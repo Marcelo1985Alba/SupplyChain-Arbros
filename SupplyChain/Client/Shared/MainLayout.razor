@@ -1,0 +1,107 @@
+﻿@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Navigations
+
+
+@inherits LayoutComponentBase
+@*<div class="page">
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+
+        <div class="main">
+            <div class="top-row px-4">
+                <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
+            </div>
+
+            <div class="content px-4">
+                @Body
+            </div>
+        </div>
+    </div>*@
+
+
+<div id="header" style="height:50px;text-align: center;color:white;background-color:orangered;font-size:1.2rem;line-height:45px;">
+        
+    <div class="text-left">
+        <SfButton @onclick="@(()=> SidebarToggle = !SidebarToggle)" IsToggle="true" IconCss="e-icons e-menu"
+                  IconPosition="IconPosition.Left"
+                  CssClass="e-btn close-btn"></SfButton>
+        <a class="navbar-brand" href="#"><img src="aerre.jpg" alt="logo" /></a>
+    </div>
+
+</div>
+
+
+<SfSidebar @ref="sidebarObj" Animate="true" EnableRtl="true" Width="260px" @bind-IsOpen="SidebarToggle" MediaQuery="(min-width: 600px)">
+    <ChildContent>
+        <a class="navbar-brand" href="#"><img src="aerre.jpg" alt="logo" /></a>
+        <SfButton @onclick="Close" CssClass="e-btn close-btn" IsToggle="true" IconCss="e-icons e-play-icon" IsPrimary="true"></SfButton>
+        <div style="text-align: center;" class="text-content">
+            @if (authState != null)
+            {
+                if (authState.User.Identity.IsAuthenticated)
+                {
+
+                    <span>Bienvenido</span>
+                    <span>@authState.User.Identity.Name</span>
+                }
+            }
+
+            <Menu></Menu>
+        </div>
+    </ChildContent>
+</SfSidebar>
+
+<div class="text-content">
+    @Body
+</div>
+
+@code{
+    [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
+    public AuthenticationState authState;
+    SfSidebar sidebarObj;
+    public bool SidebarToggle = false;
+
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        authState = await authenticationState;
+    }
+
+
+    public void Close()
+    {
+        SidebarToggle = false;
+    }
+
+    
+}
+
+<style>
+    .e-sidebar {
+        background-color: #f8f8f8;
+        color: black;
+    }
+
+    .text-content {
+        font-size: 1.5rem;
+        padding: 3rem;
+    }
+
+    .main > div {
+        padding: 0px !important;
+    }
+
+    e-icons {
+        color: #00ffff;
+        font-size: 26px;
+    }
+
+    .e-menu::before {
+        content: '\e99a';
+    }
+
+    .e-play-icon::before {
+        content: '\e99a';
+    }
+</style>

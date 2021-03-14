@@ -1,0 +1,50 @@
+﻿@page "/kanban"
+
+@using Syncfusion.Blazor.Kanban
+@using System.Diagnostics
+@inherits SupplyChain.Pages.Modelos.EstadoPageBase
+
+<div>
+    <div>
+        <nav class="navbar fixed-top navbar-light bg-light">
+            <a class="navbar-brand" href="#"><img src="aerre.jpg" alt="logo" /></a>
+            <a class="navbar-brand" style=" font-weight: bold;" href="#">KANBAN</a>
+            <a class="btn btn-outline-primary btn-sm oi oi-arrow-left" href="/">
+                Volver
+            </a>
+        </nav>
+    </div>
+    <div>
+        <br />
+        <br />
+        <br />
+        <SfKanban TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis" AllowDragAndDrop="true" Height="800px">
+            <KanbanEvents TValue="PedCli" DragStart="@onDragStart" DragStop="@onDragStop"></KanbanEvents>
+            <KanbanColumns>
+                @foreach (Syncfusion.Blazor.Kanban.ColumnModel item in columnData)
+                {
+                    <KanbanColumn HeaderText="@item.HeaderText" KeyField="@item.KeyField"></KanbanColumn>
+                }
+            </KanbanColumns>
+            <div style="z-index:0;">
+                <KanbanCardSettings HeaderField="@(nameof(PedCli.PEDIDO))" ContentField="@(nameof(PedCli.DES_ART))">
+                </KanbanCardSettings>
+                <KanbanSwimlaneSettings KeyField="@nameof(PedCli.DES_CLI)" TextField="@nameof(PedCli.DES_CLI)" AllowDragAndDrop=true ShowItemCount=true SortDirection=Syncfusion.Blazor.Kanban.SortDirection.Ascending ShowEmptyRow=true>
+                </KanbanSwimlaneSettings>
+            </div>
+        </SfKanban>
+
+    </div>
+</div>
+
+@code {
+    private List<Syncfusion.Blazor.Kanban.ColumnModel> columnData = new List<Syncfusion.Blazor.Kanban.ColumnModel>() {
+        new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Remitir", KeyField= new List<string>() { "Remitir" } },
+        new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Inspección", KeyField= new List<string>() { "Inspeccion" } },
+        new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Ret.Planta", KeyField= new List<string>() { "Ret.Planta" } },
+        new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Ret.CABA", KeyField= new List<string>() { "Ret.CABA" } },
+        new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Entregar", KeyField= new List<string>() { "Entregar" } },
+        new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Facturar", KeyField= new List<string>() { "Facturar" } },
+        new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Pago", KeyField= new List<string>() { "Pago" } }
+    };
+}
