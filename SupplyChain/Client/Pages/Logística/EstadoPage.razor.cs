@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using SupplyChain.Shared.Models;
+using Syncfusion.Blazor.Data;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
 using System;
@@ -24,6 +25,11 @@ namespace SupplyChain.Pages.Modelos
         protected List<PedCli> Pedclis = new List<PedCli>();
         protected List<Pedidos> Pedidoss = new List<Pedidos>();
         protected List<Programa> Programas = new List<Programa>();
+        protected string PriorityValue = "None";
+        protected string StatusValue = "None";
+        protected string SearchValue = string.Empty;
+        protected Query CardQuery = new Query();
+
         protected override async Task OnInitializedAsync()
         {
 
@@ -54,6 +60,19 @@ namespace SupplyChain.Pages.Modelos
             {
                 PedCli Nuevo = args.Data[0];
                 response = await Http.PutAsJsonAsync($"api/Pedcli/{Nuevo.PEDIDO}", Nuevo);
+            }
+        }
+
+        protected void OnCardSearch(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+        {
+            string searchString = (string)args.Value;
+            if (searchString == string.Empty)
+            {
+                CardQuery = new Query();
+            }
+            else
+            {
+                CardQuery = new Query().Search(searchString, new List<string>() { "PEDIDO", "DES_ART", "DES_CLI" }, "contains", true);
             }
         }
     }

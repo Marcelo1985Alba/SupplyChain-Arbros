@@ -8,7 +8,7 @@ namespace SupplyChain.Shared.Models
 {
     public class Usuarios
     {
-        [Key,Required] public string Usuario { get; set; } = ""; 
+        [Key,Required(ErrorMessage = "Nombre de Usuario Requerido")] public string Usuario { get; set; } = ""; 
         public int Cg_TipoUsu { get; set; } = 0;
         public string Nombre { get; set; } = "";
         public string Email { get; set; } = "";
@@ -16,7 +16,7 @@ namespace SupplyChain.Shared.Models
         public string Tel_Mov { get; set; } = "";
         public string Tel_Part { get; set; } = "";
         
-        [Required]public string Contras { get; set; } = "";
+        [Required(ErrorMessage = "Nombre de Contraseña Requerido")] public string Contras { get; set; } = "";
         public int Derechos { get; set; } = 0;
         public int Cg_Cia { get; set; } = 0;
         public string UltimoPuntoVenta { get; set; } = "";

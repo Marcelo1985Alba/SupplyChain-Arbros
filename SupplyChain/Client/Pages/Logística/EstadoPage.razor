@@ -5,20 +5,21 @@
 @inherits SupplyChain.Pages.Modelos.EstadoPageBase
 
 <div>
+    @*<div>
+            <nav class="navbar fixed-top navbar-light bg-light">
+                <a class="navbar-brand" href="#"><img src="aerre.jpg" alt="logo" /></a>
+                <a class="navbar-brand" style=" font-weight: bold;" href="#">KANBAN</a>
+                <a class="btn btn-outline-primary btn-sm oi oi-arrow-left" href="/">
+                    Volver
+                </a>
+            </nav>
+        </div>*@
+    <SfTextBox ID="search_text" Placeholder="Buscar por Numero de Pedidos o Nombre de Cliente..." ShowClearButton="true" Value="@SearchValue" 
+               OnChange="OnCardSearch" OnFocus="@(() => { PriorityValue = "None";  StatusValue = "None"; })"></SfTextBox>
+    
     <div>
-        <nav class="navbar fixed-top navbar-light bg-light">
-            <a class="navbar-brand" href="#"><img src="aerre.jpg" alt="logo" /></a>
-            <a class="navbar-brand" style=" font-weight: bold;" href="#">KANBAN</a>
-            <a class="btn btn-outline-primary btn-sm oi oi-arrow-left" href="/">
-                Volver
-            </a>
-        </nav>
-    </div>
-    <div>
         <br />
-        <br />
-        <br />
-        <SfKanban TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis" AllowDragAndDrop="true" Height="800px">
+        <SfKanban TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis" AllowDragAndDrop="true" Height="800px" Query="@CardQuery">
             <KanbanEvents TValue="PedCli" DragStart="@onDragStart" DragStop="@onDragStop"></KanbanEvents>
             <KanbanColumns>
                 @foreach (Syncfusion.Blazor.Kanban.ColumnModel item in columnData)
@@ -29,7 +30,9 @@
             <div style="z-index:0;">
                 <KanbanCardSettings HeaderField="@(nameof(PedCli.PEDIDO))" ContentField="@(nameof(PedCli.DES_ART))">
                 </KanbanCardSettings>
-                <KanbanSwimlaneSettings KeyField="@nameof(PedCli.DES_CLI)" TextField="@nameof(PedCli.DES_CLI)" AllowDragAndDrop=true ShowItemCount=true SortDirection=Syncfusion.Blazor.Kanban.SortDirection.Ascending ShowEmptyRow=true>
+                <KanbanSwimlaneSettings KeyField="@nameof(PedCli.DES_CLI)" TextField="@nameof(PedCli.DES_CLI)" 
+                                        AllowDragAndDrop=true ShowItemCount=true 
+                                        SortDirection=Syncfusion.Blazor.Kanban.SortDirection.Ascending ShowEmptyRow=true>
                 </KanbanSwimlaneSettings>
             </div>
         </SfKanban>

@@ -20,7 +20,7 @@
     </div>*@
 
 
-<div id="header" style="height:50px;text-align: center;color:white;background-color:orangered;font-size:1.2rem;line-height:45px;">
+<div id="header" class="fix-header card-no-border fix-sidebar" style="height:50px;text-align: center;color:white;background-color:orangered;font-size:1.2rem;line-height:45px;">
         
     <div class="text-left">
         <SfButton @onclick="@(()=> SidebarToggle = !SidebarToggle)" IsToggle="true" IconCss="e-icons e-menu"
@@ -32,10 +32,10 @@
 </div>
 
 
-<SfSidebar @ref="sidebarObj" Animate="true" EnableRtl="true" Width="260px" @bind-IsOpen="SidebarToggle" MediaQuery="(min-width: 600px)">
+<SfSidebar @ref="sidebarObj" Animate="true" EnableRtl="true" Width="260px" @bind-IsOpen="SidebarToggle" Position="SidebarPosition.Left">
     <ChildContent>
         <a class="navbar-brand" href="#"><img src="aerre.jpg" alt="logo" /></a>
-        <SfButton @onclick="Close" CssClass="e-btn close-btn" IsToggle="true" IconCss="e-icons e-play-icon" IsPrimary="true"></SfButton>
+        <SfButton @onclick="Close" CssClass="e-btn close-btn" IsToggle="true" IconCss="e-icons e-play-icon"></SfButton>
         <div style="text-align: center;" class="text-content">
             @if (authState != null)
             {
@@ -94,7 +94,7 @@
 
     e-icons {
         color: #00ffff;
-        font-size: 26px;
+        font-size: 60px;
     }
 
     .e-menu::before {

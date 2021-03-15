@@ -35,15 +35,15 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
-        [HttpPost("{usuario}/{contras}")]
-        public async Task<ActionResult<Usuarios>> Post(string usuario, string contras)
+        [HttpPost]
+        public async Task<ActionResult<Usuarios>> Post([FromBody] Usuarios usuario)
         {
             try
             {
                 //string xSQL = $"SELECT Usuario, Contras FROM USUARIOS WHERE Usuario = '{usuario}' AND CONTRAS = '{contras}'";
                 //return await _context.Usuarios.FromSqlRaw(xSQL).FirstOrDefaultAsync();
                 return await _context.Usuarios
-                    .Where(u => u.Usuario == usuario && u.Contras == contras).FirstOrDefaultAsync();
+                    .Where(u => u.Usuario == usuario.Usuario && u.Contras == usuario.Contras).FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {
