@@ -18,7 +18,7 @@ using SupplyChain.Client.HelperService;
 using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf;
 using Syncfusion.Blazor.Spinner;
-
+using Microsoft.AspNetCore.Hosting;
 namespace SupplyChain.Pages.Servicios
 {
     public class ServicioPageBase : ComponentBase
@@ -359,10 +359,10 @@ namespace SupplyChain.Pages.Servicios
                             }
                         }
                         //Load the image from the stream 
-                        FileStream fs = new FileStream("./wwwrroot/logo_aerre.jpg", FileMode.Open);
+                        //FileStream fs = new FileStream("./wwwrroot/logo_aerre.jpg", FileMode.Open);
                         //FileStream IMR = new FileStream("wwwroot\\IMR.jpg", FileMode.Open);
-                        //var fs = await GetFile("logo_aerre.jpg");
-                        //var IMR = await GetFile("IMR.jpg");
+                        var fs = await GetFile("logo_aerre.jpg");
+                        var IMR = await GetFile("IMR.jpg");
 
                         //Add RowSpan
                         PdfGridCell gridCell = pdfGrid.Rows[0].Cells[0];
@@ -667,7 +667,7 @@ namespace SupplyChain.Pages.Servicios
                         PdfGridCell gridCell58 = pdfGrid.Rows[31].Cells[0];
                         gridCell58.ColumnSpan = 2;
                         gridCell58.StringFormat = Centrado;
-                        //gridCell58.Value = new PdfBitmap(IMR);
+                        gridCell58.Value = new PdfBitmap(IMR);
                         //Add RowSpan
                         PdfGridCell gridCell59 = pdfGrid.Rows[31].Cells[2];
                         gridCell59.ColumnSpan = 1;
@@ -896,7 +896,8 @@ namespace SupplyChain.Pages.Servicios
 
         protected async Task<Stream> GetFile(string nameFile)
         {
-            var file = await Http.GetStreamAsync("Calibri 400.ttf");
+            var file = await Http.GetStreamAsync(nameFile);
+
             return file;
         }
         public void Refresh()

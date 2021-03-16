@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SupplyChain.Shared.Login;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,5 +23,7 @@ namespace SupplyChain.Shared.Models
         public string UltimoPuntoVenta { get; set; } = "";
         public int Cg_Area { get; set; } = 0;
         public bool CG_CUENTRAPI { get; set; } = false;
+        public int RolId { get; set; }
+        public Rol Rol { get; set; }
     }
 }

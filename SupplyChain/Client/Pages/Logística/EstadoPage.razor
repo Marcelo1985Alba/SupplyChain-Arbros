@@ -24,7 +24,17 @@
             <KanbanColumns>
                 @foreach (Syncfusion.Blazor.Kanban.ColumnModel item in columnData)
                 {
-                    <KanbanColumn HeaderText="@item.HeaderText" KeyField="@item.KeyField"></KanbanColumn>
+                <KanbanColumn HeaderText="@item.HeaderText" KeyField="@item.KeyField" AllowToggle="true">
+                    <Template>
+                        @{
+                            KanbanColumn column = (KanbanColumn)context;
+                            <div class="header-template-wrap">
+                                <div class="header-icon e-icons @column.KeyField[0]"></div>
+                                <div class="header-text">@column.HeaderText</div>
+                            </div>
+                        }
+                    </Template>
+                </KanbanColumn>
                 }
             </KanbanColumns>
             <div style="z-index:0;">

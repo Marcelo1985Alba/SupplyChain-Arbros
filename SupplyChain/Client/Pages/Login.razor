@@ -47,7 +47,6 @@
             <EditForm Model="@usuarioLogin" OnValidSubmit="@(async() => await LoginDialogOk())">
                 <a href="javascript:void(0)" class="text-center db">
                     <img src="./logo_aerre.jpg" class="img-thumbnail" alt="Home" /><br />
-                    @*<img src="../assets/images/logo-text.png" alt="Home" />*@
                 </a>
                 <DataAnnotationsValidator/>
                 <div class="form-group m-t-40">
@@ -127,7 +126,7 @@
                 Icon = "e-success toast-icons"
             });
 
-            await loginService.Login(xUser.Usuario);
+            await loginService.Login(xUser);
             navigationManager.NavigateTo("/index");
         }
         else

@@ -254,7 +254,7 @@ namespace SupplyChain.Server.Controllers
         private string GetDocumentPath(string document)
         {
 
-            string xSQL = string.Format("select CAMPO, VALORC from Solution where CAMPO = 'RUTAOF' OR CAMPO = 'RUTACNC' OR CAMPO = 'RUTAENSAYO' OR CAMPO = 'RUTATRAZABILIDAD' OR CAMPO = 'RUTADATOS'");
+            string xSQL = string.Format("select CAMPO, VALORC from Solution where CAMPO = 'RUTAOF2' OR CAMPO = 'RUTACNC' OR CAMPO = 'RUTAENSAYO' OR CAMPO = 'RUTATRAZABILIDAD' OR CAMPO = 'RUTADATOS'");
             var ubicaciones =  _context.Solution.FromSqlRaw(xSQL).ToList<Solution>();
             var ubicacion = ubicaciones.Where(s => s.CAMPO == "RUTAOF").Select(c => c.VALORC).FirstOrDefault();
             
@@ -263,12 +263,11 @@ namespace SupplyChain.Server.Controllers
 
             if (!System.IO.File.Exists(ubicacion + document))
             {
-                document = "D-12726.pdf";
                 //var path = _hostingEnvironment.ContentRootPath;
                 //string webRootPath = _hostingEnvironment.WebRootPath;
                 //if (System.IO.File.Exists(path + "/documentos/" + document))
                 //    documentPath = path + "/documentos/" + document;
-                ubicacion = "D:\\Descargas";
+                ubicacion = "D:\\Descargas\\";
                 document = "27303156459_011_00001_00000058.pdf";
                 if (System.IO.File.Exists(ubicacion +"/" + document))
                     documentPath = ubicacion + "/" + document;

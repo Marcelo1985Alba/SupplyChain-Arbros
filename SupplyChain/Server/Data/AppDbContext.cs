@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SupplyChain.Shared.Login;
 using SupplyChain.Shared.Models;
 
 namespace SupplyChain
@@ -48,6 +49,7 @@ namespace SupplyChain
         public DbSet<Trabajosefec> Trabajosefec { get; set; }
         //MODULO LOGIN
         public DbSet<Usuarios> Usuarios { get; set; }
+        public DbSet<Rol> Roles { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         { }
     }

@@ -8,6 +8,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using SupplyChain.Client.HelperService;
 using System.Net.Http.Headers;
+using SupplyChain.Shared.Models;
+using System.Net.Http.Json;
 
 namespace SupplyChain.Client.Auth
 {
@@ -16,6 +18,7 @@ namespace SupplyChain.Client.Auth
         private readonly IJSRuntime js;
         private readonly HttpClient httpClient;
         public static readonly string USER = "Usuario";
+        private Usuarios usuarioLogin;
         public ProveedorAutenticacion(IJSRuntime js, HttpClient httpClient)
         {
             this.js = js;
@@ -34,25 +37,29 @@ namespace SupplyChain.Client.Auth
                 return Anonimo;
             }
 
-            return ConstruirAuthenticationState(usuario);
+            usuarioLogin = await httpClient.GetFromJsonAsync<Usuarios>($"api/Usuarios/{usuario}");
+            return ConstruirAuthenticationState(usuarioLogin);
         }
 
-        public AuthenticationState ConstruirAuthenticationState(string usuario)
+        public AuthenticationState ConstruirAuthenticationState(Usuarios usuario)
         {
             //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
             //return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt")));
+            //todo: OBTENER ROL DEL USUARIO
+            
             var userAuth = new ClaimsIdentity(new List<Claim>()
             {
-                new Claim(ClaimTypes.Name, usuario),
-                new Claim(ClaimTypes.Role, "Admin")
-            }, "testing");
+                new Claim(ClaimTypes.Name, usuario.Usuario),
+                new Claim(ClaimTypes.Role, usuario.Rol.Descripcion)
+            }, "Arbros");
 
             return new AuthenticationState(new ClaimsPrincipal(userAuth));
         }
 
-        public async Task Login(string userToken)
+        public async Task Login(Usuarios userToken)
         {
-            await js.SetInSessionStorage(USER, userToken);
+            await js.SetInSessionStorage(USER, userToken.Usuario);
+
             //await js.SetInLocalStorage(EXPIRATIONTOKENKEY, userToken.Expiration.ToString());
             var authState = ConstruirAuthenticationState(userToken);
             NotifyAuthenticationStateChanged(Task.FromResult(authState));
@@ -60,6 +67,7 @@ namespace SupplyChain.Client.Auth
 
         public async Task Logout()
         {
+            usuarioLogin = null;
             await Limpiar();
             NotifyAuthenticationStateChanged(Task.FromResult(Anonimo));
         }

@@ -7,6 +7,7 @@
     <title>SupplyChain</title>
     <base href="/" />
     <link href="css/app.css" rel="stylesheet" />
+    <link href="css/spinners.css" rel="stylesheet" />
     <!--<link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />-->
     <link href="SupplyChain.Client.styles.css" rel="stylesheet" />
     <link href="manifest.json" rel="manifest" />
@@ -18,7 +19,15 @@
 </head>
 
 <body class="fix-header card-no-border fix-sidebar">
-    <div id="app">Loading...</div>
+    <div id="app">
+        <div class="preloader">
+            <div class="loader">
+                <div class="loader__figure"></div>
+                <p class="loader__label">Arbros S.A.</p>
+            </div>
+        </div>
+        Loading...
+    </div>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
