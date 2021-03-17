@@ -14,18 +14,17 @@
 @inject IJSRuntime JsRuntime
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
-@attribute [Authorize(Roles ="Admin")]
+@attribute [Authorize]
 
 
-<div style="margin-left:20px">
+
     @*<div>
         <h3 class="titulo">Carga de Máquina</h3>
     </div>*@
     <SfToast ID="toast_default" @ref="ToastObj">
         <ToastPosition X="Center" Y="Top"></ToastPosition>
     </SfToast>
-    <div class="container">
-        <h3 class="titulo text-center">Carga de Máquina</h3>
+        <h3 class="card-title">Carga de Máquina</h3>
         <hr />
         <div class="row">
             <div class="col-3">
@@ -39,7 +38,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" id="cargaMaq">
             <div class="col">
                 <div class="table-responsive">
                     <table width="700" class="table table-bordered table-hover">
@@ -274,47 +273,14 @@
             </div>
             
         </div>
-    </div>
 
-    @*<div class="table-responsive">
-        <table width="400px">
-            <tr>
-                <td width="400px">
-                    <div style="margin-top:20px;width:400px">
-                        <h3 class="titulo">Carga de máquina</h3>
-                    </div>
-                </td>
-                <td width="200px">
-                    <div style="margin-top:20px;text-align:right;width:150px">
-                        <SfNumericTextBox TValue="int" @bind-Value="@ordenAbuscar" Format="N0" ShowClearButton="true" Step="1" Width="150"></SfNumericTextBox>
-                    </div>
-                </td>
-                <td width="200px">
-                    <div style="margin-top:20px;margin-left:20px;width:200px">
-                        <SfButton IsPrimary="true" @onclick="BuscarOrden_Click">Buscar órden de fabricación</SfButton>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>*@
-
- 
-    
-
-
-
-
-    @*@for (int z = 1; z <= 100; z++)
-        {
-            <div><h3>&nbsp;</h3></div>
-        }*@
 
     @*DIALOG ORDEN DE FABRICACION*@
     @if (isOrdenDialogVisible && ordenFabricacion != null && dbCarga != null)
     {
         <div id="targetPreguntaFoto" class="cssOrdenFabricacionDialog">
-            <SfDialog AllowDragging="true" Target="#targetPreguntaFoto" CssClass="" IsModal="false"
-                      ShowCloseIcon="true" CloseOnEscape="true"
+            <SfDialog AllowDragging="true" Target="#cargaMaq" CssClass="" IsModal="false"
+                      ShowCloseIcon="true" CloseOnEscape="true" Height="900" Width="900"
                       @bind-Visible="@isOrdenDialogVisible">
                 <DialogTemplates>
                     <Header><p style="font-weight:800">@ordenTitulo</p></Header>
@@ -832,7 +798,7 @@
             </SfDialog>
         </div>
     }
-</div>
+
 
 @code
 {

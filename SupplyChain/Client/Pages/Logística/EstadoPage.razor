@@ -5,20 +5,10 @@
 @inherits SupplyChain.Pages.Modelos.EstadoPageBase
 
 <div>
-    @*<div>
-            <nav class="navbar fixed-top navbar-light bg-light">
-                <a class="navbar-brand" href="#"><img src="aerre.jpg" alt="logo" /></a>
-                <a class="navbar-brand" style=" font-weight: bold;" href="#">KANBAN</a>
-                <a class="btn btn-outline-primary btn-sm oi oi-arrow-left" href="/">
-                    Volver
-                </a>
-            </nav>
-        </div>*@
     <SfTextBox ID="search_text" Placeholder="Buscar por Numero de Pedidos o Nombre de Cliente..." ShowClearButton="true" Value="@SearchValue" 
                OnChange="OnCardSearch" OnFocus="@(() => { PriorityValue = "None";  StatusValue = "None"; })"></SfTextBox>
     
     <div>
-        <br />
         <SfKanban TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis" AllowDragAndDrop="true" Height="800px" Query="@CardQuery">
             <KanbanEvents TValue="PedCli" DragStart="@onDragStart" DragStop="@onDragStop"></KanbanEvents>
             <KanbanColumns>

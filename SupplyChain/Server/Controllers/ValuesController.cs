@@ -11,7 +11,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using Syncfusion.EJ2.PdfViewer;
 
-namespace SupplyChain.Server.Controllers
+namespace SupplyChain
 {
 
     [Route("api/[controller]")]
@@ -256,12 +256,14 @@ namespace SupplyChain.Server.Controllers
 
             string xSQL = string.Format("select CAMPO, VALORC from Solution where CAMPO = 'RUTAOF2' OR CAMPO = 'RUTACNC' OR CAMPO = 'RUTAENSAYO' OR CAMPO = 'RUTATRAZABILIDAD' OR CAMPO = 'RUTADATOS'");
             var ubicaciones =  _context.Solution.FromSqlRaw(xSQL).ToList<Solution>();
-            var ubicacion = ubicaciones.Where(s => s.CAMPO == "RUTAOF").Select(c => c.VALORC).FirstOrDefault();
+            var ubicacion = ubicaciones.Where(s => s.CAMPO == "RUTAOF2").Select(c => c.VALORC).FirstOrDefault();
             
             string documentPath = string.Empty;
 
+            //document = "27303156459_011_00001_00000065.pdf";
 
-            if (!System.IO.File.Exists(ubicacion + document))
+
+            if (!System.IO.File.Exists(ubicacion + "/" + document))
             {
                 //var path = _hostingEnvironment.ContentRootPath;
                 //string webRootPath = _hostingEnvironment.WebRootPath;
