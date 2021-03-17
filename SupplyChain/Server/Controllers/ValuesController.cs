@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Syncfusion.EJ2.PdfViewer;
 
@@ -22,12 +23,17 @@ namespace SupplyChain
         //Initialize the memory cache object   
         public IMemoryCache _cache;
         private readonly AppDbContext _context;
+        private readonly ILogger<ValuesController> logger;
 
-        public ValuesController(IWebHostEnvironment hostingEnvironment, IMemoryCache cache, AppDbContext appContext)
+        public ValuesController(IWebHostEnvironment hostingEnvironment, IMemoryCache cache
+            , AppDbContext appContext
+            , ILogger<ValuesController> logger)
         {
             _hostingEnvironment = hostingEnvironment;
             _cache = cache;
             this._context = appContext;
+            this.logger = logger;
+            logger.LogInformation("PdfViewerController initialized");
             Console.WriteLine("PdfViewerController initialized");
         }
 
@@ -38,6 +44,7 @@ namespace SupplyChain
         public IActionResult Load([FromBody] Dictionary<string, string> jsonObject)
         {
             Console.WriteLine("Load called");
+            logger.LogInformation("Load called");
             //Initialize the PDF viewer object with memory cache object
             PdfRenderer pdfviewer = new PdfRenderer(_cache);
             MemoryStream stream = new MemoryStream();

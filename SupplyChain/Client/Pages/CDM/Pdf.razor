@@ -31,7 +31,14 @@ else
         }
         else
         {
+
             codigo = codigo.Substring(0, 7) + ".pdf";
+            <h3>@codigo</h3>
+            @*foreach(Solution solution in rutas)
+                {
+                    <h1>@Solution?.VALORC</h1>
+                }*@
+            <h1>@Solution?.VALORC</h1>
             <SfPdfViewer ServiceUrl="/api/Values" DocumentPath="@codigo.Trim()" Height="1200" Width="100%"></SfPdfViewer>
         }
 
@@ -213,12 +220,17 @@ else
     protected override async Task OnInitializedAsync()
     {
         rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
-        Solution = rutas.Where(s => s.CAMPO == accion).FirstOrDefault();
+
+        Solution = rutas.Where(s => s.CAMPO == "RUTAOF2").FirstOrDefault();
+        Console.WriteLine("RUTA PLANOS PDF:" + Solution.VALORC);
         await InvokeAsync(StateHasChanged);
 
     }
 
-
+    private string GetPdf()
+    {
+        return codigo;
+    }
 
 
 

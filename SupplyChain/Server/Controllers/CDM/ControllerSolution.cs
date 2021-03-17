@@ -24,16 +24,17 @@ namespace SupplyChain
         }
 
         [HttpGet]
-        public IEnumerable<Solution> Get()
+        public async Task<ActionResult<IEnumerable<Solution>>> Get()
         {
             try
             {
-                string xSQL = string.Format("select CAMPO, VALORC from Solution where CAMPO = 'RUTAOF' OR CAMPO = 'RUTACNC'" +
-                    " OR CAMPO = 'RUTAENSAYO' OR CAMPO = 'RUTATRAZABILIDAD' OR CAMPO = 'RUTADATOS'");
-                return _context.Solution.FromSqlRaw(xSQL).ToList();
+                string xSQL = string.Format("select CAMPO, VALORC from Solution where CAMPO IN ( 'RUTAOF', 'RUTACNC','RUTAENSAYO'," +
+                    " 'RUTAOF2','RUTATRAZABILIDAD', 'RUTADATOS')");
+                return await _context.Solution.FromSqlRaw(xSQL).ToListAsync();
             }
-            catch
+            catch(Exception ex)
             {
+                BadRequest(ex);
                 return new List<Solution>();
             }
         }
