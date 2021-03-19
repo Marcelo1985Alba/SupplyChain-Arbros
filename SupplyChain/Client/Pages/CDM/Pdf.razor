@@ -17,14 +17,18 @@
 @using System.IO;
 @using Syncfusion.Blazor.PdfViewer;
 @*@using Syncfusion.Blazor.PdfViewerServer;*@
+<SfSpinner Size="80" Label="Cargando..." Type="SpinnerType.Bootstrap4" @bind-Visible ="@VisibleSpinner" Target="#pdfViewer"></SfSpinner>
 @if (accion == null)
 {
     <p><em>Loading...</em></p>
+    
 }
 else
 {
+
     if (accion == "RUTAOF")
     {
+        VisibleSpinner = false;
         if (codigo.Length < 6)
         {
             <label>No hay planos asociados a reparaciones.</label>
@@ -39,7 +43,7 @@ else
                     <h1>@Solution?.VALORC</h1>
                 }*@
             <h1>@Solution?.VALORC</h1>
-            <SfPdfViewer ServiceUrl="/api/Values" DocumentPath="@codigo.Trim()" Height="1200" Width="100%"></SfPdfViewer>
+            <SfPdfViewer ID="pdfViewer" ServiceUrl="/api/Values" DocumentPath="@codigo.Trim()" Height="1200" Width="100%" ></SfPdfViewer>
         }
 
     }
@@ -200,6 +204,7 @@ else
 
 @code {
     private string DocumentPath { get; set; } = "PDF_Succinctly.pdf";
+    bool VisibleSpinner = false;
 
     [Inject] protected HttpClient Http { get; set; }
 
@@ -219,12 +224,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        VisibleSpinner = true;
         rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 
         Solution = rutas.Where(s => s.CAMPO == "RUTAOF2").FirstOrDefault();
         Console.WriteLine("RUTA PLANOS PDF:" + Solution.VALORC);
         await InvokeAsync(StateHasChanged);
-
+        VisibleSpinner = false;
     }
 
     private string GetPdf()

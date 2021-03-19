@@ -1,14 +1,11 @@
-﻿using SupplyChain.Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
-namespace SupplyChain
+namespace SupplyChain.Shared.Models
 {
-    public class Prod
+    [Table("Prod")]
+    public class Producto
     {
         [Key]
         [ColumnaGridViewAtributo(Name = "Código producto")]

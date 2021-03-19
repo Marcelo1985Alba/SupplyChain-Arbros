@@ -269,9 +269,9 @@ namespace SupplyChain
 
             //document = "27303156459_011_00001_00000065.pdf";
 
-
             if (!System.IO.File.Exists(ubicacion + "/" + document))
             {
+                var sol = ubicaciones.Where(s => s.CAMPO == "RUTAOF2").FirstOrDefault();
                 //var path = _hostingEnvironment.ContentRootPath;
                 //string webRootPath = _hostingEnvironment.WebRootPath;
                 //if (System.IO.File.Exists(path + "/documentos/" + document))

@@ -1,0 +1,205 @@
+﻿@page "/productos"
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using System.Configuration;
+@using System.Data.SqlClient;
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.BarcodeGenerator
+@using System.Text.Json
+
+@using System.Linq
+@attribute [Authorize]
+@inject IJSRuntime JsRuntime
+@using SupplyChain
+@using System.Net.Http.Json
+@using Syncfusion.Blazor.PivotView
+
+@inject NavigationManager NavManager
+@inherits SupplyChain.Pages.Prods.ProdsPageBase
+
+<div class="col control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
+                    @ref="Grid" DataSource="@prods" AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true" ID="Prod"
+                    AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
+                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                <GridEvents OnToolbarClick="@ClickHandler" OnCellSave="CellSaveHandler" OnActionBegin="ActionBegin" TValue="Producto"></GridEvents>
+                <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+                <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+                <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
+                <Template>
+                    @{
+                        var prod = (context as Producto);
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Id:</label>
+                                    <SfTextBox ID="CG_OPER" @bind-Value="@(prod.CG_PROD)" Enabled="@Disabled"></SfTextBox>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Nombre:</label>
+                                    <SfTextBox CssClass="customClass" ID="DES_OPER" @bind-Value="@(prod.DES_PROD)"></SfTextBox>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Horas Finales:</label>
+                                    <SfNumericTextBox ID="HS_FINAL" @bind-Value="@(prod.CG_ORDEN)"></SfNumericTextBox>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Valor Por Hora:</label>
+                                    <SfNumericTextBox ID="VALOR_HORA" @bind-Value="@(prod.CG_CLAS)"></SfNumericTextBox>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </Template>
+            </GridEditSettings>
+                <GridColumns>
+                    <GridColumn Field=@nameof(Prod.CG_PROD) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CAMPOCOM1) HeaderText="CAMPOCOM1" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CAMPOCOM2) HeaderText="CAMPOCOM2" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CAMPOCOM3) HeaderText="CAMPOCOM3" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CAMPOCOM4) HeaderText="CAMPOCOM4" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CAMPOCOM5) HeaderText="CAMPOCOM5" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CAMPOCOM6) HeaderText="CAMPOCOM6" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CAMPOCOM7) HeaderText="CAMPOCOM7" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CAMPOCOM8) HeaderText="CAMPOCOM8" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CAMPOCOM9) HeaderText="CAMPOCOM9" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CAMPOCOM10) HeaderText="CAMPOCOM10" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CG_ORDEN) HeaderText="Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.TIPO) HeaderText="Tipo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CG_CLAS) HeaderText="Clase" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.UNID) HeaderText="Unidades" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CG_DENSEG) HeaderText="Codigo densidad/segundo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.UNIDSEG) HeaderText="Unidad/segundo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.PESO) HeaderText="Peso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.UNIDPESO) HeaderText="Unidad de peso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.ESPECIF) HeaderText="Especificacion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.NORMA) HeaderText="Norma" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.EXIGEDESPACHO) HeaderText="Exige despacho" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.EXIGELOTE) HeaderText="Exige lote" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.EXIGESERIE) HeaderText="Exige serie" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.EXIGEOA) HeaderText="Exige orden de armado" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.STOCKMIN) HeaderText="Stock Minimo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.LOPTIMO) HeaderText="Lote Optimo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    @*<GridColumn Field=@nameof(Producto.ACTIVO) HeaderText="Activo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>*@
+                    <GridColumn Field=@nameof(Prod.TIEMPOFAB) HeaderText="Tiempo fabricacion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.COSTO) HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.COSTOTER) HeaderText="Costo ter" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    @*<GridColumn Field=@nameof(Prod.COSTOUCLOCAL) HeaderText="Costo UC Local" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.COSTOUCDOL) HeaderText="Costo UC Dol" TextAlign="TextAlign.Left" Width="150px"></GridColumn>*@
+                    <GridColumn Field=@nameof(Prod.FE_UC) HeaderText="Fecha UC" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CG_CELDA) HeaderText="Celda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CG_AREA) HeaderText="Area" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CG_LINEA) HeaderText="Linea" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.CG_TIPOAREA) HeaderText="Tipo Area" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    @*<GridColumn Field=@nameof(Prod.FE_REG) HeaderText="Fecha Registro" TextAlign="TextAlign.Left" Width="150px"></GridColumn>*@
+                </GridColumns>
+            </SfGrid>
+            <div class="col-lg-3 property-section">
+                <br>
+                <div class="property-panel-section">
+                    <div class="property-panel-header" style="padding-bottom:5px; font-size:16px">Properties</div>
+                    <div class="property-panel-content">
+                        <table id="property" style="width: 100%;height:100%;" class="property-panel-table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <SfRadioButton Label="Inline Editing" Name="EditOperation" Value=@("inline") Checked=@("inline") ValueChange="OnRadioChange" TChecked="string"></SfRadioButton>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <SfRadioButton Label="Batch Editing" Name="EditOperation" Value=@("batch") Checked=@("batch") ValueChange="OnRadioChange" TChecked="string"></SfRadioButton>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <SfRadioButton Label="Dialog Editing" Name="EditOperation" Value=@("dialog") Checked=@("dialog") ValueChange="OnRadioChange" TChecked="string"></SfRadioButton>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <SfRadioButton Label="Command Columns" Name="EditOperation" Value=@("cc") Checked=@("cc") ValueChange="OnRadioChange" TChecked="string"></SfRadioButton>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .form-group.col-md-6 {
+        width: 200px;
+    }
+
+    label.e-float-text {
+        position: relative;
+        padding-left: 0;
+        top: 10%;
+    }
+
+    .e-input-group.e-control-wrapper.customClass {
+        color: black;
+        background-color: lightblue;
+    }
+</style>
+
+@code {
+
+    public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
+    public bool DblClick = true;
+    public bool CommandColumnsClick = false;
+
+    public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+    public void OnRadioChange(ChangeArgs<string> args)
+    {
+        if (args.Value == "inline")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+        }
+        else if (args.Value == "batch")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Batch;
+        }
+        else if (args.Value == "dialog")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Dialog;
+        }
+        else
+        {
+            this.CommandColumnsClick = true;
+        }
+    }
+}

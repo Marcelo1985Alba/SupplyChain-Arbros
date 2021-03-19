@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Shared.Models;
 
 namespace SupplyChain
 {
@@ -21,23 +22,32 @@ namespace SupplyChain
 
         // GET: api/Prod
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Prod>>> GetProd()
+        public async Task<ActionResult<IEnumerable<Producto>>> GetProd()
         {
-            return await _context.Prod.ToListAsync();
+            try
+            {
+                return await _context.Prod.ToListAsync();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+            
         }
 
 
         [HttpGet("GetPedidos")]
-        public IEnumerable<Prod> Gets(string PEDIDO)
+        public IEnumerable<Producto> Gets(string PEDIDO)
         {
             string xSQL = string.Format("SELECT * FROM Prod ");
-            return _context.Prod.FromSqlRaw(xSQL).ToList<Prod>();
+            return _context.Prod.FromSqlRaw(xSQL).ToList();
         }
 
 
         // GET: api/Prod/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Prod>> GetProd(string id)
+        public async Task<ActionResult<Producto>> GetProd(string id)
         {
             var Prod = await _context.Prod.FindAsync(id);
 
@@ -85,7 +95,7 @@ namespace SupplyChain
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Prod>> PostProd(Prod Prod)
+        public async Task<ActionResult<Prod>> PostProd(Producto Prod)
         {
             _context.Prod.Add(Prod);
             try
@@ -109,7 +119,7 @@ namespace SupplyChain
 
         // DELETE: api/Prod/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Prod>> DeleteProd(string id)
+        public async Task<ActionResult<Producto>> DeleteProd(string id)
         {
             var Prod = await _context.Prod.FindAsync(id);
             if (Prod == null)
@@ -130,9 +140,9 @@ namespace SupplyChain
 
         // GET: api/Prod/BuscarPorCG_PROD/{CG_PROD}
         [HttpGet("BuscarPorCG_PROD/{CG_PROD}")]
-        public async Task<ActionResult<List<Prod>>> BuscarPorCG_PROD(string CG_PROD)
+        public async Task<ActionResult<List<Producto>>> BuscarPorCG_PROD(string CG_PROD)
         {
-            List<Prod> lDesProd = new List<Prod>();
+            List<Producto> lDesProd = new List<Producto>();
             if (_context.Prod.Any())
             {
                 lDesProd = await _context.Prod.Where(p => p.CG_PROD == CG_PROD).ToListAsync();

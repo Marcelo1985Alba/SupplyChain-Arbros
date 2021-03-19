@@ -17,7 +17,7 @@ namespace SupplyChain
         public virtual DbSet<ModeloGenericoStringString> ModelosGenericosStringString { get; set; }
         public virtual DbSet<Solution> Solution { get; set; }
         public virtual DbSet<Operario> Operario { get; set; }
-        public virtual DbSet<Prod> Prod { get; set; }
+        //public virtual DbSet<Prod> Prod { get; set; }
         public virtual DbSet<Cliente> Cliente { get; set; }
         //MODULO LOGÍSTICA
         public DbSet<PedCli> PedCli { get; set; }
@@ -36,6 +36,7 @@ namespace SupplyChain
         public DbSet<Parada> Parada { get; set; }
         public DbSet<ProTarea> ProTarea { get; set; }
         public DbSet<TipoMat> TipoMat { get; set; }
+        public DbSet<Producto> Prod { get; set; }
         //MODULO SERVICIOS
         public DbSet<Celdas> Celdas { get; set; }
         public DbSet<Estado> Estado { get; set; }

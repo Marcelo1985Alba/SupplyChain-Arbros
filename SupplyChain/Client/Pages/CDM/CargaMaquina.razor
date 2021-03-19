@@ -38,6 +38,9 @@
                 </div>
             </div>
         </div>
+        <SfSpinner @ref="SpinnerCDM" Size="60" Label="@MensajeCargando" CssClass="mt-5 pt-5"
+                   Type="SpinnerType.Bootstrap" Target="#cargaMaq"
+                   @bind-Visible="Visible"></SfSpinner>
         <div class="row" id="cargaMaq">
             <div class="col">
                 <div class="table-responsive">
@@ -45,8 +48,7 @@
                         @if (dbCarga == null)
                         {
                             @*<p><em>Loading...</em></p>*@
-                            <SfSpinner @ref="SpinnerCDM" Size="60" Label="@MensajeCargando" CssClass="mt-5 pt-5" Type="SpinnerType.Bootstrap"
-                                       @bind-Visible="Visible"></SfSpinner>
+                            
 
                         }
                         else
@@ -842,10 +844,10 @@
 
     protected List<Operario> operariosList = new List<Operario>();
     protected List<PedCli> PedCliList = new List<PedCli>();
-    protected List<Prod> prodList = new List<Prod>();
+    protected List<Producto> prodList = new List<Producto>();
     private SfSpinner SpinnerCDM;
     private bool Visible = false;
-private string MensajeCargando = "Cargando...";
+    private string MensajeCargando = "Cargando...";
     protected override async Task OnInitializedAsync()
     {
         //await SpinnerCDM.ShowAsync();
@@ -856,7 +858,7 @@ private string MensajeCargando = "Cargando...";
         dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 3, TEXTO = "EN CURSO" });
         dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 4, TEXTO = "CERRADA" });
         dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 5, TEXTO = "ANULADA" });
-        
+
 
         operariosList = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
 
@@ -866,7 +868,7 @@ private string MensajeCargando = "Cargando...";
 
 
         PedCliList = await Http.GetFromJsonAsync<List<PedCli>>("api/PedCli/GetPedidos");
-        prodList = await Http.GetFromJsonAsync<List<Prod>>("api/Prod/GetPedidos");
+        prodList = await Http.GetFromJsonAsync<List<Producto>>("api/Prod/GetPedidos");
 
         rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 
@@ -880,6 +882,7 @@ private string MensajeCargando = "Cargando...";
     {
         try
         {
+            Visible = true;
             dbCarga = await Http.GetFromJsonAsync<List<ModeloCarga>>("api/Cargas");
             // turno
             List<ModeloGenericoIntString> xTurno = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/Select Top 1 CONVERT(INT, ValorN) ID, '' TEXTO From Solution Where Campo = 'HORASDIA'");
@@ -902,6 +905,9 @@ private string MensajeCargando = "Cargando...";
                 fechaInicial = dbCarga.Where(x => x.FE_CURSO != null && x.FE_CURSO.Year != 1900 && x.CG_ESTADOCARGA == 3).Min(x => x.FE_CURSO);
             else
                 fechaInicial = DateTime.Now;
+
+
+            Visible = false;
         }
         catch
         {
@@ -911,9 +917,10 @@ private string MensajeCargando = "Cargando...";
 
     protected async Task OrdenFabricacionOpen(int xOrdenFabricacion, bool xExigeOA, int xPedido, string xCgProd, decimal xCantidad)
     {
+        Visible = true;
         try
         {
-            isOrdenDialogVisible = true;
+
             // Titulo
             if (xExigeOA)
             {
@@ -950,6 +957,8 @@ private string MensajeCargando = "Cargando...";
             ordenFabricacionSE = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionSE>>("api/OrdenesFabricacionSE/" + ordenNumero.ToString());
             // Semi elaborados
             ordenFabricacionHojaRuta = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionHojaRuta>>("api/OrdenesFabricacionHojaRuta/" + xCgProd + "/" + xCantidad.ToString());
+            Visible = false;
+            isOrdenDialogVisible = true;
         }
         catch
         {
@@ -972,10 +981,11 @@ private string MensajeCargando = "Cargando...";
 
     private async Task OrdenFabricacionOk(Object args)
     {
+        Visible = true;
         try
         {
-            isOrdenDialogVisible = false;
 
+            isOrdenDialogVisible = false;
             var respuesta = await Http.PutAsJsonAsync("api/OrdenesFabricacion/" + ordenFabricacion.CG_ORDF, ordenFabricacion);
             if (respuesta.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
@@ -1021,6 +1031,9 @@ private string MensajeCargando = "Cargando...";
                 ordenFabricacion = null;
                 await Refrescar();
             }
+
+
+            Visible = false;
         }
         catch
         {
@@ -1076,6 +1089,8 @@ private string MensajeCargando = "Cargando...";
 
     protected async Task CerrarOrdenFabricacion()
     {
+
+        Visible = true;
         string sqlCommandString = "EXEC NET_PCP_Cerrar_OrdenFabricacion " + ordenFabricacion.CG_ORDF.ToString() + ", '" + Usuario + "', " + scrapSeleccionado.ToString();
         await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
         if (ordenFabricacion.CG_ORDF == ordenFabricacion.ULTIMAORDENASOCIADA)
@@ -1085,6 +1100,7 @@ private string MensajeCargando = "Cargando...";
         ordenFabricacion = null;
         scrapSeleccionado = null;
         await Refrescar();
+        Visible = false;
     }
 
     protected async Task EstadoCarga_Change()
