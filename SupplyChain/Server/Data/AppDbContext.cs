@@ -48,6 +48,10 @@ namespace SupplyChain
         public DbSet<Sobrepresion> Sobrepresion { get; set; }
         public DbSet<Tipo> Tipo { get; set; }
         public DbSet<Trabajosefec> Trabajosefec { get; set; }
+        //MODULO PCP
+        public virtual DbSet<PresAnual> PresAnual { get; set; }
+        public virtual DbSet<ModeloPendientesFabricar> ModeloPendientesFabricar { get; set; }
+        public virtual DbSet<ModeloAbastecimiento> ModeloAbastecimiento { get; set; }
         //MODULO LOGIN
         public DbSet<Usuarios> Usuarios { get; set; }
         public DbSet<Rol> Roles { get; set; }
