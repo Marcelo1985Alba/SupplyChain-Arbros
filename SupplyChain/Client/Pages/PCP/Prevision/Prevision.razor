@@ -1,5 +1,4 @@
-﻿@page "/prev"
-@using Syncfusion.Blazor.Grids
+﻿@using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Data
 @using Syncfusion.Blazor.Calendars
 @using Syncfusion.Blazor.DropDowns
@@ -13,14 +12,13 @@
 @using Syncfusion.Blazor.Spinner
 @using System.Text.Json
 @using System.Linq
-@attribute [Authorize]
 @inject IJSRuntime JsRuntime
 @using SupplyChain
 @using System.Net.Http.Json
 @inject NavigationManager NavManager
-@inherits SupplyChain.Pages.Prev.PrevisionesPageBase
+@inherits SupplyChain.Client.Pages.Prev.PrevisionesPageBase
 
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color:none!important;">
+@*<nav class="navbar navbar-expand-lg navbar-light" style="background-color:none!important;">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -49,7 +47,7 @@
             </li>
         </ul>
     </div>
-</nav>
+</nav>*@
 
 <SfDialog Width="1000px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible">
     <DialogTemplates>

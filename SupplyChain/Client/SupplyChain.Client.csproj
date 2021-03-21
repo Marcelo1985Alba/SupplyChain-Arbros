@@ -11,12 +11,7 @@
 
   <ItemGroup>
     <None Include="Pages\ABM\Prods\ProdPage.razor" />
-    <None Include="Pages\PCP\Abastecimientos\Abastecimiento.razor" />
-    <None Include="Pages\PCP\Carga De Maquina\CargaMaquina.razor" />
     <None Include="Pages\PCP\Fabricaciones\Fabricaciones.razor" />
-    <None Include="Pages\PCP\Pedidos Pendientes\PedidosPendientes.razor" />
-    <None Include="Pages\PCP\Pendientes Fabricacion\PendienteFabricar.razor" />
-    <None Include="Pages\PCP\Planificaciones\Planificaciones.razor" />
     <None Include="Pages\PCP\Prevision\Prevision.razor" />
     <None Include="wwwroot\scss\colors\blue-dark.scss" />
     <None Include="wwwroot\scss\colors\blue.scss" />

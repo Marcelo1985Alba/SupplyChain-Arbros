@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Inputs;
 
-namespace SupplyChain.Pages.Planific
+namespace SupplyChain.Client.Pages.PCP.Planificaciones
 {
-    public class PlanifPageBase : ComponentBase
+    public class PlanificacionesBase : ComponentBase
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }

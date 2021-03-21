@@ -16,7 +16,7 @@ using System.IO;
 using Syncfusion.Blazor.Inputs;
 using Newtonsoft.Json;
 
-namespace SupplyChain.Pages.Prev
+namespace SupplyChain.Client.Pages.Prev
 {
     public class PrevisionesPageBase : ComponentBase
     {

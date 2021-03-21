@@ -1,4 +1,4 @@
-﻿@page "/planificacion"
+﻿
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Data
 @using Syncfusion.Blazor.Calendars
@@ -14,43 +14,13 @@
 @using System.Text.Json
 @using System.Linq
 @using Syncfusion.Blazor.SplitButtons
-@attribute [Authorize]
+
 @inject IJSRuntime JsRuntime
 @using SupplyChain
 @using System.Net.Http.Json
 @inject NavigationManager NavManager
-@inherits SupplyChain.Pages.Planific.PlanifPageBase
+@inherits PlanificacionesBase
 
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color:none!important;">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="/prev">Previsión</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/PedPend">Pendientes de entrega</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/pendfab">Pendientes de fabricar</a>
-            </li>
-            <li class="nav-item active" style="background-color:lightblue;">
-                <a class="nav-link" href="/planificacion">Planificación</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/abastecimiento">Abastecimiento</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/fabricacion">Fabricación</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/CargaMaquina">Carga De Máquina</a>
-            </li>
-        </ul>
-    </div>
-</nav>
 
 <div class="col-lg-12 control-section">
     <div class="content-wrapper">

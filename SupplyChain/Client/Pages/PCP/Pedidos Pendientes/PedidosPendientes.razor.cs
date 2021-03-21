@@ -11,9 +11,10 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
-namespace SupplyChain.Pages.PedPend
+
+namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
 {
-    public class PedPendPageBase : ComponentBase
+    public class PedidosPendientesBase  : ComponentBase
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }

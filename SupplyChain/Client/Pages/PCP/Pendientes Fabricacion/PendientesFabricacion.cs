@@ -11,9 +11,9 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
-namespace SupplyChain.Pages.PendFab
+namespace SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion
 {
-    public class PendFabPageBase : ComponentBase
+    public class PendientesFabricacionBase : ComponentBase
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }

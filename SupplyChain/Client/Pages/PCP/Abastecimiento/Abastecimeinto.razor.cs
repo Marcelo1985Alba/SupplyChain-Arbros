@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using SupplyChain;
 using Syncfusion.Blazor.Grids;
@@ -12,11 +13,10 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
 using System.Data;
-using Syncfusion.Blazor.ProgressBar;
 
-namespace SupplyChain.Pages.Absto
+namespace SupplyChain.Client.Pages.PCP.Abastecimiento
 {
-    public class AbastPageBase : ComponentBase
+    public class AbastecimeintoBase : ComponentBase
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
@@ -158,3 +158,4 @@ namespace SupplyChain.Pages.Absto
         }
     }
 }
+

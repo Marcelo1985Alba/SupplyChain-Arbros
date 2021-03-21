@@ -1,4 +1,4 @@
-﻿@page "/PedPend"
+﻿
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Data
 @using Syncfusion.Blazor.Calendars
@@ -16,39 +16,39 @@
 @inject IJSRuntime JsRuntime
 @using SupplyChain
 @using System.Net.Http.Json
-@attribute [Authorize]
 @inject NavigationManager NavManager
-@inherits SupplyChain.Pages.PedPend.PedPendPageBase
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color:none!important;">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="/prev">Previsión</a>
-            </li>
-            <li class="nav-item active" style="background-color:lightblue;">
-                <a class="nav-link" href="/PedPend">Pendientes de entrega</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/pendfab">Pendientes de fabricar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/planificacion">Planificación</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/abastecimiento">Abastecimiento</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/fabricacion">Fabricación</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/CargaMaquina">Carga De Máquina</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+@inherits PedidosPendientesBase
+@*<nav class="navbar navbar-expand-lg navbar-light" style="background-color:none!important;">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/prev">Previsión</a>
+                </li>
+                <li class="nav-item active" style="background-color:lightblue;">
+                    <a class="nav-link" href="/PedPend">Pendientes de entrega</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pendfab">Pendientes de fabricar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/planificacion">Planificación</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/abastecimiento">Abastecimiento</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/fabricacion">Fabricación</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/CargaMaquina">Carga De Máquina</a>
+                </li>
+            </ul>
+        </div>
+    </nav>*@
+
 @{
     if (listaPedPend is null)
     {
@@ -64,7 +64,7 @@
             <div class="content-wrapper">
                 <div class="row">
                     <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
-                            @ref="Grid" DataSource="@listaPedPend" AllowExcelExport="true" AllowGrouping="true" 
+                            @ref="Grid" DataSource="@listaPedPend" AllowExcelExport="true" AllowGrouping="true"
                             GridLines="GridLine.Both" Height="100%" Width="100%"
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" ID="PedidosPendientes">
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
