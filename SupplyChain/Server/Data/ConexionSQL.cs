@@ -64,7 +64,7 @@ namespace SupplyChain
                     // Attempt to commit the transaction.
                     Transaction.Commit();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     //MessageBox.Show("Commit Exception Type: {0}  " + ex.GetType() + "\n Message: {0}  " + ex.Message + "\n\n" + SQLCommandString, "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                     // Attempt to roll back the transaction.

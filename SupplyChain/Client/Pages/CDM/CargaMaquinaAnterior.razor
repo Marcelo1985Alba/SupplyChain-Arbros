@@ -27,13 +27,13 @@
         <h3 class="card-title">Carga de Máquina</h3>
         <hr />
         <div class="row">
-            <div class="col-3">
-                <div style="margin-top:20px;text-align:right;width:150px">
+            <div class="col-lg-3 col-sm-12">
+                <div class="form-control">
                     <SfNumericTextBox TValue="int" @bind-Value="@ordenAbuscar" Format="N0" ShowClearButton="true" Step="1" Width="150" />
                 </div>
             </div>
-            <div class="col-9">
-                <div style="margin-top:20px;margin-left:20px;width:200px">
+            <div class="col-lg-9 col-sm-12">
+                <div class="form-control">
                     <SfButton IsPrimary="true" @onclick="BuscarOrden_Click">Buscar órden de fabricación</SfButton>
                 </div>
             </div>

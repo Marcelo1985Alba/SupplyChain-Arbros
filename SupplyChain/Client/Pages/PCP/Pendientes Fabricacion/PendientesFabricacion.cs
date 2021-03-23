@@ -11,13 +11,16 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
+using SupplyChain.Shared.PCP;
+using SupplyChain.Client.Shared;
+
 namespace SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion
 {
     public class PendientesFabricacionBase : ComponentBase
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
-        protected SfGrid<ModeloPendientesFabricar> Grid;
+        protected SfGrid<vPendienteFabricar> Grid;
         protected bool VisibleProperty { get; set; } = false;
 
         public bool Enabled = true;
@@ -26,17 +29,20 @@ namespace SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion
         protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "500px" };
 
         //protected List<CatOpe> catopes = new List<CatOpe>();
-        protected List<ModeloPendientesFabricar> listaPendFab = new List<ModeloPendientesFabricar>();
+        protected List<vPendienteFabricar> listaPendFab = new List<vPendienteFabricar>();
 
         protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
         "Print",
         "ExcelExport"
-    };
+        };
+
+        protected NotificacionToast NotificacionObj;
+        protected bool ToastVisible { get; set; } = false;
 
         protected override async Task OnInitializedAsync()
         {
-            listaPendFab = await Http.GetFromJsonAsync<List<ModeloPendientesFabricar>>("api/PendientesFabricar");
+            listaPendFab = await Http.GetFromJsonAsync<List<vPendienteFabricar>>("api/PendientesFabricar");
 
             await base.OnInitializedAsync();
         }
@@ -53,13 +59,15 @@ namespace SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion
             }
         }
 
-        public async Task ActionBegin(ActionEventArgs<ModeloPendientesFabricar> args)
+        public async Task ActionBegin(ActionEventArgs<vPendienteFabricar> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
                 if (args.Data.CG_FORM != 1)
                 {
-                    bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "El producto no tiene Fórmula o no tiene Fórmula Activa");
+                    bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", 
+                        "El producto no tiene Fórmula o no tiene Fórmula Activa");
+
                     if (isConfirmed)
                     {
                     }
@@ -69,9 +77,46 @@ namespace SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion
                     if (args.Data.CANTEMITIR != 0)
                     {
                         HttpResponseMessage response;
-                        response = await Http.PutAsJsonAsync($"api/PendientesFabricar/PutPenFab/{Convert.ToInt32(args.Data.REGISTRO)}", args.Data);
-                        listaPendFab = await Http.GetFromJsonAsync<List<ModeloPendientesFabricar>>("api/PendientesFabricar");
-                        Grid.Refresh();
+
+                        //Convertir a modelo 
+                        var modelo = new ModeloPendientesFabricar()
+                        {
+                            CALCULADO = args.Data.CALCULADO,
+                            CANTEMITIR = args.Data.CANTEMITIR,
+                            CANTPED = args.Data.CANTPED,
+                            CG_ART = args.Data.CG_ART,
+                            CG_FORM = args.Data.CG_FORM,
+                            DES_ART = args.Data.DES_ART,
+                            EXIGEOA = args.Data.EXIGEOA == "Armado",
+                            LOPTIMO = args.Data.LOPTIMO,
+                            PEDIDO = args.Data.PEDIDO,
+                            PREVISION = args.Data.PREVISION,
+                            REGISTRO = args.Data.REGISTRO,
+                            STOCK =args.Data.STOCK,
+                            STOCKENT = args.Data.STOCKENT,
+                            STOCKMIN = args.Data.STOCKMIN
+                        };
+
+                        response = await Http
+                            .PutAsJsonAsync($"api/PendientesFabricar/PutPenFab/{Convert.ToInt32(args.Data.REGISTRO)}", modelo);
+
+                        if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
+                            || response.StatusCode == System.Net.HttpStatusCode.NotFound
+                            || response.StatusCode == System.Net.HttpStatusCode.Conflict)
+                        {
+                            var mensServidor = await response.Content.ReadAsStringAsync();
+
+                            Console.WriteLine($"Error: {mensServidor}");
+                            await NotificacionObj.ShowAsyncError();
+                        }
+                        else
+                        {
+                            listaPendFab = await Http.GetFromJsonAsync<List<vPendienteFabricar>>("api/PendientesFabricar");
+                            Grid.Refresh();
+                            await NotificacionObj.ShowAsync();
+                        }
+
+                        
                     }
                 }
             }
@@ -95,11 +140,12 @@ namespace SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion
                 bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Va a emitir órdenes de fabricación según necesidades de stock \n\n¿Desea continuar?");
                 if (isConfirmed)
                 {
-                    listaPendFab = await Http.GetFromJsonAsync<List<ModeloPendientesFabricar>>("api/PendientesFabricar/EmitirOrdenes");
+                    listaPendFab = await Http.GetFromJsonAsync<List<vPendienteFabricar>>("api/PendientesFabricar/EmitirOrdenes");
+                    await NotificacionObj.ShowAsync();
                 }
             }
         }
-        public void QueryCellInfoHandler(QueryCellInfoEventArgs<ModeloPendientesFabricar> args)
+        public void QueryCellInfoHandler(QueryCellInfoEventArgs<vPendienteFabricar> args)
         {
             if (args.Data.CG_FORM == 0)
             {

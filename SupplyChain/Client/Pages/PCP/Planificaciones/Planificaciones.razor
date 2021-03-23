@@ -27,7 +27,7 @@
         <div class="row">
             <div>
                 <SfButton OnClick="@((e) => Emitir())" CssClass="emitir" IsPrimary="false"
-                          IconCss="fas fa-check-circle">Emitir Órden para un solo producto</SfButton>
+                          IconCss="fa fa-check-circle">Emitir Órden para un solo producto</SfButton>
             </div>
             <div>
                 <SfCheckBox @bind-Checked="@armadoCheck" @onchange="@CheckCambio" Label="Incluir también órdenes de Armado"></SfCheckBox>
@@ -36,7 +36,8 @@
                 <SfCheckBox @bind-Checked="@emitidasCheck" @onchange="@CheckCambio" Label="Incluir también órdenes Emitidas"></SfCheckBox>
             </div>
             <div>
-                <SfButton IconCss="fas fa-ban" @onclick="@(async ()=> await OrdCerradas())" CssClass="btn btn-sm btn-outline-primary" IsPrimary="false">Órdenes cerradas y anuladas</SfButton>
+                <SfButton IconCss="fa fa-ban" @onclick="@(async ()=> await OrdCerradas())" CssClass="btn btn-sm btn-outline-primary" 
+                          IsPrimary="false">Órdenes cerradas y anuladas</SfButton>
             </div>
         </div>
     </div>
@@ -212,7 +213,7 @@
                                     <GridCommandColumn Type="CommandButtonType.None" Title="Despiece"
                                                        ButtonOption="@(new CommandButtonOptions()
                                                            {
-                                                               IconCss = "fas fa-list-ul black", Content="", CssClass="botonGrilla"
+                                                               IconCss = "fa fa-list-ul black", Content="", CssClass="botonGrilla"
                                                            })" />
                                 </GridCommandColumns>
                             </GridColumn>
@@ -236,7 +237,7 @@
                                     <GridCommandColumn Type="CommandButtonType.None" Title="Activo"
                                                        ButtonOption="@(new CommandButtonOptions()
                                                            {
-                                                               IconCss = "fas fa-chart-line", Content="", CssClass="botonGrilla"
+                                                               IconCss = "fa fa-chart-line", Content="", CssClass="botonGrilla"
                                                            })" />
                                 </GridCommandColumns>
                             </GridColumn>
@@ -401,7 +402,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-3 my-1">
-                        <SfButton OnClick="@((e)=> BuscarProductoPrevision())" IconCss="fas fa-search" CssClass="btn btn-sm btn-outline-primary" IsPrimary="false">Buscar</SfButton>
+                        <SfButton OnClick="@((e)=> BuscarProductoPrevision())" IconCss="fa fa-search" CssClass="btn btn-sm btn-outline-primary" IsPrimary="false">Buscar</SfButton>
                     </div>
                 </div>
             </div>

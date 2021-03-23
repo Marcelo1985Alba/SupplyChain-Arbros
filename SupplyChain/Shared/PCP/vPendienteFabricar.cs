@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace SupplyChain.Shared.Models
+namespace SupplyChain.Shared.PCP
 {
-    [Table("NET_Temp_Pedidos")]
-    public class ModeloPendientesFabricar
+    public class vPendienteFabricar
     {
         [Key]
         public decimal? REGISTRO { get; set; } = 0;
@@ -24,7 +23,7 @@ namespace SupplyChain.Shared.Models
         public decimal? STOCKMIN { get; set; } = 0;
         public int? CG_FORM { get; set; } = 0;
         public decimal? STOCKENT { get; set; } = 0;
-        //public decimal? COMP_EMITIDAS { get; set; } = 0;
-        public bool EXIGEOA { get; set; } = false;
+        public decimal? COMP_EMITIDAS { get; set; } = 0;
+        public string EXIGEOA { get; set; } = "";
     }
 }

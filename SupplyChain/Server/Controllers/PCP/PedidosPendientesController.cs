@@ -64,7 +64,7 @@ namespace SupplyChain.Server.Controllers
                     Semana = m.Field<int>("Semana"),
                     LOTE = m.Field<string>("LOTE"),
                     REGISTRO_PEDCLI = m.Field<decimal>("REGISTRO_PEDCLI"),
-                }).ToList<ModeloPedidosPendientes>();
+                }).ToList();
 
                 return xLista;
             }

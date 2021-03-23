@@ -122,16 +122,17 @@ namespace SupplyChain.Server.Controllers
         }
 
         // GET: api/Prevision/AgregarProductoPrevision/{CG_PROD}/{DES_PROD}
-        [HttpPut("AgregarProductoPrevision")]
-        public async Task<IActionResult> AgregarProductoPrevision(PresAnual parametros)
+        [HttpPost("AgregarProductoPrevision")]
+        public async Task<IActionResult> AgregarProductoPrevision(Prod parametros)
         {
             try
             {
                 string xFecha = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
 
+
                 // Averigua unidad
                 ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
-                string xSQLCommandString = "SELECT Unid FROM Prod WHERE Cg_prod = '" + parametros.CG_ART.Trim() + "'";
+                string xSQLCommandString = "SELECT Unid FROM Prod WHERE Cg_prod = '" + parametros.CG_PROD.Trim() + "'";
                 DataTable xTabla = xConexionSQL.EjecutarSQL(xSQLCommandString);
                 string xUnidad = "";
                 if (xTabla.Rows.Count > 0)
@@ -145,18 +146,30 @@ namespace SupplyChain.Server.Controllers
                 string xCantidad = "1";
 
                 // Inserta registro en PresAnual
-                xConexionSQL = new ConexionSQL(CadenaConexionSQL);
-                xConexionSQL.EjecutarSQLNonQuery("NET_PCP_PrevisionAgregar '" + parametros.CG_ART.Trim() + "', " +
-                                                                          "'" + parametros.DES_ART.Trim() + "', " +
-                                                                          "'" + xUnidad + "', " +
+                //xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+                //xConexionSQL.EjecutarSQLNonQuery("NET_PCP_PrevisionAgregar '" + parametros.CG_ART.Trim() + "', " +
+                //                                                          "'" + parametros.DES_ART.Trim() + "', " +
+                //                                                          "'" + xUnidad + "', " +
+                //                                                          " " + xCantidad + ", " +
+                //                                                          "'" + xFecha + "'");
+
+                await _context.Database.ExecuteSqlRawAsync("NET_PCP_PrevisionAgregar '" + parametros.CG_PROD.Trim() + "', " +
+                                                                          "'" + parametros.DES_PROD.Trim() + "', " +
+                                                                          "'" + parametros.UNID + "', " +
                                                                           " " + xCantidad + ", " +
-                                                                          "'" + xFecha + "'");
+                                                                          "'" + DateTime.Now.AddDays(1) + "'");
+
+                return Ok(await _context.PresAnual.ToListAsync());
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException dbex)
             {
-                throw;
+                return BadRequest(dbex);
             }
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
         }
 
         // GET: api/Prevision/AgregarProductoPrevision/{CG_PROD}

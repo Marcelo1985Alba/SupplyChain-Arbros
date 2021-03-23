@@ -15,6 +15,8 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using Syncfusion.Blazor.Inputs;
 using Newtonsoft.Json;
+using Syncfusion.Blazor.Notifications;
+using SupplyChain.Client.Shared;
 
 namespace SupplyChain.Client.Pages.Prev
 {
@@ -48,7 +50,10 @@ namespace SupplyChain.Client.Pages.Prev
         "Delete",
         "Print",
         "ExcelExport"
-    };
+        };
+
+        protected NotificacionToast NotificacionObj;
+        protected bool ToastVisible { get; set; } = false;
         protected override async Task OnInitializedAsync()
         {
             previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
@@ -152,11 +157,30 @@ namespace SupplyChain.Client.Pages.Prev
         }
         protected async Task AgregarProductoPrevision()
         {
-            previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/AgregarProductoPrevision/{CgString}");
-            CgString = "";
-            DesString = "";
-            previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
-            Grid.Refresh();
+            //previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/AgregarProductoPrevision/{CgString}");
+            var producto = await Http.GetFromJsonAsync<Prod>($"api/Prod/{CgString}");
+            var response = await Http.PostAsJsonAsync($"api/Prevision/AgregarProductoPrevision", producto);
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
+                || response.StatusCode == System.Net.HttpStatusCode.NotFound
+                || response.StatusCode == System.Net.HttpStatusCode.Conflict)
+            {
+                var mensServidor = await response.Content.ReadAsStringAsync();
+
+                Console.WriteLine($"Error: {mensServidor}");
+                await NotificacionObj.ShowAsyncError();
+            }
+            else
+            {
+                CgString = "";
+                DesString = "";
+                //previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
+                previsiones = await response.Content.ReadFromJsonAsync<List<PresAnual>>();
+                Grid.Refresh();
+
+                await NotificacionObj.ShowAsync();
+            }
+
+            
         }
         protected async Task AgregarValores()
         {

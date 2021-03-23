@@ -17,7 +17,8 @@ namespace SupplyChain.Server.Controllers
     [ApiController]
     public class PlanificacionController : ControllerBase
     {
-        private string CadenaConexionSQL = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build().GetConnectionString("DefaultConnection");
+        private string CadenaConexionSQL = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build().GetConnectionString("DefaultConnection");
         private readonly AppDbContext _context;
         private DataTable dbPlanificacion;
 
@@ -99,7 +100,8 @@ namespace SupplyChain.Server.Controllers
             try
             {
                 ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
-                dbPlanificacion = xConexionSQL.EjecutarSQL(String.Format("EXEC NET_PCP_Despiece_Producto '{0}', {1}, {2}", cg_prod, formula, cantidad));
+                dbPlanificacion = xConexionSQL
+                    .EjecutarSQL(String.Format("EXEC NET_PCP_Despiece_Producto '{0}', {1}, {2}", cg_prod, formula, cantidad));
 
                 List<DespiecePlanificacion> xLista = dbPlanificacion.AsEnumerable().Select(m => new DespiecePlanificacion()
                 {
@@ -116,7 +118,7 @@ namespace SupplyChain.Server.Controllers
                     SALDO_PLANEADAS = m.Field<decimal>("SALDO_PLANEADAS"),
                     CANT_TOTAL = m.Field<decimal>("CANT_TOTAL"),
                     SALDO_TOTAL = m.Field<decimal>("SALDO_TOTAL"),
-                }).ToList<DespiecePlanificacion>();
+                }).ToList();
 
                 return xLista;
             }
