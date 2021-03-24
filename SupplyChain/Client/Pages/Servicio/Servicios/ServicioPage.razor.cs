@@ -19,6 +19,8 @@ using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf;
 using Syncfusion.Blazor.Spinner;
 using Microsoft.AspNetCore.Hosting;
+using SupplyChain.Client.Shared;
+
 namespace SupplyChain.Pages.Servicios
 {
     public class ServicioPageBase : ComponentBase
@@ -109,7 +111,8 @@ namespace SupplyChain.Pages.Servicios
         protected List<Cliente> ClienteList = new List<Cliente>();
         protected SfSpinner SpinnerObj;
         protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "1100px" };
-
+        [CascadingParameter]
+        public MainLayout Layout { get; set; }
         protected List<Object> Toolbaritems = new List<Object>(){
         "Edit",
         new Syncfusion.Blazor.Navigations.ItemModel { Text = "Certificado", TooltipText = "Certificado", PrefixIcon = "e-copy", Id = "Certificado" },
@@ -121,6 +124,7 @@ namespace SupplyChain.Pages.Servicios
 
         protected override async Task OnInitializedAsync()
         {
+            Layout.Titulo = "Servicios";
             servicios = await Http.GetFromJsonAsync<List<Service>>("api/Servicios");
             if (!string.IsNullOrEmpty(pedido))
             {

@@ -28,6 +28,52 @@ namespace SupplyChain.Server.Controllers
             _context = context;
         }
 
+        // GET: api/Abastecimiento
+        [HttpGet]
+        public List<ModeloAbastecimiento> Abastecimiento()
+        {
+            try
+            {
+                ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+                xConexionSQL.EjecutarSQL("EXEC NET_PCP_Abastecimiento");
+
+                xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+                string xSQLCommandString = ("SELECT CG_MAT, DES_MAT, CALCULADO, ACOMPRAR, ACOMPRAR_INFORMADO, STOCK, UNIDMED, UNIDCOMER, STOCK_MINIMO, PEND_SIN_OC, COMP_DE_ENTRADA, COMP_DE_SALIDA" +
+                                                            ", STOCK_CORREG, EN_PROCESO, REQUERIDO, ENTRPREV, * FROM NET_Temp_Abastecimiento");
+                dbAbastecimientoMP = xConexionSQL.EjecutarSQL(xSQLCommandString);
+
+                List<ModeloAbastecimiento> xLista = dbAbastecimientoMP.AsEnumerable().Select(m => new ModeloAbastecimiento()
+                {
+                    CG_PROD = m.Field<string>("CG_PROD"),
+                    CG_MAT = m.Field<string>("CG_MAT"),
+                    DES_MAT = m.Field<string>("DES_MAT"),
+                    CG_ORDEN = m.Field<int>("CG_ORDEN"),
+                    CALCULADO = m.Field<decimal?>("CALCULADO"),
+                    ACOMPRAR = m.Field<decimal?>("ACOMPRAR"),
+                    ACOMPRAR_INFORMADO = m.Field<decimal?>("ACOMPRAR_INFORMADO"),
+                    STOCK = m.Field<decimal?>("STOCK"),
+                    UNIDMED = m.Field<string>("UNIDMED"),
+                    UNIDCOMER = m.Field<string>("UNIDCOMER"),
+                    STOCK_MINIMO = m.Field<decimal?>("STOCK_MINIMO"),
+                    PEND_SIN_OC = m.Field<decimal?>("PEND_SIN_OC"),
+                    COMP_DE_ENTRADA = m.Field<decimal?>("COMP_DE_ENTRADA"),
+                    COMP_DE_SALIDA = m.Field<decimal?>("COMP_DE_SALIDA"),
+                    STOCK_CORREG = m.Field<decimal?>("STOCK_CORREG"),
+                    EN_PROCESO = m.Field<decimal?>("EN_PROCESO"),
+                    REQUERIDO = m.Field<decimal?>("REQUERIDO"),
+                    ENTRPREV = m.Field<DateTime>("ENTRPREV"),
+                    //CG_CIA = m.Field<int>("CG_CIA"),
+                    //USUARIO = m.Field<string>("USUARIO"),
+                }).ToList<ModeloAbastecimiento>();
+
+                return xLista;
+            }
+            catch (Exception ex)
+            {
+                return new List<ModeloAbastecimiento>();
+            }
+        }
+
         // GET: api/Abastecimiento/AbastecimientoMP
         [HttpGet("AbastecimientoMP")]
         public List<ModeloAbastecimiento> AbastecimientoMP()
@@ -62,8 +108,8 @@ namespace SupplyChain.Server.Controllers
                     EN_PROCESO = m.Field<decimal?>("EN_PROCESO"),
                     REQUERIDO = m.Field<decimal?>("REQUERIDO"),
                     ENTRPREV = m.Field<DateTime>("ENTRPREV"),
-                    CG_CIA = m.Field<int>("CG_CIA"),
-                    USUARIO = m.Field<string>("USUARIO"),
+                    //CG_CIA = m.Field<int>("CG_CIA"),
+                    //USUARIO = m.Field<string>("USUARIO"),
                 }).ToList<ModeloAbastecimiento>();
 
                 return xLista;
@@ -106,8 +152,8 @@ namespace SupplyChain.Server.Controllers
                     EN_PROCESO = m.Field<decimal?>("EN_PROCESO"),
                     REQUERIDO = m.Field<decimal?>("REQUERIDO"),
                     ENTRPREV = m.Field<DateTime>("ENTRPREV"),
-                    CG_CIA = m.Field<int>("CG_CIA"),
-                    USUARIO = m.Field<string>("USUARIO"),
+                    //CG_CIA = m.Field<int>("CG_CIA"),
+                    //USUARIO = m.Field<string>("USUARIO"),
                 }).ToList<ModeloAbastecimiento>();
 
                 return xLista;
@@ -120,47 +166,50 @@ namespace SupplyChain.Server.Controllers
 
         // GET: api/Abastecimiento/AbastecimientoSE
         [HttpGet("AbastecimientoSE")]
-        public List<ModeloAbastecimiento> AbastecimientoSE()
+        public async Task<ActionResult<List<ModeloAbastecimiento>>> AbastecimientoSE()
         {
             try
             {
-                ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
-                xConexionSQL.EjecutarSQL("EXEC NET_PCP_Abastecimiento");
+                //ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+                //xConexionSQL.EjecutarSQL("EXEC NET_PCP_Abastecimiento");
+                await _context.Database.ExecuteSqlRawAsync("EXEC NET_PCP_Abastecimiento");
+                //xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+                //string xSQLCommandString = ("SELECT CG_MAT, DES_MAT, CALCULADO, ACOMPRAR, STOCK, UNIDMED, UNIDCOMER, " +
+                //    "STOCK_MINIMO, PEND_SIN_OC, COMP_DE_ENTRADA, COMP_DE_SALIDA" +
+                // ", STOCK_CORREG, EN_PROCESO, REQUERIDO, ENTRPREV, * FROM NET_Temp_Abastecimiento WHERE CG_ORDEN = 3");
+                //dbAbastecimientoSE = xConexionSQL.EjecutarSQL(xSQLCommandString);
 
-                xConexionSQL = new ConexionSQL(CadenaConexionSQL);
-                string xSQLCommandString = ("SELECT CG_MAT, DES_MAT, CALCULADO, ACOMPRAR, STOCK, UNIDMED, UNIDCOMER, STOCK_MINIMO, PEND_SIN_OC, COMP_DE_ENTRADA, COMP_DE_SALIDA" +
-                                                        ", STOCK_CORREG, EN_PROCESO, REQUERIDO, ENTRPREV, * FROM NET_Temp_Abastecimiento WHERE CG_ORDEN = 3");
-                dbAbastecimientoSE = xConexionSQL.EjecutarSQL(xSQLCommandString);
+                //List<ModeloAbastecimiento> xLista = dbAbastecimientoSE.AsEnumerable().Select(m => new ModeloAbastecimiento()
+                //{
+                //    CG_PROD = m.Field<string>("CG_PROD"),
+                //    CG_MAT = m.Field<string>("CG_MAT"),
+                //    DES_MAT = m.Field<string>("DES_MAT"),
+                //    CG_ORDEN = m.Field<int>("CG_ORDEN"),
+                //    CALCULADO = m.Field<decimal?>("CALCULADO"),
+                //    ACOMPRAR = m.Field<decimal?>("ACOMPRAR"),
+                //    ACOMPRAR_INFORMADO = m.Field<decimal?>("ACOMPRAR_INFORMADO"),
+                //    STOCK = m.Field<decimal?>("STOCK"),
+                //    UNIDMED = m.Field<string>("UNIDMED"),
+                //    UNIDCOMER = m.Field<string>("UNIDCOMER"),
+                //    STOCK_MINIMO = m.Field<decimal?>("STOCK_MINIMO"),
+                //    PEND_SIN_OC = m.Field<decimal?>("PEND_SIN_OC"),
+                //    COMP_DE_ENTRADA = m.Field<decimal?>("COMP_DE_ENTRADA"),
+                //    COMP_DE_SALIDA = m.Field<decimal?>("COMP_DE_SALIDA"),
+                //    STOCK_CORREG = m.Field<decimal?>("STOCK_CORREG"),
+                //    EN_PROCESO = m.Field<decimal?>("EN_PROCESO"),
+                //    REQUERIDO = m.Field<decimal?>("REQUERIDO"),
+                //    ENTRPREV = m.Field<DateTime>("ENTRPREV"),
+                //    CG_CIA = m.Field<int>("CG_CIA"),
+                //    USUARIO = m.Field<string>("USUARIO"),
+                //}).ToList<ModeloAbastecimiento>();
 
-                List<ModeloAbastecimiento> xLista = dbAbastecimientoSE.AsEnumerable().Select(m => new ModeloAbastecimiento()
-                {
-                    CG_PROD = m.Field<string>("CG_PROD"),
-                    CG_MAT = m.Field<string>("CG_MAT"),
-                    DES_MAT = m.Field<string>("DES_MAT"),
-                    CG_ORDEN = m.Field<int>("CG_ORDEN"),
-                    CALCULADO = m.Field<decimal?>("CALCULADO"),
-                    ACOMPRAR = m.Field<decimal?>("ACOMPRAR"),
-                    ACOMPRAR_INFORMADO = m.Field<decimal?>("ACOMPRAR_INFORMADO"),
-                    STOCK = m.Field<decimal?>("STOCK"),
-                    UNIDMED = m.Field<string>("UNIDMED"),
-                    UNIDCOMER = m.Field<string>("UNIDCOMER"),
-                    STOCK_MINIMO = m.Field<decimal?>("STOCK_MINIMO"),
-                    PEND_SIN_OC = m.Field<decimal?>("PEND_SIN_OC"),
-                    COMP_DE_ENTRADA = m.Field<decimal?>("COMP_DE_ENTRADA"),
-                    COMP_DE_SALIDA = m.Field<decimal?>("COMP_DE_SALIDA"),
-                    STOCK_CORREG = m.Field<decimal?>("STOCK_CORREG"),
-                    EN_PROCESO = m.Field<decimal?>("EN_PROCESO"),
-                    REQUERIDO = m.Field<decimal?>("REQUERIDO"),
-                    ENTRPREV = m.Field<DateTime>("ENTRPREV"),
-                    CG_CIA = m.Field<int>("CG_CIA"),
-                    USUARIO = m.Field<string>("USUARIO"),
-                }).ToList<ModeloAbastecimiento>();
 
-                return xLista;
+                var se = await _context.ModeloAbastecimiento.Where(a => a.CG_ORDEN == 3).ToListAsync();
+                return se;
             }
             catch (Exception ex)
             {
-                return new List<ModeloAbastecimiento>();
+                return BadRequest(new List<ModeloAbastecimiento>());
             }
         }
 
@@ -196,8 +245,8 @@ namespace SupplyChain.Server.Controllers
                     EN_PROCESO = m.Field<decimal?>("EN_PROCESO"),
                     REQUERIDO = m.Field<decimal?>("REQUERIDO"),
                     ENTRPREV = m.Field<DateTime>("ENTRPREV"),
-                    CG_CIA = m.Field<int>("CG_CIA"),
-                    USUARIO = m.Field<string>("USUARIO"),
+                    //CG_CIA = m.Field<int>("CG_CIA"),
+                    //USUARIO = m.Field<string>("USUARIO"),
                 }).ToList<ModeloAbastecimiento>();
 
                 return xLista;
@@ -271,8 +320,8 @@ namespace SupplyChain.Server.Controllers
                     EN_PROCESO = m.Field<decimal?>("EN_PROCESO"),
                     REQUERIDO = m.Field<decimal?>("REQUERIDO"),
                     ENTRPREV = m.Field<DateTime>("ENTRPREV"),
-                    CG_CIA = m.Field<int>("CG_CIA"),
-                    USUARIO = m.Field<string>("USUARIO"),
+                    //CG_CIA = m.Field<int>("CG_CIA"),
+                    //USUARIO = m.Field<string>("USUARIO"),
                 }).ToList<ModeloAbastecimiento>();
 
                 return xLista;
@@ -316,8 +365,8 @@ namespace SupplyChain.Server.Controllers
                     EN_PROCESO = m.Field<decimal?>("EN_PROCESO"),
                     REQUERIDO = m.Field<decimal?>("REQUERIDO"),
                     ENTRPREV = m.Field<DateTime>("ENTRPREV"),
-                    CG_CIA = m.Field<int>("CG_CIA"),
-                    USUARIO = m.Field<string>("USUARIO"),
+                    //CG_CIA = m.Field<int>("CG_CIA"),
+                    //USUARIO = m.Field<string>("USUARIO"),
                 }).ToList<ModeloAbastecimiento>();
 
                 return xLista;

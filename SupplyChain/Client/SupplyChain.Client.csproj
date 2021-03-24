@@ -9,6 +9,10 @@
     <Content Remove="wwwroot\pages.css" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="Pages\ABM\Prods\ProdPage.razor" />
     <None Include="Pages\PCP\Fabricaciones\Fabricaciones.razor" />
@@ -499,6 +503,21 @@
 
   <ItemGroup>
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <!-->Target Name="PublishServiceWorker" AfterTargets="CopyFilesToPublishDirectory">
     <WriteLinesToFile File="$(PublishDir)wwwroot\service-worker.js" Lines="/* $([System.Guid]::NewGuid()) */" />

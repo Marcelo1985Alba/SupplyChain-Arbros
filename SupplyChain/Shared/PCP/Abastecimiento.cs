@@ -7,6 +7,7 @@ using System.Text;
 
 namespace SupplyChain.Shared.Models
 {
+    [Table("NET_Temp_Abastecimiento")]
     public class ModeloAbastecimiento
     {
         [Key]
@@ -28,8 +29,8 @@ namespace SupplyChain.Shared.Models
         public decimal? EN_PROCESO { get; set; } = 0;
         public decimal? REQUERIDO { get; set; } = 0;
         public DateTime ENTRPREV { get; set; }
-        public int CG_CIA { get; set; } = 0;
-        public string USUARIO { get; set; } = "";
+        //public int CG_CIA { get; set; } = 0;
+        //public string USUARIO { get; set; } = "";
     }
 
 }

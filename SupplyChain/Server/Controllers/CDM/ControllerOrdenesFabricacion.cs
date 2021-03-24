@@ -73,15 +73,13 @@ namespace SupplyChain
                                           xItem.DES_OPER,
                                           xItem.CG_ORDF);
                 await _context.Database.ExecuteSqlRawAsync(xSQL);
+                return Ok();
             }
             catch (Exception ex)
             {
-                {
-                    BadRequest(ex);
-                }
+                 return BadRequest(ex);
             }
 
-            return NoContent();
         }
     }
 }

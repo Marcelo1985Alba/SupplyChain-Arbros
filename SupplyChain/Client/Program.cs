@@ -8,6 +8,7 @@ using SupplyChain.Client.HelperService;
 using Syncfusion.Blazor;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,10 +22,17 @@ namespace SupplyChain.Client
             Syncfusion.Licensing.SyncfusionLicenseProvider
     .               RegisterLicense("MzcxMzE0QDMxMzgyZTM0MmUzMG0wbHRCMGNDZi9oUFhMVlp1V3l4NG10OFNmejVQVnpEMzFBQ3p2M0VqYms9");
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
             builder.RootComponents.Add<App>("#app");
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             ConfigureServices(builder.Services);
             builder.Services.AddSyncfusionBlazor();
+            // Register the Syncfusion locale service to customize the  SyncfusionBlazor component locale culture
+            builder.Services.AddSingleton(typeof(ISyncfusionStringLocalizer), typeof(SyncfusionLocalizer));
+
+            // Set the default culture of the application
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("es");
+            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("es");
             await builder.Build().RunAsync();
         }
 

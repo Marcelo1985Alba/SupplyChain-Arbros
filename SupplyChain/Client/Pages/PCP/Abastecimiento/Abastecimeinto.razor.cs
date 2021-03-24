@@ -13,6 +13,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
 using System.Data;
+using SupplyChain.Client.Shared;
 
 namespace SupplyChain.Client.Pages.PCP.Abastecimiento
 {
@@ -48,13 +49,29 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
         "Print",
         "ExcelExport"
     };
-
+        //protected NotificacionToast NotificacionObj;
+        //protected bool ToastVisible { get; set; } = false;
         protected override async Task OnInitializedAsync()
         {
-            listaAbastMP = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecimientoMP");
-            listaAbastSE = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecimientoSE");
+            //HttpResponseMessage respuesta;
+            var listAbastecimiento = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento");
+            listaAbastMP = listAbastecimiento.Where(a => a.CG_ORDEN == 4).ToList();
+            listaAbastSE = listAbastecimiento.Where(a => a.CG_ORDEN == 3).ToList();
+            //listaAbastMP = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecimientoMP");
+            //listaAbastSE =  await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecimientoSE");
+            //if (respuesta.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            //{
+            //    var mensServidor = await respuesta.Content.ReadAsStringAsync();
 
-            await base.OnInitializedAsync();
+            //    Console.WriteLine($"Error: {mensServidor}");
+            //    //await NotificacionObj.ShowAsyncError();
+            //}
+            //else
+            //{
+            //    listaAbastSE = await respuesta.Content.ReadFromJsonAsync<List<ModeloAbastecimiento>>();
+            //}
+
+            await InvokeAsync(StateHasChanged);
         }
 
         public async Task ClickHandlerMP(Syncfusion.Blazor.Navigations.ClickEventArgs args)

@@ -29,9 +29,16 @@ namespace SupplyChain.Server
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            services.AddRazorPages(); ;
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+            .AddJsonOptions(options =>
+             {
+                 // Use the default property (Pascal) casing.
+                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
+             });
+            services.AddRazorPages(); 
+
             
+
             //services.AddControllersWithViews();
             //services.AddRazorPages();
         }
@@ -50,7 +57,7 @@ namespace SupplyChain.Server
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseRequestLocalization();
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();

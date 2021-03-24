@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using SupplyChain.Client.Shared;
 using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Data;
 using Syncfusion.Blazor.Grids;
@@ -29,10 +30,11 @@ namespace SupplyChain.Pages.Modelos
         protected string StatusValue = "None";
         protected string SearchValue = string.Empty;
         protected Query CardQuery = new Query();
-
+        [CascadingParameter]
+        public MainLayout Layout { get; set; }
         protected override async Task OnInitializedAsync()
         {
-
+            Layout.Titulo = "Logistica";
             Pedclis = await Http.GetFromJsonAsync<List<PedCli>>("api/PedCli");
             Pedidoss = await Http.GetFromJsonAsync<List<Pedidos>>("api/Pedidos");
             Programas = await Http.GetFromJsonAsync<List<Programa>>("api/Programa");

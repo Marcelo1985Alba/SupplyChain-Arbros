@@ -1,6 +1,8 @@
 ﻿
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor
 @using Syncfusion.Blazor.Calendars
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Inputs
@@ -38,6 +40,7 @@
                             @ref="Grid" DataSource="@listaPedPend" AllowExcelExport="true" AllowGrouping="true"
                             GridLines="GridLine.Both" Height="100%" Width="100%"
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" ID="PedidosPendientes">
+                        <SfDataManager Url="api/PedidosPendientes" CrossDomain="true" Adaptor="Adaptors.ODataAdaptor"></SfDataManager>
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                         <GridEvents OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" TValue="ModeloPedidosPendientes"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>

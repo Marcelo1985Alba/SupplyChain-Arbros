@@ -49,12 +49,20 @@
                     <div class="col-sm-3 my-1">
                         <button type="submit" class="btn btn-primary" @onclick="@MostrarTrazabilidad">Mostrar Trazabilidad</button>
                     </div>
-                    <div class="col-sm-3 my-1">
-                        <button type="submit" class="btn btn-primary" @onclick="@Catalogo">Imprimir catálogo</button>
-                    </div>
-                    <div class="col-sm-3 my-1">
-                        <button type="submit" class="btn btn-primary" @onclick="@Etiqueta">Identificación</button>
-                    </div>
+                    @{
+                        if (Showgrid == true)
+                        {
+                            <div class="col-sm-2 my-1">
+                                <button type="submit" class="btn btn-primary" @onclick="@Catalogo">Imprimir catálogo</button>
+                            </div>
+                            <div class="col-sm-2 my-1">
+                                <button type="submit" class="btn btn-primary" @onclick="@Etiqueta">Identificación</button>
+                            </div>
+                            <div class="col-sm-2 my-1">
+                                <button type="submit" class="btn btn-primary" @onclick="@Ensayos">Ver ensayos</button>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -413,9 +421,11 @@
             //new Syncfusion.Blazor.Navigations.ItemModel { Text = "medium", TooltipText = "40px", PrefixIcon = "e-medium-icon", Id = "medium", Align = Syncfusion.Blazor.Navigations.ItemAlign.Right},
             //new Syncfusion.Blazor.Navigations.ItemModel { Text = "big", TooltipText = "60px", PrefixIcon = "e-small-icon", Id = "big", Align = Syncfusion.Blazor.Navigations.ItemAlign.Right}
         };
-
+    [CascadingParameter]
+    public MainLayout Layout { get; set; }
     protected override async Task OnInitializedAsync()
     {
+        Layout.Titulo = "Trazabilidad";
         rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
         PedCliList = await Http.GetFromJsonAsync<List<PedCli>>("api/PedCli/GetPedidos");
         prodList = await Http.GetFromJsonAsync<List<Prod>>("api/Prod/GetPedidos");
@@ -1206,6 +1216,12 @@
         //    document1.Close(true);
         //    await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
         //}
+    }
+
+    protected async Task Ensayos()
+    {
+        //NavigationManager.NavigateTo($"Pdf/{pedido}/ENSAYOS");
+        await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{TrzNro}/ENSAYOS", $"Pdf/{TrzNro}/ENSAYOS" });
     }
 }
 <style>

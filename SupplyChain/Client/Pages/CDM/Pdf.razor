@@ -21,7 +21,7 @@
 @if (accion == null)
 {
     <p><em>Loading...</em></p>
-    
+
 }
 else
 {
@@ -37,24 +37,19 @@ else
         {
 
             codigo = codigo.Substring(0, 7) + ".pdf";
-            <h3>@codigo</h3>
-            @*foreach(Solution solution in rutas)
-                {
-                    <h1>@Solution?.VALORC</h1>
-                }*@
-            <h1>@Solution?.VALORC</h1>
-            <SfPdfViewer ID="pdfViewer" ServiceUrl="/api/Values" DocumentPath="@codigo.Trim()" Height="1200" Width="100%" ></SfPdfViewer>
+            <SfPdfViewer @ref="sfPdfViewerObj" ID="pdfViewer" ServiceUrl="/api/Values" DocumentPath="@codigo.Trim()" Height="2000px" Width="100%" ></SfPdfViewer>
         }
 
     }
 
-    @*if (accion == "RUTACNC")
-        {
+    if (accion == "RUTACNC")
+    {
 
-            // Only get files that begin with the letter "c".
-            string[] dirs = Directory.GetFiles(@$"{ruta.VALORC}", $"{codigo.Substring(0, 7)}*");
-                for (int i = 0; i < dirs.Length; i++)
-                {
+        // Only get files that begin with the letter "c".
+        var ruta = rutas.Where(s => s.CAMPO == accion).FirstOrDefault();
+        string[] dirs = Directory.GetFiles(@$"{ruta.VALORC}", $"{codigo.Substring(0, 7)}*");
+        for (int i = 0; i < dirs.Length; i++)
+        {
                     <div class="accordion" id="accordionExample">
                         <div class="card">
                             <div class="card-header" id="@i">
@@ -81,10 +76,9 @@ else
                             </div>
                         </div>
                     </div>
-                }
-        }*@
+                                                }
+                                            }
 }
-
 
 @*if (accion == "RUTAOF")
         {
@@ -222,14 +216,17 @@ else
 
     [Parameter] public string accion { get; set; } = "";
 
+    SfPdfViewer sfPdfViewerObj;
+
     protected override async Task OnInitializedAsync()
     {
         VisibleSpinner = true;
         rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 
-        Solution = rutas.Where(s => s.CAMPO == "RUTAOF2").FirstOrDefault();
-        Console.WriteLine("RUTA PLANOS PDF:" + Solution.VALORC);
+        Console.WriteLine("RUTA PLANOS PDF:" + accion);
         await InvokeAsync(StateHasChanged);
+
+        //sfPdfViewerObj.Load()
         VisibleSpinner = false;
     }
 

@@ -67,8 +67,12 @@
     private int SelectedTab { get; set; } = 0;
     public List<Order> Orders { get; set; }
 
+    [CascadingParameter]
+    public MainLayout Layout { get; set; }
+
     protected override void OnInitialized()
     {
+        Layout.Titulo = "Programacion y Control de la Produccion";
         Orders = Enumerable.Range(1, 6).Select(x => new Order()
         {
             OrderID = 1000 + x,
