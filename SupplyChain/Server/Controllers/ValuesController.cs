@@ -261,17 +261,15 @@ namespace SupplyChain
         private string GetDocumentPath(string document)
         {
 
-            string xSQL = string.Format("select CAMPO, VALORC from Solution where CAMPO = 'RUTAOF2' OR CAMPO = 'RUTACNC' OR CAMPO = 'RUTAENSAYO' OR CAMPO = 'RUTATRAZABILIDAD' OR CAMPO = 'RUTADATOS'");
+            string xSQL = string.Format("select CAMPO, VALORC from Solution where CAMPO = 'RUTAOF' OR CAMPO = 'RUTACNC' OR CAMPO = 'RUTAENSAYO' OR CAMPO = 'RUTATRAZABILIDAD' OR CAMPO = 'RUTADATOS'");
             var ubicaciones =  _context.Solution.FromSqlRaw(xSQL).ToList<Solution>();
-            var ubicacion = ubicaciones.Where(s => s.CAMPO == "RUTAOF2").Select(c => c.VALORC).FirstOrDefault();
+            var ubicacion = ubicaciones.Where(s => s.CAMPO == "RUTAOF").Select(c => c.VALORC).FirstOrDefault();
             
             string documentPath = string.Empty;
 
-            //document = "27303156459_011_00001_00000065.pdf";
-
             if (!System.IO.File.Exists(ubicacion + "/" + document))
             {
-                var sol = ubicaciones.Where(s => s.CAMPO == "RUTAOF2").FirstOrDefault();
+                var sol = ubicaciones.Where(s => s.CAMPO == "RUTAOF").FirstOrDefault();
                 //var path = _hostingEnvironment.ContentRootPath;
                 //string webRootPath = _hostingEnvironment.WebRootPath;
                 //if (System.IO.File.Exists(path + "/documentos/" + document))

@@ -10,6 +10,7 @@ namespace SupplyChain
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Microsoft.AspNetCore.Authorization.Authorize]
     public class TipoMatController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -19,7 +20,7 @@ namespace SupplyChain
             _context = context;
         }
 
-        // GET: api/Areas
+        // GET: api/TipoMat
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TipoMat>>> GetUnidades()
         {

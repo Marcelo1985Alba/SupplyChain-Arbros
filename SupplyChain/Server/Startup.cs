@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Syncfusion.Blazor;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SupplyChain.Server
 {
@@ -68,8 +70,15 @@ namespace SupplyChain.Server
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
+                endpoints.Map("api/{**slug}", HandleApiFallback);
                 endpoints.MapFallbackToFile("index.html");
             });
+        }
+
+        private Task HandleApiFallback(HttpContext context)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            return Task.CompletedTask;
         }
     }
 }

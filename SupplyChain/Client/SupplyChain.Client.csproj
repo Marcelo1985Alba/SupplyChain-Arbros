@@ -11,8 +11,10 @@
 
   <PropertyGroup>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+
   </PropertyGroup>
 
+  
   <ItemGroup>
     <None Include="Pages\ABM\Prods\ProdPage.razor" />
     <None Include="Pages\PCP\Fabricaciones\Fabricaciones.razor" />

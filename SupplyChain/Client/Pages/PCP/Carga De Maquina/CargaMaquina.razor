@@ -222,7 +222,7 @@
                                             }
                                             else
                                             {
-                                                ValorBoton = dbCarga[i].CG_ORDF;
+                                                ValorBoton = OrdenDeFabAlta;
                                             }
                                         }
                                         <div class="@("botonOrden" + xOrdenFabricacion.ToString())" id="ButtonHover">
@@ -470,8 +470,8 @@
                                     </div>
                                 }
                                 @if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
-                  ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
-                  ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
+                                        ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
+                                        ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
                                 {
                                     <div class="form-group col-md-2">
                                         <SfButton IsPrimary="true" @onclick="@(async ()=> await IrAServicio(ordenFabricacion.PEDIDO.ToString().Trim()))">Ver en Modulo Servicios</SfButton>
@@ -484,6 +484,9 @@
                                 {
                                     <div class="form-group col-md-2">
                                         <SfButton IsPrimary="true" @onclick="@(async ()=> await Ensayos(ordenFabricacion.PEDIDO.ToString().Trim()))">Ver Ensayos</SfButton>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <SfButton IsPrimary="true" @onclick="@(async ()=> await IrAPrograma(ordenFabricacion.CG_PROD.Trim()))">Ver Programa</SfButton>
                                     </div>
                                 }
                             </div>
@@ -553,10 +556,12 @@
                             {
                                 <div class="form-row">
                                     <div class="form-group col-md-6" style="text-align:left">
-                                        <label class="font-weight-normal"><a class="font-weight-bold">Transportista: </a>@(ordenFabricacionEncabezado.CG_TRANS + " - " + ordenFabricacionEncabezado.DES_TRANS)</label>
+                                        <label class="font-weight-normal"><a class="font-weight-bold">Transportista: </a>
+                                        @(ordenFabricacionEncabezado.CG_TRANS + " - " + ordenFabricacionEncabezado.DES_TRANS)</label>
                                     </div>
                                     <div class="form-group col-md-6" style="text-align:left">
-                                        <label class="font-weight-normal"><a class="font-weight-bold">Entrega: </a>@(ordenFabricacionEncabezado.DIRENT + " - " + ordenFabricacionEncabezado.DIRTRANS)</label>
+                                        <label class="font-weight-normal"><a class="font-weight-bold">Entrega: </a>
+                                        @(ordenFabricacionEncabezado.DIRENT + " - " + ordenFabricacionEncabezado.DIRTRANS)</label>
                                     </div>
                                 </div>
                             }
@@ -807,7 +812,7 @@
 @if (isScrapDialogVisible && ordenFabricacion != null && dbCarga != null && dbScrap != null)
 {
     <div id="targetPreguntaFoto" class="cssScrapDialog">
-        <SfDialog Target="#targetPreguntaFoto" Width="90%" Height="950%" CssClass="" IsModal="false" ShowCloseIcon="true"
+        <SfDialog Target="#targetPreguntaFoto" Width="90%" Height="95%" CssClass="" IsModal="false" ShowCloseIcon="true"
                   CloseOnEscape="true"
                   @bind-Visible="@isScrapDialogVisible">
             <DialogTemplates>
@@ -844,379 +849,422 @@
 
 @code
 {
-            public DateTime ProjectStart = new DateTime(2019, 3, 25);
-            public DateTime ProjectEnd = new DateTime(2019, 7, 28);
-            [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
-            protected List<ModeloCarga> dbCarga;
-            protected int extensionDias = 365;
-            protected int totalDiasNoLaborables = 0;
-            protected int CantidadColumnasPorPeriodo = 8;
-            protected int xHora = 1;
-            protected int xColumna;
-            protected string xCg_celda;
-            protected int xColumnaInicialBarra;
-            protected bool isOrdenDialogVisible = false;
-            protected bool isScrapDialogVisible = false;
-            protected bool sabadosLaborables = false;
-            protected bool domingosLaborables = false;
-            protected SfToast ToastObj;
-            protected int ordenNumero = 0;
-            protected string ordenTitulo = "";
-            protected DateTime fechaInicial;
-            protected int ordenAbuscar = 0;
-            protected ModeloOrdenFabricacion ordenFabricacion;
-            protected ModeloOrdenFabricacion ordenFabricacionOriginal;
-            protected ModeloOrdenFabricacionEncabezado ordenFabricacionEncabezado;
-            protected List<ModeloOrdenFabricacionMP> ordenFabricacionMP;
-            protected List<ModeloOrdenFabricacionSE> ordenFabricacionSE;
-            protected List<ModeloOrdenFabricacionHojaRuta> ordenFabricacionHojaRuta;
-            protected List<ModeloGenericoIntString> dbOrdenesDependientes;
-            protected List<ModeloGenericoIntString> dbEstadoCarga;
-            protected List<ModeloGenericoStringString> dbCeldas;
-            protected List<ModeloGenericoStringString> dbProcesos;
-            protected List<ModeloGenericoStringString> dbDiasFestivos;
-            protected List<ModeloGenericoIntString> dbScrap;
-            protected int? scrapSeleccionado;
-            protected string Usuario = "USER";
-            protected int OrdenDeFabAlta;
-            public SfListView<ModeloGenericoIntString> listViewScrap;
-            private string scrapSeleccionadoMensaje { get; set; } = "";
-            protected IEnumerable<Operario> operariosBE3;
-            protected List<Solution> rutas;
+    public DateTime ProjectStart = new DateTime(2019, 3, 25);
+    public DateTime ProjectEnd = new DateTime(2019, 7, 28);
+    [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
+    protected List<ModeloCarga> dbCarga;
+    protected int extensionDias = 365;
+    protected int totalDiasNoLaborables = 0;
+    protected int CantidadColumnasPorPeriodo = 8;
+    protected int xHora = 1;
+    protected int xColumna;
+    protected string xCg_celda;
+    protected int xColumnaInicialBarra;
+    protected bool isOrdenDialogVisible = false;
+    protected bool isScrapDialogVisible = false;
+    protected bool sabadosLaborables = false;
+    protected bool domingosLaborables = false;
+    protected SfToast ToastObj;
+    protected int ordenNumero = 0;
+    protected string ordenTitulo = "";
+    protected DateTime fechaInicial;
+    protected int ordenAbuscar = 0;
+    protected ModeloOrdenFabricacion ordenFabricacion;
+    protected ModeloOrdenFabricacion ordenFabricacionOriginal;
+    protected ModeloOrdenFabricacionEncabezado ordenFabricacionEncabezado;
+    protected List<ModeloOrdenFabricacionMP> ordenFabricacionMP;
+    protected List<ModeloOrdenFabricacionSE> ordenFabricacionSE;
+    protected List<ModeloOrdenFabricacionHojaRuta> ordenFabricacionHojaRuta;
+    protected List<ModeloGenericoIntString> dbOrdenesDependientes;
+    protected List<ModeloGenericoIntString> dbEstadoCarga;
+    protected List<ModeloGenericoStringString> dbCeldas;
+    protected List<ModeloGenericoStringString> dbProcesos;
+    protected List<ModeloGenericoStringString> dbDiasFestivos;
+    protected List<ModeloGenericoIntString> dbScrap;
+    protected int? scrapSeleccionado;
+    protected string Usuario = "USER";
+    protected int OrdenDeFabAlta;
+    public SfListView<ModeloGenericoIntString> listViewScrap;
+    private string scrapSeleccionadoMensaje { get; set; } = "";
+    protected IEnumerable<Operario> operariosBE3;
+    protected List<Solution> rutas;
 
-            protected List<Operario> operariosList = new List<Operario>();
-            protected List<PedCli> PedCliList = new List<PedCli>();
-            protected List<Producto> prodList = new List<Producto>();
-            private SfSpinner SpinnerCDM;
-            private bool Visible = false;
-            private string MensajeCargando = "Cargando...";
-            protected override async Task OnInitializedAsync()
+    protected List<Operario> operariosList = new List<Operario>();
+    protected List<PedCli> PedCliList = new List<PedCli>();
+    protected List<Producto> prodList = new List<Producto>();
+    private SfSpinner SpinnerCDM;
+    private bool Visible = false;
+    private string MensajeCargando = "Cargando...";
+    protected override async Task OnInitializedAsync()
+    {
+        //await SpinnerCDM.ShowAsync();
+        Visible = true;
+
+        dbEstadoCarga = new List<ModeloGenericoIntString>();
+        dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 2, TEXTO = "FIRME" });
+        dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 3, TEXTO = "EN CURSO" });
+        dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 4, TEXTO = "CERRADA" });
+        dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 5, TEXTO = "ANULADA" });
+
+
+        operariosList = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
+
+        operariosBE3 = from operariosBE3 in (IEnumerable<Operario>)operariosList
+                       where operariosBE3.CG_OPER == 51 || operariosBE3.CG_OPER == 131 || operariosBE3.CG_OPER == 135 || operariosBE3.CG_OPER == 139 || operariosBE3.CG_OPER == 144
+                       select operariosBE3;
+
+
+        PedCliList = await Http.GetFromJsonAsync<List<PedCli>>("api/PedCli/GetPedidos");
+        prodList = await Http.GetFromJsonAsync<List<Producto>>("api/Prod/GetPedidos");
+
+        rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+
+        await Refrescar();
+
+        //await SpinnerCDM.HideAsync();
+        Visible = false;
+    }
+
+    protected async Task Refrescar()
+    {
+        try
+        {
+            Visible = true;
+            dbCarga = await Http.GetFromJsonAsync<List<ModeloCarga>>("api/Cargas");
+            // turno
+            List<ModeloGenericoIntString> xTurno = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/Select Top 1 CONVERT(INT, ValorN) ID, '' TEXTO From Solution Where Campo = 'HORASDIA'");
+            CantidadColumnasPorPeriodo = xTurno.FirstOrDefault().ID;
+            // Dias de calendario
+            List<ModeloGenericoIntString> xDias = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/Select Top 1 CONVERT(INT, ValorN) ID, '' TEXTO From Solution Where Campo = 'DIASCARGA'");
+            extensionDias = xDias.FirstOrDefault().ID;
+            // Sabados laborables
+            List<ModeloGenericoIntString> xSabadosLaborables = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/Select Top 1 CONVERT(INT, ValorN) ID, '' TEXTO From Solution Where Campo = 'SABADOSLABORABLES'");
+            sabadosLaborables = (xSabadosLaborables.FirstOrDefault().ID == 1) ? true : false;
+            // Domingos laborables
+            List<ModeloGenericoIntString> xDomingosLaborables = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/Select Top 1 CONVERT(INT, ValorN) ID, '' TEXTO From Solution Where Campo = 'DOMINGOSLABORABLES'");
+            domingosLaborables = (xDomingosLaborables.FirstOrDefault().ID == 1) ? true : false;
+            // Dias laborables
+            dbDiasFestivos = await Http.GetFromJsonAsync<List<ModeloGenericoStringString>>("api/ModelosGenericosStringString/select distinct convert(char(8), Fecha, 112) ID, '' TEXTO from CalendarioFestivos");
+            //Busca Scrap
+            dbScrap = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/SELECT convert(int, cg_scrap) ID, des_scrap TEXTO FROM scrap ORDER BY Cg_scrap");
+            // fecha inicial
+            if (dbCarga.Where(x => x.FE_CURSO != null && x.FE_CURSO.Year != 1900 && x.CG_ESTADOCARGA == 3).ToList().Count > 0)
+                fechaInicial = dbCarga.Where(x => x.FE_CURSO != null && x.FE_CURSO.Year != 1900 && x.CG_ESTADOCARGA == 3).Min(x => x.FE_CURSO);
+            else
+                fechaInicial = DateTime.Now;
+
+
+            Visible = false;
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    protected async Task OrdenFabricacionOpen(int xOrdenFabricacion, bool xExigeOA, int xPedido, string xCgProd, decimal xCantidad)
+    {
+        Visible = true;
+        try
+        {
+
+            // Titulo
+            if (xExigeOA)
             {
-                //await SpinnerCDM.ShowAsync();
-                Visible = true;
-
-                dbEstadoCarga = new List<ModeloGenericoIntString>();
-                dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 2, TEXTO = "FIRME" });
-                dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 3, TEXTO = "EN CURSO" });
-                dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 4, TEXTO = "CERRADA" });
-                dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 5, TEXTO = "ANULADA" });
-
-
-                operariosList = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
-
-                operariosBE3 = from operariosBE3 in (IEnumerable<Operario>)operariosList
-                               where operariosBE3.CG_OPER == 51 || operariosBE3.CG_OPER == 131 || operariosBE3.CG_OPER == 135 || operariosBE3.CG_OPER == 139 || operariosBE3.CG_OPER == 144
-                               select operariosBE3;
-
-
-                PedCliList = await Http.GetFromJsonAsync<List<PedCli>>("api/PedCli/GetPedidos");
-                prodList = await Http.GetFromJsonAsync<List<Producto>>("api/Prod/GetPedidos");
-
-                rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
-
-                await Refrescar();
-
-                //await SpinnerCDM.HideAsync();
-                Visible = false;
+                ordenTitulo = "ORDEN DE ARMADO Nº " + xOrdenFabricacion.ToString();
             }
-
-            protected async Task Refrescar()
+            else
             {
-                try
-                {
-                    Visible = true;
-                    dbCarga = await Http.GetFromJsonAsync<List<ModeloCarga>>("api/Cargas");
-                    // turno
-                    List<ModeloGenericoIntString> xTurno = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/Select Top 1 CONVERT(INT, ValorN) ID, '' TEXTO From Solution Where Campo = 'HORASDIA'");
-                    CantidadColumnasPorPeriodo = xTurno.FirstOrDefault().ID;
-                    // Dias de calendario
-                    List<ModeloGenericoIntString> xDias = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/Select Top 1 CONVERT(INT, ValorN) ID, '' TEXTO From Solution Where Campo = 'DIASCARGA'");
-                    extensionDias = xDias.FirstOrDefault().ID;
-                    // Sabados laborables
-                    List<ModeloGenericoIntString> xSabadosLaborables = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/Select Top 1 CONVERT(INT, ValorN) ID, '' TEXTO From Solution Where Campo = 'SABADOSLABORABLES'");
-                    sabadosLaborables = (xSabadosLaborables.FirstOrDefault().ID == 1) ? true : false;
-                    // Domingos laborables
-                    List<ModeloGenericoIntString> xDomingosLaborables = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/Select Top 1 CONVERT(INT, ValorN) ID, '' TEXTO From Solution Where Campo = 'DOMINGOSLABORABLES'");
-                    domingosLaborables = (xDomingosLaborables.FirstOrDefault().ID == 1) ? true : false;
-                    // Dias laborables
-                    dbDiasFestivos = await Http.GetFromJsonAsync<List<ModeloGenericoStringString>>("api/ModelosGenericosStringString/select distinct convert(char(8), Fecha, 112) ID, '' TEXTO from CalendarioFestivos");
-                    //Busca Scrap
-                    dbScrap = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/SELECT convert(int, cg_scrap) ID, des_scrap TEXTO FROM scrap ORDER BY Cg_scrap");
-                    // fecha inicial
-                    if (dbCarga.Where(x => x.FE_CURSO != null && x.FE_CURSO.Year != 1900 && x.CG_ESTADOCARGA == 3).ToList().Count > 0)
-                        fechaInicial = dbCarga.Where(x => x.FE_CURSO != null && x.FE_CURSO.Year != 1900 && x.CG_ESTADOCARGA == 3).Min(x => x.FE_CURSO);
-                    else
-                        fechaInicial = DateTime.Now;
-
-
-                    Visible = false;
-                }
-                catch
-                {
-                    throw;
-                }
+                ordenTitulo = "ORDEN DE FABRICACIÓN Nº " + xOrdenFabricacion.ToString();
             }
-
-            protected async Task OrdenFabricacionOpen(int xOrdenFabricacion, bool xExigeOA, int xPedido, string xCgProd, decimal xCantidad)
+            if (xPedido > 0)
             {
-                Visible = true;
-                try
-                {
-
-                    // Titulo
-                    if (xExigeOA)
-                    {
-                        ordenTitulo = "ORDEN DE ARMADO Nº " + xOrdenFabricacion.ToString();
-                    }
-                    else
-                    {
-                        ordenTitulo = "ORDEN DE FABRICACIÓN Nº " + xOrdenFabricacion.ToString();
-                    }
-                    if (xPedido > 0)
-                    {
-                        ordenTitulo += " - SERIE / PEDIDO Nº " + xPedido.ToString();
-                    }
-                    // Datos de la orden
-                    ordenNumero = xOrdenFabricacion;
-                    ordenFabricacion = await Http.GetFromJsonAsync<ModeloOrdenFabricacion>("api/OrdenesFabricacion/" + ordenNumero.ToString());
-                    ordenFabricacionOriginal = Newtonsoft.Json.JsonConvert.DeserializeObject<ModeloOrdenFabricacion>(Newtonsoft.Json.JsonConvert.SerializeObject(ordenFabricacion));
-                    // Ordenes dependientes
-                    string xSQLcommand = String.Format("SELECT 0 ID, CONVERT(varchar, 0) TEXTO UNION SELECT DISTINCT CG_ORDF ID, CONVERT(varchar, CG_ORDF) TEXTO FROM PROGRAMA WHERE CG_ORDFASOC = {0} AND CG_ORDF != {1}",
-                                                          ordenFabricacion.CG_ORDFASOC,
-                                                          ordenFabricacion.CG_ORDF);
-                    dbOrdenesDependientes = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/" + xSQLcommand);
-                    // Celdas
-                    xSQLcommand = String.Format("SELECT ltrim(rtrim(CG_CELDA)) ID, DES_CELDA TEXTO FROM CELDAS ORDER BY CG_CELDA");
-                    dbCeldas = await Http.GetFromJsonAsync<List<ModeloGenericoStringString>>("api/ModelosGenericosStringString/" + xSQLcommand);
-                    // Procesos
-                    xSQLcommand = String.Format("SELECT PROCESO ID, DESCRIP TEXTO FROM PROTAB ORDER BY PROCESO");
-                    dbProcesos = await Http.GetFromJsonAsync<List<ModeloGenericoStringString>>("api/ModelosGenericosStringString/" + xSQLcommand);
-                    // Datos del encabezado del detalle
-                    ordenFabricacionEncabezado = await Http.GetFromJsonAsync<ModeloOrdenFabricacionEncabezado>("api/OrdenesFabricacionEncabezado/" + ordenNumero.ToString());
-                    // Materias primas
-                    ordenFabricacionMP = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionMP>>("api/OrdenesFabricacionMP/" + ordenNumero.ToString());
-                    // Semi elaborados
-                    ordenFabricacionSE = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionSE>>("api/OrdenesFabricacionSE/" + ordenNumero.ToString());
-                    // Semi elaborados
-                    ordenFabricacionHojaRuta = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionHojaRuta>>("api/OrdenesFabricacionHojaRuta/" + xCgProd + "/" + xCantidad.ToString());
-                    Visible = false;
-                    isOrdenDialogVisible = true;
-                }
-                catch
-                {
-                    throw;
-                }
+                ordenTitulo += " - SERIE / PEDIDO Nº " + xPedido.ToString();
             }
-
-            private void OrdenFabricacionClose(Object args)
-            {
-                try
-                {
-                    isOrdenDialogVisible = false;
-                    ordenFabricacion = null;
-                }
-                catch
-                {
-                    throw;
-                }
-            }
-
-            private async Task OrdenFabricacionOk(Object args)
-            {
-                Visible = true;
-                try
-                {
-
-                    isOrdenDialogVisible = false;
-                    var respuesta = await Http.PutAsJsonAsync("api/OrdenesFabricacion/" + ordenFabricacion.CG_ORDF, ordenFabricacion);
-                    if (respuesta.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                    {
-                        await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "ERROR ", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
-                    }
-                    if (ordenFabricacion.CG_ESTADOCARGA == 2 || ordenFabricacion.CG_ESTADOCARGA == 3 && (ordenFabricacion.CG_ESTADOCARGA != ordenFabricacionOriginal.CG_ESTADOCARGA))
-                    {
-                        string sqlCommandString = string.Format("UPDATE Programa SET CG_ESTADOCARGA = {0},Fe_curso = GETDATE(), CG_ESTADO = {1} WHERE (Cg_ordf = {2} OR Cg_ordfAsoc = {2})",
-                                                  ordenFabricacion.CG_ESTADOCARGA,
-                                                  ordenFabricacionOriginal.CG_ESTADOCARGA,
+            // Datos de la orden
+            ordenNumero = xOrdenFabricacion;
+            ordenFabricacion = await Http.GetFromJsonAsync<ModeloOrdenFabricacion>("api/OrdenesFabricacion/" + ordenNumero.ToString());
+            ordenFabricacionOriginal = Newtonsoft.Json.JsonConvert.DeserializeObject<ModeloOrdenFabricacion>(Newtonsoft.Json.JsonConvert.SerializeObject(ordenFabricacion));
+            // Ordenes dependientes
+            string xSQLcommand = String.Format("SELECT 0 ID, CONVERT(varchar, 0) TEXTO UNION SELECT DISTINCT CG_ORDF ID, CONVERT(varchar, CG_ORDF) TEXTO FROM PROGRAMA WHERE CG_ORDFASOC = {0} AND CG_ORDF != {1}",
+                                                  ordenFabricacion.CG_ORDFASOC,
                                                   ordenFabricacion.CG_ORDF);
-                        respuesta = await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
+            dbOrdenesDependientes = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/" + xSQLcommand);
+            // Celdas
+            xSQLcommand = String.Format("SELECT ltrim(rtrim(CG_CELDA)) ID, DES_CELDA TEXTO FROM CELDAS ORDER BY CG_CELDA");
+            dbCeldas = await Http.GetFromJsonAsync<List<ModeloGenericoStringString>>("api/ModelosGenericosStringString/" + xSQLcommand);
+            // Procesos
+            xSQLcommand = String.Format("SELECT PROCESO ID, DESCRIP TEXTO FROM PROTAB ORDER BY PROCESO");
+            dbProcesos = await Http.GetFromJsonAsync<List<ModeloGenericoStringString>>("api/ModelosGenericosStringString/" + xSQLcommand);
+            // Datos del encabezado del detalle
+            ordenFabricacionEncabezado = await Http.GetFromJsonAsync<ModeloOrdenFabricacionEncabezado>("api/OrdenesFabricacionEncabezado/" + ordenNumero.ToString());
+            // Materias primas
+            ordenFabricacionMP = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionMP>>("api/OrdenesFabricacionMP/" + ordenNumero.ToString());
+            // Semi elaborados
+            ordenFabricacionSE = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionSE>>("api/OrdenesFabricacionSE/" + ordenNumero.ToString());
+            // Semi elaborados
+            ordenFabricacionHojaRuta = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionHojaRuta>>("api/OrdenesFabricacionHojaRuta/" + xCgProd + "/" + xCantidad.ToString());
+            Visible = false;
+            isOrdenDialogVisible = true;
+        }
+        catch
+        {
+            throw;
+        }
+    }
 
-                        if (respuesta.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                        {
-                            await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "ERROR ", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
-                        }
+    private void OrdenFabricacionClose(Object args)
+    {
+        try
+        {
+            isOrdenDialogVisible = false;
+            ordenFabricacion = null;
+        }
+        catch
+        {
+            throw;
+        }
+    }
 
+    private async Task OrdenFabricacionOk(Object args)
+    {
+        Visible = true;
 
-                        ordenFabricacion = null;
-                        await Refrescar();
-                    }
-                    else if (ordenFabricacion.CG_ESTADOCARGA == 4)
-                    {
-                        if (ordenFabricacion.CANTFAB == 0)
-                        {
-                            await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Órden sin indicar cantidad fabricada. Se continuará igualmente.", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
-                        }
+        isOrdenDialogVisible = false;
+        var respuesta = await Http.PutAsJsonAsync("api/OrdenesFabricacion/" + ordenFabricacion.CG_ORDF, ordenFabricacion);
+        if (respuesta.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        {
+            Console.WriteLine("Error en api/OrdenesFabricacion");
 
-                        if (dbScrap != null)
-                        {
-                            isScrapDialogVisible = true;
-                            StateHasChanged();
-                        }
-                        else
-                        {
-                            await CerrarOrdenFabricacion();
-                        }
-                    }
-                    else if (ordenFabricacion.CG_ESTADOCARGA == 5)
-                    {
-                        string sqlCommandString = "EXEC NET_PCP_Anular_OrdenFabricacion " + ordenFabricacion.CG_ORDF.ToString() + ", '" + Usuario + "'";
-                        var respuesta2 = await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
-                        if (respuesta2.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                        {
-                            await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "ERROR ", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
-                        }
+            string xSQL = string.Format("UPDATE Programa SET FECHA_PREVISTA_FABRICACION = '{0}', FECHA_INICIO_REAL_FABRICACION = '{1}', CANTFAB = {2}, FE_CIERRE = '{3}', " +
+                                            "CG_ORDFORIG = {4}, CG_CELDA = '{5}', PROCESO = '{6}', CG_OPER = {7}, DES_OPER = '{8}' WHERE Cg_ordf = {9}",
+                                          ordenFabricacion.FECHA_PREVISTA_FABRICACION,
+                                          ordenFabricacion.FECHA_INICIO_REAL_FABRICACION,
+                                          ordenFabricacion.CANTFAB.ToString().Replace(",", "."),
+                                          ordenFabricacion.FE_CIERRE,
+                                          ordenFabricacion.CG_ORDFORIG,
+                                          ordenFabricacion.CG_CELDA,
+                                          ordenFabricacion.PROCESO,
+                                          ordenFabricacion.CG_OPER,
+                                          ordenFabricacion.DES_OPER,
+                                          ordenFabricacion.CG_ORDF);
+            Console.WriteLine(" VER QUERY");
+            Console.WriteLine(xSQL);
 
-                        await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Órden anulada.", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
-                        ordenFabricacion = null;
-                    }
-
-
-                    await Refrescar();
-                    await InvokeAsync(StateHasChanged);
-                    Visible = false;
-                }
-                catch
-                {
-                    throw;
-                }
+            await this.ToastObj.Show(new ToastModel { Title = "ERROR!",
+                Content = $"Ocurrrio un error.Error al intentar Guardar OF: {ordenFabricacion.CG_ORDF} ",
+                CssClass = "e-toast-danger",
+                Icon = "e-error toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
+        if (ordenFabricacion.CG_ESTADOCARGA == 2 || ordenFabricacion.CG_ESTADOCARGA == 3 && (ordenFabricacion.CG_ESTADOCARGA != ordenFabricacionOriginal.CG_ESTADOCARGA))
+        {
+            string sqlCommandString = string.Format("UPDATE Programa SET CG_ESTADOCARGA = {0},Fe_curso = GETDATE(), CG_ESTADO = {1} WHERE (Cg_ordf = {2} OR Cg_ordfAsoc = {2})",
+                                      ordenFabricacion.CG_ESTADOCARGA,
+                                      ordenFabricacionOriginal.CG_ESTADOCARGA,
+                                      ordenFabricacion.CG_ORDF);
+            await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
+            ordenFabricacion = null;
+            await Refrescar();
+        }
+        else if (ordenFabricacion.CG_ESTADOCARGA == 4)
+        {
+            if (ordenFabricacion.CANTFAB == 0)
+            {
+                await this.ToastObj.Show(new ToastModel { Title = "AVISO!",
+                    Content = "Órden sin indicar cantidad fabricada. Se continuará igualmente.",
+                    CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
             }
 
-            private void Scrap_Selection(ModeloGenericoIntString args)
+            if (dbScrap != null)
             {
-                try
-                {
-                    scrapSeleccionadoMensaje = "";
-                    scrapSeleccionado = args.ID;
-                }
-                catch
-                {
-                    throw;
-                }
+                isScrapDialogVisible = true;
+                StateHasChanged();
             }
-
-            private async Task DialogScrapClose(Object args)
+            else
             {
-                try
-                {
-                    isScrapDialogVisible = false;
-                    await CerrarOrdenFabricacion();
-                }
-                catch
-                {
-                    throw;
-                }
+                await CerrarOrdenFabricacion();
             }
-
-            private async Task DialogScrapOk(Object args)
+        }
+        else if (ordenFabricacion.CG_ESTADOCARGA == 5)
+        {
+            string sqlCommandString = "EXEC NET_PCP_Anular_OrdenFabricacion " + ordenFabricacion.CG_ORDF.ToString() + ", '" + Usuario + "'";
+            var respuesta2 = await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
+            if (respuesta2.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                try
+                await this.ToastObj.Show(new ToastModel
                 {
-                    if (scrapSeleccionado == null)
-                    {
-                        scrapSeleccionadoMensaje = "No seleccionó ningún Item";
-                    }
-                    else
-                    {
-                        isScrapDialogVisible = false;
-                        await CerrarOrdenFabricacion();
-                    }
-                }
-                catch
-                {
-                    throw;
-                }
+                    Title = "ERROR!",
+                    Content = $"Ocurrio un error. Error al intentar anular OF: {ordenFabricacion.CG_ORDF}",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
             }
+            StateHasChanged();
+            await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Órden anulada.",
+                CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
+            ordenFabricacion = null;
+            await Refrescar();
+        }
 
-            protected async Task CerrarOrdenFabricacion()
+        //await this.ToastObj.Show(new ToastModel
+        //{
+        //    Title = "Exito!",
+        //    Content = $"Guardado Correctamente!  Se actualizo OF: {ordenFabricacion.CG_PROD.Trim()}",
+        //    CssClass = "e-toast-success",
+        //    Icon = "e-success toast-icons",
+        //    ShowCloseButton = true,
+        //    ShowProgressBar = true
+        //});
+
+
+        Visible = false;
+
+
+    }
+
+    private void Scrap_Selection(ModeloGenericoIntString args)
+    {
+        try
+        {
+            scrapSeleccionadoMensaje = "";
+            scrapSeleccionado = args.ID;
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    private async Task DialogScrapClose(Object args)
+    {
+        try
+        {
+            isScrapDialogVisible = false;
+            await CerrarOrdenFabricacion();
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    private async Task DialogScrapOk(Object args)
+    {
+        try
+        {
+            if (scrapSeleccionado == null)
             {
-
-                Visible = true;
-                string sqlCommandString = "EXEC NET_PCP_Cerrar_OrdenFabricacion " + ordenFabricacion.CG_ORDF.ToString() + ", '" + Usuario + "', " + scrapSeleccionado.ToString();
-                await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
-                if (ordenFabricacion.CG_ORDF == ordenFabricacion.ULTIMAORDENASOCIADA)
-                {
-                    await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Se dió de alta el producto terminado.", CssClass = "e-toast-success", Icon = "e-success toast-icons" });
-                }
-                ordenFabricacion = null;
-                scrapSeleccionado = null;
-                await Refrescar();
-                Visible = false;
+                scrapSeleccionadoMensaje = "No seleccionó ningún Item";
             }
-
-            protected async Task EstadoCarga_Change()
+            else
             {
-                try
-                {
-                    if (ordenFabricacionOriginal.CG_ESTADOCARGA == 0 && ordenFabricacion.CG_ESTADOCARGA == 2)
-                    {
-                        await this.ToastObj.Show(new ToastModel { Title = "ERROR!", Content = "No puede pasar una órden de fabricación EMITIDA a estado EN FIRME.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
-                    }
-                    else if (ordenFabricacionOriginal.CG_ESTADOCARGA == 0 && ordenFabricacion.CG_ESTADOCARGA == 3)
-                    {
-                        await this.ToastObj.Show(new ToastModel { Title = "ERROR!", Content = "No puede pasar una órden de fabricación EMITIDA a estado EN CURSO.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
-                    }
-                    else if (ordenFabricacionOriginal.CG_ESTADOCARGA == 1 && ordenFabricacion.CG_ESTADOCARGA == 3)
-                    {
-                        await this.ToastObj.Show(new ToastModel { Title = "ERROR!", Content = "No puede pasar una órden de fabricación PLANEADA a estado EN CURSO.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
-                    }
-                }
-                catch
-                {
-                    throw;
-                }
+                isScrapDialogVisible = false;
+                await CerrarOrdenFabricacion();
             }
+        }
+        catch
+        {
+            throw;
+        }
+    }
 
-            protected async Task BuscarOrden_Click()
+    protected async Task CerrarOrdenFabricacion()
+    {
+
+        Visible = true;
+        string sqlCommandString = "EXEC NET_PCP_Cerrar_OrdenFabricacion " + ordenFabricacion.CG_ORDF.ToString() + ", '" + Usuario + "', " + scrapSeleccionado.ToString();
+        await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
+        if (ordenFabricacion.CG_ORDF == ordenFabricacion.ULTIMAORDENASOCIADA)
+        {
+            await this.ToastObj.Show(new ToastModel { Title = "Exito!",
+                Content = $"Guardado Correctamente! Alta {ordenFabricacion.CG_PROD.Trim()}",
+                CssClass = "e-toast-success",
+                Icon = "e-success toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
+        ordenFabricacion = null;
+        scrapSeleccionado = null;
+        await Refrescar();
+        Visible = false;
+    }
+
+    protected async Task EstadoCarga_Change()
+    {
+        try
+        {
+            if (ordenFabricacionOriginal.CG_ESTADOCARGA == 0 && ordenFabricacion.CG_ESTADOCARGA == 2)
             {
-                await Refrescar();
+                await this.ToastObj.Show(new ToastModel { Title = "ERROR!", Content = "No puede pasar una órden de fabricación EMITIDA a estado EN FIRME.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
             }
-
-            protected async Task VerPlano(string cg_prod)
+            else if (ordenFabricacionOriginal.CG_ESTADOCARGA == 0 && ordenFabricacion.CG_ESTADOCARGA == 3)
             {
-                //NavigationManager.NavigateTo($"Pdf/{cg_prod}/RUTAOF");
-                //await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{cg_prod}/RUTAOF", $"_blank" });
-                await JS.InvokeAsync<object>("open", $"Pdf/{cg_prod.Trim()}/RUTAOF", "_blank");
-                //NavigationManager.NavigateTo($"/VerPdf/{cg_prod}/RUTAOF");
+                await this.ToastObj.Show(new ToastModel { Title = "ERROR!", Content = "No puede pasar una órden de fabricación EMITIDA a estado EN CURSO.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
             }
-
-            protected async Task IrAServicio(string pedido)
+            else if (ordenFabricacionOriginal.CG_ESTADOCARGA == 1 && ordenFabricacion.CG_ESTADOCARGA == 3)
             {
-                //NavigationManager.NavigateTo($"sc/servicio/list/{pedido}");
-                await JS.InvokeVoidAsync("open", new object[2] { $"sc/servicio/list/{pedido}", $"sc/servicio/list/{pedido}" });
+                await this.ToastObj.Show(new ToastModel { Title = "ERROR!", Content = "No puede pasar una órden de fabricación PLANEADA a estado EN CURSO.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
             }
+        }
+        catch
+        {
+            throw;
+        }
+    }
 
-            protected async Task Ensayos(string pedido)
-            {
-                //NavigationManager.NavigateTo($"Pdf/{pedido}/ENSAYOS");
-                await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{pedido}/ENSAYOS", $"Pdf/{pedido}/ENSAYOS" });
-            }
+    protected async Task BuscarOrden_Click()
+    {
+        await Refrescar();
+    }
 
-            async Task DownloadText()
-            {
-                string presion = ordenFabricacionEncabezado.CAMPOCOM4.Trim();
-                if (String.IsNullOrEmpty(presion))
-                {
-                    presion = ordenFabricacionEncabezado.CAMPOCOM1.Trim();
-                }
-                presion = presion.Replace(',', '.');
-                // Generate a text file
-                //byte[] file;
-                if (String.IsNullOrEmpty(ordenFabricacion.DES_OPER))
-                {
-                    await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Antes de generar el archivo debe asignar un operario", CssClass = "e-toast-danger", Icon = "e-success toast-icons" });
-                }
-                else
-                {
+    protected async Task VerPlano(string cg_prod)
+    {
+        //NavigationManager.NavigateTo($"Pdf/{cg_prod}/RUTAOF");
+        //await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{cg_prod}/RUTAOF", $"_blank" });
+        await JS.InvokeAsync<object>("open", $"Pdf/{cg_prod.Trim()}/RUTAOF", "_blank");
+        //NavigationManager.NavigateTo($"/VerPdf/{cg_prod}/RUTAOF");
+    }
+
+    protected async Task IrAServicio(string pedido)
+    {
+        //NavigationManager.NavigateTo($"sc/servicio/list/{pedido}");
+        await JS.InvokeVoidAsync("open", new object[2] { $"sc/servicio/list/{pedido}", $"sc/servicio/list/{pedido}" });
+    }
+
+    protected async Task IrAPrograma(string cg_prod)
+    {
+        //Pdf/@(ordenFabricacion.CG_PROD)/RUTACNC
+        await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{cg_prod}/RUTACNC", $"Pdf/{cg_prod}/RUTACNC" });
+    }
+
+    protected async Task Ensayos(string pedido)
+    {
+        //NavigationManager.NavigateTo($"Pdf/{pedido}/ENSAYOS");
+        await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{pedido}/ENSAYOS", $"Pdf/{pedido}/ENSAYOS" });
+    }
+
+    async Task DownloadText()
+    {
+        string presion = ordenFabricacionEncabezado.CAMPOCOM4.Trim();
+        if (String.IsNullOrEmpty(presion))
+        {
+            presion = ordenFabricacionEncabezado.CAMPOCOM1.Trim();
+        }
+        presion = presion.Replace(',', '.');
+        // Generate a text file
+        //byte[] file;
+        if (String.IsNullOrEmpty(ordenFabricacion.DES_OPER))
+        {
+            await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Antes de generar el archivo debe asignar un operario", CssClass = "e-toast-danger", Icon = "e-success toast-icons" });
+        }
+        else
+        {
             @foreach (Solution ruta in rutas)
             {
                 if (ruta.CAMPO == "RUTADATOS")
@@ -1649,5 +1697,56 @@
     .e-spinner-pane .e-spinner-inner .e-spin-bootstrap {
         fill: #000;
         stroke: #000;
+    }
+
+    @@font-face {
+        font-family: 'Toast_icons';
+        src: url(data:application/x-font-ttf;charset=utf-8;base64,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) format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    #toast_types button {
+        margin: 5px;
+        min-width: 160px;
+        max-width: 160px;
+    }
+
+    .toast-icons {
+        font-family: 'Toast_icons' !important;
+        speak: none;
+        font-size: 55px;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    #toast_type .e-toast-icon.e-icons {
+        height: auto;
+        font-size: 30px;
+    }
+
+    .toast-icons.e-success::before {
+        content: "\e701";
+    }
+
+    .toast-icons.e-error::before {
+        content: "\e700";
+    }
+
+    .toast-icons.e-info::before {
+        content: "\e704";
+    }
+
+    .toast-icons.e-warning::before {
+        content: "\e703";
+    }
+
+    #toast_types {
+        text-align: center;
     }
 </style>
