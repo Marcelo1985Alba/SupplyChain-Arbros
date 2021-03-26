@@ -38,9 +38,9 @@
                 <div class="row">
                     <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
                             @ref="Grid" DataSource="@listaPedPend" AllowExcelExport="true" AllowGrouping="true"
-                            GridLines="GridLine.Both" Height="100%" Width="100%"
+                            GridLines="GridLine.Both" Height="100%" Width="100%" RowHeight="20"
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" ID="PedidosPendientes">
-                        <SfDataManager Url="api/PedidosPendientes" CrossDomain="true" Adaptor="Adaptors.ODataAdaptor"></SfDataManager>
+                        @*<SfDataManager Url="api/PedidosPendientes" CrossDomain="true" Adaptor="Adaptors.ODataAdaptor"></SfDataManager>*@
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                         <GridEvents OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" TValue="ModeloPedidosPendientes"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>

@@ -16,3 +16,13 @@
     border-right:none;
     border-radius: 3px;
 }
+
+
+e-grid .e-gridheader {
+    background-color: #fff;
+    border-bottom-color: #e0e0e0;
+    border-top-color: #e0e0e0;
+    color: rgba(0,0,0,0.54);
+    font-size: 20px !important;
+    font-weight:bold !important;
+}

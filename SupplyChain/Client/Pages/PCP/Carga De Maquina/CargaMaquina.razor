@@ -914,10 +914,10 @@
                        select operariosBE3;
 
 
-        PedCliList = await Http.GetFromJsonAsync<List<PedCli>>("api/PedCli/GetPedidos");
-        prodList = await Http.GetFromJsonAsync<List<Producto>>("api/Prod/GetPedidos");
+        
+        //prodList = await Http.GetFromJsonAsync<List<Producto>>("api/Prod/GetPedidos");
 
-        rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+        //rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 
         await Refrescar();
 
@@ -1036,7 +1036,7 @@
         {
             Console.WriteLine("Error en api/OrdenesFabricacion");
 
-            string xSQL = string.Format("UPDATE Programa SET FECHA_PREVISTA_FABRICACION = '{0}', FECHA_INICIO_REAL_FABRICACION = '{1}', CANTFAB = {2}, FE_CIERRE = '{3}', " +
+            string xSQL = string.Format("set dateformat dmy UPDATE Programa SET FECHA_PREVISTA_FABRICACION = '{0}', FECHA_INICIO_REAL_FABRICACION = '{1}', CANTFAB = {2}, FE_CIERRE = '{3}', " +
                                             "CG_ORDFORIG = {4}, CG_CELDA = '{5}', PROCESO = '{6}', CG_OPER = {7}, DES_OPER = '{8}' WHERE Cg_ordf = {9}",
                                           ordenFabricacion.FECHA_PREVISTA_FABRICACION,
                                           ordenFabricacion.FECHA_INICIO_REAL_FABRICACION,
@@ -1048,9 +1048,11 @@
                                           ordenFabricacion.CG_OPER,
                                           ordenFabricacion.DES_OPER,
                                           ordenFabricacion.CG_ORDF);
-            Console.WriteLine(" VER QUERY");
-            Console.WriteLine(xSQL);
+            Console.WriteLine(" VER CONSULTA SQL  " + xSQL);
 
+            var mensajeServidor = await respuesta.Content.ReadAsStringAsync();
+            Console.WriteLine(xSQL);
+            Console.WriteLine(mensajeServidor);
             await this.ToastObj.Show(new ToastModel { Title = "ERROR!",
                 Content = $"Ocurrrio un error.Error al intentar Guardar OF: {ordenFabricacion.CG_ORDF} ",
                 CssClass = "e-toast-danger",
@@ -1129,15 +1131,9 @@
 
     private void Scrap_Selection(ModeloGenericoIntString args)
     {
-        try
-        {
-            scrapSeleccionadoMensaje = "";
-            scrapSeleccionado = args.ID;
-        }
-        catch
-        {
-            throw;
-        }
+
+        scrapSeleccionadoMensaje = "";
+        scrapSeleccionado = args.ID;
     }
 
     private async Task DialogScrapClose(Object args)
@@ -1197,24 +1193,20 @@
 
     protected async Task EstadoCarga_Change()
     {
-        try
+        
+        if (ordenFabricacionOriginal.CG_ESTADOCARGA == 0 && ordenFabricacion.CG_ESTADOCARGA == 2)
         {
-            if (ordenFabricacionOriginal.CG_ESTADOCARGA == 0 && ordenFabricacion.CG_ESTADOCARGA == 2)
-            {
-                await this.ToastObj.Show(new ToastModel { Title = "ERROR!", Content = "No puede pasar una órden de fabricación EMITIDA a estado EN FIRME.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
-            }
-            else if (ordenFabricacionOriginal.CG_ESTADOCARGA == 0 && ordenFabricacion.CG_ESTADOCARGA == 3)
-            {
-                await this.ToastObj.Show(new ToastModel { Title = "ERROR!", Content = "No puede pasar una órden de fabricación EMITIDA a estado EN CURSO.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
-            }
-            else if (ordenFabricacionOriginal.CG_ESTADOCARGA == 1 && ordenFabricacion.CG_ESTADOCARGA == 3)
-            {
-                await this.ToastObj.Show(new ToastModel { Title = "ERROR!", Content = "No puede pasar una órden de fabricación PLANEADA a estado EN CURSO.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
-            }
+            await this.ToastObj.Show(new ToastModel { Title = "ERROR!", 
+                Content = "No puede pasar una órden de fabricación EMITIDA a estado EN FIRME.", 
+                CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
         }
-        catch
+        else if (ordenFabricacionOriginal.CG_ESTADOCARGA == 0 && ordenFabricacion.CG_ESTADOCARGA == 3)
         {
-            throw;
+            await this.ToastObj.Show(new ToastModel { Title = "ERROR!", Content = "No puede pasar una órden de fabricación EMITIDA a estado EN CURSO.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
+        }
+        else if (ordenFabricacionOriginal.CG_ESTADOCARGA == 1 && ordenFabricacion.CG_ESTADOCARGA == 3)
+        {
+            await this.ToastObj.Show(new ToastModel { Title = "ERROR!", Content = "No puede pasar una órden de fabricación PLANEADA a estado EN CURSO.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
         }
     }
 
@@ -1299,6 +1291,7 @@
     }
     protected async Task Etiqueta()
     {
+        PedCliList = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/GetPedidos/{ordenFabricacion.PEDIDO}");
         if (ordenFabricacion.CG_CELDA == "BE3" || ordenFabricacion.CG_CELDA == "GC1")
         {
             if (ordenFabricacion.CG_PROD.Substring(0, 1) == "2")

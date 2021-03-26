@@ -70,7 +70,7 @@ namespace SupplyChain.Server
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
-                endpoints.Map("api/{**slug}", HandleApiFallback);
+                //endpoints.Map("api/{**slug}", HandleApiFallback);
                 endpoints.MapFallbackToFile("index.html");
             });
         }

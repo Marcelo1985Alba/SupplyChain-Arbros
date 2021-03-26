@@ -7,6 +7,7 @@ using System.Text;
 
 namespace SupplyChain
 {
+
     public class ModeloOrdenFabricacion
     {
         [Key]

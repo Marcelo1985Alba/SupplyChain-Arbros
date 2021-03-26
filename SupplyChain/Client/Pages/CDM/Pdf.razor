@@ -16,6 +16,7 @@
 @using System.Web;
 @using System.IO;
 @using Syncfusion.Blazor.PdfViewer;
+@using SupplyChain.Client.Shared;
 @*@using Syncfusion.Blazor.PdfViewerServer;*@
 <SfSpinner Size="80" Label="Cargando..." Type="SpinnerType.Bootstrap4" @bind-Visible="@VisibleSpinner" Target="#pdfViewer"></SfSpinner>
 @if (accion == null)
@@ -221,11 +222,12 @@ else
     bool docsCargados = false;
     [Parameter] public string codigo { get; set; } = "";
     [Parameter] public string accion { get; set; } = "";
-
+    //[CascadingParameter] public MainLayout Layout { get; set; }
     SfPdfViewer sfPdfViewerObj;
 
     protected override async Task OnInitializedAsync()
     {
+        //MainLayout.Titulo = $"Codigo";
         VisibleSpinner = true;
         //rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 

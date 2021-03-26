@@ -38,6 +38,12 @@ namespace SupplyChain
             return _context.PedCli.FromSqlRaw(xSQL).ToList<PedCli>();
         }
 
+        [HttpGet("{pedido}")]
+        public async Task<IEnumerable<PedCli>> Gets(int pedido)
+        {
+            return await _context.PedCli.Where(p=> p.PEDIDO == pedido).ToListAsync();
+        }
+
         // PUT: api/Servicios/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.

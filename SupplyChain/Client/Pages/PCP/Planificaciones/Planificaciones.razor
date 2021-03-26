@@ -60,7 +60,7 @@
                 <div class="row">
                     <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
                             @ref="Grid" DataSource="@listaPlanificacion" Height="100%" Width="100%"
-                            AllowExcelExport="true" AllowGrouping="true" ID="Planificacion"
+                            AllowExcelExport="true" AllowGrouping="true" ID="Planificacion" RowHeight="20"
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                         <GridEvents CommandClicked="@CommandClickHandler" OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin" TValue="Planificacion"></GridEvents>
