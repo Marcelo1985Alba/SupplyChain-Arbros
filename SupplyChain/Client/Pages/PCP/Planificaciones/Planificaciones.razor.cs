@@ -19,7 +19,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
-        protected SfGrid<Planificacion> Grid;
+        protected SfGrid<Planificacion> GridPlanificacion;
         protected SfGrid<DespiecePlanificacion> Grid2;
         protected SfGrid<FormulaPlanificacion> Grid3;
         protected SfGrid<Planificacion> Grid4;
@@ -79,7 +79,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         protected override async Task OnInitializedAsync()
         {
             listaPlanificacion = await Http.GetFromJsonAsync<List<Planificacion>>("api/Planificacion/0/1");
-
+            await GridPlanificacion?.AutoFitColumns();
             await base.OnInitializedAsync();
         }
 
@@ -87,11 +87,11 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         {
             if (args.Item.Text == "Excel Export")
             {
-                await this.Grid.ExcelExport();
+                await this.GridPlanificacion.ExcelExport();
             }
             if (args.Item.Text == "Print")
             {
-                await this.Grid.Print();
+                await this.GridPlanificacion.Print();
             }
         }
 
@@ -154,9 +154,9 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
                         listaPlanificacion = await Http.GetFromJsonAsync<List<Planificacion>>("api/Planificacion/1/0");
                     }
                 }
-                await Grid.RefreshColumns();
-                Grid.Refresh();
-                await Grid.RefreshHeader();
+                await GridPlanificacion.RefreshColumns();
+                GridPlanificacion.Refresh();
+                await GridPlanificacion.RefreshHeader();
 
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
@@ -277,9 +277,9 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
                     listaPlanificacion = await Http.GetFromJsonAsync<List<Planificacion>>("api/Planificacion/1/0");
                 }
             }
-            await Grid.RefreshColumns();
-            Grid.Refresh();
-            await Grid.RefreshHeader();
+            await GridPlanificacion.RefreshColumns();
+            GridPlanificacion.Refresh();
+            await GridPlanificacion.RefreshHeader();
         }
         protected async Task AgregarValores()
         {

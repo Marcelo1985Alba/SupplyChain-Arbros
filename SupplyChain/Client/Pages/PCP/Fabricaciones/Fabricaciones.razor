@@ -35,10 +35,13 @@
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row">
-                    <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" 
+                    <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
                             EnablePersistence="true" RowHeight="20"
-                            @ref="Grid" DataSource="@listaFab" AllowExcelExport="true" AllowGrouping="true" ID="Fab" Height="100%" Width="100%"
-                            AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
+                            @ref="Grid" DataSource="@listaFab" AllowExcelExport="true" 
+                            AllowGrouping="true" ID="Fab" Height="100%" Width="100%"
+                            AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems"
+                            GridLines="GridLine.Both">
+                        <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                         <GridEvents OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin" TValue="Fabricacion"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
@@ -104,7 +107,7 @@
                             <GridColumn Field=@nameof(Fabricacion.FECHA_PREVISTA_FABRICACION) HeaderText="Fecha prevista de fabricacion" TextAlign="TextAlign.Left" Edit="false" Width="240px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.ORDEN) HeaderText="Prioridad" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
                             @*<GridColumn Field=@nameof(Fabricacion.FE_ANUL) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
-                                <GridColumn Field=@nameof(Fabricacion.FE_CIERRE) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="190px"></GridColumn>*@
+            <GridColumn Field=@nameof(Fabricacion.FE_CIERRE) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="190px"></GridColumn>*@
                         </GridColumns>
                     </SfGrid>
                 </div>

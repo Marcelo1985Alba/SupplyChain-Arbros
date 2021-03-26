@@ -37,7 +37,7 @@ namespace SupplyChain.Pages.Fab
         protected override async Task OnInitializedAsync()
         {
             listaFab = await Http.GetFromJsonAsync<List<Fabricacion>>("api/Fabricacion");
-
+            await Grid.AutoFitColumns();
             await base.OnInitializedAsync();
         }
 

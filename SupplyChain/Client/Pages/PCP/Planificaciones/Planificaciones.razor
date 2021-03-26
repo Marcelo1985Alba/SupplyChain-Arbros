@@ -59,9 +59,11 @@
             <div class="content-wrapper">
                 <div class="row">
                     <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
-                            @ref="Grid" DataSource="@listaPlanificacion" Height="100%" Width="100%"
+                            @ref="GridPlanificacion" DataSource="@listaPlanificacion" Height="100%" Width="100%"
                             AllowExcelExport="true" AllowGrouping="true" ID="Planificacion" RowHeight="20"
-                            AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
+                            AllowSorting="true" AllowPaging="true" AllowFiltering="true"
+                            Toolbar="@Toolbaritems" GridLines="GridLine.Both">
+                        <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                         <GridEvents CommandClicked="@CommandClickHandler" OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin" TValue="Planificacion"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
@@ -116,23 +118,23 @@
                                         Planificacion Value = (context as Planificacion);
                                         if (Value.SEM_ORIGEN == 0)
                                         {
-                                            <span class="dotwhite"></span>
+                                        <span class="dotwhite"></span>
                                         }
                                         else if (Value.SEM_ORIGEN == 1)
                                         {
-                                            <span class="dotlightgreen"></span>
+                                        <span class="dotlightgreen"></span>
                                         }
                                         else if (Value.SEM_ORIGEN == 2)
                                         {
-                                            <span class="dotyellow"></span>
+                                        <span class="dotyellow"></span>
                                         }
                                         else if (Value.SEM_ORIGEN == 3)
                                         {
-                                            <span class="dotred"></span>
+                                        <span class="dotred"></span>
                                         }
                                         else if (Value.SEM_ORIGEN == 4)
                                         {
-                                            <span class="dotblue"></span>
+                                        <span class="dotblue"></span>
                                         }
                                     }
                                 </Template>
@@ -144,23 +146,23 @@
                                         Planificacion Value = (context as Planificacion);
                                         if (Value.SEM_ABAST_PURO == 0)
                                         {
-                                            <span class="dotwhite"></span>
+                                        <span class="dotwhite"></span>
                                         }
                                         else if (Value.SEM_ABAST_PURO == 1)
                                         {
-                                            <span class="dotlightgreen"></span>
+                                        <span class="dotlightgreen"></span>
                                         }
                                         else if (Value.SEM_ABAST_PURO == 2)
                                         {
-                                            <span class="dotyellow"></span>
+                                        <span class="dotyellow"></span>
                                         }
                                         else if (Value.SEM_ABAST_PURO == 3)
                                         {
-                                            <span class="dotred"></span>
+                                        <span class="dotred"></span>
                                         }
                                         else if (Value.SEM_ABAST_PURO == 4)
                                         {
-                                            <span class="dotblue"></span>
+                                        <span class="dotblue"></span>
                                         }
                                     }
                                 </Template>
@@ -172,23 +174,23 @@
                                         Planificacion Value = (context as Planificacion);
                                         if (Value.SEM_ABAST == 0)
                                         {
-                                            <span class="dotwhite"></span>
+                                        <span class="dotwhite"></span>
                                         }
                                         else if (Value.SEM_ABAST == 1)
                                         {
-                                            <span class="dotlightgreen"></span>
+                                        <span class="dotlightgreen"></span>
                                         }
                                         else if (Value.SEM_ABAST == 2)
                                         {
-                                            <span class="dotyellow"></span>
+                                        <span class="dotyellow"></span>
                                         }
                                         else if (Value.SEM_ABAST == 3)
                                         {
-                                            <span class="dotred"></span>
+                                        <span class="dotred"></span>
                                         }
                                         else if (Value.SEM_ABAST == 4)
                                         {
-                                            <span class="dotblue"></span>
+                                        <span class="dotblue"></span>
                                         }
                                     }
                                 </Template>
@@ -199,11 +201,11 @@
                                         Planificacion Value = (context as Planificacion);
                                         if (Value.CG_ESTADOCARGA == 0)
                                         {
-                                            <span>EMITIDA</span>
+                                        <span>EMITIDA</span>
                                         }
                                         else if (Value.CG_ESTADOCARGA == 1)
                                         {
-                                            <span>PLANEADA</span>
+                                        <span>PLANEADA</span>
                                         }
                                     }
                                 </Template>
@@ -229,10 +231,10 @@
                             <GridColumn Field=@nameof(Planificacion.CG_FORM) Format="N0" HeaderText="Fórmula" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                             @*<GridColumn Field=@nameof(Planificacion.DIASFAB) Format="N0" HeaderText="Planificadas" TextAlign="TextAlign.Left" Width="110px"></GridColumn>*@
                             @*<GridColumn HeaderText="Activo" Width="90px">
-                                    <Template>
-                                        <SfButton OnClick="@((e)=> Despiece())" IconCss="fas fa-chart-line" CssClass="botonDespiece" IsPrimary="true"></SfButton>
-                                    </Template>
-                                </GridColumn>*@
+                <Template>
+                    <SfButton OnClick="@((e)=> Despiece())" IconCss="fas fa-chart-line" CssClass="botonDespiece" IsPrimary="true"></SfButton>
+                </Template>
+            </GridColumn>*@
                             <GridColumn HeaderText="Activo" Width="90px">
                                 <GridCommandColumns>
                                     <GridCommandColumn Type="CommandButtonType.None" Title="Activo"

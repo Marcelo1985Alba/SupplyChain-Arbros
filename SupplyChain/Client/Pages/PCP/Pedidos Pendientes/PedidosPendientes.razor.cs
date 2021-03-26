@@ -37,6 +37,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
         protected override async Task OnInitializedAsync()
         {
             listaPedPend = await Http.GetFromJsonAsync<List<ModeloPedidosPendientes>>("api/PedidosPendientes");
+            await Grid.AutoFitColumns();
             await base.OnInitializedAsync();
         }
 

@@ -13,7 +13,7 @@ namespace SupplyChain.Shared.Models
         [ColumnaGridViewAtributo(Name = "Nombre producto")]
         public string DES_PROD { get; set; }
         [ColumnaGridViewAtributo(Name = "Tipo insumo")]
-        public int? CG_ORDEN { get; set; }
+        public int CG_ORDEN { get; set; }
         [ColumnaGridViewAtributo(Name = "Tipo producto")]
         public string TIPO { get; set; }
         [ColumnaGridViewAtributo(Name = "Unidad stock")]

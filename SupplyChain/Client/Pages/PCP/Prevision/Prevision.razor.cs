@@ -57,7 +57,7 @@ namespace SupplyChain.Client.Pages.Prev
         protected override async Task OnInitializedAsync()
         {
             previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
-
+            await Grid.AutoFitColumns();
             await base.OnInitializedAsync();
         }
 

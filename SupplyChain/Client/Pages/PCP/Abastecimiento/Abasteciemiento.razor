@@ -51,7 +51,7 @@
                                                     AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@ToolbaritemsSE"
                                                     GridLines="GridLine.Both">
                                                 @*<SfDataManager Url="api/Abastecimiento/AbastecimientoSE" CrossDomain="true" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>*@
-
+                                                <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                                                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                                                 <GridEvents OnToolbarClick="@ClickHandlerSE" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBeginSE" TValue="ModeloAbastecimiento"></GridEvents>
                                                 <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
@@ -123,6 +123,7 @@
                                                         AllowGrouping="true" ID="AbastecimientoMP" Height="100%" Width="100%"
                                                         AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@ToolbaritemsMP"
                                                         GridLines="GridLine.Both">
+                                                    <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                                                     @*<SfDataManager Url="api/" CrossDomain="false" Adaptor="Adaptors.ODataAdaptor"></SfDataManager>*@
                                                     <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                                                     <GridEvents OnToolbarClick="@ClickHandlerMP" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBeginMP" TValue="ModeloAbastecimiento"></GridEvents>

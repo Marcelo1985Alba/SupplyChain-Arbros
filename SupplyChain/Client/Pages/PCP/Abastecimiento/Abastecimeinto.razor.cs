@@ -71,6 +71,8 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             //    listaAbastSE = await respuesta.Content.ReadFromJsonAsync<List<ModeloAbastecimiento>>();
             //}
 
+            await GridMP.AutoFitColumns();
+            await GridSE.AutoFitColumns();
             await InvokeAsync(StateHasChanged);
         }
 
