@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SupplyChain.Shared.HelpersAtributo;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,10 +9,11 @@ namespace SupplyChain.Shared.Models
 {
     public class Fabricacion
     {
-        [Key]
+        
         public string CG_PROD { get; set; } = "";
         public string DES_PROD { get; set; } = "";
         public int CG_ORDEN { get; set; } = 0;
+        [Key]
         public int CG_ORDF { get; set; } = 0;
         public int ULTIMAORDENASOCIADA { get; set; } = 0;
         public string CLASE { get; set; } = "";
@@ -30,7 +32,7 @@ namespace SupplyChain.Shared.Models
         public DateTime? FE_EMIT { get; set; }
         public DateTime? FE_PLAN { get; set; }
         public DateTime? FE_FIRME { get; set; }
-        public DateTime? FE_CURSO { get; set; }
+        [EstadoCurso]public DateTime? FE_CURSO { get; set; }
         public DateTime? FECHA_PREVISTA_FABRICACION { get; set; }
         public int ORDEN { get; set; } = 0;
         public DateTime? FE_ANUL { get; set; }

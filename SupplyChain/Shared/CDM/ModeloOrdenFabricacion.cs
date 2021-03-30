@@ -34,5 +34,7 @@ namespace SupplyChain
         public DateTime FE_CIERRE { get; set; }
         public int CG_OPER { get; set; }
         public string DES_OPER { get; set; }
+        [NotMapped]public string Presion { get; set; }
+        [NotMapped]public string Des_Cli { get; set; }
     }
 }

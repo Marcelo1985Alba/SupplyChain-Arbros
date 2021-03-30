@@ -24,6 +24,8 @@
 
 <div class="col-12 control-section mt-4">
     <div class="content-wrapper">
+        <SfSpinner @bind-Visible="@VisiblePropertySE">
+        </SfSpinner>
         <div class="form-row">
             <div class="col-12">
                 <SfTab LoadOn="ContentLoad.Dynamic" OverflowMode="OverflowMode.Scrollable">
@@ -184,7 +186,7 @@
                     </TabItems>
                 </SfTab>
             </div>
-            
+
         </div>
     </div>
 </div>

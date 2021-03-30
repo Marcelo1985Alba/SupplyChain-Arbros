@@ -36,9 +36,15 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
 
         protected override async Task OnInitializedAsync()
         {
+            VisibleProperty = true;
             listaPedPend = await Http.GetFromJsonAsync<List<ModeloPedidosPendientes>>("api/PedidosPendientes");
-            await Grid.AutoFitColumns();
+            
             await base.OnInitializedAsync();
+        }
+        public async Task DataBoundHandler()
+        {
+            await Grid.AutoFitColumns();
+            VisibleProperty = false;
         }
 
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)

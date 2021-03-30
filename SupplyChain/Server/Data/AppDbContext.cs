@@ -18,6 +18,7 @@ namespace SupplyChain
         public virtual DbSet<ModeloGenericoStringString> ModelosGenericosStringString { get; set; }
         public virtual DbSet<Solution> Solution { get; set; }
         public virtual DbSet<Operario> Operario { get; set; }
+        public virtual DbSet<EstadosCargaMaquina> EstadosCargaMaquinas { get; set; }
         //public virtual DbSet<Prod> Prod { get; set; }
         public virtual DbSet<Cliente> Cliente { get; set; }
         //MODULO LOGÍSTICA

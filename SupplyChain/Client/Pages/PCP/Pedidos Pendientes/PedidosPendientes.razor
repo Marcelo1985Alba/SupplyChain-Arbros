@@ -43,7 +43,7 @@
                         <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                         @*<SfDataManager Url="api/PedidosPendientes" CrossDomain="true" Adaptor="Adaptors.ODataAdaptor"></SfDataManager>*@
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                        <GridEvents OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" TValue="ModeloPedidosPendientes"></GridEvents>
+                        <GridEvents DataBound="(async()=> await DataBoundHandler())"  OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" TValue="ModeloPedidosPendientes"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                         <GridColumns>

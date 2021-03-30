@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using SupplyChain.Shared.Models;
 
 namespace SupplyChain
 {
@@ -41,7 +42,7 @@ namespace SupplyChain
                                                   "LEFT JOIN ProTab ON ProTab.PROCESO = A.PROCESO " +
                                                   "LEFT JOIN Celdas ON Celdas.CG_CELDA = A.CG_CELDA " +
                                                   "WHERE A.CG_PROD = B.CG_PROD AND A.CG_ORDF = " + id;
-                return _context.OrdenesFabricacion.FromSqlRaw(xSQL).ToList<ModeloOrdenFabricacion>().FirstOrDefault<ModeloOrdenFabricacion>();
+                return _context.OrdenesFabricacion.FromSqlRaw(xSQL).ToList().FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -70,6 +71,7 @@ namespace SupplyChain
                 programa.PROCESO = xItem.PROCESO;
                 programa.CG_OPER = xItem.CG_OPER;
                 programa.DES_OPER = xItem.DES_OPER;
+
 
 
                 //string xSQL = string.Format("set dateformat dmy UPDATE Programa SET FECHA_PREVISTA_FABRICACION = '{0}', FECHA_INICIO_REAL_FABRICACION = '{1}', CANTFAB = {2}, FE_CIERRE = '{3}', " +
@@ -106,6 +108,43 @@ namespace SupplyChain
             catch (Exception ex)
             {
                  return BadRequest(ex);
+            }
+
+        }
+
+        [HttpPut("PutFromModeloOF/{id}")]
+        public async Task<IActionResult> PutFromFabricacion(int id, Fabricacion xItem)
+        {
+            if (id != xItem.CG_ORDF)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var programa = await _context.Programa.Where(p => p.CG_ORDF == id).FirstOrDefaultAsync();
+                programa.CG_CELDA = xItem.CG_CELDA;
+                programa.FE_PLAN = xItem.FE_PLAN;
+                programa.ORDEN = xItem.ORDEN;
+                programa.FE_CURSO = xItem.FE_CURSO;
+
+
+                _context.Attach(programa);
+
+                _context.Entry(programa).Property(p => p.CG_CELDA).IsModified = true;
+                _context.Entry(programa).Property(p => p.FE_PLAN).IsModified = true;
+                _context.Entry(programa).Property(p => p.CANTFAB).IsModified = true;
+                _context.Entry(programa).Property(p => p.ORDEN).IsModified = true;
+                _context.Entry(programa).Property(p => p.FE_CURSO).IsModified = true;
+
+
+
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
             }
 
         }

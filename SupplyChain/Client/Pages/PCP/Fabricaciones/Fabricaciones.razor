@@ -21,6 +21,8 @@
 @inject NavigationManager NavManager
 @inherits SupplyChain.Pages.Fab.FabricPageBase
 
+<SfToast @ref="ToasObj"></SfToast>
+
 @{
     if (listaFab.Count() == 0 || listaFab is null)
     {
@@ -43,38 +45,78 @@
                             GridLines="GridLine.Both">
                         <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                        <GridEvents OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin" TValue="Fabricacion"></GridEvents>
+                        <GridEvents OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" 
+                                    OnActionComplete="@ActionComplete" TValue="Fabricacion"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                         <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
+                            <HeaderTemplate><p style="font-weight:800">
+                                Detalle Orden Fabricion @((context as Fabricacion).CG_ORDF)</p>
+                            </HeaderTemplate>
                             <Template>
                                 @{
                                     var f = (context as Fabricacion);
                                     <div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Orden:</label>
+                                                <label class="">Orden de Fabricacion:</label>
                                                 <br />
-                                                <SfNumericTextBox ID="CG_ORDEN" Format="N" @bind-Value="@(f.CG_ORDEN)" Enabled="false"></SfNumericTextBox>
+                                                <SfNumericTextBox ID="CG_ORDF"
+                                                                  Format="N0" @bind-Value="@(f.CG_ORDF)" Enabled="false"></SfNumericTextBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Estado:</label>
+                                                <label class="">Estado:</label>
                                                 <br />
-                                                <SfNumericTextBox ID="CG_ESTADOCARGA" Format="N" @bind-Value="@(f.CG_ESTADOCARGA)" Enabled="true"></SfNumericTextBox>
+
+                                                <SfDropDownList TItem="EstadosCargaMaquina" @bind-Value="@(f.CG_ESTADOCARGA)"
+                                                                TValue="int" ID="CG_ESTADO" DataSource="@listaEstadosCargaMaquina">
+                                                    <DropDownListFieldSettings Text="ESTADO" Value="CG_ESTADO">
+
+                                                    </DropDownListFieldSettings>
+                                                </SfDropDownList>
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Orden:</label>
+                                                <label class="">Cantidad:</label>
                                                 <br />
-                                                <SfNumericTextBox ID="CG_ORDEN" Format="N" @bind-Value="@(f.CANT)" Enabled="false"></SfNumericTextBox>
+                                                <SfNumericTextBox ID="CANT" Format="N" @bind-Value="@(f.CANT)" Enabled="false"></SfNumericTextBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
-                                                <label>Fecha de entrega:</label>
+                                                <label>Fecha de Planificada:</label>
                                                 <br />
-                                                <SfDatePicker ID="FE_ENTREGA" @bind-Value="@(f.FE_ENTREGA)" Enabled="true" Placeholder="Fecha de entrega"></SfDatePicker>
+                                                <SfDatePicker ID="FE_PLAN" @bind-Value="@(f.FE_PLAN)"
+                                                              Enabled="true" Placeholder="Fecha de entrega"></SfDatePicker>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="">Fecha de Curso:</label>
+                                                <br />
+                                                <SfDatePicker ID="FE_CURSO" @bind-Value="@(f.FE_CURSO)" Enabled="true"></SfDatePicker>
+                                                @*<ValidationMessage For="@(()=> f.FE_CURSO)"></ValidationMessage>*@
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label class="e-label-top">Celda:</label>
+                                                <br />
+
+                                                <SfDropDownList TItem="Celdas" @bind-Value="f.CG_CELDA"
+                                                                TValue="string" ID="CG_CELDA" DataSource="@listaCelda">
+                                                    <DropDownListFieldSettings Text="DES_CELDA" Value="CG_CELDA">
+
+                                                    </DropDownListFieldSettings>
+                                                </SfDropDownList>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="">Prioridad:</label>
+                                                <br />
+                                                <SfNumericTextBox ID="ORDEN" Format="N" @bind-Value="@(f.ORDEN)" Enabled="true"></SfNumericTextBox>
                                             </div>
                                         </div>
                                     </div>
@@ -90,14 +132,41 @@
                             <GridColumn Field=@nameof(Fabricacion.CLASE) HeaderText="Clase" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.CG_R) HeaderText="Tipo de órden" TextAlign="TextAlign.Left" Edit="false" Width="210px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.CANT) Format="N2" HeaderText="Cantidad" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.CG_ESTADOCARGA) Format="N2" HeaderText="Estado" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.CANTFAB) Format="N2" HeaderText="Cantidad fabricada" TextAlign="TextAlign.Left" Edit="false" Width="190px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.CG_ESTADOCARGA) Format="N2" HeaderText="Estado" TextAlign="TextAlign.Left" Edit="false" Width="240px">
+                                <Template>
+                                    @{
+                                        var ordfab = (context as Fabricacion);
+                                        if (listaEstadosCargaMaquina.Any(c => c.CG_ESTADO == ordfab.CG_ESTADOCARGA))
+                                        {
+                                            <span>@listaEstadosCargaMaquina.Where(c => c.CG_ESTADO == ordfab.CG_ESTADOCARGA).FirstOrDefault().ESTADO.Trim()</span>
+
+                                        }
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.CANTFAB) Format="N2" HeaderText="Cantidad fabricada" TextAlign="TextAlign.Left" Edit="false" Width="190px">
+                            </GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.UNID) HeaderText="Unidad" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.PROCESO) HeaderText="Proceso" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.INSUMOS_ENTREGADOS_A_PLANTA) HeaderText="Insumos entregados" Edit="false" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.DIASFAB) Format="N2" HeaderText="Días de fabricación" Edit="false" TextAlign="TextAlign.Left" Width="310px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.CG_CELDA) HeaderText="Celda" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.CG_CELDA) HeaderText="Celda"  
+                                        TextAlign="TextAlign.Left" Edit="true" Width="340px" >
+                                <Template>
+                                    @{
+                                        var ordfab = (context as Fabricacion);
+                                        if (!string.IsNullOrEmpty(ordfab.CG_CELDA))
+                                        {
+                                            if (listaCelda.Any(c => c.CG_CELDA.Trim() == ordfab.CG_CELDA.Trim()))
+                                            {
+                                                <span>@listaCelda.Where(c=> c.CG_CELDA.Trim() == ordfab.CG_CELDA.Trim()).FirstOrDefault().DES_CELDA</span>
+
+                                            }
+                                        }
+                                    }
+                                </Template>
+                            </GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.CG_FORM) HeaderText="Fórmula" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.FE_ENTREGA) HeaderText="Fecha de entrega" TextAlign="TextAlign.Left" Edit="false" Width="210px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.FE_EMIT) HeaderText="Fecha de emision" TextAlign="TextAlign.Left" Edit="false" Width="210px"></GridColumn>

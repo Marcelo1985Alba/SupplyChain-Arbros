@@ -47,5 +47,36 @@ namespace SupplyChain.Server.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [HttpPost("DownloadText")]
+        public async Task<ActionResult<ModeloOrdenFabricacion>> DownloadText(ModeloOrdenFabricacion ordfab)
+        {
+            var ruta = await _context.Solution.Where(s => s.CAMPO == "RUTADATOS").FirstOrDefaultAsync();
+            string fileName = ruta.VALORC + ordfab.PEDIDO + ".txt";
+            try
+            {
+                // Check if file already exists. If yes, delete it.
+                if (System.IO.File.Exists(fileName))
+                {
+                    System.IO.File.Delete(fileName);
+                }
+                
+                // Create a new file
+                using (StreamWriter sw = System.IO.File.CreateText(fileName))
+                {
+                    sw.WriteLine($"{ordfab.Des_Cli.Trim()}");
+                    sw.WriteLine($"{ordfab.PEDIDO}");
+                    sw.WriteLine($"{ordfab.PEDIDO}");
+                    sw.WriteLine($"{ordfab.DES_OPER}");
+                }
+
+                return Ok(ordfab);
+
+            }
+            catch (Exception Ex)
+            {
+                return BadRequest(Ex);
+            }
+        }
     }
 }

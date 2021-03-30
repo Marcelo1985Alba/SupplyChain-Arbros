@@ -53,6 +53,8 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
         //protected bool ToastVisible { get; set; } = false;
         protected override async Task OnInitializedAsync()
         {
+            //VisiblePropertySE = true;
+            //VisiblePropertyMP = true;
             //HttpResponseMessage respuesta;
             var listAbastecimiento = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento");
             listaAbastMP = listAbastecimiento.Where(a => a.CG_ORDEN == 4).ToList();
@@ -71,9 +73,16 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             //    listaAbastSE = await respuesta.Content.ReadFromJsonAsync<List<ModeloAbastecimiento>>();
             //}
 
+            ;
+            await InvokeAsync(StateHasChanged);
+        }
+
+        public async Task DataBoundHandler()
+        {
             await GridMP.AutoFitColumns();
             await GridSE.AutoFitColumns();
-            await InvokeAsync(StateHasChanged);
+            //VisiblePropertySE = false;
+            //VisiblePropertyMP = false;
         }
 
         public async Task ClickHandlerMP(Syncfusion.Blazor.Navigations.ClickEventArgs args)

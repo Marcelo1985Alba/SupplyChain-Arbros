@@ -47,9 +47,9 @@ namespace SupplyChain
 
         // GET: api/Prod/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Producto>> GetProd(string id)
+        public async Task<ActionResult<IEnumerable<Producto>>> GetProd(string id)
         {
-            var Prod = await _context.Prod.FindAsync(id);
+            var Prod = await _context.Prod.Where(P=> P.CG_PROD == id).ToListAsync();
 
             if (Prod == null)
             {

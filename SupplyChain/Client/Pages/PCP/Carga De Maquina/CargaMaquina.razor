@@ -39,7 +39,9 @@
 </div>
 <SfSpinner @ref="SpinnerCDM" Size="60" Label="@MensajeCargando" CssClass="mt-5 pt-5"
            Type="SpinnerType.Bootstrap" Target="#cargaMaq"
-           @bind-Visible="Visible"></SfSpinner>
+           @bind-Visible="Visible">
+
+</SfSpinner>
 <div class="row" id="cargaMaq">
     <div class="col">
         <div class="table-responsive">
@@ -367,7 +369,14 @@
                                                         <table><tr><th class="e-text-center combo-width">Código</th><th>Operario</th></tr></table>
                                                     </HeaderTemplate>
                                                     <ItemTemplate>
-                                                        <table><tbody><tr><td class="e-text-center combo-width">@((context as Operario).CG_OPER)</td><td>@((context as Operario).DES_OPER)</td></tr> </tbody></table>
+                                                        <table>
+                                                            <tbody>
+                                                            <tr>
+                                                                <td class="e-text-center combo-width">@((context as Operario).CG_OPER)</td>
+                                                            <td>@((context as Operario).DES_OPER)</td>
+                                                                </tr> 
+                                                            </tbody>
+                                                        </table>
                                                     </ItemTemplate>
                                                 </ComboBoxTemplates>
                                             </SfComboBox>
@@ -402,7 +411,13 @@
                                                 <table><tr><th class="e-text-center combo-width">Código</th><th>Celda</th></tr></table>
                                             </HeaderTemplate>
                                             <ItemTemplate>
-                                                <table><tbody><tr><td class="e-text-center combo-width">@((context as ModeloGenericoStringString).ID)</td><td>@((context as ModeloGenericoStringString).TEXTO)</td></tr> </tbody></table>
+                                                <table>
+                                                <tbody>
+                                                    <tr>
+                                                    <td class="e-text-center combo-width">@((context as ModeloGenericoStringString).ID)
+                                                        </td>
+                                                    <td>@((context as ModeloGenericoStringString).TEXTO)</td>]
+                                                        </tr> </tbody></table>
                                             </ItemTemplate>
                                         </ComboBoxTemplates>
                                     </SfComboBox>
@@ -812,7 +827,7 @@
 @if (isScrapDialogVisible && ordenFabricacion != null && dbCarga != null && dbScrap != null)
 {
     <div id="targetPreguntaFoto" class="cssScrapDialog">
-        <SfDialog Target="#targetPreguntaFoto" Width="90%" Height="95%" CssClass="" IsModal="false" ShowCloseIcon="true"
+        <SfDialog Target="#targetPreguntaFoto" Width="90%" Height="35%" CssClass="" IsModal="false" ShowCloseIcon="true"
                   CloseOnEscape="true"
                   @bind-Visible="@isScrapDialogVisible">
             <DialogTemplates>
@@ -914,10 +929,10 @@
                        select operariosBE3;
 
 
-        
+
         //prodList = await Http.GetFromJsonAsync<List<Producto>>("api/Prod/GetPedidos");
 
-        //rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+
 
         await Refrescar();
 
@@ -1193,11 +1208,11 @@
 
     protected async Task EstadoCarga_Change()
     {
-        
+
         if (ordenFabricacionOriginal.CG_ESTADOCARGA == 0 && ordenFabricacion.CG_ESTADOCARGA == 2)
         {
-            await this.ToastObj.Show(new ToastModel { Title = "ERROR!", 
-                Content = "No puede pasar una órden de fabricación EMITIDA a estado EN FIRME.", 
+            await this.ToastObj.Show(new ToastModel { Title = "ERROR!",
+                Content = "No puede pasar una órden de fabricación EMITIDA a estado EN FIRME.",
                 CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
         }
         else if (ordenFabricacionOriginal.CG_ESTADOCARGA == 0 && ordenFabricacion.CG_ESTADOCARGA == 3)
@@ -1244,6 +1259,7 @@
     async Task DownloadText()
     {
         string presion = ordenFabricacionEncabezado.CAMPOCOM4.Trim();
+
         if (String.IsNullOrEmpty(presion))
         {
             presion = ordenFabricacionEncabezado.CAMPOCOM1.Trim();
@@ -1251,13 +1267,44 @@
         presion = presion.Replace(',', '.');
         // Generate a text file
         //byte[] file;
+
+        ordenFabricacion.Des_Cli = ordenFabricacionEncabezado.DES_CLI;
+        ordenFabricacion.Presion = presion;
         if (String.IsNullOrEmpty(ordenFabricacion.DES_OPER))
         {
-            await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Antes de generar el archivo debe asignar un operario", CssClass = "e-toast-danger", Icon = "e-success toast-icons" });
+            await this.ToastObj.Show(new ToastModel { Title = "AVISO!",
+                Content = "Antes de generar el archivo debe asignar un operario",
+                CssClass = "e-toast-danger", Icon = "e-success toast-icons" });
         }
         else
         {
-            @foreach (Solution ruta in rutas)
+
+            //TODO: HACER DESDE CONTROLER ADMINISTRADOR DE ARCHIVOS
+            var respuesta = await Http.PostAsJsonAsync<ModeloOrdenFabricacion>($"api/AdministracionArchivos/DownloadText",ordenFabricacion);
+            if (respuesta.StatusCode == System.Net.HttpStatusCode.BadRequest
+                || respuesta.StatusCode == System.Net.HttpStatusCode.NotFound
+                || respuesta.StatusCode == System.Net.HttpStatusCode.UnsupportedMediaType)
+            {
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "Error al descargar archivo",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-success toast-icons"
+                });
+            }
+            else
+            {
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "EXITO!",
+                    Content = "Archivo generado con éxito",
+                    CssClass =
+                            "e-toast-success",
+                    Icon = "e-success toast-icons"
+                });
+            }
+            @*@foreach (Solution ruta in rutas)
             {
                 if (ruta.CAMPO == "RUTADATOS")
                 {
@@ -1278,7 +1325,9 @@
                             sw.WriteLine($"{presion}");
                             sw.WriteLine($"{ordenFabricacion.DES_OPER}");
                         }
-                        await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Archivo generado con éxito", CssClass = "e-toast-success", Icon = "e-success toast-icons" });
+                        await this.ToastObj.Show(new ToastModel { Title = "AVISO!", 
+                            Content = "Archivo generado con éxito", CssClass = 
+                            "e-toast-success", Icon = "e-success toast-icons" });
                     }
                     catch (Exception Ex)
                     {
@@ -1286,7 +1335,7 @@
                     }
 
                 }
-            }
+            }*@
         }
     }
     protected async Task Etiqueta()

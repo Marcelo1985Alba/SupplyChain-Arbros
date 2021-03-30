@@ -79,8 +79,13 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         protected override async Task OnInitializedAsync()
         {
             listaPlanificacion = await Http.GetFromJsonAsync<List<Planificacion>>("api/Planificacion/0/1");
-            await GridPlanificacion?.AutoFitColumns();
+            
             await base.OnInitializedAsync();
+        }
+
+        public async Task DataBoundHandler()
+        {
+            await GridPlanificacion?.AutoFitColumns();
         }
 
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)

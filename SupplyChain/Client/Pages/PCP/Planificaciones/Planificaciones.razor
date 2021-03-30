@@ -65,7 +65,7 @@
                             Toolbar="@Toolbaritems" GridLines="GridLine.Both">
                         <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                        <GridEvents CommandClicked="@CommandClickHandler" OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin" TValue="Planificacion"></GridEvents>
+                        <GridEvents DataBound="(async ()=> await DataBoundHandler())"  CommandClicked="@CommandClickHandler" OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin" TValue="Planificacion"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                         <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
@@ -266,7 +266,8 @@
 <SfDialog Width="1300px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible">
     <DialogTemplates>
         <Content>
-            <SfGrid @ref="Grid2" DataSource="@listaDespiece" EnablePersistence="true" ID="Despiece" GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true">
+            <SfGrid @ref="Grid2" DataSource="@listaDespiece" EnablePersistence="true" ID="Despiece" 
+                    GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true">
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                 <GridEvents TValue="DespiecePlanificacion"></GridEvents>
                 <GridColumns>

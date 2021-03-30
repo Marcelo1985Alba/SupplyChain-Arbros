@@ -37,7 +37,7 @@ else
         else
         {
 
-            codigo = codigo.Substring(0, 7) + ".pdf";
+            codigo = codigo.Substring(0, 7) + ".pdf" + "-RUTAOF";
             <SfPdfViewer @ref="sfPdfViewerObj" ID="pdfViewer" ServiceUrl="/api/Values" DocumentPath="@codigo.Trim()"
                          Height="1300px" Width="100%"></SfPdfViewer>
         }

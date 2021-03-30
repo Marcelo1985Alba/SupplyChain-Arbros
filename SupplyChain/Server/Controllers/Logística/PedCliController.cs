@@ -31,6 +31,7 @@ namespace SupplyChain
         }
 
 
+
         [HttpGet("GetPedidos")]
         public IEnumerable<PedCli> Gets(string PEDIDO)
         {

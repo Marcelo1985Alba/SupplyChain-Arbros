@@ -11,6 +11,11 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
+using Syncfusion.Blazor.DropDowns;
+using SupplyChain.Shared.PCP;
+using Syncfusion.Blazor.Spinner;
+using Syncfusion.Blazor.Notifications;
+
 namespace SupplyChain.Pages.Fab
 {
     public class FabricPageBase : ComponentBase
@@ -27,20 +32,27 @@ namespace SupplyChain.Pages.Fab
 
         //protected List<CatOpe> catopes = new List<CatOpe>();
         protected List<Fabricacion> listaFab = new List<Fabricacion>();
-
+        protected List<Celdas> listaCelda = new List<Celdas>();
+        protected List<EstadosCargaMaquina> listaEstadosCargaMaquina = new List<EstadosCargaMaquina>();
         protected List<Object> Toolbaritems = new List<Object>(){
-        "Search",
-        "Print",
-        "ExcelExport"
-    };
+            "Search",
+            "Print",
+            "ExcelExport"
+        };
 
+        protected SfToast ToasObj;
         protected override async Task OnInitializedAsync()
         {
             listaFab = await Http.GetFromJsonAsync<List<Fabricacion>>("api/Fabricacion");
-            await Grid.AutoFitColumns();
+            listaCelda = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
+            listaEstadosCargaMaquina = await Http.GetFromJsonAsync<List<EstadosCargaMaquina>>("api/EstadosCargaMaquinas");
             await base.OnInitializedAsync();
         }
-
+        
+        public async Task DataBoundHandler()
+        {
+            await Grid.AutoFitColumns();
+        }
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {
             if (args.Item.Text == "Excel Export")
@@ -53,11 +65,41 @@ namespace SupplyChain.Pages.Fab
             }
         }
 
-        public async Task ActionBegin(ActionEventArgs<Fabricacion> args)
+        public async Task ActionComplete(ActionEventArgs<Fabricacion> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
 
+                var respuesta = await Http.PutAsJsonAsync($"api/OrdenesFabricacion/PutFromModeloOF/{args.Data.CG_ORDF}", args.Data);
+                if (respuesta.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    await ToasObj.Show(new ToastModel
+                    {
+                        Title = "ERROR!",
+                        Content = $"Ocurrrio un error.Error al intentar Guardar OF: {args.Data.CG_ORDF} ",
+                        CssClass = "e-toast-danger",
+                        Icon = "e-error toast-icons",
+                        ShowCloseButton = true,
+                        ShowProgressBar = true
+                    });
+                }
+                else
+                {
+                    await this.ToasObj.Show(new ToastModel
+                    {
+                        Title = "Exito!",
+                        Content = $"Guardado Correctamente! Nro OF: {args.Data.CG_ORDF}",
+                        CssClass = "e-toast-success",
+                        Icon = "e-success toast-icons",
+                        ShowCloseButton = true,
+                        ShowProgressBar = true
+                    });
+
+
+                    await Grid.RefreshColumns();
+                    Grid.Refresh();
+                    await Grid.RefreshHeader();
+                }
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
             {

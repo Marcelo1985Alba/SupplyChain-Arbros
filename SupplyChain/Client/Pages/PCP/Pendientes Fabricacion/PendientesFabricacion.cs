@@ -43,8 +43,13 @@ namespace SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion
         protected override async Task OnInitializedAsync()
         {
             listaPendFab = await Http.GetFromJsonAsync<List<vPendienteFabricar>>("api/PendientesFabricar");
-            await Grid.AutoFitColumns();
+            
             await base.OnInitializedAsync();
+        }
+
+        public async Task DataBoundHandler()
+        {
+            await Grid.AutoFitColumns();
         }
 
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
