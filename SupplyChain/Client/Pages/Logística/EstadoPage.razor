@@ -9,7 +9,7 @@
                OnChange="OnCardSearch" OnFocus="@(() => { PriorityValue = "None";  StatusValue = "None"; })"></SfTextBox>
     
     <div>
-        <SfKanban TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis" AllowDragAndDrop="true" Height="800px" Query="@CardQuery">
+        <SfKanban ID="logisticaKanban" TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis" AllowDragAndDrop="true" Height="800px" Query="@CardQuery">
             <KanbanEvents TValue="PedCli" DragStart="@onDragStart" DragStop="@onDragStop"></KanbanEvents>
             <KanbanColumns>
                 @foreach (Syncfusion.Blazor.Kanban.ColumnModel item in columnData)

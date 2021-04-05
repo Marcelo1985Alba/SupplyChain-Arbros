@@ -20,7 +20,7 @@ namespace SupplyChain.Client
         public static async Task Main(string[] args)
         {
             Syncfusion.Licensing.SyncfusionLicenseProvider
-    .               RegisterLicense("MzcxMzE0QDMxMzgyZTM0MmUzMG0wbHRCMGNDZi9oUFhMVlp1V3l4NG10OFNmejVQVnpEMzFBQ3p2M0VqYms9");
+    .               RegisterLicense("NDIwNjc3QDMxMzkyZTMxMmUzMGJqUU1qRXlHTkN1K1hScURFdkdjUjhUTTRQQkFRcTRCa0wvWkpaMTRhaVE9;NDIwNjc4QDMxMzkyZTMxMmUzMFBPRXpBd0hUSVMrK1hudkR2bHhlWHZuQUVPbmhqTDFvZ3l1ODAybndwczA9");
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
             builder.RootComponents.Add<App>("#app");

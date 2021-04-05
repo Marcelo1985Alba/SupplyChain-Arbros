@@ -281,7 +281,7 @@
     @if (isOrdenDialogVisible && ordenFabricacion != null && dbCarga != null)
     {
         <div id="targetPreguntaFoto" class="cssOrdenFabricacionDialog">
-            <SfDialog AllowDragging="true" Target="#cargaMaq" CssClass="" IsModal="false"
+            <SfDialog ID="dialogOF" AllowDragging="true" Target="#cargaMaq" CssClass="" IsModal="false"
                       ShowCloseIcon="true" CloseOnEscape="true" Height="900" Width="900"
                       @bind-Visible="@isOrdenDialogVisible">
                 <DialogTemplates>
@@ -767,7 +767,7 @@
     @if (isScrapDialogVisible && ordenFabricacion != null && dbCarga != null && dbScrap != null)
     {
         <div id="targetPreguntaFoto" class="cssScrapDialog">
-            <SfDialog Target="#targetPreguntaFoto" Width="90%" Height="950%" CssClass="" IsModal="false" ShowCloseIcon="true"
+            <SfDialog ID="dialogScrap" Target="#targetPreguntaFoto" Width="90%" Height="950%" CssClass="" IsModal="false" ShowCloseIcon="true"
                       CloseOnEscape="true" 
                       @bind-Visible="@isScrapDialogVisible">
                 <DialogTemplates>

@@ -11,6 +11,8 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
+using SupplyChain.Client.Shared;
+
 namespace SupplyChain.Pages.Prods
 {
     public class ProdsPageBase : ComponentBase
@@ -35,9 +37,10 @@ namespace SupplyChain.Pages.Prods
         new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
         "ExcelExport"
     };
-
+        [CascadingParameter] MainLayout MainLayout { get; set; }
         protected override async Task OnInitializedAsync()
         {
+            MainLayout.Titulo = "Productos";
             prods = await Http.GetFromJsonAsync<List<Producto>>("api/Prod");
 
             await base.OnInitializedAsync();

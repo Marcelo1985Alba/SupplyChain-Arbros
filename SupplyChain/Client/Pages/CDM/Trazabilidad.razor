@@ -33,13 +33,13 @@
             <div class="content-wrapper">
                 <div class="row">
                     <div class="col-md-4  col-sm-6 my-1">
-                        <SfTextBox Placeholder="Número de Pedido" Input="OnInputPedido" @bind-Value="BoxPedido" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                        <SfTextBox ID="txtTrazPedido" Placeholder="Número de Pedido" Input="OnInputPedido" @bind-Value="BoxPedido" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
                     </div>
                     <div class="col-md-4 col-sm-6 my-1">
-                        <SfTextBox Placeholder="Nombre de Cliente" Input="OnInputCliente" @bind-Value="BoxCliente" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                        <SfTextBox ID="txtTrazCliente" Placeholder="Nombre de Cliente" Input="OnInputCliente" @bind-Value="BoxCliente" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
                     </div>
                     <div class=" col-md-4 col-sm-12 my-1">
-                        <SfTextBox Placeholder="Codigo de Producto" Input="OnInputCodigo" @bind-Value="BoxCodigo" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                        <SfTextBox ID="txtTrazCg_Prod" Placeholder="Codigo de Producto" Input="OnInputCodigo" @bind-Value="BoxCodigo" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
                     </div>
                 </div>
                 <div class="row">
@@ -66,10 +66,10 @@
                 </div>
             </div>
         </div>
-        <SfDialog Width="1000px" MinHeight="450px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible">
+        <SfDialog ID="dialogTrazPed" Width="1000px" MinHeight="450px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible">
             <DialogTemplates>
                 <Content>
-                    <SfGrid @ref="Grid2" DataSource="@Busquedalist">
+                    <SfGrid ID="dTrazPedidogrid" @ref="Grid2" DataSource="@Busquedalist">
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                         <GridEvents RowSelected="OnSelected" TValue="Pedidos"></GridEvents>
                         <GridColumns>
@@ -91,7 +91,7 @@
             </DialogTemplates>
         </SfDialog>
 
-        <SfDialog Width="1000px" MinHeight="450px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisibleCertificado">
+        <SfDialog ID="dialogCertifTraz" Width="1000px" MinHeight="450px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisibleCertificado">
             <DialogTemplates>
                 <Content>
                     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -345,7 +345,8 @@
             <div class="col-lg-12 control-section">
                 <div class="content-wrapper">
                     <div class="row">
-                        <SfGrid ShowColumnChooser="true" AllowResizing="true" Width="auto" @ref="Grid" DataSource="@pedidos" AllowExcelExport="true" AllowGrouping="true" Toolbar="@Toolbaritems">
+                        <SfGrid ShowColumnChooser="true" AllowResizing="true" Width="auto" @ref="Grid" ID="gridTrazPedidos"
+                                DataSource="@pedidos" AllowExcelExport="true" AllowGrouping="true" Toolbar="@Toolbaritems">
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                             <GridEvents RowSelected="OnSelectedCertificado" OnToolbarClick="@ClickHandler" TValue="Pedidos"></GridEvents>
                             <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
