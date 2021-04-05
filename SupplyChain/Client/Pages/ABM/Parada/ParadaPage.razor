@@ -23,7 +23,8 @@
     <div class="content-wrapper">
         <div class="row">
             <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
-                    @ref="Grid" DataSource="@paradas" AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true"
+                    @ref="Grid" DataSource="@paradas" ID="paradaGrid"
+                    AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true"
                     AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                 <GridEvents OnToolbarClick="@ClickHandler" OnActionBegin="ActionBegin" TValue="Parada"></GridEvents>

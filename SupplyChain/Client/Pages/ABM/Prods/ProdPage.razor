@@ -26,7 +26,8 @@
     <div class="content-wrapper">
         <div class="row">
             <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
-                    @ref="Grid" DataSource="@prods" AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true" ID="Prod"
+                    @ref="Grid" DataSource="@prods" 
+                    AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true" ID="Prod"
                     AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                 <GridEvents OnToolbarClick="@ClickHandler" OnCellSave="CellSaveHandler" OnActionBegin="ActionBegin" TValue="Producto"></GridEvents>
