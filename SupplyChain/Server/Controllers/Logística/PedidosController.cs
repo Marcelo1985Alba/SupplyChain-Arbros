@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SupplyChain;
+using SupplyChain.Server.Controllers;
+
 namespace SupplyChain
 {
     [Route("api/[controller]")]
@@ -17,10 +19,12 @@ namespace SupplyChain
     public class PedidosController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly GeneraController generaController;
 
-        public PedidosController(AppDbContext context)
+        public PedidosController(AppDbContext context, GeneraController generaController)
         {
             _context = context;
+            this.generaController = generaController;
         }
 
         [HttpGet]
@@ -185,5 +189,145 @@ namespace SupplyChain
             }
             return lpedidos;
         }
+
+        //POST: api/Stock
+        //To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPost]
+        public async Task<ActionResult<Pedidos>> PostStock([FromBody] Pedidos stock)
+        {
+
+            try
+            {
+                stock.CG_CIA = 1;
+                //RESERVA REGISTRO: El vale hay que hacerlo del lado del cliente porque debe reservar un solo vale
+                //y aqui se ejecuta por item.
+                await generaController.ReservaByCampo("REGSTOCK");
+                var genera = _context.Genera.Where(g => g.CAMP3 == "REGSTOCK").FirstOrDefault();
+                stock.REGISTRO = (int?)genera.VALOR1;
+                stock.FE_REG = DateTime.Now;
+                stock.USUARIO = "USER";
+
+                if (stock.TIPOO == 9)
+                {
+
+                    stock.STOCK = -stock.STOCK;
+                }
+                stock.Cliente = null;
+                stock.Proveedor = null;
+                _context.Pedidos.Add(stock);
+                await _context.SaveChangesAsync();
+                await generaController.LiberaByCampo("REGSTOCK");
+            }
+            catch (DbUpdateException ex)
+            {
+                await generaController.LiberaByCampo("REGSTOCK");
+                if (RegistroExists(stock.REGISTRO))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    return BadRequest(ex);
+                }
+            }
+            catch(Exception e)
+            {
+                await generaController.LiberaByCampo("REGSTOCK");
+                return BadRequest(e);
+            }
+
+            if (stock.TIPOO == 6) //devol a prove: cargo los datos de resumen stock para el item para luego verificar si tiene stock cuando se vuelva a editar
+            {
+                stock.ResumenStock = await _context.ResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
+                && r.CG_ART.ToUpper() == stock.CG_ART.ToUpper()
+                && r.LOTE.ToUpper() == stock.LOTE.ToUpper()
+                && r.DESPACHO.ToUpper() == stock.DESPACHO.ToUpper()
+                && r.SERIE.ToUpper() == stock.SERIE.ToUpper()).FirstAsync();
+            }
+
+            //MOVIM ENTRE DEP: GENERAR SEGUNDO REGISTROS: 
+            if (stock?.TIPOO == 9)
+            {
+                stock.REGISTRO = null;
+                stock.USUARIO = "USER";
+                stock.CG_CIA = 1;
+                stock.STOCK = -stock.STOCK;
+                stock.CG_DEP = stock.CG_DEP_ALT;
+
+                _context.Pedidos.Add(stock);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException ex)
+                {
+                    if (RegistroExists(stock.REGISTRO))
+                    {
+                        return Conflict();
+                    }
+                    else
+                    {
+                        return BadRequest(ex);
+                    }
+                }
+
+                if (stock.TIPOO == 6) //devol a prove: cargo los datos de resumen stock para el item para luego verificar si tiene stock cuando se vuelva a editar
+                {
+                    stock.ResumenStock = await _context.ResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
+                    && r.CG_ART.ToUpper() == stock.CG_ART.ToUpper()
+                    && r.LOTE.ToUpper() == stock.LOTE.ToUpper()
+                    && r.DESPACHO.ToUpper() == stock.DESPACHO.ToUpper()
+                    && r.SERIE.ToUpper() == stock.SERIE.ToUpper()).FirstAsync();
+                }
+
+            }
+
+            return Ok(stock);
+        }
+
+        // PUT: api/Stock/123729
+        [HttpPut("{registro}")]
+        public async Task<ActionResult<Pedidos>> PutStock(decimal registro, Pedidos stock)
+        {
+            stock.USUARIO = "USER";
+            stock.CG_CIA = 1;
+            if (registro != stock.REGISTRO)
+            {
+                return BadRequest("Registro Incorrecto");
+            }
+
+            _context.Entry(stock).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException dbEx)
+            {
+                if (!RegistroExists(registro))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    BadRequest(dbEx);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+            return Ok(stock);
+        }
+
+        private bool RegistroExists(decimal? registro)
+        {
+            return _context.Pedidos.Any(e => e.REGISTRO == registro);
+        }
+
+        
     }
 }

@@ -37,11 +37,11 @@ namespace SupplyChain.Server
                  // Use the default property (Pascal) casing.
                  options.JsonSerializerOptions.PropertyNamingPolicy = null;
              });
-            services.AddRazorPages(); 
+            services.AddRazorPages();
 
-            
 
-            //services.AddControllersWithViews();
+            //Para invocar controladores en otros controladores a traves de DI
+            services.AddMvc().AddControllersAsServices();
             //services.AddRazorPages();
         }
 

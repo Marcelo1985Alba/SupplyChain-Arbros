@@ -1,0 +1,133 @@
+﻿@typeparam TItem
+
+<SfDialog Height="75%" Width="90%" Target="#target" ShowCloseIcon="true" @bind-Visible="Visible" IsModal="true">
+    <DialogTemplates>
+        <Header>
+            @Titulo
+        </Header>
+        <Content>
+            <div class="dialogContent">
+                @if (DataSource == null)
+                {
+                    <span>Cargando...</span>
+                }
+                else
+                {
+                    if (DataSource.Count() == 0)
+                    {
+                        <span class="text-muted">Sin Datos</span>
+                    }
+                    else
+                    {
+
+            <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="true" AllowFiltering="true" TValue="TItem"
+                    AllowResizing="true" GridLines="GridLine.Both"
+                    AllowSelection="true" AllowSorting="true" AllowTextWrap="true" EnableHover="true"
+                    ShowColumnMenu="true">
+                @*<GridFilterSettings ShowFilterBarStatus="true" Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"  
+                                    Operators="@(new Operator[] { Operator.Contains })"
+                                    Mode="FilterBarMode.Immediate"></GridFilterSettings>*@
+                <GridPageSettings PageSizes="@(new int[] { 5,7,10,20 })" PageSize="7" PageCount="7"></GridPageSettings>
+                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                <GridEvents RowSelected="GetSelectedRecords" TValue="TItem"></GridEvents>
+                <GridColumns>
+                    @{
+                        object itemfinal = DataSource.FirstOrDefault();
+                        System.Reflection.PropertyInfo[] propiedades = itemfinal.GetType().GetProperties();
+
+                        foreach (string col in Columnas)
+                        {
+                            if (propiedades.Any(p => p.Name.ToUpper() == col.ToUpper()))
+                            {
+                                var propiedad = propiedades.Where(p => p.Name == col.ToUpper()).FirstOrDefault();
+
+                                //obtener el atributo para mostrar el nombre de columna
+                                string nameColumn = propiedad.Name;
+                                var tipoDate = propiedad.PropertyType == typeof(DateTime) ? propiedad.GetValue(itemfinal, null) : null;
+                                var attr = propiedad.GetCustomAttributesData().FirstOrDefault(a => a.AttributeType.Name.Equals("ColumnaGridViewAtributo"));
+                                nameColumn = attr?.NamedArguments.FirstOrDefault(a => a.MemberName.Equals("Name")).TypedValue.Value.ToString();
+                                if (tipoDate != null)
+                                {
+                                    <GridColumn Field="@propiedad.Name" HeaderText="@nameColumn" Type="ColumnType.Date"
+                                                Format="dd/MM/yyyy" Width="120px"
+                                                FilterSettings="@(new FilterSettings{ Operator = Syncfusion.Blazor.Operator.Contains })"> 
+                                    </GridColumn>
+                                }
+                                else
+                                {
+
+                                    if (col.ToUpper() == "DES_ART")
+                                    {
+                                        <GridColumn Field="@propiedad.Name" HeaderText="@nameColumn" Width="220px" 
+                                                    FilterSettings="@(new FilterSettings{ Operator = Syncfusion.Blazor.Operator.Contains })"></GridColumn>
+                                    }
+                                    else
+                                    {
+
+                                        <GridColumn Field="@propiedad.Name" HeaderText="@nameColumn" Width="150px"
+                                                    FilterSettings="@(new FilterSettings{ Operator = Syncfusion.Blazor.Operator.Contains })"></GridColumn>
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+
+                </GridColumns>
+            </SfGrid>
+
+
+                    }
+                }
+            </div>
+        </Content>
+        <FooterTemplate>
+            @*<SfTextBox ID="inVal" @bind-Value="@TextBoxValue" @ref="TextboxObj" Type="InputType.Text" Placeholder="Enter your message here!" />*@
+            <button id="sendButton" @onclick="@EnviarObjetoSeleccionado" class="e-control e-btn e-primary" data-ripple="true">Aceptar</button>
+        </FooterTemplate>
+    </DialogTemplates>
+    @*<DialogEvents OnOpen="@BeforeDialogOpen" Closed="@DialogClosed"></DialogEvents>*@
+</SfDialog>
+
+@code {
+    SfGrid<TItem> Grid;
+
+    [Parameter] public string Titulo { get; set; } = null!;
+    [Parameter] public bool Visible { get; set; } = false;
+    [Parameter] public IEnumerable<TItem> DataSource { get; set; } = null!;
+    [Parameter] public string[] Columnas { get; set; } = null!;
+    [Parameter] public EventCallback<TItem> onObjetoSeleccionado { get; set; }
+
+    public TItem Selected { get; set; }
+
+    public void EnviarObjetoSeleccionado()
+    {
+        Visible = false;
+        onObjetoSeleccionado.InvokeAsync(Selected);
+    }
+
+
+    public void GetSelectedRecords(RowSelectEventArgs<TItem> args)
+    {
+        args.PreventRender = true; //without this, you may see noticable delay in selection with 75 rows in grid.
+                                   //var items = await this.Grid.GetSelectedRecords();
+        Selected = args.Data;
+        //TotalValue = SelectedRowIndexes.ToArray();
+        //SelectedValue = "";
+        //foreach (var data in TotalValue)
+        //{
+        //    SelectedValue = SelectedValue + " " + data;
+        //}
+    }
+
+    //public static Object GetPropValue(object src, string propName)
+    //{
+    //    var entity = src.GetType().GetProperty(propName).GetValue(src, null);
+    //    return entity;
+    //}
+
+    //public static T GetPropertyValue<T>(object obj, string propName)
+    //{
+    //    return (T)obj.GetType().GetProperty(propName).GetValue(obj, null);
+    //}
+}

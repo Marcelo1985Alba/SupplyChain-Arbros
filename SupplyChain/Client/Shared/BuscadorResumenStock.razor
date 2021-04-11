@@ -1,0 +1,49 @@
+﻿@inject HttpClient Http
+@using Syncfusion.Blazor.Buttons
+<div class="form-row">
+    <div class="col-6">
+        @if (MostraBotonBusqueda)
+        {
+            <SfButton OnClick="@(async (e)=> await BuscarStock())" CssClass="" IsPrimary="true"
+                      IconCss="fa fa-search" Disabled="@HabilitaBotonBusqueda">@TextoButon</SfButton>
+                }
+    </div>
+
+</div>
+
+<BuscadorEmergente TItem="ResumenStock" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" Titulo="@TituloBuscador"
+                   Visible="@PopupBuscadorVisible" onObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+
+@*<BuscadorEmergenteResumenStock Titulo="@TituloBuscador" onObjetoSeleccionado="EnviarObjetoSeleccionado" Visible="PopupBuscadorVisible"/>*@
+
+@code {
+
+    [Parameter] public string TextoButon { get; set; } = "";
+    [Parameter] public bool EsSoloLectura { get; set; } = false;
+    [Parameter] public bool MostraBotonBusqueda { get; set; } = false;
+    [Parameter] public bool HabilitaBotonBusqueda { get; set; } = false;
+    [Parameter] public bool MostrarSpin { get; set; } = true;
+    [Parameter] public EventCallback<ResumenStock> OnRSSeleccionada { get; set; }
+
+    private ResumenStock[] ItemsABuscar = null;
+    private string[] ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE" };
+    private string TituloBuscador = "Listado de Stock";
+    private bool PopupBuscadorVisible = false;
+
+    private async Task BuscarStock()
+    {
+        PopupBuscadorVisible = true;
+        ItemsABuscar = await Http.GetFromJsonAsync<ResumenStock[]>("api/ResumenStock");
+        //ItemsABuscar = await Http.GetFromJsonAsync<Programa[]>("api/Programas");
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task EnviarObjetoSeleccionado(ResumenStock resumenStock)
+    {
+        //var rs = (ResumenStock)rsStock;
+        PopupBuscadorVisible = false;
+        await OnRSSeleccionada.InvokeAsync(resumenStock);
+    }
+
+
+}

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SupplyChain.Shared;
 using SupplyChain.Shared.Login;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
@@ -58,6 +59,11 @@ namespace SupplyChain
         //MODULO LOGIN
         public DbSet<Usuarios> Usuarios { get; set; }
         public DbSet<Rol> Roles { get; set; }
+
+        public virtual DbSet<Compra> Compras { get; set; }
+        public DbSet<ResumenStock> ResumenStock { get; set; }
+
+        public virtual DbSet<Genera> Genera { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         { 
             
@@ -65,12 +71,17 @@ namespace SupplyChain
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Genera>()
+        .       HasKey(c => new { c.CAMP3, c.CG_CIA, c.PUNTO_VENTA });
+
             modelBuilder .Entity<vPendienteFabricar>(
             eb =>
             {
                 eb.ToView("vPendientesFabricar");
                 //eb.Property(v => v.BlogName).HasColumnName("Name");
             });
+
+            modelBuilder.Entity<ItemAbastecimiento>().HasNoKey().ToView(null);
         }
     }
 }

@@ -1,0 +1,62 @@
+﻿@inject HttpClient Http
+@using Syncfusion.Blazor.Buttons
+<div class="form-row">
+    <div class="col-10">
+        <SfNumericTextBox @bind-Value="@Valor" ShowClearButton="true" TValue="int" Format="n0"
+                          Decimals="0" ShowSpinButton="@MostrarSpin" Readonly="@EsSoloLectura"></SfNumericTextBox>
+        @*@if (!EsSoloLectura)
+            {
+                <DxSpinEdit @bind-Value="@Valor" ShowSpinButtons="@MostrarSpin"></DxSpinEdit>
+            }
+            else
+            {
+                <DxSpinEdit Value="0" ShowSpinButtons="@MostrarSpin" ReadOnly="true"></DxSpinEdit>
+            }*@
+
+    </div>
+    <div class="col-2">
+        @*<DxButton Text="..." RenderStyle="@ButtonRenderStyle.Danger" IconCssClass="fas fa-search"
+            Visible="@MostraBotonBusqueda"
+            Enabled="@HabilitaBotonBusqueda" Click="@(async (e)=> await BuscarPedidos())"
+            RenderStyleMode="@ButtonRenderStyleMode.Outline" />*@
+
+        @if (MostraBotonBusqueda)
+        {
+            <SfButton OnClick="@(async (e)=> await BuscarPedidos())" CssClass="btn btn-outline" IsPrimary="true"
+                      IconCss="fa fa-search" Disabled="@HabilitaBotonBusqueda"></SfButton>
+        }
+    </div>
+
+</div>
+
+<BuscadorEmergente TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" Titulo="@TituloBuscador"
+                   Visible="@PopupBuscadorVisible" onObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+
+@code {
+
+    [Parameter] public int Valor { get; set; } = 0;
+    [Parameter] public bool EsSoloLectura { get; set; } = false;
+    [Parameter] public bool MostraBotonBusqueda { get; set; } = false;
+    [Parameter] public bool HabilitaBotonBusqueda { get; set; } = true;
+    [Parameter] public bool MostrarSpin { get; set; } = true;
+    [Parameter] public EventCallback<Compra> OnOCSeleccionada { get; set; }
+    private Compra[] ItemsABuscar = null;
+    private string[] ColumnasBuscador = new string[] { "NUMERO", "DES_PROVE" };
+    private string TituloBuscador = "Listado de Pedidos";
+    private bool PopupBuscadorVisible = false;
+    private async Task BuscarPedidos()
+    {
+        PopupBuscadorVisible = true;
+        ItemsABuscar = await Http.GetFromJsonAsync<Compra[]>("api/Compras");
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task EnviarObjetoSeleccionado(Compra compra)
+    {
+        var oc = (Compra)compra;
+        PopupBuscadorVisible = false;
+        await OnOCSeleccionada.InvokeAsync(oc);
+    }
+
+
+}

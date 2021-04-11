@@ -1,0 +1,67 @@
+﻿@inject HttpClient Http
+@using Syncfusion.Blazor.Buttons
+<div class="form-row">
+    <div class="col-10">
+        <SfNumericTextBox @bind-Value="@Valor" ShowClearButton="true" TValue="int" Format="n0"
+                          Decimals="0" ShowSpinButton="@MostrarSpin" Readonly="@EsSoloLectura">
+
+        </SfNumericTextBox>
+        @*<DxSpinEdit @bind-Value="@Valor" ShowSpinButtons="@MostrarSpin" ReadOnly="@EsSoloLectura"></DxSpinEdit>*@
+        @*@if (!EsSoloLectura)
+            {
+                <DxSpinEdit @bind-Value="@Valor" ShowSpinButtons="@MostrarSpin"></DxSpinEdit>
+            }
+            else
+            {
+                <DxSpinEdit Value="0" ShowSpinButtons="@MostrarSpin" ReadOnly="true"></DxSpinEdit>
+            }*@
+
+    </div>
+    <div class="col-2">
+        @*<DxButton RenderStyle="@ButtonRenderStyle.Danger" IconCssClass="fas fa-search"
+            Visible="@MostraBotonBusqueda"
+            Enabled="@HabilitaBotonBusqueda" Click="@(async (e)=> await BuscarOF())"
+            RenderStyleMode="@ButtonRenderStyleMode.Outline" />*@
+
+        @if (MostraBotonBusqueda)
+        {
+            <SfButton OnClick="@(async (e)=> await BuscarOF())" CssClass="btn btn-outline" IsPrimary="true"
+                      IconCss="fa fa-search" Disabled="@DeshabilitaBotonBusqueda"></SfButton>
+        }
+    </div>
+
+</div>
+
+<BuscadorEmergente TItem="Programa" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" Titulo="@TituloBuscador"
+                   Visible="@PopupBuscadorVisible" onObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+
+@code {
+
+    [Parameter] public int Valor { get; set; } = 0;
+    [Parameter] public bool EsSoloLectura { get; set; } = false;
+    [Parameter] public bool MostraBotonBusqueda { get; set; } = true;
+    [Parameter] public bool DeshabilitaBotonBusqueda { get; set; } = true;
+    [Parameter] public bool MostrarSpin { get; set; } = true;
+    [Parameter] public EventCallback<Programa> OnOFSeleccionada { get; set; }
+    private Programa[] ItemsABuscar = null;
+    private string[] ColumnasBuscador = new string[] { "CG_ORDF", "FE_EMIT", "CG_PROD", "CANT",
+        "DES_PROD", "PEDIDO", "CG_CLI","DES_CLI" };
+    private string TituloBuscador = "Listado de Ordenes de Fabricacion Planeadas";
+    private bool PopupBuscadorVisible = false;
+
+    private async Task BuscarOF()
+    {
+        PopupBuscadorVisible = true;
+        //ItemsABuscar = await Http.GetFromJsonAsync<Programa[]>("api/Programas");
+        ItemsABuscar = await Http.GetFromJsonAsync<Programa[]>("api/Programa/GetPlaneadas");
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task EnviarObjetoSeleccionado(Programa ordfab)
+    {
+        var of = (Programa)ordfab;
+        PopupBuscadorVisible = false;
+        await OnOFSeleccionada.InvokeAsync(of);
+    }
+
+}

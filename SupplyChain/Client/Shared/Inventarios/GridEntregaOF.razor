@@ -1,0 +1,688 @@
+﻿@using System.ComponentModel.DataAnnotations;
+@using System.ComponentModel.DataAnnotations.Schema;
+@inject HttpClient Http
+@using System.Text.Json
+
+@if (DataSource == null)
+{
+    return;
+}
+else
+{
+    <div class="table-responsive">
+
+        <table id="x1" class="dxbs-table table table-bordered table-sm myFormat myFormatHeader">
+            <tbody>
+                @*Preparar grilla para cargar sus columnas dinamicamente*@
+                @*OnActionBegin="HandleValidSubmit"  Toolbar="@(new List<string>() { "Add" })" *@
+                <SfGrid @ref="@Grid" DataSource="@DataSource" Width="1410" AllowExcelExport="true" AllowPaging="true"
+                        GridLines="GridLine.Both" Locale="es-Ar"
+                        AllowResizing="true" AllowSelection="true" AllowSorting="true" AllowTextWrap="false">
+                    <GridPageSettings PageCount="4"></GridPageSettings>
+                    <GridEvents OnBeginEdit="@(async (ped)=> await BeginEditHandler(ped))" OnActionComplete="OnActionComplete "
+                                TValue="Pedidos"></GridEvents>
+                    <GridEditSettings AllowAdding="PermiteAgregar" AllowEditing="PermiteEditar" AllowDeleting="PermiteEliminar"
+                                      Mode="EditMode.Dialog">
+
+                        <HeaderTemplate>
+                            <span>Detalle de Producto</span>
+                        </HeaderTemplate>
+                        <Template>
+                            @{
+
+                                stock = (context as Pedidos);
+
+                                @*<div class="form-row">
+                                        @foreach (var tipo in this.TiposInsumo)
+                                        {
+                                            <label class="form-check-label mr-2">
+                                                <input type="radio"
+                                                       name="tipo"
+                                                       checked="@(TipoInsumoCodigo == tipo.Codigo)"
+                                                       @onchange="@(() => TipoInsumoCodigo = tipo.Codigo)" />
+                                                @tipo.Descrip
+                                            </label>
+                                        }
+                                    </div>*@
+                                <hr />
+                                <br />
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label class="col-form-label">Codigo Producto :</label>
+                                        <SfTextBox @bind-Value="@stock.CG_ART" Readonly="true"></SfTextBox>
+                                        <ValidationMessage For="@(() => stock.CG_ART)"></ValidationMessage>
+                                    </div>
+                                    <div class="form-group col-md-9">
+                                        <label class="col-form-label">Descripcion Producto :</label>
+                                        <SfTextBox @bind-Value="@stock.DES_ART" Readonly="true"></SfTextBox>
+                                        <ValidationMessage For="@(() => stock.DES_ART)"></ValidationMessage>
+                                    </div>
+                                    @*<div class="form-group col-md-2">
+                                            <SfButton CssClass="e-round" IconCss="fas fa-search" IsPrimary="true"
+                                                      Disabled="@DeshabilitaBotonBuscar"
+                                                      @onclick="@(async ()=> await Buscar())">
+
+                                            </SfButton>
+                                        </div>*@
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label class="col-form-label">Cantidad :</label>
+                                        <SfNumericTextBox @bind-Value="@stock.STOCK" Decimals="2"></SfNumericTextBox>
+                                        <ValidationMessage For="@(() => stock.STOCK)"></ValidationMessage>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label class="col-form-label">Unidad :</label>
+                                        <SfTextBox @bind-Value="@stock.UNID" Readonly="true"></SfTextBox>
+                                        <ValidationMessage For="@(() => stock.UNID)"></ValidationMessage>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="col-form-label">Serie :</label>
+                                        <SfTextBox @bind-Value="@stock.SERIE"></SfTextBox>
+                                        <ValidationMessage For="@(() => stock.SERIE)"></ValidationMessage>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="col-form-label">Depacho :</label>
+                                        <SfTextBox @bind-Value="@stock.DESPACHO"></SfTextBox>
+                                        <ValidationMessage For="@(() => stock.DESPACHO)"></ValidationMessage>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="col-form-label">Lote :</label>
+                                        <SfTextBox @bind-Value="@stock.LOTE"></SfTextBox>
+                                        <ValidationMessage For="@(() => stock.LOTE)"></ValidationMessage>
+                                    </div>
+
+                                </div>
+
+                            }
+                        </Template>
+                    </GridEditSettings>
+
+                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                    <GridColumns>
+                        <GridColumn HeaderText="" Width="120">
+                            <GridCommandColumns>
+                                <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
+                                <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
+                                <GridCommandColumn Type="CommandButtonType.Save" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-update", CssClass = "e-flat" })"></GridCommandColumn>
+                                <GridCommandColumn Type="CommandButtonType.Cancel" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-cancel-icon", CssClass = "e-flat" })"></GridCommandColumn>
+                            </GridCommandColumns>
+                        </GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.CG_ART)" HeaderText="Cod. Producto" AutoFit="true" Width="130"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.DES_ART)" HeaderText="Desc. Producto" Width="180"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.STOCK)" HeaderText="Cantidad" EditType="EditType.NumericEdit" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.UNID)" HeaderText="Unidad" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.STOCKA)" HeaderText="Stock Alter" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.UNIDA)" HeaderText="Unidad A" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.IMPORTE1)" HeaderText="Precio Unit." AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.IMPORTE2)" HeaderText="Importe2" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.IMPORTE3)" HeaderText="Importe3" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.IMPORTE4)" HeaderText="Total" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.DESPACHO)" HeaderText="Despacho" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.SERIE)" HeaderText="Serie" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.LOTE)" HeaderText="Lote" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.REGISTRO)" IsPrimaryKey="true" Visible="false"></GridColumn>
+                    </GridColumns>
+                </SfGrid>
+            </tbody>
+        </table>
+    </div>
+
+    @*<BuscadorEmergente TItem="ResumenStock" Titulo=@tituloBuscador Visible="@PopupBuscadorStockVisible"
+                       DataSource="@Items" Columnas="@ColumnasBuscador"
+        onObjetoSeleccionado="@(async(o)=> await onResumenStockSelected(o))" />*@
+
+
+    @*<BuscadorEmergente @ref="BuscadorProducto" Titulo=@tituloBuscador Visible="@PopupBuscadorProdVisible"
+        DataSource="@DataSourceProductos" Columnas="@ColumnasBuscador" onObjetoSeleccionado="onpro"  />*@
+
+
+}
+
+@code {
+    //BuscadorEmergente<ResumenStock> BuscadorResumenStock;
+    //BuscadorEmergente<Producto> BuscadorProducto;
+    Pedidos stock;
+
+    Producto[] DataSourceProductos;
+    [Parameter] public string Titulo { get; set; } = null!;
+    [Parameter] public Pedidos[] DataSource { get; set; } = null!;
+    [Parameter] public bool PermiteAgregar { get; set; } = false;
+    [Parameter] public bool PermiteEditar { get; set; } = false;
+    [Parameter] public bool PermiteEliminar { get; set; } = false;
+    [Parameter] public EventCallback<Pedidos> onEnviarDepos { get; set; }
+
+    [Parameter] public EventCallback<Pedidos> onGuardar { get; set; }
+    [CascadingParameter] public Pedidos RegistroGenerado { get; set; }
+
+
+    SfGrid<Pedidos> Grid;
+    Unidades[] Unidades = new List<Unidades>().ToArray();
+    private Unidades selectedUnidad = null;
+    Unidades SelectedUnidad
+    {
+        get => selectedUnidad;
+        set { selectedUnidad = value; InvokeAsync(StateHasChanged); }
+    }
+
+    private bool deshabilitaBotonBuscar = false;
+    bool DeshabilitaBotonBuscar
+    {
+        get { return deshabilitaBotonBuscar; }
+        set
+        {
+            deshabilitaBotonBuscar = DataSource.Any(s => s.TIPOO == 9);
+
+        }
+    }
+
+    class TipoInsumo
+    {
+        public int Codigo { get; set; }
+        public string Descrip { get; set; }
+    }
+
+    int TipoInsumoCodigo = 1;
+    TipoInsumo[] TiposInsumo = new[] {
+      new TipoInsumo { Codigo = 1, Descrip = "Productos" },
+      new TipoInsumo { Codigo = 2, Descrip = "Semi Elaborados" },
+      new TipoInsumo { Codigo = 4, Descrip = "Materias Primas" },
+      new TipoInsumo { Codigo = 10, Descrip = "Articulo de Reventa" },
+      new TipoInsumo { Codigo = 11, Descrip = "Herramental/Inventariables" },
+      new TipoInsumo { Codigo = 12, Descrip = "Repuestos" },
+      new TipoInsumo { Codigo = 13, Descrip = "Servicios" }
+    };
+
+
+    public class ControlCantAttribute : ValidationAttribute
+    {
+
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            var stock = (FormEditContext)validationContext.ObjectInstance;
+
+            if (stock.Tipoo == 21)
+                return ValidationResult.Success;
+
+
+            decimal? cant = (decimal?)value;
+            return ((stock.Tipoo == 6 || stock.Tipoo == 9) && stock.Cantidad > stock.ResumenStock?.STOCK)
+                ? new ValidationResult($"La cantidad ingresada no puede ser mayor a la del stock ({stock.ResumenStock?.STOCK})")
+                : ValidationResult.Success;
+
+            //return cant == default || cant == 0
+            //? new ValidationResult("Ingresar cantidad")
+            //: ValidationResult.Success;
+        }
+    }
+
+
+
+
+    public class RequireWhenExigeDespachoAttribute : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            var stock = (FormEditContext)validationContext.ObjectInstance;
+            if (!stock.ExigeDespacho)
+                return ValidationResult.Success;
+
+            var despacho = value as string;
+            return string.IsNullOrWhiteSpace(despacho)
+                ? new ValidationResult("Ingresar Despacho: el insumo exige despacho")
+                : ValidationResult.Success;
+        }
+    }
+
+    public class RequireWhenExigeSerieAttribute : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            var stock = (FormEditContext)validationContext.ObjectInstance;
+            if (!stock.ExigeSerie)
+                return ValidationResult.Success;
+
+            var serie = value as string;
+            return string.IsNullOrWhiteSpace(serie)
+                ? new ValidationResult("Ingresar Serie: el insumo exige serie")
+                : ValidationResult.Success;
+        }
+    }
+    public class RequireWhenExigeLoteAttribute : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            var stock = (FormEditContext)validationContext.ObjectInstance;
+            if (!stock.ExigeLote)
+                return ValidationResult.Success;
+
+            var lote = value as string;
+            return string.IsNullOrWhiteSpace(lote)
+                ? new ValidationResult("Ingresar Lote: el insumo exige lote")
+                : ValidationResult.Success;
+        }
+    }
+
+    class FormEditContext
+    {
+        public FormEditContext(Pedidos dataItem)
+        {
+            DataItem = dataItem;
+            if (DataItem == null)
+            {
+                DataItem = new Pedidos();
+                DataItem.STOCK = 0.000M;
+                DataItem.DESPACHO = "";
+                DataItem.SERIE = "";
+                DataItem.LOTE = "";
+
+                IsNewRow = true;
+            }
+
+            CodigoProducto = DataItem.CG_ART;
+            DescripcionProducto = DataItem.DES_ART;
+            Unidad = DataItem.UNID;
+            Cantidad = DataItem.STOCK;
+            Despacho = DataItem.DESPACHO;
+            Serie = DataItem.SERIE;
+            Lote = DataItem.LOTE;
+            Importe1 = DataItem.IMPORTE1;
+            Tipoo = DataItem.TIPOO;
+            ExigeDespacho = DataItem.EXIGEDESPACHO;
+            ExigeSerie = DataItem.EXIGESERIE;
+            ExigeLote = DataItem.EXIGELOTE;
+            ResumenStock = DataItem.ResumenStock;
+        }
+
+        public Pedidos DataItem { get; set; }
+        public bool IsNewRow { get; set; }
+
+        [Required(ErrorMessage = "Ingresar Codigo de Producto.")]
+        [StringLength(maximumLength: 15, MinimumLength = 1,
+        ErrorMessage = "Ingresar Codigo de Producto.")]
+        public string CodigoProducto { get; set; }
+
+        [Required(ErrorMessage = "Ingresar Descripcion")]
+        [StringLength(maximumLength: 500, MinimumLength = 4,
+        ErrorMessage = "Ingresar Descripcion")]
+        public string DescripcionProducto { get; set; }
+
+        public int? Tipoo { get; set; } = 0;
+
+        [Required(ErrorMessage = "Ingresar Cantidad")]
+        //[Range(minimum: 1.0000, maximum: 9999999.0000, ErrorMessage = "Ingresar Cantidad")]
+        [Column(TypeName = "decimal(18,4)")]
+        [ControlCant]
+        public decimal? Cantidad { get; set; }
+
+        public string Unidad { get; set; } = "";
+        public decimal StockA { get; set; } = 0;
+        public string UnidadA { get; set; } = "";
+        public decimal? Importe1 { get; set; } = 0;
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public decimal Importe2 { get; set; } = 0;
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public decimal Importe3 { get; set; } = 0;
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public decimal Importe4 { get; set; } = 0;
+        public string Moneda { get; set; } = "";
+
+        [RequireWhenExigeDespacho]
+        public string Despacho { get; set; } = "";
+        [RequireWhenExigeSerie]
+        public string Serie { get; set; } = "";
+        [RequireWhenExigeLote]
+        public string Lote { get; set; } = "";
+
+        public ResumenStock ResumenStock { get; set; } = new ResumenStock();
+
+        public bool ExigeDespacho { get; set; } = false;
+        public bool ExigeSerie { get; set; } = false;
+        public bool ExigeLote { get; set; } = false;
+        public bool ExigeOA { get; set; }
+        public int Cg_Orden { get; set; }
+
+
+        public System.Action StateHasChanged { get; set; }
+    }
+
+
+    FormEditContext EditContext = null;
+
+    public async Task BeginEditHandler(BeginEditArgs<Pedidos> args)
+    {
+        var pedido = args.RowData;
+
+        EditContext = new FormEditContext(pedido);
+        EditContext.Tipoo = RegistroGenerado.TIPOO;
+
+        EditContext.Cantidad = 0;
+
+        //ir al servidor y cargar el stock del item
+        if (EditContext.Tipoo == 6 || EditContext.Tipoo == 9) //DEVolucion y Momvim entre deposito
+        {
+            if (pedido == null) return;
+
+            if (!string.IsNullOrEmpty(pedido.CG_ART))
+            {
+                var cg_art = pedido.CG_ART;
+                var cg_dep = pedido.CG_DEP;
+                var despacho = pedido.DESPACHO == null ? "" : pedido.DESPACHO;
+                var lote = pedido.LOTE == null ? "" : pedido.LOTE;
+                var serie = pedido.SERIE == null ? "" : pedido.SERIE;
+
+                var resumen = await Http
+                    .GetFromJsonAsync<ResumenStock>($"api/ResumenStocks/GetByStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
+                EditContext.ResumenStock = resumen;
+
+                pedido.ResumenStock = resumen;
+            }
+
+        }
+
+
+        EditContext.StateHasChanged += () => { InvokeAsync(StateHasChanged); };
+
+        stock = pedido;
+    }
+
+
+    async Task OnRowEditStarting(Pedidos pedido)
+    {
+        EditContext = new FormEditContext(pedido);
+        EditContext.Tipoo = RegistroGenerado.TIPOO;
+
+        EditContext.Cantidad = 0;
+
+        //ir al servidor y cargar el stock del item
+        if (EditContext.Tipoo == 6 || EditContext.Tipoo == 9) //DEV
+        {
+            if (pedido == null) return;
+
+            if (!string.IsNullOrEmpty(pedido.CG_ART))
+            {
+                var cg_art = pedido.CG_ART;
+                var cg_dep = pedido.CG_DEP;
+                var despacho = pedido.DESPACHO == null ? "" : pedido.DESPACHO;
+                var lote = pedido.LOTE == null ? "" : pedido.LOTE;
+                var serie = pedido.SERIE == null ? "" : pedido.SERIE;
+
+                var resumen = await Http
+                    .GetFromJsonAsync<ResumenStock>($"api/ResumenStocks/GetByStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
+                EditContext.ResumenStock = resumen;
+
+            }
+
+        }
+
+        EditContext.StateHasChanged += () => { InvokeAsync(StateHasChanged); };
+    }
+    void OnCancelButtonClick()
+    {
+        EditContext = null;
+    }
+
+    public async Task OnActionComplete(ActionEventArgs<Pedidos> Args)
+    {
+
+        if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
+        {
+            await onGuardar.InvokeAsync(Args.Data);
+            Args.Data.REGISTRO = RegistroGenerado.REGISTRO;
+            if (RegistroGenerado.TIPOO == 5)
+            {
+                Args.Data.IMPORTE1 = RegistroGenerado.IMPORTE1;
+                Args.Data.IMPORTE2 = RegistroGenerado.IMPORTE2;
+                Args.Data.IMPORTE3 = RegistroGenerado.IMPORTE3;
+                Args.Data.IMPORTE4 = RegistroGenerado.IMPORTE4;
+                Args.Data.IMPORTE6 = RegistroGenerado.IMPORTE6;
+            }
+
+
+            await Grid.RefreshColumns();
+            Grid.Refresh();
+            await Grid.RefreshHeader();
+        }
+    }
+
+
+    async Task HandleValidSubmit(ActionEventArgs<Pedidos> Args)
+    {
+        if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
+        {
+            //DataSource.Concat(new Stock[] { Args.Data });
+        }
+
+        if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
+        {
+            //EditContext.DataItem.CG_ART = EditContext.CodigoProducto;
+            //EditContext.DataItem.DES_ART = EditContext.DescripcionProducto;
+            //EditContext.DataItem.UNID = EditContext.Unidad;
+            //EditContext.DataItem.STOCK = EditContext.Cantidad;
+
+            //EditContext.DataItem.DESPACHO = Args.Data.DESPACHO;
+            //EditContext.DataItem.SERIE = EditContext.Serie;
+            //EditContext.DataItem.LOTE = EditContext.Lote;
+            //EditContext.DataItem.IMPORTE1 = EditContext.Importe1;
+            //EditContext.DataItem.EXIGEDESPACHO = EditContext.ExigeDespacho;
+            //EditContext.DataItem.CG_ORDEN = EditContext.Cg_Orden;
+
+
+
+            try
+            {
+                //envio item stock para guardar en la pantall operarcion
+                //para poder agregarle los datos de la cabecera: vale, ocompra etc
+                //await onGuardar.InvokeAsync(EditContext.DataItem);
+                await onGuardar.InvokeAsync(Args.Data);
+
+
+                //agregar nuero de registro una vez guardado y obtner los importes
+                Args.Data.REGISTRO = RegistroGenerado.REGISTRO;
+                Args.Data.IMPORTE1 = RegistroGenerado.IMPORTE1;
+                Args.Data.IMPORTE2 = RegistroGenerado.IMPORTE2;
+                Args.Data.IMPORTE3 = RegistroGenerado.IMPORTE3;
+                Args.Data.IMPORTE4 = RegistroGenerado.IMPORTE4;
+                Args.Data.IMPORTE6 = RegistroGenerado.IMPORTE6;
+                //EditContext.DataItem.REGISTRO = RegistroGenerado.REGISTRO;
+                //EditContext.DataItem.IMPORTE1 = RegistroGenerado.IMPORTE1;
+                //EditContext.DataItem.IMPORTE2 = RegistroGenerado.IMPORTE2;
+                //EditContext.DataItem.IMPORTE3 = RegistroGenerado.IMPORTE3;
+                //EditContext.DataItem.IMPORTE4 = RegistroGenerado.IMPORTE4;
+                //EditContext.DataItem.IMPORTE6 = RegistroGenerado.IMPORTE6;
+
+                //if (EditContext.IsNewRow)
+                //{
+                //    EditContext.IsNewRow = false;
+                //    var nuevoItem = (new Stock[] { EditContext.DataItem });
+                //    //lStock = (new Stock[] { EditContext.DataItem }).Concat(lStock);
+                //    DataSource = nuevoItem.Concat(DataSource).ToArray();
+                //}
+
+
+                Grid.Refresh();
+                EditContext = null;
+                await Grid.CloseEdit();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+
+
+    }
+
+    void OnRowRemoving(Pedidos pedido)
+    {
+        DataSource = DataSource.Where(v => v != pedido).ToArray();
+        InvokeAsync(StateHasChanged);
+    }
+
+    string tituloBuscador { get; set; } = "";
+    private bool popupBuscadorVisible = false;
+    bool PopupBuscadorStockVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
+    bool PopupBuscadorProdVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
+    string[] ColumnasBuscador = new string[] { "CG_PROD", "DES_PROD" }; /*,"DES_ART","DESPACHO", "LOTE","SERIE"*/
+    ResumenStock[] Items;
+
+    protected async Task Buscar()
+    {
+        if (RegistroGenerado.TIPOO == 5) //Recep
+        {
+            await BuscarProductos();
+
+        }
+
+        if (RegistroGenerado.TIPOO == 21) //Ajuste
+        {
+            await BuscarProductosStock();
+        }
+
+        if (RegistroGenerado.TIPOO == 9 || RegistroGenerado.TIPOO == 6) //Devol y Movim
+        {
+
+            await BuscarProductosStockEnPositivo();
+        }
+
+
+    }
+
+    protected bool ControlReadOnly()
+    {
+        if (RegistroGenerado.TIPOO == 6 || RegistroGenerado.TIPOO == 9 || RegistroGenerado.TIPOO == 21)
+        {
+            return true;
+        }
+
+
+        return false;
+    }
+
+    protected async Task BuscarProductos()
+    {
+        PopupBuscadorStockVisible = false;
+
+        Items = null;
+        tituloBuscador = "Listado de Productos";
+        PopupBuscadorProdVisible = true;
+        ColumnasBuscador = new string[] { "CG_PROD", "DES_PROD", "UNID" };
+        int cg_orden = TipoInsumoCodigo;
+        DataSourceProductos = await Http.GetFromJsonAsync<Producto[]>($"api/Productos/GetProductos/{cg_orden}");
+
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected async Task BuscarProductosStock()
+    {
+        PopupBuscadorProdVisible = false;
+
+        Items = null;
+        tituloBuscador = "Listado de Productos en Stock";
+        PopupBuscadorStockVisible = true;
+        ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE", "STOCK" };
+        int cg_orden = TipoInsumoCodigo;
+        Items = await Http.GetFromJsonAsync<ResumenStock[]>("api/ResumenStocks");
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected async Task BuscarProductosStockEnPositivo()
+    {
+        PopupBuscadorProdVisible = false;
+
+        Items = null;
+        tituloBuscador = "Listado de Productos en Stock";
+        PopupBuscadorStockVisible = true;
+        ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE", "STOCK" };
+        int cg_orden = TipoInsumoCodigo;
+        Items = await Http.GetFromJsonAsync<ResumenStock[]>("api/ResumenStocks/GetResumenStockPositivo");
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+
+    private async Task onStockSelected(Pedidos obj)
+    {
+        PopupBuscadorStockVisible = false;
+        var tipoEntidad = obj.GetType().Name;
+        if (tipoEntidad == "Stock")
+        {
+            var pedido = (Pedidos)obj;
+            //Get items del vale
+            var vale = pedido.VALE;
+            DataSource = await Http.GetFromJsonAsync<Pedidos[]>($"api/Stock/AbriVale/{pedido.VALE}");
+
+            //NumeroVale = ItemsVale[0].VALE;
+            //Fecha = ItemsVale[0].FE_MOV;
+        }
+
+    }
+
+    private async Task onInsumoSelected(Producto obj)
+    {
+        await Task.Run(() =>
+        {
+            PopupBuscadorStockVisible = false;
+            var tipoEntidad = obj.GetType().Name;
+
+            if (tipoEntidad == "Producto")
+            {
+                var producto = (Producto)obj;
+                EditContext.CodigoProducto = producto.CG_PROD;
+                EditContext.DescripcionProducto = producto.DES_PROD;
+                EditContext.Unidad = producto.UNID;
+            }
+        });
+
+
+    }
+
+
+
+    private async Task onListResumenStockSelected(List<ResumenStock> listaResumenStock)
+    {
+
+    }
+
+
+    private async Task onResumenStockSelected(ResumenStock obj)
+    {
+
+        PopupBuscadorStockVisible = false;
+
+        var resumenStock = (ResumenStock)obj;
+
+        //buscar registro mas reciente con las caracteristicas de resumen stock
+        var cg_art = resumenStock.CG_ART;
+        var cg_dep = resumenStock.CG_DEP;
+        var despacho = resumenStock.DESPACHO == null ? "" : resumenStock.DESPACHO;
+        var lote = resumenStock.LOTE == null ? "" : resumenStock.LOTE;
+        var serie = resumenStock.SERIE == null ? "" : resumenStock.SERIE;
+
+        var registroCompleto = await Http
+            .GetFromJsonAsync<Pedidos>($"api/Stock/GetByResumenStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
+
+        registroCompleto.REGISTRO = DataSource.Length > 0 ? -1 : DataSource.Length * -1;//indica que es un nuevo registro
+        registroCompleto.TIPOO = RegistroGenerado.TIPOO;
+        registroCompleto.STOCK = 0;
+        registroCompleto.ResumenStock = resumenStock;
+
+        //var nuevoItem = (new Stock[] { EditContext.DataItem });
+        //lStock = (new Stock[] { EditContext.DataItem }).Concat(lStock);
+        //DataSource = nuevoItem.Concat(DataSource).ToArray();
+
+        //var lStock = new List<Stock>();
+        //lStock.Add(registroCompleto);
+        //DataSource = lStock.ToArray();
+        stock = registroCompleto;
+        EditContext = new FormEditContext(registroCompleto);
+        EditContext.IsNewRow = true;
+
+        EditContext.ResumenStock = resumenStock;
+
+    }
+}

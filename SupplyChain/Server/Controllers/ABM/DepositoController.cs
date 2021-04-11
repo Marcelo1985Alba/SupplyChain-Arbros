@@ -27,7 +27,15 @@ namespace SupplyChain
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Deposito>>> GetDeposito()
         {
-            return await _context.Depositos.Where(d=> d.CG_CIA == cg_cia_usuario).ToListAsync();
+            try
+            {
+                return await _context.Depositos.Where(d => d.CG_CIA == cg_cia_usuario).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            
         }
 
         [HttpGet("GetDepositos")]
