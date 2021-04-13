@@ -134,357 +134,360 @@
 
 
         @code {
-            string usuario;
-            protected SfToast ToastObj;
-            Pedidos StockGuardado = new Pedidos();
-            bool DisableCssClass { get => selectedTire == null ? true : false; }
-            int NumVale { get; set; }
-            private bool puedeBuscarStock = false;
-            BuscadorEmergenteResumenStock BuscadorEmergenteResumenStock;
-            private bool DepositoSalidaSoloLectura = true;
-            private bool DepositoIngresoSoloLectura = true;
+
+                    [CascadingParameter] public MainLayout MainLayout { get; set; }
+                    string usuario;
+                    protected SfToast ToastObj;
+                    Pedidos StockGuardado = new Pedidos();
+                    bool DisableCssClass { get => selectedTire == null ? true : false; }
+                    int NumVale { get; set; }
+                    private bool puedeBuscarStock = false;
+                    BuscadorEmergenteResumenStock BuscadorEmergenteResumenStock;
+                    private bool DepositoSalidaSoloLectura = true;
+                    private bool DepositoIngresoSoloLectura = true;
 
 
-            Producto[] Productos = null;
-            Deposito[] Depositos = null;
-            Pedidos[] ItemsVale = null;
+                    Producto[] Productos = null;
+                    Deposito[] Depositos = null;
+                    Pedidos[] ItemsVale = null;
 
-            bool PermiteAgregarItem { get; set; } = false;
-            bool PermiteEditarItem { get; set; } = false;
-            bool PermiteEliminarItem { get; set; } = false;
+                    bool PermiteAgregarItem { get; set; } = false;
+                    bool PermiteEditarItem { get; set; } = false;
+                    bool PermiteEliminarItem { get; set; } = false;
 
-            #region "PARA BUSCAR ORDENES DE COMPRAS"
-            bool OCSoloLectura = true;
-            bool DeshabilitaBotonOC = true;
-            bool MostrarBotorOC = false;
-            #endregion
+                    #region "PARA BUSCAR ORDENES DE COMPRAS"
+                    bool OCSoloLectura = true;
+                    bool DeshabilitaBotonOC = true;
+                    bool MostrarBotorOC = false;
+                    #endregion
 
-            #region "PARA BUSCAR ORDENES DE FABRICACION"
-            bool OFSoloLectura = true;
-            bool DeshabilitaBotonOF = true;
-            bool MostrarBotorOF = false;
-            #endregion
+                    #region "PARA BUSCAR ORDENES DE FABRICACION"
+                    bool OFSoloLectura = true;
+                    bool DeshabilitaBotonOF = true;
+                    bool MostrarBotorOF = false;
+                    #endregion
 
-            string labelClienteProveedor = "Cliente/Proveedor";
+                    string labelClienteProveedor = "Cliente/Proveedor";
 
-            Producto selectedProducto;
-            public Producto SelectedProducto
-            {
-                get { return selectedProducto; }
-                set
-                {
-                    selectedProducto = value;
-                    InvokeAsync(StateHasChanged);
-                }
-            }
-
-
-
-
-
-
-            #region "CABACERA VALE"
-            private Tire selectedTire = null;
-            Tire SelectedTire
-            {
-                get => selectedTire;
-                set { selectedTire = value; InvokeAsync(StateHasChanged); }
-            }
-
-            private int OrdenFabricacion { get; set; } = 0;
-            private int Pedido { get; set; } = 0;
-            private int? Cg_CLI_Cg_PROVE { get; set; } = 0;
-            //private int OCompra { get; set; } = 0;
-            private string Remito = "0000-00000000";
-            private DateTime fecha = DateTime.Now;
-            DateTime Fecha { get => fecha; set { fecha = value; InvokeAsync(StateHasChanged); } }
-            string Codigoi { get; set; } = "";
-            string DescripcionPro { get; set; } = "";
-
-            private Deposito selectedDepositoOC = null;
-            Deposito SelectedDepositoOC
-            {
-                get => selectedDepositoOC;
-                set { selectedDepositoOC = value; InvokeAsync(StateHasChanged); }
-            }
-
-            private Deposito selectedDepositoSalida = null;
-            Deposito SelectedDepositoSalida
-            {
-                get => selectedDepositoSalida;
-                set { selectedDepositoSalida = value; InvokeAsync(StateHasChanged); }
-            }
-
-            private Deposito selectedDepositoIngreso = null;
-            Deposito SelectedDepositoIngreso
-            {
-                get => selectedDepositoIngreso;
-                set { selectedDepositoIngreso = value; InvokeAsync(StateHasChanged); }
-            }
-
-            #endregion
-
-            void OnChanged() { InvokeAsync(StateHasChanged); }
-
-            protected override async Task OnInitializedAsync()
-            {
-                NumVale = await Http.GetFromJsonAsync<int>($"api/Stock/GetMaxVale");
-                Depositos = await Http.GetFromJsonAsync<Deposito[]>("api/Deposito");
-                selectedDepositoSalida = Depositos.FirstOrDefault(d => d.CG_DEP == 0);
-                selectedDepositoIngreso = Depositos.FirstOrDefault(d => d.CG_DEP == 0);
-                ItemsVale = new List<Pedidos>().ToArray();
-                //ItemsVale = new ObservableCollection<Stock>();
-                await InvokeAsync(StateHasChanged);
-
-            }
-
-            protected async override Task OnAfterRenderAsync(bool firstRender)
-            {
-                if (firstRender)
-                {
-                    usuario = await JsRuntime.InvokeAsync<string>("sessionStorage.getItem", "Usuario");
-                    if (usuario == null)
-                        navigationManager.NavigateTo($"/");
-                }
-            }
-
-            async Task SelectedTireChanged(Tire tire)
-            {
-                StockGuardado = new Pedidos();
-                ItemsVale = Array.Empty<Pedidos>();
-                //ItemsVale = new ObservableCollection<Stock>();
-                selectedTire = tire;
-                //Dependiendo el TIPOO Habilitar controles
-
-
-                StockGuardado.TIPOO = selectedTire.Tipoo;
-                MostrarBotorOC = false;
-                DeshabilitaBotonOC = true;
-                OCSoloLectura = true;
-                DeshabilitaBotonOF = true;
-                OFSoloLectura = true;
-                DepositoSalidaSoloLectura = true;
-                DepositoIngresoSoloLectura = true;
-                puedeBuscarStock = false;
-                SelectedDepositoOC = new Deposito();
-
-                if (selectedTire?.Tipoo == 5) //recep prove
-                {
-                    DeshabilitaBotonOC = false;
-                    MostrarBotorOC = true;
-                    DepositoIngresoSoloLectura = false;
-                    labelClienteProveedor = "Proveedor:";
-                }
-
-                if (selectedTire?.Tipoo == 6)//dev prove
-                {
-                    DeshabilitaBotonOC = false;
-                    MostrarBotorOC = true;
-                    DepositoSalidaSoloLectura = false;
-                    labelClienteProveedor = "Proveedor:";
-                }
-
-                if (selectedTire?.Tipoo == 10) //OF
-                {
-                    DeshabilitaBotonOF = false;
-                    OFSoloLectura = true;
-
-                }
-
-                if (selectedTire?.Tipoo == 9) //Movimeinto Entre deposito
-                {
-                    puedeBuscarStock = true;
-                    DepositoIngresoSoloLectura = false;
-                    if (selectedDepositoIngreso?.CG_DEP == null || selectedDepositoIngreso?.CG_DEP == 0)
+                    Producto selectedProducto;
+                    public Producto SelectedProducto
                     {
-                        //toastService.ShowToast("Seleccionar Deposito de Ingreso", TipoAlerta.Info);
-                        await this.ToastObj.Show(new ToastModel
+                        get { return selectedProducto; }
+                        set
                         {
-                            Title = "AVISO!",
-                            Content = "Órden sin indicar cantidad fabricada. Se continuará igualmente.",
-                            CssClass = "e-toast-warning",
-                            Icon = "e-warning toast-icons"
-                        });
-                        //return;
+                            selectedProducto = value;
+                            InvokeAsync(StateHasChanged);
+                        }
                     }
 
-                }
-
-                if (selectedTire?.Tipoo == 10) //Entrega de insumos a una orden de fabricación
-                {
-                    PermiteEditarItem = true;
-                    OFSoloLectura = true;
-                    DeshabilitaBotonOF = false;
-                    MostrarBotorOF = true;
-
-                }
-
-                if (selectedTire?.Tipoo == 21) //Ajuste de Invetario
-                {
-                    PermiteAgregarItem = false;
-                    puedeBuscarStock = true;
-                }
-
-                StockGuardado.TIPOO = selectedTire?.Tipoo; // lo utilizo para pasar la variable a los items de la grilla.
-                await InvokeAsync(StateHasChanged);
-            }
-
-            void SelectedDepositoSalidaChanged(Deposito deposito)
-            {
-                selectedDepositoSalida = deposito;
-
-                if (selectedTire?.Tipoo == 6) //DEVOL prove
-                {
-                    selectedDepositoOC = deposito;
-                }
-            }
-            void SelectedDepositoIngresoChanged(Deposito deposito)
-            {
-                selectedDepositoIngreso = deposito;
-                if (selectedTire?.Tipoo == 5) //RECEP prove
-                {
-                    selectedDepositoOC = deposito;
-                }
-
-                if (selectedTire?.Tipoo == 9) //MOVIM ENTRE DEP
-                {
-                    PermiteAgregarItem = true;
-                    ItemsVale = new List<Pedidos>().ToArray();
-                    //ItemsVale = new ObservableCollection<Stock>();
-                }
-            }
-
-            async Task CargarVale()
-            {
-                //Cargando Datos de Cabecera
-                NumVale = (int)ItemsVale[0].VALE;
-                Fecha = ItemsVale[0].FE_MOV;
-                //depos: ver cual campo es ingreso y salida: tal vez depende segun el tipo de operacion
-                selectedDepositoIngreso = Depositos.Where(d => d.CG_DEP == ItemsVale[0].CG_DEP).FirstOrDefault();
-                OrdenFabricacion = (int)ItemsVale[0].CG_ORDF;
-                StockGuardado.OCOMPRA = (int)ItemsVale[0].OCOMPRA;
-                Pedido = (int)ItemsVale[0].PEDIDO;
-                Cg_CLI_Cg_PROVE = ItemsVale[0].CG_CLI == 0 ? ItemsVale[0].CG_PROVE : ItemsVale[0].CG_CLI;
-                DescripcionPro = ItemsVale[0].CG_CLI == 0 ? "Proveedor" : "Cliente";
-                Remito = ItemsVale[0].REMITO;
-                PermiteAgregarItem = false;
-                PermiteEditarItem = true;
-                PermiteEliminarItem = true;
-
-                //Cargando datos para controlar si exige lote etc: para controlar validaciones en la edicion.
-
-                await ItemsVale.ToList().ForEachAsync(async i =>
-                {
-                    var cg_prod = i.CG_ART;
-                    var prod = await Http.GetFromJsonAsync<Producto>($"api/Prod/{cg_prod}");
-                    i.EXIGEDESPACHO = prod.EXIGEDESPACHO;
-                    i.EXIGELOTE = prod.EXIGELOTE;
-                    i.EXIGESERIE = prod.EXIGESERIE;
-                });
-
-
-                await InvokeAsync(StateHasChanged);
-            }
-
-            #region "BUSCADOR EMERGENTE"
-            string tituloBuscador { get; set; } = "";
-            private bool popupVisible = false;
-            bool PopupVisible { get => popupVisible; set { popupVisible = value; InvokeAsync(StateHasChanged); } }
 
 
 
-            private async Task BuscarResumenStock()
-            {
-                PermiteAgregarItem = false;
-                popupBuscadorVisible = true;
-                await InvokeAsync(StateHasChanged);
-            }
-
-            private async Task onResumenStockSelected(ResumenStock item)
-            {
-                popupBuscadorVisible = false;
-                List<Pedidos> lStock = new List<Pedidos>();
-                int registronegativo = 0;
 
 
-                //var cg_art = "OR312-233";
-                //var despacho = "testing";
-                //var serie = "";
-                //var lote = "";
-                //var cg_dep = 1;
+                    #region "CABACERA VALE"
+                    private Tire selectedTire = null;
+                    Tire SelectedTire
+                    {
+                        get => selectedTire;
+                        set { selectedTire = value; InvokeAsync(StateHasChanged); }
+                    }
 
-                //var resumen = await Http
-                //           .GetFromJsonAsync<ResumenStock[]>($"api/ResumenStocks/GetStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
-                //foreach (var rs in resumen)
-                //{
+                    private int OrdenFabricacion { get; set; } = 0;
+                    private int Pedido { get; set; } = 0;
+                    private int? Cg_CLI_Cg_PROVE { get; set; } = 0;
+                    //private int OCompra { get; set; } = 0;
+                    private string Remito = "0000-00000000";
+                    private DateTime fecha = DateTime.Now;
+                    DateTime Fecha { get => fecha; set { fecha = value; InvokeAsync(StateHasChanged); } }
+                    string Codigoi { get; set; } = "";
+                    string DescripcionPro { get; set; } = "";
+
+                    private Deposito selectedDepositoOC = null;
+                    Deposito SelectedDepositoOC
+                    {
+                        get => selectedDepositoOC;
+                        set { selectedDepositoOC = value; InvokeAsync(StateHasChanged); }
+                    }
+
+                    private Deposito selectedDepositoSalida = null;
+                    Deposito SelectedDepositoSalida
+                    {
+                        get => selectedDepositoSalida;
+                        set { selectedDepositoSalida = value; InvokeAsync(StateHasChanged); }
+                    }
+
+                    private Deposito selectedDepositoIngreso = null;
+                    Deposito SelectedDepositoIngreso
+                    {
+                        get => selectedDepositoIngreso;
+                        set { selectedDepositoIngreso = value; InvokeAsync(StateHasChanged); }
+                    }
+
+                    #endregion
+
+                    void OnChanged() { InvokeAsync(StateHasChanged); }
+
+                    protected override async Task OnInitializedAsync()
+                    {
+                        MainLayout.Titulo = "Administracion de Stock";
+                        NumVale = await Http.GetFromJsonAsync<int>($"api/Stock/GetMaxVale");
+                        Depositos = await Http.GetFromJsonAsync<Deposito[]>("api/Deposito");
+                        selectedDepositoSalida = Depositos.FirstOrDefault(d => d.CG_DEP == 0);
+                        selectedDepositoIngreso = Depositos.FirstOrDefault(d => d.CG_DEP == 0);
+                        ItemsVale = new List<Pedidos>().ToArray();
+                        //ItemsVale = new ObservableCollection<Stock>();
+                        await InvokeAsync(StateHasChanged);
+
+                    }
+
+                    protected async override Task OnAfterRenderAsync(bool firstRender)
+                    {
+                        if (firstRender)
+                        {
+                            usuario = await JsRuntime.InvokeAsync<string>("sessionStorage.getItem", "Usuario");
+                            if (usuario == null)
+                                navigationManager.NavigateTo($"/");
+                        }
+                    }
+
+                    async Task SelectedTireChanged(Tire tire)
+                    {
+                        StockGuardado = new Pedidos();
+                        ItemsVale = Array.Empty<Pedidos>();
+                        //ItemsVale = new ObservableCollection<Stock>();
+                        selectedTire = tire;
+                        //Dependiendo el TIPOO Habilitar controles
+
+
+                        StockGuardado.TIPOO = selectedTire.Tipoo;
+                        MostrarBotorOC = false;
+                        DeshabilitaBotonOC = true;
+                        OCSoloLectura = true;
+                        DeshabilitaBotonOF = true;
+                        OFSoloLectura = true;
+                        DepositoSalidaSoloLectura = true;
+                        DepositoIngresoSoloLectura = true;
+                        puedeBuscarStock = false;
+                        SelectedDepositoOC = new Deposito();
+
+                        if (selectedTire?.Tipoo == 5) //recep prove
+                        {
+                            DeshabilitaBotonOC = false;
+                            MostrarBotorOC = true;
+                            DepositoIngresoSoloLectura = false;
+                            labelClienteProveedor = "Proveedor:";
+                        }
+
+                        if (selectedTire?.Tipoo == 6)//dev prove
+                        {
+                            DeshabilitaBotonOC = false;
+                            MostrarBotorOC = true;
+                            DepositoSalidaSoloLectura = false;
+                            labelClienteProveedor = "Proveedor:";
+                        }
+
+                        if (selectedTire?.Tipoo == 10) //OF
+                        {
+                            DeshabilitaBotonOF = false;
+                            OFSoloLectura = true;
+
+                        }
+
+                        if (selectedTire?.Tipoo == 9) //Movimeinto Entre deposito
+                        {
+                            puedeBuscarStock = true;
+                            DepositoIngresoSoloLectura = false;
+                            if (selectedDepositoIngreso?.CG_DEP == null || selectedDepositoIngreso?.CG_DEP == 0)
+                            {
+                                //toastService.ShowToast("Seleccionar Deposito de Ingreso", TipoAlerta.Info);
+                                await this.ToastObj.Show(new ToastModel
+                                {
+                                    Title = "AVISO!",
+                                    Content = "Órden sin indicar cantidad fabricada. Se continuará igualmente.",
+                                    CssClass = "e-toast-warning",
+                                    Icon = "e-warning toast-icons"
+                                });
+                                //return;
+                            }
+
+                        }
+
+                        if (selectedTire?.Tipoo == 10) //Entrega de insumos a una orden de fabricación
+                        {
+                            PermiteEditarItem = true;
+                            OFSoloLectura = true;
+                            DeshabilitaBotonOF = false;
+                            MostrarBotorOF = true;
+
+                        }
+
+                        if (selectedTire?.Tipoo == 21) //Ajuste de Invetario
+                        {
+                            PermiteAgregarItem = false;
+                            puedeBuscarStock = true;
+                        }
+
+                        StockGuardado.TIPOO = selectedTire?.Tipoo; // lo utilizo para pasar la variable a los items de la grilla.
+                        await InvokeAsync(StateHasChanged);
+                    }
+
+                    void SelectedDepositoSalidaChanged(Deposito deposito)
+                    {
+                        selectedDepositoSalida = deposito;
+
+                        if (selectedTire?.Tipoo == 6) //DEVOL prove
+                        {
+                            selectedDepositoOC = deposito;
+                        }
+                    }
+                    void SelectedDepositoIngresoChanged(Deposito deposito)
+                    {
+                        selectedDepositoIngreso = deposito;
+                        if (selectedTire?.Tipoo == 5) //RECEP prove
+                        {
+                            selectedDepositoOC = deposito;
+                        }
+
+                        if (selectedTire?.Tipoo == 9) //MOVIM ENTRE DEP
+                        {
+                            PermiteAgregarItem = true;
+                            ItemsVale = new List<Pedidos>().ToArray();
+                            //ItemsVale = new ObservableCollection<Stock>();
+                        }
+                    }
+
+                    async Task CargarVale()
+                    {
+                        //Cargando Datos de Cabecera
+                        NumVale = (int)ItemsVale[0].VALE;
+                        Fecha = ItemsVale[0].FE_MOV;
+                        //depos: ver cual campo es ingreso y salida: tal vez depende segun el tipo de operacion
+                        selectedDepositoIngreso = Depositos.Where(d => d.CG_DEP == ItemsVale[0].CG_DEP).FirstOrDefault();
+                        OrdenFabricacion = (int)ItemsVale[0].CG_ORDF;
+                        StockGuardado.OCOMPRA = (int)ItemsVale[0].OCOMPRA;
+                        Pedido = (int)ItemsVale[0].PEDIDO;
+                        Cg_CLI_Cg_PROVE = ItemsVale[0].CG_CLI == 0 ? ItemsVale[0].CG_PROVE : ItemsVale[0].CG_CLI;
+                        DescripcionPro = ItemsVale[0].CG_CLI == 0 ? "Proveedor" : "Cliente";
+                        Remito = ItemsVale[0].REMITO;
+                        PermiteAgregarItem = false;
+                        PermiteEditarItem = true;
+                        PermiteEliminarItem = true;
+
+                        //Cargando datos para controlar si exige lote etc: para controlar validaciones en la edicion.
+
+                        await ItemsVale.ToList().ForEachAsync(async i =>
+                        {
+                            var cg_prod = i.CG_ART;
+                            var prod = await Http.GetFromJsonAsync<Producto>($"api/Prod/{cg_prod}");
+                            i.EXIGEDESPACHO = prod.EXIGEDESPACHO;
+                            i.EXIGELOTE = prod.EXIGELOTE;
+                            i.EXIGESERIE = prod.EXIGESERIE;
+                        });
+
+
+                        await InvokeAsync(StateHasChanged);
+                    }
+
+                    #region "BUSCADOR EMERGENTE"
+                    string tituloBuscador { get; set; } = "";
+                    private bool popupVisible = false;
+                    bool PopupVisible { get => popupVisible; set { popupVisible = value; InvokeAsync(StateHasChanged); } }
 
 
 
-                //    //pedido.PEDIDO = item.PEDIDO;
-                //    //pedido.CG_ORDF = item.CG_ORDF;
-                //    //OrdenFabricacion = item.CG_ORDF;
+                    private async Task BuscarResumenStock()
+                    {
+                        PermiteAgregarItem = false;
+                        popupBuscadorVisible = true;
+                        await InvokeAsync(StateHasChanged);
+                    }
+
+                    private async Task onResumenStockSelected(ResumenStock item)
+                    {
+                        popupBuscadorVisible = false;
+                        List<Pedidos> lStock = new List<Pedidos>();
+                        int registronegativo = 0;
+
+
+                        //var cg_art = "OR312-233";
+                        //var despacho = "testing";
+                        //var serie = "";
+                        //var lote = "";
+                        //var cg_dep = 1;
+
+                        //var resumen = await Http
+                        //           .GetFromJsonAsync<ResumenStock[]>($"api/ResumenStocks/GetStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
+                        //foreach (var rs in resumen)
+                        //{
 
 
 
-                //}
-
-                registronegativo--;
-                Pedidos pedido = new Pedidos();
-                pedido.CG_ART = item.CG_ART;
-                pedido.CG_DEP = item.CG_DEP;
-                pedido.SERIE = item.SERIE;
-                pedido.LOTE = item.LOTE;
-                pedido.DESPACHO = item.DESPACHO;
-                pedido.STOCK = item.STOCK;
-
-                //datos del producto: exigeserie etc.
-                var prod = await Http.GetFromJsonAsync<Producto>($"api/Prod/{item.CG_ART}");
-                pedido.UNID = prod.UNID;
-                pedido.EXIGEDESPACHO = prod.EXIGEDESPACHO;
-                pedido.EXIGESERIE = prod.EXIGESERIE;
-                pedido.EXIGELOTE = prod.EXIGELOTE;
-                pedido.DES_ART = prod.DES_PROD;
-                pedido.REGISTRO = registronegativo;
-
-                pedido.CG_PROVE = 0;
-                Cg_CLI_Cg_PROVE = 0;
-
-                lStock.Add(pedido);
-
-                ItemsVale = lStock.ToArray();
-
-                PermiteAgregarItem = false;
-                PermiteEditarItem = true;
-                PermiteEliminarItem = true;
-            }
-
-            private async Task onGuardarPedido(Pedidos stock)
-            {
-
-                //stock.NUMOCI = 0;
-                stock.FE_MOV = Fecha;
-                stock.VALE = NumVale;
+                        //    //pedido.PEDIDO = item.PEDIDO;
+                        //    //pedido.CG_ORDF = item.CG_ORDF;
+                        //    //OrdenFabricacion = item.CG_ORDF;
 
 
-                //stock.CG_CLI = 0;
-                stock.CG_PROVE = Cg_CLI_Cg_PROVE;
+
+                        //}
+
+                        registronegativo--;
+                        Pedidos pedido = new Pedidos();
+                        pedido.CG_ART = item.CG_ART;
+                        pedido.CG_DEP = item.CG_DEP;
+                        pedido.SERIE = item.SERIE;
+                        pedido.LOTE = item.LOTE;
+                        pedido.DESPACHO = item.DESPACHO;
+                        pedido.STOCK = item.STOCK;
+
+                        //datos del producto: exigeserie etc.
+                        var prod = await Http.GetFromJsonAsync<Producto>($"api/Prod/{item.CG_ART}");
+                        pedido.UNID = prod.UNID;
+                        pedido.EXIGEDESPACHO = prod.EXIGEDESPACHO;
+                        pedido.EXIGESERIE = prod.EXIGESERIE;
+                        pedido.EXIGELOTE = prod.EXIGELOTE;
+                        pedido.DES_ART = prod.DES_PROD;
+                        pedido.REGISTRO = registronegativo;
+
+                        pedido.CG_PROVE = 0;
+                        Cg_CLI_Cg_PROVE = 0;
+
+                        lStock.Add(pedido);
+
+                        ItemsVale = lStock.ToArray();
+
+                        PermiteAgregarItem = false;
+                        PermiteEditarItem = true;
+                        PermiteEliminarItem = true;
+                    }
+
+                    private async Task onGuardarPedido(Pedidos stock)
+                    {
+
+                        //stock.NUMOCI = 0;
+                        stock.FE_MOV = Fecha;
+                        stock.VALE = NumVale;
 
 
-                stock.TIPOO = selectedTire.Tipoo;
-                //TODO: controlar el TIPOO al guardar para setar cada campo
-                if (stock.TIPOO == 5)
-                {
-                    stock.AVISO = "RECEPCION DE INSUMOS DE PROVEEDOR"; /*VERIFICAR TIPOO*/
-                    stock.OCOMPRA = StockGuardado.OCOMPRA;
-                    //stock.DES_PROVE = DescripcionPro.Trim();
-                    stock.REMITO = Remito;
-                    stock.CG_DEP = SelectedDepositoIngreso.CG_DEP;
-                }
+                        //stock.CG_CLI = 0;
+                        stock.CG_PROVE = Cg_CLI_Cg_PROVE;
 
-                if (stock.TIPOO == 6)
-                {
-                    stock.OCOMPRA = StockGuardado.OCOMPRA;
-                    //stock.DES_PROVE = DescripcionPro.Trim();
+
+                        stock.TIPOO = selectedTire.Tipoo;
+                        //TODO: controlar el TIPOO al guardar para setar cada campo
+                        if (stock.TIPOO == 5)
+                        {
+                            stock.AVISO = "RECEPCION DE INSUMOS DE PROVEEDOR"; /*VERIFICAR TIPOO*/
+                            stock.OCOMPRA = StockGuardado.OCOMPRA;
+                            //stock.DES_PROVE = DescripcionPro.Trim();
+                            stock.REMITO = Remito;
+                            stock.CG_DEP = SelectedDepositoIngreso.CG_DEP;
+                        }
+
+                        if (stock.TIPOO == 6)
+                        {
+                            stock.OCOMPRA = StockGuardado.OCOMPRA;
+                            //stock.DES_PROVE = DescripcionPro.Trim();
                     @*stock.CG_DEP = SelectedDepositoSalida.CG_DEP;*@
                 stock.STOCK = -stock.STOCK;
             }

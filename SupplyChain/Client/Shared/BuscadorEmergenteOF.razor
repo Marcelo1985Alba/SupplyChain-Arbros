@@ -21,7 +21,7 @@
                     {
 
                         <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="true" AllowFiltering="true" TValue="Programa"
-                                AllowResizing="true" GridLines="GridLine.Both"
+                                AllowResizing="true" GridLines="GridLine.Both" ID="gridOFplaneadas" EnablePersistence="true" 
                                 AllowSelection="true" AllowSorting="true" AllowTextWrap="true" EnableHover="true"
                                 ShowColumnMenu="true">
                             <GridPageSettings PageSizes="@(new int[] { 5,7,10,20 })" PageSize="7" PageCount="7"></GridPageSettings>

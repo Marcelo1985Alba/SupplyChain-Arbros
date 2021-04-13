@@ -32,11 +32,11 @@
 
 </div>
 
-<BuscadorEmergente TItem="Programa" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" Titulo="@TituloBuscador"
-                   Visible="@PopupBuscadorVisible" onObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+<BuscadorEmergente @ref="Buscador" TItem="Programa" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" Titulo="@TituloBuscador"
+                   onObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
 
 @code {
-
+    BuscadorEmergente<Programa> Buscador;
     [Parameter] public int Valor { get; set; } = 0;
     [Parameter] public bool EsSoloLectura { get; set; } = false;
     [Parameter] public bool MostraBotonBusqueda { get; set; } = true;
@@ -51,7 +51,7 @@
 
     private async Task BuscarOF()
     {
-        PopupBuscadorVisible = true;
+        await Buscador.ShowAsync();
         //ItemsABuscar = await Http.GetFromJsonAsync<Programa[]>("api/Programas");
         ItemsABuscar = await Http.GetFromJsonAsync<Programa[]>("api/Programa/GetPlaneadas");
         await InvokeAsync(StateHasChanged);
@@ -59,8 +59,8 @@
 
     public async Task EnviarObjetoSeleccionado(Programa ordfab)
     {
+        await Buscador.HideAsync();
         var of = (Programa)ordfab;
-        PopupBuscadorVisible = false;
         await OnOFSeleccionada.InvokeAsync(of);
     }
 

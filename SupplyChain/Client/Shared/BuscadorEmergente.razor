@@ -1,7 +1,9 @@
 ﻿@typeparam TItem
 
-<SfDialog Height="75%" Width="90%" Target="#target" ShowCloseIcon="true" @bind-Visible="Visible" IsModal="true">
+<SfDialog Height="75%" Width="90%" Target="#target" ShowCloseIcon="true" @bind-Visible="@Visible" IsModal="true" EnableResize="true">
+    <DialogEvents Closed="OnAfterDialogClosed"></DialogEvents>
     <DialogTemplates>
+        
         <Header>
             @Titulo
         </Header>
@@ -100,6 +102,12 @@
 
     public TItem Selected { get; set; }
 
+    //protected async override Task OnInitializedAsync()
+    //{
+    //    Visible = true;
+    //    await InvokeAsync(StateHasChanged);
+    //}
+
     public void EnviarObjetoSeleccionado()
     {
         Visible = false;
@@ -118,6 +126,24 @@
         //{
         //    SelectedValue = SelectedValue + " " + data;
         //}
+    }
+
+
+    private void OnAfterDialogClosed(object arg)
+    {
+        Visible = false;
+    }
+
+    public async Task ShowAsync()
+    {
+        Visible = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task HideAsync()
+    {
+        Visible = false;
+        await InvokeAsync(StateHasChanged);
     }
 
     //public static Object GetPropValue(object src, string propName)
