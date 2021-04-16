@@ -129,6 +129,13 @@ namespace SupplyChain
             return programa;
         }
 
+        [HttpGet("EnviarCsvDataCore")]
+        public async Task<ActionResult> EnviarCsv()
+        {
+            string xSQL = string.Format("EXEC INTERFACE_DATACORE");
+            await _context.Database.ExecuteSqlRawAsync(xSQL);
+            return Ok();
+        }
         // PUT: api/Programas/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.

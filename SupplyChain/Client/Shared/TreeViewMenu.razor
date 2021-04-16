@@ -1,38 +1,44 @@
-﻿
+﻿@page "/treeview"
 @using Syncfusion.Blazor.Navigations
-
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor
+@using SupplyChain.Shared
+@inject HttpClient Http
 <div class="control-wrapper">
-    
-<SfTreeView ID="menuTreeview" TValue="TreeData">
-    <TreeViewFieldsSettings Id="nodeId" Text="nodeText" IconCss="iconCss" DataSource="@dbMenu" NavigateUrl="url"
-                            Selected="Selected"  HasChildren="hasChild" ParentID="pid">
-                    </TreeViewFieldsSettings>
-    <TreeViewTemplates TValue="TreeData">
-        <NodeTemplate>
-            <div>
-                <div class="treeviewdiv">
-                    <div class="nodetext">
-                        <span class="treeName">@((context as TreeData).nodeText)</span>
+    MENU
+    <Syncfusion.Blazor.SplitButtons.SfProgressButton Content="Test" OnClick="@(async ()=> await TestApi())">
+    </Syncfusion.Blazor.SplitButtons.SfProgressButton>
+    <SfTreeView ID="menuTreeview" TValue="Modulo">
+        <TreeViewFieldsSettings TValue="Modulo" Id="id" Text="descripcion" IconCss="iconCss" NavigateUrl="url"
+                                HasChildren="tieneChild" ParentID="parentId">
+        </TreeViewFieldsSettings>
+        <SfDataManager Url="api/Modulo/Syncf" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="false"></SfDataManager>
+        @*<TreeViewTemplates TValue="TreeData">
+            <NodeTemplate>
+                <div>
+                    <div class="treeviewdiv">
+                        <div class="nodetext">
+                            <span class="treeName">@((context as TreeData).nodeText)</span>
+                        </div>
+                        @{
+                                @if (((context as TreeData).Count) != 0)
+                                {
+                                    <div class="nodebadge">
+                                        <span class="treeCount e-badge e-badge-primary">@((context as TreeData).Count)</span>
+                                    </div>
+                                }
+                            }
                     </div>
-                    @*@{
-                        @if (((context as TreeData).Count) != 0)
-                        {
-                            <div class="nodebadge">
-                                <span class="treeCount e-badge e-badge-primary">@((context as TreeData).Count)</span>
-                            </div>
-                        }
-                    }*@
                 </div>
-            </div>
-        </NodeTemplate>
-    </TreeViewTemplates>
-</SfTreeView>
+            </NodeTemplate>
+        </TreeViewTemplates>*@
+    </SfTreeView>
 </div>
 
 @code{
     public class TreeData
     {
-        public string nodeId { get; set; }
+        public int nodeId { get; set; }
         public string nodeText { get; set; }
         public string iconCss { get; set; }
         public bool hasChild { get; set; }
@@ -42,33 +48,45 @@
     }
     List<TreeData> dbMenu = new List<TreeData>();
     public ExpandAction Expand = ExpandAction.Click;
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        dbMenu.Add(new TreeData { nodeId = "01", nodeText = "Home", iconCss = "icon-microchip icon", url = "/index" });
-        dbMenu.Add(new TreeData { nodeId = "02", nodeText = "ADMINISTRACION", iconCss = "icon-thumbs-up-alt icon", hasChild = true });
-        dbMenu.Add(new TreeData { nodeId = "03", nodeText = "Quick Start", iconCss = "icon-docs icon" });
-        dbMenu.Add(new TreeData { nodeId = "04", nodeText = "PCP", iconCss = "icon-th icon", hasChild = true });
-        dbMenu.Add(new TreeData { nodeId = "04-01", nodeText = "Pronóstico de ventas", iconCss = "icon-thumbs-up-alt icon", pid = "04" });
-        dbMenu.Add(new TreeData { nodeId = "04-02", nodeText = "Carga de Máquina", iconCss = "icon-circle-thin icon", pid = "04", url = "/CargaMaquina" });
-        dbMenu.Add(new TreeData { nodeId = "04-03", nodeText = "Pedidos de clientes", iconCss = "icon-circle-thin icon", pid = "04" });
-        dbMenu.Add(new TreeData { nodeId = "04-04", nodeText = "PCP", iconCss = "icon-circle-thin icon", pid = "04", url = "/pcp" });
-        dbMenu.Add(new TreeData { nodeId = "04-05", nodeText = "TimePicker", iconCss = "icon-circle-thin icon", pid = "04" });
-        dbMenu.Add(new TreeData { nodeId = "04-06", nodeText = "SideBar", iconCss = "icon-circle-thin icon", pid = "04" });
-        dbMenu.Add(new TreeData { nodeId = "05", nodeText = "API Reference", iconCss = "icon-code icon", hasChild = true });
-        dbMenu.Add(new TreeData { nodeId = "05-01", nodeText = "Calendar", iconCss = "icon-circle-thin icon", pid = "05" });
-        dbMenu.Add(new TreeData { nodeId = "05-02", nodeText = "DatePicker", iconCss = "icon-circle-thin icon", pid = "05" });
-        dbMenu.Add(new TreeData { nodeId = "05-03", nodeText = "DateTimePicker", iconCss = "icon-circle-thin icon", pid = "05" });
-        dbMenu.Add(new TreeData { nodeId = "05-04", nodeText = "DateRangePicker", iconCss = "icon-circle-thin icon", pid = "05" });
-        dbMenu.Add(new TreeData { nodeId = "05-05", nodeText = "TimePicker", iconCss = "icon-circle-thin icon", pid = "05" });
-        dbMenu.Add(new TreeData { nodeId = "05-06", nodeText = "SideBar", iconCss = "icon-circle-thin icon", pid = "05" });
-        dbMenu.Add(new TreeData { nodeId = "06", nodeText = "Browser Compatibility", iconCss = "icon-chrome icon" });
-        dbMenu.Add(new TreeData { nodeId = "07", nodeText = "Upgrade Packages", iconCss = "icon-up-hand icon" });
-        dbMenu.Add(new TreeData { nodeId = "08", nodeText = "Release Notes", iconCss = "icon-bookmark-empty icon" });
-        dbMenu.Add(new TreeData { nodeId = "09", nodeText = "FAQ", iconCss = "icon-help-circled icon" });
-        dbMenu.Add(new TreeData { nodeId = "10", nodeText = "License", iconCss = "icon-doc-text icon" });
 
+    protected async override Task OnInitializedAsync()
+    {
+        //var Depositos = await Http.GetFromJsonAsync<IEnumerable<Modulo>>("api/Modulo");
     }
+
+    protected async Task TestApi()
+    {
+        var Depositos = await Http.GetFromJsonAsync<IEnumerable<Modulo>>("api/Modulo");
+    }
+
+    //protected override void OnInitialized()
+    //{
+    //base.OnInitialized();
+    //TODO: CARGAR MENU DESDE BASE DE DATOS
+    //dbMenu.Add(new TreeData { nodeId = 1, nodeText = "Home", iconCss = "icon-microchip icon", url = "/index" });
+    //dbMenu.Add(new TreeData { nodeId = 2, nodeText = "ADMINISTRACION", iconCss = "icon-thumbs-up-alt icon", hasChild = true });
+    //dbMenu.Add(new TreeData { nodeId = 3, nodeText = "Quick Start", iconCss = "icon-docs icon" });
+    //dbMenu.Add(new TreeData { nodeId = 4, nodeText = "PCP", iconCss = "icon-th icon", hasChild = true });
+    //dbMenu.Add(new TreeData { nodeId = 5, nodeText = "Pronóstico de ventas", iconCss = "icon-thumbs-up-alt icon", pid = "04" });
+    //dbMenu.Add(new TreeData { nodeId = 6, nodeText = "Carga de Máquina", iconCss = "icon-circle-thin icon", pid = "04", url = "/CargaMaquina" });
+    //dbMenu.Add(new TreeData { nodeId = 7, nodeText = "Pedidos de clientes", iconCss = "icon-circle-thin icon", pid = "04" });
+    //dbMenu.Add(new TreeData { nodeId = 8, nodeText = "PCP", iconCss = "icon-circle-thin icon", pid = "04", url = "/pcp" });
+    //dbMenu.Add(new TreeData { nodeId = 9, nodeText = "Recepcion de Insumos", iconCss = "icon-circle-thin icon", pid = "04", url="/" });
+    //dbMenu.Add(new TreeData { nodeId = 10, nodeText = "SideBar", iconCss = "icon-circle-thin icon", pid = "04" });
+    //dbMenu.Add(new TreeData { nodeId = 11, nodeText = "API Reference", iconCss = "icon-code icon", hasChild = true });
+    //dbMenu.Add(new TreeData { nodeId = "05-01", nodeText = "Calendar", iconCss = "icon-circle-thin icon", pid = "05" });
+    //dbMenu.Add(new TreeData { nodeId = "05-02", nodeText = "DatePicker", iconCss = "icon-circle-thin icon", pid = "05" });
+    //dbMenu.Add(new TreeData { nodeId = "05-03", nodeText = "DateTimePicker", iconCss = "icon-circle-thin icon", pid = "05" });
+    //dbMenu.Add(new TreeData { nodeId = "05-04", nodeText = "DateRangePicker", iconCss = "icon-circle-thin icon", pid = "05" });
+    //dbMenu.Add(new TreeData { nodeId = "05-05", nodeText = "TimePicker", iconCss = "icon-circle-thin icon", pid = "05" });
+    //dbMenu.Add(new TreeData { nodeId = "05-06", nodeText = "SideBar", iconCss = "icon-circle-thin icon", pid = "05" });
+    //dbMenu.Add(new TreeData { nodeId = "06", nodeText = "Browser Compatibility", iconCss = "icon-chrome icon" });
+    //dbMenu.Add(new TreeData { nodeId = "07", nodeText = "Upgrade Packages", iconCss = "icon-up-hand icon" });
+    //dbMenu.Add(new TreeData { nodeId = "08", nodeText = "Release Notes", iconCss = "icon-bookmark-empty icon" });
+    //dbMenu.Add(new TreeData { nodeId = "09", nodeText = "FAQ", iconCss = "icon-help-circled icon" });
+    //dbMenu.Add(new TreeData { nodeId = "10", nodeText = "License", iconCss = "icon-doc-text icon" });
+
+@*}*@
 }
 
 <style>
@@ -103,8 +121,8 @@
         float: left;
         margin-left: 5px
     }
-    .treeName{
+
+    .treeName {
         font-size: 20px;
     }
-
 </style>

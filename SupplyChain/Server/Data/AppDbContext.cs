@@ -62,7 +62,7 @@ namespace SupplyChain
 
         public virtual DbSet<Compra> Compras { get; set; }
         public DbSet<ResumenStock> ResumenStock { get; set; }
-
+        public DbSet<Modulo> Modulos { get; set; }
         public virtual DbSet<Genera> Genera { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         { 
