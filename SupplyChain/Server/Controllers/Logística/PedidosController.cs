@@ -31,7 +31,9 @@ namespace SupplyChain
         public IEnumerable<Pedidos> Get(string PEDIDO)
         {
             string xSQL = string.Format("" +
-                "SELECT Pedidos.REGISTRO, Pedidos.PEDIDO, Pedidos.REMITO, Pedidos.FLAG, Pedidos.CG_ORDF, Pedidos.TIPOO, Pedidos.CG_TIRE, Pedidos.DES_CLI, Pedidos.CG_ART, Pedidos.DES_ART, Pedidos.DESPACHO, Pedidos.LOTE, Pedidos.FE_MOV, Pedidos.AVISO, Pedidos.CG_ORDEN " +
+                "SELECT Pedidos.REGISTRO, Pedidos.PEDIDO, Pedidos.REMITO, Pedidos.FLAG, Pedidos.CG_ORDF, Pedidos.TIPOO, " +
+                "Pedidos.CG_TIRE, Pedidos.DES_CLI, Pedidos.CG_ART, Pedidos.DES_ART, Pedidos.DESPACHO, Pedidos.LOTE, " +
+                "Pedidos.FE_MOV, Pedidos.AVISO, Pedidos.CG_ORDEN, Pedidos.BONIF " +
                 "FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
                 "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) " +
                 "where(pedidos.FLAG = 0 AND Programa.CG_ESTADO = 3 AND Pedidos.CG_ORDF != 0 AND(Pedidos.TIPOO = 1)) " +

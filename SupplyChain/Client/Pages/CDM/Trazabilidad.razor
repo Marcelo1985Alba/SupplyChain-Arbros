@@ -164,32 +164,32 @@
                     {
                         lote = "";
                     }
-                    var modelo = prodList.Where(t => t.CG_PROD.ToString() == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM1.Trim();
+                    var modelo = prodList.CAMPOCOM1.Trim();
                     if (modelo == null)
                     {
                         modelo = "";
                     }
-                    var medida = prodList.Where(t => t.CG_PROD.ToString() == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim();
+                    var medida = prodList.CAMPOCOM2.Trim();
                     if (medida == null)
                     {
                         medida = "";
                     }
-                    var orificio = prodList.Where(t => t.CG_PROD.ToString() == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim();
+                    var orificio = prodList.CAMPOCOM3.Trim();
                     if (orificio == null)
                     {
                         orificio = "";
                     }
-                    var area = prodList.Where(t => t.CG_PROD.ToString() == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM4.Trim();
+                    var area = prodList.CAMPOCOM4.Trim();
                     if (area == null)
                     {
                         area = "";
                     }
-                    var serie = prodList.Where(t => t.CG_PROD.ToString() == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim();
+                    var serie = prodList.CAMPOCOM5.Trim();
                     if (serie == null)
                     {
                         serie = "";
                     }
-                    var tipo = prodList.Where(t => t.CG_PROD.ToString() == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM6.Trim();
+                    var tipo = prodList.CAMPOCOM6.Trim();
                     if (tipo == null)
                     {
                         tipo = "";
@@ -397,7 +397,7 @@
     protected List<Pedidos> Busquedalist = new List<Pedidos>();
     protected List<Pedidos> OF = new List<Pedidos>();
     protected List<PedCli> PedCliList = new List<PedCli>();
-    protected List<Prod> prodList = new List<Prod>();
+    protected Prod prodList = new Prod();
     protected List<Solution> rutas;
     protected List<Prod> ProdCertificado = new List<Prod>();
     protected List<PedCli> PedcliCertificado = new List<PedCli>();
@@ -578,7 +578,7 @@
         else
         {
             PedCliList = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/{BoxPedido}");
-            prodList = await Http.GetFromJsonAsync<List<Prod>>($"api/Prod/{CodNro}");
+            prodList = await Http.GetFromJsonAsync<Prod>($"api/Prod/{CodNro}");
             pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/MostrarTrazabilidad/{BoxPedido}");
             Showgrid = true;
             BoxPedido = "";
@@ -989,11 +989,9 @@
                     {
                         espaciosPedido = espaciosPedido + " ";
                     }
-                    var tipo2 = from item in prodList
-                                where item.CG_PROD == CodNro
-                                select item.CAMPOCOM6;
+                    var tipo2 = prodList.CAMPOCOM6;
                     string tipo = "";
-                    if (tipo2 is null || tipo2.Contains("System.Linq"))
+                    if (string.IsNullOrEmpty(tipo2))
                     {
                         tipo = "";
                     }
@@ -1010,8 +1008,8 @@
                         $"    TAG:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}\r\n" +
                         $"    Tipo:\r\n" +
                         $"    Codigo:{CodNro.Trim()}\r\n" +
-                        $"    Medida:{prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}  {prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}\r\n" +
-                        $"    Clase:{prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim()}\r\n" +
+                        $"    Medida:{prodList.CAMPOCOM2.Trim()}  {prodList.CAMPOCOM3.Trim()}\r\n" +
+                        $"    Clase:{prodList.CAMPOCOM5.Trim()}\r\n" +
                         $"    Temp:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim()}\r\n" +
                         $"    Presion SET:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}\r\n" +
                         $"    P. Aj Banco:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}\r\n" +
@@ -1129,7 +1127,7 @@
                     espaciosAnio = espaciosAnio + " ";
                 }
                 string espaciosOrif = "";
-                for (int i = 0; i < (32 - prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim().Length); i++)
+                for (int i = 0; i < (32 - prodList.CAMPOCOM2.Trim().Length); i++)
                 {
                     espaciosOrif = espaciosOrif + " ";
                 }
@@ -1150,14 +1148,14 @@
                 if (!String.IsNullOrEmpty(PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()))
                 {
                     graphics.DrawString($"\r\n\r\n                                     {Convert.ToInt32(TrzNro)}{espaciosSinLote}{DateTime.Now.Year}     .  .  .  .  ." +
-                        $"\r\n               {CodNro.Trim()}          {prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
-                        $"\r\n.                                            {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}     .  .  .  .  .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
+                        $"\r\n               {CodNro.Trim()}          {prodList.CAMPOCOM2.Trim()}{espaciosOrif}{prodList.CAMPOCOM3.Trim()} " +
+                        $"\r\n.                                            {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}{espaciosClase}{prodList.CAMPOCOM5.Trim()}     .  .  .  .  .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
                 }
                 else
                 {
                     graphics.DrawString($"                                                                                                           \"\r\n\r\n                                     {Convert.ToInt32(TrzNro)}{espaciosTag}{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosAnio}{DateTime.Now.Year}" +
-                    $"\r\n               {CodNro.Trim()}          {prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
-                    $"\r\n                                             {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}" +
+                    $"\r\n               {CodNro.Trim()}          {prodList.CAMPOCOM2.Trim()}{espaciosOrif}{prodList.CAMPOCOM3.Trim()} " +
+                    $"\r\n                                             {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}{espaciosClase}{prodList.CAMPOCOM5.Trim()}" +
                     $"\r\n\r\n._", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
                 }
 

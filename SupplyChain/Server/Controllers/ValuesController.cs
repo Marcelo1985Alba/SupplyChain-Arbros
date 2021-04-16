@@ -261,8 +261,8 @@ namespace SupplyChain
         private string GetDocumentPath(string document)
         {
 
-            string xSQL = string.Format("select CAMPO, VALORC from Solution where CAMPO = 'RUTAOF' OR CAMPO = 'RUTACNC' OR CAMPO = 'RUTAENSAYO' OR CAMPO = 'RUTATRAZABILIDAD' OR CAMPO = 'RUTADATOS'");
-            var ubicaciones =  _context.Solution.FromSqlRaw(xSQL).ToList<Solution>();
+            string xSQL = "select CAMPO, VALORC from Solution where CAMPO in ('RUTAOF', 'RUTACNC','RUTAENSAYO','RUTATRAZABILIDAD','RUTADATOS')";
+            var ubicaciones =  _context.Solution.FromSqlRaw(xSQL).ToList();
             var ubicacion = ubicaciones.Where(s => s.CAMPO == "RUTAOF").Select(c => c.VALORC).FirstOrDefault();
             
             string documentPath = string.Empty;

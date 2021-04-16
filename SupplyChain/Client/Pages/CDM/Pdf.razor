@@ -37,9 +37,20 @@ else
         else
         {
 
-            codigo = codigo.Substring(0, 7) + ".pdf" + "-RUTAOF";
-            <SfPdfViewer @ref="sfPdfViewerObj" ID="pdfViewer" ServiceUrl="/api/Values" DocumentPath="@codigo.Trim()"
-                         Height="1300px" Width="100%"></SfPdfViewer>
+            if (rutas != null && rutas.Count > 0)
+            {
+                <p>@rutas.Where(s => s.CAMPO == accion).FirstOrDefault().VALORC</p>
+            }
+            codigo = codigo.Substring(0, 7) + ".pdf";
+
+            @*<div class="col-lg-12 control-section">
+                <div class="content-wrapper">
+                    <div class="row">*@
+                        <SfPdfViewer @ref="sfPdfViewerObj" ID="pdfViewer" ServiceUrl="/api/Values" DocumentPath="@codigo.Trim()"
+                                     Height="1300px" Width="100%"></SfPdfViewer>
+                    @*</div>
+                </div>
+            </div>*@
         }
 
     }
@@ -47,220 +58,220 @@ else
     if (accion == "RUTACNC")
     {
 
-        // Only get files that begin with the letter "c".
-        //var ruta = rutas.Where(s => s.CAMPO == accion).FirstOrDefault();
-        //string[] dirs = Directory.GetFiles(@$"{ruta.VALORC}", $"{codigo.Substring(0, 7)}*");
-        if (docsCargados)
-        {
-            for (int i = 0; i < dirs.Length; i++)
-            {
-                <div class="accordion" id="accordionExample">
-                    <div class="card">
-                        <div class="card-header" id="@i">
-                            <h2 class="mb-0">
-                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(i)" aria-expanded="false" aria-controls="collapse@(i)">
-                                    @*@(dirs.GetValue(i).ToString().Substring(ruta.VALORC.Length))*@
-                                    @(dirs.GetValue(i).ToString())
-                                </button>
-                            </h2>
-                        </div>
-                        <div id="collapse@(i)" class="collapse" aria-labelledby="@i" data-parent="#accordionExample">
-                            <div class="card-body">
-                                @{
-                                    userData1 = File.ReadAllLines(dirs.GetValue(i).ToString());
-                                    @foreach (string dataLine in userData1)
-                                    {
-                                        @foreach (string dataItem in dataLine.Split(delimiterChar))
-                                        {
-                                            <label>@dataItem</label>
-                                            <br />
-                                        }
-                                    }
-                                }
-                            </div>
-                        </div>
-                    </div>
+    // Only get files that begin with the letter "c".
+    //var ruta = rutas.Where(s => s.CAMPO == accion).FirstOrDefault();
+    //string[] dirs = Directory.GetFiles(@$"{ruta.VALORC}", $"{codigo.Substring(0, 7)}*");
+    if (docsCargados)
+    {
+    for (int i = 0; i < dirs.Length; i++)
+    {
+    <div class="accordion" id="accordionExample">
+        <div class="card">
+            <div class="card-header" id="@i">
+                <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(i)" aria-expanded="false" aria-controls="collapse@(i)">
+                        @*@(dirs.GetValue(i).ToString().Substring(ruta.VALORC.Length))*@
+                        @(dirs.GetValue(i).ToString())
+                    </button>
+                </h2>
+            </div>
+            <div id="collapse@(i)" class="collapse" aria-labelledby="@i" data-parent="#accordionExample">
+                <div class="card-body">
+                    @{
+                        userData1 = File.ReadAllLines(dirs.GetValue(i).ToString());
+                        @foreach (string dataLine in userData1)
+                        {
+                            @foreach (string dataItem in dataLine.Split(delimiterChar))
+                            {
+                                <label>@dataItem</label>
+                                <br />
+                            }
+                        }
+                    }
                 </div>
-            }
-        }
+            </div>
+        </div>
+    </div>
+    }
+    }
 
     }
-}
+    }
 
-@*if (accion == "RUTAOF")
-        {
-            <div class="control-section">
-                <SfPdfViewer ServiceUrl="/api/Values" DocumentPath="@codigo" Height="2000px" Width="100%"></SfPdfViewer>
-            </div>
-            @foreach (Solution ruta in rutas)
-            {
-                if (ruta.CAMPO == "RUTAOF")
-                {
-                    if (codigo.Length < 6)
-                    {
-                        <label>No hay planos asociados a reparaciones.</label>
-                    }
-                    else
-                    {
-                        //codigo = ruta.VALORC + codigo.Substring(0, 7) + ".pdf";
-                        codigo = codigo.Substring(0, 7) + ".pdf";
-                        if (File.Exists(codigo))
-                        {
-                            <div class="control-section">
-                                <SfPdfViewer ServiceUrl="/api/Values" DocumentPath="@codigo" Height="2000px" Width="100%"></SfPdfViewer>
-                            </div>
-                        }
-                        else
-                        {
-                            <label>No hay un plano asociado a la orden de Fabricación.TEST:@codigo</label>
-                            <SfPdfViewer ServiceUrl="/api/Values" DocumentPath="@codigo" Height="2000px" Width="100%"></SfPdfViewer>
-                        }
-                    }
-                }
-            }
-        }
-        if (accion == "RUTACNC")
-        {
-            @foreach (Solution ruta in rutas)
-            {
-                if (ruta.CAMPO == "RUTACNC")
-                {
-                    // Only get files that begin with the letter "c".
-                    string[] dirs = Directory.GetFiles(@$"{ruta.VALORC}", $"{codigo.Substring(0, 7)}*");
-                    for (int i = 0; i < dirs.Length; i++)
-                    {
-                        <div class="accordion" id="accordionExample">
-                            <div class="card">
-                                <div class="card-header" id="@i">
-                                    <h2 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(i)" aria-expanded="false" aria-controls="collapse@(i)">
-                                            @(dirs.GetValue(i).ToString().Substring(ruta.VALORC.Length))
-                                        </button>
-                                    </h2>
-                                </div>
-                                <div id="collapse@(i)" class="collapse" aria-labelledby="@i" data-parent="#accordionExample">
-                                    <div class="card-body">
-                                        @{
-                                            userData1 = File.ReadAllLines(dirs.GetValue(i).ToString());
-                                            @foreach (string dataLine in userData1)
+                        @*if (accion == "RUTAOF")
+                                {
+                                    <div class="control-section">
+                                        <SfPdfViewer ServiceUrl="/api/Values" DocumentPath="@codigo" Height="2000px" Width="100%"></SfPdfViewer>
+                                    </div>
+                                    @foreach (Solution ruta in rutas)
+                                    {
+                                        if (ruta.CAMPO == "RUTAOF")
+                                        {
+                                            if (codigo.Length < 6)
                                             {
-                                                @foreach (string dataItem in dataLine.Split(delimiterChar))
+                                                <label>No hay planos asociados a reparaciones.</label>
+                                            }
+                                            else
+                                            {
+                                                //codigo = ruta.VALORC + codigo.Substring(0, 7) + ".pdf";
+                                                codigo = codigo.Substring(0, 7) + ".pdf";
+                                                if (File.Exists(codigo))
                                                 {
-                                                    <label>@dataItem</label>
-                                                    <br />
+                                                    <div class="control-section">
+                                                        <SfPdfViewer ServiceUrl="/api/Values" DocumentPath="@codigo" Height="2000px" Width="100%"></SfPdfViewer>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <label>No hay un plano asociado a la orden de Fabricación.TEST:@codigo</label>
+                                                    <SfPdfViewer ServiceUrl="/api/Values" DocumentPath="@codigo" Height="2000px" Width="100%"></SfPdfViewer>
                                                 }
                                             }
                                         }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                }
-            }
-        }
-        if (accion == "ENSAYOS")
-        {
-            @foreach (Solution ruta in rutas)
-            {
-                if (ruta.CAMPO == "RUTAENSAYO")
-                {
-                    if (File.Exists(ruta.VALORC + $"ENS_{codigo}_1.pdf"))
-                    {
-                        <div class="accordion" id="accordionExample">
-                            @{
-                                for (int i = 1; i < 4; i++)
-                                {
-                                    string rutaDocumento = ruta.VALORC + $"ENS_{codigo}_{i}.pdf";
-                                    if (File.Exists(rutaDocumento))
-                                    {
-                                        <div class="card">
-                                            <div class="card-header" id="@i">
-                                                <h2 class="mb-0">
-                                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(i)" aria-expanded="false" aria-controls="collapse@(i)">
-                                                        Ensayo @(i)
-                                                    </button>
-                                                </h2>
-                                            </div>
-
-                                            <div id="collapse@(i)" class="collapse" aria-labelledby="@i" data-parent="#accordionExample">
-                                                <div class="card-body">
-                                                    <SfPdfViewer DocumentPath="@rutaDocumento" Height="1000px" Width="750%"></SfPdfViewer>
-                                                </div>
-                                            </div>
-                                        </div>
                                     }
                                 }
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <label>No existen registros de ensayos para el pedido numero @(codigo)</label>
-                    }
+                                if (accion == "RUTACNC")
+                                {
+                                    @foreach (Solution ruta in rutas)
+                                    {
+                                        if (ruta.CAMPO == "RUTACNC")
+                                        {
+                                            // Only get files that begin with the letter "c".
+                                            string[] dirs = Directory.GetFiles(@$"{ruta.VALORC}", $"{codigo.Substring(0, 7)}*");
+                                            for (int i = 0; i < dirs.Length; i++)
+                                            {
+                                                <div class="accordion" id="accordionExample">
+                                                    <div class="card">
+                                                        <div class="card-header" id="@i">
+                                                            <h2 class="mb-0">
+                                                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(i)" aria-expanded="false" aria-controls="collapse@(i)">
+                                                                    @(dirs.GetValue(i).ToString().Substring(ruta.VALORC.Length))
+                                                                </button>
+                                                            </h2>
+                                                        </div>
+                                                        <div id="collapse@(i)" class="collapse" aria-labelledby="@i" data-parent="#accordionExample">
+                                                            <div class="card-body">
+                                                                @{
+                                                                    userData1 = File.ReadAllLines(dirs.GetValue(i).ToString());
+                                                                    @foreach (string dataLine in userData1)
+                                                                    {
+                                                                        @foreach (string dataItem in dataLine.Split(delimiterChar))
+                                                                        {
+                                                                            <label>@dataItem</label>
+                                                                            <br />
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                }
+                                if (accion == "ENSAYOS")
+                                {
+                                    @foreach (Solution ruta in rutas)
+                                    {
+                                        if (ruta.CAMPO == "RUTAENSAYO")
+                                        {
+                                            if (File.Exists(ruta.VALORC + $"ENS_{codigo}_1.pdf"))
+                                            {
+                                                <div class="accordion" id="accordionExample">
+                                                    @{
+                                                        for (int i = 1; i < 4; i++)
+                                                        {
+                                                            string rutaDocumento = ruta.VALORC + $"ENS_{codigo}_{i}.pdf";
+                                                            if (File.Exists(rutaDocumento))
+                                                            {
+                                                                <div class="card">
+                                                                    <div class="card-header" id="@i">
+                                                                        <h2 class="mb-0">
+                                                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(i)" aria-expanded="false" aria-controls="collapse@(i)">
+                                                                                Ensayo @(i)
+                                                                            </button>
+                                                                        </h2>
+                                                                    </div>
+
+                                                                    <div id="collapse@(i)" class="collapse" aria-labelledby="@i" data-parent="#accordionExample">
+                                                                        <div class="card-body">
+                                                                            <SfPdfViewer DocumentPath="@rutaDocumento" Height="1000px" Width="750%"></SfPdfViewer>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    }
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <label>No existen registros de ensayos para el pedido numero @(codigo)</label>
+                                            }
+                                        }
+                                    }
+                                }
+                            }*@
+
+                        @code {
+            private string DocumentPath { get; set; } = "PDF_Succinctly.pdf";
+                bool VisibleSpinner = false;
+
+                [Inject] protected HttpClient Http { get; set; }
+
+                [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
+
+                protected List<Solution> rutas;
+                protected Solution Solution;
+                Array userData1 = null;
+
+                char[] delimiterChar = { ',' };
+
+                string docPath;
+                string[] dirs;
+                bool docsCargados = false;
+                [Parameter] public string codigo { get; set; } = "";
+                [Parameter] public string accion { get; set; } = "";
+                //[CascadingParameter] public MainLayout Layout { get; set; }
+                SfPdfViewer sfPdfViewerObj;
+
+                protected override async Task OnInitializedAsync()
+                {
+                    //MainLayout.Titulo = $"Codigo";
+                    VisibleSpinner = true;
+                    rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+
+                    Console.WriteLine("RUTA PLANOS PDF:" + accion);
+                    await InvokeAsync(StateHasChanged);
+
+                    //sfPdfViewerObj.Load()
+                    VisibleSpinner = false;
                 }
-            }
-        }
-    }*@
 
-@code {
-    private string DocumentPath { get; set; } = "PDF_Succinctly.pdf";
-    bool VisibleSpinner = false;
+                protected async override Task OnParametersSetAsync()
+                {
+                    if (accion == "RUTACNC")
+                    {
+                        //OBTENER ARCHIVOS EXISTENTES
+                        dirs = await Http
+                            .GetFromJsonAsync<string[]>($"api/AdministracionArchivos/GetDocumentosByRuta/{accion}/{codigo.Substring(0, 7)}");
+                        docsCargados = true;
+                    }
 
-    [Inject] protected HttpClient Http { get; set; }
+                    await InvokeAsync(StateHasChanged);
+                }
 
-    [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
-
-    protected List<Solution> rutas;
-    protected Solution Solution;
-    Array userData1 = null;
-
-    char[] delimiterChar = { ',' };
-
-    string docPath;
-    string[] dirs;
-    bool docsCargados = false;
-    [Parameter] public string codigo { get; set; } = "";
-    [Parameter] public string accion { get; set; } = "";
-    //[CascadingParameter] public MainLayout Layout { get; set; }
-    SfPdfViewer sfPdfViewerObj;
-
-    protected override async Task OnInitializedAsync()
-    {
-        //MainLayout.Titulo = $"Codigo";
-        VisibleSpinner = true;
-        //rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
-
-        Console.WriteLine("RUTA PLANOS PDF:" + accion);
-        await InvokeAsync(StateHasChanged);
-
-        //sfPdfViewerObj.Load()
-        VisibleSpinner = false;
-    }
-
-    protected async override Task OnParametersSetAsync()
-    {
-        if (accion == "RUTACNC")
-        {
-            //OBTENER ARCHIVOS EXISTENTES
-            dirs = await Http
-                .GetFromJsonAsync<string[]>($"api/AdministracionArchivos/GetDocumentosByRuta/{accion}/{codigo.Substring(0, 7)}");
-            docsCargados = true;
-        }
-
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private string GetPdf()
-    {
-        return codigo;
-    }
+                private string GetPdf()
+                {
+                    return codigo;
+                }
 
 
 
-    private void DownloadText(string Nombre)
-    {
-        File.OpenRead(Nombre);
-        //JS.InvokeVoidAsync("BlazorDownloadFile", $"{Nombre}.txt", "text/plain", Nombre);
-    }
-}
+                private void DownloadText(string Nombre)
+                {
+                    File.OpenRead(Nombre);
+                    //JS.InvokeVoidAsync("BlazorDownloadFile", $"{Nombre}.txt", "text/plain", Nombre);
+                }
+                        }
