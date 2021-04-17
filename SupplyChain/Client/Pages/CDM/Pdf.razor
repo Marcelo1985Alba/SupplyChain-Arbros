@@ -206,7 +206,7 @@ else
             archivos = await Http
             .GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/GetDocumentosByRuta/{accion}/{codigoLimpio}");
 
-            sfPdfViewerObj.lo();
+
             docsCargados = true;
         }
 
