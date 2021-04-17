@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using SupplyChain.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,18 +34,36 @@ namespace SupplyChain.Server.Controllers
         }
 
         [HttpGet("GetDocumentosByRuta/{parametro}/{codigo}")]
-        public async Task<ActionResult<string[]>> GetDocumentosByRuta(string parametro, string codigo)
+        public async Task<IEnumerable<Archivo>> GetDocumentosByRuta(string parametro, string codigo)
         {
             try
             {
+                var archivos = new List<Archivo>();
                 var ruta = await _context.Solution.Where(s => s.CAMPO == parametro).FirstOrDefaultAsync();
                 string[] dirs = Directory.GetFiles(@$"{ruta.VALORC}", $"{codigo.Substring(0, 7)}*");
+                int identificacion = 0;
+                foreach (string item in dirs)
+                {
+                    identificacion++;
+                    var archivo = new Archivo()
+                    {
+                        Id = identificacion,
+                        Nombre = item.Substring(ruta.VALORC.Length),
+                        Directorio = item,
+                        Contenido = System.IO.File.ReadAllLines(item),
+                        ContenidoByte = System.IO.File.ReadAllBytes(item),
+                        ContenidoBase64 = "data:application/pdf;base64," + Convert.ToBase64String(System.IO.File.ReadAllBytes(item))
+                };
 
-                return dirs;
+                    archivos.Add(archivo);
+                }
+
+                return archivos;
+
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex);
+                return new List<Archivo>();
             }
         }
 

@@ -33,8 +33,6 @@ namespace SupplyChain
             _cache = cache;
             this._context = appContext;
             this.logger = logger;
-            logger.LogInformation("PdfViewerController initialized");
-            Console.WriteLine("PdfViewerController initialized");
         }
 
         [HttpPost("Load")]
@@ -43,8 +41,6 @@ namespace SupplyChain
         //Post action for Loading the PDF documents   
         public IActionResult Load([FromBody] Dictionary<string, string> jsonObject)
         {
-            Console.WriteLine("Load called");
-            logger.LogInformation("Load called");
             //Initialize the PDF viewer object with memory cache object
             PdfRenderer pdfviewer = new PdfRenderer(_cache);
             MemoryStream stream = new MemoryStream();
@@ -261,15 +257,16 @@ namespace SupplyChain
         private string GetDocumentPath(string document)
         {
 
-            string xSQL = "select CAMPO, VALORC from Solution where CAMPO in ('RUTAOF', 'RUTACNC','RUTAENSAYO','RUTATRAZABILIDAD','RUTADATOS')";
-            var ubicaciones =  _context.Solution.FromSqlRaw(xSQL).ToList();
-            var ubicacion = ubicaciones.Where(s => s.CAMPO == "RUTAOF").Select(c => c.VALORC).FirstOrDefault();
-            
+            var contenido = document.Split(',');
+
+            document = contenido[0];
+
+            var ubicacion =  _context.Solution.Where(s=> s.CAMPO == contenido[1]).Select(c=> c.VALORC).FirstOrDefault();
             string documentPath = string.Empty;
 
             if (!System.IO.File.Exists(ubicacion + "/" + document))
             {
-                var sol = ubicaciones.Where(s => s.CAMPO == "RUTAOF").FirstOrDefault();
+                //var sol = ubicaciones.Where(s => s.CAMPO == contenido[1]).FirstOrDefault();
                 //var path = _hostingEnvironment.ContentRootPath;
                 //string webRootPath = _hostingEnvironment.WebRootPath;
                 //if (System.IO.File.Exists(path + "/documentos/" + document))

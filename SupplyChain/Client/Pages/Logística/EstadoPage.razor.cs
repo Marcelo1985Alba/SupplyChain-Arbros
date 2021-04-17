@@ -30,8 +30,7 @@ namespace SupplyChain.Pages.Modelos
         protected string StatusValue = "None";
         protected string SearchValue = string.Empty;
         protected Query CardQuery = new Query();
-        [CascadingParameter]
-        public MainLayout Layout { get; set; }
+        [CascadingParameter] public MainLayout Layout { get; set; }
         protected override async Task OnInitializedAsync()
         {
             Layout.Titulo = "Logistica";

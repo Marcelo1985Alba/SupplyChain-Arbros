@@ -39,7 +39,7 @@
         <div class="col">
             <div>
                 <Syncfusion.Blazor.SplitButtons.SfProgressButton 
-                          Content="Enivar OFs a DataCore" IsPrimary="true" IconCss="fa fa-share-square"
+                          Content="Enviar OFs a DataCore" IsPrimary="true" IconCss="fa fa-share-square"
                           @onclick="@(async()=> await EnviarCSVDataCore())">
                 </Syncfusion.Blazor.SplitButtons.SfProgressButton>
             </div>
@@ -484,12 +484,14 @@
                             @*BOTONES PARA OBTENER DATOS*@
                             <div class="form-row">
                                     <div class="form-group col">
-                                        <SfButton Content="Ver Plano" IsPrimary="true" @onclick="@(async ()=> await VerPlano(ordenFabricacion.CG_PROD))"></SfButton>
+                                        <SfButton Content="Ver Plano" IsPrimary="true" IconCss="fa fa-file-pdf-o"
+                                                  @onclick="@(async ()=> await VerPlano(ordenFabricacion.CG_PROD))"></SfButton>
                                     </div>
                                     @if (ordenFabricacion.EXIGEOA == true)
                                     {
                                         <div class="form-group col">
-                                            <Syncfusion.Blazor.SplitButtons.SfProgressButton IsPrimary="true" Content="Guardar Datos"
+                                            <Syncfusion.Blazor.SplitButtons.SfProgressButton IsPrimary="true" IconCss="fa fa-save"
+                                                                                             Content="Guardar Datos"
                                                 @onclick="@(async ()=> await DownloadText())">
                                         
                                             </Syncfusion.Blazor.SplitButtons.SfProgressButton>
@@ -508,7 +510,8 @@
                                     }
                                 <div class="form-group col">
                                     @*<SfButton IsPrimary="true" @onclick="@(async ()=> await Etiqueta())">Identificación</SfButton>*@
-                                    <Syncfusion.Blazor.SplitButtons.SfProgressButton IsPrimary="true" Content="Identificación"
+                                    <Syncfusion.Blazor.SplitButtons.SfProgressButton IsPrimary="true" IconCss="fa fa-download"
+                                                                                     Content="Identificación"
                                                            @onclick="@(async ()=> await Etiqueta())">
 
                                     </Syncfusion.Blazor.SplitButtons.SfProgressButton>
@@ -516,11 +519,12 @@
                                     @if (ordenFabricacion.EXIGEOA == true)
                                     {
                                         <div class="form-group col">
-                                            <SfButton IsPrimary="true" 
+                                            <SfButton IsPrimary="true" IconCss="fa fa-file"
                                                       @onclick="@(async ()=> await Ensayos(ordenFabricacion.PEDIDO.ToString().Trim()))">Ver Ensayos</SfButton>
                                         </div>
                                         <div class="form-group col">
-                                            <SfButton IsPrimary="true" @onclick="@(async ()=> await IrAPrograma(ordenFabricacion.CG_PROD.Trim()))">Ver Programa</SfButton>
+                                            <SfButton IsPrimary="true" IconCss="fa fa-file"
+                                                      @onclick="@(async ()=> await IrAPrograma(ordenFabricacion.CG_PROD.Trim()))">Ver Programa</SfButton>
                                         </div>
                                     }
                                 </div>
@@ -839,8 +843,8 @@
                 </DialogTemplates>
                 <DialogEvents Closed="@OrdenFabricacionClose"></DialogEvents>
                 <DialogButtons>
-                    <DialogButton Content="OK" IsPrimary="true" OnClick="@OrdenFabricacionOk" />
-                    <DialogButton Content="Cancel" OnClick="@OrdenFabricacionClose" />
+                    <DialogButton IconCss="fa fa-save" Content="Guardar" IsPrimary="true" OnClick="@OrdenFabricacionOk" />
+                    <DialogButton IconCss="fa fa-window-close" Content="Cancelar" IsPrimary="true" OnClick="@OrdenFabricacionClose" />
                 </DialogButtons>
             </SfDialog>
         </div>
@@ -1293,7 +1297,7 @@
     protected async Task Ensayos(string pedido)
     {
         //NavigationManager.NavigateTo($"Pdf/{pedido}/ENSAYOS");
-        await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{pedido}/ENSAYOS", $"Pdf/{pedido}/ENSAYOS" });
+        await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{pedido}/RUTAENSAYO", $"_blank" });
     }
 
     async Task DownloadText()
