@@ -20,20 +20,20 @@ namespace SupplyChain.Server.Controllers
             this.appDbContext = appDbContext;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Modulo>>> Get()
-        {
-            try
-            {
-                return await appDbContext.Modulos.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Modulo>>> Get()
+        //{
+        //    try
+        //    {
+        //        return await appDbContext.Modulos.ToListAsync();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex);
+        //    }
+        //}
 
-        [HttpGet("Syncf")]
+        [HttpGet]
         public object GetSyncfusion()
         {
             //Get the DataSource from Database
@@ -54,6 +54,41 @@ namespace SupplyChain.Server.Controllers
                 data = data.Where(d => d.ParentId == null).ToList();
                 return data;
             }
+        }
+
+        [HttpGet("{id}")]
+        public object GetIndex(string id)
+        {
+            // Get the DataSource from Database
+            var data = appDbContext.Modulos.ToList();
+            int index;
+            var count = data.Count;
+            if (count > 0)
+            {
+                index = (data[data.Count - 1].Id);
+            }
+            else
+            {
+                index = 0;
+            }
+            return index;
+        }
+
+        [HttpPost]
+        public void Post([FromBody] Modulo modulo)
+        {
+            appDbContext.Add(modulo);
+        }
+        [HttpPut]
+        public object Put([FromBody] Modulo modulo)
+        {
+            appDbContext.Add(modulo);
+            return modulo;
+        }
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            appDbContext.Modulos.ToList();
         }
 
 

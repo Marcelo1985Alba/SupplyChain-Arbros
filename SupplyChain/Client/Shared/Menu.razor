@@ -24,7 +24,24 @@
         if (AuthState.User.Identity.IsAuthenticated)
         {
             var IsAdmin = AuthState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Admin"));
-            MenuItems = new List<MenuItem>{
+            var IsProd = AuthState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Produccion"));
+            if (IsProd || !IsAdmin)
+            {
+                MenuItems = new List<MenuItem>
+                {
+                    new MenuItem 
+                    { 
+                        Text = "PCP", IconCss = "e-icons e-file",
+                        Items = new List<MenuItem>
+                        {
+                            new MenuItem { Text= "Carga de Máquina", Url="/cargamaquina" }
+                        }
+                    }
+                };
+            }
+            else
+            {
+                MenuItems = new List<MenuItem>{
                 new MenuItem{ Text = "ADMINISTRACIÓN", IconCss = "e-icons e-file", Items = new List<MenuItem>{
                     new MenuItem { Text= "Parámetros", IconCss= "e-icons e-open" },
                     new MenuItem { Separator= true },
@@ -59,7 +76,7 @@
                     new MenuItem { Separator=true },
                     new MenuItem { Text= "Carga de Máquina", Url="/cargamaquina" },
                     new MenuItem { Text= "Pedidos de clientes" },
-                    new MenuItem { Text= "PCP", Url="/programacioncontrolprudccion" }}},
+                    new MenuItem { Text= "PCP", Url="/programacioncontrolproduccion" }}},
 
                 new MenuItem { Text = "INGENIERÍA", IconCss = "e-icons e-file",Items = new List<MenuItem>{
                     new MenuItem { Text= "Lista de materiales y hoja de ruta" },
@@ -97,6 +114,8 @@
                     new MenuItem { Text= "Tipos de no conformidades" , Url="/tiposnoconf" },
                     new MenuItem { Text= "Registro de ensayos" },
                     new MenuItem { Text= "Trazabilidad",Url="/trazabilidad" }}}};
+            }
+
         }
     }
 

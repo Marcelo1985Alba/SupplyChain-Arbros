@@ -15,7 +15,7 @@
 @inject IJSRuntime JsRuntime
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
-@attribute [Authorize]
+@attribute [Authorize(Roles = "Admin, Produccion")]
 
 <div class="col-12 control-section mt-4">
     <SfToast ID="toast_default" @ref="ToastObj">

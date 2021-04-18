@@ -4,59 +4,76 @@
 @using Syncfusion.Blazor
 @using SupplyChain.Shared
 @inject HttpClient Http
-<div class="control-wrapper">
-    MENU
-    <Syncfusion.Blazor.SplitButtons.SfProgressButton Content="Test" OnClick="@(async ()=> await TestApi())">
-    </Syncfusion.Blazor.SplitButtons.SfProgressButton>
-    <SfTreeView ID="menuTreeview" TValue="Modulo">
-        <TreeViewFieldsSettings TValue="Modulo" Id="id" Text="descripcion" IconCss="iconCss" NavigateUrl="url"
-                                HasChildren="tieneChild" ParentID="parentId">
-        </TreeViewFieldsSettings>
-        <SfDataManager Url="api/Modulo/Syncf" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="false"></SfDataManager>
-        @*<TreeViewTemplates TValue="TreeData">
-            <NodeTemplate>
-                <div>
-                    <div class="treeviewdiv">
-                        <div class="nodetext">
-                            <span class="treeName">@((context as TreeData).nodeText)</span>
-                        </div>
-                        @{
-                                @if (((context as TreeData).Count) != 0)
-                                {
-                                    <div class="nodebadge">
-                                        <span class="treeCount e-badge e-badge-primary">@((context as TreeData).Count)</span>
-                                    </div>
-                                }
-                            }
-                    </div>
-                </div>
-            </NodeTemplate>
-        </TreeViewTemplates>*@
-    </SfTreeView>
-</div>
+
+@if (!IsAdmin)
+{
+    <div id="treeview">
+        <SfTreeView TValue="Modulo" ID="treeviewMenuManual" CssClass="custom">
+            <TreeViewFieldsSettings DataSource="dbMenu" Id="Id" Text="Descripcion" ParentID="ParentId" HasChildren="TieneChild"
+                                    NavigateUrl="Url">
+            </TreeViewFieldsSettings>
+            <TreeViewEvents TValue="Modulo"></TreeViewEvents>
+        </SfTreeView>
+    </div>
+}
+else
+{
+    <div class="control-wrapper">
+        <div id="treeview">
+            <SfTreeView TValue="Modulo" ID="treeviewMenuDB" CssClass="custom">
+                <TreeViewFieldsSettings TValue="Modulo" Id="Id" Text="Descripcion" ParentID="ParentId" HasChildren="TieneChild"
+                                        NavigateUrl="Url">
+                    <SfDataManager Url="api/Modulo" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
+                </TreeViewFieldsSettings>
+                <TreeViewEvents TValue="Modulo"></TreeViewEvents>
+            </SfTreeView>
+        </div>
+
+    </div>
+}
+
 
 @code{
-    public class TreeData
-    {
-        public int nodeId { get; set; }
-        public string nodeText { get; set; }
-        public string iconCss { get; set; }
-        public bool hasChild { get; set; }
-        public string pid { get; set; }
-        public string url { get; set; }
-        public bool Selected { get; set; }
-    }
-    List<TreeData> dbMenu = new List<TreeData>();
-    public ExpandAction Expand = ExpandAction.Click;
 
+    [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
+    protected ExpandAction Expand = ExpandAction.Click;
+    private AuthenticationState authState;
+    protected bool IsAdmin = false;
+    protected bool IsProd = false;
+    protected List<Modulo> dbMenu = new List<Modulo>();
     protected async override Task OnInitializedAsync()
     {
         //var Depositos = await Http.GetFromJsonAsync<IEnumerable<Modulo>>("api/Modulo");
-    }
+        // To get the last item index from the db
+        //var count = await Http.GetFromJsonAsync<int>("api/Modulo/index");
+        //var index = count + 1;
 
+        //Console.WriteLine("Count: " + count);
+
+        authState = await authenticationState;
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            IsAdmin = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Admin"));
+            IsProd = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Produccion"));
+        }
+
+        if (!IsAdmin)
+        {
+            dbMenu.Add(new Modulo { Id = 4, Descripcion = "PCP", IconCss = "icon-th icon", TieneChild = true });
+            dbMenu.Add(new Modulo
+            {
+                Id = 7,
+                Descripcion = "Carga de Máquina",
+                IconCss = "",
+                TieneChild = false,
+                ParentId = 4,
+                Url = "/cargamaquina"
+            });
+        }
+    }
     protected async Task TestApi()
     {
-        var Depositos = await Http.GetFromJsonAsync<IEnumerable<Modulo>>("api/Modulo");
+        var modulos = await Http.GetFromJsonAsync<IEnumerable<Modulo>>("api/Modulo");
     }
 
     //protected override void OnInitialized()
@@ -86,43 +103,57 @@
     //dbMenu.Add(new TreeData { nodeId = "09", nodeText = "FAQ", iconCss = "icon-help-circled icon" });
     //dbMenu.Add(new TreeData { nodeId = "10", nodeText = "License", iconCss = "icon-doc-text icon" });
 
-@*}*@
+    @*}*@
 }
 
 <style>
+    /*To apply border and background color for treeview*/
+    /*#treeview {
+        max-width: 400px;
+        margin: auto;
+        border: 1px solid #dddddd;
+        border-radius: 3px;*/
+        /*background: #1c86c8;*/
+        /*background: #000000;
+    }*/
 
-    .e-treeview .e-list-text {
-        width: 100%;
+
+    /* customize icon styles */
+    .e-treeview.custom-tree .e-list-icon {
+        font-family: 'fontello';
+        font-size: 16px;
+        margin-top: -4px;
+        color: white;
+    }
+    /* icon styles */
+    .custom .e-list-item .e-icons {
+        font-family: "Customize-icon";
     }
 
-    .treeCount.e-badge {
-        padding: 0.4em;
-        vertical-align: text-bottom;
+    @@font-face {
+        font-family: 'Customize-icon';
+        src: url(data:application/x-font-ttf;charset=utf-8;base64,AAEAAAAKAIAAAwAgT1MvMj0gSRcAAAEoAAAAVmNtYXDnEOdaAAABjAAAADhnbHlmcYqIngAAAcwAAAD8aGVhZBWT124AAADQAAAANmhoZWEHmANtAAAArAAAACRobXR4C9AAAAAAAYAAAAAMbG9jYQBAAH4AAAHEAAAACG1heHABEAAxAAABCAAAACBuYW1l/qscPAAAAsgAAAJ5cG9zdIPGFvoAAAVEAAAAVgABAAADUv9qAFoEAAAA//8D6QABAAAAAAAAAAAAAAAAAAAAAwABAAAAAQAAIKcGUl8PPPUACwPoAAAAANlGSVAAAAAA2UZJUAAAAAAD6QPpAAAACAACAAAAAAAAAAEAAAADACUAAwAAAAAAAgAAAAoACgAAAP8AAAAAAAAAAQPwAZAABQAAAnoCvAAAAIwCegK8AAAB4AAxAQIAAAIABQMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUGZFZABA5wDnAQNS/2oAWgPpAJYAAAABAAAAAAAABAAAAAPoAAAD6AAAAAAAAgAAAAMAAAAUAAMAAQAAABQABAAkAAAABAAEAAEAAOcB//8AAOcA//8AAAABAAQAAAABAAIAAAAAAEAAfgADAAAAAAPpA+kACAAWACQAAAEhFSEHMzcnIyUWEAcGICcmEDc+ATIWBQYQFxYgNzYQJy4BIgYCMf6kAWqUqMK8rgF+goKK/qCEfn5Coquf/amRkZoBkpqRkUq3xLcCKmSTybt4if6ghYKChQFgiUJBQRma/m6akZGaAZKaSElJAAMAAAAAA+gD6QAGABQAIgAAASMXNyMRIyUWEAcGICcmEDc+ATIWBQYQFxYgNzYQJy4BIgYBvrLp6JmGAW6BgYf+oYiBgUGhqqH9qZOTmgGOmpOTSrbCtgGy6ekBbwuI/qGHgYGIAV6IQEFBFpr+cZmTk5oBj5lKSUkAAAAAABIA3gABAAAAAAAAAAEAAAABAAAAAAABAA4AAQABAAAAAAACAAcADwABAAAAAAADAA4AFgABAAAAAAAEAA4AJAABAAAAAAAFAAsAMgABAAAAAAAGAA4APQABAAAAAAAKACwASwABAAAAAAALABIAdwADAAEECQAAAAIAiQADAAEECQABABwAiwADAAEECQACAA4ApwADAAEECQADABwAtQADAAEECQAEABwA0QADAAEECQAFABYA7QADAAEECQAGABwBAwADAAEECQAKAFgBHwADAAEECQALACQBdyBDdXN0b21pemUtaWNvblJlZ3VsYXJDdXN0b21pemUtaWNvbkN1c3RvbWl6ZS1pY29uVmVyc2lvbiAxLjBDdXN0b21pemUtaWNvbkZvbnQgZ2VuZXJhdGVkIHVzaW5nIFN5bmNmdXNpb24gTWV0cm8gU3R1ZGlvd3d3LnN5bmNmdXNpb24uY29tACAAQwB1AHMAdABvAG0AaQB6AGUALQBpAGMAbwBuAFIAZQBnAHUAbABhAHIAQwB1AHMAdABvAG0AaQB6AGUALQBpAGMAbwBuAEMAdQBzAHQAbwBtAGkAegBlAC0AaQBjAG8AbgBWAGUAcgBzAGkAbwBuACAAMQAuADAAQwB1AHMAdABvAG0AaQB6AGUALQBpAGMAbwBuAEYAbwBuAHQAIABnAGUAbgBlAHIAYQB0AGUAZAAgAHUAcwBpAG4AZwAgAFMAeQBuAGMAZgB1AHMAaQBvAG4AIABNAGUAdAByAG8AIABTAHQAdQBkAGkAbwB3AHcAdwAuAHMAeQBuAGMAZgB1AHMAaQBvAG4ALgBjAG8AbQAAAAACAAAAAAAAAAoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMBAgEDAQQAFy1hcnJvdy1jaXJjbGUtcmlnaHQtXzAxEi1hcnJvdy1jaXJjbGUtZG93bgAAAAA=) format('truetype');
+        font-weight: normal;
+        font-style: normal;
     }
 
-    .material .treeCount.e-badge {
-        vertical-align: middle;
+    .custom.e-treeview .e-list-item .e-icon-expandable::before, .custom.e-treeview .e-list-item .e-icon-collapsible:before {
+        content: '\e700';
+        font-size: 12px;
     }
 
-    .nodetext {
-        float: left;
-    }
-
-    .e-rtl .nodetext {
+    /*To float the expand/collapse icon right*/
+/*    .e-treeview.custom-tree .e-icon-collapsible, .e-treeview .e-icon-expandable {
         float: right;
+    }*/
+    /*To customize the expand collapse icon color*/
+    .e-treeview.custom-tree .e-icon-collapsible::before, .e-treeview.custom-tree .e-icon-expandable::before {
+        color: white;
     }
 
-    .nodebadge {
-        float: right;
-        margin-right: 5px
-    }
-
-    .e-rtl .nodebadge {
-        float: left;
-        margin-left: 5px
-    }
-
-    .treeName {
-        font-size: 20px;
-    }
+    /*To change the text color for treeview*/
+/*    .e-treeview .e-text-content > .e-list-text {
+        color: white;
+    }*/
+    
 </style>

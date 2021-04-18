@@ -130,6 +130,7 @@ else
                 @{
                     foreach(Archivo item in archivos)
                     {
+                        var idPdf = $"pdfEns{item.Id}";
                         var doc_ubica = $"ENS_{codigo}_{item.Id}.pdf," + accion;
                         <div class="card">
                             <div class="card-header" id="@item.Id">
@@ -143,8 +144,8 @@ else
 
                             <div id="collapse@(item.Id)" class="collapse" aria-labelledby="@item.Id" data-parent="#accordionExample">
                                 <div class="card-body">
-
-                                    <SfPdfViewer @ref="sfPdfViewerObj" ID="pdfEns"
+                                    
+                                    <SfPdfViewer @ref="sfPdfViewerObj" ID="@idPdf"
                                                  ServiceUrl="/api/Values" DocumentPath="@doc_ubica"
                                                  Height="1200px" Width="100%"></SfPdfViewer>
                                 </div>

@@ -27,10 +27,18 @@ namespace SupplyChain
         }
 
         [HttpGet]
-        public IEnumerable<Programa> Get(string PEDIDO)
+        public IEnumerable<Programa> Get()
         {
-            string xSQL = string.Format("SELECT Programa.REGISTRO, Programa.PEDIDO, Programa.CG_ESTADO, Programa.CG_ESTADOCARGA, Programa.FE_CIERRE, Programa.FE_ENTREGA FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) where(pedidos.FLAG = 0 AND Programa.CG_ESTADO = 3 AND Pedidos.CG_ORDF != 0 AND(Pedidos.TIPOO = 1)) UNION SELECT Programa.REGISTRO, Programa.PEDIDO, Programa.CG_ESTADO, Programa.CG_ESTADOCARGA, Programa.FE_CIERRE, Programa.FE_ENTREGA FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) where Pedcli.PEDIDO NOT IN(select PEDIDO from Pedidos where TIPOO = 1) AND Programa.CG_ESTADO = 3  AND Pedcli.CANTPED > 0 AND Pedidos.TIPOO != 28");
-            return _context.Programa.FromSqlRaw(xSQL).ToList<Programa>();
+            string xSQL = string.Format("SELECT Programa.REGISTRO, Programa.PEDIDO, Programa.CG_ESTADO, Programa.CG_ESTADOCARGA, " +
+                "Programa.FE_CIERRE, Programa.FE_ENTREGA FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
+                "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) where(pedidos.FLAG = 0 AND Programa.CG_ESTADO = 3 " +
+                "AND Pedidos.CG_ORDF != 0 AND(Pedidos.TIPOO = 1)) UNION SELECT Programa.REGISTRO, Programa.PEDIDO, " +
+                "Programa.CG_ESTADO, Programa.CG_ESTADOCARGA, Programa.FE_CIERRE, Programa.FE_ENTREGA " +
+                "FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
+                "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) " +
+                "where Pedcli.PEDIDO NOT IN(select PEDIDO from Pedidos where TIPOO = 1) " +
+                "AND Programa.CG_ESTADO = 3  AND Pedcli.CANTPED > 0 AND Pedidos.TIPOO != 28");
+            return _context.Programa.FromSqlRaw(xSQL).ToList();
         }
 
 
@@ -41,14 +49,6 @@ namespace SupplyChain
             return _context.Programa.FromSqlRaw(xSQL).ToList<Programa>();
         }
 
-        // GET: api/Programas
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Programa>>> GetProgramas()
-        {
-            return await _context.Programa.Where(p => p.Cg_Cia == 1)
-                .OrderBy(r => r.FE_EMIT).ToListAsync();
-
-        }
 
         // GET: api/Programas/GetPlaneadas
         [HttpGet("GetPlaneadas")]
