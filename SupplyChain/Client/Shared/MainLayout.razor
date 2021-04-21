@@ -340,7 +340,8 @@
         </header>
     </div>
 
-    <SfSidebar ID="sidebarInit" @ref="sidebarObj" Animate="false" EnableRtl="false" Width="280px" @bind-IsOpen="SidebarToggle" ZIndex="0"
+    <SfSidebar ID="sidebarInit" @ref="sidebarObj" Animate="false" EnableRtl="false" Width="280px" @bind-IsOpen="SidebarToggle" 
+               ZIndex="20"
                DockSize="0px" EnableDock=true Position="SidebarPosition.Left"
                MediaQuery="(min-width: 600px)">
         <ChildContent>
@@ -382,15 +383,15 @@
                 </div>
                 @*<div class="col-md-7 align-self-center">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">@BreadCumParent</a></li>
                             <li class="breadcrumb-item">Forms</li>
                             <li class="breadcrumb-item active">Form Basic</li>
                         </ol>
                     </div>
-                    <div class="">
-                        <button class="right-side-toggle waves-effect waves-light btn-inverse btn btn-circle btn-sm pull-right m-l-10">
-                            <i class="ti-settings text-white"></i></button>
-                    </div>*@
+                <div class="">
+                    <button class="right-side-toggle waves-effect waves-light btn-inverse btn btn-circle btn-sm pull-right m-l-10">
+                        <i class="ti-settings text-white"></i></button>
+                </div>*@
             </div>
             <div class="row">
                 <div class="col-12">
@@ -412,32 +413,21 @@
 
 
 @code{
-    SfSidebar sidebarObj;
-    SfTreeView<TreeData> TreeView;
-    public Syncfusion.Blazor.Navigations.ExpandAction Expand = ExpandAction.Click;
-    public class TreeData
-    {
-        public string nodeId { get; set; }
-        public string nodeText { get; set; }
-        public string iconCss { get; set; }
-        public bool hasChild { get; set; }
-        public string pid { get; set; }
-        public string url { get; set; }
-    }
-    private List<TreeData> treedata = new List<TreeData>() {
-        new TreeData { nodeId = "01", nodeText = "Home", iconCss = "icon-microchip icon", url="/index" }
+    protected SfSidebar sidebarObj;
 
-    };
-    Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
-{
+    private Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
+    {
          {"class", "sidebar-treeview" }
     };
     [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
     public AuthenticationState authState;
 
-    public bool SidebarToggle = false;
+    private bool SidebarToggle = false;
     private string nombreUsuario = "";
+
     public string Titulo { get; set; } = "";
+    public string BreadCumParent { get; set; } = "";
+
     protected async override Task OnInitializedAsync()
     {
         authState = await authenticationState;
@@ -445,11 +435,7 @@
             nombreUsuario = authState.User.Identity.Name;
     }
 
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
 
-    }
 
     //protected override void OnAfterRender(bool firstRender)
     //{
@@ -476,7 +462,7 @@
 
 <style>
     .e-sidebar {
-        background-color: #fff;
+        background-color: #242a33;
         color: black;
         top: 8% !important;
         position: fixed;

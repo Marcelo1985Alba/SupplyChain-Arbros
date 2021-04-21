@@ -103,5 +103,8 @@ namespace SupplyChain.Shared.Models
         public int REGISTRO { get; set; }
         [Display(Name = "Compañía")]
         public int? CG_CIA { get; set; }
+
+        [NotMapped]
+        public Proveedor ProveedorNavigation { get; set; }
     }
 }

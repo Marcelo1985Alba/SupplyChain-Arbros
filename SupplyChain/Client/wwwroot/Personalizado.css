@@ -80,3 +80,11 @@ e-grid .e-gridheader {
 #toast_types {
     text-align: center;
 }
+
+
+@media only screen and (max-width: 600px) {
+    .login-box {
+        width: 200px!important;
+        margin: 0 auto;
+    }
+}

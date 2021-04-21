@@ -1,2 +1,2 @@
 // JavaScript source code
-const CACHE_VERSION = 3.3;
+const CACHE_VERSION = 3.6;

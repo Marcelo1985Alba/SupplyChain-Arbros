@@ -115,14 +115,15 @@ namespace SupplyChain.Server.Controllers
         }
 
         [HttpGet("Reserva/{campo}")]
-        public async Task<IActionResult> ReservaByCampo(string campo)
+        public async Task<ActionResult<Genera>> ReservaByCampo(string campo)
         {
 
             try
             {
-                await Reserva(campo);
 
-                return Ok();
+                await Reserva(campo);
+                var genera = await _context.Genera.Where(g => g.CAMP3 == campo).FirstOrDefaultAsync();
+                return Ok(genera);
             }
             catch (Exception ex)
             {
@@ -132,13 +133,13 @@ namespace SupplyChain.Server.Controllers
         }
 
         [HttpGet("Libera/{campo}")]
-        public async Task<IActionResult> LiberaByCampo(string campo)
+        public async Task<ActionResult<Genera>> LiberaByCampo(string campo)
         {
             try
             {
                 await Libera(campo);
-
-                return Ok();
+                var genera = await _context.Genera.Where(g => g.CAMP3 == campo).FirstOrDefaultAsync();
+                return Ok(genera);
             }
             catch (Exception ex)
             {

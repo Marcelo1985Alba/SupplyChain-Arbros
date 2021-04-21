@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using Syncfusion.Blazor.FileManager;
 using Syncfusion.Blazor.Grids;
 using System;
 using System.Collections.Generic;
@@ -18,6 +17,7 @@ using SupplyChain.Client.HelperService;
 using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf;
 using Syncfusion.Blazor.Spinner;
+using Syncfusion.Blazor.Navigations;
 using Microsoft.AspNetCore.Hosting;
 using SupplyChain.Client.Shared;
 
@@ -38,22 +38,7 @@ namespace SupplyChain.Pages.Servicios
         public bool Disabled = false;
         public bool Visible { get; set; } = true;
 
-        public void toolbarClick(ToolbarClickEventArgs<Service> args)
-        {
-            if (args.Item.Text == "Custom")
-            {
-                // Perform the operation based on your requirement.
-                System.Diagnostics.Debug.Write("Custom item clicked");
-            }
-        }
-        public void menuClick(MenuClickEventArgs<Service> args)
-        {
-            if (args.Item.Text == "Custom")
-            {
-                // Perform the operation based on your requirement.
-                System.Diagnostics.Debug.WriteLine("Custom item clicked");
-            }
-        }
+        
         public class SIoNO
         {
             public string Text { get; set; }
@@ -125,13 +110,16 @@ namespace SupplyChain.Pages.Servicios
         protected override async Task OnInitializedAsync()
         {
             Layout.Titulo = "Servicios";
-            servicios = await Http.GetFromJsonAsync<List<Service>>("api/Servicios");
+
+            
             if (!string.IsNullOrEmpty(pedido))
             {
+                servicios = await Http.GetFromJsonAsync<List<Service>>("api/Servicios");
                 servDesc = servicios.Where(s => s.PEDIDO == pedido).ToList();
             }
             else
             {
+                servicios = await Http.GetFromJsonAsync<List<Service>>($"api/Servicios/{pedido}");
                 servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
             }
             medidas = await Http.GetFromJsonAsync<List<Medida>>("api/Medida");

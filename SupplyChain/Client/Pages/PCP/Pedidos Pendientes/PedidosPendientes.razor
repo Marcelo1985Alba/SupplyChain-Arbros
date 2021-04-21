@@ -42,8 +42,9 @@
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" ID="PedidosPendientes">
                         <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                         @*<SfDataManager Url="api/PedidosPendientes" CrossDomain="true" Adaptor="Adaptors.ODataAdaptor"></SfDataManager>*@
-                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                        <GridEvents DataBound="(async()=> await DataBoundHandler())"  OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" TValue="ModeloPedidosPendientes"></GridEvents>
+                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                        <GridEvents DataBound="(async()=> await DataBoundHandler())"  OnToolbarClick="@ClickHandler" 
+                                    QueryCellInfo="QueryCellInfoHandler" TValue="ModeloPedidosPendientes"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                         <GridColumns>
@@ -91,12 +92,12 @@
                             </GridColumn>
                             <GridColumn Field=@nameof(ModeloPedidosPendientes.Obseritem) Width="200px" HeaderText="Observaciones" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
                             <GridColumn Field=@nameof(ModeloPedidosPendientes.CG_ESTADOCARGA) Width="200px" HeaderText="Código estado" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM1) Width="200px" HeaderText="COM1" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM2) Width="200px" HeaderText="COM2" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM3) Width="200px" HeaderText="COM3" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM4) Width="200px" HeaderText="COM4" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM5) Width="200px" HeaderText="COM5" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM6) Width="200px" HeaderText="COM6" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM1) Width="200px" HeaderText="Presión" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM2) Width="200px" HeaderText="Resorte" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM3) Width="200px" HeaderText="Fluido" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM4) Width="200px" HeaderText="Ajuste Banco" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM5) Width="200px" HeaderText="Contrapresion" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM6) Width="200px" HeaderText="Temperatura" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
                             <GridColumn Field=@nameof(ModeloPedidosPendientes.Semana) Width="200px" HeaderText="Semana" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
                             <GridColumn Field=@nameof(ModeloPedidosPendientes.LOTE) Width="200px" HeaderText="Lote" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>
                             <GridColumn Field=@nameof(ModeloPedidosPendientes.REGISTRO_PEDCLI) Width="200px" HeaderText="Registro Pedcli" TextAlign="TextAlign.Left" Visible="Disabled"></GridColumn>

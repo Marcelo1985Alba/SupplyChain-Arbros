@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Client.HelperService;
 using SupplyChain.Shared.Models;
 
 namespace SupplyChain.Server.Controllers
@@ -28,8 +29,17 @@ namespace SupplyChain.Server.Controllers
             //OC ABIERTAS
             try
             {
-                return await _context.Compras.Where(c => c.CG_CIA == cg_cia_usuario && c.FE_CIERRE == null && c.NUMERO > 0)
-                .ToListAsync();
+                var compras = await _context.Compras
+                    .Where(c => c.CG_CIA == cg_cia_usuario && c.FE_CIERRE == null && c.NUMERO > 0)
+                    .ToListAsync();
+
+                await compras.ForEachAsync( async c => 
+                {
+                    c.ProveedorNavigation = await _context.Proveedores.Where(p => p.CG_PROVE == c.NROCLTE).FirstOrDefaultAsync();
+                    
+                });
+
+                return compras;
             }
             catch (Exception ex)
             {

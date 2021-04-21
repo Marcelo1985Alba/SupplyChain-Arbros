@@ -187,12 +187,15 @@ namespace SupplyChain.Server.Controllers
             stock.REGISTRO = null;
             stock.USUARIO = "USER";
             stock.CG_CIA = 1;
-
-            if (stock.TIPOO == 9)
-            {
-
+            
+            if (stock.TIPOO == 9) 
                 stock.STOCK = -stock.STOCK;
+
+            if (stock.TIPOO == 5)
+            {
+                stock.CUIT = stock.Proveedor?.CUIT;
             }
+
             stock.Cliente = null;
             stock.Proveedor = null;
             _context.Pedidos.Add(stock);
@@ -200,6 +203,7 @@ namespace SupplyChain.Server.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                //TODO: MODIFICAR NUMERO EN GENERA
             }
             catch (DbUpdateException ex)
             {

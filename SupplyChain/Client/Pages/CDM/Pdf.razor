@@ -2,8 +2,6 @@
 @using Microsoft.AspNetCore.Components;
 @using Microsoft.JSInterop;
 @using SupplyChain;
-@using Syncfusion.Blazor.FileManager;
-@using Syncfusion.Blazor.Grids;
 @using Syncfusion.Blazor.Navigations;
 @using Syncfusion.Blazor.Buttons;
 @using System;
@@ -18,7 +16,7 @@
 @using Syncfusion.Blazor.PdfViewer;
 @using SupplyChain.Shared;
 @*@using Syncfusion.Blazor.PdfViewerServer;*@
-<SfSpinner Size="80" Label="Cargando..." Type="SpinnerType.Bootstrap4" @bind-Visible="@VisibleSpinner" Target="#pdfViewer"></SfSpinner>
+
 @if (accion == null)
 {
     <p><em>Loading...</em></p>
@@ -38,14 +36,16 @@ else
         {
 
             //paso nombre del doc y la accion para despues del lado del servidor saber cual es la ubicacion que debe tomar
-            codigo = codigo.Substring(0, 7) + ".pdf," + accion;
+            //codigo = codigo.Substring(0, 7) + ".pdf," + accion;
 
             @*<div class="col-lg-12 control-section">
                 <div class="content-wrapper">
                     <div class="row">*@
-            <SfPdfViewer @ref="sfPdfViewerObj" ID="pdfViewer" ServiceUrl="/api/Values" DocumentPath="@codigo.Trim()" 
+            <SfPdfViewer ID="pdfViewerPlano" ServiceUrl="/api/Values" DocumentPath="@codigoLimpio.Trim()" 
                          EnableErrorDialog="true" 
-                         Height="1300px" Width="100%"></SfPdfViewer>
+                         Height="1250px" Width="100%"></SfPdfViewer>
+
+
             @*</div>
                     </div>
                 </div>*@
@@ -116,7 +116,6 @@ else
         if (archivos is null )
         {
             VisibleSpinner = true;
-            <pem>Cargando..</pem>
         }
         else if(archivos.Count == 0)
         {
@@ -125,36 +124,29 @@ else
         }
         else
         {
+            if(docsCargados) { }
             VisibleSpinner = false;
-            <div class="accordion" id="accordionExample">
-                @{
-                    foreach(Archivo item in archivos)
+            <SfAccordion ID="accordionPdfEnsayos">
+                <AccordionItems>
+                    @foreach (Archivo item in archivos)
                     {
                         var idPdf = $"pdfEns{item.Id}";
                         var doc_ubica = $"ENS_{codigo}_{item.Id}.pdf," + accion;
-                        <div class="card">
-                            <div class="card-header" id="@item.Id">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link" type="button" data-toggle="collapse" 
-                                            data-target="#collapse@(item.Id)" aria-expanded="false" aria-controls="collapse@(item.Id)">
-                                        Ensayo @(item.Id)
-                                    </button>
-                                </h2>
-                            </div>
-
-                            <div id="collapse@(item.Id)" class="collapse" aria-labelledby="@item.Id" data-parent="#accordionExample">
-                                <div class="card-body">
-                                    
-                                    <SfPdfViewer @ref="sfPdfViewerObj" ID="@idPdf"
-                                                 ServiceUrl="/api/Values" DocumentPath="@doc_ubica"
-                                                 Height="1200px" Width="100%"></SfPdfViewer>
-                                </div>
-                            </div>
-                        </div>
-                        
+                        <AccordionItem>
+                            <HeaderTemplate>
+                                <div>@(item.Nombre)</div>
+                            </HeaderTemplate>
+                            <ContentTemplate>
+                                <SfPdfViewer @ref="sfPdfViewerObj" ID="@idPdf"
+                                             ServiceUrl="/api/Values" DocumentPath="@doc_ubica"
+                                             Height="1250px" Width="100%"></SfPdfViewer>
+                            </ContentTemplate>
+                        </AccordionItem>
                     }
-                }
-            </div>
+                </AccordionItems>
+            </SfAccordion>
+            
+            
         }
     }
 }
@@ -182,16 +174,24 @@ else
     [Parameter] public string accion { get; set; } = "";
     [CascadingParameter] public MainLayout Layout { get; set; }
     SfPdfViewer sfPdfViewerObj;
-
+    string codigoLimpio = "";
     protected override async Task OnInitializedAsync()
     {
         //MainLayout.Titulo = $"Codigo";
         VisibleSpinner = true;
+
         rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+
+        if (accion == "RUTAOF")
+        {
+            Layout.Titulo = $"Plano {codigo}";
+            codigoLimpio = codigo.Substring(0, 7) + ".pdf," + accion;
+            //DocumentPath = await Http.GetFromJsonAsync<string>($"api/AdministracionArchivos/GetPdfNube/{codigoLimpio}/RUTAOF");
+        }
 
         if (accion == "RUTACNC" || accion == "RUTAENSAYO")
         {
-            string codigoLimpio = "";
+
             if (accion == "RUTACNC")
             {
                 Layout.Titulo = $"Listado Archivos {codigo}";
@@ -200,28 +200,19 @@ else
 
             if (accion == "RUTAENSAYO")
             {
-                Layout.Titulo = $"Visor PDFs de Ensayos para Pedido {codigo}";
+                Layout.Titulo = $"Ensayos Pedido {codigo}";
                 codigoLimpio = $"ENS_{codigo}_1.pdf";
             }
 
-            archivos = await Http
-            .GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/GetDocumentosByRuta/{accion}/{codigoLimpio}");
+            archivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/ByParamRuta/{accion}/{codigoLimpio}");
 
 
             docsCargados = true;
         }
 
-        await InvokeAsync(StateHasChanged);
 
-        //sfPdfViewerObj.Load()
         VisibleSpinner = false;
     }
-
-    private string GetPdf()
-    {
-        return codigo;
-    }
-
 
 
     private void DownloadText(string Nombre)

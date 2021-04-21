@@ -1,14 +1,8 @@
-@*<Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-    </Found>
-    <NotFound>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p>Sorry, there's nothing at this address.</p>
-        </LayoutView>
-    </NotFound>
-</Router>*@
-<Router AppAssembly="@typeof(Program).Assembly">
+@inject Microsoft.AspNetCore.Components.WebAssembly.Services.LazyAssemblyLoader lazyLoader
+@using System.Reflection
+
+<Router AppAssembly="@typeof(Program).Assembly" OnNavigateAsync="OnNavigationAsync"
+        AdditionalAssemblies="assemblies">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
             <Authorizing>
@@ -32,5 +26,21 @@
 
     </NotFound>
 </Router>
+
+@code{
+
+    private List<Assembly> assemblies = new List<Assembly>();
+    private async Task OnNavigationAsync(NavigationContext args)
+    {
+        //if (args.Path.Contains("logistica-listado"))
+        //{
+        //    var assembliesCargados = await lazyLoader.LoadAssembliesAsync(
+        //        new List<string> { "Syncfusion.Blazor.Kanban.dll" }
+        //        );
+
+        //    assemblies.AddRange(assembliesCargados);
+        //}
+    }
+}
 
 

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Syncfusion.EJ2.PdfViewer;
+using Syncfusion.Blazor.PdfViewer;
 
 namespace SupplyChain
 {

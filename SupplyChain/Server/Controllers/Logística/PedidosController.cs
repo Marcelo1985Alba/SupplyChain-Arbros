@@ -203,16 +203,17 @@ namespace SupplyChain
                 //RESERVA REGISTRO: El vale hay que hacerlo del lado del cliente porque debe reservar un solo vale
                 //y aqui se ejecuta por item.
                 await generaController.ReservaByCampo("REGSTOCK");
-                var genera = _context.Genera.Where(g => g.CAMP3 == "REGSTOCK").FirstOrDefault();
+                var genera = await _context.Genera.Where(g => g.CAMP3 == "REGSTOCK").FirstOrDefaultAsync();
                 stock.REGISTRO = (int?)genera.VALOR1;
                 stock.FE_REG = DateTime.Now;
                 stock.USUARIO = "USER";
 
                 if (stock.TIPOO == 9)
-                {
-
                     stock.STOCK = -stock.STOCK;
-                }
+
+                if (stock.TIPOO == 5)
+                    stock.CUIT = stock.Proveedor?.CUIT.Trim();
+
                 stock.Cliente = null;
                 stock.Proveedor = null;
                 _context.Pedidos.Add(stock);

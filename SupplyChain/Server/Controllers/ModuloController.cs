@@ -56,22 +56,32 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
+        //[HttpGet("{id}")]
+        //public object GetIndex(string id)
+        //{
+        //    // Get the DataSource from Database
+        //    var data = appDbContext.Modulos.ToList();
+        //    int index;
+        //    var count = data.Count;
+        //    if (count > 0)
+        //    {
+        //        index = (data[data.Count - 1].Id);
+        //    }
+        //    else
+        //    {
+        //        index = 0;
+        //    }
+        //    return index;
+        //}
+
+
         [HttpGet("{id}")]
-        public object GetIndex(string id)
+        public async Task<ActionResult<Modulo>> GetName(int id)
         {
             // Get the DataSource from Database
-            var data = appDbContext.Modulos.ToList();
-            int index;
-            var count = data.Count;
-            if (count > 0)
-            {
-                index = (data[data.Count - 1].Id);
-            }
-            else
-            {
-                index = 0;
-            }
-            return index;
+            var data = await appDbContext.Modulos.Where(m=> m.Id == id).FirstOrDefaultAsync();
+            
+            return data;
         }
 
         [HttpPost]

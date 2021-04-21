@@ -1297,7 +1297,8 @@
     protected async Task Ensayos(string pedido)
     {
         //NavigationManager.NavigateTo($"Pdf/{pedido}/ENSAYOS");
-        await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{pedido}/RUTAENSAYO", $"_blank" });
+        
+        await JS.InvokeVoidAsync("open", new object[2] { $"/pdf-ensayos/{pedido}/RUTAENSAYO", $"_blank" });
     }
 
     async Task DownloadText()

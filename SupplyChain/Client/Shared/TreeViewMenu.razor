@@ -10,9 +10,9 @@
     <div id="treeview">
         <SfTreeView TValue="Modulo" ID="treeviewMenuManual" CssClass="custom">
             <TreeViewFieldsSettings DataSource="dbMenu" Id="Id" Text="Descripcion" ParentID="ParentId" HasChildren="TieneChild"
-                                    NavigateUrl="Url">
+                                    NavigateUrl="Url" IconCss="IconCss">
             </TreeViewFieldsSettings>
-            <TreeViewEvents TValue="Modulo"></TreeViewEvents>
+            <TreeViewEvents TValue="Modulo" NodeSelected="@(async(a)=> await NodeClicked(a))"></TreeViewEvents>
         </SfTreeView>
     </div>
 }
@@ -22,10 +22,10 @@ else
         <div id="treeview">
             <SfTreeView TValue="Modulo" ID="treeviewMenuDB" CssClass="custom">
                 <TreeViewFieldsSettings TValue="Modulo" Id="Id" Text="Descripcion" ParentID="ParentId" HasChildren="TieneChild"
-                                        NavigateUrl="Url">
+                                        NavigateUrl="Url" IconCss="IconCss">
                     <SfDataManager Url="api/Modulo" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
                 </TreeViewFieldsSettings>
-                <TreeViewEvents TValue="Modulo"></TreeViewEvents>
+                <TreeViewEvents TValue="Modulo" NodeSelected="@(async(a)=> await NodeClicked(a))"></TreeViewEvents>
             </SfTreeView>
         </div>
 
@@ -34,7 +34,7 @@ else
 
 
 @code{
-
+    [CascadingParameter] public MainLayout Layout { get; set; }
     [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
     protected ExpandAction Expand = ExpandAction.Click;
     private AuthenticationState authState;
@@ -43,7 +43,6 @@ else
     protected List<Modulo> dbMenu = new List<Modulo>();
     protected async override Task OnInitializedAsync()
     {
-        //var Depositos = await Http.GetFromJsonAsync<IEnumerable<Modulo>>("api/Modulo");
         // To get the last item index from the db
         //var count = await Http.GetFromJsonAsync<int>("api/Modulo/index");
         //var index = count + 1;
@@ -74,6 +73,14 @@ else
     protected async Task TestApi()
     {
         var modulos = await Http.GetFromJsonAsync<IEnumerable<Modulo>>("api/Modulo");
+    }
+
+    protected async Task NodeClicked(NodeSelectEventArgs args)
+    {
+        var parentId = args.NodeData.ParentID;
+        var modulo = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
+        Layout.BreadCumParent = modulo.Descripcion;
+        await InvokeAsync(StateHasChanged);
     }
 
     //protected override void OnInitialized()
@@ -121,7 +128,7 @@ else
     /* customize icon styles */
     .e-treeview.custom-tree .e-list-icon {
         font-family: 'fontello';
-        font-size: 16px;
+        font-size: 20px;
         margin-top: -4px;
         color: white;
     }
@@ -139,21 +146,54 @@ else
 
     .custom.e-treeview .e-list-item .e-icon-expandable::before, .custom.e-treeview .e-list-item .e-icon-collapsible:before {
         content: '\e700';
-        font-size: 12px;
+        font-size: 16px;
+        color: #687384 !important;
     }
 
-    /*To float the expand/collapse icon right*/
-/*    .e-treeview.custom-tree .e-icon-collapsible, .e-treeview .e-icon-expandable {
-        float: right;
-    }*/
-    /*To customize the expand collapse icon color*/
-    .e-treeview.custom-tree .e-icon-collapsible::before, .e-treeview.custom-tree .e-icon-expandable::before {
+    e-treeview .e-text-content, .e-treeview .e-fullrow {
+        border-color: transparent;
         color: white;
     }
+
+    .e-treeview .e-list-item.e-hover > .e-fullrow {
+        font-size: 18px;
+        background-color: transparent !important;
+        border-color: transparent !important;
+    }
+
+
+    .e-treeview .e-list-item.e-active > .e-fullrow {
+        color: #ffffff !important;
+        background-color: transparent !important;
+        border-color: transparent !important;
+    }
+
+    .custom.e-treeview .e-list-text {
+        font-size:16px;
+        color: #687384 !important;
+    }
+
+    .custom.e-treeview .e-list-item.e-active > .e-text-content > .e-list-text {
+        color: #ffffff !important;
+    }
+
+    .custom.e-treeview .e-list-item.e-hover > .e-text-content > .e-list-text {
+        color: #ffffff !important;
+    }
+
+        /*To float the expand/collapse icon right*/
+        /*    .e-treeview.custom-tree .e-icon-collapsible, .e-treeview .e-icon-expandable {
+        float: right;
+    }*/
+        /*To customize the expand collapse icon color*/
+        .e-treeview.custom-tree .e-icon-collapsible::before, .e-treeview.custom-tree .e-icon-expandable::before {
+            color: white;
+        }
 
     /*To change the text color for treeview*/
 /*    .e-treeview .e-text-content > .e-list-text {
         color: white;
     }*/
+
     
 </style>

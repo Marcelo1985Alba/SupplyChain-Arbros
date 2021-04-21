@@ -60,10 +60,13 @@ namespace SupplyChain
         public DbSet<Usuarios> Usuarios { get; set; }
         public DbSet<Rol> Roles { get; set; }
 
-        public virtual DbSet<Compra> Compras { get; set; }
+        public DbSet<Compra> Compras { get; set; }
         public DbSet<ResumenStock> ResumenStock { get; set; }
         public DbSet<Modulo> Modulos { get; set; }
         public virtual DbSet<Genera> Genera { get; set; }
+
+        public DbSet<Proveedor> Proveedores { get; set; }
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         { 
             
@@ -71,6 +74,14 @@ namespace SupplyChain
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Compra>(entity =>
+
+            entity.HasOne(d => d.ProveedorNavigation)
+                    .WithMany(p => p.Compras)
+            .HasForeignKey(d => d.NROCLTE)
+            //.OnDelete(DeleteBehavior.ClientSetNull)
+            //.HasConstraintName("FK_Clientes_Companias");
+            );
             modelBuilder.Entity<Genera>()
         .       HasKey(c => new { c.CAMP3, c.CG_CIA, c.PUNTO_VENTA });
 

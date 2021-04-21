@@ -31,7 +31,8 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
         protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
         "Print",
-        "ExcelExport"
+        "ExcelExport",
+        new Syncfusion.Blazor.Navigations.ItemModel { Text = "Seleccionar Columnas", TooltipText = "Seleccionar Columnas", Id = "Seleccionar Columnas" }
     };
 
         protected override async Task OnInitializedAsync()
@@ -49,6 +50,10 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
 
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {
+            if (args.Item.Text == "Seleccionar Columnas")
+            {
+                await Grid.OpenColumnChooser();
+            }
             if (args.Item.Text == "Excel Export")
             {
                 //BORRARESTO = Grid.Columns.FirstOrDefault().Width.ToString();
@@ -62,7 +67,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
 
         public void QueryCellInfoHandler(QueryCellInfoEventArgs<ModeloPedidosPendientes> args)
         {
-            if (args.Data.DES_ESTADOCARGA == "EN CURSO")
+            if (args.Data.CG_ESTADOCARGA == 2 || args.Data.CG_ESTADOCARGA == 3)
             {
                 args.Cell.AddClass(new string[] { "verdes" });
             }

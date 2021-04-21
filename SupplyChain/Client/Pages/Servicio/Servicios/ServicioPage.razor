@@ -1,6 +1,5 @@
 ﻿@page "/servicio/listado"
-@page "/sc/servicio/list/{pedido}"
-@using Syncfusion.Blazor.FileManager;
+@page "/servicio/list/{pedido}"
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Data
 @using Syncfusion.Blazor.Calendars
@@ -40,8 +39,9 @@
     <div class="content-wrapper">
         <div class="row">
             <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true" 
-                    ID="gridServicios" Height="100%" Width="100%"
-                    @ref="Grid" DataSource="@servDesc" AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true" AllowMultiSorting="true"
+                    ID="gridServicios" Height="100%" Width="100%" GridLines="GridLine.Both"
+                    @ref="Grid" DataSource="@servDesc" AllowExcelExport="true" AllowRowDragAndDrop="true"
+                    AllowGrouping="true" AllowMultiSorting="true"
                     AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
                 <SfToolbar>
                     <ToolbarItems>
@@ -53,11 +53,13 @@
                         </ToolbarItem>
                     </ToolbarItems>
                 </SfToolbar>
-                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                <GridEvents OnLoad="OnLoad" DataBound="DataBound" OnToolbarClick="@ClickHandler" OnActionBegin="ActionBegin" TValue="Service"></GridEvents>
+                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                <GridEvents OnLoad="OnLoad" DataBound="DataBound" OnToolbarClick="@ClickHandler" 
+                            OnActionBegin="ActionBegin" TValue="Service"></GridEvents>
                 <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                 <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-                <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
+                <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true"
+                                  Mode="@EditMode.Dialog" Dialog="DialogParams">
                     <Template>
                         @{
                             var servicio = (context as Service);
@@ -504,7 +506,7 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="pills-file" role="tabpanel" aria-labelledby="pills-profile-tab">
-                                    @{
+                                    @*@{
                                         @foreach (Solution ruta in rutas)
                                         {
                                             if (ruta.CAMPO == "RUTAENSAYO")
@@ -544,7 +546,11 @@
                                                 }
                                             }
                                         }
-                                    }
+                                    }*@
+
+                                    <SupplyChain.Client.Pages.Visor_Pdf.VerEnsayos Accion="RUTAENSAYO" Codigo="@servicio.PEDIDO">
+
+                                    </SupplyChain.Client.Pages.Visor_Pdf.VerEnsayos>
                                 </div>
                                 <div class="tab-pane fade" id="pills-img" role="tabpanel" aria-labelledby="pills-profile-tab">
                                     @{

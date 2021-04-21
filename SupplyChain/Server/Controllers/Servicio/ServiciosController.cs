@@ -22,17 +22,17 @@ namespace SupplyChain
         }
 
         [HttpGet]
-        public IEnumerable<Service> Get()
+        public async Task<ActionResult<IEnumerable<Service>>> Get()
         {
-            var xitem = _context.Servicios.ToList();
+            var xitem = await _context.Servicios.ToListAsync();
             return xitem;
         }
 
         // GET: api/Servicios/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Service>> GetServicios(string id)
+        public async Task<ActionResult<IEnumerable<Service>>> GetServicios(string id)
         {
-            var Servicios = await _context.Servicios.FindAsync(id);
+            var Servicios = await _context.Servicios.Where(s=> s.PEDIDO == id).ToListAsync();
 
             if (Servicios == null)
             {

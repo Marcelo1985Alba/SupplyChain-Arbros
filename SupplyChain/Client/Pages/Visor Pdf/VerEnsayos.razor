@@ -1,0 +1,60 @@
+﻿@page "/pdf-ensayos/{Codigo}/{Accion}"
+@using Syncfusion.Blazor.PdfViewer;
+@using SupplyChain.Shared;
+@using Syncfusion.Blazor.Navigations
+@inject HttpClient Http
+
+<SfSpinner Size="80" Label="Cargando..." Type="SpinnerType.Bootstrap4" @bind-Visible="@VisibleSpinner" 
+           Target="#pdfViewer"></SfSpinner>
+@if (archivos is null)
+{
+    <p>Cargando..</p>
+}
+else
+{
+    if (archivos.Count == 0)
+    {
+        <p>Sin Ensayos</p>
+    }
+    else
+    {
+
+        <SfAccordion ID="accordionPdfEnsayos">
+            <AccordionItems>
+                @foreach (Archivo item in archivos)
+                {
+                    var idPdf = $"pdfEns{item.Id}";
+                    <AccordionItem>
+                        <HeaderTemplate>
+                            <div>@(item.Nombre)</div>
+                        </HeaderTemplate>
+                        <ContentTemplate>
+                            <SfPdfViewer ID="@idPdf"
+                                         ServiceUrl="/api/Values" DocumentPath="@Codigo"
+                                         Height="1200px" Width="100%"></SfPdfViewer>
+                        </ContentTemplate>
+                    </AccordionItem>
+                }
+            </AccordionItems>
+        </SfAccordion>
+    }
+}
+
+
+@code {
+
+    [Parameter] public string Codigo { get; set; } = "";
+    [Parameter] public string Accion { get; set; } = "";
+    protected bool VisibleSpinner { get; set; } = false;
+    protected List<Archivo> archivos;
+    protected async override Task OnInitializedAsync()
+    {
+        Accion = "RUTAENSAYO";
+        Codigo = $"ENS_{Codigo}_1.pdf," + Accion;
+
+
+        archivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/ByParamRuta/{Accion}/{Codigo}");
+
+    }
+
+}

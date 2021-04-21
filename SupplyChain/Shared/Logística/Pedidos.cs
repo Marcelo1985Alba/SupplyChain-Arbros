@@ -36,7 +36,7 @@ namespace SupplyChain
         public Cliente Cliente { get; set; } = new Cliente();
 
         [NotMapped]
-        public Proveedor Proveedor { get; set; } = new Proveedor();
+        public virtual Proveedor Proveedor { get; set; } = new Proveedor();
 
         /*
          * Agrego campo CG_DEP_ALT no mapeado para guardar el otro deposito: 
