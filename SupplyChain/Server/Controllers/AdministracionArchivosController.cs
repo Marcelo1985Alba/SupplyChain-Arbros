@@ -89,7 +89,7 @@ namespace SupplyChain.Server.Controllers
                 {
                     sw.WriteLine($"{ordfab.Des_Cli.Trim()}");
                     sw.WriteLine($"{ordfab.PEDIDO}");
-                    sw.WriteLine($"{ordfab.PEDIDO}");
+                    sw.WriteLine($"{ordfab.Presion}");
                     sw.WriteLine($"{ordfab.DES_OPER}");
                 }
 
