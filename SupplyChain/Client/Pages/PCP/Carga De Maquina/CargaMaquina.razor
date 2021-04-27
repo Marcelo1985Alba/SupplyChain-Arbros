@@ -1105,9 +1105,11 @@
                 ShowProgressBar = true
             });
         }
-        if (ordenFabricacion.CG_ESTADOCARGA == 2 || ordenFabricacion.CG_ESTADOCARGA == 3 && (ordenFabricacion.CG_ESTADOCARGA != ordenFabricacionOriginal.CG_ESTADOCARGA))
+        if (ordenFabricacion.CG_ESTADOCARGA == 2 || ordenFabricacion.CG_ESTADOCARGA == 3
+            && (ordenFabricacion.CG_ESTADOCARGA != ordenFabricacionOriginal.CG_ESTADOCARGA))
         {
-            string sqlCommandString = string.Format("UPDATE Programa SET CG_ESTADOCARGA = {0},Fe_curso = GETDATE(), CG_ESTADO = {1} WHERE (Cg_ordf = {2} OR Cg_ordfAsoc = {2})",
+            string sqlCommandString = string.Format("UPDATE Programa SET CG_ESTADOCARGA = {0}," +
+                "Fe_curso = GETDATE(), CG_ESTADO = {1} WHERE (Cg_ordf = {2} OR Cg_ordfAsoc = {2})",
                                       ordenFabricacion.CG_ESTADOCARGA,
                                       ordenFabricacionOriginal.CG_ESTADOCARGA,
                                       ordenFabricacion.CG_ORDF);
@@ -1297,7 +1299,7 @@
     protected async Task Ensayos(string pedido)
     {
         //NavigationManager.NavigateTo($"Pdf/{pedido}/ENSAYOS");
-        
+
         await JS.InvokeVoidAsync("open", new object[2] { $"/pdf-ensayos/{pedido}/RUTAENSAYO", $"_blank" });
     }
 
