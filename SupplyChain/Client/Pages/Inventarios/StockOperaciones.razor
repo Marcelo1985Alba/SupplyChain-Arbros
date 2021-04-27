@@ -2,7 +2,6 @@
 @page "/inventario/{OperacionId:int}"
 @inject IJSRuntime JsRuntime
 @inject HttpClient Http
-@inject ToastService toastService
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 @using System.Text.Json
 @attribute [Authorize]
@@ -19,75 +18,94 @@
                 Operaciones de Stock a Realizar
                 <small class="text-info"> <strong>@SelectedTire?.Descrip</strong></small>
             </h4>
-
+            
         </div>
         <hr />
 
+        <EditForm Model="@StockEncabezado" OnValidSubmit="@(async()=> await onGuardar())">
+            <DataAnnotationsValidator />
+            <div class="form-group col-lg-3 col-md-4 col-sm-12">
+                <label class="col-form-label">Remito</label>
+                <SfTextBox ID="Remito" ShowClearButton="true" @bind-Value="@StockEncabezado.REMITO" Type="InputType.Text" Readonly="false">
+                </SfTextBox>
+                <ValidationMessage For="(()=> StockEncabezado.REMITO)"/>
+            </div>
+            <ValidationSummary/>
+            <SfButton Content="Guardar" IsPrimary="true"></SfButton>
 
+        </EditForm>
         <div class="form-row">
-            <div class="form-group col-lg-6 col-md-4 col-sm-12">
-                <label class="col-form-label">Operaciones de Stock:</label>
-                <ComboTipoo TipoOperacionIdUnico="@OperacionId" TipooSeleccionado="@SelectedTire" 
+            <div class="form-group col-lg-6 col-md-4 col-sm-12 col-12">
+                <label class="col-form-label">Ope. de Stock</label>
+                <ComboTipoo TipoOperacionIdUnico="@OperacionId" TipooSeleccionado="@SelectedTire"
                             OnSelectedTireChanged="@SelectedTireChanged" />
             </div>
-            <div class="form-group col-lg-3 col-md-4 col-sm-6">
-                <label class="col-form-label">Orden de Fabricación:</label>
-                <BuscadorOFab EsSoloLectura="@OFSoloLectura" DeshabilitaBotonBusqueda="@DeshabilitaBotonOF"
-                              MostraBotonBusqueda="@MostrarBotorOF" MostrarSpin="false"
-                              Valor="@OrdenFabricacion" OnOFSeleccionada="onProgramaSelected" />
+            <div class="form-group col-lg-2 col-md-3 col-sm-6 col-11">
+                <label class="col-form-label">Vale</label>
+                <SfNumericTextBox TValue="int" @bind-Value="@StockEncabezado.VALE" Readonly="true" ShowSpinButton="false" />
             </div>
-            <div class="form-group col-lg-3 col-md-4 col-sm-6">
-                <label class="col-form-label">Orden de Compra:</label>
-                <BuscadorOCompra EsSoloLectura="@OCSoloLectura" DeshabilitaBotonBusqueda="@DeshabilitaBotonOC"
-                                 MostraBotonBusqueda="@MostrarBotorOC" MostrarSpin="false"
-                                 CodigoDeposito="@SelectedDepositoOC?.CG_DEP" Remito="@Remito"
-                                 Tipoo="selectedTire?.Tipoo"
-                                 Valor="@((int)StockGuardado.OCOMPRA)" OnOCSeleccionada="onCompraSelected" />
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group col-lg-4 col-md-3 col-sm-10">
-                <label class="col-form-label">Número de Vale:</label>
-                <SfNumericTextBox TValue="int" @bind-Value="@NumVale" Readonly="true" ShowSpinButton="false"></SfNumericTextBox>
-            </div>
-            <div class="form-group col-lg-2 col-md-1 col-sm-2 mt-2">
+            <div class="form-group col-lg-1 col-md-1 col-sm-1 col-1 mt-2">
                 <br />
                 <SfButton OnClick="@(async (e)=> await AbrirVale())" CssClass="btn btn-sm" IsPrimary="false"
-                          IconCss="fas fa-search" Disabled="@DisableCssClass"></SfButton>
+                          IconCss="fa fa-search" Disabled="@DisableCssClass"></SfButton>
             </div>
-            <div class="form-group col-lg-3 col-md-4 col-sm-6">
-                <label class="col-form-label">Fecha:</label>
+            <div class="form-group col-lg-3 col-md-3 col-sm-6 col-12">
+                <label class="col-form-label">Fecha</label>
                 <SfDatePicker TValue="DateTime" Value='@Fecha' Format='dd/MM/yyyy'></SfDatePicker>
             </div>
-            <div class="form-group col-lg-3 col-md-4 col-sm-6">
-                <label class="col-form-label">Pedido:</label>
-                <BuscadorPedido Valor="@Pedido" MostrarSpin="false" EsSoloLectura="true"
-                                HabilitaBotonBusqueda="false" MostraBotonBusqueda="false" />
-            </div>
 
-        </div>
-        <div class="form-row">
-            <div class="form-group col-6">
-                <label class="col-form-label">Depòsito de Salida:</label>
-                <ComboDeposito DepositoSeleccionado="@selectedDepositoSalida" EsSoloLectura="@DepositoSalidaSoloLectura"
-                               OnSelectedDepositoChanged="SelectedDepositoSalidaChanged" />
-            </div>
-            <div class="form-group col-6">
-                <label class="col-form-label">Depòsito de Ingreso:</label>
-                <ComboDeposito DepositoSeleccionado="@selectedDepositoIngreso" EsSoloLectura="@DepositoIngresoSoloLectura"
-                               OnSelectedDepositoChanged="SelectedDepositoIngresoChanged" />
-            </div>
+
         </div>
 
         <div class="form-row">
-            <div class="form-group col-lg-3 col-md-3 col-sm-12">
+            @if (SelectedTire?.Tipoo == 10)
+            {
+                <div class="form-group col-lg-3 col-md-4 col-sm-6">
+                    <label class="col-form-label">Orden de Fabricación:</label>
+                    <BuscadorOFab EsSoloLectura="@OFSoloLectura" DeshabilitaBotonBusqueda="@DeshabilitaBotonOF"
+                                  MostraBotonBusqueda="@MostrarBotorOF" MostrarSpin="false"
+                                  Valor="@OrdenFabricacion" OnOFSeleccionada="onProgramaSelected" />
+                </div>
+
+
+            }
+
+            @if (SelectedTire?.Tipoo == 5)
+            {
+                <div class="form-group col-lg-3 col-md-4 col-sm-6">
+                    <label class="col-form-label">O. de Compra:</label>
+                    <BuscadorOCompra EsSoloLectura="@OCSoloLectura" DeshabilitaBotonBusqueda="@DeshabilitaBotonOC"
+                                     MostraBotonBusqueda="@MostrarBotorOC" MostrarSpin="false"
+                                     CodigoDeposito="@StockEncabezado.CG_DEP" Remito="@StockEncabezado.REMITO"
+                                     Tipoo="selectedTire?.Tipoo"
+                                     Valor="@((int)StockEncabezado.OCOMPRA)" OnOCSeleccionada="onCompraSelected" />
+                </div>
+
+                <div class="form-group col-lg-3 col-md-4 col-sm-12">
+                    <label class="col-form-label">Remito:</label>
+                    <SfTextBox ID="Remito" ShowClearButton="true" @bind-Value="@StockEncabezado.REMITO" Type="InputType.Text" Readonly="false">
+                    </SfTextBox>
+
+                </div>
+            }
+
+
+            @if (SelectedTire?.Tipoo == 1)
+            { 
+                <div class="form-group col-lg-3 col-md-4 col-sm-6">
+                    <label class="col-form-label">Pedido</label>
+                    <BuscadorPedido Valor="@Pedido" MostrarSpin="false" EsSoloLectura="true"
+                                    HabilitaBotonBusqueda="false" MostraBotonBusqueda="false" />
+                </div>
+            }
+
+            <div class="form-group col-lg-2 col-md-6 col-sm-12">
                 <label class="col-form-label">@labelClienteProveedor</label>
                 <SfNumericTextBox ID="Cg_CLI_Cg_PROVE" TValue="int?" @bind-Value="@Cg_CLI_Cg_PROVE" Readonly="true" ShowSpinButton="false">
 
                 </SfNumericTextBox>
             </div>
-            <div class="form-group col-lg-6 col-md-5 col-sm-12">
+            <div class="form-group col-lg-4 col-md-6 col-sm-12">
                 <label class="col-form-label">Razon Social:</label>
                 <SfTextBox ID="DescripcionPro" ShowClearButton="true"
                            @bind-Value="@DescripcionPro" Readonly="true">
@@ -95,13 +113,23 @@
                 </SfTextBox>
 
             </div>
-            <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                <label class="col-form-label">Remito:</label>
-                <SfTextBox ID="Remito" ShowClearButton="true" @bind-Value="@Remito" Readonly="false">
-                </SfTextBox>
 
-            </div>
         </div>
+        <div class="form-row">
+
+            <div class="form-group col-6">
+                <label class="col-form-label">Depósito de Ingreso</label>
+                <ComboDeposito DepositoSeleccionado="@StockEncabezado.CG_DEP" EsSoloLectura="@DepositoIngresoSoloLectura"
+                               OnSelectedDepositoChanged="SelectedDepositoIngresoChanged" />
+            </div>
+            @*<div class="form-group col-6">
+                <label class="col-form-label">Depósito de Salida</label>
+                <ComboDeposito DepositoSeleccionado="@selectedDepositoSalida" EsSoloLectura="@DepositoSalidaSoloLectura"
+                               OnSelectedDepositoChanged="SelectedDepositoSalidaChanged" />
+            </div>*@
+
+        </div>
+
 
         @if (puedeBuscarStock)@*AJUSTE DE INVENTARIO O MOVIM ENTRE DEPOS*@
         {
@@ -118,7 +146,7 @@
         }
 
 
-        <CascadingValue Value="@StockGuardado">
+        <CascadingValue Value="@StockEncabezado">
             <SupplyChain.Client.Shared.Inventarios.GridEditStock DataSource="@ItemsVale" PermiteAgregar="@PermiteAgregarItem"
                                                                  PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
                                                                  onGuardar="onGuardarPedido" />
@@ -139,11 +167,10 @@
 
     [CascadingParameter] public MainLayout MainLayout { get; set; }
     [Parameter] public int OperacionId { get; set; } = 0;
-    string usuario;
+    [Parameter] public PedidoEncabezado StockEncabezado { get; set; } = new PedidoEncabezado();
+
     protected SfToast ToastObj;
-    Pedidos StockGuardado = new Pedidos();
     bool DisableCssClass { get => selectedTire == null ? true : false; }
-    int NumVale { get; set; }
     private bool puedeBuscarStock = false;
     BuscadorEmergenteResumenStock BuscadorEmergenteResumenStock;
     private bool DepositoSalidaSoloLectura = true;
@@ -151,7 +178,7 @@
 
 
     Producto[] Productos = null;
-    Deposito[] Depositos = null;
+    //Deposito[] Depositos = null;
     Pedidos[] ItemsVale = null;
 
     bool PermiteAgregarItem { get; set; } = false;
@@ -170,7 +197,7 @@
     bool MostrarBotorOF = false;
     #endregion
 
-    string labelClienteProveedor = "Cliente/Proveedor";
+    string labelClienteProveedor = "Cliente/Prove";
 
     Producto selectedProducto;
     public Producto SelectedProducto
@@ -199,33 +226,12 @@
     private int OrdenFabricacion { get; set; } = 0;
     private int Pedido { get; set; } = 0;
     private int? Cg_CLI_Cg_PROVE { get; set; } = 0;
-    //private int OCompra { get; set; } = 0;
-    private string Remito = "0000-00000000";
     private DateTime fecha = DateTime.Now;
     DateTime Fecha { get => fecha; set { fecha = value; InvokeAsync(StateHasChanged); } }
     string Codigoi { get; set; } = "";
     string DescripcionPro { get; set; } = "";
 
-    private Deposito selectedDepositoOC = null;
-    Deposito SelectedDepositoOC
-    {
-        get => selectedDepositoOC;
-        set { selectedDepositoOC = value; InvokeAsync(StateHasChanged); }
-    }
 
-    private Deposito selectedDepositoSalida = null;
-    Deposito SelectedDepositoSalida
-    {
-        get => selectedDepositoSalida;
-        set { selectedDepositoSalida = value; InvokeAsync(StateHasChanged); }
-    }
-
-    private Deposito selectedDepositoIngreso = null;
-    Deposito SelectedDepositoIngreso
-    {
-        get => selectedDepositoIngreso;
-        set { selectedDepositoIngreso = value; InvokeAsync(StateHasChanged); }
-    }
 
     void OnChanged() { InvokeAsync(StateHasChanged); }
     #endregion
@@ -234,10 +240,9 @@
     protected override async Task OnInitializedAsync()
     {
         MainLayout.Titulo = "Administracion de Stock";
-        NumVale = await Http.GetFromJsonAsync<int>($"api/Stock/GetMaxVale");
-        Depositos = await Http.GetFromJsonAsync<Deposito[]>("api/Deposito");
-        selectedDepositoSalida = Depositos.FirstOrDefault(d => d.CG_DEP == 0);
-        selectedDepositoIngreso = Depositos.FirstOrDefault(d => d.CG_DEP == 0);
+
+        await GetVale();
+
         ItemsVale = new List<Pedidos>().ToArray();
 
 
@@ -246,27 +251,33 @@
 
     }
 
-    protected async override Task OnAfterRenderAsync(bool firstRender)
+    protected async Task GetVale()
     {
-        if (firstRender)
-        {
-            usuario = await JsRuntime.InvokeAsync<string>("sessionStorage.getItem", "Usuario");
-            if (usuario == null)
-                navigationManager.NavigateTo($"/");
-        }
-
+        StockEncabezado.VALE = await Http.GetFromJsonAsync<int>($"api/Stock/GetMaxVale");
     }
+
+    //protected async override Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    if (firstRender)
+    //    {
+    //        usuario = await JsRuntime.InvokeAsync<string>("sessionStorage.getItem", "Usuario");
+    //        if (usuario == null)
+    //            navigationManager.NavigateTo($"/");
+    //    }
+
+    //}
 
     async Task SelectedTireChanged(Tire tire)
     {
-        StockGuardado = new Pedidos();
+        StockEncabezado = new();
+        await GetVale();
         ItemsVale = Array.Empty<Pedidos>();
         //ItemsVale = new ObservableCollection<Stock>();
         selectedTire = tire;
         //Dependiendo el TIPOO Habilitar controles
 
 
-        StockGuardado.TIPOO = selectedTire.Tipoo;
+        StockEncabezado.TIPOO = selectedTire.Tipoo;
         MostrarBotorOC = false;
         DeshabilitaBotonOC = true;
         OCSoloLectura = true;
@@ -275,7 +286,6 @@
         DepositoSalidaSoloLectura = true;
         DepositoIngresoSoloLectura = true;
         puedeBuscarStock = false;
-        SelectedDepositoOC = new Deposito();
 
         if (selectedTire?.Tipoo == 5) //recep prove
         {
@@ -283,6 +293,11 @@
             MostrarBotorOC = true;
             DepositoIngresoSoloLectura = false;
             labelClienteProveedor = "Proveedor:";
+
+            StockEncabezado.CG_DEP = 4;
+            //Depositos.Where(d => d.DES_DEP.Trim().ToUpper() == "INSUMOS").Select(dep => dep.CG_DEP).FirstOrDefault();
+
+            //selectedDepositoIngreso = Depositos.Where(d=> d.CG_DEP == StockEncabezado.CG_DEP).FirstOrDefault();
         }
 
         if (selectedTire?.Tipoo == 6)//dev prove
@@ -304,7 +319,7 @@
         {
             puedeBuscarStock = true;
             DepositoIngresoSoloLectura = false;
-            if (selectedDepositoIngreso?.CG_DEP == null || selectedDepositoIngreso?.CG_DEP == 0)
+            if (StockEncabezado?.CG_DEP == null || StockEncabezado?.CG_DEP == 0)
             {
                 //toastService.ShowToast("Seleccionar Deposito de Ingreso", TipoAlerta.Info);
                 await this.ToastObj.Show(new ToastModel
@@ -334,25 +349,25 @@
             puedeBuscarStock = true;
         }
 
-        StockGuardado.TIPOO = selectedTire?.Tipoo; // lo utilizo para pasar la variable a los items de la grilla.
+        StockEncabezado.TIPOO = selectedTire?.Tipoo; // lo utilizo para pasar la variable a los items de la grilla.
         await InvokeAsync(StateHasChanged);
     }
 
     void SelectedDepositoSalidaChanged(Deposito deposito)
     {
-        selectedDepositoSalida = deposito;
+        //selectedDepositoSalida = deposito;
 
         if (selectedTire?.Tipoo == 6) //DEVOL prove
         {
-            selectedDepositoOC = deposito;
+            StockEncabezado.CG_DEP = deposito.CG_DEP;
         }
     }
     void SelectedDepositoIngresoChanged(Deposito deposito)
     {
-        selectedDepositoIngreso = deposito;
+        //selectedDepositoIngreso = deposito;
         if (selectedTire?.Tipoo == 5) //RECEP prove
         {
-            selectedDepositoOC = deposito;
+            StockEncabezado.CG_DEP = deposito.CG_DEP;
         }
 
         if (selectedTire?.Tipoo == 9) //MOVIM ENTRE DEP
@@ -366,16 +381,17 @@
     async Task CargarVale()
     {
         //Cargando Datos de Cabecera
-        NumVale = (int)ItemsVale[0].VALE;
+        StockEncabezado.VALE = (int)ItemsVale[0].VALE;
         Fecha = ItemsVale[0].FE_MOV;
         //depos: ver cual campo es ingreso y salida: tal vez depende segun el tipo de operacion
-        selectedDepositoIngreso = Depositos.Where(d => d.CG_DEP == ItemsVale[0].CG_DEP).FirstOrDefault();
+        StockEncabezado.CG_DEP = ItemsVale[0].CG_DEP;
+        //selectedDepositoIngreso = Depositos.Where(d => d.CG_DEP == ItemsVale[0].CG_DEP).FirstOrDefault();
         OrdenFabricacion = (int)ItemsVale[0].CG_ORDF;
-        StockGuardado.OCOMPRA = (int)ItemsVale[0].OCOMPRA;
+        StockEncabezado.OCOMPRA = (int)ItemsVale[0].OCOMPRA;
         Pedido = (int)ItemsVale[0].PEDIDO;
         Cg_CLI_Cg_PROVE = ItemsVale[0].CG_CLI == 0 ? ItemsVale[0].CG_PROVE : ItemsVale[0].CG_CLI;
         DescripcionPro = ItemsVale[0].CG_CLI == 0 ? "Proveedor" : "Cliente";
-        Remito = ItemsVale[0].REMITO;
+        StockEncabezado.REMITO = ItemsVale[0].REMITO;
         PermiteAgregarItem = false;
         PermiteEditarItem = true;
         PermiteEliminarItem = true;
@@ -467,6 +483,13 @@
         PermiteEliminarItem = true;
     }
 
+    private async Task onGuardar()
+    {
+        //TODO: RESERVAR VALE EN GENERA DEPENDIENTO EL TIPO DE OPERACION
+        Genera genera = await Http.GetFromJsonAsync<Genera>($"api/Genera/Reserva/VALE");
+    }
+
+
     private async Task onGuardarPedido(Pedidos stock)
     {
         //TODO: RESERVAR VALE EN GENERA DEPENDIENTO EL TIPO DE OPERACION
@@ -475,7 +498,7 @@
 
         //stock.NUMOCI = 0;
         stock.FE_MOV = Fecha;
-        stock.VALE = NumVale;
+        stock.VALE = StockEncabezado.VALE;
 
 
         //stock.CG_CLI = 0;
@@ -488,16 +511,16 @@
         {
 
             stock.AVISO = "RECEPCION DE INSUMOS DE PROVEEDOR"; /*VERIFICAR TIPOO*/
-            stock.OCOMPRA = StockGuardado.OCOMPRA;
+            stock.OCOMPRA = StockEncabezado.OCOMPRA;
             //stock.DES_PROVE = DescripcionPro.Trim();
-            stock.REMITO = Remito;
-            stock.CG_DEP = SelectedDepositoIngreso.CG_DEP;
+            stock.REMITO = StockEncabezado.REMITO;
+            stock.CG_DEP = StockEncabezado.CG_DEP;
         }
 
         if (stock.TIPOO == 6)
         {
 
-            stock.OCOMPRA = StockGuardado.OCOMPRA;
+            stock.OCOMPRA = StockEncabezado.OCOMPRA;
             //stock.DES_PROVE = DescripcionPro.Trim();
             @*stock.CG_DEP = SelectedDepositoSalida.CG_DEP;*@
         stock.STOCK = -stock.STOCK;
@@ -505,7 +528,7 @@
 
     if (stock.TIPOO == 9)//movim depos
     {
-        stock.CG_DEP_ALT = (int)selectedDepositoIngreso.CG_DEP;
+        stock.CG_DEP_ALT = StockEncabezado.CG_DEP_ALT;
     }
 
     stock.ENTRREAL = DateTime.UtcNow;
@@ -547,20 +570,21 @@
     {
         if (response.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            StockGuardado = await response.Content.ReadFromJsonAsync<Pedidos>();
+            var pedido = await response.Content.ReadFromJsonAsync<Pedidos>();
+            //StockEncabezado =
             await InvokeAsync(StateHasChanged);
-            var itemsJson = JsonSerializer.Serialize(StockGuardado);
+            var itemsJson = JsonSerializer.Serialize(pedido);
             if (esNuevoRegistro)
             {
                 await ItemsVale.Where(i => i.REGISTRO == stock.REGISTRO).ForEachAsync(async s =>
                 {
                     await Task.Run(() =>
                     {
-                        s.REGISTRO = StockGuardado.REGISTRO;
-                        s.IMPORTE2 = StockGuardado.IMPORTE2;
-                        s.IMPORTE3 = StockGuardado.IMPORTE3;
-                        s.IMPORTE4 = StockGuardado.IMPORTE4;
-                        s.IMPORTE6 = StockGuardado.IMPORTE6;
+                        s.REGISTRO = pedido.REGISTRO;
+                        s.IMPORTE2 = pedido.IMPORTE2;
+                        s.IMPORTE3 = pedido.IMPORTE3;
+                        s.IMPORTE4 = pedido.IMPORTE4;
+                        s.IMPORTE6 = pedido.IMPORTE6;
                     });
 
 
@@ -624,7 +648,7 @@ private async Task onCompraSelected(Compra compraSel)
     //ItemsVale = new ObservableCollection<Stock>();
     List<Pedidos> lStock = new List<Pedidos>();
     int registronegativo = 0;
-    StockGuardado.OCOMPRA = compraSel.NUMERO;
+    StockEncabezado.OCOMPRA = compraSel.NUMERO;
 
     if (selectedTire.Tipoo == 5)
     {
@@ -758,7 +782,7 @@ private async Task onObjectSelected(Pedidos stockSel)
 protected async Task AbrirVale()
 {
 
-    var vale = NumVale;
+    var vale = StockEncabezado.VALE;
     ItemsVale = await Http.GetFromJsonAsync<Pedidos[]>($"api/Stock/AbriVale/{vale}");
     //ItemsVale = new ObservableCollection<Stock>(data);
 

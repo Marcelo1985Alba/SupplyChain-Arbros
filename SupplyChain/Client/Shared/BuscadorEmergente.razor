@@ -29,7 +29,7 @@
                 @*<GridFilterSettings ShowFilterBarStatus="true" Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"  
                                     Operators="@(new Operator[] { Operator.Contains })"
                                     Mode="FilterBarMode.Immediate"></GridFilterSettings>*@
-                <GridPageSettings PageSizes="@(new int[] { 5,7,10,20 })" PageSize="7" PageCount="7"></GridPageSettings>
+                <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                 <GridEvents RowSelected="GetSelectedRecords" TValue="TItem"></GridEvents>
                 <GridColumns>

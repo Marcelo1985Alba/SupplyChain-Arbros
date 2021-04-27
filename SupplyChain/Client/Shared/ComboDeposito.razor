@@ -7,9 +7,10 @@
                 TextFieldName="@nameof(Deposito.DES_DEP)"
                 SelectedItemChanged="@((deposito)=> SelectedDepositoChanged(deposito))">
     </DxComboBox>*@
-<SfDropDownList TValue="int" TItem="Deposito" Placeholder="Seleccione Deposito..." Readonly="@EsSoloLectura">
+<SfDropDownList TValue="int" TItem="Deposito" Placeholder="Seleccione Deposito..." Readonly="@EsSoloLectura" 
+                @bind-Value="DepositoSeleccionado">
     <SfDataManager Url="api/Deposito" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>
-    <DropDownListEvents TItem="Deposito" TValue="int" ValueChange="SelectedDepositoChangedSync"></DropDownListEvents>
+    <DropDownListEvents TItem="Deposito" TValue="int" ValueChange="SelectedDepositoChangedSync" ></DropDownListEvents>
     <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP"></DropDownListFieldSettings>
 </SfDropDownList>
 
@@ -17,7 +18,8 @@
 @code {
     private IEnumerable<Deposito> Depositos = new List<Deposito>();
 
-    [Parameter] public Deposito DepositoSeleccionado { get; set; } = new Deposito();
+    //[Parameter] public Deposito DepositoSeleccionado { get; set; } = new Deposito();
+    [Parameter] public int DepositoSeleccionado { get; set; } = 0;
     [Parameter] public EventCallback<Deposito> OnSelectedDepositoChanged { get; set; }
     [Parameter] public bool EsSoloLectura { get; set; } = false;
 
@@ -30,15 +32,16 @@
         //} });
 
         //Depositos = nuevoItem.Concat(Depositos).ToArray();
-        DepositoSeleccionado = Depositos.FirstOrDefault(d => d.CG_DEP == 0);
+        //DepositoSeleccionado = Depositos.FirstOrDefault(d => d.CG_DEP == 0);
 
         await InvokeAsync(StateHasChanged);
     }
 
     private void SelectedDepositoChanged(Deposito depos)
     {
-        DepositoSeleccionado = depos;
-        OnSelectedDepositoChanged.InvokeAsync(DepositoSeleccionado);
+        DepositoSeleccionado = depos.CG_DEP;
+        var depo = Depositos.Where(d => d.CG_DEP == DepositoSeleccionado).FirstOrDefault();
+        OnSelectedDepositoChanged.InvokeAsync(depo);
         InvokeAsync(StateHasChanged);
     }
 
@@ -49,8 +52,8 @@
             return;
         }
 
-        DepositoSeleccionado = dep.ItemData;
-        OnSelectedDepositoChanged.InvokeAsync(DepositoSeleccionado);
+        DepositoSeleccionado = dep.ItemData.CG_DEP;
+        OnSelectedDepositoChanged.InvokeAsync(dep.ItemData);
         InvokeAsync(StateHasChanged);
     }
 

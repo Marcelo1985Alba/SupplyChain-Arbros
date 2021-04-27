@@ -6,23 +6,9 @@
                           Decimals="0" ShowSpinButton="@MostrarSpin" Readonly="@EsSoloLectura">
 
         </SfNumericTextBox>
-        @*<DxSpinEdit @bind-Value="@Valor" ShowSpinButtons="@MostrarSpin" ReadOnly="@EsSoloLectura"></DxSpinEdit>*@
-        @*@if (!EsSoloLectura)
-            {
-                <DxSpinEdit @bind-Value="@Valor" ShowSpinButtons="@MostrarSpin"></DxSpinEdit>
-            }
-            else
-            {
-                <DxSpinEdit Value="0" ShowSpinButtons="@MostrarSpin" ReadOnly="true"></DxSpinEdit>
-            }*@
-
     </div>
     <div class="col-2">
-        @*<DxButton RenderStyle="@ButtonRenderStyle.Danger" IconCssClass="fas fa-search"
-            Visible="@MostraBotonBusqueda"
-            Enabled="@HabilitaBotonBusqueda" Click="@(async (e)=> await BuscarOF())"
-            RenderStyleMode="@ButtonRenderStyleMode.Outline" />*@
-
+        
         @if (MostraBotonBusqueda)
         {
             <SfButton OnClick="@(async (e)=> await BuscarOF())" CssClass="btn btn-outline" IsPrimary="true"
