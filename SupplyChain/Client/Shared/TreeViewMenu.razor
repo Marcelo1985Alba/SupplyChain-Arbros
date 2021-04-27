@@ -8,7 +8,7 @@
 @if (!IsAdmin)
 {
     <div id="treeview">
-        <SfTreeView TValue="Modulo" ID="treeviewMenuManual" CssClass="custom">
+        <SfTreeView TValue="Modulo" ID="treeviewMenuManual" CssClass="custom" >
             <TreeViewFieldsSettings DataSource="dbMenu" Id="Id" Text="Descripcion" ParentID="ParentId" HasChildren="TieneChild"
                                     NavigateUrl="Url" IconCss="IconCss">
             </TreeViewFieldsSettings>
