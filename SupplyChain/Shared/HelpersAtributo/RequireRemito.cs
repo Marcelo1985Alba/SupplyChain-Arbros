@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SupplyChain.Shared.HelpersAtributo
 {
@@ -14,9 +9,10 @@ namespace SupplyChain.Shared.HelpersAtributo
             var stock = (PedidoEncabezado)validationContext.ObjectInstance;
             //if (stock.EXIGESERIE == 0)
             //    return ValidationResult.Success;
-
             var remito = value as string;
-            return stock.TIPOO == 5 && ( string.IsNullOrEmpty(remito) || remito.Length > 13 || remito == "0000-00000000")
+            var noTieneFormato = string.IsNullOrEmpty(remito) || remito.Length > 13 || remito == "0000-00000000";
+
+            return stock.TIPOO == 5 && noTieneFormato
                 ? new ValidationResult("Ingresar remito válido")
                 : ValidationResult.Success;
         }

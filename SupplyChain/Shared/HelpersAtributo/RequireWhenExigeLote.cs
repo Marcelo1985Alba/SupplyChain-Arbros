@@ -10,9 +10,9 @@ namespace SupplyChain.Shared.HelpersAtributo
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            //var stock = (Stock)validationContext.ObjectInstance;
-            //if (stock.EXIGELOTE == 0)
-            //    return ValidationResult.Success;
+            var stock = (Pedidos)validationContext.ObjectInstance;
+            if (!stock.EXIGELOTE)
+                return ValidationResult.Success;
 
             var lote = value as string;
             return string.IsNullOrWhiteSpace(lote)

@@ -1,12 +1,7 @@
 ﻿@inject HttpClient Http
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Data
-@*<DxComboBox NullText="Seleccione Deposito..." ReadOnly="@EsSoloLectura"
-                Data="@Depositos"
-                @bind-Value="@DepositoSeleccionado"
-                TextFieldName="@nameof(Deposito.DES_DEP)"
-                SelectedItemChanged="@((deposito)=> SelectedDepositoChanged(deposito))">
-    </DxComboBox>*@
+
 <SfDropDownList TValue="int" TItem="Deposito" Placeholder="Seleccione Deposito..." Readonly="@EsSoloLectura" 
                 @bind-Value="DepositoSeleccionado">
     <SfDataManager Url="api/Deposito" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>

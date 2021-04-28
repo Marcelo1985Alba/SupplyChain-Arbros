@@ -9,7 +9,7 @@
     <div class="col-2">
         @if (MostraBotonBusqueda)
         {
-            <SfButton OnClick="@(async (e)=> await BuscarOCompras())" CssClass="" IsPrimary="true"
+            <SfButton HtmlAttributes="@HtmlAttr" OnClick="@(async (e)=> await BuscarOCompras())" CssClass="" IsPrimary="true"
                       IconCss="fa fa-search" Disabled="@DeshabilitaBotonBusqueda"></SfButton>
         }
 
@@ -35,6 +35,8 @@
     [Parameter] public int? CodigoDeposito { get; set; }
     [Parameter] public string Remito { get; set; } = "0000-00000000";
     [Parameter] public int? Tipoo { get; set; }
+    [Parameter] public Dictionary<string, object> HtmlAttr { get; set; } = new Dictionary<string, object>();
+
 
     BuscadorEmergente<Compra> Buscador;
     SfToast ToastObj;

@@ -126,14 +126,14 @@ else
 
     Producto[] DataSourceProductos;
     [Parameter] public string Titulo { get; set; } = null!;
-    [Parameter] public Pedidos[] DataSource { get; set; } = null!;
+    [Parameter] public List<Pedidos> DataSource { get; set; } = null!;
     [Parameter] public bool PermiteAgregar { get; set; } = false;
     [Parameter] public bool PermiteEditar { get; set; } = false;
     [Parameter] public bool PermiteEliminar { get; set; } = false;
     [Parameter] public EventCallback<Pedidos> onEnviarDepos { get; set; }
 
     [Parameter] public EventCallback<Pedidos> onGuardar { get; set; }
-    [CascadingParameter] public Pedidos RegistroGenerado { get; set; }
+    [CascadingParameter] public PedidoEncabezado RegistroGenerado { get; set; }
 
 
     SfGrid<Pedidos> Grid;
@@ -407,16 +407,16 @@ else
 
         if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
         {
-            await onGuardar.InvokeAsync(Args.Data);
-            Args.Data.REGISTRO = RegistroGenerado.REGISTRO;
-            if (RegistroGenerado.TIPOO == 5)
-            {
-                Args.Data.IMPORTE1 = RegistroGenerado.IMPORTE1;
-                Args.Data.IMPORTE2 = RegistroGenerado.IMPORTE2;
-                Args.Data.IMPORTE3 = RegistroGenerado.IMPORTE3;
-                Args.Data.IMPORTE4 = RegistroGenerado.IMPORTE4;
-                Args.Data.IMPORTE6 = RegistroGenerado.IMPORTE6;
-            }
+            //await onGuardar.InvokeAsync(Args.Data);
+            //Args.Data.REGISTRO = RegistroGenerado.REGISTRO;
+            //if (RegistroGenerado.TIPOO == 5)
+            //{
+            //    //Args.Data.IMPORTE1 = RegistroGenerado.IMPORTE1;
+            //    //Args.Data.IMPORTE2 = RegistroGenerado.IMPORTE2;
+            //    //Args.Data.IMPORTE3 = RegistroGenerado.IMPORTE3;
+            //    //Args.Data.IMPORTE4 = RegistroGenerado.IMPORTE4;
+            //    //Args.Data.IMPORTE6 = RegistroGenerado.IMPORTE6;
+            //}
 
 
             await Grid.RefreshColumns();
@@ -426,78 +426,11 @@ else
     }
 
 
-    async Task HandleValidSubmit(ActionEventArgs<Pedidos> Args)
-    {
-        if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
-        {
-            //DataSource.Concat(new Stock[] { Args.Data });
-        }
 
-        if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
-        {
-            //EditContext.DataItem.CG_ART = EditContext.CodigoProducto;
-            //EditContext.DataItem.DES_ART = EditContext.DescripcionProducto;
-            //EditContext.DataItem.UNID = EditContext.Unidad;
-            //EditContext.DataItem.STOCK = EditContext.Cantidad;
-
-            //EditContext.DataItem.DESPACHO = Args.Data.DESPACHO;
-            //EditContext.DataItem.SERIE = EditContext.Serie;
-            //EditContext.DataItem.LOTE = EditContext.Lote;
-            //EditContext.DataItem.IMPORTE1 = EditContext.Importe1;
-            //EditContext.DataItem.EXIGEDESPACHO = EditContext.ExigeDespacho;
-            //EditContext.DataItem.CG_ORDEN = EditContext.Cg_Orden;
-
-
-
-            try
-            {
-                //envio item stock para guardar en la pantall operarcion
-                //para poder agregarle los datos de la cabecera: vale, ocompra etc
-                //await onGuardar.InvokeAsync(EditContext.DataItem);
-                await onGuardar.InvokeAsync(Args.Data);
-
-
-                //agregar nuero de registro una vez guardado y obtner los importes
-                Args.Data.REGISTRO = RegistroGenerado.REGISTRO;
-                Args.Data.IMPORTE1 = RegistroGenerado.IMPORTE1;
-                Args.Data.IMPORTE2 = RegistroGenerado.IMPORTE2;
-                Args.Data.IMPORTE3 = RegistroGenerado.IMPORTE3;
-                Args.Data.IMPORTE4 = RegistroGenerado.IMPORTE4;
-                Args.Data.IMPORTE6 = RegistroGenerado.IMPORTE6;
-                //EditContext.DataItem.REGISTRO = RegistroGenerado.REGISTRO;
-                //EditContext.DataItem.IMPORTE1 = RegistroGenerado.IMPORTE1;
-                //EditContext.DataItem.IMPORTE2 = RegistroGenerado.IMPORTE2;
-                //EditContext.DataItem.IMPORTE3 = RegistroGenerado.IMPORTE3;
-                //EditContext.DataItem.IMPORTE4 = RegistroGenerado.IMPORTE4;
-                //EditContext.DataItem.IMPORTE6 = RegistroGenerado.IMPORTE6;
-
-                //if (EditContext.IsNewRow)
-                //{
-                //    EditContext.IsNewRow = false;
-                //    var nuevoItem = (new Stock[] { EditContext.DataItem });
-                //    //lStock = (new Stock[] { EditContext.DataItem }).Concat(lStock);
-                //    DataSource = nuevoItem.Concat(DataSource).ToArray();
-                //}
-
-
-                Grid.Refresh();
-                EditContext = null;
-                await Grid.CloseEdit();
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-        }
-
-
-
-    }
 
     void OnRowRemoving(Pedidos pedido)
     {
-        DataSource = DataSource.Where(v => v != pedido).ToArray();
+        DataSource = DataSource.Where(v => v != pedido).ToList();
         InvokeAsync(StateHasChanged);
     }
 
@@ -594,7 +527,7 @@ else
             var pedido = (Pedidos)obj;
             //Get items del vale
             var vale = pedido.VALE;
-            DataSource = await Http.GetFromJsonAsync<Pedidos[]>($"api/Stock/AbriVale/{pedido.VALE}");
+            DataSource = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriVale/{pedido.VALE}");
 
             //NumeroVale = ItemsVale[0].VALE;
             //Fecha = ItemsVale[0].FE_MOV;
@@ -646,7 +579,7 @@ else
         var registroCompleto = await Http
             .GetFromJsonAsync<Pedidos>($"api/Stock/GetByResumenStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
 
-        registroCompleto.REGISTRO = DataSource.Length > 0 ? -1 : DataSource.Length * -1;//indica que es un nuevo registro
+        registroCompleto.REGISTRO = DataSource.Count > 0 ? -1 : DataSource.Count * -1;//indica que es un nuevo registro
         registroCompleto.TIPOO = RegistroGenerado.TIPOO;
         registroCompleto.STOCK = 0;
         registroCompleto.ResumenStock = resumenStock;
