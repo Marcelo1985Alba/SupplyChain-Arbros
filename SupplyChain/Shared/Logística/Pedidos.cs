@@ -94,16 +94,16 @@ namespace SupplyChain
         [ColumnaGridViewAtributo(Name = "Nombre artículo")]
         public string DES_ART { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Tipo artículo")]
-        public string TIPO { get; set; } = " ";
+        public string TIPO { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Lote")]
         [RequireWhenExigeLote]
-        public string LOTE { get; set; } = " ";
+        public string LOTE { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Serie")]
         [RequireWhenExigeSerie]
-        public string SERIE { get; set; } = " ";
+        public string SERIE { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Despacho")]
         [RequireWhenExigeDespacho]
-        public string DESPACHO { get; set; } = " ";
+        public string DESPACHO { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Ubicación")]
         public string UBICACION { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Depósito")]

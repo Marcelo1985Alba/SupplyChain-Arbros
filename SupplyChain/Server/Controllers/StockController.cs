@@ -54,7 +54,7 @@ namespace SupplyChain.Server.Controllers
                 return NotFound();
             }
 
-            return lStock;
+            return lStock.OrderByDescending(s => s.VALE).ToList(); ;
         }
 
         // GET: api/Stock/AbriVale/{vale}

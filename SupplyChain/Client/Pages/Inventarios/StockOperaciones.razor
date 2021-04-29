@@ -13,7 +13,9 @@
     <SfToast ID="toast_default" @ref="ToastObj">
         <ToastPosition X="Center" Y="Top"></ToastPosition>
     </SfToast>
-    <div class="content-wrapper">
+    <SfSpinner @bind-Visible="@SpinnerVisible" Label="Guardando..." Target="#formulario" Size="100" CssClass="e-spin-overlay">
+    </SfSpinner>
+    <div class="content-wrapper" id="formulario">
         <div class="form-inline">
             <h4 class="pt-3 text-left">
                 Operaciones de Stock a Realizar
@@ -24,7 +26,7 @@
         <hr />
         <EditForm Model="@StockEncabezado" OnValidSubmit="@(async()=> await onGuardar())">
             @*<DataAnnotationsValidator />*@
-            <ObjectGraphDataAnnotationsValidator/>
+            <ObjectGraphDataAnnotationsValidator /> 
             <div class="form-row">
                 <div class="form-group col-lg-6 col-md-4 col-sm-12 col-12">
                     <label class="col-form-label">Ope. de Stock</label>
@@ -114,10 +116,10 @@
                                    OnSelectedDepositoChanged="SelectedDepositoIngresoChanged" />
                 </div>
                 @*<div class="form-group col-6">
-                <label class="col-form-label">Depósito de Salida</label>
-                <ComboDeposito DepositoSeleccionado="@selectedDepositoSalida" EsSoloLectura="@DepositoSalidaSoloLectura"
-                               OnSelectedDepositoChanged="SelectedDepositoSalidaChanged" />
-            </div>*@
+                        <label class="col-form-label">Depósito de Salida</label>
+                        <ComboDeposito DepositoSeleccionado="@selectedDepositoSalida" EsSoloLectura="@DepositoSalidaSoloLectura"
+                                       OnSelectedDepositoChanged="SelectedDepositoSalidaChanged" />
+                    </div>*@
 
             </div>
 
@@ -143,7 +145,7 @@
                                onGuardar="onGuardarPedido" />
             </CascadingValue>
             <ValidationSummary />
-            <SfButton Content="Guardar" IsPrimary="true" IconCss="fa fa-save"
+            <SfButton Content="Guardar" IsPrimary="true" IconCss="fa fa-save" CssClass="btn btn-block btn-sm-danger"
                       Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"></SfButton>
 
         </EditForm>
@@ -165,16 +167,16 @@
     [CascadingParameter] public MainLayout MainLayout { get; set; }
     [Parameter] public int OperacionId { get; set; } = 0;
     [Parameter] public PedidoEncabezado StockEncabezado { get; set; } = new PedidoEncabezado();
-
+    protected bool SpinnerVisible { get; set; } = false;
     protected SfToast ToastObj;
-    bool DisableCssClass { get => StockEncabezado.TIPOO == 0 ? true : false; }
+    protected bool DisableCssClass { get => StockEncabezado.TIPOO == 0 ? true : false; }
     private bool puedeBuscarStock = false;
-    BuscadorEmergenteResumenStock BuscadorEmergenteResumenStock;
+    protected BuscadorEmergenteResumenStock BuscadorEmergenteResumenStock;
     private bool DepositoSalidaSoloLectura = true;
     private bool DepositoIngresoSoloLectura = true;
-
+    protected bool abrioVale = false;
     private Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
-    {
+{
          {"type", "button" }
     };
 
@@ -250,6 +252,7 @@
 
     async Task SelectedTireChanged(Tire tire)
     {
+        abrioVale = false;
         StockEncabezado = new();
         StockEncabezado.FE_MOV = DateTime.Now;
         await GetVale();
@@ -275,7 +278,7 @@
             MostrarBotorOC = true;
             DepositoIngresoSoloLectura = false;
             labelClienteProveedor = "Proveedor:";
-
+            PermiteAgregarItem = true;
             StockEncabezado.CG_DEP = 4;
         }
 
@@ -313,7 +316,7 @@
 
         }
 
-        if (StockEncabezado.TIPOO== 10) //Entrega de insumos a una orden de fabricación
+        if (StockEncabezado.TIPOO == 10) //Entrega de insumos a una orden de fabricación
         {
             PermiteEditarItem = true;
             OFSoloLectura = true;
@@ -373,6 +376,8 @@
         PermiteAgregarItem = false;
         PermiteEditarItem = true;
         PermiteEliminarItem = true;
+
+        abrioVale = true;
 
         //Cargando datos para controlar si exige lote etc: para controlar validaciones en la edicion.
 
@@ -461,15 +466,249 @@
         PermiteEliminarItem = true;
     }
 
+
+
+    private async Task onProgramaSelected(Programa programaSel)
+    {
+        List<Pedidos> lStock = new List<Pedidos>();
+        int registronegativo = 0;
+        var ItemsPrograma = await Http.GetFromJsonAsync<ItemAbastecimiento[]>($"api/Programa/GetAbastecimientoByOF/{programaSel.CG_ORDF}");
+        //Cargar los item de sp en los items de items para guardar vale
+        foreach (var item in ItemsPrograma)
+        {
+            registronegativo--;
+            Pedidos pedido = new();
+            //pedido.PEDIDO = item.PEDIDO;
+            pedido.CG_ORDF = programaSel.CG_ORDF;
+            StockEncabezado.CG_ORDF = programaSel.CG_ORDF;
+            //OCompra = (int)item.NUMERO;
+            pedido.CG_PROVE = 0;
+            Cg_CLI_Cg_PROVE = programaSel.CG_CLI;
+            //DescripcionPro = item.des;
+            pedido.CG_ART = item.CG_ART;
+            pedido.DES_ART = item.DES_ART;
+            pedido.UNID = item.UNID;
+            pedido.LOTE = item.LOTE;
+            pedido.SERIE = item.SERIE;
+            pedido.DESPACHO = item.DESPACHO;
+            pedido.REGISTRO = registronegativo;
+            lStock.Add(pedido);
+        }
+
+        StockEncabezado.Items = lStock;
+        PermiteAgregarItem = false;
+        PermiteEditarItem = true;
+        PermiteEliminarItem = true;
+    }
+
+    private async Task OnCompraSelected(Compra compraSel)
+    {
+        //ItemsVale = new ObservableCollection<Stock>();
+        List<Pedidos> lStock = new List<Pedidos>();
+        int registronegativo = 0;
+        StockEncabezado.OCOMPRA = compraSel.NUMERO;
+
+        if (StockEncabezado.TIPOO == 5)
+        {
+            var ItemsCompras = await Http.GetFromJsonAsync<Compra[]>($"api/Compras/GetCompraByNumero/{compraSel.NUMERO}");
+
+            //Cargar los item de compras en los items de items para guardar vale
+
+            foreach (var item in ItemsCompras)
+            {
+                registronegativo--;
+                Pedidos pedido = new();
+                pedido.Proveedor = compraSel.ProveedorNavigation;
+                pedido.OCOMPRA = item.NUMERO;
+                pedido.CG_PROVE = item.NROCLTE;
+                Cg_CLI_Cg_PROVE = item.NROCLTE;
+                DescripcionPro = item.DES_PROVE;
+                pedido.CG_ART = item.CG_MAT;
+                pedido.DES_ART = item.DES_MAT;
+                pedido.MONEDA = item.MONEDA;
+                pedido.UNID = item.UNID;
+                //pedido.CG_ORDEN = item.CG_ORE
+                //Calcular stockA
+                pedido.STOCKA = item.AUTORIZADO;
+                pedido.STOCK = item.AUTORIZADO * item.CG_DEN;
+                pedido.IMPORTE1 = item.PRECIONETO * item.CG_DEN;
+
+
+                //datos del producto: exigeserie etc.
+                var prod = await Http.GetFromJsonAsync<Producto>($"api/Prod/{item.CG_MAT}");
+
+                pedido.EXIGEDESPACHO = prod.EXIGEDESPACHO;
+                pedido.EXIGESERIE = prod.EXIGESERIE;
+                pedido.EXIGELOTE = prod.EXIGELOTE;
+
+                pedido.REGISTRO = registronegativo;
+
+
+                lStock.Add(pedido);
+                StockEncabezado.Items = lStock;
+
+            }
+
+
+        }
+
+        if (StockEncabezado.TIPOO == 6)
+        {
+            //Devuelve con los items con su respectivo stock
+            StockEncabezado.Items = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriValeByOCParaDevol/{compraSel.NUMERO}");
+            //ItemsVale = new ObservableCollection<Stock>(data);
+
+            registronegativo = 0;
+            await StockEncabezado.Items.ForEachAsync(async stock =>
+            {
+                registronegativo--;
+                stock.REGISTRO = registronegativo;
+                stock.STOCK = Math.Abs((decimal)stock.STOCK);
+                await InvokeAsync(StateHasChanged);
+            });
+        }
+
+        //ItemsVale = new ObservableCollection<Stock>(lStock);
+        //ItemsVale = lStock.ToArray();
+
+        PermiteAgregarItem = StockEncabezado.TIPOO == 5;
+        PermiteEditarItem = true;
+        PermiteEliminarItem = true;
+    }
+
+    private async Task onResumenStockSelected(Pedidos stockSel)
+    {
+        //ItemsVale = null;
+        PopupBuscadorVisible = false;
+        //Get items del vale
+        var vale = stockSel.VALE;
+        StockEncabezado.Items = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriVale/{stockSel.VALE}");
+        //ItemsVale = new ObservableCollection<Stock>(data);
+
+        if (StockEncabezado.Items != null || StockEncabezado.Items.Count > 0)
+        {
+            await CargarVale();
+        }
+
+        //if (tipoEntidad == "Producto")
+        //{
+        //    selectedProducto = (Producto)obj;
+        //    Codigoi = selectedProducto.CG_PROD;
+        //    DescripcionPro = selectedProducto.DES_PROD;
+        //}
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    #endregion
+
+    #region "BUSCAR VALES"
+
+
+    private bool popupBuscadorVisible = false;
+    bool PopupBuscadorVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
+    private bool popupBuscadorVisibleRS = false;
+    bool PopupBuscadorVisibleRS { get => popupBuscadorVisibleRS; set { popupBuscadorVisibleRS = value; InvokeAsync(StateHasChanged); } }
+    string[] ColumnasBuscador = null; /*{ "VALE", "FE_MOV", "CG_ART", "DES_ART", "DESPACHO", "LOTE", "SERIE" };*/
+    Pedidos[] ItemsABuscar;
+    ResumenStock[] buscarResumenStock;
+
+    private async Task onObjectSelected(Pedidos stockSel)
+    {
+        PopupBuscadorVisible = false;
+        //Get items del vale
+        var vale = stockSel.VALE;
+        StockEncabezado.Items = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriVale/{stockSel.VALE}");
+        //ItemsVale = new ObservableCollection<Stock>(data);
+
+        if (StockEncabezado.Items != null || StockEncabezado.Items.Count > 0)
+        {
+            await CargarVale();
+        }
+
+        //if (tipoEntidad == "Producto")
+        //{
+        //    selectedProducto = (Producto)obj;
+        //    Codigoi = selectedProducto.CG_PROD;
+        //    DescripcionPro = selectedProducto.DES_PROD;
+        //}
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected async Task AbrirVale()
+    {
+
+        var vale = StockEncabezado.VALE;
+        StockEncabezado.Items = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriVale/{vale}");
+
+        if (StockEncabezado.Items != null || StockEncabezado.Items.Count > 0)
+        {
+            await BuscarVales();
+        }
+        else
+        {
+            await CargarVale();
+        }
+    }
+
+    protected async Task BuscarVales()
+    {
+        ItemsABuscar = null;
+        PopupBuscadorVisible = true;
+        tituloBuscador = $"Listado de Vales";
+        ColumnasBuscador = new string[] { "VALE", "FE_MOV", "CG_ART", "DES_ART" };
+        var tipoo = StockEncabezado.TIPOO;
+        ItemsABuscar = await Http.GetFromJsonAsync<Pedidos[]>($"api/Stock/GetValesByTipo/{tipoo}");
+        if (ItemsABuscar == null)
+        {
+            ItemsABuscar = new List<Pedidos>().ToArray();
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    #endregion
+
     private async Task onGuardar()
     {
+        SpinnerVisible = true;
+        Genera genera;
+        if (abrioVale)
+        {
+            genera = await Http.GetFromJsonAsync<Genera>($"api/Genera/Reserva/VALE");
+            StockEncabezado.VALE = Convert.ToInt32(genera.VALOR1);
+        }
 
         await StockEncabezado.Items.ForEachAsync(async s =>
         {
+            s.VALE = StockEncabezado.VALE;
+            s.FE_MOV = StockEncabezado.FE_MOV;
+            s.VALE = StockEncabezado.VALE;
+            s.CG_PROVE = Cg_CLI_Cg_PROVE;
+            s.TIPOO = StockEncabezado.TIPOO;
             await onGuardarPedido(s);
 
         });
 
+
+        if (abrioVale)
+        {
+            await Http.GetFromJsonAsync<Genera>($"api/Genera/Libera/VALE");
+        }
+
+        SpinnerVisible = false;
+
+        await this.ToastObj.Show(new ToastModel
+        {
+            Title = "EXITO!",
+            Content = $"Vale {StockEncabezado.VALE} Guardado Correctamente.",
+            CssClass = "e-toast-success",
+            Icon = "e-success toast-icons",
+            ShowCloseButton = true,
+            ShowProgressBar = true
+        });
+
+        StockEncabezado = new();
     }
 
 
@@ -478,15 +717,11 @@
 
 
         //stock.NUMOCI = 0;
-        stock.FE_MOV = StockEncabezado.FE_MOV;
-        stock.VALE = StockEncabezado.VALE;
+
 
 
         //stock.CG_CLI = 0;
-        stock.CG_PROVE = Cg_CLI_Cg_PROVE;
 
-
-        stock.TIPOO = StockEncabezado.TIPOO;
         //TODO: controlar el TIPOO al guardar para setar cada campo
         if (stock.TIPOO == 5)
         {
@@ -504,13 +739,13 @@
             stock.OCOMPRA = StockEncabezado.OCOMPRA;
             //stock.DES_PROVE = DescripcionPro.Trim();
             @*stock.CG_DEP = SelectedDepositoSalida.CG_DEP;*@
-            stock.STOCK = -stock.STOCK;
-        }
+        stock.STOCK = -stock.STOCK;
+    }
 
-        if (stock.TIPOO == 9)//movim depos
-        {
-            stock.CG_DEP_ALT = StockEncabezado.CG_DEP_ALT;
-        }
+    if (stock.TIPOO == 9)//movim depos
+    {
+        stock.CG_DEP_ALT = StockEncabezado.CG_DEP_ALT;
+    }
 
     stock.ENTRREAL = DateTime.UtcNow;
     var esNuevoRegistro = stock.REGISTRO == null || stock.REGISTRO <= 0;
@@ -518,10 +753,7 @@
     if (esNuevoRegistro)
     {
         //TODO: RESERVAR VALE EN GENERA DEPENDIENTO EL TIPO DE OPERACION
-        Genera genera = await Http.GetFromJsonAsync<Genera>($"api/Genera/Reserva/VALE");
-        stock.VALE = Convert.ToInt32(genera.VALOR1);
         response = await Http.PostAsJsonAsync("api/Pedidos", stock);
-        genera = await Http.GetFromJsonAsync<Genera>($"api/Genera/Libera/VALE");
     }
     else
     {
@@ -576,15 +808,7 @@
             }
 
 
-            await this.ToastObj.Show(new ToastModel
-            {
-                Title = "EXITO!",
-                Content = "Vale Guardado Correctamente.",
-                CssClass = "e-toast-success",
-                Icon = "e-success toast-icons",
-                ShowCloseButton = true,
-                ShowProgressBar = true
-            });
+            
         }
 
 
@@ -592,207 +816,6 @@
     }
 
 }
-
-private async Task onProgramaSelected(Programa programaSel)
-{
-    List<Pedidos> lStock = new List<Pedidos>();
-    int registronegativo = 0;
-    var ItemsPrograma = await Http.GetFromJsonAsync<ItemAbastecimiento[]>($"api/Programa/GetAbastecimientoByOF/{programaSel.CG_ORDF}");
-    //Cargar los item de sp en los items de items para guardar vale
-    foreach (var item in ItemsPrograma)
-    {
-        registronegativo--;
-        Pedidos pedido = new();
-        //pedido.PEDIDO = item.PEDIDO;
-        pedido.CG_ORDF = programaSel.CG_ORDF;
-        StockEncabezado.CG_ORDF = programaSel.CG_ORDF;
-        //OCompra = (int)item.NUMERO;
-        pedido.CG_PROVE = 0;
-        Cg_CLI_Cg_PROVE = programaSel.CG_CLI;
-        //DescripcionPro = item.des;
-        pedido.CG_ART = item.CG_ART;
-        pedido.DES_ART = item.DES_ART;
-        pedido.UNID = item.UNID;
-        pedido.LOTE = item.LOTE;
-        pedido.SERIE = item.SERIE;
-        pedido.DESPACHO = item.DESPACHO;
-        pedido.REGISTRO = registronegativo;
-        lStock.Add(pedido);
-    }
-
-    StockEncabezado.Items = lStock;
-    PermiteAgregarItem = false;
-    PermiteEditarItem = true;
-    PermiteEliminarItem = true;
-}
-
-private async Task OnCompraSelected(Compra compraSel)
-{
-    //ItemsVale = new ObservableCollection<Stock>();
-    List<Pedidos> lStock = new List<Pedidos>();
-    int registronegativo = 0;
-    StockEncabezado.OCOMPRA = compraSel.NUMERO;
-
-    if (StockEncabezado.TIPOO == 5)
-    {
-        var ItemsCompras = await Http.GetFromJsonAsync<Compra[]>($"api/Compras/GetCompraByNumero/{compraSel.NUMERO}");
-
-        //Cargar los item de compras en los items de items para guardar vale
-
-        foreach (var item in ItemsCompras)
-        {
-            registronegativo--;
-            Pedidos pedido = new();
-            pedido.Proveedor = compraSel.ProveedorNavigation;
-            pedido.OCOMPRA = item.NUMERO;
-            pedido.CG_PROVE = item.NROCLTE;
-            Cg_CLI_Cg_PROVE = item.NROCLTE;
-            DescripcionPro = item.DES_PROVE;
-            pedido.CG_ART = item.CG_MAT;
-            pedido.DES_ART = item.DES_MAT;
-            pedido.MONEDA = item.MONEDA;
-            pedido.UNID = item.UNID;
-            //pedido.CG_ORDEN = item.CG_ORE
-            //Calcular stockA
-            pedido.STOCKA = item.AUTORIZADO;
-            pedido.STOCK = item.AUTORIZADO * item.CG_DEN;
-            pedido.IMPORTE1 = item.PRECIONETO * item.CG_DEN;
-
-
-            //datos del producto: exigeserie etc.
-            var prod = await Http.GetFromJsonAsync<Producto>($"api/Prod/{item.CG_MAT}");
-
-            pedido.EXIGEDESPACHO = prod.EXIGEDESPACHO;
-            pedido.EXIGESERIE = prod.EXIGESERIE;
-            pedido.EXIGELOTE = prod.EXIGELOTE;
-
-            pedido.REGISTRO = registronegativo;
-
-
-            lStock.Add(pedido);
-            StockEncabezado.Items = lStock;
-
-        }
-
-
-    }
-
-    if (StockEncabezado.TIPOO == 6)
-    {
-        //Devuelve con los items con su respectivo stock
-        StockEncabezado.Items = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriValeByOCParaDevol/{compraSel.NUMERO}");
-        //ItemsVale = new ObservableCollection<Stock>(data);
-
-        registronegativo = 0;
-        await StockEncabezado.Items.ForEachAsync(async stock =>
-        {
-            registronegativo--;
-            stock.REGISTRO = registronegativo;
-            stock.STOCK = Math.Abs((decimal)stock.STOCK);
-            await InvokeAsync(StateHasChanged);
-        });
-    }
-
-    //ItemsVale = new ObservableCollection<Stock>(lStock);
-    //ItemsVale = lStock.ToArray();
-
-    PermiteAgregarItem = StockEncabezado.TIPOO == 5;
-    PermiteEditarItem = true;
-    PermiteEliminarItem = true;
-}
-
-private async Task onResumenStockSelected(Pedidos stockSel)
-{
-    //ItemsVale = null;
-    PopupBuscadorVisible = false;
-    //Get items del vale
-    var vale = stockSel.VALE;
-    StockEncabezado.Items = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriVale/{stockSel.VALE}");
-    //ItemsVale = new ObservableCollection<Stock>(data);
-
-    if (StockEncabezado.Items != null || StockEncabezado.Items.Count > 0)
-    {
-        await CargarVale();
-    }
-
-    //if (tipoEntidad == "Producto")
-    //{
-    //    selectedProducto = (Producto)obj;
-    //    Codigoi = selectedProducto.CG_PROD;
-    //    DescripcionPro = selectedProducto.DES_PROD;
-    //}
-
-    await InvokeAsync(StateHasChanged);
-}
-
-#endregion
-
-#region "BUSCAR VALES"
-
-
-private bool popupBuscadorVisible = false;
-bool PopupBuscadorVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
-private bool popupBuscadorVisibleRS = false;
-bool PopupBuscadorVisibleRS { get => popupBuscadorVisibleRS; set { popupBuscadorVisibleRS = value; InvokeAsync(StateHasChanged); } }
-string[] ColumnasBuscador = null; /*{ "VALE", "FE_MOV", "CG_ART", "DES_ART", "DESPACHO", "LOTE", "SERIE" };*/
-Pedidos[] ItemsABuscar;
-ResumenStock[] buscarResumenStock;
-
-private async Task onObjectSelected(Pedidos stockSel)
-{
-    PopupBuscadorVisible = false;
-    //Get items del vale
-    var vale = stockSel.VALE;
-    StockEncabezado.Items = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriVale/{stockSel.VALE}");
-    //ItemsVale = new ObservableCollection<Stock>(data);
-
-    if (StockEncabezado.Items != null || StockEncabezado.Items.Count > 0)
-    {
-        await CargarVale();
-    }
-
-    //if (tipoEntidad == "Producto")
-    //{
-    //    selectedProducto = (Producto)obj;
-    //    Codigoi = selectedProducto.CG_PROD;
-    //    DescripcionPro = selectedProducto.DES_PROD;
-    //}
-
-    await InvokeAsync(StateHasChanged);
-}
-
-protected async Task AbrirVale()
-{
-
-    var vale = StockEncabezado.VALE;
-    StockEncabezado.Items = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriVale/{vale}");
-
-    if (StockEncabezado.Items != null || StockEncabezado.Items.Count > 0)
-    {
-        await BuscarVales();
-    }
-    else
-    {
-        await CargarVale();
-    }
-}
-
-protected async Task BuscarVales()
-{
-    ItemsABuscar = null;
-    PopupBuscadorVisible = true;
-    tituloBuscador = $"Listado de Vales";
-    ColumnasBuscador = new string[] { "VALE", "FE_MOV", "CG_ART", "DES_ART" };
-    var tipoo = StockEncabezado.TIPOO;
-    ItemsABuscar = await Http.GetFromJsonAsync<Pedidos[]>($"api/Stock/GetValesByTipo/{tipoo}");
-    if (ItemsABuscar == null)
-    {
-        ItemsABuscar = new List<Pedidos>().ToArray();
-    }
-    await InvokeAsync(StateHasChanged);
-}
-
-#endregion
 
 
 

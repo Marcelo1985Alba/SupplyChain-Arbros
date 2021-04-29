@@ -15,7 +15,7 @@ else
                 <SfGrid @ref="@Grid" DataSource="@DataSource" AllowExcelExport="true" AllowPaging="true" ID="gridEditStock"
                         GridLines="GridLine.Both" Locale="es-Ar" Height="100%" Width="100%" EnablePersistence="true"
                         AllowResizing="true" AllowSelection="true" AllowSorting="true" AllowTextWrap="false">
-                    <GridPageSettings PageCount="4" PageSize="4"></GridPageSettings>
+                    @*<GridPageSettings PageCount="4" PageSize="4"></GridPageSettings>*@
                     <GridEvents OnBeginEdit="@(async (ped)=> await BeginEditHandler(ped))" OnActionComplete="OnActionComplete "
                                 TValue="Pedidos"></GridEvents>
                     <GridEditSettings AllowAdding="PermiteAgregar" AllowEditing="PermiteEditar" AllowDeleting="PermiteEliminar"
