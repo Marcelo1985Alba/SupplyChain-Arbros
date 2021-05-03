@@ -2,6 +2,8 @@
 @using System.ComponentModel.DataAnnotations.Schema;
 @inject HttpClient Http
 @using System.Text.Json
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Buttons
 
 @if (DataSource == null)
 {
@@ -14,63 +16,85 @@ else
             <div class="row">
                 <SfGrid @ref="@Grid" DataSource="@DataSource" AllowExcelExport="true" AllowPaging="true" ID="gridEditStock"
                         GridLines="GridLine.Both" Locale="es-Ar" Height="100%" Width="100%" EnablePersistence="true"
-                        AllowResizing="true" AllowSelection="true" AllowSorting="true" AllowTextWrap="false">
+                        AllowResizing="true" AllowSelection="true" AllowSorting="true" AllowTextWrap="false"
+                        AllowReordering="true"
+                        Toolbar="@(new List<string>() { "Add"})">
                     @*<GridPageSettings PageCount="4" PageSize="4"></GridPageSettings>*@
                     <GridEvents OnBeginEdit="@(async (ped)=> await BeginEditHandler(ped))" OnActionComplete="OnActionComplete "
                                 TValue="Pedidos"></GridEvents>
                     <GridEditSettings AllowAdding="PermiteAgregar" AllowEditing="PermiteEditar" AllowDeleting="PermiteEliminar"
                                       Mode="EditMode.Dialog">
 
-                        <HeaderTemplate >
-                                <span>Detalle de Producto</span>
-                            </HeaderTemplate>
-                        <Template >
+                        <HeaderTemplate>
+                            <span class="text-black-50">Detalle de Producto</span>
+                        </HeaderTemplate>
+                        <Template>
                             @{
 
                                 stock = (context as Pedidos);
-                        <div id="dialogo">
-                           
-                            <div class="form-row">
-                                <div class="form-group col-md-3">
-                                    <label class="col-form-label">Codigo Producto :</label>
-                                    <SfTextBox @bind-Value="@stock.CG_ART" Readonly="true"></SfTextBox>
-                                    <ValidationMessage For="@(() => stock.CG_ART)"></ValidationMessage>
-                                </div>
-                                <div class="form-group col-md-9">
-                                    <label class="col-form-label">Descripcion Producto :</label>
-                                    <SfTextBox @bind-Value="@stock.DES_ART" Readonly="true"></SfTextBox>
-                                    <ValidationMessage For="@(() => stock.DES_ART)"></ValidationMessage>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-2">
-                                    <label class="col-form-label">Cantidad :</label>
-                                    <SfNumericTextBox @bind-Value="@stock.STOCK" Decimals="2"></SfNumericTextBox>
-                                    <ValidationMessage For="@(() => stock.STOCK)"></ValidationMessage>
-                                </div>
-                                <div class="form-group col-md-1">
-                                    <label class="col-form-label">Unidad :</label>
-                                    <SfTextBox @bind-Value="@stock.UNID" Readonly="true"></SfTextBox>
-                                    <ValidationMessage For="@(() => stock.UNID)"></ValidationMessage>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label class="col-form-label">Serie :</label>
-                                    <SfTextBox @bind-Value="@stock.SERIE"></SfTextBox>
-                                    <ValidationMessage For="@(() => stock.SERIE)"></ValidationMessage>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label class="col-form-label">Depacho :</label>
-                                    <SfTextBox @bind-Value="@stock.DESPACHO"></SfTextBox>
-                                    <ValidationMessage For="@(() => stock.DESPACHO)"></ValidationMessage>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label class="col-form-label">Lote :</label>
-                                    <SfTextBox @bind-Value="@stock.LOTE"></SfTextBox>
-                                    <ValidationMessage For="@(() => stock.LOTE)"></ValidationMessage>
-                                </div>
+                                <div id="dialogo">
 
-                            </div>
-                        </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-2">
+                                            <label class="col-form-label">Codigo Producto</label>
+                                            <SfTextBox @bind-Value="@stock.CG_ART" Readonly="true"></SfTextBox>
+                                            <ValidationMessage For="@(() => stock.CG_ART)"></ValidationMessage>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="col-form-label">Descripcion Producto</label>
+                                            <SfTextBox @bind-Value="@stock.DES_ART" Readonly="true"></SfTextBox>
+                                            <ValidationMessage For="@(() => stock.DES_ART)"></ValidationMessage>
+                                        </div>
+                                        
+                                        <div class="form-group col-md-1 mt-4">
+                                            <SfButton HtmlAttributes="@HtmlAttribute" OnClick="@(async ()=> await BuscarItem())" 
+                                                                                Disabled="@(stock.CG_ART != "")"
+                                                                                Content="" IconCss="fa fa-search"/>
+                                        </div>
+                                        <div class="form-group col-md-5">
+                                            <label class="col-form-label">Déposito Ingreso</label>
+                                            <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP"
+                                                            TValue="int" ID="CG_DEP" DataSource="@depositos">
+                                                <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP">
+
+                                                </DropDownListFieldSettings>
+                                            </SfDropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-2">
+                                            <label class="col-form-label">Cantidad</label>
+                                            <SfNumericTextBox @bind-Value="@stock.STOCK" Decimals="2"></SfNumericTextBox>
+                                            <ValidationMessage For="@(() => stock.STOCK)"></ValidationMessage>
+                                        </div>
+                                        <div class="form-group col-md-1">
+                                            <label class="col-form-label">Unidad</label>
+                                            <SfTextBox @bind-Value="@stock.UNID" Readonly="true"></SfTextBox>
+                                            <ValidationMessage For="@(() => stock.UNID)"></ValidationMessage>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label class="col-form-label">Serie</label>
+                                            <SfTextBox @bind-Value="@stock.SERIE"></SfTextBox>
+                                            <ValidationMessage For="@(() => stock.SERIE)"></ValidationMessage>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label class="col-form-label">Depacho</label>
+                                            <SfTextBox @bind-Value="@stock.DESPACHO"></SfTextBox>
+                                            <ValidationMessage For="@(() => stock.DESPACHO)"></ValidationMessage>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label class="col-form-label">Lote</label>
+                                            <SfTextBox @bind-Value="@stock.LOTE"></SfTextBox>
+                                            <ValidationMessage For="@(() => stock.LOTE)"></ValidationMessage>
+                                        </div>
+                                        <div class="form-group col-md-2 mt-5">
+                                            @*<CheckBox LabelText="Cierra Item en OC" IsChecked="@stock.CERRAROC"/>*@
+                                            <Syncfusion.Blazor.Buttons.SfCheckBox Label="Cierra Item en OC" 
+                                                                                  @bind-Checked ="@stock.CERRAROC" />
+                                        </div>
+
+                                    </div>
+                                </div>
 
 
                             }
@@ -100,6 +124,11 @@ else
                         <GridColumn Field="@nameof(Pedidos.DESPACHO)" HeaderText="Despacho" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.SERIE)" HeaderText="Serie" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.LOTE)" HeaderText="Lote" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.CG_DEP)" HeaderText="Deposito" AutoFit="true">
+
+                        </GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.CERRAROC)" HeaderText="Cierra OC" DisplayAsCheckBox="true" 
+                                    AutoFit="true" Visible="@(stock?.TIPOO == 5)"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.REGISTRO)" IsPrimaryKey="true" Visible="false"></GridColumn>
                     </GridColumns>
                 </SfGrid>
@@ -113,16 +142,16 @@ else
         onObjetoSeleccionado="@(async(o)=> await onResumenStockSelected(o))" />*@
 
 
-    @*<BuscadorEmergente @ref="BuscadorProducto" Titulo=@tituloBuscador Visible="@PopupBuscadorProdVisible"
-        DataSource="@DataSourceProductos" Columnas="@ColumnasBuscador" onObjetoSeleccionado="onpro"  />*@
+    <BuscadorEmergente TItem="Pedidos" @ref="BuscadorProducto" Titulo=@tituloBuscador
+        DataSource="@DataSource" Columnas="@(new string[] { "CG_ART", "DES_ART"})" onObjetoSeleccionado="OnSelectedItem"  />
 
 
 }
 
 @code {
     //BuscadorEmergente<ResumenStock> BuscadorResumenStock;
-    //BuscadorEmergente<Producto> BuscadorProducto;
-    Pedidos stock;
+    BuscadorEmergente<Pedidos> BuscadorProducto;
+    protected Pedidos stock;
 
     Producto[] DataSourceProductos;
     [Parameter] public string Titulo { get; set; } = null!;
@@ -135,7 +164,10 @@ else
     [Parameter] public EventCallback<Pedidos> onGuardar { get; set; }
     [CascadingParameter] public PedidoEncabezado RegistroGenerado { get; set; }
 
-
+    private Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
+    {
+         {"type", "button" }
+    };
     SfGrid<Pedidos> Grid;
     Unidades[] Unidades = new List<Unidades>().ToArray();
     private Unidades selectedUnidad = null;
@@ -195,9 +227,6 @@ else
             //: ValidationResult.Success;
         }
     }
-
-
-
 
     public class RequireWhenExigeDespachoAttribute : ValidationAttribute
     {
@@ -329,17 +358,24 @@ else
 
     FormEditContext EditContext = null;
 
+    protected List<Deposito> depositos = new List<Deposito>();
+    protected override async Task OnInitializedAsync()
+    {
+        depositos = await Http.GetFromJsonAsync<List<Deposito>>("api/Deposito");
+        await InvokeAsync(StateHasChanged);
+    }
+
     public async Task BeginEditHandler(BeginEditArgs<Pedidos> args)
     {
         var pedido = args.RowData;
 
-        EditContext = new FormEditContext(pedido);
-        EditContext.Tipoo = RegistroGenerado.TIPOO;
+        //EditContext = new FormEditContext(pedido);
+        //EditContext.Tipoo = RegistroGenerado.TIPOO;
 
-        EditContext.Cantidad = 0;
+        //EditContext.Cantidad = 0;
 
         //ir al servidor y cargar el stock del item
-        if (EditContext.Tipoo == 6 || EditContext.Tipoo == 9) //DEVolucion y Momvim entre deposito
+        if (pedido.TIPOO == 6 || pedido.TIPOO == 9) //DEVolucion y Momvim entre deposito
         {
             if (pedido == null) return;
 
@@ -361,7 +397,7 @@ else
         }
 
 
-        EditContext.StateHasChanged += () => { InvokeAsync(StateHasChanged); };
+        //EditContext.StateHasChanged += () => { InvokeAsync(StateHasChanged); };
 
         stock = pedido;
     }
@@ -407,25 +443,12 @@ else
 
         if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
         {
-            //await onGuardar.InvokeAsync(Args.Data);
-            //Args.Data.REGISTRO = RegistroGenerado.REGISTRO;
-            //if (RegistroGenerado.TIPOO == 5)
-            //{
-            //    //Args.Data.IMPORTE1 = RegistroGenerado.IMPORTE1;
-            //    //Args.Data.IMPORTE2 = RegistroGenerado.IMPORTE2;
-            //    //Args.Data.IMPORTE3 = RegistroGenerado.IMPORTE3;
-            //    //Args.Data.IMPORTE4 = RegistroGenerado.IMPORTE4;
-            //    //Args.Data.IMPORTE6 = RegistroGenerado.IMPORTE6;
-            //}
-
 
             await Grid.RefreshColumns();
             Grid.Refresh();
             await Grid.RefreshHeader();
         }
     }
-
-
 
 
     void OnRowRemoving(Pedidos pedido)
@@ -438,7 +461,7 @@ else
     private bool popupBuscadorVisible = false;
     bool PopupBuscadorStockVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
     bool PopupBuscadorProdVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
-    string[] ColumnasBuscador = new string[] { "CG_PROD", "DES_PROD" }; /*,"DES_ART","DESPACHO", "LOTE","SERIE"*/
+    string[] ColumnasBuscador = new string[] { "CG_MAT"};
     ResumenStock[] Items;
 
     protected async Task Buscar()
@@ -555,10 +578,14 @@ else
     }
 
 
-
-    private async Task onListResumenStockSelected(List<ResumenStock> listaResumenStock)
+    private async Task BuscarItem()
     {
+        await BuscadorProducto.ShowAsync();
+    }
 
+    private async Task OnSelectedItem(Pedidos item)
+    {
+        await BuscadorProducto.HideAsync();
     }
 
 
@@ -600,7 +627,7 @@ else
     }
 }
 <style>
-/*    #dialogo {
+    /*    #dialogo {
         min-height: 400px;
     }*/
 

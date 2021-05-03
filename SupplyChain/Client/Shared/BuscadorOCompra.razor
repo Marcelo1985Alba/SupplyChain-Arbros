@@ -31,7 +31,7 @@
     [Parameter] public bool MostraBotonBusqueda { get; set; } = false;
     [Parameter] public bool DeshabilitaBotonBusqueda { get; set; } = true;
     [Parameter] public bool MostrarSpin { get; set; } = true;
-    [Parameter] public EventCallback<Compra> OnOCSeleccionada { get; set; }
+    [Parameter] public EventCallback<List<Compra>> OnOCSeleccionada { get; set; }
     [Parameter] public int? CodigoDeposito { get; set; }
     [Parameter] public string Remito { get; set; } = "0000-00000000";
     [Parameter] public int? Tipoo { get; set; }
@@ -50,21 +50,6 @@
         //Avisar con un cartel que se debe seleccionar deposito
         if (Tipoo == 5 || Tipoo == 6)
         {
-            if (CodigoDeposito == null)
-            {
-                //toastService.ShowToast("Seleccione Deposito Ingreso", TipoAlerta.Info);
-                await this.ToastObj.Show(new ToastModel
-                {
-                    Title = "AVISO!",
-                    Content = "Seleccione Deposito Ingreso",
-                    CssClass = "e-toast-warning",
-                    Icon = "e-warning toast-icons",
-                    ShowCloseButton = true,
-                    ShowProgressBar = true
-                });
-                return;
-            }
-
             if (string.IsNullOrEmpty(Remito) || Remito.Trim() == "﻿0000-00000000" || Remito.Length > 13)
             {
                 Console.WriteLine(Remito);
@@ -110,9 +95,10 @@
 
     public async Task EnviarObjetoSeleccionado(Compra compra)
     {
-        var oc = (Compra)compra;
+
+        var compras = ItemsABuscar.Where(c => c.NUMERO == compra.NUMERO).ToList();
         await Buscador.HideAsync();
-        await OnOCSeleccionada.InvokeAsync(oc);
+        await OnOCSeleccionada.InvokeAsync(compras);
     }
 
 

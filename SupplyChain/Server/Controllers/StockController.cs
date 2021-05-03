@@ -203,7 +203,16 @@ namespace SupplyChain.Server.Controllers
             try
             {
                 await _context.SaveChangesAsync();
-                //TODO: MODIFICAR NUMERO EN GENERA
+
+                if (stock.CERRAROC)
+                {
+                    var compra = await _context.Compras
+                        .Where(c => c.CG_MAT == stock.CG_ART && c.NUMERO == stock.OCOMPRA).FirstOrDefaultAsync();
+
+                    compra.FE_CIERRE = DateTime.Now;
+                    _context.Entry(compra).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
             }
             catch (DbUpdateException ex)
             {

@@ -5,7 +5,7 @@
 <SfDropDownList TValue="int" TItem="Deposito" Placeholder="Seleccione Deposito..." Readonly="@EsSoloLectura" 
                 @bind-Value="DepositoSeleccionado">
     <SfDataManager Url="api/Deposito" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>
-    <DropDownListEvents TItem="Deposito" TValue="int" ValueChange="SelectedDepositoChangedSync" ></DropDownListEvents>
+    @*<DropDownListEvents TItem="Deposito" TValue="int" ValueChange="SelectedDepositoChangedSync" ></DropDownListEvents>*@
     <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP"></DropDownListFieldSettings>
 </SfDropDownList>
 

@@ -24,6 +24,8 @@ namespace SupplyChain
         public bool EXIGELOTE { get; set; } = false;
         [NotMapped]
         public bool EXIGESERIE { get; set; } = false;
+        [NotMapped]
+        public bool CERRAROC { get; set; } = false;
 
         /* 
          * AGREGO MODELO RESUMENSTOCK PARA VALIDAR QUE LA CANTIDAD INGRESADA NO SUPERE A LA DEL STOCK: 
@@ -89,7 +91,7 @@ namespace SupplyChain
         public string DIRENT { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Tipo insumo")]
         public int? CG_ORDEN { get; set; } = 0;
-        [ColumnaGridViewAtributo(Name = "Código artículo")]
+        [ColumnaGridViewAtributo(Name = "Código artículo"), Required(ErrorMessage ="ingresar insumo")]
         public string CG_ART { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Nombre artículo")]
         public string DES_ART { get; set; } = "";

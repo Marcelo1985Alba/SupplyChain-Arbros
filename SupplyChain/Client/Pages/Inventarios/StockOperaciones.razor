@@ -13,16 +13,16 @@
     <SfToast ID="toast_default" @ref="ToastObj">
         <ToastPosition X="Center" Y="Top"></ToastPosition>
     </SfToast>
-    <SfSpinner @bind-Visible="@SpinnerVisible" Label="Guardando..." Target="#formulario" Size="100" CssClass="e-spin-overlay">
+    <SfSpinner @bind-Visible="@SpinnerVisible" Label="Guardando..." Target="#formulario" Size="200" Type="SpinnerType.Bootstrap">
     </SfSpinner>
     <div class="content-wrapper" id="formulario">
-        <div class="form-inline">
-            <h4 class="pt-3 text-left">
-                Operaciones de Stock a Realizar
-                @*<small class="text-info"> <strong>@StockEncabezado.TIRE?.Descrip</strong></small>*@
-            </h4>
+        <!--<div class="form-inline">
+            <!--<h4 class="pt-3 text-left">
+                Operaciones de Stock a Realizar-->-->
+                <!--@*<small class="text-info"> <strong>@StockEncabezado.TIRE?.Descrip</strong></small>*@-->
+            <!--</h4>-->
 
-        </div>
+        <!--</div>-->
         <hr />
         <EditForm Model="@StockEncabezado" OnValidSubmit="@(async()=> await onGuardar())">
             @*<DataAnnotationsValidator />*@
@@ -69,7 +69,7 @@
                         <label class="col-form-label">O. de Compra:</label>
                         <BuscadorOCompra EsSoloLectura="@OCSoloLectura" DeshabilitaBotonBusqueda="@DeshabilitaBotonOC"
                                          MostraBotonBusqueda="@MostrarBotorOC" MostrarSpin="false" HtmlAttr="@HtmlAttribute"
-                                         CodigoDeposito="@StockEncabezado.CG_DEP" Remito="@StockEncabezado.REMITO"
+                                         Remito="@StockEncabezado.REMITO"
                                          Tipoo="StockEncabezado.TIPOO"
                                          Valor="@((int)StockEncabezado.OCOMPRA)" OnOCSeleccionada="OnCompraSelected" />
                     </div>
@@ -92,29 +92,33 @@
                     </div>
                 }
 
-                <div class="form-group col-lg-2 col-md-6 col-sm-12">
-                    <label class="col-form-label">@labelClienteProveedor</label>
-                    <SfNumericTextBox ID="Cg_CLI_Cg_PROVE" TValue="int?" @bind-Value="@Cg_CLI_Cg_PROVE" Readonly="true" ShowSpinButton="false">
+                @if (StockEncabezado.TIPOO == 5)
+                {
+                    <div class="form-group col-lg-2 col-md-6 col-sm-12">
+                        <label class="col-form-label">@labelClienteProveedor</label>
+                        <SfNumericTextBox ID="Cg_CLI_Cg_PROVE" TValue="int?" @bind-Value="@Cg_CLI_Cg_PROVE" Readonly="true" ShowSpinButton="false">
 
-                    </SfNumericTextBox>
-                </div>
-                <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                    <label class="col-form-label">Razon Social:</label>
-                    <SfTextBox ID="DescripcionPro" ShowClearButton="true"
-                               @bind-Value="@DescripcionPro" Readonly="true">
+                        </SfNumericTextBox>
+                    </div>
+                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                        <label class="col-form-label">Razon Social:</label>
+                        <SfTextBox ID="DescripcionPro" ShowClearButton="true"
+                                   @bind-Value="@DescripcionPro" Readonly="true">
 
-                    </SfTextBox>
+                        </SfTextBox>
 
-                </div>
+                    </div>
+                }
+
 
             </div>
             <div class="form-row">
 
-                <div class="form-group col-6">
+                @*<div class="form-group col-6">
                     <label class="col-form-label">Depósito de Ingreso</label>
                     <ComboDeposito DepositoSeleccionado="@StockEncabezado.CG_DEP" EsSoloLectura="@DepositoIngresoSoloLectura"
                                    OnSelectedDepositoChanged="SelectedDepositoIngresoChanged" />
-                </div>
+                </div>*@
                 @*<div class="form-group col-6">
                         <label class="col-form-label">Depósito de Salida</label>
                         <ComboDeposito DepositoSeleccionado="@selectedDepositoSalida" EsSoloLectura="@DepositoSalidaSoloLectura"
@@ -128,7 +132,8 @@
             {
                 <div class="form-row">
                     <div class="form-group col-6">
-                        <BuscadorResumenStock MostraBotonBusqueda="puedeBuscarStock" HabilitaBotonBusqueda="!puedeBuscarStock" MostrarSpin="false"
+                        <BuscadorResumenStock MostraBotonBusqueda="puedeBuscarStock" HabilitaBotonBusqueda="!puedeBuscarStock" 
+                                              MostrarSpin="false" HtmlAtrr="HtmlAttribute"
                                               OnRSSeleccionada="onResumenStockSelected" TextoButon="Buscar Stock" />
 
                     </div>
@@ -158,10 +163,6 @@
 <BuscadorEmergente TItem="Pedidos" Titulo=@tituloBuscador Visible="@PopupBuscadorVisible" DataSource="@ItemsABuscar"
                    Columnas="@ColumnasBuscador" onObjetoSeleccionado="onObjectSelected" />
 
-
-
-
-
 @code {
 
     [CascadingParameter] public MainLayout MainLayout { get; set; }
@@ -176,12 +177,13 @@
     private bool DepositoIngresoSoloLectura = true;
     protected bool abrioVale = false;
     private Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
-{
+    {
          {"type", "button" }
     };
 
-
     Producto[] Productos = null;
+    Compra[] ItemsCompras = Array.Empty<Compra>();
+    Compra Compra = new();
     //Deposito[] Depositos = null;
     //Pedidos[] ItemsVale = null;
 
@@ -232,11 +234,15 @@
 
     protected override async Task OnInitializedAsync()
     {
+
+
         MainLayout.Titulo = "Administracion de Stock";
 
         await GetVale();
 
         StockEncabezado.Items = new List<Pedidos>();
+
+
 
 
 
@@ -279,7 +285,11 @@
             DepositoIngresoSoloLectura = false;
             labelClienteProveedor = "Proveedor:";
             PermiteAgregarItem = true;
-            StockEncabezado.CG_DEP = 4;
+            //StockEncabezado.CG_DEP = 4;
+            foreach (var item in StockEncabezado.Items)
+            {
+                item.CG_DEP = 4;
+            }
         }
 
         if (StockEncabezado.TIPOO == 6)//dev prove
@@ -301,18 +311,18 @@
         {
             puedeBuscarStock = true;
             DepositoIngresoSoloLectura = false;
-            if (StockEncabezado?.CG_DEP == null || StockEncabezado?.CG_DEP == 0)
-            {
-                //toastService.ShowToast("Seleccionar Deposito de Ingreso", TipoAlerta.Info);
-                await this.ToastObj.Show(new ToastModel
-                {
-                    Title = "AVISO!",
-                    Content = "Órden sin indicar cantidad fabricada. Se continuará igualmente.",
-                    CssClass = "e-toast-warning",
-                    Icon = "e-warning toast-icons"
-                });
-                //return;
-            }
+            //if (StockEncabezado?.CG_DEP == null || StockEncabezado?.CG_DEP == 0)
+            //{
+            //    //toastService.ShowToast("Seleccionar Deposito de Ingreso", TipoAlerta.Info);
+            //    await this.ToastObj.Show(new ToastModel
+            //    {
+            //        Title = "AVISO!",
+            //        Content = "Órden sin indicar cantidad fabricada. Se continuará igualmente.",
+            //        CssClass = "e-toast-warning",
+            //        Icon = "e-warning toast-icons"
+            //    });
+            //    //return;
+            //}
 
         }
 
@@ -341,7 +351,11 @@
 
         if (StockEncabezado.TIPOO == 6) //DEVOL prove
         {
-            StockEncabezado.CG_DEP = deposito.CG_DEP;
+            //StockEncabezado.CG_DEP = deposito.CG_DEP;
+            StockEncabezado.Items.ForEach(s=>
+            {
+                s.CG_DEP = deposito.CG_DEP;
+            });
         }
     }
     void SelectedDepositoIngresoChanged(Deposito deposito)
@@ -349,7 +363,11 @@
         //selectedDepositoIngreso = deposito;
         if (StockEncabezado.TIPOO == 5) //RECEP prove
         {
-            StockEncabezado.CG_DEP = deposito.CG_DEP;
+            //StockEncabezado.CG_DEP = deposito.CG_DEP;
+            StockEncabezado.Items.ForEach(s =>
+            {
+                s.CG_DEP = deposito.CG_DEP;
+            });
         }
 
         if (StockEncabezado.TIPOO == 9) //MOVIM ENTRE DEP
@@ -365,7 +383,7 @@
         StockEncabezado.VALE = StockEncabezado.Items[0].VALE;
         StockEncabezado.FE_MOV = StockEncabezado.Items[0].FE_MOV;
         //depos: ver cual campo es ingreso y salida: tal vez depende segun el tipo de operacion
-        StockEncabezado.CG_DEP = StockEncabezado.Items[0].CG_DEP;
+        //StockEncabezado.CG_DEP = StockEncabezado.Items[0].CG_DEP;
         //selectedDepositoIngreso = Depositos.Where(d => d.CG_DEP == ItemsVale[0].CG_DEP).FirstOrDefault();
         StockEncabezado.CG_ORDF = (int)StockEncabezado.Items[0].CG_ORDF;
         StockEncabezado.OCOMPRA = StockEncabezado.Items[0].OCOMPRA;
@@ -501,24 +519,24 @@
         PermiteEliminarItem = true;
     }
 
-    private async Task OnCompraSelected(Compra compraSel)
+    private async Task OnCompraSelected(List<Compra> lcompraSel)
     {
         //ItemsVale = new ObservableCollection<Stock>();
         List<Pedidos> lStock = new List<Pedidos>();
         int registronegativo = 0;
-        StockEncabezado.OCOMPRA = compraSel.NUMERO;
+        StockEncabezado.OCOMPRA = lcompraSel[0].NUMERO;
 
         if (StockEncabezado.TIPOO == 5)
         {
-            var ItemsCompras = await Http.GetFromJsonAsync<Compra[]>($"api/Compras/GetCompraByNumero/{compraSel.NUMERO}");
+            //ItemsCompras = await Http.GetFromJsonAsync<Compra[]>($"api/Compras/GetCompraByNumero/{compraSel.NUMERO}");
 
             //Cargar los item de compras en los items de items para guardar vale
 
-            foreach (var item in ItemsCompras)
+            foreach (var item in lcompraSel)
             {
                 registronegativo--;
                 Pedidos pedido = new();
-                pedido.Proveedor = compraSel.ProveedorNavigation;
+                pedido.Proveedor = lcompraSel[0].ProveedorNavigation;
                 pedido.OCOMPRA = item.NUMERO;
                 pedido.CG_PROVE = item.NROCLTE;
                 Cg_CLI_Cg_PROVE = item.NROCLTE;
@@ -527,7 +545,7 @@
                 pedido.DES_ART = item.DES_MAT;
                 pedido.MONEDA = item.MONEDA;
                 pedido.UNID = item.UNID;
-                //pedido.CG_ORDEN = item.CG_ORE
+                pedido.CG_DEP = 4;
                 //Calcular stockA
                 pedido.STOCKA = item.AUTORIZADO;
                 pedido.STOCK = item.AUTORIZADO * item.CG_DEN;
@@ -555,7 +573,7 @@
         if (StockEncabezado.TIPOO == 6)
         {
             //Devuelve con los items con su respectivo stock
-            StockEncabezado.Items = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriValeByOCParaDevol/{compraSel.NUMERO}");
+            StockEncabezado.Items = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriValeByOCParaDevol/{lcompraSel[0].NUMERO}");
             //ItemsVale = new ObservableCollection<Stock>(data);
 
             registronegativo = 0;
@@ -571,7 +589,7 @@
         //ItemsVale = new ObservableCollection<Stock>(lStock);
         //ItemsVale = lStock.ToArray();
 
-        PermiteAgregarItem = StockEncabezado.TIPOO == 5;
+        PermiteAgregarItem = true;
         PermiteEditarItem = true;
         PermiteEliminarItem = true;
     }
@@ -696,7 +714,6 @@
             await Http.GetFromJsonAsync<Genera>($"api/Genera/Libera/VALE");
         }
 
-        SpinnerVisible = false;
 
         await this.ToastObj.Show(new ToastModel
         {
@@ -709,6 +726,7 @@
         });
 
         StockEncabezado = new();
+        SpinnerVisible = false;
     }
 
 
@@ -730,7 +748,7 @@
             stock.OCOMPRA = StockEncabezado.OCOMPRA;
             //stock.DES_PROVE = DescripcionPro.Trim();
             stock.REMITO = StockEncabezado.REMITO;
-            stock.CG_DEP = StockEncabezado.CG_DEP;
+            //stock.CG_DEP = StockEncabezado.CG_DEP;
         }
 
         if (stock.TIPOO == 6)
@@ -807,8 +825,8 @@
                 });
             }
 
-
             
+
         }
 
 

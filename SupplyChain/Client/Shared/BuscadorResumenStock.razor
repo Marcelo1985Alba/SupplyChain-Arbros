@@ -4,9 +4,9 @@
     <div class="col-6">
         @if (MostraBotonBusqueda)
         {
-            <SfButton OnClick="@(async (e)=> await BuscarStock())" CssClass="" IsPrimary="true"
+            <SfButton HtmlAttributes="@HtmlAtrr" OnClick="@(async (e)=> await BuscarStock())" CssClass="" IsPrimary="true"
                       IconCss="fa fa-search" Disabled="@HabilitaBotonBusqueda">@TextoButon</SfButton>
-                }
+         }
     </div>
 
 </div>
@@ -24,6 +24,7 @@
     [Parameter] public bool HabilitaBotonBusqueda { get; set; } = false;
     [Parameter] public bool MostrarSpin { get; set; } = true;
     [Parameter] public EventCallback<ResumenStock> OnRSSeleccionada { get; set; }
+    [Parameter] public Dictionary<string, object> HtmlAtrr { get; set; } = new Dictionary<string, object>();
 
     private ResumenStock[] ItemsABuscar = null;
     private string[] ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE" };

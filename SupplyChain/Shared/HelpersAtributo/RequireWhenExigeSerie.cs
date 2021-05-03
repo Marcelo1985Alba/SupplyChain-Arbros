@@ -16,7 +16,7 @@ namespace SupplyChain.Shared.HelpersAtributo
 
             var serie = value as string;
             return string.IsNullOrWhiteSpace(serie)
-                ? new ValidationResult("Ingresar Serie: el insumo exige despacho")
+                ? new ValidationResult("Ingresar Serie: el insumo exige serie")
                 : ValidationResult.Success;
         }
     }

@@ -218,6 +218,15 @@ namespace SupplyChain
                 stock.Proveedor = null;
                 _context.Pedidos.Add(stock);
                 await _context.SaveChangesAsync();
+                if (stock.CERRAROC)
+                {
+                    var compra = await _context.Compras
+                        .Where(c => c.CG_MAT == stock.CG_ART && c.NUMERO == stock.OCOMPRA).FirstOrDefaultAsync();
+
+                    compra.FE_CIERRE = DateTime.Now;
+                    _context.Entry(compra).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
                 await generaController.LiberaByCampo("REGSTOCK");
             }
             catch (DbUpdateException ex)

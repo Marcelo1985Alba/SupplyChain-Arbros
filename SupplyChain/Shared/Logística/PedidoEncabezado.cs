@@ -16,7 +16,7 @@ namespace SupplyChain.Shared
         public int CG_ORDF { get; set; } = 0;
         [RequireRemito]
         public string REMITO { get; set; } = "0000-00000000";
-        public int CG_DEP { get; set; } = 0;
+        //public int CG_DEP { get; set; } = 0;
         public int CG_DEP_ALT { get; set; } = 0;
         public int VOUCHER { get; set; } = 0;
         [ValidateComplexType]
