@@ -32,7 +32,7 @@ namespace SupplyChain.Pages.Area
         "Print",
         new Syncfusion.Blazor.Navigations.ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
         "ExcelExport"
-    };
+        };
 
         protected override async Task OnInitializedAsync()
         {
