@@ -218,6 +218,15 @@ namespace SupplyChain
                 stock.Proveedor = null;
                 _context.Pedidos.Add(stock);
                 await _context.SaveChangesAsync();
+                if (stock.CERRAROC)
+                {
+                    var compra = await _context.Compras
+                        .Where(c => c.CG_MAT == stock.CG_ART && c.NUMERO == stock.OCOMPRA).FirstOrDefaultAsync();
+
+                    compra.FE_CIERRE = DateTime.Now;
+                    _context.Entry(compra).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
                 await generaController.LiberaByCampo("REGSTOCK");
             }
             catch (DbUpdateException ex)
@@ -322,6 +331,34 @@ namespace SupplyChain
             }
 
             return Ok(stock);
+        }
+
+
+        [HttpDelete("{vale}")]
+        public async Task<IActionResult> DeleteByVale(int vale)
+        {
+            var pedidos = await _context.Pedidos.Where(p => p.VALE == vale).ToListAsync();
+            if (pedidos is null || pedidos.Count == 0)
+            {
+                return NotFound();
+            }
+
+            foreach (var item in pedidos)
+            {
+                item.STOCK = 0;
+                item.AVISO = "VALE ANULADO";
+                _context.Entry(item).State = EntityState.Modified;
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         private bool RegistroExists(decimal? registro)

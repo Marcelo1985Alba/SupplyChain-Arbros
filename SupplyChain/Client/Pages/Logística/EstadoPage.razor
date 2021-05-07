@@ -3,47 +3,48 @@
 @using Syncfusion.Blazor.Kanban
 @using System.Diagnostics
 @inherits SupplyChain.Pages.Modelos.EstadoPageBase
+<SfSpinner @ref="spinnerRef" @bind-Visible="@SpinnerVisible" Label="Cargando..." Target="#logisticaKanban" Size="200" Type="SpinnerType.Bootstrap"/>
 
-<div>
-    <SfTextBox ID="search_text" Placeholder="Buscar por Numero de Pedidos o Nombre de Cliente..." 
-               ShowClearButton="true" Value="@SearchValue" 
-               OnChange="OnCardSearch" OnFocus="@(() => { PriorityValue = "None";  StatusValue = "None"; })"></SfTextBox>
-    
     <div>
-        <SfKanban ID="logisticaKanban" TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis" 
-                  AllowDragAndDrop="true" Height="800px" Query="@CardQuery">
-            <KanbanEvents TValue="PedCli" DragStart="@onDragStart" DragStop="@onDragStop"></KanbanEvents>
-            <KanbanColumns>
-                @foreach (Syncfusion.Blazor.Kanban.ColumnModel item in columnData)
-                {
-                <KanbanColumn HeaderText="@item.HeaderText" KeyField="@item.KeyField" AllowToggle="true">
-                    <Template>
-                        @{
-                            KanbanColumn column = (KanbanColumn)context;
-                            <div class="header-template-wrap">
-                                <div class="header-icon e-icons @column.KeyField[0]"></div>
-                                <div class="header-text">@column.HeaderText</div>
-                            </div>
-                        }
-                    </Template>
-                </KanbanColumn>
-                }
-            </KanbanColumns>
-            <div style="z-index:0;">
-                <KanbanCardSettings HeaderField="@(nameof(PedCli.PEDIDO))" ContentField="@(nameof(PedCli.DES_ART))">
-                </KanbanCardSettings>
-                <KanbanSwimlaneSettings KeyField="@nameof(PedCli.DES_CLI)" TextField="@nameof(PedCli.DES_CLI)" 
-                                        AllowDragAndDrop=true ShowItemCount=true 
-                                        SortDirection=Syncfusion.Blazor.Kanban.SortDirection.Ascending ShowEmptyRow=true>
-                </KanbanSwimlaneSettings>
-            </div>
-        </SfKanban>
+        <SfTextBox ID="search_text" Placeholder="Buscar por Numero de Pedidos o Nombre de Cliente..."
+                   ShowClearButton="true" Value="@SearchValue"
+                   OnChange="OnCardSearch" OnFocus="@(() => { PriorityValue = "None";  StatusValue = "None"; })"></SfTextBox>
 
+        <div>
+            <SfKanban ID="logisticaKanban" TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis"
+                      AllowDragAndDrop="true" Height="800px" Query="@CardQuery">
+                <KanbanEvents TValue="PedCli" DragStart="@onDragStart" DragStop="@onDragStop"></KanbanEvents>
+                <KanbanColumns>
+                    @foreach (Syncfusion.Blazor.Kanban.ColumnModel item in columnData)
+                    {
+                        <KanbanColumn HeaderText="@item.HeaderText" KeyField="@item.KeyField" AllowToggle="true">
+                            <Template>
+                                @{
+                                    KanbanColumn column = (KanbanColumn)context;
+                                    <div class="header-template-wrap">
+                                        <div class="header-icon e-icons @column.KeyField[0]"></div>
+                                        <div class="header-text">@column.HeaderText</div>
+                                    </div>
+                                }
+                            </Template>
+                        </KanbanColumn>
+                    }
+                </KanbanColumns>
+                <div style="z-index:0;">
+                    <KanbanCardSettings HeaderField="@(nameof(PedCli.PEDIDO))" ContentField="@(nameof(PedCli.DES_ART))">
+                    </KanbanCardSettings>
+                    <KanbanSwimlaneSettings KeyField="@nameof(PedCli.DES_CLI)" TextField="@nameof(PedCli.DES_CLI)"
+                                            AllowDragAndDrop=true ShowItemCount=true
+                                            SortDirection=Syncfusion.Blazor.Kanban.SortDirection.Ascending ShowEmptyRow=true>
+                    </KanbanSwimlaneSettings>
+                </div>
+            </SfKanban>
+
+        </div>
     </div>
-</div>
 
-@code {
-    private List<Syncfusion.Blazor.Kanban.ColumnModel> columnData = new List<Syncfusion.Blazor.Kanban.ColumnModel>() {
+    @code {
+        private List<Syncfusion.Blazor.Kanban.ColumnModel> columnData = new List<Syncfusion.Blazor.Kanban.ColumnModel>() {
         new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Remitir", KeyField= new List<string>() { "Remitir" } },
         new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Inspección", KeyField= new List<string>() { "Inspeccion" } },
         new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Ret.Planta", KeyField= new List<string>() { "Ret.Planta" } },
@@ -52,4 +53,4 @@
         new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Facturar", KeyField= new List<string>() { "Facturar" } },
         new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Pago", KeyField= new List<string>() { "Pago" } }
     };
-}
+    }

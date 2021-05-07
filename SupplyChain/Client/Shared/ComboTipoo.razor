@@ -1,9 +1,18 @@
 ﻿@inject HttpClient Http
-
-<ComboGenerico TItem="Tire" PlaceHolder="Seleccione tipo de operacion..." 
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Data
+@*<ComboGenerico TItem="Tire" PlaceHolder="Seleccione tipo de operacion..."
                DataSource="@TiposOperacion" ValueId="Tipoo" ValueText="Descrip"
                OnSelectedChanged="OnSelectedTireChanged">
-</ComboGenerico>
+</ComboGenerico>*@
+
+<SfDropDownList TValue="int" TItem="Tire" Placeholder="Seleccione tipo de operacion..." DataSource="@TiposOperacion"
+                @bind-Value="TipooSeleccionado">
+    @*<SfDataManager Url="api/Deposito" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>*@
+    <DropDownListEvents TItem="Tire" TValue="int" ValueChange="SelectedTipooChanged"></DropDownListEvents>
+    <DropDownListFieldSettings Text="Descrip" Value="Tipoo"></DropDownListFieldSettings>
+</SfDropDownList>
+
 
 @code {
     public List<Tire> TiposOperacion = new List<Tire>() {
@@ -23,7 +32,7 @@
         //new Tire() { Tipoo = 1, Descrip = "Devolución de un cliente con y sin pedido" }
     };
 
-    [Parameter] public Tire TipooSeleccionado { get; set; } = new Tire();
+    [Parameter] public int TipooSeleccionado { get; set; }
     [Parameter] public EventCallback<Tire> OnSelectedTireChanged { get; set; }
     [Parameter] public int TipoOperacionIdUnico { get; set; } = 0;
 
@@ -60,10 +69,7 @@
 
         await InvokeAsync(StateHasChanged);
     }
-    //protected override bool ShouldRender()
-    //{
-    //    return base.ShouldRender();
-    //}
+
     protected override void OnAfterRender(bool firstRender)
     {
 
@@ -80,8 +86,8 @@
 
     private void SelectedTipooChanged(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int, Tire> args)
     {
-        TipooSeleccionado = args.ItemData;
-        OnSelectedTireChanged.InvokeAsync(TipooSeleccionado);
+        TipooSeleccionado = args.ItemData.Tipoo;
+        OnSelectedTireChanged.InvokeAsync(args.ItemData);
         InvokeAsync(StateHasChanged);
     }
 

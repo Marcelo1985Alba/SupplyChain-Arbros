@@ -25,6 +25,8 @@ namespace SupplyChain
         [NotMapped]
         public bool EXIGESERIE { get; set; } = false;
 
+        public bool CERRAROC { get; set; } = false;
+
         /* 
          * AGREGO MODELO RESUMENSTOCK PARA VALIDAR QUE LA CANTIDAD INGRESADA NO SUPERE A LA DEL STOCK: 
          * EJEM: EN DEV A PROVE
@@ -89,25 +91,25 @@ namespace SupplyChain
         public string DIRENT { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Tipo insumo")]
         public int? CG_ORDEN { get; set; } = 0;
-        [ColumnaGridViewAtributo(Name = "Código artículo")]
+        [ColumnaGridViewAtributo(Name = "Código artículo"), Required(ErrorMessage ="ingresar insumo")]
         public string CG_ART { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Nombre artículo")]
         public string DES_ART { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Tipo artículo")]
-        public string TIPO { get; set; } = " ";
+        public string TIPO { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Lote")]
         [RequireWhenExigeLote]
-        public string LOTE { get; set; } = " ";
+        public string LOTE { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Serie")]
         [RequireWhenExigeSerie]
-        public string SERIE { get; set; } = " ";
+        public string SERIE { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Despacho")]
         [RequireWhenExigeDespacho]
-        public string DESPACHO { get; set; } = " ";
+        public string DESPACHO { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Ubicación")]
         public string UBICACION { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Depósito")]
-        public int? CG_DEP { get; set; } = 0;
+        public int CG_DEP { get; set; } = 0;
         [ColumnaGridViewAtributo(Name = "Cantidad")]
         public decimal? CANTENT { get; set; } = 0;
         [ColumnaGridViewAtributo(Name = "Cantidad operación")]

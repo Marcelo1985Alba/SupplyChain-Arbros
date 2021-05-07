@@ -1,0 +1,48 @@
+﻿<ConfirmacionDialog @ref="refConfirmacionDialog" OnConfirm="@(async ()=> await CerrarOC())">
+    <HeaderTempalte>
+        <p style="font-weight:800">ORDEN COMPRA: @Compra.NUMERO  INSUMO: @Compra.CG_MAT - @Compra.DES_MAT</p>
+    </HeaderTempalte>
+    <ContentTemplate>
+        <p>Insumo-----: @Compra.CG_MAT</p>
+        <p>Autorizado-: @Compra.AUTORIZADO</p>
+        <p>Recibido---: CALCULAR...</p>
+        <p>A recibir--: CALCULAR...</p>
+        <p>Total------: CALCULAR...</p>
+
+    </ContentTemplate>
+</ConfirmacionDialog>
+
+@code {
+
+    [Inject] public HttpClient Http { get; set; }
+    [Parameter] public Compra Compra { get; set; } = new Compra();
+
+
+    private ConfirmacionDialog refConfirmacionDialog;
+
+
+    protected async Task CerrarOC()
+    {
+        Compra.FE_CIERRE = DateTime.Now;
+        var response = await Http.PutAsJsonAsync<Compra>("api/Compras", Compra);
+        if (!response.IsSuccessStatusCode)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
+
+    public async Task HideAsync()
+    {
+        await refConfirmacionDialog.HideAsync();
+    }
+
+    public async Task ShowAsync()
+    {
+        await refConfirmacionDialog.ShowAsync();
+    }
+
+}

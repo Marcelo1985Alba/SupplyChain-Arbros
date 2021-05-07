@@ -10,9 +10,9 @@ namespace SupplyChain.Shared.HelpersAtributo
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            //var stock = (Stock)validationContext.ObjectInstance;
-            //if (stock.EXIGEDESPACHO == 0)
-            //    return ValidationResult.Success;
+            var stock = (Pedidos)validationContext.ObjectInstance;
+            if (!stock.EXIGEDESPACHO)
+                return ValidationResult.Success;
 
             var despacho = value as string;
             return string.IsNullOrWhiteSpace(despacho)

@@ -54,7 +54,7 @@ namespace SupplyChain.Server.Controllers
                 return NotFound();
             }
 
-            return lStock;
+            return lStock.OrderByDescending(s => s.VALE).ToList(); ;
         }
 
         // GET: api/Stock/AbriVale/{vale}
@@ -76,6 +76,15 @@ namespace SupplyChain.Server.Controllers
                 if (lStock == null)
                 {
                     return NotFound();
+                }
+
+
+                if ( lStock.Count > 0 && lStock[0].TIPOO == 5)
+                {
+                    foreach (var item in lStock)
+                    {
+                        item.Proveedor = _context.Proveedores.Where(p => p.CG_PROVE == item.CG_PROVE).FirstOrDefault();
+                    }
                 }
 
                 return lStock;
@@ -203,7 +212,16 @@ namespace SupplyChain.Server.Controllers
             try
             {
                 await _context.SaveChangesAsync();
-                //TODO: MODIFICAR NUMERO EN GENERA
+
+                if (stock.CERRAROC)
+                {
+                    var compra = await _context.Compras
+                        .Where(c => c.CG_MAT == stock.CG_ART && c.NUMERO == stock.OCOMPRA).FirstOrDefaultAsync();
+
+                    compra.FE_CIERRE = DateTime.Now;
+                    _context.Entry(compra).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
             }
             catch (DbUpdateException ex)
             {

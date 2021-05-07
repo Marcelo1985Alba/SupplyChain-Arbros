@@ -56,7 +56,7 @@ else
             IsProd = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Produccion"));
         }
 
-        if (!IsAdmin)
+        if (!IsAdmin && IsProd)
         {
             dbMenu.Add(new Modulo { Id = 4, Descripcion = "PCP", IconCss = "icon-th icon", TieneChild = true });
             dbMenu.Add(new Modulo
@@ -67,6 +67,45 @@ else
                 TieneChild = false,
                 ParentId = 4,
                 Url = "/cargamaquina"
+            });
+            dbMenu.Add(new Modulo { Id = 2, Descripcion = "VENTAS", IconCss = "icon-th icon", TieneChild = true });
+            dbMenu.Add(new Modulo
+            {
+                Id = 8,
+                Descripcion = "Logistica",
+                IconCss = "",
+                TieneChild = false,
+                ParentId = 2,
+                Url = "/logistica-listado"
+            });
+            dbMenu.Add(new Modulo
+            {
+                Id = 13,
+                Descripcion = "Servicios",
+                IconCss = "",
+                TieneChild = false,
+                ParentId = 2,
+                Url = "/servicio/listado"
+            });
+            dbMenu.Add(new Modulo { Id = 5, Descripcion = "CONTROL DE CALIDAD", IconCss = "icon-th icon", TieneChild = true });
+            dbMenu.Add(new Modulo
+            {
+                Id = 14,
+                Descripcion = "Trazabilidad",
+                IconCss = "",
+                TieneChild = false,
+                ParentId = 5,
+                Url = "/trazabilidad"
+            });
+            dbMenu.Add(new Modulo { Id = 3, Descripcion = "INVENTARIOS", IconCss = "icon-th icon", TieneChild = true });
+            dbMenu.Add(new Modulo
+            {
+                Id = 14,
+                Descripcion = "Recepcion de Insumos",
+                IconCss = "",
+                TieneChild = false,
+                ParentId = 3,
+                Url = "/inventario/5"
             });
         }
     }

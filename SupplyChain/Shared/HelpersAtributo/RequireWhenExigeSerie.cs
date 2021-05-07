@@ -10,13 +10,13 @@ namespace SupplyChain.Shared.HelpersAtributo
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            //var stock = (Stock)validationContext.ObjectInstance;
-            //if (stock.EXIGESERIE == 0)
-            //    return ValidationResult.Success;
+            var stock = (Pedidos)validationContext.ObjectInstance;
+            if (!stock.EXIGESERIE)
+                return ValidationResult.Success;
 
             var serie = value as string;
             return string.IsNullOrWhiteSpace(serie)
-                ? new ValidationResult("Ingresar Serie: el insumo exige despacho")
+                ? new ValidationResult("Ingresar Serie: el insumo exige serie")
                 : ValidationResult.Success;
         }
     }

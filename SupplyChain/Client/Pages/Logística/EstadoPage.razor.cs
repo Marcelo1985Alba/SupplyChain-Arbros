@@ -3,6 +3,7 @@ using Microsoft.JSInterop;
 using SupplyChain.Client.Shared;
 using Syncfusion.Blazor.Data;
 using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Spinner;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -17,7 +18,8 @@ namespace SupplyChain.Pages.Modelos
         protected SfGrid<PedCli> Grid;
         public bool Enabled = true;
         public bool Disabled = false;
-
+        protected SfSpinner spinnerRef;
+        protected bool SpinnerVisible { get; set; } = false;
         protected List<PedCli> Pedclis = new List<PedCli>();
         //protected List<Pedidos> Pedidoss = new List<Pedidos>();
         //protected List<Programa> Programas = new List<Programa>();
@@ -29,11 +31,12 @@ namespace SupplyChain.Pages.Modelos
 
         protected override async Task OnInitializedAsync()
         {
+            SpinnerVisible = true;
             Layout.Titulo = "Logistica";
             Pedclis = await Http.GetFromJsonAsync<List<PedCli>>("api/PedCli");
             //Pedidoss = await Http.GetFromJsonAsync<List<Pedidos>>("api/Pedidos");
             //Programas = await Http.GetFromJsonAsync<List<Programa>>("api/Programa");
-
+            SpinnerVisible = false;
             await base.OnInitializedAsync();
         }
 

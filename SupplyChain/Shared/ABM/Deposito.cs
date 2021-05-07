@@ -9,7 +9,7 @@ namespace SupplyChain
     public class Deposito
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int? CG_DEP { get; set; }//
+        public int CG_DEP { get; set; } = 0;
         [Required(ErrorMessage ="Ingresar Deposito")]
         public string DES_DEP { get; set; }//
         public string TIPO_DEP { get; set; }//

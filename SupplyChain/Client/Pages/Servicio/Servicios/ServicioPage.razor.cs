@@ -31,7 +31,7 @@ namespace SupplyChain.Pages.Servicios
 
         [Parameter]
         public string pedido { get; set; } = "";
-
+        protected bool SpinnerVisible { get; set; } = false;
         protected SfGrid<Service> Grid;
         public string NroPedido = "";
         public bool Enabled = true;
@@ -111,7 +111,7 @@ namespace SupplyChain.Pages.Servicios
         {
             Layout.Titulo = "Servicios";
 
-            
+            SpinnerVisible = true;
             if (!string.IsNullOrEmpty(pedido))
             {
                 servicios = await Http.GetFromJsonAsync<List<Service>>("api/Servicios");
@@ -136,6 +136,8 @@ namespace SupplyChain.Pages.Servicios
                     select opers;
             celdas = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
             rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+
+            SpinnerVisible = false;
             await base.OnInitializedAsync();
         }
 
