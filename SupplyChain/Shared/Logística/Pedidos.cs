@@ -24,7 +24,7 @@ namespace SupplyChain
         public bool EXIGELOTE { get; set; } = false;
         [NotMapped]
         public bool EXIGESERIE { get; set; } = false;
-        [NotMapped]
+
         public bool CERRAROC { get; set; } = false;
 
         /* 

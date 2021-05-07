@@ -78,6 +78,15 @@ namespace SupplyChain.Server.Controllers
                     return NotFound();
                 }
 
+
+                if ( lStock.Count > 0 && lStock[0].TIPOO == 5)
+                {
+                    foreach (var item in lStock)
+                    {
+                        item.Proveedor = _context.Proveedores.Where(p => p.CG_PROVE == item.CG_PROVE).FirstOrDefault();
+                    }
+                }
+
                 return lStock;
             }
             catch (Exception ex)

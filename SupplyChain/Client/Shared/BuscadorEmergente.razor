@@ -1,6 +1,6 @@
 ﻿@typeparam TItem
 
-<SfSpinner @bind-Visible="@visibliSpinner" Size="80" Target=".dialogContent" Label="Cargando..."/>
+<SfSpinner @bind-Visible="@visibliSpinner" Size="80" Target=".dialogContent" Label="Cargando..." Type="SpinnerType.Bootstrap"/>
 
 <SfDialog Height="75%" Width="90%" Target="#target" ShowCloseIcon="true" @bind-Visible="@Visible" IsModal="true" EnableResize="true">
     <DialogEvents Closed="OnAfterDialogClosed"></DialogEvents>

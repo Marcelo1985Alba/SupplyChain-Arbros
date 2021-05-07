@@ -8,7 +8,7 @@
 
 @if (DataSource == null)
 {
-    return;
+
 }
 else
 {
@@ -18,10 +18,9 @@ else
                 <SfGrid @ref="@Grid" DataSource="@DataSource" AllowExcelExport="true" AllowPaging="true" ID="gridEditStock"
                         GridLines="GridLine.Both" Locale="es-Ar" Height="100%" Width="100%" EnablePersistence="true"
                         AllowResizing="true" AllowSelection="true" AllowSorting="true" AllowTextWrap="false"
-                        AllowReordering="true"
-                        Toolbar="@Toolbaritems">
+                        AllowReordering="true">
                     @*<GridPageSettings PageCount="4" PageSize="4"></GridPageSettings>*@
-                    <GridEvents OnActionBegin="@(async(p)=> await OnActionBeginHandler(p))" 
+                    <GridEvents OnActionBegin="@(async(p)=> await OnActionBeginHandler(p))" CommandClicked="@(async (p)=> await CommandClickHandler(p))"
                                 OnBeginEdit="@(async (ped)=> await BeginEditHandler(ped))" 
                                 OnActionComplete="OnActionComplete" OnToolbarClick="ClickHandler"
                                 TValue="Pedidos"></GridEvents>
@@ -30,6 +29,7 @@ else
 
                         <HeaderTemplate>
                             <span class="text-active">Detalle de Producto</span>
+                            <hr />
                         </HeaderTemplate>
                         <Template>
                             @{
@@ -108,6 +108,10 @@ else
                     <GridColumns>
                         <GridColumn HeaderText="" Width="120">
                             <GridCommandColumns>
+                                <GridCommandColumn Type="CommandButtonType.None" Title="Copiar"
+                                                   ButtonOption="@(new CommandButtonOptions() {     
+                                                                       IconCss = "e-icons e-copy", 
+                                                                       CssClass = "e-flat" })"></GridCommandColumn>
                                 <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
                                 <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
                                 <GridCommandColumn Type="CommandButtonType.Save" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-update", CssClass = "e-flat" })"></GridCommandColumn>
@@ -116,20 +120,29 @@ else
                         </GridColumn>
                         <GridColumn Field="@nameof(Pedidos.CG_ART)" HeaderText="Cod. Producto" AutoFit="true" Width="130"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.DES_ART)" HeaderText="Desc. Producto" Width="180"></GridColumn>
-                        <GridColumn Field="@nameof(Pedidos.STOCK)" HeaderText="Cantidad" EditType="EditType.NumericEdit" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.STOCK)" HeaderText="Cantidad" EditType="EditType.NumericEdit" Format="N2" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.UNID)" HeaderText="Unidad" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.DESPACHO)" HeaderText="Despacho" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.SERIE)" HeaderText="Serie" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.LOTE)" HeaderText="Lote" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.CG_DEP)" HeaderText="Deposito" AutoFit="true">
+                            <Template>
+                                @{
+                                    var ped = (context as Pedidos);
+                                    if (depositos.Any(c => c.CG_DEP == ped.CG_DEP))
+                                    {
+                                        <span>@depositos.Where(c => c.CG_DEP == ped.CG_DEP).FirstOrDefault().DES_DEP.Trim()</span>
 
+                                    }
+                                }
+                            </Template>
                         </GridColumn>
-                        <GridColumn Field="@nameof(Pedidos.STOCKA)" HeaderText="Stock Alter" AutoFit="true"></GridColumn>
-                        <GridColumn Field="@nameof(Pedidos.UNIDA)" HeaderText="Unidad A" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.STOCKA)" HeaderText="Cant Comer" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.UNIDA)" HeaderText="Unid Comer" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.IMPORTE1)" HeaderText="Precio Unit." AutoFit="true"></GridColumn>
-                        <GridColumn Field="@nameof(Pedidos.IMPORTE2)" HeaderText="Importe2" AutoFit="true"></GridColumn>
+                        @*<GridColumn Field="@nameof(Pedidos.IMPORTE2)" HeaderText="Importe2" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.IMPORTE3)" HeaderText="Importe3" AutoFit="true"></GridColumn>
-                        <GridColumn Field="@nameof(Pedidos.IMPORTE4)" HeaderText="Total" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.IMPORTE4)" HeaderText="Total" AutoFit="true"></GridColumn>*@
 
                         <GridColumn Field="@nameof(Pedidos.CERRAROC)" HeaderText="Cierra OC" DisplayAsCheckBox="true"
                                     AutoFit="true"></GridColumn>
@@ -184,9 +197,9 @@ else
          {"type", "button" }
     };
 
-    protected List<ItemModel> Toolbaritems = new List<ItemModel>(){
-        new ItemModel { Text = "Copiar", TooltipText = "Copiar Item", PrefixIcon = "e-copy", Id = "copy" }
-    };
+    //protected List<ItemModel> Toolbaritems = new List<ItemModel>(){
+    //    new ItemModel { Text = "Copiar", TooltipText = "Copiar Item", PrefixIcon = "e-copy", Id = "copy" }
+    //};
 
 
     protected SfGrid<Pedidos> Grid;
@@ -249,6 +262,32 @@ else
     {
         depositos = await Http.GetFromJsonAsync<List<Deposito>>("api/Deposito");
         await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task CommandClickHandler(CommandClickEventArgs<Pedidos> args)
+    {
+        if (args.CommandColumn.Title == "Copiar")
+        {
+
+            await ConfirmacionDialog.ShowAsync();
+
+            stockCopiado = new();
+            stockCopiado.REGISTRO = DataSource.Min(p => p.REGISTRO) - 1;
+            stockCopiado.REGISTRO = stockCopiado.REGISTRO > 0 ? -1 : stockCopiado.REGISTRO;
+            stockCopiado.IMPORTE1 = args.RowData.IMPORTE1;
+            stockCopiado.CG_ART = args.RowData.CG_ART;
+            stockCopiado.DES_ART = args.RowData.DES_ART;
+            stockCopiado.UNID = args.RowData.UNID;
+            stockCopiado.UNIDA = args.RowData.UNIDA;
+            stockCopiado.STOCK = args.RowData.STOCK;
+            stockCopiado.STOCKA = args.RowData.STOCKA;
+            stockCopiado.CG_DEP = args.RowData.CG_DEP;
+            stockCopiado.DESPACHO = "";
+            stockCopiado.SERIE = "";
+            stockCopiado.LOTE = "";
+            stockCopiado.Proveedor = args.RowData.Proveedor;
+
+        }
     }
 
     public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)

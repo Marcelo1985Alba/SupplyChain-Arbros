@@ -8,7 +8,7 @@ namespace SupplyChain.Shared
     {
         [Key]
         public int REGISTRO { get; set; }
-        public DateTime FE_MOV { get; set; }
+        public DateTime FE_MOV { get; set; } = DateTime.Now;
         public int VALE { get; set; }
         public int TIPOO { get; set; }
         public int PEDIDO { get; set; } = 0;

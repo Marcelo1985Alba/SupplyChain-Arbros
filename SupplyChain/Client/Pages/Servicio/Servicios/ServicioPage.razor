@@ -34,7 +34,7 @@
     <br />
     <br />*@
 <div id="container"></div>
-<SfSpinner @ref="SpinnerObj" CssClass="e-spin-overlay" Label="Cargando..." Type="SpinnerType.Bootstrap4"></SfSpinner>
+<SfSpinner @ref="SpinnerObj" @bind-Visible="@SpinnerVisible" CssClass="e-spin-overlay" Label="Cargando..." Type="SpinnerType.Bootstrap4"></SfSpinner>
 <div class="col-lg-12 control-section">
     <div class="content-wrapper">
         <div class="row">

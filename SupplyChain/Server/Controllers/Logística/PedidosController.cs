@@ -333,6 +333,34 @@ namespace SupplyChain
             return Ok(stock);
         }
 
+
+        [HttpDelete("{vale}")]
+        public async Task<IActionResult> DeleteByVale(int vale)
+        {
+            var pedidos = await _context.Pedidos.Where(p => p.VALE == vale).ToListAsync();
+            if (pedidos is null || pedidos.Count == 0)
+            {
+                return NotFound();
+            }
+
+            foreach (var item in pedidos)
+            {
+                item.STOCK = 0;
+                item.AVISO = "VALE ANULADO";
+                _context.Entry(item).State = EntityState.Modified;
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         private bool RegistroExists(decimal? registro)
         {
             return _context.Pedidos.Any(e => e.REGISTRO == registro);

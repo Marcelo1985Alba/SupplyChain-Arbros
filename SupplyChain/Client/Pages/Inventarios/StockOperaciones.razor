@@ -6,6 +6,7 @@
 @using System.Text.Json
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.Navigations
 @using SupplyChain.Client.Shared.Inventarios
 @attribute [Authorize]
 
@@ -13,23 +14,37 @@
     <SfToast ID="toast_default" @ref="ToastObj">
         <ToastPosition X="Center" Y="Top"></ToastPosition>
     </SfToast>
-    <SfSpinner @bind-Visible="@SpinnerVisible" Label="Guardando..." Target="#formulario" Size="200" Type="SpinnerType.Bootstrap">
+    <SfSpinner @bind-Visible="@SpinnerVisible" Label="Procesando..." Target="#formulario" Size="200" Type="SpinnerType.Bootstrap">
     </SfSpinner>
     <div class="content-wrapper" id="formulario">
-        <!--<div class="form-inline">
-            <!--<h4 class="pt-3 text-left">
-                Operaciones de Stock a Realizar-->-->
-                <!--@*<small class="text-info"> <strong>@StockEncabezado.TIRE?.Descrip</strong></small>*@-->
-            <!--</h4>-->
-
-        <!--</div>-->
-        <hr />
-        <EditForm Model="@StockEncabezado" OnValidSubmit="@(async()=> await onGuardar())">
+        
+        <EditForm Model="@StockEncabezado" OnValidSubmit="@(async()=> await AbrirConfirmacionGuardarVale())">
             @*<DataAnnotationsValidator />*@
-            <ObjectGraphDataAnnotationsValidator /> 
+            <div class="form-row btn-group">
+                <div class="col-4">
+                    <SfButton HtmlAttributes="HtmlAttribute" Content="Eliminar" ID="btnEliminarVale" 
+                              OnClick="@(async ()=> await AbrirConfirmacionEliminarVale())" IsPrimary="false"
+                              IconCss="fa fa-trash-o" CssClass="btn btn-sm btn-warning"
+                              Disabled="@(!abrioVale)"></SfButton>
+                </div>
+                <div class="col-4">
+                    <SfButton HtmlAttributes="HtmlAttribute" Content="Nuevo" IsPrimary="false"  
+                              OnClick="@(async ()=> await NuevoVale())" ID="btnNuevoVale"
+                              IconCss="fa fa-plus-square-o" CssClass="btn btn-sm btn-info"
+                              Disabled="@(!abrioVale)"></SfButton>
+                </div>
+                <div class="col-4">
+                    <SfButton Content="Guardar" IsPrimary="true" IconCss="fa fa-save" 
+                              CssClass="btn btn-sm btn-success" ID="btnGuardarVale"
+                              Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"></SfButton>
+                </div>
+            </div>
+            <hr />
+            
+            <ObjectGraphDataAnnotationsValidator />
             <div class="form-row">
                 <div class="form-group col-lg-6 col-md-4 col-sm-12 col-12">
-                    <label class="col-form-label">Ope. de Stock</label>
+                    <label class="col-form-label">Op. de Stock</label>
                     <ComboTipoo TipoOperacionIdUnico="@OperacionId" TipooSeleccionado="@StockEncabezado.TIPOO"
                                 OnSelectedTireChanged="@SelectedTireChanged" />
                 </div>
@@ -39,7 +54,7 @@
                 </div>
                 <div class="form-group col-lg-1 col-md-1 col-sm-1 col-1 mt-2">
                     <br />
-                    <SfButton OnClick="@(async (e)=> await AbrirVale())" CssClass="btn btn-sm" IsPrimary="false"
+                    <SfButton HtmlAttributes="@HtmlAttribute" OnClick="@(async (e)=> await AbrirVale())" CssClass="btn btn-sm" IsPrimary="false"
                               IconCss="fa fa-search" Disabled="@DisableCssClass"></SfButton>
                 </div>
                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-12">
@@ -115,15 +130,15 @@
             <div class="form-row">
 
                 @*<div class="form-group col-6">
-                    <label class="col-form-label">Depósito de Ingreso</label>
-                    <ComboDeposito DepositoSeleccionado="@StockEncabezado.CG_DEP" EsSoloLectura="@DepositoIngresoSoloLectura"
-                                   OnSelectedDepositoChanged="SelectedDepositoIngresoChanged" />
-                </div>*@
+                <label class="col-form-label">Depósito de Ingreso</label>
+                <ComboDeposito DepositoSeleccionado="@StockEncabezado.CG_DEP" EsSoloLectura="@DepositoIngresoSoloLectura"
+                               OnSelectedDepositoChanged="SelectedDepositoIngresoChanged" />
+            </div>*@
                 @*<div class="form-group col-6">
-                        <label class="col-form-label">Depósito de Salida</label>
-                        <ComboDeposito DepositoSeleccionado="@selectedDepositoSalida" EsSoloLectura="@DepositoSalidaSoloLectura"
-                                       OnSelectedDepositoChanged="SelectedDepositoSalidaChanged" />
-                    </div>*@
+                <label class="col-form-label">Depósito de Salida</label>
+                <ComboDeposito DepositoSeleccionado="@selectedDepositoSalida" EsSoloLectura="@DepositoSalidaSoloLectura"
+                               OnSelectedDepositoChanged="SelectedDepositoSalidaChanged" />
+            </div>*@
 
             </div>
 
@@ -132,7 +147,7 @@
             {
                 <div class="form-row">
                     <div class="form-group col-6">
-                        <BuscadorResumenStock MostraBotonBusqueda="puedeBuscarStock" HabilitaBotonBusqueda="!puedeBuscarStock" 
+                        <BuscadorResumenStock MostraBotonBusqueda="puedeBuscarStock" HabilitaBotonBusqueda="!puedeBuscarStock"
                                               MostrarSpin="false" HtmlAtrr="HtmlAttribute"
                                               OnRSSeleccionada="onResumenStockSelected" TextoButon="Buscar Stock" />
 
@@ -147,9 +162,10 @@
             <CascadingValue Value="@StockEncabezado">
                 <GridEditStock DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
                                PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
-                               onGuardar="onGuardarPedido" />
+                               onGuardar="OnGuardarPedido" />
             </CascadingValue>
             <ValidationSummary />
+
             <SfButton Content="Guardar" IsPrimary="true" IconCss="fa fa-save" CssClass="btn btn-block btn-sm-danger"
                       Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"></SfButton>
 
@@ -158,16 +174,37 @@
     </div>
 </div>
 
+<ConfirmacionDialog @ref="ConfirmacionEliminarDialog" OnConfirm="@(async ()=> await EliminarVale())">
+    <HeaderTempalte>
+        <p> <strong>Eliminacion Vale</strong></p>
+        <hr />
+    </HeaderTempalte>
+    <ContentTemplate>
+        <p>Estas seguro que desea elimnar el vale <strong>@StockEncabezado?.VALE</strong> ?</p>
+    </ContentTemplate>
+</ConfirmacionDialog>
+
+<ConfirmacionDialog @ref="ConfirmacionGuardarDialog" OnConfirm="@(async ()=> await OnGuardar())">
+    <HeaderTempalte>
+        <p> <strong>Guardar Vale </strong></p>
+        <hr />
+    </HeaderTempalte>
+    <ContentTemplate>
+        <p>Estas seguro que desea guardar el vale <strong>@StockEncabezado?.VALE</strong> ?</p>
+    </ContentTemplate>
+</ConfirmacionDialog>
 
 
 <BuscadorEmergente TItem="Pedidos" Titulo=@tituloBuscador Visible="@PopupBuscadorVisible" DataSource="@ItemsABuscar"
-                   Columnas="@ColumnasBuscador" onObjetoSeleccionado="onObjectSelected" />
+                   Columnas="@ColumnasBuscador" onObjetoSeleccionado="OnObjectSelected" />
 
 @code {
 
     [CascadingParameter] public MainLayout MainLayout { get; set; }
     [Parameter] public int OperacionId { get; set; } = 0;
     [Parameter] public PedidoEncabezado StockEncabezado { get; set; } = new PedidoEncabezado();
+    protected ConfirmacionDialog ConfirmacionEliminarDialog;
+    protected ConfirmacionDialog ConfirmacionGuardarDialog;
     protected bool SpinnerVisible { get; set; } = false;
     protected SfToast ToastObj;
     protected bool DisableCssClass { get => StockEncabezado.TIPOO == 0 ? true : false; }
@@ -256,14 +293,18 @@
     }
 
 
-    async Task SelectedTireChanged(Tire tire)
+    protected async Task NuevoVale()
     {
         abrioVale = false;
         StockEncabezado = new();
         StockEncabezado.FE_MOV = DateTime.Now;
         await GetVale();
         StockEncabezado.Items = new List<Pedidos>();
-        //selectedTire = tire;
+    }
+
+    async Task SelectedTireChanged(Tire tire)
+    {
+        await NuevoVale();
 
         //Dependiendo el TIPOO Habilitar controles
 
@@ -547,9 +588,10 @@
                 pedido.UNID = item.UNID;
                 pedido.CG_DEP = 4;
                 //Calcular stockA
+                pedido.UNIDA = item.UNID1;
                 pedido.STOCKA = item.AUTORIZADO;
-                pedido.STOCK = item.AUTORIZADO * item.CG_DEN;
-                pedido.IMPORTE1 = item.PRECIONETO * item.CG_DEN;
+                pedido.STOCK = item.SOLICITADO;
+                pedido.IMPORTE1 = item.PRECIONETO;
 
 
                 //datos del producto: exigeserie etc.
@@ -628,7 +670,7 @@
     Pedidos[] ItemsABuscar;
     ResumenStock[] buscarResumenStock;
 
-    private async Task onObjectSelected(Pedidos stockSel)
+    private async Task OnObjectSelected(Pedidos stockSel)
     {
         PopupBuscadorVisible = false;
         //Get items del vale
@@ -648,7 +690,7 @@
         //    DescripcionPro = selectedProducto.DES_PROD;
         //}
 
-        await InvokeAsync(StateHasChanged);
+        //await InvokeAsync(StateHasChanged);
     }
 
     protected async Task AbrirVale()
@@ -669,6 +711,7 @@
 
     protected async Task BuscarVales()
     {
+        abrioVale = true;
         ItemsABuscar = null;
         PopupBuscadorVisible = true;
         tituloBuscador = $"Listado de Vales";
@@ -684,11 +727,13 @@
 
     #endregion
 
-    private async Task onGuardar()
+    private async Task OnGuardar()
     {
+        await ConfirmacionGuardarDialog.HideAsync();
+
         SpinnerVisible = true;
         Genera genera;
-        if (abrioVale)
+        if (!abrioVale)
         {
             genera = await Http.GetFromJsonAsync<Genera>($"api/Genera/Reserva/VALE");
             StockEncabezado.VALE = Convert.ToInt32(genera.VALOR1);
@@ -701,12 +746,12 @@
             s.VALE = StockEncabezado.VALE;
             s.CG_PROVE = Cg_CLI_Cg_PROVE;
             s.TIPOO = StockEncabezado.TIPOO;
-            await onGuardarPedido(s);
+            await OnGuardarPedido(s);
 
         });
 
 
-        if (abrioVale)
+        if (!abrioVale)
         {
             await Http.GetFromJsonAsync<Genera>($"api/Genera/Libera/VALE");
         }
@@ -727,7 +772,7 @@
     }
 
 
-    private async Task onGuardarPedido(Pedidos stock)
+    private async Task OnGuardarPedido(Pedidos stock)
     {
 
 
@@ -822,7 +867,7 @@
                 });
             }
 
-            
+
 
         }
 
@@ -833,6 +878,60 @@
 }
 
 
+protected async Task AbrirConfirmacionGuardarVale()
+{
+    await ConfirmacionGuardarDialog.ShowAsync();
+}
 
+protected async Task AbrirConfirmacionEliminarVale()
+{
+    await ConfirmacionEliminarDialog.ShowAsync();
+}
+
+protected async Task EliminarVale()
+{
+    if (abrioVale)
+    {
+        await ConfirmacionEliminarDialog.HideAsync();
+        SpinnerVisible = true;
+        var response = await Http.DeleteAsync($"api/Pedidos/{StockEncabezado.VALE}");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            SpinnerVisible = false;
+            var mensServidor = await response.Content.ReadAsStringAsync();
+
+
+            Console.WriteLine($"Error: {mensServidor}");
+            //toastService.ShowToast($"{mensServidor}", TipoAlerta.Error);
+            await this.ToastObj.Show(new ToastModel
+            {
+                Title = "ERROR!",
+                Content = "Error al eliminar vale",
+                CssClass = "e-toast-danger",
+                Icon = "e-error toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
+        else
+        {
+            SpinnerVisible = false;
+            StockEncabezado = new();
+            await this.ToastObj.Show(new ToastModel
+            {
+                Title = "EXITO!",
+                Content = $"Vale anulado Correctamente.",
+                CssClass = "e-toast-success",
+                Icon = "e-success toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+
+        }
+
+
+    }
+}
 
 }
