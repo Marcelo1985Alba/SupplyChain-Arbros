@@ -26,20 +26,22 @@
 <div class="col-lg-12 control-section mt-4">
     <div class="content-wrapper">
         <div class="row">
-            <div>
-                <SfButton OnClick="@((e) => Emitir())" CssClass="emitir" IsPrimary="false"
+            <div class="col-lg-5 col-md-7 col-12">
+                <SfButton OnClick="@((e) => Emitir())" CssClass="" IsPrimary="true"
                           IconCss="fa fa-check-circle">Emitir Órden para un solo producto</SfButton>
             </div>
-            <div>
-                <SfCheckBox @bind-Checked="@armadoCheck" @onchange="@CheckCambio" Label="Incluir también órdenes de Armado"></SfCheckBox>
-            </div>
-            <div>
-                <SfCheckBox @bind-Checked="@emitidasCheck" @onchange="@CheckCambio" Label="Incluir también órdenes Emitidas"></SfCheckBox>
-            </div>
-            <div>
-                <SfButton IconCss="fa fa-ban" @onclick="@(async ()=> await OrdCerradas())" CssClass="btn btn-sm btn-outline-primary" 
+            <div class="col-lg-3 col-md-5 col-12">
+                <SfButton IconCss="fa fa-ban" @onclick="@(async ()=> await OrdCerradas())" CssClass="btn btn-sm btn-outline-primary"
                           IsPrimary="false">Órdenes cerradas y anuladas</SfButton>
             </div>
+            <div class="col-lg-2 col-md-6 col-12">
+                <SfCheckBox @bind-Checked="@emitidasCheck" @onchange="@CheckCambio" Label="Incluir también órdenes Emitidas"></SfCheckBox>
+            </div>
+            <div class="col-lg-2 col-md-6 col-12">
+                <SfCheckBox @bind-Checked="@armadoCheck" @onchange="@CheckCambio" Label="Incluir también órdenes de Armado"></SfCheckBox>
+            </div>
+
+
         </div>
     </div>
 </div>
@@ -140,7 +142,7 @@
                                 </Template>
                             </GridColumn>
                             @*QUEDA STOCK*@
-                            <GridColumn HeaderText="Queda stock" Width="90px">
+                            <GridColumn HeaderText="Queda stock" Width="90px" AllowGrouping="true" AllowReordering="true">
                                 <Template>
                                     @{
                                         Planificacion Value = (context as Planificacion);
@@ -168,11 +170,11 @@
                                 </Template>
                             </GridColumn>
                             @*HAY STOCK*@
-                            <GridColumn HeaderText="Hay stock" Width="90px">
+                            <GridColumn HeaderText="Hay stock" Width="90px" AllowGrouping="true" AllowReordering="true">
                                 <Template>
                                     @{
                                         Planificacion Value = (context as Planificacion);
-                                        if (Value.SEM_ABAST == 0)
+                                        if (Value.SEM_ABAST == 0) 
                                         {
                                         <span class="dotwhite"></span>
                                         }

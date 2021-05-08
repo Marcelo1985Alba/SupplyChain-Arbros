@@ -24,19 +24,19 @@
     <h3 class="card-title">Carga de Máquina</h3>
     <hr />
     <div class="form-row">
-        <div class="col">
+        <div class="col-2">
             <div>
                 <SfNumericTextBox TValue="int" @bind-Value="@ordenAbuscar" Format="N0" ShowClearButton="true" Width="150"
                                   ShowSpinButton="false" Placeholder="Ingrese Nro de Orden de Fabricación" />
             </div>
         </div>
-        <div class="col">
+        <div class="col-5">
             <div>
                 <SfButton IsPrimary="true" IconCss="fa fa-folder-open"
                           @onclick="BuscarOrden_Click">Abrir órden de fabricación</SfButton>
             </div>
         </div>
-        <div class="col">
+        <div class="col-5">
             <div>
                 <Syncfusion.Blazor.SplitButtons.SfProgressButton 
                           Content="Enviar OFs a DataCore" IsPrimary="true" IconCss="fa fa-share-square"
@@ -330,7 +330,7 @@
     {
         <div id="targetPreguntaFoto" class="cssOrdenFabricacionDialog">
             <SfDialog AllowDragging="true" Target="#cargaMaq" CssClass="" IsModal="false"
-                      ShowCloseIcon="true" CloseOnEscape="true" Height="900" Width="900"
+                      ShowCloseIcon="true" CloseOnEscape="true" Height="500" Width="900"
                       @bind-Visible="@isOrdenDialogVisible">
                 <DialogTemplates>
                     <Header><p style="font-weight:800">@ordenTitulo - Cantidad: @(Decimal.ToInt32(ordenFabricacion.CANT))</p></Header>
@@ -450,15 +450,15 @@
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-md-2">
+                                    @*<div class="form-group col-md-2">
                                         <label style="color:blue">Planificada Inicio:</label>
                                         <SfDateTimePicker Format="dd/MM/yyyy" TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_PREVISTA_FABRICACION"></SfDateTimePicker>
-                                    </div>
-                                    <div class="form-group col-md-2">
+                                    </div>*@
+                                    <div class="form-group col-md-3">
                                         <label style="color:blue">Inicio real:</label>
                                         <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_INICIO_REAL_FABRICACION"></SfDateTimePicker>
                                     </div>
-                                    <div class="form-group col-md-2">
+                                    <div class="form-group col-md-3">
                                         <label style="color:blue">Finalización real:</label>
                                         <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FE_CIERRE"></SfDateTimePicker>
                                     </div>
@@ -484,9 +484,13 @@
                             @*BOTONES PARA OBTENER DATOS*@
                             <div class="form-row">
                                     <div class="form-group col">
+                                        <SfButton Content="Descargar Plano" IsPrimary="true" IconCss="fa fa-download fa fa-file-pdf-o"
+                                                  @onclick="@(async ()=> await ConfirmaDescargarPlano())"></SfButton>
+                                    </div>
+                                    @*<div class="form-group col">
                                         <SfButton Content="Ver Plano" IsPrimary="true" IconCss="fa fa-file-pdf-o"
                                                   @onclick="@(async ()=> await VerPlano(ordenFabricacion.CG_PROD))"></SfButton>
-                                    </div>
+                                    </div>*@
                                     @if (ordenFabricacion.EXIGEOA == true)
                                     {
                                         <div class="form-group col">
@@ -626,64 +630,68 @@
                                                         {
                                                             <tr style="font-weight:bold">
                                                                 <td colspan="2">
-                                                                    MATERIAS PRIMAS
+                                                                    <a @onclick="@(()=> verMP = !verMP)">MATERIAS PRIMAS</a>
                                                                 </td>
                                                             </tr>
-                                                            <tr>
-                                                                <td colspan="2">
-                                                                    <table width="100%">
-                                                                        <tr class="font-weight-bold">
-                                                                            <td width="15%" style="border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Código</label>
-                                                                            </td>
-                                                                            <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Descripción</label>
-                                                                            </td>
-                                                                            <td width="10%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Cantidad</label>
-                                                                            </td>
-                                                                            <td width="10%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Lote</label>
-                                                                            </td>
-                                                                            <td width="10%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Identific</label>
-                                                                            </td>
-                                                                            @if (ordenFabricacion.EXIGEOA)
-                                                                            {
+                                                            if (verMP)
+                                                            {
+                                                                <tr>
+                                                                    <td colspan="2">
+                                                                        <table width="100%">
+                                                                            <tr class="font-weight-bold">
+                                                                                <td width="15%" style="border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Código</label>
+                                                                                </td>
+                                                                                <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Descripción</label>
+                                                                                </td>
+                                                                                <td width="10%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Cantidad</label>
+                                                                                </td>
                                                                                 <td width="10%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                    <label>Serie</label>
+                                                                                    <label>Lote</label>
                                                                                 </td>
-                                                                            }
-                                                                        </tr>
-                                                                        @foreach (ModeloOrdenFabricacionMP xMP in ordenFabricacionMP)
-                                                                        {
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <label>@xMP.CG_ART</label>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <label>@xMP.DES_ART</label>
-                                                                                </td>
-                                                                                <td style="text-align:right">
-                                                                                    <label>@xMP.STOCK</label>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <label>@xMP.LOTE</label>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <label>@xMP.DESPACHO</label>
+                                                                                <td width="10%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Identific</label>
                                                                                 </td>
                                                                                 @if (ordenFabricacion.EXIGEOA)
                                                                                 {
-                                                                                    <td>
-                                                                                        <label>@xMP.SERIE</label>
+                                                                                    <td width="10%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                        <label>Serie</label>
                                                                                     </td>
                                                                                 }
                                                                             </tr>
-                                                                        }
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
+                                                                            @foreach (ModeloOrdenFabricacionMP xMP in ordenFabricacionMP)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <label>@xMP.CG_ART</label>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <label>@xMP.DES_ART</label>
+                                                                                    </td>
+                                                                                    <td style="text-align:right">
+                                                                                        <label>@xMP.STOCK</label>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <label>@xMP.LOTE</label>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <label>@xMP.DESPACHO</label>
+                                                                                    </td>
+                                                                                    @if (ordenFabricacion.EXIGEOA)
+                                                                                    {
+                                                                                        <td>
+                                                                                            <label>@xMP.SERIE</label>
+                                                                                        </td>
+                                                                                    }
+                                                                                </tr>
+                                                                            }
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+
                                                         }
                                                     }
                                                     @*SEMI ELABORADOS*@
@@ -693,70 +701,74 @@
                                                         {
                                                             <tr style="font-weight:bold">
                                                                 <td colspan="2">
-                                                                    SEMI ELABORAODS
+                                                                    <a @onclick="@(()=> verSE = !verSE)">SEMI ELABORADoS</a>
                                                                 </td>
                                                             </tr>
-                                                            <tr>
-                                                                <td colspan="2">
-                                                                    <table width="100%">
-                                                                        <tr class="font-weight-bold">
-                                                                            <td width="15%" style="border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Código</label>
-                                                                            </td>
-                                                                            <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Descripción</label>
-                                                                            </td>
-                                                                            <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Cantidad</label>
-                                                                            </td>
-                                                                            <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Lote</label>
-                                                                            </td>
-                                                                            <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Línea</label>
-                                                                            </td>
-                                                                            <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Ubicación</label>
-                                                                            </td>
-                                                                            <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Despacho</label>
-                                                                            </td>
-                                                                            <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Vale</label>
-                                                                            </td>
-                                                                        </tr>
-                                                                        @foreach (ModeloOrdenFabricacionSE xSE in ordenFabricacionSE)
-                                                                        {
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <label>@xSE.CG_ART</label>
+                                                            if (verSE)
+                                                            {
+                                                                <tr>
+                                                                    <td colspan="2">
+                                                                        <table width="100%">
+                                                                            <tr class="font-weight-bold">
+                                                                                <td width="15%" style="border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Código</label>
                                                                                 </td>
-                                                                                <td>
-                                                                                    <label>@xSE.DES_ART</label>
+                                                                                <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Descripción</label>
                                                                                 </td>
-                                                                                <td style="text-align:right">
-                                                                                    <label>@xSE.STOCK</label>
+                                                                                <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Cantidad</label>
                                                                                 </td>
-                                                                                <td>
-                                                                                    <label>@xSE.LOTE</label>
+                                                                                <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Lote</label>
                                                                                 </td>
-                                                                                <td style="text-align:right">
-                                                                                    <label>@xSE.CG_LINEA</label>
+                                                                                <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Línea</label>
                                                                                 </td>
-                                                                                <td>
-                                                                                    <label>@xSE.UBICACION</label>
+                                                                                <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Ubicación</label>
                                                                                 </td>
-                                                                                <td>
-                                                                                    <label>@xSE.DESPACHO</label>
+                                                                                <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Despacho</label>
                                                                                 </td>
-                                                                                <td style="text-align:right">
-                                                                                    <label>@xSE.VALE</label>
+                                                                                <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Vale</label>
                                                                                 </td>
                                                                             </tr>
-                                                                        }
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
+                                                                            @foreach (ModeloOrdenFabricacionSE xSE in ordenFabricacionSE)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <label>@xSE.CG_ART</label>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <label>@xSE.DES_ART</label>
+                                                                                    </td>
+                                                                                    <td style="text-align:right">
+                                                                                        <label>@xSE.STOCK</label>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <label>@xSE.LOTE</label>
+                                                                                    </td>
+                                                                                    <td style="text-align:right">
+                                                                                        <label>@xSE.CG_LINEA</label>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <label>@xSE.UBICACION</label>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <label>@xSE.DESPACHO</label>
+                                                                                    </td>
+                                                                                    <td style="text-align:right">
+                                                                                        <label>@xSE.VALE</label>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+
                                                         }
                                                     }
                                                     @*HOJA DE RUTA*@
@@ -766,70 +778,74 @@
                                                         {
                                                             <tr style="font-weight:bold">
                                                                 <td colspan="2">
-                                                                    HOJA DE RUTA
+                                                                    <a @onclick="@(()=> verHojaRuta = !verHojaRuta)">HOJA DE RUTA</a>
                                                                 </td>
                                                             </tr>
-                                                            <tr>
-                                                                <td colspan="2">
-                                                                    <table width="100%">
-                                                                        <tr class="font-weight-bold">
-                                                                            <td width="5%" style="text-align:center;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Órden</label>
-                                                                            </td>
-                                                                            <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Proceso</label>
-                                                                            </td>
-                                                                            <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Descripción</label>
-                                                                            </td>
-                                                                            <td width="8%" style="border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Celda</label>
-                                                                            </td>
-                                                                            <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Descripción</label>
-                                                                            </td>
-                                                                            <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Tiempo</label>
-                                                                            </td>
-                                                                            <td width="5%" style="margin-left:10px;text-align:center;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Proporc</label>
-                                                                            </td>
-                                                                            <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Tiempo Unitario</label>
-                                                                            </td>
-                                                                        </tr>
-                                                                        @foreach (ModeloOrdenFabricacionHojaRuta xHojaRuta in ordenFabricacionHojaRuta)
-                                                                        {
-                                                                            <tr>
-                                                                                <td style="text-align:center">
-                                                                                    <label>@xHojaRuta.ORDEN</label>
+                                                            if (verHojaRuta)
+                                                            {
+                                                                <tr>
+                                                                    <td colspan="2">
+                                                                        <table width="100%">
+                                                                            <tr class="font-weight-bold">
+                                                                                <td width="5%" style="text-align:center;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Órden</label>
                                                                                 </td>
-                                                                                <td>
-                                                                                    <label>@xHojaRuta.PROCESO</label>
+                                                                                <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Proceso</label>
                                                                                 </td>
-                                                                                <td>
-                                                                                    <label>@xHojaRuta.DESCRIP</label>
+                                                                                <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Descripción</label>
                                                                                 </td>
-                                                                                <td>
-                                                                                    <label>@xHojaRuta.CG_CELDA</label>
+                                                                                <td width="8%" style="border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Celda</label>
                                                                                 </td>
-                                                                                <td>
-                                                                                    <label>@xHojaRuta.DES_CELDA</label>
+                                                                                <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Descripción</label>
                                                                                 </td>
-                                                                                <td style="text-align:right">
-                                                                                    <label>@xHojaRuta.TIEMPO_TOTAL</label>
+                                                                                <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Tiempo</label>
                                                                                 </td>
-                                                                                <td style="text-align:center">
-                                                                                    <label>@xHojaRuta.PROPORC</label>
+                                                                                <td width="5%" style="margin-left:10px;text-align:center;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Proporc</label>
                                                                                 </td>
-                                                                                <td style="text-align:right">
-                                                                                    <label>@xHojaRuta.TIEMPO1</label>
+                                                                                <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                    <label>Tiempo Unitario</label>
                                                                                 </td>
                                                                             </tr>
-                                                                        }
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
+                                                                            @foreach (ModeloOrdenFabricacionHojaRuta xHojaRuta in ordenFabricacionHojaRuta)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td style="text-align:center">
+                                                                                        <label>@xHojaRuta.ORDEN</label>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <label>@xHojaRuta.PROCESO</label>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <label>@xHojaRuta.DESCRIP</label>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <label>@xHojaRuta.CG_CELDA</label>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <label>@xHojaRuta.DES_CELDA</label>
+                                                                                    </td>
+                                                                                    <td style="text-align:right">
+                                                                                        <label>@xHojaRuta.TIEMPO_TOTAL</label>
+                                                                                    </td>
+                                                                                    <td style="text-align:center">
+                                                                                        <label>@xHojaRuta.PROPORC</label>
+                                                                                    </td>
+                                                                                    <td style="text-align:right">
+                                                                                        <label>@xHojaRuta.TIEMPO1</label>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+
                                                         }
                                                     }
                                                 </table>
@@ -891,9 +907,18 @@
 </div>
     
 
+<ConfirmacionDialog @ref="@confirmacionDescargarPlanoDialog" OnConfirm="@(async ()=> await DescrgarPlano())">
+    <HeaderTempalte><p>Plano Pdf</p> <hr /></HeaderTempalte>
+    <ContentTemplate>Confirma Descargar Plano?</ContentTemplate>
+</ConfirmacionDialog>
+
 
     @code
 {
+    protected bool verHojaRuta = false;
+    protected bool verMP = true;
+    protected bool verSE = true;
+    protected ConfirmacionDialog confirmacionDescargarPlanoDialog;
     public DateTime ProjectStart = new DateTime(2019, 3, 25);
     public DateTime ProjectEnd = new DateTime(2019, 7, 28);
     [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
@@ -1276,18 +1301,80 @@
         await Refrescar();
     }
 
+
+    protected async Task DescrgarPlano()
+    {
+
+        var file = ordenFabricacion.CG_PROD.Substring(0, 7) + ".pdf";
+        await confirmacionDescargarPlanoDialog.HideAsync();
+        var fileArray = await Http.GetByteArrayAsync($"api/AdministracionArchivos/GetPlano/{file}/Load");
+
+        await Task.Run(() =>
+        {
+            JS.SaveAs(ordenFabricacion.CG_PROD.Substring(0, 7) + ".pdf", fileArray);
+        });
+
+    }
+
+    protected async Task ConfirmaDescargarPlano()
+    {
+        var file = ordenFabricacion.CG_PROD.Substring(0, 7) + ".pdf";
+        if (await ExistePlano(file))
+        {
+
+            await confirmacionDescargarPlanoDialog.ShowAsync();
+        }
+        else
+        {
+            await confirmacionDescargarPlanoDialog.HideAsync();
+            await this.ToastObj.Show(new ToastModel
+            {
+                Title = "ERROR!",
+                Content = "No existe plano",
+                CssClass = "e-toast-danger",
+                Icon = "e-success toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
+
+    }
+
+    protected async Task<bool> ExistePlano(string file)
+    {
+        return await Http.GetFromJsonAsync<bool>($"api/AdministracionArchivos/ExistePlano/{file}");
+    }
+
+
     protected async Task VerPlano(string cg_prod)
     {
+        var file = ordenFabricacion.CG_PROD.Substring(0, 7) + ".pdf";
+        if (await ExistePlano(file))
+        {
+            await JS.InvokeAsync<object>("open", $"Pdf/{cg_prod.Trim()}/RUTAOF", "_blank");
+        }
+        else
+        {
+            await this.ToastObj.Show(new ToastModel
+            {
+                Title = "ERROR!",
+                Content = "No existe plano",
+                CssClass = "e-toast-danger",
+                Icon = "e-success toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
         //NavigationManager.NavigateTo($"Pdf/{cg_prod}/RUTAOF");
         //await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{cg_prod}/RUTAOF", $"_blank" });
-        await JS.InvokeAsync<object>("open", $"Pdf/{cg_prod.Trim()}/RUTAOF", "_blank");
+
         //NavigationManager.NavigateTo($"/VerPdf/{cg_prod}/RUTAOF");
     }
 
     protected async Task IrAServicio(string pedido)
     {
         //NavigationManager.NavigateTo($"sc/servicio/list/{pedido}");
-        await JS.InvokeVoidAsync("open", new object[2] { $"sc/servicio/list/{pedido}", $"sc/servicio/list/{pedido}" });
+        await JS.InvokeVoidAsync("open", new object[2] { $"servicio/list/{pedido}", $"servicio/list/{pedido}" });
     }
 
     protected async Task IrAPrograma(string cg_prod)
@@ -1689,6 +1776,10 @@
             });
         }
     }
+
+
+
+
     }
     <style>
 

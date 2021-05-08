@@ -39,13 +39,13 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
         {
             VisibleProperty = true;
             listaPedPend = await Http.GetFromJsonAsync<List<ModeloPedidosPendientes>>("api/PedidosPendientes");
-            
-            await base.OnInitializedAsync();
+            VisibleProperty = false;
+
         }
         public async Task DataBoundHandler()
         {
             await Grid.AutoFitColumns();
-            VisibleProperty = false;
+            
         }
 
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)

@@ -18,7 +18,7 @@ namespace SupplyChain
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
-    {
+    { 
         private IWebHostEnvironment _hostingEnvironment;
         //Initialize the memory cache object   
         public IMemoryCache _cache;
@@ -70,7 +70,7 @@ namespace SupplyChain
             jsonResult = pdfviewer.Load(stream, jsonObject);
 
             var result = Content(JsonConvert.SerializeObject(jsonResult));
-
+            
             return result;
         }
 

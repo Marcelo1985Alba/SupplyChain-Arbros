@@ -41,7 +41,8 @@ namespace SupplyChain.Server.Controllers
                 var archivos = new List<Archivo>();
                 var ruta = await _context.Solution.Where(s => s.CAMPO == parametro).FirstOrDefaultAsync();
                 var endLength = ruta.CAMPO.Trim() == "RUTAENSAYO" ? 9 : 7;
-                string[] dirs = Directory.GetFiles(@$"{ruta.VALORC}", $"{codigo.Substring(0, endLength)}*");
+                var file = codigo.Substring(0, endLength); 
+                string[] dirs = Directory.GetFiles(@$"{ruta.VALORC}", $"{file}*");
                 int identificacion = 0;
                 foreach (string item in dirs)
                 {
@@ -63,7 +64,7 @@ namespace SupplyChain.Server.Controllers
                 return archivos;
 
             }
-            catch
+            catch(Exception ex)
             {
                 return new List<Archivo>();
             }
@@ -100,6 +101,37 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
+        [HttpGet("ExistePlano/{file}")]
+        public async Task<bool> ExistePlano(string file)
+        {
+            var param = await _context.Solution.Where(s => s.CAMPO == "RUTAOF").FirstOrDefaultAsync();
+            var path = param.VALORC.Trim();
+
+            return System.IO.File.Exists(path + "/" + file);
+        }
+
+        [HttpGet("GetPlano/{file}/Load")]
+        public async Task<IActionResult> GetPlano(string file)
+        {
+            try
+            {
+                MemoryStream stream = new MemoryStream();
+                var ruta = await _context.Solution.Where(s => s.CAMPO == "RUTAOF").FirstOrDefaultAsync();
+                byte[] bytes = System.IO.File.ReadAllBytes(ruta.VALORC + "/" + file);
+                stream = new MemoryStream(bytes);
+                string mimeType = "application/pdf";
+                return new FileStreamResult(stream, mimeType)
+                {
+                    FileDownloadName = file
+                };
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
         [HttpGet("GetPdfNube/{fileName}/{ruta}")]
         public async Task<ActionResult<string>> GetPdfNube(string fileName, string ruta)
         {
@@ -127,15 +159,13 @@ namespace SupplyChain.Server.Controllers
                 DocumentPath = "data:application/pdf;base64," + Convert.ToBase64String(memoryStream.ToArray());
             }
 
-            //CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(connectionString);
-            //CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-            //CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(containerName);
-            //CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(fileName);
-            //MemoryStream memoryStream = new MemoryStream();
-            //await cloudBlockBlob.DownloadToStreamAsync(memoryStream);
-            //DocumentPath = "data:application/pdf;base64," + Convert.ToBase64String(memoryStream.ToArray());
 
             return DocumentPath;
+        }
+
+        private bool ExisteDoc(string file)
+        {
+            return System.IO.File.Exists(file);
         }
     }
 }
