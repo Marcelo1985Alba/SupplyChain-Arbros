@@ -265,12 +265,13 @@
 }
 
 @*DIALOG PARA DESPIECE*@
-<SfDialog Width="1300px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible">
+<SfDialog Height="850px" Width="95%" IsModal="false" ShowCloseIcon="true" @bind-Visible="@IsVisible" Target="#Despiece">
     <DialogTemplates>
+        <Header><p>Despiece</p><hr /></Header>
         <Content>
-            <SfGrid @ref="Grid2" DataSource="@listaDespiece" EnablePersistence="true" ID="Despiece" 
-                    GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true">
-                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <SfGrid @ref="Grid2" DataSource="@listaDespiece" EnablePersistence="true" ID="Despiece"
+                    GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true" Height="250px" Width="95%">
+                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                 <GridEvents TValue="DespiecePlanificacion"></GridEvents>
                 <GridColumns>
                     <GridColumn Field=@nameof(DespiecePlanificacion.CG_SE) HeaderText="Semi Elaborado" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
@@ -290,14 +291,17 @@
 </SfDialog>
 
 @*DIALOG PARA FORMULA*@
-<SfDialog Width="200px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible2">
+<SfDialog IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible2">
     <DialogTemplates>
+        <Header><p>Formulas</p><hr /></Header>
         <Content>
-            <SfGrid @ref="Grid3" DataSource="@listaFormula" EnablePersistence="true" ID="Formula" GridLines="GridLine.Both" AllowResizing="true">
+            <SfGrid @ref="Grid3" DataSource="@listaFormula" EnablePersistence="true" ID="Formula" GridLines="GridLine.Both"
+                    AllowResizing="true" Height="100px" Width="100%">
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                 <GridEvents RowSelected="OnSelected" TValue="FormulaPlanificacion"></GridEvents>
                 <GridColumns>
-                    <GridColumn Field=@nameof(FormulaPlanificacion.DES_FORM) HeaderText="SELECCIONAR FORMULA" TextAlign="TextAlign.Center" Width="110px"></GridColumn>
+                    <GridColumn Field=@nameof(FormulaPlanificacion.DES_FORM) HeaderText="SELECCIONAR FORMULA" 
+                                TextAlign="TextAlign.Center" Width="110px"></GridColumn>
                 </GridColumns>
             </SfGrid>
         </Content>
@@ -305,59 +309,73 @@
 </SfDialog>
 
 @*DIALOG PARA ORDENES CERRADAS Y ANULADAS*@
-<SfDialog Width="1300px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible3">
+<SfDialog IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible3" Height="550px" Width="70%" >
     <DialogTemplates>
+        <Header><p>ORDENES CERRADAS Y ANULADAS</p><hr/></Header>
         <Content>
-            <SfGrid @ref="Grid4" DataSource="@listaCerradasAnuladas" EnablePersistence="true" ID="Despiece" GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true">
-                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                <GridEvents TValue="Planificacion"></GridEvents>
-                <GridColumns>
-                    <GridColumn Field=@nameof(Planificacion.CG_ORDEN) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.CG_ORDF) HeaderText="Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.CLASE) HeaderText="Clase" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.CG_R) HeaderText="Tipo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.CG_ESTADOCARGA) Format="N0" HeaderText="Estado" Width="200px">
-                        <Template>
-                            @{
-                                Planificacion Value = (context as Planificacion);
-                                if (Value.CG_ESTADOCARGA == 4)
-                                {
-                                    <span>CERRADA</span>
-                                }
-                                else if (Value.CG_ESTADOCARGA == 5)
-                                {
-                                    <span>ANULADA</span>
-                                }
-                            }
-                        </Template>
-                    </GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.CG_PROD) HeaderText="Producto" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.DES_PROD) HeaderText="Descripción de producto" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.CANT) Format="N2" HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.CANTFAB) Format="N2" HeaderText="Cantidad fabricada" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.UNID) HeaderText="Unidad" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.UNIDSEG) HeaderText="Unidad comercial" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.DIASFAB) Format="N2" HeaderText="Días de fabricación" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.CG_CELDA) HeaderText="Celda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.CG_FORM) HeaderText="Fórmula" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.FE_ENTREGA) HeaderText="Fecha de entrega" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.FE_EMIT) HeaderText="Fecha de emisión" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.FE_PLAN) HeaderText="Fecha planificada" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.FE_FIRME) HeaderText="Fecha en firme" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.FE_CURSO) HeaderText="Fecha en curso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.FE_ANUL) HeaderText="Fecha de anulación" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Planificacion.FE_CIERRE) HeaderText="Fecha de cierre" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                </GridColumns>
-            </SfGrid>
-            @{
-                if (listaCerradasAnuladas.Count == CantidadMostrar)
-                {
-                    <div class="col-sm-3 my-1">
-                        <button type="submit" class="btn btn-primary" @onclick="@AgregarValores">Ver más</button>
-                    </div>
-                }
+            @if (listaCerradasAnuladas is null)
+            {
+                <em>Cargando...</em>
             }
+            <div class="col-lg-12 control-section mt-4">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <SfGrid @ref="Grid4" DataSource="@listaCerradasAnuladas" EnablePersistence="false"
+                                ID="Despiece" GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true"
+                                RowHeight="20" Height="320">
+                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                            <GridEvents TValue="Planificacion"></GridEvents>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(Planificacion.CG_ORDEN) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.CG_ORDF) HeaderText="Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.CLASE) HeaderText="Clase" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.CG_R) HeaderText="Tipo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.CG_ESTADOCARGA) Format="N0" HeaderText="Estado" Width="200px">
+                                    <Template>
+                                        @{
+                                            Planificacion Value = (context as Planificacion);
+                                            if (Value.CG_ESTADOCARGA == 4)
+                                            {
+                                                <span>CERRADA</span>
+                                            }
+                                            else if (Value.CG_ESTADOCARGA == 5)
+                                            {
+                                                <span>ANULADA</span>
+                                            }
+                                        }
+                                    </Template>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.CG_PROD) HeaderText="Producto" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.DES_PROD) HeaderText="Descripción de producto" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.CANT) Format="N2" HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.CANTFAB) Format="N2" HeaderText="Cantidad fabricada" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.UNID) HeaderText="Unidad" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.UNIDSEG) HeaderText="Unidad comercial" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.DIASFAB) Format="N2" HeaderText="Días de fabricación" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.CG_CELDA) HeaderText="Celda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.CG_FORM) HeaderText="Fórmula" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.FE_ENTREGA) HeaderText="Fecha de entrega" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.FE_EMIT) HeaderText="Fecha de emisión" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.FE_PLAN) HeaderText="Fecha planificada" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.FE_FIRME) HeaderText="Fecha en firme" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.FE_CURSO) HeaderText="Fecha en curso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.FE_ANUL) HeaderText="Fecha de anulación" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.FE_CIERRE) HeaderText="Fecha de cierre" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                        @{
+                            if (listaCerradasAnuladas.Count == CantidadMostrar)
+                            {
+                                <div class="col-sm-3 my-1">
+                                    <button type="submit" class="btn btn-primary" @onclick="@AgregarValores">Ver más</button>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+                        
         </Content>
     </DialogTemplates>
     <DialogEvents OnClose="@Validation"></DialogEvents>

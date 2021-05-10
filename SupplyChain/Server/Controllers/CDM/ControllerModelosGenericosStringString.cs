@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace SupplyChain
 {
@@ -24,11 +18,12 @@ namespace SupplyChain
         }
 
         [HttpGet("{SQLcommandString}")]
-        public IEnumerable<ModeloGenericoStringString> Get(string SQLcommandString)
+        public async Task<IEnumerable<ModeloGenericoStringString>> Get(string SQLcommandString)
         {
             try
             {
-                List<ModeloGenericoStringString> xResultado = _context.ModelosGenericosStringString.FromSqlRaw(SQLcommandString).ToList<ModeloGenericoStringString>();
+                List<ModeloGenericoStringString> xResultado = await _context.ModelosGenericosStringString.FromSqlRaw(SQLcommandString)
+                    .ToListAsync();
                 return xResultado;
             }
             catch (Exception ex)

@@ -482,56 +482,63 @@
                             </div>
                             <hr class="separator">
                             @*BOTONES PARA OBTENER DATOS*@
-                            <div class="form-row">
-                                    <div class="form-group col">
-                                        <SfButton Content="Descargar Plano" IsPrimary="true" IconCss="fa fa-download fa fa-file-pdf-o"
-                                                  @onclick="@(async ()=> await ConfirmaDescargarPlano())"></SfButton>
-                                    </div>
-                                    @*<div class="form-group col">
-                                        <SfButton Content="Ver Plano" IsPrimary="true" IconCss="fa fa-file-pdf-o"
-                                                  @onclick="@(async ()=> await VerPlano(ordenFabricacion.CG_PROD))"></SfButton>
-                                    </div>*@
-                                    @if (ordenFabricacion.EXIGEOA == true)
-                                    {
-                                        <div class="form-group col">
-                                            <Syncfusion.Blazor.SplitButtons.SfProgressButton IsPrimary="true" IconCss="fa fa-save"
-                                                                                             Content="Guardar Datos"
-                                                @onclick="@(async ()=> await DownloadText())">
-                                        
-                                            </Syncfusion.Blazor.SplitButtons.SfProgressButton>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <SfButton Content="Descargar Plano" IsPrimary="true" IconCss="fa fa-download fa fa-file-pdf-o"
+                                      @onclick="@(async ()=> await ConfirmaDescargarPlano())"></SfButton>
+                        </div>
+                        @*<div class="form-group col">
+            <SfButton Content="Ver Plano" IsPrimary="true" IconCss="fa fa-file-pdf-o"
+                      @onclick="@(async ()=> await VerPlano(ordenFabricacion.CG_PROD))"></SfButton>
+        </div>*@
+                        @if (ordenFabricacion.EXIGEOA == true)
+                        {
+                            <div class="form-group col">
+                                <Syncfusion.Blazor.SplitButtons.SfProgressButton IsPrimary="true" IconCss="fa fa-save"
+                                                                                 Content="Guardar Datos"
+                                                                                 @onclick="@(async ()=> await DownloadText())">
 
-                                    
-                                        </div>
-                                    }
-                                    @if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
-                                          ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
-                                          ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
-                                    {
-                                        <div class="form-group col">
-                                            <SfButton IsPrimary="true" Content="Ver en Modulo Servicios"
-                                                      @onclick="@(async ()=> await IrAServicio(ordenFabricacion.PEDIDO.ToString().Trim()))"></SfButton>
-                                        </div>
-                                    }
-                                <div class="form-group col">
-                                    @*<SfButton IsPrimary="true" @onclick="@(async ()=> await Etiqueta())">Identificación</SfButton>*@
-                                    <Syncfusion.Blazor.SplitButtons.SfProgressButton IsPrimary="true" IconCss="fa fa-download"
-                                                                                     Content="Identificación"
-                                                           @onclick="@(async ()=> await Etiqueta())">
+                                </Syncfusion.Blazor.SplitButtons.SfProgressButton>
 
-                                    </Syncfusion.Blazor.SplitButtons.SfProgressButton>
-                                </div>
-                                    @if (ordenFabricacion.EXIGEOA == true)
-                                    {
-                                        <div class="form-group col">
-                                            <SfButton IsPrimary="true" IconCss="fa fa-file"
-                                                      @onclick="@(async ()=> await Ensayos(ordenFabricacion.PEDIDO.ToString().Trim()))">Ver Ensayos</SfButton>
-                                        </div>
-                                        <div class="form-group col">
-                                            <SfButton IsPrimary="true" IconCss="fa fa-file"
-                                                      @onclick="@(async ()=> await IrAPrograma(ordenFabricacion.CG_PROD.Trim()))">Ver Programa</SfButton>
-                                        </div>
-                                    }
-                                </div>
+
+                            </div>
+                        }
+                        @if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
+                             ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
+                             ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
+                        {
+                            <div class="form-group col">
+                                <SfButton IsPrimary="true" Content="Ver en Modulo Servicios"
+                                          @onclick="@(async ()=> await IrAServicio(ordenFabricacion.PEDIDO.ToString().Trim()))"></SfButton>
+                            </div>
+                        }
+                        <div class="form-group col">
+                            @*<SfButton IsPrimary="true" @onclick="@(async ()=> await Etiqueta())">Identificación</SfButton>*@
+                            <Syncfusion.Blazor.SplitButtons.SfProgressButton IsPrimary="true" IconCss="fa fa-download"
+                                                                             Content="Identificación"
+                                                                             @onclick="@(async ()=> await Etiqueta())">
+
+                            </Syncfusion.Blazor.SplitButtons.SfProgressButton>
+                        </div>
+                        @if (ordenFabricacion.EXIGEOA == true)
+                        {
+                            <div class="form-group col">
+                                <SfButton IsPrimary="true" IconCss="fa fa-file"
+                                          @onclick="@(async ()=> await Ensayos(ordenFabricacion.PEDIDO.ToString().Trim()))">Ver Ensayos</SfButton>
+                            </div>
+                        }
+                        @if (!ordenFabricacion.EXIGEOA == true)
+                        {
+                            
+                            <div class="form-group col">
+                                <SfButton IsPrimary="true" IconCss="fa fa-file"
+                                          @onclick="@(async ()=> await IrAPrograma(ordenFabricacion.CG_PROD.Trim()))">
+                                    Ver Programa
+                                </SfButton>
+                            </div>
+                        }
+
+                    </div>
                             
                             <hr class="separator">
                             @*PRODUCTO*@

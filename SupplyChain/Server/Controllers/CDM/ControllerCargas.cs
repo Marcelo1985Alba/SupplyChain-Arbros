@@ -25,7 +25,7 @@ namespace SupplyChain
 
         // GET: api/Cargas
         [HttpGet]
-        public IEnumerable<ModeloCarga> Get()
+        public async Task<IEnumerable<ModeloCarga>> Get()
         {
             try
             {
@@ -34,7 +34,8 @@ namespace SupplyChain
 
                 // Llena tabla de carga
                 List<ModeloCarga> dbCarga;
-                dbCarga = _context.Cargas.FromSqlRaw("EXEC NET_PCP_Carga_Poner_Fecha_Prevista_Fabricacion 0; EXEC NET_PCP_Carga_Maq 1").ToList();
+                dbCarga = await _context.Cargas.FromSqlRaw("EXEC NET_PCP_Carga_Poner_Fecha_Prevista_Fabricacion 0; EXEC NET_PCP_Carga_Maq 1")
+                    .ToListAsync();
                 dbCarga = dbCarga.OrderBy(x => x.ORDEN_CELDA)
                     .ThenBy(x => x.CG_CELDA)
                     .ThenByDescending(x => x.CG_ESTADOCARGA)

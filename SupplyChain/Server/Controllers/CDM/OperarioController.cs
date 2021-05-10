@@ -26,9 +26,9 @@ namespace SupplyChain
         //    return await _context.Operario.ToListAsync();
         //}
         [HttpGet]
-        public IEnumerable<Operario> Get()
+        public async Task<IEnumerable<Operario>> Get()
         {
-            var xitem = _context.Operario.ToList();
+            var xitem = await _context.Operario.ToListAsync();
 
             return xitem;
         }
