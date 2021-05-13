@@ -218,15 +218,8 @@ namespace SupplyChain
                 stock.Proveedor = null;
                 _context.Pedidos.Add(stock);
                 await _context.SaveChangesAsync();
-                if (stock.CERRAROC)
-                {
-                    var compra = await _context.Compras
-                        .Where(c => c.CG_MAT == stock.CG_ART && c.NUMERO == stock.OCOMPRA).FirstOrDefaultAsync();
 
-                    compra.FE_CIERRE = DateTime.Now;
-                    _context.Entry(compra).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                }
+                await CerrarOC(stock);
                 await generaController.LiberaByCampo("REGSTOCK");
             }
             catch (DbUpdateException ex)
@@ -295,6 +288,33 @@ namespace SupplyChain
             }
 
             return Ok(stock);
+        }
+
+        private async Task CerrarOC(Pedidos stock)
+        {
+            if (stock.TIPOO ==5)
+            {
+                var recibido =_context.Pedidos
+                    .Where(p => p.TIPOO == 5 && p.OCOMPRA == stock.OCOMPRA && p.CG_ART == stock.CG_ART)
+                    .Sum(p => p.STOCK);
+
+                var cantOC = _context.Compras
+                    .Where(c => c.NUMERO == stock.OCOMPRA && c.CG_MAT == stock.CG_ART)
+                    .Sum(c => c.SOLICITADO);
+
+                var completado = cantOC - recibido <= 0;
+
+                if (stock.CERRAROC || completado)
+                {
+                    var compra = await _context.Compras
+                        .Where(c => c.CG_MAT == stock.CG_ART && c.NUMERO == stock.OCOMPRA).FirstOrDefaultAsync();
+
+                    compra.FE_CIERRE = DateTime.Now;
+                    _context.Entry(compra).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
+            }
+            
         }
 
         // PUT: api/Stock/123729

@@ -16,7 +16,7 @@ namespace SupplyChain.Shared.HelpersAtributo
 
             var serie = value as string;
             return string.IsNullOrWhiteSpace(serie)
-                ? new ValidationResult("Ingresar Serie: el insumo exige serie")
+                ? new ValidationResult($"Ingresar Serie: el insumo {stock.CG_ART.Trim()} exige serie")
                 : ValidationResult.Success;
         }
     }

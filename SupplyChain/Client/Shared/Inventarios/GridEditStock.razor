@@ -75,26 +75,39 @@ else
                                             <SfTextBox @bind-Value="@stock.UNID" Readonly="true"></SfTextBox>
                                             <ValidationMessage For="@(() => stock.UNID)"></ValidationMessage>
                                         </div>
-                                        <div class="form-group col-md-2">
-                                            <label class="col-form-label">Serie</label>
-                                            <SfTextBox @bind-Value="@stock.SERIE"></SfTextBox>
-                                            <ValidationMessage For="@(() => stock.SERIE)"></ValidationMessage>
-                                        </div>
-                                        <div class="form-group col-md-2">
-                                            <label class="col-form-label">Depacho</label>
-                                            <SfTextBox @bind-Value="@stock.DESPACHO"></SfTextBox>
-                                            <ValidationMessage For="@(() => stock.DESPACHO)"></ValidationMessage>
-                                        </div>
-                                        <div class="form-group col-md-2">
-                                            <label class="col-form-label">Lote</label>
-                                            <SfTextBox @bind-Value="@stock.LOTE"></SfTextBox>
-                                            <ValidationMessage For="@(() => stock.LOTE)"></ValidationMessage>
-                                        </div>
-                                        <div class="form-group col-md-2 mt-5">
-                                            @*<CheckBox LabelText="Cierra Item en OC" IsChecked="@stock.CERRAROC"/>*@
-                                            <Syncfusion.Blazor.Buttons.SfCheckBox Label="Cierra Item en OC" 
-                                                                                  @bind-Checked ="@stock.CERRAROC" />
-                                        </div>
+                                        @if (RegistroGenerado.TIPOO != 5)
+                                        {
+                                            <div class="form-group col-md-2">
+                                                <label class="col-form-label">Serie</label>
+                                                <SfTextBox @bind-Value="@stock.SERIE"></SfTextBox>
+                                                <ValidationMessage For="@(() => stock.SERIE)"></ValidationMessage>
+                                            </div>
+                                        }
+                                        @if (RegistroGenerado.TIPOO == 5)
+                                        {
+                                            <div class="form-group col-md-2">
+                                                <label class="col-form-label">Depacho</label>
+                                                <SfTextBox @bind-Value="@stock.DESPACHO"></SfTextBox>
+                                                <ValidationMessage For="@(() => stock.DESPACHO)"></ValidationMessage>
+                                            </div>
+                                        }
+
+                                        @if (RegistroGenerado.TIPOO != 5)
+                                        {
+                                            <div class="form-group col-md-2">
+                                                <label class="col-form-label">Lote</label>
+                                                <SfTextBox @bind-Value="@stock.LOTE"></SfTextBox>
+                                                <ValidationMessage For="@(() => stock.LOTE)"></ValidationMessage>
+                                            </div>
+                                        }
+
+                                        @if (RegistroGenerado.TIPOO == 5)
+                                        {
+                                            <div class="form-group col-md-2 mt-5">
+                                                <Syncfusion.Blazor.Buttons.SfCheckBox Label="Cierra Item en OC"
+                                                                                      @bind-Checked="@stock.CERRAROC" />
+                                            </div>
+                                        }
 
                                     </div>
                                 </div>
@@ -109,8 +122,8 @@ else
                         <GridColumn HeaderText="" Width="120">
                             <GridCommandColumns>
                                 <GridCommandColumn Type="CommandButtonType.None" Title="Copiar"
-                                                   ButtonOption="@(new CommandButtonOptions() {     
-                                                                       IconCss = "e-icons e-copy", 
+                                                   ButtonOption="@(new CommandButtonOptions() {
+                                                                       IconCss = "e-icons e-copy",
                                                                        CssClass = "e-flat" })"></GridCommandColumn>
                                 <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
                                 <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
@@ -122,9 +135,11 @@ else
                         <GridColumn Field="@nameof(Pedidos.DES_ART)" HeaderText="Desc. Producto" Width="180"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.STOCK)" HeaderText="Cantidad" EditType="EditType.NumericEdit" Format="N2" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.UNID)" HeaderText="Unidad" AutoFit="true"></GridColumn>
-                        <GridColumn Field="@nameof(Pedidos.DESPACHO)" HeaderText="Despacho" AutoFit="true"></GridColumn>
-                        <GridColumn Field="@nameof(Pedidos.SERIE)" HeaderText="Serie" AutoFit="true"></GridColumn>
-                        <GridColumn Field="@nameof(Pedidos.LOTE)" HeaderText="Lote" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.CERRAROC)" HeaderText="Cierra OC" DisplayAsCheckBox="true"
+                                    AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.DESPACHO)" HeaderText="Despacho" AutoFit="true" Visible="@(RegistroGenerado.TIPOO == 5)"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.SERIE)" HeaderText="Serie" AutoFit="true" Visible="@(RegistroGenerado.TIPOO != 5)"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.LOTE)" HeaderText="Lote" AutoFit="true" Visible="@(RegistroGenerado.TIPOO != 5)"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.CG_DEP)" HeaderText="Deposito" AutoFit="true">
                             <Template>
                                 @{
@@ -137,15 +152,15 @@ else
                                 }
                             </Template>
                         </GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.PENDIENTEOC)" HeaderText="Pendiente"AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.STOCKA)" HeaderText="Cant Comer" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.UNIDA)" HeaderText="Unid Comer" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.IMPORTE1)" HeaderText="Precio Unit." AutoFit="true"></GridColumn>
                         @*<GridColumn Field="@nameof(Pedidos.IMPORTE2)" HeaderText="Importe2" AutoFit="true"></GridColumn>
-                        <GridColumn Field="@nameof(Pedidos.IMPORTE3)" HeaderText="Importe3" AutoFit="true"></GridColumn>
-                        <GridColumn Field="@nameof(Pedidos.IMPORTE4)" HeaderText="Total" AutoFit="true"></GridColumn>*@
+        <GridColumn Field="@nameof(Pedidos.IMPORTE3)" HeaderText="Importe3" AutoFit="true"></GridColumn>
+        <GridColumn Field="@nameof(Pedidos.IMPORTE4)" HeaderText="Total" AutoFit="true"></GridColumn>*@
 
-                        <GridColumn Field="@nameof(Pedidos.CERRAROC)" HeaderText="Cierra OC" DisplayAsCheckBox="true"
-                                    AutoFit="true"></GridColumn>
+
                         <GridColumn Field="@nameof(Pedidos.REGISTRO)" IsPrimaryKey="true" Visible="false"></GridColumn>
                     </GridColumns>
                 </SfGrid>
@@ -261,8 +276,10 @@ else
     protected override async Task OnInitializedAsync()
     {
         depositos = await Http.GetFromJsonAsync<List<Deposito>>("api/Deposito");
-        await InvokeAsync(StateHasChanged);
+
+        //await InvokeAsync(StateHasChanged);
     }
+
 
     public async Task CommandClickHandler(CommandClickEventArgs<Pedidos> args)
     {
@@ -405,10 +422,6 @@ else
             }
 
         }
-
-
-        //EditContext.StateHasChanged += () => { InvokeAsync(StateHasChanged); };
-
         stock = pedido;
     }
 
@@ -551,7 +564,6 @@ else
         Grid.Refresh();
         await Grid.RefreshHeader();
         await BuscadorProducto.HideAsync();
-        await InvokeAsync(StateHasChanged);
     }
 
 

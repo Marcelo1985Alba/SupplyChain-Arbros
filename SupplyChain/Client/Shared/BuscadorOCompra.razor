@@ -41,8 +41,8 @@
     BuscadorEmergente<Compra> Buscador;
     SfToast ToastObj;
     private Compra[] ItemsABuscar = null;
-    private string[] ColumnasBuscador = new string[] { "NUMERO", "CG_MAT", "AUTORIZADO", "DES_PROVE" };
-    private string TituloBuscador = "Listado de Ordenes de Compra";
+    private string[] ColumnasBuscador = new string[] { "NUMERO", "FE_EMIT", "CG_MAT", "SOLICITADO","UNID", "DES_PROVE" };
+    private string TituloBuscador = "Listado de Ordenes de Compra Abierta";
     private bool PopupBuscadorVisible = false;
 
     private async Task BuscarOCompras()

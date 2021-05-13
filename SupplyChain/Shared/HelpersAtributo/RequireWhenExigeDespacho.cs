@@ -16,7 +16,7 @@ namespace SupplyChain.Shared.HelpersAtributo
 
             var despacho = value as string;
             return string.IsNullOrWhiteSpace(despacho)
-                ? new ValidationResult("Ingresar Despacho: el insumo exige despacho")
+                ? new ValidationResult($"Ingresar Despacho: el insumo {stock.CG_ART.Trim()} exige despacho")
                 : ValidationResult.Success;
         }
     }

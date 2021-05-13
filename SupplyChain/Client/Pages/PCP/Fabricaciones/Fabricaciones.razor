@@ -38,7 +38,7 @@
             <div class="content-wrapper">
                 <div class="row">
                     <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                            EnablePersistence="true" RowHeight="20"
+                            EnablePersistence="true" RowHeight="20" AllowRowDragAndDrop="true"
                             @ref="Grid" DataSource="@listaFab" AllowExcelExport="true" 
                             AllowGrouping="true" ID="Fab" Height="100%" Width="100%"
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems"
@@ -124,11 +124,12 @@
                             </Template>
                         </GridEditSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(Fabricacion.CG_ORDEN) HeaderText="Tipo producto" Edit="false" TextAlign="TextAlign.Left" Width="210px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.CG_ORDEN) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="210px" Visible="false" AllowEditing="false"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.CG_PROD) HeaderText="Producto" Edit="false" TextAlign="TextAlign.Left" Width="210px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.DES_PROD) HeaderText="Descripción de producto" Edit="false" TextAlign="TextAlign.Left" Width="310px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.ORDEN) HeaderText="Prioridad" TextAlign="TextAlign.Left" Edit="true" Width="140px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.CG_ORDF) HeaderText="Orden" Edit="false" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.ULTIMAORDENASOCIADA) HeaderText="Tipo producto" Edit="false" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.ULTIMAORDENASOCIADA) HeaderText="Tipo producto" Edit="false" Visible="false" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.CLASE) HeaderText="Clase" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.CG_R) HeaderText="Tipo de órden" TextAlign="TextAlign.Left" Edit="false" Width="210px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.CANT) Format="N2" HeaderText="Cantidad" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
@@ -151,8 +152,8 @@
                             <GridColumn Field=@nameof(Fabricacion.INSUMOS_ENTREGADOS_A_PLANTA) HeaderText="Insumos entregados" Edit="false" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.DIASFAB) Format="N2" HeaderText="Días de fabricación" Edit="false" TextAlign="TextAlign.Left" Width="310px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.CG_CELDA) HeaderText="Celda"  
-                                        TextAlign="TextAlign.Left" Edit="true" Width="340px" >
+                            <GridColumn Field=@nameof(Fabricacion.CG_CELDA) HeaderText="Celda"
+                                        TextAlign="TextAlign.Left" Edit="true" Width="340px">
                                 <Template>
                                     @{
                                         var ordfab = (context as Fabricacion);
@@ -160,7 +161,7 @@
                                         {
                                             if (listaCelda.Any(c => c.CG_CELDA.Trim() == ordfab.CG_CELDA.Trim()))
                                             {
-                                                <span>@listaCelda.Where(c=> c.CG_CELDA.Trim() == ordfab.CG_CELDA.Trim()).FirstOrDefault().DES_CELDA</span>
+                                                <span>@listaCelda.Where(c => c.CG_CELDA.Trim() == ordfab.CG_CELDA.Trim()).FirstOrDefault().DES_CELDA</span>
 
                                             }
                                         }
@@ -174,9 +175,9 @@
                             <GridColumn Field=@nameof(Fabricacion.FE_FIRME) HeaderText="Fecha en firme" TextAlign="TextAlign.Left" Edit="false" Width="210px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.FE_CURSO) HeaderText="Fecha en curso" TextAlign="TextAlign.Left" Edit="false" Width="210px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.FECHA_PREVISTA_FABRICACION) HeaderText="Fecha prevista de fabricacion" TextAlign="TextAlign.Left" Edit="false" Width="240px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.ORDEN) HeaderText="Prioridad" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
+
                             @*<GridColumn Field=@nameof(Fabricacion.FE_ANUL) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
-            <GridColumn Field=@nameof(Fabricacion.FE_CIERRE) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="190px"></GridColumn>*@
+        <GridColumn Field=@nameof(Fabricacion.FE_CIERRE) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="190px"></GridColumn>*@
                         </GridColumns>
                     </SfGrid>
                 </div>

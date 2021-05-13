@@ -566,7 +566,7 @@
         List<Pedidos> lStock = new List<Pedidos>();
         int registronegativo = 0;
         StockEncabezado.OCOMPRA = lcompraSel[0].NUMERO;
-
+        Genera genera;
         if (StockEncabezado.TIPOO == 5)
         {
             //ItemsCompras = await Http.GetFromJsonAsync<Compra[]>($"api/Compras/GetCompraByNumero/{compraSel.NUMERO}");
@@ -576,6 +576,7 @@
             foreach (var item in lcompraSel)
             {
                 registronegativo--;
+
                 Pedidos pedido = new();
                 pedido.Proveedor = lcompraSel[0].ProveedorNavigation;
                 pedido.OCOMPRA = item.NUMERO;
@@ -588,6 +589,7 @@
                 pedido.UNID = item.UNID;
                 pedido.CG_DEP = 4;
                 //Calcular stockA
+                pedido.PENDIENTEOC = item.PENDIENTE;
                 pedido.UNIDA = item.UNID1;
                 pedido.STOCKA = item.AUTORIZADO;
                 pedido.STOCK = item.SOLICITADO;
@@ -600,6 +602,13 @@
                 pedido.EXIGEDESPACHO = prod.EXIGEDESPACHO;
                 pedido.EXIGESERIE = prod.EXIGESERIE;
                 pedido.EXIGELOTE = prod.EXIGELOTE;
+
+                if (pedido.EXIGEDESPACHO)
+                {
+                    genera = await Http.GetFromJsonAsync<Genera>($"api/Genera/Reserva/CG_ORDING");
+                    pedido.DESPACHO = Convert.ToInt32(genera.VALOR1).ToString();
+                    await Http.GetFromJsonAsync<Genera>($"api/Genera/Libera/CG_ORDING");
+                }
 
                 pedido.REGISTRO = registronegativo;
 

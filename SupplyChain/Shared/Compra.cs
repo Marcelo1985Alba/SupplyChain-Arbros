@@ -105,6 +105,8 @@ namespace SupplyChain.Shared.Models
         public int? CG_CIA { get; set; }
 
         [NotMapped]
+        public decimal? PENDIENTE { get; set; } = 0;
+        [NotMapped]
         public Proveedor ProveedorNavigation { get; set; }
     }
 }

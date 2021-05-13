@@ -16,7 +16,7 @@ namespace SupplyChain.Shared.HelpersAtributo
 
             var lote = value as string;
             return string.IsNullOrWhiteSpace(lote)
-                ? new ValidationResult("Ingresar Lote: el insumo exige lote")
+                ? new ValidationResult($"Ingresar Lote: el insumo {stock.CG_ART.Trim()} exige lote")
                 : ValidationResult.Success;
         }
     }
