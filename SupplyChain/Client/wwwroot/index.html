@@ -3,17 +3,18 @@
 
 <head>
     <meta charset="utf-8" />
+    <meta name="theme-color" content="#317EFB"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Arbros S.A</title>
     <base href="/" />
     <link href="css/app.css" rel="stylesheet" />
     <link href="css/spinners.css" rel="stylesheet" />
-    <link href="SupplyChain.Client.styles.css" rel="stylesheet" />
+   
     <link href="manifest.json" rel="manifest" />
-    <link href="_content/Syncfusion.Blazor.Themes/material.css" rel="stylesheet" />
+    <link async href="_content/Syncfusion.Blazor.Themes/material.css" rel="stylesheet" />
     <link rel="apple-touch-icon" sizes="512x512" href="logo_aerre.jpg" />
 
-    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link async href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <script src="FuncionesJavaScript.js"></script>
     <link href="css/font-awesome/font-awesome.css" rel="stylesheet" />
     <link href="css/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" />
@@ -116,11 +117,13 @@
     <!--<script src="js/sidebarmenu.js"></script>-->
     <!--<script src="css/bootstrap-table/dist/bootstrap-table.min.js"></script>
     <script src="css/bootstrap-table/dist/bootstrap-table.ints.js"></script>-->
+    <link async href="SupplyChain.Client.styles.css" rel="stylesheet" />
     <script src="_framework/blazor.webassembly.js"></script>
-    <script>navigator.serviceWorker.register('service-worker.js');</script>
-    <script>navigator.serviceWorker.register('actualiza-cache.js', { scope: './' }).then(() => {
+    <script>navigator.serviceWorker.register('service-worker.js', { scope: '/' });</script>
+    <!--<script>navigator.serviceWorker.register('actualiza-cache.js', { scope: './' }).then(() => {
             console.log('Service Worker Registrado');
-        });</script>
+        });</script>-->
+
 </body>
 
 </html>
