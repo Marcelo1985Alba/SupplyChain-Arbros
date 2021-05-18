@@ -8,6 +8,11 @@
 @using Syncfusion.Blazor.Calendars
 @using Syncfusion.Blazor.Navigations
 @using SupplyChain.Client.Shared.Inventarios
+@using Syncfusion.Pdf;
+@using Syncfusion.Pdf.Graphics;
+@using Syncfusion.Pdf.Grid;
+@using Syncfusion.Pdf.Tables;
+@using System.IO;
 @attribute [Authorize]
 
 <div class="col-12 control-section mt-4">
@@ -17,30 +22,30 @@
     <SfSpinner @bind-Visible="@SpinnerVisible" Label="Procesando..." Target="#formulario" Size="200" Type="SpinnerType.Bootstrap">
     </SfSpinner>
     <div class="content-wrapper" id="formulario">
-        
+
         <EditForm Model="@StockEncabezado" OnValidSubmit="@(async()=> await AbrirConfirmacionGuardarVale())">
             @*<DataAnnotationsValidator />*@
             <div class="form-row btn-group">
                 <div class="col-4">
-                    <SfButton HtmlAttributes="HtmlAttribute" Content="Eliminar" ID="btnEliminarVale" 
+                    <SfButton HtmlAttributes="HtmlAttribute" Content="Eliminar" ID="btnEliminarVale"
                               OnClick="@(async ()=> await AbrirConfirmacionEliminarVale())" IsPrimary="false"
                               IconCss="fa fa-trash-o" CssClass="btn btn-sm btn-warning"
                               Disabled="@(!abrioVale)"></SfButton>
                 </div>
                 <div class="col-4">
-                    <SfButton HtmlAttributes="HtmlAttribute" Content="Nuevo" IsPrimary="false"  
+                    <SfButton HtmlAttributes="HtmlAttribute" Content="Nuevo" IsPrimary="false"
                               OnClick="@(async ()=> await NuevoVale())" ID="btnNuevoVale"
                               IconCss="fa fa-plus-square-o" CssClass="btn btn-sm btn-info"
                               Disabled="@(!abrioVale)"></SfButton>
                 </div>
                 <div class="col-4">
-                    <SfButton Content="Guardar" IsPrimary="true" IconCss="fa fa-save" 
+                    <SfButton Content="Guardar" IsPrimary="true" IconCss="fa fa-save"
                               CssClass="btn btn-sm btn-success" ID="btnGuardarVale"
                               Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"></SfButton>
                 </div>
             </div>
             <hr />
-            
+
             <ObjectGraphDataAnnotationsValidator />
             <div class="form-row">
                 <div class="form-group col-lg-6 col-md-4 col-sm-12 col-12">
@@ -91,8 +96,13 @@
 
                     <div class="form-group col-lg-3 col-md-4 col-sm-12">
                         <label class="col-form-label">Remito:</label>
-                        <SfTextBox ID="Remito" ShowClearButton="true" @bind-Value="@StockEncabezado.REMITO" Type="InputType.Text" Readonly="false">
+                        <SfTextBox ID="Remito" ShowClearButton="false" @bind-Value="@StockEncabezado.REMITO" Type="InputType.Text"
+                                   Readonly="false" Blur="OnBlurRemito">
                         </SfTextBox>
+
+                        @*<SfMaskedTextBox ID="RemitoMask" ShowClearButton="true"
+                            @bind-Value="@StockEncabezado.REMITO" Blur="@OnBlurRemito"
+                            Mask="[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"></SfMaskedTextBox>*@
 
                     </div>
                 }
@@ -130,15 +140,15 @@
             <div class="form-row">
 
                 @*<div class="form-group col-6">
-                <label class="col-form-label">Depósito de Ingreso</label>
-                <ComboDeposito DepositoSeleccionado="@StockEncabezado.CG_DEP" EsSoloLectura="@DepositoIngresoSoloLectura"
-                               OnSelectedDepositoChanged="SelectedDepositoIngresoChanged" />
-            </div>*@
+                        <label class="col-form-label">Depósito de Ingreso</label>
+                        <ComboDeposito DepositoSeleccionado="@StockEncabezado.CG_DEP" EsSoloLectura="@DepositoIngresoSoloLectura"
+                                       OnSelectedDepositoChanged="SelectedDepositoIngresoChanged" />
+                    </div>*@
                 @*<div class="form-group col-6">
-                <label class="col-form-label">Depósito de Salida</label>
-                <ComboDeposito DepositoSeleccionado="@selectedDepositoSalida" EsSoloLectura="@DepositoSalidaSoloLectura"
-                               OnSelectedDepositoChanged="SelectedDepositoSalidaChanged" />
-            </div>*@
+                        <label class="col-form-label">Depósito de Salida</label>
+                        <ComboDeposito DepositoSeleccionado="@selectedDepositoSalida" EsSoloLectura="@DepositoSalidaSoloLectura"
+                                       OnSelectedDepositoChanged="SelectedDepositoSalidaChanged" />
+                    </div>*@
 
             </div>
 
@@ -214,7 +224,7 @@
     private bool DepositoIngresoSoloLectura = true;
     protected bool abrioVale = false;
     private Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
-    {
+{
          {"type", "button" }
     };
 
@@ -393,7 +403,7 @@
         if (StockEncabezado.TIPOO == 6) //DEVOL prove
         {
             //StockEncabezado.CG_DEP = deposito.CG_DEP;
-            StockEncabezado.Items.ForEach(s=>
+            StockEncabezado.Items.ForEach(s =>
             {
                 s.CG_DEP = deposito.CG_DEP;
             });
@@ -592,7 +602,7 @@
                 pedido.PENDIENTEOC = item.PENDIENTE;
                 pedido.UNIDA = item.UNID1;
                 pedido.STOCKA = item.AUTORIZADO;
-                pedido.STOCK = item.SOLICITADO;
+                pedido.STOCK = item.PENDIENTE;
                 pedido.IMPORTE1 = item.PRECIONETO;
 
 
@@ -756,7 +766,7 @@
             s.CG_PROVE = Cg_CLI_Cg_PROVE;
             s.TIPOO = StockEncabezado.TIPOO;
             await OnGuardarPedido(s);
-
+            await Etiqueta(s);
         });
 
 
@@ -941,6 +951,45 @@ protected async Task EliminarVale()
 
 
     }
+}
+
+private void OnBlurRemito()
+{
+    if (!string.IsNullOrEmpty(StockEncabezado.REMITO))
+    {
+
+        var puntoVenta = StockEncabezado.REMITO.Substring(0, StockEncabezado.REMITO.IndexOf("-"));
+        puntoVenta = puntoVenta.PadLeft(4, '0');
+        var numero = StockEncabezado.REMITO.Substring(StockEncabezado.REMITO.IndexOf("-") + 1);
+        numero = numero.PadLeft(8, '0');
+        StockEncabezado.REMITO = puntoVenta + "-" + numero;
+    }
+
+}
+
+protected async Task Etiqueta(Pedidos pedidos)
+{
+
+    PdfDocument document1 = new PdfDocument();
+    document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(227, 70);//110
+    document1.PageSettings.Margins.All = -1;
+    PdfGrid pdfGrid1 = new PdfGrid();
+    PdfPage page = document1.Pages.Add();
+    PdfGraphics graphics = page.Graphics;
+    PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
+    PdfLightTable pdfTable = new PdfLightTable();
+    page.Graphics.RotateTransform(-90);
+
+
+    graphics.DrawString($"{pedidos.CG_ART}                  OC {pedidos.OCOMPRA}\r\n{pedidos.DES_ART}\r\n " +
+        $"Despacho {pedidos.DESPACHO}                    VALE {pedidos.VALE}\n" +
+        $"{pedidos.Proveedor.DES_PROVE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+
+    document1.PageSettings.Margins.All = 0;
+    MemoryStream xx = new MemoryStream();
+    document1.Save(xx);
+    document1.Close(true);
+    await JsRuntime.SaveAs("ETOC" + pedidos.CG_ART.Trim() + ".pdf", xx.ToArray());
 }
 
 }
