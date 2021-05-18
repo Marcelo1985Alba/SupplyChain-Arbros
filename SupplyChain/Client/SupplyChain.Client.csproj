@@ -419,23 +419,23 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="5.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Components.DataAnnotations.Validation" Version="3.2.0-rc1.20223.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.5" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.6" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Syncfusion.Blazor.BarcodeGenerator" Version="19.1.0.59" />
-    <PackageReference Include="Syncfusion.Blazor.Buttons" Version="19.1.0.59" />
-    <PackageReference Include="Syncfusion.Blazor.DropDowns" Version="19.1.0.59" />
-    <PackageReference Include="Syncfusion.Blazor.Gantt" Version="19.1.0.59" />
-    <PackageReference Include="Syncfusion.Blazor.Grid" Version="19.1.0.59" />
-    <PackageReference Include="Syncfusion.Blazor.Kanban" Version="19.1.0.59" />
-    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="19.1.0.59" />
-    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="19.1.0.59" />
-    <PackageReference Include="Syncfusion.Blazor.PivotTable" Version="19.1.0.59" />
-    <PackageReference Include="Syncfusion.Blazor.Popups" Version="19.1.0.59" />
+    <PackageReference Include="Syncfusion.Blazor.BarcodeGenerator" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.Blazor.Buttons" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.Blazor.DropDowns" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.Blazor.Gantt" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.Blazor.Grid" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.Blazor.Kanban" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.Blazor.PivotTable" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.Blazor.Popups" Version="19.1.0.63" />
     
-    <PackageReference Include="Syncfusion.Pdf.Net.Core" Version="19.1.0.59" />
+    <PackageReference Include="Syncfusion.Pdf.Net.Core" Version="19.1.0.63" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>
 

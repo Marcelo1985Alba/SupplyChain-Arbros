@@ -71,6 +71,7 @@
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                         <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
+                            <HeaderTemplate>Detalle</HeaderTemplate>
                             <Template>
                                 @{
                                     var planif = (context as Planificacion);
@@ -265,12 +266,12 @@
 }
 
 @*DIALOG PARA DESPIECE*@
-<SfDialog Height="850px" Width="95%" IsModal="false" ShowCloseIcon="true" @bind-Visible="@IsVisible" Target="#Despiece">
+<SfDialog Height="850px" Width="95%" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible" Target="#GridPlanificacion">
     <DialogTemplates>
         <Header><p>Despiece</p><hr /></Header>
         <Content>
             <SfGrid @ref="Grid2" DataSource="@listaDespiece" EnablePersistence="true" ID="Despiece"
-                    GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true" Height="250px" Width="95%">
+                    GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true" Height="350px" Width="100%">
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                 <GridEvents TValue="DespiecePlanificacion"></GridEvents>
                 <GridColumns>

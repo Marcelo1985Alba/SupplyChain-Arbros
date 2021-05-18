@@ -20,8 +20,10 @@ else
                         AllowResizing="true" AllowSelection="true" AllowSorting="true" AllowTextWrap="false"
                         AllowReordering="true">
                     @*<GridPageSettings PageCount="4" PageSize="4"></GridPageSettings>*@
-                    <GridEvents OnActionBegin="@(async(p)=> await OnActionBeginHandler(p))" CommandClicked="@(async (p)=> await CommandClickHandler(p))"
+                    <GridEvents OnActionBegin="@(async(p)=> await OnActionBeginHandler(p))" 
+                                CommandClicked="@(async (p)=> await CommandClickHandler(p))"
                                 OnBeginEdit="@(async (ped)=> await BeginEditHandler(ped))" 
+                                QueryCellInfo="@(async(e)=> await QueryCellInfoHandler(e))"
                                 OnActionComplete="OnActionComplete" OnToolbarClick="ClickHandler"
                                 TValue="Pedidos"></GridEvents>
                     <GridEditSettings AllowAdding="PermiteAgregar" AllowEditing="PermiteEditar" AllowDeleting="PermiteEliminar"
@@ -598,6 +600,15 @@ else
         //DataSource = lStock.ToArray();
         stock = registroCompleto;
     }
+
+
+    public async Task QueryCellInfoHandler(QueryCellInfoEventArgs<Pedidos> args)
+    {
+        if (args.Data.STOCK > args.Data.PENDIENTEOC)
+        {
+            args.Cell.AddClass(new string[] { "rojo" });
+        }
+    }
 }
 <style>
     /*    #dialogo {
@@ -610,5 +621,9 @@ else
 
     #gridEditStock_dialogEdit_wrapper {
         top: 131px !important;
+    }
+
+    .e-grid .e-gridcontent .e-rowcell.rojo {
+        background-color: #fc9494;
     }
 </style>
