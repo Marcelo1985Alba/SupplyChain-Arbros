@@ -22,5 +22,7 @@ namespace SupplyChain.Shared.Models
         public decimal SALDO_PLANEADAS { get; set; } = 0;
         public decimal CANT_TOTAL { get; set; } = 0;
         public decimal SALDO_TOTAL { get; set; } = 0;
+
+        public List<ResumenStock> ResumenStocks { get; set; }
     }
 }

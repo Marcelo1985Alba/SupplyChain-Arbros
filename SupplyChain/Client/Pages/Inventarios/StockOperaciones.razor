@@ -26,22 +26,27 @@
         <EditForm Model="@StockEncabezado" OnValidSubmit="@(async()=> await AbrirConfirmacionGuardarVale())">
             @*<DataAnnotationsValidator />*@
             <div class="form-row btn-group">
-                <div class="col-4">
+                <div class="col-3">
                     <SfButton HtmlAttributes="HtmlAttribute" Content="Eliminar" ID="btnEliminarVale"
                               OnClick="@(async ()=> await AbrirConfirmacionEliminarVale())" IsPrimary="false"
-                              IconCss="fa fa-trash-o" CssClass="btn btn-sm btn-warning"
+                              IconCss="fa fa-trash-o" CssClass="btn btn-md btn-warning"
                               Disabled="@(!abrioVale)"></SfButton>
                 </div>
-                <div class="col-4">
+                <div class="col-3">
                     <SfButton HtmlAttributes="HtmlAttribute" Content="Nuevo" IsPrimary="false"
                               OnClick="@(async ()=> await NuevoVale())" ID="btnNuevoVale"
-                              IconCss="fa fa-plus-square-o" CssClass="btn btn-sm btn-info"
-                              Disabled="@(!abrioVale)"></SfButton>
+                              IconCss="fa fa-plus-square-o" CssClass="btn btn-md btn-info"></SfButton>
                 </div>
-                <div class="col-4">
+                <div class="col-3">
                     <SfButton Content="Guardar" IsPrimary="true" IconCss="fa fa-save"
-                              CssClass="btn btn-sm btn-success" ID="btnGuardarVale"
+                              CssClass="btn btn-md btn-success" ID="btnGuardarVale"
                               Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"></SfButton>
+                </div>
+                <div class="col-3">
+                    <SfButton HtmlAttributes="HtmlAttribute" Content="Imprimir Etiqueta" IsPrimary="false" IconCss="fa fa-print"
+                              CssClass="btn btn-md btn-secondary" ID="btnEtiqueta"
+                              OnClick="@(async()=> await ImprimirEtiqueta())"
+                              Disabled="@(!abrioVale)"></SfButton>
                 </div>
             </div>
             <hr />
@@ -186,6 +191,7 @@
 
 <ConfirmacionDialog @ref="ConfirmacionEliminarDialog" OnConfirm="@(async ()=> await EliminarVale())">
     <HeaderTempalte>
+        
         <p> <strong>Eliminacion Vale</strong></p>
         <hr />
     </HeaderTempalte>
@@ -965,6 +971,17 @@ private void OnBlurRemito()
         StockEncabezado.REMITO = puntoVenta + "-" + numero;
     }
 
+}
+
+protected async Task ImprimirEtiqueta()
+{
+    if (abrioVale)
+    {
+        await StockEncabezado.Items.ForEachAsync(async s=>
+        {
+            await Etiqueta(s);
+        });
+    }
 }
 
 protected async Task Etiqueta(Pedidos pedidos)

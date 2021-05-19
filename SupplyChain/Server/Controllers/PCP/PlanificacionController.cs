@@ -153,7 +153,7 @@ namespace SupplyChain.Server.Controllers
 
         // GET: api/Planificacion/Despiece/{CG_PROD}/{FORMULA}/{CANTIDAD}
         [HttpGet("Despiece/{CG_PROD}/{FORMULA}/{CANTIDAD}")]
-        public List<DespiecePlanificacion> Despiece(string cg_prod, int formula, decimal cantidad)
+        public async Task<ActionResult<List<DespiecePlanificacion>>> Despiece(string cg_prod, int formula, decimal cantidad)
         {
             try
             {
@@ -177,6 +177,14 @@ namespace SupplyChain.Server.Controllers
                     CANT_TOTAL = m.Field<decimal>("CANT_TOTAL"),
                     SALDO_TOTAL = m.Field<decimal>("SALDO_TOTAL"),
                 }).ToList();
+
+                foreach (DespiecePlanificacion item in xLista)
+                {
+                    var codigoInsumo = string.IsNullOrWhiteSpace(item.CG_SE) ? item.CG_MAT.Trim() : item.CG_SE.Trim();
+                    item.ResumenStocks = await _context.ResumenStock
+                        .Where(r => r.CG_ART == codigoInsumo && r.STOCK > 0 && r.CG_DEP == 4)
+                        .ToListAsync();
+                }
 
                 return xLista;
             }

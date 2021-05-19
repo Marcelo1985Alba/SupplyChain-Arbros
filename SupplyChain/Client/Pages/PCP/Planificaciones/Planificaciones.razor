@@ -60,14 +60,15 @@
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row">
-                    <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
+                    <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                            EnablePersistence="true"
                             @ref="GridPlanificacion" DataSource="@listaPlanificacion" Height="100%" Width="100%"
                             AllowExcelExport="true" AllowGrouping="true" ID="Planificacion" RowHeight="20"
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true"
                             Toolbar="@Toolbaritems" GridLines="GridLine.Both">
                         <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                        <GridEvents DataBound="(async ()=> await DataBoundHandler())"  CommandClicked="@CommandClickHandler" OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin" TValue="Planificacion"></GridEvents>
+                        <GridEvents DataBound="(async ()=> await DataBoundHandler())" CommandClicked="@CommandClickHandler" OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin" TValue="Planificacion"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                         <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
@@ -109,6 +110,7 @@
                                 }
                             </Template>
                         </GridEditSettings>
+
                         <GridColumns>
                             <GridColumn Field=@nameof(Planificacion.CG_ORDEN) Format="N0" HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="90px"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.CG_ORDF) Format="N0" HeaderText="Orden" TextAlign="TextAlign.Left" Width="90px"></GridColumn>
@@ -121,23 +123,23 @@
                                         Planificacion Value = (context as Planificacion);
                                         if (Value.SEM_ORIGEN == 0)
                                         {
-                                        <span class="dotwhite"></span>
+                                            <span class="dotwhite"></span>
                                         }
                                         else if (Value.SEM_ORIGEN == 1)
                                         {
-                                        <span class="dotlightgreen"></span>
+                                            <span class="dotlightgreen"></span>
                                         }
                                         else if (Value.SEM_ORIGEN == 2)
                                         {
-                                        <span class="dotyellow"></span>
+                                            <span class="dotyellow"></span>
                                         }
                                         else if (Value.SEM_ORIGEN == 3)
                                         {
-                                        <span class="dotred"></span>
+                                            <span class="dotred"></span>
                                         }
                                         else if (Value.SEM_ORIGEN == 4)
                                         {
-                                        <span class="dotblue"></span>
+                                            <span class="dotblue"></span>
                                         }
                                     }
                                 </Template>
@@ -149,23 +151,23 @@
                                         Planificacion Value = (context as Planificacion);
                                         if (Value.SEM_ABAST_PURO == 0)
                                         {
-                                        <span class="dotwhite"></span>
+                                            <span class="dotwhite"></span>
                                         }
                                         else if (Value.SEM_ABAST_PURO == 1)
                                         {
-                                        <span class="dotlightgreen"></span>
+                                            <span class="dotlightgreen"></span>
                                         }
                                         else if (Value.SEM_ABAST_PURO == 2)
                                         {
-                                        <span class="dotyellow"></span>
+                                            <span class="dotyellow"></span>
                                         }
                                         else if (Value.SEM_ABAST_PURO == 3)
                                         {
-                                        <span class="dotred"></span>
+                                            <span class="dotred"></span>
                                         }
                                         else if (Value.SEM_ABAST_PURO == 4)
                                         {
-                                        <span class="dotblue"></span>
+                                            <span class="dotblue"></span>
                                         }
                                     }
                                 </Template>
@@ -175,25 +177,25 @@
                                 <Template>
                                     @{
                                         Planificacion Value = (context as Planificacion);
-                                        if (Value.SEM_ABAST == 0) 
+                                        if (Value.SEM_ABAST == 0)
                                         {
-                                        <span class="dotwhite"></span>
+                                            <span class="dotwhite"></span>
                                         }
                                         else if (Value.SEM_ABAST == 1)
                                         {
-                                        <span class="dotlightgreen"></span>
+                                            <span class="dotlightgreen"></span>
                                         }
                                         else if (Value.SEM_ABAST == 2)
                                         {
-                                        <span class="dotyellow"></span>
+                                            <span class="dotyellow"></span>
                                         }
                                         else if (Value.SEM_ABAST == 3)
                                         {
-                                        <span class="dotred"></span>
+                                            <span class="dotred"></span>
                                         }
                                         else if (Value.SEM_ABAST == 4)
                                         {
-                                        <span class="dotblue"></span>
+                                            <span class="dotblue"></span>
                                         }
                                     }
                                 </Template>
@@ -204,11 +206,11 @@
                                         Planificacion Value = (context as Planificacion);
                                         if (Value.CG_ESTADOCARGA == 0)
                                         {
-                                        <span>EMITIDA</span>
+                                            <span>EMITIDA</span>
                                         }
                                         else if (Value.CG_ESTADOCARGA == 1)
                                         {
-                                        <span>PLANEADA</span>
+                                            <span>PLANEADA</span>
                                         }
                                     }
                                 </Template>
@@ -274,6 +276,42 @@
                     GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true" Height="350px" Width="100%">
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                 <GridEvents TValue="DespiecePlanificacion"></GridEvents>
+                <GridTemplates>
+                    <DetailTemplate>
+                        @{ 
+                            var insumo = context as DespiecePlanificacion;
+                       }
+
+                        <SfTab Height="350" HeaderPlacement="HeaderPosition.Top">
+                            <TabItems>
+                                <TabItem>
+                                    <ChildContent>
+                                        <TabHeader Text="Stock"></TabHeader>
+                                    </ChildContent>
+                                    <ContentTemplate>
+                                        <div style="padding:25px">
+                                            <SfGrid ID="grdDespieceStock" Width="870px" TValue="ResumenStock" 
+                                                    AllowPaging="true" AllowResizing="true" AllowReordering="true"
+                                                    DataSource="@insumo.ResumenStocks">
+                                                <GridPageSettings PageSize="6"></GridPageSettings>
+                                                @*<SfDataManager Url="https://js.syncfusion.com/demos/ejservices/Wcf/Northwind.svc/Orders"
+                                                               CrossDomain="true"></SfDataManager>*@
+                                                <GridColumns>
+                                                    <GridColumn Field=@nameof(ResumenStock.CG_ART) HeaderText="Insumo" Width="150"> </GridColumn>
+                                                    <GridColumn Field=@nameof(ResumenStock.STOCK) HeaderText="Stock" Width="110"></GridColumn>
+                                                    <GridColumn Field=@nameof(ResumenStock.CG_DEP) HeaderText="Deposito" Width="110"></GridColumn>
+                                                    <GridColumn Field=@nameof(ResumenStock.SERIE) HeaderText="Serie" Width="150"></GridColumn>
+                                                    <GridColumn Field=@nameof(ResumenStock.LOTE) HeaderText="Lote" Width="150"></GridColumn>
+                                                    <GridColumn Field=@nameof(ResumenStock.DESPACHO) HeaderText="Despacho"></GridColumn>
+                                                </GridColumns>
+                                            </SfGrid>
+                                        </div>
+                                    </ContentTemplate>
+                                </TabItem>
+                            </TabItems>
+                        </SfTab>
+                    </DetailTemplate>
+                </GridTemplates>
                 <GridColumns>
                     <GridColumn Field=@nameof(DespiecePlanificacion.CG_SE) HeaderText="Semi Elaborado" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                     <GridColumn Field=@nameof(DespiecePlanificacion.CG_MAT) HeaderText="Materia prima" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
