@@ -433,8 +433,8 @@ else
 
         if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
         {
-
-
+            var pedido = DataSource.Where(p => p.REGISTRO == Args.Data.REGISTRO).FirstOrDefault();
+            pedido.STOCKA = Args.Data.STOCK / Args.Data.CG_DEN > 0 ? Args.Data.CG_DEN : 1;
             await Grid.RefreshColumns();
             Grid.Refresh();
             await Grid.RefreshHeader();
@@ -604,6 +604,8 @@ else
 
     public async Task QueryCellInfoHandler(QueryCellInfoEventArgs<Pedidos> args)
     {
+        args.Data.STOCKA = args.Data.STOCK / args.Data.CG_DEN;
+        //InvokeAsync(StateHasChanged);
         if (args.Data.STOCK > args.Data.PENDIENTEOC)
         {
             args.Cell.AddClass(new string[] { "rojo" });

@@ -29,22 +29,22 @@
                 <div class="col-3">
                     <SfButton HtmlAttributes="HtmlAttribute" Content="Eliminar" ID="btnEliminarVale"
                               OnClick="@(async ()=> await AbrirConfirmacionEliminarVale())" IsPrimary="false"
-                              IconCss="fa fa-trash-o" CssClass="btn btn-md btn-warning"
+                              IconCss="fa fa-trash-o" CssClass="btn btn-sm btn-warning"
                               Disabled="@(!abrioVale)"></SfButton>
                 </div>
                 <div class="col-3">
                     <SfButton HtmlAttributes="HtmlAttribute" Content="Nuevo" IsPrimary="false"
                               OnClick="@(async ()=> await NuevoVale())" ID="btnNuevoVale"
-                              IconCss="fa fa-plus-square-o" CssClass="btn btn-md btn-info"></SfButton>
+                              IconCss="fa fa-plus-square-o" CssClass="btn btn-sm btn-info"></SfButton>
                 </div>
                 <div class="col-3">
                     <SfButton Content="Guardar" IsPrimary="true" IconCss="fa fa-save"
-                              CssClass="btn btn-md btn-success" ID="btnGuardarVale"
+                              CssClass="btn btn-sm btn-success" ID="btnGuardarVale"
                               Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"></SfButton>
                 </div>
                 <div class="col-3">
                     <SfButton HtmlAttributes="HtmlAttribute" Content="Imprimir Etiqueta" IsPrimary="false" IconCss="fa fa-print"
-                              CssClass="btn btn-md btn-secondary" ID="btnEtiqueta"
+                              CssClass="btn btn-sm btn-secondary" ID="btnEtiqueta"
                               OnClick="@(async()=> await ImprimirEtiqueta())"
                               Disabled="@(!abrioVale)"></SfButton>
                 </div>
@@ -446,7 +446,7 @@
         StockEncabezado.OCOMPRA = StockEncabezado.Items[0].OCOMPRA;
         StockEncabezado.PEDIDO = (int)StockEncabezado.Items[0].PEDIDO;
         Cg_CLI_Cg_PROVE = StockEncabezado.Items[0].CG_CLI == 0 ? StockEncabezado.Items[0].CG_PROVE : StockEncabezado.Items[0].CG_CLI;
-        DescripcionPro = StockEncabezado.Items[0].CG_CLI == 0 ? "Proveedor" : "Cliente";
+        DescripcionPro = StockEncabezado.Items[0].CG_CLI == 0 ? StockEncabezado.Items[0].Proveedor.DES_PROVE.Trim() : "Cliente";
         StockEncabezado.REMITO = StockEncabezado.Items[0].REMITO;
         PermiteAgregarItem = false;
         PermiteEditarItem = true;
@@ -604,6 +604,7 @@
                 pedido.MONEDA = item.MONEDA;
                 pedido.UNID = item.UNID;
                 pedido.CG_DEP = 4;
+                pedido.CG_DEN = item.CG_DEN;
                 //Calcular stockA
                 pedido.PENDIENTEOC = item.PENDIENTE;
                 pedido.UNIDA = item.UNID1;
@@ -703,6 +704,8 @@
         StockEncabezado.Items = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriVale/{stockSel.VALE}");
         //ItemsVale = new ObservableCollection<Stock>(data);
 
+        ItemsABuscar = ItemsABuscar.Where(i => i.VALE == stockSel.VALE).ToList().ToArray();
+
         if (StockEncabezado.Items != null || StockEncabezado.Items.Count > 0)
         {
             await CargarVale();
@@ -740,7 +743,7 @@
         ItemsABuscar = null;
         PopupBuscadorVisible = true;
         tituloBuscador = $"Listado de Vales";
-        ColumnasBuscador = new string[] { "VALE", "FE_MOV", "CG_ART", "DES_ART" };
+        ColumnasBuscador = new string[] { "VALE", "FE_MOV", "CG_ART", "DES_ART", "STOCK" };
         var tipoo = StockEncabezado.TIPOO;
         ItemsABuscar = await Http.GetFromJsonAsync<Pedidos[]>($"api/Stock/GetValesByTipo/{tipoo}");
         if (ItemsABuscar == null)

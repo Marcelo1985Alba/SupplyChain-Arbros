@@ -35,7 +35,8 @@ namespace SupplyChain.Server.Controllers
 
                 await compras.ForEachAsync( async c => 
                 {
-                    c.PENDIENTE = c.SOLICITADO - _context.Pedidos.Where(p => p.TIPOO == 5 && p.OCOMPRA == c.NUMERO && p.CG_ART == c.CG_MAT)
+                    c.PENDIENTE = c.SOLICITADO - _context.Pedidos
+                    .Where(p => p.TIPOO == 5 && p.OCOMPRA == c.NUMERO && p.CG_ART == c.CG_MAT)
                     .Sum(p => p.STOCK);
                     c.ProveedorNavigation = await _context.Proveedores.Where(p => p.CG_PROVE == c.NROCLTE).FirstOrDefaultAsync();
                     

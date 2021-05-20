@@ -9,6 +9,7 @@ using SupplyChain.Shared.Models;
 using System.Data;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.AspNetCore.Identity;
+using SupplyChain.Client.HelperService;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -46,13 +47,14 @@ namespace SupplyChain.Server.Controllers
                 lStock = await _context.Pedidos
                     //.Include(x=> x.Proveedor)
                     .Where(p => p.TIPOO == tipoo && p.VOUCHER == 0 && p.CG_CIA == cg_cia_usuario)
+                    .OrderByDescending(s=> s.VALE)
                     .ToListAsync();
             }
-
             if (lStock == null)
             {
                 return NotFound();
             }
+
 
             return lStock.OrderByDescending(s => s.VALE).ToList(); ;
         }
@@ -78,13 +80,22 @@ namespace SupplyChain.Server.Controllers
                     return NotFound();
                 }
 
-
+                //SI ES RECEPCION HAYQ EU CALCULAR PENDIENTE DE OC Y OBTENER EL PEDIDO
                 if ( lStock.Count > 0 && lStock[0].TIPOO == 5)
                 {
-                    foreach (var item in lStock)
+                    await lStock.ForEachAsync(async s =>
                     {
-                        item.Proveedor = _context.Proveedores.Where(p => p.CG_PROVE == item.CG_PROVE).FirstOrDefault();
-                    }
+                        var solicitado = await _context.Compras.Where(c => c.NUMERO == s.OCOMPRA).SumAsync(c => c.SOLICITADO);
+                        var recibido = await _context.Pedidos
+                            .Where(p => p.TIPOO == 5 && p.OCOMPRA == s.OCOMPRA && p.CG_ART == s.CG_ART)
+                            .SumAsync(p => p.STOCK);
+
+                        s.PENDIENTEOC = solicitado - recibido;
+
+
+                        s.Proveedor = await _context.Proveedores.Where(p => p.CG_PROVE == s.CG_PROVE).FirstOrDefaultAsync();
+                    });
+
                 }
 
                 return lStock;
