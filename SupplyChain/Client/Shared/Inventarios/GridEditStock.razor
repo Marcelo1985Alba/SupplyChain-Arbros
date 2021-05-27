@@ -37,82 +37,104 @@ else
                             @{
 
                                 stock = (context as Pedidos);
-                                <div id="dialogo">
+                                                        <div id="dialogo">
 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-2">
-                                            <label class="col-form-label">Codigo Producto</label>
-                                            <SfTextBox @bind-Value="@stock.CG_ART" Readonly="true"></SfTextBox>
-                                            <ValidationMessage For="@(() => stock.CG_ART)"></ValidationMessage>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label class="col-form-label">Descripcion Producto</label>
-                                            <SfTextBox @bind-Value="@stock.DES_ART" Readonly="true"></SfTextBox>
-                                            <ValidationMessage For="@(() => stock.DES_ART)"></ValidationMessage>
-                                        </div>
-                                        
-                                        <div class="form-group col-md-1 mt-4">
-                                            <SfButton HtmlAttributes="@HtmlAttribute" OnClick="@(async ()=> await BuscarItem())" 
-                                                                                Disabled="@(stock.CG_ART != "")"
-                                                                                Content="" IconCss="fa fa-search"/>
-                                        </div>
-                                        <div class="form-group col-md-5">
-                                            <label class="col-form-label">Déposito Ingreso</label>
-                                            <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP"
-                                                            TValue="int" ID="CG_DEP" DataSource="@depositos">
-                                                <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="col-form-label">Codigo Producto</label>
+                                                                    <SfTextBox @bind-Value="@stock.CG_ART" Readonly="true"></SfTextBox>
+                                                                    <ValidationMessage For="@(() => stock.CG_ART)"></ValidationMessage>
+                                                                </div>
+                                                                <div class="form-group col-md-4">
+                                                                    <label class="col-form-label">Descripcion Producto</label>
+                                                                    <SfTextBox @bind-Value="@stock.DES_ART" Readonly="true"></SfTextBox>
+                                                                    <ValidationMessage For="@(() => stock.DES_ART)"></ValidationMessage>
+                                                                </div>
 
-                                                </DropDownListFieldSettings>
-                                            </SfDropDownList>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-2">
-                                            <label class="col-form-label">Cantidad</label>
-                                            <SfNumericTextBox @bind-Value="@stock.STOCK" Decimals="2"></SfNumericTextBox>
-                                            <ValidationMessage For="@(() => stock.STOCK)"></ValidationMessage>
-                                        </div>
-                                        <div class="form-group col-md-1">
-                                            <label class="col-form-label">Unidad</label>
-                                            <SfTextBox @bind-Value="@stock.UNID" Readonly="true"></SfTextBox>
-                                            <ValidationMessage For="@(() => stock.UNID)"></ValidationMessage>
-                                        </div>
-                                        @if (RegistroGenerado.TIPOO != 5)
-                                        {
-                                            <div class="form-group col-md-2">
-                                                <label class="col-form-label">Serie</label>
-                                                <SfTextBox @bind-Value="@stock.SERIE"></SfTextBox>
-                                                <ValidationMessage For="@(() => stock.SERIE)"></ValidationMessage>
-                                            </div>
-                                        }
-                                        @if (RegistroGenerado.TIPOO == 5)
-                                        {
-                                            <div class="form-group col-md-2">
-                                                <label class="col-form-label">Depacho</label>
-                                                <SfTextBox @bind-Value="@stock.DESPACHO"></SfTextBox>
-                                                <ValidationMessage For="@(() => stock.DESPACHO)"></ValidationMessage>
-                                            </div>
-                                        }
+                                                                <div class="form-group col-md-1 mt-4">
+                                                                    <SfButton HtmlAttributes="@HtmlAttribute" OnClick="@(async ()=> await BuscarItem())"
+                                                                              Disabled="@(stock.CG_ART != "")"
+                                                                              Content="" IconCss="fa fa-search" />
+                                                                </div>
+                                                                <div class="form-group col-md-5">
+                                                                    <label class="col-form-label">Déposito Ingreso</label>
+                                                                    <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP"
+                                                                                    TValue="int" ID="CG_DEP" DataSource="@depositos">
+                                                                        <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP">
 
-                                        @if (RegistroGenerado.TIPOO != 5)
-                                        {
-                                            <div class="form-group col-md-2">
-                                                <label class="col-form-label">Lote</label>
-                                                <SfTextBox @bind-Value="@stock.LOTE"></SfTextBox>
-                                                <ValidationMessage For="@(() => stock.LOTE)"></ValidationMessage>
-                                            </div>
-                                        }
+                                                                        </DropDownListFieldSettings>
+                                                                    </SfDropDownList>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="col-form-label">Cantidad</label>
+                                                                    <SfNumericTextBox @bind-Value="@stock.STOCK" Decimals="2"></SfNumericTextBox>
+                                                                    <ValidationMessage For="@(() => stock.STOCK)"></ValidationMessage>
+                                                                </div>
+                                                                <div class="form-group col-md-1">
+                                                                    <label class="col-form-label">Unidad</label>
+                                                                    <SfTextBox @bind-Value="@stock.UNID" Readonly="true"></SfTextBox>
+                                                                    <ValidationMessage For="@(() => stock.UNID)"></ValidationMessage>
+                                                                </div>
+                                                                @if (RegistroGenerado.TIPOO != 5)
+                                                                {
+                                                                    <div class="form-group col-md-2">
+                                                                        <label class="col-form-label">Serie</label>
+                                                                        <SfTextBox @bind-Value="@stock.SERIE"></SfTextBox>
+                                                                        <ValidationMessage For="@(() => stock.SERIE)"></ValidationMessage>
+                                                                    </div>
+                                                                }
+                                                                @if (RegistroGenerado.TIPOO == 5)
+                                                                {
+                                                                    <div class="form-group col-md-2">
+                                                                        <label class="col-form-label">Depacho</label>
+                                                                        <SfTextBox @bind-Value="@stock.DESPACHO"></SfTextBox>
+                                                                        <ValidationMessage For="@(() => stock.DESPACHO)"></ValidationMessage>
+                                                                    </div>
+                                                                }
 
-                                        @if (RegistroGenerado.TIPOO == 5)
-                                        {
-                                            <div class="form-group col-md-2 mt-5">
-                                                <Syncfusion.Blazor.Buttons.SfCheckBox Label="Cierra Item en OC"
-                                                                                      @bind-Checked="@stock.CERRAROC" />
-                                            </div>
-                                        }
+                                                                @if (RegistroGenerado.TIPOO != 5)
+                                                                {
+                                                                    <div class="form-group col-md-2">
+                                                                        <label class="col-form-label">Lote</label>
+                                                                        <SfTextBox @bind-Value="@stock.LOTE"></SfTextBox>
+                                                                        <ValidationMessage For="@(() => stock.LOTE)"></ValidationMessage>
+                                                                    </div>
+                                                                }
 
-                                    </div>
-                                </div>
+                                                                @if (RegistroGenerado.TIPOO == 5)
+                                                                {
+                                                                    <div class="form-group col-md-2 mt-5">
+                                                                        <Syncfusion.Blazor.Buttons.SfCheckBox Label="Cierra Item en OC"
+                                                                                                              @bind-Checked="@stock.CERRAROC" />
+                                                                    </div>
+                                                                }
+
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-2 mt-5">
+                                                                    <Syncfusion.Blazor.Buttons.SfCheckBox Label="Dimension"
+                                                                                                          @bind-Checked="@stock.Dimension" />
+                                                                </div>
+                                                                <div class="form-group col-md-3 mt-5">
+                                                                    <Syncfusion.Blazor.Buttons.SfCheckBox Label="Identificacion"
+                                                                                                          @bind-Checked="@stock.Identificacion" />
+                                                                </div>
+                                                                <div class="form-group col-md-2 mt-5">
+                                                                    <Syncfusion.Blazor.Buttons.SfCheckBox Label="Ensayo Fisico"
+                                                                                                          @bind-Checked="@stock.EnsayoFisico" />
+                                                                </div>
+                                                                <div class="form-group col-md-2 mt-5">
+                                                                    <Syncfusion.Blazor.Buttons.SfCheckBox Label="Ensayo Quimico"
+                                                                                                          @bind-Checked="@stock.EnsayoQuimico" />
+                                                                </div>
+                                                                <div class="form-group col-md-2 mt-5">
+                                                                    <Syncfusion.Blazor.Buttons.SfCheckBox Label="Control Visual"
+                                                                                                          @bind-Checked="@stock.ControlVisual" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
 
                             }
@@ -297,6 +319,7 @@ else
             stockCopiado.CG_ART = args.RowData.CG_ART;
             stockCopiado.DES_ART = args.RowData.DES_ART;
             stockCopiado.UNID = args.RowData.UNID;
+            stockCopiado.CG_DEN = args.RowData.CG_DEN;
             stockCopiado.UNIDA = args.RowData.UNIDA;
             stockCopiado.STOCK = args.RowData.STOCK;
             stockCopiado.STOCKA = args.RowData.STOCKA;
@@ -604,7 +627,7 @@ else
 
     public async Task QueryCellInfoHandler(QueryCellInfoEventArgs<Pedidos> args)
     {
-        args.Data.STOCKA = args.Data.STOCK / args.Data.CG_DEN;
+        args.Data.STOCKA = Math.Round( (decimal)(args.Data.STOCK / args.Data.CG_DEN), 4);
         //InvokeAsync(StateHasChanged);
         if (args.Data.STOCK > args.Data.PENDIENTEOC)
         {

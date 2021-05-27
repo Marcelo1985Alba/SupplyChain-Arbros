@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Inputs;
+using Syncfusion.Blazor.Popups;
 
 namespace SupplyChain.Client.Pages.PCP.Planificaciones
 {
@@ -24,6 +25,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         protected SfGrid<FormulaPlanificacion> Grid3;
         protected SfGrid<Planificacion> Grid4;
         protected SfGrid<Producto> Grid5;
+        protected SfDialog DialogDespieceRef;
         protected bool VisibleProperty { get; set; } = false;
         protected bool armadoCheck { get; set; } = true;
         protected bool emitidasCheck { get; set; } = true;
@@ -42,7 +44,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         protected bool IsVisible4 { get; set; } = false;
         protected bool IsVisible5 { get; set; } = false;
         protected Planificacion Datos_paraFormula;
-
+        protected Producto ProdSeleccionada;
         protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "500px" };
 
         //protected List<CatOpe> catopes = new List<CatOpe>();
@@ -228,10 +230,13 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         }
         public async Task CommandClickHandler(CommandClickEventArgs<Planificacion> args)
         {
+
+            ProdSeleccionada = await Http.GetFromJsonAsync<Producto>($"api/Prod/{args.RowData.CG_PROD}");
             if (args.CommandColumn.Title == "Despiece")
             {
                 listaDespiece = await Http.GetFromJsonAsync<List<DespiecePlanificacion>>($"api/Planificacion/Despiece/{args.RowData.CG_PROD.Trim()}/{args.RowData.CG_FORM}/{args.RowData.CANT}");
-                IsVisible = true;
+                //IsVisible = true;
+                await DialogDespieceRef.Show(true);
             }
             if (args.CommandColumn.Title == "Activo")
             {

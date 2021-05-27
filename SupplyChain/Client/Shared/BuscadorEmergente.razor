@@ -2,7 +2,7 @@
 
 <SfSpinner @bind-Visible="@visibliSpinner" Size="80" Target=".dialogContent" Label="Cargando..." Type="SpinnerType.Bootstrap"/>
 
-<SfDialog Height="75%" Width="90%" Target="#target" ShowCloseIcon="true" @bind-Visible="@Visible" IsModal="true" EnableResize="true">
+<SfDialog Height="@Height" Width="90%" Target="#target" ShowCloseIcon="true" @bind-Visible="@Visible" IsModal="true" EnableResize="true">
     <DialogEvents Closed="OnAfterDialogClosed"></DialogEvents>
     <DialogTemplates>
         
@@ -98,6 +98,7 @@
     SfGrid<TItem> Grid;
     protected bool visibliSpinner = false;
     [Parameter] public string Titulo { get; set; } = null!;
+    [Parameter] public string Height { get; set; } = null!;
     [Parameter] public bool Visible { get; set; } = false;
     [Parameter] public IEnumerable<TItem> DataSource { get; set; } = null!;
     [Parameter] public string[] Columnas { get; set; } = null!;

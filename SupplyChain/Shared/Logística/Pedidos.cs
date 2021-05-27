@@ -186,5 +186,12 @@ namespace SupplyChain
         public int? REGISTRO { get; set; }
         [ColumnaGridViewAtributo(Name = "Compañía")]
         public int? CG_CIA { get; set; } = 0;
+
+        public bool Dimension { get; set; } = false;
+        public bool Identificacion { get; set; } = false;
+        public bool EnsayoFisico { get; set; } = false;
+        public bool EnsayoQuimico { get; set; } = false;
+        public bool TratamientoTermico { get; set; } = false;
+        public bool ControlVisual { get; set; } = false;
     }
 }

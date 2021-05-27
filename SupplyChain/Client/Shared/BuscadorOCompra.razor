@@ -21,7 +21,7 @@
     <ToastPosition X="Center" Y="Top"></ToastPosition>
 </SfToast>
 
-<BuscadorEmergente @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" Titulo="@TituloBuscador"
+<BuscadorEmergente Height="85%" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" Titulo="@TituloBuscador"
                    onObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
 
 @code {

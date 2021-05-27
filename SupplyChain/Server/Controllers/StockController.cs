@@ -85,7 +85,8 @@ namespace SupplyChain.Server.Controllers
                 {
                     await lStock.ForEachAsync(async s =>
                     {
-                        var solicitado = await _context.Compras.Where(c => c.NUMERO == s.OCOMPRA).SumAsync(c => c.SOLICITADO);
+                        var solicitado = await _context.Compras.Where(c => c.NUMERO == s.OCOMPRA && c.CG_MAT == s.CG_ART)
+                        .SumAsync(c => c.SOLICITADO);
                         var recibido = await _context.Pedidos
                             .Where(p => p.TIPOO == 5 && p.OCOMPRA == s.OCOMPRA && p.CG_ART == s.CG_ART)
                             .SumAsync(p => p.STOCK);

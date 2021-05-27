@@ -211,7 +211,7 @@
 </ConfirmacionDialog>
 
 
-<BuscadorEmergente TItem="Pedidos" Titulo=@tituloBuscador Visible="@PopupBuscadorVisible" DataSource="@ItemsABuscar"
+<BuscadorEmergente Height="100%" TItem="Pedidos" Titulo=@tituloBuscador Visible="@PopupBuscadorVisible" DataSource="@ItemsABuscar"
                    Columnas="@ColumnasBuscador" onObjetoSeleccionado="OnObjectSelected" />
 
 @code {
@@ -230,7 +230,7 @@
     private bool DepositoIngresoSoloLectura = true;
     protected bool abrioVale = false;
     private Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
-{
+    {
          {"type", "button" }
     };
 
