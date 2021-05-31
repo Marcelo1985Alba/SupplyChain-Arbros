@@ -101,6 +101,15 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
+        [HttpGet("ExisteEspecificacion/{file}")]
+        public async Task<bool> ExisteEspecificacion(string file)
+        {
+            var param = await _context.Solution.Where(s => s.CAMPO == "RUTAESP").FirstOrDefaultAsync();
+            var path = param.VALORC.Trim();
+
+            return System.IO.File.Exists(path + "/" + file);
+        }
+
         [HttpGet("ExistePlano/{file}")]
         public async Task<bool> ExistePlano(string file)
         {

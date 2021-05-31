@@ -1,0 +1,51 @@
+﻿@page "/pdf-especificacion/{Codigo}/{Accion}"
+@using Syncfusion.Blazor.PdfViewer;
+@using SupplyChain.Shared;
+@using Syncfusion.Blazor.Navigations
+@inject HttpClient Http
+
+
+<SfSpinner Size="80" Label="Cargando..." Type="SpinnerType.Bootstrap4" @bind-Visible="@VisibleSpinner"
+           Target="#pdfViewer"></SfSpinner>
+@if (Cargando)
+{
+    VisibleSpinner = true;
+}
+else
+{
+    VisibleSpinner = false;
+    if (ExisteDoc)
+    {
+        var pdfBuscar = Codigo + "," + Accion;
+        <SfPdfViewer ID="pdfViewerPlano" ServiceUrl="/api/Values" DocumentPath="@pdfBuscar.Trim()"
+                     EnableErrorDialog="true"
+                     Height="1250px" Width="100%"></SfPdfViewer>
+    }
+    else
+    {
+        <p>Especificacion inexistente</p>
+    }
+
+}
+
+
+@code {
+
+    [Parameter] public string Codigo { get; set; } = "";
+    [Parameter] public string Accion { get; set; } = "";
+    protected bool VisibleSpinner { get; set; } = false;
+    protected bool Cargando { get; set; } = true;
+    protected bool ExisteDoc { get; set; } = true;
+    protected List<Archivo> archivos;
+    protected async override Task OnInitializedAsync()
+    {
+        Codigo = Codigo.Substring(0, 2);
+        Codigo = $"E{Codigo}.pdf";
+
+
+        ExisteDoc = await Http.GetFromJsonAsync<bool>($"api/AdministracionArchivos/ExisteEspecificacion/{Codigo}");
+        Cargando = false;
+        VisibleSpinner = false;
+    }
+
+}

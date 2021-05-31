@@ -34,24 +34,24 @@ else
         }
         else
         {
-            var api_url_pdf = $"api/AdministracionArchivos/GetPlano/{codigo.Substring(0, 7) + ".pdf"}/Load";
+            //var api_url_pdf = $"api/AdministracionArchivos/GetPlano/{codigo.Substring(0, 7) + ".pdf"}/Load";
             //paso nombre del doc y la accion para despues del lado del servidor saber cual es la ubicacion que debe tomar
-            //codigo = codigo.Substring(0, 7) + ".pdf," + accion;
+            codigo = codigo.Substring(0, 7) + ".pdf," + accion;
 
-            @*<div class="col-lg-12 control-section">
+            <div class="col-lg-12 control-section">
                 <div class="content-wrapper">
-                    <div class="row">*@
-            @*<SfPdfViewer @ref="sfPdfViewerObj" ID="pdfViewerPlano" ServiceUrl="/api/Values" DocumentPath="@codigoLimpio.Trim()" 
+                    <div class="row">
+            <SfPdfViewer @ref="sfPdfViewerObj" ID="pdfViewerPlano" ServiceUrl="/api/Values" DocumentPath="@codigoLimpio.Trim()" 
                          EnableErrorDialog="true" 
-                         Height="1250px" Width="100%"></SfPdfViewer>*@
-            <SfPdfViewer @ref="sfPdfViewerObj" ID="pdfViewerPlano" DocumentPath="@DocumentPath"
+                         Height="1250px" Width="100%"></SfPdfViewer>
+            @*<SfPdfViewer @ref="sfPdfViewerObj" ID="pdfViewerPlano" DocumentPath="@DocumentPath"
                                          EnableErrorDialog="true" ServiceUrl="@api_url_pdf"
-                                         Height="1250px" Width="100%"></SfPdfViewer>
+                                         Height="1250px" Width="100%"></SfPdfViewer>*@
 
 
-            @*</div>
                     </div>
-                </div>*@
+                </div>
+             </div>
         }
 
     }
