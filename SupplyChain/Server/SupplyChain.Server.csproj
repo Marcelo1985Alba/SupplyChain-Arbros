@@ -17,7 +17,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="19.1.0.66" />
   </ItemGroup>
 
   <ItemGroup>
