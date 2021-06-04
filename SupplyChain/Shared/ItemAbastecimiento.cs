@@ -11,8 +11,8 @@
 		public string DES_ART {get;set;}
 		public decimal CANTPED {get;set;}
 		public decimal CANTENT {get;set;}
-		public decimal CANTEMP {get;set;}
-		public decimal STOCK {get;set;}
+        public decimal CANTEMP { get; set; }
+        public decimal STOCK {get;set;}
 		public string UNID {get;set;}
 		public int CG_DEP {get;set;}
 		public int CG_ORDEN {get;set;}

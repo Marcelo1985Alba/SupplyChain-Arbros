@@ -1,18 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using SupplyChain;
 using Syncfusion.Blazor.Grids;
-using Syncfusion.Blazor.Navigations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
 using System.Data;
-using SupplyChain.Client.Shared;
 
 namespace SupplyChain.Client.Pages.PCP.Abastecimiento
 {
@@ -52,7 +48,7 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
         //protected bool ToastVisible { get; set; } = false;
         protected override async Task OnInitializedAsync()
         {
-            //VisiblePropertySE = true;
+            VisiblePropertySE = true;
             //VisiblePropertyMP = true;
             //HttpResponseMessage respuesta;
             var listAbastecimiento = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento");
@@ -72,16 +68,15 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             //    listaAbastSE = await respuesta.Content.ReadFromJsonAsync<List<ModeloAbastecimiento>>();
             //}
 
-            ;
-            await InvokeAsync(StateHasChanged);
+            //await InvokeAsync(StateHasChanged);
         }
 
         public async Task DataBoundHandler()
         {
             await GridMP.AutoFitColumns();
             await GridSE.AutoFitColumns();
-            //VisiblePropertySE = false;
-            //VisiblePropertyMP = false;
+            VisiblePropertySE = false;
+            VisiblePropertyMP = false;
         }
 
         public async Task ClickHandlerMP(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -181,6 +176,11 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             if (args.Column.Field == "ACOMPRAR")
             {
                 args.Cell.AddClass(new string[] { "gris" });
+            }
+
+            if (args.Data.CantProcesos < 3 && args.Data.CG_ORDEN == 3)
+            {
+                args.Cell.AddClass(new string[] { "alerta-procesos" });
             }
         }
     }

@@ -53,9 +53,11 @@ namespace SupplyChain
         public DbSet<Trabajosefec> Trabajosefec { get; set; }
         //MODULO PCP
         public virtual DbSet<PresAnual> PresAnual { get; set; }
+        public virtual DbSet<ModeloPedidosPendientes> ModeloPedidosPendientes { get; set; }
         public virtual DbSet<ModeloPendientesFabricar> ModeloPendientesFabricar { get; set; }
         public virtual DbSet<ModeloAbastecimiento> ModeloAbastecimiento { get; set; }
         public virtual DbSet<vPendienteFabricar> VPendientesFabricars { get; set; }
+        public virtual DbSet<Procun> Procun { get; set; }
         //MODULO LOGIN
         public DbSet<Usuarios> Usuarios { get; set; }
         public DbSet<Rol> Roles { get; set; }
@@ -64,6 +66,7 @@ namespace SupplyChain
         public DbSet<ResumenStock> ResumenStock { get; set; }
         public DbSet<Modulo> Modulos { get; set; }
         public virtual DbSet<Genera> Genera { get; set; }
+        public virtual DbSet<Planificacion> Planificaciones { get; set; }
 
         public DbSet<Proveedor> Proveedores { get; set; }
 
@@ -93,6 +96,7 @@ namespace SupplyChain
             });
 
             modelBuilder.Entity<ItemAbastecimiento>().HasNoKey().ToView(null);
+            modelBuilder.Entity<Procun>().HasNoKey().ToView(null);
         }
     }
 }

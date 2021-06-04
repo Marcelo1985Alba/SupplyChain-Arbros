@@ -1,5 +1,6 @@
 ﻿@page "/inventarios"
 @page "/inventario/{OperacionId:int}"
+@page "/inventario/{OperacionId:int}/{EsEntrega:bool}/{OrdFab:int}"
 @inject IJSRuntime JsRuntime
 @inject HttpClient Http
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
@@ -23,18 +24,18 @@
     </SfSpinner>
     <div class="content-wrapper" id="formulario">
 
-        <EditForm Model="@StockEncabezado" OnValidSubmit="@(async()=> await AbrirConfirmacionGuardarVale())">
+        <EditForm Model="@StockEncabezado" OnValidSubmit="@(async () => await AbrirConfirmacionGuardarVale())">
             @*<DataAnnotationsValidator />*@
             <div class="form-row btn-group">
                 <div class="col-3">
                     <SfButton HtmlAttributes="HtmlAttribute" Content="Eliminar" ID="btnEliminarVale"
-                              OnClick="@(async ()=> await AbrirConfirmacionEliminarVale())" IsPrimary="false"
+                              OnClick="@(async () => await AbrirConfirmacionEliminarVale())" IsPrimary="false"
                               IconCss="fa fa-trash-o" CssClass="btn btn-sm btn-warning"
                               Disabled="@(!abrioVale)"></SfButton>
                 </div>
                 <div class="col-3">
                     <SfButton HtmlAttributes="HtmlAttribute" Content="Nuevo" IsPrimary="false"
-                              OnClick="@(async ()=> await NuevoVale())" ID="btnNuevoVale"
+                              OnClick="@(async () => await NuevoVale())" ID="btnNuevoVale"
                               IconCss="fa fa-plus-square-o" CssClass="btn btn-sm btn-info"></SfButton>
                 </div>
                 <div class="col-3">
@@ -45,7 +46,7 @@
                 <div class="col-3">
                     <SfButton HtmlAttributes="HtmlAttribute" Content="Imprimir Etiqueta" IsPrimary="false" IconCss="fa fa-print"
                               CssClass="btn btn-sm btn-secondary" ID="btnEtiqueta"
-                              OnClick="@(async()=> await ImprimirEtiqueta())"
+                              OnClick="@(async () => await ImprimirEtiqueta())"
                               Disabled="@(!abrioVale)"></SfButton>
                 </div>
             </div>
@@ -64,7 +65,7 @@
                 </div>
                 <div class="form-group col-lg-1 col-md-1 col-sm-1 col-1 mt-2">
                     <br />
-                    <SfButton HtmlAttributes="@HtmlAttribute" OnClick="@(async (e)=> await AbrirVale())" CssClass="btn btn-sm" IsPrimary="false"
+                    <SfButton HtmlAttributes="@HtmlAttribute" OnClick="@(async (e) => await AbrirVale())" CssClass="btn btn-sm" IsPrimary="false"
                               IconCss="fa fa-search" Disabled="@DisableCssClass"></SfButton>
                 </div>
                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-12">
@@ -82,7 +83,7 @@
                         <label class="col-form-label">Orden de Fabricación:</label>
                         <BuscadorOFab EsSoloLectura="@OFSoloLectura" DeshabilitaBotonBusqueda="@DeshabilitaBotonOF"
                                       MostraBotonBusqueda="@MostrarBotorOF" MostrarSpin="false"
-                                      Valor="@StockEncabezado.CG_ORDF" OnOFSeleccionada="onProgramaSelected" />
+                                      Valor="@StockEncabezado.CG_ORDF" OnOFSeleccionada="OnProgramaSelected" />
                     </div>
 
 
@@ -142,20 +143,6 @@
 
 
             </div>
-            <div class="form-row">
-
-                @*<div class="form-group col-6">
-                        <label class="col-form-label">Depósito de Ingreso</label>
-                        <ComboDeposito DepositoSeleccionado="@StockEncabezado.CG_DEP" EsSoloLectura="@DepositoIngresoSoloLectura"
-                                       OnSelectedDepositoChanged="SelectedDepositoIngresoChanged" />
-                    </div>*@
-                @*<div class="form-group col-6">
-                        <label class="col-form-label">Depósito de Salida</label>
-                        <ComboDeposito DepositoSeleccionado="@selectedDepositoSalida" EsSoloLectura="@DepositoSalidaSoloLectura"
-                                       OnSelectedDepositoChanged="SelectedDepositoSalidaChanged" />
-                    </div>*@
-
-            </div>
 
 
             @if (puedeBuscarStock)@*AJUSTE DE INVENTARIO O MOVIM ENTRE DEPOS*@
@@ -189,9 +176,9 @@
     </div>
 </div>
 
-<ConfirmacionDialog @ref="ConfirmacionEliminarDialog" OnConfirm="@(async ()=> await EliminarVale())">
+<ConfirmacionDialog @ref="ConfirmacionEliminarDialog" OnConfirm="@(async () => await EliminarVale())">
     <HeaderTempalte>
-        
+
         <p> <strong>Eliminacion Vale</strong></p>
         <hr />
     </HeaderTempalte>
@@ -200,7 +187,7 @@
     </ContentTemplate>
 </ConfirmacionDialog>
 
-<ConfirmacionDialog @ref="ConfirmacionGuardarDialog" OnConfirm="@(async ()=> await OnGuardar())">
+<ConfirmacionDialog @ref="ConfirmacionGuardarDialog" OnConfirm="@(async () => await OnGuardar())">
     <HeaderTempalte>
         <p> <strong>Guardar Vale </strong></p>
         <hr />
@@ -218,7 +205,11 @@
 
     [CascadingParameter] public MainLayout MainLayout { get; set; }
     [Parameter] public int OperacionId { get; set; } = 0;
+    [Parameter] public bool EsEntrega { get; set; } = false;
+    [Parameter] public int OrdFab { get; set; } = 0;
     [Parameter] public PedidoEncabezado StockEncabezado { get; set; } = new PedidoEncabezado();
+
+
     protected ConfirmacionDialog ConfirmacionEliminarDialog;
     protected ConfirmacionDialog ConfirmacionGuardarDialog;
     protected bool SpinnerVisible { get; set; } = false;
@@ -230,7 +221,7 @@
     private bool DepositoIngresoSoloLectura = true;
     protected bool abrioVale = false;
     private Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
-    {
+{
          {"type", "button" }
     };
 
@@ -288,21 +279,27 @@
     protected override async Task OnInitializedAsync()
     {
 
-
         MainLayout.Titulo = "Administracion de Stock";
-
         await GetVale();
-
         StockEncabezado.Items = new List<Pedidos>();
 
-
-
-
+        if (OperacionId == 10 && EsEntrega && OrdFab > 0)
+        {
+            var tire = new Tire();
+            tire.Tipoo = 10;
+            await SelectedTireChanged(tire);
+            var programa = await Http.GetFromJsonAsync<List<Programa>>($"api/Programa/GetProgramaByOF/{OrdFab}");
+            await OnProgramaSelected(programa[0]);
+        }
 
         await InvokeAsync(StateHasChanged);
 
     }
 
+    protected override bool ShouldRender()
+    {
+        return base.ShouldRender();
+    }
     protected async Task GetVale()
     {
         StockEncabezado.VALE = await Http.GetFromJsonAsync<int>($"api/Stock/GetMaxVale");
@@ -543,7 +540,7 @@
 
 
 
-    private async Task onProgramaSelected(Programa programaSel)
+    private async Task OnProgramaSelected(Programa programaSel)
     {
         List<Pedidos> lStock = new List<Pedidos>();
         int registronegativo = 0;
@@ -562,12 +559,16 @@
             //DescripcionPro = item.des;
             pedido.CG_ART = item.CG_ART;
             pedido.DES_ART = item.DES_ART;
+            pedido.CANTPED = item.CANTPED;
+            pedido.STOCK = item.CANTENT;
             pedido.UNID = item.UNID;
             pedido.LOTE = item.LOTE;
             pedido.SERIE = item.SERIE;
             pedido.DESPACHO = item.DESPACHO;
             pedido.REGISTRO = registronegativo;
             lStock.Add(pedido);
+
+
         }
 
         StockEncabezado.Items = lStock;
@@ -827,106 +828,34 @@
             stock.OCOMPRA = StockEncabezado.OCOMPRA;
             //stock.DES_PROVE = DescripcionPro.Trim();
             @*stock.CG_DEP = SelectedDepositoSalida.CG_DEP;*@
-        stock.STOCK = -stock.STOCK;
-    }
+            stock.STOCK = -stock.STOCK;
+        }
 
-    if (stock.TIPOO == 9)//movim depos
-    {
-        stock.CG_DEP_ALT = StockEncabezado.CG_DEP_ALT;
-    }
-
-    stock.ENTRREAL = DateTime.UtcNow;
-    var esNuevoRegistro = stock.REGISTRO == null || stock.REGISTRO <= 0;
-    HttpResponseMessage response = null;
-    if (esNuevoRegistro)
-    {
-        //TODO: RESERVAR VALE EN GENERA DEPENDIENTO EL TIPO DE OPERACION
-        response = await Http.PostAsJsonAsync("api/Pedidos", stock);
-    }
-    else
-    {
-        var registro = stock.REGISTRO;
-        response = await Http.PutAsJsonAsync($"api/Pedidos/{registro}", stock);
-    }
-
-
-
-    if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
-        || response.StatusCode == System.Net.HttpStatusCode.NotFound
-        || response.StatusCode == System.Net.HttpStatusCode.Conflict)
-    {
-        var mensServidor = await response.Content.ReadAsStringAsync();
-
-
-        Console.WriteLine($"Error: {mensServidor}");
-        //toastService.ShowToast($"{mensServidor}", TipoAlerta.Error);
-        await this.ToastObj.Show(new ToastModel
+        if (stock.TIPOO == 9)//movim depos
         {
-            Title = "ERROR!",
-            Content = "Error al guardar",
-            CssClass = "e-toast-danger",
-            Icon = "e-error toast-icons",
-            ShowCloseButton = true,
-            ShowProgressBar = true
-        });
-    }
-    else
-    {
-        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            stock.CG_DEP_ALT = StockEncabezado.CG_DEP_ALT;
+        }
+
+        stock.ENTRREAL = DateTime.UtcNow;
+        var esNuevoRegistro = stock.REGISTRO == null || stock.REGISTRO <= 0;
+        HttpResponseMessage response = null;
+        if (esNuevoRegistro)
         {
-            var pedido = await response.Content.ReadFromJsonAsync<Pedidos>();
-            //StockEncabezado =
-            await InvokeAsync(StateHasChanged);
-            var itemsJson = JsonSerializer.Serialize(pedido);
-            if (esNuevoRegistro)
-            {
-                await StockEncabezado.Items.Where(i => i.REGISTRO == stock.REGISTRO).ForEachAsync(async s =>
-                {
-                    await Task.Run(() =>
-                    {
-                        s.REGISTRO = pedido.REGISTRO;
-                        s.IMPORTE2 = pedido.IMPORTE2;
-                        s.IMPORTE3 = pedido.IMPORTE3;
-                        s.IMPORTE4 = pedido.IMPORTE4;
-                        s.IMPORTE6 = pedido.IMPORTE6;
-                    });
-
-
-                });
-            }
-
-
-
+            //TODO: RESERVAR VALE EN GENERA DEPENDIENTO EL TIPO DE OPERACION
+            response = await Http.PostAsJsonAsync("api/Pedidos", stock);
+        }
+        else
+        {
+            var registro = stock.REGISTRO;
+            response = await Http.PutAsJsonAsync($"api/Pedidos/{registro}", stock);
         }
 
 
 
-    }
-
-}
-
-
-protected async Task AbrirConfirmacionGuardarVale()
-{
-    await ConfirmacionGuardarDialog.ShowAsync();
-}
-
-protected async Task AbrirConfirmacionEliminarVale()
-{
-    await ConfirmacionEliminarDialog.ShowAsync();
-}
-
-protected async Task EliminarVale()
-{
-    if (abrioVale)
-    {
-        await ConfirmacionEliminarDialog.HideAsync();
-        SpinnerVisible = true;
-        var response = await Http.DeleteAsync($"api/Pedidos/{StockEncabezado.VALE}");
-
-        if (!response.IsSuccessStatusCode)
+        if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
+            || response.StatusCode == System.Net.HttpStatusCode.NotFound
+            || response.StatusCode == System.Net.HttpStatusCode.Conflict)
         {
-            SpinnerVisible = false;
             var mensServidor = await response.Content.ReadAsStringAsync();
 
 
@@ -935,7 +864,7 @@ protected async Task EliminarVale()
             await this.ToastObj.Show(new ToastModel
             {
                 Title = "ERROR!",
-                Content = "Error al eliminar vale",
+                Content = "Error al guardar",
                 CssClass = "e-toast-danger",
                 Icon = "e-error toast-icons",
                 ShowCloseButton = true,
@@ -944,72 +873,144 @@ protected async Task EliminarVale()
         }
         else
         {
-            SpinnerVisible = false;
-            StockEncabezado = new();
-            await this.ToastObj.Show(new ToastModel
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Title = "EXITO!",
-                Content = $"Vale anulado Correctamente.",
-                CssClass = "e-toast-success",
-                Icon = "e-success toast-icons",
-                ShowCloseButton = true,
-                ShowProgressBar = true
-            });
+                var pedido = await response.Content.ReadFromJsonAsync<Pedidos>();
+                //StockEncabezado =
+                await InvokeAsync(StateHasChanged);
+                var itemsJson = JsonSerializer.Serialize(pedido);
+                if (esNuevoRegistro)
+                {
+                    await StockEncabezado.Items.Where(i => i.REGISTRO == stock.REGISTRO).ForEachAsync(async s =>
+                    {
+                        await Task.Run(() =>
+                        {
+                            s.REGISTRO = pedido.REGISTRO;
+                            s.IMPORTE2 = pedido.IMPORTE2;
+                            s.IMPORTE3 = pedido.IMPORTE3;
+                            s.IMPORTE4 = pedido.IMPORTE4;
+                            s.IMPORTE6 = pedido.IMPORTE6;
+                        });
+
+
+                    });
+                }
+
+
+
+            }
+
+
 
         }
 
-
-    }
-}
-
-private void OnBlurRemito()
-{
-    if (!string.IsNullOrEmpty(StockEncabezado.REMITO))
-    {
-
-        var puntoVenta = StockEncabezado.REMITO.Substring(0, StockEncabezado.REMITO.IndexOf("-"));
-        puntoVenta = puntoVenta.PadLeft(4, '0');
-        var numero = StockEncabezado.REMITO.Substring(StockEncabezado.REMITO.IndexOf("-") + 1);
-        numero = numero.PadLeft(8, '0');
-        StockEncabezado.REMITO = puntoVenta + "-" + numero;
     }
 
-}
 
-protected async Task ImprimirEtiqueta()
-{
-    if (abrioVale)
+    protected async Task AbrirConfirmacionGuardarVale()
     {
-        await StockEncabezado.Items.ForEachAsync(async s=>
+        await ConfirmacionGuardarDialog.ShowAsync();
+    }
+
+    protected async Task AbrirConfirmacionEliminarVale()
+    {
+        await ConfirmacionEliminarDialog.ShowAsync();
+    }
+
+    protected async Task EliminarVale()
+    {
+        if (abrioVale)
         {
-            await Etiqueta(s);
-        });
+            await ConfirmacionEliminarDialog.HideAsync();
+            SpinnerVisible = true;
+            var response = await Http.DeleteAsync($"api/Pedidos/{StockEncabezado.VALE}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                SpinnerVisible = false;
+                var mensServidor = await response.Content.ReadAsStringAsync();
+
+
+                Console.WriteLine($"Error: {mensServidor}");
+                //toastService.ShowToast($"{mensServidor}", TipoAlerta.Error);
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "Error al eliminar vale",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }
+            else
+            {
+                SpinnerVisible = false;
+                StockEncabezado = new();
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "EXITO!",
+                    Content = $"Vale anulado Correctamente.",
+                    CssClass = "e-toast-success",
+                    Icon = "e-success toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+
+            }
+
+
+        }
     }
-}
 
-protected async Task Etiqueta(Pedidos pedidos)
-{
+    private void OnBlurRemito()
+    {
+        if (!string.IsNullOrEmpty(StockEncabezado.REMITO))
+        {
 
-    PdfDocument document1 = new PdfDocument();
-    document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(227, 70);//110
-    document1.PageSettings.Margins.All = -1;
-    PdfGrid pdfGrid1 = new PdfGrid();
-    PdfPage page = document1.Pages.Add();
-    PdfGraphics graphics = page.Graphics;
-    PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
-    PdfLightTable pdfTable = new PdfLightTable();
-    page.Graphics.RotateTransform(-90);
+            var puntoVenta = StockEncabezado.REMITO.Substring(0, StockEncabezado.REMITO.IndexOf("-"));
+            puntoVenta = puntoVenta.PadLeft(4, '0');
+            var numero = StockEncabezado.REMITO.Substring(StockEncabezado.REMITO.IndexOf("-") + 1);
+            numero = numero.PadLeft(8, '0');
+            StockEncabezado.REMITO = puntoVenta + "-" + numero;
+        }
+
+    }
+
+    protected async Task ImprimirEtiqueta()
+    {
+        if (abrioVale)
+        {
+            await StockEncabezado.Items.ForEachAsync(async s =>
+            {
+                await Etiqueta(s);
+            });
+        }
+    }
+
+    protected async Task Etiqueta(Pedidos pedidos)
+    {
+
+        PdfDocument document1 = new PdfDocument();
+        document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(227, 70);//110
+        document1.PageSettings.Margins.All = -1;
+        PdfGrid pdfGrid1 = new PdfGrid();
+        PdfPage page = document1.Pages.Add();
+        PdfGraphics graphics = page.Graphics;
+        PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
+        PdfLightTable pdfTable = new PdfLightTable();
+        page.Graphics.RotateTransform(-90);
 
 
-    graphics.DrawString($"{pedidos.CG_ART}                  OC {pedidos.OCOMPRA}\r\n{pedidos.DES_ART}\r\n " +
-        $"Despacho {pedidos.DESPACHO}                    VALE {pedidos.VALE}\n" +
-        $"{pedidos.Proveedor.DES_PROVE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+        graphics.DrawString($"{pedidos.CG_ART}                  OC {pedidos.OCOMPRA}\r\n{pedidos.DES_ART}\r\n " +
+            $"Despacho {pedidos.DESPACHO}                    VALE {pedidos.VALE}\n" +
+            $"{pedidos.Proveedor.DES_PROVE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
 
-    document1.PageSettings.Margins.All = 0;
-    MemoryStream xx = new MemoryStream();
-    document1.Save(xx);
-    document1.Close(true);
-    await JsRuntime.SaveAs("ETOC" + pedidos.CG_ART.Trim() + ".pdf", xx.ToArray());
-}
+        document1.PageSettings.Margins.All = 0;
+        MemoryStream xx = new MemoryStream();
+        document1.Save(xx);
+        document1.Close(true);
+        await JsRuntime.SaveAs("ETOC" + pedidos.CG_ART.Trim() + ".pdf", xx.ToArray());
+    }
 
 }

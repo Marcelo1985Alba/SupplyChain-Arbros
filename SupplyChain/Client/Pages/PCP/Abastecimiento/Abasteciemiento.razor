@@ -55,7 +55,10 @@
                                                 @*<SfDataManager Url="api/Abastecimiento/AbastecimientoSE" CrossDomain="true" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>*@
                                                 <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                                                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                                                <GridEvents OnToolbarClick="@ClickHandlerSE" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBeginSE" TValue="ModeloAbastecimiento"></GridEvents>
+                                                <GridEvents OnToolbarClick="@ClickHandlerSE" QueryCellInfo="QueryCellInfoHandler"
+                                                            OnActionBegin="ActionBeginSE" TValue="ModeloAbastecimiento">
+                                                            
+                                                </GridEvents>
                                                 <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                                                 <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                                                 <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
@@ -223,6 +226,10 @@
 
     .gris {
         background-color: lightgrey;
+    }   
+    
+    .alerta-procesos {
+        background-color: #f89b9b;
     }
 
     .e-tab .e-tab{

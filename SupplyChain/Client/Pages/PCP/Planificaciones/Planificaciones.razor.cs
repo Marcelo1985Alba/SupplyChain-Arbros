@@ -26,6 +26,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         protected SfGrid<Planificacion> Grid4;
         protected SfGrid<Producto> Grid5;
         protected SfDialog DialogDespieceRef;
+        protected SfDialog refDialogEntrega;
         protected bool VisibleProperty { get; set; } = false;
         protected bool armadoCheck { get; set; } = true;
         protected bool emitidasCheck { get; set; } = true;
@@ -46,7 +47,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         protected Planificacion Datos_paraFormula;
         protected Producto ProdSeleccionada;
         protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "500px" };
-
+        protected int OrdenFabricacionSelected = 0;
         //protected List<CatOpe> catopes = new List<CatOpe>();
         protected List<Planificacion> listaPlanificacion = new List<Planificacion>();
         protected List<DespiecePlanificacion> listaDespiece = new List<DespiecePlanificacion>();
@@ -232,6 +233,13 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         {
 
             ProdSeleccionada = await Http.GetFromJsonAsync<Producto>($"api/Prod/{args.RowData.CG_PROD}");
+            if (args.CommandColumn.Title == "Entrega")
+            {
+                OrdenFabricacionSelected = args.RowData.CG_ORDF;
+                await JsRuntime.InvokeAsync<object>("open", $"inventario/10/true/{OrdenFabricacionSelected}", "_blank");
+
+                await refDialogEntrega.Show(true);
+            }
             if (args.CommandColumn.Title == "Despiece")
             {
                 listaDespiece = await Http.GetFromJsonAsync<List<DespiecePlanificacion>>($"api/Planificacion/Despiece/{args.RowData.CG_PROD.Trim()}/{args.RowData.CG_FORM}/{args.RowData.CANT}");

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using SupplyChain.Client.HelperService;
 using SupplyChain.Shared.Models;
 
 namespace SupplyChain.Server.Controllers
@@ -30,16 +31,15 @@ namespace SupplyChain.Server.Controllers
 
         // GET: api/Abastecimiento
         [HttpGet]
-        public List<ModeloAbastecimiento> Abastecimiento()
+        public async Task<List<ModeloAbastecimiento>> AbastecimientoAsync()
         {
             try
             {
                 ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
                 xConexionSQL.EjecutarSQL("EXEC NET_PCP_Abastecimiento");
-
-                xConexionSQL = new ConexionSQL(CadenaConexionSQL);
-                string xSQLCommandString = ("SELECT CG_MAT, DES_MAT, CALCULADO, ACOMPRAR, ACOMPRAR_INFORMADO, STOCK, UNIDMED, UNIDCOMER, STOCK_MINIMO, PEND_SIN_OC, COMP_DE_ENTRADA, COMP_DE_SALIDA" +
-                                                            ", STOCK_CORREG, EN_PROCESO, REQUERIDO, ENTRPREV, * FROM NET_Temp_Abastecimiento");
+                //await _context.Database.ExecuteSqlRawAsync("EXEC NET_PCP_Abastecimiento");
+                //xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+                string xSQLCommandString = ("SELECT * FROM NET_Temp_Abastecimiento");
                 dbAbastecimientoMP = xConexionSQL.EjecutarSQL(xSQLCommandString);
 
                 List<ModeloAbastecimiento> xLista = dbAbastecimientoMP.AsEnumerable().Select(m => new ModeloAbastecimiento()
@@ -66,6 +66,14 @@ namespace SupplyChain.Server.Controllers
                     //USUARIO = m.Field<string>("USUARIO"),
                 }).ToList<ModeloAbastecimiento>();
 
+                //var xLista = await _context.ModeloAbastecimiento.FromSqlRaw(xSQLCommandString).ToListAsync();
+
+
+                await xLista.Where(x=> x.CG_ORDEN == 3).ForEachAsync(async a =>
+                {
+                    var hojasRuta = await _context.Procun.Where(p=> p.CG_PROD.Trim() ==  a.CG_MAT).CountAsync();
+                    a.CantProcesos = hojasRuta;
+                });
                 return xLista;
             }
             catch (Exception ex)

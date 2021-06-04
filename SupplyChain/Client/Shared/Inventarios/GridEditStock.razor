@@ -173,7 +173,7 @@ else
                         <GridColumn Field="@nameof(Pedidos.STOCK)" HeaderText="Cantidad" EditType="EditType.NumericEdit" Format="N2" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.UNID)" HeaderText="Unidad" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.CERRAROC)" HeaderText="Cierra OC" DisplayAsCheckBox="true"
-                                    AutoFit="true"></GridColumn>
+                                    AutoFit="true" Visible="@(RegistroGenerado.TIPOO == 5)"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.DESPACHO)" HeaderText="Despacho" AutoFit="true" Visible="@(RegistroGenerado.TIPOO == 5)"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.SERIE)" HeaderText="Serie" AutoFit="true" Visible="@(RegistroGenerado.TIPOO != 5)"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.LOTE)" HeaderText="Lote" AutoFit="true" Visible="@(RegistroGenerado.TIPOO != 5)"></GridColumn>
@@ -189,10 +189,10 @@ else
                                 }
                             </Template>
                         </GridColumn>
-                        <GridColumn Field="@nameof(Pedidos.PENDIENTEOC)" HeaderText="Pendiente"AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.PENDIENTEOC)" HeaderText="Pendiente"AutoFit="true" Visible="@(RegistroGenerado.TIPOO == 5)"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.STOCKA)" HeaderText="Cant Comer" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.UNIDA)" HeaderText="Unid Comer" AutoFit="true"></GridColumn>
-                        <GridColumn Field="@nameof(Pedidos.IMPORTE1)" HeaderText="Precio Unit." AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.IMPORTE1)" HeaderText="Precio Unit." AutoFit="true" Visible="@(RegistroGenerado.TIPOO == 5)"></GridColumn>
                         @*<GridColumn Field="@nameof(Pedidos.IMPORTE2)" HeaderText="Importe2" AutoFit="true"></GridColumn>
         <GridColumn Field="@nameof(Pedidos.IMPORTE3)" HeaderText="Importe3" AutoFit="true"></GridColumn>
         <GridColumn Field="@nameof(Pedidos.IMPORTE4)" HeaderText="Total" AutoFit="true"></GridColumn>*@

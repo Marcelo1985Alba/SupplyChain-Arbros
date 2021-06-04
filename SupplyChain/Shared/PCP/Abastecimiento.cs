@@ -29,6 +29,9 @@ namespace SupplyChain.Shared.Models
         public decimal? EN_PROCESO { get; set; } = 0;
         public decimal? REQUERIDO { get; set; } = 0;
         public DateTime ENTRPREV { get; set; }
+
+        [NotMapped]
+        public int CantProcesos { get; set; } = 0;
         //public int CG_CIA { get; set; } = 0;
         //public string USUARIO { get; set; } = "";
     }

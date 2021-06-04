@@ -34,5 +34,6 @@ namespace SupplyChain.Shared.Models
         public DateTime? FE_CURSO { get; set; }
         public DateTime? FE_ANUL { get; set; }
         public DateTime? FE_CIERRE { get; set; }
+        public decimal UNIDEQUI { get; set; }
     }
 }

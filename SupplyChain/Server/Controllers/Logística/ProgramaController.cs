@@ -61,7 +61,7 @@ namespace SupplyChain
         [HttpGet("GetAbastecimientoByOF/{cg_ordf:int}")]
         public async Task<ActionResult<IEnumerable<ItemAbastecimiento>>> GetAbastecimientoByOF(int cg_ordf)
         {
-            var dt = new DataTable();
+            //var dt = new DataTable();
             List<ItemAbastecimiento> itemAbastecimiento;
             var usuario = "user";
 
