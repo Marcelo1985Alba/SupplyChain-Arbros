@@ -42,7 +42,7 @@ namespace SupplyChain
                                                   "LEFT JOIN ProTab ON ProTab.PROCESO = A.PROCESO " +
                                                   "LEFT JOIN Celdas ON Celdas.CG_CELDA = A.CG_CELDA " +
                                                   "WHERE A.CG_PROD = B.CG_PROD AND A.CG_ORDF = " + id;
-                return _context.OrdenesFabricacion.FromSqlRaw(xSQL).ToList().FirstOrDefault();
+                return await _context.OrdenesFabricacion.FromSqlRaw(xSQL).FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {

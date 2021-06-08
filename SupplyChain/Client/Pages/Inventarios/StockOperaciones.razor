@@ -9,6 +9,7 @@
 @using Syncfusion.Blazor.Calendars
 @using Syncfusion.Blazor.Navigations
 @using SupplyChain.Client.Shared.Inventarios
+@using SupplyChain.Shared.Prod;
 @using Syncfusion.Pdf;
 @using Syncfusion.Pdf.Graphics;
 @using Syncfusion.Pdf.Grid;
@@ -556,7 +557,7 @@
             //OCompra = (int)item.NUMERO;
             pedido.CG_PROVE = 0;
             Cg_CLI_Cg_PROVE = programaSel.CG_CLI;
-            //DescripcionPro = item.des;
+            pedido.CG_DEP = item.CG_DEP;
             pedido.CG_ART = item.CG_ART;
             pedido.DES_ART = item.DES_ART;
             pedido.CANTPED = item.CANTPED;
@@ -572,7 +573,7 @@
         }
 
         StockEncabezado.Items = lStock;
-        PermiteAgregarItem = false;
+        PermiteAgregarItem = true;
         PermiteEditarItem = true;
         PermiteEliminarItem = true;
     }
@@ -615,7 +616,15 @@
 
 
                 //datos del producto: exigeserie etc.
-                var prod = await Http.GetFromJsonAsync<Producto>($"api/Prod/{item.CG_MAT}");
+
+                var filterProd = new FilterProd()
+                {
+                    Codigo = item.CG_MAT.Trim(),
+                    Descripcion = ""
+
+                };
+
+                var prod = await Http.GetFromJsonAsync<Producto>($"api/Prod/GetByFilter?Codigo={filterProd.Codigo}&Descripcion={filterProd.Descripcion}");
 
                 pedido.EXIGEDESPACHO = prod.EXIGEDESPACHO;
                 pedido.EXIGESERIE = prod.EXIGESERIE;

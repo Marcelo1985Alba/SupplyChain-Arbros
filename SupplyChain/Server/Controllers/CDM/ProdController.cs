@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Shared.Models;
+using SupplyChain.Shared.Prod;
 
 namespace SupplyChain
 {
@@ -58,6 +59,21 @@ namespace SupplyChain
 
             return Prod;
         }
+
+        // GET: api/Prod/5
+        [HttpGet("GetByFilter")]
+        public async Task<ActionResult<Producto>> GetByFilter([FromQuery]FilterProd filter)
+        {
+            var Prod = await _context.Prod.Where(P => P.CG_PROD == filter.Codigo).FirstOrDefaultAsync();
+
+            if (Prod == null)
+            {
+                return NotFound();
+            }
+
+            return Prod;
+        }
+
 
         // PUT: api/Prod/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for

@@ -47,8 +47,11 @@ namespace SupplyChain.Client.Pages.Prev
 
         protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
+        new ItemModel(){ Type = ItemType.Separator},
         "Delete",
+        new ItemModel(){ Type = ItemType.Separator},
         "Print",
+        new ItemModel(){ Type = ItemType.Separator},
         "ExcelExport"
         };
 
@@ -140,20 +143,25 @@ namespace SupplyChain.Client.Pages.Prev
 
         protected async Task BuscarProductoPrevision()
         {
-            CantidadMostrar = 100;
-            if (DesString == "")
+            if (!string.IsNullOrEmpty(DesString) && !string.IsNullOrEmpty(CgString))
             {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/Vacio/{CantidadMostrar}");
+                CantidadMostrar = 100;
+                if (DesString == "")
+                {
+                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/Vacio/{CantidadMostrar}");
+                }
+                else if (CgString == "")
+                {
+                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/Vacio/{DesString}/{CantidadMostrar}");
+                }
+                else
+                {
+                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/{DesString}/{CantidadMostrar}");
+                }
+                IsVisible = true;
             }
-            else if (CgString == "")
-            {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/Vacio/{DesString}/{CantidadMostrar}");
-            }
-            else
-            {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/{DesString}/{CantidadMostrar}");
-            }
-            IsVisible = true;
+
+            
         }
         protected async Task AgregarProductoPrevision()
         {

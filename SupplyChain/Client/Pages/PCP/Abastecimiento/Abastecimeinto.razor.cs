@@ -9,6 +9,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
 using System.Data;
+using Syncfusion.Blazor.Navigations;
 
 namespace SupplyChain.Client.Pages.PCP.Abastecimiento
 {
@@ -36,19 +37,23 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
 
         protected List<Object> ToolbaritemsMP = new List<Object>(){
         "Search",
+        new ItemModel(){ Type = ItemType.Separator},
         "Print",
+        new ItemModel(){ Type = ItemType.Separator},
         "ExcelExport"
     };
         protected List<Object> ToolbaritemsSE = new List<Object>(){
         "Search",
+        new ItemModel(){ Type = ItemType.Separator},
         "Print",
+        new ItemModel(){ Type = ItemType.Separator},
         "ExcelExport"
     };
         //protected NotificacionToast NotificacionObj;
         //protected bool ToastVisible { get; set; } = false;
         protected override async Task OnInitializedAsync()
         {
-            VisiblePropertySE = true;
+            //VisiblePropertySE = true;
             //VisiblePropertyMP = true;
             //HttpResponseMessage respuesta;
             var listAbastecimiento = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento");
@@ -75,8 +80,8 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
         {
             await GridMP.AutoFitColumns();
             await GridSE.AutoFitColumns();
-            VisiblePropertySE = false;
-            VisiblePropertyMP = false;
+            //VisiblePropertySE = false;
+            //VisiblePropertyMP = false;
         }
 
         public async Task ClickHandlerMP(Syncfusion.Blazor.Navigations.ClickEventArgs args)

@@ -20,6 +20,8 @@
 @inject NavigationManager NavManager
 @inherits PedidosPendientesBase
 
+<SfSpinner @bind-Visible="@VisibleProperty">
+</SfSpinner>
 
 @{
     if (listaPedPend is null)
@@ -29,9 +31,6 @@
     else
     {
         VisibleProperty = false;
-    }
-    if (VisibleProperty == false)
-    {
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row">
@@ -40,9 +39,9 @@
                             GridLines="GridLine.Both" Height="100%" Width="100%" RowHeight="20"
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" ID="PedidosPendientes">
                         <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
-                        @*<SfDataManager Url="api/PedidosPendientes" CrossDomain="true" Adaptor="Adaptors.ODataAdaptor"></SfDataManager>*@
+                        <SfDataManager Url="api/PedidosPendientes" CrossDomain="true" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-                        <GridEvents DataBound="(async()=> await DataBoundHandler())"  OnToolbarClick="@ClickHandler" 
+                        <GridEvents DataBound="(async()=> await DataBoundHandler())" OnToolbarClick="@ClickHandler"
                                     QueryCellInfo="QueryCellInfoHandler" TValue="ModeloPedidosPendientes"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
@@ -68,15 +67,15 @@
                                         ModeloPedidosPendientes Value = (context as ModeloPedidosPendientes);
                                         if (@Value.CANTPED.ToString().Substring(1, 1) == ".")
                                         {
-                                        <span>@Value.CANTPED.ToString().Substring(0, 1)</span>
+                                            <span>@Value.CANTPED.ToString().Substring(0, 1)</span>
                                         }
                                         else if (@Value.CANTPED.ToString().Substring(2, 1) == ".")
                                         {
-                                        <span>@Value.CANTPED.ToString().Substring(0, 2)</span>
+                                            <span>@Value.CANTPED.ToString().Substring(0, 2)</span>
                                         }
                                         else if (@Value.CANTPED.ToString().Substring(3, 1) == ".")
                                         {
-                                        <span>@Value.CANTPED.ToString().Substring(0, 3)</span>
+                                            <span>@Value.CANTPED.ToString().Substring(0, 3)</span>
                                         }
                                     }
                                 </Template>
@@ -106,11 +105,7 @@
             </div>
         </div>
     }
-    else
-    {
-        <SfSpinner @bind-Visible="@VisibleProperty">
-        </SfSpinner>
-    }
+
 }
 <style>
     .form-group.col-md-6 {

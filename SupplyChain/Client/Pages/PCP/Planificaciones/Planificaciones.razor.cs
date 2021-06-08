@@ -61,7 +61,10 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
 
         protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
+        new ItemModel(){ Type = ItemType.Separator},
+        //new ItemModel(){ Id= "Print", Text = "Imprimir", PrefixIcon = "fa fa-print", CssClass = "bagde badge-success", Type = ItemType.Button},
         "Print",
+        new ItemModel(){ Type = ItemType.Separator},
         "ExcelExport"
         };
         public class Estado

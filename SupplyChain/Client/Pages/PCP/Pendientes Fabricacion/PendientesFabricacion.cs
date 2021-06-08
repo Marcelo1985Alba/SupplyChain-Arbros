@@ -33,7 +33,9 @@ namespace SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion
 
         protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
+        new ItemModel(){ Type = ItemType.Separator},
         "Print",
+        new ItemModel(){ Type = ItemType.Separator},
         "ExcelExport"
         };
 

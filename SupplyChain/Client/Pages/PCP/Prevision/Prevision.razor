@@ -88,7 +88,8 @@
                             Toolbar="@Toolbaritems" GridLines="GridLine.Both">
                         <GridPageSettings PageCount="20" PageSizes="true" PageSize="20"></GridPageSettings>
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                        <GridEvents OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin" TValue="PresAnual"></GridEvents>
+                        <GridEvents OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin" 
+                                    TValue="PresAnual"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                         <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">

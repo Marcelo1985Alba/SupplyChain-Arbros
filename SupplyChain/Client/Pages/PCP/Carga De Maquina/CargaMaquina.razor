@@ -107,11 +107,11 @@
                             <tr class="CargaRowClass" style="height:20px">
                                 <td class="CargaCellClass" colspan="2"
                                     style="
-                        border-bottom: solid;
-                        border-bottom-width:thin;
-                        border-bottom-color:lightgray;
-                        border-color:lightgray;
-                        border-width:1px;">
+                                    border-bottom: solid;
+                                    border-bottom-width:thin;
+                                    border-bottom-color:lightgray;
+                                    border-color:lightgray;
+                                    border-width:1px;">
                                     <a style="font-size:12px">CELDA</a>
                                 </td>
                                 @{xHora = 1;}
@@ -238,7 +238,7 @@
                                             <div class="@("botonOrden" + xOrdenFabricacion.ToString())" id="ButtonHover">
                                                 <input type="button"
                                                        class="CargaButtonClass@((dbCarga.ElementAt(i).CG_ORDF == ordenAbuscar || (dbCarga.ElementAt(i).PEDIDO == ordenAbuscar && dbCarga.ElementAt(i).PEDIDO != 0)) ? " CargaButtonClassBuscarOrden" : ((dbCarga.ElementAt(i).BORDE) ? " CargaButtonClassFirstFirme" : ""))"
-                                                       @onclick=@(() => OrdenFabricacionOpen(xOrdenFabricacion, xExigeOA, xPedido, xCgProd, xCantidad))
+                                                       @onclick=@(async() => await OrdenFabricacionOpen(xOrdenFabricacion, xExigeOA, xPedido, xCgProd, xCantidad))
                                                        style="width: 100%;background-image: linear-gradient( @dbCarga[i].BACKGROUND.ToLower(), whitesmoke)"
                                                        value="@ValorBoton"
                                                        id="of + @dbCarga[i].CG_ORDF" />

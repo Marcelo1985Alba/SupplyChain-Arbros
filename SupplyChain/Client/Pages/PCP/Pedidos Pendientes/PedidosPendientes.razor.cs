@@ -30,22 +30,24 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
 
         protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
+        new ItemModel(){ Type = ItemType.Separator},
         "Print",
+        new ItemModel(){ Type = ItemType.Separator},
         "ExcelExport",
-        new Syncfusion.Blazor.Navigations.ItemModel { Text = "Seleccionar Columnas", TooltipText = "Seleccionar Columnas", Id = "Seleccionar Columnas" }
+        new ItemModel { Text = "Seleccionar Columnas", TooltipText = "Seleccionar Columnas", Id = "Seleccionar Columnas" }
     };
 
         protected override async Task OnInitializedAsync()
         {
             VisibleProperty = true;
             listaPedPend = await Http.GetFromJsonAsync<List<ModeloPedidosPendientes>>("api/PedidosPendientes");
-            VisibleProperty = false;
+            
 
         }
         public async Task DataBoundHandler()
         {
             await Grid.AutoFitColumns();
-            
+            VisibleProperty = false;
         }
 
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)

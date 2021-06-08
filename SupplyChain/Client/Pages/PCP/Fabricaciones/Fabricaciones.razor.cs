@@ -36,13 +36,16 @@ namespace SupplyChain.Pages.Fab
         protected List<EstadosCargaMaquina> listaEstadosCargaMaquina = new List<EstadosCargaMaquina>();
         protected List<Object> Toolbaritems = new List<Object>(){
             "Search",
+            new ItemModel(){ Type = ItemType.Separator},
             "Print",
+            new ItemModel(){ Type = ItemType.Separator},
             "ExcelExport"
         };
 
         protected SfToast ToasObj;
         protected override async Task OnInitializedAsync()
         {
+            
             listaFab = await Http.GetFromJsonAsync<List<Fabricacion>>("api/Fabricacion");
             listaCelda = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
             listaEstadosCargaMaquina = await Http.GetFromJsonAsync<List<EstadosCargaMaquina>>("api/EstadosCargaMaquinas");
