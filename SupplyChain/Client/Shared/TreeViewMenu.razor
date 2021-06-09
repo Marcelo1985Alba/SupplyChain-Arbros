@@ -116,10 +116,14 @@ else
 
     protected async Task NodeClicked(NodeSelectEventArgs args)
     {
-        var parentId = args.NodeData.ParentID;
-        var modulo = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
-        Layout.BreadCumParent = modulo.Descripcion;
-        await InvokeAsync(StateHasChanged);
+        if (!string.IsNullOrEmpty(args.NodeData.ParentID))
+        {
+            var parentId = args.NodeData.ParentID;
+            var modulo = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
+            Layout.BreadCumParent = modulo.Descripcion;
+            await InvokeAsync(StateHasChanged);
+        }
+
     }
 
     //protected override void OnInitialized()

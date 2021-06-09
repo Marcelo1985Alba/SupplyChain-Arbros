@@ -1,0 +1,72 @@
+﻿@page "/estadistica-ventas"
+@using Syncfusion.Blazor.PivotView
+@using Syncfusion.Blazor.Data
+@inject HttpClient Http
+<!--<div class="col-lg-9 control-section sb-property-border">
+    <div class="content-wrapper">
+        <SfPivotView TValue="Indicadores" ShowFieldList=true>
+            <PivotViewDataSourceSettings DataSource="@Data" ExpandAll=false EnableSorting=true>
+                <PivotViewColumns>
+                    <PivotViewColumn Name="RazonSoc"></PivotViewColumn>
+                </PivotViewColumns>
+                <PivotViewRows>
+                    <PivotViewRow Name="FechaPed"></PivotViewRow>
+                </PivotViewRows>
+                <PivotViewValues>
+                    <PivotViewValue Name="Cantped" Caption="Quantity"></PivotViewValue>
+                </PivotViewValues>
+                <PivotViewFormatSettings>
+                    <PivotViewFormatSetting Name="DolaresPedido" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+                </PivotViewFormatSettings>
+            </PivotViewDataSourceSettings>-->
+@*<PivotViewDisplayOption View=View.Chart></PivotViewDisplayOption>*@
+<!--</SfPivotView>
+    </div>
+</div>-->
+
+<SfPivotView TValue="EstadVenta" Height="300" EnableValueSorting=true ShowTooltip=false ShowFieldList=true EnableVirtualization="true">
+    <PivotViewDataSourceSettings TValue="EstadVenta" ExpandAll=true EnableSorting=true>
+        <SfDataManager Url="api/EstadisticaVentas/GetSyncf" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>
+        <PivotViewColumns>
+            <PivotViewColumn Name="DES_CATEG"></PivotViewColumn>
+        </PivotViewColumns>
+        <PivotViewRows>
+            <PivotViewRow Name="AnoPedido"></PivotViewRow>
+            @*<PivotViewRow Name="ShipCity"></PivotViewRow>*@
+        </PivotViewRows>
+        <PivotViewValues>
+            <PivotViewValue Name="DolaresPresupuesto" Caption="Dolares Presupuesto"></PivotViewValue>
+            <PivotViewValue Name="DolaresPedido" Caption="Dolares Pedido"></PivotViewValue>
+            <PivotViewValue Name="DolaresFactura" Caption="Dolares Factura"></PivotViewValue>
+            @*<PivotViewValue Name="UnitPrice" Caption="Unit Price"></PivotViewValue>*@
+        </PivotViewValues>
+        <PivotViewFormatSettings>
+            <PivotViewFormatSetting Name="DolaresPresupuesto" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+            <PivotViewFormatSetting Name="DolaresPedido" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+            <PivotViewFormatSetting Name="DolaresFactura" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+        </PivotViewFormatSettings>
+    </PivotViewDataSourceSettings>
+    <PivotViewGridSettings ColumnWidth="120"></PivotViewGridSettings>
+</SfPivotView>
+
+
+<style>
+    .e-pivotview {
+        min-height: 200px;
+    }
+
+    html, body {
+        height: 100%;
+    }
+</style>
+@code{ 
+    [CascadingParameter] public MainLayout MainLayout { get; set; }
+    public List<EstadVenta> DataEstad { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        MainLayout.Titulo = "Estadistica de Ventas";
+        //this.DataEstad = await Http.GetFromJsonAsync<List<EstadVenta>>("api/EstadisticaVentas");
+        //await InvokeAsync(StateHasChanged);
+    }
+}

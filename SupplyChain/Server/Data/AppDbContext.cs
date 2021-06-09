@@ -69,6 +69,8 @@ namespace SupplyChain
         public virtual DbSet<Planificacion> Planificaciones { get; set; }
 
         public DbSet<Proveedor> Proveedores { get; set; }
+        public DbSet<EstadVenta> EstadVentas { get; set; }
+
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         { 
@@ -97,6 +99,7 @@ namespace SupplyChain
 
             modelBuilder.Entity<ItemAbastecimiento>().HasNoKey().ToView(null);
             modelBuilder.Entity<Procun>().HasNoKey().ToView(null);
+            modelBuilder.Entity<EstadVenta>().HasNoKey().ToView(null);
         }
     }
 }
