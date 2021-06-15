@@ -12,6 +12,7 @@ namespace SupplyChain
         public int REGISTRO { get; set; } = 0; 
         public int PEDIDO { get; set; } = 0;
         public int NUMOCI { get; set; } = 0;
+        public int CG_CLI { get; set; } = 0;
         public string DES_CLI { get; set; } = "";
         public string ORCO { get; set; } = "";
         public string CG_ART { get; set; } = "";

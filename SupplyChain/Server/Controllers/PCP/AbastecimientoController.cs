@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Shared.Models;
 
@@ -27,6 +28,78 @@ namespace SupplyChain.Server.Controllers
         public AbastecimientoController(AppDbContext context)
         {
             _context = context;
+        }
+
+        [HttpGet("AbastecimientoSyncfSE")]
+        public object AbastecimientoSyncf()
+        {
+            try
+            {
+                ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+                xConexionSQL.EjecutarSQL("EXEC NET_PCP_Abastecimiento");
+                //await _context.Database.ExecuteSqlRawAsync("EXEC NET_PCP_Abastecimiento");
+                //xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+                string xSQLCommandString = ("SELECT * FROM NET_Temp_Abastecimiento");
+                dbAbastecimientoMP = xConexionSQL.EjecutarSQL(xSQLCommandString);
+
+                List<ModeloAbastecimiento> xLista = dbAbastecimientoMP.AsEnumerable().Select(m => new ModeloAbastecimiento()
+                {
+                    CG_PROD = m.Field<string>("CG_PROD"),
+                    CG_MAT = m.Field<string>("CG_MAT"),
+                    DES_MAT = m.Field<string>("DES_MAT"),
+                    CG_ORDEN = m.Field<int>("CG_ORDEN"),
+                    CALCULADO = m.Field<decimal?>("CALCULADO"),
+                    ACOMPRAR = m.Field<decimal?>("ACOMPRAR"),
+                    ACOMPRAR_INFORMADO = m.Field<decimal?>("ACOMPRAR_INFORMADO"),
+                    STOCK = m.Field<decimal?>("STOCK"),
+                    UNIDMED = m.Field<string>("UNIDMED"),
+                    UNIDCOMER = m.Field<string>("UNIDCOMER"),
+                    STOCK_MINIMO = m.Field<decimal?>("STOCK_MINIMO"),
+                    PEND_SIN_OC = m.Field<decimal?>("PEND_SIN_OC"),
+                    COMP_DE_ENTRADA = m.Field<decimal?>("COMP_DE_ENTRADA"),
+                    COMP_DE_SALIDA = m.Field<decimal?>("COMP_DE_SALIDA"),
+                    STOCK_CORREG = m.Field<decimal?>("STOCK_CORREG"),
+                    EN_PROCESO = m.Field<decimal?>("EN_PROCESO"),
+                    REQUERIDO = m.Field<decimal?>("REQUERIDO"),
+                    ENTRPREV = m.Field<DateTime>("ENTRPREV"),
+                    //CG_CIA = m.Field<int>("CG_CIA"),
+                    //USUARIO = m.Field<string>("USUARIO"),
+                }).ToList<ModeloAbastecimiento>();
+
+ 
+                foreach (var item in xLista)
+                {
+                    if (item.CG_ORDEN == 3)
+                    {
+                        var hojasRuta = _context.Procun.Where(p => p.CG_PROD.Trim() == item.CG_MAT).Count();
+                        item.CantProcesos = hojasRuta;
+                    }
+                }
+
+
+                //Get the DataSource from Database
+                var data = xLista;
+                var queryString = Request.Query;
+                if (queryString.Keys.Contains("$filter"))
+                {
+                    StringValues Skip;
+                    StringValues Take;
+                    int skip = (queryString.TryGetValue("$skip", out Skip)) ? Convert.ToInt32(Skip[0]) : 0;
+                    int top = (queryString.TryGetValue("$top", out Take)) ? Convert.ToInt32(Take[0]) : data.Count();
+                    string filter = string.Join("", queryString["$filter"].ToString().Split(' ').Skip(2)); // get filter from querystring
+                    data = data.Where(d => d.CG_ORDEN.ToString() == filter).ToList();
+                    return data.Skip(skip).Take(top);
+                }
+                else
+                {
+                    data = data.Where(d => d.CG_ORDEN == 3).ToList();
+                    return data;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new List<ModeloAbastecimiento>();
+            }
         }
 
         // GET: api/Abastecimiento

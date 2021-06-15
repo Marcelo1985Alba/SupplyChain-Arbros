@@ -1,0 +1,321 @@
+﻿@page "/Noconformidades"
+
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Notifications
+@using Syncfusion.Pdf;
+@using Syncfusion.Pdf.Grid;
+@using System.Drawing;
+@using System.IO;
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.BarcodeGenerator
+@using Syncfusion.Blazor.Buttons
+@using System.Text.Json
+@using Syncfusion.Blazor.Grids
+@inject IJSRuntime JsRuntime
+@inject Microsoft.JSInterop.IJSRuntime JS
+@inject HttpClient Http
+@using Syncfusion.Blazor.PdfViewer
+@using Syncfusion.Pdf.Tables
+@inherits SupplyChain.Client.Pages.NoConf.NoConformidadesPageBase
+
+@{
+
+    <SfToast ID="toast_default" @ref="ToastObj">
+        <ToastPosition X="Center" Y="Top"></ToastPosition>
+    </SfToast>
+
+    <div class="col-12 control-section mt-4">
+        <div class="content-wrapper">
+            <!--            <div class="form-inline">-->
+            <div class="col-lg-9 col-sm-12">
+                <h4 class="pt-3 text-left">
+                    Eventos y No Conformidades
+                </h4>
+            </div>
+            <div class="col-lg-2 col-sm-4">
+                <!--<SfButton IsPrimary="true" @onclick="refrescagrid">refresca</SfButton>-->
+                <SfButton IsPrimary="true" hidden="@ocultadivlista" @onclick="nuevoevento">Nuevo Evento</SfButton>
+                <SfButton IsPrimary="true" hidden="@ocultadivform" @onclick="volver">Volver</SfButton>
+            </div>
+
+            <hr />
+            <div id="divnoconflista" hidden="@ocultadivlista">
+                <!--                <SupplyChain.Client.Pages.CDM.NoConformidadesLista VuelveEdit="@VuelveEdit" EventoSelected="OnEventoSelected"></SupplyChain.Client.Pages.CDM.NoConformidadesLista>-->
+                <!--                <SupplyChain.Client.Pages.CDM.NoConformidadesLista></SupplyChain.Client.Pages.CDM.NoConformidadesLista>
+                    -->
+                <div class="col-lg-12 control-section">
+                    <div class="content-wrapper">
+                        <div class="row" id="gridPrevisiones">
+                            <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
+                                    @ref="Grid" DataSource="@listanoconf" AllowExcelExport="true" AllowGrouping="true" ID="Prevision"
+                                    RowHeight="20" Width="100%"
+                                    AllowSorting="true" AllowPaging="true" AllowFiltering="true"
+                                    Toolbar="@Toolbaritems" GridLines="GridLine.Both">
+                                <GridPageSettings PageCount="10" PageSizes="true" PageSize="20"></GridPageSettings>
+                                <GridEvents OnLoad="OnLoad" DataBound="DataBound" OnToolbarClick="@ClickHandler" TValue="NoConformidadesQuery"></GridEvents>
+                                <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+                                <GridColumns>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.Cg_NoConf) HeaderText="Nro.Evento" Edit="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.FE_EMIT) HeaderText="Fecha" Edit="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.Origen) HeaderText="Origen" Edit="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.Des_TipoNc) HeaderText="Tipo Evento" Edit="false" TextAlign="TextAlign.Left" Width="40px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.Observaciones) HeaderText="Descripcion" Edit="false" TextAlign="TextAlign.Left" Width="40px"></GridColumn>
+                                </GridColumns>
+                            </SfGrid>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="divnoconfform" hidden="@ocultadivform">
+                <!--                <SupplyChain.Client.Pages.CDM.NoConformidadesForm VuelveLista="@VuelveLista" EventoSelected="VarEventoSelected"></SupplyChain.Client.Pages.CDM.NoConformidadesForm>-->
+                <!--<SupplyChain.Client.Pages.CDM.NoConformidadesForm></SupplyChain.Client.Pages.CDM.NoConformidadesForm>-->
+                <div class="form-row">
+                    <div class="form-group col-lg-4 col-md-4 col-sm-8">
+                        <div class="form-row">
+                            <SfRadioButton  Disabled="@deshabradio" Label="Sin vinculos" Name="clase" @bind-Checked="@valorradio" Value=@("sinvinculos") ValueChange="OnRadioChange" TChecked="string"></SfRadioButton>
+                        </div>
+                        <div class="form-row">
+                            <SfRadioButton Disabled="@deshabradio" Label="Por Pedido (Cliente)" Name="clase" @bind-Checked="@valorradio" Value=@("pedido") ValueChange="OnRadioChange" TChecked="string"></SfRadioButton>
+                        </div>
+                        <div class="form-row">
+                            <SfRadioButton Disabled="@deshabradio" Label="Por Orden de Fabricación (Interna)" @bind-Checked="@valorradio" Name="clase" Value=@("orden") ValueChange="OnRadioChange" TChecked="string"></SfRadioButton>
+                        </div>
+                        <div class="form-row">
+                            <SfRadioButton Disabled="@deshabradio" Label="Por Orden de Compra (Proveedor)" @bind-Checked="@valorradio" Name="clase" Value=@("ocompra") ValueChange="OnRadioChange" TChecked="string"></SfRadioButton>
+                        </div>
+                    </div>
+                    <div hidden="@ocultadivof" class="form-group col-lg-5 col-md-5 col-sm-10">
+                        <label class="col-form-label">Orden de Fabricación:</label>
+                        <div class="form-row">
+                            <div class="col-8">
+                                <SfNumericTextBox @bind-Value="@ValorOF"
+                                                  ShowClearButton="true" TValue="int" Format="n0"
+                                                  Decimals="0" ShowSpinButton="@MostrarSpin"
+                                                  Readonly="@OFSoloLectura">
+
+                                </SfNumericTextBox>
+                            </div>
+                            <div hidden="@DeshabilitaBotonOF" class="col-2">
+                                <SfButton OnClick="@(async (e)=> await BuscarxOF())"
+                                          CssClass="btn btn-outline" IsPrimary="true"
+                                          IconCss="fa fa-search"></SfButton>
+                            </div>
+                        </div>
+                    </div>
+                    <div hidden="@ocultadivocompra" class="form-group col-lg-5 col-md-5 col-sm-10">
+                        <label class="col-form-label">Orden de Compra:</label>
+                        <div class="form-row">
+                            <div class="col-8">
+
+                                <SfNumericTextBox @bind-Value="@ValorOC"
+                                                  ShowClearButton="true" TValue="int" Format="n0"
+                                                  Decimals="0" ShowSpinButton="@MostrarSpin"
+                                                  Readonly="@OCSoloLectura">
+                                </SfNumericTextBox>
+                            </div>
+                            <div hidden="@DeshabilitaBotonOC" class="col-2">
+                                <SfButton OnClick="@(async (e)=> await BuscarxOC())"
+                                          CssClass="btn btn-outline" IsPrimary="true"
+                                          IconCss="fa fa-search"></SfButton>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div hidden="@ocultadivpedido" class="form-group col-lg-5 col-md-5 col-sm-10">
+                        <label class="col-form-label">Pedido:</label>
+                        <div class="form-row">
+                            <div class="col-8">
+
+                                <SfNumericTextBox @bind-Value="@ValorPedido"
+                                                  ShowClearButton="true" TValue="int" Format="n0"
+                                                  Decimals="0" ShowSpinButton="@MostrarSpin"
+                                                  Readonly="@PedidoSoloLectura">
+
+                                </SfNumericTextBox>
+                            </div>
+                            <div hidden="@DeshabilitaBotonPedido" class="col-2">
+                                <SfButton OnClick="@(async (e)=> await BuscarxPedido())"
+                                          CssClass="btn btn-outline" IsPrimary="true"
+                                          IconCss="fa fa-search"></SfButton>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div hidden="@ocultadivtextodatos" class="form-group col-lg-12 col-md-12 col-sm-24">
+                    <!--<label class="col-form-label">Datos Formulario:</label>-->
+                    <h2>@textodatos</h2>
+
+
+                    <div class="form-row">
+                        <div class="form-group col-lg-3 col-md-3 col-sm-6">
+                            <label class="col-form-label">Despacho:</label>
+                            <SfDropDownList TValue="string" @bind-Value="@despacho" TItem="ListaDespachos" Placeholder="Seleccione Despacho..." DataSource="@datosdespacho">
+                                <DropDownListFieldSettings Value="despachocombo" Text="despachocombo"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </div>
+                        <div class="form-group col-lg-3 col-md-3 col-sm-6">
+                            <label class="col-form-label">Lote:</label>
+                            <SfDropDownList TValue="string" @bind-Value="@lote" TItem="ListaLotes" Placeholder="Seleccione Lote..." DataSource="@datoslote">
+                                <DropDownListFieldSettings Value="lotecombo" Text="lotecombo"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </div>
+                        <div class="form-group col-lg-3 col-md-3 col-sm-6">
+                            <label class="col-form-label">Cantidad:</label>
+                            <SfNumericTextBox @bind-Value="@cantidadnoconf"
+                                              ShowClearButton="true" TValue="decimal" Format="n0"
+                                              Decimals="0">
+
+                            </SfNumericTextBox>
+                        </div>
+                    </div>
+                </div>
+                <div hidden="@ocultadivdatosgenerales" class="form-group col-lg-12 col-md-12 col-sm-24">
+                    <!--<label class="col-form-label">Datos No Conformidad:</label>-->
+                    <div class="form-row">
+                        <div class="form-group col-lg-6 col-md-4 col-sm-12">
+
+                            <label class="col-form-label">Tipo de Evento:</label>
+                            <SfDropDownList TValue="int" TItem="TiposNoConf" @bind-Value="@DropVal" Placeholder="Seleccione Tipo...">
+                                <SfDataManager Url="api/TiposNoConf" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"
+                                               CrossDomain=false></SfDataManager>
+                                <DropDownListFieldSettings Text="Des_TipoNc" Value="Cg_TipoNc"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-row">
+                        <div class="form-group col-lg-5 col-md-5 col-sm-10">
+                            <h4>Descripción del Evento</h4>
+                        </div>
+                        <div class="form-group col-lg-7 col-md-7 col-sm-14">
+                            <SfTextBox ID="datosnoconfor1" ShowClearButton="true"
+                                       @bind-Value="@datosnoconfor1" Readonly="false">
+
+                            </SfTextBox>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-lg-12 col-md-12 col-sm-24">
+                            <h4>Comentarios</h4>
+                        </div>
+                        <div class="form-group col-lg-12 col-md-12 col-sm-24">
+                            <SfTextBox Multiline=true ID="comentarios" ShowClearButton="true"
+                                       @bind-Value="@comentarios" Readonly="false">
+
+                            </SfTextBox>
+                        </div>
+                    </div>
+                    <SfButton OnClick="() => guardanoconfor()"
+                              CssClass="btn btn-outline" IsPrimary="true" Content="Guardar"
+                              IconCss="fa fa-save"></SfButton>
+
+                    <div hidden="@ocultadivAcciones">
+                        <hr />
+                        <hr />
+                        Acciones
+                        <div class="col-lg-12 control-section">
+                            <div class="content-wrapper">
+                                <div class="row" id="gridAcciones">
+                                    <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
+                                            @ref="GridAcciones" DataSource="@listaacciones" AllowExcelExport="true" AllowGrouping="true" ID="Prevision"
+                                            RowHeight="30"
+                                            AllowSorting="true" AllowPaging="true" AllowFiltering="true"
+                                            GridLines="GridLine.Both">
+                                        <GridPageSettings PageCount="10" PageSizes="true" PageSize="20"></GridPageSettings>
+                                        <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+                                        <GridColumns>
+                                            <GridColumn Field=@nameof(NoConformidadesAcciones.Orden) HeaderText="Tipo Accion" Edit="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
+                                            <GridColumn Field=@nameof(NoConformidadesQuery.Observaciones) HeaderText="Observaciones" Edit="false" TextAlign="TextAlign.Left" Width="50px"></GridColumn>
+                                            <GridColumn Field=@nameof(NoConformidadesQuery.Fe_Ocurrencia) HeaderText="Fecha" Edit="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
+                                            <GridColumn Field=@nameof(NoConformidadesQuery.Usuario) HeaderText="Usuario" Edit="false" TextAlign="TextAlign.Left" Width="40px"></GridColumn>
+                                        </GridColumns>
+                                    </SfGrid>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <SfDialog ID="dialogAcciones" Width="600px" MinHeight="250px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisibledialogacciones">
+        <DialogTemplates>
+            <Content>
+                <h2>@textoitemgrid</h2>
+                <br />
+                <div class="form-group col-lg-5 col-md-5 col-sm-10">
+                    <SfDropDownList TValue="int" @bind-Value="@tipoaccion" TItem="ListaAcciones" Placeholder="Seleccione Acción..." DataSource="@ListaAccionesData">
+                        <DropDownListFieldSettings Value="Value" Text="Texto"></DropDownListFieldSettings>
+                    </SfDropDownList>
+                </div>
+
+                <div class="form-group col-lg-12 col-md-12 col-sm-24">
+                    <SfTextBox ID="observacionesmodal" ShowClearButton="true"
+                               @bind-Value="@observacionesmodal" Readonly="false">
+                    </SfTextBox>
+                </div>
+                <SfButton OnClick="() => guardaaccion()"
+                          CssClass="btn btn-outline" IsPrimary="true" Content="Guardar"
+                          IconCss="fa fa-save"></SfButton>
+
+            </Content>
+        </DialogTemplates>
+    </SfDialog>
+
+
+}
+
+@code {
+
+    /*
+    protected SfToast ToastObj;
+
+    private bool ocultadivlista { get; set; } = false;
+    private bool ocultadivform { get; set; } = true;
+
+    protected async Task nuevoevento()
+    {
+        ocultadivlista = true;
+        ocultadivform = false;
+    }
+
+    protected async Task volver()
+    {
+        ocultadivlista = false;
+        ocultadivform = true;
+    }
+
+
+    //    public void VuelveLista()
+    public async void VuelveLista()
+    {
+        ocultadivlista = false;
+        ocultadivform = true;
+        //NoConformidadesLista.RefrescaLista();
+
+    }
+
+    public async void VuelveEdit()
+    {
+        ocultadivlista = true;
+        ocultadivform = false;
+
+    }
+
+    private async Task OnEventoSelected(NoConformidadesQuery eventoSel)
+    {
+        Console.WriteLine(eventoSel);
+        NoConformidadesQuery VarEventoSelected = eventoSel;
+    }
+    */
+
+
+}

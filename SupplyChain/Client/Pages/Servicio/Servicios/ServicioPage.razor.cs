@@ -28,9 +28,8 @@ namespace SupplyChain.Pages.Servicios
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
         [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
-
-        [Parameter]
-        public string pedido { get; set; } = "";
+        [CascadingParameter] public MainLayout Layout { get; set; }
+        [Parameter] public string pedido { get; set; } = "";
         protected bool SpinnerVisible { get; set; } = false;
         protected SfGrid<Service> Grid;
         public string NroPedido = "";
@@ -38,7 +37,9 @@ namespace SupplyChain.Pages.Servicios
         public bool Disabled = false;
         public bool Visible { get; set; } = true;
 
-        
+        protected const string IDGRID = "gridServicios";
+
+
         public class SIoNO
         {
             public string Text { get; set; }
@@ -96,48 +97,54 @@ namespace SupplyChain.Pages.Servicios
         protected List<Cliente> ClienteList = new List<Cliente>();
         protected SfSpinner SpinnerObj;
         protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "1100px" };
-        [CascadingParameter]
-        public MainLayout Layout { get; set; }
-        protected List<Object> Toolbaritems = new List<Object>(){
-        "Edit",
-        new Syncfusion.Blazor.Navigations.ItemModel { Text = "Certificado", TooltipText = "Certificado", PrefixIcon = "e-copy", Id = "Certificado" },
-        new Syncfusion.Blazor.Navigations.ItemModel { Text = "OPDS", TooltipText = "OPDS", PrefixIcon = "e-copy", Id = "OPDS" },
-        "Exportar grilla en Excel",
-        new Syncfusion.Blazor.Navigations.ItemModel { Text = "Seleccionar Columnas", TooltipText = "Seleccionar Columnas", Id = "Seleccionar Columnas" },
-        new Syncfusion.Blazor.Navigations.ItemModel { Text = "Search", TooltipText = "OPDS", Id = "Search" }
-    };
 
+
+        protected List<Object> Toolbaritems = new List<Object>(){
+        "Search",
+        new ItemModel { Text = "Certificado", TooltipText = "Certificado", PrefixIcon = "e-copy", Id = "Certificado" },
+        "Edit",
+        new ItemModel { Text = "OPDS", TooltipText = "OPDS", PrefixIcon = "e-copy", Id = "OPDS" },
+        "Exportar grilla en Excel",
+        new ItemModel { Text = "Seleccionar Columnas", TooltipText = "Seleccionar Columnas", Id = "Seleccionar Columnas" },
+        //new ItemModel { Text = "Search", TooltipText = "OPDS", Id = "Search" }
+        };
+
+        public string ApiUrl { get; set; } = "";
+        public string _state;
         protected override async Task OnInitializedAsync()
         {
             Layout.Titulo = "Servicios";
 
-            SpinnerVisible = true;
-            if (!string.IsNullOrEmpty(pedido))
+            //SpinnerVisible = true;
+            if (string.IsNullOrEmpty(pedido))
             {
+                ApiUrl = "api/Servicios";
                 servicios = await Http.GetFromJsonAsync<List<Service>>("api/Servicios");
-                servDesc = servicios.Where(s => s.PEDIDO == pedido).ToList();
+                servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
+                
             }
             else
             {
+                ApiUrl = $"api/Servicios/{pedido}";
                 servicios = await Http.GetFromJsonAsync<List<Service>>($"api/Servicios/{pedido}");
-                servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
+                servDesc = servicios.Where(s => s.PEDIDO == pedido).ToList();
             }
             medidas = await Http.GetFromJsonAsync<List<Medida>>("api/Medida");
-            series = await Http.GetFromJsonAsync<List<Serie>>("api/Serie");
-            orificios = await Http.GetFromJsonAsync<List<Orificio>>("api/Orificio");
-            sobrepresiones = await Http.GetFromJsonAsync<List<Sobrepresion>>("api/Sobrepresion");
-            tipos = await Http.GetFromJsonAsync<List<Tipo>>("api/Tipo");
-            estados = await Http.GetFromJsonAsync<List<Estado>>("api/Estado");
-            trabajosEfectuados = await Http.GetFromJsonAsync<List<Trabajosefec>>("api/TrabajosEfec");
-            marcas = await Http.GetFromJsonAsync<List<Marca>>("api/Marca");
-            operarios = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
-            opers = from opers in (IEnumerable<Operario>)operarios
-                    where opers.ACTIVO == true
-                    select opers;
-            celdas = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
+            //series = await Http.GetFromJsonAsync<List<Serie>>("api/Serie");
+            //orificios = await Http.GetFromJsonAsync<List<Orificio>>("api/Orificio");
+            //sobrepresiones = await Http.GetFromJsonAsync<List<Sobrepresion>>("api/Sobrepresion");
+            //tipos = await Http.GetFromJsonAsync<List<Tipo>>("api/Tipo");
+            //estados = await Http.GetFromJsonAsync<List<Estado>>("api/Estado");
+            //trabajosEfectuados = await Http.GetFromJsonAsync<List<Trabajosefec>>("api/TrabajosEfec");
+            //marcas = await Http.GetFromJsonAsync<List<Marca>>("api/Marca");
+            //operarios = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
+            //opers = from opers in (IEnumerable<Operario>)operarios
+            //        where opers.ACTIVO == true
+            //        select opers;
+            //celdas = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
             rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 
-            SpinnerVisible = false;
+            
             await base.OnInitializedAsync();
         }
 
@@ -252,35 +259,32 @@ namespace SupplyChain.Pages.Servicios
 
         private async Task EliminarServicio(ActionEventArgs<Service> args)
         {
-            try
+            
+            if (args.Data != null)
             {
-                if (args.Data != null)
+                bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", $"Seguro de que desea eliminar la reparacion {args.Data.PEDIDO}?");
+                if (isConfirmed)
                 {
-                    bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", $"Seguro de que desea eliminar la reparacion {args.Data.PEDIDO}?");
-                    if (isConfirmed)
-                    {
-                        //servicios.Remove(servicios.Find(m => m.PEDIDO == args.Data.PEDIDO));
-                        await Http.DeleteAsync($"api/Servicios/{args.Data.PEDIDO}");
-                        servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
-                    }
+                    //servicios.Remove(servicios.Find(m => m.PEDIDO == args.Data.PEDIDO));
+                    await Http.DeleteAsync($"api/Servicios/{args.Data.PEDIDO}");
+                    servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
                 }
             }
-            catch (Exception ex)
-            {
-
-            }
         }
-        public void OnInput(InputEventArgs args)
+        public async Task OnInput(InputEventArgs args)
         {
-            this.Grid.Search(args.Value);
+            
+            await this.Grid.Search(args.Value);
         }
         public async Task OnLoad()                        //Show the spinner using initial Grid load 
         {
-            await SpinnerObj.ShowAsync();
+            //await SpinnerObj.ShowAsync();
         }
         public async Task DataBound()                      //Hide the spinner after the data is bound to Grid(during data operations also this will be triggered) 
         {
-            await SpinnerObj.HideAsync();
+            //await SpinnerObj.HideAsync();
+            //await Grid.AutoFitColumns();
+            SpinnerVisible = false;
         }
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {

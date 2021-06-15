@@ -1,0 +1,53 @@
+﻿@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Data
+
+<SfDropDownList TValue="int" TItem="VistasGrillas" Placeholder="Seleccione Vista..." DataSource="@Source"  
+                @bind-Value="VistaSeleccionada" AllowFiltering="true" Readonly="false" ShowClearButton="true">
+    <SfDataManager Url="@ApiUrl" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>
+    <DropDownListEvents TItem="VistasGrillas" TValue="int" ValueChange="@(async (e)=>  await OnSelected(e))"></DropDownListEvents>
+    <DropDownListFieldSettings Text="Descripcion" Value="Id"></DropDownListFieldSettings>
+</SfDropDownList>
+
+@*<SfComboBox TValue="int" TItem="VistasGrillas" PopupWidth="150px" AllowFiltering="true"
+            @bind-Value="@VistaSeleccionada">
+    <SfDataManager Url="@ApiUrl" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>
+    <ComboBoxFieldSettings Value="Id" Text="Descripcion"></ComboBoxFieldSettings>
+    <ComboBoxTemplates TItem="VistasGrillas">
+        <HeaderTemplate>
+            <table><tr><th class="e-text-center combo-width">Código</th><th>Descripcion</th></tr></table>
+        </HeaderTemplate>
+        <ItemTemplate>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="e-text-center combo-width">@((context as VistasGrillas).Id)</td>
+                        <td>@((context as VistasGrillas).Descripcion)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </ItemTemplate>
+    </ComboBoxTemplates>
+</SfComboBox>*@
+
+@code {
+
+    [Inject] public HttpClient Http { get; set; }
+    public List<VistasGrillas> Source { get; set; }
+    public string ApiUrl { get; set; }
+    public int VistaSeleccionada { get; set; }
+
+    [Parameter] public string AppName { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        ApiUrl = $"api/VistasGrillas/GetByNameSyncf/{AppName}";
+        //Source = await Http.GetFromJsonAsync<List<VistasGrillas>>(ApiUrl);
+
+    }
+
+    protected async Task OnSelected(ChangeEventArgs<int, VistasGrillas> args)
+    {
+
+    }
+
+}

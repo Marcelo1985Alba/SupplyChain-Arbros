@@ -47,7 +47,9 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
         new ItemModel(){ Type = ItemType.Separator},
         "Print",
         new ItemModel(){ Type = ItemType.Separator},
-        "ExcelExport"
+        "ExcelExport",
+        new ItemModel(){ Type = ItemType.Separator},
+        new ItemModel { Text = "Seleccionar Columnas", TooltipText = "Seleccionar Columnas", Id = "Seleccionar Columnas" }
     };
         //protected NotificacionToast NotificacionObj;
         //protected bool ToastVisible { get; set; } = false;
@@ -105,6 +107,10 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             {
                 await this.GridSE.Print();
             }
+            if (args.Item.Text == "Seleccionar Columnas")
+            {
+                await GridSE.OpenColumnChooser();
+            }
         }
         public async Task ActionBeginMP(ActionEventArgs<ModeloAbastecimiento> args)
         {
@@ -125,7 +131,9 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             {
                 HttpResponseMessage response;
                 response = await Http.PutAsJsonAsync($"api/Abastecimiento/PutAbSE/{args.Data.CG_MAT}", args.Data);
-                listaAbastSE = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecimientoSEX");
+                //listaAbastSE = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecimientoSEX");
+                await GridSE.RefreshHeader();
+                await GridSE.RefreshColumns();
                 GridSE.Refresh();
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
@@ -173,6 +181,8 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             {
                 listaAbastSE = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecerSE");
                 listaAbastSE = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecimientoSEX");
+                await GridSE.RefreshHeader();
+                await GridSE.RefreshColumns();
                 GridSE.Refresh();
             }
         }
@@ -187,6 +197,8 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             {
                 args.Cell.AddClass(new string[] { "alerta-procesos" });
             }
+
+            
         }
     }
 }

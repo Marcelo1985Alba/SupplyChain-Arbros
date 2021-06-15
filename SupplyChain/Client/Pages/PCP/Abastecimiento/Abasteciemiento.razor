@@ -56,13 +56,13 @@
                                             {
                                                 VisiblePropertySE = false;
 
-                                                <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                                                        EnablePersistence="true" RowHeight="20"
-                                                        @ref="GridSE" DataSource="@listaAbastSE" AllowExcelExport="true" AllowGrouping="true"
-                                                        ID="AbastecimientoSE" Height="100%" Width="100%"
+                                                <SfGrid TValue="ModeloAbastecimiento" AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" 
+                                                        EnablePersistence="true" RowHeight="20" AllowResizing="true"
+                                                        @ref="GridSE" AllowExcelExport="true" AllowGrouping="true"
+                                                        ID="AbastecimientoSE" Height="100%" Width="100%" DataSource="listaAbastSE"
                                                         AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@ToolbaritemsSE"
                                                         GridLines="GridLine.Both">
-                                                    @*<SfDataManager Url="api/Abastecimiento/AbastecimientoSE" CrossDomain="true" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>*@
+                                                    @*<SfDataManager Url="api/Abastecimiento/AbastecimientoSyncfSE" CrossDomain="false" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>*@
                                                     <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                                                     <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                                                     <GridEvents OnToolbarClick="@ClickHandlerSE" QueryCellInfo="QueryCellInfoHandler"
@@ -78,13 +78,13 @@
                                                                 <div>
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
-                                                                            <label class="e-float-text e-label-top">Producto:</label>
+                                                                            <label class="">Producto:</label>
                                                                             <br />
                                                                             <SfTextBox ID="CG_PROD" @bind-Value="@(SE.CG_MAT)" Enabled="false"></SfTextBox>
                                                                         </div>
 
                                                                         <div class="form-group col-md-6">
-                                                                            <label class="e-float-text e-label-top">Stock a fabricar:</label>
+                                                                            <label class="">Stock a fabricar:</label>
                                                                             <br />
                                                                             <SfNumericTextBox ID="ACOMPRAR" Format="N2" @bind-Value="@(SE.ACOMPRAR)" Enabled="true"></SfNumericTextBox>
                                                                         </div>
@@ -94,7 +94,7 @@
                                                         </Template>
                                                     </GridEditSettings>
                                                     <GridColumns>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.CG_MAT) HeaderText="Codigo Semi-elaborado" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.CG_MAT) HeaderText="Codigo Semi-elaborado" IsPrimaryKey="true" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                                                         <GridColumn Field=@nameof(ModeloAbastecimiento.DES_MAT) HeaderText="Descripción del Semi-elaborado" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                                         <GridColumn Field=@nameof(ModeloAbastecimiento.REQUERIDO) Format="N2" HeaderText="Stock requerido" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                                                         <GridColumn Field=@nameof(ModeloAbastecimiento.CALCULADO) Format="N2" HeaderText="Fabricación sugerida" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
@@ -169,7 +169,7 @@
                                                         </Template>
                                                     </GridEditSettings>
                                                     <GridColumns>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.CG_MAT) HeaderText="Codigo Insumo" TextAlign="TextAlign.Left" Width="90px"></GridColumn>
+                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.CG_MAT) HeaderText="Codigo Insumo" IsPrimaryKey="true" TextAlign="TextAlign.Left" Width="90px"></GridColumn>
                                                         <GridColumn Field=@nameof(ModeloAbastecimiento.DES_MAT) HeaderText="Descripción del insumo" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                                                         <GridColumn Field=@nameof(ModeloAbastecimiento.REQUERIDO) Format="N2" HeaderText="Stock requerido" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                                                         <GridColumn Field=@nameof(ModeloAbastecimiento.CALCULADO) Format="N2" HeaderText="Compra sugerida" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>

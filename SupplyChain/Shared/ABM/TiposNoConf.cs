@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SupplyChain
 {
-    [Table("TiposNoConf")]
+    [Table("TiposNoConf")]  
     public class TiposNoConf
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]

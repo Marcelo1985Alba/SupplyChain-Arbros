@@ -62,6 +62,15 @@ namespace SupplyChain
         public DbSet<Usuarios> Usuarios { get; set; }
         public DbSet<Rol> Roles { get; set; }
 
+        //MODULO NO CONFORMIDADES
+
+        public virtual DbSet<ModeloPedidosDespacho> PedidosDespacho { get; set; }
+        public virtual DbSet<ModeloPedidosLote> PedidosLote { get; set; }
+        public DbSet<NoConformidades> NoConformidades { get; set; }
+        public DbSet<NoConformidadesQuery> NoConformidadesQuery { get; set; }
+        public DbSet<NoConformidadesAcciones> NoConformidadesAcciones { get; set; }
+        public DbSet<Compra> ComprasDbSet { get; set; }
+
         public DbSet<Compra> Compras { get; set; }
         public DbSet<ResumenStock> ResumenStock { get; set; }
         public DbSet<Modulo> Modulos { get; set; }
@@ -70,6 +79,7 @@ namespace SupplyChain
 
         public DbSet<Proveedor> Proveedores { get; set; }
         public DbSet<EstadVenta> EstadVentas { get; set; }
+        public DbSet<VistasGrillas> VistasGrillas { get; set; }
 
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

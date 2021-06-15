@@ -1,53 +1,83 @@
 ﻿@page "/estadistica-ventas"
 @using Syncfusion.Blazor.PivotView
+@using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Data
 @inject HttpClient Http
-<!--<div class="col-lg-9 control-section sb-property-border">
-    <div class="content-wrapper">
-        <SfPivotView TValue="Indicadores" ShowFieldList=true>
-            <PivotViewDataSourceSettings DataSource="@Data" ExpandAll=false EnableSorting=true>
-                <PivotViewColumns>
-                    <PivotViewColumn Name="RazonSoc"></PivotViewColumn>
-                </PivotViewColumns>
-                <PivotViewRows>
-                    <PivotViewRow Name="FechaPed"></PivotViewRow>
-                </PivotViewRows>
-                <PivotViewValues>
-                    <PivotViewValue Name="Cantped" Caption="Quantity"></PivotViewValue>
-                </PivotViewValues>
-                <PivotViewFormatSettings>
-                    <PivotViewFormatSetting Name="DolaresPedido" Format="C0" UseGrouping=true></PivotViewFormatSetting>
-                </PivotViewFormatSettings>
-            </PivotViewDataSourceSettings>-->
-@*<PivotViewDisplayOption View=View.Chart></PivotViewDisplayOption>*@
-<!--</SfPivotView>
-    </div>
-</div>-->
 
-<SfPivotView TValue="EstadVenta" Height="300" EnableValueSorting=true ShowTooltip=false ShowFieldList=true EnableVirtualization="true">
-    <PivotViewDataSourceSettings TValue="EstadVenta" ExpandAll=true EnableSorting=true>
-        <SfDataManager Url="api/EstadisticaVentas/GetSyncf" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>
-        <PivotViewColumns>
-            <PivotViewColumn Name="DES_CATEG"></PivotViewColumn>
-        </PivotViewColumns>
-        <PivotViewRows>
-            <PivotViewRow Name="AnoPedido"></PivotViewRow>
-            @*<PivotViewRow Name="ShipCity"></PivotViewRow>*@
-        </PivotViewRows>
-        <PivotViewValues>
-            <PivotViewValue Name="DolaresPresupuesto" Caption="Dolares Presupuesto"></PivotViewValue>
-            <PivotViewValue Name="DolaresPedido" Caption="Dolares Pedido"></PivotViewValue>
-            <PivotViewValue Name="DolaresFactura" Caption="Dolares Factura"></PivotViewValue>
-            @*<PivotViewValue Name="UnitPrice" Caption="Unit Price"></PivotViewValue>*@
-        </PivotViewValues>
-        <PivotViewFormatSettings>
-            <PivotViewFormatSetting Name="DolaresPresupuesto" Format="C0" UseGrouping=true></PivotViewFormatSetting>
-            <PivotViewFormatSetting Name="DolaresPedido" Format="C0" UseGrouping=true></PivotViewFormatSetting>
-            <PivotViewFormatSetting Name="DolaresFactura" Format="C0" UseGrouping=true></PivotViewFormatSetting>
-        </PivotViewFormatSettings>
-    </PivotViewDataSourceSettings>
-    <PivotViewGridSettings ColumnWidth="120"></PivotViewGridSettings>
-</SfPivotView>
+
+<div class="row">
+    <div class="col-3">
+        <label class="">Tipo Grafico:</label>
+    </div>
+    <div class="col-9">
+        <SfDropDownList TValue="ChartSeriesType" TItem="DropDownData" DataSource="@ChartTypes" @bind-Value="@ChartType">
+            <DropDownListFieldSettings Text="Name" Value="Value"></DropDownListFieldSettings>
+        </SfDropDownList>
+    </div>
+
+</div>
+
+<div class="row">
+    <SfPivotView TValue="EstadVenta" Height="300" EnableValueSorting=true ShowTooltip=false ShowFieldList=true EnableVirtualization="true">
+        <PivotViewDataSourceSettings TValue="EstadVenta" ExpandAll=true EnableSorting=true >
+            <SfDataManager Url="api/EstadisticaVentas/GetSyncf" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>
+            <PivotViewColumns>
+                <PivotViewColumn Name="DES_CATEG"></PivotViewColumn>
+            </PivotViewColumns>
+            <PivotViewRows>
+                <PivotViewRow Name="AnoPedido"></PivotViewRow>
+                @*<PivotViewRow Name="ShipCity"></PivotViewRow>*@
+            </PivotViewRows>
+            <PivotViewValues>
+                <PivotViewValue Name="DolaresPresupuesto" Caption="Dolares Presupuesto"></PivotViewValue>
+                <PivotViewValue Name="DolaresPedido" Caption="Dolares Pedido"></PivotViewValue>
+                <PivotViewValue Name="DolaresFactura" Caption="Dolares Factura"></PivotViewValue>
+            </PivotViewValues>
+            <PivotViewFormatSettings>
+                <PivotViewFormatSetting Name="DolaresPresupuesto" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+                <PivotViewFormatSetting Name="DolaresPedido" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+                <PivotViewFormatSetting Name="DolaresFactura" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+            </PivotViewFormatSettings>
+        </PivotViewDataSourceSettings>
+        <PivotViewGridSettings ColumnWidth="120"></PivotViewGridSettings>
+    </SfPivotView>
+</div>
+
+<div class="row mt-2">
+    <SfPivotView TValue="EstadVenta" Height="300" EnableValueSorting=true ShowTooltip=false ShowFieldList=true EnableVirtualization="true">
+        <PivotViewDataSourceSettings TValue="EstadVenta" ExpandAll=true EnableSorting=true>
+            <SfDataManager Url="api/EstadisticaVentas/GetSyncf" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>
+            <PivotViewColumns>
+                <PivotViewColumn Name="DES_CATEG"></PivotViewColumn>
+            </PivotViewColumns>
+            <PivotViewRows>
+                <PivotViewRow Name="AnoPedido"></PivotViewRow>
+                @*<PivotViewRow Name="ShipCity"></PivotViewRow>*@
+            </PivotViewRows>
+            <PivotViewValues>
+                <PivotViewValue Name="DolaresPresupuesto" Caption="Dolares Presupuesto"></PivotViewValue>
+                <PivotViewValue Name="DolaresPedido" Caption="Dolares Pedido"></PivotViewValue>
+                <PivotViewValue Name="DolaresFactura" Caption="Dolares Factura"></PivotViewValue>
+                @*<PivotViewValue Name="UnitPrice" Caption="Unit Price"></PivotViewValue>*@
+            </PivotViewValues>
+            <PivotViewFormatSettings>
+                <PivotViewFormatSetting Name="DolaresPresupuesto" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+                <PivotViewFormatSetting Name="DolaresPedido" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+                <PivotViewFormatSetting Name="DolaresFactura" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+            </PivotViewFormatSettings>
+        </PivotViewDataSourceSettings>
+        <PivotViewGridSettings ColumnWidth="120"></PivotViewGridSettings>
+        <PivotViewDisplayOption View=View.Chart></PivotViewDisplayOption>
+        <PivotChartSettings Title="Analisis de Ventas" Theme="PivotChartTheme.Material">
+            <PivotChartSeries Type="@ChartType"></PivotChartSeries>
+            <PivotChartPrimaryYAxis>
+                <PivotChartPrimaryYAxisBorder Width="0"></PivotChartPrimaryYAxisBorder>
+            </PivotChartPrimaryYAxis>
+        </PivotChartSettings>
+    </SfPivotView>
+</div>
+
+
 
 
 <style>
@@ -59,9 +89,42 @@
         height: 100%;
     }
 </style>
-@code{ 
+@code{
     [CascadingParameter] public MainLayout MainLayout { get; set; }
     public List<EstadVenta> DataEstad { get; set; }
+    public ChartSeriesType ChartType = ChartSeriesType.Column;
+
+
+    List<DropDownData> ChartTypes = new List<DropDownData>() {
+        new DropDownData { Name = "Column", Value = ChartSeriesType.Column },
+        new DropDownData { Name = "Bar", Value = ChartSeriesType.Bar },
+        new DropDownData { Name = "Line", Value = ChartSeriesType.Line },
+        new DropDownData { Name = "Spline", Value = ChartSeriesType.Spline },
+        new DropDownData { Name = "Area", Value = ChartSeriesType.Area },
+        new DropDownData { Name = "SplineArea", Value = ChartSeriesType.SplineArea },
+        new DropDownData { Name = "StepLine", Value = ChartSeriesType.StepLine },
+        new DropDownData { Name = "StepArea", Value = ChartSeriesType.StepArea },
+        new DropDownData { Name = "StackingColumn", Value = ChartSeriesType.StackingColumn },
+        new DropDownData { Name = "StackingBar", Value = ChartSeriesType.StackingBar },
+        new DropDownData { Name = "StackingArea", Value = ChartSeriesType.StackingArea },
+        new DropDownData { Name = "StackingColumn100", Value = ChartSeriesType.StackingColumn100 },
+        new DropDownData { Name = "StackingBar100", Value = ChartSeriesType.StackingBar100 },
+        new DropDownData { Name = "StackingArea100", Value = ChartSeriesType.StackingArea100 },
+        new DropDownData { Name = "Scatter", Value = ChartSeriesType.Scatter },
+        new DropDownData { Name = "Bubble", Value = ChartSeriesType.Bubble },
+        new DropDownData { Name = "Polar", Value = ChartSeriesType.Polar },
+        new DropDownData { Name = "Radar", Value = ChartSeriesType.Radar },
+        new DropDownData { Name = "Pareto", Value = ChartSeriesType.Pareto },
+        new DropDownData { Name = "Pie", Value = ChartSeriesType.Pie },
+        new DropDownData { Name = "Doughnut", Value = ChartSeriesType.Doughnut },
+        new DropDownData { Name = "Funnel", Value = ChartSeriesType.Funnel },
+        new DropDownData { Name = "Pyramid", Value = ChartSeriesType.Pyramid }
+    };
+    public class DropDownData
+    {
+        public string Name { get; set; }
+        public ChartSeriesType Value { get; set; }
+    }
 
     protected override async Task OnInitializedAsync()
     {

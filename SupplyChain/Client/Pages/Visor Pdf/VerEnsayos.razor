@@ -24,13 +24,14 @@ else
                 @foreach (Archivo item in archivos)
                 {
                     var idPdf = $"pdfEns{item.Id}";
+                    var pdf_ruta = $"{item.Nombre}," + Accion;
                     <AccordionItem>
                         <HeaderTemplate>
                             <div>@(item.Nombre)</div>
                         </HeaderTemplate>
                         <ContentTemplate>
                             <SfPdfViewer ID="@idPdf"
-                                         ServiceUrl="/api/Values" DocumentPath="@Codigo"
+                                         ServiceUrl="/api/Values" DocumentPath="@pdf_ruta"
                                          Height="1200px" Width="100%"></SfPdfViewer>
                         </ContentTemplate>
                     </AccordionItem>

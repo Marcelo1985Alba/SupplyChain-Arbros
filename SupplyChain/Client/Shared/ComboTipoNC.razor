@@ -1,0 +1,27 @@
+﻿@inject HttpClient Http
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Data
+
+
+<SfDropDownList TValue="int" TItem="TiposNoConf"  @bind-Value="@DropVal" Placeholder="Seleccione Tipo...">
+    <SfDataManager Url="api/TiposNoConf" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"
+                   CrossDomain=false></SfDataManager>
+    <DropDownListFieldSettings Text="Des_TipoNc" Value="Cg_TipoNc"></DropDownListFieldSettings>
+</SfDropDownList>
+
+                @code {
+
+                    public int DropVal;
+
+                    /*
+                    private IEnumerable<TiposNoConf> TiposNc = new List<TiposNoConf>();
+
+
+                    protected override async Task OnInitializedAsync()
+                    {
+
+                        await InvokeAsync(StateHasChanged);
+                    }
+                    */
+
+                }

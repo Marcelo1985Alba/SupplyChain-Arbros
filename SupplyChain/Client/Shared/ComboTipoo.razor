@@ -1,10 +1,6 @@
 ﻿@inject HttpClient Http
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Data
-@*<ComboGenerico TItem="Tire" PlaceHolder="Seleccione tipo de operacion..."
-               DataSource="@TiposOperacion" ValueId="Tipoo" ValueText="Descrip"
-               OnSelectedChanged="OnSelectedTireChanged">
-</ComboGenerico>*@
 
 <SfDropDownList TValue="int" TItem="Tire" Placeholder="Seleccione tipo de operacion..." DataSource="@TiposOperacion"
                 @bind-Value="TipooSeleccionado">

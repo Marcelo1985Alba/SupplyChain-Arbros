@@ -10,8 +10,8 @@ namespace SupplyChain.Shared.Models
     [Table("NET_Temp_Abastecimiento")]
     public class ModeloAbastecimiento
     {
-        [Key]
         public string CG_PROD { get; set; } = "";
+        [Key]
         public string CG_MAT { get; set; } = "";
         public string DES_MAT { get; set; } = "";
         public int CG_ORDEN { get; set; } = 0;
