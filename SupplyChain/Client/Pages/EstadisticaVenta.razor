@@ -18,66 +18,204 @@
 </div>
 
 <div class="row">
-    <SfPivotView TValue="EstadVenta" Height="300" EnableValueSorting=true ShowTooltip=false ShowFieldList=true EnableVirtualization="true">
-        <PivotViewDataSourceSettings TValue="EstadVenta" ExpandAll=true EnableSorting=true >
-            <SfDataManager Url="api/EstadisticaVentas/GetSyncf" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>
-            <PivotViewColumns>
-                <PivotViewColumn Name="DES_CATEG"></PivotViewColumn>
-            </PivotViewColumns>
-            <PivotViewRows>
-                <PivotViewRow Name="AnoPedido"></PivotViewRow>
-                @*<PivotViewRow Name="ShipCity"></PivotViewRow>*@
-            </PivotViewRows>
-            <PivotViewValues>
-                <PivotViewValue Name="DolaresPresupuesto" Caption="Dolares Presupuesto"></PivotViewValue>
-                <PivotViewValue Name="DolaresPedido" Caption="Dolares Pedido"></PivotViewValue>
-                <PivotViewValue Name="DolaresFactura" Caption="Dolares Factura"></PivotViewValue>
-            </PivotViewValues>
-            <PivotViewFormatSettings>
-                <PivotViewFormatSetting Name="DolaresPresupuesto" Format="C0" UseGrouping=true></PivotViewFormatSetting>
-                <PivotViewFormatSetting Name="DolaresPedido" Format="C0" UseGrouping=true></PivotViewFormatSetting>
-                <PivotViewFormatSetting Name="DolaresFactura" Format="C0" UseGrouping=true></PivotViewFormatSetting>
-            </PivotViewFormatSettings>
-        </PivotViewDataSourceSettings>
-        <PivotViewGridSettings ColumnWidth="120"></PivotViewGridSettings>
-    </SfPivotView>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <SfPivotView TValue="EstadVenta" Height="300" Width="100%" ShowFieldList="true">
+                    <PivotViewDataSourceSettings TValue="EstadVenta"ExpandAll=false EnableSorting=true>
+                        <SfDataManager Url="api/EstadisticaVentas/GetFacturacion" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>
+                        <PivotViewColumns>
+                            <PivotViewColumn Name="AnoFactura" Caption="Año Factura"></PivotViewColumn>
+                        </PivotViewColumns>
+                        @*<PivotViewFilters>
+                            <PivotViewFilter Name="AnoFactura" Caption="Año Factura" Type="Syncfusion.Blazor.PivotView.FilterType.Label" Condition="Operators.DoesNotEquals" Value1="FY 2015">
+
+                            </PivotViewFilter>
+                        </PivotViewFilters>*@
+                    @*<PivotViewFilterSettings>
+                        <PivotViewFilterSetting Name="AnoFactura" Type="Syncfusion.Blazor.PivotView.FilterType.Value" 
+                                                Condition="Operators.DoesNotEquals" Value1="0.0"></PivotViewFilterSetting>
+                    </PivotViewFilterSettings>*@
+                        @*<PivotViewRows>
+                            <PivotViewRow Name="RazonSoc" Caption="Cliente" AllowDragAndDrop="true"></PivotViewRow>                            
+                        </PivotViewRows>*@
+                        <PivotViewValues>
+                            <PivotViewValue Name="DolaresFactura" Caption="Dolares Factura"></PivotViewValue>
+                        </PivotViewValues>
+                        <PivotViewFormatSettings>
+                            <PivotViewFormatSetting Name="DolaresPresupuesto" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+                            <PivotViewFormatSetting Name="DolaresPedido" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+                            <PivotViewFormatSetting Name="DolaresFactura" Format="C" UseGrouping=true></PivotViewFormatSetting>
+                            <PivotViewFormatSetting Name="AnoFactura" Format="N0" UseGrouping=true></PivotViewFormatSetting>
+                        </PivotViewFormatSettings>
+                    </PivotViewDataSourceSettings>
+                    <PivotViewGridSettings ColumnWidth="120"></PivotViewGridSettings>
+                </SfPivotView>
+            </div>
+        </div>
+
+    </div>
+    
 </div>
 
-<div class="row mt-2">
-    <SfPivotView TValue="EstadVenta" Height="300" EnableValueSorting=true ShowTooltip=false ShowFieldList=true EnableVirtualization="true">
-        <PivotViewDataSourceSettings TValue="EstadVenta" ExpandAll=true EnableSorting=true>
-            <SfDataManager Url="api/EstadisticaVentas/GetSyncf" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>
-            <PivotViewColumns>
-                <PivotViewColumn Name="DES_CATEG"></PivotViewColumn>
-            </PivotViewColumns>
-            <PivotViewRows>
-                <PivotViewRow Name="AnoPedido"></PivotViewRow>
-                @*<PivotViewRow Name="ShipCity"></PivotViewRow>*@
-            </PivotViewRows>
-            <PivotViewValues>
-                <PivotViewValue Name="DolaresPresupuesto" Caption="Dolares Presupuesto"></PivotViewValue>
-                <PivotViewValue Name="DolaresPedido" Caption="Dolares Pedido"></PivotViewValue>
-                <PivotViewValue Name="DolaresFactura" Caption="Dolares Factura"></PivotViewValue>
-                @*<PivotViewValue Name="UnitPrice" Caption="Unit Price"></PivotViewValue>*@
-            </PivotViewValues>
-            <PivotViewFormatSettings>
-                <PivotViewFormatSetting Name="DolaresPresupuesto" Format="C0" UseGrouping=true></PivotViewFormatSetting>
-                <PivotViewFormatSetting Name="DolaresPedido" Format="C0" UseGrouping=true></PivotViewFormatSetting>
-                <PivotViewFormatSetting Name="DolaresFactura" Format="C0" UseGrouping=true></PivotViewFormatSetting>
-            </PivotViewFormatSettings>
-        </PivotViewDataSourceSettings>
-        <PivotViewGridSettings ColumnWidth="120"></PivotViewGridSettings>
-        <PivotViewDisplayOption View=View.Chart></PivotViewDisplayOption>
-        <PivotChartSettings Title="Analisis de Ventas" Theme="PivotChartTheme.Material">
-            <PivotChartSeries Type="@ChartType"></PivotChartSeries>
-            <PivotChartPrimaryYAxis>
-                <PivotChartPrimaryYAxisBorder Width="0"></PivotChartPrimaryYAxisBorder>
-            </PivotChartPrimaryYAxis>
-        </PivotChartSettings>
-    </SfPivotView>
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <SfPivotView TValue="EstadVenta" Height="600" ShowFieldList="true"
+                             Width="100%">
+                    <PivotViewDataSourceSettings TValue="EstadVenta" ExpandAll=true EnableSorting=true>
+                        <SfDataManager Url="api/EstadisticaVentas/GetFacturacion" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>
+                        @*<PivotViewColumns>
+                                <PivotViewColumn Name="DES_CATEG" Caption="Categoria"></PivotViewColumn>
+                            </PivotViewColumns>*@
+                        <PivotViewRows>
+                            <PivotViewRow Name="AnoFactura" Caption="Año" AllowDragAndDrop="true"></PivotViewRow>
+                        </PivotViewRows>
+                        @*<PivotViewFilterSettings>
+                                <PivotViewFilterSetting Name="AnoFactura" Type="Syncfusion.Blazor.PivotView.FilterType.Number"
+                                                        Condition="Operators.DoesNotEquals" Value1="0.0"></PivotViewFilterSetting>
+                            </PivotViewFilterSettings>*@
+                        <PivotViewValues>
+                            <PivotViewValue Name="DolaresFactura" Caption="Dolares Factura"></PivotViewValue>
+                            @*<PivotViewValue Name="UnitPrice" Caption="Unit Price"></PivotViewValue>*@
+                        </PivotViewValues>
+                        <PivotViewDrilledMembers>
+                            <PivotViewDrilledMember Name="AnoFactura" Items="@DrilledMembers"></PivotViewDrilledMember>
+                        </PivotViewDrilledMembers>
+                        <PivotViewFormatSettings>
+                            @*<PivotViewFormatSetting Name="DolaresPresupuesto" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+                                <PivotViewFormatSetting Name="DolaresPedido" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+                                <PivotViewFormatSetting Name="DolaresFactura" Format="C" UseGrouping=true></PivotViewFormatSetting>*@
+                            <PivotViewFormatSetting Name="AnoFactura" Format="N0" UseGrouping=true Type="FormatType.Number"></PivotViewFormatSetting>
+                        </PivotViewFormatSettings>
+                    </PivotViewDataSourceSettings>
+                    <PivotViewGridSettings ColumnWidth="120"></PivotViewGridSettings>
+                    <PivotViewDisplayOption View=View.Chart></PivotViewDisplayOption>
+                    <PivotChartSettings Title="Ventas Anuales U$S" Theme="PivotChartTheme.Bootstrap" EnableAnimation="true">
+                        <PivotChartSeries Type="@ChartType" EnableTooltip="true">
+
+                            <PivotChartMarkerSettings>
+                                <PivotChartDataLabel Visible="true"></PivotChartDataLabel>
+                            </PivotChartMarkerSettings>
+                        </PivotChartSeries>
+                        <PivotChartPrimaryXAxis Visible="true" Title="Años"></PivotChartPrimaryXAxis>
+                        <PivotChartPrimaryYAxis>
+                            <PivotChartPrimaryYAxisBorder Width="4" Type="PivotChartBorderType.CurlyBrace"></PivotChartPrimaryYAxisBorder>
+                        </PivotChartPrimaryYAxis>
+
+                    </PivotChartSettings>
+                </SfPivotView>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <SfPivotView TValue="EstadVenta" Height="600" ShowFieldList="true"
+                             Width="100%">
+                    <PivotViewDataSourceSettings TValue="EstadVenta" ExpandAll=true EnableSorting=true>
+                        <SfDataManager Url="api/EstadisticaVentas/GetFacturacion" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>
+                        @*<PivotViewColumns>
+                                <PivotViewColumn Name="DES_CATEG" Caption="Categoria"></PivotViewColumn>
+                            </PivotViewColumns>*@
+                        <PivotViewRows>
+                            <PivotViewRow Name="AnoPedido" Caption="Año" AllowDragAndDrop="true"></PivotViewRow>
+                        </PivotViewRows>
+                        @*<PivotViewFilterSettings>
+                                <PivotViewFilterSetting Name="AnoFactura" Type="Syncfusion.Blazor.PivotView.FilterType.Number"
+                                                        Condition="Operators.DoesNotEquals" Value1="0.0"></PivotViewFilterSetting>
+                            </PivotViewFilterSettings>*@
+                        <PivotViewValues>
+                            <PivotViewValue Name="UnidEqui" Caption="Unidades Equivalentes"></PivotViewValue>
+                            @*<PivotViewValue Name="UnitPrice" Caption="Unit Price"></PivotViewValue>*@
+                        </PivotViewValues>
+                        <PivotViewDrilledMembers>
+                            <PivotViewDrilledMember Name="AnoPedido" Items="@DrilledMembers"></PivotViewDrilledMember>
+                        </PivotViewDrilledMembers>
+                        <PivotViewFormatSettings>
+                            @*<PivotViewFormatSetting Name="DolaresPresupuesto" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+                                <PivotViewFormatSetting Name="DolaresPedido" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+                                <PivotViewFormatSetting Name="DolaresFactura" Format="C" UseGrouping=true></PivotViewFormatSetting>*@
+                            <PivotViewFormatSetting Name="Unidades Equivalentes" Format="C1" UseGrouping=true Type="FormatType.Number"></PivotViewFormatSetting>
+                        </PivotViewFormatSettings>
+                    </PivotViewDataSourceSettings>
+                    <PivotViewGridSettings ColumnWidth="120"></PivotViewGridSettings>
+                    <PivotViewDisplayOption View=View.Chart></PivotViewDisplayOption>
+                    <PivotChartSettings Title="Unidades Equivalentes" Theme="PivotChartTheme.Bootstrap" EnableAnimation="true">
+                        <PivotChartSeries Type="@ChartType" EnableTooltip="true">
+
+                            <PivotChartMarkerSettings>
+                                <PivotChartDataLabel Visible="true"></PivotChartDataLabel>
+                            </PivotChartMarkerSettings>
+                        </PivotChartSeries>
+                        <PivotChartPrimaryXAxis Visible="true" Title="Año"></PivotChartPrimaryXAxis>
+                        <PivotChartPrimaryYAxis>
+                            <PivotChartPrimaryYAxisBorder Width="2" Type="PivotChartBorderType.CurlyBrace"></PivotChartPrimaryYAxisBorder>
+                        </PivotChartPrimaryYAxis>
+
+                    </PivotChartSettings>
+                </SfPivotView>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <SfPivotView TValue="EstadVenta" Height="600" ShowFieldList="true"
+                             Width="100%" AllowDrillThrough="true">
+                    <PivotViewDataSourceSettings TValue="EstadVenta" ExpandAll=true EnableSorting=true>
+                        <SfDataManager Url="api/EstadisticaVentas/GetFacturacion" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>
+                        @*<PivotViewColumns>
+                                <PivotViewColumn Name="DES_CATEG" Caption="Categoria"></PivotViewColumn>
+                            </PivotViewColumns>*@
+                        <PivotViewRows>
+                            <PivotViewRow Name="AnoPedido" Caption="Año" AllowDragAndDrop="true"></PivotViewRow>
+                        </PivotViewRows>
+                        @*<PivotViewFilterSettings>
+                                <PivotViewFilterSetting Name="AnoFactura" Type="Syncfusion.Blazor.PivotView.FilterType.Number"
+                                                        Condition="Operators.DoesNotEquals" Value1="0.0"></PivotViewFilterSetting>
+                            </PivotViewFilterSettings>*@
+                        <PivotViewValues>
+                            <PivotViewValue Name="DolaresPedido" Caption="Pedido Dolares"></PivotViewValue>
+                            @*<PivotViewValue Name="UnitPrice" Caption="Unit Price"></PivotViewValue>*@
+                        </PivotViewValues>
+                        <PivotViewDrilledMembers>
+                            <PivotViewDrilledMember Name="AnoPedido" Items="@DrilledMembers"></PivotViewDrilledMember>
+                        </PivotViewDrilledMembers>
+                        <PivotViewFormatSettings>
+                            <PivotViewFormatSetting Name="DolaresPresupuesto" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+                            <PivotViewFormatSetting Name="DolaresPedido" Format="C2" UseGrouping=true></PivotViewFormatSetting>
+                            <PivotViewFormatSetting Name="DolaresFactura" Format="C" UseGrouping=true></PivotViewFormatSetting>
+                            <PivotViewFormatSetting Name="Unidades Equivalentes" Format="C1" UseGrouping=true Type="FormatType.Number"></PivotViewFormatSetting>
+                        </PivotViewFormatSettings>
+                    </PivotViewDataSourceSettings>
+                    <PivotViewGridSettings ColumnWidth="120" GridLines="PivotTableGridLine.Both"></PivotViewGridSettings>
+                    <PivotViewDisplayOption View=View.Chart></PivotViewDisplayOption>
+                    <PivotChartSettings Title="Pedidos U$S" Theme="PivotChartTheme.MaterialDark"
+                                        EnableAnimation="true" EnableSmartLabels="true">
+                        <PivotChartSeries Type="@ChartType" EnableTooltip="true">
+                            <PivotChartLegendSettings Position=PivotChartLegendPosition.Right Background="rgb(230, 236, 239)" Padding=20 Alignment="PivotChartAlignment.Center">
+                            </PivotChartLegendSettings>
+                            <PivotChartMarkerSettings>
+                                <PivotChartDataLabel Visible="true"></PivotChartDataLabel>
+                            </PivotChartMarkerSettings>
+                        </PivotChartSeries>
+                            <PivotChartPrimaryXAxis Visible="true" Title="Año"></PivotChartPrimaryXAxis>
+                            <PivotChartPrimaryYAxis>
+                                <PivotChartPrimaryYAxisBorder Width="2" Type="PivotChartBorderType.CurlyBrace"></PivotChartPrimaryYAxisBorder>
+                            </PivotChartPrimaryYAxis>
+
+                    </PivotChartSettings>
+                </SfPivotView>
+            </div>
+        </div>
+
+    </div>
 </div>
-
-
 
 
 <style>
@@ -93,8 +231,18 @@
     [CascadingParameter] public MainLayout MainLayout { get; set; }
     public List<EstadVenta> DataEstad { get; set; }
     public ChartSeriesType ChartType = ChartSeriesType.Column;
-
-
+    public string[] DrilledMembers = new string[] { "2016.0" };
+    public PivotChartTooltipSettings pivotChartTooltipSettings = new PivotChartTooltipSettings()
+    {
+        Enable = true,
+        Border = new PivotChartTooltipBorder() { Width = 1},
+        EnableMarker = true
+    };
+    public PivotChartLegendSettings pivotChartLegendSettings = new PivotChartLegendSettings()
+    {
+        Position = PivotChartLegendPosition.Top,
+        Visible = true
+    };
     List<DropDownData> ChartTypes = new List<DropDownData>() {
         new DropDownData { Name = "Column", Value = ChartSeriesType.Column },
         new DropDownData { Name = "Bar", Value = ChartSeriesType.Bar },
@@ -129,7 +277,7 @@
     protected override async Task OnInitializedAsync()
     {
         MainLayout.Titulo = "Estadistica de Ventas";
-        //this.DataEstad = await Http.GetFromJsonAsync<List<EstadVenta>>("api/EstadisticaVentas");
+        //this.DataEstad = await Http.GetFromJsonAsync<List<EstadVenta>>("api/EstadisticaVentas/GetFacturacionAsync");
         //await InvokeAsync(StateHasChanged);
     }
 }

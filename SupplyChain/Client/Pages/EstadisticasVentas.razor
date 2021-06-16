@@ -1,0 +1,43 @@
+﻿@page "/pivot-table/default-functionalities"
+@using Syncfusion.Blazor.PivotView
+@using Syncfusion.Blazor.Data
+
+<div class="control-section">
+    <div class="content-wrapper">
+        <SfPivotView TValue="EstadVenta" Height="340" EnableValueSorting=true>
+            <PivotViewDataSourceSettings TValue="EstadVenta" ExpandAll=false EnableSorting=true>
+                <SfDataManager Url="api/EstadisticaVentas/GetFacturacionAsync" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" ></SfDataManager>
+                <PivotViewColumns>
+                    <PivotViewColumn Name="AnoFactura"></PivotViewColumn>
+                    @*<PivotViewColumn Name="Quarter"></PivotViewColumn>*@
+                </PivotViewColumns>
+                <PivotViewRows>
+                    <PivotViewRow Name="DES_CATEG"></PivotViewRow>
+                    @*<PivotViewRow Name="Products"></PivotViewRow>*@
+                </PivotViewRows>
+                <PivotViewValues>
+                    @*<PivotViewValue Name="Sold" Caption="Units Sold"></PivotViewValue>*@
+                    <PivotViewValue Name="DolaresFactura" Caption="Dolares Factura"></PivotViewValue>
+                </PivotViewValues>
+                <PivotViewFormatSettings>
+                    <PivotViewFormatSetting Name="DolaresFactura" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+                </PivotViewFormatSettings>
+            </PivotViewDataSourceSettings>
+            <PivotViewGridSettings ColumnWidth="120"></PivotViewGridSettings>
+        </SfPivotView>
+    </div>
+</div>
+<style>
+    .e-pivotview {
+        min-height: 200px;
+    }
+</style>
+@code{
+    [Inject] public HttpClient Http { get; set; }
+    public List<EstadVenta> Data { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        this.Data = await Http.GetFromJsonAsync<List<EstadVenta>>("api/EstadisticaVentas/GetFacturacionAsync");
+    }
+
+}

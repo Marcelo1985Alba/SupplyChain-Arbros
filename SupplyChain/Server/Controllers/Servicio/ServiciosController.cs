@@ -24,7 +24,7 @@ namespace SupplyChain
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Service>>> Get()
         {
-            var xitem = await _context.Servicios.ToListAsync();
+            var xitem = await _context.Servicios.OrderByDescending(s=> s.PEDIDO).ToListAsync();
             return xitem;
         }
 
