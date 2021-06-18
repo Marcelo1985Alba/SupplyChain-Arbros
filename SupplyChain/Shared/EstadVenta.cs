@@ -24,6 +24,7 @@ namespace SupplyChain.Shared
 		public decimal? DolaresPresupuesto { get; set; } = 0;
 		public decimal? PesosPedido { get; set; } = 0;
 		public decimal? DolaresPedido { get; set; } = 0;
+		public decimal? DolaresFactura { get; set; } = 0;
 		public int? OCinterna { get; set; } = 0;
 		public DateTime? FechaPrev { get; set; }
 		public string Dirent { get; set; } = "";
@@ -49,6 +50,7 @@ namespace SupplyChain.Shared
 		public string ConPed { get; set; } = "";
 		public int? MesPedido { get; set; } = 0;
 		public decimal? AnoPedido { get; set; } = 0;
+		public decimal? AnoFactura { get; set; } = 0;
 		public decimal? UnidEqui { get; set; } = 0;
 		public int? DiasAtraso { get; set; } = 0;
 		public int? DiasDemoraEntrega { get; set; } = 0;

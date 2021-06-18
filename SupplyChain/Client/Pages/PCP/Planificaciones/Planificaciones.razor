@@ -61,7 +61,7 @@
             <div class="content-wrapper">
                 <div class="row" id="rowGrilla">
                     <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                            EnablePersistence="true"
+                            EnablePersistence="false"
                             @ref="GridPlanificacion" DataSource="@listaPlanificacion" Height="100%" Width="100%"
                             AllowExcelExport="true" AllowGrouping="true" ID="Planificacion" RowHeight="20"
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true"
@@ -114,7 +114,7 @@
                         </GridEditSettings>
 
                         <GridColumns>
-                            <GridColumn Field=@nameof(Planificacion.CG_ORDEN) Format="N0" HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="90px" Visible="false"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.CG_ORDEN) Format="N0" HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="90px"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.CG_ORDF) Format="N0" HeaderText="Orden" TextAlign="TextAlign.Left" Width="90px"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.CLASE) HeaderText="Clase" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.CG_R) HeaderText="Tipo de Orden" TextAlign="TextAlign.Left" Width="110px"></GridColumn>

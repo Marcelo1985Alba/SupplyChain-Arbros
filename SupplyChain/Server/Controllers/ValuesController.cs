@@ -258,10 +258,10 @@ namespace SupplyChain
         {
 
             var contenido = document.Split(',');
-
+            var campo = contenido[1];
             document = contenido[0];
 
-            var ubicacion =  _context.Solution.Where(s=> s.CAMPO == contenido[1]).Select(c=> c.VALORC).FirstOrDefault();
+            var ubicacion =  _context.Solution.Where(s=> s.CAMPO == campo).Select(c=> c.VALORC).FirstOrDefault();
             string documentPath = string.Empty;
 
             if (!System.IO.File.Exists(ubicacion + "/" + document))
