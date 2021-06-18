@@ -106,10 +106,18 @@ namespace SupplyChain
 
         // GET: api/Programas/GetProgramaByOF/cg_ordf
         [HttpGet("GetProgramaByOF/{cg_ordf}")]
-        public async Task<ActionResult<IEnumerable<Programa>>> GetCompraByOF(decimal cg_ordf)
+        public async Task<ActionResult<List<Programa>>> GetCompraByOF(decimal cg_ordf)
         {
-            return await _context.Programa.Where(p => p.Cg_Cia == 1
+            try
+            {
+                return await _context.Programa.Where(p => p.Cg_Cia == 1
                     && p.CG_ORDF == cg_ordf).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            
 
         }
 

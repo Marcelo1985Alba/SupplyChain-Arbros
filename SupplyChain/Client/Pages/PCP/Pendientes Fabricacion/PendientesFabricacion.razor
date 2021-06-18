@@ -55,7 +55,8 @@
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                         <SfDataManager Url="api/PendientesFabricar" CrossDomain="true" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>
-                        <GridEvents DataBound="(async()=> await DataBoundHandler())" OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin"
+                        <GridEvents DataBound="(async()=> await DataBoundHandler())" OnToolbarClick="@ClickHandler" 
+                                    QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin"
                                     TValue="vPendienteFabricar"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>

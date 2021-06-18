@@ -4,6 +4,7 @@
 @using Syncfusion.Pdf;
 @using Syncfusion.Pdf.Graphics;
 @using Syncfusion.Pdf.Grid;
+@using Syncfusion.Blazor.Navigations
 @using System.Drawing;
 @using System.IO;
 @using Syncfusion.Blazor.Inputs
@@ -13,362 +14,369 @@
 @using System.Text.Json
 @using Syncfusion.Blazor.Grids
 @inject IJSRuntime JsRuntime
-@inject Microsoft.JSInterop.IJSRuntime JS
 @inject HttpClient Http
 @using Syncfusion.Blazor.PdfViewer
-@*@using Syncfusion.Blazor.PdfViewerServer;*@
 @using Syncfusion.Pdf.Tables
 @{
 
     <SfToast ID="toast_default" @ref="ToastObj">
         <ToastPosition X="Right"></ToastPosition>
     </SfToast>
-    @*if (prodList.Count == 0)
+
+    <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Bootstrap" Size="100"></SfSpinner>
+
+    <div class="col-lg-12 control-section">
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-4  col-sm-6 my-1">
+                    <SfTextBox ID="txtTrazPedido" Placeholder="Número de Pedido"
+                               Input="OnInputPedido" @bind-Value="BoxPedido" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                </div>
+                <div class="col-md-4 col-sm-6 my-1">
+                    <SfTextBox ID="txtTrazCliente" Placeholder="Nombre de Cliente"
+                               Input="OnInputCliente" @bind-Value="BoxCliente" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                </div>
+                <div class=" col-md-4 col-sm-12 my-1">
+                    <SfTextBox ID="txtTrazCg_Prod" Placeholder="Codigo de Producto"
+                               Input="OnInputCodigo" @bind-Value="BoxCodigo" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-sm-6 my-1">
+                    <button type="button" class="btn btn-success btn-sm" @onclick="@BuscarTrazabilidad">Buscar Pedido</button>
+                </div>
+                <div class="col-md-4 col-sm-6 my-1">
+                    <button type="button" class="btn btn-info btn-sm" @onclick="@MostrarTrazabilidad">Mostrar Trazabilidad</button>
+                </div>
+                @{
+                    if (Showgrid)
+                    {
+                        <div class="col-md-4 col-sm-6 my-1">
+                            <button type="submit" class="btn btn-danger btn-sm" @onclick="@Catalogo">Imprimir catálogo</button>
+                        </div>
+                        <div class="col-md-4 col-sm-6 my-1">
+                            <button type="submit" class="btn btn-warning btn-sm" @onclick="@Etiqueta">Identificación</button>
+                        </div>
+                        <div class="col-md-4 col-sm-6 my-1">
+                            <button type="submit" class="btn btn-primary btn-sm" @onclick="@Ensayos">Ver ensayos</button>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <SfDialog ID="dialogTrazPed" Width="1000px" MinHeight="450px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible">
+        <DialogTemplates>
+            <Header>Listado de Pedidos del Cliente @BoxCliente.ToUpper().Trim() </Header>
+            <Content>
+                <SfGrid ID="dlgPedidoGrid" @ref="Grid2" GridLines="GridLine.Both" DataSource="@Busquedalist" Height="80%">
+                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                    <GridEvents RowSelected="@(async ()=> await OnSelected())" TValue="Pedidos"></GridEvents>
+                    <GridColumns>
+                        <GridColumn Field=@nameof(Pedidos.PEDIDO) HeaderText="Pedido" Width="110px"></GridColumn>
+                        <GridColumn Field=@nameof(Pedidos.DES_CLI) HeaderText="Cliente" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Pedidos.CG_ART) HeaderText="Codigo" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Pedidos.DES_ART) HeaderText="Descripcion" Width="150px"></GridColumn>
+                    </GridColumns>
+                </SfGrid>
+                @{
+                    if (Busquedalist.Count == CantidadMostrar)
+                    {
+                        <div class="col-sm-3 my-1">
+                            <button type="submit" class="btn btn-primary" @onclick="@AgregarValores">Buscar más</button>
+                        </div>
+                    }
+                }
+            </Content>
+        </DialogTemplates>
+    </SfDialog>
+
+
+    if (Showgrid == true)
     {
-        <span>Loading...</span>
-    }
-    else
-    {*@
+        <form>
+            @{
+                var lote = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim();
+                if (lote == null)
+                {
+                    lote = "";
+                }
+                var modelo = prodList.CAMPOCOM1.Trim();
+                if (modelo == null)
+                {
+                    modelo = "";
+                }
+                var medida = prodList.CAMPOCOM2.Trim();
+                if (medida == null)
+                {
+                    medida = "";
+                }
+                var orificio = prodList.CAMPOCOM3.Trim();
+                if (orificio == null)
+                {
+                    orificio = "";
+                }
+                var area = prodList.CAMPOCOM4.Trim();
+                if (area == null)
+                {
+                    area = "";
+                }
+                var serie = prodList.CAMPOCOM5.Trim();
+                if (serie == null)
+                {
+                    serie = "";
+                }
+                var tipo = prodList.CAMPOCOM6.Trim();
+                if (tipo == null)
+                {
+                    tipo = "";
+                }
+                var presion = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
+                if (presion == null)
+                {
+                    presion = "";
+                }
+                var resorte = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim();
+                if (resorte == null)
+                {
+                    resorte = "";
+                }
+                var fluido = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim();
+                if (fluido == null)
+                {
+                    fluido = "";
+                }
+                var presAj = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim();
+                if (presAj == null)
+                {
+                    presAj = "";
+                }
+                var ctpre = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim();
+                if (ctpre == null)
+                {
+                    ctpre = "";
+                }
+                var temp = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim();
+                if (temp == null)
+                {
+                    temp = "";
+                }
+            }
+            <div class="row">
+
+                <div class="col">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Trazabilidad del Número de Pedido @TrzNro"
+                           readonly />
+                </div>
+
+                <div class="col">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Lote: @lote"
+                           readonly />
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Modelo: @modelo"
+                           readonly />
+                </div>
+
+                <div class="col">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Medida: @medida"
+                           readonly />
+                </div>
+
+                <div class="col">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Orificio: @orificio"
+                           readonly />
+                </div>
+
+
+
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Area: @area"
+                           readonly />
+                </div>
+
+                <div class="col">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Serie: @serie"
+                           readonly />
+                </div>
+
+                <div class="col">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Tipo: @tipo"
+                           readonly />
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Presion: @presion"
+                           readonly />
+                </div>
+
+                <div class="col">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Resorte: @resorte"
+                           readonly />
+                </div>
+
+                <div class="col">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Fluido: @fluido"
+                           readonly />
+                </div>
+
+
+
+            </div>
+            <div class="row">
+                <div class="col">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="P. Aj Banco: @presAj"
+                           readonly />
+                </div>
+
+                <div class="col">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Contrapresión: @ctpre"
+                           readonly />
+                </div>
+
+                <div class="col">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Temperatura: @temp"
+                           readonly />
+                </div>
+            </div>
+        </form>
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row">
-                    <div class="col-md-4  col-sm-6 my-1">
-                        <SfTextBox ID="txtTrazPedido" Placeholder="Número de Pedido" Input="OnInputPedido" @bind-Value="BoxPedido" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
-                    </div>
-                    <div class="col-md-4 col-sm-6 my-1">
-                        <SfTextBox ID="txtTrazCliente" Placeholder="Nombre de Cliente" Input="OnInputCliente" @bind-Value="BoxCliente" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
-                    </div>
-                    <div class=" col-md-4 col-sm-12 my-1">
-                        <SfTextBox ID="txtTrazCg_Prod" Placeholder="Codigo de Producto" Input="OnInputCodigo" @bind-Value="BoxCodigo" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4 col-sm-6 my-1">
-                        <button type="submit" class="btn btn-primary" @onclick="@BuscarTrazabilidad">Buscar Pedido</button>
-                    </div>
-                    <div class="col-md-4 col-sm-6 my-1">
-                        <button type="submit" class="btn btn-primary" @onclick="@MostrarTrazabilidad">Mostrar Trazabilidad</button>
-                    </div>
-                    @{
-                        if (Showgrid == true)
-                        {
-                            <div class="col-md-4 col-sm-6 my-1">
-                                <button type="submit" class="btn btn-primary" @onclick="@Catalogo">Imprimir catálogo</button>
-                            </div>
-                            <div class="col-md-4 col-sm-6 my-1">
-                                <button type="submit" class="btn btn-primary" @onclick="@Etiqueta">Identificación</button>
-                            </div>
-                            <div class="col-md-4 col-sm-6 my-1">
-                                <button type="submit" class="btn btn-primary" @onclick="@Ensayos">Ver ensayos</button>
-                            </div>
-                        }
-                    }
-                </div>
-            </div>
-        </div>
-        <SfDialog ID="dialogTrazPed" Width="1000px" MinHeight="450px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible">
-            <DialogTemplates>
-                <Content>
-                    <SfGrid ID="dTrazPedidogrid" @ref="Grid2" DataSource="@Busquedalist">
-                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                        <GridEvents RowSelected="OnSelected" TValue="Pedidos"></GridEvents>
+                    <SfGrid ShowColumnChooser="true" AllowResizing="true" Width="auto" @ref="Grid" ID="gridTrazPedidos"
+                            GridLines="GridLine.Both"
+                            DataSource="@pedidos" AllowExcelExport="true" AllowGrouping="true" Toolbar="@Toolbaritems">
+                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                        <GridEvents RowSelected="@(async()=> await OnSelectedCertificado())" OnToolbarClick="@ClickHandler"
+                                    TValue="Pedidos"></GridEvents>
+                        <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+                        <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(Pedidos.PEDIDO) HeaderText="Pedido" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(Pedidos.DES_CLI) HeaderText="Cliente" Width="150px"></GridColumn>
-                            <GridColumn Field=@nameof(Pedidos.CG_ART) HeaderText="Codigo" Width="150px"></GridColumn>
-                            <GridColumn Field=@nameof(Pedidos.DES_ART) HeaderText="Descripcion" Width="150px"></GridColumn>
+                            <GridColumn Field=@nameof(Pedidos.CG_ART) HeaderText="Producto" Width="55px"></GridColumn>
+                            <GridColumn Field=@nameof(Pedidos.DES_ART) HeaderText="Descripcion" Width="130px"></GridColumn>
+                            <GridColumn Field=@nameof(Pedidos.DESPACHO) HeaderText="Despacho" Width="60px"></GridColumn>
+                            <GridColumn Field=@nameof(Pedidos.LOTE) HeaderText="Lote" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Pedidos.FE_MOV) HeaderText="Fecha Movimiento" Width="110px"></GridColumn>
                         </GridColumns>
                     </SfGrid>
-                    @{
-                        if (Busquedalist.Count == CantidadMostrar)
-                        {
-                            <div class="col-sm-3 my-1">
-                                <button type="submit" class="btn btn-primary" @onclick="@AgregarValores">Buscar más</button>
-                            </div>
-                        }
-                    }
-                </Content>
-            </DialogTemplates>
-        </SfDialog>
+                </div>
 
-        <SfDialog ID="dialogCertifTraz" Width="1000px" MinHeight="450px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisibleCertificado">
+            </div>
+        </div>
+        <SfDialog ID="dialogCertifTraz" @ref="DialogRef" Height="550px" Target="#gridTrazPedidos"
+                  Width="950px" CssClass="dialog" ShowCloseIcon="true" Visible="false">
             <DialogTemplates>
+                <Header>Detalle</Header>
                 <Content>
-                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-Certificado" role="tab" aria-controls="pills-home" aria-selected="true">Certificado</a>
-                        </li>
+                    <SfTab>
+                        <TabItems>
+                            <TabItem>
+                                <HeaderTemplate>Certificado</HeaderTemplate>
+                                <ContentTemplate>
+                                    @{
 
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-Despiece" role="tab" aria-controls="pills-profile" aria-selected="false">Despiece</a>
-                        </li>
-                    </ul>
+                                        if (ShowCertificado)
+                                        {
+                                            var pdf_ruta = NroCertificado.Trim() + ".pdf,RUTATRAZABILIDAD";
+                                            <div class="mt-5">
+                                                @*<SfPdfViewer DocumentPath="@ruta"></SfPdfViewer>*@
+                                                <SfPdfViewer ID="CertifiPdf"
+                                                             ServiceUrl="/api/Values" DocumentPath="@pdf_ruta"
+                                                             Height="85%" Width="90%"></SfPdfViewer>
+                                            </div>
 
-                    <div class="tab-content" id="pills-tabContent">
-                        <div class="tab-pane fade show active" id="pills-Certificado" role="tabpanel" aria-labelledby="pills-home-tab">
-                            <div>
-                                @{
-
-                                    if (ShowCertificado == true)
-                                    {
-                                        <div class="control-section">
-                                            <SfPdfViewer DocumentPath="@ruta"></SfPdfViewer>
-                                        </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="mt-5">
+                                                <span class="text-danger text">No existe Certificado asociado</span>
+                                            </div>
+                                        }
                                     }
-                                    else
-                                    {
-                                        <span>No existe Certificado asociado</span>
-                                    }
-                                }
-                            </div>
-                        </div>
-                        <div class="tab-pane fade show active" id="pills-Despiece" role="tabpanel" aria-labelledby="pills-home-tab">
-                            <div>
-                                @{
-                                    if (OF is null || OF.Count() < 0)
-                                    {
-                                        <span>Cargando...</span>
-                                    }
-                                    else
-                                    {
-                                        <div class="col-lg-12 control-section">
-                                            <div class="content-wrapper">
-                                                <div class="row">
-                                                    <SfGrid ShowColumnChooser="true" DataSource="@OF">
-                                                        <GridEvents RowSelected="OnSelectedCertificado" TValue="Pedidos"></GridEvents>
-                                                        <GridColumns>
-                                                            <GridColumn Field=@nameof(Pedidos.CG_ART) HeaderText="Producto" Width="55px"></GridColumn>
-                                                            <GridColumn Field=@nameof(Pedidos.DES_ART) HeaderText="Descripcion" Width="130px"></GridColumn>
-                                                            <GridColumn Field=@nameof(Pedidos.DESPACHO) HeaderText="Despacho" Width="60px"></GridColumn>
-                                                            <GridColumn Field=@nameof(Pedidos.LOTE) HeaderText="Lote" Width="110px"></GridColumn>
-                                                            <GridColumn Field=@nameof(Pedidos.FE_MOV) HeaderText="Fecha Movimiento" Width="110px"></GridColumn>
-                                                        </GridColumns>
-                                                    </SfGrid>
+                                </ContentTemplate>
+                            </TabItem>
+                            <TabItem>
+                                <HeaderTemplate>Despiece</HeaderTemplate>
+                                <ContentTemplate>
+                                    @{
+                                        if (OF is null || OF.Count() < 0)
+                                        {
+                                            <span>Cargando...</span>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-lg-12 mt-4">
+                                                <div class="content-wrapper">
+                                                    <div class="row">
+                                                        <SfGrid ID="despieceSE" GridLines="GridLine.Both"
+                                                                ShowColumnChooser="true" DataSource="@ordenFabricacionMP">
+                                                            <GridEvents TValue="ModeloOrdenFabricacionMP"></GridEvents>
+                                                            <GridColumns>
+                                                                <GridColumn Field=@nameof(ModeloOrdenFabricacionMP.CG_ART) HeaderText="Producto" Width="55px"></GridColumn>
+                                                                <GridColumn Field=@nameof(ModeloOrdenFabricacionMP.DES_ART) HeaderText="Descripcion" Width="130px"></GridColumn>
+                                                                <GridColumn Field=@nameof(ModeloOrdenFabricacionMP.DESPACHO) HeaderText="Despacho" Width="60px"></GridColumn>
+                                                                <GridColumn Field=@nameof(ModeloOrdenFabricacionMP.LOTE) HeaderText="Lote" Width="110px"></GridColumn>
+                                                                <GridColumn Field=@nameof(ModeloOrdenFabricacionMP.STOCK) HeaderText="Cant. Ent." Width="110px"></GridColumn>
+                                                            </GridColumns>
+                                                        </SfGrid>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        }
                                     }
-                                }
-                            </div>
-                        </div>
-                    </div>
+                                </ContentTemplate>
+                            </TabItem>
+                        </TabItems>
+                    </SfTab>
                 </Content>
             </DialogTemplates>
         </SfDialog>
-        if (Showgrid == true)
-        {
-            <form>
-                @{
-                    var lote = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim();
-                    if (lote == null)
-                    {
-                        lote = "";
-                    }
-                    var modelo = prodList.CAMPOCOM1.Trim();
-                    if (modelo == null)
-                    {
-                        modelo = "";
-                    }
-                    var medida = prodList.CAMPOCOM2.Trim();
-                    if (medida == null)
-                    {
-                        medida = "";
-                    }
-                    var orificio = prodList.CAMPOCOM3.Trim();
-                    if (orificio == null)
-                    {
-                        orificio = "";
-                    }
-                    var area = prodList.CAMPOCOM4.Trim();
-                    if (area == null)
-                    {
-                        area = "";
-                    }
-                    var serie = prodList.CAMPOCOM5.Trim();
-                    if (serie == null)
-                    {
-                        serie = "";
-                    }
-                    var tipo = prodList.CAMPOCOM6.Trim();
-                    if (tipo == null)
-                    {
-                        tipo = "";
-                    }
-                    var presion = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
-                    if (presion == null)
-                    {
-                        presion = "";
-                    }
-                    var resorte = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim();
-                    if (resorte == null)
-                    {
-                        resorte = "";
-                    }
-                    var fluido = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim();
-                    if (fluido == null)
-                    {
-                        fluido = "";
-                    }
-                    var presAj = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim();
-                    if (presAj == null)
-                    {
-                        presAj = "";
-                    }
-                    var ctpre = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim();
-                    if (ctpre == null)
-                    {
-                        ctpre = "";
-                    }
-                    var temp = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim();
-                    if (temp == null)
-                    {
-                        temp = "";
-                    }
-                }
-                <div class="row">
-
-                    <div class="col">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Trazabilidad del Número de Pedido @TrzNro"
-                               readonly />
-                    </div>
-
-                    <div class="col">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Lote: @lote"
-                               readonly />
-                    </div>
-
-                </div>
-
-                <div class="row">
-
-                    <div class="col">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Modelo: @modelo"
-                               readonly />
-                    </div>
-
-                    <div class="col">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Medida: @medida"
-                               readonly />
-                    </div>
-
-                    <div class="col">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Orificio: @orificio"
-                               readonly />
-                    </div>
-
-                    
-
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Area: @area"
-                               readonly />
-                    </div>
-
-                    <div class="col">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Serie: @serie"
-                               readonly />
-                    </div>
-
-                    <div class="col">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Tipo: @tipo"
-                               readonly />
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Presion: @presion"
-                               readonly />
-                    </div>
-
-                    <div class="col">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Resorte: @resorte"
-                               readonly />
-                    </div>
-
-                    <div class="col">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Fluido: @fluido"
-                               readonly />
-                    </div>
-
-                    
-
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="P. Aj Banco: @presAj"
-                               readonly />
-                    </div>
-
-                    <div class="col">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Contrapresión: @ctpre"
-                               readonly />
-                    </div>
-
-                    <div class="col">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Temperatura: @temp"
-                               readonly />
-                    </div>
-                </div>
-            </form>
-            <div class="col-lg-12 control-section">
-                <div class="content-wrapper">
-                    <div class="row">
-                        <SfGrid ShowColumnChooser="true" AllowResizing="true" Width="auto" @ref="Grid" ID="gridTrazPedidos"
-                                DataSource="@pedidos" AllowExcelExport="true" AllowGrouping="true" Toolbar="@Toolbaritems">
-                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                            <GridEvents RowSelected="OnSelectedCertificado" OnToolbarClick="@ClickHandler" TValue="Pedidos"></GridEvents>
-                            <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
-                            <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-                            <GridColumns>
-                                <GridColumn Field=@nameof(Pedidos.CG_ART) HeaderText="Producto" Width="55px"></GridColumn>
-                                <GridColumn Field=@nameof(Pedidos.DES_ART) HeaderText="Descripcion" Width="130px"></GridColumn>
-                                <GridColumn Field=@nameof(Pedidos.DESPACHO) HeaderText="Despacho" Width="60px"></GridColumn>
-                                <GridColumn Field=@nameof(Pedidos.LOTE) HeaderText="Lote" Width="110px"></GridColumn>
-                                <GridColumn Field=@nameof(Pedidos.FE_MOV) HeaderText="Fecha Movimiento" Width="110px"></GridColumn>
-                            </GridColumns>
-                        </SfGrid>
-                    </div>
-                </div>
-            </div>
-        }
-        else
-        {
-            <label class="centrado">Debe buscar arriba una orden de armado para ver su trazabilidad.</label>
-        }
     }
-@*}*@
+    else
+    {
+        <label class="centrado">Debe buscar arriba una orden de armado para ver su trazabilidad.</label>
+    }
+}
+
 
 
 <style>
@@ -380,13 +388,22 @@
         margin: 0 auto;
         text-align: center;
     }
+
+    .e-dialog.e-control.e-popup, .e-dialog.e-control.e-popup .e-dlg-header-content {
+        background-color: #d9edf7;
+    }
+
+    .dialog {
+        min-height: 650px;
+    }
 </style>
 
 @code {
     protected SfGrid<Pedidos> Grid;
     protected SfGrid<Pedidos> Grid2;
     protected SfGrid<Pedidos> Grid3;
-
+    protected SfSpinner refSpinner;
+    protected SfDialog DialogRef;
     public bool Enabled = true;
     public bool Disabled = false;
     public bool Showgrid = false;
@@ -417,14 +434,16 @@
     protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "1100px" };
 
     SfToast ToastObj;
-
-    private string ToastContent { get; set; } = "Conference Room 01 / Building 135 10:00 AM-10:30 AM";
+    List<ModeloOrdenFabricacionMP> ordenFabricacionMP;
 
     protected List<Object> Toolbaritems = new List<Object>(){
             "Search",
+            new ItemModel { Type = ItemType.Separator},
             "Print",
             "ExcelExport",
-            "ColumnChooser"
+            new ItemModel { Type = ItemType.Separator},
+            "ColumnChooser",
+            new ItemModel { Type = ItemType.Separator},
             //new Syncfusion.Blazor.Navigations.ItemModel { Text = "small", TooltipText = "20px", PrefixIcon = "e-big-icon", Id = "small", Align = Syncfusion.Blazor.Navigations.ItemAlign.Right},
             //new Syncfusion.Blazor.Navigations.ItemModel { Text = "medium", TooltipText = "40px", PrefixIcon = "e-medium-icon", Id = "medium", Align = Syncfusion.Blazor.Navigations.ItemAlign.Right},
             //new Syncfusion.Blazor.Navigations.ItemModel { Text = "big", TooltipText = "60px", PrefixIcon = "e-small-icon", Id = "big", Align = Syncfusion.Blazor.Navigations.ItemAlign.Right}
@@ -435,8 +454,8 @@
     {
         Layout.Titulo = "Trazabilidad";
         //rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
-        
-        
+
+
 
         await base.OnInitializedAsync();
     }
@@ -453,47 +472,54 @@
         }
     }
 
-    public void OnSelected()
+    public async Task OnSelected()
     {
+        await refSpinner.ShowAsync();
         BoxPedido = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().PEDIDO.ToString(); // return the details of selected record
         TrzNro = BoxPedido;
         BoxCliente = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().DES_CLI; // return the details of selected record
         BoxCodigo = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().CG_ART; // return the details of selected record
         CodNro = BoxCodigo;
         CantidadMostrar = 0;
+        await MostrarTrazabilidad();
         IsVisible = false;
+        await refSpinner.HideAsync();
     }
 
-    public async void OnSelectedCertificado()
+    public async Task OnSelectedCertificado()
     {
-        IsVisibleCertificado = true;
-        if (!String.IsNullOrEmpty(this.Grid.GetSelectedRecords().Result.FirstOrDefault().DESPACHO))
+        await refSpinner.ShowAsync();
+        var row = await this.Grid.GetSelectedRecords();
+        if (!string.IsNullOrEmpty(row[0].DESPACHO))
         {
-            string parametro = this.Grid.GetSelectedRecords().Result.FirstOrDefault().LOTE.Substring(3).Trim();
-            OF = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorOF/{parametro}");
-            NroCertificado = this.Grid.GetSelectedRecords().Result.FirstOrDefault().DESPACHO;
-            if (rutas != null)
+            if (!string.IsNullOrEmpty(row[0].LOTE))
             {
-                @foreach (Solution rutaX in rutas)
+                string ordFab = row[0].LOTE.Substring(3).Trim();
+
+                // Materias Primas entregadas
+                var programa = await Http.GetFromJsonAsync<List<Programa>>($"api/Programa/GetProgramaByOF/{Convert.ToDecimal(ordFab)}");
+                if (programa != null && programa.Count != 0)
                 {
-                    if (rutaX.CAMPO == "RUTATRAZABILIDAD")
-                    {
-                        // Only get files that begin with the letter "c".
-                        ruta = rutaX.VALORC + NroCertificado.Trim() + ".pdf";
-                        if (File.Exists(ruta))
-                        {
-                            IsVisibleCertificado = true;
-                            ShowCertificado = true;
-                        }
-                        else
-                        {
-                            IsVisibleCertificado = true;
-                            ShowCertificado = false;
-                        }
-                    }
+                    ordenFabricacionMP = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionMP>>($"api/OrdenesFabricacionMP/{programa[0].CG_ORDFASOC.ToString()}");
+                }
+                else
+                {
+                    ordenFabricacionMP = new List<ModeloOrdenFabricacionMP>();
                 }
             }
+
+
+            if (!string.IsNullOrEmpty(row[0].DESPACHO))
+            {
+                NroCertificado = row[0].DESPACHO;
+                var archivo = NroCertificado.Trim() + ".pdf";
+                ShowCertificado = await Http.GetFromJsonAsync<bool>($"api/AdministracionArchivos/ExisteCertificado/{archivo}");
+            }
+
+            await DialogRef.Show(false);
         }
+
+        await refSpinner.HideAsync();
     }
 
     protected async Task OnInputPedido(InputEventArgs args)
@@ -544,6 +570,7 @@
 
     protected async Task BuscarTrazabilidad()
     {
+        await refSpinner.ShowAsync();
         CantidadMostrar = 100;
         if (BoxPedido != "")
         {
@@ -561,6 +588,8 @@
         {
             Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/{BoxCliente}/{BoxCodigo}/{CantidadMostrar}");
         }
+
+        await refSpinner.HideAsync();
         IsVisible = true;
     }
     protected async Task MostrarTrazabilidad()
@@ -942,7 +971,7 @@
         stream.Position = 0;
         //Close the document
         document.Close(true);
-        await JS.SaveAs($" Certificado" + ".pdf", stream.ToArray());
+        await JsRuntime.SaveAs($" Certificado" + ".pdf", stream.ToArray());
     }
     protected async Task AgregarValores()
     {
@@ -1029,7 +1058,7 @@
                     MemoryStream xx = new MemoryStream();
                     document1.Save(xx);
                     document1.Close(true);
-                    await JS.SaveAs("EtiquetaProd" + CodNro.Trim() + ".pdf", xx.ToArray());
+                    await JsRuntime.SaveAs("EtiquetaProd" + CodNro.Trim() + ".pdf", xx.ToArray());
                 }
                 //else
                 //{
@@ -1162,7 +1191,7 @@
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
                 document1.Close(true);
-                await JS.SaveAs("ETOF" + CodNro.Trim() + ".pdf", xx.ToArray());
+                await JsRuntime.SaveAs("ETOF" + CodNro.Trim() + ".pdf", xx.ToArray());
             }
             if (CodNro.Substring(0, 4) == "0012" ||
                 CodNro.Substring(0, 5) == "00130" ||
@@ -1202,7 +1231,7 @@
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
                 document1.Close(true);
-                await JS.SaveAs("ETOF" + CodNro.Trim() + ".pdf", xx.ToArray());
+                await JsRuntime.SaveAs("ETOF" + CodNro.Trim() + ".pdf", xx.ToArray());
             }
         }
         //else
@@ -1233,7 +1262,7 @@
     protected async Task Ensayos()
     {
         //NavigationManager.NavigateTo($"Pdf/{pedido}/ENSAYOS");
-        await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{TrzNro}/ENSAYOS", $"Pdf/{TrzNro}/ENSAYOS" });
+        await JsRuntime.InvokeVoidAsync("open", new object[2] { $"Pdf/{TrzNro}/ENSAYOS", $"Pdf/{TrzNro}/ENSAYOS" });
     }
 }
 <style>

@@ -8,13 +8,13 @@ namespace SupplyChain.Shared.Models
 {
     public class Planificacion
     {
-        [Key]
         public string CG_PROD { get; set; } = "";
         public string DES_PROD { get; set; } = "";
         public int CG_ORDEN { get; set; } = 0;
         public int SEM_ORIGEN { get; set; } = 0;
         public int SEM_ABAST_PURO { get; set; } = 0;
         public int SEM_ABAST { get; set; } = 0;
+        [Key]
         public int CG_ORDF { get; set; } = 0;
         public string CLASE { get; set; } = "";
         public string CG_R { get; set; } = "";

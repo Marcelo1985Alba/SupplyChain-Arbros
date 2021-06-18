@@ -118,6 +118,14 @@ namespace SupplyChain.Server.Controllers
 
             return System.IO.File.Exists(path + "/" + file);
         }
+        [HttpGet("ExisteCertificado/{file}")]
+        public async Task<bool> ExisteCertificado(string file)
+        {
+            var param = await _context.Solution.Where(s => s.CAMPO == "RUTATRAZABILIDAD").FirstOrDefaultAsync();
+            var path = param.VALORC.Trim();
+
+            return System.IO.File.Exists(path + "/" + file);
+        }
 
         [HttpGet("GetPlano/{file}/Load")]
         public async Task<IActionResult> GetPlano(string file)
