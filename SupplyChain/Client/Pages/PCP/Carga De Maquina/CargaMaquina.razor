@@ -10,12 +10,17 @@
 @using Syncfusion.Pdf.Graphics;
 @using Syncfusion.Pdf.Grid;
 @using Syncfusion.Pdf.Tables;
+@using SupplyChain.Client.Pages.CDM
+
 @using System.IO;
 @using Syncfusion.Blazor.Gantt
 @inject IJSRuntime JsRuntime
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "Admin, Produccion")]
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+
 
 <div class="col-12 control-section mt-4">
     <SfToast ID="toast_default" @ref="ToastObj">
@@ -38,9 +43,8 @@
         </div>
         <div class="col-5">
             <div>
-                <Syncfusion.Blazor.SplitButtons.SfProgressButton 
-                          Content="Enviar OFs a DataCore" IsPrimary="true" IconCss="fa fa-share-square"
-                          @onclick="@(async()=> await EnviarCSVDataCore())">
+                <Syncfusion.Blazor.SplitButtons.SfProgressButton Content="Enviar OFs a DataCore" IsPrimary="true" IconCss="fa fa-share-square"
+                                                                 @onclick="@(async()=> await EnviarCSVDataCore())">
                 </Syncfusion.Blazor.SplitButtons.SfProgressButton>
             </div>
         </div>
@@ -451,9 +455,9 @@
                                 </div>
                                 <div class="form-row">
                                     @*<div class="form-group col-md-2">
-                                        <label style="color:blue">Planificada Inicio:</label>
-                                        <SfDateTimePicker Format="dd/MM/yyyy" TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_PREVISTA_FABRICACION"></SfDateTimePicker>
-                                    </div>*@
+                                            <label style="color:blue">Planificada Inicio:</label>
+                                            <SfDateTimePicker Format="dd/MM/yyyy" TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_PREVISTA_FABRICACION"></SfDateTimePicker>
+                                        </div>*@
                                     <div class="form-group col-md-3">
                                         <label style="color:blue">Inicio real:</label>
                                         <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_INICIO_REAL_FABRICACION"></SfDateTimePicker>
@@ -482,64 +486,64 @@
                             </div>
                             <hr class="separator">
                             @*BOTONES PARA OBTENER DATOS*@
-                    <div class="form-row">
-                        <div class="form-group col">
-                            <SfButton Content="Descargar Plano" IsPrimary="true" IconCss="fa fa-download fa fa-file-pdf-o"
-                                      @onclick="@(async ()=> await ConfirmaDescargarPlano())"></SfButton>
-                        </div>
-                        @*<div class="form-group col">
-            <SfButton Content="Ver Plano" IsPrimary="true" IconCss="fa fa-file-pdf-o"
-                      @onclick="@(async ()=> await VerPlano(ordenFabricacion.CG_PROD))"></SfButton>
-        </div>*@
-                        @if (ordenFabricacion.EXIGEOA == true)
-                        {
-                            <div class="form-group col">
-                                <Syncfusion.Blazor.SplitButtons.SfProgressButton IsPrimary="true" IconCss="fa fa-save"
-                                                                                 Content="Guardar Datos"
-                                                                                 @onclick="@(async ()=> await DownloadText())">
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <SfButton Content="Descargar Plano" IsPrimary="true" IconCss="fa fa-download fa fa-file-pdf-o"
+                                              @onclick="@(async ()=> await ConfirmaDescargarPlano())"></SfButton>
+                                </div>
+                                @*<div class="form-group col">
+                                        <SfButton Content="Ver Plano" IsPrimary="true" IconCss="fa fa-file-pdf-o"
+                                                  @onclick="@(async ()=> await VerPlano(ordenFabricacion.CG_PROD))"></SfButton>
+                                    </div>*@
+                                @if (ordenFabricacion.EXIGEOA == true)
+                                {
+                                    <div class="form-group col">
+                                        <Syncfusion.Blazor.SplitButtons.SfProgressButton IsPrimary="true" IconCss="fa fa-save"
+                                                                                         Content="Guardar Datos"
+                                                                                         @onclick="@(async ()=> await DownloadText())">
 
-                                </Syncfusion.Blazor.SplitButtons.SfProgressButton>
+                                        </Syncfusion.Blazor.SplitButtons.SfProgressButton>
 
+
+                                    </div>
+                                }
+                                @if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
+                                  ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
+                                  ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
+                                {
+                                    <div class="form-group col">
+                                        <SfButton IsPrimary="true" Content="Ver en Modulo Servicios"
+                                                  @onclick="@(async ()=> await IrAServicio(ordenFabricacion.PEDIDO.ToString().Trim()))"></SfButton>
+                                    </div>
+                                }
+                                <div class="form-group col">
+                                    @*<SfButton IsPrimary="true" @onclick="@(async ()=> await Etiqueta())">Identificación</SfButton>*@
+                                    <Syncfusion.Blazor.SplitButtons.SfProgressButton IsPrimary="true" IconCss="fa fa-download"
+                                                                                     Content="Identificación"
+                                                                                     @onclick="@(async ()=> await Etiqueta())">
+
+                                    </Syncfusion.Blazor.SplitButtons.SfProgressButton>
+                                </div>
+                                @if (ordenFabricacion.EXIGEOA == true)
+                                {
+                                    <div class="form-group col">
+                                        <SfButton IsPrimary="true" IconCss="fa fa-file"
+                                                  @onclick="@(async ()=> await Ensayos(ordenFabricacion.PEDIDO.ToString().Trim()))">Ver Ensayos</SfButton>
+                                    </div>
+                                }
+                                @if (!ordenFabricacion.EXIGEOA == true)
+                                {
+
+                                    <div class="form-group col">
+                                        <SfButton IsPrimary="true" IconCss="fa fa-file"
+                                                  @onclick="@(async ()=> await IrAPrograma(ordenFabricacion.CG_PROD.Trim()))">
+                                            Ver Programa
+                                        </SfButton>
+                                    </div>
+                                }
 
                             </div>
-                        }
-                        @if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
-                             ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
-                             ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
-                        {
-                            <div class="form-group col">
-                                <SfButton IsPrimary="true" Content="Ver en Modulo Servicios"
-                                          @onclick="@(async ()=> await IrAServicio(ordenFabricacion.PEDIDO.ToString().Trim()))"></SfButton>
-                            </div>
-                        }
-                        <div class="form-group col">
-                            @*<SfButton IsPrimary="true" @onclick="@(async ()=> await Etiqueta())">Identificación</SfButton>*@
-                            <Syncfusion.Blazor.SplitButtons.SfProgressButton IsPrimary="true" IconCss="fa fa-download"
-                                                                             Content="Identificación"
-                                                                             @onclick="@(async ()=> await Etiqueta())">
 
-                            </Syncfusion.Blazor.SplitButtons.SfProgressButton>
-                        </div>
-                        @if (ordenFabricacion.EXIGEOA == true)
-                        {
-                            <div class="form-group col">
-                                <SfButton IsPrimary="true" IconCss="fa fa-file"
-                                          @onclick="@(async ()=> await Ensayos(ordenFabricacion.PEDIDO.ToString().Trim()))">Ver Ensayos</SfButton>
-                            </div>
-                        }
-                        @if (!ordenFabricacion.EXIGEOA == true)
-                        {
-                            
-                            <div class="form-group col">
-                                <SfButton IsPrimary="true" IconCss="fa fa-file"
-                                          @onclick="@(async ()=> await IrAPrograma(ordenFabricacion.CG_PROD.Trim()))">
-                                    Ver Programa
-                                </SfButton>
-                            </div>
-                        }
-
-                    </div>
-                            
                             <hr class="separator">
                             @*PRODUCTO*@
                             <div>
@@ -866,6 +870,7 @@
                 </DialogTemplates>
                 <DialogEvents Closed="@OrdenFabricacionClose"></DialogEvents>
                 <DialogButtons>
+                    <DialogButton IconCss="fa fa-edit" Content="Evento" IsPrimary="true" OnClick="@AbreEvento" />
                     <DialogButton IconCss="fa fa-save" Content="Guardar" IsPrimary="true" OnClick="@OrdenFabricacionOk" />
                     <DialogButton IconCss="fa fa-window-close" Content="Cancelar" IsPrimary="true" OnClick="@OrdenFabricacionClose" />
                 </DialogButtons>
@@ -912,15 +917,32 @@
     }
 
 </div>
-    
+
 
 <ConfirmacionDialog @ref="@confirmacionDescargarPlanoDialog" OnConfirm="@(async ()=> await DescrgarPlano())">
     <HeaderTempalte><p>Plano Pdf</p> <hr /></HeaderTempalte>
     <ContentTemplate>Confirma Descargar Plano?</ContentTemplate>
 </ConfirmacionDialog>
 
+@*DIALOG EVENTO*@
+@if (isEventoDialogVisible)
+{
+    <div class="cssOrdenFabricacionDialog">
+        <SfDialog Target="#targetPreguntaFoto" Width="80%" Height="85%" CssClass="" IsModal="false" ShowCloseIcon="true"
+                    CloseOnEscape="true"
+                    @bind-Visible="@isEventoDialogVisible">
+            <DialogTemplates>
+                <Content>
+                    <SupplyChain.Client.Pages.CDM.Noconformidades vieneOF="ordenNumero"></SupplyChain.Client.Pages.CDM.Noconformidades>
+                </Content>
+            </DialogTemplates>
+            <DialogEvents OnClose="@DialogEventoClose"></DialogEvents>
+        </SfDialog>
+</div>
+}
 
-    @code
+
+@code
 {
     protected bool verHojaRuta = false;
     protected bool verMP = true;
@@ -937,6 +959,7 @@
     protected int xColumna;
     protected string xCg_celda;
     protected int xColumnaInicialBarra;
+    protected bool isEventoDialogVisible = false;
     protected bool isOrdenDialogVisible = false;
     protected bool isScrapDialogVisible = false;
     protected bool sabadosLaborables = false;
@@ -968,7 +991,7 @@
 
     protected List<Operario> operariosList = new List<Operario>();
     protected List<PedCli> PedCliList = new List<PedCli>();
-    protected Producto prodList = new ();
+    protected Producto prodList = new();
     private SfSpinner SpinnerCDM;
     private bool Visible = false;
     private string MensajeCargando = "Cargando...";
@@ -1098,6 +1121,17 @@
         {
             throw;
         }
+    }
+    private async Task AbreEvento(Object args)
+    {
+        isOrdenDialogVisible = false;
+        isEventoDialogVisible = true;
+
+    }
+    private async Task DialogEventoClose(Object args)
+    {
+        isOrdenDialogVisible = true;
+        isEventoDialogVisible = false;
     }
 
     private async Task OrdenFabricacionOk(Object args)
@@ -1452,38 +1486,38 @@
                     ShowProgressBar = true
                 });
             }
-                @*@foreach (Solution ruta in rutas)
+            @*@foreach (Solution ruta in rutas)
+                {
+                    if (ruta.CAMPO == "RUTADATOS")
                     {
-                        if (ruta.CAMPO == "RUTADATOS")
+                        string fileName = ruta.VALORC + ordenFabricacion.PEDIDO + ".txt";
+                        try
                         {
-                            string fileName = ruta.VALORC + ordenFabricacion.PEDIDO + ".txt";
-                            try
+                            // Check if file already exists. If yes, delete it.
+                            if (File.Exists(fileName))
                             {
-                                // Check if file already exists. If yes, delete it.
-                                if (File.Exists(fileName))
-                                {
-                                    File.Delete(fileName);
-                                }
-
-                                // Create a new file
-                                using (StreamWriter sw = File.CreateText(fileName))
-                                {
-                                    sw.WriteLine($"{ordenFabricacionEncabezado.DES_CLI.Trim()}");
-                                    sw.WriteLine($"{ordenFabricacion.PEDIDO}");
-                                    sw.WriteLine($"{presion}");
-                                    sw.WriteLine($"{ordenFabricacion.DES_OPER}");
-                                }
-                                await this.ToastObj.Show(new ToastModel { Title = "AVISO!",
-                                    Content = "Archivo generado con éxito", CssClass =
-                                    "e-toast-success", Icon = "e-success toast-icons" });
-                            }
-                            catch (Exception Ex)
-                            {
-                                Console.WriteLine(Ex.ToString());
+                                File.Delete(fileName);
                             }
 
+                            // Create a new file
+                            using (StreamWriter sw = File.CreateText(fileName))
+                            {
+                                sw.WriteLine($"{ordenFabricacionEncabezado.DES_CLI.Trim()}");
+                                sw.WriteLine($"{ordenFabricacion.PEDIDO}");
+                                sw.WriteLine($"{presion}");
+                                sw.WriteLine($"{ordenFabricacion.DES_OPER}");
+                            }
+                            await this.ToastObj.Show(new ToastModel { Title = "AVISO!",
+                                Content = "Archivo generado con éxito", CssClass =
+                                "e-toast-success", Icon = "e-success toast-icons" });
                         }
-                    }*@
+                        catch (Exception Ex)
+                        {
+                            Console.WriteLine(Ex.ToString());
+                        }
+
+                    }
+                }*@
         }
     }
     protected async Task Etiqueta()
@@ -1787,140 +1821,140 @@
 
 
 
-    }
-    <style>
+}
+<style>
 
-            /*    table {
+    /*    table {
             display: block;
             height: 500px;
             overflow-y: scroll;
         }*/
 
-            .titulo {
-                font-weight: bold;
-                color: dodgerblue;
-                margin-top: 20px;
-            }
+    .titulo {
+        font-weight: bold;
+        color: dodgerblue;
+        margin-top: 20px;
+    }
 
-            .CargaButtonClass {
-                cursor: pointer;
-                padding: 0px;
-                padding-left: 0px;
-                padding-right: 0px;
-                width: 100%;
-                height: 26px;
-                border-width: 0px;
-                border-right-width: thin;
-                border-right-style: solid;
-                border-right-color: whitesmoke;
-                font-size: 18px;
-                font-weight: bold;
-            }
+    .CargaButtonClass {
+        cursor: pointer;
+        padding: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+        width: 100%;
+        height: 26px;
+        border-width: 0px;
+        border-right-width: thin;
+        border-right-style: solid;
+        border-right-color: whitesmoke;
+        font-size: 18px;
+        font-weight: bold;
+    }
 
-            .CargaButtonClassFirstFirme {
-                border-width: 2px;
-                border-color: lightseagreen;
-                font-size: 18px;
-                font-weight: bold;
-            }
+    .CargaButtonClassFirstFirme {
+        border-width: 2px;
+        border-color: lightseagreen;
+        font-size: 18px;
+        font-weight: bold;
+    }
 
-            .CargaButtonClassBuscarOrden {
-                border-width: 5px;
-                border-color: black;
-                font-size: 18px;
-                font-weight: bold;
-            }
+    .CargaButtonClassBuscarOrden {
+        border-width: 5px;
+        border-color: black;
+        font-size: 18px;
+        font-weight: bold;
+    }
 
-            .CargaRowClass {
-                padding: 0px;
-                padding-left: 0px;
-                padding-right: 0px;
-                height: 35px;
-                border-width: 0px;
-            }
+    .CargaRowClass {
+        padding: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+        height: 35px;
+        border-width: 0px;
+    }
 
-            .CargaCellClass {
-                width: 100%;
-                width: 60px;
-                padding: 0px;
-                padding-left: 0px;
-                padding-right: 0px;
-            }
+    .CargaCellClass {
+        width: 100%;
+        width: 60px;
+        padding: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
 
-            .CargaCeldaBuscarOrden {
-                color: deepskyblue !important;
-                background: white !important;
-            }
+    .CargaCeldaBuscarOrden {
+        color: deepskyblue !important;
+        background: white !important;
+    }
 
-            .CargaHyperLink {
-                cursor: pointer;
-                margin-right: 20px;
-                text-decoration: none;
-                font-size: small;
-                color: black;
-            }
+    .CargaHyperLink {
+        cursor: pointer;
+        margin-right: 20px;
+        text-decoration: none;
+        font-size: small;
+        color: black;
+    }
 
-            .cssOrdenFabricacionDialog {
-                position: fixed;
-                top: 5%;
-                left: 5%;
-                min-width: 1200px;
-                min-height: 580px;
-                max-width: 90%;
-                margin-top: auto;
-                margin-right: auto;
-                margin-left: auto;
-                margin-bottom: auto;
-                left: 50px !important;
-                top: 0px !important;
-            }
+    .cssOrdenFabricacionDialog {
+        position: fixed;
+        top: 5%;
+        left: 5%;
+        min-width: 1200px;
+        min-height: 580px;
+        max-width: 90%;
+        margin-top: auto;
+        margin-right: auto;
+        margin-left: auto;
+        margin-bottom: auto;
+        left: 50px !important;
+        top: 0px !important;
+    }
 
-            .cssScrapDialog {
-                position: fixed;
-                top: 10%;
-                left: 30%;
-                width: 40%;
-                height: 80%;
-                max-width: 40%;
-                margin-top: auto;
-                margin-right: auto;
-                margin-left: auto;
-                margin-bottom: auto;
-            }
+    .cssScrapDialog {
+        position: fixed;
+        top: 10%;
+        left: 30%;
+        width: 40%;
+        height: 80%;
+        max-width: 40%;
+        margin-top: auto;
+        margin-right: auto;
+        margin-left: auto;
+        margin-bottom: auto;
+    }
 
-            .form-group {
-                margin-bottom: 0rem;
-            }
+    .form-group {
+        margin-bottom: 0rem;
+    }
 
-            label {
-                display: inline-block;
-                margin-bottom: 0rem;
-            }
+    label {
+        display: inline-block;
+        margin-bottom: 0rem;
+    }
 
-            hr {
-                margin-top: 0.5rem;
-                margin-bottom: 0.5rem;
-                border: 0;
-                border-top: 1px solid rgba(0,0,0,.1);
-            }
+    hr {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+        border: 0;
+        border-top: 1px solid rgba(0,0,0,.1);
+    }
 
-            .tooltiptext {
-                visibility: hidden;
-                background-color: black;
-                color: #fff;
-                text-align: center;
-                padding: 5px 0;
-                border-radius: 6px;
-                position: fixed;
-                z-index: 1;
-            }
+    .tooltiptext {
+        visibility: hidden;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 6px;
+        position: fixed;
+        z-index: 1;
+    }
 
-            #ButtonHover:hover .tooltiptext {
-                visibility: visible;
-            }
+    #ButtonHover:hover .tooltiptext {
+        visibility: visible;
+    }
 
-            .e-spinner-pane .e-spinner-inner .e-spin-bootstrap {
-                fill: #000;
-                stroke: #000;
-            }
-    </style>
+    .e-spinner-pane .e-spinner-inner .e-spin-bootstrap {
+        fill: #000;
+        stroke: #000;
+    }
+</style>

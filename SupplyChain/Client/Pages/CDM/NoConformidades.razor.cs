@@ -75,6 +75,7 @@ namespace SupplyChain.Client.Pages.NoConf
 
         }
 
+        [Parameter] public int vieneOF { get; set; } = 0;
 
         public async Task volver()
         {
@@ -280,40 +281,13 @@ namespace SupplyChain.Client.Pages.NoConf
                         ShowCloseButton = false,
                         ShowProgressBar = false
                     });
-                    /*
-                    if ( NoConf.Cg_NoConf > 0)
+                    if ( vieneOF == 0)
                     {
-                        // CORRIGE listanoconf para refrescar la grilla. ver de cambiar de cambiar origen datos grilla
-                        foreach (var itemlistanoconf in listanoconf)
-                        {
-                            if (itemlistanoconf.Cg_NoConf == NoConf.Cg_NoConf)
-                            {
-                                itemlistanoconf.Observaciones = @datosnoconfor1;
-                                itemlistanoconf.Comentarios = comentarios;
-                            }
-                        }
-                        Grid.Refresh();
+                        await refrescagrid();
+
+                        ocultadivlista = false;
+                        ocultadivform = true;
                     }
-                    */
-                    /*
-                    try
-                    {
-                        listanoconf = await Http.GetFromJsonAsync<List<NoConformidadesQuery>>("api/NoConformidades");
-                    }
-                    catch (Exception e)
-                    {
-                        //return BadRequest(e);
-
-                    }
-                    Grid.Refresh();
-                    */
-                    await refrescagrid();
-
-                    //Grid.Refresh();
-
-                    ocultadivlista = false;
-                    ocultadivform = true;
-
 
                 }
             }
@@ -518,6 +492,7 @@ namespace SupplyChain.Client.Pages.NoConf
             }
         }
         TiposNoConf[] TiposNc = null;
+
         /*
         public override async Task OnInitializedAsync()
         {
@@ -587,11 +562,48 @@ namespace SupplyChain.Client.Pages.NoConf
 
         protected override async Task OnInitializedAsync()
         {
-            listanoconf = await Http.GetFromJsonAsync<List<NoConformidadesQuery>>("api/NoConformidades");
-            TiposNc = await Http.GetFromJsonAsync<TiposNoConf[]>("api/TiposNoConf");
 
-            await Grid.AutoFitColumns();
+            if ( vieneOF == 0)
+            {
+
+                listanoconf = await Http.GetFromJsonAsync<List<NoConformidadesQuery>>("api/NoConformidades");
+                TiposNc = await Http.GetFromJsonAsync<TiposNoConf[]>("api/TiposNoConf");
+
+                await Grid.AutoFitColumns();
+            }
+            else
+            {
+
+               deshabradio = true;
+               ocultadivAcciones = true;
+               ocultadivlista = true;
+               ocultadivform = false;
+               OFSoloLectura = true;
+               DeshabilitaBotonOF = true;
+
+               valorradio = "orden";
+               ocultadivof = false;
+               ocultadivpedido = true;
+               ocultadivocompra = true;
+
+               ocultadivtextodatos = false;
+               ocultadivdatosgenerales = false;
+               ValorCg_noconf = 0;
+               ValorOF = vieneOF;
+               ValorOC = 0;
+               ValorPedido = 0;
+
+               await BuscarxOF();
+               textodatos = "Edicion Producto/SemiElaborado: " + cg_prod + " " + des_prod;
+
+               DropVal = 0;
+               despacho = "";
+               lote = "";
+               cantidadnoconf = 0;
+               datosnoconfor1 = "";
+            }
             await base.OnInitializedAsync();
+
         }
         public async Task OnLoad()                        //Show the spinner using initial Grid load 
         {

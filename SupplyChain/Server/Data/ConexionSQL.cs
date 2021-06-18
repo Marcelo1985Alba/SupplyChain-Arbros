@@ -31,10 +31,11 @@ namespace SupplyChain
             try
             {
                 Command = new SqlCommand(SQLCommandString, Connection);
-                Command.CommandTimeout = 0;
+                Command.CommandTimeout = 60;
                 DataAdatper = new SqlDataAdapter(Command);
                 DataTable = new DataTable();
                 DataAdatper.Fill(DataTable);
+
                 Connection.Close();
                 DataAdatper.Dispose();
             }
