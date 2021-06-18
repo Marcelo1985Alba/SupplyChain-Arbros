@@ -279,7 +279,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-
+        SpinnerVisible = true;
         MainLayout.Titulo = "Administracion de Stock";
         await GetVale();
         StockEncabezado.Items = new List<Pedidos>();
@@ -291,9 +291,11 @@
             await SelectedTireChanged(tire);
             var programa = await Http.GetFromJsonAsync<List<Programa>>($"api/Programa/GetProgramaByOF/{OrdFab}");
             await OnProgramaSelected(programa[0]);
+            //navigationManager.NavigateTo(navigationManager.Uri, forceLoad: true);
         }
-
         await InvokeAsync(StateHasChanged);
+        SpinnerVisible = false;
+
 
     }
 
