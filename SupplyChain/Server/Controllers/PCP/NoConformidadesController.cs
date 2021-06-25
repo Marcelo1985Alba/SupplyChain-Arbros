@@ -48,7 +48,7 @@ namespace SupplyChain
                 "tiposnoconf.origen, Orden, noconfor.Observaciones, Fe_Ocurrencia, " +
                 "Fe_Aprobacion, Aprob, Cg_Cli, Cg_Prod, Cg_Orden, Lote, Serie, Despacho, Cg_Ordf, " +
                 "Pedido, noconfor.Cg_Cia, Usuario,CG_PROVE, OCOMPRA, CANT, NOCONF, FE_EMIT, FE_PREV, " +
-                "FE_SOLUC, DES_CLI, DES_PROVE, Comentarios " +
+                "FE_SOLUC, DES_CLI, DES_PROVE, Comentarios, fe_implemen, fe_cierre " +
                 "from noconfor, tiposnoconf " +
                 "where noconfor.cg_tiponc = tiposnoconf.cg_tiponc and orden = 1 " +
                 "ORDER BY CG_NOCONF DESC");

@@ -40,6 +40,8 @@ namespace SupplyChain
 		public string DES_CLI { get; set; } = "";
 		public string DES_PROVE { get; set; } = "";
 		public string Comentarios { get; set; } = "";
+		public DateTime? fe_implemen { get; set; }
+		public DateTime? fe_cierre { get; set; }
 
 		//public virtual string Des_TipoNc { get; set; } = "";
 		//public virtual string Origen { get; set; } = "";

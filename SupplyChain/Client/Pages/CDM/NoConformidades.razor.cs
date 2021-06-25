@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using SupplyChain;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
 using System;
@@ -8,11 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
-using Syncfusion.Blazor.Spinner;
 using SupplyChain.Shared.Models;
-using Microsoft.Extensions.Configuration;
 using System.IO;
 using Syncfusion.Blazor.Inputs;
 using Newtonsoft.Json;
@@ -23,6 +19,12 @@ using Syncfusion.Blazor.Buttons;
 using SupplyChain.Client.Shared;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Syncfusion.Pdf;
+using Syncfusion.Pdf.Graphics;
+using Syncfusion.Pdf.Grid;
+using Syncfusion.Pdf.Tables;
+using SupplyChain.Client.HelperService;
+
 
 namespace SupplyChain.Client.Pages.NoConf
 {
@@ -30,6 +32,7 @@ namespace SupplyChain.Client.Pages.NoConf
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
+        [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
 
         // variables generales
         public bool IsVisible { get; set; } = false;
@@ -37,7 +40,12 @@ namespace SupplyChain.Client.Pages.NoConf
         public bool ocultadivlista { get; set; } = false;
         public bool ocultadivAcciones { get; set; } = true;
         public bool ocultadivform { get; set; } = true;
+        public bool ocultabotvolver { get; set; } = true;
+        public bool ocultafechacierre { get; set; } = true;
+        public bool ocultacheckfechacierre { get; set; } = false;
         public bool deshabradio { get; set; } = false;
+        public bool desfechacierre { get; set; } = false;
+
         protected NotificacionToast NotificacionObj;
         protected bool ToastVisible { get; set; } = false;
 //        protected SfSpinner SpinnerObj;
@@ -55,6 +63,7 @@ namespace SupplyChain.Client.Pages.NoConf
             ocultadivAcciones = true;
             ocultadivlista = true;
             ocultadivform = false;
+            ocultabotvolver = false;
             deshabradio = false;
             valorradio = "sinvinculos";
             cantidadnoconf = 0;
@@ -72,7 +81,8 @@ namespace SupplyChain.Client.Pages.NoConf
             DeshabilitaBotonOC = false;
             PedidoSoloLectura = false;
             DeshabilitaBotonPedido = false;
-
+            desfechacierre = false;
+            ocultafechacierre = true;
         }
 
         [Parameter] public int vieneOF { get; set; } = 0;
@@ -81,6 +91,7 @@ namespace SupplyChain.Client.Pages.NoConf
         {
             ocultadivlista = false;
             ocultadivform = true;
+            ocultabotvolver = true;
         }
 
         // variables form
@@ -89,6 +100,13 @@ namespace SupplyChain.Client.Pages.NoConf
         NoConformidades NoConf = new NoConformidades();
 
         public int DropVal;
+        public DateTime fechahoy;
+        public DateTime fechaocurr;
+        public DateTime fechaimplemen;
+        public DateTime fechacierre;
+        public DateTime fechaaccion;
+        protected bool checkcierra { get; set; } = false;
+
         public bool MostrarSpin { get; set; } = false;
         public int ValorOF { get; set; } = 0;
         public int ValorOC { get; set; } = 0;
@@ -102,6 +120,7 @@ namespace SupplyChain.Client.Pages.NoConf
         public string des_prove { get; set; } = "";
 
         public DateTime fecha { get; set; }
+
 
         public decimal cantidadnoconf { get; set; } = 0;
 
@@ -121,6 +140,7 @@ namespace SupplyChain.Client.Pages.NoConf
         public bool ocultadivocompra { get; set; } = true;
         public bool ocultadivtextodatos { get; set; } = true;
         public bool ocultadivdatosgenerales { get; set; } = false;
+
         public class ListaDespachos
         {
             public string despachocombo { get; set; }
@@ -189,7 +209,24 @@ namespace SupplyChain.Client.Pages.NoConf
             ocultadivtextodatos = true;
             ocultadivdatosgenerales = true;
 
+            fechaocurr = fechahoy;
+            ocultacheckfechacierre = false;
+
         }
+
+        public async Task HaceCheckCierra()
+        {
+            if (checkcierra == true)
+            {
+                ocultafechacierre = false;
+                fechacierre = fechahoy;
+            }
+            else
+            {
+                ocultafechacierre = true;
+            }
+        }
+
         public async Task guardanoconfor()
         {
 
@@ -230,11 +267,29 @@ namespace SupplyChain.Client.Pages.NoConf
             NoConf.DES_CLI = des_cli;
             NoConf.DES_PROVE = des_prove;
 
-            NoConf.FE_EMIT = DateTime.Now.Date;
+            NoConf.FE_EMIT = fechahoy;
             NoConf.FE_PREV = null;
             NoConf.FE_SOLUC = null;
-            DateTime xx = new DateTime(2001, 01, 01, 0, 0, 0);
-            NoConf.Fe_Ocurrencia = xx;
+
+            NoConf.Fe_Ocurrencia = fechaocurr;
+            if (fechaimplemen.Year == 1)
+            {
+                NoConf.fe_implemen = null;
+            }
+            else
+            {
+                NoConf.fe_implemen = fechaimplemen;
+            }
+
+            if (fechacierre.Year == 1)
+            {
+                NoConf.fe_cierre = null;
+            }
+            else
+            {
+                NoConf.fe_cierre = fechacierre;
+            }
+
             NoConf.Fe_Aprobacion = null;
 
 
@@ -287,6 +342,7 @@ namespace SupplyChain.Client.Pages.NoConf
 
                         ocultadivlista = false;
                         ocultadivform = true;
+                        ocultabotvolver = true;
                     }
 
                 }
@@ -534,7 +590,7 @@ namespace SupplyChain.Client.Pages.NoConf
         new ListaAcciones() {Texto= "Causa Raiz", Value = 3},
         new ListaAcciones() {Texto= "Acción Correctiva", Value = 4},
         new ListaAcciones() {Texto= "Responsable", Value = 5},
-        new ListaAcciones() {Texto= "Fecha de implementacion de la acción", Value = 6},
+//        new ListaAcciones() {Texto= "Fecha de implementacion de la acción", Value = 6},
         new ListaAcciones() {Texto= "Verificación de la Acción Correctiva", Value = 7},
         new ListaAcciones() {Texto= "Efectividad", Value = 8}};
 
@@ -551,7 +607,7 @@ namespace SupplyChain.Client.Pages.NoConf
         new ItemModel { Type = ItemType.Separator },
         new ItemModel { Text = "Acciones", TooltipText = "Acciones", PrefixIcon = "e-copy", Id = "Acciones" },
         new ItemModel { Type = ItemType.Separator },
-        new ItemModel { Text = "Cerrar", TooltipText = "Cerrar Evento", PrefixIcon = "fas fa-close-windows", Id = "Cerrar" },
+        new ItemModel { Text = "Imprimir Evento", TooltipText = "Imprimir Evento", PrefixIcon = "e-print", Id = "ImprimirConf" },
         new ItemModel { Type = ItemType.Separator },
         "Search",
         new ItemModel { Type = ItemType.Separator },
@@ -563,6 +619,8 @@ namespace SupplyChain.Client.Pages.NoConf
         protected override async Task OnInitializedAsync()
         {
 
+            fechahoy = DateTime.Now.Date;
+
             if ( vieneOF == 0)
             {
 
@@ -573,11 +631,11 @@ namespace SupplyChain.Client.Pages.NoConf
             }
             else
             {
-
                deshabradio = true;
                ocultadivAcciones = true;
                ocultadivlista = true;
                ocultadivform = false;
+               ocultabotvolver = true;
                OFSoloLectura = true;
                DeshabilitaBotonOF = true;
 
@@ -620,12 +678,22 @@ namespace SupplyChain.Client.Pages.NoConf
             {
                 await this.Grid.ExcelExport();
             }
+            /*
             if (args.Item.Text == "Print")
             {
                 await this.Grid.Print();
-            }
-            if (args.Item.Text == "Cerrar")
+            }*/
+            if (args.Item.Text == "Imprimir Evento")
             {
+                if (this.Grid.SelectedRecords.Count > 0)
+                {
+                    foreach (NoConformidadesQuery selectedRecord in this.Grid.SelectedRecords)
+                    {
+                        seleccionconf = selectedRecord;
+                    }
+
+                    await this.ImprimeConf(seleccionconf);
+                }
             }
             if (args.Item.Text == "Acciones")
             {
@@ -638,6 +706,7 @@ namespace SupplyChain.Client.Pages.NoConf
 
                         tipoaccion = 0;
                         observacionesmodal = "";
+                        fechaaccion = fechahoy;
 
                     }
 
@@ -663,6 +732,25 @@ namespace SupplyChain.Client.Pages.NoConf
                         ValorOF = 0;
                         ValorOC = 0;
                         ValorPedido = 0;
+                        if (selectedRecord.fe_implemen == null)
+                        {
+                            fechaimplemen = Convert.ToDateTime("01-01-0001");
+                        }
+                        else
+                        {
+                            fechaimplemen = Convert.ToDateTime(selectedRecord.fe_implemen);
+                        }
+                        if (selectedRecord.fe_cierre == null)
+                        {
+                            fechacierre = Convert.ToDateTime("01-01-0001");
+                        }
+                        else
+                        {
+                            fechacierre = Convert.ToDateTime(selectedRecord.fe_cierre);
+                            ocultacheckfechacierre = true;
+                            ocultafechacierre = false;
+                            desfechacierre = true;
+                        }
 
                         if ( selectedRecord.Cg_Ordf > 0)
                         {
@@ -703,6 +791,7 @@ namespace SupplyChain.Client.Pages.NoConf
 
                         DropVal = selectedRecord.Cg_TipoNc;
                         despacho = selectedRecord.Despacho;
+                        fechaocurr = (DateTime)selectedRecord.Fe_Ocurrencia;
                         lote = selectedRecord.Lote;
                         cantidadnoconf = selectedRecord.CANT;
                         datosnoconfor1 = selectedRecord.Observaciones;
@@ -715,6 +804,8 @@ namespace SupplyChain.Client.Pages.NoConf
                     ocultadivAcciones = false;
                     ocultadivlista = true;
                     ocultadivform = false;
+                    ocultabotvolver = false;
+
                 }
             }
 
@@ -725,14 +816,92 @@ namespace SupplyChain.Client.Pages.NoConf
            this.Grid.Refresh();
         }
         */
-//        public async Task guardaaccion()
+        //        public async Task guardaaccion()
+        protected async Task ImprimeConf(NoConformidadesQuery registro)
+        {
+            Console.WriteLine(registro);
+//            document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(359, 94);
+//            document1.PageSettings.Margins.All = 0;
+
+            //Create a new PDF document.
+            PdfDocument document = new PdfDocument();
+            //Add a page to the document.
+            PdfPage page = document.Pages.Add();
+            //Create PDF graphics for the page.
+            PdfGraphics graphics = page.Graphics;
+            //Set the standard font.
+            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+            //Draw the text.
+            //            graphics.DrawString("Evento: " + registro.Cg_NoConf.ToString(), font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+            //          graphics.DrawString($"evento1", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+
+            var fechapdf = registro.Fe_Ocurrencia.ToString();
+            fechapdf = fechapdf.Substring(0, 10);
+
+            var fechaimplemenpdf = "";
+            var fechacierre = "";
+            if (registro.fe_implemen.HasValue)
+            {
+                fechaimplemenpdf = registro.fe_implemen.ToString();
+                fechaimplemenpdf = fechaimplemenpdf.Substring(0, 10);
+            }
+            if (registro.fe_cierre.HasValue)
+            {
+                fechacierre = registro.fe_cierre.ToString();
+                fechacierre = fechacierre.Substring(0, 10);
+            }
+
+            graphics.DrawString($"EVENTO: {registro.Cg_NoConf.ToString()}                   Fecha: {fechapdf} \r\n \r\n \r\n " +
+                $"Fecha Implementación: {fechaimplemenpdf} \r\n \r\n " +
+                $"Fecha Cierre: {fechacierre} \r\n " +
+                $"Descripcion: {registro.Observaciones} \r\n \r\n " +
+                $"{registro.Comentarios}" , font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+
+            PdfGrid pdfGrid = new PdfGrid();
+            listaacciones = await Http.GetFromJsonAsync<List<NoConformidadesAcciones>>($"api/NoConformidades/GetAccionesByEvento/" + registro.Cg_NoConf);
+
+            pdfGrid.DataSource = listaacciones;
+            //Create string format for PdfGrid
+            PdfStringFormat format = new PdfStringFormat();
+            format.Alignment = PdfTextAlignment.Center;
+            format.LineAlignment = PdfVerticalAlignment.Bottom;
+            //Assign string format for each column in PdfGrid
+            foreach (PdfGridColumn column in pdfGrid.Columns)
+                column.Format = format;
+            //Apply a built-in style
+            pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent6);
+            //Set properties to paginate the grid
+            PdfGridLayoutFormat layoutFormat = new PdfGridLayoutFormat();
+            layoutFormat.Break = PdfLayoutBreakType.FitPage;
+            layoutFormat.Layout = PdfLayoutType.Paginate;
+            //Draw grid to the page of PDF document
+            pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, 200), layoutFormat);
+
+            /*
+            graphics.DrawString($"\r\n\r\n\r\n\r\n\r\n\r\n    {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE}{espaciosPedidox}{ordenFabricacion.PEDIDO} " +
+                        $"\r\n\r\n         {ordenFabricacion.CG_PROD} {espaciosAnio}     {DateTime.Now.Year} " +
+            */
+            /*
+            //Save the document.
+            document.Save("Output.pdf");
+            //Close the document.
+            document.Close(true);*/
+            MemoryStream xx = new MemoryStream();
+            document.Save(xx);
+            document.Close(true);
+            await JS.SaveAs("Evento" + registro.Cg_NoConf.ToString() + ".pdf", xx.ToArray());
+
+
+        }
+
         public async Task guardaaccion()
         {
 
             NoConfAcciones.Cg_NoConf = seleccionconf.Cg_NoConf;
             NoConfAcciones.Orden = tipoaccion;
             NoConfAcciones.Observaciones = observacionesmodal;
-            NoConfAcciones.Fe_Ocurrencia = DateTime.Now.Date;
+//            NoConfAcciones.Fe_Ocurrencia = DateTime.Now.Date;
+            NoConfAcciones.Fe_Ocurrencia = fechaaccion;
             NoConfAcciones.Usuario = "USER";
 
             ValidationContext valContext = new ValidationContext(NoConfAcciones, null, null);

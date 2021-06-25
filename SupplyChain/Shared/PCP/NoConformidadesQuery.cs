@@ -40,6 +40,8 @@ namespace SupplyChain
 		public string Comentarios { get; set; } = "";
 		public virtual string Des_TipoNc { get; set; } = "";
 		public virtual string Origen { get; set; } = "";
+		public DateTime? fe_implemen { get; set; }
+		public DateTime? fe_cierre { get; set; }
 
 	}
 }

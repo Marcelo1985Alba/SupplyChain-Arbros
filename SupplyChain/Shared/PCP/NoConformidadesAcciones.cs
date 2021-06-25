@@ -22,7 +22,7 @@ namespace SupplyChain
 		public string DesOrden { get; set; } = "";
 
 		[Required(ErrorMessage = "Debe Indicar una Observación")]
-		[StringLength(200)] 
+		[StringLength(600)] 
 		public string Observaciones { get; set; } = "";
 		public DateTime? Fe_Ocurrencia { get; set; }
 		public string Usuario { get; set; } = "";
