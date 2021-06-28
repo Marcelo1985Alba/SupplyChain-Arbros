@@ -26,7 +26,7 @@ namespace SupplyChain.Server.Controllers
 
         // GET: api/PedidosPendientes
         [HttpGet]
-        public async Task<IEnumerable<ModeloPedidosPendientes>> GetAsync()
+        public async Task<List<ModeloPedidosPendientes>> GetAsync()
         {
             try
             {

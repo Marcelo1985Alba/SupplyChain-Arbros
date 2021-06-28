@@ -37,21 +37,24 @@
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row">
-                    <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                            EnablePersistence="true" RowHeight="20" AllowRowDragAndDrop="true"
-                            @ref="Grid" DataSource="@listaFab" AllowExcelExport="true" 
-                            AllowGrouping="true" ID="Fab" Height="100%" Width="100%"
+                    <SfGrid @ref="Grid" ID="grdFabricaciones" AllowReordering="true" ShowColumnChooser="true"
+                            ShowColumnMenu="true" AllowResizing="true"
+                            RowHeight="20" AllowRowDragAndDrop="true"
+                            DataSource="@listaFab" AllowExcelExport="true"
+                            AllowGrouping="true" Height="100%" Width="100%"
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems"
                             GridLines="GridLine.Both">
                         <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                        <GridEvents OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" 
-                                    OnActionComplete="@ActionComplete" TValue="Fabricacion"></GridEvents>
-                        <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+                        <GridEvents OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler"
+                                    DataBound="@(async()=> await DataBoundHandler())"
+                                    OnActionComplete="@(async(a)=> await ActionComplete(a))" TValue="Fabricacion"></GridEvents>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                         <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
-                            <HeaderTemplate><p style="font-weight:800">
-                                Detalle Orden Fabricion @((context as Fabricacion).CG_ORDF)</p>
+                            <HeaderTemplate>
+                                <p style="font-weight:800">
+                                    Detalle Orden Fabricion @((context as Fabricacion).CG_ORDF)
+                                </p>
                             </HeaderTemplate>
                             <Template>
                                 @{
@@ -124,12 +127,12 @@
                             </Template>
                         </GridEditSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(Fabricacion.CG_ORDEN) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="210px" Visible="false" AllowEditing="false"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.CG_ORDEN) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="210px" AllowEditing="false"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.CG_PROD) HeaderText="Producto" Edit="false" TextAlign="TextAlign.Left" Width="210px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.DES_PROD) HeaderText="Descripción de producto" Edit="false" TextAlign="TextAlign.Left" Width="310px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.ORDEN) HeaderText="Prioridad" TextAlign="TextAlign.Left" Edit="true" Width="140px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.CG_ORDF) HeaderText="Orden" Edit="false" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.ULTIMAORDENASOCIADA) HeaderText="Tipo producto" Edit="false" Visible="false" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.ULTIMAORDENASOCIADA) HeaderText="Tipo producto" Edit="false" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.CLASE) HeaderText="Clase" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.CG_R) HeaderText="Tipo de órden" TextAlign="TextAlign.Left" Edit="false" Width="210px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.CANT) Format="N2" HeaderText="Cantidad" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
@@ -177,9 +180,10 @@
                             <GridColumn Field=@nameof(Fabricacion.FECHA_PREVISTA_FABRICACION) HeaderText="Fecha prevista de fabricacion" TextAlign="TextAlign.Left" Edit="false" Width="240px"></GridColumn>
 
                             @*<GridColumn Field=@nameof(Fabricacion.FE_ANUL) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
-        <GridColumn Field=@nameof(Fabricacion.FE_CIERRE) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="190px"></GridColumn>*@
+            <GridColumn Field=@nameof(Fabricacion.FE_CIERRE) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="190px"></GridColumn>*@
                         </GridColumns>
                     </SfGrid>
+
                 </div>
             </div>
         </div>

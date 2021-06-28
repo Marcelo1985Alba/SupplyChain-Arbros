@@ -1,20 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using SupplyChain;
+using SupplyChain.Shared.Models;
+using SupplyChain.Shared.PCP;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
+using Syncfusion.Blazor.Notifications;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
-using SupplyChain.Shared.Models;
-using Syncfusion.Blazor.DropDowns;
-using SupplyChain.Shared.PCP;
-using Syncfusion.Blazor.Spinner;
-using Syncfusion.Blazor.Notifications;
 
 namespace SupplyChain.Pages.Fab
 {
@@ -68,6 +63,15 @@ namespace SupplyChain.Pages.Fab
             }
         }
 
+        public async Task BeginComplete(ActionEventArgs<Fabricacion> args)
+        {
+            
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.RowDragAndDrop)
+            {
+
+            }
+        }
+
         public async Task ActionComplete(ActionEventArgs<Fabricacion> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
@@ -104,7 +108,7 @@ namespace SupplyChain.Pages.Fab
                     await Grid.RefreshHeader();
                 }
             }
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.RowDragAndDrop)
             {
 
             }

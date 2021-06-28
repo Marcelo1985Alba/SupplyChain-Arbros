@@ -29,6 +29,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
         protected List<ModeloPedidosPendientes> listaPedPend = new List<ModeloPedidosPendientes>();
 
         protected List<Object> Toolbaritems = new List<Object>(){
+        new ItemModel(){ Type = ItemType.Separator},
         "Search",
         new ItemModel(){ Type = ItemType.Separator},
         "Print",
@@ -47,7 +48,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
         public async Task DataBoundHandler()
         {
             await Grid.AutoFitColumns();
-            VisibleProperty = false;
+            //VisibleProperty = false;
         }
 
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)

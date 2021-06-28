@@ -58,6 +58,7 @@ namespace SupplyChain
         public virtual DbSet<ModeloAbastecimiento> ModeloAbastecimiento { get; set; }
         public virtual DbSet<vPendienteFabricar> VPendientesFabricars { get; set; }
         public virtual DbSet<Procun> Procun { get; set; }
+        public virtual DbSet<Fabricacion> Fabricaciones { get; set; }
         //MODULO LOGIN
         public DbSet<Usuarios> Usuarios { get; set; }
         public DbSet<Rol> Roles { get; set; }

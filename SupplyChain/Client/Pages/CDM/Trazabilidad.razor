@@ -1262,7 +1262,8 @@
     protected async Task Ensayos()
     {
         //NavigationManager.NavigateTo($"Pdf/{pedido}/ENSAYOS");
-        await JsRuntime.InvokeVoidAsync("open", new object[2] { $"Pdf/{TrzNro}/ENSAYOS", $"Pdf/{TrzNro}/ENSAYOS" });
+        //await JsRuntime.InvokeVoidAsync("open", new object[2] { $"Pdf/{TrzNro}/ENSAYOS", $"Pdf/{TrzNro}/ENSAYOS" });
+        await JsRuntime.InvokeVoidAsync("open", new object[2] { $"pdf-ensayos/{TrzNro}/RUTAENSAYO", $"pdf-ensayos/{TrzNro}/RUTAENSAYO" });
     }
 }
 <style>
