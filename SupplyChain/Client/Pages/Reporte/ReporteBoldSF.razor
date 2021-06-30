@@ -1,0 +1,28 @@
+﻿@page "/reporting"
+@using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Components
+@inject IJSRuntime JSRuntime
+@*@using BlazorReportingTools.Data;*@
+<div id="reportViewerControl" style="width: 100%;height:800px" />
+
+@code {
+
+    private string reportPathInput = "Report1";
+    // ReportViewer options
+    //BoldReportViewerOptions viewerOptions = new BoldReportViewerOptions();
+
+    // You have to call this method based on your need. It can called while loading the page or after selection the report.
+    public async void RenderReport()
+    {
+        await JSRuntime.InvokeVoidAsync("RenderReportViewer", reportPathInput, "reportViewerControl");
+    }
+
+    /// https://docs.microsoft.com/en-us/aspnet/core/blazor-reporting/components?view=aspnetcore-3.0
+    /// https://github.com/aspnet/AspNetCore.Docs/tree/master/aspnetcore/blazor-reporting/common/samp   les/3.x/BlazorSample
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        // If you want to load in intialization you can make use of this.
+        RenderReport();
+    }
+}

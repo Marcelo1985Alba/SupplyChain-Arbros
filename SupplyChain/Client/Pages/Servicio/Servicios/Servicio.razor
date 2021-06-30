@@ -22,8 +22,8 @@
             <div class="row">
                 <SfGrid @ref="Grid" DataSource="@servicios" AllowPaging="true" AllowGrouping="true" AllowReordering="true"
                         GridLines="GridLine.Both" Width="100%" AllowSorting="true" AllowSelection="true"
-                        Toolbar="@Toolbaritems" EnableHover="true" AllowExcelExport="true"
-                        RowHeight="20">
+                        Toolbar="@Toolbaritems" EnableHover="true" AllowExcelExport="true" AllowFiltering="true"
+                        RowHeight="20" ShowColumnChooser="true">
                     <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                     <GridSelectionSettings Type="SelectionType.Single"></GridSelectionSettings>
                     <GridEvents OnToolbarClick="@(async(a)=> await ClickHandler(a))" 
