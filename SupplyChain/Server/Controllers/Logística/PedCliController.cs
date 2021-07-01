@@ -24,7 +24,7 @@ namespace SupplyChain
         }
 
         [HttpGet]
-        public IEnumerable<PedCli> Get(string PEDIDO)
+        public async Task<IEnumerable<PedCli>> Get(string PEDIDO)
         {
             string xSQL = string.Format("SELECT Pedcli.* FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
                 "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) where(pedidos.FLAG = 0 AND Programa.CG_ESTADO = 3 " +
@@ -34,7 +34,7 @@ namespace SupplyChain
                 "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) " +
                 "where Pedcli.PEDIDO NOT IN(select PEDIDO from Pedidos where TIPOO = 1) " +
                 "AND Programa.CG_ESTADO = 3  AND Pedcli.CANTPED > 0 AND Pedidos.TIPOO != 28");
-            return _context.PedCli.FromSqlRaw(xSQL).ToList<PedCli>();
+            return await _context.PedCli.FromSqlRaw(xSQL).ToListAsync();
         }
 
 
