@@ -28,7 +28,7 @@
     </SfToast>
     <h3 class="card-title">Carga de Máquina</h3>
     <hr />
-    <div class="form-row">
+    <div class="form-row form-inline">
         <div class="col-2">
             <div>
                 <SfNumericTextBox TValue="int" @bind-Value="@ordenAbuscar" Format="N0" ShowClearButton="true" Width="150"
@@ -37,13 +37,14 @@
         </div>
         <div class="col-5">
             <div>
-                <SfButton IsPrimary="true" IconCss="fa fa-folder-open"
+                <SfButton IconCss="fa fa-folder-open" CssClass="btn btn-sm btn-info"
                           @onclick="BuscarOrden_Click">Abrir órden de fabricación</SfButton>
             </div>
         </div>
         <div class="col-5">
             <div>
-                <Syncfusion.Blazor.SplitButtons.SfProgressButton Content="Enviar OFs a DataCore" IsPrimary="true" IconCss="fa fa-share-square"
+                <Syncfusion.Blazor.SplitButtons.SfProgressButton Content="Enviar OFs a DataCore"
+                                                                 IconCss="fa fa-share-square" CssClass="btn btn-sm btn-info"
                                                                  @onclick="@(async()=> await EnviarCSVDataCore())">
                 </Syncfusion.Blazor.SplitButtons.SfProgressButton>
             </div>
@@ -712,7 +713,7 @@
                                                         {
                                                             <tr style="font-weight:bold">
                                                                 <td colspan="2">
-                                                                    <a @onclick="@(()=> verSE = !verSE)">SEMI ELABORADoS</a>
+                                                                    <a @onclick="@(()=> verSE = !verSE)">SEMI ELABORADOS</a>
                                                                 </td>
                                                             </tr>
                                                             if (verSE)
@@ -870,9 +871,9 @@
                 </DialogTemplates>
                 <DialogEvents Closed="@OrdenFabricacionClose"></DialogEvents>
                 <DialogButtons>
-                    <DialogButton IconCss="fa fa-edit" Content="Evento" IsPrimary="true" OnClick="@AbreEvento" />
-                    <DialogButton IconCss="fa fa-save" Content="Guardar" IsPrimary="true" OnClick="@OrdenFabricacionOk" />
-                    <DialogButton IconCss="fa fa-window-close" Content="Cancelar" IsPrimary="true" OnClick="@OrdenFabricacionClose" />
+                    <DialogButton Type="Syncfusion.Blazor.Popups.ButtonType.Button" IconCss="fa fa-edit" Content="Evento" CssClass="btn btn-sm btn-info" OnClick="@AbreEvento" />
+                    <DialogButton Type="Syncfusion.Blazor.Popups.ButtonType.Button" IconCss="fa fa-save" Content="Guardar" CssClass="btn btn-sm btn-info" OnClick="@OrdenFabricacionOk" />
+                    <DialogButton Type="Syncfusion.Blazor.Popups.ButtonType.Button" IconCss="fa fa-window-close" Content="Cancelar" CssClass="btn btn-sm btn-info" OnClick="@OrdenFabricacionClose" />
                 </DialogButtons>
             </SfDialog>
         </div>
@@ -1953,8 +1954,14 @@
         visibility: visible;
     }
 
-    .e-spinner-pane .e-spinner-inner .e-spin-bootstrap {
+    .e-btn.e-flat, .e-css.e-btn.e-flat {
+        background-color: #398bf7;
+        border-color: #fafafa;
+        box-shadow: none;
+        color: #fafafa;
+    }
+/*    .e-spinner-pane .e-spinner-inner .e-spin-bootstrap {
         fill: #000;
         stroke: #000;
-    }
+    }*/
 </style>

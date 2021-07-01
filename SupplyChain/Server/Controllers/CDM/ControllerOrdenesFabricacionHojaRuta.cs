@@ -24,7 +24,7 @@ namespace SupplyChain
         }
 
         [HttpGet("{cgProd}/{cant}")]
-        public IEnumerable<ModeloOrdenFabricacionHojaRuta> Get(string cgProd, double cant)
+        public async Task<IEnumerable<ModeloOrdenFabricacionHojaRuta>> Get(string cgProd, double cant)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace SupplyChain
                                             "WHERE A.PROCESO = B.PROCESO AND A.CG_CELDA = C.CG_CELDA AND A.CG_PROD = '{1}' ORDER BY A.ORDEN"
                                             , cant.ToString().Replace(",", ".")
                                             , cgProd);
-                return _context.OrdenesFabricacionHojaRuta.FromSqlRaw(xSQL).ToList<ModeloOrdenFabricacionHojaRuta>();
+                return await _context.OrdenesFabricacionHojaRuta.FromSqlRaw(xSQL).ToListAsync();
             }
             catch
             {

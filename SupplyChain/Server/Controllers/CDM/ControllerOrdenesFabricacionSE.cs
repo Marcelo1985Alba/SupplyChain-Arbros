@@ -24,7 +24,7 @@ namespace SupplyChain
         }
 
         [HttpGet("{idOrden}")]
-        public IEnumerable<ModeloOrdenFabricacionSE> Get(int idOrden)
+        public async Task<IEnumerable<ModeloOrdenFabricacionSE>> Get(int idOrden)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace SupplyChain
                                             "AND PE.CG_ORDEN = 3 AND PE.CG_ORDF = {0} " +
                                             "ORDER BY PE.REGISTRO",
                                             idOrden);
-                return _context.OrdenesFabricacionSE.FromSqlRaw(xSQL).ToList<ModeloOrdenFabricacionSE>();
+                return await _context.OrdenesFabricacionSE.FromSqlRaw(xSQL).ToListAsync();
             }
             catch
             {

@@ -5902,6 +5902,8 @@ File: scss
     border: 2px solid #398bf7;
 }
 
+
+
 .e-grid .e-groupdroparea {
     background-color: #398bf7;
     color: #ffffff;
@@ -5920,4 +5922,14 @@ File: scss
     font-weight: 500;
     font-size: 14px;
     padding: .5rem;
+}
+
+/*****************SPINNER SF*******************************/
+.e-spinner-pane .e-spinner-inner .e-spin-bootstrap4 {
+    stroke: #398bf7;
+}
+
+.e-spinner-pane .e-spinner-inner .e-spin-bootstrap {
+    fill: #0c64d8;
+    stroke: #0c64d8;
 }
