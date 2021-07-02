@@ -1145,22 +1145,7 @@
         {
             Console.WriteLine("Error en api/OrdenesFabricacion");
 
-            string xSQL = string.Format("set dateformat dmy UPDATE Programa SET FECHA_PREVISTA_FABRICACION = '{0}', FECHA_INICIO_REAL_FABRICACION = '{1}', CANTFAB = {2}, FE_CIERRE = '{3}', " +
-                                            "CG_ORDFORIG = {4}, CG_CELDA = '{5}', PROCESO = '{6}', CG_OPER = {7}, DES_OPER = '{8}' WHERE Cg_ordf = {9}",
-                                          ordenFabricacion.FECHA_PREVISTA_FABRICACION,
-                                          ordenFabricacion.FECHA_INICIO_REAL_FABRICACION,
-                                          ordenFabricacion.CANTFAB.ToString().Replace(",", "."),
-                                          ordenFabricacion.FE_CIERRE,
-                                          ordenFabricacion.CG_ORDFORIG,
-                                          ordenFabricacion.CG_CELDA,
-                                          ordenFabricacion.PROCESO,
-                                          ordenFabricacion.CG_OPER,
-                                          ordenFabricacion.DES_OPER,
-                                          ordenFabricacion.CG_ORDF);
-            Console.WriteLine(" VER CONSULTA SQL  " + xSQL);
-
             var mensajeServidor = await respuesta.Content.ReadAsStringAsync();
-            Console.WriteLine(xSQL);
             Console.WriteLine(mensajeServidor);
             await this.ToastObj.Show(new ToastModel
             {

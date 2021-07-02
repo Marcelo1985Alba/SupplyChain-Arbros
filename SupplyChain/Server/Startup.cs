@@ -42,13 +42,13 @@ namespace SupplyChain.Server
 
             //Para invocar controladores en otros controladores a traves de DI
             services.AddMvc()
-                .AddControllersAsServices()
-                .ConfigureApiBehaviorOptions(options =>
-                {
-                    options.SuppressModelStateInvalidFilter = true;
-                    options.SuppressConsumesConstraintForFormFileParameters = true;
-                    options.SuppressInferBindingSourcesForParameters = true;
-                });
+                .AddControllersAsServices();
+                //.ConfigureApiBehaviorOptions(options =>
+                //{
+                //    options.SuppressModelStateInvalidFilter = true;
+                //    options.SuppressConsumesConstraintForFormFileParameters = true;
+                //    options.SuppressInferBindingSourcesForParameters = true;
+                //});
 
             services.AddResponseCompression(opts =>
             {

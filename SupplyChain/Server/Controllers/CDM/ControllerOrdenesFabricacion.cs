@@ -56,7 +56,7 @@ namespace SupplyChain
         {
             if (id != xItem.CG_ORDF)
             {
-                return BadRequest();
+                return BadRequest("Item Orden de Fabricacion es nulo");
             }
 
             try
