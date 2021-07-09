@@ -11,6 +11,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SupplyChain;
+using SupplyChain.Client.HelperService;
 using SupplyChain.Shared.Models;
 
 namespace SupplyChain
@@ -94,6 +95,31 @@ namespace SupplyChain
                 itemAbastecimiento = await _context.Set<ItemAbastecimiento>()
                     .FromSqlRaw("Exec dbo.NET_PCP_TraerAbast  @Cg_Ordf=@of", of)
                     .ToListAsync();
+
+                //Cargar Depositos: ver como cargar en sp
+                await itemAbastecimiento.ForEachAsync(async i=> 
+                {
+                    var query = _context.ResumenStock.Where(r =>
+                    r.CG_ART.ToUpper() == i.CG_ART.ToUpper()
+                    && r.LOTE.ToUpper() == i.LOTE.ToUpper()
+                    && r.DESPACHO.ToUpper() == i.DESPACHO.ToUpper()
+                    && r.SERIE.ToUpper() == i.SERIE.ToUpper()
+                    ).AsQueryable();
+
+                    if (i.CG_DEP > 0)
+                        query = query.Where(r => r.CG_DEP == i.CG_DEP);
+
+                    if (i.STOCK <= 0)
+                        i.CG_DEP = 0;
+                    else
+                    {
+                        var rs = await query.FirstOrDefaultAsync();
+                        i.CG_DEP = rs.CG_DEP;
+                    }
+                    
+                });
+
+
 
                 return itemAbastecimiento;
             }

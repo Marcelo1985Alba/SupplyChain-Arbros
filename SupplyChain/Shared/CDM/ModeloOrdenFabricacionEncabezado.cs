@@ -11,7 +11,7 @@ namespace SupplyChain
     {
         [Key]
         public int CG_ORDF { get; set; }
-        public DateTime FECHA_PREVISTA_FABRICACION { get; set; }
+        public DateTime? FECHA_PREVISTA_FABRICACION { get; set; }
         public decimal DIASFAB { get; set; }
         public decimal HORASFAB { get; set; }
         public decimal AVANCE { get; set; }

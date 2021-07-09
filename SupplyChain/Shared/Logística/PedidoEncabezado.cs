@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace SupplyChain.Shared
 {
     public class PedidoEncabezado
@@ -22,5 +24,7 @@ namespace SupplyChain.Shared
         [ValidateComplexType]
         public List<Pedidos> Items { get; set; }
 
+        [NotMapped]
+        public ModeloOrdenFabricacionEncabezado ModeloOrdenFabricacionEncabezado { get; set; } = new();
     }
 }

@@ -105,7 +105,6 @@ namespace SupplyChain
             eb =>
             {
                 eb.ToView("vPendientesFabricar");
-                //eb.Property(v => v.BlogName).HasColumnName("Name");
             });
 
             modelBuilder.Entity<ItemAbastecimiento>().HasNoKey().ToView(null);

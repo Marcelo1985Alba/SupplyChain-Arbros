@@ -48,6 +48,20 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
+        // GET: api/ResumenStocksPositivo/ByCodigo/
+        [HttpGet("ByCodigo/{cg_art}")]
+        public async Task<ActionResult<IEnumerable<ResumenStock>>> ByCodigo(string cg_art)
+        {
+            try
+            {
+                return await _context.ResumenStock.Where(rs => rs.STOCK > 0 && rs.CG_ART.Trim() == cg_art.Trim()).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         // GET: api/ResumenStocksGetResumenStockByDeposito/1
         [HttpGet("GetResumenStockByDeposito/{cg_dep}")]
         public async Task<ActionResult<IEnumerable<ResumenStock>>> GetResumenStockByDeposito(int cg_dep)
@@ -79,13 +93,22 @@ namespace SupplyChain.Server.Controllers
                 resumenStock.DESPACHO = resumenStock.DESPACHO == null ? "" : resumenStock.DESPACHO ;
                 resumenStock.LOTE = resumenStock.LOTE == null ? "" : resumenStock.LOTE ;
                 resumenStock.SERIE = resumenStock.SERIE == null ? "" : resumenStock.SERIE ;
-                return await _context.ResumenStock.Where(r => 
-                    r.CG_DEP == resumenStock.CG_DEP
-                    && r.CG_ART.ToUpper() == resumenStock.CG_ART.ToUpper()
+
+
+
+                var query = _context.ResumenStock.Where(r =>
+                    r.CG_ART.ToUpper() == resumenStock.CG_ART.ToUpper()
                     && r.LOTE.ToUpper() == resumenStock.LOTE.ToUpper()
                     && r.DESPACHO.ToUpper() == resumenStock.DESPACHO.ToUpper()
                     && r.SERIE.ToUpper() == resumenStock.SERIE.ToUpper()
-                ).FirstAsync();
+                ).AsQueryable();
+
+                if (resumenStock.CG_DEP > 0)
+                {
+                   query = query.Where(r => r.CG_DEP == resumenStock.CG_DEP);
+                }
+
+                return await query.FirstOrDefaultAsync();
              }
             catch (Exception ex)
             {

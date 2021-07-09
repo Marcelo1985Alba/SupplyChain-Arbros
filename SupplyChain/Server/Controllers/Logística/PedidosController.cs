@@ -208,7 +208,7 @@ namespace SupplyChain
                 stock.FE_REG = DateTime.Now;
                 stock.USUARIO = "USER";
 
-                if (stock.TIPOO == 9)
+                if (stock.TIPOO == 9 || stock.TIPOO == 10)
                     stock.STOCK = -stock.STOCK;
 
                 if (stock.TIPOO == 5)

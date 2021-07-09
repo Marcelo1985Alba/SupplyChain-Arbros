@@ -110,6 +110,7 @@ namespace SupplyChain
         [ColumnaGridViewAtributo(Name = "Ubicación")]
         public string UBICACION { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Depósito")]
+        [RequireDepositoItem]
         public int CG_DEP { get; set; } = 0;
         [ColumnaGridViewAtributo(Name = "Cantidad")]
         public decimal? CANTENT { get; set; } = 0;

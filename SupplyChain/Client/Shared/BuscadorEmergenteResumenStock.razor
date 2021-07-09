@@ -19,33 +19,24 @@
                     }
                     else
                     {
-
-                        <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="true" AllowFiltering="true" TValue="Programa"
+                        <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="true" AllowFiltering="true" TValue="ResumenStock"
                                 AllowResizing="true" GridLines="GridLine.Both"
                                 AllowSelection="true" AllowSorting="true" AllowTextWrap="true" EnableHover="true"
                                 ShowColumnMenu="true">
                             <GridPageSettings PageSizes="@(new int[] { 5,10,20 })" PageSize="5" PageCount="5"></GridPageSettings>
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-                            <GridEvents RowSelected="GetSelectedRecords" TValue="Programa"></GridEvents>
+                            <GridEvents RowSelected="@(async(a)=> await GetSelectedRecords(a))" TValue="ResumenStock"></GridEvents>
                             <GridColumns>
-                                @*<GridColumn Field="@nameof(ResumenStock.CG_ART)" AutoFit="true"></GridColumn>
-                                <GridColumn Field="@nameof(ResumenStock.STOCK)" AutoFit="true"></GridColumn>
-                                <GridColumn Field="@nameof(ResumenStock.CG_DEP)" AutoFit="true"></GridColumn>
-                                <GridColumn Field="@nameof(ResumenStock.DESPACHO)" AutoFit="true"></GridColumn>
-                                <GridColumn Field="@nameof(ResumenStock.SERIE)" AutoFit="true"></GridColumn>
-                                <GridColumn Field="@nameof(ResumenStock.LOTE)" AutoFit="true"></GridColumn>*@
 
-                                <GridColumn Field="@nameof(Programa.CG_PROD)" Width="120px"></GridColumn>
-                                <GridColumn Field="@nameof(Programa.CG_ORDF)"></GridColumn>
-                                <GridColumn Field="@nameof(Programa.FE_EMIT)"></GridColumn>
-                                <GridColumn Field="@nameof(Programa.CANT)"></GridColumn>
-                                <GridColumn Field="@nameof(Programa.REGISTRO)" IsPrimaryKey="true"></GridColumn>
-                                <GridColumn Field="@nameof(Programa.Cg_Cia)"></GridColumn>
+                                <GridColumn Field="@nameof(ResumenStock.CG_ART)" Width="120px"></GridColumn>
+                                <GridColumn Field="@nameof(ResumenStock.STOCK)"></GridColumn>
+                                <GridColumn Field="@nameof(ResumenStock.CG_DEP)"></GridColumn>
+                                <GridColumn Field="@nameof(ResumenStock.SERIE)"></GridColumn>
+                                <GridColumn Field="@nameof(ResumenStock.LOTE)" IsPrimaryKey="true"></GridColumn>
+                                <GridColumn Field="@nameof(ResumenStock.DESPACHO)"></GridColumn>
 
                             </GridColumns>
                         </SfGrid>
-
-
                     }
                 }
             </div>
@@ -59,25 +50,33 @@
 </SfDialog>
 
 @code {
-    SfGrid<Programa> Grid;
+    SfGrid<ResumenStock> Grid;
 
+    [Parameter] public ResumenStock[] DataSource { get; set; } = null!;
     [Parameter] public string Titulo { get; set; } = null!;
     [Parameter] public bool Visible { get; set; } = false;
-    Programa[] DataSource { get; set; } = null!;
     [Parameter] public string[] Columnas { get; set; } = null!;
-    [Parameter] public EventCallback<Programa> onObjetoSeleccionado { get; set; }
+    [Parameter] public EventCallback<ResumenStock> onObjetoSeleccionado { get; set; }
 
-    //public ResumenStock Selected { get; set; }
-    public Programa Selected { get; set; }
 
-    protected async override Task OnInitializedAsync()
+    public ResumenStock Selected { get; set; }
+
+    //protected async override Task OnInitializedAsync()
+    //{
+    //    DataSource = await Http.GetFromJsonAsync<ResumenStock[]>($"api/ResumenStock/ByCodigo/{cg_art}");
+
+    //    await InvokeAsync(StateHasChanged);
+    //}
+
+
+    public async Task ShowAsync()
     {
-        //DataSource = await Http.GetFromJsonAsync<Progr[]>("api/ResumenStocks");
-        DataSource = await Http.GetFromJsonAsync<Programa[]>("api/Programas");
-
-        await InvokeAsync(StateHasChanged);
+        Visible = true;
     }
-
+    public async Task HideAsync()
+    {
+        Visible = false;
+    }
 
     public void EnviarObjetoSeleccionado()
     {
@@ -85,7 +84,7 @@
         onObjetoSeleccionado.InvokeAsync(Selected);
     }
 
-    public async Task GetSelectedRecords(RowSelectEventArgs<Programa> args)
+    public async Task GetSelectedRecords(RowSelectEventArgs<ResumenStock> args)
     {
         args.PreventRender = true; //without this, you may see noticable delay in selection with 75 rows in grid
         //ListaSeleccionada = await this.Grid.GetSelectedRecords();
