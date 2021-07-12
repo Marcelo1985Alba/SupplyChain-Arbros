@@ -50,9 +50,9 @@ namespace SupplyChain
         [NotMapped]
         public int CG_DEP_ALT { get; set; } = 0;
 
-        [ColumnaGridViewAtributo(Name = "Vale")]
+        [Display(Name = "Vale")]
         public int VALE { get; set; } = 0;
-        [ColumnaGridViewAtributo(Name = "Fecha vale")]
+        [Display(Name = "Fecha Vale")]
         public DateTime FE_MOV { get; set; }
         [ColumnaGridViewAtributo(Name = "Asiento contable")]
         public int VOUCHER { get; set; } = 0;
@@ -92,9 +92,9 @@ namespace SupplyChain
         public string DIRENT { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Tipo insumo")]
         public int? CG_ORDEN { get; set; } = 0;
-        [ColumnaGridViewAtributo(Name = "Código artículo"), Required(ErrorMessage ="ingresar insumo")]
+        [Display(Name = "Código artículo"), Required(ErrorMessage ="ingresar insumo")]
         public string CG_ART { get; set; } = "";
-        [ColumnaGridViewAtributo(Name = "Nombre artículo")]
+        [Display(Name = "Nombre artículo")]
         public string DES_ART { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Tipo artículo")]
         public string TIPO { get; set; } = "";
@@ -114,7 +114,7 @@ namespace SupplyChain
         public int CG_DEP { get; set; } = 0;
         [ColumnaGridViewAtributo(Name = "Cantidad")]
         public decimal? CANTENT { get; set; } = 0;
-        [ColumnaGridViewAtributo(Name = "Cantidad operación")]
+        [Display(Name = "Cantidad operación")]
         [ControlCant]
         public decimal? STOCK { get; set; } = 0;
         [ColumnaGridViewAtributo(Name = "Unidad stock")]

@@ -9,7 +9,7 @@
     <div class="col-2">
         @if (MostraBotonBusqueda)
         {
-            <SfButton HtmlAttributes="@HtmlAttr" OnClick="@(async (e)=> await BuscarOCompras())" CssClass="" IsPrimary="true"
+            <SfButton HtmlAttributes="@HtmlAttr" OnClick="@(async (e)=> await BuscarOCompras())" CssClass="btn btn-sm e-round" IsPrimary="false"
                       IconCss="fa fa-search" Disabled="@DeshabilitaBotonBusqueda"></SfButton>
         }
 

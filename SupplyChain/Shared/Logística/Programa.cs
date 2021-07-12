@@ -1,4 +1,5 @@
 ﻿using SupplyChain.Shared.HelpersAtributo;
+using SupplyChain.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,11 +12,15 @@ namespace SupplyChain
 	{
 		public string CG_PROG { get; set; }
 		public DateTime? FE_PROG { get; set; }
+		[Display(Name = "Producto")]
 		public string CG_PROD { get; set; }
+		[Display(Name = "Descripción")]
 		public string DES_PROD { get; set; }
 		public int CG_FORM { get; set; }
+		[Display(Name = "Cantidad")]
 		public decimal CANT { get; set; }
 		public DateTime? FE_ENTREGA { get; set; }
+		[Display(Name = "Fecha Emisión")]
 		public DateTime? FE_EMIT { get; set; }
 		public int CG_REG { get; set; }
 		public DateTime? FE_CONF { get; set; }
@@ -24,9 +29,12 @@ namespace SupplyChain
 		public int CG_ORDEN { get; set; }
 		public string LINEA { get; set; }
 		public int CG_CONF { get; set; }
+		[Display(Name = "Pedido")]
 		public int PEDIDO { get; set; }
+		[Display(Name = "Cliente")]
 		public int CG_CLI { get; set; }
 		public int CG_FLAG { get; set; }
+		[Display(Name ="Orden Fabricación")]
 		public int CG_ORDF { get; set; }
 		public DateTime? FE_ORDF { get; set; }
 		public string HS_ORDF { get; set; }

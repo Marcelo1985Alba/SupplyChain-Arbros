@@ -21,7 +21,7 @@ else
                         Toolbar="@Toolbaritems"
                         AllowResizing="true" AllowSelection="true" AllowSorting="true" AllowTextWrap="false"
                         AllowReordering="true" RowHeight="20">
-                    @*<GridPageSettings PageCount="4" PageSize="4"></GridPageSettings>*@
+                    <GridPageSettings PageCount="4" PageSize="50"></GridPageSettings>
                     <GridEvents OnActionBegin="@(async(p)=> await OnActionBeginHandler(p))"
                                 CommandClicked="@(async (p)=> await CommandClickHandler(p))"
                                 OnBeginEdit="@(async (ped)=> await BeginEditHandler(ped))"
@@ -185,7 +185,7 @@ else
     };
 
     protected List<ItemModel> Toolbaritems = new List<ItemModel>(){
-        new ItemModel { CssClass="btn", Text = "Agregar Insumo",
+        new ItemModel { CssClass="btn", Text = "Agregar Insumo", ShowTextOn = DisplayMode.Toolbar, Type = ItemType.Button, 
             TooltipText = "Agregar Insumo", PrefixIcon = "fa fa-search", Id = "AgregarInsumo" }
     };
 
@@ -203,23 +203,6 @@ else
 
         }
     }
-
-    class TipoInsumo
-    {
-        public int Codigo { get; set; }
-        public string Descrip { get; set; }
-    }
-
-    int TipoInsumoCodigo = 1;
-    TipoInsumo[] TiposInsumo = new[] {
-      new TipoInsumo { Codigo = 1, Descrip = "Productos" },
-      new TipoInsumo { Codigo = 2, Descrip = "Semi Elaborados" },
-      new TipoInsumo { Codigo = 4, Descrip = "Materias Primas" },
-      new TipoInsumo { Codigo = 10, Descrip = "Articulo de Reventa" },
-      new TipoInsumo { Codigo = 11, Descrip = "Herramental/Inventariables" },
-      new TipoInsumo { Codigo = 12, Descrip = "Repuestos" },
-      new TipoInsumo { Codigo = 13, Descrip = "Servicios" }
-    };
 
 
 
@@ -371,8 +354,7 @@ else
         tituloBuscador = "Listado de Productos";
         PopupBuscadorProdVisible = true;
         ColumnasBuscador = new string[] { "CG_PROD", "DES_PROD", "UNID" };
-        int cg_orden = TipoInsumoCodigo;
-        DataSourceProductos = await Http.GetFromJsonAsync<Producto[]>($"api/Productos/GetProductos/{cg_orden}");
+        //DataSourceProductos = await Http.GetFromJsonAsync<Producto[]>($"api/Productos/GetProductos/{cg_orden}");
 
 
         await InvokeAsync(StateHasChanged);
@@ -386,7 +368,7 @@ else
         tituloBuscador = "Listado de Productos en Stock";
         PopupBuscadorStockVisible = true;
         ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE", "STOCK" };
-        int cg_orden = TipoInsumoCodigo;
+        //int cg_orden = TipoInsumoCodigo;
         Items = await Http.GetFromJsonAsync<ResumenStock[]>("api/ResumenStocks");
 
         await InvokeAsync(StateHasChanged);
@@ -399,7 +381,7 @@ else
         tituloBuscador = $"Listado de Insumo {stock.CG_ART} con Stock";
 
         ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE", "STOCK" };
-        int cg_orden = TipoInsumoCodigo;
+        //int cg_orden = TipoInsumoCodigo;
         Items = await Http.GetFromJsonAsync<ResumenStock[]>($"api/ResumenStock/ByCodigo/{stock.CG_ART.Trim()}");
         await BuscadorEmergenteRS.ShowAsync();
         //await InvokeAsync(StateHasChanged);
@@ -468,7 +450,7 @@ else
         var registroCompleto = await Http
             .GetFromJsonAsync<Pedidos>($"api/Stock/GetByResumenStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
 
-        registroCompleto.REGISTRO = stock.REGISTRO;
+        registroCompleto.REGISTRO = stock?.REGISTRO;
         registroCompleto.TIPOO = RegistroGenerado.TIPOO;
         registroCompleto.ResumenStock = resumenStock;
 
@@ -480,17 +462,25 @@ else
         //var lStock = new List<Stock>();
         //lStock.Add(registroCompleto);
         //DataSource = lStock.ToArray();
-        stock.ResumenStock = resumenStock;
-        stock.PENDIENTEOC = resumenStock.STOCK;
-        stock.CG_DEP = resumenStock.CG_DEP;
-        stock.SERIE = resumenStock.SERIE;
-        stock.DESPACHO = resumenStock.DESPACHO;
-        stock.LOTE = resumenStock.LOTE;
-
         if (bAgregarInsumo)
         {
-            stock.REGISTRO = DataSource.Count * -1;
-            DataSource.Add(stock);
+            registroCompleto.STOCK = (decimal?)1.0000;
+            registroCompleto.PENDIENTEOC = resumenStock.STOCK;
+            registroCompleto.REGISTRO = DataSource.Count * -1;
+            DataSource.Add(registroCompleto);
+            await Grid.RefreshColumns();
+            await Grid.RefreshHeader();
+            Grid.Refresh();
+            bAgregarInsumo = false;
+        }
+        else
+        {
+            stock.ResumenStock = resumenStock;
+            stock.PENDIENTEOC = resumenStock.STOCK;
+            stock.CG_DEP = resumenStock.CG_DEP;
+            stock.SERIE = resumenStock.SERIE;
+            stock.DESPACHO = resumenStock.DESPACHO;
+            stock.LOTE = resumenStock.LOTE;
         }
 
 
