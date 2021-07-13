@@ -39,5 +39,6 @@ namespace SupplyChain
         public int CG_TRANS { get; set; }
         public string DES_TRANS { get; set; }
         public string DIRTRANS { get; set; }
+        public int CG_ORDEN { get; set; }
     }
 }

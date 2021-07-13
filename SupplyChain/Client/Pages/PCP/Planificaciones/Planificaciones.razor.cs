@@ -81,7 +81,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
             //new Estado() {Texto= "CERRADA", Valor = 4},
             new Estado() {Texto= "ANULADA", Valor = 5}
         };
-
+        protected SfDialog refDialogCerradasAnuladas;
         protected override async Task OnInitializedAsync()
         {
             listaPlanificacion = await Http.GetFromJsonAsync<List<Planificacion>>("api/Planificacion/0/1");
@@ -273,6 +273,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         {
             listaCerradasAnuladas = await Http.GetFromJsonAsync<List<Planificacion>>($"api/Planificacion/OrdenesCerradasYAnuladas/{CantidadMostrar}");
             IsVisible3 = true;
+            await refDialogCerradasAnuladas.Show(true);
         }
         public async Task CheckCambio()
         {

@@ -57,7 +57,7 @@ else
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label class="col-form-label">Déposito Salida</label>
-                                        <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP"
+                                        <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP" Readonly="true"
                                                         TValue="int" ID="CG_DEP" DataSource="@depositos">
                                             <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP">
 
@@ -87,12 +87,12 @@ else
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label class="col-form-label">Depacho :</label>
-                                        <SfTextBox @bind-Value="@stock.DESPACHO"></SfTextBox>
+                                        <SfTextBox @bind-Value="@stock.DESPACHO" Readonly="true"></SfTextBox>
                                         <ValidationMessage For="@(() => stock.DESPACHO)"></ValidationMessage>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label class="col-form-label">Lote :</label>
-                                        <SfTextBox @bind-Value="@stock.LOTE"></SfTextBox>
+                                        <SfTextBox @bind-Value="@stock.LOTE" Readonly="true"></SfTextBox>
                                         <ValidationMessage For="@(() => stock.LOTE)"></ValidationMessage>
                                     </div>
 
@@ -109,8 +109,6 @@ else
                             <GridCommandColumns>
                                 <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
                                 <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
-                                <GridCommandColumn Type="CommandButtonType.Save" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-update", CssClass = "e-flat" })"></GridCommandColumn>
-                                <GridCommandColumn Type="CommandButtonType.Cancel" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-cancel-icon", CssClass = "e-flat" })"></GridCommandColumn>
                             </GridCommandColumns>
                         </GridColumn>
                         <GridColumn Field="@nameof(Pedidos.CG_ART)" HeaderText="Cod. Producto" AutoFit="true" Width="130"></GridColumn>

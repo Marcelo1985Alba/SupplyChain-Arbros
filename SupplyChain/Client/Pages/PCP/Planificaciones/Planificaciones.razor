@@ -421,7 +421,7 @@
 </SfDialog>
 
 @*DIALOG PARA ORDENES CERRADAS Y ANULADAS*@
-<SfDialog IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible3" Height="550px" Width="70%">
+<SfDialog @ref="refDialogCerradasAnuladas" Width="250px" ShowCloseIcon="true" Visible="false" CssClass="dialog">
     <DialogTemplates>
         <Header><p>ORDENES CERRADAS Y ANULADAS</p><hr /></Header>
         <Content>
@@ -433,6 +433,7 @@
                 <div class="content-wrapper">
                     <div class="row">
                         <SfGrid @ref="Grid4" DataSource="@listaCerradasAnuladas" EnablePersistence="false"
+                                AllowFiltering="true" Width="100%"
                                 ID="Despiece" GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true"
                                 RowHeight="20" Height="320">
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
@@ -675,6 +676,10 @@
         background-color: lightgrey;
         border-color: lightgrey;
         color: blue;
+    }
+
+    .dialog{
+        min-height:635px;
     }
 </style>
 @code {

@@ -259,14 +259,13 @@
     <!-- Row -->
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header bg-info">
-                    <h4 class="m-b-0 text-white">Operaciones de Stock</h4>
+            <div class="">
+                <div class="">
                 </div>
-                <div class="card-body">
+                <div class="">
                     <EditForm Model="@StockEncabezado" OnValidSubmit="@(async () => await AbrirConfirmacionGuardarVale())">
                         @*<DataAnnotationsValidator />*@
-                        <div class="form-body">
+                        <div class="">
 
                             <div class="form-row btn-group">
                                 <div class="col-3">
@@ -383,7 +382,9 @@
                                     </div>
                                 }
 
-                                @if (StockEncabezado.TIPOO == 10 && StockEncabezado.ModeloOrdenFabricacionEncabezado != null)
+                                @if (StockEncabezado.TIPOO == 10 &&
+                                    StockEncabezado.ModeloOrdenFabricacionEncabezado != null
+                                    && StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ORDEN == 1 )
                                 {
                                     <div class="form-group col-lg-3 col-md-4 col-sm-12">
                                         <label class="col-form-label">Producto:</label>
@@ -746,36 +747,52 @@
     async Task CargarVale()
     {
         //Cargando Datos de Cabecera
+        SpinnerVisible = true;
         StockEncabezado.VALE = StockEncabezado.Items[0].VALE;
         StockEncabezado.FE_MOV = StockEncabezado.Items[0].FE_MOV;
         //depos: ver cual campo es ingreso y salida: tal vez depende segun el tipo de operacion
         //StockEncabezado.CG_DEP = StockEncabezado.Items[0].CG_DEP;
         //selectedDepositoIngreso = Depositos.Where(d => d.CG_DEP == ItemsVale[0].CG_DEP).FirstOrDefault();
         StockEncabezado.CG_ORDF = (int)StockEncabezado.Items[0].CG_ORDF;
-        StockEncabezado.OCOMPRA = StockEncabezado.Items[0].OCOMPRA;
         StockEncabezado.PEDIDO = (int)StockEncabezado.Items[0].PEDIDO;
-        Cg_CLI_Cg_PROVE = StockEncabezado.Items[0].CG_CLI == 0 ? StockEncabezado.Items[0].CG_PROVE : StockEncabezado.Items[0].CG_CLI;
-        DescripcionPro = StockEncabezado.Items[0].CG_CLI == 0 ? StockEncabezado.Items[0].Proveedor.DES_PROVE.Trim() : "Cliente";
-        StockEncabezado.REMITO = StockEncabezado.Items[0].REMITO;
+
+        StockEncabezado.OCOMPRA = StockEncabezado.Items[0].OCOMPRA;
+
+        if (StockEncabezado.TIPOO == 5)
+        {
+            Cg_CLI_Cg_PROVE = StockEncabezado.Items[0].CG_CLI == 0 ? StockEncabezado.Items[0].CG_PROVE : StockEncabezado.Items[0].CG_CLI;
+            DescripcionPro = StockEncabezado.Items[0].CG_CLI == 0 ? StockEncabezado.Items[0].Proveedor.DES_PROVE.Trim() : "Cliente";
+            StockEncabezado.REMITO = StockEncabezado.Items[0].REMITO;
+
+            //Cargando datos para controlar si exige lote etc: para controlar validaciones en la edicion.
+            await StockEncabezado.Items.ForEachAsync(async i =>
+            {
+                var cg_prod = i.CG_ART;
+                var prod = await Http.GetFromJsonAsync<Producto>($"api/Prod/{cg_prod}");
+                i.EXIGEDESPACHO = prod.EXIGEDESPACHO;
+                i.EXIGELOTE = prod.EXIGELOTE;
+                i.EXIGESERIE = prod.EXIGESERIE;
+            });
+        }
+
+
+        if (StockEncabezado.TIPOO == 10)
+        {
+            await StockEncabezado.Items.ForEachAsync(async i =>
+            {
+                i.STOCK = Math.Abs((decimal)i.STOCK);
+
+            });
+        }
+
+
         PermiteAgregarItem = false;
         PermiteEditarItem = true;
         PermiteEliminarItem = true;
 
         abrioVale = true;
-
-        //Cargando datos para controlar si exige lote etc: para controlar validaciones en la edicion.
-
-        await StockEncabezado.Items.ForEachAsync(async i =>
-        {
-            var cg_prod = i.CG_ART;
-            var prod = await Http.GetFromJsonAsync<Producto>($"api/Prod/{cg_prod}");
-            i.EXIGEDESPACHO = prod.EXIGEDESPACHO;
-            i.EXIGELOTE = prod.EXIGELOTE;
-            i.EXIGESERIE = prod.EXIGESERIE;
-        });
-
-
-        await InvokeAsync(StateHasChanged);
+        SpinnerVisible = false;
+        //await InvokeAsync(StateHasChanged);
     }
 
     #region "BUSCADOR EMERGENTE"
@@ -1038,15 +1055,6 @@
         {
             await CargarVale();
         }
-
-        //if (tipoEntidad == "Producto")
-        //{
-        //    selectedProducto = (Producto)obj;
-        //    Codigoi = selectedProducto.CG_PROD;
-        //    DescripcionPro = selectedProducto.DES_PROD;
-        //}
-
-        //await InvokeAsync(StateHasChanged);
     }
 
     protected async Task AbrirVale()
@@ -1078,7 +1086,7 @@
         {
             ItemsABuscar = new List<Pedidos>().ToArray();
         }
-        await InvokeAsync(StateHasChanged);
+        //await InvokeAsync(StateHasChanged);
     }
 
     #endregion
@@ -1112,7 +1120,7 @@
         });
 
 
-        
+
         if (!abrioVale)
         {
             await Http.GetFromJsonAsync<Genera>($"api/Genera/Libera/VALE");
@@ -1139,6 +1147,12 @@
 
 
         //TODO: controlar el TIPOO al guardar para setar cada campo
+        if (stock.TIPOO == 10)
+        {
+            stock.AVISO = "ENTREGA A ORDEN DE FABRICACION";
+        }
+
+
         if (stock.TIPOO == 5)
         {
 

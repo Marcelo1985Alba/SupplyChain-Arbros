@@ -28,7 +28,7 @@ namespace SupplyChain
         }
 
         [HttpGet]
-        public IEnumerable<Pedidos> Get(string PEDIDO)
+        public async Task<IEnumerable<Pedidos>> Get(string PEDIDO)
         {
             string xSQL = string.Format("" +
                 "SELECT Pedidos.* " +
@@ -39,7 +39,7 @@ namespace SupplyChain
                 "FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
                 "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) " +
                 "where Pedcli.PEDIDO NOT IN(select PEDIDO from Pedidos where TIPOO = 1) AND Programa.CG_ESTADO = 3  AND Pedcli.CANTPED > 0 AND Pedidos.TIPOO != 28");
-            return _context.Pedidos.FromSqlRaw(xSQL).ToList<Pedidos>();
+            return await _context.Pedidos.FromSqlRaw(xSQL).ToListAsync();
         }
 
         // GET: api/Pedidos/BuscarPorPedido/{Pedido}
@@ -196,7 +196,6 @@ namespace SupplyChain
         [HttpPost]
         public async Task<ActionResult<Pedidos>> PostStock([FromBody] Pedidos stock)
         {
-
             try
             {
                 stock.CG_CIA = 1;
@@ -207,6 +206,8 @@ namespace SupplyChain
                 stock.REGISTRO = (int?)genera.VALOR1;
                 stock.FE_REG = DateTime.Now;
                 stock.USUARIO = "USER";
+
+                
 
                 if (stock.TIPOO == 9 || stock.TIPOO == 10)
                     stock.STOCK = -stock.STOCK;
@@ -220,6 +221,7 @@ namespace SupplyChain
                 await _context.SaveChangesAsync();
 
                 await CerrarOC(stock);
+                await FirmeOF(stock);
                 await generaController.LiberaByCampo("REGSTOCK");
             }
             catch (DbUpdateException ex)
@@ -313,6 +315,20 @@ namespace SupplyChain
                     _context.Entry(compra).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                 }
+            }
+            
+        }
+        private async Task FirmeOF(Pedidos stock)
+        {
+            if (stock.TIPOO == 10)
+            {
+                var programa = await _context.Programa
+                        .Where(c => c.CG_ORDF == stock.CG_ORDF).FirstOrDefaultAsync();
+
+                programa.CG_ESTADO = 1;
+                programa.CG_ESTADOCARGA = 2;
+                _context.Entry(programa).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
             }
             
         }

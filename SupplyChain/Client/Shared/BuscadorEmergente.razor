@@ -1,8 +1,9 @@
-﻿@typeparam TItem
+﻿@using Syncfusion.Blazor.Navigations 
+@typeparam TItem
 
 <SfSpinner @bind-Visible="@visibliSpinner" Size="80" Target=".dialogContent" Label="Cargando..." Type="SpinnerType.Bootstrap"/>
 
-<SfDialog Height="@Height" Width="90%" Target="#target" ShowCloseIcon="true" @bind-Visible="@Visible" IsModal="true" EnableResize="false">
+<SfDialog Height="@Height" Width="95%" Target="#target" ShowCloseIcon="true" @bind-Visible="@Visible" IsModal="true" EnableResize="false">
     <DialogEvents Closed="OnAfterDialogClosed"></DialogEvents>
     <DialogTemplates>
         
@@ -24,68 +25,76 @@
                     }
                     else
                     {
+                        <div class="col-lg-12 control-section">
+                            <div class="content-wrapper">
+                                <div class="row">
+                                    <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="false" AllowFiltering="true" TValue="TItem"
+                                            AllowResizing="true" GridLines="GridLine.Both" RowHeight="20" Height="420" AllowReordering="true"
+                                            AllowSelection="true" AllowSorting="true" AllowTextWrap="true" EnableHover="true"
+                                            ShowColumnMenu="true" EnableVirtualization="true" Toolbar="@Toolbaritems">
+                                        @*<GridFilterSettings ShowFilterBarStatus="true" Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"
+            Operators="@(new Operator[] { Operator.Contains })"
+            Mode="FilterBarMode.Immediate"></GridFilterSettings>*@
+                                        @*<GridPageSettings PageCount="20" PageSize="20" PageSizes="false"></GridPageSettings>*@
+                                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                                        <GridEvents RowSelected="GetSelectedRecords" OnRecordDoubleClick="EnviarObjetoSeleccionado" TValue="TItem"></GridEvents>
+                                        <GridColumns>
+                                            @{
+                                                object itemfinal = DataSource.FirstOrDefault();
+                                                System.Reflection.PropertyInfo[] propiedades = itemfinal.GetType().GetProperties();
 
-                        <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="true" AllowFiltering="true" TValue="TItem"
-                                AllowResizing="true" GridLines="GridLine.Both" RowHeight="20" Height="320" AllowReordering="true"
-                                AllowSelection="true" AllowSorting="true" AllowTextWrap="true" EnableHover="true"
-                                ShowColumnMenu="true">
-                            @*<GridFilterSettings ShowFilterBarStatus="true" Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"  
-                                                Operators="@(new Operator[] { Operator.Contains })"
-                                                Mode="FilterBarMode.Immediate"></GridFilterSettings>*@
-                            <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
-                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-                            <GridEvents RowSelected="GetSelectedRecords"  OnRecordDoubleClick="EnviarObjetoSeleccionado" TValue="TItem"></GridEvents>
-                            <GridColumns>
-                                @{
-                                    object itemfinal = DataSource.FirstOrDefault();
-                                    System.Reflection.PropertyInfo[] propiedades = itemfinal.GetType().GetProperties();
-
-                                    foreach (string col in Columnas)
-                                    {
-                                        if (propiedades.Any(p => p.Name.ToUpper() == col.ToUpper()))
-                                        {
-                                            var propiedad = propiedades.Where(p => p.Name == col.ToUpper()).FirstOrDefault();
-
-                                            //obtener el atributo para mostrar el nombre de columna
-                                            string nameColumn = propiedad.Name;
-                                            var tipoDate = propiedad.PropertyType == typeof(DateTime) ? propiedad.GetValue(itemfinal, null) : null;
-                                            var attr = propiedad.GetCustomAttributesData().FirstOrDefault(a => a.AttributeType.Name.Equals("ColumnaGridViewAtributo"));
-                                            nameColumn = attr?.NamedArguments.FirstOrDefault(a => a.MemberName.Equals("Name")).TypedValue.Value.ToString();
-                                            if (tipoDate != null)
-                                            {
-                                                <GridColumn Field="@propiedad.Name" HeaderText="@nameColumn" Type="ColumnType.Date"
-                                                            Format="dd/MM/yyyy" Width="120px"
-                                                            FilterSettings="@(new FilterSettings{ Operator = Syncfusion.Blazor.Operator.Contains })"> 
-                                                </GridColumn>
-                                            }
-                                            else
-                                            {
-
-                                                if (col.ToUpper() == "DES_ART")
+                                                foreach (string col in Columnas)
                                                 {
-                                                    <GridColumn Field="@propiedad.Name" Width="220px" 
-                                                                FilterSettings="@(new FilterSettings{ Operator = Syncfusion.Blazor.Operator.Contains })"></GridColumn>
-                                                }
-                                                else
-                                                {
+                                                    if (propiedades.Any(p => p.Name.ToUpper() == col.ToUpper()))
+                                                    {
+                                                        var propiedad = propiedades.Where(p => p.Name == col.ToUpper()).FirstOrDefault();
 
-                                                    <GridColumn Field="@propiedad.Name" Width="150px"
-                                                                FilterSettings="@(new FilterSettings{ Operator = Syncfusion.Blazor.Operator.Contains })"></GridColumn>
+                                                        //obtener el atributo para mostrar el nombre de columna
+                                                        string nameColumn = propiedad.Name;
+                                                        var tipoDate = propiedad.PropertyType == typeof(DateTime) ? propiedad.GetValue(itemfinal, null) : null;
+                                                        var attr = propiedad.GetCustomAttributesData().FirstOrDefault(a => a.AttributeType.Name.Equals("ColumnaGridViewAtributo"));
+                                                        nameColumn = attr?.NamedArguments.FirstOrDefault(a => a.MemberName.Equals("Name")).TypedValue.Value.ToString();
+                                                        if (tipoDate != null)
+                                                        {
+                                                            <GridColumn Field="@propiedad.Name" HeaderText="@nameColumn" Type="ColumnType.Date"
+                                                                        Format="dd/MM/yyyy" Width="120px"
+                                                                        FilterSettings="@(new FilterSettings { Operator = Syncfusion.Blazor.Operator.Contains })">
+                                                            </GridColumn>
+                                                        }
+                                                        else
+                                                        {
+
+                                                            if (col.ToUpper() == "DES_ART")
+                                                            {
+                                                                <GridColumn Field="@propiedad.Name" Width="220px"
+                                                                            FilterSettings="@(new FilterSettings { Operator = Syncfusion.Blazor.Operator.Contains })"></GridColumn>
+                                                            }
+                                                            else
+                                                            {
+
+                                                                <GridColumn Field="@propiedad.Name" Width="150px"
+                                                                            FilterSettings="@(new FilterSettings { Operator = Syncfusion.Blazor.Operator.Contains })"></GridColumn>
+                                                            }
+                                                        }
+
+                                                    }
                                                 }
                                             }
 
-                                        }
-                                    }
-                                }
+                                        </GridColumns>
+                                    </SfGrid>
+                                </div>
+                            </div>
+                        </div>
 
-                            </GridColumns>
-                        </SfGrid>
+                                    
+
 
 
                     }
                 }
             </div>
-        </Content>
+</Content>
         <FooterTemplate>
             @*<SfTextBox ID="inVal" @bind-Value="@TextBoxValue" @ref="TextboxObj" Type="InputType.Text" Placeholder="Enter your message here!" />*@
             <button id="sendButton" @onclick="@EnviarObjetoSeleccionado" class="e-control e-btn e-primary" data-ripple="true">Aceptar</button>
@@ -97,6 +106,12 @@
 @code {
     SfGrid<TItem> Grid;
     protected bool visibliSpinner = false;
+    protected List<Object> Toolbaritems = new List<Object>(){
+            "Search",
+            new ItemModel(){ Type = ItemType.Separator},
+            new ItemModel(){ Type = ItemType.Separator},
+            "ExcelExport"
+        };
     [Parameter] public string Titulo { get; set; } = null!;
     [Parameter] public string Height { get; set; } = null!;
     [Parameter] public bool Visible { get; set; } = false;
