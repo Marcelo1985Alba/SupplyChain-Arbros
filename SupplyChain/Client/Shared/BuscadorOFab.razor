@@ -21,7 +21,7 @@
 
 <BuscadorEmergente @ref="Buscador" TItem="Programa" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" 
                    Titulo="@TituloBuscador"
-                   onObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+                   OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
 
 @code {
     BuscadorEmergente<Programa> Buscador;

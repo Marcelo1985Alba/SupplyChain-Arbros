@@ -16,13 +16,13 @@ namespace SupplyChain.Shared.HelpersAtributo
             var stock = (Pedidos)validationContext.ObjectInstance;
 
             decimal? cant = (decimal?)value;
-            if (stock.TIPOO == 10 && stock.PENDIENTEOC == 0)//entrega a og
+            if (stock.TIPOO == 10 && stock.ResumenStock?.STOCK == 0)//entrega a og
             {
                 return new ValidationResult($"{stock.CG_ART.Trim()}: Insumo sin stock.");
             }
 
             //PendienteOC: tambien se utiliza para obtener el stock
-            return ((stock.TIPOO == 6 || stock.TIPOO == 10) && stock.STOCK > stock.PENDIENTEOC)
+            return ((stock.TIPOO == 6 || stock.TIPOO == 10) && stock.STOCK > stock.ResumenStock?.STOCK)
                 ? new ValidationResult($"{stock.CG_ART.Trim()}:La cantidad ingresada no puede ser mayor a la del stock")
                 : ValidationResult.Success;
 

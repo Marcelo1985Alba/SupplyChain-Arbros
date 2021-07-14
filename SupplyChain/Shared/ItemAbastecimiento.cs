@@ -1,4 +1,6 @@
-﻿namespace SupplyChain.Shared.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace SupplyChain.Shared.Models
 {
 
 	public class ItemAbastecimiento
@@ -20,5 +22,8 @@
 		//public int PEDIDO {get;set;}
 		public string OBSERITEM {get;set;}
         public string AVISO { get; set; }
+
+		[NotMapped]
+		public ResumenStock ResumenStock { get; set; } = new ResumenStock();
     }
 }

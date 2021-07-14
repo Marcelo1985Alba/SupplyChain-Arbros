@@ -38,8 +38,8 @@ namespace SupplyChain.Server.Controllers
         }
 
         // GET:   
-        [HttpGet("GetValesByTipo/{tipoo}")]
-        public async Task<ActionResult<IEnumerable<Pedidos>>> GetValesByTipo(int tipoo)
+        [HttpGet("GetValesByTipo/{tipoo}/{cantRegistros:int}")]
+        public async Task<ActionResult<IEnumerable<Pedidos>>> GetValesByTipo(int tipoo, int cantRegistros)
         {
             List<Pedidos> lStock = new List<Pedidos>();
             if (_context.Pedidos.Any())
@@ -48,6 +48,7 @@ namespace SupplyChain.Server.Controllers
                     //.Include(x=> x.Proveedor)
                     .Where(p => p.TIPOO == tipoo && p.VOUCHER == 0 && p.CG_CIA == cg_cia_usuario)
                     .OrderByDescending(s=> s.VALE)
+                    .Take(cantRegistros)
                     .ToListAsync();
             }
             if (lStock == null)

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Shared.Models;
+using SupplyChain.Shared.Prod;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -49,12 +50,12 @@ namespace SupplyChain.Server.Controllers
         }
 
         // GET: api/ResumenStocksPositivo/ByCodigo/
-        [HttpGet("ByCodigo/{cg_art}")]
-        public async Task<ActionResult<IEnumerable<ResumenStock>>> ByCodigo(string cg_art)
+        [HttpGet("ByCodigo")]
+        public async Task<ActionResult<IEnumerable<ResumenStock>>> ByCodigo([FromQuery]FilterProd filter)
         {
             try
             {
-                return await _context.ResumenStock.Where(rs => rs.STOCK > 0 && rs.CG_ART.Trim() == cg_art.Trim()).ToListAsync();
+                return await _context.ResumenStock.Where(rs => rs.STOCK > 0 && rs.CG_ART.Trim() == filter.Codigo.Trim()).ToListAsync();
             }
             catch (Exception ex)
             {

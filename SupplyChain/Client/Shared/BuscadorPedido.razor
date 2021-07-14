@@ -2,35 +2,24 @@
 @using Syncfusion.Blazor.Buttons
 <div class="form-row">
     <div class="col-10">
+        <label class="col-form-label">Vale</label>
         <SfNumericTextBox @bind-Value="@Valor" ShowClearButton="true" TValue="int" Format="n0"
                           Decimals="0" ShowSpinButton="@MostrarSpin" Readonly="@EsSoloLectura"></SfNumericTextBox>
-        @*@if (!EsSoloLectura)
-            {
-                <DxSpinEdit @bind-Value="@Valor" ShowSpinButtons="@MostrarSpin"></DxSpinEdit>
-            }
-            else
-            {
-                <DxSpinEdit Value="0" ShowSpinButtons="@MostrarSpin" ReadOnly="true"></DxSpinEdit>
-            }*@
-
     </div>
-    <div class="col-2">
-        @*<DxButton Text="..." RenderStyle="@ButtonRenderStyle.Danger" IconCssClass="fas fa-search"
-            Visible="@MostraBotonBusqueda"
-            Enabled="@HabilitaBotonBusqueda" Click="@(async (e)=> await BuscarPedidos())"
-            RenderStyleMode="@ButtonRenderStyleMode.Outline" />*@
+    <div class="col-2 mt-4">
 
         @if (MostraBotonBusqueda)
         {
-            <SfButton OnClick="@(async (e)=> await BuscarPedidos())" CssClass="btn btn-outline" IsPrimary="true"
+            <SfButton OnClick="@(async (e)=> await BuscarPedidos())" CssClass="e-round btn btn-info btm-sm"
+                      IsPrimary="false" HtmlAttributes="@HtmlAttr"
                       IconCss="fa fa-search" Disabled="@HabilitaBotonBusqueda"></SfButton>
         }
     </div>
 
 </div>
 
-<BuscadorEmergente TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" Titulo="@TituloBuscador"
-                   Visible="@PopupBuscadorVisible" onObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+<BuscadorEmergente @ref="Buscador" TItem="Pedidos" DataSource="@ItemsABuscar" Columnas="@ColumnasBuscador" 
+                   Titulo="@TituloBuscador" Height="85%" OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
 
 @code {
 
@@ -39,22 +28,44 @@
     [Parameter] public bool MostraBotonBusqueda { get; set; } = false;
     [Parameter] public bool HabilitaBotonBusqueda { get; set; } = true;
     [Parameter] public bool MostrarSpin { get; set; } = true;
-    [Parameter] public EventCallback<Compra> OnOCSeleccionada { get; set; }
-    private Compra[] ItemsABuscar = null;
-    private string[] ColumnasBuscador = new string[] { "NUMERO", "DES_PROVE" };
-    private string TituloBuscador = "Listado de Pedidos";
+    [Parameter] public EventCallback<Pedidos> OnOCSeleccionada { get; set; }
+    [Parameter] public string[] ColumnasBuscador { get; set; }
+    [Parameter] public string TituloBuscador { get; set; }
+    [Parameter] public int TipoOperacion { get; set; }
+    [Parameter] public Dictionary<string, object> HtmlAttr { get; set; } = new Dictionary<string, object>();
+    private Pedidos[] ItemsABuscar = null;
     private bool PopupBuscadorVisible = false;
+    private int CantRegistros = 0;
+    private BuscadorEmergente<Pedidos> Buscador;
+
     private async Task BuscarPedidos()
     {
-        PopupBuscadorVisible = true;
-        ItemsABuscar = await Http.GetFromJsonAsync<Compra[]>("api/Compras");
+        CantRegistros += 100;
+        SetTituloBuscador();
+        ColumnasBuscador = new string[] { "VALE", "FE_MOV", "CG_ART", "DES_ART", "STOCK" };
+        await Buscador.ShowAsync();
+        ItemsABuscar = await Http.GetFromJsonAsync<Pedidos[]>($"api/Stock/GetValesByTipo/{TipoOperacion}/{CantRegistros}");
         await InvokeAsync(StateHasChanged);
     }
 
-    public async Task EnviarObjetoSeleccionado(Compra compra)
+
+    private void SetTituloBuscador()
     {
-        var oc = (Compra)compra;
-        PopupBuscadorVisible = false;
+        TituloBuscador = "Listado de Vales: ";
+        if (TipoOperacion == 5)
+        {
+            TituloBuscador += "RECEPCION DE INSUMOS DE PROVEEDOR";
+        }
+        if (TipoOperacion == 10)
+        {
+            TituloBuscador += "ENTREGA A ORDEN DE FABRICACION";
+        }
+    }
+
+    public async Task EnviarObjetoSeleccionado(Pedidos pedido)
+    {
+        var oc = (Pedidos)pedido;
+        await Buscador.HideAsync();
         await OnOCSeleccionada.InvokeAsync(oc);
     }
 

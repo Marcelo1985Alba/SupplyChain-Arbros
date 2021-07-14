@@ -55,7 +55,7 @@ else
                                                   CssClass="e-round"
                                                   Content="" IconCss="fa fa-search" />
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-2">
                                         <label class="col-form-label">Déposito Salida</label>
                                         <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP" Readonly="true"
                                                         TValue="int" ID="CG_DEP" DataSource="@depositos">
@@ -64,9 +64,13 @@ else
                                             </DropDownListFieldSettings>
                                         </SfDropDownList>
                                     </div>
-                                    <div class="form-group col-md-1">
-                                        <label class="col-form-label">Stock :</label>
+                                    <div class="form-group col-md-2">
+                                        <label class="col-form-label">Stock Con Entrega:</label>
                                         <SfNumericTextBox ShowSpinButton="false" @bind-Value="@stock.PENDIENTEOC" Readonly="true"/>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label class="col-form-label">Stock:</label>
+                                        <SfNumericTextBox ShowSpinButton="false" @bind-Value="@stock.ResumenStock.STOCK" Readonly="true"/>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -149,7 +153,7 @@ else
 
     <BuscadorEmergente TItem="Pedidos" @ref="BuscadorProducto" Titulo=@tituloBuscador
                        DataSource="@DataSource" Columnas="@(new string[] { "CG_ART", "DES_ART"})"
-                       onObjetoSeleccionado="OnSelectedItem" />
+                       OnObjetoSeleccionado="OnSelectedItem" />
 
 
 
@@ -367,7 +371,7 @@ else
         PopupBuscadorStockVisible = true;
         ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE", "STOCK" };
         //int cg_orden = TipoInsumoCodigo;
-        Items = await Http.GetFromJsonAsync<ResumenStock[]>("api/ResumenStocks");
+        Items = await Http.GetFromJsonAsync<ResumenStock[]>("api/ResumenStock");
 
         await InvokeAsync(StateHasChanged);
     }
@@ -380,7 +384,7 @@ else
 
         ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE", "STOCK" };
         //int cg_orden = TipoInsumoCodigo;
-        Items = await Http.GetFromJsonAsync<ResumenStock[]>($"api/ResumenStock/ByCodigo/{stock.CG_ART.Trim()}");
+        Items = await Http.GetFromJsonAsync<ResumenStock[]>($"api/ResumenStock/ByCodigo?Codigo={stock.CG_ART.Trim()}&Descripcion=");
         await BuscadorEmergenteRS.ShowAsync();
         //await InvokeAsync(StateHasChanged);
     }
@@ -453,13 +457,6 @@ else
         registroCompleto.ResumenStock = resumenStock;
 
 
-        //var nuevoItem = (new Stock[] { EditContext.DataItem });
-        //lStock = (new Stock[] { EditContext.DataItem }).Concat(lStock);
-        //DataSource = nuevoItem.Concat(DataSource).ToArray();
-
-        //var lStock = new List<Stock>();
-        //lStock.Add(registroCompleto);
-        //DataSource = lStock.ToArray();
         if (bAgregarInsumo)
         {
             registroCompleto.STOCK = (decimal?)1.0000;
@@ -474,7 +471,7 @@ else
         else
         {
             stock.ResumenStock = resumenStock;
-            stock.PENDIENTEOC = resumenStock.STOCK;
+            stock.PENDIENTEOC = resumenStock.STOCK - stock.STOCK;
             stock.CG_DEP = resumenStock.CG_DEP;
             stock.SERIE = resumenStock.SERIE;
             stock.DESPACHO = resumenStock.DESPACHO;
@@ -489,8 +486,7 @@ else
     public async Task QueryCellInfoHandler(QueryCellInfoEventArgs<Pedidos> args)
     {
         args.Data.STOCKA = Math.Round((decimal)(args.Data.STOCK / args.Data.CG_DEN), 4);
-        //InvokeAsync(StateHasChanged);
-        if (args.Data.PENDIENTEOC <= 0)
+        if (args.Data.ResumenStock?.STOCK < args.Data.STOCK)
         {
             args.Cell.AddClass(new string[] { "rojo" });
         }

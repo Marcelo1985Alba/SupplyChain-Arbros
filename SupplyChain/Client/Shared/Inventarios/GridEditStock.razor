@@ -212,13 +212,12 @@ else
     </div>
 
 
-    @*<BuscadorEmergente TItem="ResumenStock" Titulo=@tituloBuscador Visible="@PopupBuscadorStockVisible"
-                       DataSource="@Items" Columnas="@ColumnasBuscador"
-        onObjetoSeleccionado="@(async(o)=> await onResumenStockSelected(o))" />*@
+
 
 
     <BuscadorEmergente TItem="Pedidos" @ref="BuscadorProducto" Titulo=@tituloBuscador
-        DataSource="@DataSource" Columnas="@(new string[] { "CG_ART", "DES_ART"})" onObjetoSeleccionado="OnSelectedItem"  />
+        DataSource="@DataSource" Columnas="@(new string[] { "CG_ART", "DES_ART"})" Height="85%"
+                       OnObjetoSeleccionado="@(async(p)=> await OnSelectedItem(p))"  />
 
  
         <ConfirmacionDialog @ref="@ConfirmacionDialog" OnConfirm="@(async()=> await ConfirmacionCopy())">

@@ -1,6 +1,6 @@
 ﻿@inject HttpClient Http
 
-<SfDialog Height="75%" Width="90%" Target="#target" ShowCloseIcon="true" @bind-Visible="Visible" IsModal="true">
+<SfDialog Height="85%" Width="90%" Target="#target" ShowCloseIcon="true" @bind-Visible="Visible" IsModal="true">
     <DialogTemplates>
         <Header>
             @Titulo
@@ -20,7 +20,7 @@
                     else
                     {
                         <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="true" AllowFiltering="true" TValue="ResumenStock"
-                                AllowResizing="true" GridLines="GridLine.Both"
+                                AllowResizing="true" GridLines="GridLine.Both" Height="320" Width="100%"
                                 AllowSelection="true" AllowSorting="true" AllowTextWrap="true" EnableHover="true"
                                 ShowColumnMenu="true">
                             <GridPageSettings PageSizes="@(new int[] { 5,10,20 })" PageSize="5" PageCount="5"></GridPageSettings>
