@@ -242,7 +242,7 @@ namespace SupplyChain
 
             if (stock.TIPOO == 6) //devol a prove: cargo los datos de resumen stock para el item para luego verificar si tiene stock cuando se vuelva a editar
             {
-                stock.ResumenStock = await _context.ResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
+                stock.ResumenStock = await _context.vResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
                 && r.CG_ART.ToUpper() == stock.CG_ART.ToUpper()
                 && r.LOTE.ToUpper() == stock.LOTE.ToUpper()
                 && r.DESPACHO.ToUpper() == stock.DESPACHO.ToUpper()
@@ -278,7 +278,7 @@ namespace SupplyChain
 
                 if (stock.TIPOO == 6) //devol a prove: cargo los datos de resumen stock para el item para luego verificar si tiene stock cuando se vuelva a editar
                 {
-                    stock.ResumenStock = await _context.ResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
+                    stock.ResumenStock = await _context.vResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
                     && r.CG_ART.ToUpper() == stock.CG_ART.ToUpper()
                     && r.LOTE.ToUpper() == stock.LOTE.ToUpper()
                     && r.DESPACHO.ToUpper() == stock.DESPACHO.ToUpper()
@@ -341,6 +341,9 @@ namespace SupplyChain
             {
                 return BadRequest("Registro Incorrecto");
             }
+
+            if (stock.TIPOO == 9 || stock.TIPOO == 10)
+                stock.STOCK = -stock.STOCK;
 
             _context.Entry(stock).State = EntityState.Modified;
 

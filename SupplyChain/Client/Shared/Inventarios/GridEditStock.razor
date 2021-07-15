@@ -199,9 +199,7 @@ else
                         <GridColumn Field="@nameof(Pedidos.STOCKA)" HeaderText="Cant Comer" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.UNIDA)" HeaderText="Unid Comer" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.IMPORTE1)" HeaderText="Precio Unit." AutoFit="true"></GridColumn>
-                        @*<GridColumn Field="@nameof(Pedidos.IMPORTE2)" HeaderText="Importe2" AutoFit="true"></GridColumn>
-        <GridColumn Field="@nameof(Pedidos.IMPORTE3)" HeaderText="Importe3" AutoFit="true"></GridColumn>
-        <GridColumn Field="@nameof(Pedidos.IMPORTE4)" HeaderText="Total" AutoFit="true"></GridColumn>*@
+
 
 
                         <GridColumn Field="@nameof(Pedidos.REGISTRO)" IsPrimaryKey="true" Visible="false"></GridColumn>
@@ -467,7 +465,7 @@ else
                 var serie = pedido.SERIE == null ? "" : pedido.SERIE;
 
                 var resumen = await Http
-                    .GetFromJsonAsync<ResumenStock>($"api/ResumenStock/GetByStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
+                    .GetFromJsonAsync<vResumenStock>($"api/ResumenStock/GetByStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
 
 
                 pedido.ResumenStock = resumen;
@@ -619,12 +617,12 @@ else
     }
 
 
-    private async Task onResumenStockSelected(ResumenStock obj)
+    private async Task onResumenStockSelected(vResumenStock obj)
     {
 
         PopupBuscadorStockVisible = false;
 
-        var resumenStock = (ResumenStock)obj;
+        var resumenStock = (vResumenStock)obj;
 
         //buscar registro mas reciente con las caracteristicas de resumen stock
         var cg_art = resumenStock.CG_ART;

@@ -2,21 +2,21 @@
 @using Syncfusion.Blazor.Buttons
 <div class="form-row">
     <div class="col-10">
-        <label class="col-form-label">Vale</label>
         <SfNumericTextBox @bind-Value="@Valor" ShowClearButton="true" TValue="int" Format="n0"
                           Decimals="0" ShowSpinButton="@MostrarSpin" Readonly="@EsSoloLectura"></SfNumericTextBox>
     </div>
-    <div class="col-2 mt-4">
+    @if (MostraBotonBusqueda)
+    {
+        <div class="col-2 mb-1">
 
-        @if (MostraBotonBusqueda)
-        {
-            <SfButton OnClick="@(async (e)=> await BuscarPedidos())" CssClass="e-round btn btn-info btm-sm"
+
+            <SfButton OnClick="@(async (e)=> await BuscarPedidos())" CssClass="e-smal e-round e-info"
                       IsPrimary="false" HtmlAttributes="@HtmlAttr"
                       IconCss="fa fa-search" Disabled="@HabilitaBotonBusqueda"></SfButton>
-        }
+            
+        </div>
+    }
     </div>
-
-</div>
 
 <BuscadorEmergente @ref="Buscador" TItem="Pedidos" DataSource="@ItemsABuscar" Columnas="@ColumnasBuscador" 
                    Titulo="@TituloBuscador" Height="85%" OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />

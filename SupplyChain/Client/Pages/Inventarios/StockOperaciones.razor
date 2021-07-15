@@ -72,7 +72,7 @@
                                                 OnSelectedTireChanged="@(async(t)=>await SelectedTireChanged(t))" />
                                 </div>
                                 <div class="form-group col-lg-4 col-md-3 col-sm-6 col-11">
-
+                                    <label class="col-form-label">Vale</label>
                                     <BuscadorPedido Valor="@StockEncabezado.VALE" EsSoloLectura="true"
                                                     MostrarSpin="false" MostraBotonBusqueda="true"
                                                     HtmlAttr="@HtmlAttribute"
@@ -130,11 +130,11 @@
                                 }
 
 
-                                @if (StockEncabezado.TIPOO == 1)
+                                @if (StockEncabezado.TIPOO == 1 || StockEncabezado.TIPOO == 10)
                                 {
                                     <div class="form-group col-lg-3 col-md-4 col-sm-6">
                                         <label class="col-form-label">Pedido</label>
-                                        <BuscadorPedido Valor="@StockEncabezado.PEDIDO" MostrarSpin="false" EsSoloLectura="true"
+                                        <BuscadorPedido Valor="@StockEncabezado.ModeloOrdenFabricacionEncabezado.PEDIDO" MostrarSpin="false" EsSoloLectura="true"
                                                         HabilitaBotonBusqueda="false" MostraBotonBusqueda="false" />
                                     </div>
                                 }
@@ -265,7 +265,7 @@
                             </CascadingValue>
                             <ValidationSummary />
 
-                            <SfButton Content="Guardar" IsPrimary="true" IconCss="fa fa-save" CssClass="btn btn-block btn-sm-info"
+                            <SfButton Content="Guardar" IsPrimary="false" IconCss="fa fa-save" CssClass="btn btn-block e-info"
                                       Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"></SfButton>
                         </div>
                         

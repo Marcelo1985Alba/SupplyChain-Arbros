@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using SupplyChain.Shared.PCP;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SupplyChain.Shared.Models
 {
@@ -24,6 +25,6 @@ namespace SupplyChain.Shared.Models
         public string AVISO { get; set; }
 
 		[NotMapped]
-		public ResumenStock ResumenStock { get; set; } = new ResumenStock();
+		public vResumenStock ResumenStock { get; set; } = new vResumenStock();
     }
 }

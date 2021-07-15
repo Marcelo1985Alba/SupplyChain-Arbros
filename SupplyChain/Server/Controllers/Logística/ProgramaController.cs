@@ -76,7 +76,7 @@ namespace SupplyChain
                 //Cargar Depositos: ver como cargar en sp
                 await itemAbastecimiento.ForEachAsync(async i=> 
                 {
-                    var query = _context.ResumenStock.Where(r =>
+                    var query = _context.vResumenStock.Where(r =>
                     r.CG_ART.ToUpper() == i.CG_ART.ToUpper()
                     && r.LOTE.ToUpper() == i.LOTE.ToUpper()
                     && r.DESPACHO.ToUpper() == i.DESPACHO.ToUpper()

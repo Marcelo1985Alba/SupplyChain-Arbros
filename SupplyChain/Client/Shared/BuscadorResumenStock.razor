@@ -12,7 +12,7 @@
 
 </div>
 
-<BuscadorEmergente TItem="ResumenStock" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" Titulo="@TituloBuscador"
+<BuscadorEmergente TItem="vResumenStock" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" Titulo="@TituloBuscador"
                    Visible="@PopupBuscadorVisible" OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
 
 @*<BuscadorEmergenteResumenStock Titulo="@TituloBuscador" onObjetoSeleccionado="EnviarObjetoSeleccionado" Visible="PopupBuscadorVisible"/>*@
@@ -24,10 +24,10 @@
     [Parameter] public bool MostraBotonBusqueda { get; set; } = false;
     [Parameter] public bool HabilitaBotonBusqueda { get; set; } = false;
     [Parameter] public bool MostrarSpin { get; set; } = true;
-    [Parameter] public EventCallback<ResumenStock> OnRSSeleccionada { get; set; }
+    [Parameter] public EventCallback<vResumenStock> OnRSSeleccionada { get; set; }
     [Parameter] public Dictionary<string, object> HtmlAtrr { get; set; } = new Dictionary<string, object>();
 
-    private ResumenStock[] ItemsABuscar = null;
+    private vResumenStock[] ItemsABuscar = null;
     private string[] ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE" };
     private string TituloBuscador = "Listado Insumos con Stock";
     private bool PopupBuscadorVisible = false;
@@ -35,16 +35,16 @@
     private async Task BuscarStock()
     {
         PopupBuscadorVisible = true;
-        ItemsABuscar = await Http.GetFromJsonAsync<ResumenStock[]>("api/ResumenStock");
+        ItemsABuscar = await Http.GetFromJsonAsync<vResumenStock[]>("api/ResumenStock");
         //ItemsABuscar = await Http.GetFromJsonAsync<Programa[]>("api/Programas");
         await InvokeAsync(StateHasChanged);
     }
 
-    public async Task EnviarObjetoSeleccionado(ResumenStock resumenStock)
+    public async Task EnviarObjetoSeleccionado(vResumenStock vresumenStock)
     {
         //var rs = (ResumenStock)rsStock;
         PopupBuscadorVisible = false;
-        await OnRSSeleccionada.InvokeAsync(resumenStock);
+        await OnRSSeleccionada.InvokeAsync(vresumenStock);
     }
 
 
