@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,23 +15,24 @@ namespace SupplyChain.Server.Controllers
     [ApiController]
     public class VistasGrillasController : ControllerBase
     {
-        private readonly AppDbContext appDbContext;
+        private readonly AppDbContext _context;
 
         public VistasGrillasController(AppDbContext appDbContext)
         {
-            this.appDbContext = appDbContext;
+            this._context = appDbContext;
         }
 
-        [HttpGet("GetByName/{name}")]
-        public async Task<ActionResult<List<VistasGrillas>>> GetByName(string name)
+        [HttpGet("GetByName/{name}/{userName}")]
+        public async Task<ActionResult<List<VistasGrillas>>> GetByName(string name, string userName)
         {
-            return await appDbContext.VistasGrillas.Where(v => v.AppName == name).ToListAsync();
+            return await _context.VistasGrillas.Where(v => v.AppName == name && v.Usuario == userName).ToListAsync();
         }
 
         [HttpGet("GetByNameSyncf/{name}")]
         public object GetByNameSyncf(string name)
         {
-            IQueryable<VistasGrillas> data = appDbContext.VistasGrillas.Where(v => v.AppName == name).AsQueryable();
+            IQueryable<VistasGrillas> data = _context.VistasGrillas
+                .Where(v => v.AppName == name ).AsQueryable();
             var count = data.Count();
             var queryString = Request.Query;
             if (queryString.Keys.Contains("$inlinecount"))
@@ -45,6 +47,44 @@ namespace SupplyChain.Server.Controllers
             {
                 return data;
             }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<VistasGrillas>> Post(VistasGrillas vistasGrillas)
+        {
+            if (vistasGrillas.Id > 0)
+            {
+                _context.Entry(vistasGrillas).State = EntityState.Modified;
+            }
+            else
+            {
+                _context.VistasGrillas.Add(vistasGrillas);
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok(vistasGrillas);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var query = _context.VistasGrillas.Where(v => v.Id == id);
+            if (!query.Any())
+            {
+                return NotFound();
+            }
+
+            _context.Remove(await query.FirstOrDefaultAsync());
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

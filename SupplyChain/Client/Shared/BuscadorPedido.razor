@@ -32,7 +32,7 @@
     [Parameter] public string[] ColumnasBuscador { get; set; }
     [Parameter] public string TituloBuscador { get; set; }
     [Parameter] public int TipoOperacion { get; set; }
-    [Parameter] public Dictionary<string, object> HtmlAttr { get; set; } = new Dictionary<string, object>();
+    [Parameter] public Dictionary<string, object> HtmlAttr { get; set; } = new Dictionary<string, object>() { { "type", "button" } };
     private Pedidos[] ItemsABuscar = null;
     private bool PopupBuscadorVisible = false;
     private int CantRegistros = 0;

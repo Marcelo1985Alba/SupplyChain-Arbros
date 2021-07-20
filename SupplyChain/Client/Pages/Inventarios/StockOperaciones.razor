@@ -37,7 +37,7 @@
 
                             <div class="form-row btn-group">
                                 <div class="col-3">
-                                    <SfButton HtmlAttributes="HtmlAttribute" Content="Eliminar" ID="btnEliminarVale"
+                                    <SfButton HtmlAttributes="HtmlAttribute" Content="Eliminar"
                                               OnClick="@(async () => await AbrirConfirmacionEliminarVale())" IsPrimary="false"
                                               IconCss="fa fa-trash-o" CssClass="btn btn-sm btn-warning"
                                               Disabled="@(!abrioVale)"></SfButton>
@@ -49,13 +49,13 @@
                                 </div>
                                 <div class="col-3">
                                     <SfButton Content="Guardar" IsPrimary="true" IconCss="fa fa-save"
-                                              CssClass="btn btn-sm btn-success" ID="btnGuardarVale"
+                                              CssClass="btn btn-sm btn-success"
                                               Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"></SfButton>
                                 </div>
                                 <div class="col-3">
                                     <SfButton HtmlAttributes="HtmlAttribute" Content="Imprimir Etiqueta" IsPrimary="false"
                                                 IconCss="fa fa-print"
-                                                CssClass="btn btn-sm btn-success" ID="btnEtiqueta"
+                                                CssClass="btn btn-sm btn-success"
                                                 OnClick="@(async () => await ImprimirEtiqueta())"
                                                 Disabled="@(!abrioVale)"></SfButton>
                                  </div>
@@ -323,7 +323,7 @@
     private bool DepositoIngresoSoloLectura = true;
     protected bool abrioVale = false;
     private Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
-{
+    {
          {"type", "button" }
     };
 

@@ -1,53 +1,179 @@
 ﻿@using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Buttons
 
-<SfDropDownList TValue="int" TItem="VistasGrillas" Placeholder="Seleccione Vista..." DataSource="@Source"  
-                @bind-Value="VistaSeleccionada" AllowFiltering="true" Readonly="false" ShowClearButton="true">
-    <SfDataManager Url="@ApiUrl" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>
-    <DropDownListEvents TItem="VistasGrillas" TValue="int" ValueChange="@(async (e)=>  await OnSelected(e))"></DropDownListEvents>
-    <DropDownListFieldSettings Text="Descripcion" Value="Id"></DropDownListFieldSettings>
-</SfDropDownList>
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
 
-@*<SfComboBox TValue="int" TItem="VistasGrillas" PopupWidth="150px" AllowFiltering="true"
-            @bind-Value="@VistaSeleccionada">
-    <SfDataManager Url="@ApiUrl" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>
-    <ComboBoxFieldSettings Value="Id" Text="Descripcion"></ComboBoxFieldSettings>
-    <ComboBoxTemplates TItem="VistasGrillas">
-        <HeaderTemplate>
-            <table><tr><th class="e-text-center combo-width">Código</th><th>Descripcion</th></tr></table>
-        </HeaderTemplate>
-        <ItemTemplate>
-            <table>
-                <tbody>
-                    <tr>
-                        <td class="e-text-center combo-width">@((context as VistasGrillas).Id)</td>
-                        <td>@((context as VistasGrillas).Descripcion)</td>
-                    </tr>
-                </tbody>
-            </table>
-        </ItemTemplate>
-    </ComboBoxTemplates>
-</SfComboBox>*@
+@*EN EL EVENTO ActionBegin DE LA GRILA SE OBTIENE EL STADO DE LA GRILLA*@
+
+<div class="row">
+    <div class="col-lg-6 col-md-3">
+        <SfComboBox @ref="@refComboBox" TValue="string" TItem="VistasGrillas" Autofill="true"
+                    @bind-Value="@VistaSeleccionada.Descripcion" AllowFiltering="true">
+            <SfDataManager Url="@ApiUrl" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>
+            <ComboBoxFieldSettings Text="Descripcion" Value="Descripcion"></ComboBoxFieldSettings>
+            <ComboBoxEvents TItem="VistasGrillas" TValue="string" Opened="(async (a)=> await OnLimpiar(a))"
+                            ValueChange="@(async (e)=>  await OnSelectedStr(e))"></ComboBoxEvents>
+        </SfComboBox>
+    </div>
+    <div class="col-lg-2 col-md-3">
+        <SfButton Content="Guardar Vista" IsPrimary="false" CssClass="btn-sm e-info" IconCss="fa fa-check"
+                  OnClick="@(async ()=> await GuardarVista())"></SfButton>
+    </div>
+    <div class="col-lg-2 col-md-3">
+        <SfButton Content="Eliminar Vista" IsPrimary="false" CssClass="btn-sm e-danger" IconCss="fa fa-trash-o"
+                  OnClick="@(async ()=> await EliminarVista())"></SfButton>
+    </div>
+    <div class="col-lg-2 col-md-12">
+        <SfButton Content="Reiniciar Grilla" IsPrimary="false" CssClass="btn-sm e-warning" IconCss="fa fa-refresh"
+                  OnClick="@(async ()=> await ReiniciarVista())"></SfButton>
+    </div>
+</div>
+
+
+
+
 
 @code {
 
     [Inject] public HttpClient Http { get; set; }
-    public List<VistasGrillas> Source { get; set; }
-    public string ApiUrl { get; set; }
-    public int VistaSeleccionada { get; set; }
+    [Inject] public ILoginService LoginService { get; set; }
 
     [Parameter] public string AppName { get; set; }
+    [Parameter] public string StateApp { get; set; }
+    [Parameter] public EventCallback<VistasGrillas> OnVistaSelected { get; set; }
+    [Parameter] public EventCallback OnReiniciar { get; set; }
 
+    public List<VistasGrillas> Source { get; set; }
+    public string ApiUrl { get; set; }
+    public VistasGrillas VistaSeleccionada { get; set; } = new VistasGrillas();
+    protected SfComboBox<string, VistasGrillas> refComboBox;
+    protected SfToast ToastObj;
     protected async override Task OnInitializedAsync()
     {
-        ApiUrl = $"api/VistasGrillas/GetByNameSyncf/{AppName}";
-        //Source = await Http.GetFromJsonAsync<List<VistasGrillas>>(ApiUrl);
+        if (string.IsNullOrEmpty(AppName))
+        {
+            AppName = "ListadoPedidosPendientes";
+        }
+        ApiUrl = $"api/VistasGrillas/GetByName/{AppName}/{LoginService.UsuarioLogin.Usuario}";
+
+        Source = await Http.GetFromJsonAsync<List<VistasGrillas>>(ApiUrl);
 
     }
 
-    protected async Task OnSelected(ChangeEventArgs<int, VistasGrillas> args)
+    protected async Task OnSelectedStr(ChangeEventArgs<string, VistasGrillas> args)
     {
 
+        VistaSeleccionada = args.ItemData == null ? new VistasGrillas() : args.ItemData;
+
+        if (VistaSeleccionada != null && VistaSeleccionada.Id > 0)
+        {
+            await OnVistaSelected.InvokeAsync(VistaSeleccionada);
+        }
+
     }
 
+    protected async Task OnLimpiar(Syncfusion.Blazor.DropDowns.PopupEventArgs args)
+    {
+        VistaSeleccionada = new VistasGrillas();
+    }
+
+    public async Task OnFiltering(Syncfusion.Blazor.DropDowns.FilteringEventArgs args)
+    {
+        //args.PreventDefaultAction = true;
+        //this.Descripcion = args.Text;
+    }
+
+    public async Task GuardarVista()
+    {
+        var vista = new VistasGrillas()
+        {
+            Id = VistaSeleccionada == null ? 0 : VistaSeleccionada.Id,
+            AppName = AppName,
+            Descripcion = VistaSeleccionada.Descripcion,
+            Layout = StateApp,
+            Usuario = LoginService.UsuarioLogin.Usuario
+        };
+        var response = await Http.PostAsJsonAsync<VistasGrillas>($"api/VistasGrillas", vista);
+        if (response.IsSuccessStatusCode)
+        {
+            var vis = await response.Content.ReadFromJsonAsync<VistasGrillas>();
+            Source.Add(vis);
+
+            await ReiniciarVista();
+            //await refComboBox.AddItems( new List<VistasGrillas>() { vis } );
+            VistaSeleccionada = vis;
+
+            await this.ToastObj.Show(new ToastModel
+            {
+                Title = "EXITO!",
+                Content = $"Vista Guardada Correctamente.",
+                CssClass = "e-toast-success",
+                Icon = "e-success toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
+        else
+        {
+            await this.ToastObj.Show(new ToastModel
+            {
+                Title = "ERROR!",
+                Content = "Error al guardar",
+                CssClass = "e-toast-danger",
+                Icon = "e-error toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
+    }
+
+    public async Task EliminarVista()
+    {
+        if (VistaSeleccionada != null || VistaSeleccionada.Id > 0)
+        {
+            var response = await Http.DeleteAsync($"api/VistasGrillas/{VistaSeleccionada.Id}");
+            if (response.IsSuccessStatusCode)
+            {
+
+                Source = Source.Where(v => v.Id != VistaSeleccionada.Id).ToList();
+                await ReiniciarVista();
+
+
+
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "EXITO!",
+                    Content = $"Vista Eliminada Correctamente.",
+                    CssClass = "e-toast-success",
+                    Icon = "e-success toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }
+            else
+            {
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "Error al Eliminar",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }
+
+
+        }
+    }
+    public async Task ReiniciarVista()
+    {
+        VistaSeleccionada = new VistasGrillas();
+        //await refComboBox.Clear();
+        refComboBox.DataSource = Source;
+        await OnReiniciar.InvokeAsync();
+    }
 }

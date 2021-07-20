@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
 using SupplyChain.Client.Shared;
+using SupplyChain.Shared;
 
 namespace SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion
 {
@@ -41,9 +42,11 @@ namespace SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion
 
         protected NotificacionToast NotificacionObj;
         protected bool ToastVisible { get; set; } = false;
-
+        protected const string APPNAME = "grdPendienteFabricar";
+        protected string state;
         protected override async Task OnInitializedAsync()
         {
+            VisibleProperty = true;
             listaPendFab = await Http.GetFromJsonAsync<List<vPendienteFabricar>>("api/PendientesFabricar");
             
             await base.OnInitializedAsync();
@@ -51,7 +54,9 @@ namespace SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion
 
         public async Task DataBoundHandler()
         {
+            
             await Grid.AutoFitColumns();
+            VisibleProperty = false;
         }
 
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -127,9 +132,17 @@ namespace SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion
                     }
                 }
             }
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete)
             {
-
+                VisibleProperty = false;
+                state = await Grid.GetPersistData();
             }
         }
         protected async Task EmitirOrden()
@@ -152,7 +165,7 @@ namespace SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion
                 }
             }
         }
-        public void QueryCellInfoHandler(QueryCellInfoEventArgs<vPendienteFabricar> args)
+        public async Task QueryCellInfoHandler(QueryCellInfoEventArgs<vPendienteFabricar> args)
         {
             if (args.Data.CG_FORM == 0)
             {
@@ -162,6 +175,15 @@ namespace SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion
             {
                 args.Cell.AddClass(new string[] { "gris" });
             }
+        }
+
+        public async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
+        {
+            await Grid.SetPersistData(vistasGrillas.Layout);
+        }
+        public async Task OnReiniciarGrilla()
+        {
+            await Grid.ResetPersistData();
         }
     }
 }

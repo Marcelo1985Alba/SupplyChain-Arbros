@@ -17,6 +17,7 @@
 @using SupplyChain
 @using System.Net.Http.Json
 @using SupplyChain.Shared.PCP;
+@using Syncfusion.Blazor.Cards
 
 @inject NavigationManager NavManager
 @inherits PendientesFabricacionBase
@@ -27,13 +28,21 @@
 <div class="col-lg-12 control-section">
     <div class="content-wrapper">
         <div class="row">
-            <div>
+            <SfCard>
                 <SfButton OnClick="@((e) => EmitirOrden())" CssClass="emitir" IsPrimary="false"
                           IconCss="fa fa-check-circle">Emitir Ordenes</SfButton>
-            </div>
+            </SfCard>
+
+            <SfCard>
+                <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                                   OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                                   OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+            </SfCard>
+
         </div>
     </div>
 </div>
+
 
 @{
     if (listaPendFab is null)
@@ -42,21 +51,20 @@
     }
     else
     {
-        VisibleProperty = false;
-    }
-    if (VisibleProperty == false)
-    {
+        
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row">
                     <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                            EnablePersistence="true" @ref="Grid" DataSource="@listaPendFab" AllowExcelExport="true"
-                            AllowGrouping="true" ID="PendienteFabricar" Height="100%" Width="100%" RowHeight="20"
+                            @ref="Grid" DataSource="@listaPendFab" AllowExcelExport="true"
+                            AllowGrouping="true" ID="grdPendienteFabricar" Height="100%" Width="100%" RowHeight="20"
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                        <SfDataManager Url="api/PendientesFabricar" CrossDomain="true" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>
-                        <GridEvents DataBound="(async()=> await DataBoundHandler())" OnToolbarClick="@ClickHandler" 
-                                    QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin"
+                        @*<SfDataManager Url="api/PendientesFabricar" CrossDomain="true" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>*@
+                        <GridEvents DataBound="(async()=> await DataBoundHandler())" 
+                                    OnToolbarClick="(async(a)=> await ClickHandler(a))"
+                                    QueryCellInfo="(async(a)=> await QueryCellInfoHandler(a))" 
+                                    OnActionBegin="(async(a)=> await ActionBegin(a))"
                                     TValue="vPendienteFabricar"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
@@ -93,15 +101,15 @@
                             </Template>
                         </GridEditSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(vPendienteFabricar.REGISTRO) HeaderText="Registro" TextAlign="TextAlign.Left" Visible="Disabled" Width="90px"></GridColumn>
+                            @*<GridColumn Field=@nameof(vPendienteFabricar.REGISTRO) HeaderText="Registro" TextAlign="TextAlign.Left" Width="90px"></GridColumn>*@
                             <GridColumn Field=@nameof(vPendienteFabricar.PEDIDO) Format="N0" HeaderText="Pedido" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                             <GridColumn Field=@nameof(vPendienteFabricar.EXIGEOA) HeaderText="Tipo de Orden" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(vPendienteFabricar.CG_ART) HeaderText="Producto" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(vPendienteFabricar.CANTPED) Format="N0" HeaderText="Comprometido pedidos" TextAlign="TextAlign.Left" Visible="Enabled" Width="130px"></GridColumn>
-                            <GridColumn Field=@nameof(vPendienteFabricar.DES_ART) HeaderText="Descripcion de producto" TextAlign="TextAlign.Left" Visible="Enabled" Width="200px"></GridColumn>
-                            <GridColumn Field=@nameof(vPendienteFabricar.CG_FORM) Format="N0" HeaderText="Formula" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(vPendienteFabricar.PREVISION) Format="N0" HeaderText="Comprometido Prevision" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(vPendienteFabricar.CANTEMITIR) Format="N0" HeaderText="Cantidad sugerida a emitir" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(vPendienteFabricar.CG_ART) HeaderText="Producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(vPendienteFabricar.CANTPED) Format="N0" HeaderText="Comprometido pedidos" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
+                            <GridColumn Field=@nameof(vPendienteFabricar.DES_ART) HeaderText="Descripcion de producto" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                            <GridColumn Field=@nameof(vPendienteFabricar.CG_FORM) Format="N0" HeaderText="Formula" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(vPendienteFabricar.PREVISION) Format="N0" HeaderText="Comprometido Prevision" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(vPendienteFabricar.CANTEMITIR) Format="N0" HeaderText="Cantidad sugerida a emitir" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                             <GridColumn Field=@nameof(vPendienteFabricar.COMP_EMITIDAS) Format="N0" HeaderText="Emitidas" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                             <GridColumn Field=@nameof(vPendienteFabricar.LOPTIMO) Format="N0" HeaderText="Lote optimo" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                             <GridColumn Field=@nameof(vPendienteFabricar.CALCULADO) Format="N0" HeaderText="Calculado" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
@@ -115,12 +123,8 @@
         </div>
 
     }
-    else
-    {
-        <SfSpinner @bind-Visible="@VisibleProperty">
-        </SfSpinner>
-
-    }
+    <SfSpinner Size="80" Type="SpinnerType.Bootstrap" @bind-Visible="@VisibleProperty">
+    </SfSpinner>
 }
 
 <style>
@@ -152,5 +156,3 @@
         background-color: lightgrey;
     }
 </style>
-@code {
-}

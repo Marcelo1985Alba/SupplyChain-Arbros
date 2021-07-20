@@ -18,7 +18,7 @@ namespace SupplyChain.Client.Auth
         private readonly IJSRuntime js;
         private readonly HttpClient httpClient;
         public static readonly string USER = "Usuario";
-        private Usuarios usuarioLogin;
+        public Usuarios UsuarioLogin { get; set; }
         public ProveedorAutenticacion(IJSRuntime js, HttpClient httpClient)
         {
             this.js = js;
@@ -36,9 +36,12 @@ namespace SupplyChain.Client.Auth
             {
                 return Anonimo;
             }
-
-            usuarioLogin = await httpClient.GetFromJsonAsync<Usuarios>($"api/Usuarios/{usuario}");
-            return ConstruirAuthenticationState(usuarioLogin);
+            if (UsuarioLogin is null || string.IsNullOrEmpty(UsuarioLogin.Nombre))
+            {
+                UsuarioLogin = await httpClient.GetFromJsonAsync<Usuarios>($"api/Usuarios/{usuario}");
+            }
+            
+            return ConstruirAuthenticationState(UsuarioLogin);
         }
 
         public AuthenticationState ConstruirAuthenticationState(Usuarios usuario)
@@ -58,6 +61,7 @@ namespace SupplyChain.Client.Auth
 
         public async Task Login(Usuarios userToken)
         {
+            UsuarioLogin = userToken;
             await js.SetInSessionStorage(USER, userToken.Usuario);
 
             //await js.SetInLocalStorage(EXPIRATIONTOKENKEY, userToken.Expiration.ToString());
@@ -67,7 +71,7 @@ namespace SupplyChain.Client.Auth
 
         public async Task Logout()
         {
-            usuarioLogin = null;
+            UsuarioLogin = null;
             await Limpiar();
             NotifyAuthenticationStateChanged(Task.FromResult(Anonimo));
         }

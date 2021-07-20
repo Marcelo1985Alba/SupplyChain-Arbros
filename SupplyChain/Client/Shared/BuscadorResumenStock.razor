@@ -5,7 +5,7 @@
         @if (MostraBotonBusqueda)
         {
             <SfButton HtmlAttributes="@HtmlAtrr" OnClick="@(async (e)=> await BuscarStock())" CssClass="btn btn-sm btn-info" 
-                      IsPrimary="false"
+                      IsPrimary="false" 
                       IconCss="fa fa-search" Disabled="@HabilitaBotonBusqueda">@TextoButon</SfButton>
          }
     </div>
@@ -15,17 +15,16 @@
 <BuscadorEmergente TItem="vResumenStock" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" Titulo="@TituloBuscador"
                    Visible="@PopupBuscadorVisible" OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
 
-@*<BuscadorEmergenteResumenStock Titulo="@TituloBuscador" onObjetoSeleccionado="EnviarObjetoSeleccionado" Visible="PopupBuscadorVisible"/>*@
 
 @code {
 
-    [Parameter] public string TextoButon { get; set; } = "";
-    [Parameter] public bool EsSoloLectura { get; set; } = false;
-    [Parameter] public bool MostraBotonBusqueda { get; set; } = false;
-    [Parameter] public bool HabilitaBotonBusqueda { get; set; } = false;
-    [Parameter] public bool MostrarSpin { get; set; } = true;
-    [Parameter] public EventCallback<vResumenStock> OnRSSeleccionada { get; set; }
-    [Parameter] public Dictionary<string, object> HtmlAtrr { get; set; } = new Dictionary<string, object>();
+        [Parameter] public string TextoButon { get; set; } = "";
+        [Parameter] public bool EsSoloLectura { get; set; } = false;
+        [Parameter] public bool MostraBotonBusqueda { get; set; } = false;
+        [Parameter] public bool HabilitaBotonBusqueda { get; set; } = false;
+        [Parameter] public bool MostrarSpin { get; set; } = true;
+        [Parameter] public EventCallback<vResumenStock> OnRSSeleccionada { get; set; }
+        [Parameter] public Dictionary<string, object> HtmlAtrr { get; set; } = new Dictionary<string, object>() { { "type","button"} };
 
     private vResumenStock[] ItemsABuscar = null;
     private string[] ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE" };
@@ -36,13 +35,11 @@
     {
         PopupBuscadorVisible = true;
         ItemsABuscar = await Http.GetFromJsonAsync<vResumenStock[]>("api/ResumenStock");
-        //ItemsABuscar = await Http.GetFromJsonAsync<Programa[]>("api/Programas");
         await InvokeAsync(StateHasChanged);
     }
 
     public async Task EnviarObjetoSeleccionado(vResumenStock vresumenStock)
     {
-        //var rs = (ResumenStock)rsStock;
         PopupBuscadorVisible = false;
         await OnRSSeleccionada.InvokeAsync(vresumenStock);
     }

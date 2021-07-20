@@ -11,6 +11,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
+using SupplyChain.Shared;
 
 namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
 {
@@ -48,7 +49,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
         public async Task DataBoundHandler()
         {
             await Grid.AutoFitColumns();
-            //VisibleProperty = false;
+            VisibleProperty = false;
         }
 
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -68,12 +69,15 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
             }
         }
 
-        public void QueryCellInfoHandler(QueryCellInfoEventArgs<ModeloPedidosPendientes> args)
+        public async Task QueryCellInfoHandler(QueryCellInfoEventArgs<ModeloPedidosPendientes> args)
         {
             if (args.Data.CG_ESTADOCARGA == 2 || args.Data.CG_ESTADOCARGA == 3)
             {
                 args.Cell.AddClass(new string[] { "verdes" });
             }
+
         }
+
+        
     }
 }
