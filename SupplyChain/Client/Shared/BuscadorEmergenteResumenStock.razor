@@ -1,6 +1,6 @@
 ﻿@inject HttpClient Http
 
-<SfDialog Height="75%" Width="90%" Target="#target" ShowCloseIcon="true" @bind-Visible="Visible" IsModal="true">
+<SfDialog Height="85%" Width="90%" Target="#target" ShowCloseIcon="true" @bind-Visible="Visible" IsModal="true">
     <DialogTemplates>
         <Header>
             @Titulo
@@ -19,21 +19,23 @@
                     }
                     else
                     {
-                        <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="true" AllowFiltering="true" TValue="ResumenStock"
-                                AllowResizing="true" GridLines="GridLine.Both"
+                        <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="true" AllowFiltering="true" TValue="vResumenStock"
+                                AllowResizing="true" GridLines="GridLine.Both" Height="320" Width="100%"
                                 AllowSelection="true" AllowSorting="true" AllowTextWrap="true" EnableHover="true"
                                 ShowColumnMenu="true">
-                            <GridPageSettings PageSizes="@(new int[] { 5,10,20 })" PageSize="5" PageCount="5"></GridPageSettings>
+                            <GridPageSettings PageSizes="@(new int[] { 5,10,20 })" PageSize="20" PageCount="5"></GridPageSettings>
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-                            <GridEvents RowSelected="@(async(a)=> await GetSelectedRecords(a))" TValue="ResumenStock"></GridEvents>
+                            <GridEvents RowSelected="@(async(a)=> await GetSelectedRecords(a))" TValue="vResumenStock"></GridEvents>
                             <GridColumns>
 
-                                <GridColumn Field="@nameof(ResumenStock.CG_ART)" Width="120px"></GridColumn>
-                                <GridColumn Field="@nameof(ResumenStock.STOCK)"></GridColumn>
-                                <GridColumn Field="@nameof(ResumenStock.CG_DEP)"></GridColumn>
-                                <GridColumn Field="@nameof(ResumenStock.SERIE)"></GridColumn>
-                                <GridColumn Field="@nameof(ResumenStock.LOTE)" IsPrimaryKey="true"></GridColumn>
-                                <GridColumn Field="@nameof(ResumenStock.DESPACHO)"></GridColumn>
+                                <GridColumn Field="@nameof(vResumenStock.CG_ART)" Width="120px"></GridColumn>
+                                <GridColumn Field="@nameof(vResumenStock.PRODUCTO)" Width="120px"></GridColumn>
+                                <GridColumn Field="@nameof(vResumenStock.STOCK)"></GridColumn>
+                                <GridColumn Field="@nameof(vResumenStock.CG_DEP)"></GridColumn>
+                                <GridColumn Field="@nameof(vResumenStock.DEPOSITO)"></GridColumn>
+                                <GridColumn Field="@nameof(vResumenStock.SERIE)"></GridColumn>
+                                <GridColumn Field="@nameof(vResumenStock.LOTE)" IsPrimaryKey="true"></GridColumn>
+                                <GridColumn Field="@nameof(vResumenStock.DESPACHO)"></GridColumn>
 
                             </GridColumns>
                         </SfGrid>
@@ -43,23 +45,23 @@
         </Content>
         <FooterTemplate>
             @*<SfTextBox ID="inVal" @bind-Value="@TextBoxValue" @ref="TextboxObj" Type="InputType.Text" Placeholder="Enter your message here!" />*@
-            <button id="sendButton" @onclick="@EnviarObjetoSeleccionado" class="e-control e-btn e-primary" data-ripple="true">Aceptar</button>
+            <button id="sendButton" @onclick="@(async ()=> await EnviarObjetoSeleccionado())" class="e-control e-btn e-primary" data-ripple="true">Aceptar</button>
         </FooterTemplate>
     </DialogTemplates>
     @*<DialogEvents OnOpen="@BeforeDialogOpen" Closed="@DialogClosed"></DialogEvents>*@
 </SfDialog>
 
 @code {
-    SfGrid<ResumenStock> Grid;
+    SfGrid<vResumenStock> Grid;
 
-    [Parameter] public ResumenStock[] DataSource { get; set; } = null!;
+    [Parameter] public vResumenStock[] DataSource { get; set; } = null!;
     [Parameter] public string Titulo { get; set; } = null!;
     [Parameter] public bool Visible { get; set; } = false;
     [Parameter] public string[] Columnas { get; set; } = null!;
-    [Parameter] public EventCallback<ResumenStock> onObjetoSeleccionado { get; set; }
+    [Parameter] public EventCallback<vResumenStock> OnObjetoSeleccionado { get; set; }
 
 
-    public ResumenStock Selected { get; set; }
+    public vResumenStock Selected { get; set; }
 
     //protected async override Task OnInitializedAsync()
     //{
@@ -78,13 +80,13 @@
         Visible = false;
     }
 
-    public void EnviarObjetoSeleccionado()
+    public async Task EnviarObjetoSeleccionado()
     {
         Visible = false;
-        onObjetoSeleccionado.InvokeAsync(Selected);
+        await OnObjetoSeleccionado.InvokeAsync(Selected);
     }
 
-    public async Task GetSelectedRecords(RowSelectEventArgs<ResumenStock> args)
+    public async Task GetSelectedRecords(RowSelectEventArgs<vResumenStock> args)
     {
         args.PreventRender = true; //without this, you may see noticable delay in selection with 75 rows in grid
         //ListaSeleccionada = await this.Grid.GetSelectedRecords();

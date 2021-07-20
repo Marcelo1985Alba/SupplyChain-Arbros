@@ -38,8 +38,8 @@ namespace SupplyChain.Server.Controllers
         }
 
         // GET:   
-        [HttpGet("GetValesByTipo/{tipoo}")]
-        public async Task<ActionResult<IEnumerable<Pedidos>>> GetValesByTipo(int tipoo)
+        [HttpGet("GetValesByTipo/{tipoo}/{cantRegistros:int}")]
+        public async Task<ActionResult<IEnumerable<Pedidos>>> GetValesByTipo(int tipoo, int cantRegistros)
         {
             List<Pedidos> lStock = new List<Pedidos>();
             if (_context.Pedidos.Any())
@@ -48,6 +48,7 @@ namespace SupplyChain.Server.Controllers
                     //.Include(x=> x.Proveedor)
                     .Where(p => p.TIPOO == tipoo && p.VOUCHER == 0 && p.CG_CIA == cg_cia_usuario)
                     .OrderByDescending(s=> s.VALE)
+                    .Take(cantRegistros)
                     .ToListAsync();
             }
             if (lStock == null)
@@ -98,6 +99,24 @@ namespace SupplyChain.Server.Controllers
                     });
 
                 }
+
+                if (lStock.Count > 0 && lStock[0].TIPOO == 10)
+                {
+                    await lStock.ForEachAsync(async i =>
+                    {
+                        i.ResumenStock = await _context.vResumenStock.Where(r =>
+                             r.CG_ART.ToUpper() == i.CG_ART.ToUpper()
+                             && r.LOTE.ToUpper() == i.LOTE.ToUpper()
+                             && r.DESPACHO.ToUpper() == i.DESPACHO.ToUpper()
+                             && r.SERIE.ToUpper() == i.SERIE.ToUpper()
+                             && r.CG_DEP == i.CG_DEP).FirstOrDefaultAsync();
+
+                        i.PENDIENTEOC = i.ResumenStock.STOCK - Math.Abs((decimal)i.STOCK);
+                    });
+                            
+
+                }
+
 
                 return lStock;
             }
@@ -249,7 +268,7 @@ namespace SupplyChain.Server.Controllers
 
             if (stock.TIPOO == 6) //devol a prove: cargo los datos de resumen stock para el item para luego verificar si tiene stock cuando se vuelva a editar
             {
-                stock.ResumenStock = await _context.ResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
+                stock.ResumenStock = await _context.vResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
                 && r.CG_ART.ToUpper() == stock.CG_ART.ToUpper()
                 && r.LOTE.ToUpper() == stock.LOTE.ToUpper()
                 && r.DESPACHO.ToUpper() == stock.DESPACHO.ToUpper()
@@ -285,7 +304,7 @@ namespace SupplyChain.Server.Controllers
 
                 if (stock.TIPOO == 6) //devol a prove: cargo los datos de resumen stock para el item para luego verificar si tiene stock cuando se vuelva a editar
                 {
-                    stock.ResumenStock = await _context.ResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
+                    stock.ResumenStock = await _context.vResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
                     && r.CG_ART.ToUpper() == stock.CG_ART.ToUpper()
                     && r.LOTE.ToUpper() == stock.LOTE.ToUpper()
                     && r.DESPACHO.ToUpper() == stock.DESPACHO.ToUpper()

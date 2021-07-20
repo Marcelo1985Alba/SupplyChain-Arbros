@@ -9,7 +9,8 @@
     <div class="col-2">
         @if (MostraBotonBusqueda)
         {
-            <SfButton HtmlAttributes="@HtmlAttr" OnClick="@(async (e)=> await BuscarOCompras())" CssClass="btn btn-sm e-round" IsPrimary="false"
+            <SfButton HtmlAttributes="@HtmlAttribute" OnClick="@(async (e)=> await BuscarOCompras())" 
+                      CssClass="btn btn-sm e-round" IsPrimary="false"
                       IconCss="fa fa-search" Disabled="@DeshabilitaBotonBusqueda"></SfButton>
         }
 
@@ -21,8 +22,9 @@
     <ToastPosition X="Center" Y="Top"></ToastPosition>
 </SfToast>
 
-<BuscadorEmergente Height="85%" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" Titulo="@TituloBuscador"
-                   onObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+<BuscadorEmergente Height="85%" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" 
+                   Titulo="@TituloBuscador"
+                   OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
 
 @code {
 
@@ -35,7 +37,7 @@
     [Parameter] public int? CodigoDeposito { get; set; }
     [Parameter] public string Remito { get; set; } = "0000-00000000";
     [Parameter] public int? Tipoo { get; set; }
-    [Parameter] public Dictionary<string, object> HtmlAttr { get; set; } = new Dictionary<string, object>();
+    [Parameter] public Dictionary<string, object> HtmlAttribute { get; set; } = new Dictionary<string, object>() { { "type", "button" } };
 
 
     BuscadorEmergente<Compra> Buscador;

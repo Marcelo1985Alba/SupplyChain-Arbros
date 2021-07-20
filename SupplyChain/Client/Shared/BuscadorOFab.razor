@@ -11,8 +11,8 @@
         
         @if (MostraBotonBusqueda)
         {
-            <SfButton HtmlAttributes="@HtmlAttr" OnClick="@(async (e)=> await BuscarOF())" 
-                      CssClass="btn btn-sm btn-info e-round" IsPrimary="false"
+            <SfButton HtmlAttributes="@HtmlAttribute" OnClick="@(async (e)=> await BuscarOF())" 
+                      CssClass="e-smal e-round e-info" IsPrimary="false"
                       IconCss="fa fa-search" Disabled="@DeshabilitaBotonBusqueda"></SfButton>
         }
     </div>
@@ -21,7 +21,7 @@
 
 <BuscadorEmergente @ref="Buscador" TItem="Programa" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" 
                    Titulo="@TituloBuscador"
-                   onObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+                   OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
 
 @code {
     BuscadorEmergente<Programa> Buscador;
@@ -30,7 +30,7 @@
     [Parameter] public bool MostraBotonBusqueda { get; set; } = true;
     [Parameter] public bool DeshabilitaBotonBusqueda { get; set; } = true;
     [Parameter] public bool MostrarSpin { get; set; } = true;
-    [Parameter] public Dictionary<string, object> HtmlAttr { get; set; } = new Dictionary<string, object>();
+    [Parameter] public Dictionary<string, object> HtmlAttribute { get; set; } = new Dictionary<string, object>();
     [Parameter] public EventCallback<Programa> OnOFSeleccionada { get; set; }
     private Programa[] ItemsABuscar = null;
     private string[] ColumnasBuscador = new string[] { "CG_ORDF", "FE_EMIT", "CG_PROD", "CANT",

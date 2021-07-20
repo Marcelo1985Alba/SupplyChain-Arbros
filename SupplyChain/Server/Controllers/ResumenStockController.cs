@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Shared.Models;
+using SupplyChain.Shared.PCP;
+using SupplyChain.Shared.Prod;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -22,11 +24,11 @@ namespace SupplyChain.Server.Controllers
 
         // GET: api/ResumenStocks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ResumenStock>>> GetResumenStock()
+        public async Task<ActionResult<IEnumerable<vResumenStock>>> GetResumenStock()
         {
             try
             {
-                return await _context.ResumenStock.ToListAsync();
+                return await _context.vResumenStock.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -36,11 +38,11 @@ namespace SupplyChain.Server.Controllers
 
         // GET: api/ResumenStocksPositivo/GetResumenStockPositivo
         [HttpGet("GetResumenStockPositivo")]
-        public async Task<ActionResult<IEnumerable<ResumenStock>>> GetResumenStockPositivo()
+        public async Task<ActionResult<IEnumerable<vResumenStock>>> GetResumenStockPositivo()
         {
             try
             {
-                return await _context.ResumenStock.Where(rs=> rs.STOCK > 0).ToListAsync();
+                return await _context.vResumenStock.Where(rs=> rs.STOCK > 0).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -49,12 +51,13 @@ namespace SupplyChain.Server.Controllers
         }
 
         // GET: api/ResumenStocksPositivo/ByCodigo/
-        [HttpGet("ByCodigo/{cg_art}")]
-        public async Task<ActionResult<IEnumerable<ResumenStock>>> ByCodigo(string cg_art)
+        [HttpGet("ByCodigo")]
+        public async Task<ActionResult<IEnumerable<vResumenStock>>> ByCodigo([FromQuery]FilterProd filter)
         {
             try
             {
-                return await _context.ResumenStock.Where(rs => rs.STOCK > 0 && rs.CG_ART.Trim() == cg_art.Trim()).ToListAsync();
+                return await _context.vResumenStock
+                    .Where(rs => rs.STOCK > 0 && rs.CG_ART.Trim() == filter.Codigo.Trim()).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -64,16 +67,16 @@ namespace SupplyChain.Server.Controllers
 
         // GET: api/ResumenStocksGetResumenStockByDeposito/1
         [HttpGet("GetResumenStockByDeposito/{cg_dep}")]
-        public async Task<ActionResult<IEnumerable<ResumenStock>>> GetResumenStockByDeposito(int cg_dep)
+        public async Task<ActionResult<IEnumerable<vResumenStock>>> GetResumenStockByDeposito(int cg_dep)
         {
-            return await _context.ResumenStock.Where(r=> r.CG_DEP == cg_dep).ToListAsync();
+            return await _context.vResumenStock.Where(r=> r.CG_DEP == cg_dep).ToListAsync();
         }
 
         // GET: api/ResumenStocks/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ResumenStock>> GetResumenStock(decimal id)
+        public async Task<ActionResult<vResumenStock>> GetResumenStock(decimal id)
         {
-            var resumenStock = await _context.ResumenStock.FindAsync(id);
+            var resumenStock = await _context.vResumenStock.FindAsync(id);
 
             if (resumenStock == null)
             {
@@ -85,7 +88,7 @@ namespace SupplyChain.Server.Controllers
 
         // GET: api/ResumenStocks/GetByStock
         [HttpGet("GetByStock")]
-        public async Task<ActionResult<ResumenStock>> GetByStock([FromQuery] ResumenStock resumenStock)
+        public async Task<ActionResult<vResumenStock>> GetByStock([FromQuery] ResumenStock resumenStock)
         {
             try
             {
@@ -96,7 +99,7 @@ namespace SupplyChain.Server.Controllers
 
 
 
-                var query = _context.ResumenStock.Where(r =>
+                var query = _context.vResumenStock.Where(r =>
                     r.CG_ART.ToUpper() == resumenStock.CG_ART.ToUpper()
                     && r.LOTE.ToUpper() == resumenStock.LOTE.ToUpper()
                     && r.DESPACHO.ToUpper() == resumenStock.DESPACHO.ToUpper()
@@ -119,7 +122,7 @@ namespace SupplyChain.Server.Controllers
 
 
         [HttpGet("GetStock")]
-        public async Task<ActionResult<IEnumerable<ResumenStock>>> GetStock([FromQuery] ResumenStock resumenStock)
+        public async Task<ActionResult<IEnumerable<vResumenStock>>> GetStock([FromQuery] vResumenStock resumenStock)
         {
             try
             {
@@ -127,7 +130,7 @@ namespace SupplyChain.Server.Controllers
                 resumenStock.DESPACHO = resumenStock.DESPACHO == null ? "" : resumenStock.DESPACHO;
                 resumenStock.LOTE = resumenStock.LOTE == null ? "" : resumenStock.LOTE;
                 resumenStock.SERIE = resumenStock.SERIE == null ? "" : resumenStock.SERIE;
-                return await _context.ResumenStock.Where(r =>
+                return await _context.vResumenStock.Where(r =>
                     r.CG_DEP == resumenStock.CG_DEP
                     && r.CG_ART.ToUpper() == resumenStock.CG_ART.ToUpper()
                     && r.LOTE.ToUpper() == resumenStock.LOTE.ToUpper()

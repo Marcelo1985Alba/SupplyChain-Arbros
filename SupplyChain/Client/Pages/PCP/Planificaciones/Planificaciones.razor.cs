@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Inputs;
 using Syncfusion.Blazor.Popups;
+using SupplyChain.Shared;
 
 namespace SupplyChain.Client.Pages.PCP.Planificaciones
 {
@@ -81,17 +82,20 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
             //new Estado() {Texto= "CERRADA", Valor = 4},
             new Estado() {Texto= "ANULADA", Valor = 5}
         };
-
+        protected SfDialog refDialogCerradasAnuladas;
+        protected const string APPNAME = "grdPlanificacion";
+        protected string state;
         protected override async Task OnInitializedAsync()
         {
             listaPlanificacion = await Http.GetFromJsonAsync<List<Planificacion>>("api/Planificacion/0/1");
-            
+            //await GridPlanificacion?.AutoFitColumns();
             await base.OnInitializedAsync();
         }
 
         public async Task DataBoundHandler()
         {
             await GridPlanificacion?.AutoFitColumns();
+            VisibleProperty = false;
         }
 
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -170,9 +174,15 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
                 await GridPlanificacion.RefreshHeader();
 
             }
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder)
             {
-
+                state = await GridPlanificacion.GetPersistData();
             }
         }
 
@@ -273,6 +283,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         {
             listaCerradasAnuladas = await Http.GetFromJsonAsync<List<Planificacion>>($"api/Planificacion/OrdenesCerradasYAnuladas/{CantidadMostrar}");
             IsVisible3 = true;
+            await refDialogCerradasAnuladas.Show(true);
         }
         public async Task CheckCambio()
         {
@@ -323,7 +334,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
                 Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/{DesString}/{CantidadMostrar2}");
             }
         }
-        public void QueryCellInfoHandler(QueryCellInfoEventArgs<Planificacion> args)
+        public async Task QueryCellInfoHandler(QueryCellInfoEventArgs<Planificacion> args)
         {
             if (args.Column.Field == "CG_ESTADOCARGA")
             {
@@ -353,6 +364,15 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
             {
                 args.Cell.AddClass(new string[] { "gris" });
             }
+        }
+
+        public async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
+        {
+            await GridPlanificacion.SetPersistData(vistasGrillas.Layout);
+        }
+        public async Task OnReiniciarGrilla()
+        {
+            await GridPlanificacion.ResetPersistData();
         }
     }
 }

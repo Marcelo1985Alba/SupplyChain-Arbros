@@ -20,7 +20,7 @@
 @inject NavigationManager NavManager
 @inherits PedidosPendientesBase
 
-<SfSpinner @bind-Visible="@VisibleProperty">
+<SfSpinner Size="80" Type="SpinnerType.Bootstrap" @bind-Visible="@VisibleProperty">
 </SfSpinner>
 
 @{
@@ -30,7 +30,7 @@
     }
     else
     {
-        VisibleProperty = false;
+        
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row">
@@ -41,13 +41,14 @@
                             AllowExcelExport="true" AllowGrouping="true">
                         <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-                        <GridEvents DataBound="(async()=> await DataBoundHandler())" OnToolbarClick="@ClickHandler"
-                                    QueryCellInfo="QueryCellInfoHandler" TValue="ModeloPedidosPendientes"></GridEvents>
+                        <GridEvents DataBound="(async()=> await DataBoundHandler())" 
+                                    OnToolbarClick="@(async(a)=> await ClickHandler(a))"
+                                    QueryCellInfo="(async(a)=> await QueryCellInfoHandler(a))" TValue="ModeloPedidosPendientes"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(ModeloPedidosPendientes.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.FE_MOV)  HeaderText="Fecha Pedido">
+                            <GridColumn Field=@nameof(ModeloPedidosPendientes.FE_MOV) HeaderText="Fecha Pedido">
                                 <Template>
                                     @{
                                         ModeloPedidosPendientes Value = (context as ModeloPedidosPendientes);
@@ -98,7 +99,7 @@
                             <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM6)  HeaderText="Temperatura" TextAlign="TextAlign.Left"></GridColumn>
                             <GridColumn Field=@nameof(ModeloPedidosPendientes.Semana)  HeaderText="Semana" TextAlign="TextAlign.Left"></GridColumn>
                             <GridColumn Field=@nameof(ModeloPedidosPendientes.LOTE)  HeaderText="Lote" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.REGISTRO_PEDCLI)  HeaderText="Registro Pedcli" TextAlign="TextAlign.Left"></GridColumn>
+                            @*<GridColumn Field=@nameof(ModeloPedidosPendientes.REGISTRO_PEDCLI)  HeaderText="Registro Pedcli" TextAlign="TextAlign.Left"></GridColumn>*@
                         </GridColumns>
                     </SfGrid>
                     @*<SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"

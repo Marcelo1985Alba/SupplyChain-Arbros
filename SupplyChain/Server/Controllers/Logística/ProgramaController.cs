@@ -66,29 +66,6 @@ namespace SupplyChain
             List<ItemAbastecimiento> itemAbastecimiento;
             var usuario = "user";
 
-
-            //using (var command = _context.Database.GetDbConnection().CreateCommand())
-            //{
-            //    var sp = $"Execute NET_PCP_TraerAbast {cg_ordf}, '{usuario}'";
-            //    command.CommandText = sp; //$"Execute NET_PCP_TraerAbast";
-            //    //command.CommandType = CommandType.StoredProcedure;
-            //    //command.Parameters.Add(new SqlParameter("@Cg_Ordf", cg_ordf));
-            //    //command.Parameters.Add(new SqlParameter("@Usuario", usuario));
-            //    var conn = command.Connection;
-
-            //    if (conn.State != ConnectionState.Open) conn.Open();
-
-            //    using (var result = await command.ExecuteReaderAsync())
-            //    {
-            //        //dt.Load(result);
-
-            //        //var eee = await Helpers.ConvertDataTable<ItemAbastecimiento>(dt);
-
-
-            //    }
-            //}
-
-            //El modelo esta seteado en dcontext
             try
             {
                 var of = new SqlParameter("of", cg_ordf);
@@ -99,21 +76,25 @@ namespace SupplyChain
                 //Cargar Depositos: ver como cargar en sp
                 await itemAbastecimiento.ForEachAsync(async i=> 
                 {
-                    var query = _context.ResumenStock.Where(r =>
+                    var query = _context.vResumenStock.Where(r =>
                     r.CG_ART.ToUpper() == i.CG_ART.ToUpper()
                     && r.LOTE.ToUpper() == i.LOTE.ToUpper()
                     && r.DESPACHO.ToUpper() == i.DESPACHO.ToUpper()
                     && r.SERIE.ToUpper() == i.SERIE.ToUpper()
+                    && r.STOCK > 0
                     ).AsQueryable();
+
+                    var res = await query.FirstOrDefaultAsync();
 
                     if (i.CG_DEP > 0)
                         query = query.Where(r => r.CG_DEP == i.CG_DEP);
 
-                    if (i.STOCK <= 0)
+                    if (i.CG_DEP == 0)
                         i.CG_DEP = 0;
                     else
                     {
                         var rs = await query.FirstOrDefaultAsync();
+                        i.ResumenStock = rs;
                         i.CG_DEP = rs.CG_DEP;
                     }
                     

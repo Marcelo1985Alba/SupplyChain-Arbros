@@ -137,11 +137,11 @@
                             </Template>
                         </GridEditSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(PresAnual.CG_ART) HeaderText="Producto" Edit="false" TextAlign="TextAlign.Left" Width="30px"></GridColumn>
-                            <GridColumn Field=@nameof(PresAnual.DES_ART) HeaderText="Descripcion del Producto" Edit="false" TextAlign="TextAlign.Left" Width="30px"></GridColumn>
-                            <GridColumn Field=@nameof(PresAnual.UNID) HeaderText="Unidad" Edit="false" TextAlign="TextAlign.Left" Width="30px"></GridColumn>
+                            <GridColumn Field=@nameof(PresAnual.CG_ART) HeaderText="Producto"  TextAlign="TextAlign.Left" Width="30px"></GridColumn>
+                            <GridColumn Field=@nameof(PresAnual.DES_ART) HeaderText="Descripcion del Producto"  TextAlign="TextAlign.Left" Width="30px"></GridColumn>
+                            <GridColumn Field=@nameof(PresAnual.UNID) HeaderText="Unidad"  TextAlign="TextAlign.Left" Width="30px"></GridColumn>
                             <GridColumn Field=@nameof(PresAnual.CANTPED) Format="N" HeaderText="Cantidad Pedida" TextAlign="TextAlign.Left" Width="30px"></GridColumn>
-                            <GridColumn Field=@nameof(PresAnual.FE_PED) HeaderText="Fecha Prevista" CustomFormat="@(new { type= "date", format= "dd/MM/yyyy" })" TextAlign="TextAlign.Left" Width="30px"></GridColumn>
+                            <GridColumn Field=@nameof(PresAnual.FE_PED) HeaderText="Fecha Prevista" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="30px"></GridColumn>
                         </GridColumns>
                     </SfGrid>
                 </div>

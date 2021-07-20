@@ -213,7 +213,7 @@ else
                 var serie = pedido.SERIE == null ? "" : pedido.SERIE;
 
                 var resumen = await Http
-                    .GetFromJsonAsync<ResumenStock>($"api/ResumenStocks/GetByStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
+                    .GetFromJsonAsync<vResumenStock>($"api/ResumenStocks/GetByStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
 
                 pedido.ResumenStock = resumen;
             }
@@ -416,12 +416,12 @@ else
     }
 
 
-    private async Task onResumenStockSelected(ResumenStock obj)
+    private async Task onResumenStockSelected(vResumenStock obj)
     {
 
         PopupBuscadorStockVisible = false;
 
-        var resumenStock = (ResumenStock)obj;
+        var resumenStock = (vResumenStock)obj;
 
         //buscar registro mas reciente con las caracteristicas de resumen stock
         var cg_art = resumenStock.CG_ART;

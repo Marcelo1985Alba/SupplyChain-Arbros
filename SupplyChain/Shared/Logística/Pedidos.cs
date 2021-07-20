@@ -1,5 +1,6 @@
 ﻿using SupplyChain.Shared.HelpersAtributo;
 using SupplyChain.Shared.Models;
+using SupplyChain.Shared.PCP;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -33,7 +34,7 @@ namespace SupplyChain
          * EJEM: EN DEV A PROVE
          */
         [NotMapped]
-        public ResumenStock ResumenStock { get; set; } = new ResumenStock();
+        public vResumenStock ResumenStock { get; set; } = new vResumenStock();
 
         [NotMapped]
         public Cliente Cliente { get; set; } = new Cliente();

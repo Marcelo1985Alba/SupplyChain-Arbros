@@ -28,7 +28,7 @@ namespace SupplyChain
         }
 
         [HttpGet]
-        public IEnumerable<Pedidos> Get(string PEDIDO)
+        public async Task<IEnumerable<Pedidos>> Get(string PEDIDO)
         {
             string xSQL = string.Format("" +
                 "SELECT Pedidos.* " +
@@ -39,7 +39,7 @@ namespace SupplyChain
                 "FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
                 "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) " +
                 "where Pedcli.PEDIDO NOT IN(select PEDIDO from Pedidos where TIPOO = 1) AND Programa.CG_ESTADO = 3  AND Pedcli.CANTPED > 0 AND Pedidos.TIPOO != 28");
-            return _context.Pedidos.FromSqlRaw(xSQL).ToList<Pedidos>();
+            return await _context.Pedidos.FromSqlRaw(xSQL).ToListAsync();
         }
 
         // GET: api/Pedidos/BuscarPorPedido/{Pedido}
@@ -196,7 +196,6 @@ namespace SupplyChain
         [HttpPost]
         public async Task<ActionResult<Pedidos>> PostStock([FromBody] Pedidos stock)
         {
-
             try
             {
                 stock.CG_CIA = 1;
@@ -220,6 +219,7 @@ namespace SupplyChain
                 await _context.SaveChangesAsync();
 
                 await CerrarOC(stock);
+                await FirmeOF(stock);
                 await generaController.LiberaByCampo("REGSTOCK");
             }
             catch (DbUpdateException ex)
@@ -242,7 +242,7 @@ namespace SupplyChain
 
             if (stock.TIPOO == 6) //devol a prove: cargo los datos de resumen stock para el item para luego verificar si tiene stock cuando se vuelva a editar
             {
-                stock.ResumenStock = await _context.ResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
+                stock.ResumenStock = await _context.vResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
                 && r.CG_ART.ToUpper() == stock.CG_ART.ToUpper()
                 && r.LOTE.ToUpper() == stock.LOTE.ToUpper()
                 && r.DESPACHO.ToUpper() == stock.DESPACHO.ToUpper()
@@ -278,7 +278,7 @@ namespace SupplyChain
 
                 if (stock.TIPOO == 6) //devol a prove: cargo los datos de resumen stock para el item para luego verificar si tiene stock cuando se vuelva a editar
                 {
-                    stock.ResumenStock = await _context.ResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
+                    stock.ResumenStock = await _context.vResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
                     && r.CG_ART.ToUpper() == stock.CG_ART.ToUpper()
                     && r.LOTE.ToUpper() == stock.LOTE.ToUpper()
                     && r.DESPACHO.ToUpper() == stock.DESPACHO.ToUpper()
@@ -316,6 +316,20 @@ namespace SupplyChain
             }
             
         }
+        private async Task FirmeOF(Pedidos stock)
+        {
+            if (stock.TIPOO == 10)
+            {
+                var programa = await _context.Programa
+                        .Where(c => c.CG_ORDF == stock.CG_ORDF).FirstOrDefaultAsync();
+
+                programa.CG_ESTADO = 1;
+                programa.CG_ESTADOCARGA = 2;
+                _context.Entry(programa).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            
+        }
 
         // PUT: api/Stock/123729
         [HttpPut("{registro}")]
@@ -327,6 +341,9 @@ namespace SupplyChain
             {
                 return BadRequest("Registro Incorrecto");
             }
+
+            if (stock.TIPOO == 9 || stock.TIPOO == 10)
+                stock.STOCK = -stock.STOCK;
 
             _context.Entry(stock).State = EntityState.Modified;
 

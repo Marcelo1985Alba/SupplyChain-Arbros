@@ -55,24 +55,31 @@ else
                                                   CssClass="e-round"
                                                   Content="" IconCss="fa fa-search" />
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-2">
                                         <label class="col-form-label">Déposito Salida</label>
-                                        <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP"
+                                        <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP" Readonly="true"
                                                         TValue="int" ID="CG_DEP" DataSource="@depositos">
                                             <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP">
 
                                             </DropDownListFieldSettings>
                                         </SfDropDownList>
                                     </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="col-form-label">Stock Con Entrega:</label>
+                                        <SfNumericTextBox ShowSpinButton="false" @bind-Value="@stock.PENDIENTEOC" TValue="decimal?"
+                                                          Readonly="true">
+                                        </SfNumericTextBox>
+                                    </div>
                                     <div class="form-group col-md-1">
-                                        <label class="col-form-label">Stock :</label>
-                                        <SfNumericTextBox ShowSpinButton="false" @bind-Value="@stock.PENDIENTEOC" Readonly="true"/>
+                                        <label class="col-form-label">Stock:</label>
+                                        <SfNumericTextBox ShowSpinButton="false" @bind-Value="@stock.ResumenStock.STOCK" 
+                                                          Readonly="true"/>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-2">
                                         <label class="col-form-label">Cantidad :</label>
-                                        <SfNumericTextBox @bind-Value="@stock.STOCK" Decimals="2"></SfNumericTextBox>
+                                        <SfNumericTextBox @bind-Value="@stock.STOCK" Decimals="2" @onchange="@CantChange"></SfNumericTextBox>
                                         <ValidationMessage For="@(() => stock.STOCK)"></ValidationMessage>
                                     </div>
                                     <div class="form-group col-md-1">
@@ -87,12 +94,12 @@ else
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label class="col-form-label">Depacho :</label>
-                                        <SfTextBox @bind-Value="@stock.DESPACHO"></SfTextBox>
+                                        <SfTextBox @bind-Value="@stock.DESPACHO" Readonly="true"></SfTextBox>
                                         <ValidationMessage For="@(() => stock.DESPACHO)"></ValidationMessage>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label class="col-form-label">Lote :</label>
-                                        <SfTextBox @bind-Value="@stock.LOTE"></SfTextBox>
+                                        <SfTextBox @bind-Value="@stock.LOTE" Readonly="true"></SfTextBox>
                                         <ValidationMessage For="@(() => stock.LOTE)"></ValidationMessage>
                                     </div>
 
@@ -109,8 +116,6 @@ else
                             <GridCommandColumns>
                                 <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
                                 <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
-                                <GridCommandColumn Type="CommandButtonType.Save" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-update", CssClass = "e-flat" })"></GridCommandColumn>
-                                <GridCommandColumn Type="CommandButtonType.Cancel" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-cancel-icon", CssClass = "e-flat" })"></GridCommandColumn>
                             </GridCommandColumns>
                         </GridColumn>
                         <GridColumn Field="@nameof(Pedidos.CG_ART)" HeaderText="Cod. Producto" AutoFit="true" Width="130"></GridColumn>
@@ -145,13 +150,13 @@ else
     {
         <BuscadorEmergenteResumenStock @ref="BuscadorEmergenteRS" Titulo="@tituloBuscador" DataSource="@Items"
                                        Columnas="@(new string[] { "CG_ART", "STOCK", "CG_DEP", "SERIE", "LOTE", "DESPACHO"})"
-                                       onObjetoSeleccionado="@(async(r)=> await OnResumenStockSelected(r))"/>
+                                       OnObjetoSeleccionado="@(async(r)=> await OnResumenStockSelected(r))"/>
     }
 
 
     <BuscadorEmergente TItem="Pedidos" @ref="BuscadorProducto" Titulo=@tituloBuscador
                        DataSource="@DataSource" Columnas="@(new string[] { "CG_ART", "DES_ART"})"
-                       onObjetoSeleccionado="OnSelectedItem" />
+                       OnObjetoSeleccionado="OnSelectedItem" />
 
 
 
@@ -185,7 +190,7 @@ else
     };
 
     protected List<ItemModel> Toolbaritems = new List<ItemModel>(){
-        new ItemModel { CssClass="btn", Text = "Agregar Insumo", ShowTextOn = DisplayMode.Toolbar, Type = ItemType.Button, 
+        new ItemModel { CssClass="btn", Text = "Agregar Insumo", ShowTextOn = DisplayMode.Toolbar, Type = ItemType.Button,
             TooltipText = "Agregar Insumo", PrefixIcon = "fa fa-search", Id = "AgregarInsumo" }
     };
 
@@ -255,7 +260,7 @@ else
 
         ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE", "STOCK" };
 
-        Items = await Http.GetFromJsonAsync<ResumenStock[]>($"api/ResumenStock/GetResumenStockPositivo");
+        Items = await Http.GetFromJsonAsync<vResumenStock[]>($"api/ResumenStock/GetResumenStockPositivo");
 
 
     }
@@ -293,7 +298,7 @@ else
                 var serie = stock.SERIE == null ? "" : stock.SERIE;
 
                 var resumen = await Http
-                    .GetFromJsonAsync<ResumenStock>($"api/ResumenStock/GetByStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
+                    .GetFromJsonAsync<vResumenStock>($"api/ResumenStock/GetByStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
 
 
                 stock.ResumenStock = resumen;
@@ -327,7 +332,7 @@ else
     bool PopupBuscadorStockVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
     bool PopupBuscadorProdVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
     string[] ColumnasBuscador = new string[] { "CG_MAT" };
-    ResumenStock[] Items;
+    vResumenStock[] Items;
 
     protected async Task Buscar()
     {
@@ -367,9 +372,9 @@ else
         Items = null;
         tituloBuscador = "Listado de Productos en Stock";
         PopupBuscadorStockVisible = true;
-        ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE", "STOCK" };
+        ColumnasBuscador = new string[] { "CG_ART","PRODUCTO", "DEPOSITO", "DESPACHO", "SERIE", "LOTE", "STOCK" };
         //int cg_orden = TipoInsumoCodigo;
-        Items = await Http.GetFromJsonAsync<ResumenStock[]>("api/ResumenStocks");
+        Items = await Http.GetFromJsonAsync<vResumenStock[]>("api/ResumenStock");
 
         await InvokeAsync(StateHasChanged);
     }
@@ -380,9 +385,9 @@ else
         Items = null;
         tituloBuscador = $"Listado de Insumo {stock.CG_ART} con Stock";
 
-        ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE", "STOCK" };
+        ColumnasBuscador = new string[] { "CG_ART", "PRODUCTO", "DEPOSITO", "DESPACHO", "SERIE", "LOTE", "STOCK" };
         //int cg_orden = TipoInsumoCodigo;
-        Items = await Http.GetFromJsonAsync<ResumenStock[]>($"api/ResumenStock/ByCodigo/{stock.CG_ART.Trim()}");
+        Items = await Http.GetFromJsonAsync<vResumenStock[]>($"api/ResumenStock/ByCodigo?Codigo={stock.CG_ART.Trim()}&Descripcion=");
         await BuscadorEmergenteRS.ShowAsync();
         //await InvokeAsync(StateHasChanged);
     }
@@ -433,12 +438,12 @@ else
     }
 
 
-    private async Task OnResumenStockSelected(ResumenStock obj)
+    private async Task OnResumenStockSelected(vResumenStock obj)
     {
 
         await BuscadorEmergenteRS.HideAsync();
 
-        var resumenStock = (ResumenStock)obj;
+        var resumenStock = (vResumenStock)obj;
 
         //buscar registro mas reciente con las caracteristicas de resumen stock
         var cg_art = resumenStock.CG_ART;
@@ -455,13 +460,6 @@ else
         registroCompleto.ResumenStock = resumenStock;
 
 
-        //var nuevoItem = (new Stock[] { EditContext.DataItem });
-        //lStock = (new Stock[] { EditContext.DataItem }).Concat(lStock);
-        //DataSource = nuevoItem.Concat(DataSource).ToArray();
-
-        //var lStock = new List<Stock>();
-        //lStock.Add(registroCompleto);
-        //DataSource = lStock.ToArray();
         if (bAgregarInsumo)
         {
             registroCompleto.STOCK = (decimal?)1.0000;
@@ -476,7 +474,7 @@ else
         else
         {
             stock.ResumenStock = resumenStock;
-            stock.PENDIENTEOC = resumenStock.STOCK;
+            stock.PENDIENTEOC = resumenStock.STOCK - stock.STOCK;
             stock.CG_DEP = resumenStock.CG_DEP;
             stock.SERIE = resumenStock.SERIE;
             stock.DESPACHO = resumenStock.DESPACHO;
@@ -487,12 +485,16 @@ else
         await InvokeAsync(StateHasChanged);
     }
 
+    protected void CantChange()
+    {
+        stock.PENDIENTEOC = stock.ResumenStock.STOCK - stock.STOCK;
+    }
+
 
     public async Task QueryCellInfoHandler(QueryCellInfoEventArgs<Pedidos> args)
     {
         args.Data.STOCKA = Math.Round((decimal)(args.Data.STOCK / args.Data.CG_DEN), 4);
-        //InvokeAsync(StateHasChanged);
-        if (args.Data.PENDIENTEOC <= 0)
+        if (args.Data.ResumenStock?.STOCK < args.Data.STOCK)
         {
             args.Cell.AddClass(new string[] { "rojo" });
         }

@@ -26,23 +26,30 @@
 <div class="col-lg-12 control-section mt-4">
     <div class="content-wrapper">
         <div class="row">
-            <div class="col-lg-5 col-md-7 col-12">
-                <SfButton OnClick="@((e) => Emitir())" CssClass="" IsPrimary="true"
-                          IconCss="fa fa-check-circle">Emitir Órden para un solo producto</SfButton>
-            </div>
-            <div class="col-lg-3 col-md-5 col-12">
-                <SfButton IconCss="fa fa-ban" @onclick="@(async ()=> await OrdCerradas())" CssClass="btn btn-sm btn-outline-primary"
-                          IsPrimary="false">Órdenes cerradas y anuladas</SfButton>
-            </div>
-            <div class="col-lg-2 col-md-6 col-12">
-                <SfCheckBox @bind-Checked="@emitidasCheck" @onchange="@CheckCambio" Label="Incluir también órdenes Emitidas"></SfCheckBox>
-            </div>
-            <div class="col-lg-2 col-md-6 col-12">
-                <SfCheckBox @bind-Checked="@armadoCheck" @onchange="@CheckCambio" Label="Incluir también órdenes de Armado"></SfCheckBox>
-            </div>
-
+                <div class="col-lg-5 col-md-6 col-12">
+                    <SfButton OnClick="@((e) => Emitir())" CssClass="" IsPrimary="true"
+                              IconCss="fa fa-check-circle">Emitir Órden para un solo producto</SfButton>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <SfButton IconCss="fa fa-ban" @onclick="@(async ()=> await OrdCerradas())" CssClass="btn btn-sm btn-outline-primary"
+                              IsPrimary="false">Órdenes cerradas y anuladas</SfButton>
+                </div>
+                <div class="col-lg-2 col-md-6 col-12">
+                    <SfCheckBox @bind-Checked="@emitidasCheck" @onchange="@CheckCambio" Label="Incluir también órdenes Emitidas"></SfCheckBox>
+                </div>
+                <div class="col-lg-2 col-md-6 col-12">
+                    <SfCheckBox @bind-Checked="@armadoCheck" @onchange="@CheckCambio" Label="Incluir también órdenes de Armado"></SfCheckBox>
+                </div>
 
         </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                               OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                               OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+        </div>
+        
     </div>
 </div>
 
@@ -53,24 +60,22 @@
     }
     else
     {
-        VisibleProperty = false;
-    }
-    if (VisibleProperty == false)
-    {
+        
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row" id="rowGrilla">
                     <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                            EnablePersistence="false"
                             @ref="GridPlanificacion" DataSource="@listaPlanificacion" Height="100%" Width="100%"
-                            AllowExcelExport="true" AllowGrouping="true" ID="Planificacion" RowHeight="20"
+                            AllowExcelExport="true" AllowGrouping="true" ID="grdPlanificacion" RowHeight="20"
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true"
                             Toolbar="@Toolbaritems" GridLines="GridLine.Both">
                         <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                        <GridEvents DataBound="(async ()=> await DataBoundHandler())" CommandClicked="@CommandClickHandler" 
-                                    OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler"
-                                    OnActionBegin="ActionBegin" TValue="Planificacion"></GridEvents>
+                        <GridEvents DataBound="(async ()=> await DataBoundHandler())" 
+                                    CommandClicked="(async (a)=> await CommandClickHandler(a))"
+                                    OnToolbarClick="(async (a)=> await ClickHandler(a))" 
+                                    QueryCellInfo="(async (a)=> await QueryCellInfoHandler(a))"
+                                    OnActionBegin="(async (a)=> await ActionBegin(a))" TValue="Planificacion"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                         <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
@@ -308,7 +313,8 @@
                             <div>
                                 <div class="form-row">
                                     <SfGrid @ref="Grid2" DataSource="@listaDespiece" EnablePersistence="true" ID="Despiece"
-                                            GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true" Height="250px" Width="100%">
+                                            GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true" 
+                                            Height="250px" Width="100%">
                                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                                         <GridEvents TValue="DespiecePlanificacion"></GridEvents>
                                         <GridTemplates>
@@ -370,13 +376,10 @@
 
 
         </div>
-
     }
-    else
-    {
-        <SfSpinner @bind-Visible="@VisibleProperty">
+                                                    
+    <SfSpinner Size="80" Type="SpinnerType.Bootstrap" @bind-Visible="@VisibleProperty">
         </SfSpinner>
-    }
 }
 
 @*DIALOG PARA ENTREGA*@
@@ -389,10 +392,10 @@
                 <div>
                     <div class="form-row">
                         @if (OrdenFabricacionSelected > 0)
-	                    {
-                            <StockOperaciones OperacionId="10" EsEntrega="true" OrdFab="@OrdenFabricacionSelected"/>
-	                    }
-                        
+                        {
+                            <StockOperaciones OperacionId="10" EsEntrega="true" OrdFab="@OrdenFabricacionSelected" />
+                        }
+
                     </div>
                 </div>
             </div>
@@ -421,7 +424,7 @@
 </SfDialog>
 
 @*DIALOG PARA ORDENES CERRADAS Y ANULADAS*@
-<SfDialog IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible3" Height="550px" Width="70%">
+<SfDialog @ref="refDialogCerradasAnuladas" Width="250px" ShowCloseIcon="true" Visible="false" CssClass="dialog">
     <DialogTemplates>
         <Header><p>ORDENES CERRADAS Y ANULADAS</p><hr /></Header>
         <Content>
@@ -433,6 +436,7 @@
                 <div class="content-wrapper">
                     <div class="row">
                         <SfGrid @ref="Grid4" DataSource="@listaCerradasAnuladas" EnablePersistence="false"
+                                AllowFiltering="true" Width="100%"
                                 ID="Despiece" GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true"
                                 RowHeight="20" Height="320">
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
@@ -676,6 +680,8 @@
         border-color: lightgrey;
         color: blue;
     }
+
+    .dialog {
+        min-height: 635px;
+    }
 </style>
-@code {
-}
