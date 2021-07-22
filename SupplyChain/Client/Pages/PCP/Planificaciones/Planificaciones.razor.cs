@@ -14,6 +14,7 @@ using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Inputs;
 using Syncfusion.Blazor.Popups;
 using SupplyChain.Shared;
+using SupplyChain.Shared.PCP;
 
 namespace SupplyChain.Client.Pages.PCP.Planificaciones
 {
@@ -66,7 +67,9 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         //new ItemModel(){ Id= "Print", Text = "Imprimir", PrefixIcon = "fa fa-print", CssClass = "bagde badge-success", Type = ItemType.Button},
         "Print",
         new ItemModel(){ Type = ItemType.Separator},
-        "ExcelExport"
+        "ExcelExport",
+        new ItemModel(){ Type = ItemType.Separator},
+        new ItemModel { Text = "Seleccionar Columnas", TooltipText = "Seleccionar Columnas", Id = "Seleccionar Columnas" },
         };
         public class Estado
         {
@@ -82,11 +85,17 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
             //new Estado() {Texto= "CERRADA", Valor = 4},
             new Estado() {Texto= "ANULADA", Valor = 5}
         };
+
+        protected List<EstadosCargaMaquina> EstadosCargaMaquinas = new();
         protected SfDialog refDialogCerradasAnuladas;
         protected const string APPNAME = "grdPlanificacion";
         protected string state;
+        protected const string APPNAME_OF_CERRADAS_ANULADAS = "grdOFCerradasAnuladas";
+        protected string state_of_cerradas_anuladas;
+        protected Planificacion PlanificacionSeleccionadaOFCerrada;
         protected override async Task OnInitializedAsync()
         {
+            EstadosCargaMaquinas = await Http.GetFromJsonAsync<List<EstadosCargaMaquina>>("api/EstadosCargaMaquinas");
             listaPlanificacion = await Http.GetFromJsonAsync<List<Planificacion>>("api/Planificacion/0/1");
             //await GridPlanificacion?.AutoFitColumns();
             await base.OnInitializedAsync();
@@ -94,6 +103,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
 
         public async Task DataBoundHandler()
         {
+            GridPlanificacion.PreventRender();
             await GridPlanificacion?.AutoFitColumns();
             VisibleProperty = false;
         }
@@ -107,6 +117,11 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
             if (args.Item.Text == "Print")
             {
                 await this.GridPlanificacion.Print();
+            }
+
+            if (args.Item.Text == "Seleccionar Columnas")
+            {
+                await GridPlanificacion.OpenColumnChooser();
             }
         }
 
@@ -281,10 +296,51 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         }
         public async Task OrdCerradas()
         {
+            VisibleProperty = true;
             listaCerradasAnuladas = await Http.GetFromJsonAsync<List<Planificacion>>($"api/Planificacion/OrdenesCerradasYAnuladas/{CantidadMostrar}");
             IsVisible3 = true;
+            VisibleProperty = false;
             await refDialogCerradasAnuladas.Show(true);
         }
+
+        public async Task DataBoundHandlerOFCerradas()
+        {
+            Grid4.PreventRender();
+            await Grid4?.AutoFitColumns();
+            VisibleProperty = false;
+        }
+
+        public async Task ActionBeginOFCerradas(ActionEventArgs<Planificacion> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder)
+            {
+                state_of_cerradas_anuladas = await Grid4.GetPersistData();
+            }
+        }
+
+        public async Task ClickHandlerOFCerradas(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+        {
+            if (args.Item.Text == "Excel Export")
+            {
+                await Grid4.ExcelExport();
+            }
+            if (args.Item.Text == "Print")
+            {
+                await Grid4.Print();
+            }
+
+            if (args.Item.Text == "Seleccionar Columnas")
+            {
+                await Grid4.OpenColumnChooser();
+            }
+        }
+
         public async Task CheckCambio()
         {
             if (armadoCheck == true)
@@ -373,6 +429,44 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         public async Task OnReiniciarGrilla()
         {
             await GridPlanificacion.ResetPersistData();
+        }
+
+        public async Task OnVistaSeleccionada_grdOFCerradasAnuladas(VistasGrillas vistasGrillas)
+        {
+            await Grid4.SetPersistData(vistasGrillas.Layout);
+        }
+        public async Task OnReiniciarGrilla_grdOFCerradasAnuladas()
+        {
+            await Grid4.ResetPersistData();
+        }
+
+        protected async Task OnChangeEstadoCarga(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int,EstadosCargaMaquina> args)
+        {
+            int ValorAnterior = 4;
+            if (args.ItemData.CG_ESTADO < 4)
+            {
+                var response = await Http.PutAsJsonAsync($"api/Planificacion/PutPlanif/{ValorAnterior}",
+                    PlanificacionSeleccionadaOFCerrada);
+                if (response.IsSuccessStatusCode)
+                {
+                    listaCerradasAnuladas = listaCerradasAnuladas
+                    .Where(p => p.CG_ORDF != PlanificacionSeleccionadaOFCerrada.CG_ORDF)
+                    .ToList();
+                    await Grid4.RefreshHeader();
+                    await Grid4.RefreshColumns();
+                    Grid4.Refresh();
+
+
+                    listaPlanificacion = await Http.GetFromJsonAsync<List<Planificacion>>("api/Planificacion/0/1");
+                    await GridPlanificacion.RefreshHeader();
+                    await GridPlanificacion.RefreshColumns();
+                    GridPlanificacion.Refresh();
+                }
+                
+            }
+
+            
+
         }
     }
 }

@@ -213,7 +213,7 @@ namespace SupplyChain.Server.Controllers
             {
                 xConexionSQL.EjecutarSQLNonQuery("EXEC NET_PCP_Anular_OrdenFabricacion " + pl.CG_ORDF + ", 'User'");
             }
-            return NoContent();
+            return Ok();
         }
     }
 }

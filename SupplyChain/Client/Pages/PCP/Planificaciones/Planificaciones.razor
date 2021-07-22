@@ -67,7 +67,7 @@
                     <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
                             @ref="GridPlanificacion" DataSource="@listaPlanificacion" Height="100%" Width="100%"
                             AllowExcelExport="true" AllowGrouping="true" ID="grdPlanificacion" RowHeight="20"
-                            AllowSorting="true" AllowPaging="true" AllowFiltering="true"
+                            AllowSorting="true" AllowPaging="true" AllowFiltering="true" EnablePersistence="false"
                             Toolbar="@Toolbaritems" GridLines="GridLine.Both">
                         <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
@@ -117,7 +117,22 @@
                                 }
                             </Template>
                         </GridEditSettings>
-
+                        <GridAggregates>
+                            <GridAggregate>
+                                <GridAggregateColumns>
+                                    <GridAggregateColumn Field=@nameof(Planificacion.UNIDEQUI) Type="AggregateType.Sum" Format="C2">
+                                        <FooterTemplate>
+                                            @{
+                                                var aggregate = (context as AggregateTemplateContext);
+                                                <div>
+                                                    <p>Sum: @aggregate.Sum</p>
+                                                </div>
+                                            }
+                                        </FooterTemplate>
+                                    </GridAggregateColumn>
+                                </GridAggregateColumns>
+                            </GridAggregate>
+                        </GridAggregates>
                         <GridColumns>
                             <GridColumn Field=@nameof(Planificacion.CG_ORDEN) Format="N0" HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="90px"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.CG_ORDF) Format="N0" HeaderText="Orden" TextAlign="TextAlign.Left" Width="90px"></GridColumn>
@@ -241,8 +256,8 @@
                                                            })" />
                                 </GridCommandColumns>
                             </GridColumn>
-                            <GridColumn Field=@nameof(Planificacion.PEDIDO) Format="N0" HeaderText="Pedido" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(Planificacion.CG_PROD) HeaderText="Producto" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.PEDIDO) Format="N0" HeaderText="Pedido" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.CG_PROD) HeaderText="Producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.DES_PROD) HeaderText="Descripción del producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.CANT) Format="N0" HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.CANTFAB) Format="N0" HeaderText="Cantidad fabricada" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
@@ -265,7 +280,7 @@
                             <GridColumn Field=@nameof(Planificacion.FE_PLAN) HeaderText="fecha planificada" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.FE_FIRME) HeaderText="Fecha en firme" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.FE_CURSO) HeaderText="Fecha en curso" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(Planificacion.UNIDEQUI) HeaderText="Unid Equi." TextAlign="TextAlign.Left" Width="90px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.UNIDEQUI) HeaderText="Unid Equi." TextAlign="TextAlign.Left" Width="90px" Format="N2"></GridColumn>
                         </GridColumns>
                     </SfGrid>
                 </div>
@@ -410,7 +425,7 @@
     <DialogTemplates>
         <Header><p>Formulas</p><hr /></Header>
         <Content>
-            <SfGrid @ref="Grid3" DataSource="@listaFormula" EnablePersistence="true" ID="Formula" GridLines="GridLine.Both"
+            <SfGrid @ref="Grid3" DataSource="@listaFormula" EnablePersistence="false" ID="grdFormula" GridLines="GridLine.Both"
                     AllowResizing="true" Height="100px" Width="100%">
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                 <GridEvents RowSelected="OnSelected" TValue="FormulaPlanificacion"></GridEvents>
@@ -424,7 +439,8 @@
 </SfDialog>
 
 @*DIALOG PARA ORDENES CERRADAS Y ANULADAS*@
-<SfDialog @ref="refDialogCerradasAnuladas" Width="250px" ShowCloseIcon="true" Visible="false" CssClass="dialog">
+<SfDialog @ref="refDialogCerradasAnuladas" Width="250px" ShowCloseIcon="true" Visible="false" IsModal="true" 
+          CssClass="dialog" Target="@APPNAME" >
     <DialogTemplates>
         <Header><p>ORDENES CERRADAS Y ANULADAS</p><hr /></Header>
         <Content>
@@ -432,32 +448,41 @@
             {
                 <em>Cargando...</em>
             }
+            <div class="row">
+                <div class="col-12">
+                    <ComboVistasGrilla AppName="@APPNAME_OF_CERRADAS_ANULADAS" StateApp="@state_of_cerradas_anuladas" 
+                                       OnReiniciar="@(()=> OnReiniciarGrilla_grdOFCerradasAnuladas())" 
+                                       OnVistaSelected="@(async(v)=> await OnVistaSeleccionada_grdOFCerradasAnuladas(v))"/>
+                </div>
+            </div>
             <div class="col-lg-12 control-section mt-4">
                 <div class="content-wrapper">
                     <div class="row">
                         <SfGrid @ref="Grid4" DataSource="@listaCerradasAnuladas" EnablePersistence="false"
-                                AllowFiltering="true" Width="100%"
-                                ID="Despiece" GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true"
-                                RowHeight="20" Height="320">
-                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                            <GridEvents TValue="Planificacion"></GridEvents>
+                                AllowFiltering="true" Width="100%" AllowGrouping="true" AllowSorting="true" EnableVirtualization="true"
+                                ID="grdOFCerradasAnuladas" GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true"
+                                ShowColumnChooser="true"
+                                Toolbar="@Toolbaritems" ShowColumnMenu="true" RowHeight="20" Height="250">
+                            <GridEvents DataBound="(async ()=> await DataBoundHandlerOFCerradas())"
+                                        OnToolbarClick="(async (a)=> await ClickHandlerOFCerradas(a))"
+                                        OnActionBegin="(async (a)=> await ActionBeginOFCerradas(a))" TValue="Planificacion"></GridEvents>
+                            <GridEditSettings AllowEditing="true" Mode="EditMode.Normal"></GridEditSettings>
                             <GridColumns>
-                                <GridColumn Field=@nameof(Planificacion.CG_ORDEN) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                                <GridColumn Field=@nameof(Planificacion.CG_ORDF) HeaderText="Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.UNIDEQUI) HeaderText="Unid Equi." TextAlign="TextAlign.Left" Width="90px" Format="N2"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.CG_ORDF) IsPrimaryKey ="true" HeaderText="Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                 <GridColumn Field=@nameof(Planificacion.CLASE) HeaderText="Clase" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                 <GridColumn Field=@nameof(Planificacion.CG_R) HeaderText="Tipo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                <GridColumn Field=@nameof(Planificacion.CG_ESTADOCARGA) Format="N0" HeaderText="Estado" Width="200px">
+                                <GridColumn Field=@nameof(Planificacion.CG_ESTADOCARGA) Format="N0" HeaderText="Estado" EditType="EditType.DropDownEdit" Width="200px">
                                     <Template>
                                         @{
-                                            Planificacion Value = (context as Planificacion);
-                                            if (Value.CG_ESTADOCARGA == 4)
-                                            {
-                                                <span>CERRADA</span>
-                                            }
-                                            else if (Value.CG_ESTADOCARGA == 5)
-                                            {
-                                                <span>ANULADA</span>
-                                            }
+                                            PlanificacionSeleccionadaOFCerrada = (context as Planificacion);
+                                            var plani = PlanificacionSeleccionadaOFCerrada;
+                                            <SfDropDownList TItem="EstadosCargaMaquina" @bind-Value="@(plani.CG_ESTADOCARGA)"
+                                                            TValue="int" ID="CG_ESTADO" DataSource="@EstadosCargaMaquinas">
+                                                <DropDownListFieldSettings Text="ESTADO" Value="CG_ESTADO"></DropDownListFieldSettings>
+                                                <DropDownListEvents TItem="EstadosCargaMaquina" TValue="int"
+                                                                    ValueChange="@(async (a)=>await OnChangeEstadoCarga(a))"></DropDownListEvents>
+                                            </SfDropDownList>
                                         }
                                     </Template>
                                 </GridColumn>
@@ -480,11 +505,17 @@
                                 <GridColumn Field=@nameof(Planificacion.FE_CIERRE) HeaderText="Fecha de cierre" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                             </GridColumns>
                         </SfGrid>
+                        
+                    </div>
+                    <div class="row">
                         @{
+
                             if (listaCerradasAnuladas.Count == CantidadMostrar)
                             {
-                                <div class="col-sm-3 my-1">
-                                    <button type="submit" class="btn btn-primary" @onclick="@AgregarValores">Ver más</button>
+                                <div class="col-sm-3">
+                                    <button type="submit" class="btn btn-sm btn-info" @onclick="@(async()=>await AgregarValores())">
+                                        <i class="fa fa-search-plus"></i>Ver más
+                                    </button>
                                 </div>
                             }
                         }
