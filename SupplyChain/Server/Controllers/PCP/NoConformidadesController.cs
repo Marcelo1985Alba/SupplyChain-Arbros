@@ -207,8 +207,10 @@ namespace SupplyChain
         [HttpGet("GetAccionesByEvento/{cg_noconf}")]
         public async Task<ActionResult<IEnumerable<NoConformidadesAcciones>>> GetAccionesByEvento(int cg_noconf)
         {
-            string xSQL = "SELECT * FROM NoConfor_Acciones as A " +
-                              " WHERE A.Cg_NoConf = " + cg_noconf;
+            string xSQL = "SELECT a.Cg_NoConfAcc, a.Cg_NoConf, a.Orden, b.Texto as DesOrden, a.Observaciones, a.Fe_ocurrencia, a.Usuario " +
+                "FROM NoConfor_Acciones as a " +
+                "left join NoConfor_ListaAcciones as b on a.Orden = b.Tipoaccion " +
+                " WHERE a.Cg_NoConf = " + cg_noconf;
             return await _context.NoConformidadesAcciones.FromSqlRaw(xSQL).ToListAsync();
         }
 

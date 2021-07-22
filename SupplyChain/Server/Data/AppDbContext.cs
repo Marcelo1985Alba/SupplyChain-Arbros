@@ -69,6 +69,7 @@ namespace SupplyChain
         public virtual DbSet<ModeloPedidosLote> PedidosLote { get; set; }
         public DbSet<NoConformidades> NoConformidades { get; set; }
         public DbSet<NoConformidadesQuery> NoConformidadesQuery { get; set; }
+        public DbSet<NoConformidadesListaAcciones> NoConformidadesListaAcciones { get; set; }
         public DbSet<NoConformidadesAcciones> NoConformidadesAcciones { get; set; }
         public DbSet<Compra> ComprasDbSet { get; set; }
 

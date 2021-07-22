@@ -245,14 +245,14 @@
                                 <div class="content-wrapper">
                                     <div class="row" id="gridAcciones">
                                         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
-                                                @ref="GridAcciones" DataSource="@listaacciones" AllowExcelExport="true" AllowGrouping="true" ID="Prevision"
+                                                @ref="GridAcciones" DataSource="@listaaccionesgrilla" AllowExcelExport="true" AllowGrouping="true" ID="Prevision"
                                                 RowHeight="30"
                                                 AllowSorting="true" AllowPaging="true" AllowFiltering="true"
                                                 GridLines="GridLine.Both">
                                             <GridPageSettings PageCount="10" PageSizes="true" PageSize="20"></GridPageSettings>
                                             <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                                             <GridColumns>
-                                                <GridColumn Field=@nameof(NoConformidadesAcciones.Orden) HeaderText="Tipo Accion" Edit="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
+                                                <GridColumn Field=@nameof(NoConformidadesAcciones.DesOrden) HeaderText="Tipo Accion" Edit="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
                                                 <GridColumn Field=@nameof(NoConformidadesQuery.Observaciones) HeaderText="Observaciones" Edit="false" TextAlign="TextAlign.Left" Width="50px"></GridColumn>
                                                 <GridColumn Field=@nameof(NoConformidadesQuery.Fe_Ocurrencia) HeaderText="Fecha" Edit="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
                                                 <GridColumn Field=@nameof(NoConformidadesQuery.Usuario) HeaderText="Usuario" Edit="false" TextAlign="TextAlign.Left" Width="40px"></GridColumn>
@@ -282,8 +282,8 @@
 
                     <div class="form-group col-lg-5 col-md-5 col-sm-10">
                         <label class="col-form-label">Tipo de Acción</label>
-                        <SfDropDownList TValue="int" @bind-Value="@tipoaccion" TItem="ListaAcciones" Placeholder="Seleccione Acción..." DataSource="@ListaAccionesData">
-                            <DropDownListFieldSettings Value="Value" Text="Texto"></DropDownListFieldSettings>
+                        <SfDropDownList TValue="int" @bind-Value="@tipoaccion" TItem="NoConformidadesListaAcciones" Placeholder="Seleccione Acción..." DataSource="@ListaAccionesData">
+                            <DropDownListFieldSettings Value="Tipoaccion" Text="Texto"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
                 </div>

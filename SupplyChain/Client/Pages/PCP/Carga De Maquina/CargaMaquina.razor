@@ -53,7 +53,6 @@
     <SfSpinner @ref="SpinnerCDM" Size="60" Label="@MensajeCargando" CssClass="mt-5 pt-5"
                Type="SpinnerType.Bootstrap" Target="#cargaMaq"
                @bind-Visible="Visible">
-
     </SfSpinner>
     <div class="row" id="cargaMaq">
         <div class="col">
@@ -542,7 +541,12 @@
                                         </SfButton>
                                     </div>
                                 }
-
+                                <div class="form-group col">
+                                    <SfButton IsPrimary="true" IconCss="fa fa-file"
+                                              @onclick="@(async ()=> await AbreEvento())">
+                                        Cargar Evento
+                                    </SfButton>
+                                </div>
                             </div>
 
                             <hr class="separator">
@@ -871,7 +875,6 @@
                 </DialogTemplates>
                 <DialogEvents Closed="@OrdenFabricacionClose"></DialogEvents>
                 <DialogButtons>
-                    <DialogButton Type="Syncfusion.Blazor.Popups.ButtonType.Button" IconCss="fa fa-edit" Content="Evento" CssClass="btn btn-sm btn-info" OnClick="@AbreEvento" />
                     <DialogButton Type="Syncfusion.Blazor.Popups.ButtonType.Button" IconCss="fa fa-save" Content="Guardar" CssClass="btn btn-sm btn-info" OnClick="@OrdenFabricacionOk" />
                     <DialogButton Type="Syncfusion.Blazor.Popups.ButtonType.Button" IconCss="fa fa-window-close" Content="Cancelar" CssClass="btn btn-sm btn-info" OnClick="@OrdenFabricacionClose" />
                 </DialogButtons>
@@ -1123,7 +1126,7 @@
             throw;
         }
     }
-    private async Task AbreEvento(Object args)
+    private async Task AbreEvento()
     {
         isOrdenDialogVisible = false;
         isEventoDialogVisible = true;
@@ -1166,6 +1169,13 @@
                                       ordenFabricacionOriginal.CG_ESTADOCARGA,
                                       ordenFabricacion.CG_ORDF);
             await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
+            ordenFabricacion = null;
+            await Refrescar();
+        }
+        else if (ordenFabricacion.CG_ESTADOCARGA == 3 && ordenFabricacion.CANTFAB > 0
+            && (ordenFabricacion.CG_ESTADOCARGA == ordenFabricacionOriginal.CG_ESTADOCARGA))
+        {
+            await Altaparcial();
             ordenFabricacion = null;
             await Refrescar();
         }
@@ -1275,7 +1285,28 @@
             throw;
         }
     }
+    protected async Task Altaparcial()
+    {
+        Visible = true;
 
+        string sqlCommandString = "EXEC NET_PCP_Altaparcial_OrdenFabricacion " + ordenFabricacion.CG_ORDF.ToString() + ", '" + Usuario + "'";
+        var respuesta2 = await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
+        if (respuesta2.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        {
+            await this.ToastObj.Show(new ToastModel
+            {
+                Title = "ERROR!",
+                Content = $"Ocurrio un error. Error al registrar el alta",
+                CssClass = "e-toast-danger",
+                Icon = "e-error toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
+
+        Visible = false;
+
+    }
     protected async Task CerrarOrdenFabricacion()
     {
 
@@ -1295,9 +1326,15 @@
             });
         }
         ordenFabricacion = null;
-        scrapSeleccionado = null;
         await Refrescar();
         Visible = false;
+        if (scrapSeleccionado > 0)
+        {
+            isEventoDialogVisible = true;
+
+        }
+        scrapSeleccionado = null;
+
     }
 
     protected async Task EstadoCarga_Change()

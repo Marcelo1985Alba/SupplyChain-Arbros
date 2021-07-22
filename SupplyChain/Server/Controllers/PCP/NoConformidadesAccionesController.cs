@@ -116,5 +116,13 @@ namespace SupplyChain
         */
 
 
+        // GET: api/NoConformidadesAcciones/GetListaAcciones/
+        [HttpGet("GetListaAcciones/")]
+        public async Task<ActionResult<IEnumerable<NoConformidadesListaAcciones>>> GetListaAcciones(int ocompra)
+        {
+            string xSQL = "SELECT * FROM NoConfor_ListaAcciones ";
+            return _context.NoConformidadesListaAcciones.FromSqlRaw(xSQL).ToList();
+        }
+
     }
 }

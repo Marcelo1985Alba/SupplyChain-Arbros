@@ -577,14 +577,14 @@ namespace SupplyChain.Client.Pages.NoConf
         NoConformidadesAcciones NoConfAcciones = new NoConformidadesAcciones();
         NoConformidadesQuery seleccionconf = new NoConformidadesQuery();
 
-        public List<NoConformidadesAcciones> listaacciones = new List<NoConformidadesAcciones>();
+        public List<NoConformidadesAcciones> listaaccionesgrilla = new List<NoConformidadesAcciones>();
 
         public class ListaAcciones
         {
             public int Value { get; set; }
             public string Texto { get; set; }
         }
-
+/*
         public List<ListaAcciones> ListaAccionesData = new List<ListaAcciones> {
         new ListaAcciones() {Texto= "Acción de Contensión", Value = 2},
         new ListaAcciones() {Texto= "Causa Raiz", Value = 3},
@@ -593,6 +593,8 @@ namespace SupplyChain.Client.Pages.NoConf
 //        new ListaAcciones() {Texto= "Fecha de implementacion de la acción", Value = 6},
         new ListaAcciones() {Texto= "Verificación de la Acción Correctiva", Value = 7},
         new ListaAcciones() {Texto= "Efectividad", Value = 8}};
+*/
+        public List<NoConformidadesListaAcciones> ListaAccionesData = new List<NoConformidadesListaAcciones>();
 
         protected string CgString = "";
         protected string DesString = "";
@@ -620,6 +622,8 @@ namespace SupplyChain.Client.Pages.NoConf
         {
 
             fechahoy = DateTime.Now.Date;
+
+            ListaAccionesData = await Http.GetFromJsonAsync<List<NoConformidadesListaAcciones>>("api/NoConformidadesAcciones/GetListaAcciones/");
 
             if ( vieneOF == 0)
             {
@@ -798,7 +802,7 @@ namespace SupplyChain.Client.Pages.NoConf
                         comentarios = selectedRecord.Comentarios;
                     }
                     // busca acciones
-                    listaacciones = await Http.GetFromJsonAsync<List<NoConformidadesAcciones>>($"api/NoConformidades/GetAccionesByEvento/" + ValorCg_noconf);
+                    listaaccionesgrilla = await Http.GetFromJsonAsync<List<NoConformidadesAcciones>>($"api/NoConformidades/GetAccionesByEvento/" + ValorCg_noconf);
 
                     deshabradio = true;
                     ocultadivAcciones = false;
@@ -858,9 +862,9 @@ namespace SupplyChain.Client.Pages.NoConf
                 $"{registro.Comentarios}" , font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
             PdfGrid pdfGrid = new PdfGrid();
-            listaacciones = await Http.GetFromJsonAsync<List<NoConformidadesAcciones>>($"api/NoConformidades/GetAccionesByEvento/" + registro.Cg_NoConf);
+            listaaccionesgrilla = await Http.GetFromJsonAsync<List<NoConformidadesAcciones>>($"api/NoConformidades/GetAccionesByEvento/" + registro.Cg_NoConf);
 
-            pdfGrid.DataSource = listaacciones;
+            pdfGrid.DataSource = listaaccionesgrilla;
             //Create string format for PdfGrid
             PdfStringFormat format = new PdfStringFormat();
             format.Alignment = PdfTextAlignment.Center;
@@ -900,7 +904,7 @@ namespace SupplyChain.Client.Pages.NoConf
             NoConfAcciones.Cg_NoConf = seleccionconf.Cg_NoConf;
             NoConfAcciones.Orden = tipoaccion;
             NoConfAcciones.Observaciones = observacionesmodal;
-//            NoConfAcciones.Fe_Ocurrencia = DateTime.Now.Date;
+            //            NoConfAcciones.Fe_Ocurrencia = DateTime.Now.Date;
             NoConfAcciones.Fe_Ocurrencia = fechaaccion;
             NoConfAcciones.Usuario = "USER";
 
