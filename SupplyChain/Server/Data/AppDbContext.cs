@@ -57,6 +57,7 @@ namespace SupplyChain
         public virtual DbSet<ModeloPendientesFabricar> ModeloPendientesFabricar { get; set; }
         public virtual DbSet<ModeloAbastecimiento> ModeloAbastecimiento { get; set; }
         public virtual DbSet<vPendienteFabricar> VPendientesFabricars { get; set; }
+        public virtual DbSet<vTrazabilidad> VTrazabilidads { get; set; }
         public virtual DbSet<Procun> Procun { get; set; }
         public virtual DbSet<Fabricacion> Fabricaciones { get; set; }
         //MODULO LOGIN
@@ -113,6 +114,12 @@ namespace SupplyChain
             eb =>
             {
                 eb.ToView("vResumenStock");
+            });
+
+            modelBuilder.Entity<vTrazabilidad>(
+            eb =>
+            {
+                eb.ToView("vTrazabilidad");
             });
 
             modelBuilder.Entity<ItemAbastecimiento>().HasNoKey().ToView(null);

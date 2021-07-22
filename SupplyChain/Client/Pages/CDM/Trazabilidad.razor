@@ -94,212 +94,239 @@
 
     if (Showgrid == true)
     {
-        <form>
-            @{
-                var lote = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim();
-                if (lote == null)
-                {
-                    lote = "";
-                }
-                var modelo = prodList.CAMPOCOM1.Trim();
-                if (modelo == null)
-                {
-                    modelo = "";
-                }
-                var medida = prodList.CAMPOCOM2.Trim();
-                if (medida == null)
-                {
-                    medida = "";
-                }
-                var orificio = prodList.CAMPOCOM3.Trim();
-                if (orificio == null)
-                {
-                    orificio = "";
-                }
-                var area = prodList.CAMPOCOM4.Trim();
-                if (area == null)
-                {
-                    area = "";
-                }
-                var serie = prodList.CAMPOCOM5.Trim();
-                if (serie == null)
-                {
-                    serie = "";
-                }
-                var tipo = prodList.CAMPOCOM6.Trim();
-                if (tipo == null)
-                {
-                    tipo = "";
-                }
-                var presion = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
-                if (presion == null)
-                {
-                    presion = "";
-                }
-                var resorte = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim();
-                if (resorte == null)
-                {
-                    resorte = "";
-                }
-                var fluido = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim();
-                if (fluido == null)
-                {
-                    fluido = "";
-                }
-                var presAj = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim();
-                if (presAj == null)
-                {
-                    presAj = "";
-                }
-                var ctpre = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim();
-                if (ctpre == null)
-                {
-                    ctpre = "";
-                }
-                var temp = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim();
-                if (temp == null)
-                {
-                    temp = "";
-                }
+<form>
+    @{
+        var lote = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim();
+        if (lote == null)
+        {
+            lote = "";
+        }
+        var fecha = vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro && t.TIPOO == 28).OrderByDescending(t => t.PEDIDO).FirstOrDefault().FE_MOV.ToString();
+        if (fecha == null)
+        {
+            fecha = "";
+        }
+        var prod = prodList.CG_PROD.ToString();
+        if (prod == null)
+        {
+            prod = "";
+        }
+        var orco = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().ORCO.Trim();
+        if (orco == null)
+        {
+            orco = "";
+        }
+        if (vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().TIPOO == 1)
+        {
+            var rem = vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro && t.TIPOO == 1).OrderByDescending(t => t.PEDIDO).FirstOrDefault().REMITO;
+            if (rem != "" && rem != null)
+            {
+                remito = rem;
             }
-            <div class="row">
-
-                <div class="col">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Trazabilidad del Número de Pedido @TrzNro"
-                           readonly />
-                </div>
-
-                <div class="col">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Lote: @lote"
-                           readonly />
-                </div>
-
-            </div>
-
-            <div class="row">
-
-                <div class="col">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Modelo: @modelo"
-                           readonly />
-                </div>
-
-                <div class="col">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Medida: @medida"
-                           readonly />
-                </div>
-
-                <div class="col">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Orificio: @orificio"
-                           readonly />
-                </div>
-
-
-
-            </div>
-
-            <div class="row">
-                <div class="col">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Area: @area"
-                           readonly />
-                </div>
-
-                <div class="col">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Serie: @serie"
-                           readonly />
-                </div>
-
-                <div class="col">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Tipo: @tipo"
-                           readonly />
-                </div>
-            </div>
-
-            <div class="row">
-
-                <div class="col">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Presion: @presion"
-                           readonly />
-                </div>
-
-                <div class="col">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Resorte: @resorte"
-                           readonly />
-                </div>
-
-                <div class="col">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Fluido: @fluido"
-                           readonly />
-                </div>
-
-
-
-            </div>
-            <div class="row">
-                <div class="col">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="P. Aj Banco: @presAj"
-                           readonly />
-                </div>
-
-                <div class="col">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Contrapresión: @ctpre"
-                           readonly />
-                </div>
-
-                <div class="col">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Temperatura: @temp"
-                           readonly />
-                </div>
-            </div>
-        </form>
+        }
+        var modelo = prodList.CAMPOCOM1.Trim();
+        if (modelo == null)
+        {
+            modelo = "";
+        }
+        var medida = prodList.CAMPOCOM2.Trim();
+        if (medida == null)
+        {
+            medida = "";
+        }
+        var orificio = prodList.CAMPOCOM3.Trim();
+        if (orificio == null)
+        {
+            orificio = "";
+        }
+        var area = prodList.CAMPOCOM4.Trim();
+        if (area == null)
+        {
+            area = "";
+        }
+        var serie = prodList.CAMPOCOM5.Trim();
+        if (serie == null)
+        {
+            serie = "";
+        }
+        var tipo = prodList.CAMPOCOM6.Trim();
+        if (tipo == null)
+        {
+            tipo = "";
+        }
+        var presion = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
+        if (presion == null)
+        {
+            presion = "";
+        }
+        var resorte = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim();
+        if (resorte == null)
+        {
+            resorte = "";
+        }
+        var fluido = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim();
+        if (fluido == null)
+        {
+            fluido = "";
+        }
+        var presAj = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim();
+        if (presAj == null)
+        {
+            presAj = "";
+        }
+        var ctpre = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim();
+        if (ctpre == null)
+        {
+            ctpre = "";
+        }
+        var temp = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim();
+        if (temp == null)
+        {
+            temp = "";
+        }
+    }
+    <div class="row">
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Pedido: @TrzNro"
+                   readonly />
+        </div>
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Producto: @prod"
+                   readonly />
+        </div>
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="O.C.: @orco"
+                   readonly />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="PSV: @lote"
+                   readonly />
+        </div>
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Fecha: @fecha"
+                   readonly />
+        </div>
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Remito: @remito"
+                   readonly />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Modelo: @modelo"
+                   readonly />
+        </div>
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Medida: @medida"
+                   readonly />
+        </div>
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Orificio: @orificio"
+                   readonly />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Area: @area"
+                   readonly />
+        </div>
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Serie: @serie"
+                   readonly />
+        </div>
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Tipo: @tipo"
+                   readonly />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Presion: @presion"
+                   readonly />
+        </div>
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Resorte: @resorte"
+                   readonly />
+        </div>
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Fluido: @fluido"
+                   readonly />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="P. Aj Banco: @presAj"
+                   readonly />
+        </div>
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Contrapresión: @ctpre"
+                   readonly />
+        </div>
+        <div class="col">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Temperatura: @temp"
+                   readonly />
+        </div>
+    </div>
+</form>
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row">
-                    <SfGrid ShowColumnChooser="true" AllowResizing="true" Width="auto" @ref="Grid" ID="gridTrazPedidos"
-                            GridLines="GridLine.Both"
-                            DataSource="@pedidos" AllowExcelExport="true" AllowGrouping="true" Toolbar="@Toolbaritems">
+                    <SfGrid ShowColumnChooser="true" AllowResizing="true" Width="auto" @ref="Grid4" ID="gridTrazPedidos"
+                            GridLines="GridLine.Both" AllowReordering="true" AllowSorting="true"
+                            DataSource="@vpedidos" AllowExcelExport="true" AllowGrouping="true" Toolbar="@Toolbaritems">
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                         <GridEvents RowSelected="@(async()=> await OnSelectedCertificado())" OnToolbarClick="@ClickHandler"
-                                    TValue="Pedidos"></GridEvents>
+                                    TValue="vTrazabilidad"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(Pedidos.CG_ART) HeaderText="Producto" Width="55px"></GridColumn>
-                            <GridColumn Field=@nameof(Pedidos.DES_ART) HeaderText="Descripcion" Width="130px"></GridColumn>
-                            <GridColumn Field=@nameof(Pedidos.DESPACHO) HeaderText="Despacho" Width="60px"></GridColumn>
-                            <GridColumn Field=@nameof(Pedidos.LOTE) HeaderText="Lote" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(Pedidos.FE_MOV) HeaderText="Fecha Movimiento" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(vTrazabilidad.CG_ART) HeaderText="Producto" Width="100px"></GridColumn>
+                            <GridColumn Field=@nameof(vTrazabilidad.DES_ART) HeaderText="Descripcion" Width="200px"></GridColumn>
+                            <GridColumn Field=@nameof(vTrazabilidad.DESPACHO) HeaderText="Despacho" Width="70px"></GridColumn>
+                            <GridColumn Field=@nameof(vTrazabilidad.LOTE) HeaderText="Lote" Width="70px"></GridColumn>
+                            <GridColumn Field=@nameof(vTrazabilidad.NORMA) HeaderText="Norma" Width="70px"></GridColumn>
+                            <GridColumn Field=@nameof(vTrazabilidad.CG_LINEA) HeaderText="Linea" Width="70px"></GridColumn>
                         </GridColumns>
                     </SfGrid>
                 </div>
-
             </div>
         </div>
         <SfDialog ID="dialogCertifTraz" @ref="DialogRef" Height="550px" Target="#gridTrazPedidos"
@@ -323,7 +350,6 @@
                                                              ServiceUrl="/api/Values" DocumentPath="@pdf_ruta"
                                                              Height="85%" Width="90%"></SfPdfViewer>
                                             </div>
-
                                         }
                                         else
                                         {
@@ -402,6 +428,7 @@
     protected SfGrid<Pedidos> Grid;
     protected SfGrid<Pedidos> Grid2;
     protected SfGrid<Pedidos> Grid3;
+    protected SfGrid<vTrazabilidad> Grid4;
     protected SfSpinner refSpinner;
     protected SfDialog DialogRef;
     public bool Enabled = true;
@@ -410,8 +437,11 @@
     public bool ShowCertificado = false;
 
     protected List<Pedidos> pedidos = new List<Pedidos>();
+    protected List<vTrazabilidad> vpedidos = new List<vTrazabilidad>();
     protected List<Pedidos> Pedidoslist = new List<Pedidos>();
+    //protected List<Pedidos> Pedidoslist = new List<Pedidos>();
     protected List<Pedidos> Busquedalist = new List<Pedidos>();
+    //protected List<Pedidos> Busquedalist = new List<Pedidos>();
     protected List<Pedidos> OF = new List<Pedidos>();
     protected List<PedCli> PedCliList = new List<PedCli>();
     protected Prod prodList = new Prod();
@@ -430,6 +460,7 @@
     protected bool IsVisible { get; set; } = false;
     protected bool IsVisibleCertificado { get; set; } = false;
     public int GridRowHeight = 20;
+    string remito = "";
 
     protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "1100px" };
 
@@ -454,9 +485,6 @@
     {
         Layout.Titulo = "Trazabilidad";
         //rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
-
-
-
         await base.OnInitializedAsync();
     }
 
@@ -489,7 +517,7 @@
     public async Task OnSelectedCertificado()
     {
         await refSpinner.ShowAsync();
-        var row = await this.Grid.GetSelectedRecords();
+        var row = await this.Grid4.GetSelectedRecords();
         if (!string.IsNullOrEmpty(row[0].DESPACHO))
         {
             if (!string.IsNullOrEmpty(row[0].LOTE))
@@ -507,18 +535,14 @@
                     ordenFabricacionMP = new List<ModeloOrdenFabricacionMP>();
                 }
             }
-
-
             if (!string.IsNullOrEmpty(row[0].DESPACHO))
             {
                 NroCertificado = row[0].DESPACHO;
                 var archivo = NroCertificado.Trim() + ".pdf";
                 ShowCertificado = await Http.GetFromJsonAsync<bool>($"api/AdministracionArchivos/ExisteCertificado/{archivo}");
             }
-
             await DialogRef.Show(false);
         }
-
         await refSpinner.HideAsync();
     }
 
@@ -609,6 +633,7 @@
             PedCliList = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/{BoxPedido}");
             prodList = await Http.GetFromJsonAsync<Prod>($"api/Prod/{CodNro}");
             pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/MostrarTrazabilidad/{BoxPedido}");
+            vpedidos = await Http.GetFromJsonAsync<List<vTrazabilidad>>($"api/Trazabilidads/MostrarTrazabilidad/{BoxPedido}");
             Showgrid = true;
             BoxPedido = "";
             BoxCliente = "";
