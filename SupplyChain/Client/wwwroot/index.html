@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="theme-color" content="#317EFB" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5 .0, user-scalable=no" />
     <title>Arbros S.A</title>
     <base href="/" />
     <link href="css/app.css" rel="stylesheet" />
@@ -44,15 +43,21 @@
 </head>
 
 <body class="fix-header card-no-border fix-sidebar">
-    <div id="app">
-        <div class="preloader">
-            <div class="loader">
-                <div class="loader__figure"></div>
-                <p class="loader__label">Arbros S.A.</p>
+
+
+
+    <header>
+        <div id="app">
+            <div class="preloader">
+                <div class="loader">
+                    <div class="loader__figure"></div>
+                    <p class="loader__label">Arbros S.A.</p>
+                </div>
             </div>
+            Loading...
         </div>
-        Loading...
-    </div>
+    </header>
+    
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
@@ -133,7 +138,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-    <link async href="SupplyChain.Client.styles.css" rel="stylesheet" />
+    <!--<link async href="SupplyChain.Client.styles.css" rel="stylesheet" />-->
     <script src="_framework/blazor.webassembly.js"></script>
 
     <script>navigator.serviceWorker.register('service-worker.js', { scope: '/' });</script>
