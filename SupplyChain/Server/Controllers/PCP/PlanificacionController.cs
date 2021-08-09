@@ -146,47 +146,22 @@ namespace SupplyChain.Server.Controllers
         }
         // GET: api/Planificacion/OrdenesCerradasYAnuladas/{Busqueda}
         [HttpGet("OrdenesCerradasYAnuladas/{Busqueda}")]
-        public List<Planificacion> OrdenesCerradasYAnuladas(int Busqueda)
+        public async Task<List<Planificacion>> OrdenesCerradasYAnuladas(int Busqueda)
         {
             try
             {
-                ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+                string xSQLCommandString = "SELECT TOP " + Busqueda+ " A.SEM_ORIGEN, A.SEM_ABAST_PURO, A.SEM_ABAST, B.CG_ORDEN, A.CG_ORDF" +
+                ", (CASE WHEN B.CG_ORDEN=1 THEN 'Producto' ELSE (CASE WHEN B.CG_ORDEN=2 " +
+                "THEN 'Semi-Elaborado de Proceso' ELSE (CASE WHEN B.CG_ORDEN=3 THEN 'Semi-Elaborado' " +
+                "ELSE (CASE WHEN B.CG_ORDEN=4 THEN 'Materia Prima' ELSE (CASE WHEN B.CG_ORDEN=10 THEN 'Insumo No Productivo / Articulo de Reventa' ELSE (CASE WHEN B.CG_ORDEN=11 THEN 'Herramental e Insumos Inventariables' ELSE (CASE WHEN B.CG_ORDEN=12 THEN 'Repuestos' ELSE (CASE WHEN B.CG_ORDEN=13 THEN 'Servicios' ELSE '' END) END) END) END) END) END) END) END) AS CLASE" +
+                ", (CASE WHEN A.CG_R='' THEN 'Fabricación' ELSE (CASE WHEN A.CG_R='R' THEN 'Reproceso' ELSE (CASE WHEN A.CG_R='T' THEN 'Retrabajo' ELSE (CASE WHEN A.CG_R='S' THEN 'Seleccion' ELSE (CASE WHEN A.CG_R='A' THEN 'Armado' ELSE '' END) END) END) END) END) AS CG_R" +
+                ", A.CG_ESTADOCARGA, A.CG_PROD, A.DES_PROD, A.CANT, A.CANTFAB, B.UNID, A.PEDIDO" +
+                ", B.UNIDSEG, A.DIASFAB, RTRIM(LTRIM(A.CG_CELDA)) AS CG_CELDA, A.CG_FORM, A.FE_ENTREGA, A.FE_EMIT, A.FE_PLAN, " +
+                "A.FE_FIRME, A.FE_CURSO, A.FE_ANUL, A.FE_CIERRE, B.UNIDEQUI * A.CANT as UNIDEQUI" +
+                " FROM Programa A, Prod B WHERE CG_REG>=2 AND" +
+                "  A.Cg_prod = B.Cg_prod AND CG_ESTADOCARGA IN (4, 5) ORDER BY A.CG_ORDF DESC";
 
-                string xSQLCommandString = $"SELECT TOP {Busqueda} B.CG_ORDEN, A.CG_ORDF" +
-                                                         ", (CASE WHEN B.CG_ORDEN=1 THEN 'Producto' ELSE (CASE WHEN B.CG_ORDEN=2 THEN 'Semi-Elaborado de Proceso' ELSE (CASE WHEN B.CG_ORDEN=3 THEN 'Semi-Elaborado' ELSE (CASE WHEN B.CG_ORDEN=4 THEN 'Materia Prima' ELSE (CASE WHEN B.CG_ORDEN=10 THEN 'Insumo No Productivo / Articulo de Reventa' ELSE (CASE WHEN B.CG_ORDEN=11 THEN 'Herramental e Insumos Inventariables' ELSE (CASE WHEN B.CG_ORDEN=12 THEN 'Repuestos' ELSE (CASE WHEN B.CG_ORDEN=13 THEN 'Servicios' ELSE '' END) END) END) END) END) END) END) END) AS CLASE" +
-                                                         ", (CASE WHEN A.CG_R='' THEN 'Productiva' ELSE (CASE WHEN A.CG_R='R' THEN 'Reproceso' ELSE (CASE WHEN A.CG_R='T' THEN 'Retrabajo' ELSE (CASE WHEN A.CG_R='S' THEN 'Seleccion' ELSE '' END) END) END) END) AS CG_R" +
-                                                         ", A.CG_ESTADOCARGA, A.CG_PROD, A.DES_PROD, A.CANT, A.CANTFAB, B.UNID, A.PEDIDO" +
-                                                         ", B.UNIDSEG, A.DIASFAB, A.CG_CELDA, A.CG_FORM, A.FE_ENTREGA, A.FE_EMIT, A.FE_PLAN, A.FE_FIRME, A.FE_CURSO" +
-                                                         ", A.FE_ANUL, A.FE_CIERRE FROM Programa A, Prod B WHERE CG_REG>=2 AND" +
-                                                         "  A.Cg_prod = B.Cg_prod AND CG_ESTADOCARGA IN (4, 5) ORDER BY A.CG_ORDF DESC";
-                dbPlanificacion = xConexionSQL.EjecutarSQL(xSQLCommandString);
-
-                List<Planificacion> xLista = dbPlanificacion.AsEnumerable().Select(m => new Planificacion()
-                {
-                    CG_PROD = m.Field<string>("CG_PROD"),
-                    DES_PROD = m.Field<string>("DES_PROD"),
-                    CG_ORDEN = m.Field<int>("CG_ORDEN"),
-                    CG_ORDF = m.Field<int>("CG_ORDF"),
-                    CLASE = m.Field<string>("CLASE"),
-                    CG_R = m.Field<string>("CG_R"),
-                    CG_ESTADOCARGA = m.Field<int>("CG_ESTADOCARGA"),
-                    CANT = m.Field<decimal>("CANT"),
-                    CANTFAB = m.Field<decimal>("CANTFAB"),
-                    UNID = m.Field<string>("UNID"),
-                    UNIDSEG = m.Field<string>("UNIDSEG"),
-                    PEDIDO = m.Field<int>("PEDIDO"),
-                    DIASFAB = m.Field<decimal>("DIASFAB"),
-                    CG_CELDA = m.Field<string>("CG_CELDA"),
-                    CG_FORM = m.Field<int>("CG_FORM"),
-                    FE_ENTREGA = m.Field<DateTime?>("FE_ENTREGA"),
-                    FE_EMIT = m.Field<DateTime?>("FE_EMIT"),
-                    FE_PLAN = m.Field<DateTime?>("FE_PLAN"),
-                    FE_FIRME = m.Field<DateTime?>("FE_FIRME"),
-                    FE_CURSO = m.Field<DateTime?>("FE_CURSO"),
-                    FE_ANUL = m.Field<DateTime?>("FE_ANUL"),
-                    FE_CIERRE = m.Field<DateTime?>("FE_CIERRE"),
-                }).ToList<Planificacion>();
-
+                var xLista = await _context.Planificaciones.FromSqlRaw(xSQLCommandString).ToListAsync();
                 return xLista;
             }
             catch (Exception ex)
@@ -198,21 +173,34 @@ namespace SupplyChain.Server.Controllers
         [HttpPut("PutPlanif/{ValorAnterior}")]
         public async Task<ActionResult<List<Planificacion>>> PutPlanif(int ValorAnterior, Planificacion pl)
         {
-            ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+            //ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+
+            var query = "";
+            
             if (pl.CG_ESTADOCARGA == 0)
             {
-                xConexionSQL.EjecutarSQLNonQuery("UPDATE Programa SET CG_ESTADOCARGA = " + pl.CG_ESTADOCARGA + ",Fe_emit = GETDATE(), CG_ESTADO = " + ValorAnterior + " WHERE (Cg_ordf =" + pl.CG_ORDF +
-                    " OR Cg_ordfAsoc = " + pl.CG_ORDF + ")");
+                query = "UPDATE Programa SET CG_ESTADOCARGA = " + pl.CG_ESTADOCARGA +
+                    ",Fe_emit = GETDATE(), CG_ESTADO = " + ValorAnterior + " WHERE (Cg_ordf =" + pl.CG_ORDF +
+                    " OR Cg_ordfAsoc = " + pl.CG_ORDF + ")";
             }
             else if (pl.CG_ESTADOCARGA == 1)
             {
-                xConexionSQL.EjecutarSQLNonQuery("UPDATE Programa SET CG_ESTADOCARGA = " + pl.CG_ESTADOCARGA + ",Fe_plan = GETDATE(), CG_ESTADO = " + ValorAnterior + " WHERE (Cg_ordf =" + pl.CG_ORDF +
-                                                                     " OR Cg_ordfAsoc = " + pl.CG_ORDF + ")");
+                query = "UPDATE Programa SET CG_ESTADOCARGA = " + pl.CG_ESTADOCARGA + 
+                    ",Fe_plan = GETDATE(), CG_ESTADO = " + ValorAnterior + " WHERE (Cg_ordf =" + pl.CG_ORDF +
+                 " OR Cg_ordfAsoc = " + pl.CG_ORDF + ")";
+            }
+            else if (pl.CG_ESTADOCARGA == 2)
+            {
+                query = "UPDATE Programa SET CG_ESTADOCARGA = " + pl.CG_ESTADOCARGA +
+                    ",Fe_Firme = GETDATE(), CG_ESTADO = " + ValorAnterior + " WHERE (Cg_ordf =" + pl.CG_ORDF +
+                 " OR Cg_ordfAsoc = " + pl.CG_ORDF + ")";
             }
             else if (pl.CG_ESTADOCARGA == 5)
             {
-                xConexionSQL.EjecutarSQLNonQuery("EXEC NET_PCP_Anular_OrdenFabricacion " + pl.CG_ORDF + ", 'User'");
+                query = "EXEC NET_PCP_Anular_OrdenFabricacion " + pl.CG_ORDF + ", 'User'";
             }
+
+            await _context.Database.ExecuteSqlRawAsync(query);
             return Ok();
         }
     }

@@ -26,7 +26,7 @@ namespace SupplyChain.Client.Auth
         }
 
         private AuthenticationState Anonimo =>
-            new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            new(new ClaimsPrincipal(new ClaimsIdentity()));
 
         public async override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
@@ -81,7 +81,5 @@ namespace SupplyChain.Client.Auth
             await js.RemoveSessionItem(USER);
             httpClient.DefaultRequestHeaders.Authorization = null;
         }
-
-
     }
 }

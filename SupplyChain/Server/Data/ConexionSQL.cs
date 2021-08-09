@@ -30,8 +30,10 @@ namespace SupplyChain
         {
             try
             {
-                Command = new SqlCommand(SQLCommandString, Connection);
-                Command.CommandTimeout = 60;
+                Command = new SqlCommand(SQLCommandString, Connection)
+                {
+                    CommandTimeout = 60
+                };
                 DataAdatper = new SqlDataAdapter(Command);
                 DataTable = new DataTable();
                 DataAdatper.Fill(DataTable);
