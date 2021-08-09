@@ -10,7 +10,7 @@
         @if (MostraBotonBusqueda)
         {
             <SfButton HtmlAttributes="@HtmlAttribute" OnClick="@(async (e)=> await BuscarOCompras())" 
-                      CssClass="btn btn-sm e-round" IsPrimary="false"
+                      CssClass="e-smal e-round e-info" IsPrimary="false"
                       IconCss="fa fa-search" Disabled="@DeshabilitaBotonBusqueda"></SfButton>
         }
 

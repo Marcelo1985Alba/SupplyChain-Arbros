@@ -16,7 +16,7 @@ namespace SupplyChain.Shared.HelpersAtributo
 
             var fechaCurso = (DateTime?)value;
             return programa.CG_ESTADOCARGA == 3 && fechaCurso == null
-                ? new ValidationResult($"Ingresar Fecha Curso")
+                ? new ValidationResult("Ingresar Fecha Curso")
                 : ValidationResult.Success;
 
             //var cant = (decimal?)value;

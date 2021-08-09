@@ -33,6 +33,14 @@ namespace SupplyChain
             return new { Items = data, Count = data.Count() };
         }
 
+
+        [HttpGet("GetPresupuestos")]
+        public object GetPresupuestos()
+        {
+            IQueryable<EstadVenta> data = _context.EstadVentas.Where(e => e.Presup > 0).AsQueryable();
+            return new { Items = data, Count = data.Count() };
+        }
+
         [HttpGet("GetFacturacion")]
         public object GetFacturacion()
         {

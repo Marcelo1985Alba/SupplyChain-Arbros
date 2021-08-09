@@ -145,7 +145,7 @@ namespace SupplyChain
         public IActionResult RenderAnnotationComments([FromBody] Dictionary<string, string> jsonObject)
         {
             //Initialize the PDF Viewer object with memory cache object
-            PdfRenderer pdfviewer = new PdfRenderer(_cache);
+            PdfRenderer pdfviewer = new(_cache);
             object jsonResult = pdfviewer.GetAnnotationComments(jsonObject);
             return Content(JsonConvert.SerializeObject(jsonResult));
         }
@@ -167,7 +167,7 @@ namespace SupplyChain
         //Post action to import annotations
         public IActionResult ImportAnnotations([FromBody] Dictionary<string, string> jsonObject)
         {
-            PdfRenderer pdfviewer = new PdfRenderer(_cache);
+            PdfRenderer pdfviewer = new(_cache);
             string jsonResult = string.Empty;
             if (jsonObject != null && jsonObject.ContainsKey("fileName"))
             {
@@ -227,7 +227,7 @@ namespace SupplyChain
         //Post action for downloading the PDF documents
         public IActionResult Download([FromBody] Dictionary<string, string> jsonObject)
         {
-            PdfRenderer pdfviewer = new PdfRenderer(_cache);
+            PdfRenderer pdfviewer = new(_cache);
             string documentBase = pdfviewer.GetDocumentAsBase64(jsonObject);
             return Content(documentBase);
         }

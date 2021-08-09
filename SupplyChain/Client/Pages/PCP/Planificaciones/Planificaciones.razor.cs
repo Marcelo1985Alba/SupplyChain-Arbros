@@ -90,7 +90,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         protected SfDialog refDialogCerradasAnuladas;
         protected const string APPNAME = "grdPlanificacion";
         protected string state;
-        protected const string APPNAME_OF_CERRADAS_ANULADAS = "grdOFCerradasAnuladas";
+        protected const string APPNAME_OF_CERRADAS_ANULADAS = "OFCerradasAnuladas";
         protected string state_of_cerradas_anuladas;
         protected Planificacion PlanificacionSeleccionadaOFCerrada;
         protected override async Task OnInitializedAsync()
@@ -195,7 +195,9 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
-                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder)
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder || 
+                args.RequestType == Syncfusion.Blazor.Grids.Action.Sorting
+                )
             {
                 state = await GridPlanificacion.GetPersistData();
             }
@@ -445,22 +447,20 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
             int ValorAnterior = 4;
             if (args.ItemData.CG_ESTADO < 4)
             {
-                var response = await Http.PutAsJsonAsync($"api/Planificacion/PutPlanif/{ValorAnterior}",
-                    PlanificacionSeleccionadaOFCerrada);
+                var response = await Http.PutAsJsonAsync($"api/Planificacion/PutPlanif/{ValorAnterior}", PlanificacionSeleccionadaOFCerrada);
                 if (response.IsSuccessStatusCode)
                 {
-                    listaCerradasAnuladas = listaCerradasAnuladas
-                    .Where(p => p.CG_ORDF != PlanificacionSeleccionadaOFCerrada.CG_ORDF)
+                    listaCerradasAnuladas = listaCerradasAnuladas.Where(p => p.CG_ESTADOCARGA > 3)
                     .ToList();
-                    await Grid4.RefreshHeader();
-                    await Grid4.RefreshColumns();
-                    Grid4.Refresh();
+                    //listaCerradasAnuladas.Remove(PlanificacionSeleccionadaOFCerrada);
+                    //await Grid4.RefreshHeader();
+                    //await Grid4.RefreshColumns();
+                    //Grid4.Refresh();
 
-
-                    listaPlanificacion = await Http.GetFromJsonAsync<List<Planificacion>>("api/Planificacion/0/1");
-                    await GridPlanificacion.RefreshHeader();
-                    await GridPlanificacion.RefreshColumns();
-                    GridPlanificacion.Refresh();
+                    //listaPlanificacion = await Http.GetFromJsonAsync<List<Planificacion>>("api/Planificacion/0/1");
+                    //await GridPlanificacion.RefreshHeader();
+                    //await GridPlanificacion.RefreshColumns();
+                    //GridPlanificacion.Refresh();
                 }
                 
             }

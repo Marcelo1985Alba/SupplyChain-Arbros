@@ -46,55 +46,44 @@ namespace SupplyChain
         [HttpGet("BuscarPorPedido/{Pedido}")]
         public async Task<ActionResult<List<Pedidos>>> BuscarPorPedido(string Pedido)
         {
-            List<Pedidos> lPedidos = new List<Pedidos>();
+            List<Pedidos> lPedidos = new();
             if (_context.Pedidos.Any())
             {
                 lPedidos = await _context.Pedidos.Where(p => p.PEDIDO.ToString() == Pedido).ToListAsync();
             }
-            if (lPedidos == null)
-            {
-                return NotFound();
-            }
-            return lPedidos;
+            return
+                lPedidos == null ? NotFound() : lPedidos;
         }
 
         // GET: api/Pedidos/BuscarPorCliente/{Cliente}
         [HttpGet("BuscarPorCliente/{Cliente}")]
         public async Task<ActionResult<List<Pedidos>>> BuscarPorCliente(string Cliente)
         {
-            List<Pedidos> lPedidos = new List<Pedidos>();
+            List<Pedidos> lPedidos = new();
             if (_context.Pedidos.Any())
             {
                 lPedidos = await _context.Pedidos.Where(p => p.DES_CLI == Cliente).ToListAsync();
             }
-            if (lPedidos == null)
-            {
-                return NotFound();
-            }
-            return lPedidos;
+            return lPedidos == null ? NotFound() : lPedidos;
         }
 
         // GET: api/Pedidos/BuscarPorCodigo/{Codigo}
         [HttpGet("BuscarPorCodigo/{Codigo}")]
         public async Task<ActionResult<List<Pedidos>>> BuscarPorCodigo(string Codigo)
         {
-            List<Pedidos> lPedidos = new List<Pedidos>();
+            List<Pedidos> lPedidos = new();
             if (_context.Pedidos.Any())
             {
                 lPedidos = await _context.Pedidos.Where(p => p.CG_ART == Codigo).ToListAsync();
             }
-            if (lPedidos == null)
-            {
-                return NotFound();
-            }
-            return lPedidos;
+            return lPedidos == null ? NotFound() : lPedidos;
         }
 
         // GET: api/Pedidos/BuscarPorOF/{OF}
         [HttpGet("BuscarPorOF/{OF}")]
         public async Task<ActionResult<List<Pedidos>>> BuscarPorOF(string OF)
         {
-            List<Pedidos> lPedidos = new List<Pedidos>();
+            List<Pedidos> lPedidos = new();
             if (_context.Pedidos.Any())
             {
                 lPedidos = await _context.Pedidos.Where(p => p.CG_ORDF.ToString() == OF).ToListAsync();
@@ -110,7 +99,7 @@ namespace SupplyChain
         [HttpGet("BuscarTrazabilidad/{Pedido}/{Cliente}/{Codigo}/{Busqueda}")]
         public async Task<ActionResult<List<Pedidos>>> BuscarTrazabilidad(string Pedido, string Cliente, string Codigo, int Busqueda)
         {
-            List<Pedidos> lContiene = new List<Pedidos>();
+            List<Pedidos> lContiene = new();
             if (Pedido != "Vacio")
             {
                 if (_context.Pedidos.Any())
@@ -162,23 +151,19 @@ namespace SupplyChain
         [HttpGet("MostrarTrazabilidad/{Pedido}")]
         public async Task<ActionResult<List<Pedidos>>> MostrarTrazabilidad(string Pedido)
         {
-            List<Pedidos> lPedidos = new List<Pedidos>();
+            List<Pedidos> lPedidos = new();
             if (_context.Pedidos.Any())
             {
                 lPedidos = await _context.Pedidos.Where(p => p.PEDIDO.ToString() == Pedido).ToListAsync();
             }
-            if (lPedidos == null)
-            {
-                return NotFound();
-            }
-            return lPedidos;
+            return lPedidos == null ? NotFound() : lPedidos;
         }
 
         // GET: api/Pedidos/BusquedaParaFE_MOV/{PEDIDO}
         [HttpGet("BusquedaParaFE_MOV/{PEDIDO}")]
         public async Task<ActionResult<List<Pedidos>>> BuscarPorCG_PROD(string PEDIDO)
         {
-            List<Pedidos> lpedidos = new List<Pedidos>();
+            List<Pedidos> lpedidos = new();
             if (_context.Pedidos.Any())
             {
                 lpedidos = await _context.Pedidos.Where(p => p.PEDIDO.ToString() == PEDIDO && p.CG_ORDEN == 1).ToListAsync();

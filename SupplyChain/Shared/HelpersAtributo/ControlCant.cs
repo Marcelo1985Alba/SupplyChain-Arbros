@@ -6,6 +6,7 @@ using System.Text;
 
 namespace SupplyChain.Shared.HelpersAtributo
 {
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     /// <summary>
     /// Control de cantidades ingresadas para los diferentes tipos de operaciones
     /// </summary>
@@ -21,15 +22,16 @@ namespace SupplyChain.Shared.HelpersAtributo
                 return new ValidationResult($"{stock.CG_ART.Trim()}: Insumo sin stock.");
             }
 
+            if (stock.TIPOO == 10 && stock.STOCK < 0)//entrega a og
+            {
+                return new ValidationResult($"{stock.CG_ART.Trim()}: No se pueden entregar cantidades negativas.");
+            }
+
             //PendienteOC: tambien se utiliza para obtener el stock
             return ((stock.TIPOO == 6 || stock.TIPOO == 10) && stock.STOCK > stock.ResumenStock?.STOCK)
-                ? new ValidationResult($"{stock.CG_ART.Trim()}:La cantidad ingresada no puede ser mayor a la del stock")
+                ? new ValidationResult($"{stock.CG_ART.Trim()}: La cantidad ingresada no puede ser mayor a la del stock")
                 : ValidationResult.Success;
 
-            //var cant = (decimal?)value;
-            //return cant == default || cant == 0
-            //    ? new ValidationResult("Ingresar cantidad")
-            //    : ValidationResult.Success;
         }
     }
 }

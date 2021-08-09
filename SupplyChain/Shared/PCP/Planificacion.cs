@@ -35,5 +35,7 @@ namespace SupplyChain.Shared.Models
         public DateTime? FE_ANUL { get; set; }
         public DateTime? FE_CIERRE { get; set; }
         public decimal UNIDEQUI { get; set; }
+
+        public string MESAÑO_CIERRE => FE_CIERRE != null ? Convert.ToDateTime(FE_CIERRE).ToString("MM/yyyy") : "";
     }
 }

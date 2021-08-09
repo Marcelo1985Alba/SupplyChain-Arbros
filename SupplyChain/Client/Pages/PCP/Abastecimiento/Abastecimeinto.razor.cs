@@ -29,20 +29,20 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
         protected bool VisiblePropertyMP { get; set; } = false;
         protected bool VisiblePropertySE { get; set; } = false;
 
-        protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "500px" };
+        protected DialogSettings DialogParams = new() { MinHeight = "400px", Width = "500px" };
 
         //protected List<CatOpe> catopes = new List<CatOpe>();
-        protected List<ModeloAbastecimiento> listaAbastMP = new List<ModeloAbastecimiento>();
-        protected List<ModeloAbastecimiento> listaAbastSE = new List<ModeloAbastecimiento>();
+        protected List<ModeloAbastecimiento> listaAbastMP = new();
+        protected List<ModeloAbastecimiento> listaAbastSE = new();
 
-        protected List<Object> ToolbaritemsMP = new List<Object>(){
+        protected List<Object> ToolbaritemsMP = new(){
         "Search",
         new ItemModel(){ Type = ItemType.Separator},
         "Print",
         new ItemModel(){ Type = ItemType.Separator},
         "ExcelExport"
     };
-        protected List<Object> ToolbaritemsSE = new List<Object>(){
+        protected List<Object> ToolbaritemsSE = new(){
         "Search",
         new ItemModel(){ Type = ItemType.Separator},
         "Print",
