@@ -262,7 +262,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         public async Task CommandClickHandler(CommandClickEventArgs<Planificacion> args)
         {
 
-            ProdSeleccionada = await Http.GetFromJsonAsync<Producto>($"api/Prod/{args.RowData.CG_PROD}");
+            ProdSeleccionada = await Http.GetFromJsonAsync<Producto>($"api/Prod/GetByFilter?Codigo={args.RowData.CG_PROD}&Descripcion={string.Empty}");
             if (args.CommandColumn.Title == "Entrega")
             {
                 OrdenFabricacionSelected = args.RowData.CG_ORDF;

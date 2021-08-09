@@ -1104,7 +1104,8 @@
             // Semi elaborados
             ordenFabricacionSE = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionSE>>("api/OrdenesFabricacionSE/" + cg_ordfAsoc.ToString());
             // Semi elaborados
-            ordenFabricacionHojaRuta = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionHojaRuta>>("api/OrdenesFabricacionHojaRuta/" + xCgProd + "/" + xCantidad.ToString());
+            ordenFabricacionHojaRuta = await Http
+                .GetFromJsonAsync<List<ModeloOrdenFabricacionHojaRuta>>($"api/OrdenesFabricacionHojaRuta/GetByFilter?Codigo={xCgProd}&Cantidad={xCantidad.ToString()}");
             Visible = false;
             isOrdenDialogVisible = true;
         }

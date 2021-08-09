@@ -126,6 +126,7 @@ namespace SupplyChain
                 programa.CG_CELDA = xItem.CG_CELDA;
                 programa.FE_PLAN = xItem.FE_PLAN;
                 programa.ORDEN = xItem.ORDEN;
+                programa.CG_ESTADOCARGA = xItem.CG_ESTADOCARGA;
                 programa.FE_CURSO = xItem.FE_CURSO;
 
 
@@ -135,6 +136,7 @@ namespace SupplyChain
                 _context.Entry(programa).Property(p => p.FE_PLAN).IsModified = true;
                 _context.Entry(programa).Property(p => p.CANTFAB).IsModified = true;
                 _context.Entry(programa).Property(p => p.ORDEN).IsModified = true;
+                _context.Entry(programa).Property(p => p.CG_ESTADOCARGA).IsModified = true;
                 _context.Entry(programa).Property(p => p.FE_CURSO).IsModified = true;
 
 
