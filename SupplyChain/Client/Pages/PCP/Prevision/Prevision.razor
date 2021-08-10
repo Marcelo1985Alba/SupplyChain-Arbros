@@ -81,7 +81,8 @@
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row" id="gridPrevisiones">
-                    <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
+                    <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                            EnablePersistence="false"
                             @ref="Grid" DataSource="@previsiones" AllowExcelExport="true" AllowGrouping="true" ID="Prevision"
                             RowHeight="20"
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true"
@@ -158,5 +159,3 @@
         background-color: lightgrey;
     }
 </style>
-@code {
-}

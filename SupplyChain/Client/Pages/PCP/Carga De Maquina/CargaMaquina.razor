@@ -1548,7 +1548,7 @@
     {
         PedCliList = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/{ordenFabricacion.PEDIDO}");
 
-        prodList = await Http.GetFromJsonAsync<Producto>($"api/Prod/{ordenFabricacion.CG_PROD.Trim()}");
+        prodList = await Http.GetFromJsonAsync<Producto>($"api/Prod/GetByFilter?Codigo={ordenFabricacion.CG_PROD.Trim()}&Descripcion={string.Empty}");
 
 
 
