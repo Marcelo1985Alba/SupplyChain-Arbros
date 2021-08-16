@@ -26,7 +26,8 @@ else
                                 CommandClicked="@(async (p)=> await CommandClickHandler(p))"
                                 OnBeginEdit="@(async (ped)=> await BeginEditHandler(ped))"
                                 QueryCellInfo="@(async(e)=> await QueryCellInfoHandler(e))"
-                                OnActionComplete="OnActionComplete" OnToolbarClick="ClickHandler"
+                                OnActionComplete="@(async(e)=> await OnActionComplete(e))" 
+                                OnToolbarClick="@(async(e)=> await ClickHandler(e))"
                                 TValue="Pedidos"></GridEvents>
                     <GridEditSettings AllowAdding="PermiteAgregar" AllowEditing="PermiteEditar" AllowDeleting="PermiteEliminar"
                                       Mode="EditMode.Dialog" Dialog="@DialogParams">

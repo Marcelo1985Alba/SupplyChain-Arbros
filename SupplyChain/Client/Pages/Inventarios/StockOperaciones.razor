@@ -650,11 +650,13 @@
 
         }
 
+        
         StockEncabezado.Items = lStock;
         PermiteAgregarItem = true;
         PermiteEditarItem = true;
         PermiteEliminarItem = true;
         SpinnerVisible = false;
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task OnCompraSelected(List<Compra> lcompraSel)

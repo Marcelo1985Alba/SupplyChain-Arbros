@@ -25,7 +25,9 @@
                                 ShowColumnMenu="true">
                             <GridPageSettings PageSizes="@(new int[] { 5,10,20 })" PageSize="20" PageCount="5"></GridPageSettings>
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-                            <GridEvents RowSelected="@(async(a)=> await GetSelectedRecords(a))" TValue="vResumenStock"></GridEvents>
+                            <GridEvents OnActionBegin="@(async()=> await BeginGrid())"
+                                        RowSelected="@(async(a)=> await GetSelectedRecords(a))"
+                                        TValue="vResumenStock"></GridEvents>
                             <GridColumns>
 
                                 <GridColumn Field="@nameof(vResumenStock.CG_ART)" Width="120px"></GridColumn>
@@ -84,6 +86,11 @@
     {
         Visible = false;
         await OnObjetoSeleccionado.InvokeAsync(Selected);
+    }
+
+    protected async Task BeginGrid()
+    {
+        await Grid.AutoFitColumns();
     }
 
     public async Task GetSelectedRecords(RowSelectEventArgs<vResumenStock> args)
