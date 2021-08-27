@@ -453,8 +453,11 @@ else
         var lote = resumenStock.LOTE == null ? "" : resumenStock.LOTE;
         var serie = resumenStock.SERIE == null ? "" : resumenStock.SERIE;
 
-        var registroCompleto = await Http
-            .GetFromJsonAsync<Pedidos>($"api/Stock/GetByResumenStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
+        var registroCompleto = await Http.GetFromJsonAsync<Pedidos>($"api/Stock/GetByResumenStock?CG_ART={cg_art}" +
+            $"&CG_DEP={cg_dep}" +
+            $"&DESPACHO={despacho}" +
+            $"&LOTE={lote}" +
+            $"&SERIE={serie}");
 
         registroCompleto.REGISTRO = stock?.REGISTRO;
         registroCompleto.TIPOO = RegistroGenerado.TIPOO;

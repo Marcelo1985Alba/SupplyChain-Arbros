@@ -10,6 +10,7 @@
 @using Syncfusion.Pdf.Graphics;
 @using Syncfusion.Pdf.Grid;
 @using Syncfusion.Pdf.Tables;
+@using Syncfusion.Blazor.SplitButtons
 @using SupplyChain.Client.Pages.CDM
 
 @using System.IO;
@@ -28,25 +29,33 @@
     </SfToast>
     <h3 class="card-title">Carga de Máquina</h3>
     <hr />
-    <div class="form-row form-inline">
+    <div class="row form-inline">
         <div class="col-2">
             <div>
                 <SfNumericTextBox TValue="int" @bind-Value="@ordenAbuscar" Format="N0" ShowClearButton="true" Width="150"
                                   ShowSpinButton="false" Placeholder="Ingrese Nro de Orden de Fabricación" />
             </div>
         </div>
-        <div class="col-5">
+        <div class="col-4">
             <div>
                 <SfButton IconCss="fa fa-folder-open" CssClass="btn btn-sm btn-info"
                           @onclick="BuscarOrden_Click">Abrir órden de fabricación</SfButton>
             </div>
         </div>
-        <div class="col-5">
+        <div class="col-3">
             <div>
-                <Syncfusion.Blazor.SplitButtons.SfProgressButton Content="Enviar OFs a DataCore"
-                                                                 IconCss="fa fa-share-square" CssClass="btn btn-sm btn-info"
-                                                                 @onclick="@(async()=> await EnviarCSVDataCore())">
-                </Syncfusion.Blazor.SplitButtons.SfProgressButton>
+                <SfProgressButton Content="Enviar OFs a DataCore"
+                                  IconCss="fa fa-share-square" CssClass="btn btn-sm btn-info"
+                                  @onclick="@(async()=> await EnviarCSVDataCore())">
+                </SfProgressButton>
+            </div>
+        </div>
+        <div class="col-3">
+            <div>
+                <SfProgressButton Content="Refrescar"
+                                  IconCss="fa fa-refresh" CssClass="btn btn-sm btn-info"
+                                  @onclick="@(async()=> await Refrescar())">
+                </SfProgressButton>
             </div>
         </div>
     </div>
@@ -508,8 +517,8 @@
                                     </div>
                                 }
                                 @if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
-                                  ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
-                                  ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
+                                 ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
+                                 ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
                                 {
                                     <div class="form-group col">
                                         <SfButton IsPrimary="true" Content="Ver en Modulo Servicios"
@@ -933,8 +942,8 @@
 {
     <div class="cssOrdenFabricacionDialog">
         <SfDialog Target="#targetPreguntaFoto" Width="80%" Height="85%" CssClass="" IsModal="false" ShowCloseIcon="true"
-                    CloseOnEscape="true"
-                    @bind-Visible="@isEventoDialogVisible">
+                  CloseOnEscape="true"
+                  @bind-Visible="@isEventoDialogVisible">
             <DialogTemplates>
                 <Content>
                     <SupplyChain.Client.Pages.CDM.Noconformidades vieneOF="ordenNumero"></SupplyChain.Client.Pages.CDM.Noconformidades>
@@ -942,7 +951,7 @@
             </DialogTemplates>
             <DialogEvents OnClose="@DialogEventoClose"></DialogEvents>
         </SfDialog>
-</div>
+    </div>
 }
 
 
@@ -1983,7 +1992,7 @@
         box-shadow: none;
         color: #fafafa;
     }
-/*    .e-spinner-pane .e-spinner-inner .e-spin-bootstrap {
+    /*    .e-spinner-pane .e-spinner-inner .e-spin-bootstrap {
         fill: #000;
         stroke: #000;
     }*/

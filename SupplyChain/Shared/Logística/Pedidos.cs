@@ -129,7 +129,7 @@ namespace SupplyChain
         [ColumnaGridViewAtributo(Name = "Cantidad comercial")]
         public decimal? CANTENTA { get; set; } = 0;
         [ColumnaGridViewAtributo(Name = "Fecha entrega")]
-        public DateTime ENTRREAL { get; set; }
+        public DateTime? ENTRREAL { get; set; }
         [ColumnaGridViewAtributo(Name = "Moneda")]
         public string MONEDA { get; set; } = "PESOS";
         [ColumnaGridViewAtributo(Name = "Precio unitario")]

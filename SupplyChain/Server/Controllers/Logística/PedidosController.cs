@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SupplyChain;
+using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Controllers;
 
 namespace SupplyChain
@@ -306,12 +307,17 @@ namespace SupplyChain
             if (stock.TIPOO == 10)
             {
                 var programa = await _context.Programa
-                        .Where(c => c.CG_ORDF == stock.CG_ORDF).FirstOrDefaultAsync();
+                        .Where(c => c.CG_ORDF == stock.CG_ORDF || c.CG_ORDFASOC == stock.CG_ORDF).ToListAsync();
 
-                programa.CG_ESTADO = 1;
-                programa.CG_ESTADOCARGA = 2;
-                _context.Entry(programa).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+
+                await programa.ForEachAsync(async p=>
+                {
+                    p.CG_ESTADO = 1;
+                    p.CG_ESTADOCARGA = 2;
+                    p.FE_FIRME = DateTime.Now;
+                    _context.Entry(p).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                });
             }
             
         }
