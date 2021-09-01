@@ -60,6 +60,7 @@ namespace SupplyChain
         public virtual DbSet<vTrazabilidad> VTrazabilidads { get; set; }
         public virtual DbSet<Procun> Procun { get; set; }
         public virtual DbSet<Fabricacion> Fabricaciones { get; set; }
+        public virtual DbSet<vProdMaquinaDataCore> VProdMaquinaDataCore { get; set; }
         //MODULO LOGIN
         public DbSet<Usuarios> Usuarios { get; set; }
         public DbSet<Rol> Roles { get; set; }
@@ -120,6 +121,12 @@ namespace SupplyChain
             eb =>
             {
                 eb.ToView("vTrazabilidad");
+            });
+            
+            modelBuilder.Entity<vProdMaquinaDataCore>(
+            eb =>
+            {
+                eb.ToView("vProdMaquinaDataCore");
             });
 
             modelBuilder.Entity<ItemAbastecimiento>().HasNoKey().ToView(null);

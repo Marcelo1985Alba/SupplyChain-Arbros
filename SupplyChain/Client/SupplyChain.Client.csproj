@@ -10,9 +10,12 @@
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
 
   </PropertyGroup>
+	<ItemGroup>
+		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+	</ItemGroup>
 
-  
-  <ItemGroup>
+
+	<ItemGroup>
     <None Include="Pages\ABM\Prods\ProdPage.razor" />
     <None Include="Pages\PCP\Fabricaciones\Fabricaciones.razor" />
     <None Include="Pages\PCP\Prevision\Prevision.razor" />
@@ -441,17 +444,18 @@
   </ItemGroup>
 
 
-  <!--ItemGroup>
-    <BlazorWebAssemblyLazyLoad Include="Syncfusion.Blazor.Kanban.dll"/>
-  </ItemGroup!-->
+  <ItemGroup>
+    <BlazorWebAssemblyLazyLoad Include="Syncfusion.Pdf.Net.Core.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Syncfusion.PdfViewer.AspNet.Core.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Syncfusion.Pdf.Portable.dll" />
+	<BlazorWebAssemblyLazyLoad Include="Syncfusion.Blazor.Gant.dll" />
+	  <!--BlazorWebAssemblyLazyLoad Include="Syncfusion.Blazor.PdfViewer.dll" /-->
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\Shared\SupplyChain.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
-  </ItemGroup>
 
   <ItemGroup>
     <Compile Update="Resources\Resources.Designer.cs">
