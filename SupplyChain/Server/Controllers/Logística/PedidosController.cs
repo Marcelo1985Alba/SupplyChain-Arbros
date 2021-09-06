@@ -194,7 +194,10 @@ namespace SupplyChain
                 stock.USUARIO = "USER";
 
                 if (stock.TIPOO == 9 || stock.TIPOO == 10)
+                {
+                    stock.CG_ORDEN = _context.Prod.Where(p => p.CG_PROD.Trim() == stock.CG_ART.Trim()).FirstOrDefault().CG_ORDEN;
                     stock.STOCK = -stock.STOCK;
+                }
 
                 if (stock.TIPOO == 5)
                     stock.CUIT = stock.Proveedor?.CUIT.Trim();
