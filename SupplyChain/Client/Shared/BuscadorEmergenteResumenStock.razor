@@ -1,5 +1,7 @@
 ﻿@inject HttpClient Http
 
+<SfSpinner @bind-Visible="@visibliSpinner" Size="80" Target=".dialogContent" Label="Cargando..." Type="SpinnerType.Bootstrap" />
+
 <SfDialog Height="85%" Width="90%" Target="#target" ShowCloseIcon="true" @bind-Visible="Visible" IsModal="true">
     <DialogTemplates>
         <Header>
@@ -9,10 +11,11 @@
             <div class="dialogContent">
                 @if (DataSource == null)
                 {
-                    <span>Cargando...</span>
+                    visibliSpinner = true;
                 }
                 else
                 {
+                    visibliSpinner = false;
                     if (DataSource.Length == 0)
                     {
                         <span class="text-muted">Sin Datos</span>
@@ -55,7 +58,7 @@
 
 @code {
     SfGrid<vResumenStock> Grid;
-
+    protected bool visibliSpinner = false;
     [Parameter] public vResumenStock[] DataSource { get; set; } = null!;
     [Parameter] public string Titulo { get; set; } = null!;
     [Parameter] public bool Visible { get; set; } = false;

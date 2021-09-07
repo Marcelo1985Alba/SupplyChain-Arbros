@@ -259,7 +259,7 @@ else
         await BuscadorEmergenteRS.ShowAsync();
         tituloBuscador = $"Listado de Insumos con Stock";
 
-        ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE", "STOCK" };
+        ColumnasBuscador = new string[] { "CG_ART", "DEPOSITO","DESPACHO", "SERIE", "LOTE", "STOCK" };
 
         Items = await Http.GetFromJsonAsync<vResumenStock[]>($"api/ResumenStock/GetResumenStockPositivo");
 
@@ -386,7 +386,7 @@ else
         Items = null;
         tituloBuscador = $"Listado de Insumo {stock.CG_ART} con Stock";
 
-        ColumnasBuscador = new string[] { "CG_ART", "PRODUCTO", "DEPOSITO", "DESPACHO", "SERIE", "LOTE", "STOCK" };
+        ColumnasBuscador = new string[] { "CG_ART", "PRODUCTO", "CG_DEP", "DEPOSITO", "DESPACHO", "SERIE", "LOTE", "STOCK" };
         //int cg_orden = TipoInsumoCodigo;
         Items = await Http.GetFromJsonAsync<vResumenStock[]>($"api/ResumenStock/ByCodigo?Codigo={stock.CG_ART.Trim()}&Descripcion=");
         await BuscadorEmergenteRS.ShowAsync();
@@ -468,7 +468,7 @@ else
         {
             registroCompleto.STOCK = (decimal?)1.0000;
             registroCompleto.PENDIENTEOC = resumenStock.STOCK;
-            registroCompleto.REGISTRO = DataSource.Count * -1;
+            registroCompleto.REGISTRO = DataSource.Min(t => t.REGISTRO) - 1;
             DataSource.Add(registroCompleto);
             await Grid.RefreshColumns();
             await Grid.RefreshHeader();
