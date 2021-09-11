@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Login;
 using SupplyChain.Shared.Models;
@@ -6,7 +7,7 @@ using SupplyChain.Shared.PCP;
 
 namespace SupplyChain
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext
     {
         //MODULO CARGA DE MAQUINA
         public virtual DbSet<ModeloCarga> Cargas { get; set; }
@@ -94,6 +95,10 @@ namespace SupplyChain
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //identity
+            base.OnModelCreating(modelBuilder);
+
+            //configuraciones de tablas sql
             modelBuilder.Entity<Compra>(entity =>
 
             entity.HasOne(d => d.ProveedorNavigation)

@@ -2,43 +2,14 @@
 @page "/"
 @page "/login"
 
-@inject HttpClient Http
+@inject IRepositorio Http
 @inject IJSRuntime JsRuntime
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
-@inject ILoginService loginService
+@inject ILoginServiceJWT loginService
 
 <SfToast ID="toast_default" @ref="ToastObj">
     <ToastPosition X="Right" ></ToastPosition>
 </SfToast>
-
-@*<div id="targetLogin" class="dialogLogin">
-    <SfDialog Target="#targetLogin" Width="100%" Height="100%" IsModal="false"
-              ShowCloseIcon="false" CloseOnEscape="false"
-              @bind-Visible="@IsDialogLoginVisible">
-        <DialogTemplates>
-            <Header>
-                @*<img src="/Logo.png" />*@
-                <!--&nbsp;&nbsp;Supply Chain
-
-            </Header>
-            <Content>
-                <br />
-                <div style="margin-top:30px;margin-left:40px;margin-right:40px">
-                    <SfTextBox Placeholder="Usuario" @bind-Value="@usuario"
-                               ShowClearButton="true" Type="InputType.Text"></SfTextBox>
-                </div>
-                <div style="margin-top:30px;margin-left:40px;margin-right:40px">
-                    <SfTextBox Placeholder="Contraseña" @bind-Value="@contras"
-                               ShowClearButton="true" Type="InputType.Password"></SfTextBox>
-                </div>
-                <SfSpinner @ref="SpinnerLogin" />
-            </Content>
-        </DialogTemplates>
-        <DialogButtons>
-            <DialogButton Content="INGRESAR" IsPrimary="true" OnClick="@LoginDialogOk" />
-        </DialogButtons>
-    </SfDialog>
-</div>-->
 
 <section id="wrapper" class="login-register login-sidebar" style="background-image:url(./Imagenes/login-register.jpg);">
     <div class="login-box card">
@@ -52,17 +23,17 @@
                     <div class="col-xs-12">
                         <label>Usuario</label>
                         <Syncfusion.Blazor.Inputs.SfTextBox ShowClearButton="true" Placeholder="Ingresar Usuario"
-                                                            @bind-Value="@usuarioLogin.Usuario" ID="txtUsuarioLogin"
+                                                            @bind-Value="@usuarioLogin.UserName" ID="txtUsuarioLogin"
                                                             FloatLabelType="FloatLabelType.Never" Type="InputType.Text" />
-                        <ValidationMessage For="@(()=>usuarioLogin.Usuario)"/>
+                        <ValidationMessage For="@(()=>usuarioLogin.UserName)"/>
                     </div>
                 </div>
                 <SfSpinner @bind-Visible="SpinnerVisible" Label="Iniciando Sesion..." Size="100" Type="SpinnerType.Bootstrap"></SfSpinner>
                 <div class="form-group">
                     <div class="col-xs-12">
                         <label>Contraseña</label>
-                        <input class='e-input' type="password" placeholder='Enter Password' @bind-value="@usuarioLogin.Contras" />
-                        <ValidationMessage For="@(()=>usuarioLogin.Contras)" />
+                        <input class='e-input' type="password" placeholder='Enter Password' @bind-value="@usuarioLogin.Password" />
+                        <ValidationMessage For="@(()=>usuarioLogin.Password)" />
                     </div>
                 </div>
 
@@ -89,18 +60,18 @@
     }*@
 
 @code {
-    protected string Usuario;
+    protected string Token;
     protected string MensajeServidor = "";
     protected string contras = "";
     protected bool IsDialogLoginVisible { get; set; } = true;
     protected SfToast ToastObj;
     private bool SpinnerVisible = false;
-    Usuarios usuarioLogin = new Usuarios();
+    UserInfo usuarioLogin = new();
 
     protected async override Task OnInitializedAsync()
     {
         // Recoge usuario
-        Usuario = await JsRuntime.InvokeAsync<string>("sessionStorage.getItem", "Usuario");
+        Token = await JsRuntime.InvokeAsync<string>("sessionStorage.getItem", "TOKEN_KEY");
         StateHasChanged();
     }
 
@@ -110,21 +81,21 @@
         //{
         SpinnerVisible = true;
 
-        var httpResponse = await Http.PostAsJsonAsync<Usuarios>($"api/Usuarios",usuarioLogin);
-        if (httpResponse.StatusCode == System.Net.HttpStatusCode.OK)
+        var httpResponse = await Http.Post<UserInfo, UserToken>($"api/Cuentas/login", usuarioLogin);
+        if (!httpResponse.Error)
         {
-            var xUser = await httpResponse.Content.ReadFromJsonAsync<Usuarios>();
+            var xUser = httpResponse.Response;
 
             //IsDialogLoginVisible = false;
             await this.ToastObj.Show(new ToastModel
             {
-                Title = $"Bienvenid@ {xUser.Usuario}!",
+                Title = $"Bienvenido {usuarioLogin.UserName}!",
                 Content = "Usuario y contraseña correcta.",
                 CssClass = "e-toast-success",
                 Icon = "e-success toast-icons"
             });
 
-            await loginService.Login(xUser);
+            await loginService.Login(xUser.Token);
             navigationManager.NavigateTo("/index");
         }
         else
@@ -140,17 +111,6 @@
         }
 
         SpinnerVisible = false;
-        //}
-        //else
-        //{
-        //    await this.ToastObj.Show(new ToastModel
-        //    {
-        //        Title = "Aviso!",
-        //        Content = "Debe indicar usuario y contraseña.",
-        //        CssClass = "e-toast-warning",
-        //        Icon = "e-warning toast-icons"
-        //    });
-        //}
 
     }
 }
