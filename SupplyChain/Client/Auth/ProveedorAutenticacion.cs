@@ -53,7 +53,7 @@ namespace SupplyChain.Client.Auth
             var userAuth = new ClaimsIdentity(new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, usuario.Usuario),
-                new Claim(ClaimTypes.Role, usuario.Rol.Descripcion)
+                //new Claim(ClaimTypes.Role, usuario.Rol.Descripcion)
             }, "Arbros");
 
             return new AuthenticationState(new ClaimsPrincipal(userAuth));

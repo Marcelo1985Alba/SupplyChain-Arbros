@@ -64,7 +64,7 @@ namespace SupplyChain
         public virtual DbSet<vProdMaquinaDataCore> VProdMaquinaDataCore { get; set; }
         //MODULO LOGIN
         public DbSet<Usuarios> Usuarios { get; set; }
-        public DbSet<Rol> Roles { get; set; }
+        //public DbSet<Rol> Roles { get; set; }
 
         //MODULO NO CONFORMIDADES
 

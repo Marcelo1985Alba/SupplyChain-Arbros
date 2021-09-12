@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Shared.Login;
 using SupplyChain.Shared.Models;
@@ -10,59 +13,77 @@ using System.Threading.Tasks;
 namespace SupplyChain.Server.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController()]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UsuariosController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<IdentityUser> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public UsuariosController(AppDbContext context)
+        public UsuariosController(AppDbContext context,
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
-        [HttpGet("{usuario}")]
-        public async Task<ActionResult<Usuarios>> GetUsuario(string usuario)
+        [HttpGet]
+        public async Task<ActionResult<List<Usuarios>>> Get()
         {
+            return await _context.Users
+                .Select(u => new Usuarios() { Id = u.Id, Usuario = u.UserName }).ToListAsync();
+        }
+
+
+        [HttpGet("roles")]
+        public async Task<ActionResult<List<Rol>>> GetRoles()
+        {
+            return await _context.Roles
+                .Select(r => new Rol { Id = r.Id, Descripcion = r.Name }).ToListAsync();
+
+        }
+
+        [HttpPost("roles")]
+        public async Task<ActionResult> PostRoles(Rol rol)
+        {
+
             try
             {
-                var user = await _context.Usuarios
-                    .Where(u => u.Usuario == usuario).Include(c => c.Rol).FirstOrDefaultAsync();
-
-                return user;
+                var roleResult = await roleManager.CreateAsync(new IdentityRole(rol.Descripcion));
+                return Ok(roleResult);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+
         }
 
-        [HttpGet("{usuario}/{contras}")]
-        public async Task<ActionResult<Usuarios>> Get(string usuario, string contras)
+
+
+        [HttpPost("asignarRol")]
+        public async Task<ActionResult<Usuarios>> Post(RolUsuario rol)
         {
             try
             {
-                //string xSQL = $"SELECT Usuario, Contras FROM USUARIOS WHERE Usuario = '{usuario}' AND CONTRAS = '{contras}'";
-                //return await _context.Usuarios.FromSqlRaw(xSQL).FirstOrDefaultAsync();
-                var user = await _context.Usuarios
-                    .Where(u => u.Usuario == usuario && u.Contras == contras).Include(c=>c.Rol).FirstOrDefaultAsync();
+                var adminRoleExists = await roleManager.FindByIdAsync(rol.RolId);
+                if (adminRoleExists == null)
+                {
+                    //_logger.LogInformation("Adding Admin role");
+                    var roleResult = await roleManager.CreateAsync(new IdentityRole("Admin"));
+                }
 
-                return user;
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Usuarios>> Post([FromBody] Usuarios usuario)
-        {
-            try
-            {
-                //string xSQL = $"SELECT Usuario, Contras FROM USUARIOS WHERE Usuario = '{usuario}' AND CONTRAS = '{contras}'";
-                //return await _context.Usuarios.FromSqlRaw(xSQL).FirstOrDefaultAsync();
-                return await _context.Usuarios
-                    .Where(u => u.Usuario == usuario.Usuario && u.Contras == usuario.Contras).Include(c => c.Rol).FirstOrDefaultAsync();
+                // Select the user, and then add the admin role to the user
+                var user = await userManager.FindByIdAsync(rol.UserId);
+                if (!await userManager.IsInRoleAsync(user, adminRoleExists.Name))
+                {
+                    //_logger.LogInformation("Adding sysadmin to Admin role");
+                    var userResult = await userManager.AddToRoleAsync(user, adminRoleExists.Name);
+                }
+                return Ok();
             }
             catch (Exception ex)
             {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SupplyChain.Shared.Login;
@@ -21,14 +22,17 @@ namespace SupplyChain.Server.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly IConfiguration configuration;
+        private readonly AppDbContext _context;
 
-        public CuentasController(UserManager<IdentityUser> userManager, 
+        public CuentasController(AppDbContext context, UserManager<IdentityUser> userManager, 
             SignInManager<IdentityUser> signInManager, IConfiguration configuration)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.configuration = configuration;
+            this._context = context;
         }
+
 
         [HttpPost("crear")]
         public async Task<ActionResult<UserToken>> CrearUsuario([FromBody] UserInfo userInfo)
