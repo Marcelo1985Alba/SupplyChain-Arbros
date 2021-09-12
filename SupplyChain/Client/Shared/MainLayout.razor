@@ -5,6 +5,8 @@
 @attribute [Authorize]
 @inject NavigationManager MyNavigationManager
 @inherits LayoutComponentBase
+@inject RenovadorToken renovarToken
+
 
 <CascadingValue Value="this">
     <div id="main-wrapper">
@@ -428,11 +430,18 @@
     public string Titulo { get; set; } = "";
     public string BreadCumParent { get; set; } = "";
 
+    protected override void OnInitialized()
+    {
+        renovarToken.Iniciar();
+
+    }
+
     protected async override Task OnInitializedAsync()
     {
         authState = await authenticationState;
         if (authState.User.Identity.IsAuthenticated)
             nombreUsuario = authState.User.Identity.Name;
+
     }
 
 

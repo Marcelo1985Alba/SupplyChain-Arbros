@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,7 +35,20 @@ namespace SupplyChain.Server.Controllers
             this._context = context;
         }
 
+        [HttpGet("renovarToken")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<UserToken>> RenovarToken()
+        {
+            var userInfo = new UserInfo()
+            {
+                UserName = HttpContext.User.Identity.Name
+            };
 
+            var user = await userManager.FindByNameAsync(userInfo.UserName);
+            var roles = await userManager.GetRolesAsync(user);
+
+            return BuildToken(userInfo, roles);
+        }
         [HttpPost("crear")]
         public async Task<ActionResult<UserToken>> CrearUsuario([FromBody] UserInfo userInfo)
         {
@@ -71,6 +86,25 @@ namespace SupplyChain.Server.Controllers
 
         private UserToken BuildToken(UserInfo userInfo, IList<string> roles)
         {
+            List<Claim> claims = AgregaClaims(userInfo, roles);
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["jwt:llave"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var expiration = DateTime.Now.AddMinutes(30);
+
+            JwtSecurityToken token = new(issuer: null,
+                audience: null, claims: claims, expires: expiration, signingCredentials: creds);
+
+            return new UserToken()
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expiration = expiration
+            };
+        }
+
+        private static List<Claim> AgregaClaims(UserInfo userInfo, IList<string> roles)
+        {
             var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.UserName),
@@ -84,19 +118,7 @@ namespace SupplyChain.Server.Controllers
                 claims.Add(new Claim(ClaimTypes.Role, rol));
             }
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["jwt:llave"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var expiration = DateTime.Now.AddHours(1);
-
-            JwtSecurityToken token = new(issuer: null,
-                audience: null, claims: claims, expires: expiration, signingCredentials: creds);
-
-            return new UserToken()
-            {
-                Token= new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration= expiration
-            };
+            return claims;
         }
     }
 }

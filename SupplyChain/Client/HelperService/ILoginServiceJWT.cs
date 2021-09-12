@@ -1,4 +1,5 @@
-﻿using SupplyChain.Shared.Models;
+﻿using SupplyChain.Shared.Login;
+using SupplyChain.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,8 @@ namespace SupplyChain.Client.HelperService
 {
     public interface ILoginServiceJWT
     {
-        Task Login(string Usuario);
+        Task Login(UserToken userToken);
         Task Logout();
+        Task ManejarRenovacionToken();
     }
 }

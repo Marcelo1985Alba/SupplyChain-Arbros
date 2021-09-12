@@ -69,6 +69,8 @@ namespace SupplyChain.Client
             services.AddScoped<ILoginServiceJWT, ProveedorAutenticacionJWT>(
                 provider => provider.GetRequiredService<ProveedorAutenticacionJWT>());
 
+            
+            services.AddScoped<RenovadorToken>();
             services.AddSingleton<ToastService>();
             services.AddApiAuthorization();
         }
