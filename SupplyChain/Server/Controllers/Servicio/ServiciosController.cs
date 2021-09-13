@@ -13,6 +13,7 @@ namespace SupplyChain
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ServiciosController : ControllerBase
     {
         //private IHostingEnvironment hostingEnv;
@@ -24,7 +25,6 @@ namespace SupplyChain
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<Service>>> Get()
         {
             var xitem = await _context.Servicios.OrderByDescending(s=> s.PEDIDO).ToListAsync();
