@@ -2,10 +2,9 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Data
 
-<SfDropDownList TValue="int" TItem="Tire" Placeholder="Seleccione tipo de operacion..." DataSource="@TiposOperacion"
-                @bind-Value="TipooSeleccionado">
-    @*<SfDataManager Url="api/Deposito" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>*@
-    <DropDownListEvents TItem="Tire" TValue="int" ValueChange="SelectedTipooChanged"></DropDownListEvents>
+<SfDropDownList TValue="int" TItem="Tire" DataSource="@TiposOperacion" @bind-Value="TipooSeleccionado"
+                Placeholder="Seleccione tipo de operacion...">
+    <DropDownListEvents TItem="Tire" TValue="int" ValueChange="@(async(a)=>await SelectedTipooChanged(a))"></DropDownListEvents>
     <DropDownListFieldSettings Text="Descrip" Value="Tipoo"></DropDownListFieldSettings>
 </SfDropDownList>
 
@@ -15,7 +14,7 @@
         new Tire() { Tipoo = 21, Descrip = "Ajuste de Inventario" },
         new Tire() { Tipoo = 10, Descrip = "Entrega de insumos a una orden de fabricación" },
         new Tire() { Tipoo = 11, Descrip = "Devolución de insumos de una orden de fabricación" },
-        new Tire() { Tipoo = 27, Descrip = "Uso de Bienes Consumibles" },
+        new Tire() { Tipoo = 27, Descrip = "Entrega a Planta sin OF" },
         //new Tire() { Tipoo = 28, Descrip = "Entrega de un insumo a una orden de armado planeada" },/*tipo 28 = order de armado y tipo 10  10 OF*/
         //new Tire() { Tipoo = 10, Descrip = "Entrega de insumos a una orden de fabricación firme o en curso" },
         //new Tire() { Tipoo = 28, Descrip = "Entrega de un insumo a una orden de armado firme o en curso" },
@@ -61,7 +60,7 @@
 
         if (TipoOperacionIdUnico > 0)
         {
-            CargarTiposOperacion();
+            //CargarTiposOperacion();
             TiposOperacion = TiposOperacion.Where(o => o.Tipoo == TipoOperacionIdUnico).ToList();
         }
 
@@ -82,11 +81,11 @@
 
     }
 
-    private void SelectedTipooChanged(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int, Tire> args)
+    private async Task SelectedTipooChanged(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int, Tire> args)
     {
         TipooSeleccionado = args.ItemData.Tipoo;
-        OnSelectedTireChanged.InvokeAsync(args.ItemData);
-        InvokeAsync(StateHasChanged);
+        await OnSelectedTireChanged.InvokeAsync(args.ItemData);
+        await InvokeAsync(StateHasChanged);
     }
 
 }

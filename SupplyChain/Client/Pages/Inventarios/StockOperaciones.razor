@@ -54,12 +54,12 @@
                                 </div>
                                 <div class="col-3">
                                     <SfButton HtmlAttributes="HtmlAttribute" Content="Imprimir Etiqueta" IsPrimary="false"
-                                                IconCss="fa fa-print"
-                                                CssClass="btn btn-sm btn-success"
-                                                OnClick="@(async () => await ImprimirEtiqueta())"
-                                                Disabled="@(!abrioVale)"></SfButton>
-                                 </div>
-                                
+                                              IconCss="fa fa-print"
+                                              CssClass="btn btn-sm btn-success"
+                                              OnClick="@(async () => await ImprimirEtiqueta())"
+                                              Disabled="@(!abrioVale)"></SfButton>
+                                </div>
+
                             </div>
                             <hr />
                             <h3 class="card-title">Vale</h3>
@@ -68,6 +68,7 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-6 col-md-4 col-sm-12 col-12">
                                     <label class="col-form-label">Op. de Stock</label>
+                                    @**@
                                     <ComboTipoo TipoOperacionIdUnico="@OperacionId" TipooSeleccionado="@StockEncabezado.TIPOO"
                                                 OnSelectedTireChanged="@(async(t)=>await SelectedTireChanged(t))" />
                                 </div>
@@ -108,7 +109,7 @@
                                     <div class="form-group col-lg-3 col-md-4 col-sm-6">
                                         <label class="col-form-label">O. de Compra:</label>
                                         <BuscadorOCompra EsSoloLectura="@OCSoloLectura" DeshabilitaBotonBusqueda="@DeshabilitaBotonOC"
-                                                         MostraBotonBusqueda="@MostrarBotorOC" MostrarSpin="false" 
+                                                         MostraBotonBusqueda="@MostrarBotorOC" MostrarSpin="false"
                                                          Remito="@StockEncabezado.REMITO" HtmlAttribute="@HtmlAttribute"
                                                          Tipoo="StockEncabezado.TIPOO"
                                                          Valor="@((int)StockEncabezado.OCOMPRA)" OnOCSeleccionada="OnCompraSelected" />
@@ -152,8 +153,8 @@
                                 }
 
                                 @if (StockEncabezado.TIPOO == 10 &&
-                                    StockEncabezado.ModeloOrdenFabricacionEncabezado != null
-                                    && StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ORDEN == 1 )
+                                   StockEncabezado.ModeloOrdenFabricacionEncabezado != null
+                                   && StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ORDEN == 1)
                                 {
                                     <div class="form-group col-lg-3 col-md-4 col-sm-12">
                                         <label class="col-form-label">Producto:</label>
@@ -225,20 +226,20 @@
 
 
                             <!--@if (puedeBuscarStock)-->@*AJUSTE DE INVENTARIO O MOVIM ENTRE DEPOS O ENTREGA*@
-                            <!--{
-                                <div class="form-row">
-                                    <div class="form-group col-6">
-                                        <BuscadorResumenStock MostraBotonBusqueda="puedeBuscarStock" 
-                                                              HabilitaBotonBusqueda="!puedeBuscarStock"
-                                                              MostrarSpin="false" HtmlAtrr="HtmlAttribute"
-                                                              OnRSSeleccionada="onResumenStockSelected" TextoButon="Buscar Stock" />
+    <!--{
+        <div class="form-row">
+            <div class="form-group col-6">
+                <BuscadorResumenStock MostraBotonBusqueda="puedeBuscarStock"
+                                      HabilitaBotonBusqueda="!puedeBuscarStock"
+                                      MostrarSpin="false" HtmlAtrr="HtmlAttribute"
+                                      OnRSSeleccionada="onResumenStockSelected" TextoButon="Buscar Stock" />
 
-                                    </div>
+            </div>
 
-                                </div>
+        </div>
 
 
-                            }-->
+    }-->
 
                             <h3 class="card-title">Items</h3>
                             <hr />
@@ -252,15 +253,14 @@
                                 else
                                 {
                                     <GridEditEntrega DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
-                                                   PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
-                                                   onGuardar="OnGuardarPedido" />
+                                                     PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
+                                                     onGuardar="OnGuardarPedido" />
                                 }
 
                             </CascadingValue>
                             <ValidationSummary />
-
-                            <SfButton Content="Guardar" IsPrimary="false" IconCss="fa fa-save" CssClass="btn btn-block e-info"
-                                      Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"></SfButton>
+                            @*Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"*@
+                            <SfButton Content="Guardar" IsPrimary="false" IconCss="fa fa-save" CssClass="btn btn-block e-info"></SfButton>
                         </div>
                         
 
@@ -310,7 +310,7 @@
     protected ConfirmacionDialog ConfirmacionGuardarDialog;
     protected bool SpinnerVisible { get; set; } = false;
     protected SfToast ToastObj;
-    protected bool DisableCssClass { get => StockEncabezado.TIPOO == 0 ? true : 
+    protected bool DisableCssClass { get => StockEncabezado.TIPOO == 0 ? true :
             EsEntrega ? true : false; }
     private bool puedeBuscarStock = false;
     protected BuscadorEmergenteResumenStock BuscadorEmergenteResumenStock;
@@ -403,7 +403,7 @@
     }
 
 
-    protected async Task NuevoVale()
+    protected async Task NuevoVale(int tipoo = 0)
     {
         abrioVale = false;
         StockEncabezado = new();
@@ -419,10 +419,12 @@
         SpinnerVisible = true;
         await NuevoVale();
 
-        //Dependiendo el TIPOO Habilitar controles
+        //Dependiendo el TIPOO Habilitar controles: 
+        //if (StockEncabezado.TIPOO != tire.Tipoo)
+        //{
 
+        //}
         StockEncabezado.TIPOO = tire.Tipoo;
-        //StockEncabezado.TIRE = tire;
         MostrarBotorOC = false;
         DeshabilitaBotonOC = true;
         OCSoloLectura = true;
@@ -470,13 +472,14 @@
             puedeBuscarStock = true;
         }
 
-        if (StockEncabezado.TIPOO == 21) //Ajuste de Invetario
+        if (StockEncabezado.TIPOO == 21 || StockEncabezado.TIPOO == 27) //Ajuste de Invetario y Entrega a Planta Sin OF
         {
-            PermiteAgregarItem = false;
+            PermiteAgregarItem = true;
+            PermiteEditarItem = true;
+            PermiteEliminarItem = true;
             puedeBuscarStock = true;
         }
 
-        //StockEncabezado.TIRE = tire; // lo utilizo para pasar la variable a los items de la grilla.
         SpinnerVisible = false;
         await InvokeAsync(StateHasChanged);
     }
@@ -650,7 +653,7 @@
 
         }
 
-        
+
         StockEncabezado.Items = lStock;
         PermiteAgregarItem = true;
         PermiteEditarItem = true;
@@ -922,6 +925,11 @@
     if (stock.TIPOO == 9)//movim depos
     {
         stock.CG_DEP_ALT = StockEncabezado.CG_DEP_ALT;
+    }
+
+    if (StockEncabezado.TIPOO == 27)
+    {
+        stock.STOCK = -stock.STOCK;
     }
 
     stock.ENTRREAL = DateTime.UtcNow;

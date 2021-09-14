@@ -23,7 +23,6 @@ else
                         AllowReordering="true" RowHeight="20">
                     <GridPageSettings PageCount="4" PageSize="50"></GridPageSettings>
                     <GridEvents OnActionBegin="@(async(p)=> await OnActionBeginHandler(p))"
-                                CommandClicked="@(async (p)=> await CommandClickHandler(p))"
                                 OnBeginEdit="@(async (ped)=> await BeginEditHandler(ped))"
                                 QueryCellInfo="@(async(e)=> await QueryCellInfoHandler(e))"
                                 OnActionComplete="@(async(e)=> await OnActionComplete(e))" 
@@ -221,15 +220,6 @@ else
         //await InvokeAsync(StateHasChanged);
     }
 
-
-    public async Task CommandClickHandler(CommandClickEventArgs<Pedidos> args)
-    {
-        if (args.CommandColumn.Title == "Copiar")
-        {
-
-
-        }
-    }
 
     public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
@@ -468,7 +458,7 @@ else
         {
             registroCompleto.STOCK = (decimal?)1.0000;
             registroCompleto.PENDIENTEOC = resumenStock.STOCK;
-            registroCompleto.REGISTRO = DataSource.Min(t => t.REGISTRO) - 1;
+            registroCompleto.REGISTRO = DataSource.Count == 0 ? -1 : DataSource.Min(t => t.REGISTRO) - 1;
             DataSource.Add(registroCompleto);
             await Grid.RefreshColumns();
             await Grid.RefreshHeader();
