@@ -1,6 +1,6 @@
 ﻿@inject HttpClient Http
 
-<SfSpinner @bind-Visible="@visibliSpinner" Size="80" Target=".dialogContent" Label="Cargando..." Type="SpinnerType.Bootstrap" />
+<SfSpinner @bind-Visible="@visibleSpinner" Size="80" Target=".dialogContent" Label="Cargando..." Type="SpinnerType.Bootstrap" />
 
 <SfDialog Height="85%" Width="90%" Target="#target" ShowCloseIcon="true" @bind-Visible="Visible" IsModal="true">
     <DialogTemplates>
@@ -11,11 +11,11 @@
             <div class="dialogContent">
                 @if (DataSource == null)
                 {
-                    visibliSpinner = true;
+                    visibleSpinner = true;
                 }
                 else
                 {
-                    visibliSpinner = false;
+                    visibleSpinner = false;
                     if (DataSource.Length == 0)
                     {
                         <span class="text-muted">Sin Datos</span>
@@ -39,7 +39,7 @@
                                 <GridColumn Field="@nameof(vResumenStock.CG_DEP)"></GridColumn>
                                 <GridColumn Field="@nameof(vResumenStock.DEPOSITO)"></GridColumn>
                                 <GridColumn Field="@nameof(vResumenStock.SERIE)"></GridColumn>
-                                <GridColumn Field="@nameof(vResumenStock.LOTE)" IsPrimaryKey="true"></GridColumn>
+                                <GridColumn Field="@nameof(vResumenStock.LOTE)"></GridColumn>
                                 <GridColumn Field="@nameof(vResumenStock.DESPACHO)"></GridColumn>
 
                             </GridColumns>
@@ -58,7 +58,7 @@
 
 @code {
     SfGrid<vResumenStock> Grid;
-    protected bool visibliSpinner = false;
+    protected bool visibleSpinner = false;
     [Parameter] public vResumenStock[] DataSource { get; set; } = null!;
     [Parameter] public string Titulo { get; set; } = null!;
     [Parameter] public bool Visible { get; set; } = false;

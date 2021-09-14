@@ -33,7 +33,8 @@
     private async Task OnNavigationAsync(NavigationContext args)
     {
         if (args.Path.Contains("maquina") || args.Path.Contains("produccion")
-            || args.Path.Contains("servicio"))
+            || args.Path.Contains("servicio")
+            || args.Path.Contains("inventario"))
         {
             var assembliesCargados = await lazyLoader.LoadAssembliesAsync(
                 new List<string> { "Syncfusion.Pdf.Portable.dll" }
