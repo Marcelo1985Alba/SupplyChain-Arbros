@@ -327,7 +327,7 @@
                             <hr class="separator">
                             <div>
                                 <div class="form-row">
-                                    <SfGrid @ref="Grid2" DataSource="@listaDespiece" EnablePersistence="true" ID="Despiece"
+                                    <SfGrid @ref="Grid2" DataSource="@listaDespiece" ID="Despiece"
                                             GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true" 
                                             Height="250px" Width="100%">
                                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -425,7 +425,7 @@
     <DialogTemplates>
         <Header><p>Formulas</p><hr /></Header>
         <Content>
-            <SfGrid @ref="Grid3" DataSource="@listaFormula" EnablePersistence="false" ID="grdFormula" GridLines="GridLine.Both"
+            <SfGrid @ref="Grid3" DataSource="@listaFormula" ID="grdFormula" GridLines="GridLine.Both"
                     AllowResizing="true" Height="100px" Width="100%">
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                 <GridEvents RowSelected="OnSelected" TValue="FormulaPlanificacion"></GridEvents>

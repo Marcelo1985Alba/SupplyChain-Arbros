@@ -48,7 +48,7 @@
             {
                 SpinnerVisible = false;
             <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                    EnablePersistence="false" DataSource="@(servicios.OrderByDescending(s=> s.PEDIDO))"
+                    DataSource="@(servicios.OrderByDescending(s=> s.PEDIDO))"
                     ID="gridServicios" Height="100%" Width="100%" GridLines="GridLine.Both" RowHeight="20"
                     @ref="Grid" AllowExcelExport="true" AllowRowDragAndDrop="true"
                     AllowGrouping="true" AllowMultiSorting="true"
