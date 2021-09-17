@@ -213,9 +213,9 @@ else
 
 
 
-    <BuscadorEmergente TItem="Pedidos" @ref="BuscadorProducto" Titulo=@tituloBuscador
+    @*<BuscadorEmergente TItem="Pedidos" @ref="BuscadorProducto" Titulo=@tituloBuscador
         DataSource="@DataSource" Columnas="@(new string[] { "CG_ART", "DES_ART"})" Height="85%"
-                       OnObjetoSeleccionado="@(async(p)=> await OnSelectedItem(p))"  />
+                       OnObjetoSeleccionado="@(async(p)=> await OnSelectedItem(p))"  />*@
 
  
         <ConfirmacionDialog @ref="@ConfirmacionDialog" OnConfirm="@(async()=> await ConfirmacionCopy())">
@@ -638,14 +638,6 @@ else
         registroCompleto.TIPOO = RegistroGenerado.TIPOO;
         registroCompleto.STOCK = 0;
         registroCompleto.ResumenStock = resumenStock;
-
-        //var nuevoItem = (new Stock[] { EditContext.DataItem });
-        //lStock = (new Stock[] { EditContext.DataItem }).Concat(lStock);
-        //DataSource = nuevoItem.Concat(DataSource).ToArray();
-
-        //var lStock = new List<Stock>();
-        //lStock.Add(registroCompleto);
-        //DataSource = lStock.ToArray();
         stock = registroCompleto;
     }
 

@@ -15,11 +15,16 @@ namespace SupplyChain.Shared.HelpersAtributo
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var stock = (Pedidos)validationContext.ObjectInstance;
-
             var cant = (decimal?)value;
+
             if (stock.TIPOO == 10 && stock.ResumenStock?.STOCK == 0)//entrega a og
             {
                 return new ValidationResult($"{stock.CG_ART.Trim()}: Insumo sin stock.");
+            }
+
+            if (stock.TIPOO == 5 && stock.STOCK < 0)//recepcion
+            {
+                return new ValidationResult($"{stock.CG_ART.Trim()}: Ingresar cantidades positivas.");
             }
 
             //NO SE PUEDE PORQUE AL INSERTA EL CAMPO STOCK EN NEGATIVO NO PERMITE GRABAR

@@ -7,7 +7,7 @@
 @using System.Text.Json
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Calendars
-@using Syncfusion.Blazor.Navigations
+
 @using SupplyChain.Client.Shared.Inventarios
 @using SupplyChain.Shared.Prod;
 @using Syncfusion.Pdf;
@@ -32,35 +32,14 @@
                 </div>
                 <div class="">
                     <EditForm Model="@StockEncabezado" OnValidSubmit="@(async () => await AbrirConfirmacionGuardarVale())">
-                        @*<DataAnnotationsValidator />*@
+                        <DataAnnotationsValidator />
                         <div class="">
 
-                            <div class="form-row btn-group">
-                                <div class="col-3">
-                                    <SfButton HtmlAttributes="HtmlAttribute" Content="Eliminar"
-                                              OnClick="@(async () => await AbrirConfirmacionEliminarVale())" IsPrimary="false"
-                                              IconCss="fa fa-trash-o" CssClass="btn btn-sm btn-warning"
-                                              Disabled="@(!abrioVale)"></SfButton>
-                                </div>
-                                <div class="col-3">
-                                    <SfButton HtmlAttributes="HtmlAttribute" Content="Nuevo" IsPrimary="false"
-                                              OnClick="@(async () => await NuevoVale())" ID="btnNuevoVale"
-                                              IconCss="fa fa-plus-square-o" CssClass="btn btn-sm btn-info"></SfButton>
-                                </div>
-                                <div class="col-3">
-                                    <SfButton Content="Guardar" IsPrimary="true" IconCss="fa fa-save"
-                                              CssClass="btn btn-sm btn-success"
-                                              Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"></SfButton>
-                                </div>
-                                <div class="col-3">
-                                    <SfButton HtmlAttributes="HtmlAttribute" Content="Imprimir Etiqueta" IsPrimary="false"
-                                              IconCss="fa fa-print"
-                                              CssClass="btn btn-sm btn-success"
-                                              OnClick="@(async () => await ImprimirEtiqueta())"
-                                              Disabled="@(!abrioVale)"></SfButton>
-                                </div>
-
-                            </div>
+                            <ToolbarMenu OnNuevoClick="@(async () => await NuevoVale())"
+                                         DisabledEliminar="!abrioVale" OnEliminarClick="@(async () => await AbrirConfirmacionEliminarVale())"
+                                         DisabledGuardar="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"
+                                         DisabledImprimir="@(!abrioVale)"
+                                         OnImprimirClick="@(async () => await ImprimirEtiqueta())"></ToolbarMenu>
                             <hr />
                             <h3 class="card-title">Vale</h3>
                             <hr />
@@ -95,9 +74,10 @@
                                 @if (StockEncabezado.TIPOO == 10)
                                 {
                                     <div class="form-group col-lg-3 col-md-4 col-sm-6">
-                                        <label class="col-form-label">Orden de Fabricación:</label>
+                                        <label class="col-form-label">Orden de Fabricación</label>
                                         <BuscadorOFab EsSoloLectura="@OFSoloLectura" DeshabilitaBotonBusqueda="@DeshabilitaBotonOF"
-                                                      MostraBotonBusqueda="@MostrarBotorOF" MostrarSpin="false" HtmlAttribute="@HtmlAttribute"
+                                                      MostraBotonBusqueda="@MostrarBotorOF" MostrarSpin="false"
+                                                      HtmlAttribute="@HtmlAttribute"
                                                       Valor="@StockEncabezado.CG_ORDF" OnOFSeleccionada="OnProgramaSelected" />
                                     </div>
 
@@ -106,19 +86,36 @@
 
                                 @if (StockEncabezado.TIPOO == 5)
                                 {
-                                    <div class="form-group col-lg-3 col-md-4 col-sm-6">
-                                        <label class="col-form-label">O. de Compra:</label>
+                                    <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                                        <label class="col-form-label">O. de Compra</label>
                                         <BuscadorOCompra EsSoloLectura="@OCSoloLectura" DeshabilitaBotonBusqueda="@DeshabilitaBotonOC"
                                                          MostraBotonBusqueda="@MostrarBotorOC" MostrarSpin="false"
                                                          Remito="@StockEncabezado.REMITO" HtmlAttribute="@HtmlAttribute"
                                                          Tipoo="StockEncabezado.TIPOO"
-                                                         Valor="@((int)StockEncabezado.OCOMPRA)" OnOCSeleccionada="OnCompraSelected" />
+                                                         Valor="@((int)StockEncabezado.OCOMPRA)"
+                                                         OnOCSeleccionada="@(async(c)=>await OnCompraSelected(c))" />
                                     </div>
 
-                                    <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                                        <label class="col-form-label">Remito:</label>
-                                        <SfTextBox ID="Remito" ShowClearButton="false" @bind-Value="@StockEncabezado.REMITO" Type="InputType.Text"
+                                    <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                        <label class="col-form-label">Remito</label>
+                                        <SfTextBox ID="Remito" ShowClearButton="false" @bind-Value="@StockEncabezado.REMITO"
+                                                   Type="InputType.Text"
                                                    Readonly="false" Blur="OnBlurRemito">
+                                        </SfTextBox>
+
+                                    </div>
+
+                                    <div class="form-group col-lg-2 col-md-6 col-sm-12">
+                                        <label class="col-form-label">@labelClienteProveedor</label>
+                                        <SfNumericTextBox ID="Cg_CLI_Cg_PROVE" TValue="int?" @bind-Value="@Cg_CLI_Cg_PROVE" Readonly="true" ShowSpinButton="false">
+
+                                        </SfNumericTextBox>
+                                    </div>
+                                    <div class="form-group col-lg-10 col-md-6 col-sm-12">
+                                        <label class="col-form-label">Razon Social</label>
+                                        <SfTextBox ID="DescripcionPro" ShowClearButton="true"
+                                                   @bind-Value="@DescripcionPro" Readonly="true">
+
                                         </SfTextBox>
 
                                     </div>
@@ -133,31 +130,12 @@
                                                         HabilitaBotonBusqueda="false" MostraBotonBusqueda="false" />
                                     </div>
                                 }
-
-                                @if (StockEncabezado.TIPOO == 5)
-                                {
-                                    <div class="form-group col-lg-2 col-md-6 col-sm-12">
-                                        <label class="col-form-label">@labelClienteProveedor</label>
-                                        <SfNumericTextBox ID="Cg_CLI_Cg_PROVE" TValue="int?" @bind-Value="@Cg_CLI_Cg_PROVE" Readonly="true" ShowSpinButton="false">
-
-                                        </SfNumericTextBox>
-                                    </div>
-                                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                                        <label class="col-form-label">Razon Social:</label>
-                                        <SfTextBox ID="DescripcionPro" ShowClearButton="true"
-                                                   @bind-Value="@DescripcionPro" Readonly="true">
-
-                                        </SfTextBox>
-
-                                    </div>
-                                }
-
                                 @if (StockEncabezado.TIPOO == 10 &&
-                                   StockEncabezado.ModeloOrdenFabricacionEncabezado != null
-                                   && StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ORDEN == 1)
+                             StockEncabezado.ModeloOrdenFabricacionEncabezado != null
+                             && StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ORDEN == 1)
                                 {
                                     <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                                        <label class="col-form-label">Producto:</label>
+                                        <label class="col-form-label">Producto</label>
                                         <SfTextBox ID="CG_PROD" ShowClearButton="false"
                                                    @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ART"
                                                    Type="InputType.Text" Readonly="true">
@@ -165,7 +143,7 @@
 
                                     </div>
                                     <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                                        <label class="col-form-label">Presion:</label>
+                                        <label class="col-form-label">Presion</label>
                                         <SfTextBox ID="CAMPOCOM1" ShowClearButton="false"
                                                    @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM1"
                                                    Type="InputType.Text" Readonly="true">
@@ -173,7 +151,7 @@
 
                                     </div>
                                     <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                                        <label class="col-form-label">Resorte:</label>
+                                        <label class="col-form-label">Resorte</label>
                                         <SfTextBox ID="CAMPOCOM2" ShowClearButton="false"
                                                    @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM2"
                                                    Type="InputType.Text" Readonly="true">
@@ -181,7 +159,7 @@
 
                                     </div>
                                     <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                                        <label class="col-form-label">Fluido:</label>
+                                        <label class="col-form-label">Fluido</label>
                                         <SfTextBox ID="CAMPOCOM3" ShowClearButton="false"
                                                    @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM3"
                                                    Type="InputType.Text" Readonly="true">
@@ -189,7 +167,7 @@
 
                                     </div>
                                     <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                                        <label class="col-form-label">Presion de Prueba:</label>
+                                        <label class="col-form-label">Presion de Prueba</label>
                                         <SfTextBox ID="CAMPOCOM4" ShowClearButton="false"
                                                    @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM4"
                                                    Type="InputType.Text" Readonly="true">
@@ -197,7 +175,7 @@
 
                                     </div>
                                     <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                                        <label class="col-form-label">Contrapresion:</label>
+                                        <label class="col-form-label">Contrapresion</label>
                                         <SfTextBox ID="CAMPOCOM5" ShowClearButton="false"
                                                    @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM5"
                                                    Type="InputType.Text" Readonly="true">
@@ -205,7 +183,7 @@
 
                                     </div>
                                     <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                                        <label class="col-form-label">Temperatura:</label>
+                                        <label class="col-form-label">Temperatura</label>
                                         <SfTextBox ID="CAMPOCOM6" ShowClearButton="false"
                                                    @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM6"
                                                    Type="InputType.Text" Readonly="true">
@@ -214,7 +192,7 @@
                                     </div>
 
                                     <div class="form-group col-12">
-                                        <label class="col-form-label">Observaciones:</label>
+                                        <label class="col-form-label">Observaciones</label>
                                         <SfTextBox ID="OBSERVACIONES" ShowClearButton="false" Multiline="true"
                                                    @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.OBSERITEM"
                                                    Type="InputType.Text" Readonly="true">
@@ -223,46 +201,31 @@
                                     </div>
                                 }
                             </div>
-
-
-                            <!--@if (puedeBuscarStock)-->@*AJUSTE DE INVENTARIO O MOVIM ENTRE DEPOS O ENTREGA*@
-    <!--{
-        <div class="form-row">
-            <div class="form-group col-6">
-                <BuscadorResumenStock MostraBotonBusqueda="puedeBuscarStock"
-                                      HabilitaBotonBusqueda="!puedeBuscarStock"
-                                      MostrarSpin="false" HtmlAtrr="HtmlAttribute"
-                                      OnRSSeleccionada="onResumenStockSelected" TextoButon="Buscar Stock" />
-
-            </div>
-
-        </div>
-
-
-    }-->
-
                             <h3 class="card-title">Items</h3>
                             <hr />
                             <CascadingValue Value="@StockEncabezado">
-                                @if (StockEncabezado.TIPOO == 5)
-                                {
-                                    <GridEditStock DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
-                                                   PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
-                                                   onGuardar="OnGuardarPedido" />
-                                }
-                                else
-                                {
-                                    <GridEditEntrega DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
-                                                     PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
-                                                     onGuardar="OnGuardarPedido" />
-                                }
+                                <CascadingValue Value="@StockEncabezado.Items">
 
+                                    @if (StockEncabezado.TIPOO == 5)
+                                    {
+                                        <GridEditStock DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
+                                                       PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
+                                                       onGuardar="OnGuardarPedido" />
+                                    }
+                                    else
+                                    {
+                                        <GridEditEntrega DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
+                                                         PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
+                                                         OnGuardar="OnGuardarPedido" />
+                                    }
+                                </CascadingValue>
                             </CascadingValue>
                             <ValidationSummary />
                             @*Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"*@
-                            <SfButton Content="Guardar" IsPrimary="false" IconCss="fa fa-save" CssClass="btn btn-block e-info"></SfButton>
+                            <SfButton Content="Guardar" IsPrimary="false" IconCss="fa fa-save"
+                                      CssClass="btn btn-block e-info"></SfButton>
                         </div>
-                        
+
 
                     </EditForm>
                 </div>
@@ -293,9 +256,12 @@
     </ContentTemplate>
 </ConfirmacionDialog>
 
+@if (popupBuscadorVisible)
+{
+    <BuscadorEmergente Height="520px" TItem="Pedidos" Titulo=@tituloBuscador Visible="@PopupBuscadorVisible" DataSource="@ItemsABuscar"
+                       Columnas="@ColumnasBuscador" OnObjetoSeleccionado="OnObjectSelected" OnBuscarMas="@(async()=> await BuscarVales())" />
+}
 
-<BuscadorEmergente Height="520px" TItem="Pedidos" Titulo=@tituloBuscador Visible="@PopupBuscadorVisible" DataSource="@ItemsABuscar"
-                   Columnas="@ColumnasBuscador" OnObjetoSeleccionado="OnObjectSelected" OnBuscarMas="@(async()=> await BuscarVales())"/>
 
 @code {
 
@@ -310,15 +276,18 @@
     protected ConfirmacionDialog ConfirmacionGuardarDialog;
     protected bool SpinnerVisible { get; set; } = false;
     protected SfToast ToastObj;
-    protected bool DisableCssClass { get => StockEncabezado.TIPOO == 0 ? true :
-            EsEntrega ? true : false; }
+    protected bool DisableCssClass
+    {
+        get => StockEncabezado.TIPOO == 0 ? true :
+EsEntrega ? true : false;
+    }
     private bool puedeBuscarStock = false;
     protected BuscadorEmergenteResumenStock BuscadorEmergenteResumenStock;
     private bool DepositoSalidaSoloLectura = true;
     private bool DepositoIngresoSoloLectura = true;
     protected bool abrioVale = false;
     private Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
-    {
+{
          {"type", "button" }
     };
 
@@ -386,20 +355,15 @@
         }
         await InvokeAsync(StateHasChanged);
 
-
     }
 
-    protected override bool ShouldRender()
-    {
-        return base.ShouldRender();
-    }
     protected async Task GetVale()
     {
         StockEncabezado.VALE = await Http.GetFromJsonAsync<int>($"api/Stock/GetMaxVale");
     }
 
 
-    protected async Task NuevoVale(int tipoo = 0)
+    protected async Task NuevoVale()
     {
         abrioVale = false;
         StockEncabezado = new();
@@ -415,7 +379,7 @@
         SpinnerVisible = true;
         await NuevoVale();
 
-        //Dependiendo el TIPOO Habilitar controles: 
+        //Dependiendo el TIPOO Habilitar controles:
         //if (StockEncabezado.TIPOO != tire.Tipoo)
         //{
 
@@ -660,22 +624,19 @@
 
     private async Task OnCompraSelected(List<Compra> lcompraSel)
     {
-        //ItemsVale = new ObservableCollection<Stock>();
         List<Pedidos> lStock = new List<Pedidos>();
         int registronegativo = 0;
         StockEncabezado.OCOMPRA = lcompraSel[0].NUMERO;
         Genera genera;
         if (StockEncabezado.TIPOO == 5)
         {
-            //ItemsCompras = await Http.GetFromJsonAsync<Compra[]>($"api/Compras/GetCompraByNumero/{compraSel.NUMERO}");
-
-            //Cargar los item de compras en los items de items para guardar vale
 
             foreach (var item in lcompraSel)
             {
                 registronegativo--;
 
                 Pedidos pedido = new();
+                pedido.TIPOO = StockEncabezado.TIPOO;
                 pedido.Proveedor = lcompraSel[0].ProveedorNavigation;
                 pedido.OCOMPRA = item.NUMERO;
                 pedido.CG_PROVE = item.NROCLTE;
@@ -749,7 +710,7 @@
         PermiteEliminarItem = true;
     }
 
-    private async Task onResumenStockSelected(Pedidos stockSel)
+    private async Task OnResumenStockSelected(Pedidos stockSel)
     {
         //ItemsVale = null;
         PopupBuscadorVisible = false;
@@ -762,13 +723,6 @@
         {
             await CargarVale();
         }
-
-        //if (tipoEntidad == "Producto")
-        //{
-        //    selectedProducto = (Producto)obj;
-        //    Codigoi = selectedProducto.CG_PROD;
-        //    DescripcionPro = selectedProducto.DES_PROD;
-        //}
 
         await InvokeAsync(StateHasChanged);
     }
@@ -886,6 +840,11 @@
         SpinnerVisible = false;
     }
 
+    private async Task OnGetItemsGrid(List<Pedidos> pedidos)
+    {
+        //StockEncabezado.Items.AddRange(pedidos);
+        //await InvokeAsync(StateHasChanged);
+    }
 
     private async Task OnGuardarPedido(Pedidos stock)
     {
@@ -914,116 +873,44 @@
             stock.OCOMPRA = StockEncabezado.OCOMPRA;
             //stock.DES_PROVE = DescripcionPro.Trim();
             @*stock.CG_DEP = SelectedDepositoSalida.CG_DEP;*@
-        stock.STOCK = -stock.STOCK;
+            stock.STOCK = -stock.STOCK;
         }
 
-    if (stock.TIPOO == 9)//movim depos
-    {
-        stock.CG_DEP_ALT = StockEncabezado.CG_DEP_ALT;
-    }
-
-    if (StockEncabezado.TIPOO == 21)
-    {
-        stock.AVISO = "AJUSTE INVENTARIOS";
-    }
-
-    if (StockEncabezado.TIPOO == 27)
-    {
-        stock.AVISO = "ENTREGA A PLANTA SIN OF";
-        stock.STOCK = -stock.STOCK;
-    }
-
-    stock.ENTRREAL = DateTime.UtcNow;
-    var esNuevoRegistro = stock.REGISTRO == null || stock.REGISTRO <= 0;
-    HttpResponseMessage response = null;
-    if (esNuevoRegistro)
-    {
-        response = await Http.PostAsJsonAsync("api/Pedidos", stock);
-    }
-    else
-    {
-        var registro = stock.REGISTRO;
-        response = await Http.PutAsJsonAsync($"api/Pedidos/{registro}", stock);
-    }
-
-
-
-    if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
-        || response.StatusCode == System.Net.HttpStatusCode.NotFound
-        || response.StatusCode == System.Net.HttpStatusCode.Conflict)
-    {
-        var mensServidor = await response.Content.ReadAsStringAsync();
-
-
-        Console.WriteLine($"Error: {mensServidor}");
-        //toastService.ShowToast($"{mensServidor}", TipoAlerta.Error);
-        await this.ToastObj.Show(new ToastModel
+        if (stock.TIPOO == 9)//movim depos
         {
-            Title = "ERROR!",
-            Content = "Error al guardar",
-            CssClass = "e-toast-danger",
-            Icon = "e-error toast-icons",
-            ShowCloseButton = true,
-            ShowProgressBar = true
-        });
-    }
-    else
-    {
-        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            stock.CG_DEP_ALT = StockEncabezado.CG_DEP_ALT;
+        }
+
+        if (StockEncabezado.TIPOO == 21)
         {
-            var pedido = await response.Content.ReadFromJsonAsync<Pedidos>();
-            //StockEncabezado =
-            await InvokeAsync(StateHasChanged);
-            var itemsJson = JsonSerializer.Serialize(pedido);
-            if (esNuevoRegistro)
-            {
-                await StockEncabezado.Items.Where(i => i.REGISTRO == stock.REGISTRO).ForEachAsync(async s =>
-                {
-                    await Task.Run(() =>
-                    {
-                        s.REGISTRO = pedido.REGISTRO;
-                        s.IMPORTE2 = pedido.IMPORTE2;
-                        s.IMPORTE3 = pedido.IMPORTE3;
-                        s.IMPORTE4 = pedido.IMPORTE4;
-                        s.IMPORTE6 = pedido.IMPORTE6;
-                    });
+            stock.AVISO = "AJUSTE INVENTARIOS";
+        }
 
+        if (StockEncabezado.TIPOO == 27)
+        {
+            stock.AVISO = "ENTREGA A PLANTA SIN OF";
+            stock.STOCK = -stock.STOCK;
+        }
 
-                });
-            }
-
-
-
+        stock.ENTRREAL = DateTime.UtcNow;
+        var esNuevoRegistro = stock.REGISTRO == null || stock.REGISTRO <= 0;
+        HttpResponseMessage response = null;
+        if (esNuevoRegistro)
+        {
+            response = await Http.PostAsJsonAsync("api/Pedidos", stock);
+        }
+        else
+        {
+            var registro = stock.REGISTRO;
+            response = await Http.PutAsJsonAsync($"api/Pedidos/{registro}", stock);
         }
 
 
 
-    }
-
-}
-
-
-protected async Task AbrirConfirmacionGuardarVale()
-{
-    await ConfirmacionGuardarDialog.ShowAsync();
-}
-
-protected async Task AbrirConfirmacionEliminarVale()
-{
-    await ConfirmacionEliminarDialog.ShowAsync();
-}
-
-protected async Task EliminarVale()
-{
-    if (abrioVale)
-    {
-        await ConfirmacionEliminarDialog.HideAsync();
-        SpinnerVisible = true;
-        var response = await Http.DeleteAsync($"api/Pedidos/{StockEncabezado.VALE}");
-
-        if (!response.IsSuccessStatusCode)
+        if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
+            || response.StatusCode == System.Net.HttpStatusCode.NotFound
+            || response.StatusCode == System.Net.HttpStatusCode.Conflict)
         {
-            SpinnerVisible = false;
             var mensServidor = await response.Content.ReadAsStringAsync();
 
 
@@ -1032,7 +919,7 @@ protected async Task EliminarVale()
             await this.ToastObj.Show(new ToastModel
             {
                 Title = "ERROR!",
-                Content = "Error al eliminar vale",
+                Content = "Error al guardar",
                 CssClass = "e-toast-danger",
                 Icon = "e-error toast-icons",
                 ShowCloseButton = true,
@@ -1041,81 +928,153 @@ protected async Task EliminarVale()
         }
         else
         {
-            SpinnerVisible = false;
-            StockEncabezado = new();
-            await this.ToastObj.Show(new ToastModel
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Title = "EXITO!",
-                Content = $"Vale anulado Correctamente.",
-                CssClass = "e-toast-success",
-                Icon = "e-success toast-icons",
-                ShowCloseButton = true,
-                ShowProgressBar = true
-            });
+                var pedido = await response.Content.ReadFromJsonAsync<Pedidos>();
+                //StockEncabezado =
+                await InvokeAsync(StateHasChanged);
+                var itemsJson = JsonSerializer.Serialize(pedido);
+                if (esNuevoRegistro)
+                {
+                    await StockEncabezado.Items.Where(i => i.REGISTRO == stock.REGISTRO).ForEachAsync(async s =>
+                    {
+                        await Task.Run(() =>
+                        {
+                            s.REGISTRO = pedido.REGISTRO;
+                            s.IMPORTE2 = pedido.IMPORTE2;
+                            s.IMPORTE3 = pedido.IMPORTE3;
+                            s.IMPORTE4 = pedido.IMPORTE4;
+                            s.IMPORTE6 = pedido.IMPORTE6;
+                        });
+
+
+                    });
+                }
+
+
+
+            }
+
+
 
         }
 
-
-    }
-}
-
-private void OnBlurRemito()
-{
-    if (!string.IsNullOrEmpty(StockEncabezado.REMITO))
-    {
-
-        var puntoVenta = StockEncabezado.REMITO.Substring(0, StockEncabezado.REMITO.IndexOf("-"));
-        puntoVenta = puntoVenta.PadLeft(4, '0');
-        var numero = StockEncabezado.REMITO.Substring(StockEncabezado.REMITO.IndexOf("-") + 1);
-        numero = numero.PadLeft(8, '0');
-        StockEncabezado.REMITO = puntoVenta + "-" + numero;
     }
 
-}
 
-protected async Task ImprimirEtiqueta()
-{
-    if (abrioVale)
+    protected async Task AbrirConfirmacionGuardarVale()
     {
-        await StockEncabezado.Items.ForEachAsync(async s =>
+        await ConfirmacionGuardarDialog.ShowAsync();
+    }
+
+    protected async Task AbrirConfirmacionEliminarVale()
+    {
+        await ConfirmacionEliminarDialog.ShowAsync();
+    }
+
+    protected async Task EliminarVale()
+    {
+        if (abrioVale)
         {
-            await Etiqueta(s);
-        });
+            await ConfirmacionEliminarDialog.HideAsync();
+            SpinnerVisible = true;
+            var response = await Http.DeleteAsync($"api/Pedidos/{StockEncabezado.VALE}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                SpinnerVisible = false;
+                var mensServidor = await response.Content.ReadAsStringAsync();
+
+
+                Console.WriteLine($"Error: {mensServidor}");
+                //toastService.ShowToast($"{mensServidor}", TipoAlerta.Error);
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "Error al eliminar vale",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }
+            else
+            {
+                SpinnerVisible = false;
+                StockEncabezado = new();
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "EXITO!",
+                    Content = $"Vale anulado Correctamente.",
+                    CssClass = "e-toast-success",
+                    Icon = "e-success toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+
+            }
+
+
+        }
     }
-}
 
-protected async Task Etiqueta(Pedidos pedidos)
-{
+    private void OnBlurRemito()
+    {
+        if (!string.IsNullOrEmpty(StockEncabezado.REMITO))
+        {
 
-    PdfDocument document1 = new PdfDocument();
-    document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(227, 70);//110
-    int margin = -25;
+            var puntoVenta = StockEncabezado.REMITO.Substring(0, StockEncabezado.REMITO.IndexOf("-"));
+            puntoVenta = puntoVenta.PadLeft(4, '0');
+            var numero = StockEncabezado.REMITO.Substring(StockEncabezado.REMITO.IndexOf("-") + 1);
+            numero = numero.PadLeft(8, '0');
+            StockEncabezado.REMITO = puntoVenta + "-" + numero;
+        }
 
-    document1.PageSettings.Margins.Left = -2;
-    document1.PageSettings.Margins.Right = -15;
-    document1.PageSettings.Margins.Top = 10;
-    document1.PageSettings.Margins.Bottom = -10;
-    //document1.PageSettings.Margins.All = margin;
-    PdfGrid pdfGrid1 = new PdfGrid();
-    PdfPage page = document1.Pages.Add();
-    PdfGraphics graphics = page.Graphics;
-    PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
-    PdfLightTable pdfTable = new PdfLightTable();
-    page.Graphics.RotateTransform(-90);
+    }
+
+    protected async Task ImprimirEtiqueta()
+    {
+        if (abrioVale)
+        {
+            await StockEncabezado.Items.ForEachAsync(async s =>
+            {
+                await Etiqueta(s);
+            });
+        }
+    }
+
+    protected async Task Etiqueta(Pedidos pedidos)
+    {
+
+        PdfDocument document1 = new PdfDocument();
+        document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(227, 70);//110
+        int margin = -25;
+
+        document1.PageSettings.Margins.Left = -2;
+        document1.PageSettings.Margins.Right = -15;
+        document1.PageSettings.Margins.Top = 10;
+        document1.PageSettings.Margins.Bottom = -10;
+        //document1.PageSettings.Margins.All = margin;
+        PdfGrid pdfGrid1 = new PdfGrid();
+        PdfPage page = document1.Pages.Add();
+        PdfGraphics graphics = page.Graphics;
+        PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
+        PdfLightTable pdfTable = new PdfLightTable();
+        page.Graphics.RotateTransform(-90);
 
 
-    graphics.DrawString($"{pedidos.CG_ART}                  OC {pedidos.OCOMPRA}\r\n{pedidos.DES_ART}\r\n" +
-        $"Despacho {pedidos.DESPACHO} Lote {pedidos.LOTE} VALE {pedidos.VALE}\n" +
-        $"{pedidos.Proveedor.DES_PROVE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+        graphics.DrawString($"{pedidos.CG_ART}                  OC {pedidos.OCOMPRA}\r\n{pedidos.DES_ART}\r\n" +
+            $"Despacho {pedidos.DESPACHO} Lote {pedidos.LOTE} VALE {pedidos.VALE}\n" +
+            $"{pedidos.Proveedor.DES_PROVE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
 
-    //document1.PageSettings.Margins.Left = margin;
-    //document1.PageSettings.Margins.Right = margin;
-    //document1.PageSettings.Margins.Top = margin;
-    //document1.PageSettings.Margins.Bottom = margin;
-    MemoryStream xx = new MemoryStream();
-    document1.Save(xx);
-    document1.Close(true);
-    await JsRuntime.SaveAs("ETOC" + pedidos.CG_ART.Trim() + ".pdf", xx.ToArray());
-}
+        //document1.PageSettings.Margins.Left = margin;
+        //document1.PageSettings.Margins.Right = margin;
+        //document1.PageSettings.Margins.Top = margin;
+        //document1.PageSettings.Margins.Bottom = margin;
+        MemoryStream xx = new MemoryStream();
+        document1.Save(xx);
+        document1.Close(true);
+        await JsRuntime.SaveAs("ETOC" + pedidos.CG_ART.Trim() + ".pdf", xx.ToArray());
+    }
 
 }

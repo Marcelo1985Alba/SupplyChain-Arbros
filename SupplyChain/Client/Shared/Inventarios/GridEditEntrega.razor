@@ -149,23 +149,18 @@ else
 
     @if (PopupBuscadorStockVisible)
     {
-        <BuscadorEmergenteResumenStock @ref="BuscadorEmergenteRS" Titulo="@tituloBuscador" DataSource="@Items"
-                                       Columnas="@(new string[] { "CG_ART", "STOCK", "CG_DEP", "SERIE", "LOTE", "DESPACHO"})"
+        <BuscadorEmergenteResumenStock @ref="BuscadorEmergenteRS" DataSource="@Items" 
+                                       Columnas="@(new string[] { "CG_ART", "STOCK", "CG_DEP", "DEPOSITO", "SERIE", "LOTE", "DESPACHO"})"
                                        OnObjetoSeleccionado="@(async(r)=> await OnResumenStockSelected(r))"/>
     }
 
 
-    <BuscadorEmergente TItem="Pedidos" @ref="BuscadorProducto" Titulo=@tituloBuscador
+    @*<BuscadorEmergente TItem="Pedidos" @ref="BuscadorProducto" Titulo=@tituloBuscador
                        DataSource="@DataSource" Columnas="@(new string[] { "CG_ART", "DES_ART"})"
-                       OnObjetoSeleccionado="@(async (p)=> await OnSelectedItem(p))" />
-
-
+                       OnObjetoSeleccionado="@(async (p)=> await OnSelectedItem(p))" />*@
 
 }
 
-@code {
-    
-}
 <style>
     /*    #dialogo {
         min-height: 400px;

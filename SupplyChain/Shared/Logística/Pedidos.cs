@@ -51,9 +51,9 @@ namespace SupplyChain
         [NotMapped]
         public int CG_DEP_ALT { get; set; } = 0;
 
-        [Display(Name = "Vale")]
+        [ColumnaGridViewAtributo(Name = "Vale")]
         public int VALE { get; set; } = 0;
-        [Display(Name = "Fecha Vale")]
+        [ColumnaGridViewAtributo(Name = "Fecha Vale")]
         public DateTime FE_MOV { get; set; }
         [ColumnaGridViewAtributo(Name = "Asiento contable")]
         public int VOUCHER { get; set; } = 0;

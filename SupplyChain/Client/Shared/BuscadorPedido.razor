@@ -7,9 +7,7 @@
     </div>
     @if (MostraBotonBusqueda)
     {
-        <div class="col-2 mb-1">
-
-
+        <div class="col-1 mb-1">
             <SfButton OnClick="@(async (e)=> await BuscarPedidos())" CssClass="e-smal e-round e-info"
                       IsPrimary="false" HtmlAttributes="@HtmlAttr"
                       IconCss="fa fa-search" Disabled="@HabilitaBotonBusqueda"></SfButton>
@@ -18,8 +16,10 @@
     }
     </div>
 
-<BuscadorEmergente @ref="Buscador" TItem="Pedidos" DataSource="@ItemsABuscar" Columnas="@ColumnasBuscador" 
-                   Titulo="@TituloBuscador" Height="85%" OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+    <BuscadorEmergente @ref="@Buscador" TItem="Pedidos" DataSource="@ItemsABuscar" Columnas="@ColumnasBuscador" Width="85%"
+                       MostrarVerMas="true" OnBuscarMas="@(async()=> await BuscarPedidos())" Visible="PopupBuscadorVisible"
+                   Titulo="@TituloBuscador" Height="600px" OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+
 
 @code {
 
@@ -32,7 +32,7 @@
     [Parameter] public string[] ColumnasBuscador { get; set; }
     [Parameter] public string TituloBuscador { get; set; }
     [Parameter] public int TipoOperacion { get; set; }
-    [Parameter] public Dictionary<string, object> HtmlAttr { get; set; } = new Dictionary<string, object>() { { "type", "button" } };
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> HtmlAttr { get; set; } = new Dictionary<string, object>() { { "type", "button" } };
     private Pedidos[] ItemsABuscar = null;
     private bool PopupBuscadorVisible = false;
     private int CantRegistros = 0;
@@ -40,9 +40,10 @@
 
     private async Task BuscarPedidos()
     {
+        PopupBuscadorVisible = true;
         CantRegistros += 100;
         SetTituloBuscador();
-        ColumnasBuscador = new string[] { "VALE", "FE_MOV", "CG_ART", "DES_ART", "STOCK" };
+        ColumnasBuscador = new string[] { "VALE", "FE_MOV", "CG_ART", "DES_ART", "STOCK", "SERIE", "LOTE", "DESPACHO" };
         await Buscador.ShowAsync();
         ItemsABuscar = await Http.GetFromJsonAsync<Pedidos[]>($"api/Stock/GetValesByTipo/{TipoOperacion}/{CantRegistros}");
         await InvokeAsync(StateHasChanged);
@@ -56,15 +57,28 @@
         {
             TituloBuscador += "RECEPCION DE INSUMOS DE PROVEEDOR";
         }
-        if (TipoOperacion == 10)
+        else if (TipoOperacion == 9)
+        {
+            TituloBuscador += "MOVIMIENTOS ENTRE DEPOSITO";
+        }
+        else if (TipoOperacion == 10)
         {
             TituloBuscador += "ENTREGA A ORDEN DE FABRICACION";
+        }
+        else if (TipoOperacion == 21)
+        {
+            TituloBuscador += "AJUSTE DE INVENTARIO";
+        }
+        else if (TipoOperacion == 27)
+        {
+            TituloBuscador += "ENTREGA A PLANTA SIN OF";
         }
     }
 
     public async Task EnviarObjetoSeleccionado(Pedidos pedido)
     {
         var oc = (Pedidos)pedido;
+        PopupBuscadorVisible = false;
         await Buscador.HideAsync();
         await OnOCSeleccionada.InvokeAsync(oc);
     }

@@ -19,21 +19,20 @@ namespace SupplyChain.Client.Shared.Inventarios
         [Inject] public IJSRuntime JsRuntime { get; set; }
         [Inject] HttpClient Http { get; set; }
         protected ConfirmacionDialog ConfirmacionDialog;
-        protected BuscadorEmergente<Pedidos> BuscadorProducto;
+        protected SupplyChain.Client.Shared.BuscadorEmergente<Pedidos> BuscadorProducto;
         protected Pedidos stock;
         protected Pedidos stockCopiado;
         protected bool confirmaCopy = false;
         protected bool bAgregarInsumo = false;
-        protected BuscadorEmergenteResumenStock BuscadorEmergenteRS;
+        protected SupplyChain.Client.Shared.BuscadorEmergenteResumenStock BuscadorEmergenteRS;
         protected Producto[] DataSourceProductos;
         [Parameter] public string Titulo { get; set; } = null!;
         [Parameter] public List<Pedidos> DataSource { get; set; } = null!;
         [Parameter] public bool PermiteAgregar { get; set; } = false;
         [Parameter] public bool PermiteEditar { get; set; } = false;
         [Parameter] public bool PermiteEliminar { get; set; } = false;
-        [Parameter] public EventCallback<Pedidos> onEnviarDepos { get; set; }
-
-        [Parameter] public EventCallback<Pedidos> onGuardar { get; set; }
+        [Parameter] public EventCallback<Pedidos> OnGuardar { get; set; }
+        [Parameter] public EventCallback<List<Pedidos>> OnItemsDataSource { get; set; }
         [CascadingParameter] public PedidoEncabezado RegistroGenerado { get; set; }
 
         protected Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
@@ -99,13 +98,13 @@ namespace SupplyChain.Client.Shared.Inventarios
             bAgregarInsumo = true;
             Items = null;
             await BuscadorEmergenteRS.ShowAsync();
-            tituloBuscador = $"Listado de Insumos con Stock";
+            tituloBuscador = $"Listado de Insumos en Stock";
 
             ColumnasBuscador = new string[] { "CG_ART", "DEPOSITO", "DESPACHO", "SERIE", "LOTE", "STOCK" };
 
-            Items = await Http.GetFromJsonAsync<vResumenStock[]>($"api/ResumenStock/GetResumenStockPositivo");
+            Items = await Http.GetFromJsonAsync<vResumenStock[]>("api/ResumenStock/GetResumenStockPositivo");
 
-
+            
         }
 
         public void RowBound(RowDataBoundEventArgs<Pedidos> args)
