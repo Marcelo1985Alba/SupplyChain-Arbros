@@ -40,7 +40,7 @@ namespace SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion
         "ExcelExport"
         };
 
-        protected NotificacionToast NotificacionObj;
+        protected SupplyChain.Client.Shared.NotificacionToast NotificacionObj;
         protected bool ToastVisible { get; set; } = false;
         protected const string APPNAME = "grdPendienteFabricar";
         protected string state;

@@ -21,6 +21,7 @@ namespace SupplyChain.Client.Shared
         [Parameter] public string[] Columnas { get; set; } = null!;
         [Parameter] public EventCallback<TItem> OnObjetoSeleccionado { get; set; }
         [Parameter] public EventCallback OnBuscarMas { get; set; }
+        [Parameter] public EventCallback<bool> OnCerrarDialog { get; set; }
         
         protected SfSpinner sfSpinner;
         protected SfGrid<TItem> Grid;
@@ -44,7 +45,9 @@ namespace SupplyChain.Client.Shared
 
         protected async Task OnLoadGrid(object args)
         {
+            await sfSpinner.ShowAsync();
             visibliSpinner = true;
+            await Grid.AutoFitColumns();
         }
         protected async Task OnDataBoundGrid(BeforeDataBoundArgs<TItem> args)
         {
@@ -52,7 +55,6 @@ namespace SupplyChain.Client.Shared
         }
         protected async Task DataBoundGrid()
         {
-            await Grid.AutoFitColumns();
             visibliSpinner = false;
         }
         protected async Task ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -77,9 +79,11 @@ namespace SupplyChain.Client.Shared
         }
 
 
-        protected void OnAfterDialogClosed(object arg)
+        protected async Task OnAfterDialogClosed(object arg)
         {
             Visible = false;
+            await OnCerrarDialog.InvokeAsync(Visible);
+
         }
 
         public async Task ShowAsync()

@@ -5,7 +5,7 @@
 @inherits BuscadorEmergenteBase<TItem>
 
 
-<SfSpinner @ref="@sfSpinner" @bind-Visible="@visibliSpinner" Size="80" Target=".dialogContent" Label="Cargando..." Type="SpinnerType.Bootstrap"/>
+
 
 <SfDialog Height="@Height" Width="@Width" Target="#target" ShowCloseIcon="true" @bind-Visible="@Visible"
           IsModal="false" EnableResize="false">
@@ -18,7 +18,15 @@
         <Content>
             @if (DataSource is null)
             {
+                if (Visible == true)
+                {
+                    visibliSpinner = true;
 
+                }
+            }
+            else if (DataSource.Count() == 0)
+            {
+                <p class="text-active">Sin Datos</p>
             }
             else
             {
@@ -27,13 +35,13 @@
                         <div class="content-wrapper">
                             <div class="row">
                                 <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="false" AllowFiltering="true" TValue="TItem"
-                                        AllowResizing="true" GridLines="GridLine.Both" RowHeight="20" Height="310px" 
+                                        AllowResizing="true" GridLines="GridLine.Both" RowHeight="20" Height="310px"
                                         AllowReordering="true" AllowExcelExport="true"
                                         AllowSelection="true" AllowSorting="true" AllowTextWrap="true" EnableHover="true" Width="100%"
                                         ShowColumnMenu="true" EnableVirtualization="true">
                                     @*<GridFilterSettings ShowFilterBarStatus="true" Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"
-                                Operators="@(new Operator[] { Operator.Contains })"
-                                Mode="FilterBarMode.Immediate"></GridFilterSettings>*@
+                                        Operators="@(new Operator[] { Operator.Contains })"
+                                        Mode="FilterBarMode.Immediate"></GridFilterSettings>*@
                                     @*<GridPageSettings PageCount="20" PageSize="20" PageSizes="false"></GridPageSettings>*@
                                     <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                                     <GridEvents TValue="TItem" OnLoad="@(async(a)=>await OnLoadGrid(a))"
@@ -86,6 +94,7 @@
                                         }
 
                                     </GridColumns>
+
                                 </SfGrid>
                             </div>
                         </div>
@@ -103,14 +112,20 @@
             <hr />
             @if (MostrarVerMas)
             {
-                <button id="verButton" @onclick="@(async()=> await Buscar())" 
-                        class="e-control e-btn e-info" data-ripple="true">Ver +</button>
+                <button id="verButton" @onclick="@(async()=> await Buscar())"
+                        class="e-control e-btn e-info" data-ripple="true">
+                    Ver +
+                </button>
             }
-            
+
             <button id="sendButton" @onclick="@EnviarObjetoSeleccionado" class="e-control e-btn e-info" data-ripple="true">Aceptar</button>
         </FooterTemplate>
+
     </DialogTemplates>
     @*<DialogEvents OnOpen="@BeforeDialogOpen" Closed="@DialogClosed"></DialogEvents>*@
+    <SfSpinner @ref="@sfSpinner" @bind-Visible="@visibliSpinner" Size="80"
+               Target=".dialogContent" Label="Cargando..." Type="SpinnerType.Bootstrap">
+    </SfSpinner>
 </SfDialog>
 
 

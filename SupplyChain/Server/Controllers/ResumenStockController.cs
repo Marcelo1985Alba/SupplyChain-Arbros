@@ -42,7 +42,9 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
-                return await _context.vResumenStock.Where(rs=> rs.STOCK > 0).ToListAsync();
+                return await _context.vResumenStock
+                    .AsNoTracking()
+                    .Where(rs=> rs.STOCK > 0).ToListAsync();
             }
             catch (Exception ex)
             {

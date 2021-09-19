@@ -1,0 +1,30 @@
+﻿@page "/inventarios/listado/Movimientos-Stock"
+@inherits ListadoMovimientosStockBase
+
+<SfSpinner @bind-Visible="@spinnerVisible"></SfSpinner>
+
+<SfGrid DataSource="@DataSource" AllowReordering="true" ShowColumnChooser="true"
+        ShowColumnMenu="true" AllowResizing="true" GridLines="GridLine.Both"
+        RowHeight="20" AllowExcelExport="true"
+        AllowGrouping="true" Height="100%" Width="100%"
+        AllowSorting="true" AllowPaging="true" AllowFiltering="true">
+    <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
+    <GridColumns>
+        <GridColumn Field=@nameof(MovimientoStockSP.Concepto) HeaderText="Concepto" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Fecha) HeaderText="Fecha" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Codigo) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Descripcion) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Entradas) HeaderText="Entredas" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Salidas) HeaderText="Salidas" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Saldo) HeaderText="Saldo" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.UnidComer) HeaderText="Unid. Comer." TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.UnidMed) HeaderText="Unid. Stock" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Despacho) HeaderText="Despacho" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Serie) HeaderText="Serie" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Lote) HeaderText="Lote" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Deposito) HeaderText="Deposito" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Vale) HeaderText="Vale" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Cliente) HeaderText="Cliente" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Cliente) HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+    </GridColumns>
+</SfGrid>

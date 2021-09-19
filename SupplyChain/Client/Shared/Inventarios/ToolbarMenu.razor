@@ -6,14 +6,14 @@
         <ToolbarItem Text="Eliminar" Id="btnEliminarToolbar" Type="ItemType.Button">
             <Template>
                 <SfButton Content="Eliminar" Disabled="@(DisabledEliminar)"
-                          CssClass="btn btn-info" IconCss="fa fa-trash-o" OnClick="@(async () => await Eliminar())" />
+                          CssClass="btn btn-sm btn-info" IconCss="fa fa-trash-o" OnClick="@(async () => await Eliminar())" />
             </Template>
         </ToolbarItem>
 
         <ToolbarItem Text="Nuevo" Id="btnNuevoToolbar" Type="ItemType.Button">
             <Template>
                 <SfButton Content="Nuevo"
-                          CssClass="btn btn-info" IconCss="fa fa-plus-square-o" OnClick="@(async () => await Nuevo())" />
+                          CssClass="btn btn-sm btn-info" IconCss="fa fa-plus-square-o" OnClick="@(async () => await Nuevo())" />
             </Template>
         </ToolbarItem>
 
@@ -22,14 +22,14 @@
         <ToolbarItem Id="btnGuardarToolbar" Type="ItemType.Button">
             <Template>
                 <SfButton HtmlAttributes="@HtmlAttribute" Content="Guardar" Disabled="@(DisabledGuardar)"
-                          CssClass="btn btn-info" IconCss="fa fa-save" />
+                          CssClass="btn btn-sm btn-info" IconCss="fa fa-save" />
             </Template>
         </ToolbarItem>
 
         <ToolbarItem Text="Imprimir" Id="btnImprimirToolbar" Type="ItemType.Button">
             <Template>
                 <SfButton Content="Imprimir" Disabled="@(DisabledImprimir)" OnClick="@(async () => await Imprimir())"
-                          CssClass="btn btn-info" IconCss="fa fa-print" />
+                          CssClass="btn btn-sm btn-info" IconCss="fa fa-print" />
             </Template>
         </ToolbarItem>
 

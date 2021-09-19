@@ -3,6 +3,7 @@ using SupplyChain.Shared;
 using SupplyChain.Shared.Login;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
+using System;
 
 namespace SupplyChain
 {
@@ -75,6 +76,8 @@ namespace SupplyChain
         public DbSet<NoConformidadesAcciones> NoConformidadesAcciones { get; set; }
         public DbSet<Compra> ComprasDbSet { get; set; }
 
+
+        public DbSet<MovimientoStockSP> MovimientosStock { get; set; }
         public DbSet<Compra> Compras { get; set; }
         public DbSet<ResumenStock> ResumenStock { get; set; }
         public DbSet<vResumenStock> vResumenStock { get; set; }

@@ -211,31 +211,74 @@
                                                 string xCgProd = dbCarga.ElementAt(i).CG_PROD;
                                                 decimal xCantidad = dbCarga.ElementAt(i).CANT;
                                                 ModeloCarga xCarga = dbCarga.ElementAt(i);
-                                                OrdenDeFabAlta = dbCarga.Where(t => t.CG_ORDFASOC == dbCarga.ElementAt(i).CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF;
+                                                OrdenDeFabAlta = dbCarga.Where(t => t.CG_ORDFASOC == dbCarga.ElementAt(i)
+                                                    .CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF;
                                             }
 
-                                            @*<SfTooltip CssClass="e-tooltip-css" OpensOn="Hover" Target="@(".botonOrden" + xOrdenFabricacion.ToString())" Width="700" Height="220" MouseTrail=true>
+                                            <SfTooltip CssClass="e-tooltip-css" OpensOn="Hover" 
+                                                       Target="@(".botonOrden" + xOrdenFabricacion.ToString())" 
+                                                       Width="300" Height="160" MouseTrail=true>
                                                     <TooltipTemplates>
                                                         <Content>
                                                             <div id='democontent' class='democontent'>
                                                                 <div class='info'>
                                                                     <div style='margin-top:0px;font-size:13px'>
-                                                                        <table width="100%">
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <div style="text-align:right">Proceso:&nbsp;</div>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <div><b>@xCarga.PROCESO</b></div>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
+                                                                        @{
+
+                                                                            if (xCarga.EXIGEOA == false)
+                                                                            {
+                                                                                <label class="label" style="font-size:16px">
+                                                                                    @xCarga.CG_PROD.Trim()
+                                                                                </label>
+                                                                                <br />
+                                                                                <label class="label" style="font-size:16px">
+                                                                                    @xCarga.DES_PROD.Trim()
+                                                                                </label>
+                                                                                <br />
+                                                                                <label class="label" style="font-size:16px">
+                                                                                    <a class="font-weight-bold">Cantidad: </a>@(Decimal.ToInt32(xCarga.CANT))<br />
+                                                                                </label>
+                                                                                <br />
+                                                                                <label class="label" style="font-size:16px">
+                                                                                    <a class="font-weight-bold">OF Inicial: </a>@xCarga.CG_ORDFASOC
+                                                                                </label>
+                                                                                <br />
+                                                                                <label class="label" style="font-size:16px">
+                                                                                    <a class="font-weight-bold">OF Alta: </a>@OrdenDeFabAlta
+                                                                                </label>
+                                                                                <br />
+                                                                                <label class="label" style="font-size:16px">
+                                                                                    @xCarga.PROCESO.Trim()
+                                                                                </label>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <label class="label" style="font-size:18px">
+                                                                                    <a class="font-weight-bold">Pedido: </a>@xCarga.PEDIDO
+                                                                                </label>
+                                                                                <label class="label" style="font-size:16px">
+                                                                                    @xCarga.DES_CLI.Trim()
+                                                                                </label>
+                                                                                <br />
+                                                                                <label class="label" style="font-size:16px">
+                                                                                    @xCarga.CG_PROD.Trim()
+                                                                                </label>
+                                                                                <br />
+                                                                                <label class="label" style="font-size:16px">
+                                                                                    @xCarga.DES_PROD.Trim()
+                                                                                </label>
+                                                                                <br />
+                                                                                <label class="label" style="font-size:16px">
+                                                                                    @xCarga.PROCESO.Trim()
+                                                                                </label>
+                                                                            }
+                                                                        }
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </Content>
                                                     </TooltipTemplates>
-                                                </SfTooltip>*@
+                                                </SfTooltip>
 
                                             @{
                                                 int ValorBoton;
@@ -255,29 +298,6 @@
                                                        style="width: 100%;background-image: linear-gradient( @dbCarga[i].BACKGROUND.ToLower(), whitesmoke)"
                                                        value="@ValorBoton"
                                                        id="of + @dbCarga[i].CG_ORDF" />
-                                                @{
-                                                    if (@dbCarga.ElementAt(i).EXIGEOA == false)
-                                                    {
-                                                        <label class="tooltiptext">
-                                                            @dbCarga.ElementAt(i).CG_PROD.Trim()<br />
-                                                            @dbCarga.ElementAt(i).DES_PROD.Trim()<br />
-                                                            <a class="font-weight-bold">Cantidad: </a>@(Decimal.ToInt32(dbCarga.ElementAt(i).CANT))<br />
-                                                            <a class="font-weight-bold">OF Inicial: </a>@dbCarga.ElementAt(i).CG_ORDFASOC<br />
-                                                            <a class="font-weight-bold">OF Alta: </a>@OrdenDeFabAlta<br />
-                                                            @dbCarga.ElementAt(i).PROCESO.Trim()
-                                                        </label>
-                                                    }
-                                                    else
-                                                    {
-                                                        <label class="tooltiptext">
-                                                            <a class="font-weight-bold">Pedido: </a>@dbCarga.ElementAt(i).PEDIDO<br />
-                                                            @dbCarga.ElementAt(i).DES_CLI.Trim()<br />
-                                                            @dbCarga.ElementAt(i).CG_PROD.Trim()<br />
-                                                            @dbCarga.ElementAt(i).DES_PROD.Trim()<br />
-                                                            @dbCarga.ElementAt(i).PROCESO.Trim()
-                                                        </label>
-                                                    }
-                                                }
                                             </div>
                                         </td>
                                         xColumna = xColumna + dbCarga[i].COLUMNSPAN;
@@ -1992,8 +2012,20 @@
         box-shadow: none;
         color: #fafafa;
     }
-    /*    .e-spinner-pane .e-spinner-inner .e-spin-bootstrap {
-        fill: #000;
-        stroke: #000;
-    }*/
+
+
+    .e-tooltip-wrap.e-popup {
+        border: 2px solid #000;
+        background-color: black;
+        color: #fff !important;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 6px;
+    }
+
+    .e-tooltip-wrap .e-tip-content {
+        color: red;
+        font-size: 12px;
+        line-height: 20px;
+    }
 </style>

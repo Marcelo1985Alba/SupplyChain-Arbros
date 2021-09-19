@@ -10,6 +10,7 @@ using System.Data;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.AspNetCore.Identity;
 using SupplyChain.Client.HelperService;
+using SupplyChain.Shared;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -45,6 +46,7 @@ namespace SupplyChain.Server.Controllers
             if (_context.Pedidos.Any())
             {
                 lStock = await _context.Pedidos
+                    //.AsNoTracking()
                     //.Include(x=> x.Proveedor)
                     .Where(p => p.TIPOO == tipoo && p.VOUCHER == 0 && p.CG_CIA == cg_cia_usuario)
                     .OrderByDescending(s=> s.VALE)
@@ -316,6 +318,13 @@ namespace SupplyChain.Server.Controllers
             return Ok(stock);
         }
 
+
+        [HttpGet("MovimientosStock")]
+        public async Task<List<MovimientoStockSP>> MovimientosStock()
+        {
+            return await _context.MovimientosStock.FromSqlRaw("Exec NET_Listado_Movimientos_WEB @FechaDesde='01/01/2021', @FechaHasta ='17/09/2021'")
+                .ToListAsync();
+        }
         private bool RegistroExists(decimal? registro)
         {
             return _context.Pedidos.Any(e => e.REGISTRO == registro);

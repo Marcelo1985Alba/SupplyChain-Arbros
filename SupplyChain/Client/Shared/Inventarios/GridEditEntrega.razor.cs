@@ -229,7 +229,11 @@ namespace SupplyChain.Client.Shared.Inventarios
 
             ColumnasBuscador = new string[] { "CG_ART", "PRODUCTO", "CG_DEP", "DEPOSITO", "DESPACHO", "SERIE", "LOTE", "STOCK" };
             //int cg_orden = TipoInsumoCodigo;
-            Items = await Http.GetFromJsonAsync<vResumenStock[]>($"api/ResumenStock/ByCodigo?Codigo={stock.CG_ART.Trim()}&Descripcion=");
+            Items = await Http.GetFromJsonAsync<vResumenStock[]>($"api/ResumenStock/ByCodigo?Codigo={stock.CG_ART.Trim()}" +
+                "&Descripcion=");
+
+            Items = Items == null ? new List<vResumenStock>().ToArray() : Items;
+
             await BuscadorEmergenteRS.ShowAsync();
             //await InvokeAsync(StateHasChanged);
         }
