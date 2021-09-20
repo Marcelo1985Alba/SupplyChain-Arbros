@@ -55,7 +55,7 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
         //protected bool ToastVisible { get; set; } = false;
         protected override async Task OnInitializedAsync()
         {
-            //VisiblePropertySE = true;
+            VisiblePropertySE = true;
             //VisiblePropertyMP = true;
             //HttpResponseMessage respuesta;
             var listAbastecimiento = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento");
@@ -82,7 +82,7 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
         {
             await GridMP.AutoFitColumns();
             await GridSE.AutoFitColumns();
-            //VisiblePropertySE = false;
+            VisiblePropertySE = false;
             //VisiblePropertyMP = false;
         }
 
@@ -199,6 +199,16 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             }
 
             
+        }
+
+        protected async Task OnLoadGrid()
+        {
+            VisiblePropertySE = true;
+        }
+
+        protected void Selecting(SelectingEventArgs args)
+        {
+            VisiblePropertySE = true;
         }
     }
 }

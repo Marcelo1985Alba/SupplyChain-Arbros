@@ -320,10 +320,22 @@ namespace SupplyChain.Server.Controllers
 
 
         [HttpGet("MovimientosStock")]
-        public async Task<List<MovimientoStockSP>> MovimientosStock()
+        public async Task<List<MovimientoStockSP>> MovimientosStock([FromQuery]FilterMovimientosStock filter)
         {
-            return await _context.MovimientosStock.FromSqlRaw("Exec NET_Listado_Movimientos_WEB @FechaDesde='01/01/2021', @FechaHasta ='17/09/2021'")
-                .ToListAsync();
+            try
+            {
+                var query = "Exec NET_Listado_Movimientos_WEB" +
+                        $" @FechaDesde='{filter.Desde}', @FechaHasta ='{filter.Hasta}', @Tipoo = {filter.Tipoo}," +
+                        $" @Deposito = {filter.Deposito}";
+
+                var list = await _context.MovimientosStock.FromSqlRaw(query).ToListAsync();
+
+                return list;
+            }
+            catch (Exception ex)
+            {
+                return new List<MovimientoStockSP>();
+            }
         }
         private bool RegistroExists(decimal? registro)
         {

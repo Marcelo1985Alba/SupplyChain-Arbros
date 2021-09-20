@@ -83,6 +83,11 @@
 
     private async Task SelectedTipooChanged(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int, Tire> args)
     {
+        if (args.Value == (int)default)
+        {
+            return;
+        }
+
         TipooSeleccionado = args.ItemData.Tipoo;
         await OnSelectedTireChanged.InvokeAsync(args.ItemData);
         await InvokeAsync(StateHasChanged);

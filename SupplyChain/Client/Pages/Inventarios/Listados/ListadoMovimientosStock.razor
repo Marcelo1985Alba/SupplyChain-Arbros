@@ -1,17 +1,84 @@
-﻿@page "/inventarios/listado/Movimientos-Stock"
+﻿@page "/inventarios/listado/movimientos-stock"
+@using Syncfusion.Blazor.Cards
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Calendars
 @inherits ListadoMovimientosStockBase
 
-<SfSpinner @bind-Visible="@spinnerVisible"></SfSpinner>
+<div class="control-section">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card-body">
+                <div class="form-body">
+                    @*<h3 class="card-title">Person Info</h3>*@
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6 col-3">
+                            <label class="col-form-label text-info">Fecha Desde</label>
+                            <SfDatePicker TValue="DateTime" @bind-Value='@desde' Format='dd/MM/yyyy'></SfDatePicker>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-3">
+                            <label class="col-form-label text-info">Fecha Hasta</label>
+                            <SfDatePicker TValue="DateTime" @bind-Value='@hasta' Format='dd/MM/yyyy'></SfDatePicker>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-6">
+                            <label class="col-form-label text-info">Concepto de Operación</label>
+                            <ComboTipoo TipooSeleccionado="@filter.Tipoo" OnSelectedTireChanged="@(async(t)=> await ChangeTipoo(t))" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="col-form-label text-info">Deposito</label>
+                            <ComboDeposito DepositoSeleccionado="filter.Deposito"  
+                                           OnSelectedDepositoChanged="@(async(t)=> await ChangeDeposito(t))"/>
+                        </div>
+                    </div>
 
+
+                </div>
+                <div class="form-actions text-right">
+                    <SfButton Content="Buscar" CssClass="btn btn-sm btn-info" IconCss="fa fa-search"
+                              OnClick="@(async()=> await Buscar())"/>
+                    <SfButton Content="Limpiar Filtros" CssClass="btn btn-sm btn-inverse" IconCss="fa fa-filter"
+                              OnClick="@(async()=> await LimpiarFiltros())" />
+                </div>
+            </div>
+            @*<div class="card">
+                <div class="card-header">
+                    <h4 class="m-b-0">Filtros</h4>
+                </div>
+
+
+            </div>*@
+        </div>
+        
+    </div>
+</div>
+<hr />
 <SfGrid DataSource="@DataSource" AllowReordering="true" ShowColumnChooser="true"
         ShowColumnMenu="true" AllowResizing="true" GridLines="GridLine.Both"
         RowHeight="20" AllowExcelExport="true"
         AllowGrouping="true" Height="100%" Width="100%"
         AllowSorting="true" AllowPaging="true" AllowFiltering="true">
-    <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
+    <GridPageSettings PageCount="20" PageSize="5" PageSizes="true"></GridPageSettings>
     <GridColumns>
-        <GridColumn Field=@nameof(MovimientoStockSP.Concepto) HeaderText="Concepto" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-        <GridColumn Field=@nameof(MovimientoStockSP.Fecha) HeaderText="Fecha" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Concepto) HeaderText="Concepto" TextAlign="TextAlign.Left" Width="150px">
+            <Template>
+                @{
+                    var ms = context as MovimientoStockSP;
+                    var classText = "label-megna";
+                    if (ms.Tipoo == 21)
+                        classText = "label-info";
+
+                    if (ms.Tipoo == 10)
+                        classText = "label-danger";
+
+                    <div class="label @classText">@ms.Concepto</div>
+
+                }
+                <div></div>
+            </Template>
+        </GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Fecha) HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Codigo) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Descripcion) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Entradas) HeaderText="Entredas" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
@@ -23,8 +90,9 @@
         <GridColumn Field=@nameof(MovimientoStockSP.Serie) HeaderText="Serie" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Lote) HeaderText="Lote" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Deposito) HeaderText="Deposito" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
-        <GridColumn Field=@nameof(MovimientoStockSP.Vale) HeaderText="Vale" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Vale) HeaderText="Vale" Format="N0" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Cliente) HeaderText="Cliente" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Cliente) HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
     </GridColumns>
+    <SfSpinner @bind-Visible="@spinnerVisible" Label="Cargando..." Type="SpinnerType.Bootstrap" Size="50"></SfSpinner>
 </SfGrid>
