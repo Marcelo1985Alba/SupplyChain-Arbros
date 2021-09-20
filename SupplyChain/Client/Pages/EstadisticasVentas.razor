@@ -4,9 +4,8 @@
 
 <div class="control-section">
     <div class="content-wrapper">
-        <SfPivotView TValue="EstadVenta" Height="340" EnableValueSorting=true>
-            <PivotViewDataSourceSettings TValue="EstadVenta" ExpandAll=false EnableSorting=true>
-                <SfDataManager Url="api/EstadisticaVentas/GetFacturacionAsync" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" ></SfDataManager>
+        <SfPivotView da TValue="EstadVenta" Height="340" EnableValueSorting=true>
+            <PivotViewDataSourceSettings DataSource="@Data" TValue="EstadVenta" ExpandAll=false EnableSorting=true>
                 <PivotViewColumns>
                     <PivotViewColumn Name="AnoFactura"></PivotViewColumn>
                     @*<PivotViewColumn Name="Quarter"></PivotViewColumn>*@

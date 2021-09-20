@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
 using System.Data;
 using Syncfusion.Blazor.Navigations;
+using Syncfusion.Blazor.Spinner;
 
 namespace SupplyChain.Client.Pages.PCP.Abastecimiento
 {
@@ -19,6 +20,8 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
         [Inject] protected IJSRuntime JsRuntime { get; set; }
         protected SfGrid<ModeloAbastecimiento> GridMP;
         protected SfGrid<ModeloAbastecimiento> GridSE;
+        protected SfSpinner SpinnerObjSE;
+        protected SfSpinner SpinnerObjMP;
         protected string claseSE = "btn btn-sm btn-primary active";
         protected string claseMP = "btn btn-sm btn-outline-primary";
 
@@ -78,12 +81,20 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             //await InvokeAsync(StateHasChanged);
         }
 
-        public async Task DataBoundHandler()
+
+        protected async Task OnDataBoundGridSE(BeforeDataBoundArgs<ModeloAbastecimiento> args)
         {
-            await GridMP.AutoFitColumns();
+            GridSE.PreventRender();
+            await GridSE.AutoFitColumns();
+            VisiblePropertySE = true;
+            await SpinnerObjSE.ShowAsync();
+        }
+
+        public async Task DataBoundHandler(object args)
+        {
+            GridSE.PreventRender();
             await GridSE.AutoFitColumns();
             VisiblePropertySE = false;
-            //VisiblePropertyMP = false;
         }
 
         public async Task ClickHandlerMP(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -201,9 +212,15 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             
         }
 
-        protected async Task OnLoadGrid()
+        protected async Task OnLoadGridSE(object args)
         {
+            GridSE.PreventRender();
+            await SpinnerObjSE.ShowAsync();
             VisiblePropertySE = true;
+        }
+        protected async Task OnLoadGridMP(object args)
+        {
+            VisiblePropertyMP = true;
         }
 
         protected void Selecting(SelectingEventArgs args)

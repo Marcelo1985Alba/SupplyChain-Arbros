@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared;
+using Syncfusion.Blazor.Spinner;
 
 namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
 {
@@ -20,6 +21,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
         protected SfGrid<ModeloPedidosPendientes> Grid;
+        protected SfSpinner SpinnerObj;
         protected bool VisibleProperty { get; set; } = false;
 
         public bool Enabled = true;
@@ -43,11 +45,24 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
         {
             VisibleProperty = true;
             listaPedPend = await Http.GetFromJsonAsync<List<ModeloPedidosPendientes>>("api/PedidosPendientes");
-            
+            await Grid.AutoFitColumns();
 
+        }
+        protected async Task OnDataBoundGrid(BeforeDataBoundArgs<ModeloPedidosPendientes> args)
+        {
+            await SpinnerObj.ShowAsync();
+            VisibleProperty = true;
+            Grid.PreventRender();
+        }
+        public async Task LoadGrid(object args)
+        {
+            await SpinnerObj.ShowAsync();
+            VisibleProperty = true;
+            await Grid.AutoFitColumns();
         }
         public async Task DataBoundHandler()
         {
+            Grid.PreventRender();
             await Grid.AutoFitColumns();
             VisibleProperty = false;
         }
