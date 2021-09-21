@@ -10,6 +10,11 @@
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
 
   </PropertyGroup>
+
+
+  <ItemGroup>
+    <Content Remove="Pages\Inventarios\Listados\ListadoStock.razor" />
+  </ItemGroup>
 	<ItemGroup>
 		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
 	</ItemGroup>
@@ -17,6 +22,7 @@
 
 	<ItemGroup>
     <None Include="Pages\ABM\Prods\ProdPage.razor" />
+    <None Include="Pages\Inventarios\Listados\ListadoStock.razor" />
     <None Include="Pages\PCP\Fabricaciones\Fabricaciones.razor" />
     <None Include="Pages\PCP\Prevision\Prevision.razor" />
     <None Include="wwwroot\scss\colors\blue-dark.scss" />
@@ -470,6 +476,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Inventarios\Listados\ListadoStock.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Inventarios\Listados\ListadoStock.razor" />
   </ItemGroup>
   <!-->Target Name="PublishServiceWorker" AfterTargets="CopyFilesToPublishDirectory">
     <WriteLinesToFile File="$(PublishDir)wwwroot\service-worker.js" Lines="/* $([System.Guid]::NewGuid()) */" />
