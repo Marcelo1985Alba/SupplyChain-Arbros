@@ -84,9 +84,9 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
 
         protected async Task OnDataBoundGridSE(BeforeDataBoundArgs<ModeloAbastecimiento> args)
         {
+            VisiblePropertySE = true;
             GridSE.PreventRender();
             await GridSE.AutoFitColumns();
-            VisiblePropertySE = true;
             await SpinnerObjSE.ShowAsync();
         }
 

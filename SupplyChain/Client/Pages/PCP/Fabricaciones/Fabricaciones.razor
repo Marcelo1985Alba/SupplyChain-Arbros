@@ -128,15 +128,15 @@
                         </GridEditSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(Fabricacion.CG_ORDEN) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="210px" AllowEditing="false"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.CG_PROD) HeaderText="Producto" Edit="false" TextAlign="TextAlign.Left" Width="210px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.DES_PROD) HeaderText="Descripción de producto" Edit="false" TextAlign="TextAlign.Left" Width="310px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.ORDEN) HeaderText="Prioridad" TextAlign="TextAlign.Left" Edit="true" Width="140px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.CG_ORDF) HeaderText="Orden" Edit="false" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.ULTIMAORDENASOCIADA) HeaderText="Tipo producto" Edit="false" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.CLASE) HeaderText="Clase" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.CG_R) HeaderText="Tipo de órden" TextAlign="TextAlign.Left" Edit="false" Width="210px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.CANT) Format="N2" HeaderText="Cantidad" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.CG_ESTADOCARGA) Format="N2" HeaderText="Estado" TextAlign="TextAlign.Left" Edit="false" Width="240px">
+                            <GridColumn Field=@nameof(Fabricacion.CG_PROD) HeaderText="Producto"  TextAlign="TextAlign.Left" Width="210px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.DES_PROD) HeaderText="Descripción de producto"  TextAlign="TextAlign.Left" Width="310px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.ORDEN) HeaderText="Prioridad" TextAlign="TextAlign.Left" AllowEditing="true" Width="140px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.CG_ORDF) HeaderText="Orden"  TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.ULTIMAORDENASOCIADA) HeaderText="Tipo producto"  TextAlign="TextAlign.Left" Width="190px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.CLASE) HeaderText="Clase" TextAlign="TextAlign.Left"  Width="140px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.CG_R) HeaderText="Tipo de órden" TextAlign="TextAlign.Left"  Width="210px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.CANT) Format="N2" HeaderText="Cantidad" TextAlign="TextAlign.Left"  Width="140px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.CG_ESTADOCARGA) Format="N2" HeaderText="Estado" TextAlign="TextAlign.Left"  Width="240px">
                                 <Template>
                                     @{
                                         var ordfab = (context as Fabricacion);
@@ -148,15 +148,15 @@
                                     }
                                 </Template>
                             </GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.CANTFAB) Format="N2" HeaderText="Cantidad fabricada" TextAlign="TextAlign.Left" Edit="false" Width="190px">
+                            <GridColumn Field=@nameof(Fabricacion.CANTFAB) Format="N2" HeaderText="Cantidad fabricada" TextAlign="TextAlign.Left"  Width="190px">
                             </GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.UNID) HeaderText="Unidad" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.PROCESO) HeaderText="Proceso" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.INSUMOS_ENTREGADOS_A_PLANTA) HeaderText="Insumos entregados" Edit="false" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.DIASFAB) Format="N2" HeaderText="Días de fabricación" Edit="false" TextAlign="TextAlign.Left" Width="310px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.UNID) HeaderText="Unidad" TextAlign="TextAlign.Left"  Width="140px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.PROCESO) HeaderText="Proceso" TextAlign="TextAlign.Left"  Width="140px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.INSUMOS_ENTREGADOS_A_PLANTA) HeaderText="Insumos entregados"  TextAlign="TextAlign.Left" Width="190px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left"  Width="140px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.DIASFAB) Format="N2" HeaderText="Días de fabricación"  TextAlign="TextAlign.Left" Width="310px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.CG_CELDA) HeaderText="Celda"
-                                        TextAlign="TextAlign.Left" Edit="true" Width="340px">
+                                        TextAlign="TextAlign.Left" AllowEditing="true" Width="340px">
                                 <Template>
                                     @{
                                         var ordfab = (context as Fabricacion);
@@ -171,13 +171,13 @@
                                     }
                                 </Template>
                             </GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.CG_FORM) HeaderText="Fórmula" TextAlign="TextAlign.Left" Edit="false" Width="140px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.FE_ENTREGA) HeaderText="Fecha de entrega" TextAlign="TextAlign.Left" Edit="false" Width="210px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.FE_EMIT) HeaderText="Fecha de emision" TextAlign="TextAlign.Left" Edit="false" Width="210px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.FE_PLAN) HeaderText="Fecha planificada" TextAlign="TextAlign.Left" Edit="false" Width="210px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.FE_FIRME) HeaderText="Fecha en firme" TextAlign="TextAlign.Left" Edit="false" Width="210px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.FE_CURSO) HeaderText="Fecha en curso" TextAlign="TextAlign.Left" Edit="false" Width="210px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.FECHA_PREVISTA_FABRICACION) HeaderText="Fecha prevista de fabricacion" TextAlign="TextAlign.Left" Edit="false" Width="240px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.CG_FORM) HeaderText="Fórmula" TextAlign="TextAlign.Left"  Width="140px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.FE_ENTREGA) HeaderText="Fecha de entrega" TextAlign="TextAlign.Left"  Width="210px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.FE_EMIT) HeaderText="Fecha de emision" TextAlign="TextAlign.Left"  Width="210px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.FE_PLAN) HeaderText="Fecha planificada" TextAlign="TextAlign.Left"  Width="210px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.FE_FIRME) HeaderText="Fecha en firme" TextAlign="TextAlign.Left"  Width="210px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.FE_CURSO) HeaderText="Fecha en curso" TextAlign="TextAlign.Left"  Width="210px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.FECHA_PREVISTA_FABRICACION) HeaderText="Fecha prevista de fabricacion" TextAlign="TextAlign.Left"  Width="240px"></GridColumn>
 
                             @*<GridColumn Field=@nameof(Fabricacion.FE_ANUL) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
             <GridColumn Field=@nameof(Fabricacion.FE_CIERRE) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="190px"></GridColumn>*@

@@ -25,7 +25,7 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         protected async override Task OnInitializedAsync()
         {
-            ML.Titulo = "Lisatado de Movimientos de Stock";
+            ML.Titulo = "Listado de Movimientos de Stock";
         }
 
         protected async Task Buscar()

@@ -2,6 +2,7 @@
 @using Syncfusion.Blazor.PivotView
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Charts
 @inject HttpClient Http
 
 
@@ -10,7 +11,7 @@
         <label class="">Tipo Grafico:</label>
     </div>
     <div class="col-9">
-        <SfDropDownList TValue="ChartSeriesType" TItem="DropDownData" DataSource="@ChartTypes" @bind-Value="@ChartType">
+        <SfDropDownList TValue="Syncfusion.Blazor.PivotView.ChartSeriesType" TItem="DropDownData" DataSource="@ChartTypes" @bind-Value="@ChartType">
             <DropDownListFieldSettings Text="Name" Value="Value"></DropDownListFieldSettings>
         </SfDropDownList>
     </div>
@@ -170,7 +171,7 @@ else
         <div class="col-6">
             <div class="card">
                 <div class="card-body">
-                    <SfPivotView TValue="EstadVenta" Height="600" ShowFieldList="true"
+                    <SfPivotView TValue="EstadVenta" Height="200" ShowFieldList="true"
                                  Width="100%" AllowDrillThrough="true">
                         <PivotViewDataSourceSettings DataSource="@DataEstad" TValue="EstadVenta" ExpandAll=true EnableSorting=true>
                             @*<PivotViewColumns>
@@ -199,7 +200,7 @@ else
                         </PivotViewDataSourceSettings>
                         <PivotViewGridSettings ColumnWidth="120" GridLines="PivotTableGridLine.Both"></PivotViewGridSettings>
                         <PivotViewDisplayOption View=View.Chart></PivotViewDisplayOption>
-                        <PivotChartSettings Title="Pedidos U$S" Theme="PivotChartTheme.MaterialDark"
+                        <PivotChartSettings Title="Pedidos U$S" Theme="PivotChartTheme.Bootstrap4"
                                             EnableAnimation="true" EnableSmartLabels="true">
                             <PivotChartSeries Type="@ChartType" EnableTooltip="true">
                                 <PivotChartLegendSettings Position=PivotChartLegendPosition.Right Background="rgb(230, 236, 239)" Padding=20 Alignment="PivotChartAlignment.Center">
@@ -220,6 +221,32 @@ else
 
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-6">
+            <SfChart Title="Ventas Anuales U$S">
+                <ChartBorder Color="black" Width="1"></ChartBorder>
+                <ChartPrimaryXAxis Title="Año" Format="N0" Interval="0" LabelPlacement="LabelPlacement.OnTicks"
+                                   ValueType="Syncfusion.Blazor.Charts.ValueType.Double">
+                    <ChartAxisLabelStyle Size="12px" Color="black" FontWeight="bold" />
+                </ChartPrimaryXAxis>
+                <ChartPrimaryYAxis Title="Ventas en Dolares" LabelFormat="U$S{value}" ValueType="Syncfusion.Blazor.Charts.ValueType.Logarithmic">
+                    <ChartAxisLabelStyle Size="12px" Color="black" FontWeight="bold" />
+                </ChartPrimaryYAxis>
+                <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+                <ChartSeriesCollection>
+                    <ChartSeries DataSource="@DataEstad" XName="AnoFactura" YName="DolaresFactura"
+                                 Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                        <ChartMarker>
+                            <ChartDataLabel Visible="true"></ChartDataLabel>
+                        </ChartMarker>
+                    </ChartSeries>
+                </ChartSeriesCollection>
+            </SfChart>
+        </div>
+
+    </div>
+    
 }
 
 
@@ -237,7 +264,7 @@ else
 @code{
     [CascadingParameter] public MainLayout MainLayout { get; set; }
     public List<EstadVenta> DataEstad { get; set; }
-    public ChartSeriesType ChartType = ChartSeriesType.Column;
+    public Syncfusion.Blazor.PivotView.ChartSeriesType ChartType = Syncfusion.Blazor.PivotView.ChartSeriesType.Column;
     public string[] DrilledMembers = new string[] { "2016.0" };
     public PivotChartTooltipSettings pivotChartTooltipSettings = new PivotChartTooltipSettings()
     {
@@ -251,34 +278,34 @@ else
         Visible = true
     };
     List<DropDownData> ChartTypes = new List<DropDownData>() {
-        new DropDownData { Name = "Column", Value = ChartSeriesType.Column },
-        new DropDownData { Name = "Bar", Value = ChartSeriesType.Bar },
-        new DropDownData { Name = "Line", Value = ChartSeriesType.Line },
-        new DropDownData { Name = "Spline", Value = ChartSeriesType.Spline },
-        new DropDownData { Name = "Area", Value = ChartSeriesType.Area },
-        new DropDownData { Name = "SplineArea", Value = ChartSeriesType.SplineArea },
-        new DropDownData { Name = "StepLine", Value = ChartSeriesType.StepLine },
-        new DropDownData { Name = "StepArea", Value = ChartSeriesType.StepArea },
-        new DropDownData { Name = "StackingColumn", Value = ChartSeriesType.StackingColumn },
-        new DropDownData { Name = "StackingBar", Value = ChartSeriesType.StackingBar },
-        new DropDownData { Name = "StackingArea", Value = ChartSeriesType.StackingArea },
-        new DropDownData { Name = "StackingColumn100", Value = ChartSeriesType.StackingColumn100 },
-        new DropDownData { Name = "StackingBar100", Value = ChartSeriesType.StackingBar100 },
-        new DropDownData { Name = "StackingArea100", Value = ChartSeriesType.StackingArea100 },
-        new DropDownData { Name = "Scatter", Value = ChartSeriesType.Scatter },
-        new DropDownData { Name = "Bubble", Value = ChartSeriesType.Bubble },
-        new DropDownData { Name = "Polar", Value = ChartSeriesType.Polar },
-        new DropDownData { Name = "Radar", Value = ChartSeriesType.Radar },
-        new DropDownData { Name = "Pareto", Value = ChartSeriesType.Pareto },
-        new DropDownData { Name = "Pie", Value = ChartSeriesType.Pie },
-        new DropDownData { Name = "Doughnut", Value = ChartSeriesType.Doughnut },
-        new DropDownData { Name = "Funnel", Value = ChartSeriesType.Funnel },
-        new DropDownData { Name = "Pyramid", Value = ChartSeriesType.Pyramid }
+        new DropDownData { Name = "Column", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.Column },
+        new DropDownData { Name = "Bar", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.Bar },
+        new DropDownData { Name = "Line", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.Line },
+        new DropDownData { Name = "Spline", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.Spline },
+        new DropDownData { Name = "Area", Value =Syncfusion.Blazor.PivotView.ChartSeriesType.Area },
+        new DropDownData { Name = "SplineArea", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.SplineArea },
+        new DropDownData { Name = "StepLine", Value =Syncfusion.Blazor.PivotView. ChartSeriesType.StepLine },
+        new DropDownData { Name = "StepArea", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.StepArea },
+        new DropDownData { Name = "StackingColumn", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.StackingColumn },
+        new DropDownData { Name = "StackingBar", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.StackingBar },
+        new DropDownData { Name = "StackingArea", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.StackingArea },
+        new DropDownData { Name = "StackingColumn100", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.StackingColumn100 },
+        new DropDownData { Name = "StackingBar100", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.StackingBar100 },
+        new DropDownData { Name = "StackingArea100", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.StackingArea100 },
+        new DropDownData { Name = "Scatter", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.Scatter },
+        new DropDownData { Name = "Bubble", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.Bubble },
+        new DropDownData { Name = "Polar", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.Polar },
+        new DropDownData { Name = "Radar", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.Radar },
+        new DropDownData { Name = "Pareto", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.Pareto },
+        new DropDownData { Name = "Pie", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.Pie },
+        new DropDownData { Name = "Doughnut", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.Doughnut },
+        new DropDownData { Name = "Funnel", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.Funnel },
+        new DropDownData { Name = "Pyramid", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.Pyramid }
     };
     public class DropDownData
     {
         public string Name { get; set; }
-        public ChartSeriesType Value { get; set; }
+        public Syncfusion.Blazor.PivotView.ChartSeriesType Value { get; set; }
     }
 
     protected override async Task OnInitializedAsync()
