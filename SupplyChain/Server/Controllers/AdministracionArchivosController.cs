@@ -148,6 +148,27 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
+        [HttpGet("GetCsv/{filename}")]
+        public async Task<IActionResult> GetCsv(string filename)
+        {
+            try
+            {
+                MemoryStream stream = new MemoryStream();
+                var ruta = @"C:\Temp";
+                byte[] bytes = System.IO.File.ReadAllBytes(ruta + "/" + filename);
+                stream = new MemoryStream(bytes);
+                string mimeType = "application/csv";
+                return new FileStreamResult(stream, mimeType)
+                {
+                    FileDownloadName = filename
+                };
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
 
         [HttpGet("GetPdfNube/{fileName}/{ruta}")]
         public async Task<ActionResult<string>> GetPdfNube(string fileName, string ruta)

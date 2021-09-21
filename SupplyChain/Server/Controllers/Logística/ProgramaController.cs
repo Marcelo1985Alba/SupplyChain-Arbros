@@ -149,6 +149,24 @@ namespace SupplyChain
             await _context.Database.ExecuteSqlRawAsync(xSQL);
             return Ok();
         }
+
+        [HttpGet("GeneraCsvImpresoraQR/{pedido}")]
+        public async Task<ActionResult> GeneraCsvImpresoraQR(int pedido)
+        {
+            //en el sp lo guarda en en c:\temp
+            try
+            {
+                string xSQL = string.Format($"EXEC INTERFACE_IMPRESORAQR {pedido}");
+                await _context.Database.ExecuteSqlRawAsync(xSQL);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         // PUT: api/Programas/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.

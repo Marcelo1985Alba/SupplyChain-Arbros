@@ -30,8 +30,7 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         protected async Task Buscar()
         {
-            filter.Desde = desde.ToString("dd/MM/yyyy");
-            filter.Hasta = hasta.ToString("dd/MM/yyyy");
+            
             spinnerVisible = true;
             DataSource = await Http.GetFromJsonAsync<List<MovimientoStockSP>>(GeneraUrl());
             spinnerVisible = false;
@@ -39,7 +38,8 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         private string GeneraUrl()
         {
-
+            filter.Desde = desde.ToString("dd/MM/yyyy");
+            filter.Hasta = hasta.ToString("dd/MM/yyyy");
             string api = "api/Stock/MovimientosStock";
 
             api += $"?Tipoo={filter.Tipoo}&Desde={filter.Desde}&Hasta={filter.Hasta}";
@@ -67,6 +67,8 @@ namespace SupplyChain.Client.Pages.Inventarios
                 Desde = desde.ToString("dd/MM/yyyy"),
                 Hasta = hasta.ToString("dd/MM/yyyy")
             };
+
+            DataSource = new();
     }
     }
 }
