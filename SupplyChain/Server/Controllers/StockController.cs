@@ -337,6 +337,25 @@ namespace SupplyChain.Server.Controllers
                 return new List<MovimientoStockSP>();
             }
         }
+
+        [HttpGet("Stocks")]
+        public async Task<List<StockSP>> Stocks([FromQuery] FilterMovimientosStock filter)
+        {
+            try
+            {
+                var query = "Exec NET_Listado_Stock_WEB" +
+                        $" @FechaHasta ='{filter.Hasta}', @Deposito = {filter.Deposito}";
+
+                var list = await _context.StocksSP.FromSqlRaw(query).ToListAsync();
+
+                return list;
+            }
+            catch (Exception ex)
+            {
+                return new List<StockSP>();
+            }
+        }
+
         private bool RegistroExists(decimal? registro)
         {
             return _context.Pedidos.Any(e => e.REGISTRO == registro);

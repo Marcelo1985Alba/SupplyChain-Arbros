@@ -1,8 +1,8 @@
-﻿@page "/stock-inventarios"
+﻿@page "/inventarios/listado/stock"
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Calendars
 @using SupplyChain.Shared
-@inherits ListadoStockBase
+@inherits StockInventariosBase
 
 <div class="control-section">
     <div class="row">
@@ -34,12 +34,12 @@
                 </div>
             </div>
             @*<div class="card">
-                    <div class="card-header">
-                        <h4 class="m-b-0">Filtros</h4>
-                    </div>
+                <div class="card-header">
+                    <h4 class="m-b-0">Filtros</h4>
+                </div>
 
 
-                </div>*@
+            </div>*@
         </div>
 
     </div>
@@ -47,10 +47,11 @@
 <hr />
 <SfGrid DataSource="@DataSource" AllowReordering="true" ShowColumnChooser="true"
         ShowColumnMenu="true" AllowResizing="true" GridLines="GridLine.Both"
-        RowHeight="20" AllowExcelExport="true"
+        RowHeight="20" AllowExcelExport="true" 
         AllowGrouping="true" Height="100%" Width="100%"
-        AllowSorting="true" AllowPaging="true" AllowFiltering="true">
-    <GridPageSettings PageCount="20" PageSize="5" PageSizes="true"></GridPageSettings>
+        AllowSorting="true" AllowPaging="false" AllowFiltering="true">
+    <GridGroupSettings Columns="@InitialGroup" EnableLazyLoading="true"></GridGroupSettings>
+    <GridPageSettings PageCount="20" PageSize="10" PageSizes="true"></GridPageSettings>
     <GridColumns>
         <GridColumn Field=@nameof(StockSP.Codigo) TextAlign="TextAlign.Left" Width="150px"></GridColumn>
         <GridColumn Field=@nameof(StockSP.Stock_Fisico) HeaderText="Stock Físico" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
@@ -67,3 +68,4 @@
     </GridColumns>
     <SfSpinner @bind-Visible="@spinnerVisible" Label="Cargando..." Type="SpinnerType.Bootstrap" Size="50"></SfSpinner>
 </SfGrid>
+

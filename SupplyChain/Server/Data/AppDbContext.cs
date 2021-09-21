@@ -78,6 +78,7 @@ namespace SupplyChain
 
 
         public DbSet<MovimientoStockSP> MovimientosStock { get; set; }
+        public DbSet<StockSP> StocksSP { get; set; }
         public DbSet<Compra> Compras { get; set; }
         public DbSet<ResumenStock> ResumenStock { get; set; }
         public DbSet<vResumenStock> vResumenStock { get; set; }
@@ -135,6 +136,7 @@ namespace SupplyChain
             modelBuilder.Entity<ItemAbastecimiento>().HasNoKey().ToView(null);
             modelBuilder.Entity<Procun>().HasNoKey().ToView(null);
             modelBuilder.Entity<EstadVenta>().HasNoKey().ToView(null);
+            modelBuilder.Entity<StockSP>().HasNoKey().ToView(null);
         }
     }
 }
