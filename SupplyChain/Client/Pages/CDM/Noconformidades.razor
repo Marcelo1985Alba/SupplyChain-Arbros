@@ -58,12 +58,12 @@
                                 <GridEvents OnLoad="OnLoad" DataBound="DataBound" OnToolbarClick="@ClickHandler" TValue="NoConformidadesQuery"></GridEvents>
                                 <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                                 <GridColumns>
-                                    <GridColumn Field=@nameof(NoConformidadesQuery.Cg_NoConf) HeaderText="Nro.Evento" Edit="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
-                                    <GridColumn Field=@nameof(NoConformidadesQuery.Fe_Ocurrencia) HeaderText="Fecha" Edit="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
-                                    <GridColumn Field=@nameof(NoConformidadesQuery.fe_cierre) HeaderText="Fecha Cierre" Edit="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
-                                    <GridColumn Field=@nameof(NoConformidadesQuery.Origen) HeaderText="Origen" Edit="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
-                                    <GridColumn Field=@nameof(NoConformidadesQuery.Des_TipoNc) HeaderText="Tipo Evento" Edit="false" TextAlign="TextAlign.Left" Width="40px"></GridColumn>
-                                    <GridColumn Field=@nameof(NoConformidadesQuery.Observaciones) HeaderText="Descripcion" Edit="false" TextAlign="TextAlign.Left" Width="40px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.Cg_NoConf) HeaderText="Nro.Evento" AllowEditing="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.Fe_Ocurrencia) HeaderText="Fecha" AllowEditing="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.fe_cierre) HeaderText="Fecha Cierre" AllowEditing="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.Origen) HeaderText="Origen" AllowEditing="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.Des_TipoNc) HeaderText="Tipo Evento" AllowEditing="false" TextAlign="TextAlign.Left" Width="40px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.Observaciones) HeaderText="Descripcion" AllowEditing="false" TextAlign="TextAlign.Left" Width="40px"></GridColumn>
                                 </GridColumns>
                             </SfGrid>
                         </div>
@@ -245,17 +245,17 @@
                                 <div class="content-wrapper">
                                     <div class="row" id="gridAcciones">
                                         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                                                @ref="GridAcciones" DataSource="@listaaccionesgrilla" AllowExcelExport="true" AllowGrouping="true" ID="Prevision"
+                                                @ref="GridAcciones" DataSource="@listaaccionesgrilla" AllowExcelExport="true" AllowGrouping="true" ID="Acc"
                                                 RowHeight="30"
                                                 AllowSorting="true" AllowPaging="true" AllowFiltering="true"
                                                 GridLines="GridLine.Both">
                                             <GridPageSettings PageCount="10" PageSizes="true" PageSize="20"></GridPageSettings>
                                             <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                                             <GridColumns>
-                                                <GridColumn Field=@nameof(NoConformidadesAcciones.DesOrden) HeaderText="Tipo Accion" Edit="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
-                                                <GridColumn Field=@nameof(NoConformidadesQuery.Observaciones) HeaderText="Observaciones" Edit="false" TextAlign="TextAlign.Left" Width="50px"></GridColumn>
-                                                <GridColumn Field=@nameof(NoConformidadesQuery.Fe_Ocurrencia) HeaderText="Fecha" Edit="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
-                                                <GridColumn Field=@nameof(NoConformidadesQuery.Usuario) HeaderText="Usuario" Edit="false" TextAlign="TextAlign.Left" Width="40px"></GridColumn>
+                                                <GridColumn Field=@nameof(NoConformidadesAcciones.DesOrden) HeaderText="Tipo Accion" AllowEditing="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
+                                                <GridColumn Field=@nameof(NoConformidadesQuery.Observaciones) HeaderText="Observaciones" AllowEditing="false" TextAlign="TextAlign.Left" Width="50px"></GridColumn>
+                                                <GridColumn Field=@nameof(NoConformidadesQuery.Fe_Ocurrencia) HeaderText="Fecha" AllowEditing="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
+                                                <GridColumn Field=@nameof(NoConformidadesQuery.Usuario) HeaderText="Usuario" AllowEditing="false" TextAlign="TextAlign.Left" Width="40px"></GridColumn>
                                             </GridColumns>
                                         </SfGrid>
                                     </div>

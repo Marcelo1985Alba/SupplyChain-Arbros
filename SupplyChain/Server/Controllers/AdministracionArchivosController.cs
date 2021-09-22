@@ -148,8 +148,8 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
-        [HttpGet("GetCsv/{filename}")]
-        public async Task<IActionResult> GetCsv(string filename)
+        [HttpGet("GetXls/{filename}")]
+        public async Task<IActionResult> GetXls(string filename)
         {
             try
             {
@@ -157,7 +157,7 @@ namespace SupplyChain.Server.Controllers
                 var ruta = @"C:\Temp";
                 byte[] bytes = System.IO.File.ReadAllBytes(ruta + "/" + filename);
                 stream = new MemoryStream(bytes);
-                string mimeType = "application/csv";
+                string mimeType = "application/xls";
                 return new FileStreamResult(stream, mimeType)
                 {
                     FileDownloadName = filename

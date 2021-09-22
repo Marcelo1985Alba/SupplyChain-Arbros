@@ -611,20 +611,20 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     {
                         //TODO:HACER CSV Y GUARDAR CON EL NOMBRE  ID + PEDIDO
 
-                        await DescargarCsvParaImpresoraQR(PedCliList[0].PEDIDO);
+                        await DescargarCsvParaImpresoraQR(PedCliList[0].PEDIDO, "Bridada");
                         //await EtiquetaClientesNOypf();
                     }
                 }
                 if (ordenFabricacion.CG_PROD.Substring(0, 1) == "1")
                 {
-                    await DescargarCsvParaImpresoraQR(PedCliList[0].PEDIDO);
+                    await DescargarCsvParaImpresoraQR(PedCliList[0].PEDIDO, "Roscada");
                     //await EtiquetaInicio1();
                 }
                 if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
                     ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
                     ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
                 {
-                    await DescargarCsvParaImpresoraQR(PedCliList[0].PEDIDO);
+                    await DescargarCsvParaImpresoraQR(PedCliList[0].PEDIDO, "Reparacion");
                     //await EtiquetaReparaciones();
                 }
             }
@@ -915,12 +915,12 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             }
         }
 
-        protected async Task DescargarCsvParaImpresoraQR(int pedido)
+        protected async Task DescargarCsvParaImpresoraQR(int pedido, string filename)
         {
-            var fileName = "ID-" + pedido + ".csv";
+            var fileName = filename + ".xls";
             if (await GeneraCsv(pedido))
             {
-                var fileArray = await Http.GetByteArrayAsync($"api/AdministracionArchivos/GetCsv/{fileName}");
+                var fileArray = await Http.GetByteArrayAsync($"api/AdministracionArchivos/GetXls/{fileName}");
 
                 await JS.SaveAs(fileName, fileArray);
             }

@@ -9,7 +9,7 @@
 
 <SfDialog Height="@Height" Width="@Width" Target="#target" ShowCloseIcon="true" @bind-Visible="@Visible"
           IsModal="false" EnableResize="false">
-    <DialogEvents Closed="OnAfterDialogClosed"></DialogEvents>
+    <DialogEvents Closed="OnAfterDialogClosed" OnOpen="OnAfterDialogOpned"></DialogEvents>
     <DialogTemplates>
         <Header>
             @Titulo
@@ -40,8 +40,8 @@
                                         AllowSelection="true" AllowSorting="true" AllowTextWrap="true" EnableHover="true" Width="100%"
                                         ShowColumnMenu="true" EnableVirtualization="true">
                                     @*<GridFilterSettings ShowFilterBarStatus="true" Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"
-                                        Operators="@(new Operator[] { Operator.Contains })"
-                                        Mode="FilterBarMode.Immediate"></GridFilterSettings>*@
+        Operators="@(new Operator[] { Operator.Contains })"
+        Mode="FilterBarMode.Immediate"></GridFilterSettings>*@
                                     @*<GridPageSettings PageCount="20" PageSize="20" PageSizes="false"></GridPageSettings>*@
                                     <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                                     <GridEvents TValue="TItem" OnLoad="@(async(a)=>await OnLoadGrid(a))"
@@ -94,7 +94,9 @@
                                         }
 
                                     </GridColumns>
-
+                                    <SfSpinner @ref="@sfSpinner" @bind-Visible="@visibliSpinner" Size="80"
+                                               Target="#dialogContent" Label="Cargando..." Type="SpinnerType.Bootstrap">
+                                    </SfSpinner>
                                 </SfGrid>
                             </div>
                         </div>
@@ -123,9 +125,7 @@
 
     </DialogTemplates>
     @*<DialogEvents OnOpen="@BeforeDialogOpen" Closed="@DialogClosed"></DialogEvents>*@
-    <SfSpinner @ref="@sfSpinner" @bind-Visible="@visibliSpinner" Size="80"
-               Target=".dialogContent" Label="Cargando..." Type="SpinnerType.Bootstrap">
-    </SfSpinner>
+<SfSpinner @bind-Visible="visibliSpinner"></SfSpinner>
 </SfDialog>
 
 

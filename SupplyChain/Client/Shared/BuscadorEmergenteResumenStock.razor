@@ -26,10 +26,12 @@
     public async Task ShowAsync()
     {
         Visible = true;
+        await Buscador.ShowAsync();
     }
     public async Task HideAsync()
     {
         Visible = false;
+        await Buscador.HideAsync();
     }
 
     public async Task OnSeleccionado(vResumenStock vResumenStock)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
+using Syncfusion.Blazor.Popups;
 using Syncfusion.Blazor.Spinner;
 using System;
 using System.Collections.Generic;
@@ -78,10 +79,16 @@ namespace SupplyChain.Client.Shared
             Selected = args.Data;
         }
 
+        protected async Task OnAfterDialogOpned(BeforeOpenEventArgs arg)
+        {
+            visibliSpinner = true;
+            
+        }
 
         protected async Task OnAfterDialogClosed(object arg)
         {
             Visible = false;
+            visibliSpinner = false;
             await OnCerrarDialog.InvokeAsync(Visible);
 
         }
@@ -89,12 +96,14 @@ namespace SupplyChain.Client.Shared
         public async Task ShowAsync()
         {
             Visible = true;
+            visibliSpinner = true;
             await InvokeAsync(StateHasChanged);
         }
 
         public async Task HideAsync()
         {
             Visible = false;
+            visibliSpinner = false;
             await InvokeAsync(StateHasChanged);
         }
 

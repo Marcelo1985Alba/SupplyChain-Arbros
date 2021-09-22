@@ -98,7 +98,7 @@ namespace SupplyChain.Client.Shared.Inventarios
             bAgregarInsumo = true;
             Items = null;
             await BuscadorEmergenteRS.ShowAsync();
-            tituloBuscador = $"Listado de Insumos en Stock";
+            tituloBuscador = "Listado de Insumos en Stock";
 
             ColumnasBuscador = new string[] { "CG_ART", "DEPOSITO", "DESPACHO", "SERIE", "LOTE", "STOCK" };
 
