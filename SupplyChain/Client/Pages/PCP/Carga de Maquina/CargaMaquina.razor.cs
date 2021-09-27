@@ -611,20 +611,20 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     {
                         //TODO:HACER CSV Y GUARDAR CON EL NOMBRE  ID + PEDIDO
 
-                        await DescargarCsvParaImpresoraQR(PedCliList[0].PEDIDO, "Bridada");
+                        await DescargarTxtParaImpresoraQR(PedCliList[0].PEDIDO, "Bridada");
                         //await EtiquetaClientesNOypf();
                     }
                 }
                 if (ordenFabricacion.CG_PROD.Substring(0, 1) == "1")
                 {
-                    await DescargarCsvParaImpresoraQR(PedCliList[0].PEDIDO, "Roscada");
+                    await DescargarTxtParaImpresoraQR(PedCliList[0].PEDIDO, "Roscada");
                     //await EtiquetaInicio1();
                 }
                 if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
                     ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
                     ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
                 {
-                    await DescargarCsvParaImpresoraQR(PedCliList[0].PEDIDO, "Reparacion");
+                    await DescargarTxtParaImpresoraQR(PedCliList[0].PEDIDO, "Reparacion");
                     //await EtiquetaReparaciones();
                 }
             }
@@ -915,12 +915,12 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             }
         }
 
-        protected async Task DescargarCsvParaImpresoraQR(int pedido, string filename)
+        protected async Task DescargarTxtParaImpresoraQR(int pedido, string filename)
         {
-            var fileName = filename + ".xls";
+            var fileName = filename + ".txt";
             if (await GeneraCsv(pedido))
             {
-                var fileArray = await Http.GetByteArrayAsync($"api/AdministracionArchivos/GetXls/{fileName}");
+                var fileArray = await Http.GetByteArrayAsync($"api/AdministracionArchivos/GetTxt/{fileName}");
 
                 await JS.SaveAs(fileName, fileArray);
             }
