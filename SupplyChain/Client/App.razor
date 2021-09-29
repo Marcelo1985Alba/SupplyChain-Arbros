@@ -34,6 +34,7 @@
     {
         if (args.Path.Contains("maquina") || args.Path.Contains("produccion")
             || args.Path.Contains("servicio")
+            || args.Path.Contains("trazabilidad")
             || args.Path.Contains("inventario"))
         {
             var assembliesCargados = await lazyLoader.LoadAssembliesAsync(

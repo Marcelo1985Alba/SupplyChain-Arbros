@@ -51,6 +51,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                 {"type", "button" }
         };
 
+
         protected bool PermiteAgregarItem { get; set; } = false;
         protected bool PermiteEditarItem { get; set; } = false;
         protected bool PermiteEliminarItem { get; set; } = false;

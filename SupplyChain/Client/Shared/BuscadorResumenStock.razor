@@ -15,7 +15,8 @@
 </div>
 @if (PopupBuscadorVisible)
 {
-    <BuscadorEmergente @ref="Buscador" TItem="vResumenStock" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" Titulo="@TituloBuscador"
+    <BuscadorEmergente @ref="Buscador" TItem="vResumenStock" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" 
+                       Titulo="@TituloBuscador"
                        Visible="@PopupBuscadorVisible" OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
 }
 

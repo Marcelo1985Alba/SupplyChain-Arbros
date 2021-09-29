@@ -153,12 +153,19 @@ namespace SupplyChain
         [HttpGet("MostrarTrazabilidad/{Pedido}")]
         public async Task<ActionResult<List<Pedidos>>> MostrarTrazabilidad(string Pedido)
         {
-            List<Pedidos> lPedidos = new();
-            if (_context.Pedidos.Any())
+            try
             {
-                lPedidos = await _context.Pedidos.Where(p => p.PEDIDO.ToString() == Pedido).ToListAsync();
+                List<Pedidos> lPedidos = new();
+                if (_context.Pedidos.Any())
+                {
+                    lPedidos = await _context.Pedidos.Where(p => p.PEDIDO.ToString() == Pedido).ToListAsync();
+                }
+                return lPedidos == null ? NotFound() : lPedidos;
             }
-            return lPedidos == null ? NotFound() : lPedidos;
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         // GET: api/Pedidos/BusquedaParaFE_MOV/{PEDIDO}

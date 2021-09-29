@@ -8,7 +8,7 @@
 
 
 <SfDialog Height="@Height" Width="@Width" Target="#target" ShowCloseIcon="true" @bind-Visible="@Visible"
-          IsModal="false" EnableResize="false">
+          IsModal="@IsModal" EnableResize="false">
     <DialogEvents Closed="OnAfterDialogClosed" OnOpen="OnAfterDialogOpned"></DialogEvents>
     <DialogTemplates>
         <Header>

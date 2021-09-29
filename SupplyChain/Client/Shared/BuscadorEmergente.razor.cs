@@ -18,6 +18,7 @@ namespace SupplyChain.Client.Shared
         [Parameter] public string Width { get; set; } = null!;
         [Parameter] public bool Visible { get; set; } = false;
         [Parameter] public bool MostrarVerMas { get; set; } = false;
+        [Parameter] public bool IsModal { get; set; } = false;
         [Parameter] public IEnumerable<TItem> DataSource { get; set; }
         [Parameter] public string[] Columnas { get; set; } = null!;
         [Parameter] public EventCallback<TItem> OnObjetoSeleccionado { get; set; }

@@ -36,6 +36,8 @@ namespace SupplyChain.Shared.PCP
         public int? TIPOO { get; set; } = 0;
         [ColumnaGridViewAtributo(Name = "Línea fabricación")]
         public int? CG_LINEA { get; set; }
+        [ColumnaGridViewAtributo(Name = "Presion de Prueba")]
+        public string CAMPOCOM4 { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Remito")]
         public string REMITO { get; set; } = "0000-00000000";
     }
