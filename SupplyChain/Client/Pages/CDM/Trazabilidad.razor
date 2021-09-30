@@ -671,7 +671,6 @@
     }
     protected async Task Catalogo()
     {
-        refSpinner.Label = "generado Pdf";
         await refSpinner.ShowAsync();
         ProdCertificado = await Http.GetFromJsonAsync<List<Prod>>($"api/Prod/BuscarPorCG_PROD/{CodNro}");
         PedcliCertificado = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/BuscarPorPedido/{TrzNro}");
@@ -697,7 +696,7 @@
         }
 
 
-        if (vpedidos.Any(p => p.DES_ART.ToLower().StartsWith("cuerpo") || p.DES_ART.StartsWith("cpo")))
+        if (vpedidos.Any(p => p.DES_ART.ToLower().StartsWith("cuerpo") || p.DES_ART.ToLower().StartsWith("cpo")))
         {
             cuerpo = vpedidos.Where(p => p.DES_ART.ToLower().StartsWith("cuerpo") || p.DES_ART.ToLower().StartsWith("cpo")).FirstOrDefault().NORMA;
             cuerpoDespacho = vpedidos.Where(p => p.DES_ART.ToLower().StartsWith("cuerpo") || p.DES_ART.ToLower().StartsWith("cpo")).FirstOrDefault().DESPACHO;
@@ -789,7 +788,7 @@
         //FileStream IMR = new FileStream("wwwroot\\IMR.jpg", FileMode.Open);
         var fs = await Http.GetStreamAsync("./logo_aerre.jpg");
         var IMR = await Http.GetStreamAsync("./IMR.jpg");
-        //LINEA 1
+        //LINEA 0
         //Add RowSpan
         PdfGridCell gridCell1 = pdfGrid.Rows[0].Cells[0];
         gridCell1.ColumnSpan = 2;
@@ -830,7 +829,7 @@
         gridCell6.Value = new PdfTextElement($"O.C.I.: {PedcliCertificado.FirstOrDefault().NUMOCI}\n" +
                                              $"{PedidosCertificado.FirstOrDefault().FE_MOV.ToShortDateString()}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
 
-        //GENERALIDADES
+        //LINEA 4 GENERALIDADES
         //Add RowSpan
         PdfGridCell gridCell7 = pdfGrid.Rows[4].Cells[0];
         gridCell7.ColumnSpan = 2;
@@ -849,17 +848,17 @@
         gridCell9.Value = $"   {PedcliCertificado.FirstOrDefault().ORCO.Trim()}\n" +
                           $"   {vpedidos.Where(p => p.TIPOO == 1).FirstOrDefault().REMITO.Trim()}";
 
-        //DATOS DE PLACA
+        //LINEA 5 DATOS DE PLACA
         //Add RowSpan
         PdfGridCell gridCell10 = pdfGrid.Rows[5].Cells[0];
         gridCell10.ColumnSpan = 2;
-        gridCell10.RowSpan = 8;
+        gridCell10.RowSpan = 6;
         gridCell10.StringFormat = Izquierda;
         gridCell10.Value = new PdfTextElement("DATOS DE PLACA", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
         //Add RowSpan
         PdfGridCell gridCell11 = pdfGrid.Rows[5].Cells[2];
         gridCell11.ColumnSpan = 1;
-        gridCell11.RowSpan = 8;
+        gridCell11.RowSpan = 6;
         gridCell11.StringFormat = Izquierda;
         gridCell11.Value = $"   Linea de Producto:\n" +
                            $"   Nro de Serie:\n" +
@@ -877,7 +876,7 @@
         //Add RowSpan
         PdfGridCell gridCell12 = pdfGrid.Rows[5].Cells[3];
         gridCell12.ColumnSpan = 3;
-        gridCell12.RowSpan = 8;
+        gridCell12.RowSpan = 6;
         gridCell12.StringFormat = Izquierda;
         gridCell12.Value = $"   {ProdCertificado.FirstOrDefault().CAMPOCOM1.Trim()}\n" +
                            $"   {TrzNro}\n" +
@@ -895,13 +894,13 @@
 
         //CONTROL DIMENSIONAL
         //Add RowSpan
-        PdfGridCell gridCell13 = pdfGrid.Rows[13].Cells[0];
+        PdfGridCell gridCell13 = pdfGrid.Rows[11].Cells[0];
         gridCell13.ColumnSpan = 2;
         gridCell13.RowSpan = 2;
         gridCell13.StringFormat = Izquierda;
         gridCell13.Value = new PdfTextElement("CONTROL DIMENSIONAL", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
         //Add RowSpan
-        PdfGridCell gridCell14 = pdfGrid.Rows[13].Cells[2];
+        PdfGridCell gridCell14 = pdfGrid.Rows[11].Cells[2];
         gridCell14.ColumnSpan = 1;
         gridCell14.StringFormat = Izquierda;
         gridCell14.RowSpan = 2;
@@ -909,7 +908,7 @@
                            $"   Roscas (Ent-Sal)\n" +
                            $"   API 526";
         //Add RowSpan
-        PdfGridCell gridCell15 = pdfGrid.Rows[13].Cells[3];
+        PdfGridCell gridCell15 = pdfGrid.Rows[11].Cells[3];
         gridCell15.ColumnSpan = 3;
         gridCell15.StringFormat = Izquierda;
         gridCell15.RowSpan = 2;
@@ -919,41 +918,41 @@
 
         //PRUEBA HIDRAULICA Y MATERIALES
         //Add RowSpan
-        PdfGridCell gridCell16 = pdfGrid.Rows[15].Cells[0];
+        PdfGridCell gridCell16 = pdfGrid.Rows[13].Cells[0];
         gridCell16.ColumnSpan = 2;
         gridCell16.RowSpan = 8;
         gridCell16.StringFormat = Izquierda;
         gridCell16.Value = new PdfTextElement("PRUEBA HIDRAULICA Y MATERIALES", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
         //Add RowSpan
-        PdfGridCell gridCell17 = pdfGrid.Rows[15].Cells[2];
+        PdfGridCell gridCell17 = pdfGrid.Rows[13].Cells[2];
         gridCell17.ColumnSpan = 1;
         gridCell17.RowSpan = 2;
         gridCell17.StringFormat = Izquierda;
         gridCell17.Value = $"   Material Disco\n" +
                            $"   Identificación Disco";
         //Add RowSpan
-        PdfGridCell gridCell18 = pdfGrid.Rows[15].Cells[3];
+        PdfGridCell gridCell18 = pdfGrid.Rows[13].Cells[3];
         gridCell18.ColumnSpan = 3;
         gridCell18.RowSpan = 2;
         gridCell18.StringFormat = Izquierda;
         gridCell18.Value = $"   {disco}\n" +
                            $"   {discoDespacho}";
         //Add RowSpan
-        PdfGridCell gridCell19 = pdfGrid.Rows[17].Cells[2];
+        PdfGridCell gridCell19 = pdfGrid.Rows[15].Cells[2];
         gridCell19.ColumnSpan = 1;
         gridCell19.RowSpan = 2;
         gridCell19.StringFormat = Izquierda;
         gridCell19.Value = $"   Material Tobera\n" +
                            $"   Identificación Tobera";
         //Add RowSpan
-        PdfGridCell gridCell20 = pdfGrid.Rows[17].Cells[3];
+        PdfGridCell gridCell20 = pdfGrid.Rows[15].Cells[3];
         gridCell20.ColumnSpan = 3;
         gridCell20.RowSpan = 2;
         gridCell20.StringFormat = Izquierda;
         gridCell20.Value = $"   {tobera}\n" +
                            $"   {toberaDespacho}";
         //Add RowSpan
-        PdfGridCell gridCell21 = pdfGrid.Rows[19].Cells[2];
+        PdfGridCell gridCell21 = pdfGrid.Rows[17].Cells[2];
         gridCell21.ColumnSpan = 1;
         gridCell21.RowSpan = 2;
         gridCell21.StringFormat = Izquierda;
@@ -961,7 +960,7 @@
                            $"   Identificación Cuerpo\n" +
                            $"   Presión de Prueba Hidráulica";
         //Add RowSpan
-        PdfGridCell gridCell22 = pdfGrid.Rows[19].Cells[3];
+        PdfGridCell gridCell22 = pdfGrid.Rows[17].Cells[3];
         gridCell22.ColumnSpan = 3;
         gridCell22.RowSpan = 2;
         gridCell22.StringFormat = Izquierda;
@@ -969,7 +968,7 @@
                            $"   {cuerpoDespacho}\n" +
                            $"   {cuerpoPresionPrueba}";
         //Add RowSpan
-        PdfGridCell gridCell23 = pdfGrid.Rows[21].Cells[2];
+        PdfGridCell gridCell23 = pdfGrid.Rows[19].Cells[2];
         gridCell23.ColumnSpan = 1;
         gridCell23.RowSpan = 2;
         gridCell23.StringFormat = Izquierda;
@@ -977,7 +976,7 @@
                            $"   Identificación Bonete\n" +
                            $"   Presión de Prueba Hidráulica";
         //Add RowSpan
-        PdfGridCell gridCell24 = pdfGrid.Rows[21].Cells[3];
+        PdfGridCell gridCell24 = pdfGrid.Rows[19].Cells[3];
         gridCell24.ColumnSpan = 3;
         gridCell24.RowSpan = 2;
         gridCell24.StringFormat = Izquierda;
@@ -987,13 +986,13 @@
 
         //ENSAYOS OPERACIONALES EN BANCO HIDRONEUMÁTICO
         //Add RowSpan
-        PdfGridCell gridCell25 = pdfGrid.Rows[23].Cells[0];
+        PdfGridCell gridCell25 = pdfGrid.Rows[21].Cells[0];
         gridCell25.ColumnSpan = 2;
         gridCell25.RowSpan = 4;
         gridCell25.StringFormat = Izquierda;
         gridCell25.Value = new PdfTextElement("ENSAYOS OPERACIONALES EN BANCO HIDRONEUMÁTICO - FLUIDO AIRE A TEMP. AMBIENTE ", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
         //Add RowSpan
-        PdfGridCell gridCell26 = pdfGrid.Rows[23].Cells[2];
+        PdfGridCell gridCell26 = pdfGrid.Rows[21].Cells[2];
         gridCell26.ColumnSpan = 3;
         gridCell26.RowSpan = 3;
         gridCell26.StringFormat = Izquierda;
@@ -1001,66 +1000,100 @@
                            $"   Ensayos de repetitividad (3):\n" +
                            $"   Control estanqueidad de asientos segun API 527:";
         //Add RowSpan
-        PdfGridCell gridCell27 = pdfGrid.Rows[23].Cells[5];
+        PdfGridCell gridCell27 = pdfGrid.Rows[21].Cells[5];
         gridCell27.ColumnSpan = 1;
         gridCell27.RowSpan = 3;
         gridCell27.StringFormat = Izquierda;
-        gridCell27.Value = $"   X1";
+        gridCell27.Value = $"   Satisfactorio\n"+
+            $"   Satisfactorio\n" +
+            $"   Satisfactorio";
         //Add RowSpan
-        PdfGridCell gridCell28 = pdfGrid.Rows[26].Cells[2];
+        PdfGridCell gridCell28 = pdfGrid.Rows[24].Cells[2];
         gridCell28.ColumnSpan = 3;
         gridCell28.StringFormat = Izquierda;
         gridCell28.Value = $" Patrón Utilizado:";
         //Add RowSpan
-        PdfGridCell gridCell29 = pdfGrid.Rows[26].Cells[5];
+        PdfGridCell gridCell29 = pdfGrid.Rows[24].Cells[5];
         gridCell29.ColumnSpan = 1;
         gridCell29.StringFormat = Izquierda;
         gridCell29.Value = $"   ..........";
 
         //RESULTADO
         //Add RowSpan
-        PdfGridCell gridCell30 = pdfGrid.Rows[27].Cells[0];
+        PdfGridCell gridCell30 = pdfGrid.Rows[25].Cells[0];
         gridCell30.ColumnSpan = 2;
         gridCell30.StringFormat = Izquierda;
         gridCell30.Value = new PdfTextElement("RESULTADO ", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
         //Add RowSpan
-        PdfGridCell gridCell31 = pdfGrid.Rows[27].Cells[2];
+        PdfGridCell gridCell31 = pdfGrid.Rows[25].Cells[2];
         gridCell31.ColumnSpan = 4;
         gridCell31.StringFormat = Izquierda;
         gridCell31.Value = new PdfTextElement("Satisfactorio", font, new PdfPen(PdfColor.Empty), PdfBrushes.AliceBlue, Centrado);
 
         //FIRMA
         //Add RowSpan
-        PdfGridCell gridCellx35 = pdfGrid.Rows[28].Cells[0];
+        PdfGridCell gridCellx35 = pdfGrid.Rows[26].Cells[0];
         gridCellx35.ColumnSpan = 2;
-        gridCellx35.RowSpan = 3;
+        gridCellx35.RowSpan = 4;
         gridCellx35.StringFormat = Izquierda;
         gridCellx35.Value = new PdfTextElement("FIRMA INSPECTOR AERRE ", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
         //Add RowSpan
-        PdfGridCell gridCellx36 = pdfGrid.Rows[28].Cells[2];
+        PdfGridCell gridCellx36 = pdfGrid.Rows[26].Cells[2];
         gridCellx36.ColumnSpan = 1;
-        gridCellx36.RowSpan = 2;
+        gridCellx36.RowSpan = 3;
         gridCellx36.StringFormat = Izquierda;
         gridCellx36.Value = new PdfBitmap(IMR);
+        //Add RowSpan
+        PdfGridCell gridCellAclara = pdfGrid.Rows[26].Cells[3];
+        gridCellAclara.ColumnSpan = 3;
+        gridCellAclara.RowSpan = 3;
+        gridCellAclara.StringFormat = Centrado;
+        gridCellAclara.Value = $"   Ing. Iris Mónica Rabboni\n"+
+            $"   Nº en OPDS s/res 1126: 188\n" +
+            $"   Matrícula: 47642";
+
+        //Add RowSpan
+        //PdfGridCell gridCellDirecc = pdfGrid.Rows[26].Cells[4];
+        //gridCellAclara.ColumnSpan = 2;
+        //gridCellAclara.RowSpan = 3;
+        //gridCellAclara.StringFormat = Izquierda;
+        //gridCellAclara.Value = $"   ARBROS SA.\n" +
+        //    $"   Parque Industrial Desarrollo Productivo\n" +
+        //    $"   Ruta 24 5801, Moreno, Provincia de Buenos Aires";
 
         //PRECINTO
         //Add RowSpan
-        PdfGridCell gridCellx37 = pdfGrid.Rows[30].Cells[0];
-        gridCellx37.ColumnSpan = 2;
+        PdfGridCell gridCellx37 = pdfGrid.Rows[29].Cells[2];
+        gridCellx37.ColumnSpan = 4;
         gridCellx37.StringFormat = Izquierda;
-        gridCellx37.Value = new PdfTextElement("PRECINTO Nro.", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+        gridCellx37.Value = new PdfTextElement("Parque Industrial Desarrollo Productivo Ruta 24 5801, Moreno, Provincia de Buenos Aires",
+            font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+
+
+
+
         //Add RowSpan
+        PdfGridCell gridCellPrecinto = pdfGrid.Rows[30].Cells[0];
+        gridCellPrecinto.ColumnSpan = 2;
+        gridCellPrecinto.StringFormat = Izquierda;
+        gridCellPrecinto.Value = $"";
+
         PdfGridCell gridCellx38 = pdfGrid.Rows[30].Cells[2];
         gridCellx38.ColumnSpan = 4;
         gridCellx38.StringFormat = Izquierda;
-        gridCellx38.Value = $"   AERRE 00024 ";
+        gridCellx38.Value = $"   PRECINTO AERRE 00024 ";
+
+
 
         //GARANTIA
         //Add RowSpan
         PdfGridCell gridCell58 = pdfGrid.Rows[31].Cells[0];
         gridCell58.ColumnSpan = 6;
         gridCell58.StringFormat = Centrado;
-        gridCell58.Value = "GARANTIA: \n Los productos están garantizados por el término de 12 meses a partir de la salida de fábrica, contra todo defecto de materiales y / o fabricación, limitada a la reposición sin cargo en nuestra fábrica de un elemento similar. Esta garantía no ampara el desgaste anormal por la utilización en condiciones distintas a las especificadas";
+        gridCell58.Value = "GARANTIA: \n Los productos están garantizados por el término de 12 meses a partir de la salida de fábrica," +
+                " contra todo defecto de materiales y / o fabricación, limitada a la reposición sin cargo en nuestra fábrica de un " +
+                "elemento similar. Esta garantía no ampara el desgaste anormal por la utilización en condiciones distintas a las " +
+                "especificadas";
 
         //Draw the PdfGrid
         pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, 0));
@@ -1072,7 +1105,7 @@
         //Close the document
         document.Close(true);
         await JsRuntime.SaveAs($" Certificado" + ".pdf", stream.ToArray());
-        refSpinner.HideAsync();
+        await refSpinner.HideAsync();
     }
     protected async Task AgregarValores()
     {
