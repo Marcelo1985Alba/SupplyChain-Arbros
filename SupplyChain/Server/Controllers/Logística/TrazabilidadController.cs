@@ -163,16 +163,23 @@ namespace SupplyChain
         [HttpGet("MostrarTrazabilidad/{Pedido}")]
         public async Task<ActionResult<List<vTrazabilidad>>> MostrarTrazabilidad(string Pedido)
         {
-            List<vTrazabilidad> lPedidos = new List<vTrazabilidad>();
-            if (_context.VTrazabilidads.Any())
+            try
             {
-                lPedidos = await _context.VTrazabilidads.Where(p => p.PEDIDO.ToString() == Pedido).OrderBy(t => t.CG_LINEA).ToListAsync();
+                List<vTrazabilidad> lPedidos = new List<vTrazabilidad>();
+                if (_context.VTrazabilidads.Any())
+                {
+                    lPedidos = await _context.VTrazabilidads.Where(p => p.PEDIDO.ToString() == Pedido).OrderBy(t => t.CG_LINEA).ToListAsync();
+                }
+                if (lPedidos == null)
+                {
+                    return NotFound();
+                }
+                return lPedidos;
             }
-            if (lPedidos == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(ex);
             }
-            return lPedidos;
         }
 
         // GET: api/Pedidos/BusquedaParaFE_MOV/{PEDIDO}

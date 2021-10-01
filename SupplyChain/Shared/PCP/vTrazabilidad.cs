@@ -40,5 +40,7 @@ namespace SupplyChain.Shared.PCP
         public string CAMPOCOM4 { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Remito")]
         public string REMITO { get; set; } = "0000-00000000";
+        [ColumnaGridViewAtributo(Name = "Remito")]
+        public string PATRON { get; set; } = "";
     }
 }

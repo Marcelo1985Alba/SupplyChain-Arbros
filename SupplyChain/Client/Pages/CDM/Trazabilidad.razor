@@ -67,9 +67,10 @@
     </div>
 
 
-    <SfDialog ID="dialogTrazPed" Width="1000px" MinHeight="650px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible">
+    <SfDialog ID="dialogTrazPed" Width="1000px" MinHeight="650px" IsModal="true" ShowCloseIcon="true" @ref="refDialogPedidos"
+              Visible="false">
             <DialogTemplates>
-                <Header>Listado de Pedidos del Cliente @BoxCliente.ToUpper().Trim() </Header>
+                <Header>Listado de Pedidos del Cliente </Header>
                 <Content>
                     <SfGrid ID="dlgPedidoGrid" @ref="Grid2" GridLines="GridLine.Both" DataSource="@Busquedalist" Height="450px">
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -439,6 +440,7 @@
     protected SfGrid<vTrazabilidad> Grid4;
     protected SfSpinner refSpinner;
     protected SfDialog DialogRef;
+    protected SfDialog refDialogPedidos;
     public bool Enabled = true;
     public bool Disabled = false;
     public bool Showgrid = false;
@@ -519,7 +521,8 @@
         CodNro = BoxCodigo;
         CantidadMostrar = 0;
         await MostrarTrazabilidad();
-        IsVisible = false;
+        //IsVisible = false;
+        await refDialogPedidos.HideAsync();
         await refSpinner.HideAsync();
     }
 
@@ -534,7 +537,6 @@
         CodNro = BoxCodigo;
         CantidadMostrar = 0;
         await MostrarTrazabilidad();
-        IsVisible = false;
         await refSpinner.HideAsync();
     }
 
@@ -638,6 +640,7 @@
         }
 
         await refSpinner.HideAsync();
+        await refDialogPedidos.ShowAsync();
         IsVisible = true;
     }
     protected async Task MostrarTrazabilidad()
@@ -663,7 +666,7 @@
             BoxPedido = "";
             BoxCliente = "";
             BoxCodigo = "";
-
+            await refDialogPedidos.HideAsync();
             await refSpinner.ShowAsync();
         }
 
@@ -688,7 +691,8 @@
         string boneteDespacho = string.Empty;
         string cuerpoPresionPrueba = string.Empty;
         string bonetePresionPrueba = string.Empty;
-
+        //de 0 a 60 (CAMPOCOM4)  el Patrón es 2-54275.  de 60 a 400 el Patrón es AE4213
+        string patronUtilizado = vpedidos[0].PATRON;
         if (vpedidos.Any(p => p.DES_ART.ToLower().StartsWith("tobera")))
         {
             tobera = vpedidos.Where(p => p.DES_ART.ToLower().StartsWith("tobera")).FirstOrDefault().NORMA;
@@ -1016,7 +1020,7 @@
         PdfGridCell gridCell29 = pdfGrid.Rows[24].Cells[5];
         gridCell29.ColumnSpan = 1;
         gridCell29.StringFormat = Izquierda;
-        gridCell29.Value = $"   ..........";
+        gridCell29.Value = $"     {patronUtilizado}";
 
         //RESULTADO
         //Add RowSpan
@@ -1081,7 +1085,7 @@
         PdfGridCell gridCellx38 = pdfGrid.Rows[30].Cells[2];
         gridCellx38.ColumnSpan = 4;
         gridCellx38.StringFormat = Izquierda;
-        gridCellx38.Value = $"   PRECINTO AERRE 00024 ";
+        gridCellx38.Value = $"     PRECINTO AERRE 24 ";
 
 
 
