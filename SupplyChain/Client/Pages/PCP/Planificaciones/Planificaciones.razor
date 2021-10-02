@@ -282,6 +282,7 @@
                             <GridColumn Field=@nameof(Planificacion.FE_CURSO) HeaderText="Fecha en curso" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.UNIDEQUI) HeaderText="Unid Equi." TextAlign="TextAlign.Left" Width="90px" Format="N2"></GridColumn>
                         </GridColumns>
+                        <SfSpinner Type="SpinnerType.Bootstrap" Label="Cargando...." @bind-Visible="@SpinnerVisible"></SfSpinner>
                     </SfGrid>
                 </div>
             </div>

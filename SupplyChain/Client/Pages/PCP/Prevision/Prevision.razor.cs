@@ -60,7 +60,7 @@ namespace SupplyChain.Client.Pages.Prev
         protected override async Task OnInitializedAsync()
         {
             previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
-            await Grid.AutoFitColumns();
+            //await Grid.AutoFitColumns();
             await base.OnInitializedAsync();
         }
 
@@ -95,9 +95,10 @@ namespace SupplyChain.Client.Pages.Prev
                 previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
                 Grid.Refresh();
             }
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState)
             {
-
+                await Grid.AutoFitColumnsAsync();
+                //Grid.Refresh();
             }
         }
 

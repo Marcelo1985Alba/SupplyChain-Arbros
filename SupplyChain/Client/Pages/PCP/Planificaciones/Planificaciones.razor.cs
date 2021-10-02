@@ -93,8 +93,10 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         protected const string APPNAME_OF_CERRADAS_ANULADAS = "OFCerradasAnuladas";
         protected string state_of_cerradas_anuladas;
         protected Planificacion PlanificacionSeleccionadaOFCerrada;
+        protected bool SpinnerVisible = false;
         protected override async Task OnInitializedAsync()
         {
+
             EstadosCargaMaquinas = await Http.GetFromJsonAsync<List<EstadosCargaMaquina>>("api/EstadosCargaMaquinas");
             listaPlanificacion = await Http.GetFromJsonAsync<List<Planificacion>>("api/Planificacion/0/1");
             //await GridPlanificacion?.AutoFitColumns();
@@ -199,7 +201,10 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
                 args.RequestType == Syncfusion.Blazor.Grids.Action.Sorting
                 )
             {
+                VisibleProperty = true;
                 state = await GridPlanificacion.GetPersistData();
+                await GridPlanificacion.AutoFitColumnsAsync();
+                VisibleProperty = false;
             }
         }
 
