@@ -342,7 +342,7 @@
 
     <SfSidebar ID="sidebarInit" @ref="sidebarObj" Animate="false" EnableRtl="false" Width="280px" @bind-IsOpen="SidebarToggle" 
                ZIndex="20" EnableDock="true"
-               DockSize="40px" Position="SidebarPosition.Left"
+               DockSize="0px" Position="SidebarPosition.Left"
                MediaQuery="(min-width: 600px)">
         <ChildContent>
 
@@ -353,7 +353,8 @@
                 {
                     <div class="profile-img">
                         <img src="img1-150x150.png" alt="user" class="profile-pic" />
-                        <div class="text text-white-50" style="width: 100%;font-size: 30px;text-align: center;">@authState.User.Identity.Name </div>
+                        <div class="text text-white-50" style="width: 100%;font-size: 30px;text-align: center;">
+                        @authState.User.Identity.Name </div>
                     </div>
                     
 
@@ -597,5 +598,13 @@
         text-indent: 10px;
         height: 30px;
         width: 19em;
+    }
+
+    .sidebar.e-dock.e-close span.e-text {
+        display: none;
+    }
+
+    .sidebar.e-dock.e-close > .profile-img {
+        visibility:hidden;
     }
 </style>
