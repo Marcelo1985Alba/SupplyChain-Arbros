@@ -338,7 +338,7 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
-        [HttpGet("Stocks")]
+        [HttpGet("StockInventario")]
         public async Task<List<StockSP>> Stocks([FromQuery] FilterMovimientosStock filter)
         {
             try

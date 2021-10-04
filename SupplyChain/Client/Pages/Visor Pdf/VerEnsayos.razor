@@ -4,8 +4,7 @@
 @using Syncfusion.Blazor.Navigations
 @inject HttpClient Http
 
-<SfSpinner Size="80" Label="Cargando..." Type="SpinnerType.Bootstrap4" @bind-Visible="@VisibleSpinner" 
-           Target="#pdfViewer"></SfSpinner>
+<SfSpinner Size="80" Label="Cargando..." Type="SpinnerType.Bootstrap4" @bind-Visible="@VisibleSpinner"  ></SfSpinner>
 @if (archivos is null)
 {
     <p>Cargando..</p>

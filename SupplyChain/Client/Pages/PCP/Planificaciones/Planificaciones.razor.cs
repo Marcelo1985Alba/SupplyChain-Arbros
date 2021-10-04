@@ -197,14 +197,19 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
-                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder || 
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder ||
                 args.RequestType == Syncfusion.Blazor.Grids.Action.Sorting
                 )
             {
-                VisibleProperty = true;
+                //VisibleProperty = true;
+                GridPlanificacion.PreventRender();
+                GridPlanificacion.Refresh();
+                
                 state = await GridPlanificacion.GetPersistData();
                 await GridPlanificacion.AutoFitColumnsAsync();
-                VisibleProperty = false;
+                await GridPlanificacion.RefreshColumns();
+                await GridPlanificacion.RefreshHeader();
+                //VisibleProperty = false;
             }
         }
 

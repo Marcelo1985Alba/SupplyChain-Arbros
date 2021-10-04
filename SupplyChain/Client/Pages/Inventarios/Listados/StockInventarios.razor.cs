@@ -21,7 +21,7 @@ namespace SupplyChain.Client.Pages.Inventarios.Listados
         protected string[] InitialGroup = (new string[] { "Tipo_Insumo" });
         protected async override Task OnInitializedAsync()
         {
-            ML.Titulo = "Listado de Stock";
+            ML.Titulo = "Listado de Stock de Inventarios";
         }
 
         protected async Task Buscar()
@@ -35,7 +35,7 @@ namespace SupplyChain.Client.Pages.Inventarios.Listados
         private string GeneraUrl()
         {
             filter.Hasta = hasta.ToString("dd/MM/yyyy");
-            string api = "api/Stock/Stocks";
+            string api = "api/Stock/StockInventario";
 
             api += $"?Deposito={filter.Deposito}&Hasta={filter.Hasta}";
 
