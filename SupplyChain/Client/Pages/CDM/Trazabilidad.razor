@@ -52,7 +52,7 @@
                     if (Showgrid)
                     {
                         <div class="col-md-4 col-sm-6 my-1">
-                            <button type="submit" class="btn btn-danger btn-sm" @onclick="@Catalogo">Imprimir catálogo</button>
+                            <button type="submit" class="btn btn-danger btn-sm" @onclick="@Catalogo">Certificado</button>
                         </div>
                         <div class="col-md-4 col-sm-6 my-1">
                             <button type="submit" class="btn btn-warning btn-sm" @onclick="@Etiqueta">Identificación</button>
@@ -704,7 +704,7 @@
         {
             cuerpo = vpedidos.Where(p => p.DES_ART.ToLower().StartsWith("cuerpo") || p.DES_ART.ToLower().StartsWith("cpo")).FirstOrDefault().NORMA;
             cuerpoDespacho = vpedidos.Where(p => p.DES_ART.ToLower().StartsWith("cuerpo") || p.DES_ART.ToLower().StartsWith("cpo")).FirstOrDefault().DESPACHO;
-            cuerpoPresionPrueba = vpedidos.Where(p => p.DES_ART.ToLower().StartsWith("cuerpo") || p.DES_ART.ToLower().StartsWith("cpo")).FirstOrDefault().CAMPOCOM4;
+            cuerpoPresionPrueba = vpedidos.Where(p => p.DES_ART.ToLower().StartsWith("cuerpo") || p.DES_ART.ToLower().StartsWith("cpo")).FirstOrDefault().PH.ToString();
         }
 
 
@@ -719,7 +719,7 @@
         {
             bonete = vpedidos.Where(p => p.DES_ART.ToLower().StartsWith("bonete")).FirstOrDefault().NORMA;
             boneteDespacho = vpedidos.Where(p => p.DES_ART.ToLower().StartsWith("bonete")).FirstOrDefault().DESPACHO;
-            bonetePresionPrueba = vpedidos.Where(p => p.DES_ART.ToLower().StartsWith("bonete")).FirstOrDefault().CAMPOCOM4;
+            bonetePresionPrueba = vpedidos.Where(p => p.DES_ART.ToLower().StartsWith("bonete")).FirstOrDefault().PH.ToString();
         }
 
 
@@ -798,13 +798,13 @@
         gridCell1.ColumnSpan = 2;
         gridCell1.RowSpan = 2;
         gridCell1.StringFormat = Centrado;
-        gridCell1.Value = new PdfTextElement("ARBROS S.A.", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+        gridCell1.Value = new PdfBitmap(fs);
         //Add RowSpan
         PdfGridCell gridCell2 = pdfGrid.Rows[0].Cells[2];
         gridCell2.ColumnSpan = 2;
         gridCell2.RowSpan = 2;
         gridCell2.StringFormat = Centrado;
-        gridCell2.Value = new PdfTextElement("ACTA DE INSPECCIÓN", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+        gridCell2.Value = new PdfTextElement("CERTIFICADO DE PRODUCTO", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
         //Add RowSpan
         PdfGridCell gridCell3 = pdfGrid.Rows[0].Cells[4];
         gridCell3.ColumnSpan = 2;
@@ -818,7 +818,7 @@
         gridCell4.ColumnSpan = 2;
         gridCell4.RowSpan = 2;
         gridCell4.StringFormat = Centrado;
-        gridCell4.Value = new PdfBitmap(fs);
+        gridCell4.Value = new PdfTextElement("ARBROS S.A.", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
         //Add RowSpan
         PdfGridCell gridCell5 = pdfGrid.Rows[2].Cells[2];
         gridCell5.ColumnSpan = 2;
@@ -1038,19 +1038,19 @@
         //Add RowSpan
         PdfGridCell gridCellx35 = pdfGrid.Rows[26].Cells[0];
         gridCellx35.ColumnSpan = 2;
-        gridCellx35.RowSpan = 4;
+        gridCellx35.RowSpan = 3;
         gridCellx35.StringFormat = Izquierda;
         gridCellx35.Value = new PdfTextElement("FIRMA INSPECTOR AERRE ", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
         //Add RowSpan
         PdfGridCell gridCellx36 = pdfGrid.Rows[26].Cells[2];
         gridCellx36.ColumnSpan = 1;
-        gridCellx36.RowSpan = 3;
+        gridCellx36.RowSpan = 2;
         gridCellx36.StringFormat = Izquierda;
         gridCellx36.Value = new PdfBitmap(IMR);
         //Add RowSpan
         PdfGridCell gridCellAclara = pdfGrid.Rows[26].Cells[3];
         gridCellAclara.ColumnSpan = 3;
-        gridCellAclara.RowSpan = 3;
+        gridCellAclara.RowSpan = 2;
         gridCellAclara.StringFormat = Centrado;
         gridCellAclara.Value = $"   Ing. Iris Mónica Rabboni\n"+
             $"   Nº en OPDS s/res 1126: 188\n" +
@@ -1067,7 +1067,7 @@
 
         //PRECINTO
         //Add RowSpan
-        PdfGridCell gridCellx37 = pdfGrid.Rows[29].Cells[2];
+        PdfGridCell gridCellx37 = pdfGrid.Rows[28].Cells[2];
         gridCellx37.ColumnSpan = 4;
         gridCellx37.StringFormat = Izquierda;
         gridCellx37.Value = new PdfTextElement("Parque Industrial Desarrollo Productivo Ruta 24 5801, Moreno, Provincia de Buenos Aires",
@@ -1077,21 +1077,22 @@
 
 
         //Add RowSpan
-        PdfGridCell gridCellPrecinto = pdfGrid.Rows[30].Cells[0];
+        PdfGridCell gridCellPrecinto = pdfGrid.Rows[29].Cells[0];
         gridCellPrecinto.ColumnSpan = 2;
         gridCellPrecinto.StringFormat = Izquierda;
         gridCellPrecinto.Value = $"";
 
-        PdfGridCell gridCellx38 = pdfGrid.Rows[30].Cells[2];
+        PdfGridCell gridCellx38 = pdfGrid.Rows[29].Cells[2];
         gridCellx38.ColumnSpan = 4;
         gridCellx38.StringFormat = Izquierda;
-        gridCellx38.Value = $"     PRECINTO AERRE 24 ";
+        gridCellx38.Value = $"     PRECINTO ";
 
 
 
         //GARANTIA
         //Add RowSpan
-        PdfGridCell gridCell58 = pdfGrid.Rows[31].Cells[0];
+        PdfGridCell gridCell58 = pdfGrid.Rows[30].Cells[0];
+        gridCell58.RowSpan = 2;
         gridCell58.ColumnSpan = 6;
         gridCell58.StringFormat = Centrado;
         gridCell58.Value = "GARANTIA: \n Los productos están garantizados por el término de 12 meses a partir de la salida de fábrica," +
@@ -1108,7 +1109,7 @@
         stream.Position = 0;
         //Close the document
         document.Close(true);
-        await JsRuntime.SaveAs($" Certificado" + ".pdf", stream.ToArray());
+        await JsRuntime.SaveAs($"{TrzNro} Certificado" + ".pdf", stream.ToArray());
         await refSpinner.HideAsync();
     }
     protected async Task AgregarValores()

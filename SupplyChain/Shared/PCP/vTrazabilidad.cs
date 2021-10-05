@@ -42,5 +42,8 @@ namespace SupplyChain.Shared.PCP
         public string REMITO { get; set; } = "0000-00000000";
         [ColumnaGridViewAtributo(Name = "Remito")]
         public string PATRON { get; set; } = "";
+
+        [ColumnaGridViewAtributo(Name = "Presión Hidraulica")]
+        public int PH { get; set; } = 0;
     }
 }
