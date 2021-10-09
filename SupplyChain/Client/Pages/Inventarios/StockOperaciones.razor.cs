@@ -186,7 +186,8 @@ namespace SupplyChain.Client.Pages.Inventarios
                 puedeBuscarStock = true;
             }
 
-            if (StockEncabezado.TIPOO == 21 || StockEncabezado.TIPOO == 27) //Ajuste de Invetario y Entrega a Planta Sin OF
+            if (StockEncabezado.TIPOO == 21 || StockEncabezado.TIPOO == 27
+                || StockEncabezado.TIPOO == 9) //Ajuste de Invetario y Entrega a Planta Sin OF
             {
                 PermiteAgregarItem = true;
                 PermiteEditarItem = true;
@@ -627,7 +628,8 @@ namespace SupplyChain.Client.Pages.Inventarios
 
             if (stock.TIPOO == 9)//movim depos
             {
-                stock.CG_DEP_ALT = StockEncabezado.CG_DEP_ALT;
+                stock.AVISO = "MOVIMIENTO ENTRE DEPOSITOS";
+                //stock.CG_DEP_ALT = StockEncabezado.CG_DEP_ALT;
             }
 
             if (StockEncabezado.TIPOO == 21)

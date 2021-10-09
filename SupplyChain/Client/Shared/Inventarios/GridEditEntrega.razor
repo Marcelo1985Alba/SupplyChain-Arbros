@@ -56,7 +56,7 @@ else
                                                   Content="" IconCss="fa fa-search" />
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label class="col-form-label">Déposito Salida</label>
+                                        <label class="col-form-label text-info">Déposito Salida</label>
                                         <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP" Readonly="true"
                                                         TValue="int" ID="CG_DEP" DataSource="@depositos">
                                             <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP">
@@ -64,6 +64,19 @@ else
                                             </DropDownListFieldSettings>
                                         </SfDropDownList>
                                     </div>
+                                    @if (stock.TIPOO == 9) //movim entre dep
+                                    {
+                                <div class="form-group col-md-2">
+                                    <label class="col-form-label text-info">Déposito Ingreso</label>
+                                    <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP_ALT"
+                                                    TValue="int" ID="CG_DEP" DataSource="@depositos">
+                                        <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP">
+
+                                        </DropDownListFieldSettings>
+                                    </SfDropDownList>
+                                    <ValidationMessage For="@(() => stock.CG_DEP_ALT)"></ValidationMessage>
+                                </div>
+                                    }
                                     <div class="form-group col-md-1">
                                         <label class="col-form-label">Stock:</label>
                                         <SfNumericTextBox ShowSpinButton="false" @bind-Value="@stock.ResumenStock.STOCK"

@@ -36,19 +36,14 @@ else
 @code{
     [CascadingParameter] public MainLayout Layout { get; set; }
     [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
-    protected ExpandAction Expand = ExpandAction.Click;
     private AuthenticationState authState;
+    protected ExpandAction Expand = ExpandAction.Click;
     protected bool IsAdmin = false;
     protected bool IsProd = false;
     protected List<Modulo> dbMenu = new List<Modulo>();
     protected async override Task OnInitializedAsync()
     {
         // To get the last item index from the db
-        //var count = await Http.GetFromJsonAsync<int>("api/Modulo/index");
-        //var index = count + 1;
-
-        //Console.WriteLine("Count: " + count);
-
         authState = await authenticationState;
         if (authState.User.Identity.IsAuthenticated)
         {

@@ -144,14 +144,50 @@
     <script src="_framework/blazor.webassembly.js"></script>
 
     <script>
-        navigator.serviceWorker.register('service-worker.js',
-            { scope: './' }).then(function (registration) {
-                // Registration was successful
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            }, function (err) {
-                // registration failed :(
-                console.log('ServiceWorker registration failed: ', err);
-            });
+        window.updateAvailable = new Promise(function (resolve, reject) {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('service-worker.js',
+                    { scope: './' }).then(function (registration) {
+                        // Registration was successful
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                        registration.onupdatefound = () => {
+                            const installingWorker = registration.installing;
+                            installingWorker.onstatechange = () => {
+                                switch (installingWorker.state) {
+                                    case 'installed':
+                                        if (navigator.serviceWorker.controller) {
+                                            resolve(true);
+                                        } else {
+                                            resolve(false);
+                                        }
+                                        break;
+                                    default:
+                                }
+                            };
+                        };
+                    }, function (err) {
+                        // registration failed :(
+                        console.log('ServiceWorker registration failed: ', err);
+
+                    });
+            }
+        });
+
+        window.blazorFuncs = {
+            registerClient: function (caller) {
+                window['updateAvailable']
+                    .then(isAvailable => {
+                        if (isAvailable) {
+                            caller.invokeMethodAsync("onupdateavailable").then(r => console.log(r));
+                        }
+                    });
+            }
+        };
+
+        function reload() {
+            window.location.reload();
+        }
+        
     </script>
     <!--<script>navigator.serviceWorker.register('actualiza-cache.js', { scope: './' }).then(() => {
             console.log('Service Worker Registrado');
@@ -163,6 +199,8 @@
                 reportPath: reportPathInfo
             });
         };
+
+        
     </script>
 </body>
 

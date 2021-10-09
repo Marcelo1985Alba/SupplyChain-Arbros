@@ -28,21 +28,19 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="">
-                <div class="">
-                </div>
                 <div class="form-material">
-                    <EditForm Model="@StockEncabezado" OnValidSubmit="@(async () => await AbrirConfirmacionGuardarVale())" >
+                    <EditForm Model="@StockEncabezado" OnValidSubmit="@(async () => await AbrirConfirmacionGuardarVale())">
                         <DataAnnotationsValidator />
-                        <div class="">
+                        <ToolbarMenu OnNuevoClick="@(async () => await NuevoVale())"
+                                     DisabledEliminar="!abrioVale" OnEliminarClick="@(async () => await AbrirConfirmacionEliminarVale())"
+                                     DisabledGuardar="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"
+                                     DisabledImprimir="@(!abrioVale)"
+                                     OnImprimirClick="@(async () => await ImprimirEtiqueta())"></ToolbarMenu>
+                        <hr />
+                        @*<h3 class="card-title">Vale</h3>*@
 
-                            <ToolbarMenu OnNuevoClick="@(async () => await NuevoVale())"
-                                         DisabledEliminar="!abrioVale" OnEliminarClick="@(async () => await AbrirConfirmacionEliminarVale())"
-                                         DisabledGuardar="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"
-                                         DisabledImprimir="@(!abrioVale)"
-                                         OnImprimirClick="@(async () => await ImprimirEtiqueta())"></ToolbarMenu>
-                            <hr />
-                            <h3 class="card-title">Vale</h3>
-                            <hr />
+                        <fieldset class="scheduler-border">
+                            <legend class="scheduler-border"> Vale</legend>
                             <ObjectGraphDataAnnotationsValidator />
                             <div class="form-row">
                                 <div class="form-group col-lg-6 col-md-4 col-sm-12 col-12">
@@ -131,8 +129,8 @@
                                     </div>
                                 }
                                 @if (StockEncabezado.TIPOO == 10 &&
-                             StockEncabezado.ModeloOrdenFabricacionEncabezado != null
-                             && StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ORDEN == 1)
+                           StockEncabezado.ModeloOrdenFabricacionEncabezado != null
+                           && StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ORDEN == 1)
                                 {
                                     <div class="form-group col-lg-3 col-md-4 col-sm-12">
                                         <label class="col-form-label text-info">Producto</label>
@@ -201,31 +199,30 @@
                                     </div>
                                 }
                             </div>
-                            <h3 class="card-title">Items</h3>
-                            <hr />
-                            <CascadingValue Value="@StockEncabezado">
-                                <CascadingValue Value="@StockEncabezado.Items">
+                        </fieldset>
+                        
+                        <CascadingValue Value="@StockEncabezado">
+                            <CascadingValue Value="@StockEncabezado.Items">
 
-                                    @if (StockEncabezado.TIPOO == 5)
-                                    {
-                                        <GridEditStock DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
-                                                       PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
-                                                       onGuardar="@(async(s)=> await SetearCamposParaGuardar(s))" />
-                                    }
-                                    else
-                                    {
-                                        <GridEditEntrega DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
-                                                         PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
-                                                         OnGuardar="@(async(s)=> await SetearCamposParaGuardar(s))" />
-                                    }
-                                </CascadingValue>
+                                @if (StockEncabezado.TIPOO == 5)
+                                {
+                                    <GridEditStock DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
+                                                   PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
+                                                   onGuardar="@(async(s)=> await SetearCamposParaGuardar(s))" />
+                                }
+                                else
+                                {
+                                    <GridEditEntrega DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
+                                                     PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
+                                                     OnGuardar="@(async(s)=> await SetearCamposParaGuardar(s))" />
+                                }
                             </CascadingValue>
-                            <ValidationSummary />
-                            @*Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"*@
-                            <SfButton Content="Guardar" IsPrimary="false" IconCss="fa fa-save"
-                                      CssClass="btn btn-block e-info"></SfButton>
-                        </div>
+                        </CascadingValue>
+                        <ValidationSummary />
 
+                        @*Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"*@
+                        <SfButton Content="Guardar" IsPrimary="false" IconCss="fa fa-save"
+                                  CssClass="btn btn-block e-info"></SfButton>
 
                     </EditForm>
                 </div>
@@ -264,5 +261,21 @@
 <style>
     .text-info{
         font-size:80% !important;
+    }
+    fieldset.scheduler-border {
+        border: 1px groove #ddd !important;
+        padding: 0 1.4em 1.4em 1.4em !important;
+        margin: 0 0 1.5em 0 !important;
+        -webkit-box-shadow: 0px 0px 0px 0px #000;
+        box-shadow: 0px 0px 0px 0px #000;
+    }
+
+    legend.scheduler-border {
+        font-size: 1.2em !important;
+        font-weight: bold !important;
+        text-align: left !important;
+        width: auto;
+        padding: 0 10px;
+        border-bottom: none;
     }
 </style>

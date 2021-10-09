@@ -1,7 +1,7 @@
 // Caution! Be sure you understand the caveats before publishing an application with
 // offline support. See https://aka.ms/blazor-offline-considerations
 
-var cacheNameVersion = 'scPWA-v0.28.3';
+var cacheNameVersion = 'scPWA-v0.29.3';
 
 self.importScripts('./service-worker-assets.js');
 self.addEventListener('install', event => event.waitUntil(onInstall(event)));
@@ -25,6 +25,7 @@ async function onInstall(event) {
         .filter(asset => !offlineAssetsExclude.some(pattern => pattern.test(asset.url)))
         .map(asset => new Request(asset.url));
         //.map(asset => new Request(asset.url, { integrity: asset.hash }));
+    self.skipWaiting();
     await caches.open(cacheName).then(cache => cache.addAll(assetsRequests));
 }
 
