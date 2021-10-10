@@ -48,8 +48,8 @@ namespace SupplyChain
          * 1) con el deposito de ingres
          * 2) con el deposito de salida
          */
-        [NotMapped, Required(ErrorMessage ="Asignar deposito de Ingreso")]
-        [Range(1, 999999, ErrorMessage ="Asignar deposito Ingreso")]
+        [NotMapped]
+        [RequireDepositoItem]
         public int CG_DEP_ALT { get; set; } = 0;
 
         [ColumnaGridViewAtributo(Name = "Vale")]

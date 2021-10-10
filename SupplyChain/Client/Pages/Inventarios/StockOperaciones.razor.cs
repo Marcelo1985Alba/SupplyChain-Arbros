@@ -6,18 +6,10 @@ using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.Prod;
 using Syncfusion.Blazor.Notifications;
-using Syncfusion.Pdf;
-using Syncfusion.Pdf.Graphics;
-using Syncfusion.Pdf.Grid;
-using Syncfusion.Pdf.Tables;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SupplyChain.Client.Pages.Inventarios
@@ -25,6 +17,8 @@ namespace SupplyChain.Client.Pages.Inventarios
     public class StockOperacionesBase : ComponentBase
     {
         [Inject] public IJSRuntime JsRuntime { get; set; }
+        [Inject] public PdfService PdfService { get; set; }
+        [Inject] public InventarioService InventarioService { get; set; }
         [Inject] public HttpClient Http { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
         [Parameter] public int OperacionId { get; set; } = 0;
@@ -113,7 +107,7 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         protected async Task GetVale()
         {
-            StockEncabezado.VALE = await Http.GetFromJsonAsync<int>($"api/Stock/GetMaxVale");
+            StockEncabezado.VALE = await InventarioService.GetProximoVale();
         }
 
 
@@ -133,11 +127,6 @@ namespace SupplyChain.Client.Pages.Inventarios
             SpinnerVisible = true;
             await NuevoVale();
 
-            //Dependiendo el TIPOO Habilitar controles:
-            //if (StockEncabezado.TIPOO != tire.Tipoo)
-            //{
-
-            //}
             StockEncabezado.TIPOO = tire.Tipoo;
             MostrarBotorOC = false;
             DeshabilitaBotonOC = true;
@@ -279,7 +268,7 @@ namespace SupplyChain.Client.Pages.Inventarios
 
             abrioVale = true;
             SpinnerVisible = false;
-            //await InvokeAsync(StateHasChanged);
+            await InvokeAsync(StateHasChanged);
         }
 
         #region "BUSCADOR EMERGENTE"
@@ -498,8 +487,8 @@ namespace SupplyChain.Client.Pages.Inventarios
         {
             PopupBuscadorVisible = false;
             //Get items del vale
-            var vale = stockSel.VALE;
-            StockEncabezado.Items = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriVale/{stockSel.VALE}");
+            StockEncabezado.VALE = stockSel.VALE;
+            StockEncabezado.Items = await InventarioService.GetVale(stockSel.VALE);
             //ItemsVale = new ObservableCollection<Stock>(data);
 
             //ItemsABuscar = ItemsABuscar.Where(i => i.VALE == stockSel.VALE).ToList().ToArray();
@@ -512,9 +501,8 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         protected async Task AbrirVale()
         {
-
-            var vale = StockEncabezado.VALE;
-            StockEncabezado.Items = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriVale/{vale}");
+;
+            StockEncabezado.Items = await InventarioService.GetVale(StockEncabezado.VALE);
 
             if (StockEncabezado.Items != null || StockEncabezado.Items.Count > 0)
             {
@@ -544,7 +532,7 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         #endregion
 
-        protected async Task OnGuardar()
+        protected async Task Guardar()
         {
             await ConfirmacionGuardarDialog.HideAsync();
 
@@ -560,11 +548,7 @@ namespace SupplyChain.Client.Pages.Inventarios
 
             if (StockEncabezado.TIPOO == 5)
             {
-                
-                await StockEncabezado.Items.ForEachAsync(async s =>
-                {
-                    await Etiqueta(s);
-                });
+                 await ImprimirEtiqueta();
             }
 
             await MostrarMensajeToastSuccess();
@@ -764,47 +748,13 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         protected async Task ImprimirEtiqueta()
         {
-            if (abrioVale)
+            if (StockEncabezado.TIPOO == 5)
             {
                 await StockEncabezado.Items.ForEachAsync(async s =>
                 {
-                    await Etiqueta(s);
+                    await PdfService.EtiquetaRecepcion(s);
                 });
             }
-        }
-
-        protected async Task Etiqueta(Pedidos pedidos)
-        {
-
-            PdfDocument document1 = new();
-            document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(227, 70);//110
-            int margin = -25;
-
-            document1.PageSettings.Margins.Left = -2;
-            document1.PageSettings.Margins.Right = -15;
-            document1.PageSettings.Margins.Top = 10;
-            document1.PageSettings.Margins.Bottom = -10;
-            //document1.PageSettings.Margins.All = margin;
-            PdfGrid pdfGrid1 = new PdfGrid();
-            PdfPage page = document1.Pages.Add();
-            PdfGraphics graphics = page.Graphics;
-            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
-            PdfLightTable pdfTable = new PdfLightTable();
-            page.Graphics.RotateTransform(-90);
-
-
-            graphics.DrawString($"{pedidos.CG_ART.Trim()}                  OC {pedidos.OCOMPRA}\r\n{pedidos.DES_ART.Trim()}\r\n" +
-                $"Despacho {pedidos.DESPACHO} Lote {pedidos.LOTE} VALE {pedidos.VALE}\n" +
-                $"{pedidos.Proveedor?.DES_PROVE.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
-
-            //document1.PageSettings.Margins.Left = margin;
-            //document1.PageSettings.Margins.Right = margin;
-            //document1.PageSettings.Margins.Top = margin;
-            //document1.PageSettings.Margins.Bottom = margin;
-            MemoryStream xx = new MemoryStream();
-            document1.Save(xx);
-            document1.Close(true);
-            await JsRuntime.SaveAs("ETOC" + pedidos.CG_ART.Trim() + ".pdf", xx.ToArray());
         }
     }
 }

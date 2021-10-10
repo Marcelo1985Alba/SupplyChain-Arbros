@@ -29,9 +29,9 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("GetMaxVale")]
         public async Task<IActionResult> GetMaxVale()
         {
-            //var user = User.Identities.ToList().Select(u=> u.Claims);
             int numero = 1;
-            if (await _context.Pedidos.CountAsync() > 0)
+
+            if (await _context.Pedidos.AnyAsync())
                 numero += await _context.Pedidos
                     .Where(p => p.CG_CIA == cg_cia_usuario).MaxAsync(p => p.VALE);
 
@@ -62,8 +62,8 @@ namespace SupplyChain.Server.Controllers
             return lStock.OrderByDescending(s => s.VALE).ToList(); ;
         }
 
-        // GET: api/Stock/AbriVale/{vale}
-        [HttpGet("AbriVale/{vale}")]
+        // GET: api/Stock/{vale}
+        [HttpGet("ByNumeroVale/{vale}")]
         public async Task<ActionResult<List<Pedidos>>> AbriVale(int vale)
         {
             try

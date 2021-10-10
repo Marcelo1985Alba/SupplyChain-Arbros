@@ -22,7 +22,8 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
 {
     public class CargaMaquinaBase : ComponentBase
     {
-        [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
+        [Inject] protected IJSRuntime JS { get; set; }
+        [Inject] public PdfService PdfService { get; set; }
         [Inject] public HttpClient Http { get; set; }
         [Inject] public NavigationManager NavigationManager { get; set; }
         protected bool verHojaRuta = false;
@@ -605,7 +606,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     string CLIENTE = PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().DES_CLI.Trim();
                     if (CLIENTE.Contains("YPF") || CLIENTE.Contains("Y.P.F"))
                     {
-                        espaciosPedido = await EtiquetaYPF(espaciosPedido);
+                        espaciosPedido = await PdfService.EtiquetaYPF(espaciosPedido, PedCliList, ordenFabricacion, prodList);
                     }
                     else
                     {
@@ -752,65 +753,6 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
         }
 
-        private async Task<string> EtiquetaYPF(string espaciosPedido)
-        {
-            //Chapa de 101 mm x 78 mm
-            PdfDocument document1 = new PdfDocument();
-            document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(382, 295);
-            document1.PageSettings.Margins.All = 0;
-            PdfGrid pdfGrid1 = new PdfGrid();
-            PdfPage page = document1.Pages.Add();
-            PdfGraphics graphics = page.Graphics;
-            PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 16);
-            PdfLightTable pdfTable = new PdfLightTable();
-            page.Graphics.RotateTransform(-360);
-            for (int i = 0; i < (20 - PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
-            {
-                espaciosPedido = espaciosPedido + " ";
-            }
-            var tipo2 = prodList.CAMPOCOM6;
-            string tipo = "";
-            if (tipo2 is null || tipo2.Contains("System.Linq"))
-            {
-                tipo = "";
-            }
-            else
-            {
-                tipo = tipo2.ToString();
-            }
-            FileStream fs = new FileStream("wwwroot\\logo_aerre.jpg", FileMode.Open);
-
-            graphics.DrawString($" \r\n" +
-                $"\r\n" +
-                $"\r\n" +
-                $"    Año:{DateTime.Now.Year}  N°:{ordenFabricacion.PEDIDO} \r\n" +
-                $"    TAG:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}\r\n" +
-                $"    Tipo:\r\n" +
-                $"    Codigo:{ordenFabricacion.CG_PROD.Trim()}\r\n" +
-                $"    Medida:{prodList.CAMPOCOM2.Trim()}  {prodList.CAMPOCOM3.Trim()}\r\n" +
-                $"    Clase:{prodList.CAMPOCOM5.Trim()}\r\n" +
-                $"    Temp:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim()}\r\n" +
-                $"    Presion SET:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}\r\n" +
-                $"    P. Aj Banco:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}\r\n" +
-                $"    Ctra.P:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}\r\n" +
-                $"    Fluido:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}\r\n" +
-                $"    Cuerpo:\r\n" +
-                $"    Tobera:\r\n" +
-                $"    Resorte:\r\n" +
-                $"    T.OPDS N°:8/11\r\n" +
-                $"    M.OPDS N°:47642\r\n" +
-                $"          Arbros S.A.\r\n" +
-                $"       www.aerre.com.ar\r\n" +
-                $"     Industria  Argentina\r\n" +
-                $"                               ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
-
-
-            MemoryStream xx = new MemoryStream();
-            document1.Save(xx);
-            document1.Close(true);
-            await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
-            return espaciosPedido;
-        }
 
         private async Task EtiquetaClientesNOypf()
         {
