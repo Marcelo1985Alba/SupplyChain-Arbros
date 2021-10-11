@@ -21,86 +21,94 @@
 @inherits PedidosPendientesBase
 
 
+<div class="row mt-3">
+    <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+    </div>
+
+</div>
 
 @{
     <div class="col-lg-12 control-section">
-            <div class="content-wrapper">
-                <div class="row">
-                    <SfGrid @ref="Grid" ID="grdPedPendPCP" TValue="ModeloPedidosPendientes" DataSource="@listaPedPend"
-                            GridLines="GridLine.Both" Height="100%" Width="100%" RowHeight="20"
-                            AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                            AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems"
-                            AllowExcelExport="true" AllowGrouping="true">
-                        <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
-                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-                        <GridEvents OnLoad="(async(a)=> await LoadGrid(a))"
-                                    DataBound="(async()=> await DataBoundHandler())"
-                                    OnDataBound="@(async(a)=>await OnDataBoundGrid(a))"
-                                    OnToolbarClick="@(async(a)=> await ClickHandler(a))"
-                                    QueryCellInfo="(async(a)=> await QueryCellInfoHandler(a))" TValue="ModeloPedidosPendientes"></GridEvents>
-                        <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
-                        <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-                        <GridColumns>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.FE_MOV) HeaderText="Fecha Pedido">
-                                <Template>
-                                    @{
-                                        ModeloPedidosPendientes Value = (context as ModeloPedidosPendientes);
-                                        <span>@Value.FE_MOV.ToString("dd/MM/yyyy")</span>
+        <div class="content-wrapper">
+            <div class="row">
+                <SfGrid @ref="Grid" ID="grdPedPendPCP" TValue="ModeloPedidosPendientes" DataSource="@listaPedPend"
+                        GridLines="GridLine.Both" Height="100%" Width="100%" RowHeight="20"
+                        AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                        AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems"
+                        AllowExcelExport="true" AllowGrouping="true">
+                    <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
+                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                    <GridEvents OnLoad="(async(a)=> await LoadGrid(a))" OnActionBegin="@((a)=> Begin(a))"
+                                DataBound="(async()=> await DataBoundHandler())"
+                                OnDataBound="@(async(a)=>await OnDataBoundGrid(a))"
+                                OnToolbarClick="@(async(a)=> await ClickHandler(a))"
+                                QueryCellInfo="(async(a)=> await QueryCellInfoHandler(a))" TValue="ModeloPedidosPendientes"></GridEvents>
+                    <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+                    <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+                    <GridColumns>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.FE_MOV) HeaderText="Fecha Pedido">
+                            <Template>
+                                @{
+                                    ModeloPedidosPendientes Value = (context as ModeloPedidosPendientes);
+                                    <span>@Value.FE_MOV.ToString("dd/MM/yyyy")</span>
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.CG_ORDF) HeaderText="OF" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.DES_ESTADOCARGA) HeaderText="Estado" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.DES_CLI) HeaderText="Razón social del Cliente" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.CG_ART) HeaderText="Código" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.DES_ART) HeaderText="Descripción del producto" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.CANTPED) HeaderText="Cant">
+                            <Template>
+                                @{
+                                    ModeloPedidosPendientes Value = (context as ModeloPedidosPendientes);
+                                    if (@Value.CANTPED.ToString().Substring(1, 1) == ".")
+                                    {
+                                        <span>@Value.CANTPED.ToString().Substring(0, 1)</span>
                                     }
-                                </Template>
-                            </GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CG_ORDF) HeaderText="OF" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.DES_ESTADOCARGA) HeaderText="Estado" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.DES_CLI) HeaderText="Razón social del Cliente" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CG_ART) HeaderText="Código" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.DES_ART) HeaderText="Descripción del producto" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CANTPED) HeaderText="Cant">
-                                <Template>
-                                    @{
-                                        ModeloPedidosPendientes Value = (context as ModeloPedidosPendientes);
-                                        if (@Value.CANTPED.ToString().Substring(1, 1) == ".")
-                                        {
-                                            <span>@Value.CANTPED.ToString().Substring(0, 1)</span>
-                                        }
-                                        else if (@Value.CANTPED.ToString().Substring(2, 1) == ".")
-                                        {
-                                            <span>@Value.CANTPED.ToString().Substring(0, 2)</span>
-                                        }
-                                        else if (@Value.CANTPED.ToString().Substring(3, 1) == ".")
-                                        {
-                                            <span>@Value.CANTPED.ToString().Substring(0, 3)</span>
-                                        }
+                                    else if (@Value.CANTPED.ToString().Substring(2, 1) == ".")
+                                    {
+                                        <span>@Value.CANTPED.ToString().Substring(0, 2)</span>
                                     }
-                                </Template>
-                            </GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.ENTRPREV) HeaderText="Fecha Prevista">
-                                <Template>
-                                    @{
-                                        ModeloPedidosPendientes Value = (context as ModeloPedidosPendientes);
-                                        <span>@Value.ENTRPREV.ToString("dd/MM/yyyy")</span>
+                                    else if (@Value.CANTPED.ToString().Substring(3, 1) == ".")
+                                    {
+                                        <span>@Value.CANTPED.ToString().Substring(0, 3)</span>
                                     }
-                                </Template>
-                            </GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.Obseritem) HeaderText="Observaciones" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CG_ESTADOCARGA) HeaderText="Código estado" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM1) HeaderText="Presión" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM2) HeaderText="Resorte" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM3) HeaderText="Fluido" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM4) HeaderText="Ajuste Banco" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM5) HeaderText="Contrapresion" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM6) HeaderText="Temperatura" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.Semana) HeaderText="Semana" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(ModeloPedidosPendientes.LOTE) HeaderText="Lote" TextAlign="TextAlign.Left"></GridColumn>
-                            @*<GridColumn Field=@nameof(ModeloPedidosPendientes.REGISTRO_PEDCLI)  HeaderText="Registro Pedcli" TextAlign="TextAlign.Left"></GridColumn>*@
-                        </GridColumns>
-                        <SfSpinner @ref="@SpinnerObj" Label="Cargando..." Size="80" Type="SpinnerType.Bootstrap" @bind-Visible="@VisibleProperty">
-                        </SfSpinner>
-                    </SfGrid>
-                </div>
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.ENTRPREV) HeaderText="Fecha Prevista">
+                            <Template>
+                                @{
+                                    ModeloPedidosPendientes Value = (context as ModeloPedidosPendientes);
+                                    <span>@Value.ENTRPREV.ToString("dd/MM/yyyy")</span>
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.Obseritem) HeaderText="Observaciones" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.CG_ESTADOCARGA) HeaderText="Código estado" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM1) HeaderText="Presión" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM2) HeaderText="Resorte" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM3) HeaderText="Fluido" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM4) HeaderText="Ajuste Banco" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM5) HeaderText="Contrapresion" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.CAMPOCOM6) HeaderText="Temperatura" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.Semana) HeaderText="Semana" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.LOTE) HeaderText="Lote" TextAlign="TextAlign.Left"></GridColumn>
+                        @*<GridColumn Field=@nameof(ModeloPedidosPendientes.REGISTRO_PEDCLI)  HeaderText="Registro Pedcli" TextAlign="TextAlign.Left"></GridColumn>*@
+                    </GridColumns>
+                    <SfSpinner @ref="@SpinnerObj" Label="Cargando..." Size="80" Type="SpinnerType.Bootstrap" @bind-Visible="@VisibleProperty">
+                    </SfSpinner>
+                </SfGrid>
             </div>
         </div>
+    </div>
 
 }
 <style>

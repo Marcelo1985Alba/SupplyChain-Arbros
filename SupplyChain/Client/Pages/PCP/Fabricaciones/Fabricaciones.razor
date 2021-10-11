@@ -23,6 +23,15 @@
 
 <SfToast @ref="ToasObj"></SfToast>
 
+<div class="row mt-3">
+    <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+    </div>
+
+</div>
+
 @{
     if (listaFab.Count() == 0 || listaFab is null)
     {
@@ -37,7 +46,7 @@
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row">
-                    <SfGrid @ref="Grid" ID="grdFabricaciones" AllowReordering="true" ShowColumnChooser="true"
+                    <SfGrid @ref="Grid" ID="@APPNAME" AllowReordering="true" ShowColumnChooser="true"
                             ShowColumnMenu="true" AllowResizing="true"
                             RowHeight="20" AllowRowDragAndDrop="true"
                             DataSource="@listaFab" AllowExcelExport="true"
@@ -47,6 +56,7 @@
                         <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                         <GridEvents OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler"
+                                    OnActionBegin="@(async(a)=> await Begin(a))"
                                     DataBound="@(async()=> await DataBoundHandler())"
                                     OnActionComplete="@(async(a)=> await ActionComplete(a))" TValue="Fabricacion"></GridEvents>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>

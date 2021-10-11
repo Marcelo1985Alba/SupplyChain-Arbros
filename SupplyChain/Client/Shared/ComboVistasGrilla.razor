@@ -2,21 +2,27 @@
 @using Syncfusion.Blazor.Data
 @using Syncfusion.Blazor.Buttons
 
+
 <SfToast ID="toast_default" @ref="ToastObj">
     <ToastPosition X="Center" Y="Top"></ToastPosition>
 </SfToast>
 
-@*EN EL EVENTO ActionBegin DE LA GRILA SE OBTIENE EL STADO DE LA GRILLA*@
+@*EN EL EVENTO ActionBegin DE LA GRILA SE OBTIENE EL ESTADO DE LA GRILLA*@
 
 <div class="row">
+    
     <div class="col-lg-6 col-md-3">
-        <SfComboBox @ref="@refComboBox" TValue="string" TItem="VistasGrillas" Autofill="true"
-                    @bind-Value="@VistaSeleccionada.Descripcion" AllowFiltering="true">
-            <SfDataManager Url="@ApiUrl" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>
-            <ComboBoxFieldSettings Text="Descripcion" Value="Descripcion"></ComboBoxFieldSettings>
-            <ComboBoxEvents TItem="VistasGrillas" TValue="string" Opened="(async (a)=> await OnLimpiar(a))"
-                            ValueChange="@(async (e)=>  await OnSelectedStr(e))"></ComboBoxEvents>
-        </SfComboBox>
+        <div class="form-inline">
+            @*<label class="col-form-label">Vista</label>*@
+            <SfComboBox @ref="@refComboBox" TValue="string" TItem="VistasGrillas" Autofill="true"
+                        @bind-Value="@VistaSeleccionada.Descripcion" AllowFiltering="true">
+                <SfDataManager Url="@ApiUrl" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>
+                <ComboBoxFieldSettings Text="Descripcion" Value="Descripcion"></ComboBoxFieldSettings>
+                <ComboBoxEvents TItem="VistasGrillas" TValue="string" Opened="(async (a)=> await OnLimpiar(a))"
+                                ValueChange="@(async (e)=>  await OnSelectedStr(e))"></ComboBoxEvents>
+            </SfComboBox>
+        </div>
+        
     </div>
     <div class="col-lg-2 col-md-3">
         <SfButton Content="Guardar Vista" IsPrimary="false" CssClass="btn-sm e-info" IconCss="fa fa-check"
@@ -38,6 +44,9 @@
 
 @code {
 
+    /// <summary>
+    /// Administra el estado de las grillas. Ademas se debe agregar el cambio de esta en el evento begin de cada grilla
+    /// </summary>
     [Inject] public HttpClient Http { get; set; }
     [Inject] public ILoginService LoginService { get; set; }
 

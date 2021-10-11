@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
 using Syncfusion.Blazor.Grids;
@@ -38,6 +39,9 @@ namespace SupplyChain.Pages.Fab
         };
 
         protected SfToast ToasObj;
+
+        protected const string APPNAME = "grdFabricaciones";
+        protected string state;
         protected override async Task OnInitializedAsync()
         {
             
@@ -63,9 +67,29 @@ namespace SupplyChain.Pages.Fab
             }
         }
 
-        public async Task BeginComplete(ActionEventArgs<Fabricacion> args)
+        public async Task Begin(ActionEventArgs<Fabricacion> args)
         {
-            
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.Sorting
+                )
+            {
+                //VisibleProperty = true;
+                Grid.PreventRender();
+                Grid.Refresh();
+
+                state = await Grid.GetPersistData();
+                await Grid.AutoFitColumnsAsync();
+                await Grid.RefreshColumns();
+                await Grid.RefreshHeader();
+                //VisibleProperty = false;
+            }
+
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.RowDragAndDrop)
             {
 
@@ -145,6 +169,15 @@ namespace SupplyChain.Pages.Fab
             {
                 args.Cell.AddClass(new string[] { "gris" });
             }*/
+        }
+
+        public async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
+        {
+            await Grid.SetPersistData(vistasGrillas.Layout);
+        }
+        public async Task OnReiniciarGrilla()
+        {
+            await Grid.ResetPersistData();
         }
     }
 }

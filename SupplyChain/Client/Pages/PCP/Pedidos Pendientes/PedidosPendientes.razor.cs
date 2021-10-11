@@ -41,12 +41,43 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
         new ItemModel { Text = "Seleccionar Columnas", TooltipText = "Seleccionar Columnas", Id = "Seleccionar Columnas" }
     };
 
+        protected const string APPNAME = "grdPedPendPCP";
+        protected string state;
         protected override async Task OnInitializedAsync()
         {
             VisibleProperty = true;
             listaPedPend = await Http.GetFromJsonAsync<List<ModeloPedidosPendientes>>("api/PedidosPendientes");
             await Grid.AutoFitColumns();
 
+        }
+
+        public async Task Begin(ActionEventArgs<ModeloPedidosPendientes> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.Sorting
+                )
+            {
+                //VisibleProperty = true;
+                Grid.PreventRender();
+                Grid.Refresh();
+
+                state = await Grid.GetPersistData();
+                await Grid.AutoFitColumnsAsync();
+                await Grid.RefreshColumns();
+                await Grid.RefreshHeader();
+                //VisibleProperty = false;
+            }
+
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.RowDragAndDrop)
+            {
+
+            }
         }
         protected async Task OnDataBoundGrid(BeforeDataBoundArgs<ModeloPedidosPendientes> args)
         {
@@ -93,6 +124,14 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
 
         }
 
-        
+        public async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
+        {
+            await Grid.SetPersistData(vistasGrillas.Layout);
+        }
+        public async Task OnReiniciarGrilla()
+        {
+            await Grid.ResetPersistData();
+        }
+
     }
 }

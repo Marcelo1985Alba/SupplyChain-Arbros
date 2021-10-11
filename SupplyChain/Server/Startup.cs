@@ -27,7 +27,11 @@ namespace SupplyChain.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(options =>
-                            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            {
+                options.EnableSensitiveDataLogging();
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
+
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>

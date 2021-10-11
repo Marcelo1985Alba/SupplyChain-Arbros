@@ -428,18 +428,20 @@ namespace SupplyChain
         {
             if (stock.TIPOO == 10)
             {
-                var programa = await _context.Programa
-                        .Where(c => c.CG_ORDF == stock.CG_ORDF || c.CG_ORDFASOC == stock.CG_ORDF).ToListAsync();
+                var programa = await _context.Programa.AsNoTracking()
+                                .Where(c => c.CG_ORDF == stock.CG_ORDF || c.CG_ORDFASOC == stock.CG_ORDF).ToListAsync();
 
-
-                await programa.ForEachAsync(async p=>
+                if (programa.Count > 0 && programa.Any(p => p.CG_ESTADOCARGA != 2))
                 {
-                    p.CG_ESTADO = 1;
-                    p.CG_ESTADOCARGA = 2;
-                    p.FE_FIRME = DateTime.Now;
-                    _context.Entry(p).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                });
+                    await programa.ForEachAsync(async p =>
+                    {
+                        p.CG_ESTADO = 1;
+                        p.CG_ESTADOCARGA = 2;
+                        p.FE_FIRME = DateTime.Now;
+                        _context.Entry(p).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+                    });
+                } 
             }
             
         }
