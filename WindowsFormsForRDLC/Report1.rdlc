@@ -3,218 +3,572 @@
   <Description>Adventure Works top five sales people and stores. This report illustrates a dataset with queries containing the TOP clause. It also illustrates the use of tables, charts, parameters, calculated fields, and drillthrough links.</Description>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
-    <DataSource Name="AdventureWorks">
+    <DataSource Name="ArbrosDataSet">
       <ConnectionProperties>
-        <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=dataplatformdemodata.syncfusion.com;Initial Catalog=AdventureWorks;user id=demoreadonly@data-platform-demo;password=N@c)=Y8s*1&amp;dh</ConnectString>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
       </ConnectionProperties>
-      <rd:SecurityType>None</rd:SecurityType>
-      <rd:DataSourceID>d9b446d5-bbfd-48c3-9e30-0db955a0ca13</rd:DataSourceID>
+      <rd:DataSourceID>3953e4cd-acf7-41ab-8334-83ff8497d18e</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="TopEmployees">
+    <DataSet Name="dsPedidos">
       <Query>
-        <DataSourceName>AdventureWorks</DataSourceName>
-        <QueryParameters>
-          <QueryParameter Name="@ProductCategory">
-            <Value>=Parameters!ProductCategory.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@ProductSubcategory">
-            <Value>=Parameters!ProductSubcategory.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@StartDate">
-            <Value>=Parameters!StartDate.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@EndDate">
-            <Value>=Parameters!EndDate.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
-        <CommandText>SELECT TOP 5 C.LastName, C.FirstName, E.EmployeeID, SUM(SOH.SubTotal) AS SaleAmount
-FROM        Sales.SalesPerson SP INNER JOIN
-            HumanResources.Employee E ON SP.SalesPersonID = E.EmployeeID INNER JOIN
-            Person.Contact C ON E.ContactID = C.ContactID INNER JOIN
-            Sales.SalesOrderHeader SOH ON SP.SalesPersonID = SOH.SalesPersonID INNER JOIN
-            Sales.SalesOrderDetail SOD ON SOH.SalesOrderID = SOD.SalesOrderID INNER JOIN
-            Production.Product P ON SOD.ProductID = P.ProductID INNER JOIN
-            Production.ProductSubcategory PS ON P.ProductSubcategoryID = PS.ProductSubcategoryID INNER JOIN
-            Production.ProductCategory PC ON PS.ProductCategoryID = PC.ProductCategoryID
-WHERE       (PC.ProductCategoryID in (@ProductCategory)) AND (PS.ProductSubcategoryID IN (@ProductSubcategory)) AND 
-            (SOH.OrderDate &gt; @StartDate) AND (SOH.OrderDate &lt; @EndDate)
-GROUP BY    C.LastName, C.FirstName, E.EmployeeID, PC.ProductCategoryID, PS.ProductSubcategoryID
-ORDER BY    SUM(SOH.SubTotal) DESC</CommandText>
-        <Timeout>30</Timeout>
+        <DataSourceName>ArbrosDataSet</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="LastName">
-          <DataField>LastName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="FirstName">
-          <DataField>FirstName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="EmployeeID">
-          <DataField>EmployeeID</DataField>
+        <Field Name="VALE">
+          <DataField>VALE</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="SaleAmount">
-          <DataField>SaleAmount</DataField>
+        <Field Name="FE_MOV">
+          <DataField>FE_MOV</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="VOUCHER">
+          <DataField>VOUCHER</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="REMITO">
+          <DataField>REMITO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CG_COMP">
+          <DataField>CG_COMP</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CG_TIRE">
+          <DataField>CG_TIRE</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TIPOO">
+          <DataField>TIPOO</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CRGO">
+          <DataField>CRGO</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="CG_CIA">
+          <DataField>CG_CIA</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CG_PROY">
+          <DataField>CG_PROY</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CG_COS">
+          <DataField>CG_COS</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CG_IMPORT">
+          <DataField>CG_IMPORT</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CG_EXPORT">
+          <DataField>CG_EXPORT</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="PRESUP">
+          <DataField>PRESUP</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="PEDIDO">
+          <DataField>PEDIDO</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="PEDIDON">
+          <DataField>PEDIDON</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="PEDIDOX">
+          <DataField>PEDIDOX</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="OBRA">
+          <DataField>OBRA</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="OCOMPRA">
+          <DataField>OCOMPRA</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="OBS1">
+          <DataField>OBS1</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OBS2">
+          <DataField>OBS2</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OBS3">
+          <DataField>OBS3</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OBS4">
+          <DataField>OBS4</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AVISO">
+          <DataField>AVISO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CG_PROVE">
+          <DataField>CG_PROVE</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CG_CLI">
+          <DataField>CG_CLI</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="DIRENT">
+          <DataField>DIRENT</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CONDVEN">
+          <DataField>CONDVEN</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CONDVENEX">
+          <DataField>CONDVENEX</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DFF">
+          <DataField>DFF</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CG_COBR">
+          <DataField>CG_COBR</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CG_VEND">
+          <DataField>CG_VEND</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CG_EXPRESO">
+          <DataField>CG_EXPRESO</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CG_TRANS">
+          <DataField>CG_TRANS</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CG_PALLET">
+          <DataField>CG_PALLET</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="PALLET">
+          <DataField>PALLET</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="LARGO">
+          <DataField>LARGO</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="FullName">
-          <Value>=Fields!LastName.Value &amp; ", " &amp; Fields!FirstName.Value</Value>
-        </Field>
-      </Fields>
-    </DataSet>
-    <DataSet Name="ProductCategories">
-      <Query>
-        <DataSourceName>AdventureWorks</DataSourceName>
-        <CommandText>SELECT DISTINCT ProductCategoryID, Name
-FROM        Production.ProductCategory
-ORDER BY    Name</CommandText>
-        <Timeout>30</Timeout>
-      </Query>
-      <Fields>
-        <Field Name="ProductCategoryID">
-          <DataField>ProductCategoryID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Name">
-          <DataField>Name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-    </DataSet>
-    <DataSet Name="TopCustomers">
-      <Query>
-        <DataSourceName>AdventureWorks</DataSourceName>
-        <QueryParameters>
-          <QueryParameter Name="@ProductSubcategory">
-            <Value>=Parameters!ProductSubcategory.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@StartDate">
-            <Value>=Parameters!StartDate.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@EndDate">
-            <Value>=Parameters!EndDate.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@ProductCategory">
-            <Value>=Parameters!ProductCategory.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
-        <CommandText>SELECT TOP 5 S.Name AS StoreName, SUM(SOH.SubTotal) AS SaleAmount, PS.ProductSubcategoryID, 
-            PS.ProductCategoryID
-FROM        Production.Product P INNER JOIN
-            Production.ProductSubcategory PS ON P.ProductSubcategoryID = PS.ProductSubcategoryID INNER JOIN
-            Sales.SalesOrderDetail SOD ON P.ProductID = SOD.ProductID INNER JOIN
-            Sales.Customer CU INNER JOIN
-            Sales.SalesOrderHeader SOH ON CU.CustomerID = SOH.CustomerID INNER JOIN
-            Sales.Store S ON CU.CustomerID = S.CustomerID ON SOD.SalesOrderID = SOH.SalesOrderID
-WHERE       (SOH.OrderDate &gt; @StartDate) AND 
-            (SOH.OrderDate &lt; @EndDate) AND (PS.ProductCategoryID in (@ProductCategory)) AND (PS.ProductSubcategoryID IN (@ProductSubcategory)) 
-GROUP BY    S.Name, PS.ProductSubcategoryID, PS.ProductCategoryID
-ORDER BY    SUM(SOH.SubTotal) DESC</CommandText>
-        <Timeout>30</Timeout>
-      </Query>
-      <Fields>
-        <Field Name="StoreName">
-          <DataField>StoreName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SaleAmount">
-          <DataField>SaleAmount</DataField>
+        <Field Name="ANCHO">
+          <DataField>ANCHO</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="ProductSubcategoryID">
-          <DataField>ProductSubcategoryID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+        <Field Name="ALTURA">
+          <DataField>ALTURA</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="ProductCategoryID">
-          <DataField>ProductCategoryID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-      </Fields>
-    </DataSet>
-    <DataSet Name="ProductSubcategories">
-      <Query>
-        <DataSourceName>AdventureWorks</DataSourceName>
-        <QueryParameters>
-          <QueryParameter Name="@ProductCategory">
-            <Value>=Parameters!ProductCategory.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
-        <CommandText>SELECT      ProductSubcategoryID, ProductCategoryID, Name
-FROM        Production.ProductSubcategory
-WHERE       (ProductCategoryID in (@ProductCategory))</CommandText>
-        <Timeout>30</Timeout>
-      </Query>
-      <Fields>
-        <Field Name="ProductSubcategoryID">
-          <DataField>ProductSubcategoryID</DataField>
-          <rd:TypeName>System.Int16</rd:TypeName>
-        </Field>
-        <Field Name="ProductCategoryID">
-          <DataField>ProductCategoryID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Name">
-          <DataField>Name</DataField>
+        <Field Name="IMPRESO">
+          <DataField>IMPRESO</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="OBSERITEM">
+          <DataField>OBSERITEM</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CG_ORDEN">
+          <DataField>CG_ORDEN</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CG_ART">
+          <DataField>CG_ART</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DESPACHO">
+          <DataField>DESPACHO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="LOTE">
+          <DataField>LOTE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SERIE">
+          <DataField>SERIE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CG_ORDING">
+          <DataField>CG_ORDING</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="UBICACION">
+          <DataField>UBICACION</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DES_ART">
+          <DataField>DES_ART</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CANTENT">
+          <DataField>CANTENT</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="CG_DEP">
+          <DataField>CG_DEP</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="STOCK">
+          <DataField>STOCK</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="UNID">
+          <DataField>UNID</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CG_DEN">
+          <DataField>CG_DEN</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="STOCKA">
+          <DataField>STOCKA</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="UNIDA">
+          <DataField>UNIDA</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ENTRREAL">
+          <DataField>ENTRREAL</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="MONEDA">
+          <DataField>MONEDA</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="IMPORTE1">
+          <DataField>IMPORTE1</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="IMPORTE2">
+          <DataField>IMPORTE2</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="IMPORTE3">
+          <DataField>IMPORTE3</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="IMPORTE4">
+          <DataField>IMPORTE4</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="IMPORTE6">
+          <DataField>IMPORTE6</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="DESCUENTO">
+          <DataField>DESCUENTO</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="BONIFIC">
+          <DataField>BONIFIC</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="IVA">
+          <DataField>IVA</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="CG_BARRAS">
+          <DataField>CG_BARRAS</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="POSARAN">
+          <DataField>POSARAN</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CG_ART1">
+          <DataField>CG_ART1</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DES_ART1">
+          <DataField>DES_ART1</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="VA_INDIC">
+          <DataField>VA_INDIC</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="CG_CUENT">
+          <DataField>CG_CUENT</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="CG_ORDF">
+          <DataField>CG_ORDF</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="NETONOG">
+          <DataField>NETONOG</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="USUARIO">
+          <DataField>USUARIO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FE_REG">
+          <DataField>FE_REG</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="REGISTRO">
+          <DataField>REGISTRO</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Comprob">
+          <DataField>Comprob</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Factura">
+          <DataField>Factura</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Leyenda">
+          <DataField>Leyenda</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ENTRANSITO">
+          <DataField>ENTRANSITO</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="cg_ven">
+          <DataField>cg_ven</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="NUMREQ">
+          <DataField>NUMREQ</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CAMPANA">
+          <DataField>CAMPANA</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="cuit">
+          <DataField>cuit</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="cg_cond">
+          <DataField>cg_cond</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="REGCOMPR">
+          <DataField>REGCOMPR</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CANTENTA">
+          <DataField>CANTENTA</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="FE_FAC">
+          <DataField>FE_FAC</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="PROFORMA">
+          <DataField>PROFORMA</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="DES_CLI">
+          <DataField>DES_CLI</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DPP">
+          <DataField>DPP</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="direcc">
+          <DataField>direcc</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="localidad">
+          <DataField>localidad</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="cg_posta">
+          <DataField>cg_posta</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="cg_zona">
+          <DataField>cg_zona</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="VALE_DESCA">
+          <DataField>VALE_DESCA</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CG_CATEG">
+          <DataField>CG_CATEG</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CONVMON">
+          <DataField>CONVMON</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CG_FORM_VENTAS">
+          <DataField>CG_FORM_VENTAS</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ORCO">
+          <DataField>ORCO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TIPO_FAC_AGRO">
+          <DataField>TIPO_FAC_AGRO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CANTPED">
+          <DataField>CANTPED</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="FLAG">
+          <DataField>FLAG</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="Observaciones">
+          <DataField>Observaciones</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CG_SCRAP">
+          <DataField>CG_SCRAP</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="NUMOCI">
+          <DataField>NUMOCI</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="TIPO">
+          <DataField>TIPO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CERRAROC">
+          <DataField>CERRAROC</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="Control1">
+          <DataField>Control1</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="Control2">
+          <DataField>Control2</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="Control3">
+          <DataField>Control3</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="Control4">
+          <DataField>Control4</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="Control5">
+          <DataField>Control5</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="Control6">
+          <DataField>Control6</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
       </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>ArbrosDataSet</rd:DataSetName>
+        <rd:SchemaPath>D:\Repos\Arbros\SupplyChain\WindowsFormsForRDLC\ArbrosDataSet.xsd</rd:SchemaPath>
+        <rd:TableName>Pedidos</rd:TableName>
+        <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
+        <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
+        <rd:TableAdapterName>PedidosTableAdapter</rd:TableAdapterName>
+      </rd:DataSetInfo>
     </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
         <ReportItems>
-          <Tablix Name="TopStoresTable">
+          <Textbox Name="Textbox15">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Items</Value>
+                    <Style>
+                      <FontFamily>Segoe UI Semibold</FontFamily>
+                      <FontSize>11pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.18486in</Top>
+            <Left>0.13918in</Left>
+            <Height>0.29499in</Height>
+            <Width>3.70168in</Width>
+            <Style>
+              <Border>
+                <Color>#b0b0b0</Color>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Middle</VerticalAlign>
+              <PaddingLeft>4pt</PaddingLeft>
+              <PaddingRight>4pt</PaddingRight>
+              <PaddingTop>4pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Tablix Name="Tablix1">
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>1.98958in</Width>
+                  <Width>1.23389in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.6875in</Width>
+                  <Width>1.23389in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.23389in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.24167in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="StoreName">
+                        <Textbox Name="Textbox3">
+                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!StoreName.Value</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <Color>#333333</Color>
-                                  </Style>
+                                  <Value>Codigo</Value>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
+                              <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <ZIndex>1</ZIndex>
+                          <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Style>
                             <Border>
-                              <Color>#b0b0b0</Color>
-                              <Style>None</Style>
-                            </Border>
-                            <BottomBorder>
+                              <Color>LightGrey</Color>
                               <Style>Solid</Style>
-                            </BottomBorder>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>4pt</PaddingLeft>
-                            <PaddingRight>4pt</PaddingRight>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
@@ -223,37 +577,153 @@ WHERE       (ProductCategoryID in (@ProductCategory))</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="SaleAmountStore">
+                        <Textbox Name="Textbox5">
+                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Round(Fields!SaleAmount.Value)</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Format>'$'#,0;('$'#,0)</Format>
-                                    <Color>#333333</Color>
-                                  </Style>
+                                  <Value>Descripcion</Value>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
+                              <Style />
                             </Paragraph>
                           </Paragraphs>
+                          <rd:DefaultName>Textbox5</rd:DefaultName>
                           <Style>
                             <Border>
-                              <Color>#b0b0b0</Color>
-                              <Style>None</Style>
-                            </Border>
-                            <BottomBorder>
+                              <Color>LightGrey</Color>
                               <Style>Solid</Style>
-                            </BottomBorder>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>4pt</PaddingLeft>
-                            <PaddingRight>4pt</PaddingRight>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox7">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Cantidad</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox7</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.24167in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="CG_ART">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!CG_ART.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>CG_ART</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DES_ART">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DES_ART.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>DES_ART</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="STOCK">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!STOCK.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>STOCK</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
@@ -268,122 +738,138 @@ WHERE       (ProductCategoryID in (@ProductCategory))</CommandText>
               <TablixMembers>
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
               <TablixMembers>
                 <TablixMember>
-                  <Group Name="TopStoresTable_Details_Group">
-                    <DataElementName>Detail</DataElementName>
-                  </Group>
-                  <SortExpressions>
-                    <SortExpression>
-                      <Value>=Fields!SaleAmount.Value</Value>
-                      <Direction>Descending</Direction>
-                    </SortExpression>
-                  </SortExpressions>
-                  <TablixMembers>
-                    <TablixMember />
-                  </TablixMembers>
-                  <DataElementName>Detail_Collection</DataElementName>
-                  <DataElementOutput>Output</DataElementOutput>
-                  <KeepTogether>true</KeepTogether>
+                  <KeepWithGroup>After</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="Detalles" />
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <NoRowsMessage>*No Data Available</NoRowsMessage>
-            <DataSetName>TopCustomers</DataSetName>
-            <Top>0.52958in</Top>
-            <Left>0.20854in</Left>
-            <Height>0.25in</Height>
-            <Width>3.67708in</Width>
-            <Style>
-              <Border>
-                <Color>#b0b0b0</Color>
-                <Style>None</Style>
-              </Border>
-              <FontFamily>Segoe UI</FontFamily>
-              <Color>Red</Color>
-              <PaddingLeft>10pt</PaddingLeft>
-            </Style>
-          </Tablix>
-          <Textbox Name="Textbox16">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value> Top Stores</Value>
-                    <Style>
-                      <FontFamily>Segoe UI Semibold</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>0.06944in</Top>
-            <Left>0.20854in</Left>
-            <Height>0.30333in</Height>
-            <Width>3.67708in</Width>
+            <DataSetName>dsPedidos</DataSetName>
+            <Top>0.47985in</Top>
+            <Left>0.13918in</Left>
+            <Height>0.48333in</Height>
+            <Width>3.70168in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
-                <Color>#b0b0b0</Color>
                 <Style>None</Style>
               </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>4pt</PaddingLeft>
-              <PaddingRight>4pt</PaddingRight>
-              <PaddingTop>4pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
             </Style>
-          </Textbox>
+          </Tablix>
         </ReportItems>
-        <Height>1.02708in</Height>
+        <Height>1.90208in</Height>
         <Style />
       </Body>
-      <Width>5.20875in</Width>
+      <Width>5.15903in</Width>
       <Page>
-        <PageFooter>
-          <Height>0.47916in</Height>
+        <PageHeader>
+          <Height>1.03833in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
-            <Textbox Name="FooterDate">
+            <Image Name="Image2">
+              <Source>Embedded</Source>
+              <Value>logofull</Value>
+              <Sizing>FitProportional</Sizing>
+              <Top>0.12777in</Top>
+              <Left>0.08333in</Left>
+              <Height>0.68597in</Height>
+              <Width>1.4154in</Width>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+              </Style>
+            </Image>
+            <Textbox Name="Textbox9">
+              <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>= "Date and Time :" + " " + Now()</Value>
+                      <Value>Vale Tipo: </Value>
                       <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <Format>D</Format>
-                        <Color>#333333</Color>
+                        <FontSize>14pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Fields!AVISO.Value</Value>
+                      <Style>
+                        <FontSize>14pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
                   </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
+                  <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>0.13194in</Top>
-              <Left>1.91319in</Left>
-              <Height>0.25in</Height>
-              <Width>3.00001in</Width>
+              <rd:DefaultName>Textbox9</rd:DefaultName>
+              <Top>0.36333in</Top>
+              <Left>1.805in</Left>
+              <Height>0.3in</Height>
+              <Width>2.56667in</Width>
+              <ZIndex>1</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
                 </Border>
-                <BackgroundColor>White</BackgroundColor>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
+            <Textbox Name="param">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Parameters!param.Value</Value>
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>param</rd:DefaultName>
+              <Top>0.78833in</Top>
+              <Left>0.13918in</Left>
+              <Height>0.25in</Height>
+              <Width>3.14082in</Width>
+              <ZIndex>2</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+          </ReportItems>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </PageHeader>
+        <PageFooter>
+          <Height>0.61874in</Height>
+          <PrintOnFirstPage>true</PrintOnFirstPage>
+          <PrintOnLastPage>true</PrintOnLastPage>
+          <ReportItems>
             <Textbox Name="FooterCompany">
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
@@ -403,8 +889,7 @@ WHERE       (ProductCategoryID in (@ProductCategory))</CommandText>
               <Top>0.125in</Top>
               <Left>0.0625in</Left>
               <Height>0.25in</Height>
-              <Width>1.60417in</Width>
-              <ZIndex>1</ZIndex>
+              <Width>2.25in</Width>
               <Style>
                 <PaddingLeft>2pt</PaddingLeft>
               </Style>
@@ -413,8 +898,8 @@ WHERE       (ProductCategoryID in (@ProductCategory))</CommandText>
               <Top>0.0625in</Top>
               <Left>0.08333in</Left>
               <Height>0in</Height>
-              <Width>4.82987in</Width>
-              <ZIndex>2</ZIndex>
+              <Width>4.87153in</Width>
+              <ZIndex>1</ZIndex>
               <Style>
                 <Border>
                   <Color>#b0b0b0</Color>
@@ -434,59 +919,10 @@ WHERE       (ProductCategoryID in (@ProductCategory))</CommandText>
     </ReportSection>
   </ReportSections>
   <ReportParameters>
-    <ReportParameter Name="ProductCategory">
-      <DataType>Integer</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>1</Value>
-        </Values>
-      </DefaultValue>
-      <Prompt>Category:</Prompt>
-      <ValidValues>
-        <DataSetReference>
-          <DataSetName>ProductCategories</DataSetName>
-          <ValueField>ProductCategoryID</ValueField>
-          <LabelField>Name</LabelField>
-        </DataSetReference>
-      </ValidValues>
-      <MultiValue>true</MultiValue>
-    </ReportParameter>
-    <ReportParameter Name="ProductSubcategory">
-      <DataType>Integer</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>2</Value>
-        </Values>
-      </DefaultValue>
-      <Prompt>Subcategory:</Prompt>
-      <ValidValues>
-        <DataSetReference>
-          <DataSetName>ProductSubcategories</DataSetName>
-          <ValueField>ProductSubcategoryID</ValueField>
-          <LabelField>Name</LabelField>
-        </DataSetReference>
-      </ValidValues>
-      <MultiValue>true</MultiValue>
-    </ReportParameter>
-    <ReportParameter Name="StartDate">
-      <DataType>DateTime</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>2003-1-1</Value>
-        </Values>
-      </DefaultValue>
+    <ReportParameter Name="param">
+      <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
-      <Prompt>Start Date:</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="EndDate">
-      <DataType>DateTime</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>2003-12-31</Value>
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>End Date:</Prompt>
+      <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
@@ -497,22 +933,7 @@ WHERE       (ProductCategoryID in (@ProductCategory))</CommandText>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>ProductCategory</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>1</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>ProductSubcategory</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>0</ColumnIndex>
-          <RowIndex>1</RowIndex>
-          <ParameterName>StartDate</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>1</ColumnIndex>
-          <RowIndex>1</RowIndex>
-          <ParameterName>EndDate</ParameterName>
+          <ParameterName>param</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>
@@ -558,5 +979,5 @@ i/bvtuyV5PO8ry87jnGNx/nUPjT4ceH/ABxAp1GBo7xBiK8gwsqjrgnGGGex9TjFddRQB84al+zbq8cj
   <Language>en-US</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
-  <rd:ReportID>f7d43d3f-e249-4f89-878a-d3834707e2a4</rd:ReportID>
+  <rd:ReportID>e1626120-e02a-4507-85ea-8797c297ac1f</rd:ReportID>
 </Report>

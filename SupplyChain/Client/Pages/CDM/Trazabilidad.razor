@@ -659,8 +659,9 @@
         else
         {
             await refSpinner.ShowAsync();
+            TrzNro = BoxPedido;
             PedCliList = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/{BoxPedido}");
-            prodList = await Http.GetFromJsonAsync<Prod>($"api/Prod/{CodNro}");
+            prodList = await Http.GetFromJsonAsync<Prod>($"api/Prod/{PedCliList.FirstOrDefault().CG_ART.Trim()}");
             pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/MostrarTrazabilidad/{BoxPedido}");
             vpedidos = await Http.GetFromJsonAsync<List<vTrazabilidad>>($"api/Trazabilidads/MostrarTrazabilidad/{BoxPedido}");
             Showgrid = true;
@@ -668,7 +669,7 @@
             BoxCliente = "";
             BoxCodigo = "";
             await refDialogPedidos.HideAsync();
-            await refSpinner.ShowAsync();
+            await refSpinner.HideAsync();
         }
 
 

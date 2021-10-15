@@ -117,7 +117,8 @@ namespace SupplyChain
             {
                 if (_context.Pedidos.Any())
                 {
-                    lContiene = await _context.Pedidos.Where(p => p.DES_CLI.Contains(Cliente) && p.AVISO == "ALTA DE PRODUCTO FABRICADO").OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
+                    lContiene = await _context.Pedidos.Where(p => p.DES_CLI.Contains(Cliente) && p.AVISO == "ALTA DE PRODUCTO FABRICADO")
+                        .OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
                 }
                 if (lContiene == null)
                 {

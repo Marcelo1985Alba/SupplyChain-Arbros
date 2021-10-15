@@ -6,24 +6,45 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Report\ArbrosDataSet.Designer.cs" />
+    <Content Remove="wwwroot\Report\ArbrosDataSet.xsc" />
+    <Content Remove="wwwroot\Report\ArbrosDataSet.xsd" />
+    <Content Remove="wwwroot\Report\ArbrosDataSet.xss" />
+    <Content Remove="wwwroot\Report\Report1.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="wwwroot\Report\ArbrosDataSet.Designer.cs">
+      <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\Report\Report1.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />
     <PackageReference Include="BoldReports.Net.Core" Version="3.2.24" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.11">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="19.3.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="19.3.0.45" />
     <PackageReference Include="System.CodeDom" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\WindowsFormsForRDLC\WindowsFormsForRDLC.csproj" />
     <ProjectReference Include="..\Client\SupplyChain.Client.csproj" />
     <ProjectReference Include="..\Shared\SupplyChain.Shared.csproj" />
   </ItemGroup>
@@ -43,6 +64,20 @@
     </None>
     <None Update="x64\pdfium.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Report\ArbrosDataSet.xsc">
+      <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="wwwroot\Report\ArbrosDataSet.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>ArbrosDataSet.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Include="wwwroot\Report\ArbrosDataSet.xss">
+      <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
     </None>
   </ItemGroup>
 

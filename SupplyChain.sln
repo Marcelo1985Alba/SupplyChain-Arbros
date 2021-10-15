@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SupplyChain.Client", "Suppl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SupplyChain.Shared", "SupplyChain\Shared\SupplyChain.Shared.csproj", "{61D0DF17-E878-4290-B68D-7E1047ECE86E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsForRDLC", "WindowsFormsForRDLC\WindowsFormsForRDLC.csproj", "{5C3EC599-DC42-4C3B-B2EA-35AD06D0E70F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{61D0DF17-E878-4290-B68D-7E1047ECE86E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61D0DF17-E878-4290-B68D-7E1047ECE86E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61D0DF17-E878-4290-B68D-7E1047ECE86E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C3EC599-DC42-4C3B-B2EA-35AD06D0E70F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C3EC599-DC42-4C3B-B2EA-35AD06D0E70F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C3EC599-DC42-4C3B-B2EA-35AD06D0E70F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C3EC599-DC42-4C3B-B2EA-35AD06D0E70F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
