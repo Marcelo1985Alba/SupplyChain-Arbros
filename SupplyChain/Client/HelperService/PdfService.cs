@@ -1,6 +1,7 @@
 ﻿using Microsoft.JSInterop;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
+using Syncfusion.Drawing;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Grid;
@@ -24,6 +25,32 @@ namespace SupplyChain.Client.HelperService
         {
             this.js = js;
             this.Http = httpClient;
+        }
+
+        public async Task EtiquetaOF(int OrdenDeFabAlta, ModeloOrdenFabricacion ordenFabricacion)
+        {
+            //Create a new PDF document
+            PdfDocument document = new()
+            {
+                PageSettings = new PdfPageSettings(new SizeF(227, 70))
+            };
+            document.PageSettings.Margins.All = 0;
+            PdfPage page = document.Pages.Add();
+            PdfGraphics graphics = page.Graphics;
+
+            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
+            PdfFont font1 = new PdfStandardFont(PdfFontFamily.TimesRoman, 7f, PdfFontStyle.Bold);
+            graphics.DrawString($"        OF ALTA: {OrdenDeFabAlta}\r\n            {ordenFabricacion.CG_PROD}\r\n{ordenFabricacion.DES_PROD}\r\nCANTIDAD {ordenFabricacion.CANTFAB}    {ordenFabricacion.FE_CIERRE}",
+                    font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(30, 10));
+
+            //Save the PDF to the MemoryStream
+            MemoryStream ms = new MemoryStream();
+            document.Save(ms);
+            //If the position is not set to '0' then the PDF will be empty.
+            ms.Position = 0;
+            //Close the PDF document.
+            document.Close(true);
+            await js.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", ms.ToArray());
         }
 
         public async Task Catalogo(string CodNro, string TrzNro, List<vTrazabilidad> vpedidos)

@@ -596,7 +596,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             prodList = await Http.GetFromJsonAsync<Producto>($"api/Prod/GetByFilter?Codigo={ordenFabricacion.CG_PROD.Trim()}" +
                 $"&Descripcion={string.Empty}");
 
-
+            
 
             if (ordenFabricacion.CG_CELDA == "BE3" || ordenFabricacion.CG_CELDA == "GC1")
             {
@@ -631,24 +631,8 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             }
             else
             {
-                PdfDocument document1 = new PdfDocument();
-                document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(227, 70);//110
-                document1.PageSettings.Margins.All = 0;
-                PdfGrid pdfGrid1 = new PdfGrid();
-                PdfPage page = document1.Pages.Add();
-                PdfGraphics graphics = page.Graphics;
-                PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
-                PdfLightTable pdfTable = new PdfLightTable();
-                page.Graphics.RotateTransform(-90);
+                await PdfService.EtiquetaOF(OrdenDeFabAlta, ordenFabricacion);
 
-                OrdenDeFabAlta = dbCarga.Where(t => t.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF;
-                graphics.DrawString($"        OF ALTA: {OrdenDeFabAlta}\r\n            {ordenFabricacion.CG_PROD}\r\n{ordenFabricacion.DES_PROD}\r\nCANTIDAD {ordenFabricacion.CANTFAB}    {ordenFabricacion.FE_CIERRE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
-
-                document1.PageSettings.Margins.All = 0;
-                MemoryStream xx = new();
-                document1.Save(xx);
-                document1.Close(true);
-                await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
             }
         }
 

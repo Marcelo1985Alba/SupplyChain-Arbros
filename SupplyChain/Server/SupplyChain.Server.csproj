@@ -10,6 +10,16 @@
     <Content Remove="wwwroot\Report\ArbrosDataSet.xsc" />
     <Content Remove="wwwroot\Report\ArbrosDataSet.xsd" />
     <Content Remove="wwwroot\Report\ArbrosDataSet.xss" />
+    <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.Designer.cs" />
+    <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsc" />
+    <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsd" />
+    <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xss" />
+    <Content Remove="wwwroot\Report\EtiquetaOF\ReporteEtiquetaOF.rdlc" />
+    <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.Designer.cs" />
+    <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xsc" />
+    <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xsd" />
+    <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xss" />
+    <Content Remove="wwwroot\Report\NoConfor\ReporteEvento.rdlc" />
     <Content Remove="wwwroot\Report\Report1.rdlc" />
   </ItemGroup>
 
@@ -19,9 +29,21 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.Designer.cs">
+      <DependentUpon>ArbrosDataSet5.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="wwwroot\Report\NoConfor\ArbrosDataSet1.Designer.cs">
+      <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="wwwroot\Report\EtiquetaOF\ReporteEtiquetaOF.rdlc" />
+    <EmbeddedResource Include="wwwroot\Report\NoConfor\ReporteEvento.rdlc" />
     <EmbeddedResource Include="wwwroot\Report\Report1.rdlc" />
   </ItemGroup>
 
@@ -78,6 +100,28 @@
     </None>
     <None Include="wwwroot\Report\ArbrosDataSet.xss">
       <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsc">
+      <DependentUpon>ArbrosDataSet5.xsd</DependentUpon>
+    </None>
+    <None Include="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>ArbrosDataSet5.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Include="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xss">
+      <DependentUpon>ArbrosDataSet5.xsd</DependentUpon>
+    </None>
+    <None Include="wwwroot\Report\NoConfor\ArbrosDataSet1.xsc">
+      <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="wwwroot\Report\NoConfor\ArbrosDataSet1.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>ArbrosDataSet1.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Include="wwwroot\Report\NoConfor\ArbrosDataSet1.xss">
+      <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>
     </None>
   </ItemGroup>
 

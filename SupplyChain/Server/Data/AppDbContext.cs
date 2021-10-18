@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SupplyChain.Shared;
+using SupplyChain.Shared.CDM;
 using SupplyChain.Shared.Login;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
@@ -11,6 +12,7 @@ namespace SupplyChain
     {
         //MODULO CARGA DE MAQUINA
         public virtual DbSet<ModeloCarga> Cargas { get; set; }
+        public virtual DbSet<CargaMaq> CargaMaq { get; set; }
         public virtual DbSet<ModeloOrdenFabricacionHojaRuta> OrdenesFabricacionHojaRuta { get; set; }
         public virtual DbSet<ModeloOrdenFabricacionSE> OrdenesFabricacionSE { get; set; }
         public virtual DbSet<ModeloOrdenFabricacionMP> OrdenesFabricacionMP { get; set; }
@@ -89,6 +91,7 @@ namespace SupplyChain
         public DbSet<Proveedor> Proveedores { get; set; }
         public DbSet<EstadVenta> EstadVentas { get; set; }
         public DbSet<VistasGrillas> VistasGrillas { get; set; }
+        public DbSet<vEventos> vEventos { get; set; }
 
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -137,6 +140,7 @@ namespace SupplyChain
             modelBuilder.Entity<Procun>().HasNoKey().ToView(null);
             modelBuilder.Entity<EstadVenta>().HasNoKey().ToView(null);
             modelBuilder.Entity<StockSP>().HasNoKey().ToView(null);
+            modelBuilder.Entity<vEventos>().HasNoKey().ToView("vEventos");
         }
     }
 }

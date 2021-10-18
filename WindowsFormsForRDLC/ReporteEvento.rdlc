@@ -3,774 +3,146 @@
   <Description>Adventure Works top five sales people and stores. This report illustrates a dataset with queries containing the TOP clause. It also illustrates the use of tables, charts, parameters, calculated fields, and drillthrough links.</Description>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
-    <DataSource Name="ArbrosDataSet">
+    <DataSource Name="ArbrosDataSet1">
       <ConnectionProperties>
         <DataProvider>System.Data.DataSet</DataProvider>
         <ConnectString>/* Local Connection */</ConnectString>
       </ConnectionProperties>
-      <rd:DataSourceID>3953e4cd-acf7-41ab-8334-83ff8497d18e</rd:DataSourceID>
+      <rd:DataSourceID>7bd48518-6d68-4c65-8763-e7f7f2c63003</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="dsPedidos">
+    <DataSet Name="dsEventos">
       <Query>
-        <DataSourceName>ArbrosDataSet</DataSourceName>
+        <DataSourceName>ArbrosDataSet1</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="VALE">
-          <DataField>VALE</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="FE_MOV">
-          <DataField>FE_MOV</DataField>
+        <Field Name="FE_EMIT">
+          <DataField>FE_EMIT</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
-        <Field Name="VOUCHER">
-          <DataField>VOUCHER</DataField>
+        <Field Name="Cg_NoConf">
+          <DataField>Cg_NoConf</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="REMITO">
-          <DataField>REMITO</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CG_COMP">
-          <DataField>CG_COMP</DataField>
+        <Field Name="Cg_TipoNc">
+          <DataField>Cg_TipoNc</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="CG_TIRE">
-          <DataField>CG_TIRE</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TIPOO">
-          <DataField>TIPOO</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CRGO">
-          <DataField>CRGO</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
-        </Field>
-        <Field Name="CG_CIA">
-          <DataField>CG_CIA</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CG_PROY">
-          <DataField>CG_PROY</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CG_COS">
-          <DataField>CG_COS</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CG_IMPORT">
-          <DataField>CG_IMPORT</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CG_EXPORT">
-          <DataField>CG_EXPORT</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="PRESUP">
-          <DataField>PRESUP</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="PEDIDO">
-          <DataField>PEDIDO</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="PEDIDON">
-          <DataField>PEDIDON</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="PEDIDOX">
-          <DataField>PEDIDOX</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="OBRA">
-          <DataField>OBRA</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="OCOMPRA">
-          <DataField>OCOMPRA</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="OBS1">
-          <DataField>OBS1</DataField>
+        <Field Name="Des_TipoNc">
+          <DataField>Des_TipoNc</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="OBS2">
-          <DataField>OBS2</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="OBS3">
-          <DataField>OBS3</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="OBS4">
-          <DataField>OBS4</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="AVISO">
-          <DataField>AVISO</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CG_PROVE">
-          <DataField>CG_PROVE</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CG_CLI">
-          <DataField>CG_CLI</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="DIRENT">
-          <DataField>DIRENT</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CONDVEN">
-          <DataField>CONDVEN</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CONDVENEX">
-          <DataField>CONDVENEX</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DFF">
-          <DataField>DFF</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CG_COBR">
-          <DataField>CG_COBR</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CG_VEND">
-          <DataField>CG_VEND</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CG_EXPRESO">
-          <DataField>CG_EXPRESO</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CG_TRANS">
-          <DataField>CG_TRANS</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CG_PALLET">
-          <DataField>CG_PALLET</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="PALLET">
-          <DataField>PALLET</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="LARGO">
-          <DataField>LARGO</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="ANCHO">
-          <DataField>ANCHO</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="ALTURA">
-          <DataField>ALTURA</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="IMPRESO">
-          <DataField>IMPRESO</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="OBSERITEM">
-          <DataField>OBSERITEM</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CG_ORDEN">
-          <DataField>CG_ORDEN</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CG_ART">
-          <DataField>CG_ART</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DESPACHO">
-          <DataField>DESPACHO</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="LOTE">
-          <DataField>LOTE</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SERIE">
-          <DataField>SERIE</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CG_ORDING">
-          <DataField>CG_ORDING</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="UBICACION">
-          <DataField>UBICACION</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DES_ART">
-          <DataField>DES_ART</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CANTENT">
-          <DataField>CANTENT</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="CG_DEP">
-          <DataField>CG_DEP</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="STOCK">
-          <DataField>STOCK</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="UNID">
-          <DataField>UNID</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CG_DEN">
-          <DataField>CG_DEN</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="STOCKA">
-          <DataField>STOCKA</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="UNIDA">
-          <DataField>UNIDA</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ENTRREAL">
-          <DataField>ENTRREAL</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="MONEDA">
-          <DataField>MONEDA</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="IMPORTE1">
-          <DataField>IMPORTE1</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="IMPORTE2">
-          <DataField>IMPORTE2</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="IMPORTE3">
-          <DataField>IMPORTE3</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="IMPORTE4">
-          <DataField>IMPORTE4</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="IMPORTE6">
-          <DataField>IMPORTE6</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="DESCUENTO">
-          <DataField>DESCUENTO</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="BONIFIC">
-          <DataField>BONIFIC</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="IVA">
-          <DataField>IVA</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="CG_BARRAS">
-          <DataField>CG_BARRAS</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="POSARAN">
-          <DataField>POSARAN</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CG_ART1">
-          <DataField>CG_ART1</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DES_ART1">
-          <DataField>DES_ART1</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="VA_INDIC">
-          <DataField>VA_INDIC</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="CG_CUENT">
-          <DataField>CG_CUENT</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="CG_ORDF">
-          <DataField>CG_ORDF</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="NETONOG">
-          <DataField>NETONOG</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
-        </Field>
-        <Field Name="USUARIO">
-          <DataField>USUARIO</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="FE_REG">
-          <DataField>FE_REG</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="REGISTRO">
-          <DataField>REGISTRO</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Comprob">
-          <DataField>Comprob</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Factura">
-          <DataField>Factura</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Leyenda">
-          <DataField>Leyenda</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ENTRANSITO">
-          <DataField>ENTRANSITO</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
-        </Field>
-        <Field Name="cg_ven">
-          <DataField>cg_ven</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="NUMREQ">
-          <DataField>NUMREQ</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CAMPANA">
-          <DataField>CAMPANA</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="cuit">
-          <DataField>cuit</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="cg_cond">
-          <DataField>cg_cond</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="REGCOMPR">
-          <DataField>REGCOMPR</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CANTENTA">
-          <DataField>CANTENTA</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="FE_FAC">
-          <DataField>FE_FAC</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="PROFORMA">
-          <DataField>PROFORMA</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="DES_CLI">
-          <DataField>DES_CLI</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DPP">
-          <DataField>DPP</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="direcc">
-          <DataField>direcc</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="localidad">
-          <DataField>localidad</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="cg_posta">
-          <DataField>cg_posta</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="cg_zona">
-          <DataField>cg_zona</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="VALE_DESCA">
-          <DataField>VALE_DESCA</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CG_CATEG">
-          <DataField>CG_CATEG</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CONVMON">
-          <DataField>CONVMON</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CG_FORM_VENTAS">
-          <DataField>CG_FORM_VENTAS</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="ORCO">
-          <DataField>ORCO</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="TIPO_FAC_AGRO">
-          <DataField>TIPO_FAC_AGRO</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CANTPED">
-          <DataField>CANTPED</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="FLAG">
-          <DataField>FLAG</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="Observaciones">
           <DataField>Observaciones</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="CG_SCRAP">
-          <DataField>CG_SCRAP</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+        <Field Name="Fe_Ocurrencia">
+          <DataField>Fe_Ocurrencia</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
-        <Field Name="NUMOCI">
-          <DataField>NUMOCI</DataField>
+        <Field Name="Fe_Aprobacion">
+          <DataField>Fe_Aprobacion</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="Cg_Cli">
+          <DataField>Cg_Cli</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="TIPO">
-          <DataField>TIPO</DataField>
+        <Field Name="Cg_Prod">
+          <DataField>Cg_Prod</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="CERRAROC">
-          <DataField>CERRAROC</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
+        <Field Name="DES_CLI">
+          <DataField>DES_CLI</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Control1">
-          <DataField>Control1</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
+        <Field Name="DES_PROVE">
+          <DataField>DES_PROVE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Control2">
-          <DataField>Control2</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
+        <Field Name="DES_PROD">
+          <DataField>DES_PROD</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Control3">
-          <DataField>Control3</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
+        <Field Name="Lote">
+          <DataField>Lote</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Control4">
-          <DataField>Control4</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
+        <Field Name="Serie">
+          <DataField>Serie</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Control5">
-          <DataField>Control5</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
+        <Field Name="Despacho">
+          <DataField>Despacho</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Control6">
-          <DataField>Control6</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
+        <Field Name="Cg_Ordf">
+          <DataField>Cg_Ordf</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Pedido">
+          <DataField>Pedido</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Usuario">
+          <DataField>Usuario</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OCOMPRA">
+          <DataField>OCOMPRA</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CANT">
+          <DataField>CANT</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="Cg_NoConfAcc">
+          <DataField>Cg_NoConfAcc</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Texto">
+          <DataField>Texto</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Orden">
+          <DataField>Orden</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ObservacionesAccion">
+          <DataField>ObservacionesAccion</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="fe_implemen">
+          <DataField>fe_implemen</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="Origen">
+          <DataField>Origen</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>ArbrosDataSet</rd:DataSetName>
-        <rd:SchemaPath>D:\Repos\Arbros\SupplyChain\WindowsFormsForRDLC\ArbrosDataSet.xsd</rd:SchemaPath>
-        <rd:TableName>Pedidos</rd:TableName>
+        <rd:DataSetName>ArbrosDataSet1</rd:DataSetName>
+        <rd:SchemaPath>D:\repos\Arbros\SupplyChain\WindowsFormsForRDLC\ArbrosDataSet1.xsd</rd:SchemaPath>
+        <rd:TableName>vEventos</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
-        <rd:TableAdapterName>PedidosTableAdapter</rd:TableAdapterName>
+        <rd:TableAdapterName>vEventosTableAdapter</rd:TableAdapterName>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
-        <ReportItems>
-          <Textbox Name="Textbox15">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Items</Value>
-                    <Style>
-                      <FontFamily>Segoe UI Semibold</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>0.18486in</Top>
-            <Left>0.13918in</Left>
-            <Height>0.29499in</Height>
-            <Width>3.70168in</Width>
-            <Style>
-              <Border>
-                <Color>#b0b0b0</Color>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>4pt</PaddingLeft>
-              <PaddingRight>4pt</PaddingRight>
-              <PaddingTop>4pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Tablix Name="Tablix1">
-            <TablixBody>
-              <TablixColumns>
-                <TablixColumn>
-                  <Width>1.23389in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>1.23389in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>1.23389in</Width>
-                </TablixColumn>
-              </TablixColumns>
-              <TablixRows>
-                <TablixRow>
-                  <Height>0.24167in</Height>
-                  <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox3">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Codigo</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox5">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Descripcion</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox5</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox7">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Cantidad</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox7</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                  </TablixCells>
-                </TablixRow>
-                <TablixRow>
-                  <Height>0.24167in</Height>
-                  <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="CG_ART">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!CG_ART.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>CG_ART</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="DES_ART">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!DES_ART.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>DES_ART</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="STOCK">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!STOCK.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>STOCK</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                  </TablixCells>
-                </TablixRow>
-              </TablixRows>
-            </TablixBody>
-            <TablixColumnHierarchy>
-              <TablixMembers>
-                <TablixMember />
-                <TablixMember />
-                <TablixMember />
-              </TablixMembers>
-            </TablixColumnHierarchy>
-            <TablixRowHierarchy>
-              <TablixMembers>
-                <TablixMember>
-                  <KeepWithGroup>After</KeepWithGroup>
-                </TablixMember>
-                <TablixMember>
-                  <Group Name="Detalles" />
-                </TablixMember>
-              </TablixMembers>
-            </TablixRowHierarchy>
-            <DataSetName>dsPedidos</DataSetName>
-            <Top>0.47985in</Top>
-            <Left>0.13918in</Left>
-            <Height>0.48334in</Height>
-            <Width>3.70167in</Width>
-            <ZIndex>1</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Tablix>
-        </ReportItems>
-        <Height>1.22708in</Height>
+        <Height>1.90208in</Height>
         <Style />
       </Body>
-      <Width>5.15903in</Width>
+      <Width>8.83833in</Width>
       <Page>
         <PageHeader>
-          <Height>1.03833in</Height>
+          <Height>1.83833in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -778,7 +150,7 @@
               <Source>Embedded</Source>
               <Value>logo_aerre</Value>
               <Sizing>FitProportional</Sizing>
-              <Top>0.12777in</Top>
+              <Top>0.29667in</Top>
               <Left>0.08333in</Left>
               <Height>0.68597in</Height>
               <Width>1.4154in</Width>
@@ -788,23 +160,16 @@
                 </Border>
               </Style>
             </Image>
-            <Textbox Name="Textbox9">
+            <Textbox Name="Textbox2">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Vale Tipo: </Value>
+                      <Value>INFORME DE NO CONFORMIDAD Y ACCIONES CORRECTIVAS / PREVENTIVAS</Value>
                       <Style>
-                        <FontSize>14pt</FontSize>
-                        <FontWeight>Bold</FontWeight>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=Fields!AVISO.Value</Value>
-                      <Style>
-                        <FontSize>14pt</FontSize>
+                        <FontSize>16pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
@@ -812,11 +177,11 @@
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <rd:DefaultName>Textbox9</rd:DefaultName>
-              <Top>0.36333in</Top>
-              <Left>1.805in</Left>
-              <Height>0.3in</Height>
-              <Width>2.56667in</Width>
+              <rd:DefaultName>Textbox2</rd:DefaultName>
+              <Top>0.29667in</Top>
+              <Left>1.955in</Left>
+              <Height>0.61707in</Height>
+              <Width>4.40833in</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>
@@ -828,26 +193,92 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Textbox Name="param">
+            <Textbox Name="Textbox4">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Parameters!param.Value</Value>
+                      <Value>SECTOR Y TIPO DE LA NC</Value>
+                      <Style>
+                        <FontSize>14pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox3</rd:DefaultName>
+              <Top>1.23166in</Top>
+              <Left>0.08333in</Left>
+              <Height>0.25in</Height>
+              <Width>3.26666in</Width>
+              <ZIndex>2</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Des_TipoNc">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!Des_TipoNc.Value, "dsEventos")</Value>
+                      <Style>
+                        <FontSize>14pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Des_TipoNc</rd:DefaultName>
+              <Top>1.55111in</Top>
+              <Left>0.08333in</Left>
+              <Height>0.28722in</Height>
+              <Width>3.26666in</Width>
+              <ZIndex>3</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Cg_NoConf">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Sum(Fields!Cg_NoConf.Value, "dsEventos")</Value>
                       <Style />
                     </TextRun>
                   </TextRuns>
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <rd:DefaultName>param</rd:DefaultName>
-              <Top>0.78833in</Top>
-              <Left>0.13918in</Left>
+              <rd:DefaultName>Cg_NoConf</rd:DefaultName>
+              <Top>0.66374in</Top>
+              <Left>7.71333in</Left>
               <Height>0.25in</Height>
-              <Width>3.14082in</Width>
-              <ZIndex>2</ZIndex>
+              <Width>1in</Width>
+              <ZIndex>4</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -866,40 +297,15 @@
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>0.61874in</Height>
+          <Height>4.87707in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
-            <Textbox Name="FooterCompany">
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>Adventure Works Cycles</Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <Color>#333333</Color>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <Top>0.125in</Top>
-              <Left>0.0625in</Left>
-              <Height>0.25in</Height>
-              <Width>2.25in</Width>
-              <Style>
-                <PaddingLeft>2pt</PaddingLeft>
-              </Style>
-            </Textbox>
             <Line Name="line1">
               <Top>0.0625in</Top>
               <Left>0.08333in</Left>
               <Height>0in</Height>
-              <Width>4.87153in</Width>
-              <ZIndex>1</ZIndex>
+              <Width>7.6382in</Width>
               <Style>
                 <Border>
                   <Color>#b0b0b0</Color>
