@@ -2,7 +2,8 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Data
 
-<SfDropDownList TValue="int" TItem="Deposito" Placeholder="Seleccione Deposito..." Readonly="@EsSoloLectura" 
+<SfDropDownList TValue="int" TItem="Deposito" Placeholder="Seleccione Deposito..." 
+                Readonly="@EsSoloLectura" 
                 @bind-Value="DepositoSeleccionado">
     <SfDataManager Url="api/Deposito" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>
     <DropDownListEvents TItem="Deposito" TValue="int" ValueChange="@((d)=> SelectedDepositoChanged(d))" ></DropDownListEvents>

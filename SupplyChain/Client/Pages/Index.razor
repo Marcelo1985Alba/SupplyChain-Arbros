@@ -3,9 +3,11 @@
 <h1>Hola, @authState.User.Identity.Name!</h1>
 
 Bienvenido a la nueva aplicación.
-<a href="https://localhost:44379/api/ReportRDLC/GetReport?numeroVale=35071" target="_blank">Vale Pdf</a>
-<a href="https://localhost:44379/api/ReportRDLC/GetReportEvento?noConf=136" target="_blank">No Conf PDF</a>
-<a href="https://localhost:44379/api/ReportRDLC/GetReportEtiquetaOF?cg_ordf=72479" target="_blank">No Conf PDF</a>
+<br />
+<strong>Nuevas Caracteristicas: impresion de evento</strong>
+@*<a href="https://localhost:44379/api/ReportRDLC/GetReport?numeroVale=35071" target="_blank">Vale Pdf</a>
+    <a href="https://localhost:44379/api/ReportRDLC/GetReportEvento?noConf=136" target="_blank">No Conf PDF</a>
+    <a href="https://localhost:44379/api/ReportRDLC/GetReportEtiquetaOF?cg_ordf=72479" target="_blank">No Conf PDF</a>*@
 @*<SurveyPrompt Title="How is Blazor working for you?" />*@
 @*<ComboVistasGrilla></ComboVistasGrilla>*@
 
@@ -16,7 +18,7 @@ Bienvenido a la nueva aplicación.
     protected async override Task OnInitializedAsync()
     {
         Layout.Titulo = "Inicio";
-    
+
         authState = await authenticationState;
     }
 }

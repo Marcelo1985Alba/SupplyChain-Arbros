@@ -15,6 +15,7 @@
     <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsd" />
     <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xss" />
     <Content Remove="wwwroot\Report\EtiquetaOF\ReporteEtiquetaOF.rdlc" />
+    <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.cs" />
     <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.Designer.cs" />
     <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xsc" />
     <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xsd" />
@@ -33,6 +34,9 @@
       <DependentUpon>ArbrosDataSet5.xsd</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="wwwroot\Report\NoConfor\ArbrosDataSet1.cs">
+      <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>
     </Compile>
     <Compile Include="wwwroot\Report\NoConfor\ArbrosDataSet1.Designer.cs">
       <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>

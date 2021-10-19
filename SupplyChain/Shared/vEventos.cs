@@ -17,8 +17,8 @@ namespace SupplyChain.Shared
 		public DateTime? Fe_Aprobacion { get; set; }
 		public decimal Cg_Cli { get; set; }
 		public string Cg_Prod { get; set; }
-		public string DES_CLI { get; set; }
-		public string DES_PROVE { get; set; }
+		public string? DES_CLI { get; set; }
+		public string? DES_PROVE { get; set; }
 		public string DES_PROD { get; set; }
 		public string Lote { get; set; }
 		public string Serie { get; set; }
@@ -28,11 +28,14 @@ namespace SupplyChain.Shared
 		public string Usuario { get; set; }
 		public int OCOMPRA { get; set; }
 		public decimal CANT { get; set; }
-		public int Cg_NoConfAcc { get; set; }
-		public string Texto { get; set; }
-		public int Orden { get; set; }
-		public string ObservacionesAccion { get; set; }
+		public int? Cg_NoConfAcc { get; set; }
+		public string? Texto { get; set; }
+		public int? Orden { get; set; }
+		public string? ObservacionesAccion { get; set; }
 		public DateTime? fe_implemen { get; set; }
 		public string Origen { get; set; }
+		public DateTime? FE_SOLUC { get; set; }
+		public DateTime? fe_cierre { get; set; }
+		public bool Aprob { get; set; }
 	}
 }

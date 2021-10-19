@@ -51,6 +51,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="ArbrosDataSet1.cs">
+      <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>
+    </Compile>
     <Compile Include="ArbrosDataSet1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -893,9 +893,9 @@ namespace SupplyChain.Client.Pages.NoConf
             MemoryStream xx = new MemoryStream();
             document.Save(xx);
             document.Close(true);
-            await JS.SaveAs("Evento" + registro.Cg_NoConf.ToString() + ".pdf", xx.ToArray());
+            //await JS.SaveAs("Evento" + registro.Cg_NoConf.ToString() + ".pdf", xx.ToArray());
 
-
+            await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportEvento?noConf={registro.Cg_NoConf}", "_blank" });
         }
 
         public async Task guardaaccion()

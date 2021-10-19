@@ -331,6 +331,12 @@ namespace WindowsFormsForRDLC {
             
             private global::System.Data.DataColumn columnOrigen;
             
+            private global::System.Data.DataColumn columnFE_SOLUC;
+            
+            private global::System.Data.DataColumn columnfe_cierre;
+            
+            private global::System.Data.DataColumn columnAprob;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public vEventosDataTable() {
@@ -574,6 +580,30 @@ namespace WindowsFormsForRDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn FE_SOLUCColumn {
+                get {
+                    return this.columnFE_SOLUC;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn fe_cierreColumn {
+                get {
+                    return this.columnfe_cierre;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn AprobColumn {
+                get {
+                    return this.columnAprob;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -635,7 +665,10 @@ namespace WindowsFormsForRDLC {
                         int Orden, 
                         string ObservacionesAccion, 
                         System.DateTime fe_implemen, 
-                        string Origen) {
+                        string Origen, 
+                        System.DateTime FE_SOLUC, 
+                        System.DateTime fe_cierre, 
+                        bool Aprob) {
                 vEventosRow rowvEventosRow = ((vEventosRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         FE_EMIT,
@@ -663,7 +696,10 @@ namespace WindowsFormsForRDLC {
                         Orden,
                         ObservacionesAccion,
                         fe_implemen,
-                        Origen};
+                        Origen,
+                        FE_SOLUC,
+                        fe_cierre,
+                        Aprob};
                 rowvEventosRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowvEventosRow);
                 return rowvEventosRow;
@@ -712,6 +748,9 @@ namespace WindowsFormsForRDLC {
                 this.columnObservacionesAccion = base.Columns["ObservacionesAccion"];
                 this.columnfe_implemen = base.Columns["fe_implemen"];
                 this.columnOrigen = base.Columns["Origen"];
+                this.columnFE_SOLUC = base.Columns["FE_SOLUC"];
+                this.columnfe_cierre = base.Columns["fe_cierre"];
+                this.columnAprob = base.Columns["Aprob"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -769,6 +808,12 @@ namespace WindowsFormsForRDLC {
                 base.Columns.Add(this.columnfe_implemen);
                 this.columnOrigen = new global::System.Data.DataColumn("Origen", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnOrigen);
+                this.columnFE_SOLUC = new global::System.Data.DataColumn("FE_SOLUC", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFE_SOLUC);
+                this.columnfe_cierre = new global::System.Data.DataColumn("fe_cierre", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnfe_cierre);
+                this.columnAprob = new global::System.Data.DataColumn("Aprob", typeof(bool), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnAprob);
                 this.columnCg_NoConf.AllowDBNull = false;
                 this.columnCg_TipoNc.AllowDBNull = false;
                 this.columnDes_TipoNc.AllowDBNull = false;
@@ -798,6 +843,7 @@ namespace WindowsFormsForRDLC {
                 this.columnObservacionesAccion.MaxLength = 2000;
                 this.columnOrigen.AllowDBNull = false;
                 this.columnOrigen.MaxLength = 500;
+                this.columnAprob.AllowDBNull = false;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1276,6 +1322,49 @@ namespace WindowsFormsForRDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public System.DateTime FE_SOLUC {
+                get {
+                    try {
+                        return ((global::System.DateTime)(this[this.tablevEventos.FE_SOLUCColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'FE_SOLUC\' de la tabla \'vEventos\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablevEventos.FE_SOLUCColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public System.DateTime fe_cierre {
+                get {
+                    try {
+                        return ((global::System.DateTime)(this[this.tablevEventos.fe_cierreColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'fe_cierre\' de la tabla \'vEventos\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablevEventos.fe_cierreColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool Aprob {
+                get {
+                    return ((bool)(this[this.tablevEventos.AprobColumn]));
+                }
+                set {
+                    this[this.tablevEventos.AprobColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsFE_EMITNull() {
                 return this.IsNull(this.tablevEventos.FE_EMITColumn);
             }
@@ -1392,6 +1481,30 @@ namespace WindowsFormsForRDLC {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void Setfe_implemenNull() {
                 this[this.tablevEventos.fe_implemenColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsFE_SOLUCNull() {
+                return this.IsNull(this.tablevEventos.FE_SOLUCColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetFE_SOLUCNull() {
+                this[this.tablevEventos.FE_SOLUCColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool Isfe_cierreNull() {
+                return this.IsNull(this.tablevEventos.fe_cierreColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void Setfe_cierreNull() {
+                this[this.tablevEventos.fe_cierreColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -1580,6 +1693,9 @@ namespace WindowsFormsForRDLC.ArbrosDataSet1TableAdapters {
             tableMapping.ColumnMappings.Add("ObservacionesAccion", "ObservacionesAccion");
             tableMapping.ColumnMappings.Add("fe_implemen", "fe_implemen");
             tableMapping.ColumnMappings.Add("Origen", "Origen");
+            tableMapping.ColumnMappings.Add("FE_SOLUC", "FE_SOLUC");
+            tableMapping.ColumnMappings.Add("fe_cierre", "fe_cierre");
+            tableMapping.ColumnMappings.Add("Aprob", "Aprob");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -1587,7 +1703,7 @@ namespace WindowsFormsForRDLC.ArbrosDataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = global::WindowsFormsForRDLC.Properties.Settings.Default.ArbrosConnectionString;
+            this._connection.ConnectionString = "";
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1596,7 +1712,7 @@ namespace WindowsFormsForRDLC.ArbrosDataSet1TableAdapters {
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT FE_EMIT, Cg_NoConf, Cg_TipoNc, Des_TipoNc, Observaciones, Fe_Ocurrencia, Fe_Aprobacion, Cg_Cli, Cg_Prod, DES_CLI, DES_PROVE, DES_PROD, Lote, Serie, Despacho, Cg_Ordf, Pedido, Usuario, OCOMPRA, CANT, Cg_NoConfAcc, Texto, Orden, ObservacionesAccion, fe_implemen, Origen FROM dbo.vEventos";
+            this._commandCollection[0].CommandText = "SELECT * FROM dbo.vEventos";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         

@@ -631,7 +631,11 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             }
             else
             {
+                //await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportEtiquetaOF?cg_ordf={ordenFabricacion.CG_ORDF}", "_blank" });
+
+                //document1.Close(true);
                 await PdfService.EtiquetaOF(OrdenDeFabAlta, ordenFabricacion);
+                //await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
 
             }
         }

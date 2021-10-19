@@ -9,10 +9,10 @@
         <Tables>
           <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="vEventosTableAdapter" GeneratorDataComponentClassName="vEventosTableAdapter" Name="vEventos" UserDataComponentName="vEventosTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="ArbrosConnectionString (Settings)" DbObjectName="Arbros.dbo.vEventos" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="ArbrosConnectionString (Settings)" DbObjectName="Arbros.dbo.vEventos" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
-                  <DbCommand CommandType="Text" ModifiedByUser="false">
-                    <CommandText>SELECT FE_EMIT, Cg_NoConf, Cg_TipoNc, Des_TipoNc, Observaciones, Fe_Ocurrencia, Fe_Aprobacion, Cg_Cli, Cg_Prod, DES_CLI, DES_PROVE, DES_PROD, Lote, Serie, Despacho, Cg_Ordf, Pedido, Usuario, OCOMPRA, CANT, Cg_NoConfAcc, Texto, Orden, ObservacionesAccion, fe_implemen, Origen FROM dbo.vEventos</CommandText>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT * FROM dbo.vEventos</CommandText>
                     <Parameters />
                   </DbCommand>
                 </SelectCommand>
@@ -45,6 +45,9 @@
               <Mapping SourceColumn="ObservacionesAccion" DataSetColumn="ObservacionesAccion" />
               <Mapping SourceColumn="fe_implemen" DataSetColumn="fe_implemen" />
               <Mapping SourceColumn="Origen" DataSetColumn="Origen" />
+              <Mapping SourceColumn="FE_SOLUC" DataSetColumn="FE_SOLUC" />
+              <Mapping SourceColumn="fe_cierre" DataSetColumn="fe_cierre" />
+              <Mapping SourceColumn="Aprob" DataSetColumn="Aprob" />
             </Mappings>
             <Sources />
           </TableAdapter>
@@ -56,7 +59,7 @@
   <xs:element name="ArbrosDataSet1" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="ArbrosDataSet1" msprop:Generator_UserDSName="ArbrosDataSet1">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="vEventos" msprop:Generator_TableClassName="vEventosDataTable" msprop:Generator_TableVarName="tablevEventos" msprop:Generator_TablePropName="vEventos" msprop:Generator_RowDeletingName="vEventosRowDeleting" msprop:Generator_RowChangingName="vEventosRowChanging" msprop:Generator_RowEvHandlerName="vEventosRowChangeEventHandler" msprop:Generator_RowDeletedName="vEventosRowDeleted" msprop:Generator_UserTableName="vEventos" msprop:Generator_RowChangedName="vEventosRowChanged" msprop:Generator_RowEvArgName="vEventosRowChangeEvent" msprop:Generator_RowClassName="vEventosRow">
+        <xs:element name="vEventos" msprop:Generator_TableClassName="vEventosDataTable" msprop:Generator_TableVarName="tablevEventos" msprop:Generator_RowChangedName="vEventosRowChanged" msprop:Generator_TablePropName="vEventos" msprop:Generator_RowDeletingName="vEventosRowDeleting" msprop:Generator_RowChangingName="vEventosRowChanging" msprop:Generator_RowEvHandlerName="vEventosRowChangeEventHandler" msprop:Generator_RowDeletedName="vEventosRowDeleted" msprop:Generator_RowClassName="vEventosRow" msprop:Generator_UserTableName="vEventos" msprop:Generator_RowEvArgName="vEventosRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="FE_EMIT" msprop:Generator_ColumnVarNameInTable="columnFE_EMIT" msprop:Generator_ColumnPropNameInRow="FE_EMIT" msprop:Generator_ColumnPropNameInTable="FE_EMITColumn" msprop:Generator_UserColumnName="FE_EMIT" type="xs:dateTime" minOccurs="0" />
@@ -163,6 +166,9 @@
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
+              <xs:element name="FE_SOLUC" msprop:Generator_ColumnVarNameInTable="columnFE_SOLUC" msprop:Generator_ColumnPropNameInRow="FE_SOLUC" msprop:Generator_ColumnPropNameInTable="FE_SOLUCColumn" msprop:Generator_UserColumnName="FE_SOLUC" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="fe_cierre" msprop:Generator_ColumnVarNameInTable="columnfe_cierre" msprop:Generator_ColumnPropNameInRow="fe_cierre" msprop:Generator_ColumnPropNameInTable="fe_cierreColumn" msprop:Generator_UserColumnName="fe_cierre" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="Aprob" msprop:Generator_ColumnVarNameInTable="columnAprob" msprop:Generator_ColumnPropNameInRow="Aprob" msprop:Generator_ColumnPropNameInTable="AprobColumn" msprop:Generator_UserColumnName="Aprob" type="xs:boolean" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
