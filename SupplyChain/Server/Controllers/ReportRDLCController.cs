@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +19,16 @@ namespace SupplyChain.Server.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment webHostEnvoirement;
+        private readonly IConfiguration configuration;
         private readonly OrdenesFabricacionController ordenesFabricacionController;
         private readonly CargasController cargasController;
 
-        public ReportRDLCController(AppDbContext appDbContext, IWebHostEnvironment webHostEnvoirement,
+        public ReportRDLCController(AppDbContext appDbContext, IWebHostEnvironment webHostEnvoirement, IConfiguration configuration,
             OrdenesFabricacionController ordenesFabricacionController, CargasController cargasController)
         {
             this._context = appDbContext;
             this.webHostEnvoirement = webHostEnvoirement;
+            this.configuration = configuration;
             this.ordenesFabricacionController = ordenesFabricacionController;
             this.cargasController = cargasController;
             System.Text.Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -35,8 +39,15 @@ namespace SupplyChain.Server.Controllers
         public IActionResult GetReport(int numeroVale)
         {
             var vale =_context.Pedidos.Where(p => p.VALE == numeroVale).ToList();
-             
-            var path = $"{webHostEnvoirement.WebRootPath}\\Report\\Report1.rdlc";
+            var path = string.Empty;
+            if (webHostEnvoirement.IsProduction())
+            {
+                path = configuration["ReportesRDLC:Reporte"];
+            }
+            else
+            {
+                path = $"{webHostEnvoirement.WebRootPath}\\Report\\Report1.rdlc";
+            }
 
 
             Dictionary<string, string> parameter = new();
@@ -55,9 +66,10 @@ namespace SupplyChain.Server.Controllers
         [Route(template: "GetReportEvento")]
         public IActionResult GetReportEvento(int noConf)
         {
+            var file = "ReporteEvento.rdlc";
             var vale = _context.vEventos.Where(p => p.Cg_NoConf == noConf).ToList();
-
-            var path = $"{webHostEnvoirement.WebRootPath}\\Report\\NoConfor\\ReporteEvento.rdlc";
+            var path = string.Empty;
+            path = configuration["ReportesRDLC:Reporte"] + $"\\{file}";
 
 
             Dictionary<string, string> parameter = new();
@@ -69,7 +81,7 @@ namespace SupplyChain.Server.Controllers
 
             var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
 
-            return File(result.MainStream, contentType: "application/pdf");
+            return File(result.MainStream, contentType: "application/pdf", $"Evento_{noConf}.pdf");
         }
 
         [HttpGet]

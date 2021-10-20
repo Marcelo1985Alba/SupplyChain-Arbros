@@ -633,9 +633,8 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             {
                 //await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportEtiquetaOF?cg_ordf={ordenFabricacion.CG_ORDF}", "_blank" });
 
-                //document1.Close(true);
+                OrdenDeFabAlta = dbCarga.Where(t => t.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF;
                 await PdfService.EtiquetaOF(OrdenDeFabAlta, ordenFabricacion);
-                //await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
 
             }
         }

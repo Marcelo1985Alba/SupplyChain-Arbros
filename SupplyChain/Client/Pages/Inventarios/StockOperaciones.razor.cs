@@ -553,6 +553,7 @@ namespace SupplyChain.Client.Pages.Inventarios
 
             await MostrarMensajeToastSuccess();
 
+            abrioVale = false;
             StockEncabezado = new();
             SpinnerVisible = false;
         }

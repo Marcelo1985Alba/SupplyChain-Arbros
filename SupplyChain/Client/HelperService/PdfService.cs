@@ -537,15 +537,15 @@ namespace SupplyChain.Client.HelperService
                 $"    P. Aj Banco:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}\r\n" +
                 $"    Ctra.P:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}\r\n" +
                 $"    Fluido:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}\r\n" +
-                $"    Cuerpo:\r\n" +
-                $"    Tobera:\r\n" +
-                $"    Resorte:\r\n" +
-                $"    T.OPDS N°:8/11\r\n" +
-                $"    M.OPDS N°:47642\r\n" +
-                $"          Arbros S.A.\r\n" +
-                $"       www.aerre.com.ar\r\n" +
-                $"     Industria  Argentina\r\n" +
-                $"                               ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+                "    Cuerpo:\r\n" +
+                "    Tobera:\r\n" +
+                "    Resorte:\r\n" +
+                "    T.OPDS N°:8/11\r\n" +
+                "    M.OPDS N°:47642\r\n" +
+                "          Arbros S.A.\r\n" +
+                "       www.aerre.com.ar\r\n" +
+                "     Industria  Argentina\r\n" +
+                "                               ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
 
             MemoryStream xx = new MemoryStream();
@@ -560,31 +560,31 @@ namespace SupplyChain.Client.HelperService
         {
 
             PdfDocument document1 = new();
+            document1.PageSettings.Margins.All = 0;
             document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(227, 70);//110
-            int margin = -25;
 
-            document1.PageSettings.Margins.Left = -2;
-            document1.PageSettings.Margins.Right = -15;
-            document1.PageSettings.Margins.Top = 10;
-            document1.PageSettings.Margins.Bottom = -10;
+            //document1.PageSettings.Margins.Left = -2;
+            //document1.PageSettings.Margins.Right = -15;
+            //document1.PageSettings.Margins.Top = 10;
+            //document1.PageSettings.Margins.Bottom = -10;
             //document1.PageSettings.Margins.All = margin;
             PdfGrid pdfGrid1 = new PdfGrid();
             PdfPage page = document1.Pages.Add();
             PdfGraphics graphics = page.Graphics;
             PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
-            PdfLightTable pdfTable = new PdfLightTable();
-            page.Graphics.RotateTransform(-90);
+            PdfLightTable pdfTable = new();
+            //page.Graphics.RotateTransform(-90);
 
 
             graphics.DrawString($"{pedidos.CG_ART.Trim()}                  OC {pedidos.OCOMPRA}\r\n{pedidos.DES_ART.Trim()}\r\n" +
                 $"Despacho {pedidos.DESPACHO} Lote {pedidos.LOTE} VALE {pedidos.VALE}\n" +
-                $"{pedidos.Proveedor?.DES_PROVE.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+                $"{pedidos.Proveedor?.DES_PROVE.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(30, 10));
 
             //document1.PageSettings.Margins.Left = margin;
             //document1.PageSettings.Margins.Right = margin;
             //document1.PageSettings.Margins.Top = margin;
             //document1.PageSettings.Margins.Bottom = margin;
-            MemoryStream xx = new MemoryStream();
+            MemoryStream xx = new();
             document1.Save(xx);
             document1.Close(true);
             await js.SaveAs("ETOC" + pedidos.CG_ART.Trim() + ".pdf", xx.ToArray());
