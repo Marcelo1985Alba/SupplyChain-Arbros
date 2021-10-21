@@ -130,6 +130,8 @@
         else
         {
             MensajeServidor = "Usuario o Contraseña incorrecta.";
+            ;
+            Console.WriteLine(await httpResponse.Content.ReadAsStringAsync());
             await this.ToastObj.Show(new ToastModel
             {
                 Title = "Error!",

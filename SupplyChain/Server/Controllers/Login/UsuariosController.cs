@@ -59,8 +59,6 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
-                //string xSQL = $"SELECT Usuario, Contras FROM USUARIOS WHERE Usuario = '{usuario}' AND CONTRAS = '{contras}'";
-                //return await _context.Usuarios.FromSqlRaw(xSQL).FirstOrDefaultAsync();
                 return await _context.Usuarios
                     .Where(u => u.Usuario == usuario.Usuario && u.Contras == usuario.Contras).Include(c => c.Rol).FirstOrDefaultAsync();
             }

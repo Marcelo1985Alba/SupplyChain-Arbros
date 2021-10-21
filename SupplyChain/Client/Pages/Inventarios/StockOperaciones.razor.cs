@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SupplyChain.Client.Pages.Inventarios
@@ -324,45 +325,67 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         protected async Task OnProgramaSelected(Programa programaSel)
         {
-            SpinnerVisible = true;
-            List<Pedidos> lStock = new List<Pedidos>();
+            
+            List<Pedidos> itemsGrilla = new();
             int registronegativo = 0;
             StockEncabezado.CG_ORDF = programaSel.CG_ORDF;
-            StockEncabezado.ModeloOrdenFabricacionEncabezado = await Http.GetFromJsonAsync<ModeloOrdenFabricacionEncabezado>("api/OrdenesFabricacionEncabezado/" + programaSel.CG_ORDF.ToString());
-            var ItemsPrograma = await Http.GetFromJsonAsync<ItemAbastecimiento[]>($"api/Programa/GetAbastecimientoByOF/{programaSel.CG_ORDF}");
-            //Cargar los item de sp en los items de items para guardar vale
-            foreach (var item in ItemsPrograma)
+            StockEncabezado.PEDIDO = programaSel.PEDIDO;
+            var httpResponse = await Http.GetAsync($"api/Programa/GetAbastecimientoByOF/{programaSel.CG_ORDF}");
+            if (httpResponse.IsSuccessStatusCode)
             {
-                registronegativo--;
-                Pedidos pedido = new();
-                pedido.CG_ORDF = programaSel.CG_ORDF;
-                pedido.TIPOO = StockEncabezado.TIPOO;
-                pedido.CG_PROVE = 0;
-                Cg_CLI_Cg_PROVE = programaSel.CG_CLI;
-                pedido.CG_DEP = item.CG_DEP;
-                pedido.CG_ART = item.CG_ART.Trim();
-                pedido.DES_ART = item.DES_ART;
-                pedido.STOCK = item.CANTPED;
-                pedido.UNID = item.UNID;
-                pedido.LOTE = item.LOTE;
-                pedido.SERIE = item.SERIE;
-                pedido.DESPACHO = item.DESPACHO;
-                pedido.ResumenStock = item.ResumenStock;
+                SpinnerVisible = true;
+                //Cargar los item de sp en los items de la grilla para guardar vale
+                var response = await httpResponse.Content.ReadAsStringAsync();
+                var itemsPrograma = JsonSerializer.Deserialize<ItemAbastecimiento[]>(response, new() { PropertyNameCaseInsensitive = true });
+                foreach (var item in itemsPrograma)
+                {
+                    registronegativo--;
+                    Pedidos pedido = new();
+                    pedido.CG_ORDF = programaSel.CG_ORDF;
+                    pedido.TIPOO = StockEncabezado.TIPOO;
+                    pedido.CG_PROVE = 0;
+                    Cg_CLI_Cg_PROVE = programaSel.CG_CLI;
+                    pedido.CG_DEP = item.CG_DEP;
+                    pedido.CG_ART = item.CG_ART.Trim();
+                    pedido.DES_ART = item.DES_ART;
+                    pedido.STOCK = item.CANTPED;
+                    pedido.UNID = item.UNID;
+                    pedido.LOTE = item.LOTE;
+                    pedido.SERIE = item.SERIE;
+                    pedido.DESPACHO = item.DESPACHO;
+                    pedido.ResumenStock = item.ResumenStock;
 
-                pedido.REGISTRO = registronegativo;
-                pedido.PENDIENTEOC = item.STOCK; //STOCK
-                lStock.Add(pedido);
+                    pedido.REGISTRO = registronegativo;
+                    pedido.PENDIENTEOC = item.STOCK; //STOCK
+                    itemsGrilla.Add(pedido);
 
 
+                }
+
+
+                StockEncabezado.Items = itemsGrilla;
+                PermiteAgregarItem = true;
+                PermiteEditarItem = true;
+                PermiteEliminarItem = true;
+                SpinnerVisible = false;
+                await InvokeAsync(StateHasChanged);
+            }
+            else
+            {
+                Console.WriteLine(httpResponse.Content.ReadAsStringAsync());
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "Error al obtener datos",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
             }
 
-
-            StockEncabezado.Items = lStock;
-            PermiteAgregarItem = true;
-            PermiteEditarItem = true;
-            PermiteEliminarItem = true;
-            SpinnerVisible = false;
-            await InvokeAsync(StateHasChanged);
+            
+            
         }
 
         protected async Task OnCompraSelected(List<Compra> lcompraSel)
@@ -583,7 +606,7 @@ namespace SupplyChain.Client.Pages.Inventarios
             stock.FE_MOV = StockEncabezado.FE_MOV;
             stock.CG_PROVE = Cg_CLI_Cg_PROVE;
             stock.TIPOO = StockEncabezado.TIPOO;
-
+            stock.PEDIDO = StockEncabezado.PEDIDO;
             //TODO: controlar el TIPOO al guardar para setar cada campo
             if (stock.TIPOO == 10)
             {
@@ -684,6 +707,7 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         protected async Task AbrirConfirmacionEliminarVale()
         {
+            await ConfirmacionGuardarDialog.HideAsync();
             await ConfirmacionEliminarDialog.ShowAsync();
         }
 

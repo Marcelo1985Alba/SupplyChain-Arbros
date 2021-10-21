@@ -120,11 +120,12 @@
                                 }
 
 
-                                @if (StockEncabezado.TIPOO == 1 || StockEncabezado.TIPOO == 10 && StockEncabezado.ModeloOrdenFabricacionEncabezado.PEDIDO > 0)
+                                @if (StockEncabezado.TIPOO == 1 || StockEncabezado.TIPOO == 10 
+                                    && StockEncabezado.PEDIDO > 0)
                                 {
                                     <div class="form-group col-lg-3 col-md-4 col-sm-6">
                                         <label class="col-form-label text-info">Pedido</label>
-                                        <BuscadorPedido Valor="@StockEncabezado.ModeloOrdenFabricacionEncabezado.PEDIDO" MostrarSpin="false" EsSoloLectura="true"
+                                        <BuscadorPedido Valor="@StockEncabezado.PEDIDO" MostrarSpin="false" EsSoloLectura="true"
                                                         HabilitaBotonBusqueda="false" MostraBotonBusqueda="false" />
                                     </div>
                                 }
@@ -249,7 +250,7 @@
         <hr />
     </HeaderTempalte>
     <ContentTemplate>
-        <p>Estas seguro que desea guardar el vale <strong>@StockEncabezado?.VALE</strong> ?</p>
+        <p>Esta seguro que desea guardar el vale <strong>@StockEncabezado?.VALE</strong> ?</p>
     </ContentTemplate>
 </ConfirmacionDialog>
 

@@ -618,7 +618,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 }
                 if (ordenFabricacion.CG_PROD.Substring(0, 1) == "1")
                 {
-                    await DescargarTxtParaImpresoraQR(PedCliList[0].PEDIDO, "Roscada");
+                    await DescargarTxtParaImpresoraQR(ordenFabricacion.PEDIDO, "Roscada");
                     //await EtiquetaInicio1();
                 }
                 if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
