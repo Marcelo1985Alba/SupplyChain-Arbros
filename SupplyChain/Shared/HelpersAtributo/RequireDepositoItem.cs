@@ -15,12 +15,6 @@ namespace SupplyChain.Shared.HelpersAtributo
 
             var cg_dep = (int)value;
 
-            //if (stock.TIPOO == 9 && cg_dep == 0)
-            //{
-            //    return new ValidationResult("Asignar deposito Ingreso");
-            //}
-
-
             return stock.TIPOO == 9 && cg_dep == 0
                 ? new ValidationResult($"{stock.CG_ART}: Ingresar deposito")
                 : ValidationResult.Success;

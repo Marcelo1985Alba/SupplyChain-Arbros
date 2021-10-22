@@ -17,8 +17,9 @@ namespace SupplyChain.Client.Shared.Inventarios
         [Parameter] public EventCallback OnImprimirClick{ get; set; }
         [Parameter] public Dictionary<string, object> HtmlAttribute { get; set; } =
         new Dictionary<string, object>() { { "type", "submit" } };
-
-
+        [Parameter]
+        public Dictionary<string, object> HtmlAttributeButton { get; set; } =
+        new Dictionary<string, object>() { { "type", "button" } };
         protected async Task Eliminar()
         {
             await OnEliminarClick.InvokeAsync();

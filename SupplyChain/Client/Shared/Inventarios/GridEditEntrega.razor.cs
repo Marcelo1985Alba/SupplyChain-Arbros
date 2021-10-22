@@ -335,7 +335,7 @@ namespace SupplyChain.Client.Shared.Inventarios
 
         protected void CantChange()
         {
-            if (stock.TIPOO == 10 || stock.TIPOO == 27) //entregas con o sin of
+            if (stock.TIPOO == 10 || stock.TIPOO == 27 || stock.TIPOO == 28) //entregas con o sin of y entrega OA
             {
                 stock.PENDIENTEOC = stock.ResumenStock.STOCK - stock.STOCK;
             }
@@ -358,7 +358,7 @@ namespace SupplyChain.Client.Shared.Inventarios
         public async Task QueryCellInfoHandler(QueryCellInfoEventArgs<Pedidos> args)
         {
             args.PreventRender = true;
-            if (args.Data.TIPOO == 10)
+            if (args.Data.TIPOO == 10 || args.Data.TIPOO == 28)
             {
                 args.Data.STOCKA = Math.Round((decimal)(args.Data.STOCK / args.Data.CG_DEN), 4);
                 if (args.Data.ResumenStock?.STOCK < args.Data.STOCK)

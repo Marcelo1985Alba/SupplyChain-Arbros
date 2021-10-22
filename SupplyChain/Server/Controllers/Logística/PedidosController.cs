@@ -359,7 +359,7 @@ namespace SupplyChain
             stock.FE_REG = DateTime.Now;
             stock.USUARIO = HttpContext.User.Identity.Name ?? "USER";
 
-            if (stock.TIPOO == 9 || stock.TIPOO == 10)
+            if (stock.TIPOO == 9 || stock.TIPOO == 10 || stock.TIPOO == 28)
             {
                 stock.CG_ORDEN = _context.Prod.Where(p => p.CG_PROD.Trim() == stock.CG_ART.Trim()).FirstOrDefault().CG_ORDEN;
                 stock.STOCK = -stock.STOCK;
@@ -485,7 +485,7 @@ namespace SupplyChain
 
         private async Task ActualizaDb(Pedidos stock)
         {
-            if (stock.TIPOO == 9 || stock.TIPOO == 10)
+            if (stock.TIPOO == 9 || stock.TIPOO == 10 || stock.TIPOO == 28)
                 stock.STOCK = -stock.STOCK;
 
             _context.Entry(stock).State = EntityState.Modified;

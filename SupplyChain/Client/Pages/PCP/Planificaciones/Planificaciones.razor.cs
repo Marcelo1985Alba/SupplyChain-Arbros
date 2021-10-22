@@ -275,8 +275,15 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
             ProdSeleccionada = await Http.GetFromJsonAsync<Producto>($"api/Prod/GetByFilter?Codigo={args.RowData.CG_PROD}&Descripcion={string.Empty}");
             if (args.CommandColumn.Title == "Entrega")
             {
+                var tipoo = 10;
                 OrdenFabricacionSelected = args.RowData.CG_ORDF;
-                await JsRuntime.InvokeAsync<object>("open", $"inventario/10/true/{OrdenFabricacionSelected}", "_blank");
+                if (ProdSeleccionada.EXIGEOA )
+                {
+                    tipoo = 28;
+                }
+
+
+                await JsRuntime.InvokeAsync<object>("open", $"inventario/{tipoo}/true/{OrdenFabricacionSelected}", "_blank");
 
                 await refDialogEntrega.Show(true);
             }

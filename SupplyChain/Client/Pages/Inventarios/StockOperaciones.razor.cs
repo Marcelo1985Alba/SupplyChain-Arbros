@@ -6,6 +6,7 @@ using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.Prod;
 using Syncfusion.Blazor.Notifications;
+using Syncfusion.Blazor.Spinner;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -29,9 +30,9 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         protected bool DisableCssClass
         {
-            get => StockEncabezado.TIPOO == 0 ? true : EsEntrega ? true : false;
+            get => StockEncabezado.TIPOO == 0 ? true :  false;
         }
-
+        protected SfSpinner refSpinner;
         protected SfToast ToastObj;
         protected ConfirmacionDialog ConfirmacionEliminarDialog;
         protected ConfirmacionDialog ConfirmacionGuardarDialog;
@@ -93,16 +94,20 @@ namespace SupplyChain.Client.Pages.Inventarios
             await GetVale();
             StockEncabezado.Items = new List<Pedidos>();
 
-            if (OperacionId == 10 && EsEntrega && OrdFab > 0)
+            if (OperacionId == 10 || OperacionId == 28 && EsEntrega && OrdFab > 0)
             {
                 MainLayout.Titulo = "Administracion de Stock: ingreso por Planificacion";
-                var tire = new Tire();
-                tire.Tipoo = 10;
-                await SelectedTireChanged(tire);
+                var tire = new Tire
+                {
+                    Tipoo = OperacionId
+                };
+                //await SelectedTireChanged(tire);
+                
+                await CargaDatosValeCabecera(tire);
                 var programa = await Http.GetFromJsonAsync<List<Programa>>($"api/Programa/GetProgramaByOF/{OrdFab}");
                 await OnProgramaSelected(programa[0]);
             }
-            await InvokeAsync(StateHasChanged);
+            //await InvokeAsync(StateHasChanged);
 
         }
 
@@ -112,23 +117,28 @@ namespace SupplyChain.Client.Pages.Inventarios
         }
 
 
+        private async Task CargaDatosValeCabecera(Tire tire)
+        {
+            StockEncabezado.TIPOO = tire.Tipoo;
+            StockEncabezado.FE_MOV = DateTime.Now;
+            CantRegistros = 0;
+            ItemsABuscar = null;
+            await GetVale();
+        }
+
         protected async Task NuevoVale()
         {
             abrioVale = false;
             StockEncabezado = new();
-            StockEncabezado.FE_MOV = DateTime.Now;
-            await GetVale();
             StockEncabezado.Items = new List<Pedidos>();
-            CantRegistros = 0;
-            ItemsABuscar = null;
         }
 
         protected async Task SelectedTireChanged(Tire tire)
         {
-            SpinnerVisible = true;
+            
             await NuevoVale();
+            await CargaDatosValeCabecera(tire);
 
-            StockEncabezado.TIPOO = tire.Tipoo;
             MostrarBotorOC = false;
             DeshabilitaBotonOC = true;
             OCSoloLectura = true;
@@ -167,7 +177,7 @@ namespace SupplyChain.Client.Pages.Inventarios
 
             }
 
-            if (StockEncabezado.TIPOO == 10) //Entrega de insumos a una orden de fabricación
+            if (StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28) //Entrega de insumos a una orden de fabricación
             {
                 PermiteEditarItem = true;
                 OFSoloLectura = true;
@@ -185,7 +195,6 @@ namespace SupplyChain.Client.Pages.Inventarios
                 puedeBuscarStock = true;
             }
 
-            SpinnerVisible = false;
             await InvokeAsync(StateHasChanged);
         }
 
@@ -224,12 +233,10 @@ namespace SupplyChain.Client.Pages.Inventarios
         protected async Task CargarVale()
         {
             //Cargando Datos de Cabecera
-            SpinnerVisible = true;
+            await refSpinner.ShowAsync();
+            abrioVale = true;
             StockEncabezado.VALE = StockEncabezado.Items[0].VALE;
             StockEncabezado.FE_MOV = StockEncabezado.Items[0].FE_MOV;
-            //depos: ver cual campo es ingreso y salida: tal vez depende segun el tipo de operacion
-            //StockEncabezado.CG_DEP = StockEncabezado.Items[0].CG_DEP;
-            //selectedDepositoIngreso = Depositos.Where(d => d.CG_DEP == ItemsVale[0].CG_DEP).FirstOrDefault();
             StockEncabezado.CG_ORDF = (int)StockEncabezado.Items[0].CG_ORDF;
             StockEncabezado.PEDIDO = (int)StockEncabezado.Items[0].PEDIDO;
 
@@ -244,8 +251,13 @@ namespace SupplyChain.Client.Pages.Inventarios
                 //Cargando datos para controlar si exige lote etc: para controlar validaciones en la edicion.
                 await StockEncabezado.Items.ForEachAsync(async i =>
                 {
-                    var cg_prod = i.CG_ART;
-                    var prod = await Http.GetFromJsonAsync<Producto>($"api/Prod/{cg_prod}");
+                    FilterProd filterProd = new()
+                    {
+                        Codigo = i.CG_ART.Trim(),
+                        Descripcion = i.DES_ART.Trim()
+                    };
+
+                    var prod = await Http.GetFromJsonAsync<Producto>($"api/Prod/GetByFilter?Codigo={filterProd.Codigo}&Descripcion={filterProd.Descripcion}");
                     i.EXIGEDESPACHO = prod.EXIGEDESPACHO;
                     i.EXIGELOTE = prod.EXIGELOTE;
                     i.EXIGESERIE = prod.EXIGESERIE;
@@ -253,7 +265,7 @@ namespace SupplyChain.Client.Pages.Inventarios
             }
 
 
-            if (StockEncabezado.TIPOO == 10)
+            if (StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28)
             {
                 await StockEncabezado.Items.ForEachAsync(async i =>
                 {
@@ -267,9 +279,8 @@ namespace SupplyChain.Client.Pages.Inventarios
             PermiteEditarItem = true;
             PermiteEliminarItem = true;
 
-            abrioVale = true;
-            SpinnerVisible = false;
-            await InvokeAsync(StateHasChanged);
+            await refSpinner.HideAsync();
+            //await InvokeAsync(StateHasChanged);
         }
 
         #region "BUSCADOR EMERGENTE"
@@ -325,18 +336,21 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         protected async Task OnProgramaSelected(Programa programaSel)
         {
-            
+            SpinnerVisible = true;
             List<Pedidos> itemsGrilla = new();
             int registronegativo = 0;
             StockEncabezado.CG_ORDF = programaSel.CG_ORDF;
             StockEncabezado.PEDIDO = programaSel.PEDIDO;
+            StockEncabezado.ModeloOrdenFabricacionEncabezado = await Http.GetFromJsonAsync<ModeloOrdenFabricacionEncabezado>("api/OrdenesFabricacionEncabezado/" + programaSel.CG_ORDF.ToString());
             var httpResponse = await Http.GetAsync($"api/Programa/GetAbastecimientoByOF/{programaSel.CG_ORDF}");
             if (httpResponse.IsSuccessStatusCode)
             {
-                SpinnerVisible = true;
+                
                 //Cargar los item de sp en los items de la grilla para guardar vale
                 var response = await httpResponse.Content.ReadAsStringAsync();
-                var itemsPrograma = JsonSerializer.Deserialize<ItemAbastecimiento[]>(response, new() { PropertyNameCaseInsensitive = true });
+                var itemsPrograma = JsonSerializer.Deserialize<ItemAbastecimiento[]>(response,
+                    new() { PropertyNameCaseInsensitive = true });
+
                 foreach (var item in itemsPrograma)
                 {
                     registronegativo--;
@@ -512,9 +526,6 @@ namespace SupplyChain.Client.Pages.Inventarios
             //Get items del vale
             StockEncabezado.VALE = stockSel.VALE;
             StockEncabezado.Items = await InventarioService.GetVale(stockSel.VALE);
-            //ItemsVale = new ObservableCollection<Stock>(data);
-
-            //ItemsABuscar = ItemsABuscar.Where(i => i.VALE == stockSel.VALE).ToList().ToArray();
 
             if (StockEncabezado.Items != null || StockEncabezado.Items.Count > 0)
             {
@@ -540,17 +551,11 @@ namespace SupplyChain.Client.Pages.Inventarios
         protected async Task BuscarVales()
         {
             CantRegistros += 100;
-            abrioVale = true;
             PopupBuscadorVisible = true;
-            tituloBuscador = $"Listado de Vales";
+            tituloBuscador = "Listado de Vales";
             ColumnasBuscador = new string[] { "VALE", "FE_MOV", "CG_ART", "DES_ART", "STOCK" };
             var tipoo = StockEncabezado.TIPOO;
-            ItemsABuscar = await Http.GetFromJsonAsync<Pedidos[]>($"api/Stock/GetValesByTipo/{tipoo}/{CantRegistros}");
-            if (ItemsABuscar == null)
-            {
-                ItemsABuscar = new List<Pedidos>().ToArray();
-            }
-            await InvokeAsync(StateHasChanged);
+            ItemsABuscar = await Http.GetFromJsonAsync<Pedidos[]>($"api/Stock/GetValesByTipo/{tipoo}/{CantRegistros}") ?? new List<Pedidos>().ToArray();
         }
 
         #endregion
@@ -649,6 +654,11 @@ namespace SupplyChain.Client.Pages.Inventarios
             {
                 stock.AVISO = "ENTREGA A PLANTA SIN OF";
                 stock.STOCK = -stock.STOCK;
+            }
+
+            if (StockEncabezado.TIPOO == 28)
+            {
+                stock.AVISO = "ENTREGA A UNA ORDEN DE ARMADO";
             }
 
             stock.ENTRREAL = DateTime.UtcNow;

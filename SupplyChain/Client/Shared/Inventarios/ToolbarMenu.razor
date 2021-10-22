@@ -5,14 +5,14 @@
     <ToolbarItems>
         <ToolbarItem Text="Eliminar" Id="btnEliminarToolbar" Type="ItemType.Button">
             <Template>
-                <SfButton Content="Eliminar" Disabled="@(DisabledEliminar)"
+                <SfButton Content="Eliminar" Disabled="@(DisabledEliminar)" HtmlAttributes="@HtmlAttributeButton"
                           CssClass="btn btn-sm btn-info" IconCss="fa fa-trash-o" OnClick="@(async () => await Eliminar())" />
             </Template>
         </ToolbarItem>
 
         <ToolbarItem Text="Nuevo" Id="btnNuevoToolbar" Type="ItemType.Button">
             <Template>
-                <SfButton Content="Nuevo"
+                <SfButton Content="Nuevo" HtmlAttributes="@HtmlAttributeButton"
                           CssClass="btn btn-sm btn-info" IconCss="fa fa-plus-square-o" OnClick="@(async () => await Nuevo())" />
             </Template>
         </ToolbarItem>
@@ -28,7 +28,7 @@
 
         <ToolbarItem Text="Imprimir" Id="btnImprimirToolbar" Type="ItemType.Button">
             <Template>
-                <SfButton Content="Imprimir" Disabled="@(DisabledImprimir)" OnClick="@(async () => await Imprimir())"
+                <SfButton Content="Imprimir" HtmlAttributes="@HtmlAttributeButton" Disabled="@(DisabledImprimir)" OnClick="@(async () => await Imprimir())"
                           CssClass="btn btn-sm btn-info" IconCss="fa fa-print" />
             </Template>
         </ToolbarItem>

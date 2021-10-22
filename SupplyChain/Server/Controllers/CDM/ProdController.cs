@@ -61,6 +61,20 @@ namespace SupplyChain
         }
 
         // GET: api/Prod/5
+        [HttpGet]
+        public async Task<ActionResult<Producto>> GetByFilter(string id)
+        {
+            var Prod = await _context.Prod.Where(P => P.CG_PROD == id).FirstOrDefaultAsync();
+
+            if (Prod == null)
+            {
+                return NotFound();
+            }
+
+            return Prod;
+        }
+
+        // GET: api/Prod/5
         [HttpGet("GetByFilter")]
         public async Task<ActionResult<Producto>> GetByFilter([FromQuery]FilterProd filter)
         {

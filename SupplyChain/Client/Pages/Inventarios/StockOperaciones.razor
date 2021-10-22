@@ -21,7 +21,7 @@
     <SfToast ID="toast_default" @ref="ToastObj">
         <ToastPosition X="Center" Y="Top"></ToastPosition>
     </SfToast>
-    <SfSpinner @bind-Visible="@SpinnerVisible" Label="Procesando..." Size="150" Type="SpinnerType.Bootstrap">
+    <SfSpinner @ref="@refSpinner" @bind-Visible="@SpinnerVisible" Label="Procesando..." Size="150" Type="SpinnerType.Bootstrap">
     </SfSpinner>
 
     <!-- Row -->
@@ -129,9 +129,9 @@
                                                         HabilitaBotonBusqueda="false" MostraBotonBusqueda="false" />
                                     </div>
                                 }
-                                @if (StockEncabezado.TIPOO == 10 &&
-                           StockEncabezado.ModeloOrdenFabricacionEncabezado != null
-                           && StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ORDEN == 1)
+                                @if ((StockEncabezado.TIPOO == 10 ||StockEncabezado.TIPOO == 28) &&
+                                     StockEncabezado.ModeloOrdenFabricacionEncabezado != null
+                                        && StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ORDEN == 1)
                                 {
                                     <div class="form-group col-lg-3 col-md-4 col-sm-12">
                                         <label class="col-form-label text-info">Producto</label>
