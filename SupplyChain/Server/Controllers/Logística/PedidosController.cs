@@ -373,7 +373,8 @@ namespace SupplyChain
             stock.Proveedor = null;
             stock.ResumenStock = null;
 
-            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTrackingWithIdentityResolution;
+
             _context.Pedidos.Add(stock);
             await _context.SaveChangesAsync();
 
@@ -394,6 +395,7 @@ namespace SupplyChain
                 stock.CG_DEP = stock.CG_DEP_ALT;
                 _context.Pedidos.Add(stock);
                 await _context.SaveChangesAsync();
+                await generaController.LiberaByCampo("REGSTOCK");
             }
 
 

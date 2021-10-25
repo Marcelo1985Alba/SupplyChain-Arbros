@@ -32,20 +32,20 @@ namespace SupplyChain.Client.Pages.Prev
         public bool Disabled = false;
         public bool Showgrid = true;
 
-        protected List<PresAnual> previsiones = new List<PresAnual>();
-        protected List<PresAnual> prueba = new List<PresAnual>();
-        protected List<Producto> CG_PRODlist = new List<Producto>();
-        protected List<Producto> DES_PRODlist = new List<Producto>();
-        protected List<Producto> Busquedalist = new List<Producto>();
-        protected List<Producto> Agregarlist = new List<Producto>();
+        protected List<PresAnual> previsiones = new();
+        protected List<PresAnual> prueba = new();
+        protected List<Producto> CG_PRODlist = new();
+        protected List<Producto> DES_PRODlist = new();
+        protected List<Producto> Busquedalist = new();
+        protected List<Producto> Agregarlist = new();
         protected string CgString = "";
         protected string DesString = "";
         protected int CantidadMostrar = 100;
         protected bool IsVisible { get; set; } = false;
 
-        protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "500px" };
+        protected DialogSettings DialogParams = new() { MinHeight = "400px", Width = "500px" };
 
-        protected List<Object> Toolbaritems = new List<Object>(){
+        protected List<Object> Toolbaritems = new(){
         "Search",
         new ItemModel(){ Type = ItemType.Separator},
         "Delete",
@@ -60,8 +60,6 @@ namespace SupplyChain.Client.Pages.Prev
         protected override async Task OnInitializedAsync()
         {
             previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
-            //await Grid.AutoFitColumns();
-            await base.OnInitializedAsync();
         }
 
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -98,7 +96,7 @@ namespace SupplyChain.Client.Pages.Prev
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState)
             {
                 await Grid.AutoFitColumnsAsync();
-                //Grid.Refresh();
+                Grid.Refresh();
             }
         }
 

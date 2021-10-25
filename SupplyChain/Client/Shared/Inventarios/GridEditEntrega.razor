@@ -162,9 +162,10 @@ else
 
     @if (PopupBuscadorStockVisible)
     {
-        <BuscadorEmergenteResumenStock @ref="BuscadorEmergenteRS" DataSource="@Items" 
+        <BuscadorEmergenteResumenStock @ref="BuscadorEmergenteRS" DataSource="@Items" TipoSeleccion="@TipoSeleccion"  
                                        Columnas="@(new string[] { "CG_ART", "STOCK", "CG_DEP", "DEPOSITO", "SERIE", "LOTE", "DESPACHO"})"
-                                       OnObjetoSeleccionado="@(async(r)=> await OnResumenStockSelected(r))"/>
+                                       OnObjetoSeleccionado="@(async(r)=> await OnResumenStockSelected(r))"
+                                       OnObjetosSeleccionados="@(async(r)=> await OnResumenStockSelected(r))"/>
     }
 
 

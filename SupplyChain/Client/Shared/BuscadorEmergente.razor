@@ -43,13 +43,15 @@
         Operators="@(new Operator[] { Operator.Contains })"
         Mode="FilterBarMode.Immediate"></GridFilterSettings>*@
                                     @*<GridPageSettings PageCount="20" PageSize="20" PageSizes="false"></GridPageSettings>*@
-                                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                                    <GridSelectionSettings Type="@TipoSeleccion"></GridSelectionSettings>
                                     <GridEvents TValue="TItem" OnLoad="@(async(a)=>await OnLoadGrid(a))"
                                                 OnToolbarClick="@((a)=> ToolbarClick(a))"
                                                 OnDataBound="@(async(a)=>await OnDataBoundGrid(a))"
                                                 DataBound="@(async()=>await DataBoundGrid())"
                                                 RowSelected="GetSelectedRecords"
-                                                OnRecordDoubleClick="EnviarObjetoSeleccionado"></GridEvents>
+                                                OnRecordDoubleClick="EnviarObjetoSeleccionado">
+                                                  
+                                    </GridEvents>
                                     <GridColumns>
                                         @{
                                             object itemfinal = DataSource.FirstOrDefault();

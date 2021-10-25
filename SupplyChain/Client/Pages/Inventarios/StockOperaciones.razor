@@ -69,7 +69,7 @@
                             </div>
 
                             <div class="form-row">
-                                @if (StockEncabezado.TIPOO == 10)
+                                @if (StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28)
                                 {
                                     <div class="form-group col-lg-3 col-md-4 col-sm-6">
                                         <label class="col-form-label text-info">Orden de Fabricación</label>
@@ -120,8 +120,8 @@
                                 }
 
 
-                                @if (StockEncabezado.TIPOO == 1 || StockEncabezado.TIPOO == 10 
-                                    && StockEncabezado.PEDIDO > 0)
+                                @if (StockEncabezado.TIPOO == 1 || StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28
+                                   && StockEncabezado.PEDIDO > 0)
                                 {
                                     <div class="form-group col-lg-3 col-md-4 col-sm-6">
                                         <label class="col-form-label text-info">Pedido</label>
@@ -255,7 +255,8 @@
 </ConfirmacionDialog>
 
 
-    <BuscadorEmergente Height="520px" TItem="Pedidos" Titulo=@tituloBuscador Visible="@PopupBuscadorVisible" DataSource="@ItemsABuscar"
+    <BuscadorEmergente Height="520px" TItem="Pedidos" Titulo=@tituloBuscador Visible="@PopupBuscadorVisible" 
+                       DataSource="@ItemsABuscar" 
                        Columnas="@ColumnasBuscador" OnObjetoSeleccionado="OnObjectSelected" OnBuscarMas="@(async()=> await BuscarVales())" />
 
 

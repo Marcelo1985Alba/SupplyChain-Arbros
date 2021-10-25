@@ -5,6 +5,7 @@ using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.Prod;
+using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
 using System;
@@ -46,7 +47,6 @@ namespace SupplyChain.Client.Pages.Inventarios
         {
                 {"type", "button" }
         };
-
 
         protected bool PermiteAgregarItem { get; set; } = false;
         protected bool PermiteEditarItem { get; set; } = false;
@@ -147,7 +147,6 @@ namespace SupplyChain.Client.Pages.Inventarios
             DepositoSalidaSoloLectura = true;
             DepositoIngresoSoloLectura = true;
             puedeBuscarStock = false;
-
             if (tire.Tipoo == 5) //recep prove
             {
                 DeshabilitaBotonOC = false;
@@ -174,7 +173,6 @@ namespace SupplyChain.Client.Pages.Inventarios
             {
                 puedeBuscarStock = true;
                 DepositoIngresoSoloLectura = false;
-
             }
 
             if (StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28) //Entrega de insumos a una orden de fabricación
@@ -336,7 +334,7 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         protected async Task OnProgramaSelected(Programa programaSel)
         {
-            SpinnerVisible = true;
+            await refSpinner.ShowAsync();
             List<Pedidos> itemsGrilla = new();
             int registronegativo = 0;
             StockEncabezado.CG_ORDF = programaSel.CG_ORDF;
@@ -376,13 +374,12 @@ namespace SupplyChain.Client.Pages.Inventarios
 
                 }
 
-
                 StockEncabezado.Items = itemsGrilla;
+
                 PermiteAgregarItem = true;
                 PermiteEditarItem = true;
                 PermiteEliminarItem = true;
-                SpinnerVisible = false;
-                await InvokeAsync(StateHasChanged);
+                
             }
             else
             {
@@ -398,8 +395,10 @@ namespace SupplyChain.Client.Pages.Inventarios
                 });
             }
 
-            
-            
+
+            //SpinnerVisible = false;
+            await refSpinner.HideAsync();
+            await InvokeAsync(StateHasChanged);
         }
 
         protected async Task OnCompraSelected(List<Compra> lcompraSel)
@@ -659,6 +658,7 @@ namespace SupplyChain.Client.Pages.Inventarios
             if (StockEncabezado.TIPOO == 28)
             {
                 stock.AVISO = "ENTREGA A UNA ORDEN DE ARMADO";
+                stock.SERIE = $"PED\\{StockEncabezado.PEDIDO}";
             }
 
             stock.ENTRREAL = DateTime.UtcNow;

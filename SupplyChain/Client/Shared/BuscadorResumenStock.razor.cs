@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SupplyChain.Shared.PCP;
+using Syncfusion.Blazor.Grids;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace SupplyChain.Client.Shared
         [Parameter] public bool HabilitaBotonBusqueda { get; set; } = false;
         [Parameter] public bool MostrarSpin { get; set; } = true;
         [Parameter] public EventCallback<vResumenStock> OnRSSeleccionada { get; set; }
+        [Parameter] public SelectionType TipoSeleccion { get; set; } = SelectionType.Single;
         [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> HtmlAtrr { get; set; } = new Dictionary<string, object>() { { "type", "button" } };
         protected BuscadorEmergente<vResumenStock> Buscador;
         protected vResumenStock[] ItemsABuscar = null;

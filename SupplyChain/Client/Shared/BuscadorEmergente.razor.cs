@@ -19,9 +19,17 @@ namespace SupplyChain.Client.Shared
         [Parameter] public bool Visible { get; set; } = false;
         [Parameter] public bool MostrarVerMas { get; set; } = false;
         [Parameter] public bool IsModal { get; set; } = false;
+        /// <summary>
+        /// Tipo de seleccion para las filas: por defecto Single
+        /// </summary>
+        [Parameter] public SelectionType TipoSeleccion { get; set; } = SelectionType.Single;
         [Parameter] public IEnumerable<TItem> DataSource { get; set; }
         [Parameter] public string[] Columnas { get; set; } = null!;
+        /// <summary>
+        /// Evento que se ejecuta al seleccionar
+        /// </summary>
         [Parameter] public EventCallback<TItem> OnObjetoSeleccionado { get; set; }
+        [Parameter] public EventCallback<List<TItem>> OnObjetosSeleccionados { get; set; }
         [Parameter] public EventCallback OnBuscarMas { get; set; }
         [Parameter] public EventCallback<bool> OnCerrarDialog { get; set; }
         
@@ -66,10 +74,19 @@ namespace SupplyChain.Client.Shared
                 await Grid.ExportToExcelAsync();
             }
         }
-        public void EnviarObjetoSeleccionado()
+        public async Task EnviarObjetoSeleccionado()
         {
             Visible = false;
-            OnObjetoSeleccionado.InvokeAsync(Selected);
+            if (TipoSeleccion == SelectionType.Multiple)
+            {
+                var items = await Grid.GetSelectedRecordsAsync();
+                await OnObjetosSeleccionados.InvokeAsync(items);
+            }
+            else
+            {
+                await OnObjetoSeleccionado.InvokeAsync(Selected);
+            }
+            
         }
 
 

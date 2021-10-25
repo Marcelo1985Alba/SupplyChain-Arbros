@@ -33,8 +33,8 @@ namespace SupplyChain.Client.Shared.Inventarios
         [Parameter] public bool PermiteEliminar { get; set; } = false;
         [Parameter] public EventCallback<Pedidos> OnGuardar { get; set; }
         [Parameter] public EventCallback<List<Pedidos>> OnItemsDataSource { get; set; }
+        [Parameter] public SelectionType TipoSeleccion { get; set; } = SelectionType.Single;
         [CascadingParameter] public PedidoEncabezado RegistroGenerado { get; set; }
-
         protected Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
 {
          {"type", "button" }
@@ -62,13 +62,12 @@ namespace SupplyChain.Client.Shared.Inventarios
 
 
 
-        protected List<Deposito> depositos = new List<Deposito>();
+        protected List<Deposito> depositos = new();
 
         protected override async Task OnInitializedAsync()
         {
             depositos = await Http.GetFromJsonAsync<List<Deposito>>("api/Deposito");
 
-            //await InvokeAsync(StateHasChanged);
         }
 
 
@@ -78,13 +77,10 @@ namespace SupplyChain.Client.Shared.Inventarios
             {
                 await AgregarInsumo();
             }
-
-
         }
 
         protected async Task OnActionBeginHandler(ActionEventArgs<Pedidos> args)
         {
-
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
                 args.PreventRender = false;
@@ -94,6 +90,11 @@ namespace SupplyChain.Client.Shared.Inventarios
 
         protected async Task AgregarInsumo()
         {
+            if (RegistroGenerado.TIPOO == 9) //movim entre deo
+            {
+                TipoSeleccion = SelectionType.Multiple;
+            }
+
             PopupBuscadorStockVisible = true;
             bAgregarInsumo = true;
             Items = null;
@@ -283,14 +284,29 @@ namespace SupplyChain.Client.Shared.Inventarios
             await BuscadorProducto.HideAsync();
         }
 
+        protected async Task OnResumenStockSelected(List<vResumenStock> lista)
+        {
+            await BuscadorEmergenteRS.HideAsync();
+            foreach (var vresumenStock in lista)
+            {
+                bAgregarInsumo = true;
+                await GetSeleccionResumenStock(vresumenStock);
+            }
 
-        protected async Task OnResumenStockSelected(vResumenStock obj)
+            await InvokeAsync(StateHasChanged);
+        }
+        protected async Task OnResumenStockSelected(vResumenStock resumenStock)
         {
 
             await BuscadorEmergenteRS.HideAsync();
 
-            var resumenStock = (vResumenStock)obj;
+            await GetSeleccionResumenStock(resumenStock);
 
+            await InvokeAsync(StateHasChanged);
+        }
+
+        private async Task GetSeleccionResumenStock(vResumenStock resumenStock)
+        {
             //buscar registro mas reciente con las caracteristicas de resumen stock
             var cg_art = resumenStock.CG_ART;
             var cg_dep = resumenStock.CG_DEP;
@@ -308,7 +324,7 @@ namespace SupplyChain.Client.Shared.Inventarios
             registroCompleto.TIPOO = RegistroGenerado.TIPOO;
             registroCompleto.ResumenStock = resumenStock;
 
-
+            Grid.PreventRender();
             if (bAgregarInsumo)
             {
                 registroCompleto.STOCK = (decimal?)1.0000;
@@ -329,8 +345,6 @@ namespace SupplyChain.Client.Shared.Inventarios
                 stock.DESPACHO = resumenStock.DESPACHO;
                 stock.LOTE = resumenStock.LOTE;
             }
-
-            await InvokeAsync(StateHasChanged);
         }
 
         protected void CantChange()
