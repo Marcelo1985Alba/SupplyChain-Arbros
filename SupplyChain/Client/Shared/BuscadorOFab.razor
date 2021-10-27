@@ -1,18 +1,18 @@
 ﻿@inject HttpClient Http
 @using Syncfusion.Blazor.Buttons
 <div class="form-row">
-    <div class="col-10">
-        <SfNumericTextBox @bind-Value="@Valor" ShowClearButton="true" TValue="int" Format="n0"
+    <div class="col-8">
+        <SfNumericTextBox @bind-Value="@Valor" ShowClearButton="true" TValue="int" Format="n0" ID="numOfab"
                           Decimals="0" ShowSpinButton="@MostrarSpin" Readonly="@EsSoloLectura">
 
         </SfNumericTextBox>
     </div>
-    <div class="col-2">
+    <div class="col-4 mb-1">
         
         @if (MostraBotonBusqueda)
         {
-            <SfButton OnClick="@(async (e)=> await BuscarOF())" 
-                      CssClass="e-smal e-round e-info" IsPrimary="false"
+            <SfButton OnClick="@(async (e)=> await BuscarOF())"
+                      CssClass="e-smal e-round e-info buscador" IsPrimary="false"
                       IconCss="fa fa-search" HtmlAttributes="@HtmlAttribute" Disabled="@DeshabilitaBotonBusqueda"></SfButton>
         }
     </div>
@@ -56,4 +56,34 @@
         await OnOFSeleccionada.InvokeAsync(of);
     }
 
+
 }
+<style>
+    input[class*="e-numerictextbox"] {
+        width: 200px;
+        height: 20px;
+        padding-right: 50px;
+        background-color:red;
+    }
+    #numOfab{
+    /*background: none;
+        color: inherit;*/
+    width: 200px;
+    height: 20px;
+    padding-right: 50px;
+    /*background-color: red;*/
+    }
+
+
+
+    .buscador {
+        margin-left: -30px;
+        height: 25px;
+        width: 50px;
+        /*background: blue;*/
+        color: white;
+        border: 0;
+        -webkit-appearance: none;
+        margin-bottom: 40px;
+    }
+</style>

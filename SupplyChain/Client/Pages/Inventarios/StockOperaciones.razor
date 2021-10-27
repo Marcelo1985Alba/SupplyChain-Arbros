@@ -18,7 +18,7 @@
 @attribute [Authorize(Roles = "Admin, Produccion")]
 
 <div class="col-12 control-section mt-4">
-    <SfToast ID="toast_default" @ref="ToastObj">
+    <SfToast ID="toast_default" @ref="ToastObj" >
         <ToastPosition X="Center" Y="Top"></ToastPosition>
     </SfToast>
     <SfSpinner @ref="@refSpinner" @bind-Visible="@SpinnerVisible" Label="Procesando..." Size="150" Type="SpinnerType.Bootstrap">
@@ -43,13 +43,12 @@
                             <legend class="scheduler-border"> Vale</legend>
                             <ObjectGraphDataAnnotationsValidator />
                             <div class="form-row">
-                                <div class="form-group col-lg-6 col-md-4 col-sm-12 col-12">
+                                <div class="form-group col-lg-7 col-md-5 col-sm-12 col-12">
                                     <label class="col-form-label text-info">Op. de Stock</label>
-                                    @**@
                                     <ComboTipoo TipoOperacionIdUnico="@OperacionId" TipooSeleccionado="@StockEncabezado.TIPOO"
                                                 OnSelectedTireChanged="@(async(t)=>await SelectedTireChanged(t))" />
                                 </div>
-                                <div class="form-group col-lg-4 col-md-5 col-sm-8">
+                                <div class="form-group col-lg-3 col-md-4 col-sm-8">
                                     <label class="col-form-label text-info">Vale</label>
                                     <BuscadorPedido Valor="@StockEncabezado.VALE" EsSoloLectura="true"
                                                     MostrarSpin="false" MostraBotonBusqueda="true"
@@ -84,7 +83,7 @@
 
                                 @if (StockEncabezado.TIPOO == 5)
                                 {
-                                    <div class="form-group col-lg-6 col-md-6 col-sm-8">
+                                    <div class="form-group col-lg-2 col-md-6 col-sm-8">
                                         <label class="col-form-label text-info">O. de Compra</label>
                                         <BuscadorOCompra EsSoloLectura="@OCSoloLectura" DeshabilitaBotonBusqueda="@DeshabilitaBotonOC"
                                                          MostraBotonBusqueda="@MostrarBotorOC" MostrarSpin="false"
@@ -94,7 +93,7 @@
                                                          OnOCSeleccionada="@(async(c)=>await OnCompraSelected(c))" />
                                     </div>
 
-                                    <div class="form-group col-lg-6 col-md-6 col-sm-4">
+                                    <div class="form-group col-lg-2 col-md-6 col-sm-4">
                                         <label class="col-form-label text-info">Remito</label>
                                         <SfTextBox ID="Remito" ShowClearButton="false" @bind-Value="@StockEncabezado.REMITO"
                                                    Type="InputType.Text"
@@ -103,13 +102,13 @@
 
                                     </div>
 
-                                    <div class="form-group col-lg-2 col-md-6 col-sm-4">
+                                    <div class="form-group col-lg-1 col-md-6 col-sm-4">
                                         <label class="col-form-label text-info">@labelClienteProveedor</label>
                                         <SfNumericTextBox ID="Cg_CLI_Cg_PROVE" TValue="int?" @bind-Value="@Cg_CLI_Cg_PROVE" Readonly="true" ShowSpinButton="false">
 
                                         </SfNumericTextBox>
                                     </div>
-                                    <div class="form-group col-lg-10 col-md-6 col-sm-8">
+                                    <div class="form-group col-lg-7 col-md-6 col-sm-8">
                                         <label class="col-form-label text-info">Razon Social</label>
                                         <SfTextBox ID="DescripcionPro" ShowClearButton="true"
                                                    @bind-Value="@DescripcionPro" Readonly="true">
@@ -120,7 +119,7 @@
                                 }
 
 
-                                @if (StockEncabezado.TIPOO == 1 || StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28
+                                @if ((StockEncabezado.TIPOO == 1 || StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28)
                                    && StockEncabezado.PEDIDO > 0)
                                 {
                                     <div class="form-group col-lg-3 col-md-4 col-sm-6">

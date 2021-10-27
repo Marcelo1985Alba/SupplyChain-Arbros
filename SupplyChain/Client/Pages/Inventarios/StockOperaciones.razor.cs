@@ -340,6 +340,7 @@ namespace SupplyChain.Client.Pages.Inventarios
             StockEncabezado.CG_ORDF = programaSel.CG_ORDF;
             StockEncabezado.PEDIDO = programaSel.PEDIDO;
             StockEncabezado.ModeloOrdenFabricacionEncabezado = await Http.GetFromJsonAsync<ModeloOrdenFabricacionEncabezado>("api/OrdenesFabricacionEncabezado/" + programaSel.CG_ORDF.ToString());
+            await InvokeAsync(StateHasChanged);
             var httpResponse = await Http.GetAsync($"api/Programa/GetAbastecimientoByOF/{programaSel.CG_ORDF}");
             if (httpResponse.IsSuccessStatusCode)
             {
@@ -399,6 +400,7 @@ namespace SupplyChain.Client.Pages.Inventarios
             //SpinnerVisible = false;
             await refSpinner.HideAsync();
             await InvokeAsync(StateHasChanged);
+            
         }
 
         protected async Task OnCompraSelected(List<Compra> lcompraSel)
