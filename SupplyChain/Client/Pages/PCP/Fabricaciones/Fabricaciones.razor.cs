@@ -29,7 +29,7 @@ namespace SupplyChain.Pages.Fab
         protected DialogSettings DialogParams = new() { MinHeight = "400px", Width = "500px" };
 
         //protected List<CatOpe> catopes = new List<CatOpe>();
-        protected List<Fabricacion> listaFab = new List<Fabricacion>();
+        protected List<Fabricacion> listaFab;
         protected List<Celdas> listaCelda = new List<Celdas>();
         protected List<EstadosCargaMaquina> listaEstadosCargaMaquina = new List<EstadosCargaMaquina>();
         protected List<Object> Toolbaritems = new List<Object>(){
@@ -47,11 +47,12 @@ namespace SupplyChain.Pages.Fab
         protected string state;
         protected override async Task OnInitializedAsync()
         {
-            
+            VisibleProperty = true;
             listaFab = await Http.GetFromJsonAsync<List<Fabricacion>>("api/Fabricacion");
             listaCelda = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
             listaEstadosCargaMaquina = await Http.GetFromJsonAsync<List<EstadosCargaMaquina>>("api/EstadosCargaMaquinas");
-            await base.OnInitializedAsync();
+            VisibleProperty = false;
+
         }
         
         public async Task DataBoundHandler()
