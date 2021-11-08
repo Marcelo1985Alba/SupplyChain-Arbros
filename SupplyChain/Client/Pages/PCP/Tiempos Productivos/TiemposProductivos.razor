@@ -10,7 +10,7 @@
 @{
     if (vProdMaquinaDatas is null)
     {
-        //SpinnerVisible = true;
+        SpinnerVisible = true;
     }
     else
     {
@@ -27,7 +27,7 @@
                 </div>
          </div>*@
 <div class="row">
-    <div class="col-6">
+    <div class="col-12">
         <div class="card">
             <div class="card-body">
                 <SfPivotView TValue="vProdMaquinaDataCore" Height="400" Width="100%" ShowFieldList=true
@@ -87,7 +87,7 @@
 
     </div>
 
-    <div class="col-6">
+    <div class="col-12">
         <div class="card">
             <div class="card-body">
                 <SfPivotView TValue="vProdMaquinaDataCore" Height="400" Width="100%" ShowFieldList=true
@@ -152,13 +152,13 @@
 
         </div>
 
-        @*<SfChart Title="Annual Growth of GDP in France">
+        <SfChart Title="tiempos">
                 <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                <ChartPrimaryXAxis LabelIntersectAction="LabelIntersectAction.Rotate45" Title="Years" Interval="1"
+                <ChartPrimaryXAxis LabelIntersectAction="LabelIntersectAction.Rotate45" Title="Años" Interval="1"
                                    ValueType="Syncfusion.Blazor.Charts.ValueType.Category">
                     <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
                 </ChartPrimaryXAxis>
-                <ChartPrimaryYAxis Title="Produccion" Minimum="0" Maximum="30000000" Interval="1" LabelFormat="{value}Hs">
+                <ChartPrimaryYAxis Title="Produccion" Minimum="0" Maximum="30000000" Interval="1" LabelFormat="{value} Hs">
                     <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
                     <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
                 </ChartPrimaryYAxis>
@@ -182,7 +182,7 @@
                     </ChartSeries>
                 </ChartSeriesCollection>
                 <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
-            </SfChart>*@
+            </SfChart>
 
         @*<SfChart Theme="Syncfusion.Blazor.Theme.Material" Title="Average Sales of Product A">
                 <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"></ChartPrimaryXAxis>

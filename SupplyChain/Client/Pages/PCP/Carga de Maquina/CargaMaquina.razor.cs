@@ -125,7 +125,8 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 dbScrap = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/SELECT convert(int, cg_scrap) ID, des_scrap TEXTO FROM scrap ORDER BY Cg_scrap");
                 // fecha inicial
                 if (dbCarga.Where(x => x.FE_CURSO != null && x.FE_CURSO.Year != 1900 && x.CG_ESTADOCARGA == 3).ToList().Count > 0)
-                    fechaInicial = dbCarga.Where(x => x.FE_CURSO != null && x.FE_CURSO.Year != 1900 && x.CG_ESTADOCARGA == 3).Min(x => x.FE_CURSO);
+                    fechaInicial = dbCarga.Where(x => x.FE_CURSO != null && x.FE_CURSO.Year != 1900 && x.CG_ESTADOCARGA == 3)
+                        .Min(x => x.FE_CURSO);
                 else
                     fechaInicial = DateTime.Now;
 
@@ -278,6 +279,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 else
                 {
                     await CerrarOrdenFabricacion();
+                    await Refrescar();
                 }
             }
             else if (ordenFabricacion.CG_ESTADOCARGA == 5)

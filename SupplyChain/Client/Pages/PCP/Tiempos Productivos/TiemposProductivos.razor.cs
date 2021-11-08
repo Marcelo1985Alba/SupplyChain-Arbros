@@ -68,8 +68,9 @@ namespace SupplyChain.Client.Pages.PCP.Tiempos_Productivos
         protected async override Task OnInitializedAsync()
         {
             Mainlayout.Titulo = "Tiempos Productivos";
+            await SpinnerObj.ShowAsync();
             vProdMaquinaDatas =  await Http.GetFromJsonAsync<List<vProdMaquinaDataCore>>("api/TiemposProdcutivosDataCore");
-
+            await SpinnerObj.HideAsync();
         }
 
         //protected async Task enginePopulating(EnginePopulatingEventArgs args)
