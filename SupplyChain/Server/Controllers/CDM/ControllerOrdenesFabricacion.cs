@@ -158,22 +158,20 @@ namespace SupplyChain
         {
             try
             {
-               //var ordenesCurso =  await _context.Programa
-               //     .Where(x => x.FE_CURSO != null && x.FE_CURSO.Value.Year != 1900 && x.CG_ESTADOCARGA == 3)
-               //     .ToListAsync();
+                var ordenesCurso = await _context.Programa
+                     .Where(x => x.FE_CURSO != null && x.FE_CURSO.Value.Year != 1900 && x.CG_ESTADOCARGA == 3)
+                     .ToListAsync();
 
-               //await  ordenesCurso.ForEachAsync(async p =>
-               //         {
-               //             p.FE_CURSO = DateTime.Now;
+                await ordenesCurso.ForEachAsync(async p =>
+                        {
+                            p.FE_CURSO = DateTime.Now;
+                            _context.Update(p);
+                            await _context.SaveChangesAsync();
 
-               //             _context.Entry(p).Property(p => p.FE_CURSO).IsModified = true;
-               //             _context.Attach(p);
-               //             await _context.SaveChangesAsync();
-
-               //         });
-                var updateFeCurso = $"Update Programa SET FE_CURSO = '{DateTime.Now}' " +
-                    "WHERE CG_ESTADOCARGA= 3 AND FE_CURSO IS NOT NULL AND YEAR(FE_CURSO) <> 1900 ";
-                _context.Database.ExecuteSqlRaw(updateFeCurso);
+                        });
+                //var updateFeCurso = $"Update Programa SET FE_CURSO = '{DateTime.Now}' " +
+                //    "WHERE CG_ESTADOCARGA= 3 AND FE_CURSO IS NOT NULL AND YEAR(FE_CURSO) <> 1900 ";
+                //_context.Database.ExecuteSqlRaw(updateFeCurso);
                 
                 return Ok();
             }
