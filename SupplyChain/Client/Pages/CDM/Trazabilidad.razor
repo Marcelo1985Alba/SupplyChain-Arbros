@@ -575,6 +575,10 @@
 
     protected async Task OnInputPedido(InputEventArgs args)
     {
+        if (string.IsNullOrEmpty(args.Value))
+        {
+            return;
+        }
         Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorPedido/{args.Value}");
         if (Pedidoslist.Count > 0)
         {
@@ -590,6 +594,11 @@
 
     protected async Task OnInputCodigo(InputEventArgs args)
     {
+        if (string.IsNullOrEmpty(args.Value))
+        {
+            return;
+        }
+
         Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorCodigo/{args.Value}");
         if (Pedidoslist.Count > 0)
         {
@@ -605,12 +614,17 @@
 
     protected async Task OnInputCliente(InputEventArgs args)
     {
+        if (string.IsNullOrEmpty(args.Value))
+        {
+            return;
+        }
+
         Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorCliente/{args.Value}");
         if (Pedidoslist.Count > 0)
         {
-            BoxPedido = Pedidoslist.FirstOrDefault().PEDIDO.ToString();
-            TrzNro = BoxPedido;
-            BoxCodigo = Pedidoslist.FirstOrDefault().CG_ART;
+            //BoxPedido = Pedidoslist.FirstOrDefault().PEDIDO.ToString();
+            //TrzNro = BoxPedido;
+            //BoxCodigo = Pedidoslist.FirstOrDefault().CG_ART;
         }
         else
         {

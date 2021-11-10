@@ -19,7 +19,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
 @attribute [Authorize(Roles = "Admin, Produccion")]
-@inherits CargaMaquinaBase
+@inherits SupplyChain.Client.Pages.PCP.Carga_de_Maquina.CargaMaquinaBase
 
 <div class="col-12 control-section mt-4">
     <SfToast ID="toast_default" @ref="ToastObj">
