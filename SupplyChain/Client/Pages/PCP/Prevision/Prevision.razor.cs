@@ -17,6 +17,7 @@ using Syncfusion.Blazor.Inputs;
 using Newtonsoft.Json;
 using Syncfusion.Blazor.Notifications;
 using SupplyChain.Client.Shared;
+using Syncfusion.Blazor.Popups;
 
 namespace SupplyChain.Client.Pages.Prev
 {
@@ -24,14 +25,17 @@ namespace SupplyChain.Client.Pages.Prev
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
+
         protected SfGrid<PresAnual> Grid;
         protected SfGrid<Producto> Grid2;
+        protected SfGrid<DespiecePlanificacion> GridDespiece;
+        protected SfDialog DialogDespieceRef;
         protected bool VisibleProperty { get; set; } = false;
 
         public bool Enabled = true;
         public bool Disabled = false;
         public bool Showgrid = true;
-
+        protected List<DespiecePlanificacion> listaDespiece = new List<DespiecePlanificacion>();
         protected List<PresAnual> previsiones = new();
         protected List<PresAnual> prueba = new();
         protected List<Producto> CG_PRODlist = new();
@@ -62,6 +66,18 @@ namespace SupplyChain.Client.Pages.Prev
             previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
         }
 
+        public async Task CommandClickHandler(CommandClickEventArgs<PresAnual> args)
+        {
+
+            if (args.CommandColumn.Title == "Despiece")
+            {
+                listaDespiece = await Http.GetFromJsonAsync<List<DespiecePlanificacion>>($"api/Planificacion/Despiece/" +
+                    $"{args.RowData.CG_ART.Trim()}/1/{args.RowData.CANTPED}");
+                //IsVisible = true;
+                await DialogDespieceRef.Show();
+            }
+        }
+
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {
             if (args.Item.Text == "Excel Export")
@@ -72,7 +88,9 @@ namespace SupplyChain.Client.Pages.Prev
             {
                 await this.Grid.Print();
             }
-            if (args.Item.Text == "Delete")
+
+
+            if (args.Item.Text == "Eliminar")
             {
                 bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar el producto?");
                 if (isConfirmed)
@@ -147,7 +165,8 @@ namespace SupplyChain.Client.Pages.Prev
                 CantidadMostrar = 100;
                 if (DesString == "")
                 {
-                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/Vacio/{CantidadMostrar}");
+                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}" +
+                        $"/Vacio/{CantidadMostrar}");
                 }
                 else if (CgString == "")
                 {
