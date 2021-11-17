@@ -26,6 +26,7 @@ namespace SupplyChain.Client.Pages.Inventarios
         [CascadingParameter] public MainLayout MainLayout { get; set; }
         [Parameter] public int OperacionId { get; set; } = 0;
         [Parameter] public bool EsEntrega { get; set; } = false;
+        [Parameter] public bool FiltraComboOperaciones { get; set; } = false;
         [Parameter] public int OrdFab { get; set; } = 0;
         [Parameter] public PedidoEncabezado StockEncabezado { get; set; } = new PedidoEncabezado();
 
@@ -48,6 +49,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                 {"type", "button" }
         };
 
+
         protected bool PermiteAgregarItem { get; set; } = false;
         protected bool PermiteEditarItem { get; set; } = false;
         protected bool PermiteEliminarItem { get; set; } = false;
@@ -66,17 +68,6 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         protected string labelClienteProveedor = "Cliente/Prove";
 
-        Producto selectedProducto;
-        public Producto SelectedProducto
-        {
-            get { return selectedProducto; }
-            set
-            {
-                selectedProducto = value;
-                InvokeAsync(StateHasChanged);
-            }
-        }
-
 
         #region "CABACERA VALE"
         protected int? Cg_CLI_Cg_PROVE { get; set; } = 0;
@@ -90,36 +81,46 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         protected override async Task OnInitializedAsync()
         {
+            
             MainLayout.Titulo = "Administracion de Stock";
-            await GetVale();
-            StockEncabezado.Items = new List<Pedidos>();
+            var tire = new Tire
+            {
+                Tipoo = OperacionId
+            };
 
             if (OperacionId == 10 || OperacionId == 28 && EsEntrega && OrdFab > 0)
             {
                 MainLayout.Titulo = "Administracion de Stock: ingreso por Planificacion";
-                var tire = new Tire
-                {
-                    Tipoo = OperacionId
-                };
-                //await SelectedTireChanged(tire);
                 
+
                 await CargaDatosValeCabecera(tire);
                 var programa = await Http.GetFromJsonAsync<List<Programa>>($"api/Programa/GetProgramaByOF/{OrdFab}");
+
                 await OnProgramaSelected(programa[0]);
             }
-            //await InvokeAsync(StateHasChanged);
+            else
+            {
+                await GetVale();
+
+                await SelectedTireChanged(tire);
+            }
+
 
         }
 
         protected async Task GetVale()
         {
-            StockEncabezado.VALE = await InventarioService.GetProximoVale();
+            if (StockEncabezado?.VALE == 0)
+            {
+                StockEncabezado.VALE = await InventarioService.GetProximoVale();
+            }
+            
         }
-
 
         private async Task CargaDatosValeCabecera(Tire tire)
         {
-            StockEncabezado.TIPOO = tire.Tipoo;
+            
+            StockEncabezado.TIPOO = OperacionId = tire.Tipoo;
             StockEncabezado.FE_MOV = DateTime.Now;
             CantRegistros = 0;
             ItemsABuscar = null;
@@ -128,9 +129,13 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         protected async Task NuevoVale()
         {
+            await refSpinner.ShowAsync();
             abrioVale = false;
             StockEncabezado = new();
             StockEncabezado.Items = new List<Pedidos>();
+            await GetVale();
+
+            await refSpinner.HideAsync();
         }
 
         protected async Task SelectedTireChanged(Tire tire)
@@ -193,7 +198,6 @@ namespace SupplyChain.Client.Pages.Inventarios
                 puedeBuscarStock = true;
             }
 
-            await InvokeAsync(StateHasChanged);
         }
 
         protected void SelectedDepositoSalidaChanged(Deposito deposito)
@@ -278,7 +282,6 @@ namespace SupplyChain.Client.Pages.Inventarios
             PermiteEliminarItem = true;
 
             await refSpinner.HideAsync();
-            //await InvokeAsync(StateHasChanged);
         }
 
         #region "BUSCADOR EMERGENTE"
@@ -340,7 +343,7 @@ namespace SupplyChain.Client.Pages.Inventarios
             StockEncabezado.CG_ORDF = programaSel.CG_ORDF;
             StockEncabezado.PEDIDO = programaSel.PEDIDO;
             StockEncabezado.ModeloOrdenFabricacionEncabezado = await Http.GetFromJsonAsync<ModeloOrdenFabricacionEncabezado>("api/OrdenesFabricacionEncabezado/" + programaSel.CG_ORDF.ToString());
-            await InvokeAsync(StateHasChanged);
+
             var httpResponse = await Http.GetAsync($"api/Programa/GetAbastecimientoByOF/{programaSel.CG_ORDF}");
             if (httpResponse.IsSuccessStatusCode)
             {
@@ -395,16 +398,13 @@ namespace SupplyChain.Client.Pages.Inventarios
                     ShowProgressBar = true
                 });
             }
-
-
-            //SpinnerVisible = false;
             await refSpinner.HideAsync();
-            await InvokeAsync(StateHasChanged);
             
         }
 
         protected async Task OnCompraSelected(List<Compra> lcompraSel)
         {
+            await refSpinner.ShowAsync();
             List<Pedidos> lStock = new List<Pedidos>();
             int registronegativo = 0;
             StockEncabezado.OCOMPRA = lcompraSel[0].NUMERO;
@@ -482,18 +482,19 @@ namespace SupplyChain.Client.Pages.Inventarios
                     registronegativo--;
                     stock.REGISTRO = registronegativo;
                     stock.STOCK = Math.Abs((decimal)stock.STOCK);
-                    await InvokeAsync(StateHasChanged);
                 });
             }
 
             PermiteAgregarItem = true;
             PermiteEditarItem = true;
             PermiteEliminarItem = true;
+
+            await refSpinner.HideAsync();
         }
 
         protected async Task OnResumenStockSelected(Pedidos stockSel)
         {
-            //ItemsVale = null;
+            await refSpinner.ShowAsync();
             PopupBuscadorVisible = false;
             //Get items del vale
             var vale = stockSel.VALE;
@@ -505,7 +506,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                 await CargarVale();
             }
 
-            await InvokeAsync(StateHasChanged);
+            await refSpinner.HideAsync();
         }
 
         #endregion
@@ -523,6 +524,7 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         protected async Task OnObjectSelected(Pedidos stockSel)
         {
+            await refSpinner.ShowAsync();
             PopupBuscadorVisible = false;
             //Get items del vale
             StockEncabezado.VALE = stockSel.VALE;
@@ -532,6 +534,7 @@ namespace SupplyChain.Client.Pages.Inventarios
             {
                 await CargarVale();
             }
+            await refSpinner.HideAsync();
         }
 
         protected async Task AbrirVale()
@@ -584,7 +587,13 @@ namespace SupplyChain.Client.Pages.Inventarios
 
             abrioVale = false;
             StockEncabezado = new();
+            Cg_CLI_Cg_PROVE = 0;
+            DescripcionPro = "";
+            StockEncabezado.TIPOO = OperacionId;
+            StockEncabezado.Items = new();
+            StockEncabezado.VALE = await InventarioService.GetProximoVale();
             SpinnerVisible = false;
+
         }
 
         private async Task MostrarMensajeToastSuccess()
@@ -692,8 +701,6 @@ namespace SupplyChain.Client.Pages.Inventarios
                 {
                     var lpedidos = await response.Content.ReadFromJsonAsync<List<Pedidos>>();
                     StockEncabezado.Items = lpedidos;
-                    await InvokeAsync(StateHasChanged);
-                    //var itemsJson = JsonSerializer.Serialize(lpedidos);
 
                 }
             }

@@ -382,7 +382,7 @@
         {
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong class="">Hay una nueva Version Disponible!</strong>
-            <SfButton Content="Actualizar" CssClass="btn btn-sm btn-success te" IconCss="fa fa-refresh" OnClick="Reload" />
+            <SfButton Content="Actualizar" CssClass="btn btn-sm btn-success" IconCss="fa fa-refresh" OnClick="Reload" />
         </div>
 
         }
@@ -457,15 +457,6 @@
         return await Task.FromResult("Alerted client");
     }
 
-    //protected override void OnAfterRender(bool firstRender)
-    //{
-    //    var uri = MyNavigationManager.Uri.Trim();
-    //    if (uri == "pcp")
-    //    {
-    //        Titulo = "Programacion y Control de la Produccion";
-    //    }
-    //    StateHasChanged();
-    //}
 
     protected async Task Logout()
     {

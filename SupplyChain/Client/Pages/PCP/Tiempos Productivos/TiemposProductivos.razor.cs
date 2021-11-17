@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared.PCP;
+using Syncfusion.Blazor.Charts;
 using Syncfusion.Blazor.PivotView;
 using Syncfusion.Blazor.Spinner;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -13,70 +16,105 @@ namespace SupplyChain.Client.Pages.PCP.Tiempos_Productivos
     public class TiemposProductivosBase: ComponentBase
     {
         [Inject] protected HttpClient Http { get; set; }
+        protected SfChart refChartDetalle;
+        protected List<vProdMaquinaDataCore> vProdMaquinaOriginal = new();
+        protected List<ChartData> vProdMaquinaCM1 = new();
+        protected List<ChartData> vProdMaquinaCN1 = new();
+        protected List<ChartData> vProdMaquinaCN2 = new();
+        protected List<ChartData> vProdMaquinaCN3 = new();
+        protected List<ChartData> vProdMaquinaCN4 = new();
 
-        protected List<vProdMaquinaDataCore> vProdMaquinaDatas;
-        public ChartSeriesType ChartType = ChartSeriesType.Column;
-        protected List<DropDownData> ChartTypes = new List<DropDownData>() {
-        new DropDownData { Name = "Column", Value = ChartSeriesType.Column },
-        new DropDownData { Name = "Bar", Value = ChartSeriesType.Bar },
-        new DropDownData { Name = "Line", Value = ChartSeriesType.Line },
-        new DropDownData { Name = "Spline", Value = ChartSeriesType.Spline },
-        new DropDownData { Name = "Area", Value = ChartSeriesType.Area },
-        new DropDownData { Name = "SplineArea", Value = ChartSeriesType.SplineArea },
-        new DropDownData { Name = "StepLine", Value = ChartSeriesType.StepLine },
-        new DropDownData { Name = "StepArea", Value = ChartSeriesType.StepArea },
-        new DropDownData { Name = "StackingColumn", Value = ChartSeriesType.StackingColumn },
-        new DropDownData { Name = "StackingBar", Value = ChartSeriesType.StackingBar },
-        new DropDownData { Name = "StackingArea", Value = ChartSeriesType.StackingArea },
-        new DropDownData { Name = "StackingColumn100", Value = ChartSeriesType.StackingColumn100 },
-        new DropDownData { Name = "StackingBar100", Value = ChartSeriesType.StackingBar100 },
-        new DropDownData { Name = "StackingArea100", Value = ChartSeriesType.StackingArea100 },
-        new DropDownData { Name = "Scatter", Value = ChartSeriesType.Scatter },
-        new DropDownData { Name = "Bubble", Value = ChartSeriesType.Bubble },
-        new DropDownData { Name = "Polar", Value = ChartSeriesType.Polar },
-        new DropDownData { Name = "Radar", Value = ChartSeriesType.Radar },
-        new DropDownData { Name = "Pareto", Value = ChartSeriesType.Pareto },
-        new DropDownData { Name = "Pie", Value = ChartSeriesType.Pie },
-        new DropDownData { Name = "Doughnut", Value = ChartSeriesType.Doughnut },
-        new DropDownData { Name = "Funnel", Value = ChartSeriesType.Funnel },
-        new DropDownData { Name = "Pyramid", Value = ChartSeriesType.Pyramid }
-    };
-        protected List<ToolbarItems> PivotToolbar = new List<ToolbarItems> {
-        ToolbarItems.New,
-        ToolbarItems.Save,
-        ToolbarItems.SaveAs,
-        ToolbarItems.Rename,
-        ToolbarItems.Remove,
-        ToolbarItems.Load,
-        ToolbarItems.Grid,
-        ToolbarItems.Chart,
-        ToolbarItems.Export,
-        ToolbarItems.SubTotal,
-        ToolbarItems.GrandTotal,
-        ToolbarItems.Formatting,
-        ToolbarItems.FieldList
-    };
+        protected List<ChartData> vProdMaquinaMes = new();
+        protected List<ChartData> vProdMaquinaMesSetup = new();
+        protected List<ChartData> vProdMaquinaMesParadas = new();
         protected SfSpinner SpinnerObj;
         protected bool SpinnerVisible = false;
-        protected class DropDownData
+
+        protected string TituloGraficoMensual = "";
+        protected string SerieSelecciona = "";
+        
+        [CascadingParameter] public MainLayout Mainlayout { get; set; }
+
+
+        protected class ChartData
         {
-            public string Name { get; set; }
-            public ChartSeriesType Value { get; set; }
+            public string XSerieName { get; set; }
+            public double YSerieName { get; set; }
         }
 
-        [CascadingParameter] public MainLayout Mainlayout { get; set; }
         protected async override Task OnInitializedAsync()
         {
             Mainlayout.Titulo = "Tiempos Productivos";
-            await SpinnerObj.ShowAsync();
-            vProdMaquinaDatas =  await Http.GetFromJsonAsync<List<vProdMaquinaDataCore>>("api/TiemposProdcutivosDataCore");
-            await SpinnerObj.HideAsync();
+            SpinnerVisible = true;
+            vProdMaquinaOriginal =  await Http.GetFromJsonAsync<List<vProdMaquinaDataCore>>("api/TiemposProdcutivosDataCore");
+
+            vProdMaquinaCM1= vProdMaquinaOriginal.Where(d=> d.Maquina.Trim() == "CM1")
+                .GroupBy(c=> new { c.Año }).Select(d=> new ChartData() {
+                XSerieName = d.Key.Año.ToString(),
+                YSerieName = Convert.ToDouble(d.Sum(p=> p.TiempoNetoHoras))
+            }).ToList();
+            
+            vProdMaquinaCN1= vProdMaquinaOriginal.Where(d=> d.Maquina.Trim() == "CN1")
+                .GroupBy(c=> new { c.Año }).Select(d=> new ChartData() {
+                XSerieName = d.Key.Año.ToString(),
+                YSerieName = Convert.ToDouble(d.Sum(p=> p.TiempoNetoHoras))
+            }).ToList();
+            vProdMaquinaCN2= vProdMaquinaOriginal.Where(d=> d.Maquina.Trim() == "CN2")
+                .GroupBy(c=> new { c.Año }).Select(d=> new ChartData() {
+                XSerieName = d.Key.Año.ToString(),
+                YSerieName = Convert.ToDouble(d.Sum(p=> p.TiempoNetoHoras))
+            }).ToList();
+            vProdMaquinaCN3= vProdMaquinaOriginal.Where(d=> d.Maquina.Trim() == "CN3")
+                .GroupBy(c=> new { c.Año }).Select(d=> new ChartData() {
+                XSerieName = d.Key.Año.ToString(),
+                YSerieName = Convert.ToDouble(d.Sum(p=> p.TiempoNetoHoras))
+            }).ToList();
+            vProdMaquinaCN4= vProdMaquinaOriginal.Where(d=> d.Maquina.Trim() == "CN4")
+                .GroupBy(c=> new { c.Año }).Select(d=> new ChartData() {
+                XSerieName = d.Key.Año.ToString(),
+                YSerieName = Convert.ToDouble(d.Sum(p=> p.TiempoNetoHoras))
+            }).ToList();
+
+            
+            SpinnerVisible = false;
         }
 
-        //protected async Task enginePopulating(EnginePopulatingEventArgs args)
-        //{
-        //    if (SpinnerObj != null) await SpinnerObj.ShowAsync();
+        protected async Task MostrarDetalle(Syncfusion.Blazor.Charts.PointEventArgs args)
+        {
+            var año = args.Point.X;
+            SerieSelecciona = args.Series.Name;
+            TituloGraficoMensual = $"Tiempos Productivos Mensual {SerieSelecciona}";
+
+
+            vProdMaquinaMes = vProdMaquinaOriginal.Where(v=> v.Año == Convert.ToInt32(año) && v.Maquina.Trim() == SerieSelecciona.Trim())
+                .GroupBy(g=> new { g.Mes }).Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.Mes.ToString(),
+                    YSerieName = Convert.ToDouble(d.Sum(p => p.TiempoNetoHoras))
+                }).ToList();
+
+
+            vProdMaquinaMesParadas = vProdMaquinaOriginal.Where(v => v.Año == Convert.ToInt32(año) && v.Maquina.Trim() == SerieSelecciona.Trim())
+                .GroupBy(g => new { g.Mes }).Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.Mes.ToString(),
+                    YSerieName = Convert.ToDouble(d.Sum(p => p.ParadasPlanHoras))
+                }).ToList();
             
-        //}
+            vProdMaquinaMesSetup = vProdMaquinaOriginal.Where(v => v.Año == Convert.ToInt32(año) && v.Maquina.Trim() == SerieSelecciona.Trim())
+                .GroupBy(g => new { g.Mes }).Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.Mes.ToString(),
+                    YSerieName = Convert.ToDouble(d.Sum(p => p.SetupRealHoras))
+                }).ToList();
+
+
+            await InvokeAsync(StateHasChanged);
+            await refChartDetalle.RefreshAsync();
+            await refChartDetalle.RefreshAsync();
+
+
+        }
+
     }
 }

@@ -31,6 +31,7 @@
     [Parameter] public int TipooSeleccionado { get; set; }
     [Parameter] public EventCallback<Tire> OnSelectedTireChanged { get; set; }
     [Parameter] public int TipoOperacionIdUnico { get; set; } = 0;
+    [Parameter] public bool Filtra { get; set; } = false;
 
 
     protected void CargarTiposOperacion()
@@ -58,28 +59,24 @@
     protected override async Task OnInitializedAsync()
     {
 
-        if (TipoOperacionIdUnico > 0)
+        if (TipoOperacionIdUnico > 0 && Filtra)
         {
-            //CargarTiposOperacion();
             TiposOperacion = TiposOperacion.Where(o => o.Tipoo == TipoOperacionIdUnico).ToList();
         }
 
-        await InvokeAsync(StateHasChanged);
+        await base.OnInitializedAsync();
+
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override Task OnParametersSetAsync()
     {
-
-        if (firstRender)
+        if (TipoOperacionIdUnico > 0 && Filtra)
         {
-            if (TipoOperacionIdUnico > 0)
-            {
-                CargarTiposOperacion();
-                TiposOperacion = TiposOperacion.Where(o => o.Tipoo == TipoOperacionIdUnico).ToList();
-            }
+            TiposOperacion = TiposOperacion.Where(o => o.Tipoo == TipoOperacionIdUnico).ToList();
         }
-
+        return base.OnParametersSetAsync();
     }
+
 
     private async Task SelectedTipooChanged(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int, Tire> args)
     {
@@ -88,9 +85,9 @@
             return;
         }
 
+
         TipooSeleccionado = args.ItemData.Tipoo;
         await OnSelectedTireChanged.InvokeAsync(args.ItemData);
-        await InvokeAsync(StateHasChanged);
     }
 
 }

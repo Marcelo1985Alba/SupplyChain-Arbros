@@ -1,5 +1,5 @@
 ﻿@page "/inventarios"
-@page "/inventario/{OperacionId:int}"
+
 @page "/inventario/{OperacionId:int}/{EsEntrega:bool}/{OrdFab:int}"
 
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
@@ -9,20 +9,20 @@
 
 @using SupplyChain.Client.Shared.Inventarios
 @using SupplyChain.Shared.Prod;
-@using Syncfusion.Pdf;
-@using Syncfusion.Pdf.Graphics;
-@using Syncfusion.Pdf.Grid;
-@using Syncfusion.Pdf.Tables;
 @using System.IO;
 @inherits StockOperacionesBase
 @attribute [Authorize(Roles = "Admin, Produccion")]
 
+
+<SfSpinner @ref="@refSpinner" @bind-Visible="@SpinnerVisible" Label="Procesando..." Size="80" Type="SpinnerType.Bootstrap">
+</SfSpinner>
+
 <div class="col-12 control-section mt-4">
-    <SfToast ID="toast_default" @ref="ToastObj" >
+    <SfToast ID="toast_default" @ref="ToastObj">
         <ToastPosition X="Center" Y="Top"></ToastPosition>
     </SfToast>
-    <SfSpinner @ref="@refSpinner" @bind-Visible="@SpinnerVisible" Label="Procesando..." Size="150" Type="SpinnerType.Bootstrap">
-    </SfSpinner>
+
+
 
     <!-- Row -->
     <div class="row">
@@ -45,8 +45,9 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-7 col-md-5 col-sm-12 col-12">
                                     <label class="col-form-label text-info">Op. de Stock</label>
-                                    <ComboTipoo TipoOperacionIdUnico="@OperacionId" TipooSeleccionado="@StockEncabezado.TIPOO"
-                                                OnSelectedTireChanged="@(async(t)=>await SelectedTireChanged(t))" />
+                                        <ComboTipoo TipoOperacionIdUnico="@OperacionId" TipooSeleccionado="@OperacionId" Filtra="@FiltraComboOperaciones"
+                                                    OnSelectedTireChanged="@(async(t)=>await SelectedTireChanged(t))" />
+                                    
                                 </div>
                                 <div class="form-group col-lg-3 col-md-4 col-sm-8">
                                     <label class="col-form-label text-info">Vale</label>
@@ -120,7 +121,7 @@
 
 
                                 @if ((StockEncabezado.TIPOO == 1 || StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28)
-                                   && StockEncabezado.PEDIDO > 0)
+                                  && StockEncabezado.PEDIDO > 0)
                                 {
                                     <div class="form-group col-lg-3 col-md-4 col-sm-6">
                                         <label class="col-form-label text-info">Pedido</label>
@@ -128,9 +129,9 @@
                                                         HabilitaBotonBusqueda="false" MostraBotonBusqueda="false" />
                                     </div>
                                 }
-                                @if ((StockEncabezado.TIPOO == 10 ||StockEncabezado.TIPOO == 28) &&
-                                     StockEncabezado.ModeloOrdenFabricacionEncabezado != null
-                                        && StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ORDEN == 1)
+                                @if ((StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28) &&
+                                    StockEncabezado.ModeloOrdenFabricacionEncabezado != null
+                                       && StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ORDEN == 1)
                                 {
                                     <div class="form-group col-lg-3 col-md-4 col-sm-12">
                                         <label class="col-form-label text-info">Producto</label>
@@ -200,7 +201,7 @@
                                 }
                             </div>
                         </fieldset>
-                        
+
                         <CascadingValue Value="@StockEncabezado">
                             <CascadingValue Value="@StockEncabezado.Items">
 
@@ -254,15 +255,16 @@
 </ConfirmacionDialog>
 
 
-    <BuscadorEmergente Height="520px" TItem="Pedidos" Titulo=@tituloBuscador Visible="@PopupBuscadorVisible" 
-                       DataSource="@ItemsABuscar" 
-                       Columnas="@ColumnasBuscador" OnObjetoSeleccionado="OnObjectSelected" OnBuscarMas="@(async()=> await BuscarVales())" />
+<BuscadorEmergente Height="520px" TItem="Pedidos" Titulo=@tituloBuscador Visible="@PopupBuscadorVisible"
+                   DataSource="@ItemsABuscar"
+                   Columnas="@ColumnasBuscador" OnObjetoSeleccionado="OnObjectSelected" OnBuscarMas="@(async()=> await BuscarVales())" />
 
 
 <style>
-    .text-info{
-        font-size:80% !important;
+    .text-info {
+        font-size: 80% !important;
     }
+
     fieldset.scheduler-border {
         border: 1px groove #ddd !important;
         padding: 0 1.4em 1.4em 1.4em !important;

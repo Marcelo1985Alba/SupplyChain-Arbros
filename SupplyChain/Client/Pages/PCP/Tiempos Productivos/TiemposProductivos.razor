@@ -7,82 +7,115 @@
 
 <SfSpinner @ref="SpinnerObj" Label="Cargando..." Type="SpinnerType.Bootstrap" Size="100" @bind-Visible="@SpinnerVisible"/>
 
-@{
-    if (vProdMaquinaDatas is null)
-    {
-        SpinnerVisible = true;
-    }
-    else
-    {
-        //SpinnerVisible = false;
-        @*<div class="row form-inline">
-                <div class="col-3">
-                    <label class="text-active">Tipo Grafico:</label>
-                </div>
-                <div class="col-9">
-                    <SfDropDownList TValue="Syncfusion.Blazor.PivotView.ChartSeriesType" TItem="DropDownData"
-                                    DataSource="@ChartTypes" @bind-Value="@ChartType">
-                        <DropDownListFieldSettings Text="Name" Value="Value"></DropDownListFieldSettings>
-                    </SfDropDownList>
-                </div>
-         </div>*@
 <div class="row">
-    <div class="col-12">
+    <div class="col-6">
         <div class="card">
             <div class="card-body">
-                <SfPivotView TValue="vProdMaquinaDataCore" Height="400" Width="100%" ShowFieldList=true
-                             ShowGroupingBar=true EnableValueSorting=true AllowDrillThrough=true
-                             ShowToolbar=true Toolbar="@PivotToolbar" AllowNumberFormatting=true AllowCalculatedField=true
-                             AllowConditionalFormatting=true AllowPdfExport=true AllowExcelExport=true
-                             ShowTooltip=false>
-                    <PivotViewDisplayOption Primary="Primary.Chart" View="View.Both"></PivotViewDisplayOption>
-                    <PivotViewDataSourceSettings TValue="vProdMaquinaDataCore" ExpandAll=true EnableSorting=true
-                                                 DataSource="@vProdMaquinaDatas">
-                        <PivotViewColumns>
-                            <PivotViewColumn Name="Maquina" Caption="Maquina" ShowSortIcon="true"
-                                             ShowSubTotals="true" ShowEditIcon="true" ShowFilterIcon="true"></PivotViewColumn>
-                        </PivotViewColumns>
-                        <PivotViewRows>
-                            <PivotViewRow Name="Año" Caption="Año"></PivotViewRow>
-                            <PivotViewRow Name="Mes" Caption="Mes"></PivotViewRow>
-                        </PivotViewRows>
-                        <PivotViewValues>
-                            <PivotViewValue Name="TiempoNetoHoras" Caption="Prod(Hs)"></PivotViewValue>
-                            <PivotViewValue Name="ParadasPlanHoras" Caption="Parada(Hs)"></PivotViewValue>
-                            <PivotViewValue Name="SetupRealHoras" Caption="Setup(Hs)"></PivotViewValue>
-                        </PivotViewValues>
-                        <PivotViewFormatSettings>
-                            <PivotViewFormatSetting Name="TiempoNetoHoras" Format="N4" UseGrouping="true" Type="FormatType.Number"></PivotViewFormatSetting>
-                        </PivotViewFormatSettings>
-                    </PivotViewDataSourceSettings>
-                    <PivotViewGridSettings ColumnWidth="80"></PivotViewGridSettings>
-                    <PivotViewDisplayOption View=View.Chart></PivotViewDisplayOption>
-                    <PivotChartSettings Title="Tiempos Productivos por Máquina en Horas" 
-                                        EnableAnimation="true" EnableExport="true">
-                        <PivotChartLegendSettings Position=PivotChartLegendPosition.Right Background="rgb(230, 236, 239)"
-                                                  Padding=20 Alignment="PivotChartAlignment.Center">
-                        </PivotChartLegendSettings>
+                <SfChart Title="Tiempos Productivos">
+                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                    </ChartPrimaryXAxis>
+                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                    </ChartPrimaryXAxis>
 
-
-                        <PivotChartSeries Type="Syncfusion.Blazor.PivotView.ChartSeriesType.Column" EnableTooltip="true">
-
-
-                            <PivotChartMarkerSettings Visible="true">
-                                <PivotChartDataLabel Visible="true"></PivotChartDataLabel>
-                            </PivotChartMarkerSettings>
-                        </PivotChartSeries>
-                        <PivotChartPrimaryXAxis Visible="true" Title="Año" LabelFormat="N0"
-                                                LabelPosition="PivotChartAxisPosition.Outside">
-                        </PivotChartPrimaryXAxis>
-                        <PivotChartPrimaryYAxis Title="Tiempo Neto Prod. (Hora)" LabelFormat="N4"
-                                                LabelPosition="PivotChartAxisPosition.Outside">
-                            <PivotChartPrimaryYAxisBorder Width="0"></PivotChartPrimaryYAxisBorder>
-                        </PivotChartPrimaryYAxis>
-
-                    </PivotChartSettings>
-                    @*<PivotViewEvents TValue="vProdMaquinaDataCore" EnginePopulating="@(async(a)=> await enginePopulating(a))"></PivotViewEvents>*@
-                </SfPivotView>
+                    <ChartPrimaryYAxis>
+                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                        <ChartAxisLabelStyle Color="transparent"></ChartAxisLabelStyle>
+                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                    </ChartPrimaryYAxis>
+                    <ChartSeriesCollection>
+                        <ChartSeries DataSource="@vProdMaquinaCM1" XName="XSerieName" YName="YSerieName" Name="CM1"
+                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                            <ChartMarker>
+                                <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                </ChartDataLabel>
+                            </ChartMarker>
+                        </ChartSeries>
+                        <ChartSeries DataSource="@vProdMaquinaCN1" XName="XSerieName" YName="YSerieName" Name="CN1"
+                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                            <ChartMarker>
+                                <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                </ChartDataLabel>
+                            </ChartMarker>
+                        </ChartSeries>
+                        <ChartSeries DataSource="@vProdMaquinaCN2" XName="XSerieName" YName="YSerieName" Name="CN2"
+                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                            <ChartMarker>
+                                <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                </ChartDataLabel>
+                            </ChartMarker>
+                        </ChartSeries>
+                        <ChartSeries DataSource="@vProdMaquinaCN3" XName="XSerieName" YName="YSerieName" Name="CN3"
+                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                            <ChartMarker>
+                                <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                </ChartDataLabel>
+                            </ChartMarker>
+                        </ChartSeries>
+                        <ChartSeries DataSource="@vProdMaquinaCN4" XName="XSerieName" YName="YSerieName" Name="CN4"
+                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                            <ChartMarker>
+                                <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                </ChartDataLabel>
+                            </ChartMarker>
+                        </ChartSeries>
+                    </ChartSeriesCollection>
+                    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetalle(a))"></ChartEvents>
+                </SfChart>
             </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <SfChart @ref="refChartDetalle" Title="@TituloGraficoMensual">
+                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                    </ChartPrimaryXAxis>
+
+                    <ChartPrimaryYAxis>
+                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                        <ChartAxisLabelStyle Color="transparent"></ChartAxisLabelStyle>
+                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                    </ChartPrimaryYAxis>
+                    <ChartSeriesCollection>
+                        <ChartSeries DataSource="@vProdMaquinaMes" XName="XSerieName" YName="YSerieName" Name="Prod"
+                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                            <ChartMarker>
+                                <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                </ChartDataLabel>
+                            </ChartMarker>
+                        </ChartSeries>
+                        <ChartSeries DataSource="@vProdMaquinaMesSetup" XName="XSerieName" YName="YSerieName" Name="Setup"
+                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                            <ChartMarker>
+                                <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                </ChartDataLabel>
+                            </ChartMarker>
+                        </ChartSeries>
+                    </ChartSeriesCollection>
+                    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+                </SfChart>
+            </div>
+
+
         </div>
 
     </div>
@@ -90,56 +123,8 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <SfPivotView TValue="vProdMaquinaDataCore" Height="400" Width="100%" ShowFieldList=true
-                             ShowGroupingBar=true EnableValueSorting=true AllowDrillThrough=true
-                             ShowToolbar=true Toolbar="@PivotToolbar" AllowNumberFormatting=true AllowCalculatedField=true
-                             AllowConditionalFormatting=true AllowPdfExport=true AllowExcelExport=true
-                             ShowTooltip=false>
-                    <PivotViewDisplayOption Primary="Primary.Chart" View="View.Both"></PivotViewDisplayOption>
-                    <PivotViewDataSourceSettings TValue="vProdMaquinaDataCore" ExpandAll=true EnableSorting=true
-                                                 DataSource="@vProdMaquinaDatas">
-                        <PivotViewColumns>
-                            <PivotViewColumn Name="Maquina" Caption="Maquina" ShowSortIcon="true"
-                                             ShowSubTotals="true" ShowEditIcon="true" ShowFilterIcon="true"></PivotViewColumn>
-                        </PivotViewColumns>
-                        <PivotViewRows>
-                            <PivotViewRow Name="Año" Caption="Año"></PivotViewRow>
-                            <PivotViewRow Name="Mes" Caption="Mes"></PivotViewRow>
-                        </PivotViewRows>
-                        <PivotViewValues>
-                            @*<PivotViewValue Name="TiempoNetoHoras" Caption="Prod(Hs)"></PivotViewValue>*@
-                            <PivotViewValue Name="ParadasPlanHoras" Caption="Parada(Hs)"></PivotViewValue>
-                            <PivotViewValue Name="SetupRealHoras" Caption="Setup(Hs)"></PivotViewValue>
-                        </PivotViewValues>
-                        <PivotViewFormatSettings>
-                            <PivotViewFormatSetting Name="ParadasPlanHoras" Format="N0" UseGrouping="true" Type="FormatType.Number"></PivotViewFormatSetting>
-                        </PivotViewFormatSettings>
-                    </PivotViewDataSourceSettings>
-                    <PivotViewGridSettings ColumnWidth="80"></PivotViewGridSettings>
-                    <PivotViewDisplayOption View=View.Chart></PivotViewDisplayOption>
-                    <PivotChartSettings Title="Tiempos Paradas por Máquina en Horas" 
-                                        EnableAnimation="true" EnableExport="true">
-                        <PivotChartLegendSettings Position=PivotChartLegendPosition.Right Background="rgb(230, 236, 239)"
-                                                  Padding=20 Alignment="PivotChartAlignment.Center">
-                        </PivotChartLegendSettings>
-
-
-                        <PivotChartSeries Type="Syncfusion.Blazor.PivotView.ChartSeriesType.Column" EnableTooltip="true">
-
-
-                                <PivotChartMarkerSettings Visible="true">
-                                    <PivotChartDataLabel Visible="true"></PivotChartDataLabel>
-                                </PivotChartMarkerSettings>
-                            </PivotChartSeries>
-                        <PivotChartPrimaryXAxis Visible="true" Title="Año" LabelFormat="N0" LabelPosition="PivotChartAxisPosition.Outside">
-                        </PivotChartPrimaryXAxis>
-                        <PivotChartPrimaryYAxis Title="Paradas (Hora)" LabelFormat="N4" LabelPosition="PivotChartAxisPosition.Outside">
-                            <PivotChartPrimaryYAxisBorder Width="0"></PivotChartPrimaryYAxisBorder>
-                        </PivotChartPrimaryYAxis>
-
-                    </PivotChartSettings>
-                    @*<PivotViewEvents TValue="vProdMaquinaDataCore" EnginePopulating="@(async(a)=> await enginePopulating(a))"></PivotViewEvents>*@
-                </SfPivotView>
+                <SfGrid DataSource="@vProdMaquinaOriginal" GridLines="GridLine.Both" AllowResizing="true"
+                        AllowPaging="true" Height="450"> </SfGrid>
             </div>
         </div>
 
@@ -147,118 +132,4 @@
 
 </div>
 
-        <div class="row">
-            
-
-        </div>
-
-        <SfChart Title="tiempos">
-                <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                <ChartPrimaryXAxis LabelIntersectAction="LabelIntersectAction.Rotate45" Title="Años" Interval="1"
-                                   ValueType="Syncfusion.Blazor.Charts.ValueType.Category">
-                    <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
-                </ChartPrimaryXAxis>
-                <ChartPrimaryYAxis Title="Produccion" Minimum="0" Maximum="30000000" Interval="1" LabelFormat="{value} Hs">
-                    <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
-                    <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
-                </ChartPrimaryYAxis>
-                <ChartAxes>
-                    <ChartAxis Minimum="24" Maximum="36" Interval="2" OpposedPosition="true" RowIndex="0" Name="yAxis2" LabelFormat="{value}°C">
-                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
-                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
-                    </ChartAxis>
-                </ChartAxes>
-                <ChartSeriesCollection>
-                    <ChartSeries DataSource="@vProdMaquinaDatas" Name="Paradas Plan" XName="Año" YName="ParadasPlanHoras"
-                                 Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
-                    </ChartSeries>
-                    <ChartSeries DataSource="@vProdMaquinaDatas" Name="Setup Real" XName="Año" YName="SetupRealHoras"
-                                 Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
-                    </ChartSeries>
-                    <ChartSeries DataSource="@vProdMaquinaDatas" Name="Tiempo Neto Horas" XName="Año" YName="TiempoNetoHoras" Width="2"
-                                 Opacity="0.6"
-                                 Type="Syncfusion.Blazor.Charts.ChartSeriesType.StackingColumn">
-                        <ChartMarker Visible="true" Height="10" Width="10"></ChartMarker>
-                    </ChartSeries>
-                </ChartSeriesCollection>
-                <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
-            </SfChart>
-
-        @*<SfChart Theme="Syncfusion.Blazor.Theme.Material" Title="Average Sales of Product A">
-                <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"></ChartPrimaryXAxis>
-                <ChartPrimaryYAxis LabelFormat="{value}K"></ChartPrimaryYAxis>
-                <ChartSeriesCollection>
-                    <ChartSeries DataSource="@vProdMaquinaDatas" XAxisName="PorAño" XName="Año" YName="TiempoNetoSeg"
-                                 Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
-                        <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
-                            <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
-                        </ChartDataLabel>
-                    </ChartSeries>
-                    <ChartSeries DataSource="@vProdMaquinaDatas" XAxisName="PorMes" XName="Mes" YName="TiempoNetoSeg"
-                                 Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
-                        <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
-                            <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
-                        </ChartDataLabel>
-                    </ChartSeries>
-                    <ChartSeries DataSource="@vProdMaquinaDatas" XAxisName="PorMaquina" XName="Maquina" YName="TiempoNetoSeg"
-                                 Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
-                        <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
-                            <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
-                        </ChartDataLabel>
-                    </ChartSeries>
-                </ChartSeriesCollection>
-                <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
-                <ChartZoomSettings EnableSelectionZooming="true"></ChartZoomSettings>
-            </SfChart>*@
-        <!--<div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <SfChart Title="Tiempos Productivos por Máquina" EnableCanvas="true" AllowExport="true"
-                                 EnableExport="true" Theme="Syncfusion.Blazor.Theme.Material">
-                            <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                            <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category" >
-                                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
-                            </ChartPrimaryXAxis>
-                            <ChartPrimaryYAxis>
-                                <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
-                                <ChartAxisLabelStyle Color="transparent"></ChartAxisLabelStyle>
-                                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
-                                <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
-                            </ChartPrimaryYAxis>
-                            <ChartSeriesCollection>
-                                <ChartSeries DataSource="@vProdMaquinaDatas" XName="Mes" YName="TiempoNetoSeg" Name="Maquina"
-                                             Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
-                                    <ChartMarker>
-                                        <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
-                                            <ChartDataLabelFont FontWeight="600" Color="#181717"></ChartDataLabelFont>
-                                        </ChartDataLabel>
-                                    </ChartMarker>
-                                </ChartSeries>-->
-        @*<ChartSeries DataSource="@vProdMaquinaDatas" XName="Año" YName="SilverMedal" Name="Silver"
-                             Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
-                    <ChartMarker>
-                        <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
-                            <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
-                        </ChartDataLabel>
-                    </ChartMarker>
-                </ChartSeries>
-            <ChartSeries DataSource="@ChartPoints" XName="Country" YName="BronzeMedal" Name="Bronze"
-                             Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
-                    <ChartMarker>
-                        <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
-                            <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
-                        </ChartDataLabel>
-                    </ChartMarker>
-                </ChartSeries>*@
-        <!--</ChartSeriesCollection>
-                            <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
-                        </SfChart>
-
-                    </div>
-                 </div>
-            </div>
-        </div>-->
-    }
-
-}
+    

@@ -11,6 +11,7 @@ namespace SupplyChain.Shared.PCP
     {
         [Key]
         public int Id { get; set; }
+        public string FechaFin { get; set; }
         public int Año { get; set; }
         public int Mes { get; set; }
         public string Maquina { get; set; }

@@ -297,12 +297,11 @@ namespace SupplyChain.Client.Shared.Inventarios
         }
         protected async Task OnResumenStockSelected(vResumenStock resumenStock)
         {
-
             await BuscadorEmergenteRS.HideAsync();
 
             await GetSeleccionResumenStock(resumenStock);
 
-            await InvokeAsync(StateHasChanged);
+            
         }
 
         private async Task GetSeleccionResumenStock(vResumenStock resumenStock)
