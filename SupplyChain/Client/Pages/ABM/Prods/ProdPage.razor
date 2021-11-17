@@ -1,4 +1,4 @@
-﻿@page "/productos"
+﻿@page "/Abms/productos"
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Data
 @using Syncfusion.Blazor.Calendars
@@ -25,92 +25,96 @@
 <div class="col control-section">
     <div class="content-wrapper">
         <div class="row">
-            <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                    @ref="Grid" DataSource="@prods" 
-                    AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true" ID="Prod"
-                    AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
-                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                <GridEvents OnToolbarClick="@ClickHandler" OnCellSave="CellSaveHandler" OnActionBegin="ActionBegin" TValue="Producto"></GridEvents>
-                <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
-                <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-                <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
-                <Template>
-                    @{
-                        var prod = (context as Producto);
-                        <div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label class="e-float-text e-label-top">Id:</label>
-                                    <SfTextBox ID="CG_OPER" @bind-Value="@(prod.CG_PROD)" Enabled="@Disabled"></SfTextBox>
-                                </div>
+            <div class="col-12">
+                <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                        @ref="Grid" DataSource="@prods" Width="100%"
+                        AllowExcelExport="true" AllowRowDragAndDrop="false" AllowGrouping="true" ID="grdProd"
+                        AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
+                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                    <GridEvents OnToolbarClick="@ClickHandler" OnCellSave="CellSaveHandler" OnActionBegin="ActionBegin" TValue="Producto"></GridEvents>
+                    <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+                    <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+                    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
+                        <Template>
+                            @{
+                                var prod = (context as Producto);
+                                <div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label class="e-float-text e-label-top">Id:</label>
+                                            <SfTextBox ID="CG_OPER" @bind-Value="@(prod.CG_PROD)" Enabled="@Disabled"></SfTextBox>
+                                        </div>
 
-                                <div class="form-group col-md-6">
-                                    <label class="e-float-text e-label-top">Nombre:</label>
-                                    <SfTextBox CssClass="customClass" ID="DES_OPER" @bind-Value="@(prod.DES_PROD)"></SfTextBox>
-                                </div>
-                            </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="e-float-text e-label-top">Nombre:</label>
+                                            <SfTextBox CssClass="customClass" ID="DES_OPER" @bind-Value="@(prod.DES_PROD)"></SfTextBox>
+                                        </div>
+                                    </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label class="e-float-text e-label-top">Horas Finales:</label>
-                                    <SfNumericTextBox ID="HS_FINAL" @bind-Value="@(prod.CG_ORDEN)"></SfNumericTextBox>
-                                </div>
-                            </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label class="e-float-text e-label-top">Horas Finales:</label>
+                                            <SfNumericTextBox ID="HS_FINAL" @bind-Value="@(prod.CG_ORDEN)"></SfNumericTextBox>
+                                        </div>
+                                    </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label class="e-float-text e-label-top">Valor Por Hora:</label>
-                                    <SfNumericTextBox ID="VALOR_HORA" @bind-Value="@(prod.CG_CLAS)"></SfNumericTextBox>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label class="e-float-text e-label-top">Valor Por Hora:</label>
+                                            <SfNumericTextBox ID="VALOR_HORA" @bind-Value="@(prod.CG_CLAS)"></SfNumericTextBox>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    }
-                </Template>
-            </GridEditSettings>
-                <GridColumns>
-                    <GridColumn Field=@nameof(Prod.CG_PROD) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CAMPOCOM1) HeaderText="CAMPOCOM1" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CAMPOCOM2) HeaderText="CAMPOCOM2" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CAMPOCOM3) HeaderText="CAMPOCOM3" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CAMPOCOM4) HeaderText="CAMPOCOM4" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CAMPOCOM5) HeaderText="CAMPOCOM5" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CAMPOCOM6) HeaderText="CAMPOCOM6" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CAMPOCOM7) HeaderText="CAMPOCOM7" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CAMPOCOM8) HeaderText="CAMPOCOM8" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CAMPOCOM9) HeaderText="CAMPOCOM9" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CAMPOCOM10) HeaderText="CAMPOCOM10" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CG_ORDEN) HeaderText="Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.TIPO) HeaderText="Tipo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CG_CLAS) HeaderText="Clase" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.UNID) HeaderText="Unidades" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CG_DENSEG) HeaderText="Codigo densidad/segundo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.UNIDSEG) HeaderText="Unidad/segundo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.PESO) HeaderText="Peso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.UNIDPESO) HeaderText="Unidad de peso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.ESPECIF) HeaderText="Especificacion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.NORMA) HeaderText="Norma" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.EXIGEDESPACHO) HeaderText="Exige despacho" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.EXIGELOTE) HeaderText="Exige lote" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.EXIGESERIE) HeaderText="Exige serie" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.EXIGEOA) HeaderText="Exige orden de armado" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.STOCKMIN) HeaderText="Stock Minimo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.LOPTIMO) HeaderText="Lote Optimo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    @*<GridColumn Field=@nameof(Producto.ACTIVO) HeaderText="Activo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>*@
-                    <GridColumn Field=@nameof(Prod.TIEMPOFAB) HeaderText="Tiempo fabricacion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.COSTO) HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.COSTOTER) HeaderText="Costo ter" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    @*<GridColumn Field=@nameof(Prod.COSTOUCLOCAL) HeaderText="Costo UC Local" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.COSTOUCDOL) HeaderText="Costo UC Dol" TextAlign="TextAlign.Left" Width="150px"></GridColumn>*@
-                    <GridColumn Field=@nameof(Prod.FE_UC) HeaderText="Fecha UC" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CG_CELDA) HeaderText="Celda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CG_AREA) HeaderText="Area" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CG_LINEA) HeaderText="Linea" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    <GridColumn Field=@nameof(Prod.CG_TIPOAREA) HeaderText="Tipo Area" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    @*<GridColumn Field=@nameof(Prod.FE_REG) HeaderText="Fecha Registro" TextAlign="TextAlign.Left" Width="150px"></GridColumn>*@
-                </GridColumns>
-            </SfGrid>
+                            }
+                        </Template>
+                    </GridEditSettings>
+                    <GridColumns>
+                        <GridColumn Field=@nameof(Prod.CG_PROD) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CAMPOCOM1) HeaderText="CAMPOCOM1" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CAMPOCOM2) HeaderText="CAMPOCOM2" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CAMPOCOM3) HeaderText="CAMPOCOM3" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CAMPOCOM4) HeaderText="CAMPOCOM4" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CAMPOCOM5) HeaderText="CAMPOCOM5" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CAMPOCOM6) HeaderText="CAMPOCOM6" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CAMPOCOM7) HeaderText="CAMPOCOM7" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CAMPOCOM8) HeaderText="CAMPOCOM8" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CAMPOCOM9) HeaderText="CAMPOCOM9" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CAMPOCOM10) HeaderText="CAMPOCOM10" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CG_ORDEN) HeaderText="Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.TIPO) HeaderText="Tipo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CG_CLAS) HeaderText="Clase" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.UNID) HeaderText="Unidades" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CG_DENSEG) HeaderText="Codigo densidad/segundo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.UNIDSEG) HeaderText="Unidad/segundo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.PESO) HeaderText="Peso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.UNIDPESO) HeaderText="Unidad de peso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.ESPECIF) HeaderText="Especificacion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.NORMA) HeaderText="Norma" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.EXIGEDESPACHO) HeaderText="Exige despacho" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.EXIGELOTE) HeaderText="Exige lote" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.EXIGESERIE) HeaderText="Exige serie" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.EXIGEOA) HeaderText="Exige orden de armado" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.STOCKMIN) HeaderText="Stock Minimo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.LOPTIMO) HeaderText="Lote Optimo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        @*<GridColumn Field=@nameof(Producto.ACTIVO) HeaderText="Activo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>*@
+                        <GridColumn Field=@nameof(Prod.TIEMPOFAB) HeaderText="Tiempo fabricacion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.COSTO) HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.COSTOTER) HeaderText="Costo ter" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        @*<GridColumn Field=@nameof(Prod.COSTOUCLOCAL) HeaderText="Costo UC Local" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+            <GridColumn Field=@nameof(Prod.COSTOUCDOL) HeaderText="Costo UC Dol" TextAlign="TextAlign.Left" Width="150px"></GridColumn>*@
+                        <GridColumn Field=@nameof(Prod.FE_UC) HeaderText="Fecha UC" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CG_CELDA) HeaderText="Celda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CG_AREA) HeaderText="Area" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CG_LINEA) HeaderText="Linea" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Prod.CG_TIPOAREA) HeaderText="Tipo Area" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        @*<GridColumn Field=@nameof(Prod.FE_REG) HeaderText="Fecha Registro" TextAlign="TextAlign.Left" Width="150px"></GridColumn>*@
+                    </GridColumns>
+                    <SfSpinner @ref="refSpinner" Type="SpinnerType.Bootstrap" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
+                </SfGrid>
+            </div>
+            
             <div class="col-lg-3 property-section">
                 <br>
                 <div class="property-panel-section">

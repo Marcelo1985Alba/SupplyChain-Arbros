@@ -90,7 +90,7 @@ namespace SupplyChain.Client.Pages.PCP.Tiempos_Productivos
                 .GroupBy(g=> new { g.Mes }).Select(d => new ChartData()
                 {
                     XSerieName = d.Key.Mes.ToString(),
-                    YSerieName = Convert.ToDouble(d.Sum(p => p.TiempoNetoHoras))
+                    YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.TiempoNetoHoras)))
                 }).ToList();
 
 
@@ -98,14 +98,14 @@ namespace SupplyChain.Client.Pages.PCP.Tiempos_Productivos
                 .GroupBy(g => new { g.Mes }).Select(d => new ChartData()
                 {
                     XSerieName = d.Key.Mes.ToString(),
-                    YSerieName = Convert.ToDouble(d.Sum(p => p.ParadasPlanHoras))
+                    YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.ParadasPlanHoras)))
                 }).ToList();
             
             vProdMaquinaMesSetup = vProdMaquinaOriginal.Where(v => v.Año == Convert.ToInt32(año) && v.Maquina.Trim() == SerieSelecciona.Trim())
                 .GroupBy(g => new { g.Mes }).Select(d => new ChartData()
                 {
                     XSerieName = d.Key.Mes.ToString(),
-                    YSerieName = Convert.ToDouble(d.Sum(p => p.SetupRealHoras))
+                    YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.SetupRealHoras)),2)
                 }).ToList();
 
 

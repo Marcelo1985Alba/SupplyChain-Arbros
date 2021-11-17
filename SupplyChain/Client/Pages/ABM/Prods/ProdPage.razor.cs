@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
 using SupplyChain.Client.Shared;
+using Syncfusion.Blazor.Spinner;
 
 namespace SupplyChain.Pages.Prods
 {
@@ -19,7 +20,11 @@ namespace SupplyChain.Pages.Prods
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
+
+        protected SfSpinner refSpinner;
         protected SfGrid<Producto> Grid;
+
+        public bool SpinnerVisible = false;
 
         public bool Enabled = true;
         public bool Disabled = false;
@@ -41,8 +46,10 @@ namespace SupplyChain.Pages.Prods
         protected override async Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Productos";
-            prods = await Http.GetFromJsonAsync<List<Producto>>("api/Prod");
 
+            SpinnerVisible = true;
+            prods = await Http.GetFromJsonAsync<List<Producto>>("api/Prod");
+            SpinnerVisible = false;
             await base.OnInitializedAsync();
         }
 
