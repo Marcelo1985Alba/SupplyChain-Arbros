@@ -6,9 +6,9 @@
 @inject HttpClient Http
 
 
-<SfSpinner Label="Cargando..." Type="SpinnerType.Fabric"></SfSpinner>
+<SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
 
-<div class="row form-inline">
+@*<div class="row form-inline">
     <div class="col-3">
         <label class="">Tipo Grafico:</label>
     </div>
@@ -18,37 +18,35 @@
         </SfDropDownList>
     </div>
 
-</div>
+</div>*@
 
 
 
     <div class="row">
         <div class="col-12">
-            <SfChart Title="Ventas Anuales" Width="100%">
-                <ChartPrimaryXAxis Title="Foods" ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
-                                   RangePadding="ChartRangePadding.Additional">
-                    <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+            <SfChart Title="Tiempos Productivos" Width="100%">
+                <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                   EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                 </ChartPrimaryXAxis>
-                <ChartPrimaryYAxis>
+
+                <ChartPrimaryYAxis LabelFormat="{value} hs">
+                    <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                    <ChartAxisLabelStyle Color="transparent"></ChartAxisLabelStyle>
                     <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
                     <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
-                    <ChartAxisLabelStyle Color="transparent"></ChartAxisLabelStyle>
-                    <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
                 </ChartPrimaryYAxis>
-                <ChartArea>
-                    <ChartAreaBorder Width="0"></ChartAreaBorder>
-                </ChartArea>
                 <ChartSeriesCollection>
-                    <ChartSeries DataSource="DataEstad" XName="RazonSoc" YName="DolaresFactura" Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                    <ChartSeries DataSource="@DataVentasAnualesDolares" XName="XSerieName" YName="YSerieName" Name="CM1"
+                                 Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
                         <ChartMarker>
-                            <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                            <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
                                 <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                             </ChartDataLabel>
                         </ChartMarker>
                     </ChartSeries>
                 </ChartSeriesCollection>
                 <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
-                @*<ChartEvents OnPointRender="PointRender"></ChartEvents>*@
             </SfChart>
         </div>
 
@@ -65,7 +63,10 @@
 </style>
 @code{
     [CascadingParameter] public MainLayout MainLayout { get; set; }
+    protected SfSpinner refSpinner;
+    protected bool VisibleSpinner = false;
     public List<EstadVenta> DataEstad { get; set; }
+
     public Syncfusion.Blazor.PivotView.ChartSeriesType ChartType = Syncfusion.Blazor.PivotView.ChartSeriesType.Column;
     public string[] DrilledMembers = new string[] { "2016.0" };
     public PivotChartTooltipSettings pivotChartTooltipSettings = new PivotChartTooltipSettings()
@@ -110,9 +111,27 @@
         public Syncfusion.Blazor.PivotView.ChartSeriesType Value { get; set; }
     }
 
+    public class ChartData
+    {
+        public string XSerieName { get; set; }
+        public double YSerieName { get; set; }
+    }
+
+    public List<ChartData> DataVentasAnualesDolares { get; set; } = new();
+
     protected override async Task OnInitializedAsync()
     {
         MainLayout.Titulo = "Estadistica de Ventas";
+        VisibleSpinner = true;
         this.DataEstad = await Http.GetFromJsonAsync<List<EstadVenta>>("api/EstadisticaVentas/GetFacturacionAsync");
+
+        DataVentasAnualesDolares = DataEstad.Where(d=> d.AnoFactura != null).GroupBy(g=> new { g.AnoFactura })
+            .Select(d=> new ChartData() 
+            { 
+                XSerieName = Convert.ToString(d.Key.AnoFactura), 
+                YSerieName = Convert.ToDouble(d.Sum(p => p.DolaresFactura))
+            }).ToList();
+
+        VisibleSpinner = false;
     }
 }

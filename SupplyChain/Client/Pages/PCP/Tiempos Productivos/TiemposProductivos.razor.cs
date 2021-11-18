@@ -48,6 +48,7 @@ namespace SupplyChain.Client.Pages.PCP.Tiempos_Productivos
             SpinnerVisible = true;
             vProdMaquinaOriginal =  await Http.GetFromJsonAsync<List<vProdMaquinaDataCore>>("api/TiemposProdcutivosDataCore");
 
+
             vProdMaquinaCM1= vProdMaquinaOriginal.Where(d=> d.Maquina.Trim() == "CM1")
                 .GroupBy(c=> new { c.Año }).Select(d=> new ChartData() {
                 XSerieName = d.Key.Año.ToString(),
@@ -86,7 +87,9 @@ namespace SupplyChain.Client.Pages.PCP.Tiempos_Productivos
             TituloGraficoMensual = $"Tiempos Productivos Mensual {SerieSelecciona}";
 
 
-            vProdMaquinaMes = vProdMaquinaOriginal.Where(v=> v.Año == Convert.ToInt32(año) && v.Maquina.Trim() == SerieSelecciona.Trim())
+            vProdMaquinaMes = vProdMaquinaOriginal
+                .Where(v=> v.Año == Convert.ToInt32(año) && v.Maquina.Trim() == SerieSelecciona.Trim())
+                .OrderBy(o=> o.Mes)
                 .GroupBy(g=> new { g.Mes }).Select(d => new ChartData()
                 {
                     XSerieName = d.Key.Mes.ToString(),
@@ -94,14 +97,18 @@ namespace SupplyChain.Client.Pages.PCP.Tiempos_Productivos
                 }).ToList();
 
 
-            vProdMaquinaMesParadas = vProdMaquinaOriginal.Where(v => v.Año == Convert.ToInt32(año) && v.Maquina.Trim() == SerieSelecciona.Trim())
+            vProdMaquinaMesParadas = vProdMaquinaOriginal
+                .Where(v => v.Año == Convert.ToInt32(año) && v.Maquina.Trim() == SerieSelecciona.Trim())
+                .OrderBy(o => o.Mes)
                 .GroupBy(g => new { g.Mes }).Select(d => new ChartData()
                 {
                     XSerieName = d.Key.Mes.ToString(),
                     YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.ParadasPlanHoras)))
                 }).ToList();
             
-            vProdMaquinaMesSetup = vProdMaquinaOriginal.Where(v => v.Año == Convert.ToInt32(año) && v.Maquina.Trim() == SerieSelecciona.Trim())
+            vProdMaquinaMesSetup = vProdMaquinaOriginal
+                .Where(v => v.Año == Convert.ToInt32(año) && v.Maquina.Trim() == SerieSelecciona.Trim())
+                .OrderBy(o => o.Mes)
                 .GroupBy(g => new { g.Mes }).Select(d => new ChartData()
                 {
                     XSerieName = d.Key.Mes.ToString(),
