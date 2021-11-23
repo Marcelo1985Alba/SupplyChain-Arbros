@@ -349,9 +349,9 @@ namespace SupplyChain.Client.Pages.Inventarios
             {
                 
                 //Cargar los item de sp en los items de la grilla para guardar vale
-                var response = await httpResponse.Content.ReadAsStringAsync();
-                var itemsPrograma = JsonSerializer.Deserialize<ItemAbastecimiento[]>(response,
-                    new() { PropertyNameCaseInsensitive = true });
+                string response = await httpResponse.Content.ReadAsStringAsync();
+                var itemsPrograma = System.Text.Json.JsonSerializer.Deserialize<ItemAbastecimiento[]>(response,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 foreach (var item in itemsPrograma)
                 {

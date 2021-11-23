@@ -34,7 +34,8 @@
                     <GridEvents OnToolbarClick="@ClickHandler" OnCellSave="CellSaveHandler" OnActionBegin="ActionBegin" TValue="Producto"></GridEvents>
                     <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                     <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-                    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
+                    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" 
+                    Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
                         <Template>
                             @{
                                 var prod = (context as Producto);
@@ -115,7 +116,7 @@
                 </SfGrid>
             </div>
             
-            <div class="col-lg-3 property-section">
+            @*<div class="col-lg-3 property-section">
                 <br>
                 <div class="property-panel-section">
                     <div class="property-panel-header" style="padding-bottom:5px; font-size:16px">Properties</div>
@@ -154,7 +155,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            </div>*@
         </div>
     </div>
 </div>

@@ -41,6 +41,8 @@ else
     protected bool IsAdmin = false;
     protected bool IsProd = false;
     protected List<Modulo> dbMenu = new List<Modulo>();
+    [Parameter] public EventCallback<bool> OnChangeToggle { get; set; }
+
     protected async override Task OnInitializedAsync()
     {
         // To get the last item index from the db
@@ -115,8 +117,11 @@ else
         {
             var parentId = args.NodeData.ParentID;
             var modulo = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
+            //var moduloParent = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
             Layout.BreadCumParent = modulo.Descripcion;
-            await InvokeAsync(StateHasChanged);
+            await OnChangeToggle.InvokeAsync(false);
+
+            //await InvokeAsync(StateHasChanged);
         }
 
     }

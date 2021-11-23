@@ -24,7 +24,7 @@ namespace SupplyChain
         }
 
         [HttpGet]
-        public async Task<IEnumerable<PedCli>> Get(string PEDIDO)
+        public async Task<IEnumerable<PedCli>> Get()
         {
             string xSQL = string.Format("SELECT Pedcli.* FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
                 "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) where(pedidos.FLAG = 0 AND Programa.CG_ESTADO = 3 " +
