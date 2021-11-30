@@ -429,7 +429,7 @@ namespace SupplyChain
         }
         private async Task FirmeOF(Pedidos stock)
         {
-            if (stock.TIPOO == 10 || stock.TIPOO == 10)
+            if (stock.TIPOO == 10 || stock.TIPOO == 28)
             {
                 var programa = await _context.Programa.AsNoTracking()
                                 .Where(c => c.CG_ORDF == stock.CG_ORDF || c.CG_ORDFASOC == stock.CG_ORDF).ToListAsync();

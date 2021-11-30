@@ -669,7 +669,7 @@ namespace SupplyChain.Client.Pages.Inventarios
             if (StockEncabezado.TIPOO == 28)
             {
                 stock.AVISO = "ENTREGA A UNA ORDEN DE ARMADO";
-                stock.SERIE = $"PED\\{StockEncabezado.PEDIDO}";
+                //stock.SERIE = $"PED\\{StockEncabezado.PEDIDO}";
             }
 
             stock.ENTRREAL = DateTime.UtcNow;

@@ -59,7 +59,7 @@ namespace SupplyChain.Server.Controllers
             }
 
 
-            return lStock.OrderByDescending(s => s.VALE).ToList(); ;
+            return lStock.OrderByDescending(s => s.VALE).ToList();
         }
 
         // GET: api/Stock/{vale}

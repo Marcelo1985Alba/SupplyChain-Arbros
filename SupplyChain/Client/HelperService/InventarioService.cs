@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Client.HelperService
 {
-    public class InventarioService
+    public class InventarioService : IDisposable
     {
         private readonly HttpClient Http;
 
