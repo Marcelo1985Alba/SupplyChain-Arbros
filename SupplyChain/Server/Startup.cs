@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SupplyChain.Server.Data.Repository;
+using SupplyChain.Server.Repositorios;
 using Syncfusion.Blazor;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,11 +28,17 @@ namespace SupplyChain.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication();
+            services.AddAuthorization();
+
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.EnableSensitiveDataLogging();
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddTransient<UsuariosRepository>();
+            services.AddTransient<ServiciosRepository>();
 
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
             services.AddControllersWithViews()
@@ -80,8 +88,9 @@ namespace SupplyChain.Server
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseRouting();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -2,7 +2,7 @@
 @page "/"
 @page "/login"
 
-@inject HttpClient Http
+@inject SupplyChain.Client.RepositoryHttp.IRepositoryHttp Http
 @inject IJSRuntime JsRuntime
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 @inject ILoginService loginService
@@ -11,34 +11,6 @@
     <ToastPosition X="Right" ></ToastPosition>
 </SfToast>
 
-@*<div id="targetLogin" class="dialogLogin">
-    <SfDialog Target="#targetLogin" Width="100%" Height="100%" IsModal="false"
-              ShowCloseIcon="false" CloseOnEscape="false"
-              @bind-Visible="@IsDialogLoginVisible">
-        <DialogTemplates>
-            <Header>
-                @*<img src="/Logo.png" />*@
-                <!--&nbsp;&nbsp;Supply Chain
-
-            </Header>
-            <Content>
-                <br />
-                <div style="margin-top:30px;margin-left:40px;margin-right:40px">
-                    <SfTextBox Placeholder="Usuario" @bind-Value="@usuario"
-                               ShowClearButton="true" Type="InputType.Text"></SfTextBox>
-                </div>
-                <div style="margin-top:30px;margin-left:40px;margin-right:40px">
-                    <SfTextBox Placeholder="Contraseña" @bind-Value="@contras"
-                               ShowClearButton="true" Type="InputType.Password"></SfTextBox>
-                </div>
-                <SfSpinner @ref="SpinnerLogin" />
-            </Content>
-        </DialogTemplates>
-        <DialogButtons>
-            <DialogButton Content="INGRESAR" IsPrimary="true" OnClick="@LoginDialogOk" />
-        </DialogButtons>
-    </SfDialog>
-</div>-->
 
 <section id="wrapper" class="login-register login-sidebar" style="background-image:url(./Imagenes/login-register.jpg);">
     <div class="login-box card">
@@ -111,9 +83,9 @@
         SpinnerVisible = true;
 
         var httpResponse = await Http.PostAsJsonAsync<Usuarios>($"api/Usuarios",usuarioLogin);
-        if (httpResponse.StatusCode == System.Net.HttpStatusCode.OK)
+        if (!httpResponse.Error)
         {
-            var xUser = await httpResponse.Content.ReadFromJsonAsync<Usuarios>();
+            var xUser = httpResponse.Response;
 
             //IsDialogLoginVisible = false;
             await this.ToastObj.Show(new ToastModel
@@ -131,7 +103,7 @@
         {
             MensajeServidor = "Usuario o Contraseña incorrecta.";
             ;
-            Console.WriteLine(await httpResponse.Content.ReadAsStringAsync());
+            Console.WriteLine(await httpResponse.HttpResponseMessage.Content.ReadAsStringAsync());
             await this.ToastObj.Show(new ToastModel
             {
                 Title = "Error!",
@@ -142,17 +114,6 @@
         }
 
         SpinnerVisible = false;
-        //}
-        //else
-        //{
-        //    await this.ToastObj.Show(new ToastModel
-        //    {
-        //        Title = "Aviso!",
-        //        Content = "Debe indicar usuario y contraseña.",
-        //        CssClass = "e-toast-warning",
-        //        Icon = "e-warning toast-icons"
-        //    });
-        //}
 
     }
 }

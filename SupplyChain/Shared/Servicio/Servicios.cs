@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SupplyChain.Shared;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,7 +8,7 @@ using System.Text;
 namespace SupplyChain
 {
     [Table("Servicios")]
-    public class Service
+    public class Service : EntityBase
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string PEDIDO { get; set; } = "";

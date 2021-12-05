@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared.Login;
 using SupplyChain.Shared.Models;
 using System;
@@ -13,11 +14,11 @@ namespace SupplyChain.Server.Controllers
     [ApiController]
     public class UsuariosController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly UsuariosRepository _usuariosRepository;
 
-        public UsuariosController(AppDbContext context)
+        public UsuariosController(UsuariosRepository usuariosRepository)
         {
-            _context = context;
+            _usuariosRepository = usuariosRepository;
         }
 
         [HttpGet("{usuario}")]
@@ -25,10 +26,8 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
-                var user = await _context.Usuarios
-                    .Where(u => u.Usuario == usuario).Include(c => c.Rol).FirstOrDefaultAsync();
-
-                return user;
+                var user = await _usuariosRepository.GetByUserName(usuario);
+                return user == null ? NotFound() : user;
             }
             catch (Exception ex)
             {
@@ -41,12 +40,8 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
-                //string xSQL = $"SELECT Usuario, Contras FROM USUARIOS WHERE Usuario = '{usuario}' AND CONTRAS = '{contras}'";
-                //return await _context.Usuarios.FromSqlRaw(xSQL).FirstOrDefaultAsync();
-                var user = await _context.Usuarios
-                    .Where(u => u.Usuario == usuario && u.Contras == contras).Include(c=>c.Rol).FirstOrDefaultAsync();
+                return await _usuariosRepository.GetByUsernamePass(usuario, contras);
 
-                return user;
             }
             catch (Exception ex)
             {
@@ -59,8 +54,8 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
-                return await _context.Usuarios
-                    .Where(u => u.Usuario == usuario.Usuario && u.Contras == usuario.Contras).Include(c => c.Rol).FirstOrDefaultAsync();
+                var user = await _usuariosRepository.GetByUsernamePass(usuario.Usuario, usuario.Contras);
+                return user == null ? NotFound() : user;
             }
             catch (Exception ex)
             {

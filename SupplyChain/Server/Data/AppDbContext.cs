@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Config;
 using SupplyChain.Shared;
 using SupplyChain.Shared.CDM;
 using SupplyChain.Shared.Login;
@@ -101,14 +102,9 @@ namespace SupplyChain
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Compra>(entity =>
+            //Configure domain classes using modelBuilder here   
+            modelBuilder.ApplyConfiguration(new CompraConfig());
 
-            entity.HasOne(d => d.ProveedorNavigation)
-                    .WithMany(p => p.Compras)
-            .HasForeignKey(d => d.NROCLTE)
-            //.OnDelete(DeleteBehavior.ClientSetNull)
-            //.HasConstraintName("FK_Clientes_Companias");
-            );
             modelBuilder.Entity<Genera>()
         .       HasKey(c => new { c.CAMP3, c.CG_CIA, c.PUNTO_VENTA });
 
