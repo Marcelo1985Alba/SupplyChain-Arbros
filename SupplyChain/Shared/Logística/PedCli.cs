@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SupplyChain.Shared;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,10 +7,10 @@ using System.Text;
 
 namespace SupplyChain
 {
-    public class PedCli
+    public class PedCli : EntityBase
     {
         [Key]
-        public int REGISTRO { get; set; } = 0; 
+        public int REGISTRO { get; set; } = 0;
         public int PEDIDO { get; set; } = 0;
         public int NUMOCI { get; set; } = 0;
         public int CG_CLI { get; set; } = 0;
