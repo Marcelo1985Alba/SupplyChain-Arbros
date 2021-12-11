@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SupplyChain;
 using SupplyChain.Client.HelperService;
+using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared.Models;
 
 namespace SupplyChain
@@ -20,32 +21,24 @@ namespace SupplyChain
     [ApiController]
     public class ProgramaController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ProgramaRepository _programaRepository;
 
-        public ProgramaController(AppDbContext context)
+        public ProgramaController( ProgramaRepository programaRepository)
         {
-            _context = context;
+            this._programaRepository = programaRepository;
         }
 
         [HttpGet]
-        public IEnumerable<Programa> Get()
+        public async Task<IEnumerable<Programa>> Get()
         {
-            string xSQL = string.Format("SELECT Programa.* FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
-                "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) where(pedidos.FLAG = 0 AND Programa.CG_ESTADO = 3 " +
-                "AND Pedidos.CG_ORDF != 0 AND(Pedidos.TIPOO = 1)) UNION SELECT Programa.* " +
-                "FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
-                "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) " +
-                "where Pedcli.PEDIDO NOT IN(select PEDIDO from Pedidos where TIPOO = 1) " +
-                "AND Programa.CG_ESTADO = 3  AND Pedcli.CANTPED > 0 AND Pedidos.TIPOO != 28");
-            return _context.Programa.FromSqlRaw(xSQL).ToList();
+            return await _programaRepository.GetProgramasPedidos();
         }
 
 
         [HttpGet("GetPedidos")]
-        public IEnumerable<Programa> Gets(string PEDIDO)
+        public async Task<IEnumerable<Programa>> Gets()
         {
-            string xSQL = string.Format("SELECT * FROM Programa ");
-            return _context.Programa.FromSqlRaw(xSQL).ToList<Programa>();
+            return await _programaRepository.ObtenerTodos();
         }
 
 
@@ -53,8 +46,8 @@ namespace SupplyChain
         [HttpGet("GetPlaneadas")]
         public async Task<ActionResult<IEnumerable<Programa>>> GetPlaneadas()
         {
-            return await _context.Programa.Where(p => p.Cg_Cia == 1 && p.CG_ESTADOCARGA == 1 && p.CG_ORDF == p.CG_ORDFASOC)
-                .OrderBy(r => r.CG_ORDF).ToListAsync();
+            var planeadas = await _programaRepository.Obtener(p => p.Cg_Cia == 1 && p.CG_ESTADOCARGA == 1 && p.CG_ORDF == p.CG_ORDFASOC);
+            return planeadas.OrderBy(r => r.CG_ORDF).ToList();
 
         }
 
@@ -62,49 +55,11 @@ namespace SupplyChain
         [HttpGet("GetAbastecimientoByOF/{cg_ordf:int}")]
         public async Task<ActionResult<IEnumerable<ItemAbastecimiento>>> GetAbastecimientoByOF(int cg_ordf)
         {
-            //var dt = new DataTable();
-            List<ItemAbastecimiento> itemAbastecimiento;
-            var usuario = "user";
-
             try
             {
-                var of = new SqlParameter("of", cg_ordf);
-                itemAbastecimiento = await _context.Set<ItemAbastecimiento>()
-                    .FromSqlRaw("Exec dbo.NET_PCP_TraerAbast  @Cg_Ordf=@of", of)
-                    .ToListAsync();
-
-                //Cargar Depositos: ver como cargar en sp
-                await itemAbastecimiento.ForEachAsync(async i=> 
-                {
-                    var query = _context.vResumenStock.Where(r =>
-                    r.CG_ART.ToUpper() == i.CG_ART.ToUpper()
-                    && r.LOTE.ToUpper() == i.LOTE.ToUpper()
-                    && r.DESPACHO.ToUpper() == i.DESPACHO.ToUpper()
-                    && r.SERIE.ToUpper() == i.SERIE.ToUpper()
-                    && r.STOCK > 0
-                    ).AsQueryable();
-
-                    var res = await query.FirstOrDefaultAsync();
-
-                    if (i.CG_DEP > 0)
-                        query = query.Where(r => r.CG_DEP == i.CG_DEP);
-
-                    if (i.CG_DEP == 0)
-                        i.CG_DEP = 0;
-                    else
-                    {
-                        var rs = await query.FirstOrDefaultAsync();
-                        i.ResumenStock = rs;
-                        i.CG_DEP = rs.CG_DEP;
-                    }
-                    
-                });
-
-
-
-                return itemAbastecimiento;
+                return Ok(await _programaRepository.GetAbastecimientoByOF(cg_ordf));
             }
-            catch (Exception ex)
+                catch (Exception ex)
             {
                 return BadRequest(ex);
             }
@@ -117,8 +72,8 @@ namespace SupplyChain
         {
             try
             {
-                return await _context.Programa.Where(p => p.Cg_Cia == 1
-                    && p.CG_ORDF == cg_ordf).ToListAsync();
+                return Ok(await _programaRepository.Obtener(p => p.Cg_Cia == 1
+                    && p.CG_ORDF == cg_ordf));
             }
             catch (Exception ex)
             {
@@ -130,9 +85,9 @@ namespace SupplyChain
 
         // GET: api/Programas/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Programa>> GetPrograma(decimal id)
+        public async Task<ActionResult<Programa>> GetPrograma(int id)
         {
-            var programa = await _context.Programa.FindAsync(id);
+            var programa = await _programaRepository.ObtenerPorId(id);
 
             if (programa == null)
             {
@@ -145,8 +100,7 @@ namespace SupplyChain
         [HttpGet("EnviarCsvDataCore")]
         public async Task<ActionResult> EnviarCsv()
         {
-            string xSQL = string.Format("EXEC INTERFACE_DATACORE");
-            await _context.Database.ExecuteSqlRawAsync(xSQL);
+            await _programaRepository.EnviarCsvDataCore();
             return Ok();
         }
 
@@ -156,9 +110,7 @@ namespace SupplyChain
             //en el sp lo guarda en en c:\temp
             try
             {
-                string xSQL = string.Format($"EXEC INTERFACE_IMPRESORAQR {pedido}");
-                await _context.Database.ExecuteSqlRawAsync(xSQL);
-
+                await _programaRepository.GenerarCsvQrByPedido(pedido);
                 return Ok();
             }
             catch (Exception ex)
@@ -171,28 +123,26 @@ namespace SupplyChain
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPrograma(decimal id, Programa programa)
+        public async Task<IActionResult> PutPrograma(int id, Programa programa)
         {
             if (id != programa.REGISTRO)
             {
                 return BadRequest();
             }
 
-            _context.Entry(programa).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _programaRepository.Actualizar(programa);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProgramaExists(id))
+                if (! await _programaRepository.Existe(id))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
 
@@ -205,33 +155,25 @@ namespace SupplyChain
         [HttpPost]
         public async Task<ActionResult<Programa>> PostPrograma(Programa programa)
         {
-            _context.Programa.Add(programa);
-            await _context.SaveChangesAsync();
+            await _programaRepository.Agregar(programa);
 
             return CreatedAtAction("GetPrograma", new { id = programa.REGISTRO }, programa);
         }
 
         // DELETE: api/Programas/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Programa>> DeletePrograma(decimal id)
+        public async Task<ActionResult<Programa>> DeletePrograma(int id)
         {
-            var programa = await _context.Programa.FindAsync(id);
+            var programa = await _programaRepository.ObtenerPorId(id);
             if (programa == null)
             {
                 return NotFound();
             }
 
-            _context.Programa.Remove(programa);
-            await _context.SaveChangesAsync();
+            await _programaRepository.Remover(id);
 
             return programa;
         }
-
-        private bool ProgramaExists(decimal id)
-        {
-            return _context.Programa.Any(e => e.REGISTRO == id);
-        }
-
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using SupplyChain.Shared.HelpersAtributo;
+﻿using SupplyChain.Shared;
+using SupplyChain.Shared.HelpersAtributo;
 using SupplyChain.Shared.Models;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace SupplyChain
 {
-	public class Programa
+	public class Programa : EntityBase
 	{
 		public string CG_PROG { get; set; }
 		public DateTime? FE_PROG { get; set; }

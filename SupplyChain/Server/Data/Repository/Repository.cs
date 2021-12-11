@@ -65,6 +65,18 @@ namespace SupplyChain.Server.Data.Repository
             return await Db.SaveChangesAsync();
         }
 
+        public async Task EnviarCsvDataCore()
+        {
+            string xSQL = string.Format("EXEC INTERFACE_DATACORE");
+            await Db.Database.ExecuteSqlRawAsync(xSQL);
+        }
+
+        public async Task GenerarCsvQrByPedido(int pedido)
+        {
+            string xSQL = string.Format($"EXEC INTERFACE_IMPRESORAQR {pedido}");
+            await Db.Database.ExecuteSqlRawAsync(xSQL);
+        }
+
         public void Dispose()
         {
             Db?.Dispose();
