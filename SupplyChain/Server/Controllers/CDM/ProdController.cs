@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.Prod;
 
@@ -14,11 +15,11 @@ namespace SupplyChain
     [ApiController]
     public class ProdController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ProductoRepository _productoRepository;
 
-        public ProdController(AppDbContext context)
+        public ProdController(ProductoRepository productoRepository)
         {
-            _context = context;
+            this._productoRepository = productoRepository;
         }
 
         // GET: api/Prod
@@ -27,51 +28,32 @@ namespace SupplyChain
         {
             try
             {
-                return await _context.Prod.ToListAsync();
+                return await _productoRepository.ObtenerTodos();
             }
             catch(Exception ex)
             {
                 return BadRequest(ex);
             }
-
-            
         }
 
-
-        [HttpGet("GetPedidos")]
-        public IEnumerable<Producto> Gets(string PEDIDO)
-        {
-            string xSQL = string.Format("SELECT * FROM Prod ");
-            return _context.Prod.FromSqlRaw(xSQL).ToList();
-        }
 
 
         // GET: api/Prod/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Producto>> Get(string id)
         {
-            var Prod = await _context.Prod.Where(P=> P.CG_PROD == id).FirstOrDefaultAsync();
+            var Prod = await _productoRepository.ObtenerPorId(id);
 
-            if (Prod == null)
-            {
-                return NotFound();
-            }
-
-            return Prod;
+            return Prod ?? (ActionResult<Producto>)NotFound();
         }
 
         // GET: api/Prod/5
         [HttpGet("GetByFilter")]
         public async Task<ActionResult<Producto>> GetByFilter([FromQuery]FilterProd filter)
         {
-            var Prod = await _context.Prod.Where(P => P.CG_PROD == filter.Codigo).FirstOrDefaultAsync();
+            var Prod = await _productoRepository.ObtenerPorId(filter.Codigo);
 
-            if (Prod == null)
-            {
-                return NotFound();
-            }
-
-            return Prod;
+            return Prod ?? (ActionResult<Producto>)NotFound();
         }
 
 
@@ -79,28 +61,26 @@ namespace SupplyChain
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProd(string id, Prod Prod)
+        public async Task<IActionResult> PutProd(string id, Producto Prod)
         {
             if (id != Prod.CG_PROD)
             {
                 return BadRequest();
             }
 
-            _context.Entry(Prod).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _productoRepository.Actualizar(Prod);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProdExists(id))
+                if (!await _productoRepository.Existe(id))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
 
@@ -111,22 +91,21 @@ namespace SupplyChain
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Prod>> PostProd(Producto Prod)
+        public async Task<ActionResult<Producto>> PostProd(Producto Prod)
         {
-            _context.Prod.Add(Prod);
             try
             {
-                await _context.SaveChangesAsync();
+                await _productoRepository.Agregar(Prod);
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException) 
             {
-                if (ProdExists(Prod.CG_PROD))
+                if (!await _productoRepository.Existe(Prod.CG_PROD))
                 {
                     return Conflict();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
 
@@ -137,37 +116,28 @@ namespace SupplyChain
         [HttpDelete("{id}")]
         public async Task<ActionResult<Producto>> DeleteProd(string id)
         {
-            var Prod = await _context.Prod.FindAsync(id);
+            var Prod = await _productoRepository.ObtenerPorId(id);
             if (Prod == null)
             {
                 return NotFound();
             }
 
-            _context.Prod.Remove(Prod);
-            await _context.SaveChangesAsync();
+            await _productoRepository.Remover(id);
 
             return Prod;
         }
 
-        private bool ProdExists(string id)
-        {
-            return _context.Prod.Any(e => e.CG_PROD == id);
-        }
 
         // GET: api/Prod/BuscarPorCG_PROD/{CG_PROD}
         [HttpGet("BuscarPorCG_PROD/{CG_PROD}")]
         public async Task<ActionResult<List<Producto>>> BuscarPorCG_PROD(string CG_PROD)
         {
             List<Producto> lDesProd = new List<Producto>();
-            if (_context.Prod.Any())
+            if (!await _productoRepository.Existe(CG_PROD))
             {
-                lDesProd = await _context.Prod.Where(p => p.CG_PROD == CG_PROD).ToListAsync();
+                lDesProd = (List<Producto>)await _productoRepository.Obtener(p => p.CG_PROD == CG_PROD);
             }
-            if (lDesProd == null)
-            {
-                return NotFound();
-            }
-            return lDesProd;
+            return lDesProd == null ? NotFound() : lDesProd;
         }
     }
 }

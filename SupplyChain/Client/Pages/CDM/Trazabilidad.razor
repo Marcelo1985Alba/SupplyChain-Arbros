@@ -455,9 +455,9 @@
     //protected List<Pedidos> Busquedalist = new List<Pedidos>();
     protected List<Pedidos> OF = new List<Pedidos>();
     protected List<PedCli> PedCliList = new List<PedCli>();
-    protected Prod prodList = new Prod();
+    protected Producto prodList = new();
     protected List<Solution> rutas;
-    protected List<Prod> ProdCertificado = new List<Prod>();
+    protected List<Producto> ProdCertificado = new List<Producto>();
     protected List<PedCli> PedcliCertificado = new List<PedCli>();
     protected List<Pedidos> PedidosCertificado = new List<Pedidos>();
     protected string ruta;
@@ -675,7 +675,7 @@
             await refSpinner.ShowAsync();
             TrzNro = BoxPedido;
             PedCliList = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/{BoxPedido}");
-            prodList = await Http.GetFromJsonAsync<Prod>($"api/Prod/{PedCliList.FirstOrDefault().CG_ART.Trim()}");
+            prodList = await Http.GetFromJsonAsync<Producto>($"api/Prod/{PedCliList.FirstOrDefault().CG_ART.Trim()}");
             pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/MostrarTrazabilidad/{BoxPedido}");
             vpedidos = await Http.GetFromJsonAsync<List<vTrazabilidad>>($"api/Trazabilidads/MostrarTrazabilidad/{BoxPedido}");
             Showgrid = true;

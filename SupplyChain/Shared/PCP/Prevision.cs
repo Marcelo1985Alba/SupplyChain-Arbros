@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace SupplyChain.Shared.Models
 {
     [Table("PresAnual")]
-    public class PresAnual
+    public class PresAnual :  EntityBase
     {
         [Key]
         public int REGISTRO { get; set; } = 0;

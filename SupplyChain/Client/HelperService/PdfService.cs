@@ -55,7 +55,7 @@ namespace SupplyChain.Client.HelperService
 
         public async Task Catalogo(string CodNro, string TrzNro, List<vTrazabilidad> vpedidos)
         {
-            var ProdCertificado = await Http.GetFromJsonAsync<List<Prod>>($"api/Prod/BuscarPorCG_PROD/{CodNro}");
+            var ProdCertificado = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarPorCG_PROD/{CodNro}");
             var PedcliCertificado = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/BuscarPorPedido/{TrzNro}");
             var PedidosCertificado = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BusquedaParaFE_MOV/{TrzNro}");
             string roscas = "";

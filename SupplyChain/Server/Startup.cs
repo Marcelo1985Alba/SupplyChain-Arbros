@@ -41,6 +41,8 @@ namespace SupplyChain.Server
             services.AddTransient<ServiciosRepository>();
             services.AddTransient<PedCliRepository>();
             services.AddTransient<ProgramaRepository>();
+            services.AddTransient<ProductoRepository>();
+            services.AddTransient<PrevisionRepository>();
 
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
             services.AddControllersWithViews()

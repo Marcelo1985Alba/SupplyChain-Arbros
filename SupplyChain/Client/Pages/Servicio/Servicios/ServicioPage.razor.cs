@@ -20,6 +20,7 @@ using Syncfusion.Blazor.Spinner;
 using Syncfusion.Blazor.Navigations;
 using Microsoft.AspNetCore.Hosting;
 using SupplyChain.Client.Shared;
+using SupplyChain.Shared.Models;
 
 namespace SupplyChain.Pages.Servicios
 {
@@ -90,7 +91,7 @@ namespace SupplyChain.Pages.Servicios
         protected List<Operario> operarios = new List<Operario>();
         protected IEnumerable<Operario> opers;
         protected List<Celdas> celdas = new List<Celdas>();
-        protected List<Prod> prods = new List<Prod>();
+        protected List<Producto> prods = new List<Producto>();
         protected List<Solution> rutas;
         protected List<Service> servDesc;
         protected string pedant;

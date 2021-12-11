@@ -198,7 +198,7 @@ namespace SupplyChain.Pages.Prods
                             if (response.StatusCode == System.Net.HttpStatusCode.Created)
                             {
                                 Grid.Refresh();
-                                var prod = await response.Content.ReadFromJsonAsync<Prod>();
+                                var prod = await response.Content.ReadFromJsonAsync<Producto>();
                                 await InvokeAsync(StateHasChanged);
                                 Nuevo.CG_PROD = prod.CG_PROD;
                                 prods.Add(Nuevo);

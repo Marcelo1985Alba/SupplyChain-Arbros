@@ -18,7 +18,7 @@ namespace SupplyChain.Server.Repositorios
 
         public async Task<bool> Existe(int id)
         {
-            return await base.DbSet.AnyAsync(e => e.PEDIDO == id);
+            return await base.DbSet.AnyAsync(e => e.REGISTRO == id);
         }
 
         public async Task<IEnumerable<Programa>> GetProgramasPedidos()

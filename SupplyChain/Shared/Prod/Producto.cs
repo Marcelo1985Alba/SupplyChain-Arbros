@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SupplyChain.Shared.Models
 {
     [Table("Prod")]
-    public class Producto
+    public class Producto :  EntityBase
     {
         [Key]
         [ColumnaGridViewAtributo(Name = "Código producto")]

@@ -184,7 +184,7 @@ namespace SupplyChain.Client.Pages.Prev
         protected async Task AgregarProductoPrevision()
         {
             //previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/AgregarProductoPrevision/{CgString}");
-            var producto = await Http.GetFromJsonAsync<Prod>($"api/Prod/{CgString}");
+            var producto = await Http.GetFromJsonAsync<Producto>($"api/Prod/{CgString}");
             var response = await Http.PostAsJsonAsync($"api/Prevision/AgregarProductoPrevision", producto);
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
                 || response.StatusCode == System.Net.HttpStatusCode.NotFound
