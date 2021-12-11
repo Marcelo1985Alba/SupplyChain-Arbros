@@ -41,7 +41,7 @@ namespace SupplyChain
             }
         }
         */
-        [HttpGet]   
+        [HttpGet]
         public IEnumerable<NoConformidadesQuery> Get()
         {
             string xSQL = string.Format("SELECT Cg_NoConf, noconfor.Cg_TipoNc, tiposnoconf.des_tiponc, " +

@@ -1,4 +1,5 @@
-﻿using SupplyChain.Shared.HelpersAtributo;
+﻿using SupplyChain.Shared;
+using SupplyChain.Shared.HelpersAtributo;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
 using System;
@@ -10,7 +11,7 @@ using System.Text;
 namespace SupplyChain
 {
     [Table("Pedidos")]
-    public class Pedidos
+    public class Pedidos : EntityBase
     {
 
         /*AGREGO CAMPOS (EXIGEDESPACHO, EXIGELOTE, EXIGESERIE) NO MAPEADOS A LA BASE DE DATOS 

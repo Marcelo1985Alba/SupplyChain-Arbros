@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SupplyChain.Shared.Models
 {
     [Table("Compras")]
-    public class Compra
+    public class Compra : EntityBase
     {
         [Display(Name = "Número")]
         public int NUMERO { get; set; }

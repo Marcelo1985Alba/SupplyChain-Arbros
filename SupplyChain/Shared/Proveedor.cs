@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SupplyChain.Shared.Models
 {
     [Table("Prove")]
-    public class Proveedor
+    public class Proveedor : EntityBase
     {
         [Key]
         [Display(Name = "Codigo")]
