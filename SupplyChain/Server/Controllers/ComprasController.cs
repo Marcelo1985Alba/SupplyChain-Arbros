@@ -36,13 +36,12 @@ namespace SupplyChain.Server.Controllers
             try
             {
                 var compras = await _compraRepository
-                    .Obtener(c => c.CG_CIA == cg_cia_usuario && c.FE_CIERRE == null && c.NUMERO > 0);
+                    .Obtener(c => c.CG_CIA == cg_cia_usuario && c.FE_CIERRE == null && c.NUMERO > 0).ToListAsync();
 
-                await compras.ForEachAsync( async c => 
+                await compras.ForEachAsync( async c =>
                 {
-                    c.PENDIENTE = c.SOLICITADO - await _pedidosRepository.GetRecepSumByOcMp(c.NUMERO, c.CG_MAT);
+                    c.PENDIENTE = c.SOLICITADO - await _pedidosRepository.ObtenerRecepSumByOcMp(c.NUMERO, c.CG_MAT);
                     c.ProveedorNavigation = await _proveedorRepository.ObtenerPorId(c.NROCLTE);
-                    
                 });
 
                 return compras.OrderByDescending(c=> c.NUMERO).ToList();
@@ -51,7 +50,6 @@ namespace SupplyChain.Server.Controllers
             {
                 return BadRequest(ex);
             }
-            
         }
 
         // GET: api/Compras/5
@@ -74,7 +72,7 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
-               return Ok(await _compraRepository.Obtener(c=> c.NUMERO == numero));
+               return Ok(await _compraRepository.Obtener(c=> c.NUMERO == numero).ToListAsync());
             }
             catch (Exception ex)
             {

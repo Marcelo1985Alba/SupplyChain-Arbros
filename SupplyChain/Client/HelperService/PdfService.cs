@@ -523,12 +523,12 @@ namespace SupplyChain.Client.HelperService
             }
             FileStream fs = new("wwwroot\\logo_aerre.jpg", FileMode.Open);
 
-            graphics.DrawString($" \r\n" +
+            graphics.DrawString(" \r\n" +
                 $"\r\n" +
                 $"\r\n" +
                 $"    Año:{DateTime.Now.Year}  N°:{ordenFabricacion.PEDIDO} \r\n" +
                 $"    TAG:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}\r\n" +
-                $"    Tipo:\r\n" +
+                "    Tipo:\r\n" +
                 $"    Codigo:{ordenFabricacion.CG_PROD.Trim()}\r\n" +
                 $"    Medida:{producto.CAMPOCOM2.Trim()}  {producto.CAMPOCOM3.Trim()}\r\n" +
                 $"    Clase:{producto.CAMPOCOM5.Trim()}\r\n" +

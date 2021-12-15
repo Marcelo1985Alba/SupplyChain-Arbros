@@ -34,7 +34,7 @@ namespace SupplyChain
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Service>>> Get(string id)
         {
-            var Servicios = await _serviciosRepository.Obtener(s=> s.PEDIDO == id);
+            var Servicios = await _serviciosRepository.Obtener(s=> s.PEDIDO == id).ToListAsync();
 
             return Servicios == null ? NotFound() : Ok(Servicios);
         }

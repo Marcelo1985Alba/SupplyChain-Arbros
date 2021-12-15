@@ -89,38 +89,37 @@ namespace SupplyChain.Server.Controllers
             List<Producto> lContiene = new();
             if (DES_PROD == "Vacio")
             {
-                lContiene = (List<Producto>)await _productoRepository.Obtener(p => p.CG_PROD.Contains(CG_PROD));
+                lContiene = await _productoRepository.Obtener(p => p.CG_PROD.Contains(CG_PROD), Busqueda)
+                    .ToListAsync();
                 if (lContiene == null)
                 {
                     return NotFound();
                 }
 
-                lContiene = lContiene.Take(Busqueda).ToList();
                 
                 
             }
             else if (CG_PROD == "Vacio")
             {
-                lContiene = (List<Producto>)await _productoRepository.Obtener(p => p.DES_PROD.Contains(DES_PROD));
+                lContiene = await _productoRepository.Obtener(p => p.DES_PROD.Contains(DES_PROD), Busqueda)
+                    .ToListAsync();
 
                 if (lContiene == null)
                 {
                     return NotFound();
                 }
-                lContiene = lContiene.Take(Busqueda).ToList();
                 
             }
-            //else if (CG_PROD != "Vacio" && DES_PROD != "Vacio")
-            //{
-            //    if (_context.Prod.Any())
-            //    {
-            //        lContiene = await _context.Prod.Where(p => p.CG_PROD.Contains(CG_PROD) && p.DES_PROD.Contains(DES_PROD)).Take(Busqueda).ToListAsync();
-            //    }
-            //    if (lContiene == null)
-            //    {
-            //        return NotFound();
-            //    }
-            //}
+            else if (CG_PROD != "Vacio" && DES_PROD != "Vacio")
+            {
+                lContiene = await _productoRepository.Obtener(p => p.CG_PROD.Contains(CG_PROD)
+                    && p.DES_PROD.Contains(DES_PROD), Busqueda).ToListAsync();
+
+                if (lContiene == null)
+                {
+                    return NotFound();
+                }
+            }
             return lContiene;
         }
 

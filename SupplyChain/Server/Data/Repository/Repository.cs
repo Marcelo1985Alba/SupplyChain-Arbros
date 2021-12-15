@@ -19,6 +19,14 @@ namespace SupplyChain.Server.Data.Repository
             DbSet = Db.Set<TEntity>();
         }
 
+        private IQueryable<TEntity> GetAsQueryable(Expression<Func<TEntity, bool>> filter, int take,
+            params Expression<Func<TEntity, object>>[] includes)
+        {
+            var result = DbSet.Where(filter);
+            includes.Aggregate(result, (current, includeProperty) => current.Include(includeProperty));
+            
+            return result;
+        }
 
         public virtual async Task<TEntity> ObtenerPorId(TId id)
         {
@@ -30,14 +38,19 @@ namespace SupplyChain.Server.Data.Repository
             return await DbSet.ToListAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> Obtener(Expression<Func<TEntity, bool>> filter,
-            params Expression<Func<TEntity, object>>[] includes)
+        public IQueryable<TEntity> Obtener(Expression<Func<TEntity, bool>> filter, int take = 0,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            bool ascending = false, params Expression<Func<TEntity, object>>[] includes )
         {
-            var query =  DbSet.AsNoTracking().Where(filter);
+            var query = GetAsQueryable(filter, take, includes);
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
 
-            includes.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+            if (take > 0) query = query.Take(take);
 
-            return await query.ToListAsync();
+            return query;
         }
 
         public virtual async Task Agregar(TEntity entity)

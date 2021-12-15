@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.AspNetCore.Identity;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Shared;
+using SupplyChain.Server.Repositorios;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -21,19 +22,18 @@ namespace SupplyChain.Server.Controllers
         private int cg_cia_usuario = 1; /*CAMBIAR POR LA DEL USUARIO*/
 
         private readonly AppDbContext _context;
-        public StockController(AppDbContext context)
+        private readonly PedidosRepository _pedidosRepository;
+
+        public StockController(AppDbContext context, PedidosRepository pedidosRepository)
         {
             _context = context;
+            this._pedidosRepository = pedidosRepository;
         }
 
         [HttpGet("GetMaxVale")]
         public async Task<IActionResult> GetMaxVale()
         {
-            int numero = 1;
-
-            if (await _context.Pedidos.AnyAsync())
-                numero += await _context.Pedidos
-                    .Where(p => p.CG_CIA == cg_cia_usuario).MaxAsync(p => p.VALE);
+            int numero = await _pedidosRepository.MaxNumeroVale(cg_cia_usuario);
 
             return Json(numero);
         }
@@ -42,24 +42,18 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("GetValesByTipo/{tipoo}/{cantRegistros:int}")]
         public async Task<ActionResult<IEnumerable<Pedidos>>> GetValesByTipo(int tipoo, int cantRegistros)
         {
-            List<Pedidos> lStock = new List<Pedidos>();
-            if (_context.Pedidos.Any())
-            {
-                lStock = await _context.Pedidos
-                    //.AsNoTracking()
-                    //.Include(x=> x.Proveedor)
-                    .Where(p => p.TIPOO == tipoo && p.VOUCHER == 0 && p.CG_CIA == cg_cia_usuario)
-                    .OrderByDescending(s=> s.VALE)
-                    .Take(cantRegistros)
-                    .ToListAsync();
-            }
+            List<Pedidos> lStock = (List<Pedidos>)await _pedidosRepository
+                .Obtener(p => p.TIPOO == tipoo && p.VOUCHER == 0 && p.CG_CIA == cg_cia_usuario, cantRegistros,
+                         s => s.OrderByDescending(p=> p.VALE), true)
+                .ToListAsync();
+
             if (lStock == null)
             {
                 return NotFound();
             }
 
 
-            return lStock.OrderByDescending(s => s.VALE).ToList();
+            return lStock;
         }
 
         // GET: api/Stock/{vale}
@@ -68,59 +62,8 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
-                List<Pedidos> lStock = new List<Pedidos>();
-                if (_context.Pedidos.Any())
-                {
-                    lStock = await _context.Pedidos
-                        .Where(p => p.VALE == vale && p.CG_CIA == cg_cia_usuario)
-                        .ToListAsync();
-                }
-
-
-
-                if (lStock == null)
-                {
-                    return NotFound();
-                }
-
-                //SI ES RECEPCION HAYQ EU CALCULAR PENDIENTE DE OC Y OBTENER EL PEDIDO
-                if ( lStock.Count > 0 && lStock[0].TIPOO == 5)
-                {
-                    await lStock.ForEachAsync(async s =>
-                    {
-                        var solicitado = await _context.Compras.Where(c => c.NUMERO == s.OCOMPRA && c.CG_MAT == s.CG_ART)
-                        .SumAsync(c => c.SOLICITADO);
-                        var recibido = await _context.Pedidos
-                            .Where(p => p.TIPOO == 5 && p.OCOMPRA == s.OCOMPRA && p.CG_ART == s.CG_ART)
-                            .SumAsync(p => p.STOCK);
-
-                        s.PENDIENTEOC = solicitado - recibido;
-
-
-                        s.Proveedor = await _context.Proveedores.Where(p => p.CG_PROVE == s.CG_PROVE).FirstOrDefaultAsync();
-                    });
-
-                }
-
-                if (lStock.Count > 0 && lStock[0].TIPOO == 10)
-                {
-                    await lStock.ForEachAsync(async i =>
-                    {
-                        i.ResumenStock = await _context.vResumenStock.Where(r =>
-                             r.CG_ART.ToUpper() == i.CG_ART.ToUpper()
-                             && r.LOTE.ToUpper() == i.LOTE.ToUpper()
-                             && r.DESPACHO.ToUpper() == i.DESPACHO.ToUpper()
-                             && r.SERIE.ToUpper() == i.SERIE.ToUpper()
-                             && r.CG_DEP == i.CG_DEP).FirstOrDefaultAsync();
-
-                        i.PENDIENTEOC = i.ResumenStock.STOCK - Math.Abs((decimal)i.STOCK);
-                    });
-                            
-
-                }
-
-
-                return lStock;
+                List<Pedidos> lStock = await _pedidosRepository.ObtenerByNumeroVale(vale, cg_cia_usuario);
+                return lStock == null ? NotFound() : lStock;
             }
             catch (Exception ex)
             {

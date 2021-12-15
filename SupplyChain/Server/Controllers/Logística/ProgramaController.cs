@@ -46,8 +46,10 @@ namespace SupplyChain
         [HttpGet("GetPlaneadas")]
         public async Task<ActionResult<IEnumerable<Programa>>> GetPlaneadas()
         {
-            var planeadas = await _programaRepository.Obtener(p => p.Cg_Cia == 1 && p.CG_ESTADOCARGA == 1 && p.CG_ORDF == p.CG_ORDFASOC);
-            return planeadas.OrderBy(r => r.CG_ORDF).ToList();
+            return await _programaRepository
+                .Obtener(p => p.Cg_Cia == 1 && p.CG_ESTADOCARGA == 1 && p.CG_ORDF == p.CG_ORDFASOC, 0 , 
+                         r => r.OrderByDescending(p=> p.CG_ORDF))
+                .ToListAsync();
 
         }
 
@@ -73,7 +75,7 @@ namespace SupplyChain
             try
             {
                 return Ok(await _programaRepository.Obtener(p => p.Cg_Cia == 1
-                    && p.CG_ORDF == cg_ordf));
+                    && p.CG_ORDF == cg_ordf).ToListAsync());
             }
             catch (Exception ex)
             {

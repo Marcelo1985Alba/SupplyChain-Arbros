@@ -42,7 +42,7 @@ namespace SupplyChain
         [HttpGet("{pedido}")]
         public async Task<IEnumerable<PedCli>> Gets(int pedido)
         {
-            return await _pedCliRepository.Obtener(p=> p.PEDIDO == pedido);
+            return await _pedCliRepository.Obtener(p=> p.PEDIDO == pedido).ToListAsync();
         }
 
         // PUT: api/Servicios/5
@@ -78,8 +78,7 @@ namespace SupplyChain
         [HttpGet("BuscarPorPedido/{PEDIDO}")]
         public async Task<ActionResult<List<PedCli>>> BuscarPorPedido(string PEDIDO)
         {
-            List<PedCli> lpedcli = new();
-            lpedcli = (List<PedCli>)await _pedCliRepository.Obtener(p => p.PEDIDO.ToString() == PEDIDO);
+            List<PedCli> lpedcli = await _pedCliRepository.Obtener(p => p.PEDIDO.ToString() == PEDIDO).ToListAsync();
             return lpedcli == null ? NotFound() : lpedcli;
         }
     }

@@ -135,7 +135,7 @@ namespace SupplyChain
             List<Producto> lDesProd = new List<Producto>();
             if (!await _productoRepository.Existe(CG_PROD))
             {
-                lDesProd = (List<Producto>)await _productoRepository.Obtener(p => p.CG_PROD == CG_PROD);
+                lDesProd = (List<Producto>)await _productoRepository.Obtener(p => p.CG_PROD == CG_PROD).ToListAsync();
             }
             return lDesProd == null ? NotFound() : lDesProd;
         }

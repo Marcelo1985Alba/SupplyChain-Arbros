@@ -604,19 +604,21 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             {
                 if (ordenFabricacion.CG_PROD.Substring(0, 1) == "2")
                 {
-                    string espaciosPedido = "";
-                    string CLIENTE = PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().DES_CLI.Trim();
-                    if (CLIENTE.Contains("YPF") || CLIENTE.Contains("Y.P.F"))
-                    {
-                        espaciosPedido = await PdfService.EtiquetaYPF(espaciosPedido, PedCliList, ordenFabricacion, prodList);
-                    }
-                    else
-                    {
-                        //TODO:HACER CSV Y GUARDAR CON EL NOMBRE  ID + PEDIDO
+                    await DescargarTxtParaImpresoraQR(PedCliList[0].PEDIDO, "Bridada");
+                    //string espaciosPedido = "";
+                    //string CLIENTE = PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO)
+                    //    .OrderByDescending(t => t.PEDIDO).FirstOrDefault().DES_CLI.Trim();
+                    //if (CLIENTE.Contains("YPF") || CLIENTE.Contains("Y.P.F"))
+                    //{
+                    //    espaciosPedido = await PdfService.EtiquetaYPF(espaciosPedido, PedCliList, ordenFabricacion, prodList);
+                    //}
+                    //else
+                    //{
+                    //    //TODO:HACER CSV Y GUARDAR CON EL NOMBRE  ID + PEDIDO
 
-                        await DescargarTxtParaImpresoraQR(PedCliList[0].PEDIDO, "Bridada");
-                        //await EtiquetaClientesNOypf();
-                    }
+                    //    await DescargarTxtParaImpresoraQR(PedCliList[0].PEDIDO, "Bridada");
+                    //    //await EtiquetaClientesNOypf();
+                    //}
                 }
                 if (ordenFabricacion.CG_PROD.Substring(0, 1) == "1")
                 {

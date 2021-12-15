@@ -67,8 +67,7 @@ namespace SupplyChain.Shared.Models
         [Display(Name = "Compañía")]
         public int? CG_CIA { get; set; }
 
-        [NotMapped]
-        public List<Pedidos> Stocks { get; set; }
+        public ICollection<Pedidos> Stocks { get; set; }
 
         public virtual ICollection<Compra> Compras { get; set; }
     }

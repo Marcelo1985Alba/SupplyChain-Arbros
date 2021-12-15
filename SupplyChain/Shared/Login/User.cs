@@ -26,6 +26,6 @@ namespace SupplyChain.Shared.Models
         public int Cg_Area { get; set; } = 0;
         public bool CG_CUENTRAPI { get; set; } = false;
         public int RolId { get; set; }
-        public Rol Rol { get; set; }
+        public virtual Rol Rol { get; set; }
     }
 }

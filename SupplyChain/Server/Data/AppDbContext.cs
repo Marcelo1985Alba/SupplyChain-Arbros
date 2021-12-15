@@ -104,6 +104,8 @@ namespace SupplyChain
         {
             //Configure domain classes using modelBuilder here   
             modelBuilder.ApplyConfiguration(new CompraConfig());
+            modelBuilder.ApplyConfiguration(new PedidoConfig());
+            modelBuilder.ApplyConfiguration(new ProveedorConfig());
 
             modelBuilder.Entity<Genera>()
         .       HasKey(c => new { c.CAMP3, c.CG_CIA, c.PUNTO_VENTA });
