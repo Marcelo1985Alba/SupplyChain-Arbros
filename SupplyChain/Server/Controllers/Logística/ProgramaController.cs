@@ -61,7 +61,7 @@ namespace SupplyChain
             {
                 return Ok(await _programaRepository.GetAbastecimientoByOF(cg_ordf));
             }
-                catch (Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex);
             }
@@ -91,12 +91,7 @@ namespace SupplyChain
         {
             var programa = await _programaRepository.ObtenerPorId(id);
 
-            if (programa == null)
-            {
-                return NotFound();
-            }
-
-            return programa;
+            return programa == null ? NotFound() : programa;
         }
 
         [HttpGet("EnviarCsvDataCore")]

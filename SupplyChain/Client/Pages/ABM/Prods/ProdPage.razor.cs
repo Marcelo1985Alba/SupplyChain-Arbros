@@ -122,11 +122,13 @@ namespace SupplyChain.Pages.Prods
             {
                 if (args.Data != null)
                 {
-                    bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar el Operario?");
+                    //Verificar si tienen formula o esta dentro
+
+
+                    bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", $"Seguro de que desea eliminar {args.Data.CG_PROD}?");
                     if (isConfirmed)
                     {
-                        //operarios.Remove(operarios.Find(m => m.CG_OPER == args.Data.CG_OPER));
-                        await Http.DeleteAsync($"api/Prod/{args.Data.CG_PROD}");
+                        var response = await Http.DeleteAsync($"api/Prod/{args.Data.CG_PROD}");
                     }
                 }
             }

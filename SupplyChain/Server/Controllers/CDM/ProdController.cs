@@ -133,11 +133,24 @@ namespace SupplyChain
         public async Task<ActionResult<List<Producto>>> BuscarPorCG_PROD(string CG_PROD)
         {
             List<Producto> lDesProd = new List<Producto>();
-            if (!await _productoRepository.Existe(CG_PROD))
+            if (await _productoRepository.Existe(CG_PROD))
             {
-                lDesProd = (List<Producto>)await _productoRepository.Obtener(p => p.CG_PROD == CG_PROD).ToListAsync();
+                lDesProd = await _productoRepository.Obtener(p => p.CG_PROD == CG_PROD).ToListAsync();
             }
             return lDesProd == null ? NotFound() : lDesProd;
+        }
+
+        // GET: api/Prod/BuscarPorDES_PROD/{DES_PROD}
+        [HttpGet("BuscarPorDES_PROD/{DES_PROD}")]
+        public async Task<ActionResult<List<Producto>>> BuscarPorDES_PROD(string DES_PROD)
+        {
+            List<Producto> lDesProd = new List<Producto>();
+            lDesProd = await _productoRepository.Obtener(p => p.DES_PROD == DES_PROD).ToListAsync();
+            if (lDesProd == null)
+            {
+                return NotFound();
+            }
+            return lDesProd;
         }
     }
 }

@@ -130,7 +130,7 @@ namespace SupplyChain.Client.Pages.Prev
         {
             if (args.Value != "")
             {
-                CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarPorCG_PROD/{args.Value}");
+                CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarPorCG_PROD/{args.Value}");
                 if (CG_PRODlist.Count > 0)
                 {
                     DesString = CG_PRODlist.FirstOrDefault().DES_PROD;
@@ -146,7 +146,7 @@ namespace SupplyChain.Client.Pages.Prev
         {
             if (args.Value != "")
             {
-                CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarPorDES_PROD/{args.Value}");
+                CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarPorDES_PROD/{args.Value}");
                 if (CG_PRODlist.Count > 0)
                 {
                     CgString = CG_PRODlist.FirstOrDefault().CG_PROD;

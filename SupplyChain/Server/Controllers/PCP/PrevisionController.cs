@@ -50,37 +50,9 @@ namespace SupplyChain.Server.Controllers
         //    return _context.Prod.FromSqlRaw(xSQL).ToList<Producto>();
         //}
 
-        //// GET: api/Prevision/BuscarPorCG_PROD/{CG_PROD}
-        //[HttpGet("BuscarPorCG_PROD/{CG_PROD}")]
-        //public async Task<ActionResult<List<Producto>>> BuscarPorCG_PROD(string CG_PROD)
-        //{
-        //    List<Producto> lDesProd = new List<Producto>();
-        //    if (_context.Prod.Any())
-        //    {
-        //        lDesProd = await _context.Prod.Where(p => p.CG_PROD == CG_PROD).ToListAsync();
-        //    }
-        //    if (lDesProd == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return lDesProd;
-        //}
+      
 
-        // GET: api/Prevision/BuscarPorDES_PROD/{DES_PROD}
-        //[HttpGet("BuscarPorDES_PROD/{DES_PROD}")]
-        //public async Task<ActionResult<List<Producto>>> BuscarPorDES_PROD(string DES_PROD)
-        //{
-        //    List<Producto> lDesProd = new List<Producto>();
-        //    if (_context.Prod.Any())
-        //    {
-        //        lDesProd = await _context.Prod.Where(p => p.DES_PROD == DES_PROD).ToListAsync();
-        //    }
-        //    if (lDesProd == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return lDesProd;
-        //}
+        
 
         // GET: api/Prevision/AgregarProductoPrevision/{CG_PROD}/{DES_PROD}
         [HttpGet("BuscarProductoPrevision/{CG_PROD}/{DES_PROD}/{Busqueda}")]
