@@ -94,6 +94,7 @@ namespace SupplyChain
         public DbSet<VistasGrillas> VistasGrillas { get; set; }
         public DbSet<vEventos> vEventos { get; set; }
 
+        public DbSet<Formula> Formulas { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {

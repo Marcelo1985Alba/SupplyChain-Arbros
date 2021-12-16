@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
 using SupplyChain.Client.Shared;
 using Syncfusion.Blazor.Spinner;
+using Syncfusion.Blazor.Notifications;
 
 namespace SupplyChain.Pages.Prods
 {
@@ -23,14 +24,14 @@ namespace SupplyChain.Pages.Prods
 
         protected SfSpinner refSpinner;
         protected SfGrid<Producto> Grid;
-
+        protected SfToast ToastObj;
         public bool SpinnerVisible = false;
 
         public bool Enabled = true;
         public bool Disabled = false;
 
 
-        protected List<Producto> prods = new List<Producto>();
+        protected List<Producto> prods = new();
 
 
         protected List<Object> Toolbaritems = new List<Object>(){
@@ -43,27 +44,7 @@ namespace SupplyChain.Pages.Prods
         "ExcelExport"
     };
         [CascadingParameter] MainLayout MainLayout { get; set; }
-        protected override async Task OnInitializedAsync()
-        {
-            MainLayout.Titulo = "Productos";
-
-            SpinnerVisible = true;
-            prods = await Http.GetFromJsonAsync<List<Producto>>("api/Prod");
-            SpinnerVisible = false;
-            await base.OnInitializedAsync();
-        }
-
-        public void ActionBeginHandler(ActionEventArgs<Producto> args)
-        {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
-            {
-                this.Enabled = false;
-            }
-            else
-            {
-                this.Enabled = true;
-            }
-        }
+        
         public class Moneda
         {
             public string ID { get; set; }
@@ -84,58 +65,14 @@ namespace SupplyChain.Pages.Prods
             new EstaActivo() { BActivo= true, Text= "SI"},
             new EstaActivo() { BActivo= false, Text= "NO"}};
 
-        public async Task ActionBegin(ActionEventArgs<Producto> args)
+        protected override async Task OnInitializedAsync()
         {
-            //if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
-            //{
-            //    HttpResponseMessage response;
-            //    bool found = prods.Any(p => p.CG_PROD == args.Data.CG_PROD);
-            //    Producto ur = new Producto();
+            MainLayout.Titulo = "Productos";
 
-            //    if (!found)
-            //    {
-            //        args.Data.CG_CIA = 1;
-            //        args.Data.USUARIO = "User";
-            //        response = await Http.PostAsJsonAsync("api/Prod", args.Data);
-            //        args.Data.CG_PROD = prods.Max(s => s.CG_PROD) + 1;
-            //    }
-            //    else
-            //    {
-            //        response = await Http.PutAsJsonAsync($"api/Prod/{args.Data.CG_PROD}", args.Data);
-            //    }
-
-            //    if (response.StatusCode == System.Net.HttpStatusCode.Created)
-            //    {
-
-            //    }
-            //}
-
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
-            {
-                await EliminarProd(args);
-            }
-        }
-
-        private async Task EliminarProd(ActionEventArgs<Producto> args)
-        {
-            try
-            {
-                if (args.Data != null)
-                {
-                    //Verificar si tienen formula o esta dentro
-
-
-                    bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", $"Seguro de que desea eliminar {args.Data.CG_PROD}?");
-                    if (isConfirmed)
-                    {
-                        var response = await Http.DeleteAsync($"api/Prod/{args.Data.CG_PROD}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
+            SpinnerVisible = true;
+            prods = await Http.GetFromJsonAsync<List<Producto>>("api/Prod");
+            SpinnerVisible = false;
+            await base.OnInitializedAsync();
         }
 
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -213,47 +150,75 @@ namespace SupplyChain.Pages.Prods
                         }
                     }
                 }
-                Refresh();
             }
-            if (args.Item.Text == "Excel Export")
+            if (args.Item.Text == "Exportar Excel")
             {
                 await this.Grid.ExcelExport();
             }
-        }
 
-        public async Task CellSaveHandler(CellSaveArgs<Producto> args)
-        {
-
-            HttpResponseMessage response;
-            bool found = prods.Any(p => p.CG_PROD == args.RowData.CG_PROD);
-            Producto ur = new Producto();
-
-            if (!found)
+            if (args.Item.Text == "Eliminar")
             {
-                //args.RowData.CG_CIA = 1;
-                //args.RowData.USUARIO = "User";
-                response = await Http
-                    .PostAsJsonAsync($"api/Prod/ActualizarDatos/{args.ColumnName}/{args.Value.ToString()}/{args.RowData.CG_PROD}", args.RowData);
-                args.RowData.CG_PROD = prods.Max(s => s.CG_PROD) + 1;
-            }
-            else
-            {
-                response = await Http.PostAsJsonAsync($"api/Prod/ActualizarDatos/{args.ColumnName}/{args.Value.ToString()}/{args.RowData.CG_PROD}", args.RowData);
+                //Verificar si tienen formula o esta dentro
+                if ((await Grid.GetSelectedRecordsAsync()).Count > 0)
+                {
+                    var prod = (await Grid.GetSelectedRecordsAsync())[0];
+                    bool InsumoEnFormula = await Http.GetFromJsonAsync<bool>($"api/Formulas/EnFormula/{prod.CG_PROD}");
+                    if (!InsumoEnFormula)
+                    {
+                        bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", $"Seguro de que desea eliminar {prod.CG_PROD}?");
+                        if (isConfirmed)
+                        {
+                            var response = await Http.DeleteAsync($"api/Prod/{prod.CG_PROD}");
+                            if (response.IsSuccessStatusCode)
+                            {
+                                await this.ToastObj.Show(new ToastModel
+                                {
+                                    Title = "EXITO!",
+                                    Content = "Insumo Eliminado Correctamente.",
+                                    CssClass = "e-toast-success",
+                                    Icon = "e-success toast-icons",
+                                    ShowCloseButton = true,
+                                    ShowProgressBar = true
+                                });
+                            }
+                            else
+                            {
+                                //cancela eliminacion en grilla por error
+                                args.Cancel = true;
+                                await this.ToastObj.Show(new ToastModel
+                                {
+                                    Title = "ERROR!",
+                                    Content = $"Error al Eliminar insumo {prod.CG_PROD}",
+                                    CssClass = "e-toast-danger",
+                                    Icon = "e-error toast-icons",
+                                    ShowCloseButton = true,
+                                    ShowProgressBar = true
+                                });
+                            }
+                        }
+                        else
+                        {
+                            //cancela eliminacion en grilla por cancelacion
+                            args.Cancel = true;
+                        }
+                    }
+                    else
+                    {
+                        //cancela eliminacion en grilla por estaar en una formula
+                        args.Cancel = true;
+                        await this.ToastObj.Show(new ToastModel
+                        {
+                            Title = "Atención!",
+                            Content = $"No se puede Eliminar insumo {prod.CG_PROD}: el insumo se enccuentra en formulas",
+                            CssClass = "e-toast-warning",
+                            Icon = "e-warning toast-icons",
+                            ShowCloseButton = true,
+                            ShowProgressBar = true
+                        });
+                    }
+                }
                 
             }
-
-            if (response.StatusCode == System.Net.HttpStatusCode.Created)
-            {
-
-            }
-
-
-
-        }
-        public void Refresh()
-        {
-            Grid.Refresh();
-
         }
     }
 }

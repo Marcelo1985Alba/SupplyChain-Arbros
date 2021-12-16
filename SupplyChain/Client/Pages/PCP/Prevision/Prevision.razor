@@ -88,8 +88,7 @@
 
         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
                 @ref="Grid" DataSource="@previsiones" AllowExcelExport="true" AllowGrouping="true"
-                RowHeight="20"
-                AllowSorting="true" AllowPaging="true" AllowFiltering="true"
+                RowHeight="20" AllowSorting="true" AllowPaging="true" AllowFiltering="true"
                 Toolbar="@Toolbaritems" GridLines="GridLine.Both">
             <GridEvents OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin"
                         TValue="PresAnual" CommandClicked="@CommandClickHandler"></GridEvents>

@@ -1,38 +1,24 @@
 ﻿@page "/Abms/productos"
 @using Syncfusion.Blazor.Grids
-@using Syncfusion.Blazor.Data
-@using Syncfusion.Blazor.Calendars
-@using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Inputs
-@using System.Configuration;
-@using System.Data.SqlClient;
-@using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.BarcodeGenerator
-@using System.Text.Json
-
-@using System.Linq
 @attribute [Authorize]
 @inject IJSRuntime JsRuntime
-@using SupplyChain
-@using System.Net.Http.Json
-@using Syncfusion.Blazor.PivotView
-
-@inject NavigationManager NavManager
 @inherits SupplyChain.Pages.Prods.ProdsPageBase
 
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
 <div class="col control-section">
     <div class="content-wrapper">
         <div class="row">
             <div class="col-12">
                 <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
                         @ref="Grid" DataSource="@prods" Width="100%"
-                        AllowExcelExport="true" AllowRowDragAndDrop="false" AllowGrouping="true" ID="grdProd"
+                        AllowExcelExport="true" AllowGrouping="true" ID="grdProd"
                         AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
-                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                    <GridEvents OnToolbarClick="@ClickHandler" OnCellSave="CellSaveHandler" OnActionBegin="ActionBegin" TValue="Producto"></GridEvents>
-                    <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                    <GridEvents OnToolbarClick="@ClickHandler" TValue="Producto"></GridEvents>
                     <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                     <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" 
                     Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
