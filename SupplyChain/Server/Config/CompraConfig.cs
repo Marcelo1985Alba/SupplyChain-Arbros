@@ -8,9 +8,9 @@ namespace SupplyChain.Server.Config
     {
         public void Configure(EntityTypeBuilder<Compra> builder)
         {
-            builder.HasOne(d => d.ProveedorNavigation)
-                   .WithMany(p => p.Compras)
-                   .HasForeignKey(d => d.NROCLTE);
+            //builder.HasOne(d => d.ProveedorNavigation)
+            //       .WithMany(p => p.Compras)
+            //       .HasForeignKey(d => d.NROCLTE);
             //.OnDelete(DeleteBehavior.ClientSetNull)
             //.HasConstraintName("FK_Clientes_Companias");
         }

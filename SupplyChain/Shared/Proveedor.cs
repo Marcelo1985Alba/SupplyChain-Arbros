@@ -67,8 +67,8 @@ namespace SupplyChain.Shared.Models
         [Display(Name = "Compañía")]
         public int? CG_CIA { get; set; }
 
-        public ICollection<Pedidos> Stocks { get; set; }
+        //public ICollection<Pedidos> Stocks { get; set; }
 
-        public virtual ICollection<Compra> Compras { get; set; }
+        //public virtual ICollection<Compra> Compras { get; set; }
     }
 }

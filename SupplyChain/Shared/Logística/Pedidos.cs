@@ -39,6 +39,7 @@ namespace SupplyChain
 
         [NotMapped]
         public Cliente Cliente { get; set; } = new Cliente();
+        [NotMapped]
         public Proveedor Proveedor { get; set; } = new Proveedor();
 
         /*

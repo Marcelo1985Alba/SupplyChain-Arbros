@@ -312,7 +312,8 @@ namespace SupplyChain
 
                     if (stock.TIPOO == 5)
                     {
-                        stock.Proveedor = _context.Proveedores.Where(p => p.CG_PROVE == stock.CG_PROVE).FirstOrDefault();
+                        stock.Proveedor = _context.Proveedores.AsNoTracking()
+                            .Where(p => p.CG_PROVE == stock.CG_PROVE).FirstOrDefault();
                     }
 
                 }
