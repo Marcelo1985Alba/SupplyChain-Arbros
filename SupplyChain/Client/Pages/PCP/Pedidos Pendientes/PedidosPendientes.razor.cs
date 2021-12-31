@@ -48,7 +48,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
             VisibleProperty = true;
             listaPedPend = await Http.GetFromJsonAsync<List<ModeloPedidosPendientes>>("api/PedidosPendientes");
             await Grid.AutoFitColumns();
-
+            VisibleProperty = false;
         }
 
         public async Task Begin(ActionEventArgs<ModeloPedidosPendientes> args)
@@ -84,12 +84,14 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
             await SpinnerObj.ShowAsync();
             VisibleProperty = true;
             Grid.PreventRender();
+            VisibleProperty = false;
         }
         public async Task LoadGrid(object args)
         {
             await SpinnerObj.ShowAsync();
             VisibleProperty = true;
             await Grid.AutoFitColumns();
+            VisibleProperty = false;
         }
         public async Task DataBoundHandler()
         {

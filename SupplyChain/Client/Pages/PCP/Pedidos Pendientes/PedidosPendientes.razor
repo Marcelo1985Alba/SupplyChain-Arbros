@@ -48,6 +48,63 @@
                                 QueryCellInfo="(async(a)=> await QueryCellInfoHandler(a))" TValue="ModeloPedidosPendientes"></GridEvents>
                     <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                     <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+                    <GridEditSettings AllowEditing="true" Mode="EditMode.Dialog">
+                        <Template>
+                            @{
+                                var prev = (context as ModeloPedidosPendientes);
+                                <div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label class="e-float-text e-label-top">Producto:</label>
+                                            <br />
+                                            <SfTextBox ID="CG_ART" @bind-Value="@(prev.CG_ART)" Readonly="true"></SfTextBox>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label class="e-float-text e-label-top">Descripcion del Producto:</label>
+                                            <br />
+                                            <SfTextBox ID="DES_ART" @bind-Value="@(prev.DES_ART)" Readonly="true"></SfTextBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label class="e-float-text e-label">Resorte:</label>
+                                            <br />
+                                            <SfTextBox ID="RESORTE" @bind-Value="@(prev.CAMPOCOM2)"></SfTextBox>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label class="e-float-text e-label-top">Pedido:</label>
+                                            <br />
+                                            <SfNumericTextBox ID="Pedido" Format="N0" @bind-Value="@(prev.PEDIDO)" Readonly="true"></SfNumericTextBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label class="e-float-text e-label-top">O. Fabricación:</label>
+                                            <br />
+                                            <SfNumericTextBox ID="Of" Format="N0" @bind-Value="@(prev.CG_ORDF)" Readonly="true"></SfNumericTextBox>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Fecha Prevista:</label>
+                                            <br />
+                                            <SfDatePicker ID="FE_PED" @bind-Value="@(prev.ENTRPREV)" Placeholder="Fecha Prevista"></SfDatePicker>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="e-float-text e-label-top">Observaciones:</label>
+                                            <br />
+                                            <SfTextBox ID="Obs" @bind-Value="@(prev.Obseritem)" Multiline="true" Readonly="true"></SfTextBox>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </Template>
+                    </GridEditSettings>
                     <GridColumns>
                         <GridColumn Field=@nameof(ModeloPedidosPendientes.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left"></GridColumn>
                         <GridColumn Field=@nameof(ModeloPedidosPendientes.FE_MOV) HeaderText="Fecha Pedido">
