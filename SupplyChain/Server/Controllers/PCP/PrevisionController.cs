@@ -59,7 +59,12 @@ namespace SupplyChain.Server.Controllers
         public async Task<ActionResult<List<Producto>>> BuscarProductoPrevision(string CG_PROD, string DES_PROD, int Busqueda)
         {
             List<Producto> lContiene = new();
-            if (DES_PROD == "Vacio")
+            if ((string.IsNullOrEmpty(CG_PROD) && string.IsNullOrEmpty(DES_PROD)) || (CG_PROD == "Vacio" && DES_PROD == "Vacio"))
+            {
+                lContiene = (await _productoRepository.ObtenerTodos())
+                    .Take(Busqueda).ToList();
+            }
+            else if (string.IsNullOrEmpty(DES_PROD) || DES_PROD == "Vacio")
             {
                 lContiene = await _productoRepository.Obtener(p => p.CG_PROD.Contains(CG_PROD), Busqueda)
                     .ToListAsync();
@@ -71,7 +76,7 @@ namespace SupplyChain.Server.Controllers
                 
                 
             }
-            else if (CG_PROD == "Vacio")
+            else if  (string.IsNullOrEmpty(CG_PROD) || CG_PROD == "Vacio")
             {
                 lContiene = await _productoRepository.Obtener(p => p.DES_PROD.Contains(DES_PROD), Busqueda)
                     .ToListAsync();
@@ -82,6 +87,8 @@ namespace SupplyChain.Server.Controllers
                 }
                 
             }
+            
+
             else if (CG_PROD != "Vacio" && DES_PROD != "Vacio")
             {
                 lContiene = await _productoRepository.Obtener(p => p.CG_PROD.Contains(CG_PROD)

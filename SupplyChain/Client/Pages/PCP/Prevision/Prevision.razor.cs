@@ -160,20 +160,29 @@ namespace SupplyChain.Client.Pages.Prev
 
         protected async Task BuscarProductoPrevision()
         {
-            if (!string.IsNullOrEmpty(DesString) && !string.IsNullOrEmpty(CgString))
+            if (string.IsNullOrEmpty(DesString) && string.IsNullOrEmpty(CgString))
+            {
+                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/Vacio" +
+                        $"/Vacio/{CantidadMostrar}");
+            }
+
+
+            if (!string.IsNullOrEmpty(DesString) || !string.IsNullOrEmpty(CgString))
             {
                 CantidadMostrar = 100;
-                if (DesString == "")
+                if (string.IsNullOrEmpty(DesString))
                 {
                     Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}" +
                         $"/Vacio/{CantidadMostrar}");
                 }
-                else if (CgString == "")
+                else if (string.IsNullOrEmpty(CgString))
                 {
                     Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/Vacio/{DesString}/{CantidadMostrar}");
                 }
                 else
                 {
+                    //CgString ??= string.Empty;
+                    //DesString ??= string.Empty;
                     Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/{DesString}/{CantidadMostrar}");
                 }
                 IsVisible = true;
