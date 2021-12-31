@@ -14,10 +14,12 @@
         <div class="row">
             <div class="col-12">
                 <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                        @ref="Grid" DataSource="@prods" Width="100%"
+                        @ref="Grid" DataSource="@prods" Width="100%" 
                         AllowExcelExport="true" AllowGrouping="true" ID="grdProd"
                         AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
-                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                    <GridSelectionSettings CheckboxOnly="true" 
+                                           Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                    <GridPageSettings PageSize="10" PageSizes="true" ></GridPageSettings>
                     <GridEvents OnToolbarClick="@ClickHandler" TValue="Producto"></GridEvents>
                     <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                     <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" 
@@ -56,6 +58,7 @@
                         </Template>
                     </GridEditSettings>
                     <GridColumns>
+                        <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
                         <GridColumn Field=@nameof(Producto.CG_PROD) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                         <GridColumn Field=@nameof(Producto.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                         <GridColumn Field=@nameof(Producto.CAMPOCOM1) HeaderText="CAMPOCOM1" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
@@ -90,7 +93,7 @@
                         <GridColumn Field=@nameof(Producto.COSTOTER) HeaderText="Costo ter" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                         <GridColumn Field=@nameof(Producto.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                         @*<GridColumn Field=@nameof(Prod.COSTOUCLOCAL) HeaderText="Costo UC Local" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-            <GridColumn Field=@nameof(Prod.COSTOUCDOL) HeaderText="Costo UC Dol" TextAlign="TextAlign.Left" Width="150px"></GridColumn>*@
+        <GridColumn Field=@nameof(Prod.COSTOUCDOL) HeaderText="Costo UC Dol" TextAlign="TextAlign.Left" Width="150px"></GridColumn>*@
                         <GridColumn Field=@nameof(Producto.FE_UC) HeaderText="Fecha UC" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                         <GridColumn Field=@nameof(Producto.CG_CELDA) HeaderText="Celda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                         <GridColumn Field=@nameof(Producto.CG_AREA) HeaderText="Area" TextAlign="TextAlign.Left" Width="150px"></GridColumn>

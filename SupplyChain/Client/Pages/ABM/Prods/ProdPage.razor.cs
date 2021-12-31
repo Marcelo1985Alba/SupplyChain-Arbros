@@ -161,25 +161,47 @@ namespace SupplyChain.Pages.Prods
                 //Verificar si tienen formula o esta dentro
                 if ((await Grid.GetSelectedRecordsAsync()).Count > 0)
                 {
-                    var prod = (await Grid.GetSelectedRecordsAsync())[0];
-                    bool InsumoEnFormula = await Http.GetFromJsonAsync<bool>($"api/Formulas/EnFormula/{prod.CG_PROD}");
-                    if (!InsumoEnFormula)
+                    var productos = await Grid.GetSelectedRecordsAsync();
+                    var productosSeleccionados = productos.Select(p=> p.CG_PROD.Trim()).ToList();
+                    var query = string.Empty;
+                    var i = 0;
+                    foreach (var item in productosSeleccionados)
                     {
-                        bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", $"Seguro de que desea eliminar {prod.CG_PROD}?");
+                        
+                        if (i == 0)
+                        {
+                            query += $"insumos={item}";
+                        }
+                        else
+                        {
+                            query += $"&&insumos={item}";
+                        }
+
+                        i++;
+                    }
+
+
+                    bool HayInsumoEnFormula = await Http.GetFromJsonAsync<bool>($"api/Formulas/VerificaFormula?{query}");
+                    if (!HayInsumoEnFormula)
+                    {
+                        bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar los insumos seleccionados?");
                         if (isConfirmed)
                         {
-                            var response = await Http.DeleteAsync($"api/Prod/{prod.CG_PROD}");
+                            var response = await Http.PostAsJsonAsync("api/Prod/PostList", productos);
                             if (response.IsSuccessStatusCode)
                             {
                                 await this.ToastObj.Show(new ToastModel
                                 {
                                     Title = "EXITO!",
-                                    Content = "Insumo Eliminado Correctamente.",
+                                    Content = "Insumos Eliminados Correctamente.",
                                     CssClass = "e-toast-success",
                                     Icon = "e-success toast-icons",
                                     ShowCloseButton = true,
                                     ShowProgressBar = true
                                 });
+
+                                //await Grid.ClearSelectionAsync();
+
                             }
                             else
                             {
@@ -188,7 +210,7 @@ namespace SupplyChain.Pages.Prods
                                 await this.ToastObj.Show(new ToastModel
                                 {
                                     Title = "ERROR!",
-                                    Content = $"Error al Eliminar insumo {prod.CG_PROD}",
+                                    Content = "Error al Eliminar insumos: contactar al administrador",
                                     CssClass = "e-toast-danger",
                                     Icon = "e-error toast-icons",
                                     ShowCloseButton = true,
@@ -209,7 +231,7 @@ namespace SupplyChain.Pages.Prods
                         await this.ToastObj.Show(new ToastModel
                         {
                             Title = "Atención!",
-                            Content = $"No se puede Eliminar insumo {prod.CG_PROD}: el insumo se enccuentra en formulas",
+                            Content = "No se puede Eliminar insumos: insumos relacionados con formula",
                             CssClass = "e-toast-warning",
                             Icon = "e-warning toast-icons",
                             ShowCloseButton = true,

@@ -112,6 +112,25 @@ namespace SupplyChain
             return CreatedAtAction("GetProd", new { id = Prod.CG_PROD }, Prod);
         }
 
+        [HttpPost("PostList")]
+        public async Task<ActionResult<Producto>> PostList(List<Producto> productos)
+        {
+            try
+            {
+                foreach (var item in productos)
+                {
+                    await _productoRepository.Remover(item.CG_PROD.Trim());
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
+
         // DELETE: api/Prod/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Producto>> DeleteProd(string id)
