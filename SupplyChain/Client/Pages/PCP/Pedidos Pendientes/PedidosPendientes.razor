@@ -21,6 +21,10 @@
 @inherits PedidosPendientesBase
 
 
+<SfToast ID="toast_default" @ref="ToasObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+
 <div class="row mt-3">
     <div class="col-12">
         <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
@@ -42,7 +46,7 @@
                     <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                     <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                     <GridEvents OnLoad="(async(a)=> await LoadGrid(a))" OnActionBegin="@((a)=> Begin(a))"
-                                DataBound="(async()=> await DataBoundHandler())"
+                                DataBound="(async()=> await DataBoundHandler())" OnActionComplete="@(async(a)=>await ActionComplete(a))"
                                 OnDataBound="@(async(a)=>await OnDataBoundGrid(a))"
                                 OnToolbarClick="@(async(a)=> await ClickHandler(a))"
                                 QueryCellInfo="(async(a)=> await QueryCellInfoHandler(a))" TValue="ModeloPedidosPendientes"></GridEvents>
@@ -77,7 +81,7 @@
                                         <div class="form-group col-md-6">
                                             <label class="">Pedido:</label>
                                             <br />
-                                            <SfNumericTextBox ID="Pedido" Format="N0" @bind-Value="@(prev.PEDIDO)" Readonly="true"></SfNumericTextBox>
+                                            <SfNumericTextBox ID="Pedido" Format="N0" @bind-Value="@(prev.PEDIDO)" Readonly="true" ShowSpinButton="false"></SfNumericTextBox>
                                         </div>
                                     </div>
 
@@ -85,7 +89,7 @@
                                         <div class="form-group col-md-6">
                                             <label class="">O. Fabricación:</label>
                                             <br />
-                                            <SfNumericTextBox ID="Of" Format="N0" @bind-Value="@(prev.CG_ORDF)" Readonly="true"></SfNumericTextBox>
+                                            <SfNumericTextBox ID="Of" Format="N0" @bind-Value="@(prev.CG_ORDF)" Readonly="true" ShowSpinButton="false"></SfNumericTextBox>
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label>Fecha Prevista:</label>

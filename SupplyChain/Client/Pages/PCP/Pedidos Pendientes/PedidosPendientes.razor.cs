@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared;
 using Syncfusion.Blazor.Spinner;
+using Syncfusion.Blazor.Notifications;
 
 namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
 {
@@ -22,6 +23,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
         [Inject] protected IJSRuntime JsRuntime { get; set; }
         protected SfGrid<ModeloPedidosPendientes> Grid;
         protected SfSpinner SpinnerObj;
+        protected SfToast ToasObj;
         protected bool VisibleProperty { get; set; } = false;
 
         public bool Enabled = true;
@@ -123,8 +125,45 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
             {
                 args.Cell.AddClass(new string[] { "verdes" });
             }
-
         }
+
+        public async Task ActionComplete(ActionEventArgs<ModeloPedidosPendientes> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
+            {
+                var respuesta = await Http.PutAsJsonAsync($"api/PedidosPendientes/{args.Data.PEDIDO}", args.Data);
+                if (!respuesta.IsSuccessStatusCode)
+                {
+                    await ToasObj.Show(new ToastModel
+                    {
+                        Title = "ERROR!",
+                        Content = $"Ocurrrio un error.Error al intentar Guardar Pedido: {args.Data.PEDIDO} ",
+                        CssClass = "e-toast-danger",
+                        Icon = "e-error toast-icons",
+                        ShowCloseButton = true,
+                        ShowProgressBar = true
+                    });
+                }
+                else
+                {
+                    await this.ToasObj.Show(new ToastModel
+                    {
+                        Title = "ÉXITO!",
+                        Content = $"Guardado Correctamente! Nro OF: {args.Data.PEDIDO}",
+                        CssClass = "e-toast-success",
+                        Icon = "e-success toast-icons",
+                        ShowCloseButton = true,
+                        ShowProgressBar = true
+                    });
+
+
+                    //await Grid.RefreshColumns();
+                    //Grid.Refresh();
+                    //await Grid.RefreshHeader();
+                }
+            }
+        }
+
 
         public async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
         {

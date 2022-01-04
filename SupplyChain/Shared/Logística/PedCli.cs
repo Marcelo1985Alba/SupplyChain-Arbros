@@ -31,5 +31,6 @@ namespace SupplyChain
         public string CAMPOCOM5 { get; set; } = "";
         public string CAMPOCOM2 { get; set; } = "";
         public string REMITO { get; set; } = "";
-    }
+        public DateTime ENTRPREV { get; set; }
+    }   
 }

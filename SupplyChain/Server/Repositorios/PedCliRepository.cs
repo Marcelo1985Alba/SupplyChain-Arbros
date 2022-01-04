@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Data.Repository;
+using SupplyChain.Shared.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,5 +29,12 @@ namespace SupplyChain.Server.Repositorios
                 "AND Programa.CG_ESTADO = 3  AND Pedcli.CANTPED > 0 AND Pedidos.TIPOO != 28");
             return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
         }
+
+        public async Task<IEnumerable<ModeloPedidosPendientes>> ObtenerPedidosPedientes()
+        {
+            string xSQL = string.Format("EXEC NET_PCP_PEDIDOS");
+            return await base.Db.ModeloPedidosPendientes.FromSqlRaw(xSQL).ToListAsync();
+        }
+
     }
 }

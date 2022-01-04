@@ -54,7 +54,7 @@
   <ItemGroup>
     <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />
-    <PackageReference Include="BoldReports.Net.Core" Version="3.2.25" />
+    <PackageReference Include="BoldReports.Net.Core" Version="3.3.26" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.11" />
@@ -65,7 +65,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="19.3.0.46" />
+    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="19.4.0.40" />
     <PackageReference Include="System.CodeDom" Version="5.0.0" />
   </ItemGroup>
 
