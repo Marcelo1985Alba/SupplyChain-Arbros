@@ -339,6 +339,9 @@ namespace SupplyChain
 
             }
 
+            await CerrarOC(lstock[0]);
+            await FirmeOF(lstock[0]);
+
             if(liberaVale)
                 await generaController.LiberaByCampo("VALE");
 
@@ -380,8 +383,7 @@ namespace SupplyChain
             await _context.SaveChangesAsync();
 
 
-            await CerrarOC(stock);
-            await FirmeOF(stock);
+            
             await generaController.LiberaByCampo("REGSTOCK");
 
 
@@ -430,7 +432,17 @@ namespace SupplyChain
         }
         private async Task FirmeOF(Pedidos stock)
         {
-            if (stock.TIPOO == 10 || stock.TIPOO == 28)
+            if (stock.TIPOO == 28)
+            {
+                var programa = await _context.Programa.AsNoTracking()
+                               .FirstOrDefaultAsync(c => c.CG_ORDF == stock.CG_ORDF || c.CG_ORDFASOC == stock.CG_ORDF);
+
+                _context.Entry(programa).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+
+
+            if (stock.TIPOO == 10)
             {
                 var programa = await _context.Programa.AsNoTracking()
                                 .Where(c => c.CG_ORDF == stock.CG_ORDF || c.CG_ORDFASOC == stock.CG_ORDF).ToListAsync();
@@ -445,7 +457,7 @@ namespace SupplyChain
                         _context.Entry(p).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                     });
-                } 
+                }
             }
             
         }
