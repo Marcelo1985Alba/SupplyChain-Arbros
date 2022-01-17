@@ -339,7 +339,7 @@ namespace SupplyChain
 
             }
 
-            await CerrarOC(lstock[0]);
+            
             await FirmeOF(lstock[0]);
 
             if(liberaVale)
@@ -382,8 +382,8 @@ namespace SupplyChain
             _context.Pedidos.Add(stock);
             await _context.SaveChangesAsync();
 
+            await CerrarOC(stock);
 
-            
             await generaController.LiberaByCampo("REGSTOCK");
 
 
@@ -437,6 +437,9 @@ namespace SupplyChain
                 var programa = await _context.Programa.AsNoTracking()
                                .FirstOrDefaultAsync(c => c.CG_ORDF == stock.CG_ORDF || c.CG_ORDFASOC == stock.CG_ORDF);
 
+                programa.CG_ESTADO = 1;
+                programa.CG_ESTADOCARGA = 2;
+                programa.FE_FIRME = DateTime.Now;
                 _context.Entry(programa).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
