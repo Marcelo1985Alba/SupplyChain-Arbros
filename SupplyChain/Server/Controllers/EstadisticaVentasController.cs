@@ -79,5 +79,37 @@ namespace SupplyChain
                 return BadRequest(ex);
             }
         }
+
+        [HttpGet("PedidosIngresados")]
+        public async Task<ActionResult<List<vEstadPedidosIngresados>>> GetPedidosIngresados()
+        {
+            try
+            {
+                List<vEstadPedidosIngresados> Estad;
+                Estad = await _context.vEstadPedidosIngresados.ToListAsync();
+
+                return Estad;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("PedidosAltas")]
+        public async Task<ActionResult<List<vEstadPedidosAlta>>> GetPedidosAltas()
+        {
+            try
+            {
+                List<vEstadPedidosAlta> Estad;
+                Estad = await _context.vEstadPedidosAltas.ToListAsync();
+
+                return Estad;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
     }
 }

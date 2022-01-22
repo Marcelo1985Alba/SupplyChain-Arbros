@@ -2,88 +2,196 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Data
 @using Syncfusion.Blazor.Charts
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Navigations
 @inject HttpClient Http
 
 
 <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
 
-@*<div class="row form-inline">
-    <div class="col-3">
-        <label class="">Tipo Grafico:</label>
-    </div>
-    <div class="col-9">
-        <SfDropDownList TValue="Syncfusion.Blazor.PivotView.ChartSeriesType" TItem="DropDownData" DataSource="@ChartTypes" @bind-Value="@ChartType">
-            <DropDownListFieldSettings Text="Name" Value="Value"></DropDownListFieldSettings>
-        </SfDropDownList>
-    </div>
 
-</div>*@
+<SfTab>
+    <TabItems>
+        <TabItem>
+            <ChildContent>
+                <TabHeader Text="Pedidos Ingresados"></TabHeader>
+            </ChildContent>
+            <ContentTemplate>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <SfChart Title="Unidades Equivalentes de Pedidos Ingresados Anuales" Width="100%">
+                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                                    </ChartPrimaryXAxis>
+
+                                    <ChartPrimaryYAxis LabelFormat="{value}">
+                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                        <ChartAxisLabelStyle Color="transparent"></ChartAxisLabelStyle>
+                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                    </ChartPrimaryYAxis>
+                                    <ChartSeriesCollection>
+                                        <ChartSeries DataSource="@PedidosIngresadosAnuales" XName="XSerieName" YName="YSerieName" Name="Año"
+                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                            <ChartMarker>
+                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                                </ChartDataLabel>
+                                            </ChartMarker>
+                                        </ChartSeries>
+                                    </ChartSeriesCollection>
+                                    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+                                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetalle(a))"></ChartEvents>
+                                </SfChart>
+                            </div>
 
 
+                        </div>
 
-    <div class="row">
-        <div class="col-12">
-            @*<SfChart Title="Tiempos Productivos" Width="100%">
-                <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                <ChartPrimaryXAxis EdgeLabelPlacement="EdgeLabelPlacement.Shift">
-                </ChartPrimaryXAxis>
+                    </div>
 
-                <ChartPrimaryYAxis LabelFormat="{value} hs">
-                    <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
-                    <ChartAxisLabelStyle Color="transparent"></ChartAxisLabelStyle>
-                    <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
-                    <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
-                </ChartPrimaryYAxis>
-                <ChartSeriesCollection>
-                    <ChartSeries DataSource="@DataVentasAnualesDolares" XName="XSerieName" YName="YSerieName" Name="CM1"
-                                 Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
-                        <ChartMarker>
-                            <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
-                                <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
-                            </ChartDataLabel>
-                        </ChartMarker>
-                    </ChartSeries>
-                </ChartSeriesCollection>
-                <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
-            </SfChart>*@
-        </div>
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <SfChart @ref="refChartDetalle" Title="@TituloGraficoMensual" Width="100%">
+                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                                    </ChartPrimaryXAxis>
 
-    </div>
+                                    <ChartPrimaryYAxis LabelFormat="{value} hs">
+                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                        <ChartAxisLabelStyle Color="transparent"></ChartAxisLabelStyle>
+                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                    </ChartPrimaryYAxis>
+                                    <ChartSeriesCollection>
+                                        <ChartSeries DataSource="@PedidosIngresadosMensuales" XName="XSerieName" YName="YSerieName" Name="Mes"
+                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                            <ChartMarker>
+                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                                </ChartDataLabel>
+                                            </ChartMarker>
+                                        </ChartSeries>
+                                    </ChartSeriesCollection>
+                                    <ChartTooltipSettings Enable="true">
+                                    </ChartTooltipSettings>
+                                </SfChart>
+                            </div>
 
-    <div class="control-section">
-        <SfChart Title="England vs West Indies">
-            <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-            <ChartPrimaryXAxis Title="Death Overs" Minimum="2018" Maximum="@AñoMax" Interval="1">
-                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
-            </ChartPrimaryXAxis>
-            <ChartPrimaryYAxis>
-                <ChartAxisLabelStyle Color="transparent"></ChartAxisLabelStyle>
-                <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
-                <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
-                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
-            </ChartPrimaryYAxis>
-            <ChartTooltipSettings Enable="true" Format="${point.x}th Over : <b>${point.y} Runs</b>"></ChartTooltipSettings>
-            <ChartSeriesCollection>
-                <ChartSeries DataSource="@ChartPoints" XName="Over" YName="ENG_Score" Opacity="1" 
-                             Name="England" Fill="#1e90ff" Width="2" Type="ChartSeriesType.Column">
-                    <ChartMarker>
-                        <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
-                            <ChartDataLabelFont FontWeight="600"></ChartDataLabelFont>
-                        </ChartDataLabel>
-                    </ChartMarker>
-                </ChartSeries>
-                <ChartSeries DataSource="@ChartPoints" XName="Over" YName="WI_Score" Opacity="1" 
-                             Name="West Indies" Fill="#b22222" Width="2" Type="ChartSeriesType.Column">
-                    <ChartMarker>
-                        <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
-                            <ChartDataLabelFont FontWeight="600"></ChartDataLabelFont>
-                        </ChartDataLabel>
-                    </ChartMarker>
-                </ChartSeries>
-            </ChartSeriesCollection>
-            <ChartLegendSettings Visible="true"></ChartLegendSettings>
-        </SfChart>
-    </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <SfGrid DataSource="@DataPedidosIngresados" GridLines="GridLine.Both" AllowResizing="true"
+                                        AllowPaging="true" Height="450"> </SfGrid>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </ContentTemplate>
+        </TabItem>
+        <TabItem>
+            <ChildContent>
+                <TabHeader Text="Pedidos dados de Alta"></TabHeader>
+            </ChildContent>
+            <ContentTemplate>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <SfChart Title="Unidades Equivalentes de Pedidos Alta Anuales" Width="100%">
+                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                                    </ChartPrimaryXAxis>
+
+                                    <ChartPrimaryYAxis LabelFormat="{value}">
+                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                        <ChartAxisLabelStyle Color="transparent"></ChartAxisLabelStyle>
+                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                    </ChartPrimaryYAxis>
+                                    <ChartSeriesCollection>
+                                        <ChartSeries DataSource="@PedidosAltasAnuales" XName="XSerieName" YName="YSerieName" Name="Año"
+                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                            <ChartMarker>
+                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                                </ChartDataLabel>
+                                            </ChartMarker>
+                                        </ChartSeries>
+                                    </ChartSeriesCollection>
+                                    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+                                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetallePedidosAlta(a))"></ChartEvents>
+                                </SfChart>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <SfChart @ref="refChartDetallePedidosAlta" Title="@TituloGraficoMensualPedidosAlta" Width="100%">
+                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                                    </ChartPrimaryXAxis>
+
+                                    <ChartPrimaryYAxis LabelFormat="{value} hs">
+                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                        <ChartAxisLabelStyle Color="transparent"></ChartAxisLabelStyle>
+                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                    </ChartPrimaryYAxis>
+                                    <ChartSeriesCollection>
+                                        <ChartSeries DataSource="@PedidosAltasMensuales" XName="XSerieName" YName="YSerieName" Name="Mes"
+                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                            <ChartMarker>
+                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                                </ChartDataLabel>
+                                            </ChartMarker>
+                                        </ChartSeries>
+                                    </ChartSeriesCollection>
+                                    <ChartTooltipSettings Enable="true">
+                                    </ChartTooltipSettings>
+                                </SfChart>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <SfGrid DataSource="@DataPedidosAltas" GridLines="GridLine.Both" AllowResizing="true"
+                                        AllowPaging="true" Height="450"> </SfGrid>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </ContentTemplate>
+        </TabItem>
+    </TabItems>
+</SfTab>
+
+
 
 <style>
     .e-pivotview {
@@ -96,12 +204,13 @@
 </style>
 @code{
     [CascadingParameter] public MainLayout MainLayout { get; set; }
+
+
     protected SfSpinner refSpinner;
     protected bool VisibleSpinner = false;
-    public List<EstadVenta> DataEstad { get; set; }
-    protected int AñoMax = 2021;
-    public Syncfusion.Blazor.PivotView.ChartSeriesType ChartType = Syncfusion.Blazor.PivotView.ChartSeriesType.Column;
-    public string[] DrilledMembers = new string[] { "2016.0" };
+    public List<vEstadPedidosIngresados> DataPedidosIngresados { get; set; }
+    public List<vEstadPedidosAlta> DataPedidosAltas { get; set; }
+    protected int AñoMax = DateTime.Now.Year;
 
     List<DropDownData> ChartTypes = new List<DropDownData>() {
         new DropDownData { Name = "Column", Value = Syncfusion.Blazor.PivotView.ChartSeriesType.Column },
@@ -136,45 +245,102 @@
 
     public class ChartData
     {
-        public double XSerieName { get; set; }
+        public string XSerieName { get; set; }
         public double YSerieName { get; set; }
     }
+    protected SfChart refChartDetalle;
+    protected List<ChartData> PedidosIngresadosAnuales { get; set; } = new List<ChartData>();
+    protected List<ChartData> PedidosIngresadosMensuales { get; set; } = new List<ChartData>();
+    protected string TituloGraficoMensual = "";
+    protected string SerieSelecciona = "";
 
-    public List<ChartData> DataVentasAnualesDolares { get; set; } = new();
+    protected SfChart refChartDetallePedidosAlta;
+    protected List<ChartData> PedidosAltasAnuales { get; set; } = new List<ChartData>();
+    protected List<ChartData> PedidosAltasMensuales { get; set; } = new List<ChartData>();
+    protected string TituloGraficoMensualPedidosAlta = "";
+    protected string SerieSeleccionaPedidosAlta = "";
 
     protected override async Task OnInitializedAsync()
     {
         MainLayout.Titulo = "Estadistica de Ventas";
         VisibleSpinner = true;
-        this.DataEstad = await Http.GetFromJsonAsync<List<EstadVenta>>("api/EstadisticaVentas/GetFacturacionAsync");
 
-        ChartPoints = DataEstad.Where(d=> d.AnoFactura != null).GroupBy(g=> new { g.AnoFactura })
-        .Select(d=> new DoubleData()
-        {
-            Over = Convert.ToDouble(d.Key.AnoFactura),
-            ENG_Score = Convert.ToDouble(d.Sum(p => p.DolaresFactura)),
-            WI_Score = 20
-        }).ToList();
-
-        AñoMax = Convert.ToInt32(ChartPoints.Max(c=> c.Over));
+        await GetPedidosIngresados();
+        await GetPedidosAltas();
 
         VisibleSpinner = false;
     }
 
-    public List<DoubleData> ChartPoints { get; set; } = new List<DoubleData>()
-    //{
-    //    new DoubleData { Over = 16, ENG_Score = 2, WI_Score = 7},
-    //    new DoubleData { Over = 17, ENG_Score = 14, WI_Score = 7 },
-    //    new DoubleData { Over = 18, ENG_Score = 7, WI_Score = 11 },
-    //    new DoubleData { Over = 19, ENG_Score = 7, WI_Score = 8 },
-    //    new DoubleData { Over = 20, ENG_Score = 10, WI_Score = 24 }
-    //}
-    ;
 
-    public class DoubleData
+    protected async Task GetPedidosIngresados()
     {
-        public double Over { get; set; }
-        public double ENG_Score { get; set; }
-        public double WI_Score { get; set; }
+        this.DataPedidosIngresados = await Http.GetFromJsonAsync<List<vEstadPedidosIngresados>>("api/EstadisticaVentas/PedidosIngresados");
+
+        PedidosIngresadosAnuales = DataPedidosIngresados.GroupBy(g => new { g.ANIO })
+        .Select(d => new ChartData()
+        {
+            XSerieName = d.Key.ANIO.ToString(),
+            YSerieName = Convert.ToDouble(d.Sum(p => p.UNIDEQUI))
+        }).OrderBy(c => c.XSerieName)
+        .ToList();
+    }
+
+    protected async Task GetPedidosAltas()
+    {
+        this.DataPedidosAltas = await Http.GetFromJsonAsync<List<vEstadPedidosAlta>>("api/EstadisticaVentas/PedidosAltas");
+
+        PedidosAltasAnuales = DataPedidosAltas.GroupBy(g => new { g.ANIO })
+        .Select(d => new ChartData()
+        {
+            XSerieName = d.Key.ANIO.ToString(),
+            YSerieName = Convert.ToDouble(d.Sum(p => p.UNIDEQUI))
+        }).OrderBy(c => c.XSerieName)
+        .ToList();
+    }
+
+    protected async Task MostrarDetalle(Syncfusion.Blazor.Charts.PointEventArgs args)
+    {
+        var año = args.Point.X;
+        SerieSelecciona = args.Series.Name;
+        TituloGraficoMensual = $"Unidades Equivalentes Mensual {año}";
+
+
+        PedidosIngresadosMensuales = DataPedidosIngresados
+            .Where(v => v.ANIO == Convert.ToInt32(año))
+            .OrderBy(o => o.MES)
+            .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+            {
+                XSerieName = d.Key.MES.ToString(),
+                YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.UNIDEQUI)))
+            }).ToList();
+
+        await InvokeAsync(StateHasChanged);
+        await refChartDetalle.RefreshAsync();
+        await refChartDetalle.RefreshAsync();
+
+
+    }
+
+    protected async Task MostrarDetallePedidosAlta(Syncfusion.Blazor.Charts.PointEventArgs args)
+    {
+        var año = args.Point.X;
+        SerieSeleccionaPedidosAlta = args.Series.Name;
+        TituloGraficoMensualPedidosAlta = $"Unidades Equivalentes Mensual {año}";
+
+
+        PedidosAltasMensuales = DataPedidosAltas
+            .Where(v => v.ANIO == Convert.ToInt32(año))
+            .OrderBy(o => o.MES)
+            .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+            {
+                XSerieName = d.Key.MES.ToString(),
+                YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.UNIDEQUI)))
+            }).ToList();
+
+        await InvokeAsync(StateHasChanged);
+        await refChartDetallePedidosAlta.RefreshAsync();
+        await refChartDetallePedidosAlta.RefreshAsync();
+
+
     }
 }

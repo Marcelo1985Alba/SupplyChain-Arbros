@@ -91,6 +91,8 @@ namespace SupplyChain
 
         public DbSet<Proveedor> Proveedores { get; set; }
         public DbSet<EstadVenta> EstadVentas { get; set; }
+        public DbSet<vEstadPedidosIngresados> vEstadPedidosIngresados { get; set; }
+        public DbSet<vEstadPedidosAlta> vEstadPedidosAltas { get; set; }
         public DbSet<VistasGrillas> VistasGrillas { get; set; }
         public DbSet<vEventos> vEventos { get; set; }
 
@@ -140,6 +142,8 @@ namespace SupplyChain
             modelBuilder.Entity<EstadVenta>().HasNoKey().ToView(null);
             modelBuilder.Entity<StockSP>().HasNoKey().ToView(null);
             modelBuilder.Entity<vEventos>().HasNoKey().ToView("vEventos");
+            modelBuilder.Entity<vEstadPedidosIngresados>().HasNoKey().ToView("vEstad_PedidosIngresados");
+            modelBuilder.Entity<vEstadPedidosAlta>().HasNoKey().ToView("vEstad_PedidosAltas");
         }
     }
 }
