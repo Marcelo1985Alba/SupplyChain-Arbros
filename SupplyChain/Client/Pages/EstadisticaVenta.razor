@@ -10,7 +10,7 @@
 <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
 
 
-<SfTab>
+<SfTab HeaderPlacement="HeaderPosition.Top">
     <TabItems>
         <TabItem>
             <ChildContent>
@@ -32,6 +32,7 @@
                                         <ChartAxisLabelStyle Color="transparent"></ChartAxisLabelStyle>
                                         <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
                                         <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                        
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
                                         <ChartSeries DataSource="@PedidosIngresadosAnuales" XName="XSerieName" YName="YSerieName" Name="Año"
@@ -62,11 +63,25 @@
                                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                                     </ChartPrimaryXAxis>
 
-                                    <ChartPrimaryYAxis LabelFormat="{value} hs">
+                                    <ChartPrimaryYAxis LabelFormat="{value} hs" Minimum="0" Maximum="500">
                                         <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
                                         <ChartAxisLabelStyle Color="transparent"></ChartAxisLabelStyle>
                                         <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
                                         <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                        <ChartStriplines>
+
+                                            @if (PromedioPedidosIngresadosMensuales > 0)
+                                            {
+                                                <ChartStripline Start="397" End="400" Color="red"
+                                                                Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
+                                                    <ChartStriplineTextStyle Size="20px" Color="red" />
+                                                </ChartStripline>
+                                                <ChartStripline Start="@(PromedioPedidosIngresadosMensuales - 5)"
+                                                                Text="@("Promedio: " + PromedioPedidosIngresadosMensuales )" ZIndex="ZIndex.Over"
+                                                                End="PromedioPedidosIngresadosMensuales" Color="blue" />
+                                            }
+
+                                        </ChartStriplines>
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
                                         <ChartSeries DataSource="@PedidosIngresadosMensuales" XName="XSerieName" YName="YSerieName" Name="Mes"
@@ -80,6 +95,7 @@
                                     </ChartSeriesCollection>
                                     <ChartTooltipSettings Enable="true">
                                     </ChartTooltipSettings>
+                                    <ChartLegendSettings Visible="true" />
                                 </SfChart>
                             </div>
 
@@ -91,7 +107,8 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <SfGrid DataSource="@DataPedidosIngresados" GridLines="GridLine.Both" AllowResizing="true"
+                                <SfGrid DataSource="@(PedidosIngresadosAnualesDetalle)" GridLines="GridLine.Both" 
+                                        AllowResizing="true" AllowReordering="true" AllowMultiSorting="true" AllowSorting="true" 
                                         AllowPaging="true" Height="450"> </SfGrid>
                             </div>
                         </div>
@@ -155,6 +172,20 @@
                                         <ChartAxisLabelStyle Color="transparent"></ChartAxisLabelStyle>
                                         <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
                                         <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                        <ChartStriplines>
+
+                                            @if (PromedioPedidosAltaMensuales > 0)
+                                            {
+                                                <ChartStripline Start="447" End="450" Color="red"
+                                                                Text="@("Objetivo: 450")" ZIndex="ZIndex.Over">
+                                                    <ChartStriplineTextStyle Size="20px" Color="red" />
+                                                </ChartStripline>
+                                                <ChartStripline Start="@(PromedioPedidosAltaMensuales - 5)"
+                                                                Text="@("Promedio: " + PromedioPedidosAltaMensuales )" ZIndex="ZIndex.Over"
+                                                                End="PromedioPedidosAltaMensuales" Color="blue" />
+                                            }
+
+                                        </ChartStriplines>
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
                                         <ChartSeries DataSource="@PedidosAltasMensuales" XName="XSerieName" YName="YSerieName" Name="Mes"
@@ -179,7 +210,8 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <SfGrid DataSource="@DataPedidosAltas" GridLines="GridLine.Both" AllowResizing="true"
+                                <SfGrid DataSource="@PedidosAltaAnualesDetalle" GridLines="GridLine.Both" AllowResizing="true" 
+                                        AllowReordering="true" 
                                         AllowPaging="true" Height="450"> </SfGrid>
                             </div>
                         </div>
@@ -208,7 +240,7 @@
 
     protected SfSpinner refSpinner;
     protected bool VisibleSpinner = false;
-    public List<vEstadPedidosIngresados> DataPedidosIngresados { get; set; }
+
     public List<vEstadPedidosAlta> DataPedidosAltas { get; set; }
     protected int AñoMax = DateTime.Now.Year;
 
@@ -249,16 +281,21 @@
         public double YSerieName { get; set; }
     }
     protected SfChart refChartDetalle;
+    public List<vEstadPedidosIngresados> DataPedidosIngresados { get; set; }
     protected List<ChartData> PedidosIngresadosAnuales { get; set; } = new List<ChartData>();
+    protected List<vEstadPedidosIngresados> PedidosIngresadosAnualesDetalle { get; set; } = new List<vEstadPedidosIngresados>();
     protected List<ChartData> PedidosIngresadosMensuales { get; set; } = new List<ChartData>();
     protected string TituloGraficoMensual = "";
     protected string SerieSelecciona = "";
+    protected int PromedioPedidosIngresadosMensuales = 0;
 
     protected SfChart refChartDetallePedidosAlta;
     protected List<ChartData> PedidosAltasAnuales { get; set; } = new List<ChartData>();
     protected List<ChartData> PedidosAltasMensuales { get; set; } = new List<ChartData>();
+    protected List<vEstadPedidosAlta> PedidosAltaAnualesDetalle { get; set; } = new List<vEstadPedidosAlta>();
     protected string TituloGraficoMensualPedidosAlta = "";
     protected string SerieSeleccionaPedidosAlta = "";
+    protected int PromedioPedidosAltaMensuales = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -304,15 +341,20 @@
         SerieSelecciona = args.Series.Name;
         TituloGraficoMensual = $"Unidades Equivalentes Mensual {año}";
 
+        PedidosIngresadosAnualesDetalle = DataPedidosIngresados.Where(p => p.ANIO == Convert.ToInt32(año)).ToList();
+
 
         PedidosIngresadosMensuales = DataPedidosIngresados
-            .Where(v => v.ANIO == Convert.ToInt32(año))
-            .OrderBy(o => o.MES)
-            .GroupBy(g => new { g.MES }).Select(d => new ChartData()
-            {
-                XSerieName = d.Key.MES.ToString(),
-                YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.UNIDEQUI)))
-            }).ToList();
+        .Where(v => v.ANIO == Convert.ToInt32(año))
+        .OrderBy(o => o.MES)
+        .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+        {
+            XSerieName = d.Key.MES.ToString(),
+            YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.UNIDEQUI)))
+        }).ToList();
+
+
+        PromedioPedidosIngresadosMensuales = Convert.ToInt32(PedidosIngresadosMensuales.Average(p=> p.YSerieName));
 
         await InvokeAsync(StateHasChanged);
         await refChartDetalle.RefreshAsync();
@@ -327,15 +369,18 @@
         SerieSeleccionaPedidosAlta = args.Series.Name;
         TituloGraficoMensualPedidosAlta = $"Unidades Equivalentes Mensual {año}";
 
+        PedidosAltaAnualesDetalle = DataPedidosAltas.Where(p => p.ANIO == Convert.ToInt32(año)).ToList();
 
         PedidosAltasMensuales = DataPedidosAltas
-            .Where(v => v.ANIO == Convert.ToInt32(año))
-            .OrderBy(o => o.MES)
-            .GroupBy(g => new { g.MES }).Select(d => new ChartData()
-            {
-                XSerieName = d.Key.MES.ToString(),
-                YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.UNIDEQUI)))
-            }).ToList();
+        .Where(v => v.ANIO == Convert.ToInt32(año))
+        .OrderBy(o => o.MES)
+        .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+        {
+            XSerieName = d.Key.MES.ToString(),
+            YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.UNIDEQUI)))
+        }).ToList();
+
+        PromedioPedidosAltaMensuales = Convert.ToInt32(PedidosAltasMensuales.Average(p => p.YSerieName));
 
         await InvokeAsync(StateHasChanged);
         await refChartDetallePedidosAlta.RefreshAsync();
