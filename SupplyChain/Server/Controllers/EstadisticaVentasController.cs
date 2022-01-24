@@ -41,12 +41,6 @@ namespace SupplyChain
             return new { Items = data, Count = data.Count() };
         }
 
-        [HttpGet("GetFacturacion")]
-        public object GetFacturacion()
-        {
-            IQueryable<EstadVenta> data = _context.EstadVentas.Where(e=> e.AnoFactura > 0).AsQueryable();
-            return new { Items = data, Count = data.Count() };
-        }
 
         // GET: api/Indicadores
         [HttpGet]
@@ -105,6 +99,19 @@ namespace SupplyChain
                 Estad = await _context.vEstadPedidosAltas.ToListAsync();
 
                 return Estad;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("Facturacion")]
+        public async Task<ActionResult<List<vEstadFacturacion>>> GetFacturacion()
+        {
+            try
+            {
+                return await _context.vEstadFacturaciones.ToListAsync();
             }
             catch (Exception ex)
             {
