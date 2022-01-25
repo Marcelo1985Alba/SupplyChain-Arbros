@@ -143,7 +143,7 @@ namespace SupplyChain.Server.Controllers
             try
             {
                 const string xCantidad = "1";
-                string xFecha = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
+                //string xFecha = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
 
 
                 // Averigua unidad

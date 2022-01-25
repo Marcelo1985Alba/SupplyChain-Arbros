@@ -25,8 +25,7 @@ namespace SupplyChain.Server.Repositorios
             await Db.Database.ExecuteSqlRawAsync("NET_PCP_PrevisionAgregar '" + parametros.CG_PROD.Trim() + "', " +
                                                                           "'" + parametros.DES_PROD.Trim() + "', " +
                                                                           "'" + parametros.UNID + "', " +
-                                                                          " " + 1 + ", " +
-                                                                          "'" + DateTime.Now.AddDays(1) + "'");
+                                                                          " " + 1 );
         }
     }
 }
