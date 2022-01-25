@@ -72,7 +72,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
             .GroupBy(g => new { g.MES }).Select(d => new ChartData()
             {
                 XSerieName = d.Key.MES.ToString(),
-                YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.TOTAL_DOL)))
+                YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.TOTAL_DOL)), 2)
             }).ToList();
 
 

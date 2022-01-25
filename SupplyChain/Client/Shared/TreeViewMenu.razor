@@ -20,10 +20,17 @@ else
 {
     <div class="control-wrapper">
         <div id="treeview">
-            <SfTreeView TValue="Modulo" ID="treeviewMenuDB" CssClass="custom-tree">
+            @*<SfTreeView TValue="Modulo" ID="treeviewMenuDB" CssClass="custom-tree">
                 <TreeViewFieldsSettings TValue="Modulo" Id="Id" Text="Descripcion" ParentID="ParentId" HasChildren="TieneChild"
                                         NavigateUrl="Url" IconCss="IconCss">
                     <SfDataManager Url="api/Modulo" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
+                </TreeViewFieldsSettings>
+                <TreeViewEvents TValue="Modulo" NodeSelected="@(async(a)=> await NodeClicked(a))"></TreeViewEvents>
+            </SfTreeView>*@
+            <SfTreeView TValue="Modulo" ID="treeviewMenuDB" CssClass="custom-tree">
+                <TreeViewFieldsSettings DataSource="dbMenu" TValue="Modulo" Id="Id" Text="Descripcion" 
+                                        ParentID="ParentId" HasChildren="TieneChild"
+                                        NavigateUrl="Url" IconCss="IconCss">
                 </TreeViewFieldsSettings>
                 <TreeViewEvents TValue="Modulo" NodeSelected="@(async(a)=> await NodeClicked(a))"></TreeViewEvents>
             </SfTreeView>
@@ -46,69 +53,85 @@ else
     protected async override Task OnInitializedAsync()
     {
         // To get the last item index from the db
+
+        await GetMenu();
+
+    }
+    protected async Task GetMenu()
+    {
+
         authState = await authenticationState;
         if (authState.User.Identity.IsAuthenticated)
         {
             IsAdmin = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Admin"));
             IsProd = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Produccion"));
+
+            if (!IsAdmin && IsProd)
+            {
+                dbMenu.Add(new Modulo { Id = 4, Descripcion = "PCP", IconCss = "icon-docs icon", TieneChild = true });
+                dbMenu.Add(new Modulo
+                {
+                    Id = 7,
+                    Descripcion = "Carga de Máquina",
+                    IconCss = "",
+                    TieneChild = false,
+                    ParentId = 4,
+                    Url = "/cargamaquina"
+                });
+                dbMenu.Add(new Modulo { Id = 2, Descripcion = "VENTAS", IconCss = "icon-th icon", TieneChild = true });
+                dbMenu.Add(new Modulo
+                {
+                    Id = 8,
+                    Descripcion = "Logistica",
+                    IconCss = "",
+                    TieneChild = false,
+                    ParentId = 2,
+                    Url = "/logistica-listado"
+                });
+                dbMenu.Add(new Modulo
+                {
+                    Id = 13,
+                    Descripcion = "Servicios",
+                    IconCss = "",
+                    TieneChild = false,
+                    ParentId = 2,
+                    Url = "/servicio/listado"
+                });
+                dbMenu.Add(new Modulo { Id = 5, Descripcion = "CONTROL DE CALIDAD", IconCss = "icon-th icon", TieneChild = true });
+                dbMenu.Add(new Modulo
+                {
+                    Id = 14,
+                    Descripcion = "Trazabilidad",
+                    IconCss = "",
+                    TieneChild = false,
+                    ParentId = 5,
+                    Url = "/trazabilidad"
+                });
+                dbMenu.Add(new Modulo { Id = 3, Descripcion = "INVENTARIOS", IconCss = "icon-th icon", TieneChild = true });
+                dbMenu.Add(new Modulo
+                {
+                    Id = 14,
+                    Descripcion = "Recepcion de Insumos",
+                    IconCss = "",
+                    TieneChild = false,
+                    ParentId = 3,
+                    Url = "/inventario/5"
+                });
+            }
+            else
+            {
+                dbMenu = await Http.GetFromJsonAsync<List<Modulo>>("api/Modulo");
+                if (authState.User.Identity.Name.ToUpper() == "MONICA")
+                {
+                    var maxId = dbMenu.Max(m => m.Id) + 1;
+                    dbMenu.Add(new Modulo { Id = maxId, Descripcion = "Panel de Control", IconCss = "fa fa-tachometer",
+                        TieneChild = false, Url= "/panel-control/index"
+                    });
+                }
+            }
         }
 
-        if (!IsAdmin && IsProd)
-        {
-            dbMenu.Add(new Modulo { Id = 4, Descripcion = "PCP", IconCss = "icon-docs icon", TieneChild = true });
-            dbMenu.Add(new Modulo
-            {
-                Id = 7,
-                Descripcion = "Carga de Máquina",
-                IconCss = "",
-                TieneChild = false,
-                ParentId = 4,
-                Url = "/cargamaquina"
-            });
-            dbMenu.Add(new Modulo { Id = 2, Descripcion = "VENTAS", IconCss = "icon-th icon", TieneChild = true });
-            dbMenu.Add(new Modulo
-            {
-                Id = 8,
-                Descripcion = "Logistica",
-                IconCss = "",
-                TieneChild = false,
-                ParentId = 2,
-                Url = "/logistica-listado"
-            });
-            dbMenu.Add(new Modulo
-            {
-                Id = 13,
-                Descripcion = "Servicios",
-                IconCss = "",
-                TieneChild = false,
-                ParentId = 2,
-                Url = "/servicio/listado"
-            });
-            dbMenu.Add(new Modulo { Id = 5, Descripcion = "CONTROL DE CALIDAD", IconCss = "icon-th icon", TieneChild = true });
-            dbMenu.Add(new Modulo
-            {
-                Id = 14,
-                Descripcion = "Trazabilidad",
-                IconCss = "",
-                TieneChild = false,
-                ParentId = 5,
-                Url = "/trazabilidad"
-            });
-            dbMenu.Add(new Modulo { Id = 3, Descripcion = "INVENTARIOS", IconCss = "icon-th icon", TieneChild = true });
-            dbMenu.Add(new Modulo
-            {
-                Id = 14,
-                Descripcion = "Recepcion de Insumos",
-                IconCss = "",
-                TieneChild = false,
-                ParentId = 3,
-                Url = "/inventario/5"
-            });
-        }
-    }
-    protected async Task TestApi()
-    {
-        var modulos = await Http.GetFromJsonAsync<IEnumerable<Modulo>>("api/Modulo");
+
     }
 
     protected async Task NodeClicked(NodeSelectEventArgs args)
