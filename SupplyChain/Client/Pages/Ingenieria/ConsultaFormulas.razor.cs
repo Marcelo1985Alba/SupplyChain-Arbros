@@ -23,6 +23,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
 
         protected SfDialog DialogDespieceRef;
         protected SfGrid<DespiecePlanificacion> GridDespiece;
+        protected SfGrid<vIngenieriaProductosFormulas> GridProdForm;
         protected List<DespiecePlanificacion> listaDespiece = new();
 
         protected List<vIngenieriaProductosFormulas> DataOrdeProductosFormulas { get; set; } = new List<vIngenieriaProductosFormulas>();
@@ -49,11 +50,38 @@ namespace SupplyChain.Client.Pages.Ingenieria
             }
         }
 
+        protected async Task ToolbarProdFormClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+        {
+
+            if (args.Item.Id == "ProdForm_excelexport") //Id is combination of Grid's ID and itemname
+            {
+                VisibleSpinner = true;
+                await this.GridProdForm.ExcelExport();
+                VisibleSpinner = false;
+            }
+        }
+
+        protected async Task ToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+        {
+            
+            if (args.Item.Id == "Despiece_excelexport") //Id is combination of Grid's ID and itemname
+            {
+                VisibleSpinner = true;
+                await this.GridDespiece.ExcelExport();
+                VisibleSpinner = false;
+            }
+        }
+
         protected async Task QueryCellInfoHandler(QueryCellInfoEventArgs<vIngenieriaProductosFormulas> args)
         {
             if (!args.Data.TIENE_FORM)
             {
                 args.Cell.AddClass(new string[] { "rojas" });
+            }
+
+            if (args.Data.TIENE_FORM && !args.Data.FORM_ACTIVA)
+            {
+                args.Cell.AddClass(new string[] { "amarillas" });
             }
         }
     }

@@ -4,16 +4,21 @@
 @inherits BaseConsultaFormulas
 
 <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
-<SfGrid DataSource="@DataOrdeProductosFormulas" AllowPaging="true" AllowFiltering="true" AllowSorting="true">
+<SfGrid @ref="@GridProdForm" DataSource="@DataOrdeProductosFormulas" AllowPaging="true" AllowFiltering="true" AllowSorting="true" ID="ProdForm"
+        GridLines="GridLine.Both" Toolbar="@(new List<string>() { "ExcelExport" })" AllowExcelExport="true">
+    <GridPageSettings PageSizes="true"></GridPageSettings>
     <GridEvents TValue="vIngenieriaProductosFormulas"
                 QueryCellInfo="(async(args)=> await QueryCellInfoHandler(args))"
-                CommandClicked="(async(args)=> await CommandClickHandler(args))">
+                CommandClicked="(async(args)=> await CommandClickHandler(args))"
+                OnToolbarClick="ToolbarProdFormClickHandler">
 
     </GridEvents>
     <GridColumns>
         <GridColumn Field=@nameof(vIngenieriaProductosFormulas.CG_PROD) HeaderText="Producto" Width="120"></GridColumn>
         <GridColumn Field=@nameof(vIngenieriaProductosFormulas.DES_PROD) HeaderText="Descripcion" Width="150"></GridColumn>
         <GridColumn Field=@nameof(vIngenieriaProductosFormulas.TIENE_FORM) HeaderText="Tiene Formula" TextAlign="TextAlign.Right"
+                    Width="50" DisplayAsCheckBox="true"></GridColumn>
+        <GridColumn Field=@nameof(vIngenieriaProductosFormulas.FORM_ACTIVA) HeaderText="Formula Activa" TextAlign="TextAlign.Right"
                     Width="50" DisplayAsCheckBox="true"></GridColumn>
         <GridColumn HeaderText="Despiece" Width="30px">
             <GridCommandColumns>
@@ -39,9 +44,9 @@
                     <div class="form-row">
                         <SfGrid @ref="GridDespiece" DataSource="@listaDespiece" ID="Despiece"
                                 GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true"
-                                Height="250px" Width="100%">
+                                Height="250px" Width="100%" Toolbar="@(new List<string>() { "ExcelExport" })" AllowExcelExport="true">
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-                            <GridEvents TValue="DespiecePlanificacion"></GridEvents>
+                            <GridEvents TValue="DespiecePlanificacion" OnToolbarClick="ToolbarClickHandler"></GridEvents>
                             <GridTemplates>
                                 <DetailTemplate>
                                     @{
@@ -100,5 +105,8 @@
 <style>
     .e-grid .e-gridcontent .e-rowcell.rojas {
         background-color: #fd8787;
+    }
+    .e-grid .e-gridcontent .e-rowcell.amarillas {
+        background-color: #c3ab29;
     }
 </style>
