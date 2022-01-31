@@ -4,6 +4,11 @@
 @inherits BaseConsultaFormulas
 
 <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
+
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+
 <SfGrid @ref="@GridProdForm" DataSource="@DataOrdeProductosFormulas" AllowPaging="true" AllowFiltering="true" AllowSorting="true" ID="ProdForm"
         GridLines="GridLine.Both" Toolbar="@(new List<string>() { "ExcelExport" })" AllowExcelExport="true">
     <GridPageSettings PageSizes="true"></GridPageSettings>
@@ -34,17 +39,15 @@
 
 
 @*DIALOG PARA DESPIECE*@
-<SfDialog @ref="DialogDespieceRef" Width="80%" Height="450px" IsModal="true" ShowCloseIcon="true" Visible="false">
+<SfDialog @ref="DialogDespieceRef" Width="80%" Height="550px" IsModal="true" ShowCloseIcon="true" Visible="false">
     <DialogTemplates>
-        <Header><p class="card-header badge badge-info text-white">DESPIECE DEL PRODUCTO </p><hr /></Header>
+        <Header><p class="card-header badge badge-info text-white">DESPIECE DEL PRODUCTO: @ProdSelected.CG_PROD.Trim() - @ProdSelected.DES_PROD </p><hr /></Header>
         <Content>
             <div class="col-lg-12 control-section mt-2">
-                <hr class="separator">
-                <div>
                     <div class="form-row">
                         <SfGrid @ref="GridDespiece" DataSource="@listaDespiece" ID="Despiece"
                                 GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true"
-                                Height="250px" Width="100%" Toolbar="@(new List<string>() { "ExcelExport" })" AllowExcelExport="true">
+                                Height="250px" Width="100%" Toolbar="@Toolbaritems" AllowExcelExport="true">
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                             <GridEvents TValue="DespiecePlanificacion" OnToolbarClick="ToolbarClickHandler"></GridEvents>
                             <GridTemplates>
@@ -95,7 +98,6 @@
                             </GridColumns>
                         </SfGrid>
                     </div>
-                </div>
             </div>
 
         </Content>

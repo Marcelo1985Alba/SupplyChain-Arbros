@@ -53,6 +53,7 @@ namespace SupplyChain.Client
 
             services.AddScoped<InventarioService>();
             services.AddScoped<PdfService>();
+            services.AddScoped<ExcelService>();
             services.AddSingleton<ToastService>();
         }
     }

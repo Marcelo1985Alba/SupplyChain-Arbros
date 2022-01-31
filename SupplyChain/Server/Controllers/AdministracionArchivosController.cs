@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
 using System;
 using System.Collections.Generic;
@@ -22,15 +23,15 @@ namespace SupplyChain.Server.Controllers
         //Initialize the memory cache object   
         public IMemoryCache _cache;
         private string DocumentPath;
-        private readonly AppDbContext _context;
         private readonly ILogger<AdministracionArchivosController> logger;
+        private readonly SolutionRepository _solutionRepository;
 
         public AdministracionArchivosController(IWebHostEnvironment hostingEnvironment, IMemoryCache cache
-            , AppDbContext appContext
+            , SolutionRepository solutionRepository
             , ILogger<AdministracionArchivosController> logger)
         {
             _hostingEnvironment = hostingEnvironment;
-            this._context = appContext;
+            this._solutionRepository = solutionRepository;
         }
 
         [HttpGet("ByParamRuta/{parametro}/{codigo}")]
@@ -39,7 +40,7 @@ namespace SupplyChain.Server.Controllers
             try
             {
                 var archivos = new List<Archivo>();
-                var ruta = await _context.Solution.Where(s => s.CAMPO == parametro).FirstOrDefaultAsync();
+                var ruta = await _solutionRepository.Obtener(s => s.CAMPO == parametro).FirstOrDefaultAsync();
                 var endLength = ruta.CAMPO.Trim() == "RUTAENSAYO" ? 9 : 7;
                 var file = codigo.Substring(0, endLength); 
                 string[] dirs = Directory.GetFiles(@$"{ruta.VALORC}", $"{file}*");
@@ -73,7 +74,7 @@ namespace SupplyChain.Server.Controllers
         [HttpPost("DownloadText")]
         public async Task<ActionResult<ModeloOrdenFabricacion>> DownloadText(ModeloOrdenFabricacion ordfab)
         {
-            var ruta = await _context.Solution.Where(s => s.CAMPO == "RUTADATOS").FirstOrDefaultAsync();
+            var ruta = await _solutionRepository.Obtener(s => s.CAMPO == "RUTADATOS").FirstOrDefaultAsync();
             string fileName = ruta.VALORC + ordfab.PEDIDO + ".txt";
             try
             {
@@ -104,7 +105,7 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("ExisteEspecificacion/{file}")]
         public async Task<bool> ExisteEspecificacion(string file)
         {
-            var param = await _context.Solution.Where(s => s.CAMPO == "RUTAESP").FirstOrDefaultAsync();
+            var param = await _solutionRepository.Obtener(s => s.CAMPO == "RUTAESP").FirstOrDefaultAsync();
             var path = param.VALORC.Trim();
 
             return System.IO.File.Exists(path + "/" + file);
@@ -113,7 +114,7 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("ExistePlano/{file}")]
         public async Task<bool> ExistePlano(string file)
         {
-            var param = await _context.Solution.Where(s => s.CAMPO == "RUTAOF").FirstOrDefaultAsync();
+            var param = await _solutionRepository.Obtener(s => s.CAMPO == "RUTAOF").FirstOrDefaultAsync();
             var path = param.VALORC.Trim();
 
             return System.IO.File.Exists(path + "/" + file);
@@ -121,7 +122,7 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("ExisteCertificado/{file}")]
         public async Task<bool> ExisteCertificado(string file)
         {
-            var param = await _context.Solution.Where(s => s.CAMPO == "RUTATRAZABILIDAD").FirstOrDefaultAsync();
+            var param = await _solutionRepository.Obtener(s => s.CAMPO == "RUTATRAZABILIDAD").FirstOrDefaultAsync();
             var path = param.VALORC.Trim();
 
             return System.IO.File.Exists(path + "/" + file);
@@ -133,7 +134,7 @@ namespace SupplyChain.Server.Controllers
             try
             {
                 MemoryStream stream = new MemoryStream();
-                var ruta = await _context.Solution.Where(s => s.CAMPO == "RUTAOF").FirstOrDefaultAsync();
+                var ruta = await _solutionRepository.Obtener(s => s.CAMPO == "RUTAOF").FirstOrDefaultAsync();
                 byte[] bytes = System.IO.File.ReadAllBytes(ruta.VALORC + "/" + file);
                 stream = new MemoryStream(bytes);
                 string mimeType = "application/pdf";
@@ -193,12 +194,43 @@ namespace SupplyChain.Server.Controllers
                 
                 var coty = blob.Properties.ContentType;
                 var properties = blob.Properties;
-                MemoryStream memoryStream = new MemoryStream(blob.Properties.ContentHash);
+                MemoryStream memoryStream = new(blob.Properties.ContentHash);
                 DocumentPath = "data:application/pdf;base64," + Convert.ToBase64String(memoryStream.ToArray());
             }
 
 
             return DocumentPath;
+        }
+
+        [HttpPost("GuardarExcel")]
+        public async Task<ActionResult<Archivo>> GuardarExcel(Archivo archivo)
+        {
+            if (archivo == null)
+            {
+                return BadRequest("El archivo es nulo");
+            }
+
+            if (archivo.ContenidoByte == null)
+            {
+                return BadRequest("Debe asignar stream");
+            }
+
+            string path = await _solutionRepository.Obtener(s=> s.CAMPO == "RUTADESPIECE").Select(s=> s.VALORC).FirstOrDefaultAsync();
+
+
+
+            using (var memoryStream = new MemoryStream(archivo.ContenidoByte))
+            {
+
+                string tempFilePath = Path.Combine(path + archivo.Nombre);
+                using (var fs = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write))
+                {
+                    memoryStream.WriteTo(fs);
+                }
+
+            }
+
+            return Ok(archivo);
         }
 
         private bool ExisteDoc(string file)

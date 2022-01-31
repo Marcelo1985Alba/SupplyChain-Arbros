@@ -70,7 +70,6 @@ namespace SupplyChain
             jsonResult = pdfviewer.Load(stream, jsonObject);
 
             var result = Content(JsonConvert.SerializeObject(jsonResult));
-            
             return result;
         }
 
