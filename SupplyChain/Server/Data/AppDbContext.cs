@@ -99,6 +99,7 @@ namespace SupplyChain
         public DbSet<vIngenieriaProductosFormulas> vIngenieriaProductosFormulas { get; set; }
 
         public DbSet<Formula> Formulas { get; set; }
+        public DbSet<StockCorregido> StockCorregidos { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {

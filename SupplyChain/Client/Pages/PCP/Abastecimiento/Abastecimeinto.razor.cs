@@ -79,6 +79,7 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             //}
 
             //await InvokeAsync(StateHasChanged);
+            VisiblePropertySE = false;
         }
 
 
@@ -87,7 +88,7 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             VisiblePropertySE = true;
             GridSE.PreventRender();
             await GridSE.AutoFitColumns();
-            await SpinnerObjSE.ShowAsync();
+            VisiblePropertySE = false;
         }
 
         public async Task DataBoundHandler(object args)
@@ -95,6 +96,7 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             GridSE.PreventRender();
             await GridSE.AutoFitColumns();
             VisiblePropertySE = false;
+
         }
 
         public async Task ClickHandlerMP(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -215,8 +217,7 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
         protected async Task OnLoadGridSE(object args)
         {
             GridSE.PreventRender();
-            await SpinnerObjSE.ShowAsync();
-            VisiblePropertySE = true;
+            VisiblePropertySE = false;
         }
         protected async Task OnLoadGridMP(object args)
         {
@@ -225,7 +226,7 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
 
         protected void Selecting(SelectingEventArgs args)
         {
-            VisiblePropertySE = true;
+            VisiblePropertySE = false;
         }
     }
 }

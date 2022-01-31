@@ -156,13 +156,13 @@ namespace SupplyChain.Server.Controllers
         private async Task Reserva(string campo)
         {
             var sp = $"Exec N_Genera 1, '{campo}', 'R', 0, '', 0, 0";
-            await _context.Database.ExecuteSqlRawAsync(sp); ;
+            await _context.Database.ExecuteSqlRawAsync(sp);
         }
 
         private async Task Libera(string campo)
         {
             var sp = $"Exec N_Genera 1, '{campo}', 'L', 0, '', 0, 0";
-            await _context.Database.ExecuteSqlRawAsync(sp); ;
+            await _context.Database.ExecuteSqlRawAsync(sp);
         }
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SupplyChain;
+using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared.Models;
 
 namespace SupplyChain.Server.Controllers
@@ -21,10 +22,12 @@ namespace SupplyChain.Server.Controllers
             .SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build().GetConnectionString("DefaultConnection");
         private readonly AppDbContext _context;
         private DataTable dbPlanificacion;
+        private readonly StockCorregidoRepository _stockCorregidoRepository;
 
-        public PlanificacionController(AppDbContext context)
+        public PlanificacionController(AppDbContext context, StockCorregidoRepository stockCorregidoRepository)
         {
             _context = context;
+            this._stockCorregidoRepository = stockCorregidoRepository;
         }
         // GET: api/Planificacion/{armado}/{emitidas}
         [HttpGet("{armado}/{emitidas}")]
@@ -33,8 +36,6 @@ namespace SupplyChain.Server.Controllers
 
             try
             {
-                ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
-
                 string xSQLCommandString = "SELECT A.SEM_ORIGEN, A.SEM_ABAST_PURO, A.SEM_ABAST, B.CG_ORDEN, A.CG_ORDF" +
                 ", (CASE WHEN B.CG_ORDEN=1 THEN 'Producto' ELSE (CASE WHEN B.CG_ORDEN=2 " +
                 "THEN 'Semi-Elaborado de Proceso' ELSE (CASE WHEN B.CG_ORDEN=3 THEN 'Semi-Elaborado' " +
@@ -74,7 +75,7 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
-                ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+                ConexionSQL xConexionSQL = new(CadenaConexionSQL);
                 dbPlanificacion = xConexionSQL
                     .EjecutarSQL(String.Format("EXEC NET_PCP_Despiece_Producto '{0}', {1}, {2}", cg_prod, formula, cantidad));
 
@@ -95,12 +96,15 @@ namespace SupplyChain.Server.Controllers
                     SALDO_TOTAL = m.Field<decimal>("SALDO_TOTAL"),
                 }).ToList();
 
+
+                
                 foreach (DespiecePlanificacion item in xLista)
                 {
                     var codigoInsumo = string.IsNullOrWhiteSpace(item.CG_SE) ? item.CG_MAT.Trim() : item.CG_SE.Trim();
                     item.ResumenStocks = await _context.ResumenStock
                         .Where(r => r.CG_ART == codigoInsumo && r.STOCK > 0)
                         .ToListAsync();
+                    item.StockCorregido = await _stockCorregidoRepository.Obtener(s=> s.CG_PROD == codigoInsumo).FirstOrDefaultAsync();
                 }
 
                 return xLista;
