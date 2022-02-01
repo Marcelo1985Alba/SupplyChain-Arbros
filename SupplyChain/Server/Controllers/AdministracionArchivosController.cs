@@ -114,10 +114,18 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("ExistePlano/{file}")]
         public async Task<bool> ExistePlano(string file)
         {
-            var param = await _solutionRepository.Obtener(s => s.CAMPO == "RUTAOF").FirstOrDefaultAsync();
-            var path = param.VALORC.Trim();
+            try
+            {
+                var param = await _solutionRepository.Obtener(s => s.CAMPO == "RUTAOF").FirstOrDefaultAsync();
+                var path = param.VALORC.Trim();
 
-            return System.IO.File.Exists(path + "/" + file);
+                return System.IO.File.Exists(path + "/" + file);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            
         }
         [HttpGet("ExisteCertificado/{file}")]
         public async Task<bool> ExisteCertificado(string file)

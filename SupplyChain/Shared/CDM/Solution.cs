@@ -13,6 +13,6 @@ namespace SupplyChain
         [Key]
         public string CAMPO { get; set; }
         public string VALORC { get; set; }
-        public string DESCRIPCION { get; set; }
+        public string DESCRIP { get; set; }
     }
 }
