@@ -16,5 +16,9 @@ namespace SupplyChain.Shared
         public decimal UNIDEQUI { get; set; }
         public int MES { get; set; }
         public int ANIO { get; set; }
+        public DateTime FECHA_PREV { get; set; }
+        public int MES_PREV { get; set; }
+        public int ANIO_PREV { get; set; }
+        public int SEMANA_PREV { get; set; }
     }
 }

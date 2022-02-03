@@ -33,19 +33,31 @@ namespace SupplyChain.Client.Pages.PCP.Unidades_Equivalentes
         protected SfChart refChartDetalle;
         public List<vEstadPedidosIngresados> DataPedidosIngresados { get; set; }
         protected List<ChartData> PedidosIngresadosAnuales { get; set; } = new List<ChartData>();
-        protected List<vEstadPedidosIngresados> PedidosIngresadosAnualesDetalle { get; set; } = new List<vEstadPedidosIngresados>();
+        
+        
         protected List<ChartData> PedidosIngresadosMensuales { get; set; } = new List<ChartData>();
         protected string TituloGraficoMensual = "";
         protected string SerieSelecciona = "";
         protected int PromedioPedidosIngresadosMensuales = 0;
 
         protected SfChart refChartDetallePedidosAlta;
+        protected List<vEstadPedidosIngresados> PedidosIngresadosAnualesDetalle { get; set; } = new List<vEstadPedidosIngresados>();
         protected List<ChartData> PedidosAltasAnuales { get; set; } = new List<ChartData>();
         protected List<ChartData> PedidosAltasMensuales { get; set; } = new List<ChartData>();
         protected List<vEstadPedidosAlta> PedidosAltaAnualesDetalle { get; set; } = new List<vEstadPedidosAlta>();
         protected string TituloGraficoMensualPedidosAlta = "";
         protected string SerieSeleccionaPedidosAlta = "";
         protected int PromedioPedidosAltaMensuales = 0;
+
+
+        protected SfChart refChartDetallePedidosIngresadosPrev;
+        protected List<ChartData> PedidosIngresadosPrevMensuales { get; set; } = new List<ChartData>();
+        protected List<ChartData> PedidosIngresadosPrevSemanales { get; set; } = new List<ChartData>();
+        
+        protected List<vEstadPedidosIngresados> PedidosIngresadosPrevDetalle { get; set; } = new List<vEstadPedidosIngresados>();
+        protected string TituloGraficoMensualPedidosingresadosPrev = "";
+        protected string SerieSeleccionaingresadosPrev = "";
+        protected int PromedioPedidosingresadosPrev = 0;
 
         protected override async Task OnInitializedAsync()
         {
@@ -62,6 +74,18 @@ namespace SupplyChain.Client.Pages.PCP.Unidades_Equivalentes
         protected async Task GetPedidosIngresados()
         {
             this.DataPedidosIngresados = await Http.GetFromJsonAsync<List<vEstadPedidosIngresados>>("api/EstadisticaVentas/PedidosIngresados");
+
+            PedidosIngresadosPrevMensuales = DataPedidosIngresados
+                .OrderBy(c => c.MES_PREV)
+                .GroupBy(g => new { g.MES_PREV })
+            .Select(d => new ChartData()
+            {
+                XSerieName = d.Key.MES_PREV.ToString(),
+                YSerieName = Convert.ToDouble(d.Sum(p => p.UNIDEQUI))
+            })
+            //.OrderBy(c => c.XSerieName)
+            .ToList();
+
 
             PedidosIngresadosAnuales = DataPedidosIngresados.GroupBy(g => new { g.ANIO })
             .Select(d => new ChartData()
@@ -135,6 +159,32 @@ namespace SupplyChain.Client.Pages.PCP.Unidades_Equivalentes
             await InvokeAsync(StateHasChanged);
             await refChartDetallePedidosAlta.RefreshAsync();
             await refChartDetallePedidosAlta.RefreshAsync();
+
+
+        }
+
+        protected async Task MostrarDetallePrev(Syncfusion.Blazor.Charts.PointEventArgs args)
+        {
+            var mes = args.Point.X;
+            SerieSeleccionaPedidosAlta = args.Series.Name;
+            TituloGraficoMensualPedidosingresadosPrev = $"Unidades Equivalentes Semanal del Mes {mes}";
+
+            PedidosIngresadosPrevDetalle = DataPedidosIngresados.Where(p => p.MES_PREV == Convert.ToInt32(mes)).ToList();
+
+            PedidosIngresadosPrevSemanales = DataPedidosIngresados
+            .Where(v => v.MES_PREV == Convert.ToInt32(mes))
+            .OrderBy(o => o.SEMANA_PREV)
+            .GroupBy(g => new { g.SEMANA_PREV }).Select(d => new ChartData()
+            {
+                XSerieName = d.Key.SEMANA_PREV.ToString(),
+                YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.UNIDEQUI)))
+            }).ToList();
+
+            //PromedioPedidosAltaMensuales = Convert.ToInt32(PedidosAltasMensuales.Average(p => p.YSerieName));
+
+            await InvokeAsync(StateHasChanged);
+            await refChartDetallePedidosIngresadosPrev.RefreshAsync();
+            await refChartDetallePedidosIngresadosPrev.RefreshAsync();
 
 
         }
