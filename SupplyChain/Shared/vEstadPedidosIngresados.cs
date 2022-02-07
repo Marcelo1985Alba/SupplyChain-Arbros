@@ -20,5 +20,7 @@ namespace SupplyChain.Shared
         public int MES_PREV { get; set; }
         public int ANIO_PREV { get; set; }
         public int SEMANA_PREV { get; set; }
+        public bool ESTADO { get; set; }
+
     }
 }

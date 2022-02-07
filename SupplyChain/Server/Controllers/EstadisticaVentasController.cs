@@ -49,9 +49,7 @@ namespace SupplyChain
             try
             {
                 List<EstadVenta> Estad;
-                Estad = await _context.EstadVentas.ToListAsync();
-
-                return Estad;
+                return await _context.EstadVentas.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -79,10 +77,7 @@ namespace SupplyChain
         {
             try
             {
-                List<vEstadPedidosIngresados> Estad;
-                Estad = await _context.vEstadPedidosIngresados.ToListAsync();
-
-                return Estad;
+                return await _context.vEstadPedidosIngresados.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -95,10 +90,7 @@ namespace SupplyChain
         {
             try
             {
-                List<vEstadPedidosAlta> Estad;
-                Estad = await _context.vEstadPedidosAltas.ToListAsync();
-
-                return Estad;
+                return await _context.vEstadPedidosAltas.ToListAsync();
             }
             catch (Exception ex)
             {

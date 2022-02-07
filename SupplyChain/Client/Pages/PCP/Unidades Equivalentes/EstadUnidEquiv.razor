@@ -5,9 +5,9 @@
 @page "/pcp/indicadores/unidades-equivalentes"
 @inherits BaseEstadUnidEquiv
 
-<SfTab HeaderPlacement="HeaderPosition.Top">
+<SfTab HeaderPlacement="HeaderPosition.Top" CssClass="tab-pane">
     <TabItems>
-        <TabItem>
+        <TabItem CssClass="tab-content">
             <ChildContent>
                 <TabHeader Text="Pedidos Ingresados"></TabHeader>
             </ChildContent>
@@ -16,7 +16,7 @@
                     <div class="col-6">
                         <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
                         <div class="card">
-                            <div class="card-body">
+                            <div class="card-body ">
                                 <SfChart Title="" Width="100%">
                                     <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
                                     <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category">
@@ -38,6 +38,7 @@
                                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                                 </ChartDataLabel>
                                             </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
                                         </ChartSeries>
                                     </ChartSeriesCollection>
                                     <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
@@ -80,7 +81,7 @@
                                         </ChartStriplines>
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
-                                        <ChartSeries DataSource="@PedidosIngresadosMensuales" XName="XSerieName" YName="YSerieName" 
+                                        <ChartSeries DataSource="@PedidosIngresadosMensuales" XName="XSerieName" YName="YSerieName"
                                                      Name="Mes" Fill="url(#card1-gradient-chart)"
                                                      Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
                                             <ChartMarker>
@@ -88,6 +89,7 @@
                                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                                 </ChartDataLabel>
                                             </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
                                         </ChartSeries>
                                     </ChartSeriesCollection>
                                     <ChartTooltipSettings Enable="true">
@@ -136,7 +138,7 @@
                                         <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
-                                        <ChartSeries DataSource="@PedidosAltasAnuales" XName="XSerieName" YName="YSerieName" 
+                                        <ChartSeries DataSource="@PedidosAltasAnuales" XName="XSerieName" YName="YSerieName"
                                                      Name="Año" Fill="url(#card2-gradient-chart)"
                                                      Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
                                             <ChartMarker>
@@ -144,6 +146,7 @@
                                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                                 </ChartDataLabel>
                                             </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
                                         </ChartSeries>
                                     </ChartSeriesCollection>
                                     <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
@@ -189,7 +192,7 @@
                                         </ChartStriplines>
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
-                                        <ChartSeries DataSource="@PedidosAltasMensuales" XName="XSerieName" YName="YSerieName" 
+                                        <ChartSeries DataSource="@PedidosAltasMensuales" XName="XSerieName" YName="YSerieName"
                                                      Name="Mes" Fill="url(#card2-gradient-chart)"
                                                      Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
                                             <ChartMarker>
@@ -197,6 +200,7 @@
                                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                                 </ChartDataLabel>
                                             </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
                                         </ChartSeries>
                                     </ChartSeriesCollection>
                                     <ChartTooltipSettings Enable="true">
@@ -224,7 +228,7 @@
         </TabItem>
         <TabItem>
             <ChildContent>
-                <TabHeader Text="Pedidos Ingresados por Fecha Prevista"></TabHeader>
+                <TabHeader Text="Pedidos Pendientes por Fecha Prevista"></TabHeader>
             </ChildContent>
             <ContentTemplate>
                 <div class="row">
@@ -245,7 +249,7 @@
 
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
-                                        <ChartSeries DataSource="@PedidosIngresadosPrevMensuales" XName="XSerieName" YName="YSerieName"
+                                        <ChartSeries DataSource="@PedidosPendientesPrevMensuales" XName="XSerieName" YName="YSerieName"
                                                      Name="Mes" Fill="url(#card3-gradient-chart)"
                                                      Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
                                             <ChartMarker>
@@ -253,6 +257,7 @@
                                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                                 </ChartDataLabel>
                                             </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
                                         </ChartSeries>
                                     </ChartSeriesCollection>
                                     <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
@@ -295,7 +300,7 @@
                                             </ChartStriplines>*@
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
-                                        <ChartSeries DataSource="@PedidosIngresadosPrevSemanales" XName="XSerieName" YName="YSerieName" 
+                                        <ChartSeries DataSource="@PedidosIngresadosPrevSemanales" XName="XSerieName" YName="YSerieName"
                                                      Name="Semana" Fill="url(#card3-gradient-chart)"
                                                      Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
                                             <ChartMarker>
@@ -303,6 +308,7 @@
                                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                                 </ChartDataLabel>
                                             </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
                                         </ChartSeries>
                                     </ChartSeriesCollection>
                                     <ChartTooltipSettings Enable="true">

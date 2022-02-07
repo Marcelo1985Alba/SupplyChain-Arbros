@@ -32,6 +32,7 @@ namespace SupplyChain.Client.Pages.PCP.Unidades_Equivalentes
         }
         protected SfChart refChartDetalle;
         public List<vEstadPedidosIngresados> DataPedidosIngresados { get; set; }
+        public List<vEstadPedidosIngresados> DataPedidosPendientes { get; set; } = new();
         protected List<ChartData> PedidosIngresadosAnuales { get; set; } = new List<ChartData>();
         
         
@@ -51,7 +52,7 @@ namespace SupplyChain.Client.Pages.PCP.Unidades_Equivalentes
 
 
         protected SfChart refChartDetallePedidosIngresadosPrev;
-        protected List<ChartData> PedidosIngresadosPrevMensuales { get; set; } = new List<ChartData>();
+        protected List<ChartData> PedidosPendientesPrevMensuales { get; set; } = new List<ChartData>();
         protected List<ChartData> PedidosIngresadosPrevSemanales { get; set; } = new List<ChartData>();
         
         protected List<vEstadPedidosIngresados> PedidosIngresadosPrevDetalle { get; set; } = new List<vEstadPedidosIngresados>();
@@ -75,7 +76,11 @@ namespace SupplyChain.Client.Pages.PCP.Unidades_Equivalentes
         {
             this.DataPedidosIngresados = await Http.GetFromJsonAsync<List<vEstadPedidosIngresados>>("api/EstadisticaVentas/PedidosIngresados");
 
-            PedidosIngresadosPrevMensuales = DataPedidosIngresados
+            DataPedidosPendientes = DataPedidosIngresados
+                .Where(p => p.ESTADO && p.FECHA > new DateTime(2021, 8, 1)).ToList();
+
+            // pedidos pendientes por fecha prevista
+            PedidosPendientesPrevMensuales = DataPedidosPendientes //pedidos pendiendos
                 .OrderBy(c => c.MES_PREV)
                 .GroupBy(g => new { g.MES_PREV })
             .Select(d => new ChartData()
@@ -85,6 +90,7 @@ namespace SupplyChain.Client.Pages.PCP.Unidades_Equivalentes
             })
             //.OrderBy(c => c.XSerieName)
             .ToList();
+
 
 
             PedidosIngresadosAnuales = DataPedidosIngresados.GroupBy(g => new { g.ANIO })
@@ -169,9 +175,9 @@ namespace SupplyChain.Client.Pages.PCP.Unidades_Equivalentes
             SerieSeleccionaPedidosAlta = args.Series.Name;
             TituloGraficoMensualPedidosingresadosPrev = $"Unidades Equivalentes Semanal del Mes {mes}";
 
-            PedidosIngresadosPrevDetalle = DataPedidosIngresados.Where(p => p.MES_PREV == Convert.ToInt32(mes)).ToList();
+            PedidosIngresadosPrevDetalle = DataPedidosPendientes.Where(p => p.MES_PREV == Convert.ToInt32(mes)).ToList();
 
-            PedidosIngresadosPrevSemanales = DataPedidosIngresados
+            PedidosIngresadosPrevSemanales = DataPedidosPendientes
             .Where(v => v.MES_PREV == Convert.ToInt32(mes))
             .OrderBy(o => o.SEMANA_PREV)
             .GroupBy(g => new { g.SEMANA_PREV }).Select(d => new ChartData()
