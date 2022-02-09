@@ -2,6 +2,7 @@
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
 using Syncfusion.Blazor.Charts;
+using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Spinner;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected string SerieSeleccionaFacturacion = "";
         protected int PromedioFacturacionMensual = 0;
 
+        protected SfGrid<vEstadCompras> gridDetalleCompras;
         protected SfChart refChartDetalleCompras;
         protected SfAccumulationChart refChartDetalleComprasTipo;
         protected List<vEstadCompras> DataComprasDetalle = new();
@@ -81,6 +83,8 @@ namespace SupplyChain.Client.Pages.Panel_Control
                 YSerieName = Convert.ToDouble(d.Sum(p => p.TOTAL_DOL))
             }).OrderBy(c => c.XSerieName)
             .ToList();
+
+            gridDetalleCompras?.PreventRender();
         }
 
         protected async Task MostrarDetalle(Syncfusion.Blazor.Charts.PointEventArgs args)
@@ -119,7 +123,10 @@ namespace SupplyChain.Client.Pages.Panel_Control
             TituloGraficoComprasMensual = $"Compra Mensual {año}";
 
             //para grilla de detalle
-            DataComprasDetalle = DataComprasOriginal.Where(p => p.ANIO == Convert.ToInt32(año)).ToList();
+            gridDetalleCompras.PreventRender();
+            DataComprasDetalle = new();
+            DataComprasDetalle = DataComprasOriginal.Where(p => p.ANIO == Convert.ToInt32(año))
+                .ToList();
 
 
             ComprasMensual = DataComprasOriginal
@@ -143,14 +150,13 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
             PromedioComprasMensual = Convert.ToInt32(ComprasMensual.Average(p => p.YSerieName));
 
-            await InvokeAsync(StateHasChanged);
+            StateHasChanged();
+            //gridDetalleCompras.Refresh();
             await refChartDetalleCompras.RefreshAsync();
             await refChartDetalleCompras.RefreshAsync();
 
-            refChartDetalleComprasTipo.Refresh();
-            refChartDetalleComprasTipo.Refresh();
-
-
+            //refChartDetalleComprasTipo.Refresh();
+            //refChartDetalleComprasTipo.Refresh();
         }
     }
 }
