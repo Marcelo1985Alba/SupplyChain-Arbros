@@ -110,5 +110,18 @@ namespace SupplyChain
                 return BadRequest(ex);
             }
         }
+
+        [HttpGet("Compras")]
+        public async Task<ActionResult<List<vEstadCompras>>> GetCompras()
+        {
+            try
+            {
+                return await _context.vEstadCompras.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
     }
 }
