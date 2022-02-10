@@ -211,6 +211,7 @@
                                     </ChartSeriesCollection>
                                     <ChartTooltipSettings Enable="true">
                                     </ChartTooltipSettings>
+                                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetalleComprasMesTipo(a))"></ChartEvents>
                                 </SfChart>
                             </div>
 
@@ -219,22 +220,11 @@
 
                     </div>
 
-                    <div class="col-12">
+                    <div class="col-6">
                         <div class="card">
                             <div class="card-body">
-                                @*<SfAccumulationChart @ref="refChartDetalleComprasTipo" EnableBorderOnMouseMove="false" Title="Compras por Tipo U$S" EnableSmartLabels="true">
-            <AccumulationChartLegendSettings Visible="false"></AccumulationChartLegendSettings>
-            <AccumulationChartTooltipSettings Enable="true" Format="${point.x} : <b>${point.y}U$S</b>"></AccumulationChartTooltipSettings>
-            <AccumulationChartSeriesCollection>
-                <AccumulationChartSeries DataSource="@ComprasMensualTipo" Name="Tipo" XName="XSerieName"
-                                         YName="YSerieName" StartAngle="60" InnerRadius="0%" Palettes="@palettes">
-                    <AccumulationDataLabelSettings Name="DataLabelMappingName" Visible="true" Position="AccumulationLabelPosition.Outside">
-                        <AccumulationChartConnector Length="20px" Type="ConnectorType.Curve"></AccumulationChartConnector>
-                    </AccumulationDataLabelSettings>
-                </AccumulationChartSeries>
-            </AccumulationChartSeriesCollection>
-        </SfAccumulationChart>*@
-                                <SfChart @ref="refChartDetalleCompras" Title="" Width="100%">
+
+                                <SfChart @ref="refChartDetalleComprasMesTipo" Title="" Width="100%">
                                     <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
                                     <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
                                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift">
@@ -249,16 +239,16 @@
 
                                             @if (PromedioComprasMensual > 0)
                                             {
-                                            @*<ChartStripline Start="397" End="400" Color="red"
-                                    Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
-                        <ChartStriplineTextStyle Color="red" />
-                    </ChartStripline>*@
+                                                @*<ChartStripline Start="397" End="400" Color="red"
+                                                    Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
+                                        <ChartStriplineTextStyle Color="red" />
+                                    </ChartStripline>*@
                                                 if (ComprasMensual.Count > 1)
                                                 {
-                                            <ChartStripline Start="@(PromedioComprasMensual - 10)"
-                                                            SizeType="SizeType.Pixel" Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
-                                                            Text="@("Promedio: " + PromedioComprasMensual )" ZIndex="ZIndex.Over"
-                                                            End="PromedioComprasMensual" Color="green" />
+                                                    <ChartStripline Start="@(PromedioComprasMensual - 10)"
+                                                                    SizeType="SizeType.Pixel" Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
+                                                                    Text="@("Promedio: " + PromedioComprasMensual )" ZIndex="ZIndex.Over"
+                                                                    End="PromedioComprasMensual" Color="green" />
                                                 }
 
                                             }
@@ -284,6 +274,28 @@
 
                     </div>
 
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <SfAccumulationChart @ref="refAccChartDetalleComprasTipo" EnableBorderOnMouseMove="false" Title="Compras por Tipo U$S" EnableSmartLabels="true">
+                                    <AccumulationChartLegendSettings Visible="false"></AccumulationChartLegendSettings>
+                                    <AccumulationChartTooltipSettings Enable="true" Format="${point.x} : <b>${point.y}U$S</b>"></AccumulationChartTooltipSettings>
+                                    <AccumulationChartSeriesCollection>
+                                        <AccumulationChartSeries DataSource="@ComprasMensualTipo" Name="Tipo" XName="XSerieName"
+                                                                 YName="YSerieName" StartAngle="60" InnerRadius="0%" Palettes="@palettes">
+                                            <AccumulationDataLabelSettings Name="DataLabelMappingName" Visible="true" Position="AccumulationLabelPosition.Outside">
+                                                <AccumulationChartConnector Length="20px" Type="ConnectorType.Curve"></AccumulationChartConnector>
+                                            </AccumulationDataLabelSettings>
+                                        </AccumulationChartSeries>
+                                    </AccumulationChartSeriesCollection>
+                                </SfAccumulationChart>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    
 
                     <div class="col-12">
                         <div class="card">

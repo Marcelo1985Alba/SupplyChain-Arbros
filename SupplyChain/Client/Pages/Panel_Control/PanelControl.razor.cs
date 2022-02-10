@@ -33,7 +33,8 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
         protected SfGrid<vEstadCompras> gridDetalleCompras;
         protected SfChart refChartDetalleCompras;
-        protected SfAccumulationChart refChartDetalleComprasTipo;
+        protected SfAccumulationChart refAccChartDetalleComprasTipo;
+        protected SfChart refChartDetalleComprasMesTipo;
         protected List<vEstadCompras> DataComprasDetalle = new();
         protected List<ChartData> ComprasAnual = new();
         protected List<ChartData> ComprasMensual = new();
@@ -138,9 +139,24 @@ namespace SupplyChain.Client.Pages.Panel_Control
                 YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.TOTAL_DOL)), 2)
             }).ToList();
 
+
+            PromedioComprasMensual = Convert.ToInt32(ComprasMensual.Average(p => p.YSerieName));
+
+            StateHasChanged();
+            //gridDetalleCompras.Refresh();
+            await refChartDetalleCompras.RefreshAsync();
+            await refChartDetalleCompras.RefreshAsync();
+        }
+
+        protected async Task MostrarDetalleComprasMesTipo(Syncfusion.Blazor.Charts.PointEventArgs args)
+        {
+            var mes = args.Point.X;
+            SerieSeleccionaCompras = args.Series.Name;
+            TituloGraficoComprasMensual = $"Compra Mensual {mes}";
+
             //POR TIPO
             ComprasMensualTipo = DataComprasOriginal
-            .Where(v => v.ANIO == Convert.ToInt32(año))
+            .Where(v => v.MES == Convert.ToInt32(mes))
             .OrderBy(o => o.MES)
             .GroupBy(g => new { g.TIPO }).Select(d => new ChartData()
             {
@@ -152,11 +168,8 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
             StateHasChanged();
             //gridDetalleCompras.Refresh();
-            await refChartDetalleCompras.RefreshAsync();
-            await refChartDetalleCompras.RefreshAsync();
-
-            //refChartDetalleComprasTipo.Refresh();
-            //refChartDetalleComprasTipo.Refresh();
+            await refChartDetalleComprasMesTipo.RefreshAsync();
+            await refChartDetalleComprasMesTipo.RefreshAsync();
         }
     }
 }
