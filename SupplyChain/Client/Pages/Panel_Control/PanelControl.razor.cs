@@ -43,8 +43,25 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected string SerieSeleccionaCompras = "";
         protected int PromedioComprasMensual = 0;
 
+        protected SfChart refChartDetallePedidos;
+        protected SfGrid<vEstadPedidosIngresados> grdPedIngresados;
+        protected List<vEstadPedidosIngresados> DataPedidosIngresados { get; set; } = new ();
+        protected List<vEstadPedidosIngresados> PedidosIngresadosAnualesDetalle { get; set; } = new ();
+        protected List<ChartData> PedidosIngresadosAnuales { get; set; } = new ();
+        protected List<ChartData> PedidosIngresadosMensuales { get; set; } = new ();
+        protected string TituloGraficoPedidosMensual = "";
+        protected string SerieSeleccionaPedidos = "";
+        protected int PromedioPedidosIngresadosMensuales = 0;
+
         protected string[] palettes = new string[] {"#38610B", "#688A08", "#86B404", "#74DF00", 
             "#40FF00", "#2EFE2E", "#81F781", "#D0FA58", "#D7DF01","#DBA901", "#2EFE9A" };
+
+        public class ChartData
+        {
+            public string XSerieName { get; set; }
+            public double YSerieName { get; set; }
+        }
+
         protected override async Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Panel de Control";
@@ -52,15 +69,11 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
             await GetFacturacion();
             await GetCompras();
-
+            await GetPedidos();
             VisibleSpinner = false;
         }
 
-        public class ChartData
-        {
-            public string XSerieName { get; set; }
-            public double YSerieName { get; set; }
-        }
+        
         protected async Task GetFacturacion()
         {
             this.DataFacturacionOriginal = await Http.GetFromJsonAsync<List<vEstadFacturacion>>("api/EstadisticaVentas/Facturacion");
@@ -88,6 +101,24 @@ namespace SupplyChain.Client.Pages.Panel_Control
             gridDetalleCompras?.PreventRender();
         }
 
+
+        protected async Task GetPedidos()
+        {
+            this.DataPedidosIngresados = await Http.GetFromJsonAsync<List<vEstadPedidosIngresados>>("api/EstadisticaVentas/PedidosIngresados");
+
+
+            PedidosIngresadosAnuales = DataPedidosIngresados.GroupBy(g => new { g.ANIO })
+            .Select(d => new ChartData()
+            {
+                XSerieName = d.Key.ANIO.ToString(),
+                YSerieName = d.Sum(p => p.TOT_DOL)
+            })
+            .OrderBy(c => c.XSerieName)
+            .ToList();
+
+            grdPedIngresados?.PreventRender();
+        }
+
         protected async Task MostrarDetalle(Syncfusion.Blazor.Charts.PointEventArgs args)
         {
             var año = args.Point.X;
@@ -95,7 +126,9 @@ namespace SupplyChain.Client.Pages.Panel_Control
             TituloGraficoFacturacionMensual = $"Facturación Mensual {año}";
 
             //para grilla de detalle
-            DataFacturacionDetalle = DataFacturacionOriginal.Where(p => p.ANIO == Convert.ToInt32(año)).ToList();
+            DataFacturacionDetalle = DataFacturacionOriginal.Where(p => p.ANIO == Convert.ToInt32(año))
+                //.OrderBy(o => new { o.ANIO, o.MES })
+                .ToList();
 
 
             FacturacionMensual = DataFacturacionOriginal
@@ -127,6 +160,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
             gridDetalleCompras.PreventRender();
             DataComprasDetalle = new();
             DataComprasDetalle = DataComprasOriginal.Where(p => p.ANIO == Convert.ToInt32(año))
+                //.OrderBy(o => new { o.ANIO, o.MES })
                 .ToList();
 
 
@@ -170,6 +204,35 @@ namespace SupplyChain.Client.Pages.Panel_Control
             //gridDetalleCompras.Refresh();
             await refChartDetalleComprasMesTipo.RefreshAsync();
             await refChartDetalleComprasMesTipo.RefreshAsync();
+        }
+
+        protected async Task MostrarDetallePedidosAnuales(Syncfusion.Blazor.Charts.PointEventArgs args)
+        {
+            var año = args.Point.X;
+            SerieSeleccionaPedidos = args.Series.Name;
+            TituloGraficoPedidosMensual = $"U$S Mensuales {año}";
+
+            PedidosIngresadosAnualesDetalle = DataPedidosIngresados.Where(p => p.ANIO == Convert.ToInt32(año))
+                //.OrderBy(p => new { p.ANIO_PREV, p.MES })
+                .ToList();
+
+
+            PedidosIngresadosMensuales = DataPedidosIngresados
+            .Where(v => v.ANIO == Convert.ToInt32(año))
+            .OrderBy(o => o.MES)
+            .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+            {
+                XSerieName = d.Key.MES.ToString(),
+                YSerieName = Math.Round(d.Sum(p => p.TOT_DOL))
+            }).ToList();
+
+
+            PromedioPedidosIngresadosMensuales = Convert.ToInt32(PedidosIngresadosMensuales.Average(p => p.YSerieName));
+            await InvokeAsync(StateHasChanged);
+            await refChartDetallePedidos.RefreshAsync();
+            await refChartDetallePedidos.RefreshAsync();
+
+
         }
     }
 }

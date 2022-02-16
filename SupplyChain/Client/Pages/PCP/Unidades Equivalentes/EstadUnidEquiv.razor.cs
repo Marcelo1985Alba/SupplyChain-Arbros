@@ -2,6 +2,7 @@
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
 using Syncfusion.Blazor.Charts;
+using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Spinner;
 using System;
 using System.Collections.Generic;
@@ -34,8 +35,9 @@ namespace SupplyChain.Client.Pages.PCP.Unidades_Equivalentes
         public List<vEstadPedidosIngresados> DataPedidosIngresados { get; set; }
         public List<vEstadPedidosIngresados> DataPedidosPendientes { get; set; } = new();
         protected List<ChartData> PedidosIngresadosAnuales { get; set; } = new List<ChartData>();
-        
-        
+        protected SfGrid<vEstadPedidosIngresados> grdPedIngresados;
+
+
         protected List<ChartData> PedidosIngresadosMensuales { get; set; } = new List<ChartData>();
         protected string TituloGraficoMensual = "";
         protected string SerieSelecciona = "";
@@ -135,7 +137,7 @@ namespace SupplyChain.Client.Pages.PCP.Unidades_Equivalentes
 
 
             PromedioPedidosIngresadosMensuales = Convert.ToInt32(PedidosIngresadosMensuales.Average(p => p.YSerieName));
-
+            //await grdPedIngresados.AutoFitColumnsAsync();
             await InvokeAsync(StateHasChanged);
             await refChartDetalle.RefreshAsync();
             await refChartDetalle.RefreshAsync();

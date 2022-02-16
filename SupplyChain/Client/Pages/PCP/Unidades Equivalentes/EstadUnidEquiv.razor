@@ -104,11 +104,23 @@
                     </div>
 
                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <SfGrid DataSource="@(PedidosIngresadosAnualesDetalle)" GridLines="GridLine.Both"
+                        <div class="content-wrapper">
+                            <div class="row">
+                                <SfGrid @ref="grdPedIngresados" DataSource="@(PedidosIngresadosAnualesDetalle)" GridLines="GridLine.Both"
                                         AllowResizing="true" AllowReordering="true" AllowMultiSorting="true" AllowSorting="true"
-                                        AllowPaging="true" Height="450"> </SfGrid>
+                                        AllowPaging="true" Height="450" Width="100%" >
+                                    <GridColumns>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.PEDIDO) HeaderText="PEDIDO" Width="70px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.FECHA) HeaderText="FECHA" Format="dd/MM/yyyy" Width="85px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.CG_ART) HeaderText="PRODUCTO" Width="140px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.DES_ART) HeaderText="DESCRIPCION" Width="250px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.CANTPED) HeaderText="CANTIDAD" Width="100px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.UNIDEQUI) HeaderText="UNID EQUIV" Width="100px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.MES) HeaderText="MES" Width="70px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.ANIO) HeaderText="AÑO" Width="70px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.ESTADO) HeaderText="ESTADO" Width="80px" DisplayAsCheckBox="true"></GridColumn>
+                                    </GridColumns>
+                                </SfGrid>
                             </div>
                         </div>
 
@@ -218,7 +230,18 @@
                             <div class="card-body">
                                 <SfGrid DataSource="@PedidosAltaAnualesDetalle" GridLines="GridLine.Both" AllowResizing="true"
                                         AllowReordering="true" AllowSorting="true"
-                                        AllowPaging="true" Height="450"> </SfGrid>
+                                        AllowPaging="true" Height="450" Width="100%" >
+                                    <GridColumns>
+                                        <GridColumn Field=@nameof(vEstadPedidosAlta.PEDIDO) HeaderText="PEDIDO" Width="80px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosAlta.FECHA) HeaderText="FECHA ALTA" Format="dd/MM/yyyy" Width="90px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosAlta.CG_ART) HeaderText="PRODUCTO" Width="140px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosAlta.DES_ART) HeaderText="DESCRIPCION" Width="250px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosAlta.STOCK) HeaderText="CANTIDAD" Width="100px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosAlta.UNIDEQUI) HeaderText="UNID EQUIV" Width="100px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosAlta.MES) HeaderText="MES" Width="70px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosAlta.ANIO) HeaderText="AÑO" Width="70px"></GridColumn>
+                                    </GridColumns>
+                                </SfGrid>
                             </div>
                         </div>
 
@@ -327,7 +350,19 @@
                             <div class="card-body">
                                 <SfGrid DataSource="@(PedidosIngresadosPrevDetalle)" GridLines="GridLine.Both"
                                         AllowResizing="true" AllowReordering="true" AllowMultiSorting="true" AllowSorting="true"
-                                        AllowPaging="true" Height="450"> </SfGrid>
+                                        AllowPaging="true" Height="450" Width="100%">
+                                    <GridColumns>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.PEDIDO) HeaderText="PEDIDO" Width="80px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.FECHA) HeaderText="FECHA" Format="dd/MM/yyyy" Width="90px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.FECHA_PREV) HeaderText="FECHA PREV" Format="dd/MM/yyyy" Width="90px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.CG_ART) HeaderText="PRODUCTO" Width="140px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.DES_ART) HeaderText="DESCRIPCION" Width="250px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.CANTPED) HeaderText="CANTIDAD" Width="100px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.UNIDEQUI) HeaderText="UNID EQUIV" Width="100px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.MES_PREV) HeaderText="MES" Width="70px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.ANIO_PREV) HeaderText="AÑO" Width="70px"></GridColumn>
+                                    </GridColumns>
+                                </SfGrid>
                             </div>
                         </div>
 
