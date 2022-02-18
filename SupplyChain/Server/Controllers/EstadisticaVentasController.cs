@@ -35,7 +35,7 @@ namespace SupplyChain
 
 
         [HttpGet("GetPresupuestos")]
-        public object GetPresupuestos()
+        public object GetPresupuestos2()
         {
             IQueryable<EstadVenta> data = _context.EstadVentas.Where(e => e.Presup > 0).AsQueryable();
             return new { Items = data, Count = data.Count() };
@@ -117,6 +117,19 @@ namespace SupplyChain
             try
             {
                 return await _context.vEstadCompras.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("Presupuestos")]
+        public async Task<ActionResult<List<vEstadPresupuestos>>> GetPresupuestos()
+        {
+            try
+            {
+                return await _context.vEstadPresupuestos.ToListAsync();
             }
             catch (Exception ex)
             {

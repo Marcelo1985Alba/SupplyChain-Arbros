@@ -53,6 +53,17 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected string SerieSeleccionaPedidos = "";
         protected int PromedioPedidosIngresadosMensuales = 0;
 
+
+        protected SfChart refChartDetallePresupuestos;
+        protected SfGrid<vEstadPresupuestos> grdPresupuestos;
+        protected List<vEstadPresupuestos> DataPresupuestos { get; set; } = new();
+        protected List<vEstadPresupuestos> PresupuestosAnualesDetalle { get; set; } = new();
+        protected List<ChartData> PresupuestosAnuales { get; set; } = new();
+        protected List<ChartData> PresupuestosMensuales { get; set; } = new();
+        protected string TituloGraficoPresupuestosMensual = "";
+        protected string SerieSeleccionaPresupuestos = "";
+        protected int PromedioPresupuestosMensuales = 0;
+
         protected string[] palettes = new string[] {"#38610B", "#688A08", "#86B404", "#74DF00", 
             "#40FF00", "#2EFE2E", "#81F781", "#D0FA58", "#D7DF01","#DBA901", "#2EFE9A" };
 
@@ -70,6 +81,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
             await GetFacturacion();
             await GetCompras();
             await GetPedidos();
+            await GetPresupuestos();
             VisibleSpinner = false;
         }
 
@@ -117,6 +129,23 @@ namespace SupplyChain.Client.Pages.Panel_Control
             .ToList();
 
             grdPedIngresados?.PreventRender();
+        }
+
+        protected async Task GetPresupuestos()
+        {
+            this.DataPresupuestos = await Http.GetFromJsonAsync<List<vEstadPresupuestos>>("api/EstadisticaVentas/Presupuestos");
+
+
+            PresupuestosAnuales = DataPresupuestos.GroupBy(g => new { g.ANIO })
+            .Select(d => new ChartData()
+            {
+                XSerieName = d.Key.ANIO.ToString(),
+                YSerieName = d.Sum(p => p.TOT_DOL)
+            })
+            .OrderBy(c => c.XSerieName)
+            .ToList();
+
+            grdPresupuestos?.PreventRender();
         }
 
         protected async Task MostrarDetalle(Syncfusion.Blazor.Charts.PointEventArgs args)
@@ -231,6 +260,35 @@ namespace SupplyChain.Client.Pages.Panel_Control
             await InvokeAsync(StateHasChanged);
             await refChartDetallePedidos.RefreshAsync();
             await refChartDetallePedidos.RefreshAsync();
+
+
+        }
+
+        protected async Task MostrarDetallePresupuestosAnuales(Syncfusion.Blazor.Charts.PointEventArgs args)
+        {
+            var año = args.Point.X;
+            SerieSeleccionaPresupuestos = args.Series.Name;
+            TituloGraficoPresupuestosMensual = $"U$S Mensuales {año}";
+
+            PresupuestosAnualesDetalle = DataPresupuestos.Where(p => p.ANIO == Convert.ToInt32(año))
+                //.OrderBy(p => new { p.ANIO_PREV, p.MES })
+                .ToList();
+
+
+            PresupuestosMensuales = DataPresupuestos
+                .Where(v => v.ANIO == Convert.ToInt32(año))
+                .OrderBy(o => o.MES)
+                .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.MES.ToString(),
+                    YSerieName = Math.Round(d.Sum(p => p.TOT_DOL))
+                }).ToList();
+
+
+            PromedioPresupuestosMensuales = Convert.ToInt32(PresupuestosMensuales.Average(p => p.YSerieName));
+            await InvokeAsync(StateHasChanged);
+            await refChartDetallePresupuestos.RefreshAsync();
+            await refChartDetallePresupuestos.RefreshAsync();
 
 
         }

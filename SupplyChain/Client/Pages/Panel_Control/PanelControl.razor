@@ -30,7 +30,7 @@
                                         <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
                                         <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
                                         <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
-                                        
+
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
                                         <ChartSeries DataSource="@FacturacionAnual" XName="XSerieName" YName="YSerieName" Name="Año"
@@ -73,7 +73,7 @@
                                             {
                                                 <ChartStripline Start="99800" End="100000" SizeType="SizeType.Pixel" ZIndex="ZIndex.Over"
                                                                 Size="1" DashArray="5,5" Color='#BB830D' HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
-                                                                Text="@("Objetivo: 100000")" >
+                                                                Text="@("Objetivo: 100000")">
                                                     <ChartStriplineTextStyle Size="10px" Color="red" />
                                                 </ChartStripline>
                                                 if (FacturacionMensual.Count > 1)
@@ -96,6 +96,7 @@
                                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                                 </ChartDataLabel>
                                             </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
                                         </ChartSeries>
                                     </ChartSeriesCollection>
                                     <ChartTooltipSettings Enable="true">
@@ -380,7 +381,7 @@
                                                 </ChartStripline>
                                                 <ChartStripline Start="@(PromedioPedidosIngresadosMensuales - 2)" SizeType="SizeType.Pixel" ZIndex="ZIndex.Over"
                                                                 Size="1" DashArray="5,5" Color='blue' HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
-                                                                Text="@("Promedio: " + PromedioPedidosIngresadosMensuales )" 
+                                                                Text="@("Promedio: " + PromedioPedidosIngresadosMensuales )"
                                                                 End="PromedioPedidosIngresadosMensuales" />
                                             }
 
@@ -426,6 +427,130 @@
                                         <GridColumn Field=@nameof(vEstadPedidosIngresados.MES) HeaderText="MES" Width="70px"></GridColumn>
                                         <GridColumn Field=@nameof(vEstadPedidosIngresados.ANIO) HeaderText="AÑO" Width="70px"></GridColumn>
                                         <GridColumn Field=@nameof(vEstadPedidosIngresados.ESTADO) HeaderText="ESTADO" Width="80px" DisplayAsCheckBox="true"></GridColumn>
+                                    </GridColumns>
+                                </SfGrid>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </ContentTemplate>
+        </TabItem>
+        <TabItem CssClass="tab-content">
+            <ChildContent>
+                <TabHeader Text="Prespuestos"></TabHeader>
+            </ChildContent>
+            <ContentTemplate>
+                <div class="row">
+                    <div class="col-6">
+                        <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
+                        <div class="card">
+                            <div class="card-body">
+                                <SfChart Title="" Width="100%">
+                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category">
+                                    </ChartPrimaryXAxis>
+
+                                    <ChartPrimaryYAxis Title="U$S Anuales" LabelFormat="{value} U$S">
+                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                        <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
+                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+
+                                    </ChartPrimaryYAxis>
+                                    <ChartSeriesCollection>
+                                        <ChartSeries DataSource="@PedidosIngresadosAnuales" XName="XSerieName" YName="YSerieName"
+                                                     Name="Año" Fill="url(#card4-gradient-chart)"
+                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                            <ChartMarker>
+                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                                </ChartDataLabel>
+                                            </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                        </ChartSeries>
+                                    </ChartSeriesCollection>
+                                    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+                                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetallePresupuestosAnuales(a))"></ChartEvents>
+                                </SfChart>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <SfChart @ref="refChartDetallePresupuestos" Width="100%">
+                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                                    </ChartPrimaryXAxis>
+
+                                    <ChartPrimaryYAxis Title="@TituloGraficoPresupuestosMensual" LabelFormat="{value} U$S" 
+                                                       Minimum="0" Maximum="1000000" Interval="100000">
+                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                        <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
+                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                        <ChartStriplines>
+
+                                            @if (PromedioPresupuestosMensuales > 0)
+                                            {
+                                                <ChartStripline Start="890000" End="900000" Color="red" SizeType="SizeType.Pixel" ZIndex="ZIndex.Over"
+                                                                Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
+                                                                Text="@("Objetivo: 900000")">
+                                                    <ChartStriplineTextStyle Color="red" />
+                                                </ChartStripline>
+                                                <ChartStripline Start="@(PromedioPresupuestosMensuales - 2)" SizeType="SizeType.Pixel" ZIndex="ZIndex.Over"
+                                                                Size="1" DashArray="5,5" Color='blue' HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
+                                                                Text="@("Promedio: " + PromedioPresupuestosMensuales )"
+                                                                End="PromedioPresupuestosMensuales" />
+                                            }
+
+                                        </ChartStriplines>
+                                    </ChartPrimaryYAxis>
+                                    <ChartSeriesCollection>
+                                        <ChartSeries DataSource="@PresupuestosMensuales" XName="XSerieName" YName="YSerieName"
+                                                     Name="Mes" Fill="url(#card4-gradient-chart)"
+                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                            <ChartMarker>
+                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                                </ChartDataLabel>
+                                            </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                        </ChartSeries>
+                                    </ChartSeriesCollection>
+                                    <ChartTooltipSettings Enable="true">
+                                    </ChartTooltipSettings>
+                                    <ChartLegendSettings Visible="true" />
+                                </SfChart>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-12">
+                        <div class="content-wrapper">
+                            <div class="row">
+                                <SfGrid @ref="grdPresupuestos" DataSource="@(PresupuestosAnualesDetalle)" GridLines="GridLine.Both"
+                                        AllowResizing="true" AllowReordering="true" AllowMultiSorting="true" AllowSorting="true"
+                                        AllowPaging="true" Height="450" Width="100%">
+                                    <GridColumns>
+                                        <GridColumn Field=@nameof(vEstadPresupuestos.PRESUP) HeaderText="PRESUP" Width="75px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPresupuestos.FECHA) HeaderText="FECHA" Format="dd/MM/yyyy" Width="85px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPresupuestos.CG_ART) HeaderText="PRODUCTO" Width="140px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPresupuestos.DES_ART) HeaderText="DESCRIPCION" Width="250px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPresupuestos.CANTENT) HeaderText="CANTIDAD" Width="100px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPresupuestos.COTIZ) HeaderText="COTIZ" Width="80px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPresupuestos.TOT_DOL) HeaderText="TOTAL DOL" Width="100px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPresupuestos.MES) HeaderText="MES" Width="70px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPresupuestos.ANIO) HeaderText="AÑO" Width="70px"></GridColumn>
                                     </GridColumns>
                                 </SfGrid>
                             </div>
