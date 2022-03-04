@@ -185,9 +185,9 @@
                                             @if (PromedioComprasMensual > 0)
                                             {
                                                 @*<ChartStripline Start="397" End="400" Color="red"
-                                                                Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
-                                                    <ChartStriplineTextStyle Color="red" />
-                                                </ChartStripline>*@
+                                                    Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
+                                        <ChartStriplineTextStyle Color="red" />
+                                    </ChartStripline>*@
                                                 if (ComprasMensual.Count > 1)
                                                 {
                                                     <ChartStripline Start="@(PromedioComprasMensual - 10)"
@@ -242,9 +242,9 @@
                                             @if (PromedioComprasMensual > 0)
                                             {
                                                 @*<ChartStripline Start="397" End="400" Color="red"
-                                                                Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
-                                                    <ChartStriplineTextStyle Color="red" />
-                                                </ChartStripline>*@
+                                                    Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
+                                        <ChartStriplineTextStyle Color="red" />
+                                    </ChartStripline>*@
                                                 if (ComprasMensual.Count > 1)
                                                 {
                                                     <ChartStripline Start="@(PromedioComprasMensual - 10)"
@@ -277,24 +277,24 @@
                     </div>
 
                     @*<div class="col-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <SfAccumulationChart @ref="refAccChartDetalleComprasTipo" EnableBorderOnMouseMove="false" Title="Compras por Tipo U$S" EnableSmartLabels="true">
-                                    <AccumulationChartLegendSettings Visible="false"></AccumulationChartLegendSettings>
-                                    <AccumulationChartTooltipSettings Enable="true" Format="${point.x} : <b>${point.y}U$S</b>"></AccumulationChartTooltipSettings>
-                                    <AccumulationChartSeriesCollection>
-                                        <AccumulationChartSeries DataSource="@ComprasMensualTipo" Name="Tipo" XName="XSerieName"
-                                                                 YName="YSerieName" StartAngle="60" InnerRadius="0%" Palettes="@palettes">
-                                            <AccumulationDataLabelSettings Name="DataLabelMappingName" Visible="true" Position="AccumulationLabelPosition.Outside">
-                                                <AccumulationChartConnector Length="20px" Type="ConnectorType.Curve"></AccumulationChartConnector>
-                                            </AccumulationDataLabelSettings>
-                                        </AccumulationChartSeries>
-                                    </AccumulationChartSeriesCollection>
-                                </SfAccumulationChart>
-                            </div>
-                        </div>
+            <div class="card">
+                <div class="card-body">
+                    <SfAccumulationChart @ref="refAccChartDetalleComprasTipo" EnableBorderOnMouseMove="false" Title="Compras por Tipo U$S" EnableSmartLabels="true">
+                        <AccumulationChartLegendSettings Visible="false"></AccumulationChartLegendSettings>
+                        <AccumulationChartTooltipSettings Enable="true" Format="${point.x} : <b>${point.y}U$S</b>"></AccumulationChartTooltipSettings>
+                        <AccumulationChartSeriesCollection>
+                            <AccumulationChartSeries DataSource="@ComprasMensualTipo" Name="Tipo" XName="XSerieName"
+                                                     YName="YSerieName" StartAngle="60" InnerRadius="0%" Palettes="@palettes">
+                                <AccumulationDataLabelSettings Name="DataLabelMappingName" Visible="true" Position="AccumulationLabelPosition.Outside">
+                                    <AccumulationChartConnector Length="20px" Type="ConnectorType.Curve"></AccumulationChartConnector>
+                                </AccumulationDataLabelSettings>
+                            </AccumulationChartSeries>
+                        </AccumulationChartSeriesCollection>
+                    </SfAccumulationChart>
+                </div>
+            </div>
 
-                    </div>*@
+        </div>*@
 
 
 
@@ -309,6 +309,7 @@
                         </div>
 
                     </div>
+                    
                 </div>
             </ContentTemplate>
         </TabItem>
@@ -402,6 +403,7 @@
                                     <ChartTooltipSettings Enable="true">
                                     </ChartTooltipSettings>
                                     <ChartLegendSettings Visible="true" />
+                                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetallePedidosMensuales(a))"></ChartEvents>
                                 </SfChart>
                             </div>
 
@@ -410,10 +412,10 @@
 
                     </div>
 
-                    <div class="col-12">
+                    <div class="col-6">
                         <div class="content-wrapper">
                             <div class="row">
-                                <SfGrid @ref="grdPedIngresados" DataSource="@(PedidosIngresadosAnualesDetalle)" GridLines="GridLine.Both"
+                                <SfGrid @ref="grdPedIngresados" DataSource="@(PedidosIngresadosDetalleMes)" GridLines="GridLine.Both"
                                         AllowResizing="true" AllowReordering="true" AllowMultiSorting="true" AllowSorting="true"
                                         AllowPaging="true" Height="450" Width="100%">
                                     <GridColumns>
@@ -426,13 +428,31 @@
                                         <GridColumn Field=@nameof(vEstadPedidosIngresados.TOT_DOL) HeaderText="TOTAL DOL" Width="100px"></GridColumn>
                                         <GridColumn Field=@nameof(vEstadPedidosIngresados.MES) HeaderText="MES" Width="70px"></GridColumn>
                                         <GridColumn Field=@nameof(vEstadPedidosIngresados.ANIO) HeaderText="AÑO" Width="70px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.ESTADO) HeaderText="ESTADO" Width="80px" DisplayAsCheckBox="true"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.CATEGORIA) HeaderText="CATEGORIA" Width="100px"></GridColumn>
+                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.ESTADO) HeaderText="ESTADO" Width="90px" DisplayAsCheckBox="true"></GridColumn>
                                     </GridColumns>
                                 </SfGrid>
                             </div>
                         </div>
 
                     </div>
+                    <div class="col-6">
+                        <SfAccumulationChart Title="@TituloPedidosIngresadosCategoria" EnableSmartLabels="true" EnableAnimation="true">
+                            <AccumulationChartLegendSettings Visible="false"></AccumulationChartLegendSettings>
+                            <AccumulationChartLegendSettings Visible="false"></AccumulationChartLegendSettings>
+                            <AccumulationChartTooltipSettings Enable="true" Format="${point.x} : <b>${point.y}U$S</b>"></AccumulationChartTooltipSettings>
+                            <AccumulationChartSeriesCollection>
+                                <AccumulationChartSeries DataSource="@PedidosIngresadosCategoria" XName="XSerieName" YName="YSerieName"
+                                                         Name="CATEGORIA"
+                                                         InnerRadius="0%" Explode="true">
+                                    <AccumulationDataLabelSettings Name="ZSerieName" Visible="true" Position="AccumulationLabelPosition.Outside">
+                                        <AccumulationChartConnector Length="20px" Type="ConnectorType.Curve"></AccumulationChartConnector>
+                                    </AccumulationDataLabelSettings>
+                                </AccumulationChartSeries>
+                            </AccumulationChartSeriesCollection>
+                        </SfAccumulationChart>
+                    </div>
+                    
                 </div>
             </ContentTemplate>
         </TabItem>

@@ -46,12 +46,15 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected SfChart refChartDetallePedidos;
         protected SfGrid<vEstadPedidosIngresados> grdPedIngresados;
         protected List<vEstadPedidosIngresados> DataPedidosIngresados { get; set; } = new ();
-        protected List<vEstadPedidosIngresados> PedidosIngresadosAnualesDetalle { get; set; } = new ();
+        protected List<ChartData> PedidosIngresadosCategoria { get; set; } = new();
+        protected List<vEstadPedidosIngresados> PedidosIngresadosDetalleMes { get; set; } = new ();
         protected List<ChartData> PedidosIngresadosAnuales { get; set; } = new ();
         protected List<ChartData> PedidosIngresadosMensuales { get; set; } = new ();
+        protected string TituloPedidosIngresadosCategoria = "U$S por Categoria";
         protected string TituloGraficoPedidosMensual = "";
         protected string SerieSeleccionaPedidos = "";
-        protected int PromedioPedidosIngresadosMensuales = 0;
+        protected int añoSeleccionadoPedidosIngresados;
+        protected int PromedioPedidosIngresadosMensuales;
 
 
         protected SfChart refChartDetallePresupuestos;
@@ -71,6 +74,18 @@ namespace SupplyChain.Client.Pages.Panel_Control
         {
             public string XSerieName { get; set; }
             public double YSerieName { get; set; }
+
+            private string _z;
+            public string ZSerieName
+            {
+                get { return _z; }
+                set
+                {
+                    // Set B to some new value
+                    _z = $"{XSerieName}: U$S {YSerieName}";
+
+                }
+            }
         }
 
         protected override async Task OnInitializedAsync()
@@ -237,17 +252,13 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
         protected async Task MostrarDetallePedidosAnuales(Syncfusion.Blazor.Charts.PointEventArgs args)
         {
-            var año = args.Point.X;
+            añoSeleccionadoPedidosIngresados = Convert.ToInt32(args.Point.X);
             SerieSeleccionaPedidos = args.Series.Name;
-            TituloGraficoPedidosMensual = $"U$S Mensuales {año}";
-
-            PedidosIngresadosAnualesDetalle = DataPedidosIngresados.Where(p => p.ANIO == Convert.ToInt32(año))
-                //.OrderBy(p => new { p.ANIO_PREV, p.MES })
-                .ToList();
+            TituloGraficoPedidosMensual = $"U$S Mensuales {añoSeleccionadoPedidosIngresados}";
 
 
             PedidosIngresadosMensuales = DataPedidosIngresados
-            .Where(v => v.ANIO == Convert.ToInt32(año))
+            .Where(v => v.ANIO == añoSeleccionadoPedidosIngresados)
             .OrderBy(o => o.MES)
             .GroupBy(g => new { g.MES }).Select(d => new ChartData()
             {
@@ -257,9 +268,38 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
 
             PromedioPedidosIngresadosMensuales = Convert.ToInt32(PedidosIngresadosMensuales.Average(p => p.YSerieName));
+
             await InvokeAsync(StateHasChanged);
             await refChartDetallePedidos.RefreshAsync();
             await refChartDetallePedidos.RefreshAsync();
+
+
+        }
+
+        protected async Task MostrarDetallePedidosMensuales(Syncfusion.Blazor.Charts.PointEventArgs args)
+        {
+            var mesSeleccionadoPedidosIngresados = Convert.ToInt32(args.Point.X);
+            var SerieSeleccionaPedidosMensual = args.Series.Name;
+            TituloPedidosIngresadosCategoria = $"U$S por Categoria Año {añoSeleccionadoPedidosIngresados} Mes {mesSeleccionadoPedidosIngresados}";
+
+            PedidosIngresadosDetalleMes = DataPedidosIngresados
+                .Where(p => p.ANIO == añoSeleccionadoPedidosIngresados && p.MES == mesSeleccionadoPedidosIngresados)
+                .ToList();
+
+            PedidosIngresadosCategoria = DataPedidosIngresados
+                .Where(p => p.ANIO == añoSeleccionadoPedidosIngresados && p.MES == mesSeleccionadoPedidosIngresados)
+                .GroupBy(g => new { g.CATEGORIA })
+            .Select(d => new ChartData()
+            {
+                XSerieName = d.Key.CATEGORIA,
+                YSerieName = Math.Round(d.Sum(p => p.TOT_DOL), 2),
+                ZSerieName = $"{d.Key.CATEGORIA}: {Math.Round(d.Sum(p => p.TOT_DOL), 2)} U$S"
+            })
+            .OrderBy(c => c.XSerieName)
+            .ToList();
+
+
+            await InvokeAsync(StateHasChanged);
 
 
         }
