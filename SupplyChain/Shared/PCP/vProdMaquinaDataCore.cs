@@ -18,5 +18,7 @@ namespace SupplyChain.Shared.PCP
         public decimal ParadasPlanHoras { get; set; }
         public decimal SetupRealHoras { get; set; }
         public decimal TiempoNetoHoras { get; set; }
+        public string Orden { get; set; }
+        public string Operador { get; set; }
     }
 }

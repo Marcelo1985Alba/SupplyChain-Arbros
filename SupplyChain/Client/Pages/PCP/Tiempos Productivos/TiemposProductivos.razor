@@ -110,6 +110,7 @@
                     </ChartSeriesCollection>
                     <ChartTooltipSettings Enable="true">
                     </ChartTooltipSettings>
+                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetalleMes(a))"></ChartEvents>
                 </SfChart>
             </div>
 
@@ -121,8 +122,8 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <SfGrid DataSource="@vProdMaquinaOriginal" GridLines="GridLine.Both" AllowResizing="true"
-                        AllowPaging="true" Height="450"> </SfGrid>
+                <SfGrid DataSource="@vProdMaquinaDetalle" GridLines="GridLine.Both" AllowResizing="true"
+                        AllowPaging="true" AllowSorting="true" EnableAutoFill="true"  Height="450"> </SfGrid>
             </div>
         </div>
 

@@ -18,6 +18,7 @@ namespace SupplyChain.Client.Pages.PCP.Tiempos_Productivos
         [Inject] protected HttpClient Http { get; set; }
         protected SfChart refChartDetalle;
         protected List<vProdMaquinaDataCore> vProdMaquinaOriginal = new();
+        protected List<vProdMaquinaDataCore> vProdMaquinaDetalle = new();
         protected List<ChartData> vProdMaquinaCM1 = new();
         protected List<ChartData> vProdMaquinaCN1 = new();
         protected List<ChartData> vProdMaquinaCN2 = new();
@@ -31,8 +32,8 @@ namespace SupplyChain.Client.Pages.PCP.Tiempos_Productivos
         protected bool SpinnerVisible = false;
 
         protected string TituloGraficoMensual = "";
-        protected string SerieSelecciona = "";
-        
+        protected string maquinaSeleccionada = "";
+        protected int añoSeleccionado;
         [CascadingParameter] public MainLayout Mainlayout { get; set; }
 
 
@@ -82,13 +83,14 @@ namespace SupplyChain.Client.Pages.PCP.Tiempos_Productivos
 
         protected async Task MostrarDetalle(Syncfusion.Blazor.Charts.PointEventArgs args)
         {
-            var año = args.Point.X;
-            SerieSelecciona = args.Series.Name;
-            TituloGraficoMensual = $"Tiempos Productivos Mensual {SerieSelecciona}";
+            añoSeleccionado = Convert.ToInt32(args.Point.X);
+            maquinaSeleccionada = args.Series.Name;
+            TituloGraficoMensual = $"Tiempos Productivos Mensual {maquinaSeleccionada}";
 
+            vProdMaquinaDetalle = new();
 
             vProdMaquinaMes = vProdMaquinaOriginal
-                .Where(v=> v.Año == Convert.ToInt32(año) && v.Maquina.Trim() == SerieSelecciona.Trim())
+                .Where(v=> v.Año == añoSeleccionado && v.Maquina.Trim() == maquinaSeleccionada.Trim())
                 .OrderBy(o=> o.Mes)
                 .GroupBy(g=> new { g.Mes }).Select(d => new ChartData()
                 {
@@ -98,7 +100,7 @@ namespace SupplyChain.Client.Pages.PCP.Tiempos_Productivos
 
 
             vProdMaquinaMesParadas = vProdMaquinaOriginal
-                .Where(v => v.Año == Convert.ToInt32(año) && v.Maquina.Trim() == SerieSelecciona.Trim())
+                .Where(v => v.Año == Convert.ToInt32(añoSeleccionado) && v.Maquina.Trim() == maquinaSeleccionada.Trim())
                 .OrderBy(o => o.Mes)
                 .GroupBy(g => new { g.Mes }).Select(d => new ChartData()
                 {
@@ -107,7 +109,7 @@ namespace SupplyChain.Client.Pages.PCP.Tiempos_Productivos
                 }).ToList();
             
             vProdMaquinaMesSetup = vProdMaquinaOriginal
-                .Where(v => v.Año == Convert.ToInt32(año) && v.Maquina.Trim() == SerieSelecciona.Trim())
+                .Where(v => v.Año == Convert.ToInt32(añoSeleccionado) && v.Maquina.Trim() == maquinaSeleccionada.Trim())
                 .OrderBy(o => o.Mes)
                 .GroupBy(g => new { g.Mes }).Select(d => new ChartData()
                 {
@@ -121,6 +123,19 @@ namespace SupplyChain.Client.Pages.PCP.Tiempos_Productivos
             await refChartDetalle.RefreshAsync();
 
 
+        }
+
+        protected async Task MostrarDetalleMes(Syncfusion.Blazor.Charts.PointEventArgs args)
+        {
+            var mes = Convert.ToInt32(args.Point.X);
+
+
+            vProdMaquinaDetalle = vProdMaquinaOriginal
+                .Where(v => v.Año == añoSeleccionado && v.Mes == mes && v.Maquina.Trim() == maquinaSeleccionada.Trim())
+                .OrderBy(o => o.FechaFin)
+                .ToList();
+
+            await InvokeAsync(StateHasChanged);
         }
 
     }

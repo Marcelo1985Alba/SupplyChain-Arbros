@@ -258,12 +258,21 @@ else
     }
 
 
-    .e-treeview .e-list-item.e-active > .e-fullrow {
-        color: #ffffff !important;
-        background-color: transparent !important;
-        border-color: transparent !important;
-        font-weight: 500 !important;
-    }
+    /*.e-treeview .e-list-item.e-active {
+        background: white;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 7px;
+    }*/
+
+        .e-treeview .e-list-item.e-active > .e-fullrow {
+            color: #333 !important;
+            background-color: transparent !important;
+            border-color: transparent !important;
+            font-weight: 500 !important;
+            
+        }
 
     .e-treeview .e-list-text {
         font-size: 14px;
@@ -271,13 +280,14 @@ else
     }
 
     .e-treeview .e-list-item.e-active > .e-text-content > .e-list-text {
-        color: #ffffff !important;
+        color: #333 !important;
+        
     }
 
-    .e-treeview .e-list-item.e-hover > .e-text-content > .e-list-text {
+/*    .e-treeview .e-list-item.e-hover > .e-text-content > .e-list-text {
         color: #ffffff !important;
     }
-
+*/
     /*To customize the expand collapse icon color*/
     .e-treeview .e-icon-collapsible::before, .e-treeview .e-icon-expandable::before {
         color: white;
@@ -290,6 +300,19 @@ else
         font-size: 12px;
         padding-left: 0px !important;
     }
+
+    .custom-tree .e-level-2 > .e-list-item.e-active > .e-text-content > .e-list-text {
+        color: #333 !important;
+    }
+
+    .custom-tree .e-level-2 >.e-list-item.e-active {
+        background: white;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 7px;
+    }
+
 
     .e-treeview .e-list-icon, .e-treeview .e-list-img {
         display: inline-block;
