@@ -196,5 +196,8 @@ namespace SupplyChain
         public bool Control4 { get; set; } = false;
         public bool Control5 { get; set; } = false;
         public bool Control6 { get; set; } = false;
+
+        [Column("FLAG")]
+        public decimal CONFIRMADO { get; set; }
     }
 }

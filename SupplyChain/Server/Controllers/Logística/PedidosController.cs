@@ -501,6 +501,31 @@ namespace SupplyChain
             return Ok(stock);
         }
 
+        [HttpPut("FromPedCli")]
+        public async Task<ActionResult<Pedidos>> PutStockFromPedCli(PedCli pedCli)
+        {
+            List<Pedidos> lStocks = new();
+            try
+            {
+                lStocks = await _context.Pedidos.Where(p => p.PEDIDO == pedCli.PEDIDO && p.TIPOO == 1).ToListAsync();
+                foreach (var stock in lStocks)
+                {
+                    stock.CONFIRMADO = pedCli.CONFIRMADO ? 1: 0;
+                    await ActualizaDb(stock);
+                }
+            }
+            catch (DbUpdateConcurrencyException dbEx)
+            {
+                return BadRequest(dbEx);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+            return Ok(lStocks);
+        }
+
         private async Task ActualizaDb(Pedidos stock)
         {
             if (stock.TIPOO == 9 || stock.TIPOO == 10 || stock.TIPOO == 28)

@@ -9,9 +9,12 @@ namespace SupplyChain
 {
     public class PedCli : EntityBase
     {
+        private string _color;
         [Key]
         public int REGISTRO { get; set; } = 0;
+        public DateTime FE_PED { get; set; }
         public int PEDIDO { get; set; } = 0;
+        public decimal CANTPED { get; set; }
         public int NUMOCI { get; set; } = 0;
         public int CG_CLI { get; set; } = 0;
         public string DES_CLI { get; set; } = "";
@@ -32,5 +35,27 @@ namespace SupplyChain
         public string CAMPOCOM2 { get; set; } = "";
         public string REMITO { get; set; } = "";
         public DateTime ENTRPREV { get; set; }
-    }   
+
+        [Column("FLAG")]
+        public bool CONFIRMADO { get; set; }
+        [NotMapped]
+        public string COLOR
+        {
+            get { return _color; }
+            set
+            {
+                _color = ESTADO_LOGISTICA switch
+                {
+                    "Remitir" => "red",
+                    "Inspeccion" => "yellow",
+                    "Ret.Planta" => "greenyellow",
+                    "Ret.CABA" => "greenyellow",
+                    "Entregar" => "pink",
+                    "Facturar" => "maroon",
+                    "Pago" => "blue",
+                    _ => "black",
+                };
+            }
+        }
+    }
 }
