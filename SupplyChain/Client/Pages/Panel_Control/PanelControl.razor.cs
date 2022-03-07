@@ -3,6 +3,7 @@ using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
 using Syncfusion.Blazor.Charts;
 using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Layouts;
 using Syncfusion.Blazor.Spinner;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace SupplyChain.Client.Pages.Panel_Control
     {
         [Inject] public HttpClient Http { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
+
+        protected SfDashboardLayout dashboardObject;
         protected SfChart refChartDetalle;
         protected SfSpinner refSpinner;
         protected bool VisibleSpinner = false;
@@ -30,6 +33,9 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected string TituloGraficoFacturacionMensual = "";
         protected string SerieSeleccionaFacturacion = "";
         protected int PromedioFacturacionMensual = 0;
+
+        protected double[] Spacing = new double[] { 15, 15 };
+        protected double Ratio = 160 / 100;
 
         protected SfGrid<vEstadCompras> gridDetalleCompras;
         protected SfChart refChartDetalleCompras;

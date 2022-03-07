@@ -1,4 +1,5 @@
-﻿@page "/index"
+﻿@using Syncfusion.Blazor.Layouts
+@page "/index"
 
 <h1>Hola, @authState.User.Identity.Name!</h1>
 
@@ -12,6 +13,10 @@ Bienvenido a la nueva aplicación.
 @*<ComboVistasGrilla></ComboVistasGrilla>*@
 
 @*<iframe src="http://localhost:8090/" width="100%" height="1200" frameborder="0"></iframe>*@
+
+
+
+
 
 @code{
     [CascadingParameter] public MainLayout Layout { get; set; }

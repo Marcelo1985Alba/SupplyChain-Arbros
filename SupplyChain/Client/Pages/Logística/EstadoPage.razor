@@ -9,12 +9,14 @@
     <ToastPosition X="Center" Y="Top"></ToastPosition>
 </SfToast>
 
-<div>
+<div class="row">
     <SfTextBox ID="search_text" Placeholder="Buscar por Numero de Pedidos o Nombre de Cliente..."
                ShowClearButton="true" Value="@SearchValue"
-               OnChange="OnCardSearch" OnFocus="@(() => { PriorityValue = "None";  StatusValue = "None"; })"></SfTextBox>
+               OnChange="OnCardSearch" OnFocus="@(() => { PriorityValue = "None";  StatusValue = "None"; })">
 
-    <div>
+    </SfTextBox>
+    
+    <div class="col-12">
         <SfKanban @ref="@refKanban" ID="logisticaKanban" TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis"
                   AllowDragAndDrop="true" Height="440px" Query="@CardQuery">
             <KanbanEvents TValue="PedCli"

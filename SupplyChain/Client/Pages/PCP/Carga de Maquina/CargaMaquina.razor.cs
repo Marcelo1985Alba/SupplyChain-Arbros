@@ -163,7 +163,9 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 ordenFabricacion = await Http.GetFromJsonAsync<ModeloOrdenFabricacion>("api/OrdenesFabricacion/" + ordenNumero.ToString());
                 ordenFabricacionOriginal = Newtonsoft.Json.JsonConvert.DeserializeObject<ModeloOrdenFabricacion>(Newtonsoft.Json.JsonConvert.SerializeObject(ordenFabricacion));
                 // Ordenes dependientes
-                string xSQLcommand = String.Format("SELECT 0 ID, CONVERT(varchar, 0) TEXTO UNION SELECT DISTINCT CG_ORDF ID, CONVERT(varchar, CG_ORDF) TEXTO FROM PROGRAMA WHERE CG_ORDFASOC = {0} AND CG_ORDF != {1}",
+                string xSQLcommand = String.Format("SELECT 0 ID, CONVERT(varchar, 0) TEXTO " +
+                    "UNION " +
+                    "SELECT DISTINCT CG_ORDF ID, CONVERT(varchar, CG_ORDF) TEXTO FROM PROGRAMA WHERE CG_ORDFASOC = {0} AND CG_ORDF != {1}",
                                                       ordenFabricacion.CG_ORDFASOC,
                                                       ordenFabricacion.CG_ORDF);
                 dbOrdenesDependientes = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/" + xSQLcommand);

@@ -36,7 +36,8 @@ namespace SupplyChain
         public string REMITO { get; set; } = "";
         public DateTime ENTRPREV { get; set; }
 
-        [Column("FLAG")]
+        //[Column("FLAG")]
+        [NotMapped]
         public bool CONFIRMADO { get; set; }
         [NotMapped]
         public string COLOR
