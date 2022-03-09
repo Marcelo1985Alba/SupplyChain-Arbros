@@ -23,6 +23,7 @@ namespace SupplyChain.Shared
         public double COTIZ { get; set; }
         public double TOT_DOL { get; set; }
         public string CATEGORIA { get; set; }
+        public string MERCADO { get; set; }
         public bool ESTADO { get; set; }
 
     }

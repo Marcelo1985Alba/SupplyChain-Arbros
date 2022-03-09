@@ -53,6 +53,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected SfGrid<vEstadPedidosIngresados> grdPedIngresados;
         protected List<vEstadPedidosIngresados> DataPedidosIngresados { get; set; } = new ();
         protected List<ChartData> PedidosIngresadosCategoria { get; set; } = new();
+        protected List<ChartData> PedidosIngresadosMercado { get; set; } = new();
         protected List<vEstadPedidosIngresados> PedidosIngresadosDetalleMes { get; set; } = new ();
         protected List<ChartData> PedidosIngresadosAnuales { get; set; } = new ();
         protected List<ChartData> PedidosIngresadosMensuales { get; set; } = new ();
@@ -88,7 +89,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
                 set
                 {
                     // Set B to some new value
-                    _z = $"{XSerieName}: U$S {YSerieName}";
+                    _z = $"{XSerieName}: {YSerieName} %";
 
                 }
             }
@@ -260,20 +261,55 @@ namespace SupplyChain.Client.Pages.Panel_Control
         {
             añoSeleccionadoPedidosIngresados = Convert.ToInt32(args.Point.X);
             SerieSeleccionaPedidos = args.Series.Name;
-            TituloGraficoPedidosMensual = $"U$S Mensuales {añoSeleccionadoPedidosIngresados}";
+            TituloGraficoPedidosMensual = $"U$S Mensuales del {añoSeleccionadoPedidosIngresados}";
 
-
+            //grafico mensual
             PedidosIngresadosMensuales = DataPedidosIngresados
-            .Where(v => v.ANIO == añoSeleccionadoPedidosIngresados)
-            .OrderBy(o => o.MES)
-            .GroupBy(g => new { g.MES }).Select(d => new ChartData()
-            {
-                XSerieName = d.Key.MES.ToString(),
-                YSerieName = Math.Round(d.Sum(p => p.TOT_DOL))
-            }).ToList();
+                .Where(v => v.ANIO == añoSeleccionadoPedidosIngresados)
+                .OrderBy(o => o.MES)
+                .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.MES.ToString(),
+                    YSerieName = Math.Round(d.Sum(p => p.TOT_DOL))
+                }).ToList();
 
 
             PromedioPedidosIngresadosMensuales = Convert.ToInt32(PedidosIngresadosMensuales.Average(p => p.YSerieName));
+
+            //categoria de cliente
+            var totalPeriodoSeleccionado = Math.Round(DataPedidosIngresados
+                .Where(p => p.ANIO == añoSeleccionadoPedidosIngresados)
+                .Sum(s => s.TOT_DOL), 2);
+
+            TituloPedidosIngresadosCategoria = $"% por Categoria del {añoSeleccionadoPedidosIngresados} (US$ {totalPeriodoSeleccionado})";
+
+            PedidosIngresadosCategoria = DataPedidosIngresados
+                .Where(p => p.ANIO == añoSeleccionadoPedidosIngresados)
+                .GroupBy(g => new { g.CATEGORIA })
+            .Select(d => new ChartData()
+            {
+                XSerieName = d.Key.CATEGORIA,
+                YSerieName = Math.Round(Math.Round(d.Sum(p => p.TOT_DOL), 2) / totalPeriodoSeleccionado, 2) * 100,
+                ZSerieName = $"{Math.Round(Math.Round(d.Sum(p => p.TOT_DOL), 2) / totalPeriodoSeleccionado, 2) * 100} %"
+            })
+            .OrderBy(c => c.XSerieName)
+            .ToList();
+
+            PedidosIngresadosMercado = DataPedidosIngresados
+                .Where(p => p.ANIO == añoSeleccionadoPedidosIngresados)
+                .GroupBy(g => new { g.MERCADO })
+            .Select(d => new ChartData()
+            {
+                XSerieName = d.Key.MERCADO,
+                YSerieName = Math.Round(d.Sum(p => p.TOT_DOL), 2)
+            })
+            .OrderBy(c => c.XSerieName)
+            .ToList();
+
+            //detalle grilla
+            PedidosIngresadosDetalleMes = DataPedidosIngresados
+                .Where(p => p.ANIO == añoSeleccionadoPedidosIngresados)
+                .ToList();
 
             await InvokeAsync(StateHasChanged);
             await refChartDetallePedidos.RefreshAsync();
@@ -286,27 +322,34 @@ namespace SupplyChain.Client.Pages.Panel_Control
         {
             var mesSeleccionadoPedidosIngresados = Convert.ToInt32(args.Point.X);
             var SerieSeleccionaPedidosMensual = args.Series.Name;
-            TituloPedidosIngresadosCategoria = $"U$S por Categoria Año {añoSeleccionadoPedidosIngresados} Mes {mesSeleccionadoPedidosIngresados}";
+
+            var totalPeriodoSeleccionado = Math.Round(DataPedidosIngresados
+                .Where(p => p.ANIO == añoSeleccionadoPedidosIngresados && p.MES == mesSeleccionadoPedidosIngresados)
+                .Sum(s => s.TOT_DOL), 2);
+
+            var nombreMes = new DateTime(añoSeleccionadoPedidosIngresados, mesSeleccionadoPedidosIngresados, 1).ToString("MMMM");
+            TituloPedidosIngresadosCategoria = $"% por Categoria de {nombreMes} del {añoSeleccionadoPedidosIngresados} (US$ {totalPeriodoSeleccionado})";
 
             PedidosIngresadosDetalleMes = DataPedidosIngresados
                 .Where(p => p.ANIO == añoSeleccionadoPedidosIngresados && p.MES == mesSeleccionadoPedidosIngresados)
                 .ToList();
 
+            
+                
+            //%categoria de cliente
             PedidosIngresadosCategoria = DataPedidosIngresados
                 .Where(p => p.ANIO == añoSeleccionadoPedidosIngresados && p.MES == mesSeleccionadoPedidosIngresados)
                 .GroupBy(g => new { g.CATEGORIA })
             .Select(d => new ChartData()
             {
                 XSerieName = d.Key.CATEGORIA,
-                YSerieName = Math.Round(d.Sum(p => p.TOT_DOL), 2),
-                ZSerieName = $"{d.Key.CATEGORIA}: {Math.Round(d.Sum(p => p.TOT_DOL), 2)} U$S"
+                YSerieName = Math.Round(Math.Round(d.Sum(p => p.TOT_DOL), 2) / totalPeriodoSeleccionado, 2) * 100,
+                ZSerieName = $"{Math.Round(Math.Round(d.Sum(p => p.TOT_DOL), 2) / totalPeriodoSeleccionado, 2) * 100} %"
             })
             .OrderBy(c => c.XSerieName)
             .ToList();
 
-
             await InvokeAsync(StateHasChanged);
-
 
         }
 
