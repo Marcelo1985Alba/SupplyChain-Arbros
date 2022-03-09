@@ -57,12 +57,19 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected List<vEstadPedidosIngresados> PedidosIngresadosDetalleMes { get; set; } = new ();
         protected List<ChartData> PedidosIngresadosAnuales { get; set; } = new ();
         protected List<ChartData> PedidosIngresadosMensuales { get; set; } = new ();
+        protected List<ChartData> PedidosIngresadosMensualesCategoriaDetalle { get; set; } = new ();
         protected string TituloPedidosIngresadosCategoria = "U$S por Categoria";
+        protected string TituloPedidosIngresadosCategoriaDetalle = "Categoria";
         protected string TituloGraficoPedidosMensual = "";
         protected string SerieSeleccionaPedidos = "";
         protected int añoSeleccionadoPedidosIngresados;
         protected int PromedioPedidosIngresadosMensuales;
 
+        /////////////**********MERCADO EXTERNO*********////////////////////
+        protected DetalleCategoria.DialogDetalle dialogDetalle;
+        protected string TituloPedidosIngresadosMercado = "Mercado Externo";
+        //////////////////////////////////////////////////////////////////
+        
 
         protected SfChart refChartDetallePresupuestos;
         protected SfGrid<vEstadPresupuestos> grdPresupuestos;
@@ -89,8 +96,8 @@ namespace SupplyChain.Client.Pages.Panel_Control
                 set
                 {
                     // Set B to some new value
-                    _z = $"{XSerieName}: {YSerieName} %";
-
+                    //_z = $"{XSerieName}: {YSerieName} %";
+                    _z = value;
                 }
             }
         }
@@ -262,7 +269,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
             añoSeleccionadoPedidosIngresados = Convert.ToInt32(args.Point.X);
             SerieSeleccionaPedidos = args.Series.Name;
             TituloGraficoPedidosMensual = $"U$S Mensuales del {añoSeleccionadoPedidosIngresados}";
-
+            TituloPedidosIngresadosMercado = $"Mercado Externo del {añoSeleccionadoPedidosIngresados}";
             //grafico mensual
             PedidosIngresadosMensuales = DataPedidosIngresados
                 .Where(v => v.ANIO == añoSeleccionadoPedidosIngresados)
@@ -290,7 +297,8 @@ namespace SupplyChain.Client.Pages.Panel_Control
             {
                 XSerieName = d.Key.CATEGORIA,
                 YSerieName = Math.Round(Math.Round(d.Sum(p => p.TOT_DOL), 2) / totalPeriodoSeleccionado, 2) * 100,
-                ZSerieName = $"{Math.Round(Math.Round(d.Sum(p => p.TOT_DOL), 2) / totalPeriodoSeleccionado, 2) * 100} %"
+                ZSerieName = $"{Math.Round(Math.Round(d.Sum(p => p.TOT_DOL), 2) / totalPeriodoSeleccionado, 2) * 100} %\n" +
+                $"({Math.Round(d.Sum(p => p.TOT_DOL), 2)} U$S)"
             })
             .OrderBy(c => c.XSerieName)
             .ToList();
@@ -301,7 +309,9 @@ namespace SupplyChain.Client.Pages.Panel_Control
             .Select(d => new ChartData()
             {
                 XSerieName = d.Key.MERCADO,
-                YSerieName = Math.Round(d.Sum(p => p.TOT_DOL), 2)
+                YSerieName = Math.Round(d.Sum(p => p.TOT_DOL), 2),
+                ZSerieName = $"{Math.Round(Math.Round(d.Sum(p => p.TOT_DOL), 2) / totalPeriodoSeleccionado, 2) * 100} %\n" +
+                $"({Math.Round(d.Sum(p => p.TOT_DOL), 2)} U$S)"
             })
             .OrderBy(c => c.XSerieName)
             .ToList();
@@ -329,13 +339,11 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
             var nombreMes = new DateTime(añoSeleccionadoPedidosIngresados, mesSeleccionadoPedidosIngresados, 1).ToString("MMMM");
             TituloPedidosIngresadosCategoria = $"% por Categoria de {nombreMes} del {añoSeleccionadoPedidosIngresados} (US$ {totalPeriodoSeleccionado})";
-
+            TituloPedidosIngresadosMercado = $"Mercado Externo de {nombreMes} del {añoSeleccionadoPedidosIngresados}";
             PedidosIngresadosDetalleMes = DataPedidosIngresados
                 .Where(p => p.ANIO == añoSeleccionadoPedidosIngresados && p.MES == mesSeleccionadoPedidosIngresados)
                 .ToList();
-
             
-                
             //%categoria de cliente
             PedidosIngresadosCategoria = DataPedidosIngresados
                 .Where(p => p.ANIO == añoSeleccionadoPedidosIngresados && p.MES == mesSeleccionadoPedidosIngresados)
@@ -344,7 +352,21 @@ namespace SupplyChain.Client.Pages.Panel_Control
             {
                 XSerieName = d.Key.CATEGORIA,
                 YSerieName = Math.Round(Math.Round(d.Sum(p => p.TOT_DOL), 2) / totalPeriodoSeleccionado, 2) * 100,
-                ZSerieName = $"{Math.Round(Math.Round(d.Sum(p => p.TOT_DOL), 2) / totalPeriodoSeleccionado, 2) * 100} %"
+                ZSerieName = $"{Math.Round(Math.Round(d.Sum(p => p.TOT_DOL), 2) / totalPeriodoSeleccionado, 2) * 100} %\n" +
+                $"({Math.Round(d.Sum(p => p.TOT_DOL), 2)} U$S)"
+            })
+            .OrderBy(c => c.XSerieName)
+            .ToList();
+
+            PedidosIngresadosMercado = DataPedidosIngresados
+                .Where(p => p.ANIO == añoSeleccionadoPedidosIngresados && p.MES == mesSeleccionadoPedidosIngresados)
+                .GroupBy(g => new { g.MERCADO })
+            .Select(d => new ChartData()
+            {
+                XSerieName = d.Key.MERCADO,
+                YSerieName = Math.Round(d.Sum(p => p.TOT_DOL), 2),
+                ZSerieName = $"{Math.Round(Math.Round(d.Sum(p => p.TOT_DOL), 2) / totalPeriodoSeleccionado, 2) * 100} %\n" +
+                $"({Math.Round(d.Sum(p => p.TOT_DOL), 2)} U$S)"
             })
             .OrderBy(c => c.XSerieName)
             .ToList();
@@ -380,6 +402,25 @@ namespace SupplyChain.Client.Pages.Panel_Control
             await refChartDetallePresupuestos.RefreshAsync();
 
 
+        }
+
+        protected async Task OnFiltroByCategoria(AccumulationPointEventArgs args)
+        {
+            var categoria = args.Point.X.ToString().Trim();
+            var name = args.Name;
+            //detalle en grafico de categoria seleccionada filtrada por año y agrupada por mes
+            PedidosIngresadosMensualesCategoriaDetalle = DataPedidosIngresados
+                .Where(v => v.ANIO == añoSeleccionadoPedidosIngresados && v.CATEGORIA.Trim() == categoria.Trim() )
+                .OrderBy(o => o.MES)
+                .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.MES.ToString(),
+                    YSerieName = Math.Round(d.Sum(p => p.TOT_DOL))
+                }).ToList();
+
+            TituloPedidosIngresadosCategoriaDetalle = $"Categoria {categoria.ToUpper()} de { añoSeleccionadoPedidosIngresados}";
+            await dialogDetalle.ShowAsync();
+            
         }
     }
 }
