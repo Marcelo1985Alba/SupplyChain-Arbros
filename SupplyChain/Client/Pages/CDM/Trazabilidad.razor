@@ -1,4 +1,5 @@
-﻿@page "/Trazabilidad"
+﻿@page "/control-calidad/Trazabilidad"
+@page "/control-calidad/Trazabilidad/{Pedido}"
 @using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.Notifications
 @using Syncfusion.Pdf;
@@ -23,7 +24,7 @@
         <ToastPosition X="Right"></ToastPosition>
     </SfToast>
 
-    <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Bootstrap" Size="100"></SfSpinner>
+    <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Bootstrap" Size="100" @bind-Visible="@ShowSpinner"></SfSpinner>
 
     <div id="principal" class="col-lg-12 control-section">
         <div class="content-wrapper">
@@ -69,30 +70,30 @@
 
     <SfDialog ID="dialogTrazPed" Width="1000px" MinHeight="650px" IsModal="true" ShowCloseIcon="true" @ref="refDialogPedidos"
               Visible="false">
-            <DialogTemplates>
-                <Header>Listado de Pedidos del Cliente </Header>
-                <Content>
-                    <SfGrid ID="dlgPedidoGrid" @ref="Grid2" GridLines="GridLine.Both" DataSource="@Busquedalist" Height="450px">
-                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-                        <GridEvents RowSelected="@(async ()=> await OnSelected())" TValue="Pedidos"></GridEvents>
-                        <GridColumns>
-                            <GridColumn Field=@nameof(Pedidos.PEDIDO) HeaderText="Pedido" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(Pedidos.DES_CLI) HeaderText="Cliente" Width="150px"></GridColumn>
-                            <GridColumn Field=@nameof(Pedidos.CG_ART) HeaderText="Codigo" Width="150px"></GridColumn>
-                            <GridColumn Field=@nameof(Pedidos.DES_ART) HeaderText="Descripcion" Width="150px"></GridColumn>
-                        </GridColumns>
-                    </SfGrid>
-                    @{
-                        if (Busquedalist.Count == CantidadMostrar)
-                        {
-                            <div class="col-sm-3 my-1">
-                                <button type="submit" class="btn btn-primary" @onclick="@AgregarValores">Buscar más</button>
-                            </div>
-                        }
+        <DialogTemplates>
+            <Header>Listado de Pedidos del Cliente </Header>
+            <Content>
+                <SfGrid ID="dlgPedidoGrid" @ref="Grid2" GridLines="GridLine.Both" DataSource="@Busquedalist" Height="450px">
+                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                    <GridEvents RowSelected="@(async ()=> await OnSelected())" TValue="Pedidos"></GridEvents>
+                    <GridColumns>
+                        <GridColumn Field=@nameof(Pedidos.PEDIDO) HeaderText="Pedido" Width="110px"></GridColumn>
+                        <GridColumn Field=@nameof(Pedidos.DES_CLI) HeaderText="Cliente" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Pedidos.CG_ART) HeaderText="Codigo" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Pedidos.DES_ART) HeaderText="Descripcion" Width="150px"></GridColumn>
+                    </GridColumns>
+                </SfGrid>
+                @{
+                    if (Busquedalist.Count == CantidadMostrar)
+                    {
+                        <div class="col-sm-3 my-1">
+                            <button type="submit" class="btn btn-primary" @onclick="@AgregarValores">Buscar más</button>
+                        </div>
                     }
-                </Content>
-            </DialogTemplates>
-        </SfDialog>
+                }
+            </Content>
+        </DialogTemplates>
+    </SfDialog>
 
 
     if (Showgrid == true)
@@ -407,10 +408,10 @@
 }
 
 @*<BuscadorEmergente DataSource="Busquedalist" Columnas="@(new string[]{"PEDIDO", "DES_CLI", "CG_ART", "DES_ART" })"
-                   TItem="Pedidos" Width="80%" Height="600px" Titulo="Listado de Pedidos del Cliente"
-                   MostrarVerMas="@(Busquedalist.Count == CantidadMostrar)" Visible="@IsVisible" IsModal="false"
-                   OnBuscarMas="@(async() => await AgregarValores())" OnCerrarDialog="@(()=> IsVisible = !IsVisible )"
-                   OnObjetoSeleccionado="@(async (o)=> await OnSelectedPedido(o))" />*@
+    TItem="Pedidos" Width="80%" Height="600px" Titulo="Listado de Pedidos del Cliente"
+    MostrarVerMas="@(Busquedalist.Count == CantidadMostrar)" Visible="@IsVisible" IsModal="false"
+    OnBuscarMas="@(async() => await AgregarValores())" OnCerrarDialog="@(()=> IsVisible = !IsVisible )"
+    OnObjetoSeleccionado="@(async (o)=> await OnSelectedPedido(o))" />*@
 
 
 
@@ -434,7 +435,9 @@
 </style>
 
 @code {
+
     [Inject] public PdfService PdfService { get; set; }
+    [Parameter] public string Pedido { get; set; }
     protected SfGrid<Pedidos> Grid;
     protected SfGrid<Pedidos> Grid2;
     protected SfGrid<Pedidos> Grid3;
@@ -442,6 +445,7 @@
     protected SfSpinner refSpinner;
     protected SfDialog DialogRef;
     protected SfDialog refDialogPedidos;
+    public bool ShowSpinner = false;
     public bool Enabled = true;
     public bool Disabled = false;
     public bool Showgrid = false;
@@ -496,7 +500,17 @@
     {
         Layout.Titulo = "Trazabilidad";
         //rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+
+        if (!string.IsNullOrEmpty(Pedido))
+        {
+            ShowSpinner = true;
+            BoxPedido = Pedido;
+            await CargaPedido();
+            ShowSpinner = false;
+        }
+
         await base.OnInitializedAsync();
+
     }
 
     public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -673,20 +687,25 @@
         else
         {
             await refSpinner.ShowAsync();
-            TrzNro = BoxPedido;
-            PedCliList = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/{BoxPedido}");
-            prodList = await Http.GetFromJsonAsync<Producto>($"api/Prod/{PedCliList.FirstOrDefault().CG_ART.Trim()}");
-            pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/MostrarTrazabilidad/{BoxPedido}");
-            vpedidos = await Http.GetFromJsonAsync<List<vTrazabilidad>>($"api/Trazabilidads/MostrarTrazabilidad/{BoxPedido}");
-            Showgrid = true;
-            BoxPedido = "";
-            BoxCliente = "";
-            BoxCodigo = "";
+
             await refDialogPedidos.HideAsync();
             await refSpinner.HideAsync();
         }
 
 
+    }
+
+    protected async Task CargaPedido()
+    {
+        TrzNro = BoxPedido;
+        PedCliList = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/{BoxPedido}");
+        prodList = await Http.GetFromJsonAsync<Producto>($"api/Prod/{PedCliList.FirstOrDefault().CG_ART.Trim()}");
+        pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/MostrarTrazabilidad/{BoxPedido}");
+        vpedidos = await Http.GetFromJsonAsync<List<vTrazabilidad>>($"api/Trazabilidads/MostrarTrazabilidad/{BoxPedido}");
+        Showgrid = true;
+        BoxPedido = "";
+        BoxCliente = "";
+        BoxCodigo = "";
     }
 
     protected async Task AgregarValores()
