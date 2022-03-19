@@ -25,6 +25,8 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected SfSpinner refSpinner;
         protected bool VisibleSpinner = false;
 
+        ///////*****************FACTURACION*************////////////////////////////
+        protected SfGrid<vEstadFacturacion> grdFacturacionDetalle;
         protected List<vEstadFacturacion> DataFacturacionOriginal = new();
         protected List<vEstadCompras> DataComprasOriginal = new();
         protected List<vEstadFacturacion> DataFacturacionDetalle = new();
@@ -33,7 +35,9 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected string TituloGraficoFacturacionMensual = "";
         protected string SerieSeleccionaFacturacion = "";
         protected int PromedioFacturacionMensual = 0;
+        ///////******************************////////////////////////////
 
+        protected string chartXAnnoation = "75px";
         protected double[] Spacing = new double[] { 15, 15 };
         protected double Ratio = 160 / 100;
 
@@ -125,6 +129,9 @@ namespace SupplyChain.Client.Pages.Panel_Control
                 YSerieName = Convert.ToDouble(d.Sum(p => p.TOTAL_DOL))
             }).OrderBy(c => c.XSerieName)
             .ToList();
+
+            grdFacturacionDetalle?.PreventRender();
+            grdFacturacionDetalle?.AutoFitColumnsAsync();
         }
 
         protected async Task GetCompras()

@@ -244,14 +244,23 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             if (ordenFabricacion.CG_ESTADOCARGA == 2 || ordenFabricacion.CG_ESTADOCARGA == 3
                 && (ordenFabricacion.CG_ESTADOCARGA != ordenFabricacionOriginal.CG_ESTADOCARGA))
             {
+                //actualizada en estado Firme o Curso: si es la primera actualiza el grupo completo.
                 string sqlCommandString = string.Format("UPDATE Programa SET CG_ESTADOCARGA = {0}," +
                     "Fe_curso = GETDATE(), CG_ESTADO = {1} WHERE (Cg_ordf = {2} OR Cg_ordfAsoc = {2})",
                                           ordenFabricacion.CG_ESTADOCARGA,
                                           ordenFabricacionOriginal.CG_ESTADOCARGA,
                                           ordenFabricacion.CG_ORDF);
                 await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
+                
+
+                var ofsList = dbCarga.Where(c => c.CG_ORDF == ordenFabricacion.CG_ORDF || c.CG_ORDFASOC == ordenFabricacion.CG_ORDF).ToList();
+                foreach (var item in ofsList)
+                {
+                    item.CG_ESTADOCARGA = ordenFabricacion.CG_ESTADOCARGA;
+                    item.FE_CURSO = DateTime.Now;
+                }
                 ordenFabricacion = null;
-                await Refrescar();
+                //await Refrescar();
             }
             else if (ordenFabricacion.CG_ESTADOCARGA == 3 && ordenFabricacion.CANTFAB > 0
                 && (ordenFabricacion.CG_ESTADOCARGA == ordenFabricacionOriginal.CG_ESTADOCARGA))
@@ -272,8 +281,10 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                         Icon = "e-warning toast-icons"
                     });
                 }
-
-                if (dbScrap != null)
+                //VERIFIFCAR QUE SE LA ULTIMA: LA QUE DA DE ALTA AL PRODUCTO
+                var lOfAsocs = dbCarga.Where(c => c.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(o => o.CG_ORDF).ToList();
+                var ultimaOF = lOfAsocs.Max(m=> m.CG_ORDF);
+                if (dbScrap != null && ordenFabricacion.CG_ORDF == ultimaOF)
                 {
                     isScrapDialogVisible = true;
                     StateHasChanged();
@@ -393,6 +404,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
         {
 
             Visible = true;
+            scrapSeleccionado = scrapSeleccionado == null ? 0 : scrapSeleccionado;
             string sqlCommandString = "EXEC NET_PCP_Cerrar_OrdenFabricacion " + ordenFabricacion.CG_ORDF.ToString() + ", '" + Usuario + "', " + scrapSeleccionado.ToString();
             await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
             if (ordenFabricacion.CG_ORDF == ordenFabricacion.ULTIMAORDENASOCIADA)
@@ -407,6 +419,20 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     ShowProgressBar = true
                 });
             }
+            else
+            {
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "Exito!",
+                    Content = "Guardado Correctamente!\n" +
+                    $"OF Cerrada {ordenFabricacion.CG_ORDF}",
+                    CssClass = "e-toast-success",
+                    Icon = "e-success toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }
+            //dbCarga.Where(w => w.CG_ORDF != ordenFabricacion.CG_ORDF);
             ordenFabricacion = null;
             await Refrescar();
             Visible = false;

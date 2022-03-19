@@ -12,7 +12,6 @@ namespace SupplyChain.Client.Shared
 {
     public partial class BuscadorEmergenteBase<TItem>:ComponentBase
     {
-        
         [Parameter] public string Titulo { get; set; } = null!;
         [Parameter] public string Height { get; set; } = null!;
         [Parameter] public string Width { get; set; } = null!;

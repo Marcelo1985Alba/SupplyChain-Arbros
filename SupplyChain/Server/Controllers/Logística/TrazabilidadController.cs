@@ -168,7 +168,8 @@ namespace SupplyChain
                 List<vTrazabilidad> lPedidos = new();
                 if (_context.VTrazabilidads.Any())
                 {
-                    lPedidos = await _context.VTrazabilidads.Where(p => p.PEDIDO.ToString() == Pedido).OrderBy(t => t.CG_LINEA).ToListAsync();
+                    lPedidos = await _context.VTrazabilidads.Where(p => p.PEDIDO.ToString() == Pedido)
+                        .OrderBy(t => t.CG_LINEA).ToListAsync();
                 }
                 if (lPedidos == null)
                 {
