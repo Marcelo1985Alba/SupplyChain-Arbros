@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
+using Syncfusion.Blazor.PdfViewer;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,43 +34,66 @@ namespace SupplyChain.Server.Controllers
         {
             _hostingEnvironment = hostingEnvironment;
             this._solutionRepository = solutionRepository;
+            this._cache = cache;
         }
 
         [HttpGet("ByParamRuta/{parametro}/{codigo}")]
-        public async Task<IEnumerable<Archivo>> GetDocumentosByRuta(string parametro, string codigo)
+        public async Task<ActionResult<List<Archivo>>> GetDocumentosByRuta(string parametro, string codigo)
         {
             try
             {
-                var archivos = new List<Archivo>();
                 var ruta = await _solutionRepository.Obtener(s => s.CAMPO == parametro).FirstOrDefaultAsync();
-                var endLength = ruta.CAMPO.Trim() == "RUTAENSAYO" ? 9 : 7;
-                var file = codigo.Substring(0, endLength); 
-                string[] dirs = Directory.GetFiles(@$"{ruta.VALORC}", $"{file}*");
-                int identificacion = 0;
-                foreach (string item in dirs)
+                if (ruta.VALORC.Contains("blob"))
                 {
-                    identificacion++;
-                    var archivo = new Archivo()
-                    {
-                        Id = identificacion,
-                        Nombre = item.Substring(ruta.VALORC.Length),
-                        Directorio = item,
-                        
-                        Contenido = parametro == "RUTACNC" ? System.IO.File.ReadAllLines(item) : null,
-                        ContenidoByte = parametro == "RUTACNC" ? System.IO.File.ReadAllBytes(item): null
-                        //ContenidoBase64 = "data:application/pdf;base64," + Convert.ToBase64String(System.IO.File.ReadAllBytes(item))
-                };
+                    string pedido = codigo.Split(',')[0];
 
-                    archivos.Add(archivo);
+                    const string FirstCharacter = "_";
+                    int Pos1 = pedido.IndexOf(FirstCharacter) + FirstCharacter.Length;
+                    pedido = pedido.Substring(Pos1);
+
+                    int Pos2 = pedido.IndexOf('_') + FirstCharacter.Length;
+                    pedido = pedido.Substring(0, Pos2 - 1);
+                    return await GetEnsayosAzure(Convert.ToInt32(pedido));
                 }
-
-                return archivos;
+                else
+                {
+                    return await GetEnsayoLocalServer(parametro, codigo);
+                }
+                
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new List<Archivo>();
             }
+        }
+
+        private async Task<List<Archivo>> GetEnsayoLocalServer(string parametro, string codigo)
+        {
+            var archivos = new List<Archivo>();
+            var ruta = await _solutionRepository.Obtener(s => s.CAMPO == parametro).FirstOrDefaultAsync();
+            var endLength = ruta.CAMPO.Trim() == "RUTAENSAYO" ? 9 : 7;
+            var file = codigo.Substring(0, endLength);
+            string[] dirs = Directory.GetFiles($"{ruta.VALORC}", $"{file}*");
+            int identificacion = 0;
+            foreach (string item in dirs)
+            {
+                identificacion++;
+                var archivo = new Archivo()
+                {
+                    Id = identificacion,
+                    Nombre = item.Substring(ruta.VALORC.Length),
+                    Directorio = item,
+
+                    Contenido = parametro == "RUTACNC" ? System.IO.File.ReadAllLines(item) : null,
+                    ContenidoByte = parametro == "RUTACNC" ? System.IO.File.ReadAllBytes(item) : null
+                    //ContenidoBase64 = "data:application/pdf;base64," + Convert.ToBase64String(System.IO.File.ReadAllBytes(item))
+                };
+
+                archivos.Add(archivo);
+            }
+
+            return archivos;
         }
 
         [HttpPost("DownloadText")]
@@ -178,6 +203,51 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
+        [HttpGet("GetEnsayos/{pedido}")]
+        public async Task<List<Archivo>> GetEnsayosAzure(int pedido)
+        {
+            return await GetBlobEnsayosAzure(pedido);
+        }
+
+        private async Task<List<Archivo>> GetBlobEnsayosAzure(int pedido)
+        {
+            //Connection String of Storage Account
+            string connectionString = "DefaultEndpointsProtocol=https;AccountName=arbrosstorage;AccountKey=d757aVPtZ0UFLcPfYn21vjEm4+FycBmm8q6OkvADT4lxWgBASGp/NeTR7eKYRBki4LwXF4RgfTRspa20VMxm/A==;EndpointSuffix=core.windows.net";
+            //Container Name
+            const string containerName = "ensayos";
+
+            var cliente = new BlobContainerClient(connectionString, containerName);
+            //Crea el contenedor si no existe
+            await cliente.CreateIfNotExistsAsync();
+            //cliente.SetAccessPolicy(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
+            var prefijo = $"ENS_{pedido}";
+            var ensayos = cliente.GetBlobs(prefix: prefijo).ToList();
+            
+            
+            //var ensayos = cliente.GetBlobs().ToList();
+            List<Archivo> archivos = new();
+            foreach (BlobItem blob in ensayos)
+            {
+                var mete = blob.Metadata;
+                var coty = blob.Properties.ContentType;
+                var properties = blob.Properties;
+                var blobsa = cliente.GetBlobClient(blob.Name);
+                MemoryStream memoryStream = new();
+                await blobsa.DownloadToAsync(memoryStream);
+                
+                var archivo = new Archivo()
+                {
+                    Id = archivos.Count + 1,
+                    Nombre = blob.Name,
+                    ContenidoByte = memoryStream.ToArray(),
+                    DocumentPath = "data:application/pdf;base64," + Convert.ToBase64String(memoryStream.ToArray()),
+                    IsAzure = true
+                };
+                archivos.Add(archivo);
+            }
+
+            return archivos.Where(a => a.Nombre.Contains(prefijo)).ToList();
+        }
 
         [HttpGet("GetPdfNube/{fileName}/{ruta}")]
         public async Task<ActionResult<string>> GetPdfNube(string fileName, string ruta)
@@ -241,9 +311,213 @@ namespace SupplyChain.Server.Controllers
             return Ok(archivo);
         }
 
+        [HttpPost("Load")]
+        //
+        [Route("[controller]/Load")]
+        //Post action for Loading the PDF documents   
+        public async Task<IActionResult> Load([FromBody] Dictionary<string, string> jsonObject)
+        {
+            //Initialize the PDF viewer object with memory cache object
+            PdfRenderer pdfviewer = new(_cache);
+            MemoryStream stream = new();
+            object jsonResult = new object();
+            if (jsonObject != null && jsonObject.ContainsKey("document"))
+            {
+                if (bool.Parse(jsonObject["isFileName"]))
+                {
+                    var contenido = jsonObject["document"].Split(',');
+                    var pedido = contenido[0];
+                    var fileName = contenido[1];
+                    var files = await GetBlobEnsayosAzure(Convert.ToInt32( pedido ) );
+                    var blob = files.FirstOrDefault(f=> f.Nombre == fileName);
+                    if (!string.IsNullOrEmpty(blob.Nombre))
+                    {
+                        //byte[] bytes = System.IO.File.ReadAllBytes(documentPath);
+                        stream = new MemoryStream(blob.ContenidoByte);
+                    }
+                    else
+                    {
+                        return this.Content(jsonObject["document"] + " is not found");
+                    }
+                }
+                else
+                {
+                    byte[] bytes = Convert.FromBase64String(jsonObject["document"]);
+                    stream = new MemoryStream(bytes);
+                }
+            }
+
+            jsonResult = pdfviewer.Load(stream, jsonObject);
+
+            var result = Content(JsonConvert.SerializeObject(jsonResult));
+            return result;
+        }
+
+        [AcceptVerbs("Post")]
+        [HttpPost("RenderPdfPages")]
+
+        [Route("[controller]/RenderPdfPages")]
+        //Post action for processing the PDF documents  
+        public IActionResult RenderPdfPages([FromBody] Dictionary<string, string> jsonObject)
+        {
+            PdfRenderer pdfviewer = new(_cache);
+            object jsonResult = pdfviewer.GetPage(jsonObject);
+            var result = JsonConvert.SerializeObject(jsonResult);
+
+            //var bytes = Encoding.UTF8.GetBytes(jsonResult.ToString());
+            //return File(jsonResult, "application/octet-stream");
+            return Content(result);
+        }
+
+
+        [AcceptVerbs("Post")]
+        [HttpPost("Bookmarks")]
+
+        [Route("[controller]/Bookmarks")]
+        //Post action for processing the bookmarks from the PDF documents
+        public IActionResult Bookmarks([FromBody] Dictionary<string, string> jsonObject)
+        {
+            //Initialize the PDF Viewer object with memory cache object
+            PdfRenderer pdfviewer = new PdfRenderer(_cache);
+            var jsonResult = pdfviewer.GetBookmarks(jsonObject);
+            return Content(JsonConvert.SerializeObject(jsonResult));
+        }
+
+
+
+        [AcceptVerbs("Post")]
+        [HttpPost("RenderThumbnailImages")]
+
+        [Route("[controller]/RenderThumbnailImages")]
+        //Post action for rendering the ThumbnailImages
+        public IActionResult RenderThumbnailImages([FromBody] Dictionary<string, string> jsonObject)
+        {
+            //Initialize the PDF Viewer object with memory cache object
+            PdfRenderer pdfviewer = new PdfRenderer(_cache);
+            object result = pdfviewer.GetThumbnailImages(jsonObject);
+            return Content(JsonConvert.SerializeObject(result));
+        }
+        [AcceptVerbs("Post")]
+        [HttpPost("RenderAnnotationComments")]
+
+        [Route("[controller]/RenderAnnotationComments")]
+        //Post action for rendering the annotations
+        public IActionResult RenderAnnotationComments([FromBody] Dictionary<string, string> jsonObject)
+        {
+            //Initialize the PDF Viewer object with memory cache object
+            PdfRenderer pdfviewer = new(_cache);
+            object jsonResult = pdfviewer.GetAnnotationComments(jsonObject);
+            return Content(JsonConvert.SerializeObject(jsonResult));
+        }
+        [AcceptVerbs("Post")]
+        [HttpPost("ExportAnnotations")]
+
+        [Route("[controller]/ExportAnnotations")]
+        //Post action to export annotations
+        public IActionResult ExportAnnotations([FromBody] Dictionary<string, string> jsonObject)
+        {
+            //PdfRenderer pdfviewer = new PdfRenderer(_cache);
+            //string jsonResult = pdfviewer.GetAnnotations(jsonObject);
+            return NoContent();
+        }
+        [AcceptVerbs("Post")]
+        [HttpPost("ImportAnnotations")]
+
+        [Route("[controller]/ImportAnnotations")]
+        //Post action to import annotations
+        public IActionResult ImportAnnotations([FromBody] Dictionary<string, string> jsonObject)
+        {
+            PdfRenderer pdfviewer = new(_cache);
+            string jsonResult = string.Empty;
+            if (jsonObject != null && jsonObject.ContainsKey("fileName"))
+            {
+                string documentPath = "";//GetDocumentPath(jsonObject["fileName"]);
+                if (!string.IsNullOrEmpty(documentPath))
+                {
+                    jsonResult = System.IO.File.ReadAllText(documentPath);
+                }
+                else
+                {
+                    return this.Content(jsonObject["document"] + " is not found");
+                }
+            }
+            return Content(jsonResult);
+        }
+
+        [AcceptVerbs("Post")]
+        [HttpPost("ExportFormFields")]
+
+        [Route("[controller]/ExportFormFields")]
+        public IActionResult ExportFormFields([FromBody] Dictionary<string, string> jsonObject)
+
+        {
+            PdfRenderer pdfviewer = new PdfRenderer(_cache);
+            string jsonResult = pdfviewer.ExportFormFields(jsonObject);
+            return Content(jsonResult);
+        }
+
+        [AcceptVerbs("Post")]
+        [HttpPost("ImportFormFields")]
+
+        [Route("[controller]/ImportFormFields")]
+        public IActionResult ImportFormFields([FromBody] Dictionary<string, string> jsonObject)
+        {
+            PdfRenderer pdfviewer = new PdfRenderer(_cache);
+            object jsonResult = pdfviewer.ImportFormFields(jsonObject);
+            return Content(JsonConvert.SerializeObject(jsonResult));
+        }
+
+        [AcceptVerbs("Post")]
+        [HttpPost("Unload")]
+
+        [Route("[controller]/Unload")]
+        //Post action for unloading and disposing the PDF document resources  
+        public IActionResult Unload([FromBody] Dictionary<string, string> jsonObject)
+        {
+            //Initialize the PDF Viewer object with memory cache object
+            PdfRenderer pdfviewer = new PdfRenderer(_cache);
+            pdfviewer.ClearCache(jsonObject);
+            return this.Content("Document cache is cleared");
+        }
+
+
+        [HttpPost("Download")]
+
+        [Route("[controller]/Download")]
+        //Post action for downloading the PDF documents
+        public IActionResult Download([FromBody] Dictionary<string, string> jsonObject)
+        {
+            PdfRenderer pdfviewer = new(_cache);
+            string documentBase = pdfviewer.GetDocumentAsBase64(jsonObject);
+            return Content(documentBase);
+        }
+
+        [HttpPost("PrintImages")]
+
+        [Route("[controller]/PrintImages")]
+        //Post action for printing the PDF documents
+        public IActionResult PrintImages([FromBody] Dictionary<string, string> jsonObject)
+        {
+            //Initialize the PDF Viewer object with memory cache object
+            PdfRenderer pdfviewer = new PdfRenderer(_cache);
+            object pageImage = pdfviewer.GetPrintImage(jsonObject);
+            return Content(JsonConvert.SerializeObject(pageImage));
+        }
+
+        [HttpPost("RenderPdfTexts")]
+        [Route("[controller]/RenderPdfTexts")]
+        public IActionResult RenderPdfTexts([FromBody] Dictionary<string, string> jsonObject)
+        {
+            PdfRenderer pdfviewer = new PdfRenderer(_cache);
+            object result = pdfviewer.GetDocumentText(jsonObject);
+            return Content(JsonConvert.SerializeObject(result));
+        }
+
         private bool ExisteDoc(string file)
         {
             return System.IO.File.Exists(file);
         }
+
+
     }
 }

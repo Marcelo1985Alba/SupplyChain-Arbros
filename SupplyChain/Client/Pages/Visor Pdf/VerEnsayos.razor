@@ -24,14 +24,25 @@ else
                 {
                     var idPdf = $"pdfEns{item.Id}";
                     var pdf_ruta = $"{item.Nombre}," + Accion;
+                    var pedido_filename = $"{Codigo},{item.Nombre}";
                     <AccordionItem>
                         <HeaderTemplate>
                             <div>@(item.Nombre)</div>
                         </HeaderTemplate>
                         <ContentTemplate>
-                            <SfPdfViewer ID="@idPdf"
-                                         ServiceUrl="/api/Values" DocumentPath="@pdf_ruta"
+                            @if(item.IsAzure)
+                            {
+                                <SfPdfViewer @ref="@refPdfViewer" ID="@idPdf" ServiceUrl="api/AdministracionArchivos" DocumentPath="@pedido_filename"
                                          Height="1200px" Width="100%"></SfPdfViewer>
+                            }
+                            else
+                            {
+                                <SfPdfViewer ID="@idPdf" ServiceUrl="/api/Values" DocumentPath="@pdf_ruta"
+                                        Height="1200px" Width="100%"></SfPdfViewer>
+                            }
+                            
+
+
                         </ContentTemplate>
                     </AccordionItem>
                 }
@@ -45,16 +56,19 @@ else
 
     [Parameter] public string Codigo { get; set; } = "";
     [Parameter] public string Accion { get; set; } = "";
+    protected SfPdfViewer refPdfViewer;
     protected bool VisibleSpinner { get; set; } = false;
     protected List<Archivo> archivos;
     protected async override Task OnInitializedAsync()
     {
+        VisibleSpinner = true;
         Accion = "RUTAENSAYO";
-        Codigo = $"ENS_{Codigo}_1.pdf," + Accion;
+        var CodigoAccion = $"ENS_{Codigo}_1.pdf," + Accion;
 
 
-        archivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/ByParamRuta/{Accion}/{Codigo}");
+        archivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/ByParamRuta/{Accion}/{CodigoAccion}");
 
+        VisibleSpinner = false;
     }
 
 }

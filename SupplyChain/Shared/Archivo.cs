@@ -14,6 +14,7 @@ namespace SupplyChain.Shared
         public string Directorio { get; set; }
         public string[] Contenido { get; set; }
         public byte[] ContenidoByte { get; set; }
-        //public string ContenidoBase64 { get; set; }
+        public string DocumentPath { get; set; }
+        public bool IsAzure { get; set; } = false;
     }
 }
