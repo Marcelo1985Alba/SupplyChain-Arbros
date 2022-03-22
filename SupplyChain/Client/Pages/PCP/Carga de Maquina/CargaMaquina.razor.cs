@@ -590,7 +590,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             {
 
                 //TODO: HACER DESDE CONTROLER ADMINISTRADOR DE ARCHIVOS
-                var respuesta = await Http.PostAsJsonAsync<ModeloOrdenFabricacion>($"api/AdministracionArchivos/DownloadText", ordenFabricacion);
+                var respuesta = await Http.PostAsJsonAsync<ModeloOrdenFabricacion>("api/AdministracionArchivos/DownloadText", ordenFabricacion);
                 if (respuesta.StatusCode == System.Net.HttpStatusCode.BadRequest
                     || respuesta.StatusCode == System.Net.HttpStatusCode.NotFound
                     || respuesta.StatusCode == System.Net.HttpStatusCode.UnsupportedMediaType)

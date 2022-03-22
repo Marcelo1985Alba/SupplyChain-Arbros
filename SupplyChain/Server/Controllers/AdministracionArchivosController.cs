@@ -57,7 +57,7 @@ namespace SupplyChain.Server.Controllers
                 }
                 else
                 {
-                    return await GetEnsayoLocalServer(parametro, codigo);
+                    return await GetFileLocalServer(parametro, codigo);
                 }
                 
 
@@ -68,13 +68,16 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
-        private async Task<List<Archivo>> GetEnsayoLocalServer(string parametro, string codigo)
+        private async Task<List<Archivo>> GetFileLocalServer(string parametro, string codigo)
         {
             var archivos = new List<Archivo>();
             var ruta = await _solutionRepository.Obtener(s => s.CAMPO == parametro).FirstOrDefaultAsync();
             var endLength = ruta.CAMPO.Trim() == "RUTAENSAYO" ? 9 : 7;
+            codigo = codigo.Split(',')[0];
             var file = codigo.Substring(0, endLength);
-            string[] dirs = Directory.GetFiles($"{ruta.VALORC}", $"{file}*");
+            file += "_*.pdf";
+            string[] dirs = Directory.GetFiles($"{ruta.VALORC}",$"{file}", 
+                new EnumerationOptions() { MatchCasing = MatchCasing.CaseInsensitive, MatchType = MatchType.Simple, IgnoreInaccessible = true});
             int identificacion = 0;
             foreach (string item in dirs)
             {
@@ -84,7 +87,6 @@ namespace SupplyChain.Server.Controllers
                     Id = identificacion,
                     Nombre = item.Substring(ruta.VALORC.Length),
                     Directorio = item,
-
                     Contenido = parametro == "RUTACNC" ? System.IO.File.ReadAllLines(item) : null,
                     ContenidoByte = parametro == "RUTACNC" ? System.IO.File.ReadAllBytes(item) : null
                     //ContenidoBase64 = "data:application/pdf;base64," + Convert.ToBase64String(System.IO.File.ReadAllBytes(item))
@@ -158,7 +160,58 @@ namespace SupplyChain.Server.Controllers
             var param = await _solutionRepository.Obtener(s => s.CAMPO == "RUTATRAZABILIDAD").FirstOrDefaultAsync();
             var path = param.VALORC.Trim();
 
+            if (path.Contains("blob", StringComparison.OrdinalIgnoreCase))
+            {
+                //BUSCAR EN AZURE
+                var archivos = await GetCertificadoAzure(file);
+                return archivos.Count > 0;
+            }
+
             return System.IO.File.Exists(path + "/" + file);
+        }
+
+
+        [HttpGet("Certificado/{file}")]
+        public async Task<List<Archivo>> Certificado(string file)
+        {
+            var param = await _solutionRepository.Obtener(s => s.CAMPO == "RUTATRAZABILIDAD").FirstOrDefaultAsync();
+            var path = param.VALORC.Trim();
+
+            if (path.Contains("blob", StringComparison.OrdinalIgnoreCase))
+            {
+                //BUSCAR EN AZURE
+                var archivos = await GetCertificadoAzure(file);
+                return archivos;
+            }
+            //TODO: OBTENER ARCHIVOS DE LOCALSERVER
+            
+            return await GetFileLocalServer("RUTATRAZABILIDAD", file);
+        }
+
+
+        [HttpGet("GetCertificado/{file}")]
+        public async Task<List<Archivo>> GetCertificadoAzure(string file)
+        {
+            BlobContainerClient cliente = await GetContainer("certmp");
+            var certificados = cliente.GetBlobs(prefix: file).ToList();
+            List<Archivo> archivos = new();
+            foreach (BlobItem blob in certificados)
+            {
+                var blobsa = cliente.GetBlobClient(blob.Name);
+                MemoryStream memoryStream = new();
+                await blobsa.DownloadToAsync(memoryStream);
+
+                var archivo = new Archivo()
+                {
+                    Id = archivos.Count + 1,
+                    Nombre = blob.Name,
+                    ContenidoByte = memoryStream.ToArray(),
+                    DocumentPath = "data:application/pdf;base64," + Convert.ToBase64String(memoryStream.ToArray()),
+                    IsAzure = true
+                };
+                archivos.Add(archivo);
+            }
+            return archivos;
         }
 
         [HttpGet("GetPlano/{file}/Load")]
@@ -211,30 +264,20 @@ namespace SupplyChain.Server.Controllers
 
         private async Task<List<Archivo>> GetBlobEnsayosAzure(int pedido)
         {
-            //Connection String of Storage Account
-            string connectionString = "DefaultEndpointsProtocol=https;AccountName=arbrosstorage;AccountKey=d757aVPtZ0UFLcPfYn21vjEm4+FycBmm8q6OkvADT4lxWgBASGp/NeTR7eKYRBki4LwXF4RgfTRspa20VMxm/A==;EndpointSuffix=core.windows.net";
-            //Container Name
-            const string containerName = "ensayos";
-
-            var cliente = new BlobContainerClient(connectionString, containerName);
-            //Crea el contenedor si no existe
-            await cliente.CreateIfNotExistsAsync();
+            BlobContainerClient cliente = await GetContainer("ensayos");
             //cliente.SetAccessPolicy(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
             var prefijo = $"ENS_{pedido}";
             var ensayos = cliente.GetBlobs(prefix: prefijo).ToList();
-            
-            
-            //var ensayos = cliente.GetBlobs().ToList();
             List<Archivo> archivos = new();
             foreach (BlobItem blob in ensayos)
             {
-                var mete = blob.Metadata;
-                var coty = blob.Properties.ContentType;
-                var properties = blob.Properties;
+                //var mete = blob.Metadata;
+                //var coty = blob.Properties.ContentType;
+                //var properties = blob.Properties;
                 var blobsa = cliente.GetBlobClient(blob.Name);
                 MemoryStream memoryStream = new();
                 await blobsa.DownloadToAsync(memoryStream);
-                
+
                 var archivo = new Archivo()
                 {
                     Id = archivos.Count + 1,
@@ -247,6 +290,18 @@ namespace SupplyChain.Server.Controllers
             }
 
             return archivos.Where(a => a.Nombre.Contains(prefijo)).ToList();
+        }
+
+        private static async Task<BlobContainerClient> GetContainer(string containerName)
+        {
+            //Connection String of Storage Account
+            string connectionString = "DefaultEndpointsProtocol=https;AccountName=arbrosstorage;AccountKey=d757aVPtZ0UFLcPfYn21vjEm4+FycBmm8q6OkvADT4lxWgBASGp/NeTR7eKYRBki4LwXF4RgfTRspa20VMxm/A==;EndpointSuffix=core.windows.net";
+
+
+            var cliente = new BlobContainerClient(connectionString, containerName);
+            //Crea el contenedor si no existe
+            await cliente.CreateIfNotExistsAsync();
+            return cliente;
         }
 
         [HttpGet("GetPdfNube/{fileName}/{ruta}")]
@@ -325,15 +380,28 @@ namespace SupplyChain.Server.Controllers
             {
                 if (bool.Parse(jsonObject["isFileName"]))
                 {
+
+                    Archivo archivo = new();
                     var contenido = jsonObject["document"].Split(',');
-                    var pedido = contenido[0];
-                    var fileName = contenido[1];
-                    var files = await GetBlobEnsayosAzure(Convert.ToInt32( pedido ) );
-                    var blob = files.FirstOrDefault(f=> f.Nombre == fileName);
-                    if (!string.IsNullOrEmpty(blob.Nombre))
+                    string primera = contenido[0];
+                    if (char.IsDigit(primera[0]))
+                    {
+                        var pedido = contenido[0];
+                        var fileName = contenido[1];
+                        var files = await GetBlobEnsayosAzure(Convert.ToInt32(pedido));
+                        archivo = files.Find(f => f.Nombre == fileName);
+                    }
+                    else
+                    {
+                        var file = contenido[0];
+                        archivo = (await GetCertificadoAzure(file)).FirstOrDefault();
+                    }
+
+                    
+                    if (!string.IsNullOrEmpty(archivo.Nombre))
                     {
                         //byte[] bytes = System.IO.File.ReadAllBytes(documentPath);
-                        stream = new MemoryStream(blob.ContenidoByte);
+                        stream = new MemoryStream(archivo.ContenidoByte);
                     }
                     else
                     {

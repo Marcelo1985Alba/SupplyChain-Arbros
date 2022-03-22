@@ -340,25 +340,36 @@
                 <Content>
                     <SfTab>
                         <TabItems>
-                            <TabItem>
+                            <TabItem CssClass="tabCertif">
                                 <HeaderTemplate>Certificado</HeaderTemplate>
                                 <ContentTemplate>
                                     @{
 
-                                        if (ShowCertificado)
+                                        if (ShowCertificado && Archivos.Count > 0)
                                         {
-                                            var pdf_ruta = NroCertificado.Trim() + ".pdf,RUTATRAZABILIDAD";
-                                            <div class="mt-5">
-                                                @*<SfPdfViewer DocumentPath="@ruta"></SfPdfViewer>*@
-                                                <SfPdfViewer ID="CertifiPdf"
-                                                             ServiceUrl="/api/Values" DocumentPath="@pdf_ruta"
-                                                             Height="85%" Width="90%"></SfPdfViewer>
-                                            </div>
+                                            var file_ruta = $"{Archivos[0].Nombre},RUTATRAZABILIDAD";
+                                            if (Archivos.Any(a => a.IsAzure))
+                                            {
+                                                <SfPdfViewer ID="CertPdf" ServiceUrl="api/AdministracionArchivos" DocumentPath="@file_ruta"
+                                                             Height="1200px" Width="100%"></SfPdfViewer>
+                                            }
+                                            else
+                                            {
+                                                var pdf_ruta = NroCertificado.Trim() + ".pdf,RUTATRAZABILIDAD";
+                                                <div class="mt-5">
+                                                    @*<SfPdfViewer DocumentPath="@ruta"></SfPdfViewer>*@
+                                                    <SfPdfViewer ID="CertifiPdf"
+                                                                 ServiceUrl="/api/Values" DocumentPath="@pdf_ruta"
+                                                                 Height="300px" Width="100%"></SfPdfViewer>
+                                                </div>
+                                            }
+
+
                                         }
                                         else
                                         {
                                             <div class="mt-5">
-                                                <span class="text-danger text">No existe Certificado asociado</span>
+                                                <span class="text text-danger">No existe Certificado asociado</span>
                                             </div>
                                         }
                                     }
@@ -464,6 +475,7 @@
     protected List<Producto> ProdCertificado = new List<Producto>();
     protected List<PedCli> PedcliCertificado = new List<PedCli>();
     protected List<Pedidos> PedidosCertificado = new List<Pedidos>();
+    protected List<Archivo> Archivos = new();
     protected string ruta;
     protected string BoxPedido = "";
     protected string BoxCliente = "";
@@ -581,6 +593,8 @@
                 NroCertificado = row[0].DESPACHO;
                 var archivo = NroCertificado.Trim() + ".pdf";
                 ShowCertificado = await Http.GetFromJsonAsync<bool>($"api/AdministracionArchivos/ExisteCertificado/{archivo}");
+                Archivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/Certificado/{archivo}");
+
             }
             await DialogRef.Show(false);
         }
@@ -1061,5 +1075,8 @@
 
     #toast_types {
         text-align: center;
+    }
+    .tabCertif{
+        height: 400px;
     }
 </style>
