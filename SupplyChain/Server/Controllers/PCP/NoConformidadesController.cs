@@ -214,5 +214,18 @@ namespace SupplyChain
             return await _context.NoConformidadesAcciones.FromSqlRaw(xSQL).ToListAsync();
         }
 
+
+        [HttpGet("Eventos")]
+        public async Task<ActionResult<List<vEstadEventos>>> GetEventos()
+        {
+            try
+            {
+                return await _context.vEstadEventos.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
     }
 }

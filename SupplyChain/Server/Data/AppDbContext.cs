@@ -78,6 +78,7 @@ namespace SupplyChain
         public DbSet<NoConformidadesListaAcciones> NoConformidadesListaAcciones { get; set; }
         public DbSet<NoConformidadesAcciones> NoConformidadesAcciones { get; set; }
         public DbSet<Compra> ComprasDbSet { get; set; }
+        public DbSet<vEstadEventos> vEstadEventos { get; set; }
 
 
         public DbSet<MovimientoStockSP> MovimientosStock { get; set; }
@@ -153,6 +154,7 @@ namespace SupplyChain
             modelBuilder.Entity<vIngenieriaProductosFormulas>().HasNoKey().ToView("vIngenieria_Productos_Formulas");
             modelBuilder.Entity<vEstadCompras>().HasNoKey().ToView("vEstad_Compras");
             modelBuilder.Entity<vEstadPresupuestos>().HasNoKey().ToView("vEstad_Presupuestos");
+            modelBuilder.Entity<vEstadEventos>().HasNoKey().ToView("vEstad_Eventos");
         }
     }
 }
