@@ -1464,36 +1464,6 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Textbox Name="FE_SOLUC">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=First(Fields!FE_SOLUC.Value, "dsEventos")</Value>
-                      <Style />
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>FE_SOLUC</rd:DefaultName>
-              <Top>3.64431in</Top>
-              <Left>3.58028in</Left>
-              <Height>0.25in</Height>
-              <Width>1.375in</Width>
-              <ZIndex>39</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
             <Textbox Name="DES_PROVE">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
@@ -1517,7 +1487,7 @@ First(Fields!DES_PROVE.Value, "dsEventos"))</Value>
               <Left>1.88833in</Left>
               <Height>0.19444in</Height>
               <Width>4.69444in</Width>
-              <ZIndex>40</ZIndex>
+              <ZIndex>39</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1549,7 +1519,7 @@ First(Fields!Pedido.Value, "dsEventos"))</Value>
               <Left>4.93444in</Left>
               <Height>0.25in</Height>
               <Width>1in</Width>
-              <ZIndex>41</ZIndex>
+              <ZIndex>40</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1579,7 +1549,7 @@ First(Fields!Pedido.Value, "dsEventos"))</Value>
               <Left>2.52611in</Left>
               <Height>0.25in</Height>
               <Width>2.57292in</Width>
-              <ZIndex>42</ZIndex>
+              <ZIndex>41</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1612,6 +1582,40 @@ First(Fields!Pedido.Value, "dsEventos"))</Value>
               <Left>0.13794in</Left>
               <Height>0.25in</Height>
               <Width>2.31873in</Width>
+              <ZIndex>42</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="fe_cierre">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!fe_cierre.Value, "dsEventos")</Value>
+                      <Style>
+                        <Format>dd/MM/yyyy</Format>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Left</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>fe_cierre</rd:DefaultName>
+              <Top>3.68598in</Top>
+              <Left>3.58028in</Left>
+              <Height>0.22222in</Height>
+              <Width>1.375in</Width>
               <ZIndex>43</ZIndex>
               <Style>
                 <Border>

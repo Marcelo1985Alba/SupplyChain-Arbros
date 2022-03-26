@@ -1,0 +1,27 @@
+﻿@page  "/control-calidad/Documentacion"
+@using Syncfusion.Blazor;
+@using Syncfusion.Blazor.FileManager;
+@inject IJSRuntime JsRuntime;
+
+<div class="control-section">
+    <SfFileManager TValue="FileManagerDirectoryContent" AllowDragAndDrop="true" Height="450px" View="ViewType.Details" >
+        <FileManagerAjaxSettings Url="/api/FilesManager/FileOperations"
+                                 DownloadUrl="/api/FilesManager/Download"
+                                 UploadUrl="/api/FilesManager/Upload"
+                                 GetImageUrl="/api/FilesManager/GetImage">
+        </FileManagerAjaxSettings>
+        <FileManagerNavigationPaneSettings Visible=false></FileManagerNavigationPaneSettings>
+    </SfFileManager>
+</div>
+
+@code {
+
+    [CascadingParameter] public MainLayout Layout { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        Layout.Titulo = "Documentos: Manual y procedimientos";
+        return base.OnInitializedAsync();
+    }
+
+}

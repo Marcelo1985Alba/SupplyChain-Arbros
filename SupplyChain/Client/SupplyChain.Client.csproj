@@ -431,6 +431,7 @@
     <PackageReference Include="Syncfusion.Blazor.Buttons" Version="19.4.0.40" />
     <PackageReference Include="Syncfusion.Blazor.Cards" Version="19.4.0.40" />
     <PackageReference Include="Syncfusion.Blazor.DropDowns" Version="19.4.0.40" />
+    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="19.4.0.40" />
     <PackageReference Include="Syncfusion.Blazor.Gantt" Version="19.4.0.40" />
     <PackageReference Include="Syncfusion.Blazor.Grid" Version="19.4.0.40" />
     <PackageReference Include="Syncfusion.Blazor.Kanban" Version="19.4.0.40" />
