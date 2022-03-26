@@ -214,7 +214,7 @@ namespace SupplyChain
             return await _context.NoConformidadesAcciones.FromSqlRaw(xSQL).ToListAsync();
         }
 
-
+        // GET: api/NoConformidades/Eventos
         [HttpGet("Eventos")]
         public async Task<ActionResult<List<vEstadEventos>>> GetEventos()
         {
