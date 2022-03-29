@@ -104,6 +104,7 @@ namespace SupplyChain
         public DbSet<Formula> Formulas { get; set; }
         public DbSet<StockCorregido> StockCorregidos { get; set; }
 
+        public DbSet<vEstadoPedido> vEstadoPedidos { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             
@@ -117,15 +118,15 @@ namespace SupplyChain
             modelBuilder.ApplyConfiguration(new ProveedorConfig());
 
             modelBuilder.Entity<Genera>()
-        .       HasKey(c => new { c.CAMP3, c.CG_CIA, c.PUNTO_VENTA });
+        .HasKey(c => new { c.CAMP3, c.CG_CIA, c.PUNTO_VENTA });
 
-            modelBuilder .Entity<vPendienteFabricar>(
+            modelBuilder.Entity<vPendienteFabricar>(
             eb =>
             {
                 eb.ToView("vPendientesFabricar");
             });
-            
-            modelBuilder .Entity<vResumenStock>(
+
+            modelBuilder.Entity<vResumenStock>(
             eb =>
             {
                 eb.ToView("vResumenStock");
@@ -136,7 +137,7 @@ namespace SupplyChain
             {
                 eb.ToView("vTrazabilidad");
             });
-            
+
             modelBuilder.Entity<vProdMaquinaDataCore>(
             eb =>
             {
@@ -147,6 +148,11 @@ namespace SupplyChain
             modelBuilder.Entity<Procun>().HasNoKey().ToView(null);
             modelBuilder.Entity<EstadVenta>().HasNoKey().ToView(null);
             modelBuilder.Entity<StockSP>().HasNoKey().ToView(null);
+            CreateVistasSQL(modelBuilder);
+        }
+
+        private static void CreateVistasSQL(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<vEventos>().HasNoKey().ToView("vEventos");
             modelBuilder.Entity<vEstadPedidosIngresados>().HasNoKey().ToView("vEstad_PedidosIngresados");
             modelBuilder.Entity<vEstadPedidosAlta>().HasNoKey().ToView("vEstad_PedidosAltas");
@@ -155,6 +161,7 @@ namespace SupplyChain
             modelBuilder.Entity<vEstadCompras>().HasNoKey().ToView("vEstad_Compras");
             modelBuilder.Entity<vEstadPresupuestos>().HasNoKey().ToView("vEstad_Presupuestos");
             modelBuilder.Entity<vEstadEventos>().HasNoKey().ToView("vEstad_Eventos");
+            modelBuilder.Entity<vEstadoPedido>().HasNoKey().ToView("vEstadoPedido");
         }
     }
 }

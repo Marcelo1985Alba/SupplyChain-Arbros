@@ -19,17 +19,16 @@ namespace filemanager.Server.Controllers
     [Route("api/[controller]")]
     public class FilesManagerController : Controller
     {
-        private readonly SolutionRepository solutionRepository;
+        private readonly SolutionRepository _solutionRepository;
         public PhysicalFileProvider operation;
+        public FileProviderBase operationAzure;
         public string basePath;
-        string root = "D:\\Arbros\\1. Manual y Procedimientos\\";
+        string root = "";
         public FilesManagerController(SolutionRepository solutionRepository )
         {
-            //this.basePath = hostingEnvironment.ContentRootPath;
             this.operation = new PhysicalFileProvider();
-            this.solutionRepository = solutionRepository;
-            
-            this.basePath = "D:\\Arbros";
+            this._solutionRepository = solutionRepository;
+            this.root = solutionRepository.Obtener(s => s.CAMPO == "RUTADOCS").FirstOrDefault().VALORC;
             this.operation.RootFolder(this.root); // It denotes in which files and folders are available.
         }
 

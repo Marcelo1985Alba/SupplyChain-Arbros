@@ -1,0 +1,127 @@
+﻿@page "/ventas/estado-pedidos"
+@inherits EstadoPedidosBase
+
+
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+<div class="">
+    <div class="">
+        <div class="row">
+            <div class="col-12">
+                <SfGrid @ref="refSfGrid" AllowReordering="true" ShowColumnChooser="false" ShowColumnMenu="false" AllowResizing="true"
+                        DataSource="@DataEstadosPedidos" Width="100%"
+                        AllowExcelExport="true" AllowGrouping="false" ID="grdEstadosPedidos"
+                        AllowSorting="true" AllowPaging="true" AllowFiltering="true" GridLines="GridLine.Both">
+                    <GridEvents RowDataBound="RowBound" TValue="vEstadoPedido"
+                                QueryCellInfo="@((a)=> QueryCellInfoHandler(a))"></GridEvents>
+                    <GridSelectionSettings CheckboxOnly="true"
+                                           Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                    <GridPageSettings PageSize="12" PageSizes="true"></GridPageSettings>
+                    <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+                    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true"
+                                      Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
+                        @*<Template>
+                @{
+                    var prod = (context as Producto);
+                    <div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label class="e-float-text e-label-top">Id:</label>
+                                <SfTextBox ID="CG_OPER" @bind-Value="@(prod.CG_PROD)" Enabled="@Disabled"></SfTextBox>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label class="e-float-text e-label-top">Nombre:</label>
+                                <SfTextBox CssClass="customClass" ID="DES_OPER" @bind-Value="@(prod.DES_PROD)"></SfTextBox>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label class="e-float-text e-label-top">Horas Finales:</label>
+                                <SfNumericTextBox ID="HS_FINAL" @bind-Value="@(prod.CG_ORDEN)"></SfNumericTextBox>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label class="e-float-text e-label-top">Valor Por Hora:</label>
+                                <SfNumericTextBox ID="VALOR_HORA" @bind-Value="@(prod.CG_CLAS)"></SfNumericTextBox>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </Template>*@
+                    </GridEditSettings>
+
+                    <GridColumns>
+                        <!--<GridColumn HeaderText="" Width="80">
+                            <GridCommandColumns>-->
+                                @*LAS BOTONES SE ESCONDEN AGREGANDO LA CLASE ATRAVES DEL EVENTO RowBound  *@
+                                <!--<GridCommandColumn Type="CommandButtonType.Edit" Title="Detalle Factura" ID="btnDetalleFactura"
+                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-usd", CssClass = "e-flat" })"></GridCommandColumn>
+                                <GridCommandColumn Type="CommandButtonType.None" Title="Detalle Remito" ID="btnDetalleRemito"
+                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-cubes fa-1", CssClass = "" })"></GridCommandColumn>
+                            </GridCommandColumns>
+                        </GridColumn>-->
+                        <GridColumn Field=@nameof(vEstadoPedido.FE_PED) HeaderText="FECHA PEDIDO" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
+                        <GridColumn Field=@nameof(vEstadoPedido.PEDIDO) HeaderText="PEDIDO" Width="120"></GridColumn>
+                        <GridColumn Field=@nameof(vEstadoPedido.DESCRIPCION_ESTADO_PEDIDO) HeaderText="ESTADO PEDIDO" Width="180">
+                        </GridColumn>
+                        <GridColumn Field=@nameof(vEstadoPedido.CG_CLI) HeaderText="CODIGO CLIENTE" Width="150"></GridColumn>                        
+                        <GridColumn Field=@nameof(vEstadoPedido.DES_CLI) HeaderText="DESCRIPCION CLIENTE" Width="230"></GridColumn>
+                        <GridColumn Field=@nameof(vEstadoPedido.CG_ART) HeaderText="CODIGO PRODUCTO" Width="180"></GridColumn>
+                        <GridColumn Field=@nameof(vEstadoPedido.DES_ART) HeaderText="PRODUCTO" Width="250"></GridColumn>
+                        <GridColumn Field=@nameof(vEstadoPedido.CANTPED) HeaderText="CANTIDAD" Width="150"></GridColumn>
+                        <GridColumn Field=@nameof(vEstadoPedido.UNID) HeaderText="UNIDAD" Width="120"></GridColumn>
+                        @*<GridColumn Field=@nameof(vEstadoPedido.ESTADO_PEDIDO) HeaderText="ESTADO PEDIDO" EditType="EditType.DropDownEdit" EditorSettings="@CustomerIDEditParams" Width="180"></GridColumn>*@
+                        <GridColumn Field=@nameof(vEstadoPedido.ORCO) HeaderText="ORDEN DE COMPRA" Width="120"></GridColumn>
+                        <GridColumn Field=@nameof(vEstadoPedido.FE_PREV) HeaderText="FECHA PREVISTA" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
+                        <GridColumn Field=@nameof(vEstadoPedido.OBSERITEM) HeaderText="OBSERVACIONES" Width="220"></GridColumn>
+                    </GridColumns>
+                    <SfSpinner Type="SpinnerType.Fabric" Size="50" Label="Cargando..." @bind-Visible="@SpinnerVisible"></SfSpinner>
+                </SfGrid>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    /*to remove the edit button alone*/
+    .e-removeEditcommand .e-unboundcell .e-unboundcelldiv button.e-Editbutton {
+        display: none;
+    }
+    .color-estado-pedido-a-confirmar {
+        /*background-color: #f89b9b;*/
+        color: #e3165b !important;
+    }
+    .color-estado-pedido-confirmado {
+        color: #0094ff !important;
+    }
+    .color-estado-pedido-produccion {
+        color: #b200ff !important;
+    }
+    .color-estado-pedido-componentes {
+        color: #b89f16 !important;
+    }
+    .color-estado-pedido-armado {
+        color: #3e7846 !important;
+    }
+    .color-estado-pedido-pendiente-remitir {
+        color: #8e6b29 !important;
+    }
+    .color-estado-pedido-entregar {
+        color: #ff0000 !important;
+    }
+    .color-estado-pedido-entregado {
+        color: #808080 !important;
+    }
+    .color-estado-pedido-facturado {
+        color: #f30b0b !important;
+    }
+    .color-estado-pedido-anulado {
+        color: #000000 !important;
+    }
+</style>
