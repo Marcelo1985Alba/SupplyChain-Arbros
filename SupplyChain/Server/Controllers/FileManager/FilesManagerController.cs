@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Server.Repositorios;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace filemanager.Server.Controllers
 {
@@ -21,15 +22,18 @@ namespace filemanager.Server.Controllers
     {
         private readonly SolutionRepository _solutionRepository;
         public PhysicalFileProvider operation;
-        public FileProviderBase operationAzure;
         public string basePath;
         string root = "";
-        public FilesManagerController(SolutionRepository solutionRepository )
+        private readonly AuthenticationStateProvider _authenticationStateProvider;
+
+        public FilesManagerController(SolutionRepository solutionRepository, AuthenticationStateProvider authenticationStateProvider )
         {
             this.operation = new PhysicalFileProvider();
             this._solutionRepository = solutionRepository;
             this.root = solutionRepository.Obtener(s => s.CAMPO == "RUTADOCS").FirstOrDefault().VALORC;
             this.operation.RootFolder(this.root); // It denotes in which files and folders are available.
+            this._authenticationStateProvider = authenticationStateProvider;
+            this.operation.SetRules(GetRules());
         }
 
         // Processing the File Manager operations
@@ -96,6 +100,37 @@ namespace filemanager.Server.Controllers
         public IActionResult GetImage(Syncfusion.Blazor.FileManager.Base.FileManagerDirectoryContent args)
         {
             return this.operation.GetImage(args.Path, args.Id, false, null, null);
+        }
+
+        protected AccessDetails GetRules()
+        {
+            AccessDetails accessDetails = new();
+            //var result = _authenticationStateProvider.GetAuthenticationStateAsync();
+            //result.Wait();
+
+            //var user = result.Result;
+            accessDetails.AccessRules = (List<AccessRule>)(new()
+            {
+                new AccessRule
+                {
+                    Path = "/*.*",
+                    Read = Permission.Allow,
+                    Write = Permission.Deny,
+                    Copy = Permission.Deny,
+                    WriteContents = Permission.Deny,
+                    Upload = Permission.Allow,
+                    Download = Permission.Allow,
+                    IsFile = true
+                },
+
+                new AccessRule { Path = "/*.*",
+                    Read = Permission.Allow,
+                    Write = Permission.Allow,
+                    Copy = Permission.Deny,
+                    WriteContents = Permission.Allow, Upload = Permission.Allow, Download = Permission.Allow, IsFile = false },
+            });
+
+            return accessDetails;
         }
     }
 }

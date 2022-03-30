@@ -49,6 +49,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected List<ChartData> EventosMensualTipo = new();
         protected string TituloGraficoEventosMensual = "";
         protected string SerieSeleccionaEventos = "";
+        protected string añoEventoSeleccionado = string.Empty;
         ///////**********************************************////////////////////////////
 
         protected string chartXAnnoation = "75px";
@@ -174,7 +175,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
             .Select(d => new ChartData()
             {
                 XSerieName = d.Key.ANIO.ToString(),
-                YSerieName = Convert.ToDouble(d.Sum(p => p.Cg_NoConf))
+                YSerieName = Convert.ToDouble(d.Count())
             }).OrderBy(c => c.XSerieName)
             .ToList();
 
@@ -304,24 +305,34 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
         protected async Task MostrarDetalleEventos(Syncfusion.Blazor.Charts.PointEventArgs args)
         {
-            var año = args.Point.X;
+            añoEventoSeleccionado = args.Point.X.ToString();
             SerieSeleccionaEventos = args.Series.Name;
-            TituloGraficoEventosMensual = $"Cantidad de Eventos en {año}";
+            TituloGraficoEventosMensual = $"Cantidad de Eventos en {añoEventoSeleccionado}";
 
             //para grilla de detalle
             gridDetalleEventos.PreventRender();
             DataEventosDetalle = new();
-            DataEventosDetalle = DataEventosOriginal.Where(p => p.ANIO == Convert.ToInt32(año))
+            DataEventosDetalle = DataEventosOriginal.Where(p => p.ANIO == Convert.ToInt32(añoEventoSeleccionado))
                 //.OrderBy(o => new { o.ANIO, o.MES })
                 .ToList();
 
 
             EventosMensual = DataEventosOriginal
-            .Where(v => v.ANIO == Convert.ToInt32(año))
+            .Where(v => v.ANIO == Convert.ToInt32(añoEventoSeleccionado))
             .OrderBy(o => o.MES)
             .GroupBy(g => new { g.MES }).Select(d => new ChartData()
             {
                 XSerieName = d.Key.MES.ToString(),
+                YSerieName = Math.Round(Convert.ToDouble(d.Count()))
+            }).ToList();
+
+            //POR TIPO
+            EventosMensualTipo = DataEventosOriginal
+            .Where(v => v.ANIO == Convert.ToInt32(añoEventoSeleccionado))
+            .OrderBy(o => o.MES)
+            .GroupBy(g => new { g.Des_TipoNc }).Select(d => new ChartData()
+            {
+                XSerieName = d.Key.Des_TipoNc,
                 YSerieName = Math.Round(Convert.ToDouble(d.Count()))
             }).ToList();
 
@@ -338,7 +349,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
             //POR TIPO
             EventosMensualTipo = DataEventosOriginal
-            .Where(v => v.MES == Convert.ToInt32(mes))
+            .Where(v => v.MES == Convert.ToInt32(mes) &&  v.ANIO == Convert.ToInt32(añoEventoSeleccionado) )
             .OrderBy(o => o.MES)
             .GroupBy(g => new { g.Des_TipoNc }).Select(d => new ChartData()
             {
