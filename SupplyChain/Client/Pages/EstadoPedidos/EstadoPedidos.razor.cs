@@ -4,6 +4,7 @@ using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
 using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.LinearGauge;
 using Syncfusion.Blazor.Notifications;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,10 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
         protected SfToast ToastObj;
         protected SfGrid<vEstadoPedido> refSfGrid;
         protected List<vEstadoPedido> DataEstadosPedidos = new();
+        protected vEstadoPedido PedidoSeleccionado = new();
         protected bool SpinnerVisible = false;
 
+        protected bool VisibleDialog = false;
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Estados de Pedidos";
@@ -29,7 +32,7 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             var response = await Http.GetFromJsonAsync<List<vEstadoPedido>>("api/EstadoPedidos");
             if (response.Error)
             {
-
+                Console.WriteLine("ERROR OBTENER DATOS");
             }
             else
             {
@@ -39,17 +42,6 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             }
             SpinnerVisible = false;
         }
-
-        //public IEditorSettings CustomerIDEditParams = new DropDownEditCellParams
-        //{
-        //    Params = new DropDownListModel<object, object>() { DataSource = LocalData, AllowFiltering = true }
-        //};
-
-        //public static List<vEstadoPedido> LocalData = new List<vEstadoPedido> {
-        //        new vEstadoPedido() { ESTADO_PEDIDO= "A ENTREGAR" },
-        //        new vEstadoPedido() { ESTADO_PEDIDO= "ENTREGADO" },
-        //        new vEstadoPedido() { ESTADO_PEDIDO= "FACTURADO" }
-        //};
 
         public void RowBound(RowDataBoundEventArgs<vEstadoPedido> Args)
         {
@@ -105,6 +97,54 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             {
                 args.Cell.AddClass(new string[] { "color-estado-pedido-anulado" });
             }
+        }
+
+        protected async Task OnRowSelected(RowSelectEventArgs<vEstadoPedido> arg)
+        {
+            arg.PreventRender = true;
+        }
+
+        protected async Task OnRowSelectedDouble_Click(RecordDoubleClickEventArgs<vEstadoPedido> arg)
+        {
+            arg.PreventRender = true;
+            PedidoSeleccionado = arg.RowData;
+            VisibleDialog = true;
+        }
+
+        protected void AxisLabelChange(AxisLabelRenderEventArgs args)
+        {
+
+            //1   PEDIDO A CONFIRMAR
+            //2   PEDIDO CONFIRMADO
+            //3   EN PROCESO
+            //4   CON TOTALIDAD DE COMPONENTES
+            //5   ARMADO Y CALIBRACION
+            //6   PENDIENTE DE REMITIR
+            //7   A ENTREGAR
+            //8   ENTREGADO
+            //9   FACTURADO
+            //10  ANULADO
+
+            if (args.Text == "1")
+                args.Text = "PEDIDO A CONFIRMAR";
+            else if (args.Text == "2")
+                args.Text = "PEDIDO CONFIRMADO";
+            else if (args.Text == "3")
+                args.Text = "EN PROCESO";
+            //else if (args.Text == "4")
+            //    args.Text = "CON TOTALIDAD DE COMPONENTES";
+            else if (args.Text == "4")
+                args.Text = "ARMADO Y CALIBRACION";
+            else if (args.Text == "6")
+                args.Text = "PENDIENTE DE REMITIR";
+            else if (args.Text == "7")
+                args.Text = "A ENTREGAR";
+            else if (args.Text == "8")
+                args.Text = "ENTREGADO";
+            //else if (args.Text == "9")
+            //    args.Text = "FACTURADO";
+            else
+                args.Text = " ";
         }
     }
 }

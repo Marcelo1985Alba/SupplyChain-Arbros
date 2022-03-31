@@ -75,7 +75,7 @@ namespace SupplyChain.Server.Controllers
             var endLength = ruta.CAMPO.Trim() == "RUTAENSAYO" ? 9 : 7;
             codigo = codigo.Split(',')[0];
             var file = codigo.Substring(0, endLength);
-            file += "_*.pdf";
+            //file += "_*.pdf";
             string[] dirs = Directory.GetFiles($"{ruta.VALORC}",$"{file}", 
                 new EnumerationOptions() { MatchCasing = MatchCasing.CaseInsensitive, MatchType = MatchType.Simple, IgnoreInaccessible = true});
             int identificacion = 0;

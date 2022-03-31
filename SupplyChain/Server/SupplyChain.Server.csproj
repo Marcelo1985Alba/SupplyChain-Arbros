@@ -65,9 +65,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="19.4.0.40" />
+    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="19.4.0.56" />
     <PackageReference Include="Syncfusion.Blazor.FileManager.PhysicalFileProvider" Version="19.4.0.48" />
-    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="19.4.0.40" />
+    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="19.4.0.56" />
     <PackageReference Include="System.CodeDom" Version="5.0.0" />
   </ItemGroup>
 
