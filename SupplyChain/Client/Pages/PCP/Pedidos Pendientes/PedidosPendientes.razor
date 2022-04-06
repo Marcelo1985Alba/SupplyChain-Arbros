@@ -47,7 +47,7 @@
                     <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                     <GridEvents OnLoad="(async(a)=> await LoadGrid(a))" OnActionBegin="@((a)=> Begin(a))"
                                 DataBound="(async()=> await DataBoundHandler())" OnActionComplete="@(async(a)=>await ActionComplete(a))"
-                                OnDataBound="@(async(a)=>await OnDataBoundGrid(a))"
+                                OnDataBound="@(async(a)=>await OnDataBoundGrid(a))" CommandClicked="(async (a)=> await CommandClickHandler(a))"
                                 OnToolbarClick="@(async(a)=> await ClickHandler(a))"
                                 QueryCellInfo="(async(a)=> await QueryCellInfoHandler(a))" TValue="ModeloPedidosPendientes"></GridEvents>
                     <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
@@ -121,6 +121,15 @@
                         </GridColumn>
                         <GridColumn Field=@nameof(ModeloPedidosPendientes.CG_ORDF) HeaderText="OF" TextAlign="TextAlign.Left"></GridColumn>
                         <GridColumn Field=@nameof(ModeloPedidosPendientes.DES_ESTADOCARGA) HeaderText="Estado" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn HeaderText="Entrega" Width="90px">
+                            <GridCommandColumns>
+                                <GridCommandColumn Type="CommandButtonType.None" Title="Entrega"
+                                                   ButtonOption="@(new CommandButtonOptions()
+                                                           {
+                                                               IconCss = "fa fa-chevron-circle-up ", Content="", CssClass=""
+                                                           })" />
+                            </GridCommandColumns>
+                        </GridColumn>
                         <GridColumn Field=@nameof(ModeloPedidosPendientes.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left"></GridColumn>
                         <GridColumn Field=@nameof(ModeloPedidosPendientes.DES_CLI) HeaderText="Razón social del Cliente" TextAlign="TextAlign.Left"></GridColumn>
                         <GridColumn Field=@nameof(ModeloPedidosPendientes.CG_ART) HeaderText="Código" TextAlign="TextAlign.Left"></GridColumn>

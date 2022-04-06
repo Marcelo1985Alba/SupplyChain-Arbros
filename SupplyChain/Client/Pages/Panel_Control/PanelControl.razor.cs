@@ -44,11 +44,15 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected SfGrid<vEstadEventos> gridDetalleEventos;
         protected SfChart refChartDetalleEventos;
         protected SfChart refChartDetalleEventosMesTipo;
+        protected SfChart refChartDetalleEventosProveedor;
         protected List<vEstadEventos> DataEventosDetalle = new();
         protected List<ChartData> EventosAnual = new();
         protected List<ChartData> EventosMensual = new();
         protected List<ChartData> EventosMensualTipo = new();
+        protected List<ChartData> EventosProveedor = new();
         protected string TituloGraficoEventosMensual = "";
+        protected string TituloGraficoEventosTipo = "";
+        protected string TituloGraficoEventosProveedor = "";
         protected string SerieSeleccionaEventos = "";
         protected string añoEventoSeleccionado = string.Empty;
         ///////**********************************************////////////////////////////
@@ -345,9 +349,25 @@ namespace SupplyChain.Client.Pages.Panel_Control
                 YSerieName = Math.Round(Convert.ToDouble(d.Count()))
             }).ToList();
 
+            //eventos por proveedor
+            TituloGraficoEventosProveedor = $"Eventos por Proveedor en {añoEventoSeleccionado}";
+            EventosProveedor = DataEventosOriginal
+            .Where(v => v.ANIO == Convert.ToInt32(añoEventoSeleccionado) && !string.IsNullOrEmpty(v.DES_PROVE))
+            .GroupBy(g => new { g.DES_PROVE }).Select(d => new ChartData()
+            {
+                XSerieName = d.Key.DES_PROVE.Trim(),
+                YSerieName = Math.Round(Convert.ToDouble(d.Count()))
+            }).ToList();
+
             StateHasChanged();
             await refChartDetalleEventos.RefreshAsync();
             await refChartDetalleEventos.RefreshAsync();
+
+            await refChartDetalleEventosMesTipo.RefreshAsync();
+            await refChartDetalleEventosMesTipo.RefreshAsync();
+            
+            await refChartDetalleEventosProveedor.RefreshAsync();
+            await refChartDetalleEventosProveedor.RefreshAsync();
         }
 
         protected async Task MostrarDetalleEventosMesTipo(Syncfusion.Blazor.Charts.PointEventArgs args)
@@ -357,6 +377,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
             TituloGraficoEventosMensual = $"Cantidad de Eventos en mes {mes}";
 
             //POR TIPO
+            TituloGraficoEventosTipo = $"Eventos por Tipo en {mes}/{añoEventoSeleccionado} ";
             EventosMensualTipo = DataEventosOriginal
             .Where(v => v.MES == Convert.ToInt32(mes) &&  v.ANIO == Convert.ToInt32(añoEventoSeleccionado) )
             .OrderBy(o => o.MES)
@@ -366,9 +387,21 @@ namespace SupplyChain.Client.Pages.Panel_Control
                 YSerieName = Math.Round(Convert.ToDouble(d.Count()))
             }).ToList();
 
+
+            //eventos por proveedor
+            TituloGraficoEventosProveedor = $"Eventos por Proveedor en {mes}/{añoEventoSeleccionado} ";
+            EventosProveedor = DataEventosOriginal
+            .Where(v => v.ANIO == Convert.ToInt32(añoEventoSeleccionado) 
+                    && !string.IsNullOrEmpty(v.DES_PROVE) && v.MES == Convert.ToInt32(mes) )
+            .GroupBy(g => new { g.DES_PROVE }).Select(d => new ChartData()
+            {
+                XSerieName = d.Key.DES_PROVE.Trim(),
+                YSerieName = Math.Round(Convert.ToDouble(d.Count()))
+            }).ToList();
+
             StateHasChanged();
             await refChartDetalleEventosMesTipo.RefreshAsync();
-            await refChartDetalleEventosMesTipo.RefreshAsync();
+            await refChartDetalleEventosProveedor.RefreshAsync();
         }
 
         protected async Task MostrarDetallePedidosAnuales(Syncfusion.Blazor.Charts.PointEventArgs args)

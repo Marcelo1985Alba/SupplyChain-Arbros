@@ -75,8 +75,16 @@ namespace SupplyChain.Server.Controllers
             var endLength = ruta.CAMPO.Trim() == "RUTAENSAYO" ? 9 : 7;
             codigo = codigo.Split(',')[0];
             var file = codigo.Substring(0, endLength);
-            //file += "_*.pdf";
-            string[] dirs = Directory.GetFiles($"{ruta.VALORC}",$"{file}", 
+            if (ruta.CAMPO.Trim() == "RUTAENSAYO")
+            {
+                file += "_*.pdf";
+            }
+            if (ruta.CAMPO.Trim() == "RUTATRAZABILIDAD")
+            {
+                file += "pdf";
+            }
+
+            string[] dirs = Directory.GetFiles($"{ruta.VALORC}",$"{file}",
                 new EnumerationOptions() { MatchCasing = MatchCasing.CaseInsensitive, MatchType = MatchType.Simple, IgnoreInaccessible = true});
             int identificacion = 0;
             foreach (string item in dirs)
@@ -85,7 +93,7 @@ namespace SupplyChain.Server.Controllers
                 var archivo = new Archivo()
                 {
                     Id = identificacion,
-                    Nombre = item.Substring(ruta.VALORC.Length),
+                    Nombre = Path.GetFileName(item),
                     Directorio = item,
                     Contenido = parametro == "RUTACNC" ? System.IO.File.ReadAllLines(item) : null,
                     ContenidoByte = parametro == "RUTACNC" ? System.IO.File.ReadAllBytes(item) : null

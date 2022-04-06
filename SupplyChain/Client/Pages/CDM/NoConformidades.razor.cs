@@ -34,6 +34,8 @@ namespace SupplyChain.Client.Pages.NoConf
         [Inject] protected IJSRuntime JsRuntime { get; set; }
         [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
 
+        [CascadingParameter] public MainLayout MainLayout { get; set; }
+
         // variables generales
         public bool IsVisible { get; set; } = false;
         public SfToast ToastObj;
@@ -621,7 +623,7 @@ namespace SupplyChain.Client.Pages.NoConf
 
         protected override async Task OnInitializedAsync()
         {
-
+            MainLayout.Titulo = "Eventos y No Conformidades";
             fechahoy = DateTime.Now.Date;
 
             ListaAccionesData = await Http.GetFromJsonAsync<List<NoConformidadesListaAcciones>>("api/NoConformidadesAcciones/GetListaAcciones/");
@@ -632,7 +634,7 @@ namespace SupplyChain.Client.Pages.NoConf
                 listanoconf = await Http.GetFromJsonAsync<List<NoConformidadesQuery>>("api/NoConformidades");
                 TiposNc = await Http.GetFromJsonAsync<TiposNoConf[]>("api/TiposNoConf");
 
-                await Grid.AutoFitColumns();
+                //await Grid.AutoFitColumns();
             }
             else
             {

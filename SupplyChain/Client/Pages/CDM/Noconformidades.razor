@@ -29,12 +29,6 @@
 
     <div class="col-12 control-section mt-4">
         <div class="content-wrapper">
-            <!--            <div class="form-inline">-->
-            <div class="col-lg-9 col-sm-12">
-                <h4 class="pt-3 text-left">
-                    Eventos y No Conformidades
-                </h4>
-            </div>
             <div class="col-lg-2 col-sm-4">
                 <!--<SfButton IsPrimary="true" @onclick="refrescagrid">refresca</SfButton>-->
                 <SfButton IsPrimary="true" hidden="@ocultadivlista" @onclick="nuevoevento">Nuevo Evento</SfButton>
@@ -58,12 +52,12 @@
                                 <GridEvents OnLoad="OnLoad" DataBound="DataBound" OnToolbarClick="@ClickHandler" TValue="NoConformidadesQuery"></GridEvents>
                                 <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                                 <GridColumns>
-                                    <GridColumn Field=@nameof(NoConformidadesQuery.Cg_NoConf) HeaderText="Nro.Evento" AllowEditing="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
-                                    <GridColumn Field=@nameof(NoConformidadesQuery.Fe_Ocurrencia) HeaderText="Fecha" AllowEditing="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
-                                    <GridColumn Field=@nameof(NoConformidadesQuery.fe_cierre) HeaderText="Fecha Cierre" AllowEditing="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
-                                    <GridColumn Field=@nameof(NoConformidadesQuery.Origen) HeaderText="Origen" AllowEditing="false" TextAlign="TextAlign.Left" Width="20px"></GridColumn>
-                                    <GridColumn Field=@nameof(NoConformidadesQuery.Des_TipoNc) HeaderText="Tipo Evento" AllowEditing="false" TextAlign="TextAlign.Left" Width="40px"></GridColumn>
-                                    <GridColumn Field=@nameof(NoConformidadesQuery.Observaciones) HeaderText="Descripcion" AllowEditing="false" TextAlign="TextAlign.Left" Width="40px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.Cg_NoConf) HeaderText="Nro.Evento" AllowEditing="false" TextAlign="TextAlign.Left" Width="80px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.Fe_Ocurrencia) HeaderText="Fecha" Format="dd/MM/yyyy" AllowEditing="false" TextAlign="TextAlign.Left" Width="70px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.fe_cierre) HeaderText="Fecha Cierre" Format="dd/MM/yyyy" AllowEditing="false" TextAlign="TextAlign.Left" Width="80px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.Origen) HeaderText="Origen" AllowEditing="false" TextAlign="TextAlign.Left" Width="80px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.Des_TipoNc) HeaderText="Tipo Evento" AllowEditing="false" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                    <GridColumn Field=@nameof(NoConformidadesQuery.Observaciones) HeaderText="Descripcion" AllowEditing="false" TextAlign="TextAlign.Left" Width="240px"></GridColumn>
                                 </GridColumns>
                             </SfGrid>
                         </div>
