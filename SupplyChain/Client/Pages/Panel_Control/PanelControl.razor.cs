@@ -5,6 +5,7 @@ using Syncfusion.Blazor.Charts;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Layouts;
 using Syncfusion.Blazor.Spinner;
+using Syncfusion.Blazor.Gantt;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected string TituloGraficoFacturacionMensual = "";
         protected string SerieSeleccionaFacturacion = "";
         protected int PromedioFacturacionMensual = 0;
-        ///////******************************////////////////////////////
+        ///////****************************************////////////////////////////
 
         ///////*****************NO CONFORMIDADES*************////////////////////////////
         protected List<vEstadEventos> DataEventosOriginal = new();
@@ -88,7 +89,14 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected DetalleCategoria.DialogDetalle dialogDetalle;
         protected string TituloPedidosIngresadosMercado = "Mercado Externo";
         //////////////////////////////////////////////////////////////////
-        
+
+        /////////////**********PROYECTOS*********////////////////////
+        protected DateTime ProjectStart = new DateTime(2021, 3, 25);
+        protected DateTime ProjectEnd = new DateTime(2023, 7, 28);
+        protected SfGantt<ProyectosGBPI> refGanttProyectos;
+        //protected List<ProyectosGBPI> DataProyectos { get; set; } = new();
+        /////////////////////////////////////////////////////////////
+
 
         protected SfChart refChartDetallePresupuestos;
         protected SfGrid<vEstadPresupuestos> grdPresupuestos;
@@ -131,6 +139,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
             await GetEventos();
             await GetPedidos();
             await GetPresupuestos();
+            //await GetProyectos();
             VisibleSpinner = false;
         }
 
@@ -518,7 +527,12 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
             TituloPedidosIngresadosCategoriaDetalle = $"Categoria {categoria.ToUpper()} de { añoSeleccionadoPedidosIngresados}";
             await dialogDetalle.ShowAsync();
-            
+
         }
+
+        /*protected async Task GetProyectos()
+        {
+            this.DataProyectos = await Http.GetFromJsonAsync<List<ProyectosGBPI>>("api/Proyectos/Proyectos");
+        }*/
     }
 }

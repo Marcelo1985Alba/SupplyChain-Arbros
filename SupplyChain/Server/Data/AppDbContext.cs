@@ -30,7 +30,6 @@ namespace SupplyChain
         public DbSet<PedCli> PedCli { get; set; }
         public DbSet<Pedidos> Pedidos { get; set; }
         public DbSet<Programa> Programa { get; set; }
-        //willy
         public DbSet<Areas> Areas { get; set; }
         public DbSet<Unidades> Unidades { get; set; }
         public DbSet<Lineas> Lineas { get; set; }
@@ -105,6 +104,9 @@ namespace SupplyChain
         public DbSet<StockCorregido> StockCorregidos { get; set; }
 
         public DbSet<vEstadoPedido> vEstadoPedidos { get; set; }
+
+        //MODULO PROYECTOS
+        public DbSet<ProyectosGBPI> Proyectos { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             

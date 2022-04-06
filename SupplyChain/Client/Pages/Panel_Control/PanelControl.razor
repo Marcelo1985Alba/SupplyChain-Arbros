@@ -2,7 +2,10 @@
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.Cards
 @using Syncfusion.Blazor.Layouts
+@using Syncfusion.Blazor.Gantt
 @using SupplyChain.Client.Pages.Panel_Control.DetalleCategoria
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor
 @page "/panel-control/index"
 
 @inherits BasePanelControl
@@ -112,7 +115,7 @@
 
                             <div class="pane card-body card1">
                                 <div class="card-title chart-title">Detalle de Facturación</div>
-                                <SfGrid @ref="grdFacturacionDetalle" DataSource="@(DataFacturacionDetalle)" GridLines="GridLine.Both"
+                                <SfGrid @ref="grdFacturacionDetalle" DataSource="@(DataFacturacionDetalle)" GridLines="Syncfusion.Blazor.Grids.GridLine.Both"
                                         AllowResizing="true" AllowReordering="true" AllowMultiSorting="true" AllowSorting="true"
                                         AllowPaging="true" Height="450" Width="100%"> </SfGrid>
                             </div>
@@ -184,9 +187,9 @@
                                             @if (PromedioComprasMensual > 0)
                                             {
                                                 @*<ChartStripline Start="397" End="400" Color="red"
-                                                                Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
-                                                    <ChartStriplineTextStyle Color="red" />
-                                                </ChartStripline>*@
+                                                                    Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
+                                                        <ChartStriplineTextStyle Color="red" />
+                                                    </ChartStripline>*@
                                                 if (ComprasMensual.Count > 1)
                                                 {
                                                     <ChartStripline Start="@(PromedioComprasMensual - 10)"
@@ -241,9 +244,9 @@
                                             @if (PromedioComprasMensual > 0)
                                             {
                                                 @*<ChartStripline Start="397" End="400" Color="red"
-                                                                Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
-                                                    <ChartStriplineTextStyle Color="red" />
-                                                </ChartStripline>*@
+                                                                    Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
+                                                        <ChartStriplineTextStyle Color="red" />
+                                                    </ChartStripline>*@
                                                 if (ComprasMensual.Count > 1)
                                                 {
                                                     <ChartStripline Start="@(PromedioComprasMensual - 10)"
@@ -276,24 +279,24 @@
                     </div>
 
                     @*<div class="col-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <SfAccumulationChart @ref="refAccChartDetalleComprasTipo" EnableBorderOnMouseMove="false" Title="Compras por Tipo U$S" EnableSmartLabels="true">
-                                    <AccumulationChartLegendSettings Visible="false"></AccumulationChartLegendSettings>
-                                    <AccumulationChartTooltipSettings Enable="true" Format="${point.x} : <b>${point.y}U$S</b>"></AccumulationChartTooltipSettings>
-                                    <AccumulationChartSeriesCollection>
-                                        <AccumulationChartSeries DataSource="@ComprasMensualTipo" Name="Tipo" XName="XSerieName"
-                                                                 YName="YSerieName" StartAngle="60" InnerRadius="0%" Palettes="@palettes">
-                                            <AccumulationDataLabelSettings Name="DataLabelMappingName" Visible="true" Position="AccumulationLabelPosition.Outside">
-                                                <AccumulationChartConnector Length="20px" Type="ConnectorType.Curve"></AccumulationChartConnector>
-                                            </AccumulationDataLabelSettings>
-                                        </AccumulationChartSeries>
-                                    </AccumulationChartSeriesCollection>
-                                </SfAccumulationChart>
+                            <div class="card">
+                                <div class="card-body">
+                                    <SfAccumulationChart @ref="refAccChartDetalleComprasTipo" EnableBorderOnMouseMove="false" Title="Compras por Tipo U$S" EnableSmartLabels="true">
+                                        <AccumulationChartLegendSettings Visible="false"></AccumulationChartLegendSettings>
+                                        <AccumulationChartTooltipSettings Enable="true" Format="${point.x} : <b>${point.y}U$S</b>"></AccumulationChartTooltipSettings>
+                                        <AccumulationChartSeriesCollection>
+                                            <AccumulationChartSeries DataSource="@ComprasMensualTipo" Name="Tipo" XName="XSerieName"
+                                                                     YName="YSerieName" StartAngle="60" InnerRadius="0%" Palettes="@palettes">
+                                                <AccumulationDataLabelSettings Name="DataLabelMappingName" Visible="true" Position="AccumulationLabelPosition.Outside">
+                                                    <AccumulationChartConnector Length="20px" Type="ConnectorType.Curve"></AccumulationChartConnector>
+                                                </AccumulationDataLabelSettings>
+                                            </AccumulationChartSeries>
+                                        </AccumulationChartSeriesCollection>
+                                    </SfAccumulationChart>
+                                </div>
                             </div>
-                        </div>
 
-                    </div>*@
+                        </div>*@
 
 
 
@@ -301,7 +304,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="pane card-body card2">
-                                <SfGrid @ref="gridDetalleCompras" DataSource="@DataComprasDetalle" GridLines="GridLine.Both" AllowResizing="true"
+                                <SfGrid @ref="gridDetalleCompras" DataSource="@DataComprasDetalle" GridLines="Syncfusion.Blazor.Grids.GridLine.Both" AllowResizing="true"
                                         AllowReordering="true" AllowSorting="true"
                                         AllowPaging="true" Height="450"> </SfGrid>
                             </div>
@@ -401,7 +404,7 @@
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
                                         <ChartSeries DataSource="@EventosMensualTipo" XName="XSerieName" YName="YSerieName"
-                                                     Name="Mes" Fill="url(#card5-gradient-chart)" 
+                                                     Name="Mes" Fill="url(#card5-gradient-chart)"
                                                      Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
                                             <ChartMarker>
                                                 <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
@@ -420,7 +423,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="pane card-body card5">
-                                <SfGrid @ref="gridDetalleEventos" DataSource="@DataEventosDetalle" GridLines="GridLine.Both" AllowResizing="true"
+                                <SfGrid @ref="gridDetalleEventos" DataSource="@DataEventosDetalle" GridLines="Syncfusion.Blazor.Grids.GridLine.Both" AllowResizing="true"
                                         AllowReordering="true" AllowSorting="true"
                                         AllowPaging="true" Height="450"> </SfGrid>
                             </div>
@@ -544,14 +547,14 @@
                                         </AccumulationChartSeries>
                                     </AccumulationChartSeriesCollection>
                                     @*<AccumulationChartAnnotations>
-                                        <AccumulationChartAnnotation Region="Regions.Series" X="50%" Y="50%">
-                                            <ContentTemplate>
-                                                <div id="annotation">
-                                                    @TituloPedidosIngresadosCategoria
-                                                </div>
-                                            </ContentTemplate>
-                                        </AccumulationChartAnnotation>
-                                    </AccumulationChartAnnotations>*@
+                                            <AccumulationChartAnnotation Region="Regions.Series" X="50%" Y="50%">
+                                                <ContentTemplate>
+                                                    <div id="annotation">
+                                                        @TituloPedidosIngresadosCategoria
+                                                    </div>
+                                                </ContentTemplate>
+                                            </AccumulationChartAnnotation>
+                                        </AccumulationChartAnnotations>*@
                                     <AccumulationChartEvents OnPointClick="@(async (a)=>await OnFiltroByCategoria(a))"></AccumulationChartEvents>
                                 </SfAccumulationChart>
                             </div>
@@ -589,15 +592,15 @@
                                                                    EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                                                 </ChartPrimaryXAxis>
                                                 @*<ChartAnnotations>
-                                                    <ChartAnnotation X="@chartXAnnoation" Y="9%" CoordinateUnits="Units.Pixel" Region="Regions.Chart">
-                                                        <ContentTemplate>
-                                                            <p style="font-family:Roboto;font-size: 16px;font-weight: 400;font-weight: 400;
-                                                                letter-spacing: 0.02em;line-height: 16px;color: #797979 !important;">
-                                                                @TituloPedidosIngresadosCategoriaDetalle
-                                                            </p>
-                                                        </ContentTemplate>
-                                                    </ChartAnnotation>
-                                                </ChartAnnotations>*@
+                                                        <ChartAnnotation X="@chartXAnnoation" Y="9%" CoordinateUnits="Units.Pixel" Region="Regions.Chart">
+                                                            <ContentTemplate>
+                                                                <p style="font-family:Roboto;font-size: 16px;font-weight: 400;font-weight: 400;
+                                                                    letter-spacing: 0.02em;line-height: 16px;color: #797979 !important;">
+                                                                    @TituloPedidosIngresadosCategoriaDetalle
+                                                                </p>
+                                                            </ContentTemplate>
+                                                        </ChartAnnotation>
+                                                    </ChartAnnotations>*@
                                                 <ChartPrimaryYAxis LabelFormat="{value} U$S"
                                                                    Minimum="0" Maximum="100000" Interval="10000">
                                                     <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
@@ -634,7 +637,7 @@
                     <div class="col-12">
                         <div class="content-wrapper">
                             <div class="row">
-                                <SfGrid @ref="grdPedIngresados" DataSource="@(PedidosIngresadosDetalleMes)" GridLines="GridLine.Both"
+                                <SfGrid @ref="grdPedIngresados" DataSource="@(PedidosIngresadosDetalleMes)" GridLines="Syncfusion.Blazor.Grids.GridLine.Both"
                                         AllowResizing="true" AllowReordering="true" AllowMultiSorting="true" AllowSorting="true"
                                         AllowPaging="true" Height="450" Width="100%">
                                     <GridTemplates>
@@ -771,7 +774,7 @@
                     <div class="col-12">
                         <div class="content-wrapper">
                             <div class="row">
-                                <SfGrid @ref="grdPresupuestos" DataSource="@(PresupuestosAnualesDetalle)" GridLines="GridLine.Both"
+                                <SfGrid @ref="grdPresupuestos" DataSource="@(PresupuestosAnualesDetalle)" GridLines="Syncfusion.Blazor.Grids.GridLine.Both"
                                         AllowResizing="true" AllowReordering="true" AllowMultiSorting="true" AllowSorting="true"
                                         AllowPaging="true" Height="450" Width="100%">
                                     <GridTemplates>
@@ -798,6 +801,43 @@
                             </div>
                         </div>
 
+                    </div>
+                </div>
+            </ContentTemplate>
+        </TabItem>
+        <TabItem CssClass="tab-content">
+            <ChildContent>
+                <TabHeader Text="Proyectos"></TabHeader>
+            </ChildContent>
+            <ContentTemplate>
+                <div class="col-lg-12 control-section">
+                    <div class="content-wrapper">
+                        <div class="row">
+                            <SfGantt TValue="ProyectosGBPI" Height="450px" Width="100%" HighlightWeekends="true"
+                                     Toolbar="@(new List<string>(){ "Add", "Edit", "Update", "Delete", "Cancel", "ExpandAll", "CollapseAll","Indent","Outdent"})"
+                                     AllowSelection="true" GridLines="Syncfusion.Blazor.Gantt.GridLine.Both" TreeColumnIndex="1"
+                                     ProjectStartDate="@ProjectStart" ProjectEndDate="@ProjectEnd" @ref="refGanttProyectos">
+                                <SfDataManager Url="/api/Proyectos/Proyectos" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
+                                <GanttTaskFields Id="TaskId" Name="TaskName" StartDate="StartDate" EndDate="EndDate" Duration="Duration" Progress="Progress"
+                                                 Dependency="Predecessor" ParentID="ParentId" Notes="Notes"></GanttTaskFields>
+                                <GanttEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" AllowTaskbarEditing="true" ShowDeleteConfirmDialog="true"></GanttEditSettings>
+                                <GanttTaskFields Id="TaskId" Name="TaskName" StartDate="StartDate"
+                                                 Duration="Duration" Progress="Progress" Dependency="Predecessor" Child="SubTasks">
+                                </GanttTaskFields>
+                                <GanttColumns>
+                                    <GanttColumn Field="TaskId" Width="100"></GanttColumn>
+                                    <GanttColumn Field="TaskName" HeaderText="Job Name" Width="250" ClipMode="Syncfusion.Blazor.Grids.ClipMode.EllipsisWithTooltip"></GanttColumn>
+                                    <GanttColumn Field="StartDate" HeaderText="Start Date"></GanttColumn>
+                                    <GanttColumn Field="EndDate" HeaderText="End Date"></GanttColumn>
+                                    <GanttColumn Field="Duration" HeaderText="Duration"></GanttColumn>
+                                    <GanttColumn Field="Progress" HeaderText="Progress"></GanttColumn>
+                                    <GanttColumn Field="Predecessor" HeaderText="Dependency"></GanttColumn>
+                                </GanttColumns>
+                                <GanttLabelSettings LeftLabel="TaskName" TValue="ProyectosGBPI">
+                                </GanttLabelSettings>
+                                <GanttSplitterSettings Position="40%"> </GanttSplitterSettings>
+                            </SfGantt>
+                        </div>
                     </div>
                 </div>
             </ContentTemplate>
@@ -897,6 +937,4 @@
         /*border-color: #000;*/
         box-shadow: 0 1px 4px 1px rgb(24 103 218 / 30%);
     }
-
-
 </style>
