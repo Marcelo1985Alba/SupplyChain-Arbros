@@ -29,13 +29,11 @@
                                     <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
                                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                                     </ChartPrimaryXAxis>
-
                                     <ChartPrimaryYAxis Title="Facturacion Anual U$S" LabelFormat="{value} U$S">
                                         <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
                                         <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
                                         <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
                                         <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
-
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
                                         <ChartSeries DataSource="@FacturacionAnual" XName="XSerieName" YName="YSerieName" Name="Año"
@@ -54,7 +52,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-6">
                         <div class="card">
                             <div class="pane card-body card1">
@@ -63,14 +60,12 @@
                                     <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
                                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                                     </ChartPrimaryXAxis>
-
                                     <ChartPrimaryYAxis Title="@TituloGraficoFacturacionMensual" LabelFormat="{value} US$" Minimum="0" Maximum="110000">
                                         <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
                                         <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
                                         <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
                                         <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
                                         <ChartStriplines>
-
                                             @if (PromedioFacturacionMensual > 0)
                                             {
                                                 <ChartStripline Start="99800" End="100000" SizeType="SizeType.Pixel" ZIndex="ZIndex.Over"
@@ -85,9 +80,7 @@
                                                                     Text="@("Promedio: " + PromedioFacturacionMensual )" ZIndex="ZIndex.Over"
                                                                     End="PromedioFacturacionMensual" Color="blue" />
                                                 }
-
                                             }
-
                                         </ChartStriplines>
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
@@ -107,9 +100,7 @@
                                 </SfChart>
                             </div>
                         </div>
-
                     </div>
-
                     <div class="col-12">
                         <div class="card">
 
@@ -120,7 +111,6 @@
                                         AllowPaging="true" Height="450" Width="100%"> </SfGrid>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </ContentTemplate>
@@ -139,7 +129,6 @@
                                     <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
                                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                                     </ChartPrimaryXAxis>
-
                                     <ChartPrimaryYAxis Title="Compras Anuales U$S" LabelFormat="{value} U$S">
                                         <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
                                         <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
@@ -162,12 +151,8 @@
                                     <ChartEvents OnPointClick="@(async (a)=> await MostrarDetalleCompras(a))"></ChartEvents>
                                 </SfChart>
                             </div>
-
-
                         </div>
-
                     </div>
-
                     <div class="col-6">
                         <div class="card">
                             <div class="pane card-body card2">
@@ -176,14 +161,12 @@
                                     <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
                                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                                     </ChartPrimaryXAxis>
-
                                     <ChartPrimaryYAxis LabelFormat="{value} U$S" Title="@TituloGraficoComprasMensual">
                                         <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
                                         <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
                                         <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
                                         <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
                                         <ChartStriplines>
-
                                             @if (PromedioComprasMensual > 0)
                                             {
                                                 @*<ChartStripline Start="397" End="400" Color="red"
@@ -197,7 +180,6 @@
                                                                     Text="@("Promedio: " + PromedioComprasMensual )" ZIndex="ZIndex.Over"
                                                                     End="PromedioComprasMensual" Color="green" />
                                                 }
-
                                             }
                                         </ChartStriplines>
                                     </ChartPrimaryYAxis>
@@ -218,29 +200,22 @@
                                     <ChartEvents OnPointClick="@(async (a)=> await MostrarDetalleComprasMesTipo(a))"></ChartEvents>
                                 </SfChart>
                             </div>
-
-
                         </div>
-
                     </div>
-
                     <div class="col-12">
                         <div class="card">
                             <div class="pane card-body card2">
-
                                 <SfChart @ref="refChartDetalleComprasMesTipo" Title="" Width="100%">
                                     <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
                                     <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
                                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                                     </ChartPrimaryXAxis>
-
                                     <ChartPrimaryYAxis LabelFormat="{value} U$S" Title="@TituloGraficoComprasMensual">
                                         <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
                                         <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
                                         <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
                                         <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
                                         <ChartStriplines>
-
                                             @if (PromedioComprasMensual > 0)
                                             {
                                                 @*<ChartStripline Start="397" End="400" Color="red"
@@ -275,9 +250,7 @@
                                 </SfChart>
                             </div>
                         </div>
-
                     </div>
-
                     @*<div class="col-6">
                             <div class="card">
                                 <div class="card-body">
@@ -295,12 +268,7 @@
                                     </SfAccumulationChart>
                                 </div>
                             </div>
-
                         </div>*@
-
-
-
-
                     <div class="col-12">
                         <div class="card">
                             <div class="pane card-body card2">
@@ -315,8 +283,6 @@
                 </div>
             </ContentTemplate>
         </TabItem>
-
-
         <TabItem>
             <ChildContent>
                 <TabHeader Text="Eventos"></TabHeader>
@@ -423,6 +389,38 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="pane card-body card5">
+                                <SfChart @ref="refChartDetalleEventosProveedor" Title="" Width="100%">
+                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift" LabelFormat="{value}">
+                                    </ChartPrimaryXAxis>
+                                    <ChartPrimaryYAxis LabelFormat="{value}" Title="@TituloGraficoEventosProveedor" Minimum="0" Maximum="10">
+                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                        <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
+                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                    </ChartPrimaryYAxis>
+                                    <ChartSeriesCollection>
+                                        <ChartSeries DataSource="@EventosProveedor" XName="XSerieName" YName="YSerieName"
+                                                     Name="Mes" Fill="url(#card5-gradient-chart)"
+                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                            <ChartMarker>
+                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                                </ChartDataLabel>
+                                            </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                        </ChartSeries>
+                                    </ChartSeriesCollection>
+                                    <ChartTooltipSettings Enable="true">
+                                    </ChartTooltipSettings>
+                                </SfChart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="pane card-body card5">
                                 <SfGrid @ref="gridDetalleEventos" DataSource="@DataEventosDetalle" GridLines="Syncfusion.Blazor.Grids.GridLine.Both" AllowResizing="true"
                                         AllowReordering="true" AllowSorting="true"
                                         AllowPaging="true" Height="450">
@@ -439,8 +437,6 @@
                 </div>
             </ContentTemplate>
         </TabItem>
-
-
         <TabItem CssClass="tab-content">
             <ChildContent>
                 <TabHeader Text="Pedidos Ingresados"></TabHeader>
@@ -461,7 +457,6 @@
                                         <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
                                         <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
                                         <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
-
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
                                         <ChartSeries DataSource="@PedidosIngresadosAnuales" XName="XSerieName" YName="YSerieName"
@@ -479,12 +474,8 @@
                                     <ChartEvents OnPointClick="@(async (a)=> await MostrarDetallePedidosAnuales(a))"></ChartEvents>
                                 </SfChart>
                             </div>
-
-
                         </div>
-
                     </div>
-
                     <div class="col-6">
                         <div class="card">
                             <div class="pane card-body card3">
@@ -493,14 +484,12 @@
                                     <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
                                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                                     </ChartPrimaryXAxis>
-
                                     <ChartPrimaryYAxis Title="@TituloGraficoPedidosMensual" LabelFormat="{value} U$S" Minimum="0" Maximum="190000" Interval="10000">
                                         <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
                                         <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
                                         <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
                                         <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
                                         <ChartStriplines>
-
                                             @if (PromedioPedidosIngresadosMensuales > 0)
                                             {
                                                 <ChartStripline Start="89000" End="90000" Color="red" SizeType="SizeType.Pixel" ZIndex="ZIndex.Over"
@@ -513,7 +502,6 @@
                                                                 Text="@("Promedio: " + PromedioPedidosIngresadosMensuales )"
                                                                 End="PromedioPedidosIngresadosMensuales" />
                                             }
-
                                         </ChartStriplines>
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
@@ -534,10 +522,7 @@
                                     <ChartEvents OnPointClick="@(async (a)=> await MostrarDetallePedidosMensuales(a))"></ChartEvents>
                                 </SfChart>
                             </div>
-
-
                         </div>
-
                     </div>
                     <div class="col-8">
                         <div class="card">
@@ -566,9 +551,7 @@
                                 </SfAccumulationChart>
                             </div>
                         </div>
-
                     </div>
-
                     <div class="col-4">
                         <div class="card">
                             <div class="pane card-body card3">
@@ -586,8 +569,6 @@
                                 </SfAccumulationChart>
                             </div>
                         </div>
-
-
                         <DialogDetalle @ref="@dialogDetalle" Titulo="Detalle Categoria" IsModal="true" Height="620px" Width="55%">
                             <Content>
                                 <div class="col-12">
@@ -634,13 +615,9 @@
                                         </div>
                                     </div>
                                 </div>
-
-
                             </Content>
                         </DialogDetalle>
-
                     </div>
-
                     <div class="col-12">
                         <div class="content-wrapper">
                             <div class="row">
@@ -672,10 +649,7 @@
                                 </SfGrid>
                             </div>
                         </div>
-
                     </div>
-
-
                 </div>
             </ContentTemplate>
         </TabItem>
@@ -693,13 +667,11 @@
                                     <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
                                     <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category">
                                     </ChartPrimaryXAxis>
-
                                     <ChartPrimaryYAxis Title="U$S Anuales" LabelFormat="{value} U$S">
                                         <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
                                         <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
                                         <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
                                         <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
-
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
                                         <ChartSeries DataSource="@PresupuestosAnuales" XName="XSerieName" YName="YSerieName"
@@ -717,12 +689,8 @@
                                     <ChartEvents OnPointClick="@(async (a)=> await MostrarDetallePresupuestosAnuales(a))"></ChartEvents>
                                 </SfChart>
                             </div>
-
-
                         </div>
-
                     </div>
-
                     <div class="col-6">
                         <div class="card">
                             <div class="pane card-body card4">
@@ -731,7 +699,6 @@
                                     <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
                                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                                     </ChartPrimaryXAxis>
-
                                     <ChartPrimaryYAxis Title="@TituloGraficoPresupuestosMensual" LabelFormat="{value} U$S"
                                                        Minimum="0" Maximum="1000000" Interval="100000">
                                         <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
@@ -739,7 +706,6 @@
                                         <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
                                         <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
                                         <ChartStriplines>
-
                                             @if (PromedioPresupuestosMensuales > 0)
                                             {
                                                 <ChartStripline Start="890000" End="900000" Color="red" SizeType="SizeType.Pixel" ZIndex="ZIndex.Over"
@@ -752,7 +718,6 @@
                                                                 Text="@("Promedio: " + PromedioPresupuestosMensuales )"
                                                                 End="PromedioPresupuestosMensuales" />
                                             }
-
                                         </ChartStriplines>
                                     </ChartPrimaryYAxis>
                                     <ChartSeriesCollection>
@@ -772,12 +737,8 @@
                                     <ChartLegendSettings Visible="true" />
                                 </SfChart>
                             </div>
-
-
                         </div>
-
                     </div>
-
                     <div class="col-12">
                         <div class="content-wrapper">
                             <div class="row">
@@ -807,7 +768,6 @@
                                 </SfGrid>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </ContentTemplate>
@@ -943,5 +903,11 @@
         background-color: #fff;
         /*border-color: #000;*/
         box-shadow: 0 1px 4px 1px rgb(24 103 218 / 30%);
+    }
+
+    .card5:hover {
+        background-color: #fff;
+        /*border-color: #000;*/
+        box-shadow: 0 1px 4px 1px rgb(216 157 28 / 30%);
     }
 </style>
