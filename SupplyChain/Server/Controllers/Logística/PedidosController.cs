@@ -547,6 +547,8 @@ namespace SupplyChain
             foreach (var item in pedidos)
             {
                 item.STOCK = 0;
+                item.PEDIDO = 0;
+                item.CG_ORDF = 0;
                 item.AVISO = "VALE ANULADO";
                 _context.Entry(item).State = EntityState.Modified;
             }

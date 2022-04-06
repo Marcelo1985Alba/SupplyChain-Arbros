@@ -130,6 +130,11 @@
                                                 <br />
                                                 <SfNumericTextBox ID="ORDEN" Format="N" @bind-Value="@(f.ORDEN)" Enabled="true"></SfNumericTextBox>
                                             </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="">Dias Fab:</label>
+                                                <br />
+                                                <SfNumericTextBox ID="diasFab" Format="N4" @bind-Value="@(f.DIASFAB)" Enabled="true"></SfNumericTextBox>
+                                            </div>
                                         </div>
                                     </div>
                                 }
@@ -162,7 +167,7 @@
                             <GridColumn Field=@nameof(Fabricacion.PROCESO) HeaderText="Proceso" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.INSUMOS_ENTREGADOS_A_PLANTA) HeaderText="Insumos entregados" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
-                            <GridColumn Field=@nameof(Fabricacion.DIASFAB) Format="N2" HeaderText="Días de fabricación" TextAlign="TextAlign.Left" Width="310px"></GridColumn>
+                            <GridColumn Field=@nameof(Fabricacion.DIASFAB) Format="N4" HeaderText="Días de fabricación" TextAlign="TextAlign.Left" Width="310px"></GridColumn>
                             <GridColumn Field=@nameof(Fabricacion.CG_CELDA) HeaderText="Celda"
                                         TextAlign="TextAlign.Left" AllowEditing="true" Width="340px">
                                 <Template>

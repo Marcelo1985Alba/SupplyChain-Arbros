@@ -3,14 +3,14 @@
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.Grids
 
-<SfTab LoadOn="ContentLoad.Dynamic" @bind-SelectedItem="@SelectedTab" OverflowMode="OverflowMode.Scrollable" >
+<SfTab LoadOn="ContentLoad.Dynamic" @bind-SelectedItem="@SelectedTab" OverflowMode="OverflowMode.Scrollable">
     <TabItems>
-        <TabItem Disabled="@Disabled" >
+        <TabItem Disabled="@Disabled">
             <HeaderTemplate>Prevision</HeaderTemplate>
             <ContentTemplate>
                 <div class="mt-3">
 
-                <SupplyChain.Client.Pages.PCP.Prevision.Prevision></SupplyChain.Client.Pages.PCP.Prevision.Prevision>
+                    <SupplyChain.Client.Pages.PCP.Prevision.Prevision></SupplyChain.Client.Pages.PCP.Prevision.Prevision>
                 </div>
             </ContentTemplate>
         </TabItem>
@@ -19,7 +19,7 @@
             <ContentTemplate>
                 <div class="mt-3">
                     <SupplyChain.Client.Pages.PCP.Pedidos_Pendientes.PedidosPendientes></SupplyChain.Client.Pages.PCP.Pedidos_Pendientes.PedidosPendientes>
-                    
+
                 </div>
             </ContentTemplate>
         </TabItem>
@@ -52,7 +52,7 @@
             <ContentTemplate>
                 <div class="mt-3">
 
-                <SupplyChain.Client.Pages.PCP.Carga_De_Maquina.CargaMaquina></SupplyChain.Client.Pages.PCP.Carga_De_Maquina.CargaMaquina>
+                    <SupplyChain.Client.Pages.PCP.Carga_De_Maquina.CargaMaquina></SupplyChain.Client.Pages.PCP.Carga_De_Maquina.CargaMaquina>
                 </div>
             </ContentTemplate>
         </TabItem>

@@ -284,8 +284,6 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
 
 
                 await JsRuntime.InvokeAsync<object>("open", $"inventario/{tipoo}/true/{OrdenFabricacionSelected}", "_blank");
-
-                await refDialogEntrega.Show(true);
             }
             if (args.CommandColumn.Title == "Despiece")
             {

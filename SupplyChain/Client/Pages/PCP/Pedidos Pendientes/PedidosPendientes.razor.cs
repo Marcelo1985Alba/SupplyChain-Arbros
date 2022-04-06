@@ -30,9 +30,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
         public bool Disabled = false;
 
 
-        //protected List<CatOpe> catopes = new List<CatOpe>();
         protected List<ModeloPedidosPendientes> listaPedPend = new List<ModeloPedidosPendientes>();
-
         protected List<Object> Toolbaritems = new List<Object>(){
         new ItemModel(){ Type = ItemType.Separator},
         "Search",
@@ -164,6 +162,21 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
             }
         }
 
+        public async Task CommandClickHandler(CommandClickEventArgs<ModeloPedidosPendientes> args)
+        {
+            if (args.CommandColumn.Title == "Entrega")
+            {
+                var tipoo = 10;
+                var prod = await Http.GetFromJsonAsync<Producto>($"api/Prod/{args.RowData.CG_ART.Trim()}");
+                if (prod.EXIGEOA)
+                {
+                    tipoo = 28;
+                }
+
+
+                await JsRuntime.InvokeAsync<object>("open", $"inventario/{tipoo}/true/{args.RowData.CG_ORDF}", "_blank");
+            }
+        }
 
         public async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
         {

@@ -133,7 +133,7 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
                 args.Text = "EN PROCESO";
             //else if (args.Text == "4")
             //    args.Text = "CON TOTALIDAD DE COMPONENTES";
-            else if (args.Text == "4")
+            else if (args.Text == "5")
                 args.Text = "ARMADO Y CALIBRACION";
             else if (args.Text == "6")
                 args.Text = "PENDIENTE DE REMITIR";

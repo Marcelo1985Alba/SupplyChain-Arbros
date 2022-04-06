@@ -26,11 +26,11 @@ namespace SupplyChain
             _context = context;
         }
 
-        [HttpGet("GetSyncf")]
-        public object GetSyncf()
+        [HttpGet("Proyectos")]
+        public async Task<ActionResult> GetProyectos()
         {
-            IQueryable<EstadVenta> data = _context.EstadVentas.AsQueryable();
-            return new { Items = data, Count = data.Count() };
+            IQueryable<Pedidos> data = _context.Pedidos.AsQueryable();
+            return Ok( new { Items = data, Count = data.Count() });
         }
 
 

@@ -141,7 +141,8 @@ namespace SupplyChain.Client.Shared.Inventarios
                     var serie = stock.SERIE == null ? "" : stock.SERIE;
 
                     var resumen = await Http
-                        .GetFromJsonAsync<vResumenStock>($"api/ResumenStock/GetByStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
+                        .GetFromJsonAsync<vResumenStock>($"api/ResumenStock/GetByStock?CG_ART={cg_art}" +
+                        $"&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
 
 
                     stock.ResumenStock = resumen;
@@ -326,6 +327,8 @@ namespace SupplyChain.Client.Shared.Inventarios
             Grid.PreventRender();
             if (bAgregarInsumo)
             {
+                registroCompleto.PEDIDO = DataSource[0].PEDIDO;
+                registroCompleto.CG_ORDF = DataSource[0].CG_ORDF;
                 registroCompleto.STOCK = (decimal?)1.0000;
                 registroCompleto.PENDIENTEOC = resumenStock.STOCK;
                 registroCompleto.REGISTRO = DataSource.Count == 0 ? -1 : DataSource.Min(t => t.REGISTRO) - 1;
