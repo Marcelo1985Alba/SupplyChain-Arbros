@@ -752,9 +752,9 @@
 
     protected async Task Etiqueta()
     {
-        if (true)
+        if (PedCliList.Count > 0)
         {
-            if (CodNro.Substring(0, 1) == "2")
+            if (PedCliList[0].CG_ART.Substring(0, 1) == "2")
             {
                 string espaciosPedido = "";
                 string CLIENTE = PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().DES_CLI.Trim();
@@ -888,7 +888,7 @@
                 //    await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
                 //}
             }
-            if (CodNro.Substring(0, 1) == "1")
+            if (PedCliList[0].CG_ART.Substring(0, 1) == "1")
             {
                 //Chapa de 25 x 95
                 PdfDocument document1 = new PdfDocument();
@@ -949,9 +949,9 @@
                 document1.Close(true);
                 await JsRuntime.SaveAs("ETOF" + CodNro.Trim() + ".pdf", xx.ToArray());
             }
-            if (CodNro.Substring(0, 4) == "0012" ||
-                CodNro.Substring(0, 5) == "00130" ||
-                CodNro.Substring(0, 5) == "00131")
+            if (PedCliList[0].CG_ART.Substring(0, 4) == "0012" ||
+            PedCliList[0].CG_ART.Substring(0, 5) == "00130" ||
+            PedCliList[0].CG_ART.Substring(0, 5) == "00131")
             {
                 string espaciosbar = "";
                 for (int i = 0; i < (16 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)

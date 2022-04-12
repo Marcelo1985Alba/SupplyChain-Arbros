@@ -578,10 +578,7 @@ namespace SupplyChain.Client.Pages.Inventarios
             await GuardarDB(StockEncabezado.Items);
 
 
-            if (StockEncabezado.TIPOO == 5)
-            {
-                 await ImprimirEtiqueta();
-            }
+            await ImprimirEtiqueta();
 
             await MostrarMensajeToastSuccess();
 
@@ -797,6 +794,17 @@ namespace SupplyChain.Client.Pages.Inventarios
                 await StockEncabezado.Items.ForEachAsync(async s =>
                 {
                     await PdfService.EtiquetaRecepcion(s);
+                });
+            }
+            else if (StockEncabezado.TIPOO == 9)
+            {
+                await StockEncabezado.Items.ForEachAsync(async s =>
+                {
+                    if (s.STOCK > 0)
+                    {
+                        await PdfService.EtiquetaMovimiento(s);
+                    }
+                    
                 });
             }
         }

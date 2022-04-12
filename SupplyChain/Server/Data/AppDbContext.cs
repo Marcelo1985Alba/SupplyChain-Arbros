@@ -104,12 +104,15 @@ namespace SupplyChain
         public DbSet<StockCorregido> StockCorregidos { get; set; }
 
         public DbSet<vEstadoPedido> vEstadoPedidos { get; set; }
+        public DbSet<Solicitud> Solicitudes { get; set; }
+        public DbSet<vSolicitudes> vSolicitudes { get; set; }
+        public DbSet<Presupuesto> Presupuestos { get; set; }
 
         //MODULO PROYECTOS
         public DbSet<ProyectosGBPI> Proyectos { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            
+            this.Database.SetCommandTimeout(60);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -120,7 +123,7 @@ namespace SupplyChain
             modelBuilder.ApplyConfiguration(new ProveedorConfig());
 
             modelBuilder.Entity<Genera>()
-        .HasKey(c => new { c.CAMP3, c.CG_CIA, c.PUNTO_VENTA });
+             .HasKey(c => new { c.CAMP3, c.CG_CIA, c.PUNTO_VENTA });
 
             modelBuilder.Entity<vPendienteFabricar>(
             eb =>
@@ -164,6 +167,7 @@ namespace SupplyChain
             modelBuilder.Entity<vEstadPresupuestos>().HasNoKey().ToView("vEstad_Presupuestos");
             modelBuilder.Entity<vEstadEventos>().HasNoKey().ToView("vEstad_Eventos");
             modelBuilder.Entity<vEstadoPedido>().HasNoKey().ToView("vEstadoPedido");
+            modelBuilder.Entity<vEstadoPedido>().HasNoKey().ToView("vSolicitudes");
         }
     }
 }

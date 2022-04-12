@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Shared
 {
-	public class Genera
+	public class Genera : EntityBase
 	{
 		public byte CG_CIA { get; set; }
 		public string CAMP3 { get; set; }

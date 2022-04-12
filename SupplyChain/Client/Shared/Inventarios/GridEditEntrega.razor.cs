@@ -36,9 +36,9 @@ namespace SupplyChain.Client.Shared.Inventarios
         [Parameter] public SelectionType TipoSeleccion { get; set; } = SelectionType.Single;
         [CascadingParameter] public PedidoEncabezado RegistroGenerado { get; set; }
         protected Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
-{
-         {"type", "button" }
-    };
+        {
+           {"type", "button" }
+        };
 
         protected List<ItemModel> Toolbaritems = new List<ItemModel>(){
         new ItemModel { CssClass="btn", Text = "Agregar Insumo", ShowTextOn = DisplayMode.Toolbar, Type = ItemType.Button,
@@ -327,8 +327,8 @@ namespace SupplyChain.Client.Shared.Inventarios
             Grid.PreventRender();
             if (bAgregarInsumo)
             {
-                registroCompleto.PEDIDO = DataSource[0].PEDIDO;
-                registroCompleto.CG_ORDF = DataSource[0].CG_ORDF;
+                registroCompleto.PEDIDO = DataSource.Count > 0 ? DataSource[0].PEDIDO : 0;
+                registroCompleto.CG_ORDF = DataSource.Count > 0 ? DataSource[0].CG_ORDF : 0;
                 registroCompleto.STOCK = (decimal?)1.0000;
                 registroCompleto.PENDIENTEOC = resumenStock.STOCK;
                 registroCompleto.REGISTRO = DataSource.Count == 0 ? -1 : DataSource.Min(t => t.REGISTRO) - 1;
@@ -340,6 +340,8 @@ namespace SupplyChain.Client.Shared.Inventarios
             }
             else
             {
+                stock.PEDIDO = DataSource.Count > 0 ? DataSource[0].PEDIDO : 0;
+                stock.CG_ORDF = DataSource.Count > 0 ? DataSource[0].CG_ORDF : 0;
                 stock.ResumenStock = resumenStock;
                 stock.PENDIENTEOC = resumenStock.STOCK - stock.STOCK;
                 stock.CG_DEP = resumenStock.CG_DEP;

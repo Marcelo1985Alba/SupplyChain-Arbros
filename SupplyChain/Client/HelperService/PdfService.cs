@@ -590,6 +590,42 @@ namespace SupplyChain.Client.HelperService
             await js.SaveAs("ETOC" + pedidos.CG_ART.Trim() + ".pdf", xx.ToArray());
         }
 
+        public async Task EtiquetaMovimiento(Pedidos pedidos)
+        {
+
+            PdfDocument document1 = new();
+            document1.PageSettings.Margins.All = 0;
+            document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(227, 70);//110
+
+            //document1.PageSettings.Margins.Left = -2;
+            //document1.PageSettings.Margins.Right = -15;
+            //document1.PageSettings.Margins.Top = 10;
+            //document1.PageSettings.Margins.Bottom = -10;
+            //document1.PageSettings.Margins.All = margin;
+            PdfGrid pdfGrid1 = new PdfGrid();
+            PdfPage page = document1.Pages.Add();
+            PdfGraphics graphics = page.Graphics;
+            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
+            PdfLightTable pdfTable = new();
+            //page.Graphics.RotateTransform(-90);
+            var depositos = await Http.GetFromJsonAsync<List<Deposito>>("api/Deposito");
+            var deposito = depositos.Find(d => d.CG_DEP == pedidos.CG_DEP).DES_DEP.Trim();
+
+            graphics.DrawString($"Vale:{pedidos.VALE}                  Fecha:{pedidos.FE_MOV:dd/MM/yyyy}\r\n" +
+                $"{pedidos.CG_ART.Trim()} Cant:{pedidos.STOCK} {pedidos.UNID} \r\n "  +
+                $"Despacho {pedidos.DESPACHO} Lote {pedidos.LOTE}\r\n" +
+                $"{deposito}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(30, 10));
+
+            //document1.PageSettings.Margins.Left = margin;
+            //document1.PageSettings.Margins.Right = margin;
+            //document1.PageSettings.Margins.Top = margin;
+            //document1.PageSettings.Margins.Bottom = margin;
+            MemoryStream xx = new();
+            document1.Save(xx);
+            document1.Close(true);
+            await js.SaveAs("MOV" + pedidos.VALE + ".pdf", xx.ToArray());
+        }
+
         public void Dispose()
         {
             throw new NotImplementedException();
