@@ -167,7 +167,7 @@ namespace SupplyChain
             modelBuilder.Entity<vEstadPresupuestos>().HasNoKey().ToView("vEstad_Presupuestos");
             modelBuilder.Entity<vEstadEventos>().HasNoKey().ToView("vEstad_Eventos");
             modelBuilder.Entity<vEstadoPedido>().HasNoKey().ToView("vEstadoPedido");
-            modelBuilder.Entity<vEstadoPedido>().HasNoKey().ToView("vSolicitudes");
+            modelBuilder.Entity<vSolicitudes>().HasNoKey().ToView("vSolicitudes");
         }
     }
 }

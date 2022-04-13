@@ -81,7 +81,7 @@ namespace SupplyChain.Server.Controllers
             }
             if (ruta.CAMPO.Trim() == "RUTATRAZABILIDAD")
             {
-                file += "pdf";
+                file = codigo;
             }
 
             string[] dirs = Directory.GetFiles($"{ruta.VALORC}",$"{file}",

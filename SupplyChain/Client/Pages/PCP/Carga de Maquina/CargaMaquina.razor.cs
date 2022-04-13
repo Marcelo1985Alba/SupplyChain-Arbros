@@ -881,7 +881,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             var fileName = filename + ".txt";
             if (await GeneraCsv(pedido))
             {
-                var fileArray = await Http.GetByteArrayAsync($"api/AdministracionArchivos/GetGetTxtTxt/{fileName}");
+                var fileArray = await Http.GetByteArrayAsync($"api/AdministracionArchivos/GetTxt/{fileName}");
 
                 await JS.SaveAs(fileName, fileArray);
             }

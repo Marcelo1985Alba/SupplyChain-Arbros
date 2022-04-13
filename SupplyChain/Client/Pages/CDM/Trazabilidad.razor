@@ -746,6 +746,13 @@
     protected async Task Catalogo()
     {
         await refSpinner.ShowAsync();
+
+        if (!string.IsNullOrEmpty(Pedido) && Convert.ToInt32(Pedido) > 0)
+        {
+            TrzNro = Pedido;
+            CodNro = PedCliList[0].CG_ART.Trim();
+        }
+
         await PdfService.Catalogo(CodNro, TrzNro, vpedidos);
         await refSpinner.HideAsync();
     }
