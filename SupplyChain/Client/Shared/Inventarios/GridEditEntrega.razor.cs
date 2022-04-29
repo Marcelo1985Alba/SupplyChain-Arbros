@@ -41,9 +41,9 @@ namespace SupplyChain.Client.Shared.Inventarios
         };
 
         protected List<ItemModel> Toolbaritems = new List<ItemModel>(){
-        new ItemModel { CssClass="btn", Text = "Agregar Insumo", ShowTextOn = DisplayMode.Toolbar, Type = ItemType.Button,
-            TooltipText = "Agregar Insumo", PrefixIcon = "fa fa-search", Id = "AgregarInsumo" }
-    };
+        new ItemModel { CssClass="", Text = "Agregar Insumo", ShowTextOn = DisplayMode.Both, Type = ItemType.Button,
+            TooltipText = "Agregar Insumo", SuffixIcon = "fa fa-search", Id = "AgregarInsumo" }
+        };
 
         protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "900px" };
 
@@ -388,3 +388,5 @@ namespace SupplyChain.Client.Shared.Inventarios
         }
     }
 }
+
+
