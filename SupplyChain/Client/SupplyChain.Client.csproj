@@ -447,10 +447,7 @@
 
 
   <ItemGroup>
-    <BlazorWebAssemblyLazyLoad Include="Syncfusion.Pdf.Net.Core.dll" />
-    <BlazorWebAssemblyLazyLoad Include="Syncfusion.PdfViewer.AspNet.Core.dll" />
-    <BlazorWebAssemblyLazyLoad Include="Syncfusion.Pdf.Portable.dll" />
-	<BlazorWebAssemblyLazyLoad Include="Syncfusion.Blazor.Gant.dll" />
+    
 	  <!--BlazorWebAssemblyLazyLoad Include="Syncfusion.Blazor.PdfViewer.dll" /-->
   </ItemGroup>
   
