@@ -63,7 +63,7 @@ namespace SupplyChain
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProd(string id, Producto Prod)
         {
-            if (id != Prod.CG_PROD)
+            if (id != Prod.Id)
             {
                 return BadRequest();
             }
@@ -99,7 +99,7 @@ namespace SupplyChain
             }
             catch (DbUpdateException) 
             {
-                if (!await _productoRepository.Existe(Prod.CG_PROD))
+                if (!await _productoRepository.Existe(Prod.Id))
                 {
                     return Conflict();
                 }
@@ -109,7 +109,7 @@ namespace SupplyChain
                 }
             }
 
-            return CreatedAtAction("GetProd", new { id = Prod.CG_PROD }, Prod);
+            return CreatedAtAction("GetProd", new { id = Prod.Id }, Prod);
         }
 
         [HttpPost("PostList")]
@@ -119,7 +119,7 @@ namespace SupplyChain
             {
                 foreach (var item in productos)
                 {
-                    await _productoRepository.Remover(item.CG_PROD.Trim());
+                    await _productoRepository.Remover(item.Id.Trim());
                 }
             }
             catch (Exception ex)
@@ -154,7 +154,7 @@ namespace SupplyChain
             List<Producto> lDesProd = new List<Producto>();
             if (await _productoRepository.Existe(CG_PROD))
             {
-                lDesProd = await _productoRepository.Obtener(p => p.CG_PROD == CG_PROD).ToListAsync();
+                lDesProd = await _productoRepository.Obtener(p => p.Id == CG_PROD).ToListAsync();
             }
             return lDesProd == null ? NotFound() : lDesProd;
         }

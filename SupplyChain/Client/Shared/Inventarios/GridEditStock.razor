@@ -203,7 +203,7 @@ else
 
 
 
-                        <GridColumn Field="@nameof(Pedidos.REGISTRO)" IsPrimaryKey="true" Visible="false"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.Id)" IsPrimaryKey="true" Visible="false"></GridColumn>
                     </GridColumns>
                 </SfGrid>
             </div>
@@ -330,8 +330,8 @@ else
             await ConfirmacionDialog.ShowAsync();
 
             stockCopiado = new();
-            stockCopiado.REGISTRO = DataSource.Min(p => p.REGISTRO) - 1;
-            stockCopiado.REGISTRO = stockCopiado.REGISTRO > 0 ? -1 : stockCopiado.REGISTRO;
+            stockCopiado.Id = DataSource.Min(p => p.Id) - 1;
+            stockCopiado.Id = stockCopiado.Id > 0 ? -1 : stockCopiado.Id;
             stockCopiado.IMPORTE1 = args.RowData.IMPORTE1;
             stockCopiado.CG_ART = args.RowData.CG_ART;
             stockCopiado.DES_ART = args.RowData.DES_ART;
@@ -382,8 +382,8 @@ else
                 foreach (Pedidos item in Grid.SelectedRecords)
                 {
                     stockCopiado = new();
-                    stockCopiado.REGISTRO = DataSource.Min(p => p.REGISTRO) - 1;
-                    stockCopiado.REGISTRO = stockCopiado.REGISTRO > 0 ? -1 : stockCopiado.REGISTRO;
+                    stockCopiado.Id = DataSource.Min(p => p.Id) - 1;
+                    stockCopiado.Id = stockCopiado.Id > 0 ? -1 : stockCopiado.Id;
                     stockCopiado.IMPORTE1 = item.IMPORTE1;
                     stockCopiado.CG_ART = item.CG_ART;
                     stockCopiado.DES_ART = item.DES_ART;
@@ -432,7 +432,7 @@ else
 
     public void RowBound(RowDataBoundEventArgs<Pedidos> args)
     {
-        if (args.Data.REGISTRO < 0)
+        if (args.Data.Id < 0)
         {
             args.Row.AddClass(new string[] { "row-red" });
         }
@@ -482,7 +482,7 @@ else
 
         if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
         {
-            var pedido = DataSource.Where(p => p.REGISTRO == Args.Data.REGISTRO).FirstOrDefault();
+            var pedido = DataSource.Where(p => p.Id == Args.Data.Id).FirstOrDefault();
             pedido.STOCKA = Args.Data.STOCK / Args.Data.CG_DEN > 0 ? Args.Data.CG_DEN : 1;
             await Grid.RefreshColumns();
             Grid.Refresh();
@@ -635,7 +635,7 @@ else
         var registroCompleto = await Http
             .GetFromJsonAsync<Pedidos>($"api/Stock/GetByResumenStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
 
-        registroCompleto.REGISTRO = DataSource.Count > 0 ? -1 : DataSource.Count * -1;//indica que es un nuevo registro
+        registroCompleto.Id = DataSource.Count > 0 ? -1 : DataSource.Count * -1;//indica que es un nuevo registro
         registroCompleto.TIPOO = RegistroGenerado.TIPOO;
         registroCompleto.STOCK = 0;
         registroCompleto.ResumenStock = resumenStock;

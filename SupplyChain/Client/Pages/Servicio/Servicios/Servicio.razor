@@ -66,7 +66,7 @@
                                             <div class="form-row">
                                                 <div class="form-group col-md-6">
                                                     <label>Pedido:</label>
-                                                    <SfTextBox ID="PEDIDO" @bind-Value="@(servicio.PEDIDO)" Enabled="@Disabled" Placeholder="Pedido"></SfTextBox>
+                                                    <SfTextBox ID="PEDIDO" @bind-Value="@(servicio.Id)" Enabled="@Disabled" Placeholder="Pedido"></SfTextBox>
                                                 </div>
 
                                                 <div class="form-group col-md-6">
@@ -479,7 +479,7 @@
                                     </div>
                                     <div class="tab-pane fade" id="pills-file" role="tabpanel" aria-labelledby="pills-profile-tab">
 
-                                        <VerEnsayos Accion="RUTAENSAYO" Codigo="@servicio.PEDIDO">
+                                        <VerEnsayos Accion="RUTAENSAYO" Codigo="@servicio.Id">
 
                                         </VerEnsayos>
                                     </div>
@@ -491,17 +491,17 @@
                                                 {
                                                     <div class="accordion" id="accordionExample">
                                                         @{
-                                                            string rutaDiscojpg = ruta.VALORC + $"{servicio.PEDIDO}_disco.jpg";
-                                                            string rutaToberajpg = ruta.VALORC + $"{servicio.PEDIDO}_tobera.jpg";
-                                                            string rutaResortejpg = ruta.VALORC + $"{servicio.PEDIDO}_resorte.jpg";
-                                                            string rutaRecepcionjpg = ruta.VALORC + $"{servicio.PEDIDO}_recepcion.jpg";
-                                                            string rutaDespachojpg = ruta.VALORC + $"{servicio.PEDIDO}_despacho.jpg";
+                                                            string rutaDiscojpg = ruta.VALORC + $"{servicio.Id}_disco.jpg";
+                                                            string rutaToberajpg = ruta.VALORC + $"{servicio.Id}_tobera.jpg";
+                                                            string rutaResortejpg = ruta.VALORC + $"{servicio.Id}_resorte.jpg";
+                                                            string rutaRecepcionjpg = ruta.VALORC + $"{servicio.Id}_recepcion.jpg";
+                                                            string rutaDespachojpg = ruta.VALORC + $"{servicio.Id}_despacho.jpg";
 
-                                                            string rutaDiscopng = ruta.VALORC + $"{servicio.PEDIDO}_disco.png";
-                                                            string rutaToberapng = ruta.VALORC + $"{servicio.PEDIDO}_tobera.png";
-                                                            string rutaResortepng = ruta.VALORC + $"{servicio.PEDIDO}_resorte.png";
-                                                            string rutaRecepcionpng = ruta.VALORC + $"{servicio.PEDIDO}_recepcion.png";
-                                                            string rutaDespachopng = ruta.VALORC + $"{servicio.PEDIDO}_despacho.png";
+                                                            string rutaDiscopng = ruta.VALORC + $"{servicio.Id}_disco.png";
+                                                            string rutaToberapng = ruta.VALORC + $"{servicio.Id}_tobera.png";
+                                                            string rutaResortepng = ruta.VALORC + $"{servicio.Id}_resorte.png";
+                                                            string rutaRecepcionpng = ruta.VALORC + $"{servicio.Id}_recepcion.png";
+                                                            string rutaDespachopng = ruta.VALORC + $"{servicio.Id}_despacho.png";
 
                                                             <div class="card">
                                                                 @{
@@ -692,7 +692,7 @@
                         </Template>
                     </GridEditSettings>
                     <GridColumns>
-                        <GridColumn Field=@nameof(Service.PEDIDO) AutoFit="true" HeaderText="Pedido"></GridColumn>
+                        <GridColumn Field=@nameof(Service.Id) AutoFit="true" HeaderText="Pedido"></GridColumn>
                         <GridColumn Field=@nameof(Service.FECHA) AutoFit="true" HeaderText="Fecha" Format="dd/MM/yyyy"></GridColumn>
                         <GridColumn Field=@nameof(Service.CLIENTE) AutoFit="true" HeaderText="Cliente"></GridColumn>
                         <GridColumn Field=@nameof(Service.NSERIE) AutoFit="true" HeaderText="Numero de Serie" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="150"></GridColumn>
@@ -799,13 +799,13 @@
         {
             ApiUrl = "api/Servicios";
             servicios = await Http.GetFromJsonAsync<List<Service>>("api/Servicios");
-            servDesc = servicios.Where(s => s.PEDIDO == Pedido).ToList();
+            servDesc = servicios.Where(s => s.Id == Pedido).ToList();
         }
         else
         {
             ApiUrl = $"api/Servicios/{Pedido}";
             servicios = await Http.GetFromJsonAsync<List<Service>>($"api/Servicios/{Pedido}");
-            servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
+            servDesc = servicios.OrderByDescending(s => s.Id).ToList();
         }
 
         medidas = await Http.GetFromJsonAsync<List<Medida>>("api/Medida");
@@ -929,7 +929,7 @@
                     PdfGridCell gridCell5 = pdfGrid.Rows[1].Cells[4];
                     gridCell5.ColumnSpan = 2;
                     gridCell5.StringFormat = Centrado;
-                    gridCell5.Value = new PdfTextElement($"PEDIDO: {selectedRecord.PEDIDO}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+                    gridCell5.Value = new PdfTextElement($"PEDIDO: {selectedRecord.Id}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
                     //Add RowSpan
                     PdfGridCell gridCell6 = pdfGrid.Rows[2].Cells[0];
                     gridCell6.ColumnSpan = 6;
@@ -1227,7 +1227,7 @@
                     stream.Position = 0;
                     //Close the document
                     document.Close(true);
-                    await JS.SaveAs($"{selectedRecord.PEDIDO} Certificado" + ".pdf", stream.ToArray());
+                    await JS.SaveAs($"{selectedRecord.Id} Certificado" + ".pdf", stream.ToArray());
                 }
             }
         }
@@ -1352,7 +1352,7 @@
                         $"\r\n" +
                         $"\r\n" +
                         $"\r\n" +//10
-                        $"         Nro. Serie Rep.: {selectedRecord.PEDIDO.Trim()}                                Fecha: {DateTime.Now.Day}/{DateTime.Now.Month}/{DateTime.Now.Year}\r\n" +
+                        $"         Nro. Serie Rep.: {selectedRecord.Id.Trim()}                                Fecha: {DateTime.Now.Day}/{DateTime.Now.Month}/{DateTime.Now.Year}\r\n" +
                         $"\r\n" +
                         $"                 {selectedRecord.CLIENTE.Trim()}\r\n" +
                         $"\r\n" +
@@ -1418,7 +1418,7 @@
                     MemoryStream xx = new MemoryStream();
                     document1.Save(xx);
                     document1.Close(true);
-                    await JS.SaveAs($"{selectedRecord.PEDIDO.Trim()} OPDS {selectedRecord.ACTA.Trim()}" + ".pdf", xx.ToArray());
+                    await JS.SaveAs($"{selectedRecord.Id.Trim()} OPDS {selectedRecord.ACTA.Trim()}" + ".pdf", xx.ToArray());
                 }
             }
         }
@@ -1435,7 +1435,7 @@
             {
                 foreach (Service selectedRecord in this.Grid.SelectedRecords)
                 {
-                    Pedido = selectedRecord.PEDIDO;
+                    Pedido = selectedRecord.Id;
                 }
             }
         }
@@ -1446,23 +1446,23 @@
         if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
         {
             HttpResponseMessage response;
-            bool found = servicios.Any(o => o.PEDIDO == args.Data.PEDIDO);
+            bool found = servicios.Any(o => o.Id == args.Data.Id);
             Service ur = new Service();
 
             if (!found)
             {
-                args.Data.PEDIDO = servicios.Max(s => s.PEDIDO) + 1;
+                args.Data.Id = servicios.Max(s => s.Id) + 1;
                 response = await Http.PostAsJsonAsync("api/Servicios", args.Data);
-                servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
+                servDesc = servicios.OrderByDescending(s => s.Id).ToList();
             }
             else
             {
-                var pedant = servicios.Where(s => s.PEDIDO == args.Data.PEDIDO).FirstOrDefault().PEDIDOANT;
+                var pedant = servicios.Where(s => s.Id == args.Data.Id).FirstOrDefault().PEDIDOANT;
                 if (pedant != args.Data.PEDIDOANT)
                 {
                     foreach (var ped in servicios)
                     {
-                        if (args.Data.PEDIDOANT == ped.PEDIDO)
+                        if (args.Data.PEDIDOANT == ped.Id)
                         {
                             bool isConfirmed = await JS.InvokeAsync<bool>("confirm", "Quiere traer los datos del pedido anterior?");
                             if (isConfirmed)
@@ -1522,7 +1522,7 @@
                 args.Data.OPDS = string.IsNullOrEmpty(args.Data.OPDS) ? "" : args.Data.OPDS;
                 args.Data.PRESENCIAINSPEC = string.IsNullOrEmpty(args.Data.PRESENCIAINSPEC) ? "" : args.Data.PRESENCIAINSPEC;
                 args.Data.MANOMETRO = string.IsNullOrEmpty(args.Data.MANOMETRO) ? "" : args.Data.MANOMETRO;
-                response = await Http.PutAsJsonAsync($"api/Servicios/{args.Data.PEDIDO}", args.Data);
+                response = await Http.PutAsJsonAsync($"api/Servicios/{args.Data.Id}", args.Data);
                 if (!response.IsSuccessStatusCode)
                 {
                     await this.ToastObj.Show(new ToastModel

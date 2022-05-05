@@ -31,7 +31,7 @@
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
                                             <label class="e-float-text e-label-top">Id:</label>
-                                            <SfTextBox ID="CG_OPER" @bind-Value="@(prod.CG_PROD)" Enabled="@Disabled"></SfTextBox>
+                                            <SfTextBox ID="CG_OPER" @bind-Value="@(prod.Id)" Enabled="@Disabled"></SfTextBox>
                                         </div>
 
                                         <div class="form-group col-md-6">
@@ -59,7 +59,7 @@
                     </GridEditSettings>
                     <GridColumns>
                         <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                        <GridColumn Field=@nameof(Producto.CG_PROD) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(Producto.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                         <GridColumn Field=@nameof(Producto.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                         <GridColumn Field=@nameof(Producto.CAMPOCOM1) HeaderText="CAMPOCOM1" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                         <GridColumn Field=@nameof(Producto.CAMPOCOM2) HeaderText="CAMPOCOM2" TextAlign="TextAlign.Left" Width="150px"></GridColumn>

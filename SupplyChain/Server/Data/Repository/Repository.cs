@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Server.Data.Repository
 {
-    public abstract class Repository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : EntityBase, new()
+    public abstract class Repository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : EntityBase<TId>, new()
     {
         protected readonly AppDbContext Db;
         protected readonly DbSet<TEntity> DbSet;
@@ -27,7 +27,17 @@ namespace SupplyChain.Server.Data.Repository
             
             return result;
         }
+        public virtual async Task<bool> Existe(TId id)
+        {
+            var entity = await ObtenerPorId(id);
+            return entity != null;
+        }
 
+        public virtual async Task<bool> Existe(params object[] keyValues)
+        {
+            var entity = await DbSet.FindAsync(keyValues);
+            return entity != null;
+        }
         public virtual async Task<TEntity> ObtenerPorId(TId id)
         {
             return await DbSet.FindAsync(id);
@@ -94,5 +104,6 @@ namespace SupplyChain.Server.Data.Repository
         {
             Db?.Dispose();
         }
+
     }
 }

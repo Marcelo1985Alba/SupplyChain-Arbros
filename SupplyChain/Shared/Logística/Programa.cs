@@ -9,8 +9,10 @@ using System.Text;
 
 namespace SupplyChain
 {
-	public class Programa : EntityBase
+	public class Programa : EntityBase<decimal>
 	{
+		[Key, Column("REGISTRO")]
+		new public decimal Id { get; set; }
 		public string CG_PROG { get; set; }
 		public DateTime? FE_PROG { get; set; }
 		[Display(Name = "Producto")]
@@ -92,8 +94,7 @@ namespace SupplyChain
 		public bool INSUMOS_ENTREGADOS_A_PLANTA { get; set; }
 		public DateTime? FECHA_PREVISTA_FABRICACION { get; set; }
 		public DateTime? FECHA_INICIO_REAL_FABRICACION { get; set; }
-		[Key]
-		public decimal REGISTRO { get; set; }
+		
 		public int CG_OPER { get; set; }
 		public string DES_OPER { get; set; }
 	}

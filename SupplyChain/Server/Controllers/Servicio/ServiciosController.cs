@@ -27,7 +27,7 @@ namespace SupplyChain
         {
             var xitem = await _serviciosRepository.ObtenerTodos();
                 
-            return xitem.OrderByDescending(s => s.PEDIDO).ToList();
+            return xitem.OrderByDescending(s => s.Id).ToList();
         }
 
         // GET: api/Servicios/5
@@ -36,7 +36,7 @@ namespace SupplyChain
         {
             try
             {
-                var Servicios = await _serviciosRepository.Obtener(s => s.PEDIDO == id).ToListAsync();
+                var Servicios = await _serviciosRepository.Obtener(s => s.Id == id).ToListAsync();
 
                 return Servicios == null ? NotFound() : Ok(Servicios);
             }
@@ -52,7 +52,7 @@ namespace SupplyChain
         [HttpPut("{id}")]
         public async Task<IActionResult> PutServicios(string id, Service Servicios)
         {
-            if (id != Servicios.PEDIDO) return BadRequest();
+            if (id != Servicios.Id) return BadRequest();
 
             try
             {
@@ -86,7 +86,7 @@ namespace SupplyChain
             }
             catch (DbUpdateException)
             {
-                if (await _serviciosRepository.Existe(Servicios.PEDIDO))
+                if (await _serviciosRepository.Existe(Servicios.Id))
                 {
                     return Conflict();
                 }
@@ -96,7 +96,7 @@ namespace SupplyChain
                 }
             }
 
-            return CreatedAtAction("Get", new { id = Servicios.PEDIDO }, Servicios);
+            return CreatedAtAction("Get", new { id = Servicios.Id }, Servicios);
         }
 
         // DELETE: api/Servicios/5

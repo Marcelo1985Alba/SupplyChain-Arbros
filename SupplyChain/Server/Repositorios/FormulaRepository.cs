@@ -22,7 +22,7 @@ namespace SupplyChain.Server.Repositorios
 
         public async Task<bool> InsumoEnFormula(List<Producto> insumos)
         {
-            var lista = insumos.ConvertAll(p=> p.CG_PROD);
+            var lista = insumos.ConvertAll(p=> p.Id);
             return await base.DbSet.AnyAsync(f => lista.Contains(f.Cg_Prod) || lista.Contains(f.Cg_Se) || lista.Contains(f.Cg_Mat));
         }
 

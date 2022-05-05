@@ -5,11 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SupplyChain.Shared.Models
 {
     [Table("Prod")]
-    public class Producto :  EntityBase
+    public class Producto :  EntityBase<string>
     {
-        [Key]
+        [Key, Column("Cg_Prod")]
         [ColumnaGridViewAtributo(Name = "Código producto")]
-        public string CG_PROD { get; set; } = "";
+        new public string Id { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Nombre producto")]
         public string DES_PROD { get; set; }
         [ColumnaGridViewAtributo(Name = "Tipo insumo")]

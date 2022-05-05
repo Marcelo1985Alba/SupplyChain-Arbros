@@ -9,10 +9,8 @@ using System.Threading.Tasks;
 namespace SupplyChain.Shared
 {
     [Table("Solicitud")]
-    public class Solicitud : EntityBase
+    public class Solicitud : EntityBase<int>
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public DateTime Fecha { get; set; } = DateTime.Now;
 
         [StringLength(maximumLength: 15, MinimumLength = 15)]

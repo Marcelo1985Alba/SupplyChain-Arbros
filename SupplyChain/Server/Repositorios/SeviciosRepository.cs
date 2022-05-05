@@ -13,10 +13,5 @@ namespace SupplyChain.Server.Repositorios
         public ServiciosRepository(AppDbContext db) : base(db)
         {
         }
-
-        public async Task<bool> Existe(string Id)
-        {
-            return await base.DbSet.AnyAsync(e => e.PEDIDO == Id);
-        }
     }
 }

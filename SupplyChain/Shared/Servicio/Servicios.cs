@@ -8,10 +8,10 @@ using System.Text;
 namespace SupplyChain
 {
     [Table("Servicios")]
-    public class Service : EntityBase
+    public class Service : EntityBase<string>
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string PEDIDO { get; set; } = "";
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Column("PEDIDO")]
+        new public string Id { get; set; } = "";
         public DateTime? FECHA { get; set; }
         public string CLIENTE { get; set; } = "";
         public int CG_CLI { get; set; } = 0;

@@ -132,19 +132,19 @@ namespace SupplyChain.Pages.Prods
                             //Nuevo.USUARIO = "User";
 
                             var response = await Http.PostAsJsonAsync("api/Prod", Nuevo);
-                            Nuevo.CG_PROD = prods.Max(s => s.CG_PROD) + 1;
+                            Nuevo.Id = prods.Max(s => s.Id) + 1;
 
                             if (response.StatusCode == System.Net.HttpStatusCode.Created)
                             {
                                 Grid.Refresh();
                                 var prod = await response.Content.ReadFromJsonAsync<Producto>();
                                 await InvokeAsync(StateHasChanged);
-                                Nuevo.CG_PROD = prod.CG_PROD;
+                                Nuevo.Id = prod.Id;
                                 prods.Add(Nuevo);
                                 var itemsJson = JsonSerializer.Serialize(prod);
                                 Console.WriteLine(itemsJson);
                                 //toastService.ShowToast($"Registrado Correctemente.Vale {StockGuardado.VALE}", TipoAlerta.Success);
-                                prods.OrderByDescending(p => p.CG_PROD);
+                                prods.OrderByDescending(p => p.Id);
                             }
 
                         }
@@ -162,7 +162,7 @@ namespace SupplyChain.Pages.Prods
                 if ((await Grid.GetSelectedRecordsAsync()).Count > 0)
                 {
                     var productos = await Grid.GetSelectedRecordsAsync();
-                    var productosSeleccionados = productos.Select(p=> p.CG_PROD.Trim()).ToList();
+                    var productosSeleccionados = productos.Select(p=> p.Id.Trim()).ToList();
                     var query = string.Empty;
                     var i = 0;
                     foreach (var item in productosSeleccionados)

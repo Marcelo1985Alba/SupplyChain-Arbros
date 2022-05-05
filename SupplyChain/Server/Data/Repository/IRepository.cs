@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Server.Data.Repository
 {
-    public interface IRepository<TEntity, TId> : IDisposable where TEntity : EntityBase
+    public interface IRepository<TEntity, TId> : IDisposable where TEntity : EntityBase<TId>
     {
         Task Agregar(TEntity entity);
         Task<TEntity> ObtenerPorId(TId id);

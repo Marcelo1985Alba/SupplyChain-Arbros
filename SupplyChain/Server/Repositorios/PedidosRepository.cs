@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Server.Repositorios
 {
-    public class PedidosRepository : Repository<Pedidos, int>
+    public class PedidosRepository : Repository<Pedidos, int?>
     {
         private readonly CompraRepository _comprasRepository;
         public PedidosRepository(AppDbContext db) : base(db)
@@ -53,7 +53,7 @@ namespace SupplyChain.Server.Repositorios
 
                     s.PENDIENTEOC = solicitado - recibido;
 
-                    s.Proveedor = await Db.Proveedores.FirstOrDefaultAsync(p=> p.CG_PROVE == s.CG_PROVE);
+                    s.Proveedor = await Db.Proveedores.FirstOrDefaultAsync(p=> p.Id == s.CG_PROVE);
                 });
 
 

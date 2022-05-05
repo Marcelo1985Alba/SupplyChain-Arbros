@@ -8,10 +8,8 @@ using System.Text;
 
 namespace SupplyChain
 {
-    public class ClienteExterno : EntityBase
+    public class ClienteExterno : EntityBase<int>
     {
-        [Key]
-        public int Id { get; set; }
         [Display(Name = "Codigo")]
         public int CG_CLI { get; set; } = 0;
         [Display(Name = "Descripcion")]

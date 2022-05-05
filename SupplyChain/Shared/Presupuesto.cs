@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 namespace SupplyChain.Shared
 {
     [Table("Prescli")]
-    public class Presupuesto : EntityBase
+    public class Presupuesto : EntityBase<int>
     {
-        [Key]
-        public int REGISTRO { get; set; }
+        [Key, Column("REGISTRO")]
+        new public int Id { get; set; }
         [Column("FE_PED")]
         public DateTime FE_PRESP { get; set; } = DateTime.Now;
         public int PRESUP { get; set; }

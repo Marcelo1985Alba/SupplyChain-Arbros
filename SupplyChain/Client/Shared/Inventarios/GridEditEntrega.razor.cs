@@ -320,7 +320,7 @@ namespace SupplyChain.Client.Shared.Inventarios
                 $"&LOTE={lote}" +
                 $"&SERIE={serie}");
 
-            registroCompleto.REGISTRO = stock?.REGISTRO;
+            registroCompleto.Id = stock?.Id ?? 0;
             registroCompleto.TIPOO = RegistroGenerado.TIPOO;
             registroCompleto.ResumenStock = resumenStock;
 
@@ -331,7 +331,7 @@ namespace SupplyChain.Client.Shared.Inventarios
                 registroCompleto.CG_ORDF = DataSource.Count > 0 ? DataSource[0].CG_ORDF : 0;
                 registroCompleto.STOCK = (decimal?)1.0000;
                 registroCompleto.PENDIENTEOC = resumenStock.STOCK;
-                registroCompleto.REGISTRO = DataSource.Count == 0 ? -1 : DataSource.Min(t => t.REGISTRO) - 1;
+                registroCompleto.Id = DataSource.Count == 0 ? -1 : DataSource.Min(t => t.Id) - 1;
                 DataSource.Add(registroCompleto);
                 await Grid.RefreshColumns();
                 await Grid.RefreshHeader();

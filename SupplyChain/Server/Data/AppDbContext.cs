@@ -123,7 +123,7 @@ namespace SupplyChain
             modelBuilder.ApplyConfiguration(new ProveedorConfig());
 
             modelBuilder.Entity<Genera>()
-             .HasKey(c => new { c.CAMP3, c.CG_CIA, c.PUNTO_VENTA });
+             .HasKey(c => new { c.Id, c.CG_CIA, c.PUNTO_VENTA });
 
             modelBuilder.Entity<vPendienteFabricar>(
             eb =>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Shared
 {
-    public class vEstadPedidosAlta : EntityBase
+    public class vEstadPedidosAlta 
     {
         public int PEDIDO { get; set; }
         public DateTime FECHA { get; set; }

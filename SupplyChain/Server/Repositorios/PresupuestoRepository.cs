@@ -25,8 +25,8 @@ namespace SupplyChain.Server.Repositorios
                 await _generaRepository.Reserva(NUMERO);
                 await _generaRepository.Reserva(REGISTRO);
 
-                entity.PRESUP = (int)(await _generaRepository.Obtener(g => g.CAMP3 == NUMERO).FirstOrDefaultAsync()).VALOR1;
-                entity.REGISTRO = (int)(await _generaRepository.Obtener(g => g.CAMP3 == REGISTRO).FirstOrDefaultAsync()).VALOR1;
+                entity.PRESUP = (int)(await _generaRepository.Obtener(g => g.Id == NUMERO).FirstOrDefaultAsync()).VALOR1;
+                entity.Id = (int)(await _generaRepository.Obtener(g => g.Id == REGISTRO).FirstOrDefaultAsync()).VALOR1;
 
                 await base.Agregar(entity);
             }
@@ -42,7 +42,7 @@ namespace SupplyChain.Server.Repositorios
         }
         public async Task<bool> Existe(decimal id)
         {
-            return await DbSet.AnyAsync(e => e.REGISTRO == id);
+            return await DbSet.AnyAsync(e => e.Id == id);
         }
 
         internal async Task AgregarDatosFaltantes(Presupuesto presupuesto)
@@ -54,7 +54,7 @@ namespace SupplyChain.Server.Repositorios
 
             if (string.IsNullOrEmpty(presupuesto.DES_ART))
             {
-                var prod = await Db.Prod.FirstOrDefaultAsync(c => c.CG_PROD.Trim() == presupuesto.CG_ART.Trim());
+                var prod = await Db.Prod.FirstOrDefaultAsync(c => c.Id.Trim() == presupuesto.CG_ART.Trim());
                 if (prod != null)
                 {
                     presupuesto.DES_ART = prod.DES_PROD.Trim();

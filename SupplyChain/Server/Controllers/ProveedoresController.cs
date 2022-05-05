@@ -29,7 +29,7 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("id")]
         public async Task<IEnumerable<Proveedor>> ById(int id)
         {
-            return await _appDbContext.Proveedores.Where(p=> p.CG_PROVE == id).ToListAsync();
+            return await _appDbContext.Proveedores.Where(p=> p.Id == id).ToListAsync();
         }
     }
 }

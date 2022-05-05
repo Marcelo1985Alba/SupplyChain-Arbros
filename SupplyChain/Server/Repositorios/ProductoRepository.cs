@@ -15,10 +15,5 @@ namespace SupplyChain.Server.Repositorios
         {
 
         }
-
-        public async Task<bool> Existe(string id)
-        {
-            return await DbSet.AnyAsync(p => p.CG_PROD == id);
-        }
     }
 }

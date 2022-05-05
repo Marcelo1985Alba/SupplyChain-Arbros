@@ -66,7 +66,7 @@ namespace SupplyChain.Server.Controllers
             }
             else if (string.IsNullOrEmpty(DES_PROD) || DES_PROD == "Vacio")
             {
-                lContiene = await _productoRepository.Obtener(p => p.CG_PROD.Contains(CG_PROD), Busqueda)
+                lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD), Busqueda)
                     .ToListAsync();
                 if (lContiene == null)
                 {
@@ -91,7 +91,7 @@ namespace SupplyChain.Server.Controllers
 
             else if (CG_PROD != "Vacio" && DES_PROD != "Vacio")
             {
-                lContiene = await _productoRepository.Obtener(p => p.CG_PROD.Contains(CG_PROD)
+                lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD)
                     && p.DES_PROD.Contains(DES_PROD), Busqueda).ToListAsync();
 
                 if (lContiene == null)
@@ -109,7 +109,7 @@ namespace SupplyChain.Server.Controllers
             try
             {
                 string xFecha = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
-                if (!await _productoRepository.Existe(parametros.CG_PROD.Trim()))
+                if (!await _productoRepository.Existe(parametros.Id.Trim()))
                 {
                     return NotFound();
                 }
@@ -188,7 +188,7 @@ namespace SupplyChain.Server.Controllers
         [HttpPut("PutPrev/{id}")]
         public async Task<IActionResult> PutPrev(int id, PresAnual prev)
         {
-            if (id != prev.REGISTRO)
+            if (id != prev.Id)
             {
                 return BadRequest();
             }
