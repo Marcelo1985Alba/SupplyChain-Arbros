@@ -43,7 +43,6 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Solicitudes";
-            await GetClientes();
             await GetSolicitudes();
             SpinnerVisible = false;
         }
@@ -60,8 +59,8 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
 
         protected async Task BuscarCliente()
         {
+            await GetClientes();
             PopupBuscadorVisible = true;
-            
         }
 
         protected async Task GeneraPresupuesto()
