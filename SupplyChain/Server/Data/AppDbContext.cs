@@ -26,6 +26,7 @@ namespace SupplyChain
         public virtual DbSet<EstadosCargaMaquina> EstadosCargaMaquinas { get; set; }
         //public virtual DbSet<Prod> Prod { get; set; }
         public virtual DbSet<Cliente> Cliente { get; set; }
+        public virtual DbSet<ClienteExterno> ClientesExternos { get; set; }
         //MODULO LOGÍSTICA
         public DbSet<PedCli> PedCli { get; set; }
         public DbSet<Pedidos> Pedidos { get; set; }
@@ -168,6 +169,7 @@ namespace SupplyChain
             modelBuilder.Entity<vEstadEventos>().HasNoKey().ToView("vEstad_Eventos");
             modelBuilder.Entity<vEstadoPedido>().HasNoKey().ToView("vEstadoPedido");
             modelBuilder.Entity<vSolicitudes>().HasNoKey().ToView("vSolicitudes");
+            modelBuilder.Entity<ClienteExterno>().HasNoKey().ToView("vClientesItris");
         }
     }
 }

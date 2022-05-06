@@ -1,5 +1,6 @@
 ﻿@page "/ventas/solicitudes"
 @using Syncfusion.Blazor.Buttons
+@using SupplyChain.Client.Shared.BuscadorCliente
 @inherits SolicitudesBase
 
 
@@ -23,7 +24,8 @@
                               Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
                 <HeaderTemplate>
                     @{
-                        var SolicitudSeleccionada = (context as vSolicitudes);
+
+                        SolicitudSeleccionada = (context as vSolicitudes);
                         if (SolicitudSeleccionada.Id == 0)
                         {
                             <p>Nueva Solicitud</p>
@@ -36,26 +38,26 @@
                 </HeaderTemplate>
                 <Template>
                     @{
-                        var solicitud = (context as vSolicitudes);
+                        SolicitudSeleccionada = (context as vSolicitudes);
 
-                        if (solicitud.Id > 0)
+                        if (SolicitudSeleccionada.Id > 0)
                         {
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label class="">Id:</label>
-                                    <SfNumericTextBox ID="VALOR_HORA" @bind-Value="@(solicitud.Id)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
+                                    <SfNumericTextBox ID="VALOR_HORA" @bind-Value="@(SolicitudSeleccionada.Id)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label class="">TagId:</label>
-                                    <SfNumericTextBox ID="tagId" @bind-Value="@(solicitud.TagId)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
+                                    <SfNumericTextBox ID="tagId" @bind-Value="@(SolicitudSeleccionada.TagId)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="">Producto:</label>
-                                    <SfTextBox CssClass="customClass" ID="DES_OPER" @bind-Value="@(solicitud.Producto)" Readonly="true"></SfTextBox>
+                                    <SfTextBox CssClass="customClass" ID="DES_OPER" @bind-Value="@(SolicitudSeleccionada.Producto)" Readonly="true"></SfTextBox>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label class="">Cantidad:</label>
-                                    <SfNumericTextBox ID="CANT" @bind-Value="@(solicitud.Cantidad)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
+                                    <SfNumericTextBox ID="CANT" @bind-Value="@(SolicitudSeleccionada.Cantidad)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
                                 </div>
                             </div>
                         }
@@ -64,15 +66,15 @@
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label class="">TagId:</label>
-                                    <SfNumericTextBox ID="tagId" @bind-Value="@(solicitud.TagId)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
+                                    <SfNumericTextBox ID="tagId" @bind-Value="@(SolicitudSeleccionada.TagId)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="">Producto:</label>
-                                    <SfTextBox CssClass="customClass" ID="Producto" @bind-Value="@(solicitud.Producto)" Readonly="true"></SfTextBox>
+                                    <SfTextBox CssClass="customClass" ID="Producto" @bind-Value="@(SolicitudSeleccionada.Producto)" Readonly="true"></SfTextBox>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label class="">Cantidad:</label>
-                                    <SfNumericTextBox ID="CANT" @bind-Value="@(solicitud.Cantidad)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
+                                    <SfNumericTextBox ID="CANT" @bind-Value="@(SolicitudSeleccionada.Cantidad)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
                                 </div>
                             </div>
 
@@ -80,19 +82,19 @@
 
 
 
-
+                        
                         <div class="form-row">
                             <div class="form-group col-md-2">
                                 <label class="">Cuit:</label>
-                                <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(solicitud.Cuit)"></SfTextBox>
+                                <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(SolicitudSeleccionada.Cuit)"></SfTextBox>
                             </div>
                             <div class="form-group col-md-2">
                                 <label class="">Cod. Cliente:</label>
-                                <SfNumericTextBox ID="CG_CLI" @bind-Value="@(solicitud.CG_CLI)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
+                                <SfNumericTextBox ID="CG_CLI" @bind-Value="@(SolicitudSeleccionada.CG_CLI)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
                             </div>
                             <div class="form-group col-md-7">
                                 <label class="">Cliente:</label>
-                                <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(solicitud.DES_CLI)" Readonly="true"></SfTextBox>
+                                <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(SolicitudSeleccionada.DES_CLI)" Readonly="true"></SfTextBox>
                             </div>
                             <div class="form-group col-md-1 mt-4">
                                 <SfButton IconCss="fa fa-search" CssClass="e-round" OnClick="@(async ()=> await BuscarCliente())"
@@ -100,10 +102,21 @@
                             </div>
                         </div>
 
+                        if (SolicitudSeleccionada.CG_CLI > 0 && !SolicitudSeleccionada.TienePresupuesto)
+                        {
+                            presupuesto.CG_CLI = SolicitudSeleccionada.CG_CLI;
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label class="">Dias Plazo:</label>
+                                    <SfNumericTextBox ID="DiasPlazo" @bind-Value="@(presupuesto.OBRA)" ShowSpinButton="true" Readonly="true"></SfNumericTextBox>
+                                </div>
+                            </div>
+                        }
+
                         <div class="form-row">
                             <div class="form-group col-md-2 checkbox checkbox-success">
                                 <Syncfusion.Blazor.Buttons.SfCheckBox Label="Con Presupuesto" CssClass="e-info checkbox checkbox-success"
-                                                                      @bind-Checked="@solicitud.TienePresupuesto" Disabled="true" />
+                                                                      @bind-Checked="@SolicitudSeleccionada.TienePresupuesto" Disabled="true" />
                             </div>
                         </div>
                     }
@@ -135,7 +148,9 @@
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
         </SfGrid>
     </div>
-    <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" Label="Generando Presupuesto..." @bind-Visible="@SpinnerVisiblePresupuesto"></SfSpinner>
-    <BuscadorEmergente Height="520px" TItem="Cliente" Titulo="Listado de Clientes" Visible="@PopupBuscadorVisible"
-                       DataSource="@Clientes" Columnas="@(new string[] { "CG_CLI", "DES_CLI"})" OnObjetoSeleccionado="OnObjectSelected" />
+    <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" Label="Generando Presupuesto..."
+               @bind-Visible="@SpinnerVisiblePresupuesto"></SfSpinner>
+
+
+    <ClientesDialog @ref="refClienteDialog" OnObjectSelected="@ClienteExternoSelected" PopupBuscadorVisible="@PopupBuscadorVisible"></ClientesDialog>
 </div>

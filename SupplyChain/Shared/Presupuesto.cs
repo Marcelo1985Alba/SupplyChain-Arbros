@@ -25,6 +25,6 @@ namespace SupplyChain.Shared
         public string DES_CLI { get; set; }
         public DateTime FE_REG { get; set; } = DateTime.Now;
 
-
+        public int OBRA { get; set; } = 0;
     }
 }

@@ -26,11 +26,11 @@ namespace SupplyChain
             return await _context.Cliente.ToListAsync();
         }
 
-        [HttpGet("GetClienteItris")]
-        public async Task<ActionResult<List<Cliente>>> GetClienteItris()
+        [HttpGet("GetClienteExterno")]
+        public async Task<ActionResult<List<ClienteExterno>>> GetClienteExterno()
         {
-            List<Cliente> lCliente = new();
-            return await _context.Cliente.ToListAsync();
+            List<ClienteExterno> lCliente = new();
+            return await _context.ClientesExternos.ToListAsync();
         }
 
 

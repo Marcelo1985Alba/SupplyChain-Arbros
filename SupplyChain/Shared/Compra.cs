@@ -8,7 +8,7 @@ namespace SupplyChain.Shared.Models
     public class Compra : EntityBase<int>
     {
 
-        [Key]
+        [Key, Column("REGISTRO")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Registro")]
         new public int Id { get; set; }
