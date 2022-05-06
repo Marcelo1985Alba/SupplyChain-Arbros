@@ -8,23 +8,35 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Shared
 {
-    [Table("Prescli")]
     public class Presupuesto : EntityBase<int>
     {
-        [Key, Column("REGISTRO")]
-        new public int Id { get; set; }
-        [Column("FE_PED")]
-        public DateTime FE_PRESP { get; set; } = DateTime.Now;
-        public int PRESUP { get; set; }
+        public int SOLICITUD { get; set; }
+        public int NUMERO { get; set; }
+        public int DIAS_PLAZO_ENTREGA { get; set; } = 0;
+        public DateTime FECHA { get; set; } = DateTime.Now;
         [StringLength(maximumLength: 15, MinimumLength = 15)]
         public string CG_ART { get; set; }
-        public string DES_ART { get; set; }
-        public string UNID { get; set; }
-        public decimal CANTENT { get; set; }
+        public decimal CANTIDAD { get; set; }
+        public decimal PREC_UNIT_X_CANTIDAD { get; set; }
+        public decimal IMP_DESCUENTO { get; set; }
+        public string MONEDA { get; set; }
+        public string OBSERITEM { get; set; }
+        public decimal DESCUENTO { get; set; }
+        public decimal IVA { get; set; }
         public int CG_CLI { get; set; } = 0;
-        public string DES_CLI { get; set; }
-        public DateTime FE_REG { get; set; } = DateTime.Now;
+        public int CONDICION_PAGO { get; set; } = 0;
+        public decimal BONIFIC { get; set; }
+        public int CG_TRANS { get; set; } = 0;
+        public int CG_EXPRESO { get; set; } = 0;
+        public string DIRENT { get; set; }
+        [NotMapped]
+        public string DES_ART { get; set; }
+        [NotMapped]
+        public string UNID { get; set; }
 
-        public int OBRA { get; set; } = 0;
+        [NotMapped]
+        public string DES_CLI { get; set; }
+
+        
     }
 }

@@ -13,12 +13,14 @@ namespace SupplyChain.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PresupuestosController : ControllerBase
+    public class PresupuestosAnteriorController : ControllerBase
     {
+        
+
         private readonly PresupuestoAnteriorRepository _presupuestoRepository;
         private readonly GeneraRepository _generaRepository;
 
-        public PresupuestosController(PresupuestoAnteriorRepository presupuestoRepository, GeneraRepository generaRepository)
+        public PresupuestosAnteriorController(PresupuestoAnteriorRepository presupuestoRepository, GeneraRepository generaRepository)
         {
             _presupuestoRepository = presupuestoRepository;
             this._generaRepository = generaRepository;

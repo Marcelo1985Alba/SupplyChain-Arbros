@@ -107,7 +107,7 @@ namespace SupplyChain
         public DbSet<vEstadoPedido> vEstadoPedidos { get; set; }
         public DbSet<Solicitud> Solicitudes { get; set; }
         public DbSet<vSolicitudes> vSolicitudes { get; set; }
-        public DbSet<Presupuesto> Presupuestos { get; set; }
+        public DbSet<PresupuestoAnterior> Presupuestos { get; set; }
 
         //MODULO PROYECTOS
         public DbSet<ProyectosGBPI> Proyectos { get; set; }

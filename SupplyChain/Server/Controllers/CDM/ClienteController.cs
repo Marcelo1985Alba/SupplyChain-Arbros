@@ -29,7 +29,6 @@ namespace SupplyChain
         [HttpGet("GetClienteExterno")]
         public async Task<ActionResult<List<ClienteExterno>>> GetClienteExterno()
         {
-            List<ClienteExterno> lCliente = new();
             return await _context.ClientesExternos.ToListAsync();
         }
 

@@ -43,7 +43,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             "ExcelExport"
         };
 
-        protected Presupuesto presupuesto = new();
+        protected PresupuestoAnterior presupuesto = new();
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Solicitudes";
@@ -66,14 +66,13 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         protected async Task GeneraPresupuesto()
         {
             SpinnerVisiblePresupuesto = true;
-            presupuesto = new Presupuesto
-            {
-                CG_ART = SolicitudSeleccionada.Producto,
-                CANTENT = SolicitudSeleccionada.Cantidad,
-                CG_CLI = SolicitudSeleccionada.CG_CLI,
-                DES_CLI = SolicitudSeleccionada.DES_CLI
-            };
-            var response = await Http.PostAsJsonAsync("api/Presupuestos/PostFromSolicitud", presupuesto);
+            //Datos de la solicitud
+            presupuesto.CG_ART = SolicitudSeleccionada.Producto;
+            presupuesto.CANTENT = SolicitudSeleccionada.Cantidad;
+            presupuesto.CG_CLI = SolicitudSeleccionada.CG_CLI;
+            presupuesto.DES_CLI = SolicitudSeleccionada.DES_CLI;
+
+            var response = await Http.PostAsJsonAsync("api/Presupuestos", presupuesto);
             if (response.IsSuccessStatusCode)
             {
                 SpinnerVisiblePresupuesto = false;

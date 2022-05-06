@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Server.Repositorios
 {
-    public class PresupuestoRepository : Repository<Presupuesto, int>
+    public class PresupuestoAnteriorRepository : Repository<PresupuestoAnterior, int>
     {
         private readonly string REGISTRO = "REGPRES";
         private readonly string NUMERO = "PRESUP";
         private readonly GeneraRepository _generaRepository;
 
-        public PresupuestoRepository(AppDbContext appDbContext, GeneraRepository generaRepository) : base (appDbContext)
+        public PresupuestoAnteriorRepository(AppDbContext appDbContext, GeneraRepository generaRepository) : base (appDbContext)
         {
             _generaRepository = generaRepository;
         }
 
-        public override async Task Agregar(Presupuesto entity)
+        public override async Task Agregar(PresupuestoAnterior entity)
         {
 
             try
@@ -25,7 +25,7 @@ namespace SupplyChain.Server.Repositorios
                 await _generaRepository.Reserva(NUMERO);
                 await _generaRepository.Reserva(REGISTRO);
 
-                entity.NUMERO = (int)(await _generaRepository.Obtener(g => g.Id == NUMERO).FirstOrDefaultAsync()).VALOR1;
+                entity.PRESUP = (int)(await _generaRepository.Obtener(g => g.Id == NUMERO).FirstOrDefaultAsync()).VALOR1;
                 entity.Id = (int)(await _generaRepository.Obtener(g => g.Id == REGISTRO).FirstOrDefaultAsync()).VALOR1;
 
                 await base.Agregar(entity);
@@ -41,7 +41,7 @@ namespace SupplyChain.Server.Repositorios
             }
         }
 
-        internal async Task AgregarDatosFaltantes(Presupuesto presupuesto)
+        internal async Task AgregarDatosFaltantes(PresupuestoAnterior presupuesto)
         {
             if (string.IsNullOrEmpty(presupuesto.DES_CLI))
             {
