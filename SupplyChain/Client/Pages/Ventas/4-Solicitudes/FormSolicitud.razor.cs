@@ -1,0 +1,124 @@
+﻿using Microsoft.AspNetCore.Components;
+using SupplyChain.Client.HelperService;
+using SupplyChain.Client.Shared.BuscadorCliente;
+using SupplyChain.Client.Shared.BuscadorProducto;
+using SupplyChain.Shared;
+using SupplyChain.Shared.Models;
+using Syncfusion.Blazor.Notifications;
+using Syncfusion.Blazor.Spinner;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
+{
+    public class FormSolicitudBase : ComponentBase
+    {
+        [Inject] public SolicitudService SolicitudService { get; set; }
+        [Parameter] public Solicitud Solicitud { get; set; } = new Solicitud();
+        [Parameter] public bool Show { get; set; } = false;
+        [Parameter] public EventCallback<Solicitud> OnGuardar { get; set; }
+
+
+        protected ClientesDialog refClienteDialog;
+        protected SfSpinner refSpinnerCli;
+        protected bool popupBuscadorVisibleCliente { get; set; } = false;
+
+        protected ProductoDialog refProductoDialog;
+        protected bool popupBuscadorVisibleProducto { get; set; } = false;
+
+
+        protected bool SpinnerVisible = false;
+        protected SfToast ToastObj;
+
+        protected Dictionary<string, object> HtmlAttribute = new()
+        {
+           {"type", "button" }
+        };
+
+        protected Dictionary<string, object> HtmlAttributeSubmit = new()
+        {
+            { "type", "submit" }
+        };
+
+        protected async Task BuscarClientes()
+        {
+            SpinnerVisible = true;
+            await refClienteDialog.Show();
+            SpinnerVisible = false;
+            popupBuscadorVisibleCliente = true;
+        }
+
+        protected async Task BuscarProductos()
+        {
+            SpinnerVisible = true;
+            await refProductoDialog.Show();
+            SpinnerVisible = false;
+            popupBuscadorVisibleProducto = true;
+        }
+
+        protected async Task ClienteExternoSelected(ClienteExterno clienteSelected)
+        {
+            await refSpinnerCli.ShowAsync();
+            popupBuscadorVisibleCliente = false;
+            Solicitud.CG_CLI = Convert.ToInt32(clienteSelected.CG_CLI);
+            Solicitud.Des_Cli = clienteSelected.DESCRIPCION.Trim();
+            Solicitud.Cuit = clienteSelected.CUIT;
+            await refSpinnerCli.HideAsync();
+        }
+
+        protected async Task ProductoSelected(Producto productoSelected)
+        {
+            await refSpinnerCli.ShowAsync();
+            popupBuscadorVisibleProducto = false;
+            Solicitud.Producto = productoSelected.Id;
+            Solicitud.Des_Prod = productoSelected.DES_PROD;
+            await refSpinnerCli.HideAsync();
+        }
+
+
+        protected async Task<bool> Agregar(Solicitud solicitud)
+        {
+            var response = await SolicitudService.Agregar(solicitud);
+            if (response.Error)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        protected async Task<bool> Actualizar(Solicitud solicitud)
+        {
+            var response = await SolicitudService.Actualizar(solicitud.Id, solicitud);
+            if (response.Error)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        protected async Task Guardar()
+        {
+            bool guardado;
+            if (Solicitud.Id == 0)
+            {
+                guardado = await Agregar(Solicitud);
+                Solicitud.EsNuevo = true;
+            }
+            else
+            {
+                guardado = await Actualizar(Solicitud);
+            }
+
+            Show = false;
+            Solicitud.Guardado = guardado;
+            await OnGuardar.InvokeAsync(Solicitud);
+        }
+
+
+        
+    }
+}

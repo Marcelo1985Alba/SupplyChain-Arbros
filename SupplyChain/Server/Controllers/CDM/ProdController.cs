@@ -37,6 +37,21 @@ namespace SupplyChain
         }
 
 
+        [HttpGet("GetProdAndReparaciones")]
+        public async Task<ActionResult<IEnumerable<Producto>>> GetProdAndReparaciones()
+        {
+            try
+            {
+                return await _productoRepository
+                    .Obtener(p=> p.CG_ORDEN == 1 || p.CG_ORDEN == 13).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
 
         // GET: api/Prod/5
         [HttpGet("{id}")]

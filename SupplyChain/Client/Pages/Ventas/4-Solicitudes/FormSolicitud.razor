@@ -1,0 +1,120 @@
+﻿@using Syncfusion.Blazor.Buttons
+@using SupplyChain.Client.Shared.BuscadorCliente
+@using SupplyChain.Client.Shared.BuscadorProducto
+
+@inherits FormSolicitudBase
+
+<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="380px" ShowCloseIcon="true">
+    <DialogTemplates>
+        <Header>
+            @if (Solicitud.Id == 0)
+            {
+                <strong>Nueva Solicitud</strong>
+            }
+            else
+            {
+                <strong>Detalle Solicitud: @Solicitud.Id</strong>
+            }
+        </Header>
+        <Content>
+            <EditForm Model="@Solicitud" OnValidSubmit="@(async()=> await Guardar())">
+                <DataAnnotationsValidator />
+                @if (Solicitud.Id > 0)
+                {
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <label class="">Id:</label>
+                            <SfNumericTextBox ID="VALOR_HORA" @bind-Value="@(Solicitud.Id)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label class="">TagId:</label>
+                            <SfNumericTextBox ID="tagId" @bind-Value="@(Solicitud.TagId)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="">Producto:</label>
+                            <SfTextBox CssClass="customClass" ID="DES_OPER" @bind-Value="@(Solicitud.Producto)" Readonly="true"></SfTextBox>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label class="">Descripcion Producto:</label>
+                            <SfTextBox CssClass="customClass" ID="DES_Prod" @bind-Value="@(Solicitud.Des_Prod)" Readonly="true"></SfTextBox>
+                        </div>
+                        <div class="form-group col-md-1 mt-4">
+                            <SfButton IconCss="fa fa-search" CssClass="e-round" OnClick="@(async ()=> await BuscarProductos())"
+                                      HtmlAttributes="@HtmlAttribute"></SfButton>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label class="">Cantidad:</label>
+                            <SfNumericTextBox ID="CANT" @bind-Value="@(Solicitud.Cantidad)" ShowSpinButton="false" Readonly="false"></SfNumericTextBox>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="">TagId:</label>
+                            <SfNumericTextBox ID="tagId" @bind-Value="@(Solicitud.TagId)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="">Producto:</label>
+                            <SfTextBox CssClass="customClass" ID="Producto" @bind-Value="@(Solicitud.Producto)" Readonly="true"></SfTextBox>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="">Cantidad:</label>
+                            <SfNumericTextBox ID="CANT" @bind-Value="@(Solicitud.Cantidad)" ShowSpinButton="false" Readonly="false"></SfNumericTextBox>
+                        </div>
+                    </div>
+
+                }
+
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label class="">Cuit:</label>
+                        <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Solicitud.Cuit)"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="">Cod. Cliente:</label>
+                        <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Solicitud.CG_CLI)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
+                    </div>
+                    <div class="form-group col-md-7">
+                        <label class="">Cliente:</label>
+                        <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Solicitud.Des_Cli)" Readonly="true"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-1 mt-4">
+                        <SfButton IconCss="fa fa-search" CssClass="e-round" OnClick="@(async ()=> await BuscarClientes())"
+                                  HtmlAttributes="@HtmlAttribute"></SfButton>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-2 checkbox checkbox-success">
+                        <SfCheckBox Label="Con Presupuesto" CssClass="e-info checkbox checkbox-success"
+                                    @bind-Checked="@Solicitud.TienePresupuesto" Disabled="true" />
+                    </div>
+                </div>
+
+
+                <SfSpinner @ref="@refSpinnerCli" Size="50" @bind-Visible="@SpinnerVisible"
+                           Label="Buscando ..." Type="SpinnerType.Fabric">
+                </SfSpinner>
+
+                <ClientesDialog @ref="refClienteDialog"
+                                OnObjectSelected="@ClienteExternoSelected" PopupBuscadorVisible="@popupBuscadorVisibleCliente"></ClientesDialog>
+
+
+                <ProductoDialog @ref="refProductoDialog" 
+                                OnObjectSelected="@ProductoSelected" PopupBuscadorVisible="@popupBuscadorVisibleProducto"></ProductoDialog>
+
+                <ValidationSummary />
+                <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit"></SfButton>
+                <SfButton Content="Cancel" IconCss="fa fa-cancel"></SfButton>
+            </EditForm>
+
+            
+        </Content>
+    </DialogTemplates>
+    
+</SfDialog>
+
+
+

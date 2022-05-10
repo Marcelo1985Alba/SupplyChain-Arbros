@@ -24,7 +24,7 @@ namespace SupplyChain.Client.HelperService
             return await Http.GetFromJsonAsync<List<PresupuestoAnterior>>("api/PresupuestosAnterior");
         }
 
-        protected async Task<HttpResponseWrapper<List<PresupuestoAnterior>>> GetPresupuestos()
+        protected async Task<HttpResponseWrapper<List<PresupuestoAnterior>>> Get()
         {
             return await Http.GetFromJsonAsync<List<PresupuestoAnterior>>("api/Presupuestos");
         }

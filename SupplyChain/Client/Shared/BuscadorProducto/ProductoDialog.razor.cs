@@ -1,26 +1,26 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SupplyChain.Client.HelperService;
+using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Spinner;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SupplyChain.Client.Shared.BuscadorCliente
+namespace SupplyChain.Client.Shared.BuscadorProducto
 {
-    public class ClientesDialogBase : ComponentBase
+    public class ProductoDialogBase : ComponentBase
     {
-        [Inject] public RepositoryHttp.IRepositoryHttp Http { get; set; }
-        [Inject] public ClienteService ClienteService { get; set; }
+        [Inject] public ProductoService ProductoService { get; set; }
         [Parameter] public bool PopupBuscadorVisible { get; set; } = false;
-        [Parameter] public EventCallback<ClienteExterno> OnObjectSelected { get; set; }
+        [Parameter] public EventCallback<Producto> OnObjectSelected { get; set; }
 
-        protected List<ClienteExterno> clientes = new();
+        protected List<Producto> productos = new();
         protected SfSpinner refSpinner;
         public async Task Show()
         {
             refSpinner?.ShowAsync();
-            var response = await ClienteService.GetClientesExterno();
+            var response = await ProductoService.GetProdAndReparaciones();
             if (response.Error)
             {
                 refSpinner?.HideAsync();
@@ -28,16 +28,17 @@ namespace SupplyChain.Client.Shared.BuscadorCliente
             }
             else
             {
-                clientes = response.Response;
+                productos = response.Response;
                 refSpinner?.HideAsync();
                 PopupBuscadorVisible = true;
+
             }
         }
         public async Task Hide()
         {
             PopupBuscadorVisible = false;
         }
-        protected async Task SendObjectSelected(ClienteExterno obj)
+        protected async Task SendObjectSelected(Producto obj)
         {
             await OnObjectSelected.InvokeAsync(obj);
             await Hide();

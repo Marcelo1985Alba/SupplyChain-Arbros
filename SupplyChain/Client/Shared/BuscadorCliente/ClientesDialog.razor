@@ -1,5 +1,9 @@
 ﻿@inherits ClientesDialogBase
 
-<BuscadorEmergente Height="520px" TItem="ClienteExterno" Titulo="Listado de Clientes" Visible="@PopupBuscadorVisible"
-                   DataSource="@clientes" IsModal="true"
+<SfSpinner @ref="@refSpinner" Size="80"
+           Label="Cargando..." Type="SpinnerType.Fabric">
+</SfSpinner>
+
+<BuscadorEmergente Height="620px" TItem="ClienteExterno" Titulo="Listado de Clientes" Visible="@PopupBuscadorVisible"
+                   DataSource="@clientes" IsModal="true" Width="90%" HeightGrid="290px"
                    Columnas="@(new string[] { "CG_CLI", "DESCRIPCION", "CUIT"})" OnObjetoSeleccionado="SendObjectSelected" />

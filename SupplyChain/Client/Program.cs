@@ -51,6 +51,9 @@ namespace SupplyChain.Client
             services.AddScoped<ILoginService, ProveedorAutenticacion>(
                 provider => provider.GetRequiredService<ProveedorAutenticacion>());
 
+            services.AddScoped<ProductoService>();
+            services.AddScoped<ClienteService>();
+            services.AddScoped<SolicitudService>();
             services.AddScoped<PresupuestoService>();
             services.AddScoped<InventarioService>();
             services.AddScoped<PdfService>();

@@ -14,6 +14,7 @@ namespace SupplyChain
         public string CG_CLI { get; set; } = "";
         [Display(Name = "Descripcion")]
         public string DESCRIPCION { get; set; } = "";
+        [Display(Name = "Cuit")]
         public string CUIT { get; set; } = "";
         public string PROVINCIA { get; set; } = "";
         public string PAIS { get; set; } = "";

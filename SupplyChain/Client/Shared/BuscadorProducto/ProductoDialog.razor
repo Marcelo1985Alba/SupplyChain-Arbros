@@ -1,0 +1,9 @@
+﻿@inherits ProductoDialogBase
+
+<SfSpinner @ref="@refSpinner" Size="80"
+           Label="" Type="SpinnerType.Fabric">
+</SfSpinner>
+
+<BuscadorEmergente Height="500px" TItem="Producto" Titulo="Listado de Productos y Reparaciones" Visible="@PopupBuscadorVisible"
+                   DataSource="@productos" IsModal="true" Width="90%" HeightGrid="250px"
+                   Columnas="@(new string[] { "ID", "DES_PROD"})" OnObjetoSeleccionado="SendObjectSelected" />

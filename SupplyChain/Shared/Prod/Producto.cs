@@ -7,10 +7,10 @@ namespace SupplyChain.Shared.Models
     [Table("Prod")]
     public class Producto :  EntityBase<string>
     {
-        [Key, Column("Cg_Prod")]
+        [Key, Column("CG_PROD"), Display(Name = "Código producto")]
         [ColumnaGridViewAtributo(Name = "Código producto")]
         new public string Id { get; set; } = "";
-        [ColumnaGridViewAtributo(Name = "Nombre producto")]
+        [ColumnaGridViewAtributo(Name = "Nombre producto"), Display(Name = "Nombre producto")]
         public string DES_PROD { get; set; }
         [ColumnaGridViewAtributo(Name = "Tipo insumo")]
         public int CG_ORDEN { get; set; }

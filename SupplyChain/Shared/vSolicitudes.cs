@@ -16,6 +16,7 @@ namespace SupplyChain.Shared
 
         [StringLength(maximumLength: 15, MinimumLength = 15)]
         public string Producto { get; set; }
+        public string DES_PROD { get; set; }
         public int CG_CLI { get; set; } = 0;
         public string DES_CLI { get; set; }
         public int TagId { get; set; } = 0;
