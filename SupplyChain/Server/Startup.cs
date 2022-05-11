@@ -58,6 +58,7 @@ namespace SupplyChain.Server
             services.AddTransient<StockCorregidoRepository>();
             services.AddTransient<SolicitudRepository>();
             services.AddTransient<PresupuestoAnteriorRepository>();
+            services.AddTransient<PresupuestoRepository>();
             services.AddTransient<GeneraRepository>();
 
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });

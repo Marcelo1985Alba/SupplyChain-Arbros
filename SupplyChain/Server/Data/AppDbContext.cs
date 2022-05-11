@@ -107,6 +107,7 @@ namespace SupplyChain
         public DbSet<vEstadoPedido> vEstadoPedidos { get; set; }
         public DbSet<Solicitud> Solicitudes { get; set; }
         public DbSet<vSolicitudes> vSolicitudes { get; set; }
+        public DbSet<vPresupuestos> vPresupuestos { get; set; }
         public DbSet<PresupuestoAnterior> Presupuestos { get; set; }
 
         //MODULO PROYECTOS
@@ -122,6 +123,20 @@ namespace SupplyChain
             modelBuilder.ApplyConfiguration(new CompraConfig());
             modelBuilder.ApplyConfiguration(new PedidoConfig());
             modelBuilder.ApplyConfiguration(new ProveedorConfig());
+
+            modelBuilder.Entity<Presupuesto>(entity => {
+                entity.HasMany(c => c.Items)
+                    .WithOne(p => p.Presupuesto)
+                    .HasForeignKey(c => c.PRESUPUESTOENCABEZADOID);
+            });
+
+            modelBuilder.Entity<PresupuestoDetalle>(entity=> {
+                entity.HasOne(d => d.Presupuesto)
+                .WithMany(p => p.Items)
+                .HasForeignKey(d => d.PRESUPUESTOENCABEZADOID)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PRESUPUESTO_DETALLE_PRESUPUESTO_ENCABEZADO");
+            });
 
             modelBuilder.Entity<Genera>()
              .HasKey(c => new { c.Id, c.CG_CIA, c.PUNTO_VENTA });
@@ -170,6 +185,7 @@ namespace SupplyChain
             modelBuilder.Entity<vEstadoPedido>().HasNoKey().ToView("vEstadoPedido");
             modelBuilder.Entity<vSolicitudes>().HasNoKey().ToView("vSolicitudes");
             modelBuilder.Entity<ClienteExterno>().HasNoKey().ToView("vClientesItris");
+            modelBuilder.Entity<vPresupuestos>().HasNoKey().ToView("vPresupuestos");
         }
     }
 }

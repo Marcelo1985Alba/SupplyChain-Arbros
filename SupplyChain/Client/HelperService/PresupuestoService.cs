@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using SupplyChain.Client.HelperService.Base;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
@@ -10,13 +11,13 @@ using System.Timers;
 
 namespace SupplyChain.Client.HelperService
 {
-    public class PresupuestoService : IDisposable
+    public class PresupuestoService : BaseService<Presupuesto,int>
     {
         private readonly IRepositoryHttp Http;
-
-        public PresupuestoService(IRepositoryHttp httpClient)
+        private const string API = "api/Presupuestos";
+        public PresupuestoService(IRepositoryHttp Http):base(Http, API)
         {
-            this.Http = httpClient;
+            this.Http = Http;
         }
 
         protected async Task<HttpResponseWrapper<List<PresupuestoAnterior>>> GetPresupuestosAnteriores()
@@ -24,25 +25,10 @@ namespace SupplyChain.Client.HelperService
             return await Http.GetFromJsonAsync<List<PresupuestoAnterior>>("api/PresupuestosAnterior");
         }
 
-        protected async Task<HttpResponseWrapper<List<PresupuestoAnterior>>> Get()
+        public async Task<HttpResponseWrapper<List<vPresupuestos>>> GetVistaParaGrilla()
         {
-            return await Http.GetFromJsonAsync<List<PresupuestoAnterior>>("api/Presupuestos");
-        }
+            return await http.GetFromJsonAsync<List<vPresupuestos>>(API+ "/GetPresupuestoVista");
 
-        protected async Task<HttpResponseWrapper<Presupuesto>> Agregar(Presupuesto presupuesto)
-        {
-            return await Http.PostAsJsonAsync("api/Presupuestos", presupuesto);
-        }
-
-        protected async Task<HttpResponseWrapper<object>> Actualizar(Presupuesto presupuesto)
-        {
-            return await Http.PutAsJsonAsync($"api/Presupuestos/{presupuesto.Id}", presupuesto);
-        }
-
-
-        public void Dispose()
-        {
-            
         }
     }
 }

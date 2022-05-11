@@ -2,19 +2,21 @@
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SupplyChain.Server.Repositorios
 {
     public class PresupuestoRepository : Repository<Presupuesto, int>
     {
-        private readonly string REGISTRO = "REGPRES";
-        private readonly string NUMERO = "PRESUP";
-        private readonly GeneraRepository _generaRepository;
 
-        public PresupuestoRepository(AppDbContext appDbContext, GeneraRepository generaRepository) : base (appDbContext)
+        public PresupuestoRepository(AppDbContext appDbContext) : base (appDbContext)
         {
-            _generaRepository = generaRepository;
+        }
+
+        public async Task<List<vPresupuestos>> GetForView()
+        {
+            return await Db.vPresupuestos.ToListAsync();
         }
 
         public override async Task Agregar(Presupuesto entity)
@@ -22,23 +24,13 @@ namespace SupplyChain.Server.Repositorios
 
             try
             {
-                await _generaRepository.Reserva(NUMERO);
-                await _generaRepository.Reserva(REGISTRO);
-
-                entity.NUMERO = (int)(await _generaRepository.Obtener(g => g.Id == NUMERO).FirstOrDefaultAsync()).VALOR1;
-                entity.Id = (int)(await _generaRepository.Obtener(g => g.Id == REGISTRO).FirstOrDefaultAsync()).VALOR1;
-
                 await base.Agregar(entity);
             }
             catch (Exception)
             {
                 throw;
             }
-            finally
-            {
-                await _generaRepository.Libera(NUMERO);
-                await _generaRepository.Libera(REGISTRO);
-            }
+  
         }
 
         internal async Task AgregarDatosFaltantes(Presupuesto presupuesto)
@@ -50,12 +42,12 @@ namespace SupplyChain.Server.Repositorios
 
             if (string.IsNullOrEmpty(presupuesto.DES_ART))
             {
-                var prod = await Db.Prod.FirstOrDefaultAsync(c => c.Id.Trim() == presupuesto.CG_ART.Trim());
-                if (prod != null)
-                {
-                    presupuesto.DES_ART = prod.DES_PROD.Trim();
-                    presupuesto.UNID = prod.UNID.Trim();
-                }
+                //var prod = await Db.Prod.FirstOrDefaultAsync(c => c.Id.Trim() == presupuesto.Items.CG_ART.Trim());
+                //if (prod != null)
+                //{
+                //    presupuesto.DES_ART = prod.DES_PROD.Trim();
+                //    presupuesto.UNID = prod.UNID.Trim();
+                //}
                 
             }
         }

@@ -48,6 +48,11 @@ namespace SupplyChain.Server.Data.Repository
             return await DbSet.ToListAsync();
         }
 
+        public virtual IQueryable<TEntity> ObtenerTodosQueryable()
+        {
+            return DbSet.AsQueryable();
+        }
+
         public IQueryable<TEntity> Obtener(Expression<Func<TEntity, bool>> filter, int take = 0,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             bool ascending = false, params Expression<Func<TEntity, object>>[] includes )

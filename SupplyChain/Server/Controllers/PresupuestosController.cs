@@ -15,44 +15,55 @@ namespace SupplyChain.Server.Controllers
     [ApiController]
     public class PresupuestosController : ControllerBase
     {
-        private readonly PresupuestoAnteriorRepository _presupuestoRepository;
+        private readonly PresupuestoAnteriorRepository _presupuestoAnteriorRepository;
+        private readonly PresupuestoRepository _presupuestoRepository;
         private readonly GeneraRepository _generaRepository;
 
-        public PresupuestosController(PresupuestoAnteriorRepository presupuestoRepository, GeneraRepository generaRepository)
+        public PresupuestosController(PresupuestoAnteriorRepository presupuestoAnteriorRepository, 
+            PresupuestoRepository presupuestoRepository,
+            GeneraRepository generaRepository)
         {
+            _presupuestoAnteriorRepository = presupuestoAnteriorRepository;
             _presupuestoRepository = presupuestoRepository;
             this._generaRepository = generaRepository;
         }
         // GET: api/<PresupuestosController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<List<Presupuesto>> GetPresupuesto()
         {
-            return new string[] { "value1", "value2" };
+            return await _presupuestoRepository.ObtenerTodosQueryable().Include(p=> p.Items).ToListAsync();
+        }
+
+        [HttpGet("GetPresupuestoVista")]
+        public async Task<List<vPresupuestos>> GetPresupuestoVista()
+        {
+            return await _presupuestoRepository.GetForView();
         }
 
         // GET api/<PresupuestosController>/5
         [HttpGet("{id}")]
-        public async Task<PresupuestoAnterior> GetPresupuesto(int id)
+        public async Task<Presupuesto> GetPresupuesto(int id)
         {
-            return await _presupuestoRepository.Obtener(p=> p.PRESUP == id).FirstOrDefaultAsync();
+            return await _presupuestoRepository.Obtener(p=> p.Id == id).Include(p=> p.Items)
+                .FirstOrDefaultAsync();
         }
 
         // POST api/<PresupuestosController>
         [HttpPost]
-        public async Task<ActionResult<PresupuestoAnterior>> Post(PresupuestoAnterior presupuesto)
+        public async Task<ActionResult<Presupuesto>> Post(Presupuesto presupuesto)
         {
             return await AgregarNuevoPresupuesto(presupuesto);
         }
 
-        private async Task<ActionResult<PresupuestoAnterior>> AgregarNuevoPresupuesto(PresupuestoAnterior presupuesto)
+        private async Task<ActionResult<Presupuesto>> AgregarNuevoPresupuesto(Presupuesto presupuesto)
         {
             await _presupuestoRepository.Agregar(presupuesto);
             
-            return CreatedAtAction("GetPresupuesto", new { id = presupuesto.PRESUP }, presupuesto);
+            return CreatedAtAction("GetPresupuesto", new { id = presupuesto.Id }, presupuesto);
         }
 
         [HttpPost("PostFromSolicitud")]
-        public async Task<ActionResult<PresupuestoAnterior>> PostFromSolicitud(PresupuestoAnterior presupuesto)
+        public async Task<ActionResult<Presupuesto>> PostFromSolicitud(Presupuesto presupuesto)
         {
             try
             {
