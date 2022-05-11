@@ -15,24 +15,24 @@
                 @ref="refGrid" DataSource="@Solicitudes" Width="100%"
                 AllowExcelExport="true" AllowGrouping="true" ID="grdProd"
                 AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
-            <GridSelectionSettings CheckboxOnly="true"
-                                   Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler" TValue="vSolicitudes"></GridEvents>
-            <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+            <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true"
                               Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
             </GridEditSettings>
             <GridColumns>
                 @*<GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>*@
-                <GridColumn Field=@nameof(vSolicitudes.Id) HeaderText="Numero" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(vSolicitudes.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(vSolicitudes.Producto) HeaderText="Producto" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(vSolicitudes.DES_PROD) HeaderText="Descripcion Producto" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(vSolicitudes.Cantidad) HeaderText="Cantidad" Format="N0" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(vSolicitudes.TagId) HeaderText="TagId" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(vSolicitudes.DES_PROD) HeaderText="Descripcion Producto" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
+                <GridColumn Field=@nameof(vSolicitudes.Cantidad) HeaderText="Cantidad" Format="N0" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
                 <GridColumn Field=@nameof(vSolicitudes.CG_CLI) HeaderText="Cod. Cliente" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                 <GridColumn Field=@nameof(vSolicitudes.DES_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                 <GridColumn Field=@nameof(vSolicitudes.Cuit) HeaderText="Cuit" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(vSolicitudes.TagId) HeaderText="TagId" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
 
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
@@ -43,7 +43,8 @@
                @bind-Visible="@SpinnerVisiblePresupuesto"></SfSpinner>
     @if (popupFormVisible)
 	{
-        <FormSolicitud Solicitud="@SolicitudSeleccionada" Show="popupFormVisible" OnGuardar="@(async(s)=> await Guardar(s))"></FormSolicitud> 
+        <FormSolicitud @ref="refFormSolicitud" Solicitud="@SolicitudSeleccionada" Show="popupFormVisible" OnCerrar="OnCerraDialog"
+                       OnGuardar="@(async(s)=> await Guardar(s))"></FormSolicitud> 
 	}
     
     

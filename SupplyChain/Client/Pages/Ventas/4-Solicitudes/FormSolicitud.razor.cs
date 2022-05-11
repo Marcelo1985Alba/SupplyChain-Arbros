@@ -22,6 +22,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         [Parameter] public Solicitud Solicitud { get; set; } = new Solicitud();
         [Parameter] public bool Show { get; set; } = false;
         [Parameter] public EventCallback<Solicitud> OnGuardar { get; set; }
+        [Parameter] public EventCallback OnCerrar { get; set; }
 
 
         protected ClientesDialog refClienteDialog;
@@ -122,7 +123,15 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             await OnGuardar.InvokeAsync(Solicitud);
         }
 
+        public async Task Hide()
+        {
+            Show = false;
+        }
 
+        protected async Task OnCerrarDialog()
+        {
+            await OnCerrar.InvokeAsync();
+        }
         
     }
 }

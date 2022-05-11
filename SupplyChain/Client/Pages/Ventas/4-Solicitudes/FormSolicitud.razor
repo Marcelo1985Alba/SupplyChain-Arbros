@@ -5,6 +5,7 @@
 @inherits FormSolicitudBase
 
 <SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="380px" ShowCloseIcon="true">
+    <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
     <DialogTemplates>
         <Header>
             @if (Solicitud.Id == 0)
@@ -13,7 +14,7 @@
             }
             else
             {
-                <strong>Detalle Solicitud:&nbsp;&nbsp;@Solicitud.Id</strong>
+        <strong>Detalle Solicitud:&nbsp;&nbsp;@Solicitud.Id&nbsp;-&nbsp;(@Solicitud.Producto)&nbsp;@Solicitud.Des_Prod</strong>
             }
         </Header>
         <Content>

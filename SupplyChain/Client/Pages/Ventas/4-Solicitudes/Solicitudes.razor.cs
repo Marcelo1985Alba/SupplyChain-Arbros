@@ -25,6 +25,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         protected SfGrid<vSolicitudes> refGrid;
         protected SfSpinner refSpinner;
         protected SfToast ToastObj;
+        protected FormSolicitud refFormSolicitud;
         protected Solicitud SolicitudSeleccionada = new();
         protected List<vSolicitudes> Solicitudes = new();
         
@@ -171,16 +172,21 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                     sol.DES_CLI = solicitud.Des_Cli;
                     sol.Cuit = solicitud.Cuit;
                 }
-
+                
                 await refGrid.RefreshHeaderAsync();
                 refGrid.Refresh();
                 await refGrid.RefreshColumnsAsync();
-
             }
             else
             {
                 await ToastMensajeError();
             }
+        }
+
+        protected void OnCerraDialog()
+        {
+            popupFormVisible = false;
+            refFormSolicitud?.Hide();
         }
 
 
@@ -198,7 +204,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         }
         private async Task ToastMensajeError()
         {
-            await this.ToastObj.Show(new ToastModel
+            await ToastObj.Show(new ToastModel
             {
                 Title = "Error!",
                 Content = "Ocurrio un Error.",
