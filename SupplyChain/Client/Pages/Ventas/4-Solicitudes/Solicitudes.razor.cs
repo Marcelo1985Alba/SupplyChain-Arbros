@@ -59,7 +59,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             }
             else
             {
-                Solicitudes = response.Response;
+                Solicitudes = response.Response.OrderBy(s=> s.Id).ToList();
             }
         }
 
@@ -114,25 +114,11 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                 SolicitudSeleccionada.Fecha = args.Data.Fecha;
                 SolicitudSeleccionada.TagId = args.Data.TagId;
                 SolicitudSeleccionada.Producto = args.Data.Producto;
+                SolicitudSeleccionada.Des_Prod = args.Data.DES_PROD;
                 SolicitudSeleccionada.Cantidad = args.Data.Cantidad;
                 SolicitudSeleccionada.CG_CLI = args.Data.CG_CLI;
                 SolicitudSeleccionada.Cuit = args.Data.Cuit;
                 SolicitudSeleccionada.Des_Cli = args.Data.DES_CLI;
-            }
-
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
-            {
-                var solicitud = new Solicitud()
-                {
-                    Id = args.Data.Id,
-                    Fecha = args.Data.Fecha,
-                    TagId = args.Data.TagId,
-                    Producto = args.Data.Producto,
-                    Cantidad = args.Data.Cantidad,
-                    CG_CLI = args.Data.CG_CLI,
-                    Cuit = args.Data.Cuit
-                };
-
             }
         }
 
@@ -172,8 +158,24 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                     };
 
                     Solicitudes.Add(nuevaSol);
+                    
                 }
-                
+                else
+                {
+                    //actualizar datos sin ir a la base de datos
+                    var sol =  Solicitudes.Where(s => s.Id == solicitud.Id).FirstOrDefault();
+                    sol.Producto = solicitud.Producto;
+                    sol.DES_PROD = solicitud.Des_Prod;
+                    sol.Cantidad = solicitud.Cantidad;
+                    sol.CG_CLI = solicitud.CG_CLI;
+                    sol.DES_CLI = solicitud.Des_Cli;
+                    sol.Cuit = solicitud.Cuit;
+                }
+
+                await refGrid.RefreshHeaderAsync();
+                refGrid.Refresh();
+                await refGrid.RefreshColumnsAsync();
+
             }
             else
             {

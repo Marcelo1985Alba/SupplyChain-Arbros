@@ -76,7 +76,7 @@ namespace SupplyChain.Server.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(solicitud);
         }
 
         // POST: api/Compras

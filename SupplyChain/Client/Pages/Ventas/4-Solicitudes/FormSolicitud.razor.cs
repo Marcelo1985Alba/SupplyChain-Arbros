@@ -16,6 +16,9 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
     public class FormSolicitudBase : ComponentBase
     {
         [Inject] public SolicitudService SolicitudService { get; set; }
+        /// <summary>
+        /// objecto modificado el cual tambien obtiene la id nueva en caso de agregar un nuevo
+        /// </summary>
         [Parameter] public Solicitud Solicitud { get; set; } = new Solicitud();
         [Parameter] public bool Show { get; set; } = false;
         [Parameter] public EventCallback<Solicitud> OnGuardar { get; set; }
@@ -85,7 +88,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             {
                 return false;
             }
-
+            Solicitud = response.Response;
             return true;
         }
 
@@ -97,6 +100,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                 return false;
             }
 
+            Solicitud = solicitud;
             return true;
         }
 

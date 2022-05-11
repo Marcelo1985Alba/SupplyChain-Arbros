@@ -11,6 +11,9 @@ using System.Timers;
 
 namespace SupplyChain.Client.HelperService
 {
+    /// <summary>
+    /// Servicio que admininstra las solicitudes
+    /// </summary>
     public class SolicitudService : BaseService<Solicitud, int>
     {
         private const string API = "api/Solicitudes";

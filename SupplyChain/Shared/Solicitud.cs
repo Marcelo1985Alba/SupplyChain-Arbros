@@ -13,7 +13,7 @@ namespace SupplyChain.Shared
     {
         public DateTime Fecha { get; set; } = DateTime.Now;
         [Required(ErrorMessage ="El Producto es requerido")]
-        [StringLength(maximumLength: 15, MinimumLength = 15)]
+        [StringLength(maximumLength:15, MinimumLength =3, ErrorMessage ="El producto debe tener entre 3 y 15 digitos")]
         public string Producto { get; set; }
         [Range(minimum:1, maximum:9999999, ErrorMessage ="El Cliente es requerido")]
         public int CG_CLI { get; set; } = 0;
