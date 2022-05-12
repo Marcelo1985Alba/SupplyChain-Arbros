@@ -60,9 +60,25 @@
         AllowGrouping="true" Height="100%" Width="100%"
         AllowSorting="true" AllowPaging="true" AllowFiltering="true">
     <GridGroupSettings EnableLazyLoading="true"></GridGroupSettings>
-    <GridPageSettings PageCount="20" PageSize="5" PageSizes="true"></GridPageSettings>
+    <GridPageSettings PageCount="20" PageSize="10" PageSizes="true"></GridPageSettings>
+    <GridAggregates>
+        <GridAggregate>
+            <GridAggregateColumns>
+                <GridAggregateColumn Field=@nameof(MovimientoStockSP.EntradasSeg) Type="AggregateType.Sum" Format="N2">
+                    <FooterTemplate>
+                        @{
+                            var aggregate = (context as AggregateTemplateContext);
+                            <div>
+                                <p>Sum: @aggregate.Sum</p>
+                            </div>
+                        }
+                    </FooterTemplate>
+                </GridAggregateColumn>
+            </GridAggregateColumns>
+        </GridAggregate>
+    </GridAggregates>
     <GridColumns>
-        <GridColumn Field=@nameof(MovimientoStockSP.Concepto) HeaderText="Concepto" TextAlign="TextAlign.Left" Width="150px">
+        <GridColumn Field=@nameof(MovimientoStockSP.Concepto) HeaderText="Concepto" TextAlign="TextAlign.Left" Width="250px">
             <Template>
                 @{
                     var ms = context as MovimientoStockSP;
@@ -86,8 +102,10 @@
         <GridColumn Field=@nameof(MovimientoStockSP.Entradas) HeaderText="Entredas" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Salidas) HeaderText="Salidas" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Saldo) HeaderText="Saldo" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-        <GridColumn Field=@nameof(MovimientoStockSP.UnidComer) HeaderText="Unid. Comer." TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-        <GridColumn Field=@nameof(MovimientoStockSP.UnidMed) HeaderText="Unid. Stock" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.UnidMed) HeaderText="Unid. Stock" TextAlign="TextAlign.Left" Width="160px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.EntradasSeg) HeaderText="Entredas Comer." TextAlign="TextAlign.Left" Width="190px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.SalidasSeg) HeaderText="Salidas Comer." TextAlign="TextAlign.Left" Width="190px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.UnidComer) HeaderText="Unid. Comer." TextAlign="TextAlign.Left" Width="160px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Despacho) HeaderText="Despacho" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Serie) HeaderText="Serie" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Lote) HeaderText="Lote" TextAlign="TextAlign.Left" Width="140px"></GridColumn>

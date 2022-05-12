@@ -26,6 +26,8 @@ namespace SupplyChain.Shared
 		public string Tipo { get; set; }
 		public decimal Entradas { get; set; }
 		public decimal Salidas { get; set; }
+		public decimal EntradasSeg { get; set; }
+		public decimal SalidasSeg { get; set; }
 		public decimal Saldo { get; set; }
 		public string Concepto { get; set; }
 		public decimal Vale { get; set; }
