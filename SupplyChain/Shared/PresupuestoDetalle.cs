@@ -21,6 +21,8 @@ namespace SupplyChain.Shared
         public decimal DESCUENTO { get; set; }
         public Presupuesto Presupuesto { get; set; }
 
+        [NotMapped]
+        public string  DES_ART { get; set; }
 
     }
 }

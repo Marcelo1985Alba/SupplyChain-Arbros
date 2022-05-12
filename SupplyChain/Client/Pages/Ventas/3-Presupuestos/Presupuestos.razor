@@ -39,8 +39,8 @@
                @bind-Visible="@SpinnerVisiblePresupuesto"></SfSpinner>
     @if (popupFormVisible)
     {
-        @*<FormSolicitud @ref="refFormSolicitud" Solicitud="@PresupuestoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
-            OnGuardar="@(async(s)=> await Guardar(s))"></FormSolicitud>*@
+        <FormPresupuesto @ref="refFormPresupuesto" Presupuesto="@PresupuestoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
+            OnGuardar="@(async(s)=> await Guardar(s))"></FormPresupuesto>
     }
 
 

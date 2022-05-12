@@ -34,6 +34,11 @@ namespace SupplyChain.Shared
         [NotMapped]
         public string DES_CLI { get; set; }
 
+        [NotMapped]
+        public bool ESNUEVO { get; set; }
+
+        [NotMapped]
+        public bool GUARDADO { get; set; }
         public virtual ICollection<PresupuestoDetalle> Items { get; set; }
     }
 }

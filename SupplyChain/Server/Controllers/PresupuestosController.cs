@@ -20,7 +20,7 @@ namespace SupplyChain.Server.Controllers
         private readonly GeneraRepository _generaRepository;
 
         public PresupuestosController(PresupuestoAnteriorRepository presupuestoAnteriorRepository, 
-            PresupuestoRepository presupuestoRepository,
+            PresupuestoRepository presupuestoRepository, 
             GeneraRepository generaRepository)
         {
             _presupuestoAnteriorRepository = presupuestoAnteriorRepository;
@@ -44,8 +44,17 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("{id}")]
         public async Task<Presupuesto> GetPresupuesto(int id)
         {
-            return await _presupuestoRepository.Obtener(p=> p.Id == id).Include(p=> p.Items)
+            var presup = await _presupuestoRepository.Obtener(p => p.Id == id).Include(p => p.Items)
                 .FirstOrDefaultAsync();
+
+            //TODO: OBTENER DESCRIPCION
+            //foreach (var item in presup.Items)
+            //{
+            //    item.DES_ART = 
+            //}
+
+
+            return presup;
         }
 
         // POST api/<PresupuestosController>

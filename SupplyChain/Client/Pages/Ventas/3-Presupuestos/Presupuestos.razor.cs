@@ -38,6 +38,8 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             "ExcelExport"
         };
 
+        protected List<string> Monedas = new() { "PESOS", "DOLARES" };
+
         protected PresupuestoAnterior presupuesto = new();
         protected async override Task OnInitializedAsync()
         {
@@ -91,8 +93,6 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
 
 
-
-
         protected async Task OnActionBeginHandler(ActionEventArgs<vPresupuestos> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
@@ -106,6 +106,16 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
+                var response = await PresupuestoService.GetById(args.Data.Id);
+                if (response.Error)
+                {
+                    await ToastMensajeError();
+                }
+                else
+                {
+                    PresupuestoSeleccionado = response.Response;
+                    PresupuestoSeleccionado.DES_CLI = args.Data.DES_CLI;
+                }
                 //PresupuestoSeleccionado.Id = args.Data.Id;
                 //PresupuestoSeleccionado.Fecha = args.Data.Fecha;
                 //PresupuestoSeleccionado.TagId = args.Data.TagId;
@@ -131,27 +141,27 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         }
 
-        protected async Task Guardar(Solicitud solicitud)
+        protected async Task Guardar(Presupuesto solicitud)
         {
-            if (solicitud.Guardado)
+            if (solicitud.GUARDADO)
             {
                 await ToastMensajeExito();
                 popupFormVisible = false;
-                if (solicitud.EsNuevo)
+                if (solicitud.ESNUEVO)
                 {
-                    var nuevaSol = new vSolicitudes()
-                    {
-                        Id = solicitud.Id,
-                        TagId = solicitud.TagId,
-                        Fecha = solicitud.Fecha,
-                        Cantidad = solicitud.Cantidad,
-                        CG_CLI = solicitud.CG_CLI,
-                        Cuit = solicitud.Cuit,
-                        DES_CLI = solicitud.Des_Cli,
-                        DES_PROD = solicitud.Des_Prod,
-                        Producto = solicitud.Producto,
-                        TienePresupuesto = solicitud.TienePresupuesto
-                    };
+                    //var nuevaSol = new vSolicitudes()
+                    //{
+                    //    Id = solicitud.Id,
+                    //    TagId = solicitud.TagId,
+                    //    Fecha = solicitud.Fecha,
+                    //    Cantidad = solicitud.Cantidad,
+                    //    CG_CLI = solicitud.CG_CLI,
+                    //    Cuit = solicitud.Cuit,
+                    //    DES_CLI = solicitud.Des_Cli,
+                    //    DES_PROD = solicitud.Des_Prod,
+                    //    Producto = solicitud.Producto,
+                    //    TienePresupuesto = solicitud.TienePresupuesto
+                    //};
 
                     //Presupuestos.Add(nuevaSol);
 

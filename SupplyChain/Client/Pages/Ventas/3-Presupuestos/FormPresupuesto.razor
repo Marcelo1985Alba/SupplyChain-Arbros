@@ -1,5 +1,112 @@
-﻿<h3>FormPresupuesto</h3>
+﻿@using Syncfusion.Blazor.Buttons
+@using SupplyChain.Client.Shared.BuscadorCliente
+@using SupplyChain.Client.Shared.BuscadorProducto
 
-@code {
+@inherits FormPresupuestoBase
 
-}
+<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="580px" ShowCloseIcon="true">
+    <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
+    <DialogTemplates>
+        <Header>
+            @if (Presupuesto.Id == 0)
+            {
+                <strong>Nueva Solicitud</strong>
+            }
+            else
+            {
+                <strong>Presupuesto:&nbsp;&nbsp;@Presupuesto.Id&nbsp;-&nbsp;(@Presupuesto.CG_CLI)&nbsp;@Presupuesto.DES_CLI</strong>
+            }
+        </Header>
+        <Content>
+            <EditForm Model="@Presupuesto" OnValidSubmit="@(async()=> await Guardar())">
+                <DataAnnotationsValidator />
+                <div class="form-row">
+                    <div class="form-group col-md-1">
+                        <label class="">Id:</label>
+                        <SfNumericTextBox ID="SolicitudId" @bind-Value="@(Presupuesto.Id)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="">Moneda:</label>
+                        <Syncfusion.Blazor.DropDowns.SfDropDownList TValue="string" TItem="string" DataSource="Monedas" 
+                                                                    @bind-Value="Presupuesto.MONEDA" ></Syncfusion.Blazor.DropDowns.SfDropDownList>
+                    </div>
+                    @*<div class="form-group col-md-5">
+                        <label class="">Descripcion Producto:</label>
+                        <SfTextBox CssClass="customClass" ID="DES_Prod" @bind-Value="@(Presupuesto.Des_Prod)" Readonly="true"></SfTextBox>
+                    </div>*@
+                    <div class="form-group col-md-1 mt-4">
+                        <SfButton IconCss="fa fa-search" CssClass="e-round" OnClick="@(async ()=> await BuscarProductos())"
+                                  HtmlAttributes="@HtmlAttribute"></SfButton>
+                    </div>
+                    @*<div class="form-group col-md-1">
+                <label class="">Cantidad:</label>
+                <SfNumericTextBox ID="CANT" @bind-Value="@(Presupuesto.Cantidad)" ShowSpinButton="false" Readonly="false"></SfNumericTextBox>
+            </div>*@
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label class="">Cod. Cliente:</label>
+                        <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Presupuesto.CG_CLI)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
+                    </div>
+                    <div class="form-group col-md-7">
+                        <label class="">Cliente:</label>
+                        <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Presupuesto.DES_CLI)" Readonly="true"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-1 mt-4">
+                        <SfButton IconCss="fa fa-search" CssClass="e-round" OnClick="@(async ()=> await BuscarClientes())"
+                                  HtmlAttributes="@HtmlAttribute"></SfButton>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="">Direccion de Entrega:</label>
+                        <Syncfusion.Blazor.DropDowns.SfDropDownList TValue="string" TItem="string" DataSource="Monedas"
+                                                                    @bind-Value="Presupuesto.MONEDA"></Syncfusion.Blazor.DropDowns.SfDropDownList>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <SfToast ID="toast_default" @ref="ToastObj">
+                            <ToastPosition X="Center" Y="Top"></ToastPosition>
+                        </SfToast>
+
+                        <SfGrid AllowReordering="true" AllowResizing="true"
+                                @ref="refGridItems" DataSource="@Presupuesto.Items" Width="100%" ID="grdItemsPresup"
+                                AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
+                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                            <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
+                            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true"
+                                              Mode="@Syncfusion.Blazor.Grids.EditMode.Normal">
+                            </GridEditSettings>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(PresupuestoDetalle.CG_ART) HeaderText="Producto" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                                <GridColumn Field=@nameof(PresupuestoDetalle.DES_ART) HeaderText="Descripcion" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT_X_CANTIDAD) HeaderText="Precio Unit." TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+
+                            </GridColumns>
+                            @*<SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>*@
+                        </SfGrid>
+                    </div>
+
+
+                </div>
+                <SfSpinner @ref="@refSpinnerCli" Size="50" @bind-Visible="@SpinnerVisible"
+                           Label="Buscando ..." Type="SpinnerType.Fabric">
+                </SfSpinner>
+
+                <ClientesDialog @ref="refClienteDialog"
+                                OnObjectSelected="@ClienteExternoSelected" PopupBuscadorVisible="@popupBuscadorVisibleCliente"></ClientesDialog>
+
+
+                <ProductoDialog @ref="refProductoDialog"
+                                OnObjectSelected="@ProductoSelected" PopupBuscadorVisible="@popupBuscadorVisibleProducto"></ProductoDialog>
+
+                <ValidationSummary />
+                <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit"></SfButton>
+                <SfButton Content="Cancel" IconCss="fa fa-window-close-o"></SfButton>
+            </EditForm>
+
+            
+
+        </Content>
+    </DialogTemplates>
+</SfDialog>
