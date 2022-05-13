@@ -15,7 +15,7 @@ namespace SupplyChain.Shared
         [Required(ErrorMessage ="El Producto es requerido")]
         [StringLength(maximumLength:15, MinimumLength =3, ErrorMessage ="El producto debe tener entre 3 y 15 digitos")]
         public string Producto { get; set; }
-        [Range(minimum:1, maximum:9999999, ErrorMessage ="El Cliente es requerido")]
+        //[Range(minimum:1, maximum:9999999, ErrorMessage ="El Cliente es requerido")]
         public int CG_CLI { get; set; } = 0;
         public int TagId { get; set; } = 0;
         public string Cuit { get; set; } = "";
@@ -23,6 +23,23 @@ namespace SupplyChain.Shared
         [Range(minimum: 1, maximum: 9999999, ErrorMessage = "La Cantidad es requerida")]
         public int Cantidad { get; set; }
         public bool TienePresupuesto { get; set; }
+
+        public string Medidas { get; set; }
+        public string Orificio { get; set; }
+        public string SerieEntrada { get; set; }
+        public string TipoEntrada { get; set; }
+        public string SerieSalida { get; set; }
+        public string TipoSalida { get; set; }
+        public string Accesorios { get; set; }
+        public string Asiento { get; set; }
+        public string Bonete { get; set; }
+        public string Cuerpo { get; set; }
+        public string Resorte { get; set; }
+        public string Disco { get; set; }
+        public string Tobera
+        {
+            get; set;
+        }
 
         [NotMapped]
         public string Des_Cli { get; set; } = "";
