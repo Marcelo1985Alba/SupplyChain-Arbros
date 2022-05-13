@@ -54,22 +54,34 @@
     </div>
 </div>
 <hr />
-<SfGrid DataSource="@DataSource" AllowReordering="true" ShowColumnChooser="true"
+<SfGrid ID="GridMovStock" @ref="Grid" DataSource="@DataSource" AllowReordering="true" ShowColumnChooser="true"
         ShowColumnMenu="true" AllowResizing="true" GridLines="GridLine.Both"
-        RowHeight="20" AllowExcelExport="true"
+        RowHeight="20" AllowExcelExport="true" Toolbar="@Toolbaritems"
         AllowGrouping="true" Height="100%" Width="100%"
         AllowSorting="true" AllowPaging="true" AllowFiltering="true">
     <GridGroupSettings EnableLazyLoading="true"></GridGroupSettings>
     <GridPageSettings PageCount="20" PageSize="10" PageSizes="true"></GridPageSettings>
+    <GridEvents OnToolbarClick="@(async(a)=> await ClickHandler(a))"
+                TValue="MovimientoStockSP"></GridEvents>
     <GridAggregates>
         <GridAggregate>
             <GridAggregateColumns>
-                <GridAggregateColumn Field=@nameof(MovimientoStockSP.EntradasSeg) Type="AggregateType.Sum" Format="N2">
+                <GridAggregateColumn Field=@nameof(MovimientoStockSP.EntradasSeg) Type="AggregateType.Sum" Format="N4">
                     <FooterTemplate>
                         @{
                             var aggregate = (context as AggregateTemplateContext);
                             <div>
-                                <p>Sum: @aggregate.Sum</p>
+                                <p style="font-weight:bold">Sum: @aggregate.Sum</p>
+                            </div>
+                        }
+                    </FooterTemplate>
+                </GridAggregateColumn>
+                <GridAggregateColumn Field=@nameof(MovimientoStockSP.Entradas) Type="AggregateType.Sum" Format="N4">
+                    <FooterTemplate>
+                        @{
+                            var aggregate = (context as AggregateTemplateContext);
+                            <div>
+                                <p style="font-weight:bold">Sum: @aggregate.Sum</p>
                             </div>
                         }
                     </FooterTemplate>
@@ -83,6 +95,12 @@
                 @{
                     var ms = context as MovimientoStockSP;
                     var classText = "label-megna";
+                    if (ms.Tipoo == 28)
+                        classText = "label-purple";
+                    if (ms.Tipoo == 27)
+                        classText = "label-success";
+                    if (ms.Tipoo == 9)
+                        classText = "label-warning";
                     if (ms.Tipoo == 21)
                         classText = "label-info";
 
@@ -99,7 +117,8 @@
         <GridColumn Field=@nameof(MovimientoStockSP.Vale) HeaderText="Vale" Format="N0" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Codigo) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Descripcion) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
-        <GridColumn Field=@nameof(MovimientoStockSP.Entradas) HeaderText="Entredas" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Tipo) HeaderText="Tipo Insumo" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Entradas) HeaderText="Entredas" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Salidas) HeaderText="Salidas" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Saldo) HeaderText="Saldo" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.UnidMed) HeaderText="Unid. Stock" TextAlign="TextAlign.Left" Width="160px"></GridColumn>
@@ -110,9 +129,8 @@
         <GridColumn Field=@nameof(MovimientoStockSP.Serie) HeaderText="Serie" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Lote) HeaderText="Lote" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
         <GridColumn Field=@nameof(MovimientoStockSP.Deposito) HeaderText="Deposito" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
-
-        <GridColumn Field=@nameof(MovimientoStockSP.Cliente) HeaderText="Cliente" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
-        <GridColumn Field=@nameof(MovimientoStockSP.Cliente) HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Proveedor) HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="240px"></GridColumn>
+        <GridColumn Field=@nameof(MovimientoStockSP.Cliente) HeaderText="Cliente" TextAlign="TextAlign.Left" Width="240px"></GridColumn>
     </GridColumns>
-    <SfSpinner @bind-Visible="@spinnerVisible" Label="Cargando..." Type="SpinnerType.Bootstrap" Size="50"></SfSpinner>
+    <SfSpinner @bind-Visible="@spinnerVisible" Label="Cargando..." Type="SpinnerType.Fabric" Size="50"></SfSpinner>
 </SfGrid>

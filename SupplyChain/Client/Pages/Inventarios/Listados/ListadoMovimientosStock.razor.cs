@@ -2,6 +2,8 @@
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
+using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Navigations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,13 +17,19 @@ namespace SupplyChain.Client.Pages.Inventarios
     {
         [Inject] public HttpClient Http { get; set; }
         [CascadingParameter] public MainLayout ML { get; set; }
+        protected SfGrid<MovimientoStockSP> Grid;
         protected List<MovimientoStockSP> DataSource;
         protected bool spinnerVisible = false;
         protected DateTime desde = DateTime.Now.AddMonths(-1);
         protected DateTime hasta = DateTime.Now;
         protected FilterMovimientosStock filter = new();
 
-
+        protected List<Object> Toolbaritems = new List<Object>(){
+        "Search",
+        //new ItemModel { Text = "Certificado", TooltipText = "Certificado", PrefixIcon = "e-copy", Id = "Certificado" },
+        "ExcelExport",
+        //new ItemModel { Text = "Search", TooltipText = "OPDS", Id = "Search" }
+        };
 
         protected async override Task OnInitializedAsync()
         {
@@ -70,5 +78,16 @@ namespace SupplyChain.Client.Pages.Inventarios
 
             DataSource = new();
         }
+
+        protected async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+        {
+            if (args.Item.Id == "GridMovStock_excelexport")// id grid + excel
+            {
+                ExcelExportProperties excelExportProperties = new();
+                excelExportProperties.IncludeTemplateColumn = true;
+                await this.Grid.ExcelExport(excelExportProperties);
+            }
+        }
+
     }
 }
