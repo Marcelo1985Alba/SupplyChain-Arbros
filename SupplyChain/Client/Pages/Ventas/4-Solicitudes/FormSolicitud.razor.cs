@@ -24,7 +24,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         [Parameter] public EventCallback<Solicitud> OnGuardar { get; set; }
         [Parameter] public EventCallback OnCerrar { get; set; }
 
-
+        [Parameter] public string HeightDialog { get; set; } = "380px";
         protected ClientesDialog refClienteDialog;
         protected SfSpinner refSpinnerCli;
         protected bool popupBuscadorVisibleCliente { get; set; } = false;

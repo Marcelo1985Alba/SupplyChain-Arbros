@@ -28,7 +28,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         protected FormSolicitud refFormSolicitud;
         protected Solicitud SolicitudSeleccionada = new();
         protected List<vSolicitudes> Solicitudes = new();
-        
+        protected string heightPopup = "400px";
         protected bool SpinnerVisible = true;
         protected bool SpinnerVisiblePresupuesto = false;
 
@@ -38,8 +38,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             "Add",
             "Edit",
             "Delete",
-            "Print",
-            //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
+            new ItemModel { Text = "Copia", TooltipText = "Copiar un item para generar una nueva solicitud", PrefixIcon = "e-copy", Id = "Copy" },
             "ExcelExport"
         };
 
@@ -64,39 +63,25 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             }
         }
 
-
-        
-
-        protected async Task GeneraPresupuesto()
+        private async Task GetSolicitudFromDB(int id, vSolicitudes vSolicitud)
         {
-            SpinnerVisiblePresupuesto = true;
-            //Datos de la solicitud
-            presupuesto.CG_ART = SolicitudSeleccionada.Producto;
-            presupuesto.CANTENT = SolicitudSeleccionada.Cantidad;
-            presupuesto.CG_CLI = SolicitudSeleccionada.CG_CLI;
-            presupuesto.DES_CLI = SolicitudSeleccionada.Des_Cli;
-
-            var response = await Http.PostAsJsonAsync("api/Presupuestos", presupuesto);
-            if (response.IsSuccessStatusCode)
+            var response = await SolicitudService.GetById(id);
+            if (response.Error)
             {
-                SpinnerVisiblePresupuesto = false;
-                SolicitudSeleccionada.TienePresupuesto = true;
-                await refGrid.EndEditAsync();
-                //await ToastMensajeExito();
+                await ToastMensajeError();
             }
             else
             {
-                var error = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(error);
-                SpinnerVisiblePresupuesto = false;
-                //await ToastMensajeError();
+                SolicitudSeleccionada = response.Response;
+                SolicitudSeleccionada.Cuit = vSolicitud.Cuit;
+                SolicitudSeleccionada.Des_Cli = vSolicitud.DES_CLI;
+                SolicitudSeleccionada.Des_Prod = vSolicitud.DES_PROD;
+                if (!SolicitudSeleccionada.Producto.StartsWith("00"))
+                {
+                    heightPopup = "600px";
+                }
             }
-            
         }
-
-        
-
-        
 
         protected async Task OnActionBeginHandler(ActionEventArgs<vSolicitudes> args)
         {
@@ -107,19 +92,13 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                 args.PreventRender = false;
                 popupFormVisible = true;
                 SolicitudSeleccionada = new();
+                heightPopup = "600px";
             }
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                SolicitudSeleccionada.Id = args.Data.Id;
-                SolicitudSeleccionada.Fecha = args.Data.Fecha;
-                SolicitudSeleccionada.TagId = args.Data.TagId;
-                SolicitudSeleccionada.Producto = args.Data.Producto;
-                SolicitudSeleccionada.Des_Prod = args.Data.DES_PROD;
-                SolicitudSeleccionada.Cantidad = args.Data.Cantidad;
-                SolicitudSeleccionada.CG_CLI = args.Data.CG_CLI;
-                SolicitudSeleccionada.Cuit = args.Data.Cuit;
-                SolicitudSeleccionada.Des_Cli = args.Data.DES_CLI;
+                //TRAER DATOS QUE NO ESTAN ENLA GRILLA
+                await GetSolicitudFromDB(args.Data.Id, args.Data);
             }
         }
 
@@ -134,6 +113,32 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             }
 
             
+        }
+
+        protected async Task OnToolbarHandler(ClickEventArgs args)
+        {
+            if (args.Item.Id == "Copy")
+            {
+                await CopiarSolicitud();
+            }
+            else
+            {
+                if (args.Item.Id == "grdSol_excelexport")
+                {
+                    await refGrid.ExportToExcelAsync();
+                }
+            }
+        }
+
+        private async Task CopiarSolicitud()
+        {
+            if (refGrid.SelectedRecords.Count > 0)
+            {
+                var vSoli = refGrid.SelectedRecords[0];
+                await GetSolicitudFromDB(vSoli.Id, vSoli);
+                SolicitudSeleccionada.Id = 0;
+                popupFormVisible = true;
+            }
         }
 
         protected async Task Guardar(Solicitud solicitud)

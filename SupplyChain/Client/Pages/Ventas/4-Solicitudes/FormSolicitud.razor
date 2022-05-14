@@ -4,17 +4,17 @@
 
 @inherits FormSolicitudBase
 
-<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="380px" ShowCloseIcon="true">
+<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="@HeightDialog" ShowCloseIcon="true">
     <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
     <DialogTemplates>
         <Header>
             @if (Solicitud.Id == 0)
             {
-                <strong>Nueva Solicitud</strong>
+                <p>Nueva Solicitud</p>
             }
             else
             {
-        <strong>Detalle Solicitud:&nbsp;&nbsp;@Solicitud.Id&nbsp;-&nbsp;(@Solicitud.Producto)&nbsp;@Solicitud.Des_Prod</strong>
+                <p>Detalle Solicitud:&nbsp;&nbsp;@Solicitud.Id&nbsp;-&nbsp;(@Solicitud.Producto)&nbsp;@Solicitud.Des_Prod</p>
             }
         </Header>
         <Content>
@@ -45,7 +45,54 @@
                         <label class="">Cantidad:</label>
                         <SfNumericTextBox ID="CANT" @bind-Value="@(Solicitud.Cantidad)" ShowSpinButton="false" Readonly="false"></SfNumericTextBox>
                     </div>
+
+
+
                 </div>
+
+                @if (!Solicitud.Producto.StartsWith("00"))
+                {
+                    
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label class="">Medida:</label>
+                    <SfTextBox ID="Medida" @bind-Value="@(Solicitud.Medidas)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="">Orificio:</label>
+                    <SfTextBox ID="Orificio" @bind-Value="@(Solicitud.Orificio)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="">Serie Entrada:</label>
+                    <SfTextBox ID="SerieEntrada" @bind-Value="@(Solicitud.SerieEntrada)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="">Tipo Entrada:</label>
+                    <SfTextBox ID="TipoEntrada" @bind-Value="@(Solicitud.TipoEntrada)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="">Serie Salida:</label>
+                    <SfTextBox ID="SerieSalida" @bind-Value="@(Solicitud.SerieSalida)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="">Tipo Salida:</label>
+                    <SfTextBox ID="TipoSalida" @bind-Value="@(Solicitud.TipoSalida)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-9">
+                    <label class="">Accesorios:</label>
+                    <SfTextBox ID="Accesorios" @bind-Value="@(Solicitud.Accesorios)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="">Asiento:</label>
+                    <SfTextBox ID="Asiento" @bind-Value="@(Solicitud.Asiento)"></SfTextBox>
+                </div>
+            </div>
+
+
+                    
+                }
+
+
                 <div class="form-row">
                     <div class="form-group col-md-2">
                         <label class="">Cuit:</label>

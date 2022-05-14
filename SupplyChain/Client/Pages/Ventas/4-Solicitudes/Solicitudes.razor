@@ -13,12 +13,14 @@
 
         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
                 @ref="refGrid" DataSource="@Solicitudes" Width="100%"
-                AllowExcelExport="true" AllowGrouping="true" ID="grdProd"
+                AllowExcelExport="true" AllowGrouping="true" ID="grdSol"
                 AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
-            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler" TValue="vSolicitudes"></GridEvents>
+            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"
+                        OnToolbarClick="OnToolbarHandler"
+                        TValue="vSolicitudes"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true"
                               Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
@@ -44,7 +46,7 @@
     @if (popupFormVisible)
 	{
         <FormSolicitud @ref="refFormSolicitud" Solicitud="@SolicitudSeleccionada" Show="popupFormVisible" OnCerrar="OnCerraDialog"
-                       OnGuardar="@(async(s)=> await Guardar(s))"></FormSolicitud> 
+                       OnGuardar="@(async(s)=> await Guardar(s))" HeightDialog="@heightPopup"></FormSolicitud> 
 	}
     
     
