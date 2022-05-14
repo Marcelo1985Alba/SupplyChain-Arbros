@@ -39,6 +39,6 @@ namespace SupplyChain.Shared
 
         [NotMapped]
         public bool GUARDADO { get; set; }
-        public virtual ICollection<PresupuestoDetalle> Items { get; set; }
+        public virtual List<PresupuestoDetalle> Items { get; set; } = new();
     }
 }

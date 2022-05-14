@@ -45,7 +45,7 @@ namespace SupplyChain.Server.Repositorios
         {
             if (string.IsNullOrEmpty(presupuesto.DES_CLI))
             {
-                presupuesto.DES_CLI = (await Db.Cliente.FirstOrDefaultAsync(c => c.CG_CLI == presupuesto.CG_CLI)).DES_CLI;
+                presupuesto.DES_CLI = (await Db.Cliente.FirstOrDefaultAsync(c => c.Id == presupuesto.CG_CLI)).DES_CLI;
             }
 
             if (string.IsNullOrEmpty(presupuesto.DES_ART))

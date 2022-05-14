@@ -53,7 +53,9 @@ namespace SupplyChain.Client
 
             services.AddScoped<ProductoService>();
             services.AddScoped<ClienteService>();
+            services.AddScoped<DireccionEntregaService>();
             services.AddScoped<SolicitudService>();
+            services.AddScoped<PrecioArticuloService>();
             services.AddScoped<PresupuestoService>();
             services.AddScoped<InventarioService>();
             services.AddScoped<PdfService>();

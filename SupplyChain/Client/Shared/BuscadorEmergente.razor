@@ -38,11 +38,11 @@
                                         AllowResizing="true" GridLines="GridLine.Both" RowHeight="20" Height=@HeightGrid
                                         AllowReordering="true" AllowExcelExport="true"
                                         AllowSelection="true" AllowSorting="true" AllowTextWrap="true" EnableHover="true" Width="100%"
-                                        ShowColumnMenu="true" EnableVirtualization="true">
+                                        ShowColumnMenu="true" EnableVirtualization="false">
                                     @*<GridFilterSettings ShowFilterBarStatus="true" Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"
                                         Operators="@(new Operator[] { Operator.Contains })"
                                         Mode="FilterBarMode.Immediate"></GridFilterSettings>*@
-                                    <GridPageSettings PageCount="20" PageSize="20" PageSizes="true" ></GridPageSettings>
+                                    <GridPageSettings PageCount="20" PageSize="10" PageSizes="true" ></GridPageSettings>
                                     <GridSelectionSettings Type="@TipoSeleccion"></GridSelectionSettings>
                                     <GridEvents TValue="TItem" OnLoad="@(async(a)=>await OnLoadGrid(a))"
                                                 OnToolbarClick="@((a)=> ToolbarClick(a))"

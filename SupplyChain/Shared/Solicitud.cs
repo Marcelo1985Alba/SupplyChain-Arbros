@@ -37,14 +37,10 @@ namespace SupplyChain.Shared
         public string Resorte { get; set; } = "";
         public string Disco { get; set; } = "";
         public string Tobera { get; set; } = "";
-
-        [NotMapped]
-        public string Des_Cli { get; set; } = "";
-        [NotMapped]
-        public string Des_Prod { get; set; } = "";
-        [NotMapped]
-        public bool Guardado { get; set; } = false;
-        [NotMapped]
-        public bool EsNuevo { get; set; } = false;
+        [NotMapped] public double Precio { get; set; }
+        [NotMapped] public string Des_Cli { get; set; } = "";
+        [NotMapped] public string Des_Prod { get; set; } = "";
+        [NotMapped] public bool Guardado { get; set; } = false;
+        [NotMapped] public bool EsNuevo { get; set; } = false;
     }
 }

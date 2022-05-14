@@ -40,7 +40,7 @@ namespace SupplyChain
             List<Cliente> lCliente = new List<Cliente>();
             if (_context.Cliente.Any())
             {
-                lCliente = await _context.Cliente.Where(p => p.CG_CLI == CG_CLI).ToListAsync();
+                lCliente = await _context.Cliente.Where(p => p.Id == CG_CLI).ToListAsync();
             }
             if (lCliente == null)
             {

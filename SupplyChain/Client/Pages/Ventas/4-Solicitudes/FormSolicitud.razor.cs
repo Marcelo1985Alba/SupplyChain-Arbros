@@ -78,6 +78,14 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             popupBuscadorVisibleProducto = false;
             Solicitud.Producto = productoSelected.Id;
             Solicitud.Des_Prod = productoSelected.DES_PROD;
+            if (Solicitud.Producto.StartsWith("00"))
+            {
+                HeightDialog = "400px";
+            }
+            else
+            {
+                HeightDialog = "600px";
+            }
             await refSpinnerCli.HideAsync();
         }
 
@@ -126,6 +134,15 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         public async Task Hide()
         {
             Show = false;
+        }
+
+        protected async Task CerrarDialogCliente()
+        {
+            popupBuscadorVisibleCliente = false;
+        }
+        protected async Task CerrarDialogProducto()
+        {
+            popupBuscadorVisibleProducto = false;
         }
 
         protected async Task OnCerrarDialog()

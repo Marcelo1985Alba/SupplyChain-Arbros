@@ -12,7 +12,7 @@ using System.Timers;
 
 namespace SupplyChain.Client.HelperService
 {
-    public class ProductoService : BaseService<Producto, int>
+    public class ProductoService : BaseService<Producto, string>
     {
         private const string API = "api/Prod";
 

@@ -124,12 +124,14 @@
                            Label="Buscando ..." Type="SpinnerType.Fabric">
                 </SfSpinner>
 
-                <ClientesDialog @ref="refClienteDialog"
-                                OnObjectSelected="@ClienteExternoSelected" PopupBuscadorVisible="@popupBuscadorVisibleCliente"></ClientesDialog>
+                <ClientesDialog @ref="refClienteDialog" PopupBuscadorVisible="@popupBuscadorVisibleCliente"
+                                OnObjectSelected="@ClienteExternoSelected"
+                                OnCerrarDialog="CerrarDialogCliente"></ClientesDialog>
 
 
-                <ProductoDialog @ref="refProductoDialog"
-                                OnObjectSelected="@ProductoSelected" PopupBuscadorVisible="@popupBuscadorVisibleProducto"></ProductoDialog>
+                <ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto"
+                                OnObjectSelected="@ProductoSelected" 
+                                OnCerrarDialog="CerrarDialogProducto"></ProductoDialog>
 
                 <ValidationSummary />
                 <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit"></SfButton>

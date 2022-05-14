@@ -109,6 +109,7 @@ namespace SupplyChain
         public DbSet<vSolicitudes> vSolicitudes { get; set; }
         public DbSet<vPresupuestos> vPresupuestos { get; set; }
         public DbSet<PresupuestoAnterior> Presupuestos { get; set; }
+        public DbSet<PrecioArticulo> PrecioArticulos { get; set; }
 
         //MODULO PROYECTOS
         public DbSet<ProyectosGBPI> Proyectos { get; set; }
@@ -186,6 +187,7 @@ namespace SupplyChain
             modelBuilder.Entity<vSolicitudes>().HasNoKey().ToView("vSolicitudes");
             modelBuilder.Entity<ClienteExterno>().HasNoKey().ToView("vClientesItris");
             modelBuilder.Entity<vPresupuestos>().HasNoKey().ToView("vPresupuestos");
+            modelBuilder.Entity<vDireccionesEntrega>().ToView("vDireccionesEntrega_Itris");
         }
     }
 }

@@ -20,5 +20,8 @@ namespace SupplyChain
         public string PAIS { get; set; } = "";
         public string RUBRO { get; set; } = "";
         public string MERCADO { get; set; } = "";
+
+        [NotMapped] 
+        public List<vDireccionesEntrega> DireccionesEntrega { get; set; } = new();
     }
 }

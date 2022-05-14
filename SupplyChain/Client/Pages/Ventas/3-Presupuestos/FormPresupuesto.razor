@@ -1,8 +1,12 @@
 ﻿@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.DropDowns
 @using SupplyChain.Client.Shared.BuscadorCliente
 @using SupplyChain.Client.Shared.BuscadorProducto
+@using SupplyChain.Client.Shared.BuscarSolicitud
 
 @inherits FormPresupuestoBase
+
 
 <SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="580px" ShowCloseIcon="true">
     <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
@@ -10,7 +14,7 @@
         <Header>
             @if (Presupuesto.Id == 0)
             {
-                <strong>Nueva Solicitud</strong>
+                <strong>Nuevo Presupuesto</strong>
             }
             else
             {
@@ -18,6 +22,14 @@
             }
         </Header>
         <Content>
+            <SfToolbar>
+                <ToolbarItems>
+                    <ToolbarItem Id="Solicitudes" Text="Solicitudes" OnClick="BuscarSolicitudes" Align="ItemAlign.Right"></ToolbarItem>
+                    <ToolbarItem Id="Productos" Text="Productos"  OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>
+                    <ToolbarItem Id="Reparaciones" Text="Reparaciones" Align="ItemAlign.Right"></ToolbarItem>
+                    <ToolbarItem Text="Settings" Align="ItemAlign.Right"></ToolbarItem>
+                </ToolbarItems>
+            </SfToolbar>
             <EditForm Model="@Presupuesto" OnValidSubmit="@(async()=> await Guardar())">
                 <DataAnnotationsValidator />
                 <div class="form-row">
@@ -26,29 +38,10 @@
                         <SfNumericTextBox ID="SolicitudId" @bind-Value="@(Presupuesto.Id)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
                     </div>
                     <div class="form-group col-md-2">
-                        <label class="">Moneda:</label>
-                        <Syncfusion.Blazor.DropDowns.SfDropDownList TValue="string" TItem="string" DataSource="Monedas" 
-                                                                    @bind-Value="Presupuesto.MONEDA" ></Syncfusion.Blazor.DropDowns.SfDropDownList>
-                    </div>
-                    @*<div class="form-group col-md-5">
-                        <label class="">Descripcion Producto:</label>
-                        <SfTextBox CssClass="customClass" ID="DES_Prod" @bind-Value="@(Presupuesto.Des_Prod)" Readonly="true"></SfTextBox>
-                    </div>*@
-                    <div class="form-group col-md-1 mt-4">
-                        <SfButton IconCss="fa fa-search" CssClass="e-round" OnClick="@(async ()=> await BuscarProductos())"
-                                  HtmlAttributes="@HtmlAttribute"></SfButton>
-                    </div>
-                    @*<div class="form-group col-md-1">
-                <label class="">Cantidad:</label>
-                <SfNumericTextBox ID="CANT" @bind-Value="@(Presupuesto.Cantidad)" ShowSpinButton="false" Readonly="false"></SfNumericTextBox>
-            </div>*@
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-2">
                         <label class="">Cod. Cliente:</label>
                         <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Presupuesto.CG_CLI)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
                     </div>
-                    <div class="form-group col-md-7">
+                    <div class="form-group col-md-8">
                         <label class="">Cliente:</label>
                         <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Presupuesto.DES_CLI)" Readonly="true"></SfTextBox>
                     </div>
@@ -56,12 +49,23 @@
                         <SfButton IconCss="fa fa-search" CssClass="e-round" OnClick="@(async ()=> await BuscarClientes())"
                                   HtmlAttributes="@HtmlAttribute"></SfButton>
                     </div>
+
+                </div>
+                <div class="form-row">
+
                     <div class="form-group col-md-12">
                         <label class="">Direccion de Entrega:</label>
-                        <Syncfusion.Blazor.DropDowns.SfDropDownList TValue="string" TItem="string" DataSource="Monedas"
-                                                                    @bind-Value="Presupuesto.MONEDA"></Syncfusion.Blazor.DropDowns.SfDropDownList>
+                        <SfDropDownList TValue="string" TItem="string" DataSource="direccionesEntregas" @bind-Value="Presupuesto.DIRENT"></SfDropDownList>
                     </div>
                 </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label class="">Moneda:</label>
+                        <SfDropDownList TValue="string" TItem="string" DataSource="Monedas" @bind-Value="Presupuesto.MONEDA"
+                                        Index="0"></SfDropDownList>
+                    </div>
+                </div>
+                
 
                 <div class="row">
                     <div class="col-12">
@@ -75,12 +79,16 @@
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
                             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true"
-                                              Mode="@Syncfusion.Blazor.Grids.EditMode.Normal">
+                                              Mode="@Syncfusion.Blazor.Grids.EditMode.Batch">
                             </GridEditSettings>
                             <GridColumns>
-                                <GridColumn Field=@nameof(PresupuestoDetalle.CG_ART) HeaderText="Producto" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                <GridColumn Field=@nameof(PresupuestoDetalle.DES_ART) HeaderText="Descripcion" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT_X_CANTIDAD) HeaderText="Precio Unit." TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                                <GridColumn Field=@nameof(PresupuestoDetalle.CG_ART) AllowEditing="false" HeaderText="Producto" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                                <GridColumn Field=@nameof(PresupuestoDetalle.DES_ART) AllowEditing="false" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(PresupuestoDetalle.CANTIDAD) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
+                                <GridColumn Field=@nameof(PresupuestoDetalle.PRECIO_UNIT) AllowEditing="false" HeaderText="Precio Unit." TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                                <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT_X_CANTIDAD) HeaderText="Neto" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                                <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT_X_CANTIDAD) HeaderText="Neto" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                                @*<GridColumn Field=@nameof(PresupuestoDetalle.) HeaderText="Precio Unit." TextAlign="TextAlign.Left" Width="120px"></GridColumn>*@
 
                             </GridColumns>
                             @*<SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>*@
@@ -93,20 +101,29 @@
                            Label="Buscando ..." Type="SpinnerType.Fabric">
                 </SfSpinner>
 
-                <ClientesDialog @ref="refClienteDialog"
-                                OnObjectSelected="@ClienteExternoSelected" PopupBuscadorVisible="@popupBuscadorVisibleCliente"></ClientesDialog>
+                <ClientesDialog @ref="refClienteDialog" PopupBuscadorVisible="@popupBuscadorVisibleCliente"
+                                OnObjectSelected="@ClienteExternoSelected"
+                                OnCerrarDialog="CerrarDialogCliente"></ClientesDialog>
 
 
-                <ProductoDialog @ref="refProductoDialog"
-                                OnObjectSelected="@ProductoSelected" PopupBuscadorVisible="@popupBuscadorVisibleProducto"></ProductoDialog>
+                <ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto"
+                                OnObjectSelected="@ProductoSelected"
+                                OnCerrarDialog="CerrarDialogProducto"></ProductoDialog>
+
+                <SolicitudesDialog @ref="refSolicitudDialog" PopupBuscadorVisible="@popupBuscadorVisibleSolicitud"
+                                   OnObjectSelected="@SolicitudSelected" ConPrecio="true" CompararCliente="true"
+                                   OnCerrarDialog="CerrarDialogSolicitud" Cg_Cli_Comparar="@Presupuesto.CG_CLI"></SolicitudesDialog>
 
                 <ValidationSummary />
                 <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit"></SfButton>
                 <SfButton Content="Cancel" IconCss="fa fa-window-close-o"></SfButton>
             </EditForm>
 
-            
-
         </Content>
     </DialogTemplates>
 </SfDialog>
+<style>
+    .e-toolbar {
+        border: 0px solid rgb(173, 255, 47);
+    }
+</style>

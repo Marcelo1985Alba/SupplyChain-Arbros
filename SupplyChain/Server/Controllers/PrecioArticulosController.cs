@@ -12,23 +12,23 @@ namespace SupplyChain.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SolicitudesController : ControllerBase
+    public class PrecioArticulosController : ControllerBase
     {
-        private readonly SolicitudRepository _solicitudRepository;
+        private readonly PrecioArticulosRepository _precioArticulosRepository;
 
-        public SolicitudesController(SolicitudRepository solicitudRepository)
+        public PrecioArticulosController(PrecioArticulosRepository precioArticulosRepository)
         {
-            _solicitudRepository = solicitudRepository;
+            _precioArticulosRepository = precioArticulosRepository;
         }
 
         // GET: api/Compras
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<vSolicitudes>>> GetSolicitudes()
+        public async Task<ActionResult<IEnumerable<PrecioArticulo>>> Gets()
         {
             //OC ABIERTAS
             try
             {
-                return await _solicitudRepository.ObtenerTodosFromVista();
+                return await _precioArticulosRepository.ObtenerTodos();
             }
             catch (Exception ex)
             {
@@ -38,50 +38,36 @@ namespace SupplyChain.Server.Controllers
 
         // GET: api/Compras/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Solicitud>> GetSolicitud(int id)
+        public async Task<ActionResult<Solicitud>> Get(string id)
         {
-            var solicitud = await _solicitudRepository.ObtenerPorId(id);
+            var precioArt = await _precioArticulosRepository.ObtenerPorId(id);
 
-            if (solicitud == null)
+            if (precioArt == null)
             {
                 return NotFound();
             }
 
-            return Ok(solicitud);
-        }
-
-        // GET: api/Compras/5
-        [HttpGet("GetSolicitudesNoPresupuestadas")]
-        public async Task<ActionResult<Solicitud>> GetSolicitudesNoPresupuestadas()
-        {
-            var solicitud = await _solicitudRepository.Obtener(s=> !s.TienePresupuesto).ToListAsync();
-
-            if (solicitud == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(solicitud);
+            return Ok(precioArt);
         }
 
         // PUT: api/Compras/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompra(int id, Solicitud solicitud)
+        public async Task<IActionResult> Put(string id, PrecioArticulo precioArt)
         {
-            if (id != solicitud.Id)
+            if (id != precioArt.Id)
             {
                 return BadRequest();
             }
 
             try
             {
-                await _solicitudRepository.Actualizar(solicitud);
+                await _precioArticulosRepository.Actualizar(precioArt);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await _solicitudRepository.Existe(id))
+                if (!await _precioArticulosRepository.Existe(id))
                 {
                     return NotFound();
                 }
@@ -91,24 +77,19 @@ namespace SupplyChain.Server.Controllers
                 }
             }
 
-            return Ok(solicitud);
+            return Ok(precioArt);
         }
 
         // POST: api/Compras
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Solicitud>> PostCompra(Solicitud solicitud)
+        public async Task<ActionResult<PrecioArticulo>> Post(PrecioArticulo precioArt)
         {
             try
             {
-                if (solicitud.CG_CLI == 0)
-                {
-                    await _solicitudRepository.AsignarClientByCuit(solicitud.Cuit, solicitud);
-                }
-                await _solicitudRepository.Agregar(solicitud);
-
-                return CreatedAtAction("GetSolicitud", new { id = solicitud.Id }, solicitud);
+                await _precioArticulosRepository.Agregar(precioArt);
+                return CreatedAtAction("Get", new { id = precioArt.Id }, precioArt);
             }
             catch (Exception ex)
             {
@@ -118,15 +99,15 @@ namespace SupplyChain.Server.Controllers
 
         // DELETE: api/Compras/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Solicitud>> DeleteCompra(int id)
+        public async Task<ActionResult<PrecioArticulo>> DeleteCompra(string id)
         {
-            var solicitud = await _solicitudRepository.ObtenerPorId(id);
+            var solicitud = await _precioArticulosRepository.ObtenerPorId(id);
             if (solicitud == null)
             {
                 return NotFound();
             }
 
-            await _solicitudRepository.Remover(id);
+            await _precioArticulosRepository.Remover(id);
 
             return solicitud;
         }

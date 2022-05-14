@@ -37,7 +37,8 @@ namespace SupplyChain.Server.Repositorios
         {
             if (string.IsNullOrEmpty(presupuesto.DES_CLI))
             {
-                presupuesto.DES_CLI = (await Db.Cliente.FirstOrDefaultAsync(c => c.CG_CLI == presupuesto.CG_CLI)).DES_CLI;
+                presupuesto.DES_CLI = (await Db.ClientesExternos
+                    .FirstOrDefaultAsync(c => c.Id == presupuesto.CG_CLI.ToString())).DESCRIPCION;
             }
 
             if (string.IsNullOrEmpty(presupuesto.DES_ART))

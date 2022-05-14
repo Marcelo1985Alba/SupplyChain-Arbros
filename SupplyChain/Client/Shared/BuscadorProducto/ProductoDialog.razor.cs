@@ -14,6 +14,7 @@ namespace SupplyChain.Client.Shared.BuscadorProducto
         [Inject] public ProductoService ProductoService { get; set; }
         [Parameter] public bool PopupBuscadorVisible { get; set; } = false;
         [Parameter] public EventCallback<Producto> OnObjectSelected { get; set; }
+        [Parameter] public EventCallback OnCerrarDialog { get; set; }
 
         protected List<Producto> productos = new();
         protected SfSpinner refSpinner;
@@ -42,6 +43,12 @@ namespace SupplyChain.Client.Shared.BuscadorProducto
         {
             await OnObjectSelected.InvokeAsync(obj);
             await Hide();
+        }
+
+        protected async Task CerrarDialog()
+        {
+            await Hide();
+            await OnCerrarDialog.InvokeAsync();
         }
     }
 }

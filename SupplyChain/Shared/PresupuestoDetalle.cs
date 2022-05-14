@@ -40,6 +40,8 @@ namespace SupplyChain.Shared
 
         [NotMapped]
         public string  DES_ART { get; set; }
+        [NotMapped]
+        public double PRECIO_UNIT { get; set; }
 
     }
 }

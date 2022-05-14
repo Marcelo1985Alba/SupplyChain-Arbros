@@ -1,4 +1,5 @@
 ﻿using SupplyChain.Client.RepositoryHttp;
+using SupplyChain.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Client.HelperService.Base
 {
-    public abstract class BaseService<TEntity, TId> : IService<TEntity, TId> where TEntity : class
+    public abstract class BaseService<TEntity, TId> : IService<TEntity, TId> where TEntity : EntityBase<TId>, new()
     {
         public readonly IRepositoryHttp http;
         private readonly string api;
