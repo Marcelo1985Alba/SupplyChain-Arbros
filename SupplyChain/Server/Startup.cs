@@ -62,6 +62,7 @@ namespace SupplyChain.Server
             services.AddTransient<PrecioArticulosRepository>();
             services.AddTransient<GeneraRepository>();
             services.AddTransient<vDireccionesEntregaRepository>();
+            services.AddTransient<NotificacionRepository>();
 
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
             services.AddControllersWithViews()

@@ -111,6 +111,8 @@ namespace SupplyChain
         public DbSet<PresupuestoAnterior> Presupuestos { get; set; }
         public DbSet<PrecioArticulo> PrecioArticulos { get; set; }
 
+        public DbSet<NotificacionSubscripcion> NotificacionSubscripcions { get; set; }
+
         //MODULO PROYECTOS
         public DbSet<ProyectosGBPI> Proyectos { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
