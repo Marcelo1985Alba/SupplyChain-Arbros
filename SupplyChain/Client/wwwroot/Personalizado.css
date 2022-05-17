@@ -173,6 +173,19 @@ e-grid .e-gridheader {
     /*padding: .5rem !important;*/
 }
 
+.e-grid .e-row { 
+    font-weight: bold;
+}
+
+.e-grid .e-row:hover {
+    font-weight: bold;
+}
+
+
+.e-grid .e-row .e-active {
+    font-weight: bold;
+}
+
 
 @media only screen and (max-width: 600px) {
     .login-box {
@@ -283,22 +296,41 @@ e-grid .e-gridheader {
 }
 
 .e-toolbar-item button[aria-label="Seleccionar Columnas"] {
-    background: #8260a2;
+    background: #a584c4;
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
 }
 
 .e-toolbar-item button[aria-label="Seleccionar Columnas"]:focus {
-    background: #513070;
+    background: #8151ae;
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
 }
 
 .e-toolbar-item button[aria-label="Seleccionar Columnas"]:hover {
-    background: #692fa0;
+    background: #966abe;
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
 }
+
+
+.e-toolbar-item button[aria-label="Copia"] {
+    background: #549bf9;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
+
+    .e-toolbar-item button[aria-label="Copia"]:focus {
+        background: #2f86f9;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+    .e-toolbar-item button[aria-label="Copia"]:hover {
+        background: #3582e8;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
 
 
 .e-toolbar-item .e-control .e-btn .e-icons .e-btn-icon {

@@ -650,6 +650,7 @@ else
         if (args.Data.STOCK > args.Data.PENDIENTEOC && RegistroGenerado.TIPOO == 5)
         {
             args.Cell.AddClass(new string[] { "rojo" });
+            
         }
     }
 }
@@ -658,8 +659,8 @@ else
         min-height: 400px;
     }*/
 
-    .row-red {
-        background-color: red;
+    .rojo {
+        color: #fc9494;
     }
 
     #gridEditStock_dialogEdit_wrapper {
@@ -667,8 +668,17 @@ else
     }
 
     .e-grid .e-gridcontent .e-rowcell.rojo {
-        background-color: #fc9494;
+        color: #fc9494;
     }
+
+/*    .e-grid .e-gridcontent .e-rowcell.rojo:hover {
+        font-weight: bold;
+        color: #fc9494 !important;
+    }*/
+        .e-grid .e-gridcontent .e-row .sin-stock:hover {
+            font-weight: bold;
+            color: #fc9494 !important;
+        }
 
     .e-checkbox-wrapper.e-info .e-frame.e-check,
     .e-checkbox-wrapper.e-info .e-checkbox:focus + .e-frame.e-check { /* csslint allow: adjoining-classes */
