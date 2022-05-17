@@ -80,7 +80,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             Solicitud.Des_Prod = productoSelected.DES_PROD;
             if (Solicitud.Producto.StartsWith("00"))
             {
-                HeightDialog = "400px";
+                HeightDialog = "450px";
             }
             else
             {

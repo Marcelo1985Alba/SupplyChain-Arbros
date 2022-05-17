@@ -3,6 +3,7 @@ using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
 using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
 using System;
@@ -30,6 +31,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected List<Object> Toolbaritems = new()
         {
             "Search",
+            //new ItemModel { Text = "Add", TooltipText = "Agregar un nuevo Presupuesto", PrefixIcon = "e-add", Id = "Add" },
             "Add",
             "Edit",
             "Delete",

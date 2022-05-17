@@ -5883,46 +5883,7 @@ File: scss
     text-align: center;
     margin-top: 10px;
     overflow: hidden; } }
-/*GRID*/
-.e-grid .e-rowcell {
-    border-style: solid;
-    border-width: 1px 0 0 0;
-    display: table-cell;
-    font-size: 13px;
-    line-height: 20px;
-    overflow: hidden;
-    padding: 1px 10px;
-    vertical-align: middle;
-    white-space: nowrap;
-    width: auto;
-}
 
-.e-grid {
-    font: 16px Arial;
-    border: 2px solid #398bf7;
-}
-
-
-
-.e-grid .e-groupdroparea {
-    background-color: #398bf7;
-    color: #ffffff;
-}
-
-
-
-.e-grid .e-gridheader .e-icons:not(.e-icon-hide):not(.e-check):not(.e-stop) {
-    padding: 0.015rem;
-}
-
-.e-grid-min-height .e-gridheader .e-headercell, .e-grid-min-height .e-gridheader .e-detailheadercell,
-.e-grid-min-height .e-gridheader .e-headercell .e-headercelldiv {
-    background-color: #398bf7;
-    color: #ffffff;
-    font-weight: 500;
-    font-size: 14px;
-    padding: .5rem;
-}
 
 /*****************SPINNER SF*******************************/
 .e-spinner-pane .e-spinner-inner .e-spin-bootstrap4 {

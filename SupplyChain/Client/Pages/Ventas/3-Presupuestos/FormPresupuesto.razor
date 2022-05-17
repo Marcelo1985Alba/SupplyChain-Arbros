@@ -22,14 +22,15 @@
             }
         </Header>
         <Content>
-            <SfToolbar>
+            <SfToolbar ID="toolbar-form-solicitud" CssClass="">
                 <ToolbarItems>
-                    <ToolbarItem Id="Solicitudes" Text="Solicitudes" OnClick="BuscarSolicitudes" Align="ItemAlign.Right"></ToolbarItem>
-                    <ToolbarItem Id="Productos" Text="Productos"  OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>
-                    <ToolbarItem Id="Reparaciones" Text="Reparaciones" Align="ItemAlign.Right"></ToolbarItem>
-                    <ToolbarItem Text="Settings" Align="ItemAlign.Right"></ToolbarItem>
+                    <ToolbarItem Id="tiSolicitudes" CssClass="e-round" Text="Solicitudes" OnClick="BuscarSolicitudes" Align="ItemAlign.Right"></ToolbarItem>
+                    <ToolbarItem Id="tiProductos" CssClass="e-round" Text="Productos"  OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>
+                    <ToolbarItem Id="tiReparaciones" CssClass="e-round" Text="Reparaciones" Align="ItemAlign.Right"></ToolbarItem>
+                    @*<ToolbarItem Text="Settings" Align="ItemAlign.Right"></ToolbarItem>*@
                 </ToolbarItems>
             </SfToolbar>
+
             <EditForm Model="@Presupuesto" OnValidSubmit="@(async()=> await Guardar())">
                 <DataAnnotationsValidator />
                 <div class="form-row">
@@ -123,7 +124,47 @@
     </DialogTemplates>
 </SfDialog>
 <style>
-    .e-toolbar {
+    #toolbar-form-solicitud {
         border: 0px solid rgb(173, 255, 47);
     }
+    #toolbar-form-solicitud .e-toolbar-item {
+        /*background: #add8e6;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+    #toolbar-form-solicitud .e-tbar-btn {
+        background: #398bf7;
+        border-radius: 10%;
+        /*border: 1px solid #5a70cc;*/
+    }
+    #toolbar-form-solicitud .e-toolbar-item:hover {
+        background: #619ded;
+        /*border: 1px solid #5a70cc;*/
+    }
+    #toolbar-form-solicitud .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn {
+        min-height: 20px; 
+    }
+
+    #toolbar-form-solicitud .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:hover {
+        background-color: #4f70ee;
+        border-radius: 10%;
+    }
+
+
+    #toolbar-form-solicitud .e-toolbar-items .e-toolbar-item .e-tbar-btn-text {
+        color: white;
+    }
+
+    #toolbar-form-solicitud .e-tbar-btn:focus {
+        background: #3d53a8;
+        border-color: #eaeaea;
+        border-radius: 0;
+        color: #000;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        color: #398bf7;
+    }
+
+
 </style>

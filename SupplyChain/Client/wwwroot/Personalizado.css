@@ -124,9 +124,184 @@ e-grid .e-gridheader {
 }
 
 
+/*GRID*/
+.e-grid .e-rowcell {
+    border-style: solid;
+    border-width: 1px 0 0 0;
+    display: table-cell;
+    font-size: 13px;
+    line-height: 20px;
+    overflow: hidden;
+    padding: 1px 10px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: auto;
+}
+
+.e-grid {
+    font: 16px Arial;
+    border: 2px solid #398bf7;
+}
+
+
+
+    .e-grid .e-groupdroparea {
+        background-color: #398bf7;
+        color: #ffffff;
+    }
+
+
+
+    .e-grid .e-gridheader .e-icons:not(.e-icon-hide):not(.e-check):not(.e-stop) {
+        padding: 0.015rem;
+    }
+
+.e-gridheader .e-headercell, .e-grid-min-height .e-gridheader .e-detailheadercell,
+.e-gridheader .e-headercell .e-headercelldiv {
+    background-color: #398bf7 !important;
+    color: #ffffff !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    padding: .2rem !important;
+}
+
+.e-grid .e-gridheader {
+    background-color: #398bf7 !important;
+    color: #ffffff !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    /*padding: .5rem !important;*/
+}
+
+
 @media only screen and (max-width: 600px) {
     .login-box {
         width: 200px!important;
         margin: 0 auto;
     }
+}
+
+
+
+/*TOOLBAR GRID*/
+.e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn.e-tbtn-txt .e-icons.e-btn-icon,
+.e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn-text {
+    color: white;
+    font-weight: bold;
+}
+
+.e-toolbar-item button[aria-label="Add"] {
+    background: #04cb93;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
+
+    .e-toolbar-item button[aria-label="Add"]:focus {
+        background: #0cc08d;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+    .e-toolbar-item button[aria-label="Add"]:hover {
+        background: #1cb78b;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+.e-toolbar-item button[aria-label="Edit"] {
+    background: #fce87a;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
+
+    .e-toolbar-item button[aria-label="Edit"]:focus {
+        background: #e1c31e;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+    .e-toolbar-item button[aria-label="Edit"]:hover {
+        background: #ffd800;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+.e-toolbar-item button[aria-label="Eliminar"] {
+    background: #ff886f;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
+
+    .e-toolbar-item button[aria-label="Eliminar"]:focus {
+        background: #ff6140;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+    .e-toolbar-item button[aria-label="Eliminar"]:hover {
+        background: #ff694a;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+
+.e-toolbar-item button[aria-label="Imprimir"] {
+    background: #ab7d4c;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
+
+    .e-toolbar-item button[aria-label="Imprimir"]:focus {
+        background: #c19669;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+    .e-toolbar-item button[aria-label="Imprimir"]:hover {
+        background: #7e5932;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+
+.e-toolbar-item button[aria-label="Exportar Excel"] {
+    background: #87c96b;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
+
+.e-toolbar-item button[aria-label="Exportar Excel"]:focus {
+    background: #56a434;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
+
+.e-toolbar-item button[aria-label="Exportar Excel"]:hover {
+    background: #74bc55;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
+
+.e-toolbar-item button[aria-label="Seleccionar Columnas"] {
+    background: #8260a2;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
+
+.e-toolbar-item button[aria-label="Seleccionar Columnas"]:focus {
+    background: #513070;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
+
+.e-toolbar-item button[aria-label="Seleccionar Columnas"]:hover {
+    background: #692fa0;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
+
+
+.e-toolbar-item .e-control .e-btn .e-icons .e-btn-icon {
+    color: white;
+    font-weight: bold;
 }
