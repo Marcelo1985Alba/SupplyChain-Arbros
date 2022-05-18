@@ -53,22 +53,7 @@
                     @ref="Grid" AllowExcelExport="true" AllowRowDragAndDrop="true"
                     AllowGrouping="true" AllowMultiSorting="true"
                     AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
-                @*<SfDataManager Url="@ApiUrl" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>*@
-                @*<SfToolbar>
-                    <ToolbarItems>
-                        <ToolbarItem Type="ItemType.Input" Align="Syncfusion.Blazor.Navigations.ItemAlign.Left">
-                            <Template>
-                                <SfTextBox Placeholder="Buscar..." Input="@(async(e)=> await OnInput(e))" ShowClearButton="true"
-                                           Type="InputType.Text">
-
-                                </SfTextBox>
-                                <span class="e-search-icon e-icons"></span>
-                            </Template>
-                        </ToolbarItem>
-                    </ToolbarItems>
-                </SfToolbar>*@
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-
                 <GridEvents OnLoad="OnLoad" DataBound="DataBound" OnToolbarClick="@ClickHandler"
                             OnActionBegin="ActionBegin" TValue="Service"></GridEvents>
                 <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
@@ -710,26 +695,17 @@
                                                                     <div id="collapseTwo" class="collapse" aria-labelledby="Two" data-parent="#accordionExample">
                                                                         <div class="card-body">
                                                                             <img src="@rutaDespachopng" alt="Alternate Text" />
-
                                                                         </div>
                                                                     </div>
                                                                 }
                                                             }
-
-
-
-
                                                         </div>
                                                     }
-
                                                 </div>
-
                                             }
                                         }
                                     }
                                 </div>
-
-
                             </div>
                         }
                     </Template>

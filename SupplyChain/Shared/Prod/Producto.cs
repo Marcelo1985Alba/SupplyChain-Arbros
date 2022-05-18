@@ -8,11 +8,11 @@ namespace SupplyChain.Shared.Models
     public class Producto :  EntityBase
     {
         [Key]
-        [ColumnaGridViewAtributo(Name = "Código producto")]
+        [ColumnaGridViewAtributo(Name = "Código producto"), Required(ErrorMessage = "El codigo es requerida")]
         public string CG_PROD { get; set; } = "";
-        [ColumnaGridViewAtributo(Name = "Nombre producto")]
+        [ColumnaGridViewAtributo(Name = "Nombre producto"), Required(ErrorMessage = "La descripcion es requerida")]
         public string DES_PROD { get; set; }
-        [ColumnaGridViewAtributo(Name = "Tipo insumo")]
+        [ColumnaGridViewAtributo(Name = "Tipo insumo"), Range(1,15, ErrorMessage = "El tipo de insumo es requerido")]
         public int CG_ORDEN { get; set; }
         [ColumnaGridViewAtributo(Name = "Tipo producto")]
         public string TIPO { get; set; }
@@ -44,7 +44,7 @@ namespace SupplyChain.Shared.Models
         [ColumnaGridViewAtributo(Name = "Lote óptimo compra")]
         public decimal? LOPTIMO { get; set; }
         [ColumnaGridViewAtributo(Name = "Area fabricación")]
-        public int? CG_AREA { get; set; }
+        public int? CG_AREA { get; set; } = 0;
         [ColumnaGridViewAtributo(Name = "Línea fabricación")]
         public int? CG_LINEA { get; set; }
         //[ColumnaGridViewAtributo(Name = "Activo")]
@@ -72,25 +72,29 @@ namespace SupplyChain.Shared.Models
         public int? CG_CLAS { get; set; }
 
         [ColumnaGridViewAtributo(Name = "CAMPOCOM1")]
-        public string CAMPOCOM1 { get; set; }
+        public string CAMPOCOM1 { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "CAMPOCOM2")]
-        public string CAMPOCOM2 { get; set; }
+        public string CAMPOCOM2 { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "CAMPOCOM3")]
-        public string CAMPOCOM3 { get; set; }
+        public string CAMPOCOM3 { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "CAMPOCOM4")]
-        public string CAMPOCOM4 { get; set; }
+        public string CAMPOCOM4 { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "CAMPOCOM5")]
-        public string CAMPOCOM5 { get; set; }
+        public string CAMPOCOM5 { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "CAMPOCOM6")]
-        public string CAMPOCOM6 { get; set; }
+        public string CAMPOCOM6 { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "CAMPOCOM7")]
-        public string CAMPOCOM7 { get; set; }
+        public string CAMPOCOM7 { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "CAMPOCOM8")]
-        public string CAMPOCOM8 { get; set; }
+        public string CAMPOCOM8 { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "CAMPOCOM9")]
-        public string CAMPOCOM9 { get; set; }
+        public string CAMPOCOM9 { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "CAMPOCOM10")]
-        public string CAMPOCOM10 { get; set; }
+        public string CAMPOCOM10 { get; set; } = "";
+        [ColumnaGridViewAtributo(Name = "CAMPOCOM11")]
+        public string CAMPOCOM11 { get; set; } = "";
+        [ColumnaGridViewAtributo(Name = "CAMPOCOM12")]
+        public string CAMPOCOM12 { get; set; } = "";
         //public decimal CG_CUENT { get; set; } = 0;
         //[ColumnaGridViewAtributo(Name = "Cuenta contable")]
         //public decimal? CG_CUENT1 { get; set; }
