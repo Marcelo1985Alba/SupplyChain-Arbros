@@ -22,9 +22,17 @@ namespace SupplyChain
         [HttpGet]
         public async Task<ActionResult<List<Cliente>>> Get()
         {
-            List<Cliente> lCliente = new List<Cliente>();
+            List<Cliente> lCliente = new();
             return await _context.Cliente.ToListAsync();
         }
+
+        [HttpGet("GetClienteItris")]
+        public async Task<ActionResult<List<Cliente>>> GetClienteItris()
+        {
+            List<Cliente> lCliente = new();
+            return await _context.Cliente.ToListAsync();
+        }
+
 
         // GET: api/Cliente/BuscarPorCliente/{CG_CLI}
         [HttpGet("BuscarPorCliente/{CG_CLI}")]
