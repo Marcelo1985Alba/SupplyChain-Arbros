@@ -127,18 +127,28 @@ namespace SupplyChain
             modelBuilder.ApplyConfiguration(new PedidoConfig());
             modelBuilder.ApplyConfiguration(new ProveedorConfig());
 
+            modelBuilder.Entity<Solicitud>(entity => {
+                entity.HasOne(c => c.PresupuestoDetalle)
+                    .WithOne(p => p.Solicitud);
+            });
+
+
             modelBuilder.Entity<Presupuesto>(entity => {
                 entity.HasMany(c => c.Items)
                     .WithOne(p => p.Presupuesto)
-                    .HasForeignKey(c => c.PRESUPUESTOENCABEZADOID);
+                    .HasForeignKey(c => c.PRESUPUESTOID);
             });
 
             modelBuilder.Entity<PresupuestoDetalle>(entity=> {
                 entity.HasOne(d => d.Presupuesto)
                 .WithMany(p => p.Items)
-                .HasForeignKey(d => d.PRESUPUESTOENCABEZADOID)
+                .HasForeignKey(d => d.PRESUPUESTOID)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PRESUPUESTO_DETALLE_PRESUPUESTO_ENCABEZADO");
+
+                entity.HasOne(d => d.Solicitud)
+                .WithOne(p => p.PresupuestoDetalle)
+                .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<Genera>()

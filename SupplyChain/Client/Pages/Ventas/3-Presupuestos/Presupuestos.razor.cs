@@ -116,7 +116,6 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 else
                 {
                     PresupuestoSeleccionado = response.Response;
-                    PresupuestoSeleccionado.DES_CLI = args.Data.DES_CLI;
                 }
                 //PresupuestoSeleccionado.Id = args.Data.Id;
                 //PresupuestoSeleccionado.Fecha = args.Data.Fecha;

@@ -45,6 +45,7 @@ namespace SupplyChain.Server.Controllers
         public async Task<Presupuesto> GetPresupuesto(int id)
         {
             var presup = await _presupuestoRepository.Obtener(p => p.Id == id).Include(p => p.Items)
+                //.ThenInclude(i=> i.Solicitud)
                 .FirstOrDefaultAsync();
 
             //TODO: OBTENER DESCRIPCION
@@ -66,6 +67,11 @@ namespace SupplyChain.Server.Controllers
 
         private async Task<ActionResult<Presupuesto>> AgregarNuevoPresupuesto(Presupuesto presupuesto)
         {
+            foreach (var item in presupuesto.Items)
+            {
+                item.Id = 0;
+            }
+
             await _presupuestoRepository.Agregar(presupuesto);
             
             return CreatedAtAction("GetPresupuesto", new { id = presupuesto.Id }, presupuesto);

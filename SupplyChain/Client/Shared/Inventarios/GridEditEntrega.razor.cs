@@ -19,7 +19,7 @@ namespace SupplyChain.Client.Shared.Inventarios
         [Inject] public IJSRuntime JsRuntime { get; set; }
         [Inject] HttpClient Http { get; set; }
         protected ConfirmacionDialog ConfirmacionDialog;
-        protected SupplyChain.Client.Shared.BuscadorEmergente<Pedidos> BuscadorProducto;
+        protected BuscadorEmergente<Pedidos> BuscadorProducto;
         protected Pedidos stock;
         protected Pedidos stockCopiado;
         protected bool confirmaCopy = false;

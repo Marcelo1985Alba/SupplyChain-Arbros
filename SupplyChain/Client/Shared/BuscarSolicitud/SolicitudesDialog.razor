@@ -7,7 +7,7 @@
     <ToastPosition X="Center" Y="Top"></ToastPosition>
 </SfToast>
 <BuscadorEmergente Height="620px" TItem="vSolicitudes" Titulo="Listado de Solicitudes sin Presupuesto" Visible="@PopupBuscadorVisible"
-                   DataSource="@solicitudes" IsModal="true" Width="90%" HeightGrid="290px"
+                   DataSource="@solicitudes" IsModal="true" Width="90%" HeightGrid="270px"
                    Columnas="@(new string[] { "ID", "PRODUCTO", "DES_PROD", "DES_CLI", "CANTIDAD"})" 
                    OnObjetoSeleccionado="SendObjectSelected"
                    OnCerrarDialog="CerrarDialog"/>

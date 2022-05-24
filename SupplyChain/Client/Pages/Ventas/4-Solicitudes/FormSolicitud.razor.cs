@@ -24,7 +24,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         [Parameter] public EventCallback<Solicitud> OnGuardar { get; set; }
         [Parameter] public EventCallback OnCerrar { get; set; }
 
-        [Parameter] public string HeightDialog { get; set; } = "380px";
+        [Parameter] public string HeightDialog { get; set; } = "280px";
         protected ClientesDialog refClienteDialog;
         protected SfSpinner refSpinnerCli;
         protected bool popupBuscadorVisibleCliente { get; set; } = false;
@@ -78,14 +78,14 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             popupBuscadorVisibleProducto = false;
             Solicitud.Producto = productoSelected.Id;
             Solicitud.Des_Prod = productoSelected.DES_PROD;
-            if (Solicitud.Producto.StartsWith("00"))
-            {
-                HeightDialog = "450px";
-            }
-            else
-            {
-                HeightDialog = "600px";
-            }
+            //if (Solicitud.Producto.StartsWith("00"))
+            //{
+            //    HeightDialog = "450px";
+            //}
+            //else
+            //{
+            //    HeightDialog = "500px";
+            //}
             await refSpinnerCli.HideAsync();
         }
 

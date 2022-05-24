@@ -28,7 +28,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         protected FormSolicitud refFormSolicitud;
         protected Solicitud SolicitudSeleccionada = new();
         protected List<vSolicitudes> Solicitudes = new();
-        protected string heightPopup = "400px";
+        protected string heightPopup = "420px";
         protected bool SpinnerVisible = true;
         protected bool SpinnerVisiblePresupuesto = false;
 
@@ -76,10 +76,10 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                 SolicitudSeleccionada.Cuit = vSolicitud.Cuit;
                 SolicitudSeleccionada.Des_Cli = vSolicitud.DES_CLI;
                 SolicitudSeleccionada.Des_Prod = vSolicitud.DES_PROD;
-                if (!SolicitudSeleccionada.Producto.StartsWith("00"))
-                {
-                    heightPopup = "600px";
-                }
+                //if (!SolicitudSeleccionada.Producto.StartsWith("00"))
+                //{
+                //    heightPopup = "600px";
+                //}
             }
         }
 
@@ -92,7 +92,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                 args.PreventRender = false;
                 popupFormVisible = true;
                 SolicitudSeleccionada = new();
-                heightPopup = "600px";
+                //heightPopup = "600px";
             }
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)

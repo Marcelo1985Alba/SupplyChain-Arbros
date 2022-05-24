@@ -15,5 +15,9 @@ namespace SupplyChain.Shared
         public decimal Precio { get; set; } = 0;
         [Required(ErrorMessage = "La Moneda es requerida")]
         public string Moneda { get; set; }
+        [StringLength(maximumLength:500, ErrorMessage ="La Marca debete tener como Maximo 500 caracteres")]
+        public string Marca { get; set; }
+        [StringLength(maximumLength:500, ErrorMessage ="La Construccion debete tener como Maximo 500 caracteres")]
+        public string Construccion { get; set; }
     }
 }

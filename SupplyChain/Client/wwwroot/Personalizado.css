@@ -337,3 +337,11 @@ e-grid .e-gridheader {
     color: white;
     font-weight: bold;
 }
+
+.e-dlg-header p {
+    font-weight: bold;
+}
+
+form label {
+    color: blue;
+}

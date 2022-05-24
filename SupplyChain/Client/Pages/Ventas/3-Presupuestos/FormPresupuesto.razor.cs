@@ -54,6 +54,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             { "type", "submit" }
         };
 
+        protected bool IsAdd { get; set; }
         protected async Task BuscarClientes()
         {
             SpinnerVisible = true;
@@ -139,6 +140,8 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
             var item = new PresupuestoDetalle()
             {
+                Id = Presupuesto.Items.Count == 0 ? -1 : Presupuesto.Items.Min(t => t.Id) - 1, //en negativos
+                SOLICITUDID = solicitudSelected.Id,
                 CANTIDAD = solicitudSelected.Cantidad,
                 CG_ART = solicitudSelected.Producto,
                 DES_ART = solicitudSelected.Des_Prod,
@@ -155,7 +158,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 TIPOENTRADA = solicitudSelected.TipoEntrada,
                 TIPOSALIDA = solicitudSelected.TipoSalida,
                 TOBERA = solicitudSelected.Tobera,
-                PRECIO_UNIT = solicitudSelected.Precio
+                PREC_UNIT = (decimal)solicitudSelected.PrecioArticulo?.Precio,
             };
 
             Presupuesto.Items.Add(item);
@@ -172,6 +175,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             var response = await PresupuestoService.Agregar(presupueto);
             if (response.Error)
             {
+                Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
                 return false;
             }
             Presupuesto = response.Response;
@@ -207,6 +211,68 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             Presupuesto.GUARDADO = guardado;
             await OnGuardar.InvokeAsync(Presupuesto);
         }
+
+        public async Task CellSavedHandler(CellSaveArgs<PresupuestoDetalle> args)
+        {
+            var index = await refGridItems.GetRowIndexByPrimaryKey(args.RowData.Id);
+            if (args.ColumnName == "Cantidad")
+            {
+                if (IsAdd)
+                {
+                    args.RowData.CANTIDAD = (decimal)args.Value;
+                    await refGridItems.UpdateCell(index, "PRECIO_UNIT", Convert.ToInt32(args.Value) * args.RowData.PREC_UNIT);
+                    //await refGridItems.UpdateCell(index, "Sum", Convert.ToInt32(args.Value) + 0);
+                }
+                await refGridItems.UpdateCell(index, "PRECIO_UNIT", Convert.ToInt32(args.Value) * args.RowData.PREC_UNIT);
+                //await refGridItems.UpdateCell(index, "Sum", Convert.ToInt32(args.Value) + args.RowData.UnitPrice);
+            }
+            else if (args.ColumnName == "PRECIO_UNIT")
+            {
+                if (IsAdd)
+                {
+                    args.RowData.PREC_UNIT = (decimal)args.Value;
+                    await refGridItems.UpdateCell(index, "PREC_UNIT_X_CANTIDAD", Convert.ToDouble(args.Value) * (double)args.RowData.CANTIDAD);
+                    //await refGridItems.UpdateCell(index, "Sum", Convert.ToDouble(args.Value) + 0);
+                }
+                await refGridItems.UpdateCell(index, "PREC_UNIT_X_CANTIDAD", Convert.ToDouble(args.Value) * (double)args.RowData.CANTIDAD);
+                //await refGridItems.UpdateCell(index, "Sum", Convert.ToDouble(args.Value) + args.RowData.Quantity);
+            }
+            else if (args.ColumnName == "DESCUENTO")
+            {
+                if (IsAdd)
+                {
+                    args.RowData.DESCUENTO = (decimal)args.Value;
+
+                    if (args.RowData.CANTIDAD == 0 || args.RowData.PREC_UNIT_X_CANTIDAD == 0)
+                    {
+                        await refGridItems.UpdateCell(index, "IMP_DESCUENTO", (double)0);
+                    }
+                    else
+                    {
+                        await refGridItems.UpdateCell(index, "IMP_DESCUENTO", args.RowData.PREC_UNIT_X_CANTIDAD / (1 + args.RowData.DESCUENTO / 100 ));
+                        //await refGridItems.UpdateCell(index, "Sum", Convert.ToDouble(args.Value) + 0);
+                    }
+
+
+
+                }
+                var descuento = Math.Round( args.RowData.PREC_UNIT_X_CANTIDAD * args.RowData.DESCUENTO / 100, 2);
+                await refGridItems.UpdateCell(index, "IMP_DESCUENTO", descuento);
+            }
+
+            await refGridItems.EndEditAsync();
+        }
+
+        public void BatchAddHandler(BeforeBatchAddArgs<PresupuestoDetalle> args)
+        {
+            IsAdd = true;
+        }
+        public void BatchSaveHandler(BeforeBatchSaveArgs<PresupuestoDetalle> args)
+        {
+            IsAdd = false;
+        }
+
+
 
         public async Task Hide()
         {

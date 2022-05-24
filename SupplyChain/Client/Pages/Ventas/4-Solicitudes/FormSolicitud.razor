@@ -38,7 +38,7 @@
                         <SfTextBox CssClass="customClass" ID="DES_Prod" @bind-Value="@(Solicitud.Des_Prod)" Readonly="true"></SfTextBox>
                     </div>
                     <div class="form-group col-md-1 mt-4">
-                        <SfButton IconCss="fa fa-search" CssClass="e-round" OnClick="@(async ()=> await BuscarProductos())"
+                        <SfButton IconCss="fa fa-search" CssClass="e-smal e-round e-info" OnClick="@(async ()=> await BuscarProductos())"
                                   HtmlAttributes="@HtmlAttribute"></SfButton>
                     </div>
                     <div class="form-group col-md-1">
@@ -106,7 +106,7 @@
                         <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Solicitud.Des_Cli)" Readonly="true"></SfTextBox>
                     </div>
                     <div class="form-group col-md-1 mt-4">
-                        <SfButton IconCss="fa fa-search" CssClass="e-round" OnClick="@(async ()=> await BuscarClientes())"
+                        <SfButton IconCss="fa fa-search" CssClass="e-smal e-round e-info" OnClick="@(async ()=> await BuscarClientes())"
                                   HtmlAttributes="@HtmlAttribute"></SfButton>
                     </div>
                 </div>
@@ -142,6 +142,4 @@
     </DialogTemplates>
     
 </SfDialog>
-
-
 

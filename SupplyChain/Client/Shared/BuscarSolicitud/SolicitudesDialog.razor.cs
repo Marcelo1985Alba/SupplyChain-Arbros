@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SupplyChain.Client.HelperService;
+using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
 using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
@@ -39,6 +40,10 @@ namespace SupplyChain.Client.Shared.BuscarSolicitud
             else
             {
                 solicitudes = response.Response.OrderBy(s=> s.Id).ToList();
+                if (Cg_Cli_Comparar > 0)
+                {
+                    solicitudes = solicitudes.Where(c => c.CG_CLI == Cg_Cli_Comparar).ToList();
+                }
                 refSpinner?.HideAsync();
                 PopupBuscadorVisible = true;
             }
@@ -97,7 +102,7 @@ namespace SupplyChain.Client.Shared.BuscarSolicitud
 
             if (precio != null)
             {
-                solicitud.Precio = (double)precio.Precio;
+                solicitud.PrecioArticulo = precio;
             }
             else
             {

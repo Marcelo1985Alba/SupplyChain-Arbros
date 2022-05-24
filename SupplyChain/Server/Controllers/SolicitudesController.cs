@@ -108,6 +108,11 @@ namespace SupplyChain.Server.Controllers
                 }
                 await _solicitudRepository.Agregar(solicitud);
 
+                if (solicitud.Producto.StartsWith("00")) //SI ES REPARACION
+	            {
+                    //TODO: ENVIAR A SERVICIO
+	            }
+
                 return CreatedAtAction("GetSolicitud", new { id = solicitud.Id }, solicitud);
             }
             catch (Exception ex)
