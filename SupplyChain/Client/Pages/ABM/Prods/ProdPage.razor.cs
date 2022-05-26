@@ -14,6 +14,7 @@ using SupplyChain.Shared.Models;
 using SupplyChain.Client.Shared;
 using Syncfusion.Blazor.Spinner;
 using Syncfusion.Blazor.Notifications;
+using SupplyChain.Shared;
 
 namespace SupplyChain.Pages.Prods
 {
@@ -47,6 +48,8 @@ namespace SupplyChain.Pages.Prods
         protected List<TipoArea> tipoarea = new List<TipoArea>();
         protected List<Cat> cat = new List<Cat>();
 
+        protected const string APPNAME = "grdProdABM";
+        protected string state;
 
         protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
@@ -76,6 +79,34 @@ namespace SupplyChain.Pages.Prods
             await base.OnInitializedAsync();
         }
 
+        public async Task Begin(ActionEventArgs<Producto> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.Sorting
+                )
+            {
+                //VisibleProperty = true;
+                Grid.PreventRender();
+                Grid.Refresh();
+
+                state = await Grid.GetPersistData();
+                await Grid.AutoFitColumnsAsync();
+                await Grid.RefreshColumns();
+                await Grid.RefreshHeader();
+            }
+
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.RowDragAndDrop)
+            {
+
+            }
+        }
+
         public async Task Cerrar()
         {
             prod = new();
@@ -87,8 +118,21 @@ namespace SupplyChain.Pages.Prods
             {
                 var existe = await Http.GetFromJsonAsync<bool>($"api/Prod/ExisteProducto/{prodAux.CG_PROD}");
 
-                if (!existe && prodAux.CG_ORDEN != 1 && prodAux.CG_ORDEN != 3 && prodAux.CG_ORDEN != 4)
+                if (!existe && prodAux.CG_ORDEN != 1 && prodAux.CG_ORDEN != 3)
                 {
+                    switch (prodAux.CG_ORDEN)
+                    {
+                        case 1:
+                            prodAux.EXIGESERIE = true;
+                            prodAux.EXIGEOA = true;
+                            break;
+                        case 3:
+                            prodAux.EXIGELOTE = true;
+                            break;
+                        case 4:
+                            prodAux.EXIGEDESPACHO = true;
+                            break;
+                    }
                     var response = await Http.PostAsJsonAsync("api/Prod", prodAux);
 
                     if (response.StatusCode == System.Net.HttpStatusCode.Created)
@@ -203,14 +247,6 @@ namespace SupplyChain.Pages.Prods
                 }
             }
         }
-        public async Task BeginHandler(Syncfusion.Blazor.Grids.ActionEventArgs<Producto> args)
-        {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
-            {
-                //args.PreventRender = false;
-            }
-        }
-
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {
             if (args.Item.Text == "Edit")
@@ -375,7 +411,6 @@ namespace SupplyChain.Pages.Prods
                         {
                             query += $"&&insumos={item}";
                         }
-
                         i++;
                     }
 
@@ -397,9 +432,7 @@ namespace SupplyChain.Pages.Prods
                                     ShowCloseButton = true,
                                     ShowProgressBar = true
                                 });
-
                                 //await Grid.ClearSelectionAsync();
-
                             }
                             else
                             {
@@ -438,6 +471,14 @@ namespace SupplyChain.Pages.Prods
                     }
                 }
             }
+        }
+        public async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
+        {
+            await Grid.SetPersistData(vistasGrillas.Layout);
+        }
+        public async Task OnReiniciarGrilla()
+        {
+            await Grid.ResetPersistData();
         }
     }
 }
