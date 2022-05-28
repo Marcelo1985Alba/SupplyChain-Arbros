@@ -81,14 +81,14 @@ namespace SupplyChain.Pages.Prods
 
         public async Task Begin(ActionEventArgs<Producto> args)
         {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping ||
-                args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
-                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder ||
-                args.RequestType == Syncfusion.Blazor.Grids.Action.Sorting
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Sorting
                 )
             {
                 //VisibleProperty = true;

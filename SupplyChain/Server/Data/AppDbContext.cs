@@ -44,6 +44,8 @@ namespace SupplyChain
         public DbSet<ProTarea> ProTarea { get; set; }
         public DbSet<TipoMat> TipoMat { get; set; }
         public DbSet<Producto> Prod { get; set; }
+
+        public DbSet<PreciosArticulos> PrecioArticulo { get; set; }
         //MODULO SERVICIOS
         public DbSet<Celdas> Celdas { get; set; }
         public DbSet<Estado> Estado { get; set; }
