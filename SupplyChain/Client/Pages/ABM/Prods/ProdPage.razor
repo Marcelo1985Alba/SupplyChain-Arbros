@@ -1,4 +1,4 @@
-﻿@page "/Abms/productos"
+﻿@*@page "/Abms/productos"*@
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Buttons
@@ -10,9 +10,9 @@
 @inject IJSRuntime JsRuntime
 @inherits SupplyChain.Pages.Prods.ProdsPageBase
 
-<div class="row mt-3">
+<div class="row">
     <div class="col-12">
-        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state" 
                            OnReiniciar="(async ()=> await OnReiniciarGrilla())"
                            OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
     </div>
@@ -25,61 +25,63 @@
     <div class="content-wrapper">
         <div class="row">
             <div class="col-12">
-                <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                        DataSource="@(prods.OrderBy(s => s.CG_ORDEN))"
-                        ID="gridProd" Height="100%" Width="100%" GridLines="GridLine.Both" RowHeight="27"
-                        @ref="Grid" AllowExcelExport="true" AllowGrouping="true"
-                        AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
-                    <GridSelectionSettings CheckboxOnly="true"
-                                           Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                    <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
-                    <GridEvents OnToolbarClick="@ClickHandler" OnActionBegin="@((a)=> Begin(a))" TValue="Producto"></GridEvents>
-                    <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-                    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true">
-                    </GridEditSettings>
-                    <GridColumns>
-                        <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                        <GridColumn Field=@nameof(Producto.CG_PROD) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                      @*//DATOS GENERALES*@
-                        <GridColumn Field=@nameof(Producto.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                @*//DATOS GENERALES*@
-                        <GridColumn Field=@nameof(Producto.CG_ORDEN) HeaderText="Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                      @*//DATOS GENERALES desplegable*@
-                        <GridColumn Field=@nameof(Producto.TIPO) HeaderText="Tipo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                           @*//DATOS GENERALES*@
-                        <GridColumn Field=@nameof(Producto.UNID) HeaderText="Unidad de uso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                  @*//DATOS GENERALES desplegable*@
-                        <GridColumn Field=@nameof(Producto.CG_DENSEG) HeaderText="Factor de conversion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>      @*//DATOS GENERALES*@
-                        <GridColumn Field=@nameof(Producto.UNIDSEG) HeaderText="Unidad comercial" TextAlign="TextAlign.Left" Width="150px"></GridColumn>            @*//DATOS GENERALES desplegable*@
-                        <GridColumn Field=@nameof(Producto.PESO) HeaderText="Peso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                           @*//DATOS GENERALES*@
-                        <GridColumn Field=@nameof(Producto.UNIDPESO) HeaderText="Unidad de peso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>             @*//DATOS GENERALES*@
-                        <GridColumn Field=@nameof(Producto.ESPECIF) HeaderText="Especificacion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>              @*//DATOS GENERALES*@
-                        <GridColumn Field=@nameof(Producto.NORMA) HeaderText="Material" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                      @*//DATOS GENERALES*@
-                        <GridColumn Field=@nameof(Producto.EXIGEDESPACHO) HeaderText="Exige despacho" TextAlign="TextAlign.Left" Width="150px"></GridColumn>        @*//Automatico, no tiene que estar en ninguna solapa, depende del valor de cg_orden*@
-                        <GridColumn Field=@nameof(Producto.EXIGELOTE) HeaderText="Exige lote" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                @*//Automatico, no tiene que estar en ninguna solapa, depende del valor de cg_orden*@
-                        <GridColumn Field=@nameof(Producto.EXIGESERIE) HeaderText="Exige serie" TextAlign="TextAlign.Left" Width="150px"></GridColumn>              @*//Automatico, no tiene que estar en ninguna solapa, depende del valor de cg_orden*@
-                        <GridColumn Field=@nameof(Producto.EXIGEOA) HeaderText="Exige orden de armado" TextAlign="TextAlign.Left" Width="150px"></GridColumn>       @*//Automatico, no tiene que estar en ninguna solapa, depende del valor de cg_orden*@
-                        <GridColumn Field=@nameof(Producto.STOCKMIN) HeaderText="Stock Minimo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>               @*//STOCK*@
-                        <GridColumn Field=@nameof(Producto.LOPTIMO) HeaderText="Lote Optimo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                 @*//STOCK*@
-                        <GridColumn Field=@nameof(Producto.COSTO) HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                         @*//STOCK*@
-                        <GridColumn Field=@nameof(Producto.COSTOTER) HeaderText="Costo ter" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                  @*//STOCK*@
-                        <GridColumn Field=@nameof(Producto.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                       @*//STOCK desplegable tabla Monedas*@
-                        <GridColumn Field=@nameof(Producto.TIEMPOFAB) HeaderText="Tiempo fabricacion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>        @*//DATOS DE FABRICACION*@
-                        <GridColumn Field=@nameof(Producto.FE_UC) HeaderText="Fecha UC" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                      @*//DATOS DE FABRICACION*@
-                        <GridColumn Field=@nameof(Producto.CG_CELDA) HeaderText="Celda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                      @*//DATOS DE FABRICACION desplegable*@
-                        <GridColumn Field=@nameof(Producto.CG_AREA) HeaderText="Area" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                        @*//DATOS DE FABRICACION desplegable*@
-                        <GridColumn Field=@nameof(Producto.CG_LINEA) HeaderText="Linea" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                      @*//DATOS DE FABRICACION desplegable*@
-                        <GridColumn Field=@nameof(Producto.CG_TIPOAREA) HeaderText="Tipo Area" TextAlign="TextAlign.Left" Width="150px"></GridColumn>               @*//DATOS DE FABRICACION desplegable*@
-                        <GridColumn Field=@nameof(Producto.CG_CLAS) HeaderText="Clase" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                       @*//DATOS DE FABRICACION*@
-                        <GridColumn Field=@nameof(Producto.CAMPOCOM1) HeaderText="CAMPOCOM1" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                 @*//CAMPOS CONFIGURABLES*@
-                        <GridColumn Field=@nameof(Producto.CAMPOCOM2) HeaderText="CAMPOCOM2" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                 @*//CAMPOS CONFIGURABLES*@
-                        <GridColumn Field=@nameof(Producto.CAMPOCOM3) HeaderText="CAMPOCOM3" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                 @*//CAMPOS CONFIGURABLES*@
-                        <GridColumn Field=@nameof(Producto.CAMPOCOM4) HeaderText="CAMPOCOM4" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                 @*//CAMPOS CONFIGURABLES*@
-                        <GridColumn Field=@nameof(Producto.CAMPOCOM5) HeaderText="CAMPOCOM5" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                 @*//CAMPOS CONFIGURABLES*@
-                        <GridColumn Field=@nameof(Producto.CAMPOCOM6) HeaderText="CAMPOCOM6" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                 @*//CAMPOS CONFIGURABLES*@
-                        <GridColumn Field=@nameof(Producto.CAMPOCOM7) HeaderText="CAMPOCOM7" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                 @*//CAMPOS CONFIGURABLES*@
-                        <GridColumn Field=@nameof(Producto.CAMPOCOM8) HeaderText="CAMPOCOM8" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                 @*//CAMPOS CONFIGURABLES*@
-                        <GridColumn Field=@nameof(Producto.CAMPOCOM9) HeaderText="CAMPOCOM9" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                 @*//CAMPOS CONFIGURABLES*@
-                        <GridColumn Field=@nameof(Producto.CAMPOCOM10) HeaderText="CAMPOCOM10" TextAlign="TextAlign.Left" Width="150px"></GridColumn>               @*//CAMPOS CONFIGURABLES*@
-                    </GridColumns>
-                    <SfSpinner @ref="refSpinner" Type="SpinnerType.Bootstrap" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
-                </SfGrid>
-            </div>
+                @*OnActionBegin="@((a)=> Begin(a))" *@
+                        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                                DataSource="prods"
+                                ID="gridProd" Height="100%" Width="100%" GridLines="GridLine.Both" RowHeight="27"
+                                @ref="Grid" AllowExcelExport="true" AllowGrouping="true"
+                                AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
+                            <GridSelectionSettings CheckboxOnly="true"
+                                                   Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                            <GridPageSettings PageSize="20" PageSizes="true" ></GridPageSettings>
+                            <GridEvents OnToolbarClick="@ClickHandler"
+                                        TValue="Producto"></GridEvents>
+                            <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
+                            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true">
+                            </GridEditSettings>
+                            <GridColumns>
+                                <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+                                <GridColumn Field=@nameof(Producto.CG_PROD) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                      @*//DATOS GENERALES*@
+                                <GridColumn Field=@nameof(Producto.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                @*//DATOS GENERALES*@
+                                <!--<GridColumn Field=@nameof(Producto.CG_ORDEN) HeaderText="Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                      @*//DATOS GENERALES desplegable*@
+                                <!--<GridColumn Field=@nameof(Producto.TIPO) HeaderText="Tipo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                           @*//DATOS GENERALES*@
+                                <!--<GridColumn Field=@nameof(Producto.UNID) HeaderText="Unidad de uso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                  @*//DATOS GENERALES desplegable*@
+                                <!--<GridColumn Field=@nameof(Producto.CG_DENSEG) HeaderText="Factor de conversion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->      @*//DATOS GENERALES*@
+                                <!--<GridColumn Field=@nameof(Producto.UNIDSEG) HeaderText="Unidad comercial" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->            @*//DATOS GENERALES desplegable*@
+                                <!--<GridColumn Field=@nameof(Producto.PESO) HeaderText="Peso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                           @*//DATOS GENERALES*@
+                                <!--<GridColumn Field=@nameof(Producto.UNIDPESO) HeaderText="Unidad de peso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->             @*//DATOS GENERALES*@
+                                <!--<GridColumn Field=@nameof(Producto.ESPECIF) HeaderText="Especificacion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->              @*//DATOS GENERALES*@
+                                <!--<GridColumn Field=@nameof(Producto.NORMA) HeaderText="Material" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                      @*//DATOS GENERALES*@
+                                <!--<GridColumn Field=@nameof(Producto.EXIGEDESPACHO) HeaderText="Exige despacho" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->        @*//Automatico, no tiene que estar en ninguna solapa, depende del valor de cg_orden*@
+                                <!--<GridColumn Field=@nameof(Producto.EXIGELOTE) HeaderText="Exige lote" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                @*//Automatico, no tiene que estar en ninguna solapa, depende del valor de cg_orden*@
+                                <!--<GridColumn Field=@nameof(Producto.EXIGESERIE) HeaderText="Exige serie" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->              @*//Automatico, no tiene que estar en ninguna solapa, depende del valor de cg_orden*@
+                                <!--<GridColumn Field=@nameof(Producto.EXIGEOA) HeaderText="Exige orden de armado" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->       @*//Automatico, no tiene que estar en ninguna solapa, depende del valor de cg_orden*@
+                                <!--<GridColumn Field=@nameof(Producto.STOCKMIN) HeaderText="Stock Minimo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->               @*//STOCK*@
+                                <!--<GridColumn Field=@nameof(Producto.LOPTIMO) HeaderText="Lote Optimo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                 @*//STOCK*@
+                                <!--<GridColumn Field=@nameof(Producto.COSTO) HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                         @*//STOCK*@
+                                <!--<GridColumn Field=@nameof(Producto.COSTOTER) HeaderText="Costo ter" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                  @*//STOCK*@
+                                <!--<GridColumn Field=@nameof(Producto.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                       @*//STOCK desplegable tabla Monedas*@
+                                <!--<GridColumn Field=@nameof(Producto.TIEMPOFAB) HeaderText="Tiempo fabricacion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->        @*//DATOS DE FABRICACION*@
+                                <!--<GridColumn Field=@nameof(Producto.FE_UC) HeaderText="Fecha UC" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                      @*//DATOS DE FABRICACION*@
+                                <!--<GridColumn Field=@nameof(Producto.CG_CELDA) HeaderText="Celda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                      @*//DATOS DE FABRICACION desplegable*@
+                                <!--<GridColumn Field=@nameof(Producto.CG_AREA) HeaderText="Area" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                        @*//DATOS DE FABRICACION desplegable*@
+                                <!--<GridColumn Field=@nameof(Producto.CG_LINEA) HeaderText="Linea" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                      @*//DATOS DE FABRICACION desplegable*@
+                                <!--<GridColumn Field=@nameof(Producto.CG_TIPOAREA) HeaderText="Tipo Area" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->               @*//DATOS DE FABRICACION desplegable*@
+                                <!--<GridColumn Field=@nameof(Producto.CG_CLAS) HeaderText="Clase" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                       @*//DATOS DE FABRICACION*@
+                                <!--<GridColumn Field=@nameof(Producto.CAMPOCOM1) HeaderText="CAMPOCOM1" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                 @*//CAMPOS CONFIGURABLES*@
+                                <!--<GridColumn Field=@nameof(Producto.CAMPOCOM2) HeaderText="CAMPOCOM2" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                 @*//CAMPOS CONFIGURABLES*@
+                                <!--<GridColumn Field=@nameof(Producto.CAMPOCOM3) HeaderText="CAMPOCOM3" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                 @*//CAMPOS CONFIGURABLES*@
+                                <!--<GridColumn Field=@nameof(Producto.CAMPOCOM4) HeaderText="CAMPOCOM4" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                 @*//CAMPOS CONFIGURABLES*@
+                                <!--<GridColumn Field=@nameof(Producto.CAMPOCOM5) HeaderText="CAMPOCOM5" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                 @*//CAMPOS CONFIGURABLES*@
+                                <!--<GridColumn Field=@nameof(Producto.CAMPOCOM6) HeaderText="CAMPOCOM6" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                 @*//CAMPOS CONFIGURABLES*@
+                                <!--<GridColumn Field=@nameof(Producto.CAMPOCOM7) HeaderText="CAMPOCOM7" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                 @*//CAMPOS CONFIGURABLES*@
+                                <!--<GridColumn Field=@nameof(Producto.CAMPOCOM8) HeaderText="CAMPOCOM8" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                 @*//CAMPOS CONFIGURABLES*@
+                                <!--<GridColumn Field=@nameof(Producto.CAMPOCOM9) HeaderText="CAMPOCOM9" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->                 @*//CAMPOS CONFIGURABLES*@
+                                <!--<GridColumn Field=@nameof(Producto.CAMPOCOM10) HeaderText="CAMPOCOM10" TextAlign="TextAlign.Left" Width="150px"></GridColumn>-->               @*//CAMPOS CONFIGURABLES*@
+                            </GridColumns>
+                            <SfSpinner @ref="refSpinner" Type="SpinnerType.Bootstrap" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
+                        </SfGrid>
+                    </div>
         </div>
     </div>
 </div>
@@ -374,37 +376,3 @@
         background-color: lightblue;
     }
 </style>
-
-@code {
-
-    public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
-    public bool DblClick = true;
-    public bool CommandColumnsClick = false;
-
-    public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
-    public void OnRadioChange(ChangeArgs<string> args)
-    {
-        if (args.Value == "inline")
-        {
-            this.DblClick = true;
-            this.CommandColumnsClick = false;
-            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
-        }
-        else if (args.Value == "batch")
-        {
-            this.DblClick = true;
-            this.CommandColumnsClick = false;
-            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Batch;
-        }
-        else if (args.Value == "dialog")
-        {
-            this.DblClick = true;
-            this.CommandColumnsClick = false;
-            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Dialog;
-        }
-        else
-        {
-            this.CommandColumnsClick = true;
-        }
-    }
-}

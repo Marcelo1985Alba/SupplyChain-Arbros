@@ -67,6 +67,8 @@ namespace SupplyChain.Pages.Prods
 
             SpinnerVisible = true;
             prods = await Http.GetFromJsonAsync<List<Producto>>("api/Prod");
+            prods = prods.OrderBy(s => s.CG_ORDEN).ToList();
+
             unidades = await Http.GetFromJsonAsync<List<Unidades>>("api/unidades");
             monedas = await Http.GetFromJsonAsync<List<Moneda>>("api/Monedas");
             celda = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
@@ -77,6 +79,11 @@ namespace SupplyChain.Pages.Prods
 
             SpinnerVisible = false;
             await base.OnInitializedAsync();
+        }
+
+        protected async Task OnCompleteHandler(ActionEventArgs<Producto> args)
+        {
+            //Grid.PreventRender();
         }
 
         public async Task Begin(ActionEventArgs<Producto> args)
