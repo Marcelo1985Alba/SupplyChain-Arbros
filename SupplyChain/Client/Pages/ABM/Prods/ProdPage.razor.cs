@@ -86,8 +86,14 @@ namespace SupplyChain.Pages.Prods
             //Grid.PreventRender();
         }
 
-        public async Task Begin(ActionEventArgs<Producto> args)
+        protected async Task OnActionBeginHandler(ActionEventArgs<Producto> args)
         {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                //SolicitudSeleccionada = args.Data;
+                args.PreventRender = false;
+            }
+
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
@@ -107,10 +113,14 @@ namespace SupplyChain.Pages.Prods
                 await Grid.RefreshColumns();
                 await Grid.RefreshHeader();
             }
+        }
 
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.RowDragAndDrop)
+        protected async Task OnActionCompleteHandler(ActionEventArgs<Producto> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-
+                //SolicitudSeleccionada = args.Data;
+                args.PreventRender = false;
             }
         }
 

@@ -1,4 +1,4 @@
-﻿@page "/Abms/productos"
+﻿@page "/Abms/productos2"
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Buttons
@@ -31,7 +31,7 @@
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler" TValue="Producto"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true" 
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
                               ShowDeleteConfirmDialog="true" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
             </GridEditSettings>
             <GridColumns>
