@@ -11,6 +11,7 @@ namespace SupplyChain
 {
     public class AppDbContext : DbContext
     {
+        #region "DbSet"
         //MODULO CARGA DE MAQUINA
         public virtual DbSet<ModeloCarga> Cargas { get; set; }
         public virtual DbSet<CargaMaq> CargaMaq { get; set; }
@@ -110,11 +111,13 @@ namespace SupplyChain
         public DbSet<vPresupuestos> vPresupuestos { get; set; }
         public DbSet<PresupuestoAnterior> Presupuestos { get; set; }
         public DbSet<PrecioArticulo> PrecioArticulos { get; set; }
-
+        public DbSet<vCondicionesPago> vCondicionesPago { get; set; }
         public DbSet<NotificacionSubscripcion> NotificacionSubscripcions { get; set; }
 
         //MODULO PROYECTOS
         public DbSet<ProyectosGBPI> Proyectos { get; set; }
+        #endregion
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             this.Database.SetCommandTimeout(60);
@@ -200,6 +203,7 @@ namespace SupplyChain
             modelBuilder.Entity<ClienteExterno>().HasNoKey().ToView("vClientesItris");
             modelBuilder.Entity<vPresupuestos>().HasNoKey().ToView("vPresupuestos");
             modelBuilder.Entity<vDireccionesEntrega>().ToView("vDireccionesEntrega_Itris");
+            modelBuilder.Entity<vDireccionesEntrega>().ToView("vCondicionesPago");
         }
     }
 }

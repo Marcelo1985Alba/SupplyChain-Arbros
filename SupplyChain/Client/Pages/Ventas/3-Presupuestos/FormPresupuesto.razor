@@ -24,7 +24,7 @@
         <Content>
             <SfToolbar ID="toolbar-form-solicitud" CssClass="" >
                 <ToolbarItems>
-                    <ToolbarItem Id="tiSolicitudes" CssClass="e-round btn-sm" Text="Solicitudes" OnClick="BuscarSolicitudes" Align="ItemAlign.Right"></ToolbarItem>
+                    <ToolbarItem Id="tiSolicitudes" CssClass="e-round e-small" Type="ItemType.Button" Text="Solicitudes" OnClick="BuscarSolicitudes" Align="ItemAlign.Right"></ToolbarItem>
                     <ToolbarItem Id="tiProductos" CssClass="e-round" Text="Productos"  OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>
                     <ToolbarItem Id="tiReparaciones" CssClass="e-round" Text="Reparaciones" Align="ItemAlign.Right"></ToolbarItem>
                     
@@ -47,7 +47,7 @@
                         <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Presupuesto.DES_CLI)" Readonly="true"></SfTextBox>
                     </div>
                     <div class="form-group col-md-1 mt-4">
-                        <SfButton IconCss="fa fa-search" CssClass="e-round btn-info" OnClick="@(async ()=> await BuscarClientes())"
+                        <SfButton IconCss="fa fa-search" CssClass="e-round e-info" OnClick="@(async ()=> await BuscarClientes())"
                                   HtmlAttributes="@HtmlAttribute"></SfButton>
                     </div>
                     <div class="form-group col-md-2">
@@ -85,7 +85,7 @@
                             <ToastPosition X="Center" Y="Top"></ToastPosition>
                         </SfToast>
 
-                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="200px"
+                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="150px"
                                 @ref="refGridItems" DataSource="@Presupuesto.Items" Width="100%" ID="grdItemsPresup"
                                 AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -165,30 +165,35 @@
     </DialogTemplates>
 </SfDialog>
 <style>
+
     #toolbar-form-solicitud {
-        border: 0px solid rgb(173, 255, 47);
+        border: 0px solid rgb(173, 255, 47) !important;
     }
+
     #toolbar-form-solicitud .e-toolbar-item {
         /*background: #add8e6;*/
         /*border: 1px solid #5a70cc;*/
     }
+
     #toolbar-form-solicitud .e-tbar-btn {
         background: #398bf7;
         border-radius: 10%;
         /*border: 1px solid #5a70cc;*/
     }
+
     #toolbar-form-solicitud .e-toolbar-item:hover {
         background: #619ded;
         /*border: 1px solid #5a70cc;*/
     }
+
     #toolbar-form-solicitud .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn {
-        min-height: 20px; 
+        min-height: 20px;
     }
 
-    #toolbar-form-solicitud .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:hover {
-        background-color: #4f70ee;
-        border-radius: 10%;
-    }
+        #toolbar-form-solicitud .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:hover {
+            background-color: #4f70ee;
+            border-radius: 10%;
+        }
 
 
     #toolbar-form-solicitud .e-toolbar-items .e-toolbar-item .e-tbar-btn-text {
@@ -203,7 +208,7 @@
     }
 
 
-    .container-button{
+    .container-button {
         text-align: right;
     }
 
@@ -211,8 +216,9 @@
         font-size: 10px !important;
         /*padding: .5rem !important;*/
     }
+
     .e-grid .e-row {
-        font-size:10px;
+        font-size: 10px;
     }
 
 </style>
