@@ -64,34 +64,6 @@ namespace SupplyChain.Pages.PreciosArt
             await base.OnInitializedAsync();
         }
 
-        public async Task Begin(ActionEventArgs<PreciosArticulos> args)
-        {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
-                || args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
-                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
-                || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
-                || args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState
-                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
-                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder
-                || args.RequestType == Syncfusion.Blazor.Grids.Action.Sorting
-                )
-            {
-                //VisibleProperty = true;
-                Grid.PreventRender();
-                Grid.Refresh();
-
-                state = await Grid.GetPersistData();
-                await Grid.AutoFitColumnsAsync();
-                await Grid.RefreshColumns();
-                await Grid.RefreshHeader();
-            }
-
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.RowDragAndDrop)
-            {
-
-            }
-        }
-
         public async Task Cerrar()
         {
             precioArt = new();
@@ -217,7 +189,7 @@ namespace SupplyChain.Pages.PreciosArt
                     });
                 }
             }
-            
+
             if (args.Item.Text == "Copy" || args.Item.Text == "Add")
             {
                 if (this.Grid.SelectedRecords.Count < 2)
@@ -272,11 +244,48 @@ namespace SupplyChain.Pages.PreciosArt
                 }
             }
         }
-        public async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
+        protected async Task OnActionBeginHandler(ActionEventArgs<PreciosArticulos> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                //SolicitudSeleccionada = args.Data;
+                args.PreventRender = false;
+            }
+
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Sorting
+                )
+            {
+                //VisibleProperty = true;
+                Grid.PreventRender();
+                Grid.Refresh();
+
+                state = await Grid.GetPersistData();
+                await Grid.AutoFitColumnsAsync();
+                await Grid.RefreshColumns();
+                await Grid.RefreshHeader();
+            }
+        }
+
+        protected async Task OnActionCompleteHandler(ActionEventArgs<PreciosArticulos> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                //SolicitudSeleccionada = args.Data;
+                args.PreventRender = false;
+            }
+        }
+        protected async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
         {
             await Grid.SetPersistData(vistasGrillas.Layout);
         }
-        public async Task OnReiniciarGrilla()
+        protected async Task OnReiniciarGrilla()
         {
             await Grid.ResetPersistData();
         }

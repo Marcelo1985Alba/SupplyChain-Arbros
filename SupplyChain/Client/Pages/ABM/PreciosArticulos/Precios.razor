@@ -33,7 +33,7 @@
                     <GridSelectionSettings CheckboxOnly="true"
                                            Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                     <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
-                    <GridEvents OnToolbarClick="@ClickHandler" OnActionBegin="@((a)=> Begin(a))" TValue="PreciosArticulos"></GridEvents>
+                    <GridEvents OnToolbarClick="@ClickHandler" TValue="PreciosArticulos"></GridEvents>
                     <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                     <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true">
                     </GridEditSettings>
@@ -127,4 +127,3 @@
         background-color: lightblue;
     }
 </style>
-

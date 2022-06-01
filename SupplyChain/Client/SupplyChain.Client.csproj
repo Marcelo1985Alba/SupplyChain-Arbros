@@ -10,18 +10,12 @@
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
 
   </PropertyGroup>
-
-
-  <ItemGroup>
-    <Content Remove="Pages\ABM\PreciosArticulos\PreciosArt.razor" />
-  </ItemGroup>
 	<ItemGroup>
 		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
 	</ItemGroup>
 
 
 	<ItemGroup>
-    <None Include="Pages\ABM\PreciosArticulos\PreciosArt.razor" />
     <None Include="Pages\ABM\Prods\ProdPage.razor" />
     <None Include="Pages\PCP\Fabricaciones\Fabricaciones.razor" />
     <None Include="Pages\PCP\Prevision\Prevision.razor" />
