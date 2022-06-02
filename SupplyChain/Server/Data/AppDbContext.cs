@@ -206,7 +206,7 @@ namespace SupplyChain
             modelBuilder.Entity<ClienteExterno>().HasNoKey().ToView("vClientesItris");
             modelBuilder.Entity<vPresupuestos>().HasNoKey().ToView("vPresupuestos");
             modelBuilder.Entity<vDireccionesEntrega>().ToView("vDireccionesEntrega_Itris");
-            modelBuilder.Entity<vDireccionesEntrega>().ToView("vCondicionesPago");
+            modelBuilder.Entity<vCondicionesPago>().ToView("vCondicionesPago");
         }
     }
 }

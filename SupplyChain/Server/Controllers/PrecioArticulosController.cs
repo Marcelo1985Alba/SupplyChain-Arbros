@@ -26,7 +26,6 @@ namespace SupplyChain.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PreciosArticulos>>> Gets()
         {
-            //OC ABIERTAS
             try
             {
                 return await _precioArticulosRepository.ObtenerTodos();

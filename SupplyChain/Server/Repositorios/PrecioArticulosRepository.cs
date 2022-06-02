@@ -11,8 +11,9 @@ namespace SupplyChain.Server.Repositorios
     public class PrecioArticulosRepository : Repository<PreciosArticulos, string>
     {
         public PrecioArticulosRepository(AppDbContext appDbContext) : base(appDbContext)
-    {
+        {
+
+        }
 
     }
-}
 }

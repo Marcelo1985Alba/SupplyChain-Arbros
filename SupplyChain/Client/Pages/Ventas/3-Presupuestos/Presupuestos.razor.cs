@@ -63,9 +63,6 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             }
         }
 
-
-
-
         protected async Task GeneraPresupuesto()
         {
             //SpinnerVisiblePresupuesto = true;
@@ -93,8 +90,6 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         }
 
-
-
         protected async Task OnActionBeginHandler(ActionEventArgs<vPresupuestos> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
@@ -117,15 +112,6 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 {
                     PresupuestoSeleccionado = response.Response;
                 }
-                //PresupuestoSeleccionado.Id = args.Data.Id;
-                //PresupuestoSeleccionado.Fecha = args.Data.Fecha;
-                //PresupuestoSeleccionado.TagId = args.Data.TagId;
-                //PresupuestoSeleccionado.Producto = args.Data.Producto;
-                //PresupuestoSeleccionado.Des_Prod = args.Data.DES_PROD;
-                //PresupuestoSeleccionado.Cantidad = args.Data.Cantidad;
-                //PresupuestoSeleccionado.CG_CLI = args.Data.CG_CLI;
-                //PresupuestoSeleccionado.Cuit = args.Data.Cuit;
-                //PresupuestoSeleccionado.Des_Cli = args.Data.DES_CLI;
             }
         }
 

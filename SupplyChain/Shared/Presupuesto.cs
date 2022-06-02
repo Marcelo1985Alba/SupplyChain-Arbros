@@ -14,14 +14,14 @@ namespace SupplyChain.Shared
         public DateTime FECHA { get; set; } = DateTime.Now;
         [Required(ErrorMessage ="* La Moneda es requerida")]
         public string MONEDA { get; set; } = "DOLARES";
-        public decimal IVA { get; set; }
         public int CG_CLI { get; set; } = 0;
+        [Required]
         public int CONDICION_PAGO { get; set; } = 0;
+        public int CG_COND_ENTREGA { get; set; } = 0;
         public decimal BONIFIC { get; set; }
         public int CG_TRANS { get; set; } = 0;
-        public int CG_EXPRESO { get; set; } = 0;
 
-        [Required]
+        [Required(ErrorMessage = "La Direccion de Entrega es requerida")]
         public string DIRENT { get; set; }
         
         [ValidateComplexType]

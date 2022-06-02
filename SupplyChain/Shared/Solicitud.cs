@@ -38,6 +38,7 @@ namespace SupplyChain.Shared
         public string Resorte { get; set; } = "";
         public string Disco { get; set; } = "";
         public string Tobera { get; set; } = "";
+        public PreciosArticulos MyProperty { get; set; }
         public PresupuestoDetalle PresupuestoDetalle { get; set; }
         [NotMapped] public PreciosArticulos PrecioArticulo { get; set; }
         [NotMapped] public string Des_Cli { get; set; } = "";
