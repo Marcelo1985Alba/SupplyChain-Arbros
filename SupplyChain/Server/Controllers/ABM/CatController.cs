@@ -10,48 +10,48 @@ namespace SupplyChain
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UnidadesController : ControllerBase
+    public class CatController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public UnidadesController(AppDbContext context)
+        public CatController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Unidades
+        // GET: api/Cat
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Unidades>>> GetUnidades()
+        public async Task<ActionResult<IEnumerable<Cat>>> GetCat()
         {
-            return await _context.Unidades.ToListAsync();
+            return await _context.Cat.ToListAsync();
         }
 
-        // GET: api/Unidades/5
+        // GET: api/Cat/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Unidades>> GetUnidad(string id)
+        public async Task<ActionResult<Cat>> GetCat(int id)
         {
-            var unidad = await _context.Unidades.FindAsync(id);
+            var Cat = await _context.Cat.FindAsync(id);
 
-            if (unidad == null)
+            if (Cat == null)
             {
                 return NotFound();
             }
 
-            return unidad;
+            return Cat;
         }
 
-        // PUT: api/Unidades/5
+        // PUT: api/Cat/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUnidad(string id, Unidades unidad)
+        public async Task<IActionResult> PutCat(int id, Cat cat)
         {
-            if (id != unidad.UNID)
+            if (id != cat.CG_ORDEN)
             {
                 return BadRequest();
             }
 
-            _context.Entry(unidad).State = EntityState.Modified;
+            _context.Entry(cat).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace SupplyChain
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UnidadExists(id))
+                if (!CatExists(id))
                 {
                     return NotFound();
                 }
@@ -72,20 +72,20 @@ namespace SupplyChain
             return NoContent();
         }
 
-        // POST: api/Unidades
+        // POST: api/Cat
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Unidades>> PostUnidad(Unidades unidad)
+        public async Task<ActionResult<Cat>> PostCat(Cat cat)
         {
-            _context.Unidades.Add(unidad);
+            _context.Cat.Add(cat);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (UnidadExists(unidad.UNID))
+                if (CatExists(cat.CG_ORDEN))
                 {
                     return Conflict();
                 }
@@ -95,28 +95,28 @@ namespace SupplyChain
                 }
             }
 
-            return CreatedAtAction("GetUnidad", new { id = unidad.UNID }, unidad);
+            return CreatedAtAction("GetCat", new { id = cat.CG_ORDEN }, cat);
         }
 
-        // DELETE: api/Unidades/5
+        // DELETE: api/Cat/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Unidades>> DeleteUnidad(string id)
+        public async Task<ActionResult<Cat>> CatUnidad(int id)
         {
-            var unidad = await _context.Unidades.FindAsync(id);
-            if (unidad == null)
+            var cat = await _context.Cat.FindAsync(id);
+            if (cat == null)
             {
                 return NotFound();
             }
 
-            _context.Unidades.Remove(unidad);
+            _context.Cat.Remove(cat);
             await _context.SaveChangesAsync();
 
-            return unidad;
+            return cat;
         }
 
-        private bool UnidadExists(string id)
+        private bool CatExists(int id)
         {
-            return _context.Unidades.Any(e => e.UNID == id);
+            return _context.Cat.Any(e => e.CG_ORDEN == id);
         }
     }
 }

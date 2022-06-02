@@ -33,6 +33,7 @@ namespace SupplyChain
         public DbSet<Pedidos> Pedidos { get; set; }
         public DbSet<Programa> Programa { get; set; }
         public DbSet<Areas> Areas { get; set; }
+        public DbSet<Cat> Cat { get; set; }
         public DbSet<Unidades> Unidades { get; set; }
         public DbSet<Lineas> Lineas { get; set; }
         public DbSet<CatOpe> CateOperarios { get; set; }
@@ -45,6 +46,8 @@ namespace SupplyChain
         public DbSet<ProTarea> ProTarea { get; set; }
         public DbSet<TipoMat> TipoMat { get; set; }
         public DbSet<Producto> Prod { get; set; }
+
+        public DbSet<PreciosArticulos> PrecioArticulo { get; set; }
         //MODULO SERVICIOS
         public DbSet<Celdas> Celdas { get; set; }
         public DbSet<Estado> Estado { get; set; }
@@ -66,6 +69,7 @@ namespace SupplyChain
         public virtual DbSet<Procun> Procun { get; set; }
         public virtual DbSet<Fabricacion> Fabricaciones { get; set; }
         public virtual DbSet<vProdMaquinaDataCore> VProdMaquinaDataCore { get; set; }
+        public virtual DbSet<Moneda> Monedas { get; set; }
         //MODULO LOGIN
         public DbSet<Usuarios> Usuarios { get; set; }
         public DbSet<Rol> Roles { get; set; }

@@ -122,7 +122,6 @@ namespace SupplyChain.Pages.Unidad
                             Nuevo.TIPOUNID = selectedRecord.TIPOUNID;
                             Nuevo.CG_DENBASICA = selectedRecord.CG_DENBASICA;
                             Nuevo.CODIGO = selectedRecord.CODIGO;
-                            Nuevo.CG_CIA = selectedRecord.CG_CIA;
 
 
 

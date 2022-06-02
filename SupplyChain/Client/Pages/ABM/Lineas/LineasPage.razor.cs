@@ -117,9 +117,6 @@ namespace SupplyChain.Pages.Linea
 
                             Nuevo.CG_LINEA = lineas.Max(s => s.CG_LINEA) + 1;
                             Nuevo.DES_LINEA = selectedRecord.DES_LINEA;
-                            Nuevo.CG_CIA = selectedRecord.CG_CIA;
-                         
-               
 
                             var response = await Http.PostAsJsonAsync("api/Lineas", Nuevo);
 

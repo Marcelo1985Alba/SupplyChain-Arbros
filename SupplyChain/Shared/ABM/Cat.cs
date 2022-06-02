@@ -6,12 +6,16 @@ using System.Text;
 
 namespace SupplyChain
 {
-    [Table("Lineas")]
-    public class Lineas
+    [Table("Cat")]
+    public class Cat
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CG_LINEA { get; set; } = 0;
-        public string DES_LINEA { get; set; } = "";
-
+        public int CG_ORDEN { get; set; } = 0;
+        public string DES_ORDEN { get; set; } = "";
     }
 }
+
+
+
+
+      

@@ -15,8 +15,8 @@ namespace SupplyChain
         public string TIPOUNID { get; set; } = "";//
         public decimal CG_DENBASICA { get; set; } = 0;//
         //public bool BASICA { get; set; } = false;
-        public int CODIGO { get; set; } = 0;//
-        public int CG_CIA { get; set; } = 0;//
+        public decimal CODIGO { get; set; } = 0;//
+        //public int CG_CIA { get; set; } = 0;
 
     }
 }

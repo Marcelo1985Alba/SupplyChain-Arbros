@@ -10,48 +10,55 @@ namespace SupplyChain
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UnidadesController : ControllerBase
+    public class MonedasController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public UnidadesController(AppDbContext context)
+        public MonedasController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Unidades
+        // GET: api/Monedas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Unidades>>> GetUnidades()
+        public async Task<ActionResult<IEnumerable<Moneda>>> GetMonedas()
         {
-            return await _context.Unidades.ToListAsync();
+            try
+            {
+                return await _context.Monedas.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
-        // GET: api/Unidades/5
+        // GET: api/Monedas/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Unidades>> GetUnidad(string id)
+        public async Task<ActionResult<Moneda>> GetMoneda(string id)
         {
-            var unidad = await _context.Unidades.FindAsync(id);
+            var moneda = await _context.Monedas.FindAsync(id);
 
-            if (unidad == null)
+            if (moneda == null)
             {
                 return NotFound();
             }
 
-            return unidad;
+            return moneda;
         }
 
-        // PUT: api/Unidades/5
+        // PUT: api/Monedas/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUnidad(string id, Unidades unidad)
+        public async Task<IActionResult> PutMoneda(string id, Moneda moneda)
         {
-            if (id != unidad.UNID)
+            if (id != moneda.MONEDA)
             {
                 return BadRequest();
             }
 
-            _context.Entry(unidad).State = EntityState.Modified;
+            _context.Entry(moneda).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +66,7 @@ namespace SupplyChain
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UnidadExists(id))
+                if (!MonedaExists(id))
                 {
                     return NotFound();
                 }
@@ -72,20 +79,20 @@ namespace SupplyChain
             return NoContent();
         }
 
-        // POST: api/Unidades
+        // POST: api/Monedas
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Unidades>> PostUnidad(Unidades unidad)
+        public async Task<ActionResult<Moneda>> PostMoneda(Moneda moneda)
         {
-            _context.Unidades.Add(unidad);
+            _context.Monedas.Add(moneda);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (UnidadExists(unidad.UNID))
+                if (MonedaExists(moneda.MONEDA))
                 {
                     return Conflict();
                 }
@@ -95,28 +102,28 @@ namespace SupplyChain
                 }
             }
 
-            return CreatedAtAction("GetUnidad", new { id = unidad.UNID }, unidad);
+            return CreatedAtAction("GetUnidad", new { id = moneda.MONEDA }, moneda);
         }
 
         // DELETE: api/Unidades/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Unidades>> DeleteUnidad(string id)
+        public async Task<ActionResult<Moneda>> DeleteMoneda(string id)
         {
-            var unidad = await _context.Unidades.FindAsync(id);
-            if (unidad == null)
+            var moneda = await _context.Monedas.FindAsync(id);
+            if (moneda == null)
             {
                 return NotFound();
             }
 
-            _context.Unidades.Remove(unidad);
+            _context.Monedas.Remove(moneda);
             await _context.SaveChangesAsync();
 
-            return unidad;
+            return moneda;
         }
 
-        private bool UnidadExists(string id)
+        private bool MonedaExists(string id)
         {
-            return _context.Unidades.Any(e => e.UNID == id);
+            return _context.Monedas.Any(e => e.MONEDA == id);
         }
     }
 }

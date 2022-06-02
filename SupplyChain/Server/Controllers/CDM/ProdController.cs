@@ -53,6 +53,7 @@ namespace SupplyChain
 
 
 
+
         // GET: api/Prod/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Producto>> Get(string id)
@@ -98,8 +99,11 @@ namespace SupplyChain
                     return BadRequest();
                 }
             }
-
-            return NoContent();
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            return Ok(Prod);
         }
 
         // POST: api/Prod
@@ -112,7 +116,7 @@ namespace SupplyChain
             {
                 await _productoRepository.Agregar(Prod);
             }
-            catch (DbUpdateException) 
+            catch (DbUpdateException exx) 
             {
                 if (!await _productoRepository.Existe(Prod.Id))
                 {
@@ -122,6 +126,10 @@ namespace SupplyChain
                 {
                     return BadRequest();
                 }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
             }
 
             return CreatedAtAction("GetProd", new { id = Prod.Id }, Prod);

@@ -6,12 +6,18 @@ using System.Text;
 
 namespace SupplyChain
 {
-    [Table("Lineas")]
-    public class Lineas
+    [Table("Monedas")]
+    public class Moneda
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CG_LINEA { get; set; } = 0;
-        public string DES_LINEA { get; set; } = "";
-
+        public string MONEDA { get; set; } = "";
+        public string TIPO { get; set; } = "";
+        public string SIMBOLO { get; set; } = "";
+        public string CODIGO { get; set; } = "";
     }
 }
+
+
+
+
+      

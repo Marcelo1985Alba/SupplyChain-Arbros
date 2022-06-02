@@ -5,53 +5,56 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared.Models;
+using SupplyChain.Shared.Prod;
 
 namespace SupplyChain
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UnidadesController : ControllerBase
+    public class PreciosArtController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public UnidadesController(AppDbContext context)
+        public PreciosArtController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Unidades
+        // GET: api/Prod
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Unidades>>> GetUnidades()
+        public async Task<ActionResult<IEnumerable<PreciosArticulos>>> GetPreciosArt()
         {
-            return await _context.Unidades.ToListAsync();
+            return await _context.PrecioArticulo.ToListAsync();
         }
 
-        // GET: api/Unidades/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Unidades>> GetUnidad(string id)
-        {
-            var unidad = await _context.Unidades.FindAsync(id);
 
-            if (unidad == null)
+        // GET: api/Prod/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PreciosArticulos>> GetPrecioArt(string id)
+        {
+            var precio = await _context.PrecioArticulo.FindAsync(id);
+
+            if (precio == null)
             {
                 return NotFound();
             }
-
-            return unidad;
+            return precio;
         }
 
-        // PUT: api/Unidades/5
+        // PUT: api/Prod/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUnidad(string id, Unidades unidad)
+        public async Task<IActionResult> PutPreciosArt(string id, PreciosArticulos precio)
         {
-            if (id != unidad.UNID)
+            if (id != precio.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(unidad).State = EntityState.Modified;
+            _context.Entry(precio).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +62,7 @@ namespace SupplyChain
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UnidadExists(id))
+                if (!PreciosArtExists(id))
                 {
                     return NotFound();
                 }
@@ -72,20 +75,20 @@ namespace SupplyChain
             return NoContent();
         }
 
-        // POST: api/Unidades
+        // POST: api/Prod
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Unidades>> PostUnidad(Unidades unidad)
+        public async Task<ActionResult<PreciosArticulos>> PostPreciosArt(PreciosArticulos precio)
         {
-            _context.Unidades.Add(unidad);
+            _context.PrecioArticulo.Add(precio);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (UnidadExists(unidad.UNID))
+                if (PreciosArtExists(precio.Id))
                 {
                     return Conflict();
                 }
@@ -95,28 +98,11 @@ namespace SupplyChain
                 }
             }
 
-            return CreatedAtAction("GetUnidad", new { id = unidad.UNID }, unidad);
+            return CreatedAtAction("GetPrecioArt", new { id = precio.Id }, precio);
         }
-
-        // DELETE: api/Unidades/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Unidades>> DeleteUnidad(string id)
+        private bool PreciosArtExists(string id)
         {
-            var unidad = await _context.Unidades.FindAsync(id);
-            if (unidad == null)
-            {
-                return NotFound();
-            }
-
-            _context.Unidades.Remove(unidad);
-            await _context.SaveChangesAsync();
-
-            return unidad;
-        }
-
-        private bool UnidadExists(string id)
-        {
-            return _context.Unidades.Any(e => e.UNID == id);
+            return _context.PrecioArticulo.Any(e => e.Id == id);
         }
     }
 }
