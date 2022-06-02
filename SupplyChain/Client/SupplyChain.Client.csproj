@@ -16,7 +16,6 @@
 
 
 	<ItemGroup>
-    <None Include="Pages\ABM\Prods\ProdPage.razor" />
     <None Include="Pages\PCP\Fabricaciones\Fabricaciones.razor" />
     <None Include="Pages\PCP\Prevision\Prevision.razor" />
     <None Include="wwwroot\scss\colors\blue-dark.scss" />
@@ -478,6 +477,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Pages\ABM\Prods\" />
     <Folder Include="Pages\Ventas\2-Pedidos\" />
     <Folder Include="Shared\BuscarPrecios\" />
   </ItemGroup>
