@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace SupplyChain.Server.Controllers
 
         // GET: api/Compras
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PrecioArticulo>>> Gets()
+        public async Task<ActionResult<IEnumerable<PreciosArticulos>>> Gets()
         {
             //OC ABIERTAS
             try
@@ -54,7 +55,7 @@ namespace SupplyChain.Server.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, PrecioArticulo precioArt)
+        public async Task<IActionResult> Put(string id, PreciosArticulos precioArt)
         {
             if (id != precioArt.Id)
             {
@@ -84,7 +85,7 @@ namespace SupplyChain.Server.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<PrecioArticulo>> Post(PrecioArticulo precioArt)
+        public async Task<ActionResult<PreciosArticulos>> Post(PreciosArticulos precioArt)
         {
             try
             {
@@ -99,7 +100,7 @@ namespace SupplyChain.Server.Controllers
 
         // DELETE: api/Compras/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<PrecioArticulo>> DeleteCompra(string id)
+        public async Task<ActionResult<PreciosArticulos>> DeleteCompra(string id)
         {
             var solicitud = await _precioArticulosRepository.ObtenerPorId(id);
             if (solicitud == null)

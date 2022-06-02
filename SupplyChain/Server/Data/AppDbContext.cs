@@ -114,7 +114,6 @@ namespace SupplyChain
         public DbSet<vSolicitudes> vSolicitudes { get; set; }
         public DbSet<vPresupuestos> vPresupuestos { get; set; }
         public DbSet<PresupuestoAnterior> Presupuestos { get; set; }
-        public DbSet<PrecioArticulo> PrecioArticulos { get; set; }
         public DbSet<vCondicionesPago> vCondicionesPago { get; set; }
         public DbSet<NotificacionSubscripcion> NotificacionSubscripcions { get; set; }
 

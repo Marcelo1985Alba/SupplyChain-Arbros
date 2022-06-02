@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SupplyChain.Shared.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -38,7 +39,7 @@ namespace SupplyChain.Shared
         public string Disco { get; set; } = "";
         public string Tobera { get; set; } = "";
         public PresupuestoDetalle PresupuestoDetalle { get; set; }
-        [NotMapped] public PrecioArticulo PrecioArticulo { get; set; }
+        [NotMapped] public PreciosArticulos PrecioArticulo { get; set; }
         [NotMapped] public string Des_Cli { get; set; } = "";
         [NotMapped] public string Des_Prod { get; set; } = "";
         [NotMapped] public bool Guardado { get; set; } = false;

@@ -2,6 +2,7 @@
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
 using System;
@@ -110,7 +111,7 @@ namespace SupplyChain.Client.Shared.BuscarSolicitud
             }
         }
 
-        protected async Task<PrecioArticulo> GetPrecio(string precioArt)
+        protected async Task<PreciosArticulos> GetPrecio(string precioArt)
         {
             var response = await PrecioArticuloService.GetById(precioArt);
             if (response.Error)
