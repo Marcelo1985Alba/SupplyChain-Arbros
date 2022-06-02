@@ -40,14 +40,21 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Solicitud>> GetSolicitud(int id)
         {
-            var solicitud = await _solicitudRepository.ObtenerPorId(id);
-
-            if (solicitud == null)
+            try
             {
-                return NotFound();
-            }
+                var solicitud = await _solicitudRepository.ObtenerPorId(id);
 
-            return Ok(solicitud);
+                if (solicitud == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(solicitud);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         // GET: api/Compras/5

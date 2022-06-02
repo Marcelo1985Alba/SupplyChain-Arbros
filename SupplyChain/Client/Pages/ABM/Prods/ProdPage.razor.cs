@@ -59,7 +59,7 @@ namespace SupplyChain.Pages.Prods
         "Print",
         new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
         "ExcelExport"
-    };
+        };
         [CascadingParameter] MainLayout MainLayout { get; set; }
         protected override async Task OnInitializedAsync()
         {

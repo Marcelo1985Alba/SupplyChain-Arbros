@@ -1,0 +1,76 @@
+﻿@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@inherits FormPrecioBase
+
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+
+<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
+    <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
+    <DialogTemplates>
+        <Header>
+            @if (string.IsNullOrEmpty(PrecioArticulo.Id))
+            {
+                <p>Nuevo Articulo</p>
+            }
+            else
+            {
+                <p>&nbsp;&nbsp;@PrecioArticulo.Id&nbsp;&nbsp;-&nbsp;&nbsp;@PrecioArticulo.Descripcion</p>
+            }
+        </Header>
+        <Content>
+            <EditForm Model="PrecioArticulo" OnValidSubmit="@GuardarPrecioArticulo">
+                <DataAnnotationsValidator />
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-Campos" role="tab" aria-controls="pills-home" aria-selected="true">Campos</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-Campos" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Id:</label>
+                                    <SfTextBox ID="Id" @bind-Value="@(PrecioArticulo.Id)" Enabled="true" Placeholder="Codigo"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Descripcion:</label>
+                                    <SfTextBox ID="Descripcion" @bind-Value="@(PrecioArticulo.Descripcion)" Placeholder="Descripcion"></SfTextBox>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Precio:</label>
+                                    <SfNumericTextBox ID="Precio" @bind-Value="@(PrecioArticulo.Precio)" Placeholder="Precio"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a>Moneda:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Moneda" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(PrecioArticulo.Moneda)" DataSource="@monedas">
+                                        <ComboBoxFieldSettings Value="MONEDA" Text="MONEDA"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Marca:</label>
+                                    <SfTextBox ID="Marca" @bind-Value="@(PrecioArticulo.Marca)" Placeholder="Marca"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Construccion:</label>
+                                    <SfTextBox ID="Construccion" @bind-Value="@(PrecioArticulo.Construccion)" Placeholder="Construccion"></SfTextBox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
+            </EditForm>
+        </Content>
+    </DialogTemplates>
+</SfDialog>

@@ -1,28 +1,28 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using SupplyChain;
+using SupplyChain.Client.HelperService;
+using SupplyChain.Client.RepositoryHttp;
+using SupplyChain.Client.Shared;
+using SupplyChain.Shared;
+using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
+using Syncfusion.Blazor.Notifications;
+using Syncfusion.Blazor.Spinner;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
-using SupplyChain.Shared.Models;
-using SupplyChain.Client.Shared;
-using Syncfusion.Blazor.Spinner;
-using Syncfusion.Blazor.Notifications;
-using SupplyChain.Shared;
 
-namespace SupplyChain.Pages.PreciosArt
+namespace SupplyChain.Client.Pages.ABM.Precios
 {
-    public class PreciosArtPageBase : ComponentBase
+    public class PreciosPageBase : ComponentBase
     {
-        [Inject] protected HttpClient Http { get; set; }
-        [Inject] protected IJSRuntime JsRuntime { get; set; }
-
+        [Inject] protected PrecioArticuloService PrecioArticuloService { get; set; }
+        [Inject] public IJSRuntime JsRuntime { get; set; }
+        [Inject] public HttpClient Http { get; set; }
         protected SfSpinner refSpinner;
         protected SfGrid<PreciosArticulos> Grid;
         protected SfToast ToastObj;
@@ -35,33 +35,48 @@ namespace SupplyChain.Pages.PreciosArt
 
 
         protected List<PreciosArticulos> preciosArts = new();
-        public PreciosArticulos precioArt = new PreciosArticulos();
+        public PreciosArticulos precioArt = new();
 
-        protected List<Moneda> monedas = new List<Moneda>();
+        protected List<Moneda> monedas = new();
 
         protected const string APPNAME = "grdPreciosArtABM";
         protected string state;
 
         protected List<Object> Toolbaritems = new List<Object>(){
-        "Search",
-        "Add",
-        "Edit",
-        "Delete",
-        "Print",
-        new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
-        "ExcelExport"
-    };
+            "Search",
+            "Add",
+            "Edit",
+            "Delete",
+            "Print",
+            new ItemModel { Text = "Copia", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
+            "ExcelExport"
+        };
         [CascadingParameter] MainLayout MainLayout { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Precios de Articulos";
 
             SpinnerVisible = true;
-            preciosArts = await Http.GetFromJsonAsync<List<PreciosArticulos>>("api/PreciosArt");
-            monedas = await Http.GetFromJsonAsync<List<Moneda>>("api/Monedas");
+            //preciosArts = await Http.GetFromJsonAsync<List<PreciosArticulos>>("api/PreciosArt");
+            await GetPrecioArticulos();
 
             SpinnerVisible = false;
-            await base.OnInitializedAsync();
+        }
+
+        protected async Task GetPrecioArticulos()
+        {
+            var respose = await PrecioArticuloService.Get();
+            if (respose.Error)
+            {
+                Console.WriteLine(await respose.HttpResponseMessage.Content.ReadAsStringAsync());
+                await ToastMensajeError();
+            }
+            else
+            {
+                preciosArts = respose.Response;
+                monedas = await Http.GetFromJsonAsync<List<Moneda>>("api/Monedas");
+            }
         }
 
         public async Task Cerrar()
@@ -73,91 +88,69 @@ namespace SupplyChain.Pages.PreciosArt
         {
             if (isAdding == true)
             {
-                var existe = await Http.GetFromJsonAsync<bool>($"api/PreciosArt/PreciosArtExists/{precioArt.Id}");
-
+                bool existe = await PrecioArticuloService.Existe(precioArt.Id);
                 if (!existe)
                 {
-                    var response = await Http.PostAsJsonAsync("api/PreciosArt", precioArt);
-
-                    if (response.StatusCode == System.Net.HttpStatusCode.Created)
-                    {
-                        var precioArtNuevo = await response.Content.ReadFromJsonAsync<PreciosArticulos>();
-                        preciosArts.Add(precioArtNuevo);
-                        preciosArts.OrderByDescending(p => p.Id);
-                        await Grid.RefreshColumns();
-                        Grid.Refresh();
-                        await Grid.RefreshHeader();
-
-                        await this.ToastObj.Show(new ToastModel
-                        {
-                            Title = "EXITO!",
-                            Content = $"Precio de articulo {precioArt.Id} Guardado Correctamente.",
-                            CssClass = "e-toast-success",
-                            Icon = "e-success toast-icons",
-                            ShowCloseButton = true,
-                            ShowProgressBar = true
-                        }); //DESPUES DE AGREGAR
-                        isAdding = false; //DESPUES DE AGREGAR
-                        IsVisible = false;
-                        await Cerrar();
-                    }
-                    else
-                    {
-                        await this.ToastObj.Show(new ToastModel
-                        {
-                            Title = "ERROR!",
-                            Content = "Error al verificar datos",
-                            CssClass = "e-toast-danger",
-                            Icon = "e-error toast-icons",
-                            ShowCloseButton = true,
-                            ShowProgressBar = true
-                        });
-                    }
+                    await AgregarNuevoArticulo();
                 }
                 else
                 {
-                    await this.ToastObj.Show(new ToastModel
-                    {
-                        Title = "ERROR!",
-                        Content = "Error al verificar datos",
-                        CssClass = "e-toast-danger",
-                        Icon = "e-error toast-icons",
-                        ShowCloseButton = true,
-                        ShowProgressBar = true
-                    });
+                    await ToastMensajeError($"El Articulo {precioArt.Id} ya existe en la base de datos.");
                 }
             }
             else
             {
-                var response = await Http.PutAsJsonAsync($"api/PreciosArt/{precioArt.Id}", precioArt);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var precioArtNuevo = await response.Content.ReadFromJsonAsync<PreciosArticulos>();
-                    precioArtNuevo.Id = precioArt.Id;
-                    var precioArtModificar = preciosArts.Where(p => p.Id == precioArt.Id).FirstOrDefault();
-                    precioArtModificar.Id = precioArtNuevo.Id;
-                    precioArtModificar.Descripcion = precioArtNuevo.Descripcion;
-                    precioArtModificar.Precio = precioArtNuevo.Precio;
-                    precioArtModificar.Moneda = precioArtNuevo.Moneda;
-                    precioArtModificar.Marca = precioArtNuevo.Marca;
-                    precioArtModificar.Construccion = precioArtNuevo.Construccion;
-                    preciosArts.OrderByDescending(p => p.Id);
-                    await this.ToastObj.Show(new ToastModel
-                    {
-                        Title = "EXITO!",
-                        Content = $"Precio de articulo {precioArt.Id} editado Correctamente.",
-                        CssClass = "e-toast-success",
-                        Icon = "e-success toast-icons",
-                        ShowCloseButton = true,
-                        ShowProgressBar = true
-                    }); //DESPUES DE EDITAR
-                    Grid.Refresh();
-                    IsVisible = false;
-                    await Cerrar();
-                }
+                await ActualizarArticulo();
             }
         }
+
+        private async Task ActualizarArticulo()
+        {
+            var response = await PrecioArticuloService.Actualizar(precioArt.Id, precioArt);
+
+            if (!response.Error)
+            {
+                var precioArtNuevo = (PreciosArticulos)response.Response;
+                precioArtNuevo.Id = precioArt.Id;
+                var precioArtModificar = preciosArts.Where(p => p.Id == precioArt.Id).FirstOrDefault();
+                precioArtModificar.Id = precioArtNuevo.Id;
+                precioArtModificar.Descripcion = precioArtNuevo.Descripcion;
+                precioArtModificar.Precio = precioArtNuevo.Precio;
+                precioArtModificar.Moneda = precioArtNuevo.Moneda;
+                precioArtModificar.Marca = precioArtNuevo.Marca;
+                precioArtModificar.Construccion = precioArtNuevo.Construccion;
+                preciosArts.OrderByDescending(p => p.Id);
+                await ToastMensajeExito($"Precio de articulo {precioArt.Id} editado Correctamente.");
+                Grid.Refresh();
+                IsVisible = false;
+                await Cerrar();
+            }
+        }
+
+        private async Task AgregarNuevoArticulo()
+        {
+            var response = await PrecioArticuloService.Agregar(precioArt);
+
+            if (!response.Error)
+            {
+                var precioArtNuevo = response.Response;
+                preciosArts.Add(precioArtNuevo);
+                preciosArts.OrderByDescending(p => p.Id);
+                await Grid.RefreshColumns();
+                Grid.Refresh();
+                await Grid.RefreshHeader();
+
+                await ToastMensajeExito($"Precio de articulo {precioArt.Id} Guardado Correctamente.");
+                isAdding = false; //DESPUES DE AGREGAR
+                IsVisible = false;
+                await Cerrar();
+            }
+            else
+            {
+                await ToastMensajeError("Error al agregar Articulo.");
+            }
+        }
+
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {
             if (args.Item.Text == "Edit")
@@ -248,8 +241,9 @@ namespace SupplyChain.Pages.PreciosArt
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                //SolicitudSeleccionada = args.Data;
+                precioArt = args.Data;
                 args.PreventRender = false;
+                args.Cancel = true;
             }
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
@@ -272,12 +266,11 @@ namespace SupplyChain.Pages.PreciosArt
                 await Grid.RefreshHeader();
             }
         }
-
         protected async Task OnActionCompleteHandler(ActionEventArgs<PreciosArticulos> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                //SolicitudSeleccionada = args.Data;
+                precioArt = args.Data;
                 args.PreventRender = false;
             }
         }
@@ -288,6 +281,32 @@ namespace SupplyChain.Pages.PreciosArt
         protected async Task OnReiniciarGrilla()
         {
             await Grid.ResetPersistData();
+        }
+
+
+        private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
+        {
+            await this.ToastObj.Show(new ToastModel
+            {
+                Title = "EXITO!",
+                Content = content,
+                CssClass = "e-toast-success",
+                Icon = "e-success toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
+        private async Task ToastMensajeError(string content = "Ocurrio un Error.")
+        {
+            await ToastObj.Show(new ToastModel
+            {
+                Title = "Error!",
+                Content = content,
+                CssClass = "e-toast-warning",
+                Icon = "e-warning toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
         }
     }
 }

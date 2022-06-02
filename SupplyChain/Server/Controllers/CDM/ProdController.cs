@@ -36,6 +36,19 @@ namespace SupplyChain
             }
         }
 
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>> GetProd(string id)
+        {
+            try
+            {
+                return await _productoRepository.Existe(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
 
         [HttpGet("GetProdAndReparaciones")]
         public async Task<ActionResult<IEnumerable<Producto>>> GetProdAndReparaciones()

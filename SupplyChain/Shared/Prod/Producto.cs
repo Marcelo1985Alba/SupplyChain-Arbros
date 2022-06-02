@@ -85,5 +85,9 @@ namespace SupplyChain.Shared.Models
         public string CAMPOCOM12 { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Fecha ultima compra")]
         public DateTime? FE_UC { get; set; }
+        [NotMapped]
+        public bool GUARDADO { get; set; }
+        [NotMapped]
+        public bool ESNUEVO { get; set; }
     }
 }

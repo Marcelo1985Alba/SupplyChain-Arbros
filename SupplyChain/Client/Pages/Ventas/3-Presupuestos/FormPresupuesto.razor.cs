@@ -134,7 +134,17 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 await ToastMensajeError("No se puede agregar item.\nCliente no corresponde al presupuesto.");
                 return;
             }
+            //Debe venir siempre con precio
+            if (solicitudSelected.PrecioArticulo != null)
+            {
+                await AgregarSolicitud(solicitudSelected);
+            }
 
+            
+        }
+
+        private async Task AgregarSolicitud(Solicitud solicitudSelected)
+        {
             await refSpinnerCli.ShowAsync();
             popupBuscadorVisibleProducto = false;
 
@@ -167,7 +177,6 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             await refGridItems.RefreshColumnsAsync();
             await refSpinnerCli.HideAsync();
         }
-
 
 
         protected async Task<bool> Agregar(Presupuesto presupueto)

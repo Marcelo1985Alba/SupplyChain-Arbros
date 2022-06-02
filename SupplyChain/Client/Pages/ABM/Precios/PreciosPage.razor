@@ -1,4 +1,4 @@
-﻿@page "/Abms/preciosarticulos"
+﻿@page "/Abms/precios-articulos-anterior"
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Buttons
@@ -8,15 +8,15 @@
 @using Syncfusion.Blazor.Calendars
 @attribute [Authorize]
 @inject IJSRuntime JsRuntime
-@inherits SupplyChain.Pages.PreciosArt.PreciosArtPageBase
+@inherits SupplyChain.Client.Pages.ABM.Precios.PreciosPageBase
 
-<div class="row mt-3">
+@*<div class="row mt-3">
     <div class="col-12">
         <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
                            OnReiniciar="(async ()=> await OnReiniciarGrilla())"
                            OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
     </div>
-</div>
+</div>*@
 
 <SfToast ID="toast_default" @ref="ToastObj">
     <ToastPosition X="Center" Y="Top"></ToastPosition>
@@ -33,9 +33,10 @@
                     <GridSelectionSettings CheckboxOnly="true"
                                            Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                     <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
-                    <GridEvents OnToolbarClick="@ClickHandler" TValue="PreciosArticulos"></GridEvents>
-                    <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-                    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true">
+                    <GridEvents TValue="PreciosArticulos"
+                                OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"></GridEvents>
+                    <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
+                    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
                     </GridEditSettings>
                     <GridColumns>
                         <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>

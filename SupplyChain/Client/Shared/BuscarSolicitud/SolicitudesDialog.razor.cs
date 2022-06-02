@@ -78,8 +78,11 @@ namespace SupplyChain.Client.Shared.BuscarSolicitud
                     }
                     else
                     {
-                        await OnObjectSelected.InvokeAsync(solicitud);
-                        await Hide();
+                        if (ConPrecio && solicitud.PrecioArticulo != null)
+                        {
+                            await OnObjectSelected.InvokeAsync(solicitud);
+                            await Hide();
+                        }
                     }
                 }
                 else
@@ -113,14 +116,20 @@ namespace SupplyChain.Client.Shared.BuscarSolicitud
 
         protected async Task<PreciosArticulos> GetPrecio(string precioArt)
         {
-            var response = await PrecioArticuloService.GetById(precioArt);
-            if (response.Error)
+            if (await PrecioArticuloService.Existe(precioArt))
             {
-                await ToastMensajeError();
-                return null;
+                var response = await PrecioArticuloService.GetById(precioArt);
+                if (response.Error)
+                {
+                    await ToastMensajeError();
+                    return null;
+                }
+
+                return response.Response;
             }
 
-            return response.Response;
+            return null;
+            
         }
 
         private async Task ToastMensajeExito(string content = "Guardado Correctamente.")

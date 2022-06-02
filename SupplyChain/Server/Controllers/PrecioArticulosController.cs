@@ -50,6 +50,15 @@ namespace SupplyChain.Server.Controllers
             return Ok(precioArt);
         }
 
+        // GET: api/Compras/5
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>> Existe(string id)
+        {
+            bool existe = await _precioArticulosRepository.Existe(id);
+
+            return Ok(existe);
+        }
+
         // PUT: api/Compras/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.

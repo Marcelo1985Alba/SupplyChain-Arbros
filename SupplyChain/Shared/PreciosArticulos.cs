@@ -17,5 +17,11 @@ namespace SupplyChain.Shared.Models
         public string Marca { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Construccion")]
         public string Construccion { get; set; } = "";
+
+        [NotMapped]
+        public bool ESNUEVO { get; set; }
+
+        [NotMapped]
+        public bool GUARDADO { get; set; }
     }
 }

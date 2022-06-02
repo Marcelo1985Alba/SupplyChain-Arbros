@@ -24,19 +24,20 @@
         </SfToast>
 
         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="false" AllowResizing="true"
-                @ref="refGrid" DataSource="@Productos" Width="100%"
+                @ref="refGrid" DataSource="@Productos" Width="100%" Toolbar="Toolbaritems"
                 AllowExcelExport="true" AllowGrouping="true" ID="grdProd"
                 AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
             <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
-            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler" TValue="Producto"></GridEvents>
+            <GridEvents OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolbarHandler"
+                        OnActionComplete="OnActionCompleteHandler" TValue="Producto"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
                               ShowDeleteConfirmDialog="true" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
             </GridEditSettings>
             <GridColumns>
+                <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
                 <GridColumn Field=@nameof(Producto.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                      @*//DATOS GENERALES*@
-                <GridColumn Field=@nameof(Producto.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                @*//DATOS GENERALES*@
                 <GridColumn Field=@nameof(Producto.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                @*//DATOS GENERALES*@
                 <GridColumn Field=@nameof(Producto.CG_ORDEN) HeaderText="Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                      @*//DATOS GENERALES desplegable*@
                 <GridColumn Field=@nameof(Producto.TIPO) HeaderText="Tipo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                           @*//DATOS GENERALES*@
@@ -78,4 +79,9 @@
         </SfGrid>
     </div>
 
+    @if (popupFormVisible)
+	{
+		 <FormProducto Producto="productoSeleccionado" Show="popupFormVisible" 
+                       OnCerrar="OnCerraDialog" OnGuardar="@(async(p)=>await Guardar(p))"></FormProducto>
+	}
 </div>

@@ -477,7 +477,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\ABM\Prods\" />
     <Folder Include="Pages\Ventas\2-Pedidos\" />
     <Folder Include="Shared\BuscarPrecios\" />
   </ItemGroup>
