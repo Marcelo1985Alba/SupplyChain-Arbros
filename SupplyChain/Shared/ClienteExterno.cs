@@ -10,6 +10,10 @@ namespace SupplyChain
 {
     public class ClienteExterno : EntityBase<string>
     {
+        public int? ID_CON_VEN { get; set; } = 0;
+        public int? ID_CON_ENT { get; set; } = 0;
+        public decimal? DESC_COMERCIAL { get; set; } = 0;
+
         [Display(Name = "Codigo")]
         public string CG_CLI { get; set; } = "";
         [Display(Name = "Descripcion")]

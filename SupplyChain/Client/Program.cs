@@ -58,6 +58,8 @@ namespace SupplyChain.Client
             services.AddScoped<PrecioArticuloService>();
             services.AddScoped<PresupuestoService>();
             services.AddScoped<InventarioService>();
+            services.AddScoped<CondicionPagoService>();
+            services.AddScoped<CondicionEntregaService>();
             services.AddScoped<PdfService>();
             services.AddScoped<ExcelService>();
             services.AddSingleton<ToastService>();

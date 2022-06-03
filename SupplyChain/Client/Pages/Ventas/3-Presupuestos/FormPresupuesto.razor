@@ -10,6 +10,7 @@
 
 <SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
     <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
+    <DialogAnimationSettings Effect="DialogEffect.FadeZoom" Duration="200"></DialogAnimationSettings>
     <DialogTemplates>
         <Header>
             @if (Presupuesto.Id == 0)
@@ -58,9 +59,19 @@
                 </div>
                 <div class="form-row">
 
-                    <div class="form-group col-md-8">
+                    <div class="form-group col-md-6">
                         <label class="">Condicion de Pago:</label>
-                        <SfDropDownList TValue="int" TItem="string" @bind-Value="Presupuesto.CONDICION_PAGO"></SfDropDownList>
+                        <SfDropDownList TValue="int" TItem="vCondicionesPago" @bind-Value="Presupuesto.CONDICION_PAGO"
+                                        DataSource="condicionesPagos">
+                            <DropDownListFieldSettings Text="DESCRIPCION" Value="Id"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="">Condicion de Entrega:</label>
+                        <SfDropDownList TValue="int" TItem="vCondicionesEntrega" @bind-Value="Presupuesto.CG_COND_ENTREGA"
+                                        DataSource="condicionesEntrega">
+                            <DropDownListFieldSettings Text="DESCRIPCION" Value="Id"></DropDownListFieldSettings>
+                        </SfDropDownList>
                     </div>
                     <div class="form-group col-md-2">
                         <label class="">Bonificacion:</label>
@@ -85,11 +96,11 @@
                             <ToastPosition X="Center" Y="Top"></ToastPosition>
                         </SfToast>
 
-                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="150px"
+                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="110px"
                                 @ref="refGridItems" DataSource="@Presupuesto.Items" Width="100%" ID="grdItemsPresup"
-                                AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
+                                AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-                            <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
+                            @*<GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>*@
                             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowConfirmDialog="false"
                                               Mode="@Syncfusion.Blazor.Grids.EditMode.Batch">
                              <GridEvents TValue="PresupuestoDetalle"
@@ -100,8 +111,15 @@
                                 <GridColumn Field=@nameof(PresupuestoDetalle.CG_ART) AllowEditing="false" HeaderText="Producto" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
                                 <GridColumn Field=@nameof(PresupuestoDetalle.DES_ART) AllowEditing="false" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                 <GridColumn Field=@nameof(PresupuestoDetalle.CANTIDAD) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT) HeaderText="Precio Unit." TextAlign="TextAlign.Left" Width="100px" 
-                                            EditType="EditType.NumericEdit" Format="N2" ></GridColumn>
+                                <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT) HeaderText="Precio Unit." TextAlign="TextAlign.Left" Width="100px"
+                                            EditType="EditType.NumericEdit" Format="N2">
+                                    <EditTemplate Context="detalle">
+                                        @{
+                                            var value = (detalle as PresupuestoDetalle);
+                                            <SfNumericTextBox @bind-Value="value.PREC_UNIT" Decimals="2" ShowSpinButton="false" ></SfNumericTextBox>
+                                        }
+                                    </EditTemplate>
+                                </GridColumn>
                                 <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT_X_CANTIDAD) AllowEditing="false" Format="C2"
                                             HeaderText="Neto" TextAlign="TextAlign.Left" Width="100px">
                                     <Template Context="detalle">
@@ -162,6 +180,7 @@
                 </div>
             </EditForm>
         </Content>
+        
     </DialogTemplates>
 </SfDialog>
 <style>
@@ -212,13 +231,25 @@
         text-align: right;
     }
 
-    .e-grid .e-gridheader {
+    #grdItemsPresup .e-gridheader .e-headercell, .e-grid-min-height .e-gridheader .e-detailheadercell,
+    #grdItemsPresup .e-gridheader .e-headercell .e-headercelldiv {
+        background-color: #398bf7 !important;
+        color: #ffffff !important;
+        font-weight: 500 !important;
+        font-size: 11px !important;
+        padding: .2rem !important;
+    }
+
+    #grdItemsPresup .e-gridheader {
+        background-color: #398bf7 !important;
+        color: #ffffff !important;
+        font-weight: 500 !important;
         font-size: 10px !important;
         /*padding: .5rem !important;*/
     }
 
-    .e-grid .e-row {
-        font-size: 10px;
+    #grdItemsPresup .e-row .e-rowcell {
+        font-size: 10px !important;
     }
 
 </style>

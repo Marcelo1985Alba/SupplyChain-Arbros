@@ -186,6 +186,10 @@ e-grid .e-gridheader {
     font-weight: bold;
 }
 
+.e-grid .e-gridheader .e-icons:not(.e-icon-hide):not(.e-check):not(.e-stop) {
+    padding: 0.5rem;
+}
+
 
 @media only screen and (max-width: 600px) {
     .login-box {

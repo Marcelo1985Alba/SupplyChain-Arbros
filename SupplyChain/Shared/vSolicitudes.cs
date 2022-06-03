@@ -19,7 +19,7 @@ namespace SupplyChain.Shared
         public string Producto { get; set; }
 
         [Display(Name = "Descripcion Producto")]
-        public string DES_PROD { get; set; }
+        public string Descripcion { get; set; }
         public int CG_CLI { get; set; } = 0;
         [Display(Name = "Descripcion Cliente")]
         public string DES_CLI { get; set; }

@@ -63,7 +63,7 @@ namespace SupplyChain.Client.Shared.BuscarSolicitud
             else
             {
                 var solicitud = response.Response;
-                solicitud.Des_Prod = obj.DES_PROD;
+                solicitud.Des_Prod = obj.Descripcion;
                 solicitud.Des_Cli = obj.DES_CLI;
                 if (ConPrecio)
                 {

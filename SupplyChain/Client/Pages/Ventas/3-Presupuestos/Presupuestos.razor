@@ -10,9 +10,9 @@
         </SfToast>
 
 
-        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="false" AllowResizing="true"
                 @ref="refGrid" DataSource="@Presupuestos" Width="100%"
-                AllowExcelExport="true" AllowGrouping="true" ID="grdProd"
+                AllowExcelExport="true" AllowGrouping="true" ID="grdPresupuesto"
                 AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -37,11 +37,9 @@
 
     <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" Label="Generando Presupuesto..."
                @bind-Visible="@SpinnerVisiblePresupuesto"></SfSpinner>
-    @if (popupFormVisible)
-    {
-        <FormPresupuesto @ref="refFormPresupuesto" Presupuesto="@PresupuestoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
+
+    <FormPresupuesto @ref="refFormPresupuesto" Presupuesto="@PresupuestoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
             OnGuardar="@(async(s)=> await Guardar(s))"></FormPresupuesto>
-    }
 
 
 </div>

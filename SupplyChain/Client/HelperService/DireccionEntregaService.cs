@@ -11,9 +11,7 @@ using System.Timers;
 
 namespace SupplyChain.Client.HelperService
 {
-    /// <summary>
-    /// administracion de clientes. Tanto internos como externos.
-    /// </summary>
+
     public class DireccionEntregaService : BaseService<vDireccionesEntrega, int>
     {
         private const string API = "api/DireccionesEntrega";

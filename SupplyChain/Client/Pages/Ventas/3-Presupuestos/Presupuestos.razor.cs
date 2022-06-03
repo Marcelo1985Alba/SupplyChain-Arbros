@@ -63,33 +63,6 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             }
         }
 
-        protected async Task GeneraPresupuesto()
-        {
-            //SpinnerVisiblePresupuesto = true;
-            ////Datos de la solicitud
-            //presupuesto.CG_ART = PresupuestoSeleccionado.Producto;
-            //presupuesto.CANTENT = PresupuestoSeleccionado.Cantidad;
-            //presupuesto.CG_CLI = PresupuestoSeleccionado.CG_CLI;
-            //presupuesto.DES_CLI = PresupuestoSeleccionado.Des_Cli;
-
-            //var response = await Http.PostAsJsonAsync("api/Presupuestos", presupuesto);
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    SpinnerVisiblePresupuesto = false;
-            //    PresupuestoSeleccionado.TienePresupuesto = true;
-            //    await refGrid.EndEditAsync();
-            //    //await ToastMensajeExito();
-            //}
-            //else
-            //{
-            //    var error = await response.Content.ReadAsStringAsync();
-            //    Console.WriteLine(error);
-            //    SpinnerVisiblePresupuesto = false;
-            //    //await ToastMensajeError();
-            //}
-
-        }
-
         protected async Task OnActionBeginHandler(ActionEventArgs<vPresupuestos> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
@@ -97,12 +70,20 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             {
                 args.Cancel = true;
                 args.PreventRender = false;
-                popupFormVisible = true;
+            }
+
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
+            {
+                SpinnerVisible = true;
                 PresupuestoSeleccionado = new();
+                await refFormPresupuesto.ShowAsync(0);
+                popupFormVisible = true;
+                SpinnerVisible = false;
             }
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
+                SpinnerVisible = true;
                 var response = await PresupuestoService.GetById(args.Data.Id);
                 if (response.Error)
                 {
@@ -111,7 +92,10 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 else
                 {
                     PresupuestoSeleccionado = response.Response;
+                    await refFormPresupuesto.ShowAsync(args.Data.Id);
+                    popupFormVisible = true;
                 }
+                SpinnerVisible = false;
             }
         }
 
@@ -122,7 +106,6 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             {
                 args.Cancel = true;
                 args.PreventRender = false;
-                popupFormVisible = true;
             }
 
 

@@ -48,11 +48,8 @@ namespace SupplyChain.Server.Controllers
                 //.ThenInclude(i=> i.Solicitud)
                 .FirstOrDefaultAsync();
 
-            //TODO: OBTENER DESCRIPCION
-            //foreach (var item in presup.Items)
-            //{
-            //    item.DES_ART = 
-            //}
+            
+            await _presupuestoRepository.AgregarDatosFaltantes(presup);
 
 
             return presup;
@@ -94,8 +91,18 @@ namespace SupplyChain.Server.Controllers
 
         // PUT api/<PresupuestosController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult<Presupuesto>> Put(int id, Presupuesto presupuesto)
         {
+            try
+            {
+                await _presupuestoRepository.Actualizar(presupuesto);
+                await _presupuestoRepository.AgregarActualizarDetalles(presupuesto.Items);
+                return Ok(presupuesto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         // DELETE api/<PresupuestosController>/5

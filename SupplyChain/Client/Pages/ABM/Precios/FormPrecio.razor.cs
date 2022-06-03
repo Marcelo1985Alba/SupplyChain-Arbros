@@ -51,14 +51,14 @@ namespace SupplyChain.Client.Pages.ABM.Precios
             cat = await Http.GetFromJsonAsync<List<Cat>>("api/Cat");
         }
 
-        private async Task<bool> PermiteGuardarNuevo()
+        private async Task<bool> Existe()
         {
             var existe = await PrecioArticuloService.Existe(PrecioArticulo.Id);
             return existe;
         }
         protected async Task<bool> Agregar(PreciosArticulos precio)
         {
-            if (await PermiteGuardarNuevo())
+            if (!await Existe())
             {
                 var response = await PrecioArticuloService.Agregar(precio);
                 if (response.Error)
@@ -68,6 +68,7 @@ namespace SupplyChain.Client.Pages.ABM.Precios
                     return false;
                 }
                 PrecioArticulo = response.Response;
+                PrecioArticulo.GUARDADO = true;
                 return true;
             }
 
@@ -87,22 +88,22 @@ namespace SupplyChain.Client.Pages.ABM.Precios
             }
 
             PrecioArticulo = precio;
+            PrecioArticulo.GUARDADO = true;
             return true;
         }
 
         protected async Task GuardarPrecioArticulo()
         {
-            bool guardado = false;
             if (PrecioArticulo.ESNUEVO)
             {
-                guardado = await Agregar(PrecioArticulo);
+                await Agregar(PrecioArticulo);
             }
             else
             {
-                guardado = await Actualizar(PrecioArticulo);
+               await Actualizar(PrecioArticulo);
             }
 
-            if (guardado)
+            if (PrecioArticulo.GUARDADO)
             {
                 Show = false;
                 await OnGuardar.InvokeAsync(PrecioArticulo);

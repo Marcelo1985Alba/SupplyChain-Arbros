@@ -75,7 +75,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                 SolicitudSeleccionada = response.Response;
                 SolicitudSeleccionada.Cuit = vSolicitud.Cuit;
                 SolicitudSeleccionada.Des_Cli = vSolicitud.DES_CLI;
-                SolicitudSeleccionada.Des_Prod = vSolicitud.DES_PROD;
+                SolicitudSeleccionada.Des_Prod = vSolicitud.Descripcion;
                 //if (!SolicitudSeleccionada.Producto.StartsWith("00"))
                 //{
                 //    heightPopup = "600px";
@@ -158,7 +158,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                         CG_CLI = solicitud.CG_CLI,
                         Cuit = solicitud.Cuit,
                         DES_CLI = solicitud.Des_Cli,
-                        DES_PROD = solicitud.Des_Prod,
+                        Descripcion = solicitud.Des_Prod,
                         Producto = solicitud.Producto,
                         TienePresupuesto = solicitud.TienePresupuesto
                     };
@@ -171,7 +171,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                     //actualizar datos sin ir a la base de datos
                     var sol =  Solicitudes.Where(s => s.Id == solicitud.Id).FirstOrDefault();
                     sol.Producto = solicitud.Producto;
-                    sol.DES_PROD = solicitud.Des_Prod;
+                    sol.Descripcion = solicitud.Des_Prod;
                     sol.Cantidad = solicitud.Cantidad;
                     sol.CG_CLI = solicitud.CG_CLI;
                     sol.DES_CLI = solicitud.Des_Cli;

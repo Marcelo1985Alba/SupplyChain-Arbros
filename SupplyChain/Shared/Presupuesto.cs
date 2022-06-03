@@ -14,23 +14,21 @@ namespace SupplyChain.Shared
         public DateTime FECHA { get; set; } = DateTime.Now;
         [Required(ErrorMessage ="* La Moneda es requerida")]
         public string MONEDA { get; set; } = "DOLARES";
+        [Required(ErrorMessage = "* El Cliente es requerido")]
         public int CG_CLI { get; set; } = 0;
-        [Required]
+        [Required(ErrorMessage = "* La Condicion de Pago es requerida")]
         public int CONDICION_PAGO { get; set; } = 0;
+        [Required(ErrorMessage = "* La Condicion de Entrega es requerida")]
         public int CG_COND_ENTREGA { get; set; } = 0;
-        public decimal BONIFIC { get; set; }
+        public decimal BONIFIC { get; set; } = 0;
         public int CG_TRANS { get; set; } = 0;
+        public int TC { get; set; } = 0;
 
         [Required(ErrorMessage = "La Direccion de Entrega es requerida")]
         public string DIRENT { get; set; }
         
         [ValidateComplexType]
         public virtual List<PresupuestoDetalle> Items { get; set; } = new();
-
-        [NotMapped]
-        public string DES_ART { get; set; }
-        [NotMapped]
-        public string UNID { get; set; }
 
         [NotMapped]
         public string DES_CLI { get; set; }

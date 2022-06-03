@@ -19,6 +19,8 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
     {
         [Inject] public PresupuestoService PresupuestoService { get; set; }
         [Inject] public PrecioArticuloService PrecioArticuloService { get; set; }
+        [Inject] public CondicionPagoService CondicionPagoService { get; set; }
+        [Inject] public CondicionEntregaService CondicionEntregaService { get; set; }
         [Inject] public DireccionEntregaService DireccionEntregaService { get; set; }
         /// <summary>
         /// objecto modificado el cual tambien obtiene la id nueva en caso de agregar un nuevo
@@ -40,6 +42,8 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected bool popupBuscadorVisibleSolicitud { get; set; } = false;
 
         protected List<string> direccionesEntregas = new();
+        protected List<vCondicionesPago> condicionesPagos = new();
+        protected List<vCondicionesEntrega> condicionesEntrega = new();
         protected List<string> Monedas = new() {"PESOS","DOLARES" };
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
@@ -55,6 +59,62 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         };
 
         protected bool IsAdd { get; set; }
+
+        public async Task ShowAsync(int id)
+        {
+            if (id > 0)
+            {
+                await GetPresupuesto(id);
+            }
+            
+            await GetCondicionesPago();
+            await GetCondicionesEntrega();
+            if (Presupuesto.CG_CLI > 0)
+            {
+                await GetDireccionesEntregaCliente(Presupuesto.CG_CLI);
+            }
+
+            
+        }
+
+        protected async Task GetPresupuesto(int id)
+        {
+            var response = await PresupuestoService.GetById(id);
+            if (response.Error)
+            {
+                await ToastMensajeError("Error al obtener Condiciones de Pago.");
+            }
+            else
+            {
+                Presupuesto = response.Response;
+            }
+        }
+
+        protected async Task GetCondicionesPago()
+        {
+            var response = await CondicionPagoService.Get();
+            if (response.Error)
+            {
+                await ToastMensajeError("Error al obtener Condiciones de Pago.");
+            }
+            else
+            {
+                condicionesPagos = response.Response;
+            }
+        }
+        protected async Task GetCondicionesEntrega()
+        {
+            var response = await CondicionEntregaService.Get();
+            if (response.Error)
+            {
+                await ToastMensajeError("Error al obtener Condiciones de Entrega.");
+            }
+            else
+            {
+                condicionesEntrega = response.Response;
+            }
+        }
+
         protected async Task BuscarClientes()
         {
             SpinnerVisible = true;
@@ -91,6 +151,9 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             popupBuscadorVisibleCliente = false;
             Presupuesto.CG_CLI = Convert.ToInt32(clienteSelected.CG_CLI);
             Presupuesto.DES_CLI = clienteSelected.DESCRIPCION.Trim();
+            Presupuesto.CONDICION_PAGO = clienteSelected.ID_CON_VEN == null ?  0 : (int)clienteSelected.ID_CON_VEN;//hay cliente que no tienen asignado una condicion de pago
+            Presupuesto.BONIFIC = clienteSelected.DESC_COMERCIAL == null ? 0 : (decimal)clienteSelected.DESC_COMERCIAL;
+            Presupuesto.CG_COND_ENTREGA = clienteSelected.ID_CON_ENT == null ? 0 : (int)clienteSelected.ID_CON_ENT;
             await GetDireccionesEntregaCliente(Presupuesto.CG_CLI);
             await refSpinnerCli.HideAsync();
         }
@@ -145,37 +208,50 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         private async Task AgregarSolicitud(Solicitud solicitudSelected)
         {
-            await refSpinnerCli.ShowAsync();
-            popupBuscadorVisibleProducto = false;
-
-            var item = new PresupuestoDetalle()
+            if (PermiteAgregItemSolicitud(solicitudSelected.Id))
             {
-                Id = Presupuesto.Items.Count == 0 ? -1 : Presupuesto.Items.Min(t => t.Id) - 1, //en negativos
-                SOLICITUDID = solicitudSelected.Id,
-                CANTIDAD = solicitudSelected.Cantidad,
-                CG_ART = solicitudSelected.Producto,
-                DES_ART = solicitudSelected.Des_Prod,
-                ACCESORIOS = solicitudSelected.Accesorios,
-                ASIENTO = solicitudSelected.Asiento,
-                BONETE = solicitudSelected.Bonete,
-                CUERPO = solicitudSelected.Cuerpo,
-                DISCO = solicitudSelected.Disco,
-                MEDIDAS = solicitudSelected.Medidas,
-                ORIFICIO = solicitudSelected.Orificio,
-                RESORTE = solicitudSelected.Resorte,
-                SERIEENTRADA = solicitudSelected.SerieEntrada,
-                SERIESALIDA = solicitudSelected.SerieSalida,
-                TIPOENTRADA = solicitudSelected.TipoEntrada,
-                TIPOSALIDA = solicitudSelected.TipoSalida,
-                TOBERA = solicitudSelected.Tobera,
-                PREC_UNIT = (decimal)solicitudSelected.PrecioArticulo?.Precio,
-            };
+                await refSpinnerCli.ShowAsync();
+                popupBuscadorVisibleProducto = false;
 
-            Presupuesto.Items.Add(item);
-            await refGridItems.RefreshHeaderAsync();
-            refGridItems.Refresh();
-            await refGridItems.RefreshColumnsAsync();
-            await refSpinnerCli.HideAsync();
+                var item = new PresupuestoDetalle()
+                {
+                    Id = Presupuesto.Items.Count == 0 ? -1 : Presupuesto.Items.Count * -1, //en negativos
+                    SOLICITUDID = solicitudSelected.Id,
+                    CANTIDAD = solicitudSelected.Cantidad,
+                    CG_ART = solicitudSelected.Producto,
+                    DES_ART = solicitudSelected.Des_Prod,
+                    ACCESORIOS = solicitudSelected.Accesorios,
+                    ASIENTO = solicitudSelected.Asiento,
+                    BONETE = solicitudSelected.Bonete,
+                    CUERPO = solicitudSelected.Cuerpo,
+                    DISCO = solicitudSelected.Disco,
+                    MEDIDAS = solicitudSelected.Medidas,
+                    ORIFICIO = solicitudSelected.Orificio,
+                    RESORTE = solicitudSelected.Resorte,
+                    SERIEENTRADA = solicitudSelected.SerieEntrada,
+                    SERIESALIDA = solicitudSelected.SerieSalida,
+                    TIPOENTRADA = solicitudSelected.TipoEntrada,
+                    TIPOSALIDA = solicitudSelected.TipoSalida,
+                    TOBERA = solicitudSelected.Tobera,
+                    PREC_UNIT = (decimal)solicitudSelected.PrecioArticulo?.Precio,
+                };
+
+                Presupuesto.Items.Add(item);
+                await refGridItems.RefreshHeaderAsync();
+                refGridItems.Refresh();
+                await refGridItems.RefreshColumnsAsync();
+                await refSpinnerCli.HideAsync();
+            }
+            else
+            {
+                await ToastMensajeError($"La Solicitud Nro: {solicitudSelected.Id}");
+            }
+            
+        }
+
+        private bool PermiteAgregItemSolicitud(int solicitudId)
+        {
+            return !Presupuesto.Items.Any(i => i.SOLICITUDID == solicitudId);
         }
 
 
