@@ -22,6 +22,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         [Inject] public CondicionPagoService CondicionPagoService { get; set; }
         [Inject] public CondicionEntregaService CondicionEntregaService { get; set; }
         [Inject] public DireccionEntregaService DireccionEntregaService { get; set; }
+        [Inject] public TipoCambioService TipoCambioService { get; set; }
         /// <summary>
         /// objecto modificado el cual tambien obtiene la id nueva en caso de agregar un nuevo
         /// </summary>
@@ -53,9 +54,17 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             { "type", "button" }
         };
 
+        protected Dictionary<string, object> HtmlAttributeButtonTC = new()
+        {
+            { "type", "button" },
+            { "title", "Obtener ultima Cotizacion Dolar" }
+        };
+
         protected Dictionary<string, object> HtmlAttributeSubmit = new()
         {
-            { "type", "submit" }
+            { "type", "submit" },
+            { "form", "formPresupuesto" }
+
         };
 
         protected bool IsAdd { get; set; }
@@ -73,10 +82,26 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             {
                 await GetDireccionesEntregaCliente(Presupuesto.CG_CLI);
             }
+            else
+            {
+                await GetTipoCambioDolarHoy();
+            }
 
             
         }
 
+        protected async Task GetTipoCambioDolarHoy()
+        {
+            var tc = await TipoCambioService.GetValorDolarHoy();
+            if (tc == 0)
+            {
+                await ToastMensajeError("Error al obtener Tipo de Cambio.");
+            }
+            else
+            {
+                Presupuesto.TC = (double)tc;
+            }
+        }
         protected async Task GetPresupuesto(int id)
         {
             var response = await PresupuestoService.GetById(id);
@@ -244,7 +269,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             }
             else
             {
-                await ToastMensajeError($"La Solicitud Nro: {solicitudSelected.Id}");
+                await ToastMensajeError($"La Solicitud Nro: {solicitudSelected.Id} ya ha sido agregado");
             }
             
         }

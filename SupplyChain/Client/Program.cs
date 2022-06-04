@@ -60,6 +60,7 @@ namespace SupplyChain.Client
             services.AddScoped<InventarioService>();
             services.AddScoped<CondicionPagoService>();
             services.AddScoped<CondicionEntregaService>();
+            services.AddScoped<TipoCambioService>();
             services.AddScoped<PdfService>();
             services.AddScoped<ExcelService>();
             services.AddSingleton<ToastService>();

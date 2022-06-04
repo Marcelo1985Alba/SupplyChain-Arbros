@@ -80,15 +80,22 @@ namespace SupplyChain.Client.Shared.BuscarSolicitud
                     {
                         if (ConPrecio && solicitud.PrecioArticulo != null)
                         {
-                            await OnObjectSelected.InvokeAsync(solicitud);
-                            await Hide();
+                            if (solicitud != null)
+                            {
+                                await OnObjectSelected.InvokeAsync(solicitud);
+                                await Hide();
+                            }
                         }
                     }
                 }
                 else
                 {
-                    await OnObjectSelected.InvokeAsync(solicitud);
-                    await Hide();
+                    if (solicitud != null)
+                    {
+                        await OnObjectSelected.InvokeAsync(solicitud);
+                        await Hide();
+                    }
+                    
                 }
                 
             }

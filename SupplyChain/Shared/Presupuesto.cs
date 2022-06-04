@@ -22,7 +22,7 @@ namespace SupplyChain.Shared
         public int CG_COND_ENTREGA { get; set; } = 0;
         public decimal BONIFIC { get; set; } = 0;
         public int CG_TRANS { get; set; } = 0;
-        public int TC { get; set; } = 0;
+        public double TC { get; set; } = 0;
 
         [Required(ErrorMessage = "La Direccion de Entrega es requerida")]
         public string DIRENT { get; set; }
