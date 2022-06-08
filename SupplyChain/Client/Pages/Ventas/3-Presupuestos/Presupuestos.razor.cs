@@ -111,41 +111,34 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         }
 
-        protected async Task Guardar(Presupuesto solicitud)
+        protected async Task Guardar(Presupuesto presupuesto)
         {
-            if (solicitud.GUARDADO)
+            if (presupuesto.GUARDADO)
             {
-                await ToastMensajeExito();
+                await ToastMensajeExito($"Guardado Correctamente.\nPresupuesto Nro {presupuesto.Id}");
                 popupFormVisible = false;
-                if (solicitud.ESNUEVO)
+                if (presupuesto.ESNUEVO)
                 {
-                    //var nuevaSol = new vSolicitudes()
-                    //{
-                    //    Id = solicitud.Id,
-                    //    TagId = solicitud.TagId,
-                    //    Fecha = solicitud.Fecha,
-                    //    Cantidad = solicitud.Cantidad,
-                    //    CG_CLI = solicitud.CG_CLI,
-                    //    Cuit = solicitud.Cuit,
-                    //    DES_CLI = solicitud.Des_Cli,
-                    //    DES_PROD = solicitud.Des_Prod,
-                    //    Producto = solicitud.Producto,
-                    //    TienePresupuesto = solicitud.TienePresupuesto
-                    //};
-
-                    //Presupuestos.Add(nuevaSol);
+                    var nuevoPresup = new vPresupuestos
+                    {
+                        CG_CLI = presupuesto.CG_CLI,
+                        DES_CLI = presupuesto.DES_CLI,
+                        Id = presupuesto.Id,
+                        Fecha = presupuesto.FECHA,
+                        MONEDA = presupuesto.MONEDA,
+                        TOTAL = presupuesto.TOTAL
+                    };
+                    Presupuestos.Add(nuevoPresup);
 
                 }
                 else
                 {
                     //actualizar datos sin ir a la base de datos
-                    var sol = Presupuestos.Where(s => s.Id == solicitud.Id).FirstOrDefault();
-                    //sol.Producto = solicitud.Producto;
-                    //sol.DES_PROD = solicitud.Des_Prod;
-                    //sol.Cantidad = solicitud.Cantidad;
-                    //sol.CG_CLI = solicitud.CG_CLI;
-                    //sol.DES_CLI = solicitud.Des_Cli;
-                    //sol.Cuit = solicitud.Cuit;
+                    var presupActualizado = Presupuestos.Where(s => s.Id == presupuesto.Id).FirstOrDefault();
+                    presupActualizado.CG_CLI = presupuesto.CG_CLI;
+                    presupActualizado.DES_CLI = presupuesto.DES_CLI;
+                    presupActualizado.TOTAL = presupuesto.TOTAL;
+
                 }
 
                 await refGrid.RefreshHeaderAsync();
@@ -165,12 +158,12 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         }
 
 
-        private async Task ToastMensajeExito()
+        private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
         {
             await this.ToastObj.Show(new ToastModel
             {
                 Title = "EXITO!",
-                Content = "Guardado Correctamente.",
+                Content = content,
                 CssClass = "e-toast-success",
                 Icon = "e-success toast-icons",
                 ShowCloseButton = true,

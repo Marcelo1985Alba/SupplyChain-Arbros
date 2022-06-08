@@ -3,6 +3,7 @@ using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SupplyChain.Server.Repositorios
@@ -71,16 +72,20 @@ namespace SupplyChain.Server.Repositorios
         /// <returns></returns>
         internal async Task AgregarNuevosDetalles(IList<PresupuestoDetalle> items)
         {
-            foreach (PresupuestoDetalle item in items)
+            var agregar = items.Any(i => i.Estado == Shared.Enum.EstadoItem.Agregado && i.Id < 0);
+            
+            if (agregar)
             {
-                if (item.Id < 0)
+                var itemsAgregar = items.Where(i => i.Estado == Shared.Enum.EstadoItem.Agregado && i.Id < 0).ToArray();
+                foreach (var item in itemsAgregar)
                 {
                     item.Id = 0;
-                    await Db.AddAsync(item);
                 }
+                await Db.AddRangeAsync(itemsAgregar);
+                await Db.SaveChangesAsync();
             }
 
-            await Db.SaveChangesAsync();
+            
         }
 
         internal async Task ActualizarDetalles(IList<PresupuestoDetalle> items)
@@ -96,10 +101,24 @@ namespace SupplyChain.Server.Repositorios
             await Db.SaveChangesAsync();
         }
 
-        internal async Task AgregarActualizarDetalles(IList<PresupuestoDetalle> items)
+        internal async Task AgregarEliminarActualizarDetalles(IList<PresupuestoDetalle> items)
         {
             await AgregarNuevosDetalles(items);
             await ActualizarDetalles(items);
+            await RemoverDetalles(items);
+        }
+
+        internal async Task RemoverDetalles(IList<PresupuestoDetalle> items)
+        {
+            var elimina = items.Any(i=> i.Estado == Shared.Enum.EstadoItem.Eliminado && i.Id > 0 );
+
+            if (elimina)
+            {
+                var itemsEliminar = items.Where(i => i.Estado == Shared.Enum.EstadoItem.Eliminado && i.Id > 0).ToArray();
+                Db.RemoveRange(itemsEliminar);
+                await SaveChanges();
+            }
+            
         }
 
     }

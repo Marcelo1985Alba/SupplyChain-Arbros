@@ -96,7 +96,8 @@ namespace SupplyChain.Server.Controllers
             try
             {
                 await _presupuestoRepository.Actualizar(presupuesto);
-                await _presupuestoRepository.AgregarActualizarDetalles(presupuesto.Items);
+                await _presupuestoRepository.AgregarEliminarActualizarDetalles(presupuesto.Items);
+
                 return Ok(presupuesto);
             }
             catch (Exception ex)

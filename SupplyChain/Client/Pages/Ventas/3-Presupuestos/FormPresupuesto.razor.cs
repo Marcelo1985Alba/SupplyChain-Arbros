@@ -5,6 +5,7 @@ using SupplyChain.Client.Shared.BuscadorProducto;
 using SupplyChain.Client.Shared.BuscarSolicitud;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
+using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
@@ -68,7 +69,8 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         };
 
         protected bool IsAdd { get; set; }
-
+        protected bool ReadOnlyMoneda = true;
+        protected decimal IMP_BONFIC = 0;
         public async Task ShowAsync(int id)
         {
             if (id > 0)
@@ -80,10 +82,12 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             await GetCondicionesEntrega();
             if (Presupuesto.CG_CLI > 0)
             {
+                ReadOnlyMoneda = true;
                 await GetDireccionesEntregaCliente(Presupuesto.CG_CLI);
             }
             else
             {
+                ReadOnlyMoneda = false;
                 await GetTipoCambioDolarHoy();
             }
 
@@ -112,6 +116,10 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             else
             {
                 Presupuesto = response.Response;
+                foreach (var item in Presupuesto.Items)
+                {
+                    item.Estado = SupplyChain.Shared.Enum.EstadoItem.Modificado;
+                }
             }
         }
 
@@ -245,20 +253,21 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                     CANTIDAD = solicitudSelected.Cantidad,
                     CG_ART = solicitudSelected.Producto,
                     DES_ART = solicitudSelected.Des_Prod,
-                    ACCESORIOS = solicitudSelected.Accesorios,
-                    ASIENTO = solicitudSelected.Asiento,
-                    BONETE = solicitudSelected.Bonete,
-                    CUERPO = solicitudSelected.Cuerpo,
-                    DISCO = solicitudSelected.Disco,
-                    MEDIDAS = solicitudSelected.Medidas,
-                    ORIFICIO = solicitudSelected.Orificio,
-                    RESORTE = solicitudSelected.Resorte,
-                    SERIEENTRADA = solicitudSelected.SerieEntrada,
-                    SERIESALIDA = solicitudSelected.SerieSalida,
-                    TIPOENTRADA = solicitudSelected.TipoEntrada,
-                    TIPOSALIDA = solicitudSelected.TipoSalida,
-                    TOBERA = solicitudSelected.Tobera,
+                    //ACCESORIOS = solicitudSelected.Accesorios,
+                    //ASIENTO = solicitudSelected.Asiento,
+                    //BONETE = solicitudSelected.Bonete,
+                    //CUERPO = solicitudSelected.Cuerpo,
+                    //DISCO = solicitudSelected.Disco,
+                    //MEDIDAS = solicitudSelected.Medidas,
+                    //ORIFICIO = solicitudSelected.Orificio,
+                    //RESORTE = solicitudSelected.Resorte,
+                    //SERIEENTRADA = solicitudSelected.SerieEntrada,
+                    //SERIESALIDA = solicitudSelected.SerieSalida,
+                    //TIPOENTRADA = solicitudSelected.TipoEntrada,
+                    //TIPOSALIDA = solicitudSelected.TipoSalida,
+                    //TOBERA = solicitudSelected.Tobera,
                     PREC_UNIT = (decimal)solicitudSelected.PrecioArticulo?.Precio,
+                    Estado = SupplyChain.Shared.Enum.EstadoItem.Agregado
                 };
 
                 Presupuesto.Items.Add(item);
@@ -322,44 +331,54 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             await OnGuardar.InvokeAsync(Presupuesto);
         }
 
+        protected async Task BatchDeleteHandler(BeforeBatchDeleteArgs<PresupuestoDetalle> args)
+        {
+            var item = Presupuesto.Items.Find(i => i.Id == args.RowData.Id);
+            item.Estado = SupplyChain.Shared.Enum.EstadoItem.Eliminado;
+        }
+
         public async Task CellSavedHandler(CellSaveArgs<PresupuestoDetalle> args)
         {
             var index = await refGridItems.GetRowIndexByPrimaryKey(args.RowData.Id);
             if (args.ColumnName == "Cantidad")
             {
+                args.RowData.CANTIDAD = (decimal)args.Value;
                 if (IsAdd)
                 {
-                    args.RowData.CANTIDAD = (decimal)args.Value;
-                    await refGridItems.UpdateCell(index, "PRECIO_UNIT", Convert.ToInt32(args.Value) * args.RowData.PREC_UNIT);
+                    
+                    await refGridItems.UpdateCell(index, "PREC_UNIT", Convert.ToInt32(args.Value) * args.RowData.PREC_UNIT);
                     //await refGridItems.UpdateCell(index, "Sum", Convert.ToInt32(args.Value) + 0);
                 }
-                await refGridItems.UpdateCell(index, "PRECIO_UNIT", Convert.ToInt32(args.Value) * args.RowData.PREC_UNIT);
-                //await refGridItems.UpdateCell(index, "Sum", Convert.ToInt32(args.Value) + args.RowData.UnitPrice);
+                await refGridItems.UpdateCell(index, "PREC_UNIT", Convert.ToInt32(args.Value) * args.RowData.PREC_UNIT);
+                
             }
-            else if (args.ColumnName == "PRECIO_UNIT")
+            else if (args.ColumnName == "PREC_UNIT")
             {
+                args.RowData.PREC_UNIT = (decimal)args.Value;
                 if (IsAdd)
                 {
-                    args.RowData.PREC_UNIT = (decimal)args.Value;
-                    await refGridItems.UpdateCell(index, "PREC_UNIT_X_CANTIDAD", Convert.ToDouble(args.Value) * (double)args.RowData.CANTIDAD);
+                    
+                    await refGridItems.UpdateCell(index, "PREC_UNIT_X_CANTIDAD", 
+                        Convert.ToDouble(args.Value) * (double)args.RowData.CANTIDAD);
                     //await refGridItems.UpdateCell(index, "Sum", Convert.ToDouble(args.Value) + 0);
                 }
                 await refGridItems.UpdateCell(index, "PREC_UNIT_X_CANTIDAD", Convert.ToDouble(args.Value) * (double)args.RowData.CANTIDAD);
-                //await refGridItems.UpdateCell(index, "Sum", Convert.ToDouble(args.Value) + args.RowData.Quantity);
+                
             }
             else if (args.ColumnName == "DESCUENTO")
             {
+                args.RowData.DESCUENTO = (decimal)args.Value;
                 if (IsAdd)
                 {
-                    args.RowData.DESCUENTO = (decimal)args.Value;
 
-                    if (args.RowData.CANTIDAD == 0 || args.RowData.PREC_UNIT_X_CANTIDAD == 0)
+                    if (args.RowData.CANTIDAD == 0 || args.RowData.PREC_UNIT_X_CANTIDAD == 0 || (decimal)args.Value == 0)
                     {
                         await refGridItems.UpdateCell(index, "IMP_DESCUENTO", (double)0);
                     }
                     else
                     {
-                        await refGridItems.UpdateCell(index, "IMP_DESCUENTO", args.RowData.PREC_UNIT_X_CANTIDAD / (1 + args.RowData.DESCUENTO / 100 ));
+                        await refGridItems.UpdateCell(index, "IMP_DESCUENTO", 
+                            args.RowData.PREC_UNIT_X_CANTIDAD / (1 + (decimal)args.Value / 100 ));
                         //await refGridItems.UpdateCell(index, "Sum", Convert.ToDouble(args.Value) + 0);
                     }
 
@@ -370,7 +389,15 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 await refGridItems.UpdateCell(index, "IMP_DESCUENTO", descuento);
             }
 
+            //var item = Presupuesto.Items.Find(i=> i.Id == args.RowData.Id);
+            //item.TOTAL = args.RowData.PREC_UNIT_X_CANTIDAD - args.RowData.IMP_DESCUENTO;
+
+
+            await refGridItems.UpdateCell(index, "TOTAL", args.RowData.PREC_UNIT_X_CANTIDAD - args.RowData.IMP_DESCUENTO);// total del item
+
+            //Presupuesto.TOTAL = Math.Round(Presupuesto.Items.Sum(i => i.TOTAL)); //total del presupuesto - la 
             await refGridItems.EndEditAsync();
+            //refGridItems.Refresh();
         }
 
         public void BatchAddHandler(BeforeBatchAddArgs<PresupuestoDetalle> args)
@@ -382,6 +409,25 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             IsAdd = false;
         }
 
+        protected void CambioMoneda(ChangeEventArgs<string, string> args)
+        {
+            var tipoCambio = Presupuesto.TC; 
+            foreach (var item in Presupuesto.Items)
+            {
+                if (args.Value == "DOLARES")
+                {
+                    item.PREC_UNIT /= (decimal)tipoCambio;
+                }
+                else
+                {
+                    item.PREC_UNIT *= (decimal)tipoCambio;
+                }
+
+                item.PREC_UNIT_X_CANTIDAD = item.PREC_UNIT * item.CANTIDAD;
+            }
+
+            refGridItems.Refresh();
+        }
 
 
         public async Task Hide()

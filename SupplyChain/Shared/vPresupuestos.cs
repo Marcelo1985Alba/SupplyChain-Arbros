@@ -16,5 +16,7 @@ namespace SupplyChain.Shared
         public int CG_CLI { get; set; } = 0;
         public string DES_CLI { get; set; }
         public string USUARIO { get; set; }
+        public string MONEDA { get; set; }
+        public decimal TOTAL { get; set; } = 0;
     }
 }

@@ -145,6 +145,7 @@ namespace SupplyChain
                 entity.HasMany(c => c.Items)
                     .WithOne(p => p.Presupuesto)
                     .HasForeignKey(c => c.PRESUPUESTOID);
+
             });
 
             modelBuilder.Entity<PresupuestoDetalle>(entity=> {
@@ -157,6 +158,9 @@ namespace SupplyChain
                 entity.HasOne(d => d.Solicitud)
                 .WithOne(p => p.PresupuestoDetalle)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+
+
+                entity.Property(p => p.TOTAL).HasComputedColumnSql("[PREC_UNIT_X_CANTIDAD] - ',' [TOTAL]");
             });
 
             modelBuilder.Entity<Genera>()

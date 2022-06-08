@@ -23,6 +23,7 @@ namespace SupplyChain.Shared
         public decimal BONIFIC { get; set; } = 0;
         public int CG_TRANS { get; set; } = 0;
         public double TC { get; set; } = 0;
+        public decimal TOTAL { get; set; } = 0;
 
         [Required(ErrorMessage = "La Direccion de Entrega es requerida")]
         public string DIRENT { get; set; }
@@ -38,5 +39,6 @@ namespace SupplyChain.Shared
 
         [NotMapped]
         public bool GUARDADO { get; set; }
+
     }
 }
