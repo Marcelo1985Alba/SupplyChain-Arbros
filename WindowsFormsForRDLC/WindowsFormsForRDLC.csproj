@@ -59,10 +59,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>
     </Compile>
-    <Compile Include="ArbrosDataSet2.Designer.cs">
+    <Compile Include="vDataSheet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ArbrosDataSet2.xsd</DependentUpon>
+      <DependentUpon>vDataSheet.xsd</DependentUpon>
     </Compile>
     <Compile Include="ArbrosDataSet3.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -121,16 +121,16 @@
     <None Include="ArbrosDataSet1.xss">
       <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>
     </None>
-    <None Include="ArbrosDataSet2.xsc">
-      <DependentUpon>ArbrosDataSet2.xsd</DependentUpon>
+    <None Include="vDataSheet.xsc">
+      <DependentUpon>vDataSheet.xsd</DependentUpon>
     </None>
-    <None Include="ArbrosDataSet2.xsd">
+    <None Include="vDataSheet.xsd">
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>ArbrosDataSet2.Designer.cs</LastGenOutput>
+      <LastGenOutput>vDataSheet.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="ArbrosDataSet2.xss">
-      <DependentUpon>ArbrosDataSet2.xsd</DependentUpon>
+    <None Include="vDataSheet.xss">
+      <DependentUpon>vDataSheet.xsd</DependentUpon>
     </None>
     <None Include="ArbrosDataSet3.xsc">
       <DependentUpon>ArbrosDataSet3.xsd</DependentUpon>

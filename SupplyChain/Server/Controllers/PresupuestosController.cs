@@ -68,9 +68,20 @@ namespace SupplyChain.Server.Controllers
             {
                 item.Id = 0;
             }
+            await _presupuestoRepository.BeginTransaction();
+            try
+            {
+                await _presupuestoRepository.Agregar(presupuesto);
+                await _presupuestoRepository.ActualizarCalculoConPresupuestoByIdCalculo(presupuesto.Id);
+                await _presupuestoRepository.CommitTransaction();
+                
+            }
+            catch (Exception ex)
+            {
+                await _presupuestoRepository.RollbackTransaction();
+                return BadRequest(ex.Message);
+            }
 
-            await _presupuestoRepository.Agregar(presupuesto);
-            
             return CreatedAtAction("GetPresupuesto", new { id = presupuesto.Id }, presupuesto);
         }
 
@@ -97,7 +108,7 @@ namespace SupplyChain.Server.Controllers
             {
                 await _presupuestoRepository.Actualizar(presupuesto);
                 await _presupuestoRepository.AgregarEliminarActualizarDetalles(presupuesto.Items);
-
+                await _presupuestoRepository.ActualizarCalculoConPresupuestoByIdCalculo(presupuesto.Id);
                 return Ok(presupuesto);
             }
             catch (Exception ex)

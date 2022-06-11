@@ -10,6 +10,10 @@
     <Content Remove="wwwroot\Report\ArbrosDataSet.xsc" />
     <Content Remove="wwwroot\Report\ArbrosDataSet.xsd" />
     <Content Remove="wwwroot\Report\ArbrosDataSet.xss" />
+    <Content Remove="wwwroot\Report\Datasheet\vDataSheet.Designer.cs" />
+    <Content Remove="wwwroot\Report\Datasheet\vDataSheet.xsc" />
+    <Content Remove="wwwroot\Report\Datasheet\vDataSheet.xsd" />
+    <Content Remove="wwwroot\Report\Datasheet\vDataSheet.xss" />
     <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.Designer.cs" />
     <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsc" />
     <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsd" />
@@ -27,6 +31,11 @@
   <ItemGroup>
     <Compile Include="wwwroot\Report\ArbrosDataSet.Designer.cs">
       <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="wwwroot\Report\Datasheet\vDataSheet.Designer.cs">
+      <DependentUpon>vDataSheet.xsd</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -108,6 +117,17 @@
     <None Include="wwwroot\Report\ArbrosDataSet.xss">
       <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
     </None>
+    <None Include="wwwroot\Report\Datasheet\vDataSheet.xsc">
+      <DependentUpon>vDataSheet.xsd</DependentUpon>
+    </None>
+    <None Include="wwwroot\Report\Datasheet\vDataSheet.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>vDataSheet.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Include="wwwroot\Report\Datasheet\vDataSheet.xss">
+      <DependentUpon>vDataSheet.xsd</DependentUpon>
+    </None>
     <None Include="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsc">
       <DependentUpon>ArbrosDataSet5.xsd</DependentUpon>
     </None>
@@ -134,6 +154,7 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\Report\Presupuesto\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

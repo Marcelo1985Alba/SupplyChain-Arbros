@@ -18,7 +18,7 @@ namespace SupplyChain.Shared
         public string Producto { get; set; } = "";
         //[Range(minimum:1, maximum:9999999, ErrorMessage ="El Cliente es requerido")]
         public int CG_CLI { get; set; } = 0;
-        public int TagId { get; set; } = 0;
+        public int CalcId { get; set; } = 0;
         public string Cuit { get; set; } = "";
 
         [Range(minimum: 1, maximum: 9999999, ErrorMessage = "La Cantidad es requerida")]

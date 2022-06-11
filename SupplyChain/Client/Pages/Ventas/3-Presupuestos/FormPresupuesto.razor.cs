@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Shared.BuscadorCliente;
 using SupplyChain.Client.Shared.BuscadorProducto;
@@ -18,12 +19,14 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 {
     public class FormPresupuestoBase : ComponentBase
     {
+        [Inject] public IJSRuntime Js { get; set; }
         [Inject] public PresupuestoService PresupuestoService { get; set; }
         [Inject] public PrecioArticuloService PrecioArticuloService { get; set; }
         [Inject] public CondicionPagoService CondicionPagoService { get; set; }
         [Inject] public CondicionEntregaService CondicionEntregaService { get; set; }
         [Inject] public DireccionEntregaService DireccionEntregaService { get; set; }
         [Inject] public TipoCambioService TipoCambioService { get; set; }
+        [Inject] public SolicitudService SolicitudService { get; set; }
         /// <summary>
         /// objecto modificado el cual tambien obtiene la id nueva en caso de agregar un nuevo
         /// </summary>
@@ -328,7 +331,31 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
             Show = false;
             Presupuesto.GUARDADO = guardado;
+            await ImprimirDataSheet();
             await OnGuardar.InvokeAsync(Presupuesto);
+            
+            
+        }
+
+        protected async Task ImprimirDataSheet()
+        {
+            foreach (var item in Presupuesto.Items.Where(i => i.Estado != SupplyChain.Shared.Enum.EstadoItem.Eliminado))
+            {
+                if (item.SOLICITUDID > 0)
+                {
+                    var response = await SolicitudService.GetById(item.SOLICITUDID);
+                    if (response.Error)
+                    {
+                        Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        await Js.InvokeVoidAsync("open", 
+                            new object[2] { $"/api/ReportRDLC/GetReportDataSheet?id={response.Response.CalcId}", "_blank" });
+                    }
+
+                }
+            }
         }
 
         protected async Task BatchDeleteHandler(BeforeBatchDeleteArgs<PresupuestoDetalle> args)

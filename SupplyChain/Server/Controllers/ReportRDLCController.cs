@@ -24,7 +24,8 @@ namespace SupplyChain.Server.Controllers
         private readonly CargasController cargasController;
 
         public ReportRDLCController(AppDbContext appDbContext, IWebHostEnvironment webHostEnvoirement, IConfiguration configuration,
-            OrdenesFabricacionController ordenesFabricacionController, CargasController cargasController)
+            OrdenesFabricacionController ordenesFabricacionController, 
+            CargasController cargasController)
         {
             this._context = appDbContext;
             this.webHostEnvoirement = webHostEnvoirement;
@@ -81,7 +82,29 @@ namespace SupplyChain.Server.Controllers
 
             var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
 
-            return File(result.MainStream, contentType: "application/pdf", $"Evento_{noConf}.pdf");
+            return File(result.MainStream, contentType: "application/pdf", $"Presupuesto_{noConf}.pdf");
+        }
+
+        [HttpGet]
+        [Route(template: "GetReportDataSheet")]
+        public IActionResult GetReportDataSheet(int id)
+        {
+            var file = "Cotizacion.rdlc";
+            var vale = _context.vCalculoSolicitudes.Where(c => c.SolicitudId  == id).ToList();
+            var path = string.Empty;
+            path = configuration["ReportesRDLC:DataSheet"] + $"\\{file}";
+
+
+            //Dictionary<string, string> parameter = new();
+            //parameter.Add("param", "Primer Reporte");
+
+            LocalReport localReport = new(path);
+
+            localReport.AddDataSource(dataSetName: "DataSet2", vale);
+            
+            var result = localReport.Execute(RenderType.Pdf, 1);
+
+            return File(result.MainStream, contentType: "application/pdf", $"DataSheet.pdf");
         }
 
         [HttpGet]

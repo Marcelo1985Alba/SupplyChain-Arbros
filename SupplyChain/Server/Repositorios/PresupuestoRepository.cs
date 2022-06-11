@@ -83,6 +83,8 @@ namespace SupplyChain.Server.Repositorios
                 }
                 await Db.AddRangeAsync(itemsAgregar);
                 await Db.SaveChangesAsync();
+
+
             }
 
             
@@ -119,6 +121,11 @@ namespace SupplyChain.Server.Repositorios
                 await SaveChanges();
             }
             
+        }
+
+        internal async Task ActualizarCalculoConPresupuestoByIdCalculo(int id)
+        {
+            await Db.Database.ExecuteSqlRawAsync($"Exec Solicitud_ActualizaPresupuesto {id}");
         }
 
     }

@@ -42,7 +42,6 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             "ExcelExport"
         };
 
-        protected PresupuestoAnterior presupuesto = new();
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Solicitudes";
@@ -152,7 +151,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                     var nuevaSol = new vSolicitudes()
                     {
                         Id = solicitud.Id,
-                        TagId = solicitud.TagId,
+                        CalcId = solicitud.CalcId,
                         Fecha = solicitud.Fecha,
                         Cantidad = solicitud.Cantidad,
                         CG_CLI = solicitud.CG_CLI,

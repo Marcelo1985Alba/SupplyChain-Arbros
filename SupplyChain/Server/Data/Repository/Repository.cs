@@ -105,6 +105,21 @@ namespace SupplyChain.Server.Data.Repository
             await Db.Database.ExecuteSqlRawAsync(xSQL);
         }
 
+        public async Task BeginTransaction()
+        {
+            await Db.Database.BeginTransactionAsync();
+        }
+
+        public async Task CommitTransaction()
+        {
+            await Db.Database.CommitTransactionAsync();
+        }
+
+        public async Task RollbackTransaction()
+        {
+            await Db.Database.RollbackTransactionAsync();
+        }
+
         public void Dispose()
         {
             Db?.Dispose();

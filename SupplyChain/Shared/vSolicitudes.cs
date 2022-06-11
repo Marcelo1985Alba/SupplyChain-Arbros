@@ -23,7 +23,7 @@ namespace SupplyChain.Shared
         public int CG_CLI { get; set; } = 0;
         [Display(Name = "Descripcion Cliente")]
         public string DES_CLI { get; set; }
-        public int TagId { get; set; } = 0;
+        public int CalcId { get; set; } = 0;
         public string Cuit { get; set; } = "";
         public int Cantidad { get; set; }
         public bool TienePresupuesto { get; set; }
