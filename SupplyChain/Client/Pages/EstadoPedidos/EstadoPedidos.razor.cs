@@ -124,7 +124,7 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             //8   ENTREGADO
             //9   FACTURADO
             //10  ANULADO
-
+            
             if (args.Text == "1")
                 args.Text = "PEDIDO A CONFIRMAR";
             else if (args.Text == "2")
@@ -140,7 +140,7 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             else if (args.Text == "7")
                 args.Text = "A ENTREGAR";
             else if (args.Text == "8")
-                args.Text = "ENTREGADO";
+                args.Text = $"ENTREGADO\n{PedidoSeleccionado.REMITO}";
             //else if (args.Text == "9")
             //    args.Text = "FACTURADO";
             else
