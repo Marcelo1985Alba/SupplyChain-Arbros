@@ -23,5 +23,7 @@ namespace SupplyChain.Shared
         [Column("ENTRPREV")]
         public DateTime FE_PREV { get; set; }
         public string OBSERITEM { get; set; }
+        public string? REMITO { get; set; }
+        public string? FACTURA { get; set; }
     }
 }
