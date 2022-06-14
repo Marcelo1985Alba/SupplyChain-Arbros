@@ -19,7 +19,7 @@
     
     <BuscadorEmergente @ref="@Buscador" TItem="Pedidos" DataSource="@ItemsABuscar" Columnas="@ColumnasBuscador" Width="85%"
                        MostrarVerMas="true" OnBuscarMas="@(async()=> await BuscarPedidos())" Visible="PopupBuscadorVisible"
-                       OnCerrarDialog="@(async(v)=>await Cerrar(v))"
+                       OnCerrarDialog="@(async(v)=>await Cerrar(v))" 
                    Titulo="@TituloBuscador" Height="600px" OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))">
     </BuscadorEmergente>
 
@@ -47,7 +47,7 @@
         await Buscador.ShowAsync();
         CantRegistros += 100;
         SetTituloBuscador();
-        ColumnasBuscador = new string[] { "VALE", "FE_MOV", "CG_ART", "DES_ART", "STOCK", "SERIE", "LOTE", "DESPACHO" };
+        ColumnasBuscador = new string[] { "VALE", "FE_MOV", "CG_ART", "DES_ART", "STOCK", "PEDIDO", "LOTE", "DESPACHO" };
         ItemsABuscar = await Http.GetFromJsonAsync<Pedidos[]>($"api/Stock/GetValesByTipo/{TipoOperacion}/{CantRegistros}");
         await InvokeAsync(StateHasChanged);
     }

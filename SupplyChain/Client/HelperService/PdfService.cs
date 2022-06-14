@@ -53,9 +53,16 @@ namespace SupplyChain.Client.HelperService
             await js.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", ms.ToArray());
         }
 
-        public async Task Catalogo(string CodNro, string TrzNro, List<vTrazabilidad> vpedidos)
+        /// <summary>
+        /// Certificado de Producto
+        /// </summary>
+        /// <param name="Articulo"></param>
+        /// <param name="TrzNro"></param>
+        /// <param name="vpedidos"></param>
+        /// <returns></returns>
+        public async Task Catalogo(string Articulo, string TrzNro, List<vTrazabilidad> vpedidos)
         {
-            var ProdCertificado = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarPorCG_PROD/{CodNro}");
+            var ProdCertificado = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarPorCG_PROD/{Articulo}");
             var PedcliCertificado = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/BuscarPorPedido/{TrzNro}");
             var PedidosCertificado = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BusquedaParaFE_MOV/{TrzNro}");
             string roscas = "";
@@ -103,7 +110,7 @@ namespace SupplyChain.Client.HelperService
             }
 
 
-            if (CodNro.Substring(0, 1) == "1")
+            if (Articulo.Substring(0, 1) == "1")
             {
                 roscas = "Aprobado";
                 Ansi_Api = "-";
@@ -274,7 +281,7 @@ namespace SupplyChain.Client.HelperService
                                $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM3.Trim()}\n" +
                                $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM6.Trim()}\n" +
                                $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM2.Trim()}\n" +
-                               $"   {CodNro}";
+                               $"   {Articulo}";
 
             //CONTROL DIMENSIONAL
             //Add RowSpan

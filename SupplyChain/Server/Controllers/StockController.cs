@@ -42,7 +42,7 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("GetValesByTipo/{tipoo}/{cantRegistros:int}")]
         public async Task<ActionResult<IEnumerable<Pedidos>>> GetValesByTipo(int tipoo, int cantRegistros)
         {
-            List<Pedidos> lStock = (List<Pedidos>)await _pedidosRepository
+            List<Pedidos> lStock = await _pedidosRepository
                 .Obtener(p => p.TIPOO == tipoo && p.VOUCHER == 0 && p.CG_CIA == cg_cia_usuario, cantRegistros,
                          s => s.OrderByDescending(p=> p.VALE), true)
                 .ToListAsync();

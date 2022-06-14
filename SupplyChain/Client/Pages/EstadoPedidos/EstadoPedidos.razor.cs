@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using SupplyChain.Client.HelperService;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
+using SupplyChain.Shared.PCP;
 using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.LinearGauge;
@@ -16,7 +19,8 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
     public class EstadoPedidosBase : ComponentBase
     {
         [Inject] protected IRepositoryHttp Http { get; set; }
-
+        [Inject] protected PdfService PdfService  { get; set; }
+        [Inject] protected IJSRuntime JS { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
         protected SfToast ToastObj;
         protected SfGrid<vEstadoPedido> refSfGrid;
@@ -52,6 +56,91 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             else
             {
                 Args.Row.AddClass(new string[] { "e-removeDeletecommand" });
+            }
+        }
+
+        public async Task CommandClickHandler(CommandClickEventArgs<vEstadoPedido> args)
+        {
+            if (args.CommandColumn.ID == "btnDescargarCertificado")
+            {
+                string pedido = args.RowData.PEDIDO.ToString();
+
+                //OBTENGO TRAZABILIDAD PARA PODER OBTENER LOS CERTIFICADO DE MP
+                var listTrazab = new List<vTrazabilidad>();
+                var listArchivosDescargar = new List<Archivo>();
+                var responseTrazab = await Http.GetFromJsonAsync<List<vTrazabilidad>>($"api/Trazabilidads/MostrarTrazabilidad/{pedido}");
+                if (responseTrazab.Error)
+                {
+                    Console.WriteLine("ERROR AL OBTENER TRAZABILIDAD");
+                }
+                else
+                {
+                    listTrazab = responseTrazab.Response;
+                }
+
+                if (listTrazab.Count > 0 )
+                {
+                    var lineasRoscada = new List<int>(new int[] { 8, 18, 19, 23 });
+                    var lineasBridada = new List<int>(new int[] { 8, 18, 23, 52 });
+                    List<vTrazabilidad> lineasCertif = new();
+                    var producto = listTrazab.FirstOrDefault(t => t.TIPOO == 1).CG_ART;
+                    if (producto.StartsWith("00"))//reparacion
+                    {
+
+                    }
+                    else if (producto.StartsWith("1")) //roscada
+                    {
+                        lineasCertif = listTrazab.Where(t => lineasRoscada.Contains((int)t.CG_LINEA)).ToList();
+                    }
+                    else if (producto.StartsWith("2")) //bridada
+                    {
+                        lineasCertif = listTrazab.Where(t=> lineasBridada.Contains((int)t.CG_LINEA)).ToList();
+                    }
+
+                    if (lineasCertif.Count > 0)
+                    {
+                        foreach (var item in lineasCertif)
+                        {
+                            var responseMp = await Http
+                                .GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/ByParamRuta/RUTATRAZABILIDAD/{item.DESPACHO}.pdf");
+                            if (responseMp.Error)
+                            {
+                                Console.WriteLine("ERROR AL OBTENER CERTIFICADOS DE MATERIA PRIMA");
+                            }
+                            else
+                            {
+                                if (responseMp.Response.Count > 0)
+                                {
+                                    listArchivosDescargar.Add(responseMp.Response[0]);
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+
+                var response = await Http
+                    .GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/ByParamRuta/RUTACERTIFICADOS/{pedido}");
+
+                if (response.Error)
+                {
+                    Console.WriteLine("ERROR AL OBTENER CERTIFICADOS DE PRODUCTO");
+                }
+                else
+                {
+                    foreach (var item in response.Response)
+                    {
+                        listArchivosDescargar.Add(item);
+                    }
+
+                    foreach (Archivo item in listArchivosDescargar)
+                    {
+                        await JS.SaveAs(item.Nombre, item.ContenidoByte);
+
+                    }
+                }
+
+                
             }
         }
 

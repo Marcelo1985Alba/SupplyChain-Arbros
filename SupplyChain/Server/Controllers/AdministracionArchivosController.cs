@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
 using Syncfusion.Blazor.PdfViewer;
@@ -27,13 +28,15 @@ namespace SupplyChain.Server.Controllers
         private string DocumentPath;
         private readonly ILogger<AdministracionArchivosController> logger;
         private readonly SolutionRepository _solutionRepository;
+        private readonly AppDbContext _context;
 
         public AdministracionArchivosController(IWebHostEnvironment hostingEnvironment, IMemoryCache cache
-            , SolutionRepository solutionRepository
+            , SolutionRepository solutionRepository, AppDbContext context
             , ILogger<AdministracionArchivosController> logger)
         {
             _hostingEnvironment = hostingEnvironment;
             this._solutionRepository = solutionRepository;
+            _context = context;
             this._cache = cache;
         }
 
@@ -72,16 +75,21 @@ namespace SupplyChain.Server.Controllers
         {
             var archivos = new List<Archivo>();
             var ruta = await _solutionRepository.Obtener(s => s.CAMPO == parametro).FirstOrDefaultAsync();
-            var endLength = ruta.CAMPO.Trim() == "RUTAENSAYO" ? 9 : 7;
+            var endLength = ruta.CAMPO.Trim() == "RUTAENSAYO" ? 9 :
+                    ruta.CAMPO.Trim() == "RUTACERTIFICADOS" || ruta.CAMPO.Trim() == "RUTATRAZABILIDAD" ? codigo.Length : 7;
             codigo = codigo.Split(',')[0];
             var file = codigo.Substring(0, endLength);
             if (ruta.CAMPO.Trim() == "RUTAENSAYO")
             {
                 file += "_*.pdf";
             }
-            if (ruta.CAMPO.Trim() == "RUTATRAZABILIDAD")
+            else if (ruta.CAMPO.Trim() == "RUTATRAZABILIDAD")
             {
                 file = codigo;
+            }
+            else if (ruta.CAMPO.Trim() == "RUTACERTIFICADOS")
+            {
+                file += "*.pdf";
             }
 
             string[] dirs = Directory.GetFiles($"{ruta.VALORC}",$"{file}",
@@ -96,12 +104,14 @@ namespace SupplyChain.Server.Controllers
                     Nombre = Path.GetFileName(item),
                     Directorio = item,
                     Contenido = parametro == "RUTACNC" ? System.IO.File.ReadAllLines(item) : null,
-                    ContenidoByte = parametro == "RUTACNC" ? System.IO.File.ReadAllBytes(item) : null
+                    ContenidoByte = parametro == "RUTACNC" || ruta.CAMPO.Trim() == "RUTACERTIFICADOS" || ruta.CAMPO.Trim() == "RUTATRAZABILIDAD"
+                                    ? System.IO.File.ReadAllBytes(item) : null
                     //ContenidoBase64 = "data:application/pdf;base64," + Convert.ToBase64String(System.IO.File.ReadAllBytes(item))
                 };
 
                 archivos.Add(archivo);
             }
+
 
             return archivos;
         }
@@ -588,6 +598,15 @@ namespace SupplyChain.Server.Controllers
             object result = pdfviewer.GetDocumentText(jsonObject);
             return Content(JsonConvert.SerializeObject(result));
         }
+
+        [HttpGet("Descargar/{archivo}")]
+        public async Task<FileResult> Descargar(Archivo archivo)
+        {
+            //List<Archivo> archivos = await GetFileLocalServer("RUTACERTIFICADOS", archivo.ToString());
+            //return archivos;
+            return File(archivo.ContenidoByte, System.Net.Mime.MediaTypeNames.Application.Pdf, archivo.Nombre);
+        }
+
 
         private bool ExisteDoc(string file)
         {

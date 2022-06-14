@@ -15,7 +15,7 @@
                         AllowExcelExport="true" AllowGrouping="true" ID="grdEstadosPedidos"
                         AllowSorting="true" AllowPaging="true" AllowFiltering="true" GridLines="GridLine.Both">
                     <GridEvents RowDataBound="RowBound" TValue="vEstadoPedido" RowSelected="@((a)=> OnRowSelected(a))" 
-                                OnRecordDoubleClick="@((a)=> OnRowSelectedDouble_Click(a))"
+                                OnRecordDoubleClick="@((a)=> OnRowSelectedDouble_Click(a))" CommandClicked="CommandClickHandler"
                                 QueryCellInfo="@((a)=> QueryCellInfoHandler(a))"></GridEvents>
                     <GridSelectionSettings CheckboxOnly="true"
                                            Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -57,13 +57,16 @@
                     </GridEditSettings>
 
                     <GridColumns>
-                        <GridColumn HeaderText="Acciones" Width="100">
+                        <GridColumn HeaderText="Acciones" Width="130">
                             <GridCommandColumns>
-                        @*LAS BOTONES SE ESCONDEN AGREGANDO LA CLASE ATRAVES DEL EVENTO RowBound*@  
-                        <GridCommandColumn Type="CommandButtonType.Edit" Title="Detalle Factura" ID="btnDetalleFactura"
+                                @*LAS BOTONES SE ESCONDEN AGREGANDO LA CLASE ATRAVES DEL EVENTO RowBound*@
+                                <GridCommandColumn Type="CommandButtonType.Edit" Title="Detalle Factura" ID="btnDetalleFactura"
                                                    ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-usd", CssClass = "e-flat" })"></GridCommandColumn>
                                 <GridCommandColumn Type="CommandButtonType.Edit" Title="Detalle Remito" ID="btnDetalleRemito"
                                                    ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-cubes fa-1", CssClass = "" })"></GridCommandColumn>
+
+                            <GridCommandColumn Type="CommandButtonType.Edit" Title="Descargar Certificados" ID="btnDescargarCertificado"
+                                               ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-download fa-1", CssClass = "" })"></GridCommandColumn>
                             </GridCommandColumns>
                         </GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.FE_PED) HeaderText="FECHA PEDIDO" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
@@ -337,5 +340,10 @@
 
     .color-estado-pedido-anulado {
         color: #000000 !important;
+    }
+
+    .e-btn .e-btn-icon, .e-css.e-btn .e-btn-icon {
+        font-size: 9px;
+        color:blue;
     }
 </style>
