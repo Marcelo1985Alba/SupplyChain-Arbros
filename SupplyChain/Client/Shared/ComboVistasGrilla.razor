@@ -111,7 +111,7 @@
             var vis = await response.Content.ReadFromJsonAsync<VistasGrillas>();
             Source.Add(vis);
 
-            await ReiniciarVista();
+            //await ReiniciarVista();
             //await refComboBox.AddItems( new List<VistasGrillas>() { vis } );
             VistaSeleccionada = vis;
 
@@ -182,7 +182,7 @@
     {
         VistaSeleccionada = new VistasGrillas();
         //await refComboBox.Clear();
-        refComboBox.DataSource = Source;
+        //refComboBox.DataSource = Source;
         await OnReiniciar.InvokeAsync();
     }
 }

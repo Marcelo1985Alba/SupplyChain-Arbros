@@ -87,7 +87,7 @@ namespace SupplyChain.Server.Controllers
             {
                 file = codigo;
             }
-            else if (ruta.CAMPO.Trim() == "RUTACERTIFICADOS")
+            else if (ruta.CAMPO.Trim() == "RUTACERTIFICADOS" || ruta.CAMPO.Trim() == "RUTAREMITO" || ruta.CAMPO.Trim() == "RUTAFACTURA")
             {
                 file += "*.pdf";
             }
@@ -105,7 +105,7 @@ namespace SupplyChain.Server.Controllers
                     Directorio = item,
                     Contenido = parametro == "RUTACNC" ? System.IO.File.ReadAllLines(item) : null,
                     ContenidoByte = parametro == "RUTACNC" || ruta.CAMPO.Trim() == "RUTACERTIFICADOS" || ruta.CAMPO.Trim() == "RUTATRAZABILIDAD"
-                                    ? System.IO.File.ReadAllBytes(item) : null
+                                    || ruta.CAMPO.Trim() == "RUTAFACTURA" || ruta.CAMPO.Trim() == "RUTAREMITO" ? System.IO.File.ReadAllBytes(item) : null
                     //ContenidoBase64 = "data:application/pdf;base64," + Convert.ToBase64String(System.IO.File.ReadAllBytes(item))
                 };
 

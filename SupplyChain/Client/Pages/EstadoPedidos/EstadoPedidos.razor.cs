@@ -29,6 +29,9 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
         protected bool SpinnerVisible = false;
 
         protected bool VisibleDialog = false;
+
+        protected const string APPNAME = "grdEstadosPedidos";
+        protected string state;
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Estados de Pedidos";
@@ -61,6 +64,16 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
 
         public async Task CommandClickHandler(CommandClickEventArgs<vEstadoPedido> args)
         {
+            if (args.CommandColumn.ID == "btnDescargarRemito")
+            {
+                await DescargarRemito(args.RowData);
+            }
+
+            if (args.CommandColumn.ID == "btnDescargarFactura")
+            {
+                await DescargarFactura(args.RowData);
+            }
+
             if (args.CommandColumn.ID == "btnDescargarCertificado")
             {
                 string pedido = args.RowData.PEDIDO.ToString();
@@ -72,6 +85,7 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
                 if (responseTrazab.Error)
                 {
                     Console.WriteLine("ERROR AL OBTENER TRAZABILIDAD");
+                    Console.WriteLine(await responseTrazab.HttpResponseMessage.Content.ReadAsStringAsync());
                 }
                 else
                 {
@@ -106,6 +120,7 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
                             if (responseMp.Error)
                             {
                                 Console.WriteLine("ERROR AL OBTENER CERTIFICADOS DE MATERIA PRIMA");
+                                Console.WriteLine(await responseMp.HttpResponseMessage.Content.ReadAsStringAsync());
                             }
                             else
                             {
@@ -125,6 +140,7 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
                 if (response.Error)
                 {
                     Console.WriteLine("ERROR AL OBTENER CERTIFICADOS DE PRODUCTO");
+                    Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
                 }
                 else
                 {
@@ -141,6 +157,52 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
                 }
 
                 
+            }
+        }
+
+        private async Task DescargarRemito(vEstadoPedido pedido)
+        {
+            var responseFactura = await Http
+                                .GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/ByParamRuta/RUTAREMITO/{pedido.REMITO}");
+            if (responseFactura.Error)
+            {
+                Console.WriteLine("ERROR AL OBTENER REMITO");
+                Console.WriteLine(await responseFactura.HttpResponseMessage.Content.ReadAsStringAsync());
+            }
+            else
+            {
+                if (responseFactura.Response.Count > 0)
+                {
+                    await JS.SaveAs(responseFactura.Response[0].Nombre, responseFactura.Response[0].ContenidoByte);
+                }
+                else
+                {
+
+                }
+
+            }
+        }
+        private async Task DescargarFactura(vEstadoPedido pedido)
+        {
+            var formatoFacturaBuscar = pedido.LETRA_FACTURA + pedido.FACTURA;
+            var responseFactura = await Http
+                                .GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/ByParamRuta/RUTAFACTURA/{formatoFacturaBuscar}");
+            if (responseFactura.Error)
+            {
+                Console.WriteLine("ERROR AL OBTENER FACTURA");
+                Console.WriteLine(await responseFactura.HttpResponseMessage.Content.ReadAsStringAsync());
+            }
+            else
+            {
+                if (responseFactura.Response.Count > 0)
+                {
+                    await JS.SaveAs(responseFactura.Response[0].Nombre, responseFactura.Response[0].ContenidoByte) ;
+                }
+                else
+                {
+
+                }
+
             }
         }
 
@@ -198,6 +260,39 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             arg.PreventRender = true;
             PedidoSeleccionado = arg.RowData;
             VisibleDialog = true;
+        }
+
+        public async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
+        {
+            await refSfGrid.SetPersistData(vistasGrillas.Layout);
+        }
+        public async Task OnReiniciarGrilla()
+        {
+            await refSfGrid.ResetPersistData();
+        }
+
+        public async Task BeginHandler(ActionEventArgs<vEstadoPedido> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.Sorting
+                )
+            {
+                //VisibleProperty = true;
+                refSfGrid.PreventRender();
+                refSfGrid.Refresh();
+
+                state = await refSfGrid.GetPersistData();
+                await refSfGrid.AutoFitColumnsAsync();
+                await refSfGrid.RefreshColumns();
+                await refSfGrid.RefreshHeader();
+                //VisibleProperty = false;
+            }
         }
 
         protected void AxisLabelChange(AxisLabelRenderEventArgs args)

@@ -6,6 +6,16 @@
 <SfToast ID="toast_default" @ref="ToastObj">
     <ToastPosition X="Center" Y="Top"></ToastPosition>
 </SfToast>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+    </div>
+
+</div>
+
 <div class="">
     <div class="">
         <div class="row">
@@ -15,7 +25,9 @@
                         AllowExcelExport="true" AllowGrouping="true" ID="grdEstadosPedidos"
                         AllowSorting="true" AllowPaging="true" AllowFiltering="true" GridLines="GridLine.Both">
                     <GridEvents RowDataBound="RowBound" TValue="vEstadoPedido" RowSelected="@((a)=> OnRowSelected(a))" 
-                                OnRecordDoubleClick="@((a)=> OnRowSelectedDouble_Click(a))" CommandClicked="CommandClickHandler"
+                                OnRecordDoubleClick="@((a)=> OnRowSelectedDouble_Click(a))" 
+                                CommandClicked="CommandClickHandler"
+                                OnActionBegin="@((a)=> BeginHandler(a))"
                                 QueryCellInfo="@((a)=> QueryCellInfoHandler(a))"></GridEvents>
                     <GridSelectionSettings CheckboxOnly="true"
                                            Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -60,9 +72,9 @@
                         <GridColumn HeaderText="Acciones" Width="130">
                             <GridCommandColumns>
                                 @*LAS BOTONES SE ESCONDEN AGREGANDO LA CLASE ATRAVES DEL EVENTO RowBound*@
-                                <GridCommandColumn Type="CommandButtonType.Edit" Title="Detalle Factura" ID="btnDetalleFactura"
-                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-usd", CssClass = "e-flat" })"></GridCommandColumn>
-                                <GridCommandColumn Type="CommandButtonType.Edit" Title="Detalle Remito" ID="btnDetalleRemito"
+                                <GridCommandColumn Type="CommandButtonType.Edit" Title="Descargar Factura" ID="btnDescargarFactura"
+                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-usd", CssClass = "" })"></GridCommandColumn>
+                                <GridCommandColumn Type="CommandButtonType.Edit" Title="Descargar Remito" ID="btnDescargarRemito"
                                                    ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-cubes fa-1", CssClass = "" })"></GridCommandColumn>
 
                             <GridCommandColumn Type="CommandButtonType.Edit" Title="Descargar Certificados" ID="btnDescargarCertificado"
@@ -83,6 +95,7 @@
                         <GridColumn Field=@nameof(vEstadoPedido.UNID) HeaderText="UNIDAD" Width="120"></GridColumn>
                         @*<GridColumn Field=@nameof(vEstadoPedido.ESTADO_PEDIDO) HeaderText="ESTADO PEDIDO" EditType="EditType.DropDownEdit" EditorSettings="@CustomerIDEditParams" Width="180"></GridColumn>*@
                         <GridColumn Field=@nameof(vEstadoPedido.ORCO) HeaderText="ORDEN DE COMPRA" Width="120"></GridColumn>
+                        <GridColumn Field=@nameof(vEstadoPedido.NUM_OCI) HeaderText="OC INTERNA" Width="120"></GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.FE_PREV) HeaderText="FECHA PREVISTA" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.OBSERITEM) HeaderText="OBSERVACIONES" Width="220"></GridColumn>
                     </GridColumns>
@@ -342,8 +355,14 @@
         color: #000000 !important;
     }
 
-    .e-btn .e-btn-icon, .e-css.e-btn .e-btn-icon {
+/*    .e-btn .e-btn-icon, .e-css.e-btn .e-btn-icon {
         font-size: 9px;
-        color:blue;
+        color: blue;
+    }*/
+
+    .e-Editbutton, .e-Editbutton .e-btn-icon {
+        font-size: 9px;
+        color: blue;
     }
+
 </style>
