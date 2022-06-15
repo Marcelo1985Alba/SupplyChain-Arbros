@@ -8,6 +8,7 @@ using SupplyChain.Shared.PCP;
 using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.LinearGauge;
+using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,11 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
         protected bool SpinnerVisible = false;
 
         protected bool VisibleDialog = false;
-
+        protected List<Object> Toolbaritems = new List<Object>(){
+        "Search",
+        new ItemModel { Text = "Seleccionar Columnas", TooltipText = "Seleccionar Columnas", Id = "SeleccionarColumnas" }
+        };
+        //new
         protected const string APPNAME = "grdEstadosPedidos";
         protected string state;
         protected async override Task OnInitializedAsync()
@@ -52,11 +57,12 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
 
         public void RowBound(RowDataBoundEventArgs<vEstadoPedido> Args)
         {
-            if (Args.Data.ESTADO_PEDIDO != 9)
+            if (string.IsNullOrEmpty(Args.Data.REMITO))
             {
                 Args.Row.AddClass(new string[] { "e-removeEditcommand" });
             }
-            else
+
+            if (string.IsNullOrEmpty(Args.Data.FACTURA))
             {
                 Args.Row.AddClass(new string[] { "e-removeDeletecommand" });
             }
@@ -295,6 +301,17 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             }
         }
 
+        public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+        {
+            if (args.Item.Text == "Seleccionar Columnas")
+            {
+                await refSfGrid.OpenColumnChooser(200, 50);
+            }
+            if (args.Item.Text == "Exportar grilla en Excel")
+            {
+                await this.refSfGrid.ExcelExport();
+            }
+        }
         protected void AxisLabelChange(AxisLabelRenderEventArgs args)
         {
 

@@ -76,7 +76,8 @@ namespace SupplyChain.Server.Controllers
             var archivos = new List<Archivo>();
             var ruta = await _solutionRepository.Obtener(s => s.CAMPO == parametro).FirstOrDefaultAsync();
             var endLength = ruta.CAMPO.Trim() == "RUTAENSAYO" ? 9 :
-                    ruta.CAMPO.Trim() == "RUTACERTIFICADOS" || ruta.CAMPO.Trim() == "RUTATRAZABILIDAD" ? codigo.Length : 7;
+                    ruta.CAMPO.Trim() == "RUTACERTIFICADOS" || ruta.CAMPO.Trim() == "RUTATRAZABILIDAD"
+                    || ruta.CAMPO.Trim() == "RUTAREMITO" || ruta.CAMPO.Trim() == "RUTAFACTURA" ? codigo.Length : 7;
             codigo = codigo.Split(',')[0];
             var file = codigo.Substring(0, endLength);
             if (ruta.CAMPO.Trim() == "RUTAENSAYO")
@@ -87,9 +88,13 @@ namespace SupplyChain.Server.Controllers
             {
                 file = codigo;
             }
-            else if (ruta.CAMPO.Trim() == "RUTACERTIFICADOS" || ruta.CAMPO.Trim() == "RUTAREMITO" || ruta.CAMPO.Trim() == "RUTAFACTURA")
+            else if (ruta.CAMPO.Trim() == "RUTACERTIFICADOS")
             {
                 file += "*.pdf";
+            }
+            else if (ruta.CAMPO.Trim() == "RUTAREMITO" || ruta.CAMPO.Trim() == "RUTAFACTURA")
+            {
+                file += "*.*";
             }
 
             string[] dirs = Directory.GetFiles($"{ruta.VALORC}",$"{file}",

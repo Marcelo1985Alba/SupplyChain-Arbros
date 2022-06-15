@@ -20,13 +20,13 @@
     <div class="">
         <div class="row">
             <div class="col-12">
-                <SfGrid @ref="refSfGrid" AllowReordering="true" ShowColumnChooser="false" ShowColumnMenu="false" AllowResizing="true"
-                        DataSource="@DataEstadosPedidos" Width="100%" 
+                <SfGrid @ref="refSfGrid" AllowReordering="true" ShowColumnChooser="false" ShowColumnMenu="true" AllowResizing="true"
+                        DataSource="@DataEstadosPedidos" Width="100%"
                         AllowExcelExport="true" AllowGrouping="true" ID="grdEstadosPedidos"
                         AllowSorting="true" AllowPaging="true" AllowFiltering="true" GridLines="GridLine.Both">
                     <GridEvents RowDataBound="RowBound" TValue="vEstadoPedido" RowSelected="@((a)=> OnRowSelected(a))" 
                                 OnRecordDoubleClick="@((a)=> OnRowSelectedDouble_Click(a))" 
-                                CommandClicked="CommandClickHandler"
+                                CommandClicked="CommandClickHandler" OnToolbarClick="@(async(a)=> await ClickHandler(a))" 
                                 OnActionBegin="@((a)=> BeginHandler(a))"
                                 QueryCellInfo="@((a)=> QueryCellInfoHandler(a))"></GridEvents>
                     <GridSelectionSettings CheckboxOnly="true"
@@ -71,8 +71,10 @@
                     <GridColumns>
                         <GridColumn HeaderText="Acciones" Width="130">
                             <GridCommandColumns>
+                                
                                 @*LAS BOTONES SE ESCONDEN AGREGANDO LA CLASE ATRAVES DEL EVENTO RowBound*@
-                                <GridCommandColumn Type="CommandButtonType.Edit" Title="Descargar Factura" ID="btnDescargarFactura"
+                                
+                                <GridCommandColumn Type="CommandButtonType.Delete" Title="Descargar Factura" ID="btnDescargarFactura"
                                                    ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-usd", CssClass = "" })"></GridCommandColumn>
                                 <GridCommandColumn Type="CommandButtonType.Edit" Title="Descargar Remito" ID="btnDescargarRemito"
                                                    ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-cubes fa-1", CssClass = "" })"></GridCommandColumn>
@@ -314,6 +316,10 @@
         display: none;
     }
 
+    .e-removeDeletecommand .e-unboundcell .e-unboundcelldiv button.e-Deletebutton {
+        display: none;
+    }
+
     .color-estado-pedido-a-confirmar {
         /*background-color: #f89b9b;*/
         color: #e3165b !important;
@@ -361,6 +367,11 @@
     }*/
 
     .e-Editbutton, .e-Editbutton .e-btn-icon {
+        font-size: 9px;
+        color: blue;
+    }
+
+    .e-Deletebutton, .e-Deletebutton .e-btn-icon {
         font-size: 9px;
         color: blue;
     }
