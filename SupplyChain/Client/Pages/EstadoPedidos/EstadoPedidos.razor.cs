@@ -100,8 +100,8 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
 
                 if (listTrazab.Count > 0 )
                 {
-                    var lineasRoscada = new List<int>(new int[] { 8, 18, 19, 23 });
-                    var lineasBridada = new List<int>(new int[] { 8, 18, 23, 52 });
+                    var lineasRoscada = new List<int>(new int[] { 8, 18, 52, 23 });
+                    var lineasBridada = new List<int>(new int[] { 8, 18, 23, 19 });
                     List<vTrazabilidad> lineasCertif = new();
                     var producto = listTrazab.FirstOrDefault(t => t.TIPOO == 1).CG_ART;
                     if (producto.StartsWith("00"))//reparacion
