@@ -44,24 +44,28 @@ namespace SupplyChain.Client.Shared.BuscadorCliente
         }
         protected async Task SendObjectSelected(ClienteExterno obj)
         {
-            if (!CompararCliente)
+            if (obj != null)
             {
-                await OnObjectSelected.InvokeAsync(obj);
-                await Hide();
-            }
-            else 
-            {
-                if (CompararCliente && obj.CG_CLI == Cg_Cli_Comparar.ToString())
+                if (!CompararCliente)
                 {
                     await OnObjectSelected.InvokeAsync(obj);
                     await Hide();
                 }
                 else
                 {
+                    if (CompararCliente && obj.CG_CLI == Cg_Cli_Comparar.ToString())
+                    {
+                        await OnObjectSelected.InvokeAsync(obj);
+                        await Hide();
+                    }
+                    else
+                    {
+
+                    }
 
                 }
-                
             }
+            
 
 
             

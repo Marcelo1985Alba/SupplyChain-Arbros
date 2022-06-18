@@ -45,7 +45,7 @@ namespace SupplyChain.Server.Repositorios
             var cliente = await Db.ClientesExternos.FirstOrDefaultAsync(c=> c.CUIT.Trim() == cuit);
             if (cliente != null)
             {
-                solicitud.CG_CLI = Convert.ToInt32(cliente.Id);
+                solicitud.CG_CLI = Convert.ToInt32(cliente.CG_CLI);
             }
         }
     }

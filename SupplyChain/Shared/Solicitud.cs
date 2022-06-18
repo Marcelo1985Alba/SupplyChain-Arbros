@@ -24,20 +24,6 @@ namespace SupplyChain.Shared
         [Range(minimum: 1, maximum: 9999999, ErrorMessage = "La Cantidad es requerida")]
         public int Cantidad { get; set; }
         public bool TienePresupuesto { get; set; }
-
-        public string Medidas { get; set; } = "";
-        public string Orificio { get; set; } = "";
-        public string SerieEntrada { get; set; } = "";
-        public string TipoEntrada { get; set; } = "";
-        public string SerieSalida { get; set; } = "";
-        public string TipoSalida { get; set; } = "";
-        public string Accesorios { get; set; } = "";
-        public string Asiento { get; set; } = "";
-        public string Bonete { get; set; } = "";
-        public string Cuerpo { get; set; } = "";
-        public string Resorte { get; set; } = "";
-        public string Disco { get; set; } = "";
-        public string Tobera { get; set; } = "";
         public PresupuestoDetalle PresupuestoDetalle { get; set; }
         [NotMapped] public PreciosArticulos PrecioArticulo { get; set; }
         [NotMapped] public string Des_Cli { get; set; } = "";

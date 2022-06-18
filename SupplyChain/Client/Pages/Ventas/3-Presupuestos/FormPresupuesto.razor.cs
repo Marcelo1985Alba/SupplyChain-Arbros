@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using SupplyChain.Client.HelperService;
+using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared.BuscadorCliente;
 using SupplyChain.Client.Shared.BuscadorProducto;
 using SupplyChain.Client.Shared.BuscarSolicitud;
@@ -19,6 +20,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 {
     public class FormPresupuestoBase : ComponentBase
     {
+        [Inject] public IRepositoryHttp Http { get; set; }
         [Inject] public IJSRuntime Js { get; set; }
         [Inject] public PresupuestoService PresupuestoService { get; set; }
         [Inject] public PrecioArticuloService PrecioArticuloService { get; set; }
@@ -74,6 +76,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected bool IsAdd { get; set; }
         protected bool ReadOnlyMoneda = true;
         protected decimal IMP_BONFIC = 0;
+        protected bool BotonGuardarDisabled = false;
         public async Task ShowAsync(int id)
         {
             if (id > 0)
@@ -204,6 +207,10 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             else
             {
                 direccionesEntregas = response.Response.Select(de=> de.DESCRIPCION).ToList();
+                if (direccionesEntregas.Count > 0)
+                {
+                    Presupuesto.DIRENT = direccionesEntregas[0];
+                }
             }
         }
 
@@ -214,6 +221,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
             var item = new PresupuestoDetalle()
             {
+                Id  = Presupuesto.Items.Count == 0 ? -1 : Presupuesto.Items.Count * -1, //en negativos
                 CANTIDAD = 1,
                 CG_ART = productoSelected.Id,
                 DES_ART = productoSelected.DES_PROD
@@ -251,7 +259,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
                 var item = new PresupuestoDetalle()
                 {
-                    Id = Presupuesto.Items.Count == 0 ? -1 : Presupuesto.Items.Count * -1, //en negativos
+                    Id = Presupuesto.Items.Count == 0 ? -1 : (Presupuesto.Items.Count * -1 - 1), //en negativos
                     SOLICITUDID = solicitudSelected.Id,
                     CANTIDAD = solicitudSelected.Cantidad,
                     CG_ART = solicitudSelected.Producto,
@@ -318,6 +326,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task Guardar()
         {
+            BotonGuardarDisabled = true;
             bool guardado;
             if (Presupuesto.Id == 0)
             {
@@ -330,9 +339,10 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             }
 
             Show = false;
+            BotonGuardarDisabled = false;
             Presupuesto.GUARDADO = guardado;
-            await ImprimirDataSheet();
             await OnGuardar.InvokeAsync(Presupuesto);
+            await ImprimirDataSheet();
             
             
         }
@@ -350,8 +360,14 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                     }
                     else
                     {
-                        await Js.InvokeVoidAsync("open", 
-                            new object[2] { $"/api/ReportRDLC/GetReportDataSheet?id={response.Response.CalcId}", "_blank" });
+                        
+                        if (response.Response.CalcId > 0)
+                        {
+                            //await Http.GetFromJsonAsync<object>($"/api/ReportRDLC/GetReportDataSheet?id={response.Response.CalcId}");
+                            await Js.InvokeVoidAsync("open",
+                                new object[2] { $"/api/ReportRDLC/GetReportDataSheet?id={response.Response.CalcId}", "" });
+                        }
+
                     }
 
                 }

@@ -17,7 +17,9 @@
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
-            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler" TValue="vPresupuestos"></GridEvents>
+            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler" 
+                        OnToolbarClick="OnToolbarHandler"
+                        TValue="vPresupuestos"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" NewRowPosition="NewRowPosition.Top"
                               Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">

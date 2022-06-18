@@ -25,6 +25,8 @@ namespace SupplyChain.Shared
         public double TC { get; set; } = 0;
         public decimal TOTAL { get; set; } = 0;
 
+        public string USUARIO { get; set; } = "";
+
         [Required(ErrorMessage = "La Direccion de Entrega es requerida")]
         public string DIRENT { get; set; }
         

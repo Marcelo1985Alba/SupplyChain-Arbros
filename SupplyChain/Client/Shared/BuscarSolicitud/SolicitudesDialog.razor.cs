@@ -55,50 +55,55 @@ namespace SupplyChain.Client.Shared.BuscarSolicitud
         }
         protected async Task SendObjectSelected(vSolicitudes obj)
         {
-            var response = await SolicitudService.GetById(obj.Id);
-            if (response.Error)
+            if (obj != null)
             {
-                await ToastMensajeError("Error al obtener datos de la Solicitud");
-            }
-            else
-            {
-                var solicitud = response.Response;
-                solicitud.Des_Prod = obj.Descripcion;
-                solicitud.Des_Cli = obj.DES_CLI;
-                if (ConPrecio)
+                var response = await SolicitudService.GetById(obj.Id);
+                if (response.Error)
                 {
-                    await SetPrecio(solicitud);
-                }
-
-                if (CompararCliente)
-                {
-                    if (solicitud.CG_CLI != Cg_Cli_Comparar)
-                    {
-                        await ToastMensajeError("No se puede agrega Solicitud.\nEl Cliente es distinto");
-                    }
-                    else
-                    {
-                        if (ConPrecio && solicitud.PrecioArticulo != null)
-                        {
-                            if (solicitud != null)
-                            {
-                                await OnObjectSelected.InvokeAsync(solicitud);
-                                await Hide();
-                            }
-                        }
-                    }
+                    await ToastMensajeError("Error al obtener datos de la Solicitud");
                 }
                 else
                 {
-                    if (solicitud != null)
+                    var solicitud = response.Response;
+                    solicitud.Des_Prod = obj.Descripcion;
+                    solicitud.Des_Cli = obj.DES_CLI;
+                    if (ConPrecio)
                     {
-                        await OnObjectSelected.InvokeAsync(solicitud);
-                        await Hide();
+                        await SetPrecio(solicitud);
                     }
-                    
+
+                    if (CompararCliente)
+                    {
+                        if (solicitud.CG_CLI != Cg_Cli_Comparar)
+                        {
+                            await ToastMensajeError("No se puede agrega Solicitud.\nEl Cliente es distinto");
+                        }
+                        else
+                        {
+                            if (ConPrecio && solicitud.PrecioArticulo != null)
+                            {
+                                if (solicitud != null)
+                                {
+                                    await OnObjectSelected.InvokeAsync(solicitud);
+                                    await Hide();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (solicitud != null)
+                        {
+                            await OnObjectSelected.InvokeAsync(solicitud);
+                            await Hide();
+                        }
+
+                    }
+
                 }
-                
             }
+
+            
         }
 
         protected async Task CerrarDialog()

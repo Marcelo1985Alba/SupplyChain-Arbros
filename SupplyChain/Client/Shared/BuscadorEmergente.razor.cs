@@ -79,7 +79,6 @@ namespace SupplyChain.Client.Shared
         }
         public async Task EnviarObjetoSeleccionado()
         {
-            Visible = false;
             if (TipoSeleccion == SelectionType.Multiple)
             {
                 var items = await Grid.GetSelectedRecordsAsync();
@@ -89,6 +88,7 @@ namespace SupplyChain.Client.Shared
             {
                 await OnObjetoSeleccionado.InvokeAsync(Selected);
             }
+            Visible = false;
             
         }
 

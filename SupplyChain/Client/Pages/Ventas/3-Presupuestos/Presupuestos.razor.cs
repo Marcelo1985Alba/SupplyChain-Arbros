@@ -37,7 +37,8 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             "Delete",
             "Print",
             //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
-            "ExcelExport"
+            "ExcelExport",
+            new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh" },
         };
 
         protected List<string> Monedas = new() { "PESOS", "DOLARES" };
@@ -111,6 +112,16 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         }
 
+        protected async Task OnToolbarHandler(ClickEventArgs args)
+        {
+            if (args.Item.Id == "refresh")
+            {
+                SpinnerVisible = true;
+                await GetPresupuestos();
+                SpinnerVisible = false;
+            }
+        }
+
         protected async Task Guardar(Presupuesto presupuesto)
         {
             if (presupuesto.GUARDADO)
@@ -126,20 +137,23 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                         Id = presupuesto.Id,
                         Fecha = presupuesto.FECHA,
                         MONEDA = presupuesto.MONEDA,
-                        TOTAL = presupuesto.TOTAL
+                        TOTAL = presupuesto.TOTAL,
+                        USUARIO = ""
                     };
                     Presupuestos.Add(nuevoPresup);
-
+                    Presupuestos = Presupuestos.OrderByDescending(p => p.Id).ToList();
                 }
                 else
                 {
                     //actualizar datos sin ir a la base de datos
                     var presupActualizado = Presupuestos.Where(s => s.Id == presupuesto.Id).FirstOrDefault();
+                    presupActualizado.MONEDA = presupuesto.MONEDA;
                     presupActualizado.CG_CLI = presupuesto.CG_CLI;
                     presupActualizado.DES_CLI = presupuesto.DES_CLI;
                     presupActualizado.TOTAL = presupuesto.TOTAL;
-
+                    presupActualizado.USUARIO = presupuesto.USUARIO;
                 }
+
 
                 await refGrid.RefreshHeaderAsync();
                 refGrid.Refresh();

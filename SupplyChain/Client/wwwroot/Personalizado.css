@@ -207,6 +207,12 @@ e-grid .e-gridheader {
     font-weight: bold;
 }
 
+.e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn {
+    height: 9px !important;
+    min-height: 29px !important;
+    min-width: 34px !important;
+}
+
 .e-toolbar-item button[aria-label="Add"] {
     background: #04cb93;
     /*border-radius: 10%;*/
@@ -324,17 +330,35 @@ e-grid .e-gridheader {
     /*border: 1px solid #5a70cc;*/
 }
 
-    .e-toolbar-item button[aria-label="Copia"]:focus {
-        background: #2f86f9;
-        /*border-radius: 10%;*/
-        /*border: 1px solid #5a70cc;*/
-    }
+.e-toolbar-item button[aria-label="Copia"]:focus {
+    background: #2f86f9;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
 
-    .e-toolbar-item button[aria-label="Copia"]:hover {
-        background: #3582e8;
-        /*border-radius: 10%;*/
-        /*border: 1px solid #5a70cc;*/
-    }
+.e-toolbar-item button[aria-label="Copia"]:hover {
+    background: #3582e8;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
+
+.e-toolbar-item button[aria-label="Actualizar Grilla"] {
+    background: #f88d42;
+    font-size: 9px;
+    /*border: 1px solid #5a70cc;*/
+}
+
+.e-toolbar-item button[aria-label="Actualizar Grilla"]:focus {
+    background: #fa7213;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
+
+.e-toolbar-item button[aria-label="Actualizar Grilla"]:hover {
+    background: #fa7213;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
 
 
 .e-toolbar-item .e-control .e-btn .e-icons .e-btn-icon {
