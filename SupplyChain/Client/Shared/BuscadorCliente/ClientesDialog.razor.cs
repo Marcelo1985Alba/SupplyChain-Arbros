@@ -18,6 +18,8 @@ namespace SupplyChain.Client.Shared.BuscadorCliente
         [Parameter] public EventCallback OnCerrarDialog { get; set; }
         [Parameter] public bool CompararCliente { get; set; } = false;
         [Parameter] public int Cg_Cli_Comparar { get; set; } = 0;
+        [Parameter] public int Cg_Cli { get; set; } = 0;
+        [Parameter] public string Des_Cli { get; set; } = "";
 
         protected List<ClienteExterno> clientes = new();
         protected SfSpinner refSpinner;
@@ -25,6 +27,12 @@ namespace SupplyChain.Client.Shared.BuscadorCliente
         public async Task Show()
         {
             refSpinner?.ShowAsync();
+            await Search();
+        }
+
+
+        protected async Task BuscarTodos()
+        {
             var response = await ClienteService.GetClientesExterno();
             if (response.Error)
             {
@@ -38,6 +46,34 @@ namespace SupplyChain.Client.Shared.BuscadorCliente
                 PopupBuscadorVisible = true;
             }
         }
+
+
+        protected async Task Search()
+        {
+            var response = await ClienteService.Search(Cg_Cli, Des_Cli);
+            if (response.Error)
+            {
+                refSpinner?.HideAsync();
+                Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+            }
+            else
+            {
+                clientes = response.Response;
+
+                if (clientes.Count == 1)
+                {
+                    await SendObjectSelected(clientes[0]);
+                }
+                else
+                {
+                    PopupBuscadorVisible = true;
+                }
+
+                refSpinner?.HideAsync();
+                
+            }
+        }
+
         public async Task Hide()
         {
             PopupBuscadorVisible = false;

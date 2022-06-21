@@ -8,7 +8,7 @@ namespace SupplyChain.Shared.Models
     public class PreciosArticulos :  EntityBase<string>
     {
         [ColumnaGridViewAtributo(Name = "Descripcion")]
-        public string Descripcion { get; set; } = "";
+        public string Descripcion { get; set; } = string.Empty;
         [ColumnaGridViewAtributo(Name = "Precio")]
         public decimal Precio { get; set; } = 0;
         [ColumnaGridViewAtributo(Name = "Moneda")]

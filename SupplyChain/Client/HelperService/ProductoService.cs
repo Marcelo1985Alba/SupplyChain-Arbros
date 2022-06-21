@@ -24,5 +24,6 @@ namespace SupplyChain.Client.HelperService
         {
             return await http.GetFromJsonAsync<List<Producto>>($"{API}/GetProdAndReparaciones");
         }
+
     }
 }

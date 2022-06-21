@@ -34,7 +34,7 @@ namespace SupplyChain.Shared
         public virtual List<PresupuestoDetalle> Items { get; set; } = new();
 
         [NotMapped]
-        public string DES_CLI { get; set; }
+        public string DES_CLI { get; set; } = "";
 
         [NotMapped]
         public bool ESNUEVO { get; set; }

@@ -27,7 +27,7 @@
                 <ToolbarItems>
                     <ToolbarItem Id="tiSolicitudes" CssClass="e-round e-small" Type="ItemType.Button" Text="Solicitudes" OnClick="BuscarSolicitudes" Align="ItemAlign.Right"></ToolbarItem>
                     <ToolbarItem Id="tiProductos" CssClass="e-round" Text="Productos"  OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>
-                    <ToolbarItem Id="tiReparaciones" CssClass="e-round" Text="Reparaciones" Align="ItemAlign.Right"></ToolbarItem>
+                    <ToolbarItem Id="tiReparaciones" CssClass="e-round" Text="Reparaciones" OnClick="BuscarReparaciones" Align="ItemAlign.Right"></ToolbarItem>
                     
                 </ToolbarItems>
             </SfToolbar>
@@ -41,11 +41,12 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label class="">Cod. Cliente:</label>
-                        <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Presupuesto.CG_CLI)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
+                        <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Presupuesto.CG_CLI)" ShowSpinButton="false" Readonly="false"
+                                          OnInput="@(e => Cg_cli_Changed(e))"></SfNumericTextBox>
                     </div>
                     <div class="form-group col-md-6">
                         <label class="">Cliente:</label>
-                        <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Presupuesto.DES_CLI)" Readonly="true"></SfTextBox>
+                        <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Presupuesto.DES_CLI)" Input="@(e => Des_cli_Changed(e))" Readonly="false"></SfTextBox>
                     </div>
                     <div class="form-group col-md-1 mt-4">
                         <SfButton IconCss="fa fa-search" CssClass="e-round e-info" OnClick="@(async ()=> await BuscarClientes())"
@@ -76,7 +77,7 @@
                             <DropDownListFieldSettings Text="OBSERVACIONES" Value="Id"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
-                    
+
                 </div>
                 <div class="form-row">
 
@@ -101,7 +102,6 @@
                     </div>
                 </div>
 
-
                 <div class="row">
                     <div class="col-12">
                         <SfToast ID="toast_default" @ref="ToastObj">
@@ -115,8 +115,8 @@
                             @*<GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>*@
                             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowConfirmDialog="false"
                                               Mode="@Syncfusion.Blazor.Grids.EditMode.Batch">
-                             <GridEvents TValue="PresupuestoDetalle" OnBatchDelete="BatchDeleteHandler"
-                                         CellSaved="CellSavedHandler" OnBatchAdd="BatchAddHandler" OnBatchSave="BatchSaveHandler"></GridEvents>
+                                <GridEvents TValue="PresupuestoDetalle" OnBatchDelete="BatchDeleteHandler"
+                                            CellSaved="CellSavedHandler" OnBatchAdd="BatchAddHandler" OnBatchSave="BatchSaveHandler"></GridEvents>
                             </GridEditSettings>
                             <GridColumns>
                                 <GridColumn Field=@nameof(PresupuestoDetalle.Id) IsPrimaryKey="true" Width="4"></GridColumn>
@@ -152,11 +152,12 @@
                                 </GridColumn>
                                 <GridColumn Field=@nameof(PresupuestoDetalle.DESCUENTO) HeaderText="% Descuento" Format="N2" TextAlign="TextAlign.Left" Width="120px">
                                     <Template Context="detalle">
-                                        @{ 
+                                        @{
                                             var value = (detalle as PresupuestoDetalle);
                                             value.DESCUENTO = Math.Round(value.DESCUENTO, 2);
-                                            <span>@value.DESCUENTO</span> 
-                                         }
+                                            <span>@value.DESCUENTO</span>
+
+                                        }
                                     </Template>
                                     <EditTemplate Context="detalle">
                                         @{
@@ -209,8 +210,12 @@
                 </SfSpinner>
 
                 <ClientesDialog @ref="refClienteDialog" PopupBuscadorVisible="@popupBuscadorVisibleCliente"
-                                OnObjectSelected="@ClienteExternoSelected"
+                                OnObjectSelected="@ClienteExternoSelected" Cg_Cli="@Presupuesto.CG_CLI" Des_Cli="@Presupuesto.DES_CLI"
                                 OnCerrarDialog="CerrarDialogCliente"></ClientesDialog>
+
+                <SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog @ref="refPrecioDialog" PopupBuscadorVisible="@popupBuscadorVisiblePrecio"
+                                OnObjectSelected="@PrecioSelected" SoloReparaciones="@buscarSoloReparaciones"
+                                OnCerrarDialog="CerrarDialogPrecio"></SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog>
 
 
                 <ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto"
@@ -223,7 +228,7 @@
 
                 <ValidationSummary />
 
-                
+
             </EditForm>
         </Content>
         <FooterTemplate>

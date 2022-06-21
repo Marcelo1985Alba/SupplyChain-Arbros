@@ -1,4 +1,5 @@
-﻿using SupplyChain.Server.Data.Repository;
+﻿using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using System;
@@ -15,5 +16,23 @@ namespace SupplyChain.Server.Repositorios
 
         }
 
+
+        internal async Task<IEnumerable<PreciosArticulos>> Search(string codigo, string descripcion)
+        {
+            IQueryable<PreciosArticulos> query = DbSet.AsQueryable();
+
+            if (codigo != "VACIO")
+            {
+                query = query.Where(p => p.Id.Contains(codigo));
+            }
+
+            if (descripcion != "VACIO")
+            {
+                query = query.Where(p => p.Descripcion.Contains(descripcion));
+            }
+
+            return await query.ToListAsync();
+
+        }
     }
 }

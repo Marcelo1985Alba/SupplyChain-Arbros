@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Shared.BuscadorCliente;
+using SupplyChain.Client.Shared.BuscadorPrecios;
 using SupplyChain.Client.Shared.BuscadorProducto;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
+using Syncfusion.Blazor.Inputs;
 using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
 using System;
@@ -16,6 +18,8 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
     public class FormSolicitudBase : ComponentBase
     {
         [Inject] public SolicitudService SolicitudService { get; set; }
+        [Inject] public ClienteService ClienteService { get; set; }
+        [Inject] public PrecioArticuloService PrecioArticuloService { get; set; }
         /// <summary>
         /// objecto modificado el cual tambien obtiene la id nueva en caso de agregar un nuevo
         /// </summary>
@@ -29,9 +33,9 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         protected SfSpinner refSpinnerCli;
         protected bool popupBuscadorVisibleCliente { get; set; } = false;
 
-        protected ProductoDialog refProductoDialog;
-        protected bool popupBuscadorVisibleProducto { get; set; } = false;
-
+        protected PreciosDialog refPreciosDialog;
+        protected bool popupBuscadorVisiblePrecio { get; set; } = false;
+        
 
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
@@ -54,12 +58,12 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             popupBuscadorVisibleCliente = true;
         }
 
-        protected async Task BuscarProductos()
+        protected async Task BuscarPreciosArticulos()
         {
             SpinnerVisible = true;
-            await refProductoDialog.Show();
+            await refPreciosDialog.Show();
             SpinnerVisible = false;
-            popupBuscadorVisibleProducto = true;
+            popupBuscadorVisiblePrecio = true;
         }
 
         protected async Task ClienteExternoSelected(ClienteExterno clienteSelected)
@@ -72,12 +76,12 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             await refSpinnerCli.HideAsync();
         }
 
-        protected async Task ProductoSelected(Producto productoSelected)
+        protected async Task PrecioSelected(PreciosArticulos precioSelected)
         {
             await refSpinnerCli.ShowAsync();
-            popupBuscadorVisibleProducto = false;
-            Solicitud.Producto = productoSelected.Id;
-            Solicitud.Des_Prod = productoSelected.DES_PROD;
+            popupBuscadorVisiblePrecio = false;
+            Solicitud.Producto = precioSelected.Id;
+            Solicitud.Des_Prod = precioSelected.Descripcion;
             //if (Solicitud.Producto.StartsWith("00"))
             //{
             //    HeightDialog = "450px";
@@ -136,13 +140,173 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             Show = false;
         }
 
+        protected async Task Des_cli_Changed(InputEventArgs args)
+        {
+            string des_cli = args.Value.ToString();
+
+            Solicitud.Des_Cli = des_cli;
+            var response = await ClienteService.Search(Solicitud.CG_CLI, Solicitud.Des_Cli);
+            if (response.Error)
+            {
+
+                await ToastMensajeError("Al obtener cliente");
+            }
+            else
+            {
+                if (response.Response != null)
+                {
+                    if (response.Response.Count == 1)
+                    {
+                        Solicitud.CG_CLI = int.Parse(response.Response[0].CG_CLI);
+                        Solicitud.Des_Cli = response.Response[0].DESCRIPCION;
+                        Solicitud.Cuit = response.Response[0].CUIT;
+                    }
+                }
+                else
+                {
+                    Solicitud.CG_CLI = 0;
+                    Solicitud.Des_Cli = string.Empty;
+                }
+
+            }
+        }
+
+
+        protected async Task Cg_cli_Changed(ChangeEventArgs args)
+        {
+            string cg_cli = args.Value.ToString();
+            if (!string.IsNullOrEmpty(cg_cli))
+            {
+                //Solicitud.CG_CLI = int.Parse(cg_cli);
+                if (Solicitud.CG_CLI > 0)
+                {
+                    var response = await ClienteService.Search(Solicitud.CG_CLI, Solicitud.Des_Cli);
+                    if (response.Error)
+                    {
+                        await ToastMensajeError("Al obtener cliente");
+                    }
+                    else
+                    {
+                        if (response.Response != null)
+                        {
+                            if (response.Response.Count == 1)
+                            {
+                                Solicitud.CG_CLI = int.Parse(response.Response[0].CG_CLI);
+                                Solicitud.Des_Cli = response.Response[0].DESCRIPCION;
+                                Solicitud.Cuit = response.Response[0].CUIT;
+                            }
+                            else
+                            {
+                                Solicitud.CG_CLI = 0;
+                                Solicitud.Des_Cli = string.Empty;
+                            }
+                        }
+                        else
+                        {
+                            Solicitud.CG_CLI = 0;
+                            Solicitud.Des_Cli = string.Empty;
+                        }
+
+                    }
+                }
+            }
+            else
+            {
+                Solicitud.CG_CLI = 0;
+                Solicitud.Des_Cli = string.Empty;
+            }
+
+
+        }
+
+        protected async Task Cg_Prod_Changed(InputEventArgs args)
+        {
+            string cg_prod = args.Value;
+
+            Solicitud.Producto = cg_prod;
+            var response = await PrecioArticuloService.Search(cg_prod, Solicitud.Des_Prod);
+            if (response.Error)
+            {
+
+                await ToastMensajeError("Al obtener Precio de articulo");
+            }
+            else
+            {
+                if (response.Response != null)
+                {
+                    if (response.Response.Count == 1)
+                    {
+                        Solicitud.Producto = response.Response[0].Id;
+                        Solicitud.Des_Prod = response.Response[0].Descripcion;
+                    }
+                    else
+                    {
+                        Solicitud.Des_Prod = string.Empty;
+                    }
+                }
+
+            }
+        }
+
+        protected async Task Des_Prod_Changed(InputEventArgs args)
+        {
+            string des_prod = args.Value;
+
+            Solicitud.Des_Prod = des_prod;
+            var response = await PrecioArticuloService.Search(Solicitud.Producto, Solicitud.Des_Prod);
+            if (response.Error)
+            {
+
+                await ToastMensajeError("Al obtener Precio de articulo");
+            }
+            else
+            {
+                if (response.Response != null)
+                {
+                    if (response.Response.Count == 1)
+                    {
+                        Solicitud.Producto = response.Response[0].Id;
+                        Solicitud.Des_Prod = response.Response[0].Descripcion;
+                    }
+                    else
+                    {
+                        Solicitud.Producto = string.Empty;
+                    }
+                }
+
+            }
+        }
+        private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
+        {
+            await this.ToastObj.Show(new ToastModel
+            {
+                Title = "EXITO!",
+                Content = content,
+                CssClass = "e-toast-success",
+                Icon = "e-success toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
+        private async Task ToastMensajeError(string content = "Ocurrio un Error.")
+        {
+            await ToastObj.Show(new ToastModel
+            {
+                Title = "Error!",
+                Content = content,
+                CssClass = "e-toast-warning",
+                Icon = "e-warning toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
         protected async Task CerrarDialogCliente()
         {
             popupBuscadorVisibleCliente = false;
         }
-        protected async Task CerrarDialogProducto()
+        protected async Task CerrarDialogPrecio()
         {
-            popupBuscadorVisibleProducto = false;
+            popupBuscadorVisiblePrecio = false;
         }
 
         protected async Task OnCerrarDialog()

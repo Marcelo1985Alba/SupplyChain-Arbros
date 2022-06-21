@@ -1,0 +1,12 @@
+﻿@using SupplyChain.Client.Shared
+@inherits PreciosDialogBase
+
+<SfSpinner @ref="@refSpinner" Size="80"
+           Label="" Type="SpinnerType.Fabric">
+</SfSpinner>
+
+<BuscadorEmergente Height="500px" TItem="PreciosArticulos" Titulo="Listado de Precios" Visible="@PopupBuscadorVisible"
+                   DataSource="@datasource" IsModal="true" Width="90%" HeightGrid="150px"
+                   Columnas="@(new string[] { "ID", "DESCRIPCION", "PRECIO", "MONEDA"})"
+                   OnObjetoSeleccionado="SendObjectSelected"
+                   OnCerrarDialog="CerrarDialog" />

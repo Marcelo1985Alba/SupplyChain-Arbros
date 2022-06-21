@@ -31,5 +31,12 @@ namespace SupplyChain.Client.HelperService
             return await http.GetFromJsonAsync<List<ClienteExterno>>("api/Cliente/GetClienteExterno");
         }
 
+        public async Task<HttpResponseWrapper<List<ClienteExterno>>> Search(int idSolutiion, string descripcion)
+        {
+            descripcion = string.IsNullOrEmpty(descripcion) ? "VACIO" : descripcion;
+
+            return await http.GetFromJsonAsync<List<ClienteExterno>>($"api/Cliente/Search/{idSolutiion}/{descripcion}");
+        }
+
     }
 }

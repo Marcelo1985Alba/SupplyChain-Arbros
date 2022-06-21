@@ -36,6 +36,33 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
+        // GET: api/Compras
+        [HttpGet("Reparaciones")]
+        public async Task<ActionResult<IEnumerable<PreciosArticulos>>> Reparaciones()
+        {
+            try
+            {
+                return await _precioArticulosRepository.Obtener(p=> p.Id.StartsWith("00")).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("Search/{codigo}/{descripcion}")]
+        public async Task<ActionResult<IEnumerable<PreciosArticulos>>> Search(string codigo, string descripcion)
+        {
+            try
+            {
+                return Ok(await _precioArticulosRepository.Search(codigo, descripcion));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         // GET: api/Compras/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Solicitud>> Get(string id)

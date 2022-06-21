@@ -10,6 +10,14 @@
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
 
   </PropertyGroup>
+
+
+  <ItemGroup>
+    <Compile Remove="Shared\BuscarPrecios\**" />
+    <Content Remove="Shared\BuscarPrecios\**" />
+    <EmbeddedResource Remove="Shared\BuscarPrecios\**" />
+    <None Remove="Shared\BuscarPrecios\**" />
+  </ItemGroup>
 	<ItemGroup>
 		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
 	</ItemGroup>
@@ -478,7 +486,6 @@
 
   <ItemGroup>
     <Folder Include="Pages\Ventas\2-Pedidos\" />
-    <Folder Include="Shared\BuscarPrecios\" />
   </ItemGroup>
   <!-->Target Name="PublishServiceWorker" AfterTargets="CopyFilesToPublishDirectory">
     <WriteLinesToFile File="$(PublishDir)wwwroot\service-worker.js" Lines="/* $([System.Guid]::NewGuid()) */" />

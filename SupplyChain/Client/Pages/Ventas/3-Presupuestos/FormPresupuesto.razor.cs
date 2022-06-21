@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared.BuscadorCliente;
+using SupplyChain.Client.Shared.BuscadorPrecios;
 using SupplyChain.Client.Shared.BuscadorProducto;
 using SupplyChain.Client.Shared.BuscarSolicitud;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Inputs;
 using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
 using System;
@@ -22,6 +25,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
     {
         [Inject] public IRepositoryHttp Http { get; set; }
         [Inject] public IJSRuntime Js { get; set; }
+        [Inject] public ClienteService ClienteService { get; set; }
         [Inject] public PresupuestoService PresupuestoService { get; set; }
         [Inject] public PrecioArticuloService PrecioArticuloService { get; set; }
         [Inject] public CondicionPagoService CondicionPagoService { get; set; }
@@ -44,6 +48,10 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected ProductoDialog refProductoDialog;
         protected bool popupBuscadorVisibleProducto { get; set; } = false;
+
+        protected PreciosDialog refPrecioDialog;
+        protected bool popupBuscadorVisiblePrecio { get; set; } = false;
+        protected bool buscarSoloReparaciones = false;
 
         protected SolicitudesDialog refSolicitudDialog;
         protected bool popupBuscadorVisibleSolicitud { get; set; } = false;
@@ -164,10 +172,20 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task BuscarProductos()
         {
+            buscarSoloReparaciones = false;
             SpinnerVisible = true;
-            await refProductoDialog.Show();
+            await refPrecioDialog.Show();
             SpinnerVisible = false;
-            popupBuscadorVisibleProducto = true;
+            popupBuscadorVisiblePrecio = true;
+        }
+
+        protected async Task BuscarReparaciones()
+        {
+            buscarSoloReparaciones = true;
+            SpinnerVisible = true;
+            await refPrecioDialog.Show();
+            SpinnerVisible = false;
+            popupBuscadorVisiblePrecio = true;
         }
 
         protected async Task BuscarSolicitudes()
@@ -197,9 +215,9 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             await refSpinnerCli.HideAsync();
         }
 
-        private async Task GetDireccionesEntregaCliente(int id)
+        private async Task GetDireccionesEntregaCliente(int idCliente)
         {
-            var response = await DireccionEntregaService.GetByNumeroCliente(id);
+            var response = await DireccionEntregaService.GetByNumeroCliente(idCliente);
             if (response.Error)
             {
                 await ToastMensajeError("Ocurrio un Error.\nError al intentar obtener direcciones de entrega");
@@ -214,6 +232,27 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             }
         }
 
+
+        protected async Task PrecioSelected(PreciosArticulos precioArticuloSelected)
+        {
+            await refSpinnerCli.ShowAsync();
+            popupBuscadorVisiblePrecio = false;
+
+            var item = new PresupuestoDetalle()
+            {
+                Id = Presupuesto.Items.Count == 0 ? -1 : Presupuesto.Items.Count * -1 - 1, //en negativos
+                CANTIDAD = 1,
+                CG_ART = precioArticuloSelected.Id,
+                DES_ART = precioArticuloSelected.Descripcion
+            };
+
+            Presupuesto.Items.Add(item);
+            await refGridItems.RefreshHeaderAsync();
+            refGridItems.Refresh();
+            await refGridItems.RefreshColumnsAsync();
+            await refSpinnerCli.HideAsync();
+        }
+
         protected async Task ProductoSelected(Producto productoSelected)
         {
             await refSpinnerCli.ShowAsync();
@@ -221,7 +260,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
             var item = new PresupuestoDetalle()
             {
-                Id  = Presupuesto.Items.Count == 0 ? -1 : Presupuesto.Items.Count * -1, //en negativos
+                Id  = Presupuesto.Items.Count == 0 ? -1 : Presupuesto.Items.Count * -1 - 1, //en negativos
                 CANTIDAD = 1,
                 CG_ART = productoSelected.Id,
                 DES_ART = productoSelected.DES_PROD
@@ -472,6 +511,102 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             refGridItems.Refresh();
         }
 
+        protected async Task Cg_cli_Changed(ChangeEventArgs args)
+        {
+            string cg_cli = args.Value.ToString();
+            if (!string.IsNullOrEmpty(cg_cli))
+            {
+                Presupuesto.CG_CLI = int.Parse(cg_cli);
+                if (Presupuesto.CG_CLI > 0)
+                {
+                    var response = await ClienteService.Search(Presupuesto.CG_CLI, Presupuesto.DES_CLI);
+                    if (response.Error)
+                    {
+                        await ToastMensajeError("Al obtener cliente");
+                    }
+                    else
+                    {
+                        if (response.Response != null)
+                        {
+                            if (response.Response.Count == 1)
+                            {
+                                Presupuesto.CG_CLI = int.Parse(response.Response[0].CG_CLI);
+                                Presupuesto.DES_CLI = response.Response[0].DESCRIPCION;
+                                await GetDireccionesEntregaCliente(Presupuesto.CG_CLI);
+                                Presupuesto.CG_COND_ENTREGA = response.Response[0].ID_CON_ENT == null ?  0 : (int)response.Response[0].ID_CON_ENT;
+                                Presupuesto.CONDICION_PAGO = response.Response[0].ID_CON_VEN == null ?  0: (int)response.Response[0].ID_CON_VEN;
+                            }
+                            else
+                            {
+                                Presupuesto.DES_CLI = string.Empty;
+                                direccionesEntregas = new();
+                                Presupuesto.DIRENT = string.Empty;
+                                Presupuesto.CG_COND_ENTREGA = 0;
+                                Presupuesto.CONDICION_PAGO = 0;
+                            }
+                        }
+                        else
+                        {
+                            Presupuesto.DES_CLI = string.Empty;
+                            direccionesEntregas = new();
+                            Presupuesto.DIRENT = string.Empty;
+                            Presupuesto.CG_COND_ENTREGA = 0;
+                            Presupuesto.CONDICION_PAGO = 0;
+                        }
+
+                    }
+                }
+            }
+            else
+            {
+                Presupuesto.DES_CLI = string.Empty;
+                direccionesEntregas = new();
+                Presupuesto.DIRENT = string.Empty;
+                Presupuesto.CG_COND_ENTREGA = 0;
+                Presupuesto.CONDICION_PAGO = 0;
+            }
+
+            
+        }
+
+        protected async Task Des_cli_Changed(InputEventArgs args)
+        {
+            string des_cli = args.Value.ToString();
+            //if (!string.IsNullOrEmpty(des_cli))
+            //{
+
+            //}
+
+            Presupuesto.DES_CLI = des_cli;
+            var response = await ClienteService.Search(Presupuesto.CG_CLI, Presupuesto.DES_CLI);
+            if (response.Error)
+            {
+
+                await ToastMensajeError("Al obtener cliente");
+            }
+            else
+            {
+                if (response.Response != null)
+                {
+                    if (response.Response.Count == 1)
+                    {
+                        Presupuesto.CG_CLI = int.Parse(response.Response[0].CG_CLI);
+                        Presupuesto.DES_CLI = response.Response[0].DESCRIPCION;
+                        await GetDireccionesEntregaCliente(Presupuesto.CG_CLI);
+                        Presupuesto.CG_COND_ENTREGA = response.Response[0].ID_CON_ENT == null ? 0 : (int)response.Response[0].ID_CON_ENT;
+                        Presupuesto.CONDICION_PAGO = response.Response[0].ID_CON_VEN == null ? 0 : (int)response.Response[0].ID_CON_VEN;
+                    }
+                }
+                else
+                {
+                    direccionesEntregas = new();
+                    Presupuesto.DIRENT = string.Empty;
+                    Presupuesto.CG_COND_ENTREGA = 0;
+                    Presupuesto.CONDICION_PAGO = 0;
+                }
+
+            }
+        }
 
         public async Task Hide()
         {
@@ -486,6 +621,11 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected async Task CerrarDialogProducto()
         {
             popupBuscadorVisibleProducto = false;
+        }
+
+        protected async Task CerrarDialogPrecio()
+        {
+            popupBuscadorVisiblePrecio = false;
         }
 
         protected async Task CerrarDialogSolicitud()

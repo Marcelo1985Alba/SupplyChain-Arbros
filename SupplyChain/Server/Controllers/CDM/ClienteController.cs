@@ -32,6 +32,25 @@ namespace SupplyChain
             return await _context.ClientesExternos.ToListAsync();
         }
 
+        [HttpGet("Search/{idExterno}/{descripcion}")]
+        public async Task<ActionResult<List<ClienteExterno>>> Search(int idExterno, string descripcion )
+        {
+            IQueryable<ClienteExterno> query = _context.ClientesExternos.AsQueryable();
+            if (idExterno > 0)
+            {
+                query = _context.ClientesExternos.Where(c => c.CG_CLI == idExterno.ToString());
+            }
+
+            if (descripcion != "VACIO")
+            {
+                query = query.Where(c => c.DESCRIPCION.Contains(descripcion));
+            }
+
+            var clientes = await query.ToListAsync();
+
+            return clientes;
+        }
+        
 
         // GET: api/Cliente/BuscarPorCliente/{CG_CLI}
         [HttpGet("BuscarPorCliente/{CG_CLI}")]

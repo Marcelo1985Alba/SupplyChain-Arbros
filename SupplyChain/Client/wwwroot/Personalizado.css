@@ -207,11 +207,11 @@ e-grid .e-gridheader {
     font-weight: bold;
 }
 
-.e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn {
+/*.e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn {
     height: 9px !important;
     min-height: 29px !important;
     min-width: 34px !important;
-}
+}*/
 
 .e-toolbar-item button[aria-label="Add"] {
     background: #04cb93;
