@@ -30,7 +30,7 @@ namespace SupplyChain
         }
 
 
-        // GET: api/Prod/5
+        // GET: api/PreciosArticulos/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PreciosArticulos>> GetPrecioArt(string id)
         {
@@ -43,7 +43,7 @@ namespace SupplyChain
             return precio;
         }
 
-        // PUT: api/Prod/5
+        // PUT: api/PreciosArticulos/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
@@ -75,7 +75,7 @@ namespace SupplyChain
             return NoContent();
         }
 
-        // POST: api/Prod
+        // POST: api/PreciosArticulos
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
@@ -100,6 +100,23 @@ namespace SupplyChain
 
             return CreatedAtAction("GetPrecioArt", new { id = precio.Id }, precio);
         }
+
+        // Delete: api/PreciosArticulos
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<PreciosArticulos>> DeleteUnidad(string id)
+        {
+            var precioArt = await _context.PrecioArticulo.FindAsync(id);
+            if (precioArt == null)
+            {
+                return NotFound();
+            }
+
+            _context.PrecioArticulo.Remove(precioArt);
+            await _context.SaveChangesAsync();
+
+            return precioArt;
+        }
+
         private bool PreciosArtExists(string id)
         {
             return _context.PrecioArticulo.Any(e => e.Id == id);

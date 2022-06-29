@@ -159,12 +159,113 @@ namespace SupplyChain.Client.Pages.ABM.Precios
                     prec.Moneda = precio.Moneda;
                     prec.Precio = precio.Precio;
                 }
+                Grid.Refresh();
             }
             else
             {
                 await ToastMensajeError();
             }
         }
+        public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+        {
+            if (args.Item.Text == "Edit")
+            {
+                if (this.Grid.SelectedRecords.Count < 2)
+                {
+                    foreach (PreciosArticulos selectedRecord in this.Grid.SelectedRecords)
+                    {
+                        preciosArticuloSeleccionado.Id = selectedRecord.Id;
+                        preciosArticuloSeleccionado.Descripcion = selectedRecord.Descripcion;
+                        preciosArticuloSeleccionado.Precio = selectedRecord.Precio;
+                        preciosArticuloSeleccionado.Moneda = selectedRecord.Moneda;
+                        preciosArticuloSeleccionado.Marca = selectedRecord.Marca;
+                        preciosArticuloSeleccionado.Construccion = selectedRecord.Construccion;
+                    }
+                    isAdding = false;
+                    //IsVisible = true;
+                }
+                else
+                {
+                    await this.ToastObj.Show(new ToastModel
+                    {
+                        Title = "ERROR!",
+                        Content = "Solo se puede editar un item",
+                        CssClass = "e-toast-danger",
+                        Icon = "e-error toast-icons",
+                        ShowCloseButton = true,
+                        ShowProgressBar = true
+                    });
+                }
+            }
+
+            if (args.Item.Text == "Copia" || args.Item.Text == "Add")
+            {
+                if (this.Grid.SelectedRecords.Count == 1)
+                {
+                    preciosArticuloSeleccionado = new();
+
+                    foreach (PreciosArticulos selectedRecord in this.Grid.SelectedRecords)
+                    {
+                        bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar el producto?");
+                        if (isConfirmed)
+                        {
+                            preciosArticuloSeleccionado.Descripcion = selectedRecord.Descripcion;
+                            preciosArticuloSeleccionado.Precio = selectedRecord.Precio;
+                            preciosArticuloSeleccionado.Moneda = selectedRecord.Moneda;
+                            preciosArticuloSeleccionado.Marca = selectedRecord.Marca;
+                            preciosArticuloSeleccionado.Construccion = selectedRecord.Construccion;
+                        }
+                    }
+                    popupFormVisible = true;
+                    isAdding = true;
+                    preciosArticuloSeleccionado.ESNUEVO = true;
+                }
+                else
+                {
+                    if (args.Item.Text == "Add")
+                    {
+                        await Grid.ClearSelection();
+                        //Grid.Refresh();
+                        popupFormVisible = true;
+                        isAdding = true;
+                        preciosArticuloSeleccionado.ESNUEVO = true;
+                    }
+                    else
+                    {
+                        await this.ToastObj.Show(new ToastModel
+                        {
+                            Title = "ERROR!",
+                            Content = "Solo se puede copiar un item",
+                            CssClass = "e-toast-danger",
+                            Icon = "e-error toast-icons",
+                            ShowCloseButton = true,
+                            ShowProgressBar = true
+                        });
+                    }
+                }
+            }
+
+            if (args.Item.Text == "Exportar Excel")
+            {
+                await this.Grid.ExcelExport();
+            }
+
+            if (args.Item.Text == "Eliminar")
+            {
+                if ((await Grid.GetSelectedRecordsAsync()).Count > 0)
+                {
+                    foreach (PreciosArticulos selectedRecord in this.Grid.SelectedRecords)
+                    {
+                        bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar el precio de articulo?");
+                        if (isConfirmed)
+                        {
+                            await Http.DeleteAsync($"api/PreciosArt/{selectedRecord.Id}");
+                        }
+                    }
+                }
+            }
+        }
+
         private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
         {
             await this.ToastObj.Show(new ToastModel

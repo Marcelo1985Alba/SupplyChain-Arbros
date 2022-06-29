@@ -33,7 +33,7 @@
             <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
             <GridEvents TValue="PreciosArticulos"
-                        OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"></GridEvents>
+                        OnToolbarClick="@ClickHandler" OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"></GridEvents>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
             </GridEditSettings>
             <GridColumns>
