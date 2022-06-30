@@ -116,9 +116,6 @@ namespace SupplyChain.Pages.TipoMatx
                             TipoMat Nuevo = new TipoMat();
 
                             Nuevo.TIPO = tipomats.Max(s => s.TIPO) + 1;
-                            Nuevo.CG_CIA = selectedRecord.CG_CIA;
-
-               
 
                             var response = await Http.PostAsJsonAsync("api/TipoMat", Nuevo);
 

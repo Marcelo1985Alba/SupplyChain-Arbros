@@ -137,6 +137,13 @@
                                 <div class="form-group col-md-6">
                                     <label>Tipo:</label>
                                     <SfTextBox ID="Tipo" @bind-Value="@(prod.TIPO)" Placeholder="Tipo"></SfTextBox>
+
+                                    @*
+        <SfComboBox TValue="string" CssClass="customClass" TItem="TipoMat" PopupWidth="auto" AllowFiltering="true"
+                    @bind-Value="@(prod.TIPO)" DataSource="@tipomat">
+            <ComboBoxFieldSettings Value="TIPO" Text="TIPO"></ComboBoxFieldSettings>
+        </SfComboBox>
+                                    *@
                                     <ValidationMessage For="@(()=> prod.TIPO)"></ValidationMessage>
                                 </div>
                             </div>
@@ -172,8 +179,11 @@
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label>Unidad de peso:</label>
-                                    <SfTextBox ID="Unidad de peso" @bind-Value="@(prod.UNIDPESO)" Placeholder="Unidad de peso"></SfTextBox>
+                                    <a href="/sc/unidades/list" target="_blank">Unidad de peso:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Unidades" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(prod.UNIDPESO)" DataSource="@unidades">
+                                        <ComboBoxFieldSettings Value="UNID" Text="UNID"></ComboBoxFieldSettings>
+                                    </SfComboBox>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Material:</label>

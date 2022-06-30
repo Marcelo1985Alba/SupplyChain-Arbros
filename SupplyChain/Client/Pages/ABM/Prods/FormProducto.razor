@@ -105,8 +105,11 @@
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label>Unidad de peso:</label>
-                                    <SfTextBox ID="Unidad de peso" @bind-Value="@(Producto.UNIDPESO)" Placeholder="Unidad de peso"></SfTextBox>
+                                    <a href="/sc/unidades/list" target="_blank">Unidad de peso:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SupplyChain.Unidades" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(Producto.UNIDPESO)" DataSource="@unidades">
+                                        <ComboBoxFieldSettings Value="UNID" Text="UNID"></ComboBoxFieldSettings>
+                                    </SfComboBox>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Material:</label>
@@ -252,8 +255,11 @@
                                             <SfTextBox ID="Serie" @bind-Value="@(Producto.CAMPOCOM5)" Placeholder="Campo Configurable 5"></SfTextBox>
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label>Tipo:</label>
-                                            <SfTextBox ID="Tipo" @bind-Value="@(Producto.CAMPOCOM6)" Placeholder="Campo Configurable 6"></SfTextBox>
+                                            <a>Tipo:</a>
+                                            <SfComboBox TValue="string" CssClass="customClass" TItem="TipoOptions" PopupWidth="auto" AllowFiltering="true"
+                                                        @bind-Value="@(Producto.CAMPOCOM5)" DataSource="@TipoData">
+                                                <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                            </SfComboBox>
                                         </div>
                                     </div>
 

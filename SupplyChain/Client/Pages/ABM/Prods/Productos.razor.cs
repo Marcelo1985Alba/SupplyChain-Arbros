@@ -132,7 +132,6 @@ namespace SupplyChain.Client.Pages.ABM.Prods
                     popupFormVisible = true;
                 }
 
-
             }
             else
             {
