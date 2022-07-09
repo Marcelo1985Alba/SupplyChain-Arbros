@@ -33,12 +33,24 @@ namespace SupplyChain.Client.Pages.ABM.Prods
         protected List<SupplyChain.Lineas> linea = new();
         protected List<TipoArea> tipoarea = new();
         protected List<Cat> cat = new();
+        protected List<SupplyChain.TipoMat> tipomat = new();
         protected Dictionary<string, object> HtmlAttributeSubmit = new()
         {
             { "type", "submit" }
         };
         protected bool camposConf = true;
         protected bool IsAdd { get; set; }
+
+        protected class TipoOptions
+        {
+            public string Text { get; set; }
+        }
+        protected List<TipoOptions> TipoData = new List<TipoOptions> {
+            new TipoOptions() {Text= "CONVENCIONAL" },
+            new TipoOptions() {Text= "BALANCEADA" },
+            new TipoOptions() {Text= "DOBLE ANILLO" },
+            new TipoOptions() {Text= "PILOTADA" },
+        };
 
         protected async override Task OnInitializedAsync()
         {
@@ -49,6 +61,7 @@ namespace SupplyChain.Client.Pages.ABM.Prods
             linea = await Http.GetFromJsonAsync<List<SupplyChain.Lineas>>("api/Lineas");
             tipoarea = await Http.GetFromJsonAsync<List<TipoArea>>("api/TipoArea");
             cat = await Http.GetFromJsonAsync<List<Cat>>("api/Cat");
+            //tipomat = await Http.GetFromJsonAsync<List<SupplyChain.TipoMat>>("api/TipoMat");
         }
 
         private async Task<bool> PermiteGuardarNuevoInsumo()
@@ -127,8 +140,6 @@ namespace SupplyChain.Client.Pages.ABM.Prods
                 Producto.GUARDADO = guardado;
                 await OnGuardar.InvokeAsync(Producto);
             }
-
-
             
         }
 

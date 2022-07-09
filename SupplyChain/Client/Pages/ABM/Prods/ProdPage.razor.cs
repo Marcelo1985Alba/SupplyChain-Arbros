@@ -41,6 +41,7 @@ namespace SupplyChain.Pages.Prods
         public Producto prodAux = new Producto();
 
         protected List<Unidades> unidades = new List<Unidades>();
+        protected List<TipoMat> tipomat = new List<TipoMat>();
         protected List<Moneda> monedas = new List<Moneda>();
         protected List<Celdas> celda = new List<Celdas>();
         protected List<Areas> area = new List<Areas>();
@@ -70,6 +71,7 @@ namespace SupplyChain.Pages.Prods
             prods = prods.OrderBy(s => s.CG_ORDEN).ToList();
 
             unidades = await Http.GetFromJsonAsync<List<Unidades>>("api/unidades");
+            //tipomat = await Http.GetFromJsonAsync<List<TipoMat>>("api/TipoMat");
             monedas = await Http.GetFromJsonAsync<List<Moneda>>("api/Monedas");
             celda = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
             area = await Http.GetFromJsonAsync<List<Areas>>("api/Areas");

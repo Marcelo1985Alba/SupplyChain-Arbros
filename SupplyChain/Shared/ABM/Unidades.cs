@@ -17,7 +17,10 @@ namespace SupplyChain
         //public bool BASICA { get; set; } = false;
         public decimal CODIGO { get; set; } = 0;//
         //public int CG_CIA { get; set; } = 0;
-
+        [NotMapped]
+        public bool GUARDADO { get; set; }
+        [NotMapped]
+        public bool ESNUEVO { get; set; }
     }
 }
 
