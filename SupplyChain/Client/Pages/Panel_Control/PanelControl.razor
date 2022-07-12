@@ -22,29 +22,29 @@
             <ContentTemplate>
                 <div class="row">
                     <div class="col-12">
-                        <div class="card border-info mt-3">
+                        <div class="card card1 mt-3">
                             <div class="card-header">Filtro Fechas</div>
                             <div class="card-body text-info">
                                 <div class="row">
-                                    <div class="col-3">
+                                    <div class="col-lg-3 col-sm-12">
                                         <SfDateRangePicker ID="fechaVentas" TValue="DateTime" Placeholder="Seleccionar..." Format="dd/MM/yyyy"
-                                                           WeekNumber="true" ShowTodayButton="true"
+                                                           WeekNumber="true" ShowTodayButton="true" CssClass=""
                                                            @bind-StartDate="@FacturacionMinDate" @bind-EndDate="@FacturacionMaxDate">
                                             <DateRangePickerEvents TValue="DateTime" ValueChange="ValueChangeFechasFacturacion"></DateRangePickerEvents>
                                         </SfDateRangePicker>
                                     </div>
-                                    <div class="col-3">
-                                        <SfButton Content="Restablecer Filtros" CssClass="e-primary"
+                                    <div class="col-lg-3 col-sm-12">
+                                        <SfButton Content="Restablecer Filtros" CssClass="btn-card1"
                                                   IconCss="e-icons e-refresh" OnClick="RestablecerGraficosFacturacion"></SfButton>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-lg-6 col-sm-12">
                         <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
                         <div class="card">
                             <div class="pane card-body card1">
@@ -76,7 +76,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-lg-6 col-sm-12">
                         <div class="card">
                             <div class="pane card-body card1">
                                 <SfChart @ref="refChartDetalle" Title="" Width="100%">
@@ -130,7 +130,7 @@
 
                             <div class="pane card-body card1">
                                 <div class="card-title chart-title">Detalle de Facturación</div>
-                                <SfGrid @ref="grdFacturacionDetalle" DataSource="@DataFacturacionDetalle" 
+                                <SfGrid @ref="grdFacturacionDetalle" DataSource="@DataFacturacionDetalle"
                                         GridLines="Syncfusion.Blazor.Grids.GridLine.Both"
                                         AllowResizing="true" AllowReordering="true" AllowMultiSorting="true" AllowSorting="true"
                                         AllowPaging="true" Height="450" Width="100%"> </SfGrid>
@@ -146,20 +146,20 @@
             </ChildContent>
             <ContentTemplate>
                 <div class="row">
-                    <div class="col-12">
-                        <div class="card border-info mt-3">
+                    <div class="col-12 col-sm-12">
+                        <div class="card card2 mt-3">
                             <div class="card-header">Filtro Fechas</div>
                             <div class="card-body text-info">
                                 <div class="row">
-                                    <div class="col-3">
+                                    <div class="col-lg-3 col-sm-12">
                                         <SfDateRangePicker ID="fechaCompras" TValue="DateTime" Placeholder="Seleccionar..." Format="dd/MM/yyyy"
                                                            WeekNumber="true" ShowTodayButton="true"
                                                            @bind-StartDate="@ComprasMinDate" @bind-EndDate="@ComprasMaxDate">
                                             <DateRangePickerEvents TValue="DateTime" ValueChange="ValueChangeFechasCompras"></DateRangePickerEvents>
                                         </SfDateRangePicker>
                                     </div>
-                                    <div class="col-3">
-                                        <SfButton Content="Restablecer Filtros" CssClass="e-success"
+                                    <div class="col-lg-3 col-sm-12">
+                                        <SfButton Content="Restablecer Filtros" CssClass="btn-card2"
                                                   IconCss="e-icons e-refresh" OnClick="RestablecerGraficosCompras"></SfButton>
                                     </div>
                                 </div>
@@ -170,7 +170,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-lg-6 col-sm-12">
                         <div class="card">
                             <div class="pane card-body card2">
                                 <SfChart Title="" Width="100%">
@@ -202,7 +202,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-lg-6 col-sm-12">
                         <div class="card">
                             <div class="pane card-body card2">
                                 <SfChart @ref="refChartDetalleCompras" Title="" Width="100%">
@@ -219,9 +219,9 @@
                                             @if (PromedioComprasMensual > 0)
                                             {
                                                 @*<ChartStripline Start="397" End="400" Color="red"
-                                                        Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
-                                            <ChartStriplineTextStyle Color="red" />
-                                        </ChartStripline>*@
+                                                                Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
+                                                    <ChartStriplineTextStyle Color="red" />
+                                                </ChartStripline>*@
                                                 if (ComprasMensual.Count > 1)
                                                 {
                                                     <ChartStripline Start="@(PromedioComprasMensual - 10)"
@@ -268,9 +268,9 @@
                                             @if (PromedioComprasMensual > 0)
                                             {
                                                 @*<ChartStripline Start="397" End="400" Color="red"
-                                                        Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
-                                            <ChartStriplineTextStyle Color="red" />
-                                        </ChartStripline>*@
+                                                                Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
+                                                    <ChartStriplineTextStyle Color="red" />
+                                                </ChartStripline>*@
                                                 if (ComprasMensual.Count > 1)
                                                 {
                                                     <ChartStripline Start="@(PromedioComprasMensual - 10)"
@@ -301,23 +301,23 @@
                         </div>
                     </div>
                     @*<div class="col-6">
-                <div class="card">
-                    <div class="card-body">
-                        <SfAccumulationChart @ref="refAccChartDetalleComprasTipo" EnableBorderOnMouseMove="false" Title="Compras por Tipo U$S" EnableSmartLabels="true">
-                            <AccumulationChartLegendSettings Visible="false"></AccumulationChartLegendSettings>
-                            <AccumulationChartTooltipSettings Enable="true" Format="${point.x} : <b>${point.y}U$S</b>"></AccumulationChartTooltipSettings>
-                            <AccumulationChartSeriesCollection>
-                                <AccumulationChartSeries DataSource="@ComprasMensualTipo" Name="Tipo" XName="XSerieName"
-                                                         YName="YSerieName" StartAngle="60" InnerRadius="0%" Palettes="@palettes">
-                                    <AccumulationDataLabelSettings Name="DataLabelMappingName" Visible="true" Position="AccumulationLabelPosition.Outside">
-                                        <AccumulationChartConnector Length="20px" Type="ConnectorType.Curve"></AccumulationChartConnector>
-                                    </AccumulationDataLabelSettings>
-                                </AccumulationChartSeries>
-                            </AccumulationChartSeriesCollection>
-                        </SfAccumulationChart>
-                    </div>
-                </div>
-            </div>*@
+                        <div class="card">
+                            <div class="card-body">
+                                <SfAccumulationChart @ref="refAccChartDetalleComprasTipo" EnableBorderOnMouseMove="false" Title="Compras por Tipo U$S" EnableSmartLabels="true">
+                                    <AccumulationChartLegendSettings Visible="false"></AccumulationChartLegendSettings>
+                                    <AccumulationChartTooltipSettings Enable="true" Format="${point.x} : <b>${point.y}U$S</b>"></AccumulationChartTooltipSettings>
+                                    <AccumulationChartSeriesCollection>
+                                        <AccumulationChartSeries DataSource="@ComprasMensualTipo" Name="Tipo" XName="XSerieName"
+                                                                 YName="YSerieName" StartAngle="60" InnerRadius="0%" Palettes="@palettes">
+                                            <AccumulationDataLabelSettings Name="DataLabelMappingName" Visible="true" Position="AccumulationLabelPosition.Outside">
+                                                <AccumulationChartConnector Length="20px" Type="ConnectorType.Curve"></AccumulationChartConnector>
+                                            </AccumulationDataLabelSettings>
+                                        </AccumulationChartSeries>
+                                    </AccumulationChartSeriesCollection>
+                                </SfAccumulationChart>
+                            </div>
+                        </div>
+                    </div>*@
                     <div class="col-12">
                         <div class="card">
                             <div class="pane card-body card2">
@@ -338,20 +338,20 @@
             </ChildContent>
             <ContentTemplate>
                 <div class="row">
-                    <div class="col-12">
-                        <div class="card border-info mt-3">
+                    <div class="col-12 ">
+                        <div class="card card5 mt-3">
                             <div class="card-header">Filtro Fechas</div>
                             <div class="card-body text-info">
                                 <div class="row">
-                                    <div class="col-3">
+                                    <div class="col-lg-3 col-sm-12">
                                         <SfDateRangePicker TValue="DateTime" Placeholder="Seleccionar..." Format="dd/MM/yyyy"
                                                            WeekNumber="true" ShowTodayButton="true"
                                                            @bind-StartDate="@EventosMinDate" @bind-EndDate="@EventosMaxDate">
                                             <DateRangePickerEvents TValue="DateTime" ValueChange="ValueChangeFechasEventos"></DateRangePickerEvents>
                                         </SfDateRangePicker>
                                     </div>
-                                    <div class="col-3">
-                                        <SfButton Content="Restablecer Filtros" CssClass="e-warning"
+                                    <div class="col-lg-3 col-sm-12">
+                                        <SfButton Content="Restablecer Filtros" CssClass="btn-card5"
                                                   IconCss="e-icons e-refresh" OnClick="RestablecerGraficosEventos"></SfButton>
                                     </div>
                                 </div>
@@ -361,7 +361,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-lg-6 col-sm-12">
                         <div class="card">
                             <div class="pane card-body card5">
                                 <SfChart Title="" Width="100%">
@@ -393,7 +393,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-lg-6 col-sm-12">
                         <div class="card">
                             <div class="pane card-body card5">
                                 <SfChart @ref="refChartDetalleEventos" Title="" Width="100%">
@@ -516,16 +516,20 @@
             <ContentTemplate>
                 <div class="row">
                     <div class="col-12">
-                        <div class="card border-info mt-3">
+                        <div class="card card3 mt-3">
                             <div class="card-header">Filtro Fechas</div>
                             <div class="card-body text-info">
                                 <div class="row">
-                                    <div class="col-3">
+                                    <div class="col-lg-3 col-sm-12">
                                         <SfDateRangePicker TValue="DateTime" Placeholder="Seleccionar..." Format="dd/MM/yyyy"
-                                                           WeekNumber="true" ShowTodayButton="true"
-                                                           @bind-StartDate="@EventosMinDate" @bind-EndDate="@EventosMaxDate">
-                                            <DateRangePickerEvents TValue="DateTime" ValueChange="ValueChangeFechasEventos"></DateRangePickerEvents>
+                                                           WeekNumber="true" ShowTodayButton="true" AllowEdit="true"
+                                                           @bind-StartDate="@PedidosIngresadosMinDate" @bind-EndDate="@PedidosIngresadosMaxDate">
+                                            <DateRangePickerEvents TValue="DateTime" ValueChange="ValueChangeFechasPedidosIngresados"></DateRangePickerEvents>
                                         </SfDateRangePicker>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <SfButton Content="Restablecer Filtros" CssClass="btn-card3"
+                                                  IconCss="e-icons e-refresh" OnClick="RestablecerGraficosPedidosIngresados"></SfButton>
                                     </div>
                                 </div>
                             </div>
@@ -534,7 +538,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-lg-6 col-sm-12">
                         <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
                         <div class="card">
                             <div class="pane card-body card3">
@@ -567,7 +571,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-lg-6 col-sm-12">
                         <div class="card">
                             <div class="pane card-body card3">
                                 <SfChart @ref="refChartDetallePedidos" Width="100%">
@@ -615,7 +619,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-8">
+                    <div class="col-lg-8 col-sm-12">
                         <div class="card">
                             <div class="pane card-body card3">
                                 <SfAccumulationChart Height="350px" Title="@TituloPedidosIngresadosCategoria" EnableSmartLabels="true" EnableAnimation="true">
@@ -630,20 +634,20 @@
                                         </AccumulationChartSeries>
                                     </AccumulationChartSeriesCollection>
                                     @*<AccumulationChartAnnotations>
-                                <AccumulationChartAnnotation Region="Regions.Series" X="50%" Y="50%">
-                                    <ContentTemplate>
-                                        <div id="annotation">
-                                            @TituloPedidosIngresadosCategoria
-                                        </div>
-                                    </ContentTemplate>
-                                </AccumulationChartAnnotation>
-                            </AccumulationChartAnnotations>*@
+                                        <AccumulationChartAnnotation Region="Regions.Series" X="50%" Y="50%">
+                                            <ContentTemplate>
+                                                <div id="annotation">
+                                                    @TituloPedidosIngresadosCategoria
+                                                </div>
+                                            </ContentTemplate>
+                                        </AccumulationChartAnnotation>
+                                    </AccumulationChartAnnotations>*@
                                     <AccumulationChartEvents OnPointClick="@(async (a)=>await OnFiltroByCategoria(a))"></AccumulationChartEvents>
                                 </SfAccumulationChart>
                             </div>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-lg-4 col-sm-12">
                         <div class="card">
                             <div class="pane card-body card3">
                                 <SfAccumulationChart Height="350px" Title="@TituloPedidosIngresadosMercado" EnableSmartLabels="true" EnableAnimation="false">
@@ -671,15 +675,15 @@
                                                                    EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                                                 </ChartPrimaryXAxis>
                                                 @*<ChartAnnotations>
-                                            <ChartAnnotation X="@chartXAnnoation" Y="9%" CoordinateUnits="Units.Pixel" Region="Regions.Chart">
-                                                <ContentTemplate>
-                                                    <p style="font-family:Roboto;font-size: 16px;font-weight: 400;font-weight: 400;
-                                                        letter-spacing: 0.02em;line-height: 16px;color: #797979 !important;">
-                                                        @TituloPedidosIngresadosCategoriaDetalle
-                                                    </p>
-                                                </ContentTemplate>
-                                            </ChartAnnotation>
-                                        </ChartAnnotations>*@
+                                                    <ChartAnnotation X="@chartXAnnoation" Y="9%" CoordinateUnits="Units.Pixel" Region="Regions.Chart">
+                                                        <ContentTemplate>
+                                                            <p style="font-family:Roboto;font-size: 16px;font-weight: 400;font-weight: 400;
+                                                                letter-spacing: 0.02em;line-height: 16px;color: #797979 !important;">
+                                                                @TituloPedidosIngresadosCategoriaDetalle
+                                                            </p>
+                                                        </ContentTemplate>
+                                                    </ChartAnnotation>
+                                                </ChartAnnotations>*@
                                                 <ChartPrimaryYAxis LabelFormat="{value} U$S"
                                                                    Minimum="0" Maximum="100000" Interval="10000">
                                                     <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
@@ -746,11 +750,171 @@
         </TabItem>
         <TabItem CssClass="tab-content">
             <ChildContent>
+                <TabHeader Text="Pedidos vs Presupuestos"></TabHeader>
+            </ChildContent>
+            <ContentTemplate>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card6 mt-3">
+                            <div class="card-header">Filtro Fechas</div>
+                            <div class="card-body text-info">
+                                <div class="row">
+                                    <div class="col-lg-3 col-sm-12">
+                                        <SfDateRangePicker TValue="DateTime" Placeholder="Seleccionar..." Format="dd/MM/yyyy"
+                                                           WeekNumber="true" ShowTodayButton="true" AllowEdit="true"
+                                                           @bind-StartDate="@PedidosIngresadosMinDate" @bind-EndDate="@PedidosIngresadosMaxDate">
+                                            <DateRangePickerEvents TValue="DateTime" ValueChange="ValueChangeFechasPedidosIngresados"></DateRangePickerEvents>
+                                        </SfDateRangePicker>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <SfButton Content="Restablecer Filtros" CssClass="btn-card6"
+                                                  IconCss="e-icons e-refresh" OnClick="RestablecerGraficosPedidosIngresados"></SfButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12">
+                        <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
+                        <div class="card">
+                            <div class="pane card-body card6">
+                                <SfChart Title="" Width="100%">
+                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category">
+                                    </ChartPrimaryXAxis>
+
+                                    <ChartPrimaryYAxis Title="U$S Anuales" LabelFormat="{value} U$S">
+                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                        <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
+                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                    </ChartPrimaryYAxis>
+                                    <ChartSeriesCollection>
+                                        <ChartSeries DataSource="@PedidosIngresadosAnuales_Vs" XName="XSerieName" YName="YSerieName"
+                                                     Name="Pedidos" Fill="url(#card3-gradient-chart)"
+                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                            <ChartMarker>
+                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                                </ChartDataLabel>
+                                            </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                        </ChartSeries>
+                                    </ChartSeriesCollection>
+                                    <ChartSeriesCollection>
+                                        <ChartSeries DataSource="@PresupuestosAnuales_Vs" XName="XSerieName" YName="YSerieName"
+                                                     Name="Presupuestos" Fill="url(#card4-gradient-chart)"
+                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                            <ChartMarker>
+                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                                </ChartDataLabel>
+                                            </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                        </ChartSeries>
+                                    </ChartSeriesCollection>
+                                    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+                                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetallePedidosAnualesVs(a))"></ChartEvents>
+                                </SfChart>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="col-lg-6 col-sm-12">
+                        <div class="card">
+                            <div class="pane card-body card3">
+                                <SfChart @ref="refChartDetallePedidos" Width="100%">
+                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                                    </ChartPrimaryXAxis>
+                                    <ChartPrimaryYAxis Title="@TituloGraficoPedidosMensual" LabelFormat="{value} U$S" Minimum="0" Maximum="190000" Interval="10000">
+                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                        <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
+                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                        <ChartStriplines>
+                                            @if (PromedioPedidosIngresadosMensuales > 0)
+                                            {
+                                                <ChartStripline Start="89000" End="90000" Color="red" SizeType="SizeType.Pixel" ZIndex="ZIndex.Over"
+                                                                Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
+                                                                Text="@("Objetivo: 90000")">
+                                                    <ChartStriplineTextStyle Color="red" />
+                                                </ChartStripline>
+                                                <ChartStripline Start="@(PromedioPedidosIngresadosMensuales - 2)" SizeType="SizeType.Pixel" ZIndex="ZIndex.Over"
+                                                                Size="1" DashArray="5,5" Color='blue' HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
+                                                                Text="@("Promedio: " + PromedioPedidosIngresadosMensuales )"
+                                                                End="PromedioPedidosIngresadosMensuales" />
+                                            }
+                                        </ChartStriplines>
+                                    </ChartPrimaryYAxis>
+                                    <ChartSeriesCollection>
+                                        <ChartSeries DataSource="@PedidosIngresadosMensuales" XName="XSerieName" YName="YSerieName"
+                                                     Name="Pedidos" Fill="url(#card3-gradient-chart)"
+                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                            <ChartMarker>
+                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                                </ChartDataLabel>
+                                            </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                        </ChartSeries>
+                                        <ChartSeriesCollection>
+                                            <ChartSeries DataSource="@PresupuestosMensuales" XName="XSerieName" YName="YSerieName"
+                                                         Name="Presupuestos" Fill="url(#card4-gradient-chart)"
+                                                         Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                                <ChartMarker>
+                                                    <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                        <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                                    </ChartDataLabel>
+                                                </ChartMarker>
+                                                <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                            </ChartSeries>
+                                        </ChartSeriesCollection>
+                                    </ChartSeriesCollection>
+                                    <ChartTooltipSettings Enable="true">
+                                    </ChartTooltipSettings>
+                                    <ChartLegendSettings Visible="true" />
+                                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetallePedidosMensuales(a))"></ChartEvents>
+                                </SfChart>
+                            </div>
+                        </div>
+                    </div>*@
+                </div>
+            </ContentTemplate>
+        </TabItem>
+        <TabItem CssClass="tab-content">
+            <ChildContent>
                 <TabHeader Text="Prespuestos"></TabHeader>
             </ChildContent>
             <ContentTemplate>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-12">
+                        <div class="card card4 mt-3">
+                            <div class="card-header">Filtro Fechas</div>
+                            <div class="card-body text-info">
+                                <div class="row">
+                                    <div class="col-lg-3 col-sm-12">
+                                        <SfDateRangePicker TValue="DateTime" Placeholder="Seleccionar..." Format="dd/MM/yyyy"
+                                                           WeekNumber="true" ShowTodayButton="true" AllowEdit="true"
+                                                           @bind-StartDate="@PresupuestosMinDate" @bind-EndDate="@PresupuestosMaxDate">
+                                            <DateRangePickerEvents TValue="DateTime" ValueChange="ValueChangeFechasPresupuestos"></DateRangePickerEvents>
+                                        </SfDateRangePicker>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <SfButton Content="Restablecer Filtros" CssClass="btn-card4"
+                                                  IconCss="e-icons e-refresh" OnClick="RestablecerGraficosPresupuestos"></SfButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12">
                         <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
                         <div class="card">
                             <div class="pane card-body card4">
@@ -782,7 +946,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-lg-6 col-sm-12">
                         <div class="card">
                             <div class="pane card-body card4">
                                 <SfChart @ref="refChartDetallePresupuestos" Width="100%">
@@ -974,6 +1138,97 @@
         color: #545454 !important;
     }
 
+    .btn-card1 {
+        /*background-image: linear-gradient(to right, #1D976C 0%, #93F9B9 51%, #1D976C 100%);*/
+        background-image: linear-gradient(to right, rgb(33, 64, 220) 0%, #62d0e9 51%, rgb(0, 191, 213) 100%);
+        /*margin: 10px;
+        padding: 15px 45px;*/
+        text-align: center;
+        transition: 0.5s;
+        background-size: 200% auto;
+        color: white;
+        box-shadow: 0 0 20px #eee;
+        border-radius: 10px;
+        display: block;
+    }
+
+    .btn-card2 {
+        /*background-image: linear-gradient(to right, #1D976C 0%, #93F9B9 51%, #1D976C 100%);*/
+        background-image: linear-gradient(to right, rgb(4, 171, 17) 0%, #a6e962 51%,rgb(125, 214, 29) 100%);
+        /*margin: 10px;
+        padding: 15px 45px;*/
+        text-align: center;
+        transition: 0.5s;
+        background-size: 200% auto;
+        color: white;
+        box-shadow: 0 0 20px #eee;
+        border-radius: 10px;
+        display: block;
+    }
+
+    .btn-card3 {
+        /*background-image: linear-gradient(to right, #1D976C 0%, #93F9B9 51%, #1D976C 100%);*/
+        background-image: linear-gradient(to right, rgb(242, 59, 59) 0%, #e9b162 51%,rgb(239, 144, 39) 100%);
+        /*margin: 10px;
+        padding: 15px 45px;*/
+        text-align: center;
+        transition: 0.5s;
+        background-size: 200% auto;
+        color: white;
+        box-shadow: 0 0 20px #eee;
+        border-radius: 10px;
+        display: block;
+    }
+
+    .btn-card4 {
+        /*background-image: linear-gradient(to right, #1D976C 0%, #93F9B9 51%, #1D976C 100%);*/
+        background-image: linear-gradient(to right, rgb(41, 37, 166) 0%, #a062e9 51%, rgb(178, 80, 209) 100%);
+        /*margin: 10px;
+        padding: 15px 45px;*/
+        text-align: center;
+        transition: 0.5s;
+        background-size: 200% auto;
+        color: white;
+        box-shadow: 0 0 20px #eee;
+        border-radius: 10px;
+        display: block;
+    }
+
+    .btn-card5 {
+        /*background-image: linear-gradient(to right, #1D976C 0%, #93F9B9 51%, #1D976C 100%);*/
+        background-image: linear-gradient(to right, rgb(239, 144, 39) 0%, #e9b162 51%, rgb(238 166 86) 100%);
+        /*margin: 10px;
+        padding: 15px 45px;*/
+        text-align: center;
+        transition: 0.5s;
+        background-size: 200% auto;
+        color: white;
+        box-shadow: 0 0 20px #eee;
+        border-radius: 10px;
+        display: block;
+    }
+
+
+    .btn-card6 {
+        /*background-image: linear-gradient(to right, #1D976C 0%, #93F9B9 51%, #1D976C 100%);*/
+        background-image: linear-gradient(to right, rgb(255 0 110) 0%, #e962bb 51%, rgb(244 139 184) 100%);
+        /*margin: 10px;
+        padding: 15px 45px;*/
+        text-align: center;
+        transition: 0.5s;
+        background-size: 200% auto;
+        color: white;
+        box-shadow: 0 0 20px #eee;
+        border-radius: 10px;
+        display: block;
+    }
+
+    .btn-card1:hover, .btn-card2:hover, .btn-card3:hover, .btn-card4:hover, .btn-card5:hover, .btn-card6:hover {
+        background-position: right center; /* change the direction of the change here */
+        color: #fff;
+        text-decoration: none;
+    }
+
     .card1:hover {
         background-color: #fff;
         box-shadow: 0 1px 4px 1px rgb(24 103 218 / 30%);
@@ -1000,5 +1255,11 @@
         background-color: #fff;
         /*border-color: #000;*/
         box-shadow: 0 1px 4px 1px rgb(216 157 28 / 30%);
+    }
+
+    .card6:hover {
+        background-color: #fff;
+        /*border-color: #000;*/
+        box-shadow: 0 1px 4px 1px rgb(178 80 209 /30%);
     }
 </style>

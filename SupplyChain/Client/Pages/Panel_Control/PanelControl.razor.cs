@@ -102,7 +102,10 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected int PromedioPedidosIngresadosMensuales;
         ///////**********************************************////////////////////////////
 
-
+        /////////////**********PEDIDOS VS PRESUPUESTO*********////////////////////
+        protected List<ChartData> PedidosIngresadosAnuales_Vs { get; set; } = new();
+        protected List<ChartData> PresupuestosAnuales_Vs { get; set; } = new();
+        ///////**********************************************////////////////////////////
         /////////////**********MERCADO EXTERNO*********////////////////////
         protected DetalleCategoria.DialogDetalle dialogDetalle;
         protected string TituloPedidosIngresadosMercado = "Mercado Externo";
@@ -125,6 +128,8 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected string TituloGraficoPresupuestosMensual = "";
         protected string SerieSeleccionaPresupuestos = "";
         protected int PromedioPresupuestosMensuales = 0;
+        protected DateTime PresupuestosMinDate = DateTime.Now.AddMonths(-3);
+        protected DateTime PresupuestosMaxDate = DateTime.Now;
 
         protected string[] palettes = new string[] {"#38610B", "#688A08", "#86B404", "#74DF00", 
             "#40FF00", "#2EFE2E", "#81F781", "#D0FA58", "#D7DF01","#DBA901", "#2EFE9A" };
@@ -232,13 +237,16 @@ namespace SupplyChain.Client.Pages.Panel_Control
             .OrderBy(c => c.XSerieName)
             .ToList();
 
+            PedidosIngresadosAnuales_Vs = PedidosIngresadosAnuales;
+
             grdPedIngresados?.PreventRender();
         }
 
         protected async Task GetPresupuestos()
         {
             this.DataPresupuestos = await Http.GetFromJsonAsync<List<vEstadPresupuestos>>("api/EstadisticaVentas/Presupuestos");
-
+            PresupuestosMinDate = DataPresupuestos.Min(f => f.FECHA);
+            PresupuestosMaxDate = DataPresupuestos.Max(f => f.FECHA);
 
             PresupuestosAnuales = DataPresupuestos.GroupBy(g => new { g.ANIO })
             .Select(d => new ChartData()
@@ -248,6 +256,8 @@ namespace SupplyChain.Client.Pages.Panel_Control
             })
             .OrderBy(c => c.XSerieName)
             .ToList();
+
+            PresupuestosAnuales_Vs = PresupuestosAnuales;
 
             grdPresupuestos?.PreventRender();
         }
@@ -335,6 +345,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
             FacturacionAnual = new();
             FacturacionMensual = new();
             DataFacturacionDetalle = new();
+            PromedioFacturacionMensual = 0;
             await GetFacturacion();
             VisibleSpinner = false;
         }
@@ -347,6 +358,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
             ComprasMensual = new();
             DataComprasDetalle = new();
             ComprasMensualTipo = new();
+            PromedioComprasMensual = 0;
             await GetCompras();
             VisibleSpinner = false;
         }
@@ -359,7 +371,35 @@ namespace SupplyChain.Client.Pages.Panel_Control
             EventosMensual = new();
             DataEventosDetalle = new();
             EventosMensualTipo = new();
+            EventosProveedor = new();
             await GetEventos();
+            VisibleSpinner = false;
+        }
+
+        protected async Task RestablecerGraficosPedidosIngresados()
+        {
+
+            VisibleSpinner = true;
+            PedidosIngresadosAnuales = new();
+            PedidosIngresadosMensuales = new();
+            PedidosIngresadosMercado = new();
+            PedidosIngresadosMensualesCategoriaDetalle = new();
+            PedidosIngresadosDetalleMes = new();
+            PedidosIngresadosCategoria = new();
+            PromedioPedidosIngresadosMensuales = 0;
+            await GetPedidos();
+            VisibleSpinner = false;
+        }
+
+        protected async Task RestablecerGraficosPresupuestos()
+        {
+
+            VisibleSpinner = true;
+            PresupuestosAnuales = new();
+            PresupuestosMensuales = new();
+            PresupuestosAnualesDetalle= new();
+            PromedioPresupuestosMensuales = 0;
+            await GetPresupuestos();
             VisibleSpinner = false;
         }
 
@@ -458,7 +498,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
             //eventos por proveedor
             TituloGraficoEventosProveedor = $"Eventos por Proveedor en {añoEventoSeleccionado}";
             EventosProveedor = DataEventosOriginal
-            .Where(v => v.ANIO == Convert.ToInt32(añoEventoSeleccionado) && !string.IsNullOrEmpty(v.DES_PROVE))
+            .Where(f => f.FE_EMIT >= EventosMinDate && f.FE_EMIT <= EventosMaxDate)
             .GroupBy(g => new { g.DES_PROVE }).Select(d => new ChartData()
             {
                 XSerieName = d.Key.DES_PROVE.Trim(),
@@ -481,6 +521,103 @@ namespace SupplyChain.Client.Pages.Panel_Control
             await refChartDetalleEventosProveedor.RefreshAsync();
         }
 
+        public async Task ValueChangeFechasPedidosIngresados(RangePickerEventArgs<DateTime> args)
+        {
+            PedidosIngresadosDetalleMes = DataPedidosIngresados
+                .Where(p => p.FECHA >= PedidosIngresadosMinDate && p.FECHA <= PedidosIngresadosMaxDate)
+                .ToList();
+
+            TituloGraficoPedidosMensual = $"U$S Mensuales Desde {PedidosIngresadosMinDate:dd/MM/yyyy} Hasta {PedidosIngresadosMaxDate:dd/MM/yyyy}";
+            TituloPedidosIngresadosMercado = $"Mercado Externo Desde {PedidosIngresadosMinDate:dd/MM/yyyy} Hasta {PedidosIngresadosMaxDate:dd/MM/yyyy}";
+            //grafico mensual
+            PedidosIngresadosMensuales = DataPedidosIngresados
+                .Where(p => p.FECHA >= PedidosIngresadosMinDate && p.FECHA <= PedidosIngresadosMaxDate)
+                .OrderBy(o => o.MES)
+                .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.MES.ToString(),
+                    YSerieName = Math.Round(d.Sum(p => p.TOT_DOL))
+                }).ToList();
+
+
+            PromedioPedidosIngresadosMensuales = Convert.ToInt32(PedidosIngresadosMensuales.Average(p => p.YSerieName));
+
+            //categoria de cliente
+            var totalPeriodoSeleccionado = Math.Round(DataPedidosIngresados
+                .Where(p => p.FECHA >= PedidosIngresadosMinDate && p.FECHA <= PedidosIngresadosMaxDate)
+                .Sum(s => s.TOT_DOL), 2);
+
+            TituloPedidosIngresadosCategoria = $"% por Categoria Desde {PedidosIngresadosMinDate:dd/MM/yyyy} Hasta {PedidosIngresadosMaxDate:dd/MM/yyyy}\n" +
+                $" (US$ {totalPeriodoSeleccionado})";
+
+            PedidosIngresadosCategoria = DataPedidosIngresados
+                .Where(p => p.FECHA >= PedidosIngresadosMinDate && p.FECHA <= PedidosIngresadosMaxDate)
+                .GroupBy(g => new { g.CATEGORIA })
+            .Select(d => new ChartData()
+            {
+                XSerieName = d.Key.CATEGORIA,
+                YSerieName = Math.Round(Math.Round(d.Sum(p => p.TOT_DOL), 2) / totalPeriodoSeleccionado, 2) * 100,
+                ZSerieName = $"{Math.Round(Math.Round(d.Sum(p => p.TOT_DOL), 2) / totalPeriodoSeleccionado, 2) * 100} %\n" +
+                $"({Math.Round(d.Sum(p => p.TOT_DOL), 2)} U$S)"
+            })
+            .OrderBy(c => c.XSerieName)
+            .ToList();
+
+            PedidosIngresadosMercado = DataPedidosIngresados
+                .Where(p => p.FECHA >= PedidosIngresadosMinDate && p.FECHA <= PedidosIngresadosMaxDate)
+                .GroupBy(g => new { g.MERCADO })
+            .Select(d => new ChartData()
+            {
+                XSerieName = d.Key.MERCADO,
+                YSerieName = Math.Round(d.Sum(p => p.TOT_DOL), 2),
+                ZSerieName = $"{Math.Round(Math.Round(d.Sum(p => p.TOT_DOL), 2) / totalPeriodoSeleccionado, 2) * 100} %\n" +
+                $"({Math.Round(d.Sum(p => p.TOT_DOL), 2)} U$S)"
+            })
+            .OrderBy(c => c.XSerieName)
+            .ToList();
+
+            //detalle grilla
+            PedidosIngresadosDetalleMes = DataPedidosIngresados
+                .Where(p => p.FECHA >= PedidosIngresadosMinDate && p.FECHA <= PedidosIngresadosMaxDate)
+                .ToList();
+
+            await InvokeAsync(StateHasChanged);
+            await refChartDetallePedidos.RefreshAsync();
+            await refChartDetallePedidos.RefreshAsync();
+
+            await grdPedIngresados.AutoFitColumnsAsync();
+
+        }
+
+        public async Task ValueChangeFechasPresupuestos(RangePickerEventArgs<DateTime> args)
+        {
+            TituloGraficoPresupuestosMensual = $"U$S Mensuales {PresupuestosMinDate:dd/MM/yyyy} {PresupuestosMaxDate:dd/MM/yyyy}";
+
+
+            PresupuestosMensuales = DataPresupuestos
+                .Where(p => p.FECHA >= PresupuestosMinDate && p.FECHA <= PresupuestosMaxDate)
+                .OrderBy(o => o.MES)
+                .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.MES.ToString(),
+                    YSerieName = Math.Round(d.Sum(p => p.TOT_DOL))
+                }).ToList();
+
+
+            PromedioPresupuestosMensuales = Convert.ToInt32(PresupuestosMensuales.Average(p => p.YSerieName));
+
+
+            PresupuestosAnualesDetalle = DataPresupuestos.Where(p => p.FECHA >= PresupuestosMinDate && p.FECHA <= PresupuestosMaxDate)
+                .OrderBy(p => p.FECHA)
+                .ToList();
+
+            await InvokeAsync(StateHasChanged);
+            await refChartDetallePresupuestos.RefreshAsync();
+            await refChartDetallePresupuestos.RefreshAsync();
+
+            grdPresupuestos.Refresh();
+            await grdPresupuestos.AutoFitColumnsAsync();
+        }
         protected async Task MostrarDetalleCompras(Syncfusion.Blazor.Charts.PointEventArgs args)
         {
             var año = args.Point.X;
@@ -689,6 +826,11 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
         }
 
+        protected async Task MostrarDetallePedidosAnualesVs(Syncfusion.Blazor.Charts.PointEventArgs args)
+        {
+
+
+        }
         protected async Task MostrarDetallePedidosMensuales(Syncfusion.Blazor.Charts.PointEventArgs args)
         {
             var mesSeleccionadoPedidosIngresados = Convert.ToInt32(args.Point.X);

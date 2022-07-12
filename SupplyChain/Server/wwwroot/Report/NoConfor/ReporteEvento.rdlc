@@ -228,63 +228,16 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.67223in</Width>
+                  <Width>2.39244in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.98in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>4.79166in</Width>
+                  <Width>5.2041in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
                   <Height>0.2125in</Height>
                   <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox32">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Orden</Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox32</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>Solid</Style>
-                            </Border>
-                            <TopBorder>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Width>1pt</Width>
-                            </RightBorder>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="Textbox34">
@@ -308,19 +261,9 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Width>1pt</Width>
-                            </TopBorder>
                             <BottomBorder>
                               <Color>Black</Color>
-                              <Width>1pt</Width>
                             </BottomBorder>
-                            <LeftBorder>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -378,52 +321,6 @@
                 <TablixRow>
                   <Height>0.2125in</Height>
                   <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Orden">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Orden.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Orden</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>Solid</Style>
-                            </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Width>1pt</Width>
-                            </RightBorder>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="Texto">
@@ -518,11 +415,6 @@
             </TablixBody>
             <TablixColumnHierarchy>
               <TablixMembers>
-                <TablixMember>
-                  <Visibility>
-                    <Hidden>true</Hidden>
-                  </Visibility>
-                </TablixMember>
                 <TablixMember />
                 <TablixMember />
               </TablixMembers>
@@ -545,9 +437,9 @@
               </SortExpression>
             </SortExpressions>
             <Top>0.53014in</Top>
-            <Left>0.16666in</Left>
+            <Left>0.11111in</Left>
             <Height>0.425in</Height>
-            <Width>7.44389in</Width>
+            <Width>7.59653in</Width>
             <ZIndex>4</ZIndex>
             <Style>
               <Border>
@@ -587,7 +479,7 @@
       <Width>7.91889in</Width>
       <Page>
         <PageHeader>
-          <Height>4.90542in</Height>
+          <Height>4.89709in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <ReportItems>
             <Image Name="Image2">
@@ -1561,9 +1453,9 @@ First(Fields!Pedido.Value, "dsEventos"))</Value>
               </Paragraphs>
               <rd:DefaultName>Observaciones</rd:DefaultName>
               <Top>1.45124in</Top>
-              <Left>2.52611in</Left>
+              <Left>1.45945in</Left>
               <Height>0.36397in</Height>
-              <Width>2.57292in</Width>
+              <Width>3.63958in</Width>
               <ZIndex>41</ZIndex>
               <Style>
                 <Border>
@@ -1596,7 +1488,7 @@ First(Fields!Pedido.Value, "dsEventos"))</Value>
               <Top>1.45124in</Top>
               <Left>0.13794in</Left>
               <Height>0.25in</Height>
-              <Width>2.31873in</Width>
+              <Width>1.27984in</Width>
               <ZIndex>42</ZIndex>
               <Style>
                 <Border>
@@ -1663,7 +1555,7 @@ First(Fields!Pedido.Value, "dsEventos"))</Value>
               <Top>1.88465in</Top>
               <Left>0.1389in</Left>
               <Height>0.25in</Height>
-              <Width>2.31873in</Width>
+              <Width>1.37372in</Width>
               <ZIndex>44</ZIndex>
               <Style>
                 <Border>
@@ -1703,9 +1595,9 @@ First(Fields!Pedido.Value, "dsEventos"))</Value>
               </Paragraphs>
               <rd:DefaultName>Comentarios</rd:DefaultName>
               <Top>1.91374in</Top>
-              <Left>2.52611in</Left>
+              <Left>1.58206in</Left>
               <Height>0.75833in</Height>
-              <Width>5.08444in</Width>
+              <Width>6.02849in</Width>
               <ZIndex>46</ZIndex>
               <Style>
                 <Border>
