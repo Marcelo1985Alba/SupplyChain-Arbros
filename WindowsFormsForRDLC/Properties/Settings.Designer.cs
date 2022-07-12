@@ -32,5 +32,16 @@ namespace WindowsFormsForRDLC.Properties {
                 return ((string)(this["ArbrosConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=MARCELO-PC\\SQL_2017;Initial Catalog=Arbros;User ID=sa;Password=Marce0" +
+            "31010")]
+        public string ArbrosConnectionString1 {
+            get {
+                return ((string)(this["ArbrosConnectionString1"]));
+            }
+        }
     }
 }

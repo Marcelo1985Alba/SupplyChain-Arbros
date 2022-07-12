@@ -337,6 +337,8 @@ namespace SupplyChain.Server.wwwroot.Report.NoConfor {
             
             private global::System.Data.DataColumn columnAprob;
             
+            private global::System.Data.DataColumn columnComentarios;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public vEventosDataTable() {
@@ -604,6 +606,14 @@ namespace SupplyChain.Server.wwwroot.Report.NoConfor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn ComentariosColumn {
+                get {
+                    return this.columnComentarios;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -668,7 +678,8 @@ namespace SupplyChain.Server.wwwroot.Report.NoConfor {
                         string Origen, 
                         System.DateTime FE_SOLUC, 
                         System.DateTime fe_cierre, 
-                        bool Aprob) {
+                        bool Aprob, 
+                        string Comentarios) {
                 vEventosRow rowvEventosRow = ((vEventosRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         FE_EMIT,
@@ -699,7 +710,8 @@ namespace SupplyChain.Server.wwwroot.Report.NoConfor {
                         Origen,
                         FE_SOLUC,
                         fe_cierre,
-                        Aprob};
+                        Aprob,
+                        Comentarios};
                 rowvEventosRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowvEventosRow);
                 return rowvEventosRow;
@@ -751,6 +763,7 @@ namespace SupplyChain.Server.wwwroot.Report.NoConfor {
                 this.columnFE_SOLUC = base.Columns["FE_SOLUC"];
                 this.columnfe_cierre = base.Columns["fe_cierre"];
                 this.columnAprob = base.Columns["Aprob"];
+                this.columnComentarios = base.Columns["Comentarios"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -814,6 +827,8 @@ namespace SupplyChain.Server.wwwroot.Report.NoConfor {
                 base.Columns.Add(this.columnfe_cierre);
                 this.columnAprob = new global::System.Data.DataColumn("Aprob", typeof(bool), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnAprob);
+                this.columnComentarios = new global::System.Data.DataColumn("Comentarios", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnComentarios);
                 this.columnCg_NoConf.AllowDBNull = false;
                 this.columnCg_TipoNc.AllowDBNull = false;
                 this.columnDes_TipoNc.AllowDBNull = false;
@@ -839,11 +854,12 @@ namespace SupplyChain.Server.wwwroot.Report.NoConfor {
                 this.columnOCOMPRA.AllowDBNull = false;
                 this.columnCANT.AllowDBNull = false;
                 this.columnTexto.MaxLength = 50;
-                this.columnObservacionesAccion.AllowDBNull = false;
                 this.columnObservacionesAccion.MaxLength = 2000;
                 this.columnOrigen.AllowDBNull = false;
                 this.columnOrigen.MaxLength = 500;
                 this.columnAprob.AllowDBNull = false;
+                this.columnComentarios.AllowDBNull = false;
+                this.columnComentarios.MaxLength = 4000;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1286,7 +1302,12 @@ namespace SupplyChain.Server.wwwroot.Report.NoConfor {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public string ObservacionesAccion {
                 get {
-                    return ((string)(this[this.tablevEventos.ObservacionesAccionColumn]));
+                    try {
+                        return ((string)(this[this.tablevEventos.ObservacionesAccionColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'ObservacionesAccion\' de la tabla \'vEventos\' es DBNull.", e);
+                    }
                 }
                 set {
                     this[this.tablevEventos.ObservacionesAccionColumn] = value;
@@ -1360,6 +1381,17 @@ namespace SupplyChain.Server.wwwroot.Report.NoConfor {
                 }
                 set {
                     this[this.tablevEventos.AprobColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Comentarios {
+                get {
+                    return ((string)(this[this.tablevEventos.ComentariosColumn]));
+                }
+                set {
+                    this[this.tablevEventos.ComentariosColumn] = value;
                 }
             }
             
@@ -1469,6 +1501,18 @@ namespace SupplyChain.Server.wwwroot.Report.NoConfor {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetOrdenNull() {
                 this[this.tablevEventos.OrdenColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsObservacionesAccionNull() {
+                return this.IsNull(this.tablevEventos.ObservacionesAccionColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetObservacionesAccionNull() {
+                this[this.tablevEventos.ObservacionesAccionColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1696,6 +1740,7 @@ namespace SupplyChain.Server.wwwroot.Report.NoConfor.ArbrosDataSet1TableAdapters
             tableMapping.ColumnMappings.Add("FE_SOLUC", "FE_SOLUC");
             tableMapping.ColumnMappings.Add("fe_cierre", "fe_cierre");
             tableMapping.ColumnMappings.Add("Aprob", "Aprob");
+            tableMapping.ColumnMappings.Add("Comentarios", "Comentarios");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -1703,7 +1748,8 @@ namespace SupplyChain.Server.wwwroot.Report.NoConfor.ArbrosDataSet1TableAdapters
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = "Data Source=192.168.0.245\\SOLUTIION;Initial Catalog=Solutiion;User ID=sa";
+            this._connection.ConnectionString = "Data Source=MARCELO-PC\\SQL_2017;Initial Catalog=Arbros;User ID=sa;Password=Marce0" +
+                "31010";
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1712,7 +1758,9 @@ namespace SupplyChain.Server.wwwroot.Report.NoConfor.ArbrosDataSet1TableAdapters
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT * FROM dbo.vEventos";
+            this._commandCollection[0].CommandText = @"SELECT FE_EMIT, Cg_NoConf, Cg_TipoNc, Des_TipoNc, Observaciones, Fe_Ocurrencia, Fe_Aprobacion, Cg_Cli, Cg_Prod, DES_CLI, DES_PROVE, DES_PROD, Lote, Serie, Despacho, Cg_Ordf, Pedido, Usuario, OCOMPRA, CANT, Cg_NoConfAcc, 
+                  Texto, Orden, ObservacionesAccion, fe_implemen, Origen, FE_SOLUC, fe_cierre, Aprob, Comentarios
+FROM     vEventos";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         

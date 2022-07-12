@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Syncfusion.Blazor.Calendars;
 
 namespace SupplyChain.Client.Pages.Panel_Control
 {
@@ -36,6 +37,8 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected string TituloGraficoFacturacionMensual = "";
         protected string SerieSeleccionaFacturacion = "";
         protected int PromedioFacturacionMensual = 0;
+        protected DateTime FacturacionMinDate = DateTime.Now.AddMonths(-3);
+        protected DateTime FacturacionMaxDate = DateTime.Now;
         ///////****************************************////////////////////////////
 
         ///////*****************NO CONFORMIDADES*************////////////////////////////
@@ -55,12 +58,15 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected string TituloGraficoEventosProveedor = "";
         protected string SerieSeleccionaEventos = "";
         protected string añoEventoSeleccionado = string.Empty;
+        protected DateTime EventosMinDate = DateTime.Now.AddMonths(-3);
+        protected DateTime EventosMaxDate = DateTime.Now;
         ///////**********************************************////////////////////////////
 
         protected string chartXAnnoation = "75px";
         protected double[] Spacing = new double[] { 15, 15 };
         protected double Ratio = 160 / 100;
 
+        ///////*****************COMPRAS*************////////////////////////////
         protected SfGrid<vEstadCompras> gridDetalleCompras;
         protected SfChart refChartDetalleCompras;
         protected SfAccumulationChart refAccChartDetalleComprasTipo;
@@ -72,7 +78,11 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected string TituloGraficoComprasMensual = "";
         protected string SerieSeleccionaCompras = "";
         protected int PromedioComprasMensual = 0;
-
+        protected DateTime ComprasMinDate = DateTime.Now.AddMonths(-3);
+        protected DateTime ComprasMaxDate = DateTime.Now;
+        ///////**********************************************////////////////////////////
+        
+        ///////*****************PEDIDOS INGRESADOS*************////////////////////////////
         protected SfChart refChartDetallePedidos;
         protected SfGrid<vEstadPedidosIngresados> grdPedIngresados;
         protected List<vEstadPedidosIngresados> DataPedidosIngresados { get; set; } = new ();
@@ -81,6 +91,8 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected List<vEstadPedidosIngresados> PedidosIngresadosDetalleMes { get; set; } = new ();
         protected List<ChartData> PedidosIngresadosAnuales { get; set; } = new ();
         protected List<ChartData> PedidosIngresadosMensuales { get; set; } = new ();
+        protected DateTime PedidosIngresadosMinDate = DateTime.Now.AddMonths(-3);
+        protected DateTime PedidosIngresadosMaxDate = DateTime.Now;
         protected List<ChartData> PedidosIngresadosMensualesCategoriaDetalle { get; set; } = new ();
         protected string TituloPedidosIngresadosCategoria = "U$S por Categoria";
         protected string TituloPedidosIngresadosCategoriaDetalle = "Categoria";
@@ -88,6 +100,8 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected string SerieSeleccionaPedidos = "";
         protected int añoSeleccionadoPedidosIngresados;
         protected int PromedioPedidosIngresadosMensuales;
+        ///////**********************************************////////////////////////////
+
 
         /////////////**********MERCADO EXTERNO*********////////////////////
         protected DetalleCategoria.DialogDetalle dialogDetalle;
@@ -151,6 +165,10 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected async Task GetFacturacion()
         {
             this.DataFacturacionOriginal = await Http.GetFromJsonAsync<List<vEstadFacturacion>>("api/EstadisticaVentas/Facturacion");
+
+            FacturacionMinDate = DataFacturacionOriginal.Min(f => f.FECHA);
+            FacturacionMaxDate = DataFacturacionOriginal.Max(f => f.FECHA);
+
             FacturacionAnual = DataFacturacionOriginal.GroupBy(g => new { g.ANIO })
             .Select(d => new ChartData()
             {
@@ -167,6 +185,9 @@ namespace SupplyChain.Client.Pages.Panel_Control
         {
             this.DataComprasOriginal = await Http.GetFromJsonAsync<List<vEstadCompras>>("api/EstadisticaVentas/Compras");
 
+            ComprasMinDate = DataComprasOriginal.Min(f => f.FECHA);
+            ComprasMaxDate = DataComprasOriginal.Max(f => f.FECHA);
+
             ComprasAnual = DataComprasOriginal.GroupBy(g => new { g.ANIO })
             .Select(d => new ChartData()
             {
@@ -179,10 +200,11 @@ namespace SupplyChain.Client.Pages.Panel_Control
         }
 
 
-
         protected async Task GetEventos()
         {
             this.DataEventosOriginal = await Http.GetFromJsonAsync<List<vEstadEventos>>("api/NoConformidades/Eventos");
+            EventosMinDate = DataEventosOriginal.Min(f => f.FE_EMIT);
+            EventosMaxDate = DataEventosOriginal.Max(f => f.FE_EMIT);
 
             EventosAnual = DataEventosOriginal.GroupBy(g => new { g.ANIO })
             .Select(d => new ChartData()
@@ -198,7 +220,8 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected async Task GetPedidos()
         {
             this.DataPedidosIngresados = await Http.GetFromJsonAsync<List<vEstadPedidosIngresados>>("api/EstadisticaVentas/PedidosIngresados");
-
+            PedidosIngresadosMinDate = DataPedidosIngresados.Min(f => f.FECHA);
+            PedidosIngresadosMaxDate = DataPedidosIngresados.Max(f => f.FECHA);
 
             PedidosIngresadosAnuales = DataPedidosIngresados.GroupBy(g => new { g.ANIO })
             .Select(d => new ChartData()
@@ -260,6 +283,204 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
         }
 
+        public async Task ValueChangeFechasFacturacion(RangePickerEventArgs<DateTime> args)
+        {
+            // Here, you can customize your code.
+            FacturacionAnual = DataFacturacionOriginal.Where(f => f.FECHA >= FacturacionMinDate && f.FECHA <= FacturacionMaxDate)
+                .GroupBy(g => new { g.ANIO })
+                .Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.ANIO.ToString(),
+                    YSerieName = Convert.ToDouble(d.Sum(p => p.TOTAL_DOL))
+                }).OrderBy(c => c.XSerieName)
+            .ToList();
+
+            
+
+
+            FacturacionMensual = DataFacturacionOriginal
+                .Where(f => f.FECHA >= FacturacionMinDate && f.FECHA <= FacturacionMaxDate)
+                .OrderBy(o => o.MES)
+                .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.MES.ToString(),
+                    YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.TOTAL_DOL)), 2)
+                }).ToList();
+
+
+            //para grilla de detalle
+            grdFacturacionDetalle.PreventRender();
+            DataFacturacionDetalle = new();
+            DataFacturacionDetalle = DataFacturacionOriginal.Where(f => f.FECHA >= FacturacionMinDate && f.FECHA <= FacturacionMaxDate)
+                .OrderBy(o => o.FECHA)
+                .ToList();
+
+            PromedioFacturacionMensual = Convert.ToInt32(FacturacionMensual.Average(p => p.YSerieName));
+            StateHasChanged();
+
+            await refChartDetalle.RefreshAsync();
+            await refChartDetalle.RefreshAsync();
+
+            await grdFacturacionDetalle.AutoFitColumnsAsync();
+            await grdFacturacionDetalle.RefreshHeaderAsync();
+            grdFacturacionDetalle.Refresh();
+            await grdFacturacionDetalle.RefreshColumnsAsync();
+
+        }
+
+        protected async Task RestablecerGraficosFacturacion()
+        {
+
+            VisibleSpinner = true;
+            FacturacionAnual = new();
+            FacturacionMensual = new();
+            DataFacturacionDetalle = new();
+            await GetFacturacion();
+            VisibleSpinner = false;
+        }
+
+        protected async Task RestablecerGraficosCompras()
+        {
+
+            VisibleSpinner = true;
+            ComprasAnual = new();
+            ComprasMensual = new();
+            DataComprasDetalle = new();
+            ComprasMensualTipo = new();
+            await GetCompras();
+            VisibleSpinner = false;
+        }
+
+        protected async Task RestablecerGraficosEventos()
+        {
+
+            VisibleSpinner = true;
+            EventosAnual = new();
+            EventosMensual = new();
+            DataEventosDetalle = new();
+            EventosMensualTipo = new();
+            await GetEventos();
+            VisibleSpinner = false;
+        }
+
+        public async Task ValueChangeFechasCompras(RangePickerEventArgs<DateTime> args)
+        {
+            // Here, you can customize your code.
+            //Filtra grafico anual
+            ComprasAnual = DataComprasOriginal.Where(f => f.FECHA >= ComprasMinDate && f.FECHA <= ComprasMaxDate)
+                .GroupBy(g => new { g.ANIO })
+                .Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.ANIO.ToString(),
+                    YSerieName = Convert.ToDouble(d.Sum(p => p.TOTAL_DOL))
+                }).OrderBy(c => c.XSerieName)
+            .ToList();
+
+
+            TituloGraficoComprasMensual = $"Compra Mensual";
+            ComprasMensual = DataComprasOriginal
+                .Where(f => f.FECHA >= ComprasMinDate && f.FECHA <= ComprasMaxDate)
+                .OrderBy(o => o.MES)
+                .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.MES.ToString(),
+                    YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.TOTAL_DOL)), 2)
+                }).ToList();
+
+
+            //POR TIPO
+            ComprasMensualTipo = DataComprasOriginal
+                .Where(f => f.FECHA >= ComprasMinDate && f.FECHA <= ComprasMaxDate)
+                .GroupBy(g => new { g.TIPO }).Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.TIPO,
+                    YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.TOTAL_DOL)), 2)
+                }).ToList();
+
+            PromedioComprasMensual = Convert.ToInt32(ComprasMensual.Average(p => p.YSerieName));
+
+
+
+
+
+            //para grilla de detalle
+            gridDetalleCompras.PreventRender();
+            DataComprasDetalle = new();
+            DataComprasDetalle = DataComprasOriginal.Where(f => f.FECHA >= ComprasMinDate && f.FECHA <= ComprasMaxDate)
+                .OrderBy(o => o.FECHA)
+                .ToList();
+
+            await InvokeAsync(StateHasChanged);
+
+            await refChartDetalleCompras.RefreshAsync();
+            await refChartDetalleCompras.RefreshAsync();
+
+            await refChartDetalleComprasMesTipo.RefreshAsync();
+            await refChartDetalleComprasMesTipo.RefreshAsync();
+
+            await gridDetalleCompras.AutoFitColumnsAsync();
+            gridDetalleCompras.Refresh();
+
+        }
+
+        public async Task ValueChangeFechasEventos(RangePickerEventArgs<DateTime> args)
+        {
+            // Here, you can customize your code.
+            //Filtra grafico anual
+            EventosAnual = DataEventosOriginal.Where(f => f.FE_EMIT >= EventosMinDate && f.FE_EMIT <= EventosMaxDate)
+                .GroupBy(g => new { g.ANIO })
+                .Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.ANIO.ToString(),
+                    YSerieName = Convert.ToDouble(d.Count())
+                }).OrderBy(c => c.XSerieName)
+            .ToList();
+
+
+            EventosMensual = DataEventosOriginal
+                .Where(f => f.FE_EMIT >= EventosMinDate && f.FE_EMIT <= EventosMaxDate)
+                .OrderBy(o => o.MES)
+                .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.MES.ToString(),
+                    YSerieName = Convert.ToDouble(d.Count())
+                }).ToList();
+
+            //POR TIPO
+            EventosMensualTipo = DataEventosOriginal
+            .Where(f => f.FE_EMIT >= EventosMinDate && f.FE_EMIT <= EventosMaxDate)
+            .GroupBy(g => new { g.Des_TipoNc }).Select(d => new ChartData()
+            {
+                XSerieName = d.Key.Des_TipoNc,
+                YSerieName = Math.Round(Convert.ToDouble(d.Count()))
+            }).ToList();
+
+            //eventos por proveedor
+            TituloGraficoEventosProveedor = $"Eventos por Proveedor en {añoEventoSeleccionado}";
+            EventosProveedor = DataEventosOriginal
+            .Where(v => v.ANIO == Convert.ToInt32(añoEventoSeleccionado) && !string.IsNullOrEmpty(v.DES_PROVE))
+            .GroupBy(g => new { g.DES_PROVE }).Select(d => new ChartData()
+            {
+                XSerieName = d.Key.DES_PROVE.Trim(),
+                YSerieName = Math.Round(Convert.ToDouble(d.Count()))
+            }).ToList();
+
+            //para grilla de detalle
+            DataEventosDetalle = DataEventosOriginal.Where(f => f.FE_EMIT >= EventosMinDate && f.FE_EMIT <= EventosMaxDate)
+                //.OrderBy(o => new { o.ANIO, o.MES })
+                .ToList();
+
+            //gridDetalleCompras.Refresh();
+            await refChartDetalleEventos.RefreshAsync();
+            await refChartDetalleEventos.RefreshAsync();
+
+            await refChartDetalleEventosMesTipo.RefreshAsync();
+            await refChartDetalleEventosMesTipo.RefreshAsync();
+
+            await refChartDetalleEventosProveedor.RefreshAsync();
+            await refChartDetalleEventosProveedor.RefreshAsync();
+        }
+
         protected async Task MostrarDetalleCompras(Syncfusion.Blazor.Charts.PointEventArgs args)
         {
             var año = args.Point.X;
@@ -275,13 +496,13 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
 
             ComprasMensual = DataComprasOriginal
-            .Where(v => v.ANIO == Convert.ToInt32(año))
-            .OrderBy(o => o.MES)
-            .GroupBy(g => new { g.MES }).Select(d => new ChartData()
-            {
-                XSerieName = d.Key.MES.ToString(),
-                YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.TOTAL_DOL)), 2)
-            }).ToList();
+                .Where(v => v.ANIO == Convert.ToInt32(año))
+                .OrderBy(o => o.MES)
+                .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.MES.ToString(),
+                    YSerieName = Math.Round(Convert.ToDouble(d.Sum(p => p.TOTAL_DOL)), 2)
+                }).ToList();
 
 
             PromedioComprasMensual = Convert.ToInt32(ComprasMensual.Average(p => p.YSerieName));

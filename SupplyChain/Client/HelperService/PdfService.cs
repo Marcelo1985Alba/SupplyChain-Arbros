@@ -139,6 +139,12 @@ namespace SupplyChain.Client.HelperService
             PdfStringFormat Centrado = new PdfStringFormat();
             Centrado.Alignment = PdfTextAlignment.Center;
             Centrado.LineAlignment = PdfVerticalAlignment.Middle;
+
+            //Create and customize the string formats
+            PdfStringFormat CentradoTop = new PdfStringFormat();
+            CentradoTop.Alignment = PdfTextAlignment.Center;
+            CentradoTop.LineAlignment = PdfVerticalAlignment.Top;
+
             //Create and customize the string formats
             PdfStringFormat Izquierda = new PdfStringFormat();
             Izquierda.Alignment = PdfTextAlignment.Left;
@@ -481,11 +487,13 @@ namespace SupplyChain.Client.HelperService
             PdfGridCell gridCell58 = pdfGrid.Rows[30].Cells[0];
             gridCell58.RowSpan = 2;
             gridCell58.ColumnSpan = 6;
-            gridCell58.StringFormat = Centrado;
-            gridCell58.Value = "GARANTIA: \n Los productos están garantizados por el término de 12 meses a partir de la salida de fábrica," +
+            gridCell58.StringFormat = CentradoTop;
+            gridCell58.Value = "GARANTIA:\n" +
+                " Los productos están garantizados por el término de 12 meses a partir de la salida de fábrica," +
                     " contra todo defecto de materiales y / o fabricación, limitada a la reposición sin cargo en nuestra fábrica de un " +
                     "elemento similar. Esta garantía no ampara el desgaste anormal por la utilización en condiciones distintas a las " +
-                    "especificadas";
+                    "especificadas\n\n" +
+                    "Se recomienda efectuar un mantenimiento periódico para extender su vida útil.";
 
             //Draw the PdfGrid
             pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, 0));

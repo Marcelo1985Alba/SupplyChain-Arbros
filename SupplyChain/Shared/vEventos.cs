@@ -37,5 +37,6 @@ namespace SupplyChain.Shared
 		public DateTime? FE_SOLUC { get; set; }
 		public DateTime? fe_cierre { get; set; }
 		public bool Aprob { get; set; }
-	}
+        public string Comentarios { get; set; }
+    }
 }
