@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
@@ -19,6 +20,7 @@ namespace SupplyChain.Client.Pages.ABM.Prods
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime jSRuntime { get; set; }
+        [Inject] protected ProductoService ProductoService { get; set; }
         #region "Vista Grilla"
         protected const string APPNAME = "grdProdABM";
         protected string state;
@@ -29,7 +31,7 @@ namespace SupplyChain.Client.Pages.ABM.Prods
         "Edit",
         "Delete",
         "Print",
-        new ItemModel { Text = "Copia", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "Copy" },
+        new ItemModel { Text = "Copia", TooltipText = "Copiar un producto", PrefixIcon = "e-copy", Id = "Copy" },
         "ExcelExport"
         };
         protected List<Producto> Productos  = new();
@@ -48,10 +50,13 @@ namespace SupplyChain.Client.Pages.ABM.Prods
             MainLayout.Titulo = "Productos";
 
             SpinnerVisible = true;
-            Productos = (await Http.GetFromJsonAsync<List<Producto>>("api/Prod")).OrderBy(s => s.CG_ORDEN).ToList();
-
-            
-
+            //Productos = await ProductoService.Get();
+            var response = await ProductoService.Get();
+            if (!response.Error)
+            {
+                Productos = response.Response;
+            }
+            //Productos = (await Http.GetFromJsonAsync<List<Producto>>("api/Prod")).OrderBy(s => s.CG_ORDEN).ToList();
             SpinnerVisible = false;
         }
 
