@@ -98,6 +98,17 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected DateTime DiasAtrasoMaxDate = DateTime.Now;
 
 
+        ///////*****************PEDIDOS INGRESADOS UNIDADES EQUIVALENTES*************////////////////////////////
+        protected SfChart refChartDetallePedidosIngresadosUE;
+        protected SfGrid<vEstadPedidosIngresados> grdPedIngresadosUE;
+        protected List<vEstadPedidosIngresados> DataPedidosIngresadosUEDetalle { get; set; } = new();
+        protected List<ChartData> PedidosIngresadosUEAnuales { get; set; } = new();
+        protected List<ChartData> PedidosIngresadosUEMensuales { get; set; } = new();
+        protected DateTime PedidosIngresadosUEMinDate = DateTime.Now.AddMonths(-3);
+        protected DateTime PedidosIngresadosUEMaxDate = DateTime.Now;
+        protected int añoSeleccionadoPedidosIngresadosUE;
+        protected int PromedioPedidosIngresadosMensualesUE;
+        protected string TituloGraficoPedidosIngresadosUEMensual = "";
         ///////*****************PEDIDOS INGRESADOS*************////////////////////////////
         protected SfChart refChartDetallePedidos;
         protected SfGrid<vEstadPedidosIngresados> grdPedIngresados;
@@ -256,9 +267,18 @@ namespace SupplyChain.Client.Pages.Panel_Control
             .OrderBy(c => c.XSerieName)
             .ToList();
 
+            PedidosIngresadosUEAnuales = DataPedidosIngresados.GroupBy(g => new { g.ANIO })
+            .Select(d => new ChartData()
+            {
+                XSerieName = d.Key.ANIO.ToString(),
+                YSerieName = Convert.ToDouble(d.Sum(p => p.UNIDEQUI))
+            }).OrderBy(c => c.XSerieName)
+            .ToList();
+
             PedidosIngresadosAnuales_Vs = PedidosIngresadosAnuales;
 
             grdPedIngresados?.PreventRender();
+            grdPedIngresadosUE?.PreventRender();
         }
 
         protected async Task GetPedidosAltas()
@@ -455,6 +475,18 @@ namespace SupplyChain.Client.Pages.Panel_Control
             PedidosAltasAnualDiasAtraso = new();
             PedidosAltasMensualDiasAtraso = new();
             await GetPedidosAltas();
+            VisibleSpinner = false;
+        }
+
+        protected async Task RestablecerGraficosPedidosIngresadosUE()
+        {
+
+            VisibleSpinner = true;
+            DataPedidosIngresadosUEDetalle = new();
+            PedidosIngresadosUEAnuales = new();
+            PedidosIngresadosUEMensuales = new();
+            PromedioPedidosIngresadosMensualesUE = 0;
+            await GetPedidos();
             VisibleSpinner = false;
         }
 
@@ -655,6 +687,35 @@ namespace SupplyChain.Client.Pages.Panel_Control
             await refChartDetallePedidos.RefreshAsync();
 
             await grdPedIngresados.AutoFitColumnsAsync();
+
+        }
+
+        public async Task ValueChangeFechasPedidosIngresadosUE(RangePickerEventArgs<DateTime> args)
+        {
+
+            TituloGraficoPedidosIngresadosUEMensual = $"Desde {PedidosIngresadosMinDate:dd/MM/yyyy} Hasta {PedidosIngresadosMaxDate:dd/MM/yyyy}";
+            //grafico mensual
+            PedidosIngresadosUEMensuales = DataPedidosIngresados
+                .Where(p => p.FECHA >= PedidosIngresadosMinDate && p.FECHA <= PedidosIngresadosMaxDate)
+                .OrderBy(o => o.MES)
+                .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.MES.ToString(),
+                    YSerieName = Math.Round(d.Sum(p => p.TOT_DOL))
+                }).ToList();
+
+            PromedioPedidosIngresadosMensualesUE = Convert.ToInt32(PedidosIngresadosUEMensuales.Average(p => p.YSerieName));
+
+            //detalle grilla
+            DataPedidosIngresadosUEDetalle = DataPedidosIngresados
+                .Where(p => p.FECHA >= PedidosIngresadosMinDate && p.FECHA <= PedidosIngresadosMaxDate)
+                .ToList();
+
+            await InvokeAsync(StateHasChanged);
+            await refChartDetallePedidosIngresadosUE?.RefreshAsync();
+            await refChartDetallePedidosIngresadosUE?.RefreshAsync();
+
+            await grdPedIngresadosUE?.AutoFitColumnsAsync();
 
         }
 
@@ -1053,6 +1114,47 @@ namespace SupplyChain.Client.Pages.Panel_Control
             await InvokeAsync(StateHasChanged);
 
             await grdDiasAtraso.AutoFitColumnsAsync();
+
+        }
+
+        protected async Task MostrarDetalleUE(Syncfusion.Blazor.Charts.PointEventArgs args)
+        {
+            añoSeleccionadoPedidosIngresadosUE = Convert.ToInt32(args.Point.X);
+
+            PedidosIngresadosUEMensuales = DataPedidosIngresados
+                .Where(p => p.ANIO == añoSeleccionadoPedidosIngresadosUE).OrderBy(p => p.FECHA)
+                .GroupBy(g=> new { g.MES })
+                .Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.MES.ToString(),
+                    YSerieName = Convert.ToDouble(d.Sum(p=> p.UNIDEQUI))
+                })
+                .ToList();
+
+            DataPedidosIngresadosUEDetalle = DataPedidosIngresados
+                .Where(p => p.ANIO == añoSeleccionadoPedidosIngresadosUE).OrderBy(p => p.FECHA).ToList();
+
+            PromedioPedidosIngresadosMensualesUE = Convert.ToInt32(PedidosIngresadosUEMensuales.Average(p => p.YSerieName));
+
+            await InvokeAsync(StateHasChanged);
+
+            
+            await refChartDetallePedidosIngresadosUE.RefreshAsync();
+            await refChartDetallePedidosIngresadosUE.RefreshAsync();
+            
+
+        }
+
+        protected async Task MostrarDetalleUEMes(Syncfusion.Blazor.Charts.PointEventArgs args)
+        {
+            var mes = Convert.ToInt32(args.Point.X);
+
+
+            DataPedidosIngresadosUEDetalle = DataPedidosIngresados.Where(p => p.PEDIDO > 0
+                && p.ANIO == añoSeleccionadoPedidosAltasDiasAtraso && p.MES == mes).OrderBy(p => p.FECHA).ToList();
+            await InvokeAsync(StateHasChanged);
+
+            
 
         }
         protected async Task OnFiltroByCategoria(AccumulationPointEventArgs args)
