@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SupplyChain.Shared;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -8,10 +9,10 @@ using System.Text;
 namespace SupplyChain
 {
     [Table("Cliente")]
-    public class Cliente
+    public class Cliente : EntityBase<int>
     {
-        [Key, Display(Name ="Codigo")]
-        public int CG_CLI { get; set; } = 0;
+        [Key, Display(Name ="Codigo"), Column("CG_CLI")]
+        public int Id { get; set; } = 0;
         [Display(Name = "Dewcripcion")]
         public string DES_CLI { get; set; } = "";
         public string CUIT { get; set; } = "";

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Shared
 {
-    public class vEstadFacturacion : EntityBase
+    public class vEstadFacturacion
     {
         public DateTime FECHA { get; set; }
         public string REMITO { get; set; }

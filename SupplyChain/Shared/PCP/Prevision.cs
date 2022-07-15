@@ -5,10 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SupplyChain.Shared.Models
 {
     [Table("PresAnual")]
-    public class PresAnual :  EntityBase
+    public class PresAnual :  EntityBase<int>
     {
-        [Key]
-        public int REGISTRO { get; set; } = 0;
+        [Key, Column("REGISTRO")]
+        new public int Id { get; set; } = 0;
         public string CG_ART { get; set; } = "";
         public string DES_ART { get; set; } = "";
         public string UNID { get; set; } = "";

@@ -48,7 +48,7 @@
             {
                 SpinnerVisible = false;
             <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                    DataSource="@(servicios.OrderByDescending(s=> s.PEDIDO))"
+                    DataSource="@(servicios.OrderByDescending(s=> s.Id))"
                     ID="gridServicios" Height="100%" Width="100%" GridLines="GridLine.Both" RowHeight="20"
                     @ref="Grid" AllowExcelExport="true" AllowRowDragAndDrop="true"
                     AllowGrouping="true" AllowMultiSorting="true"
@@ -95,7 +95,7 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label>Pedido:</label>
-                                                <SfTextBox ID="PEDIDO" @bind-Value="@(servicio.PEDIDO)" Enabled="@Disabled" Placeholder="Pedido"></SfTextBox>
+                                                <SfTextBox ID="PEDIDO" @bind-Value="@(servicio.Id)" Enabled="@Disabled" Placeholder="Pedido"></SfTextBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
@@ -507,9 +507,7 @@
                                 </div>
                                 <div class="tab-pane fade" id="pills-file" role="tabpanel" aria-labelledby="pills-profile-tab">
 
-                                    <VerEnsayos Accion="RUTAENSAYO" Codigo="@servicio.PEDIDO">
-
-                                    </VerEnsayos>
+                                    <VerEnsayos Accion="RUTAENSAYO" Codigo="@servicio.Id"></VerEnsayos>
                                 </div>
                                 <div class="tab-pane fade" id="pills-img" role="tabpanel" aria-labelledby="pills-profile-tab">
                                     @{
@@ -519,17 +517,17 @@
                                             {
                                                 <div class="accordion" id="accordionExample">
                                                     @{
-                                                        string rutaDiscojpg = ruta.VALORC + $"{servicio.PEDIDO}_disco.jpg";
-                                                        string rutaToberajpg = ruta.VALORC + $"{servicio.PEDIDO}_tobera.jpg";
-                                                        string rutaResortejpg = ruta.VALORC + $"{servicio.PEDIDO}_resorte.jpg";
-                                                        string rutaRecepcionjpg = ruta.VALORC + $"{servicio.PEDIDO}_recepcion.jpg";
-                                                        string rutaDespachojpg = ruta.VALORC + $"{servicio.PEDIDO}_despacho.jpg";
+                                                        string rutaDiscojpg = ruta.VALORC + $"{servicio.Id}_disco.jpg";
+                                                        string rutaToberajpg = ruta.VALORC + $"{servicio.Id}_tobera.jpg";
+                                                        string rutaResortejpg = ruta.VALORC + $"{servicio.Id}_resorte.jpg";
+                                                        string rutaRecepcionjpg = ruta.VALORC + $"{servicio.Id}_recepcion.jpg";
+                                                        string rutaDespachojpg = ruta.VALORC + $"{servicio.Id}_despacho.jpg";
 
-                                                        string rutaDiscopng = ruta.VALORC + $"{servicio.PEDIDO}_disco.png";
-                                                        string rutaToberapng = ruta.VALORC + $"{servicio.PEDIDO}_tobera.png";
-                                                        string rutaResortepng = ruta.VALORC + $"{servicio.PEDIDO}_resorte.png";
-                                                        string rutaRecepcionpng = ruta.VALORC + $"{servicio.PEDIDO}_recepcion.png";
-                                                        string rutaDespachopng = ruta.VALORC + $"{servicio.PEDIDO}_despacho.png";
+                                                        string rutaDiscopng = ruta.VALORC + $"{servicio.Id}_disco.png";
+                                                        string rutaToberapng = ruta.VALORC + $"{servicio.Id}_tobera.png";
+                                                        string rutaResortepng = ruta.VALORC + $"{servicio.Id}_resorte.png";
+                                                        string rutaRecepcionpng = ruta.VALORC + $"{servicio.Id}_recepcion.png";
+                                                        string rutaDespachopng = ruta.VALORC + $"{servicio.Id}_despacho.png";
 
                                                         <div class="card">
                                                             @{
@@ -712,7 +710,7 @@
                 </GridEditSettings>
 
                 <GridColumns>
-                    <GridColumn Field=@nameof(Service.PEDIDO) HeaderText="Pedido" AllowSearching="true"
+                    <GridColumn Field=@nameof(Service.Id) HeaderText="Pedido" AllowSearching="true"
                                 TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="90"></GridColumn>
                     <GridColumn Field=@nameof(Service.FECHA) HeaderText="Fecha" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Service.CLIENTE) HeaderText="Cliente" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="280"></GridColumn>

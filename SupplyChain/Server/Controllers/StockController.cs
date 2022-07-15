@@ -89,7 +89,7 @@ namespace SupplyChain.Server.Controllers
                 && r.LOTE.ToUpper() == resumenStock.LOTE.ToUpper()
                 && r.DESPACHO.ToUpper() == resumenStock.DESPACHO.ToUpper()
                 && r.SERIE.ToUpper() == resumenStock.SERIE.ToUpper()
-                ).Take(1).OrderByDescending(r => r.REGISTRO).FirstAsync();
+                ).Take(1).OrderByDescending(r => r.Id).FirstAsync();
             }
             catch (Exception ex)
             {
@@ -137,7 +137,7 @@ namespace SupplyChain.Server.Controllers
         {
             stock.USUARIO = "USER";
             stock.CG_CIA = 1;
-            if (registro != stock.REGISTRO)
+            if (registro != stock.Id)
             {
                 return BadRequest("Registro Incorrecto");
             }
@@ -169,7 +169,7 @@ namespace SupplyChain.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Pedidos>> PostStock([FromBody] Pedidos stock)
         {
-            stock.REGISTRO = null;
+            stock.Id = null;
             stock.USUARIO = "USER";
             stock.CG_CIA = 1;
             
@@ -201,7 +201,7 @@ namespace SupplyChain.Server.Controllers
             }
             catch (DbUpdateException ex)
             {
-                if (RegistroExists(stock.REGISTRO))
+                if (RegistroExists(stock.Id))
                 {
                     return Conflict();
                 }
@@ -223,7 +223,7 @@ namespace SupplyChain.Server.Controllers
             //MOVIM ENTRE DEP: GENERAR SEGUNDO REGISTROS: 
             if (stock?.TIPOO == 9)
             {
-                stock.REGISTRO = null;
+                stock.Id = null;
                 stock.USUARIO = "USER";
                 stock.CG_CIA = 1;
                 stock.STOCK = -stock.STOCK;
@@ -237,7 +237,7 @@ namespace SupplyChain.Server.Controllers
                 }
                 catch (DbUpdateException ex)
                 {
-                    if (RegistroExists(stock.REGISTRO))
+                    if (RegistroExists(stock.Id))
                     {
                         return Conflict();
                     }
@@ -301,7 +301,7 @@ namespace SupplyChain.Server.Controllers
 
         private bool RegistroExists(decimal? registro)
         {
-            return _context.Pedidos.Any(e => e.REGISTRO == registro);
+            return _context.Pedidos.Any(e => e.Id == registro);
         }
     }
 }

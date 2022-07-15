@@ -104,7 +104,7 @@ namespace SupplyChain.Server.Controllers
                     item.ResumenStocks = await _context.ResumenStock
                         .Where(r => r.CG_ART == codigoInsumo && r.STOCK > 0)
                         .ToListAsync();
-                    item.StockCorregido = await _stockCorregidoRepository.Obtener(s=> s.CG_PROD == codigoInsumo).FirstOrDefaultAsync();
+                    item.StockCorregido = await _stockCorregidoRepository.Obtener(s=> s.Id == codigoInsumo).FirstOrDefaultAsync();
                 }
 
                 return xLista;

@@ -6,17 +6,14 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Server.Repositorios
 {
-    public class GeneraRepository : Repository<Genera, int>
+    public class GeneraRepository : Repository<Genera, string>
     {
         public GeneraRepository(AppDbContext appDbContext) : base (appDbContext)
         {
             appDbContext.Database.SetCommandTimeout(180);
         }
 
-        public async Task<bool> Existe(string campo)
-        {
-            return await DbSet.AnyAsync(e => e.CAMP3 == campo);
-        }
+        
 
         public async Task Reserva(string campo)
         {

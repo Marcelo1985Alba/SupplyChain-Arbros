@@ -186,7 +186,6 @@ namespace SupplyChain.Client.Pages.Panel_Control
             VisibleSpinner = false;
         }
 
-        
         protected async Task GetFacturacion()
         {
             this.DataFacturacionOriginal = await Http.GetFromJsonAsync<List<vEstadFacturacion>>("api/EstadisticaVentas/Facturacion");

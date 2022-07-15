@@ -135,7 +135,7 @@ namespace SupplyChain
                 //RESERVA REGISTRO: El vale hay que hacerlo del lado del cliente porque debe reservar un solo vale
                 //y aqui se ejecuta por item.
                 await generaController.ReservaByCampo("NOCONF");
-                var genera = _context.Genera.Where(g => g.CAMP3 == "NOCONF").FirstOrDefault();
+                var genera = _context.Genera.Where(g => g.Id == "NOCONF").FirstOrDefault();
                 NoConf.Cg_NoConf = (int)genera.VALOR1;
 
 

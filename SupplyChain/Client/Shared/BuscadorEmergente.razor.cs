@@ -23,6 +23,10 @@ namespace SupplyChain.Client.Shared
         /// </summary>
         [Parameter] public SelectionType TipoSeleccion { get; set; } = SelectionType.Single;
         [Parameter] public IEnumerable<TItem> DataSource { get; set; }
+        /// <summary>
+        /// Acepta valores en pixeles y porcentaje: 310px o 90%
+        /// </summary>
+        [Parameter] public string HeightGrid { get; set; } = "310px";
         [Parameter] public string[] Columnas { get; set; } = null!;
         /// <summary>
         /// Evento que se ejecuta al seleccionar
@@ -75,7 +79,6 @@ namespace SupplyChain.Client.Shared
         }
         public async Task EnviarObjetoSeleccionado()
         {
-            Visible = false;
             if (TipoSeleccion == SelectionType.Multiple)
             {
                 var items = await Grid.GetSelectedRecordsAsync();
@@ -85,6 +88,7 @@ namespace SupplyChain.Client.Shared
             {
                 await OnObjetoSeleccionado.InvokeAsync(Selected);
             }
+            Visible = false;
             
         }
 

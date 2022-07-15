@@ -10,15 +10,10 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Server.Repositorios
 {
-    public class ProgramaRepository : Repository<Programa, int>
+    public class ProgramaRepository : Repository<Programa, decimal>
     {
         public ProgramaRepository(AppDbContext db) : base(db)
         {
-        }
-
-        public async Task<bool> Existe(int id)
-        {
-            return await base.DbSet.AnyAsync(e => e.REGISTRO == id);
         }
 
         public async Task<IEnumerable<Programa>> GetProgramasPedidos()

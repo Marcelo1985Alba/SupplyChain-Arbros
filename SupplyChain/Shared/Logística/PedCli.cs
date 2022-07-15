@@ -7,11 +7,12 @@ using System.Text;
 
 namespace SupplyChain
 {
-    public class PedCli : EntityBase
+    public class PedCli : EntityBase<int>
     {
         private string _color;
-        [Key]
-        public int REGISTRO { get; set; } = 0;
+
+        [Key, Column("REGISTRO")]
+        new public int Id { get; set; } = 0;
         public DateTime FE_PED { get; set; }
         public int PEDIDO { get; set; } = 0;
         public decimal CANTPED { get; set; }

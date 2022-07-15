@@ -10,7 +10,6 @@ namespace SupplyChain
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Microsoft.AspNetCore.Authorization.Authorize]
     public class TipoMatController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -22,14 +21,14 @@ namespace SupplyChain
 
         // GET: api/TipoMat
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TipoMat>>> GetUnidades()
+        public async Task<ActionResult<IEnumerable<TipoMat>>> GetTipoMat()
         {
             return await _context.TipoMat.ToListAsync();
         }
 
-        // GET: api/Areas/5
+        // GET: api/TipoMat/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TipoMat>> GetUnidad(string id)
+        public async Task<ActionResult<TipoMat>> GetTipoMat(string id)
         {
             var tipomat = await _context.TipoMat.FindAsync(id);
 
@@ -41,7 +40,7 @@ namespace SupplyChain
             return tipomat;
         }
 
-        // PUT: api/Unidades/5
+        // PUT: api/TipoMat/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
@@ -73,7 +72,7 @@ namespace SupplyChain
             return NoContent();
         }
 
-        // POST: api/Unidades
+        // POST: api/TipoMat
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
@@ -99,7 +98,7 @@ namespace SupplyChain
             return CreatedAtAction("GetUnidad", new { id = tipomat.TIPO }, tipomat);
         }
 
-        // DELETE: api/Unidades/5
+        // DELETE: api/TipoMat/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<TipoMat>> DeleteUnidad(string id)
         {

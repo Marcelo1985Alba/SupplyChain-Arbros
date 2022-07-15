@@ -1,5 +1,6 @@
 ﻿@page "/ventas/solicitudes"
 @using Syncfusion.Blazor.Buttons
+@using SupplyChain.Client.Shared.BuscadorCliente
 @inherits SolicitudesBase
 
 
@@ -12,130 +13,42 @@
 
         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
                 @ref="refGrid" DataSource="@Solicitudes" Width="100%"
-                AllowExcelExport="true" AllowGrouping="true" ID="grdProd"
+                AllowExcelExport="true" AllowGrouping="true" ID="grdSol"
                 AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
-            <GridSelectionSettings CheckboxOnly="true"
-                                   Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
-            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler" TValue="vSolicitudes"></GridEvents>
-            <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-            <GridEditSettings AllowAdding="false" AllowEditing="true" AllowDeleting="true"
+            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"
+                        OnToolbarClick="OnToolbarHandler"
+                        TValue="vSolicitudes"></GridEvents>
+            <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true"
                               Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
-                <HeaderTemplate>
-                    @{
-                        var SolicitudSeleccionada = (context as vSolicitudes);
-                        if (SolicitudSeleccionada.Id == 0)
-                        {
-                            <p>Nueva Solicitud</p>
-                        }
-                        else
-                        {
-                            <p>Detalle Solicitud:<strong>@SolicitudSeleccionada.Id</strong></p>
-                        }
-                    }
-                </HeaderTemplate>
-                <Template>
-                    @{
-                        var solicitud = (context as vSolicitudes);
-
-                        if (solicitud.Id > 0)
-                        {
-                            <div class="form-row">
-                                <div class="form-group col-md-2">
-                                    <label class="">Id:</label>
-                                    <SfNumericTextBox ID="VALOR_HORA" @bind-Value="@(solicitud.Id)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="">TagId:</label>
-                                    <SfNumericTextBox ID="tagId" @bind-Value="@(solicitud.TagId)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="">Producto:</label>
-                                    <SfTextBox CssClass="customClass" ID="DES_OPER" @bind-Value="@(solicitud.Producto)" Readonly="true"></SfTextBox>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="">Cantidad:</label>
-                                    <SfNumericTextBox ID="CANT" @bind-Value="@(solicitud.Cantidad)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label class="">TagId:</label>
-                                    <SfNumericTextBox ID="tagId" @bind-Value="@(solicitud.TagId)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="">Producto:</label>
-                                    <SfTextBox CssClass="customClass" ID="Producto" @bind-Value="@(solicitud.Producto)" Readonly="true"></SfTextBox>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="">Cantidad:</label>
-                                    <SfNumericTextBox ID="CANT" @bind-Value="@(solicitud.Cantidad)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
-                                </div>
-                            </div>
-
-                        }
-
-
-
-
-                        <div class="form-row">
-                            <div class="form-group col-md-2">
-                                <label class="">Cuit:</label>
-                                <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(solicitud.Cuit)"></SfTextBox>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="">Cod. Cliente:</label>
-                                <SfNumericTextBox ID="CG_CLI" @bind-Value="@(solicitud.CG_CLI)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
-                            </div>
-                            <div class="form-group col-md-7">
-                                <label class="">Cliente:</label>
-                                <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(solicitud.DES_CLI)" Readonly="true"></SfTextBox>
-                            </div>
-                            <div class="form-group col-md-1 mt-4">
-                                <SfButton IconCss="fa fa-search" CssClass="e-round" OnClick="@(async ()=> await BuscarCliente())"
-                                          HtmlAttributes="@HtmlAttribute"></SfButton>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-2 checkbox checkbox-success">
-                                <Syncfusion.Blazor.Buttons.SfCheckBox Label="Con Presupuesto" CssClass="e-info checkbox checkbox-success"
-                                                                      @bind-Checked="@solicitud.TienePresupuesto" Disabled="true" />
-                            </div>
-                        </div>
-                    }
-                </Template>
-                <FooterTemplate>
-                    @{
-
-                        if (SolicitudSeleccionada.CG_CLI > 0)
-                        {
-                            <Syncfusion.Blazor.Buttons.SfButton IsPrimary="true" IconCss="fa fa-save" OnClick="@(async ()=> await GeneraPresupuesto())"
-                                                                Content="Generar Presupuesto"></Syncfusion.Blazor.Buttons.SfButton>
-                        }
-
-                    }
-
-                </FooterTemplate>
             </GridEditSettings>
             <GridColumns>
                 @*<GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>*@
-                <GridColumn Field=@nameof(vSolicitudes.Id) HeaderText="Numero" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(vSolicitudes.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(vSolicitudes.Producto) HeaderText="Producto" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(vSolicitudes.Cantidad) HeaderText="Cantidad" Format="N0" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(vSolicitudes.TagId) HeaderText="TagId" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(vSolicitudes.Descripcion) HeaderText="Descripcion Producto" TextAlign="TextAlign.Left" Width="280px"></GridColumn>
+                <GridColumn Field=@nameof(vSolicitudes.Cantidad) HeaderText="Cantidad" Format="N0" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(vSolicitudes.CG_CLI) HeaderText="Cod. Cliente" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(vSolicitudes.DES_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(vSolicitudes.Cuit) HeaderText="Cuit" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(vSolicitudes.DES_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                <GridColumn Field=@nameof(vSolicitudes.Cuit) HeaderText="Cuit" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
+                <GridColumn Field=@nameof(vSolicitudes.CalcId) HeaderText="CalculoId" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
 
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
         </SfGrid>
     </div>
-    <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" Label="Generando Presupuesto..." @bind-Visible="@SpinnerVisiblePresupuesto"></SfSpinner>
-    <BuscadorEmergente Height="520px" TItem="Cliente" Titulo="Listado de Clientes" Visible="@PopupBuscadorVisible"
-                       DataSource="@Clientes" Columnas="@(new string[] { "CG_CLI", "DES_CLI"})" OnObjetoSeleccionado="OnObjectSelected" />
+
+    <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" Label="Generando Presupuesto..."
+               @bind-Visible="@SpinnerVisiblePresupuesto"></SfSpinner>
+    @if (popupFormVisible)
+	{
+        <FormSolicitud @ref="refFormSolicitud" Solicitud="@SolicitudSeleccionada" Show="popupFormVisible" OnCerrar="OnCerraDialog"
+                       OnGuardar="@(async(s)=> await Guardar(s))" HeightDialog="@heightPopup"></FormSolicitud> 
+	}
+    
+    
 </div>
+

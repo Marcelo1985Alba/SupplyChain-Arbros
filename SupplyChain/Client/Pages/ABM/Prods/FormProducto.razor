@@ -1,0 +1,298 @@
+﻿@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@inherits FormProductoBase
+
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+
+<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
+    <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
+    <DialogTemplates>
+        <Header>
+            @if (string.IsNullOrEmpty(Producto.Id))
+            {
+                <p>Nuevo Insumo</p>
+            }
+            else
+            {
+                <p>&nbsp;&nbsp;@Producto.Id&nbsp;&nbsp;-&nbsp;&nbsp;@Producto.DES_PROD</p>
+            }
+        </Header>
+        <Content>
+            <EditForm Model="Producto" OnValidSubmit="@GuardarProd">
+                <DataAnnotationsValidator />
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales" role="tab" aria-controls="pills-home" aria-selected="true">Datos Generales</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-DatosFabricacion" role="tab" aria-controls="pills-profile" aria-selected="false">Datos de Fabricacion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-Stock" role="tab" aria-controls="pills-contact" aria-selected="false">Stock</a>
+                    </li>
+                    @{
+                        if (camposConf == true)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-CamposConfigurables" role="tab" aria-controls="pills-contact" aria-selected="false">Campos Configurables</a>
+                            </li>
+                        }
+                    }
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-DatosGenerales" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Codigo:</label>
+                                    <SfTextBox ID="Codigo" @bind-Value="@(Producto.Id)" Enabled="@Producto.ESNUEVO" Placeholder="Codigo"></SfTextBox>
+                                    <ValidationMessage For="@(()=> Producto.Id)"></ValidationMessage>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Descripcion:</label>
+                                    <SfTextBox ID="Descripcion" @bind-Value="@(Producto.DES_PROD)" Placeholder="Descripcion"></SfTextBox>
+                                    <ValidationMessage For="@(()=> Producto.DES_PROD)"></ValidationMessage>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a>Orden:</a>
+                                    <SfComboBox TValue="int" CssClass="customClass" TItem="Cat" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(Producto.CG_ORDEN)" DataSource="@cat">
+                                        <ComboBoxFieldSettings Value="CG_ORDEN" Text="DES_ORDEN"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                    <ValidationMessage For="@(()=> Producto.CG_ORDEN)"></ValidationMessage>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Tipo:</label>
+                                    <SfTextBox ID="Tipo" @bind-Value="@(Producto.TIPO)" Placeholder="Tipo"></SfTextBox>
+                                    <ValidationMessage For="@(()=> Producto.TIPO)"></ValidationMessage>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a href="/sc/unidades/list" target="_blank">Unidad de uso:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SupplyChain.Unidades" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(Producto.UNID)" DataSource="@unidades">
+                                        <ComboBoxFieldSettings Value="UNID" Text="UNID"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                    <ValidationMessage For="@(()=> Producto.UNID)"></ValidationMessage>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Factor de conversion:</label>
+                                    <SfNumericTextBox ID="Factor de conversion" @bind-Value="@(Producto.CG_DENSEG)" Placeholder="Factor de conversion"></SfNumericTextBox>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a href="/sc/unidades/list" target="_blank">Unidad comercial:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SupplyChain.Unidades" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(Producto.UNIDSEG)" DataSource="@unidades">
+                                        <ComboBoxFieldSettings Value="UNID" Text="UNID"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Peso:</label>
+                                    <SfNumericTextBox ID="Peso" @bind-Value="@(Producto.PESO)" Placeholder="Peso"></SfNumericTextBox>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a href="/sc/unidades/list" target="_blank">Unidad de peso:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SupplyChain.Unidades" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(Producto.UNIDPESO)" DataSource="@unidades">
+                                        <ComboBoxFieldSettings Value="UNID" Text="UNID"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Material:</label>
+                                    <SfTextBox ID="Material" @bind-Value="@(Producto.NORMA)" Placeholder="Material"></SfTextBox>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label>Especificacion:</label>
+                                    <SfTextBox ID="Especificacion" @bind-Value="@(Producto.ESPECIF)" Placeholder="Especificacion"></SfTextBox>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-DatosFabricacion" role="tabpanel" aria-labelledby="pills-profile-tab">
+                        <div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Tiempo fabricacion:</label>
+                                    <SfNumericTextBox ID="Tiempo fabricacion" @bind-Value="@(Producto.TIEMPOFAB)" Placeholder="Tiempo fabricacion"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a href="/sc/celda/list" target="_blank">Celda:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SupplyChain.Celdas" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(Producto.CG_CELDA)" DataSource="@celda">
+                                        <ComboBoxFieldSettings Value="CG_CELDA" Text="CG_CELDA"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                    <ValidationMessage For="@(()=> Producto.CG_CELDA)"></ValidationMessage>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a href="/sc/areas/list" target="_blank">Area:</a>
+                                    <SfComboBox TValue="int?" CssClass="customClass" TItem="SupplyChain.Areas" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(Producto.CG_AREA)" DataSource="@area">
+                                        <ComboBoxFieldSettings Value="CG_AREA" Text="DES_AREA"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a href="/sc/linea/list" target="_blank">Linea/Posición:</a>
+                                    <SfComboBox TValue="int?" CssClass="customClass" TItem="SupplyChain.Lineas" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(Producto.CG_LINEA)" DataSource="@linea">
+                                        <ComboBoxFieldSettings Value="CG_LINEA" Text="DES_LINEA"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                    <ValidationMessage For="@(()=> Producto.CG_LINEA)"></ValidationMessage>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a href="/sc/tipoarea/list" target="_blank">Tipo Area:</a>
+                                    <SfComboBox TValue="int?" CssClass="customClass" TItem="TipoArea" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(Producto.CG_TIPOAREA)" DataSource="@tipoarea">
+                                        <ComboBoxFieldSettings Value="CG_TIPOAREA" Text="DES_TIPOAREA"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Clase:</label>
+                                    <SfNumericTextBox ID="Clase" @bind-Value="@(Producto.CG_CLAS)" Placeholder="Clase"></SfNumericTextBox>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Fecha UC:</label>
+                                    <SfDatePicker TValue="DateTime?" Value='@Producto.FE_UC'></SfDatePicker>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-Stock" role="tabpanel" aria-labelledby="pills-contact-tab">
+                        <div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Stock Minimo:</label>
+                                    <SfNumericTextBox ID="Stock Minimo" @bind-Value="@(Producto.STOCKMIN)" Placeholder="Stock Minimo"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Lote Optimo:</label>
+                                    <SfNumericTextBox ID="Lote Optimo" @bind-Value="@(Producto.LOPTIMO)" Placeholder="Lote Optimo"></SfNumericTextBox>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Costo:</label>
+                                    <SfNumericTextBox ID="Costo" @bind-Value="@(Producto.COSTO)" Placeholder="Costo"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Costo ter:</label>
+                                    <SfNumericTextBox ID="Costo ter" @bind-Value="@(Producto.COSTOTER)" Placeholder="Costo ter"></SfNumericTextBox>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+
+                                <div class="form-group col-md-6">
+                                    <a>Moneda:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Moneda" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(Producto.MONEDA)" DataSource="@monedas">
+                                        <ComboBoxFieldSettings Value="MONEDA" Text="MONEDA"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @{
+                        if (camposConf == true)
+                        {
+                            <div class="tab-pane fade" id="pills-CamposConfigurables" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                <div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Modelo:</label>
+                                            <SfTextBox ID="Modelo" @bind-Value="@(Producto.CAMPOCOM1)" Placeholder="Campo Configurable 1"></SfTextBox>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Medida:</label>
+                                            <SfTextBox ID="Medida" @bind-Value="@(Producto.CAMPOCOM2)" Placeholder="Campo Configurable 2"></SfTextBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Orificio:</label>
+                                            <SfTextBox ID="Orificio" @bind-Value="@(Producto.CAMPOCOM3)" Placeholder="Campo Configurable 3"></SfTextBox>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Area (cm^2):</label>
+                                            <SfTextBox ID="Area" @bind-Value="@(Producto.CAMPOCOM4)" Placeholder="Campo Configurable 4"></SfTextBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Serie:</label>
+                                            <SfTextBox ID="Serie" @bind-Value="@(Producto.CAMPOCOM5)" Placeholder="Campo Configurable 5"></SfTextBox>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <a>Tipo:</a>
+                                            <SfComboBox TValue="string" CssClass="customClass" TItem="TipoOptions" PopupWidth="auto" AllowFiltering="true"
+                                                        @bind-Value="@(Producto.CAMPOCOM5)" DataSource="@TipoData">
+                                                <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                            </SfComboBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Campo Configurable 7:</label>
+                                            <SfTextBox ID="Campo Configurable 7" @bind-Value="@(Producto.CAMPOCOM7)" Placeholder="Campo Configurable 7"></SfTextBox>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Campo Configurable 8:</label>
+                                            <SfTextBox ID="Campo Configurable 8" @bind-Value="@(Producto.CAMPOCOM8)" Placeholder="Campo Configurable 8"></SfTextBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Campo Configurable 9:</label>
+                                            <SfTextBox ID="Campo Configurable 9" @bind-Value="@(Producto.CAMPOCOM9)" Placeholder="Campo Configurable 9"></SfTextBox>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Campo Configurable 10:</label>
+                                            <SfTextBox ID="Campo Configurable 10" @bind-Value="@(Producto.CAMPOCOM10)" Placeholder="Campo Configurable 10"></SfTextBox>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                @*<ValidationSummary />*@
+                <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
+            </EditForm>
+        </Content>
+    </DialogTemplates>
+</SfDialog>

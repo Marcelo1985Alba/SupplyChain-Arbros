@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Server.Data.Repository
 {
-    public abstract class Repository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : EntityBase, new()
+    public abstract class Repository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : EntityBase<TId>, new()
     {
         protected readonly AppDbContext Db;
         protected readonly DbSet<TEntity> DbSet;
@@ -27,7 +27,17 @@ namespace SupplyChain.Server.Data.Repository
             
             return result;
         }
+        public virtual async Task<bool> Existe(TId id)
+        {
+            var entity = await ObtenerPorId(id);
+            return entity != null;
+        }
 
+        public virtual async Task<bool> Existe(params object[] keyValues)
+        {
+            var entity = await DbSet.FindAsync(keyValues);
+            return entity != null;
+        }
         public virtual async Task<TEntity> ObtenerPorId(TId id)
         {
             return await DbSet.FindAsync(id);
@@ -36,6 +46,11 @@ namespace SupplyChain.Server.Data.Repository
         public virtual async Task<List<TEntity>> ObtenerTodos()
         {
             return await DbSet.ToListAsync();
+        }
+
+        public virtual IQueryable<TEntity> ObtenerTodosQueryable()
+        {
+            return DbSet.AsQueryable();
         }
 
         public IQueryable<TEntity> Obtener(Expression<Func<TEntity, bool>> filter, int take = 0,
@@ -90,9 +105,25 @@ namespace SupplyChain.Server.Data.Repository
             await Db.Database.ExecuteSqlRawAsync(xSQL);
         }
 
+        public async Task BeginTransaction()
+        {
+            await Db.Database.BeginTransactionAsync();
+        }
+
+        public async Task CommitTransaction()
+        {
+            await Db.Database.CommitTransactionAsync();
+        }
+
+        public async Task RollbackTransaction()
+        {
+            await Db.Database.RollbackTransactionAsync();
+        }
+
         public void Dispose()
         {
             Db?.Dispose();
         }
+
     }
 }

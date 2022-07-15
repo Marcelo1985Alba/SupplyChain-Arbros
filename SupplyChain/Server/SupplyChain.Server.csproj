@@ -10,6 +10,10 @@
     <Content Remove="wwwroot\Report\ArbrosDataSet.xsc" />
     <Content Remove="wwwroot\Report\ArbrosDataSet.xsd" />
     <Content Remove="wwwroot\Report\ArbrosDataSet.xss" />
+    <Content Remove="wwwroot\Report\Datasheet\vDataSheet.Designer.cs" />
+    <Content Remove="wwwroot\Report\Datasheet\vDataSheet.xsc" />
+    <Content Remove="wwwroot\Report\Datasheet\vDataSheet.xsd" />
+    <Content Remove="wwwroot\Report\Datasheet\vDataSheet.xss" />
     <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.Designer.cs" />
     <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsc" />
     <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsd" />
@@ -27,6 +31,11 @@
   <ItemGroup>
     <Compile Include="wwwroot\Report\ArbrosDataSet.Designer.cs">
       <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="wwwroot\Report\Datasheet\vDataSheet.Designer.cs">
+      <DependentUpon>vDataSheet.xsd</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -53,14 +62,14 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />
-    <PackageReference Include="BoldReports.Net.Core" Version="3.3.32" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.13" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.12.0" />
+    <PackageReference Include="BoldReports.Net.Core" Version="4.1.78" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.13" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.13" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.13" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.13">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.17">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -68,6 +77,7 @@
     <PackageReference Include="Syncfusion.Blazor.FileManager" Version="19.4.0.56" />
     <PackageReference Include="Syncfusion.Blazor.FileManager.PhysicalFileProvider" Version="19.4.0.48" />
     <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="19.4.0.56" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="19.4.0.56" />
     <PackageReference Include="System.CodeDom" Version="5.0.0" />
   </ItemGroup>
 
@@ -107,6 +117,17 @@
     <None Include="wwwroot\Report\ArbrosDataSet.xss">
       <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
     </None>
+    <None Include="wwwroot\Report\Datasheet\vDataSheet.xsc">
+      <DependentUpon>vDataSheet.xsd</DependentUpon>
+    </None>
+    <None Include="wwwroot\Report\Datasheet\vDataSheet.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>vDataSheet.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Include="wwwroot\Report\Datasheet\vDataSheet.xss">
+      <DependentUpon>vDataSheet.xsd</DependentUpon>
+    </None>
     <None Include="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsc">
       <DependentUpon>ArbrosDataSet5.xsd</DependentUpon>
     </None>
@@ -133,6 +154,7 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\Report\Presupuesto\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

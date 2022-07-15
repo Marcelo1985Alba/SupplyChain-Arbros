@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SupplyChain.Shared
 {
-    public class EntityBase
+    public class EntityBase<TId>
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public TId Id { get; set; }
     }
 }

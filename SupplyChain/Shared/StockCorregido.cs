@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SupplyChain.Shared
 {
 	[Table("DW_StockCorregido")]
-    public class StockCorregido : EntityBase
+    public class StockCorregido : EntityBase<string>
     {
-		[Key]
-		public string CG_PROD { get; set; }
+		[Key, Column("CG_PROD")]
+		public string Id { get; set; }
 		public string DES_PROD { get; set; }
 		public decimal CG_FORM { get; set; }
 		public decimal CG_AREA { get; set; }

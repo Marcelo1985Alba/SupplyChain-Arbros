@@ -86,7 +86,7 @@ namespace SupplyChain.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCompra(decimal id, Compra compra)
         {
-            if (id != compra.REGISTRO)
+            if (id != compra.Id)
             {
                 return BadRequest();
             }
@@ -118,7 +118,7 @@ namespace SupplyChain.Server.Controllers
         {
             await _compraRepository.Agregar(compra);
 
-            return CreatedAtAction("GetCompra", new { id = compra.REGISTRO }, compra);
+            return CreatedAtAction("GetCompra", new { id = compra.Id }, compra);
         }
 
         // DELETE: api/Compras/5

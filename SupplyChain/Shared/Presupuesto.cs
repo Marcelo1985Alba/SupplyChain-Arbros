@@ -8,23 +8,39 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Shared
 {
-    [Table("Prescli")]
-    public class Presupuesto : EntityBase
+    [Table("PRESUPUESTO_ENCABEZADO")]
+    public class Presupuesto : EntityBase<int>
     {
-        [Key]
-        public int REGISTRO { get; set; }
-        [Column("FE_PED")]
-        public DateTime FE_PRESP { get; set; } = DateTime.Now;
-        public int PRESUP { get; set; }
-        [StringLength(maximumLength: 15, MinimumLength = 15)]
-        public string CG_ART { get; set; }
-        public string DES_ART { get; set; }
-        public string UNID { get; set; }
-        public decimal CANTENT { get; set; }
+        public DateTime FECHA { get; set; } = DateTime.Now;
+        [Required(ErrorMessage ="* La Moneda es requerida")]
+        public string MONEDA { get; set; } = "DOLARES";
+        [Required(ErrorMessage = "* El Cliente es requerido")]
         public int CG_CLI { get; set; } = 0;
-        public string DES_CLI { get; set; }
-        public DateTime FE_REG { get; set; } = DateTime.Now;
+        [Required(ErrorMessage = "* La Condicion de Pago es requerida")]
+        public int CONDICION_PAGO { get; set; } = 0;
+        [Required(ErrorMessage = "* La Condicion de Entrega es requerida")]
+        public int CG_COND_ENTREGA { get; set; } = 0;
+        public decimal BONIFIC { get; set; } = 0;
+        public int CG_TRANS { get; set; } = 0;
+        public double TC { get; set; } = 0;
+        public decimal TOTAL { get; set; } = 0;
 
+        public string USUARIO { get; set; } = "";
+
+        [Required(ErrorMessage = "La Direccion de Entrega es requerida")]
+        public string DIRENT { get; set; }
+        
+        [ValidateComplexType]
+        public virtual List<PresupuestoDetalle> Items { get; set; } = new();
+
+        [NotMapped]
+        public string DES_CLI { get; set; } = "";
+
+        [NotMapped]
+        public bool ESNUEVO { get; set; }
+
+        [NotMapped]
+        public bool GUARDADO { get; set; }
 
     }
 }

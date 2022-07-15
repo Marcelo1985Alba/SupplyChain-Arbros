@@ -44,6 +44,7 @@ namespace SupplyChain.Server
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            #region "Repositorios"
             services.AddTransient<UsuariosRepository>();
             services.AddTransient<ServiciosRepository>();
             services.AddTransient<PedCliRepository>();
@@ -57,8 +58,16 @@ namespace SupplyChain.Server
             services.AddTransient<SolutionRepository>();
             services.AddTransient<StockCorregidoRepository>();
             services.AddTransient<SolicitudRepository>();
+            services.AddTransient<PresupuestoAnteriorRepository>();
             services.AddTransient<PresupuestoRepository>();
+            services.AddTransient<PrecioArticulosRepository>();
             services.AddTransient<GeneraRepository>();
+            services.AddTransient<vDireccionesEntregaRepository>();
+            services.AddTransient<NotificacionRepository>();
+            services.AddTransient<vCondicionesPagoRepository>();
+            services.AddTransient<vCondicionesEntregaRepository>();
+            services.AddTransient<vTipoCambioRepository>();
+            #endregion
 
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
             services.AddControllersWithViews()

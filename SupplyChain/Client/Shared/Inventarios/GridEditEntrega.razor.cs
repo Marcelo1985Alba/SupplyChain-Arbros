@@ -19,7 +19,7 @@ namespace SupplyChain.Client.Shared.Inventarios
         [Inject] public IJSRuntime JsRuntime { get; set; }
         [Inject] HttpClient Http { get; set; }
         protected ConfirmacionDialog ConfirmacionDialog;
-        protected SupplyChain.Client.Shared.BuscadorEmergente<Pedidos> BuscadorProducto;
+        protected BuscadorEmergente<Pedidos> BuscadorProducto;
         protected Pedidos stock;
         protected Pedidos stockCopiado;
         protected bool confirmaCopy = false;
@@ -320,7 +320,7 @@ namespace SupplyChain.Client.Shared.Inventarios
                 $"&LOTE={lote}" +
                 $"&SERIE={serie}");
 
-            registroCompleto.REGISTRO = stock?.REGISTRO;
+            registroCompleto.Id = stock?.Id ?? 0;
             registroCompleto.TIPOO = RegistroGenerado.TIPOO;
             registroCompleto.ResumenStock = resumenStock;
 
@@ -331,7 +331,7 @@ namespace SupplyChain.Client.Shared.Inventarios
                 registroCompleto.CG_ORDF = DataSource.Count > 0 ? DataSource[0].CG_ORDF : 0;
                 registroCompleto.STOCK = (decimal?)1.0000;
                 registroCompleto.PENDIENTEOC = resumenStock.STOCK;
-                registroCompleto.REGISTRO = DataSource.Count == 0 ? -1 : DataSource.Min(t => t.REGISTRO) - 1;
+                registroCompleto.Id = DataSource.Count == 0 ? -1 : DataSource.Min(t => t.Id) - 1;
                 DataSource.Add(registroCompleto);
                 await Grid.RefreshColumns();
                 await Grid.RefreshHeader();
@@ -381,7 +381,7 @@ namespace SupplyChain.Client.Shared.Inventarios
                 args.Data.STOCKA = Math.Round((decimal)(args.Data.STOCK / args.Data.CG_DEN), 4);
                 if (args.Data.ResumenStock?.STOCK < args.Data.STOCK)
                 {
-                    args.Cell.AddClass(new string[] { "rojo" });
+                    args.Cell.AddClass(new string[] { "sin-stcok" });
                 }
             }
             

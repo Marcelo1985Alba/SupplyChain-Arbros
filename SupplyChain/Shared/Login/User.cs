@@ -7,9 +7,10 @@ using System.Text;
 
 namespace SupplyChain.Shared.Models
 {
-    public class Usuarios : EntityBase
+    public class Usuarios : EntityBase<int>
     {
-        [Key,Required(ErrorMessage = "Nombre de Usuario Requerido")]
+        
+        [Required(ErrorMessage = "Nombre de Usuario Requerido")]
         public string Usuario { get; set; } = ""; 
         public int Cg_TipoUsu { get; set; } = 0;
         public string Nombre { get; set; } = "";

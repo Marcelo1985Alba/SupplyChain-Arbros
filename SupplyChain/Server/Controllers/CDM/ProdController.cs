@@ -36,7 +36,33 @@ namespace SupplyChain
             }
         }
 
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>> GetProd(string id)
+        {
+            try
+            {
+                return await _productoRepository.Existe(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
 
+
+        [HttpGet("GetProdAndReparaciones")]
+        public async Task<ActionResult<IEnumerable<Producto>>> GetProdAndReparaciones()
+        {
+            try
+            {
+                return await _productoRepository
+                    .Obtener(p=> p.CG_ORDEN == 1 || p.CG_ORDEN == 13).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
         // GET: api/Prod/5
         [HttpGet("ExisteProducto/{id}")]
         public async Task<ActionResult<bool>> ExisteProducto(string id)
@@ -72,7 +98,7 @@ namespace SupplyChain
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProd(string id, Producto Prod)
         {
-            if (id != Prod.CG_PROD)
+            if (id != Prod.Id)
             {
                 return BadRequest();
             }
@@ -108,10 +134,11 @@ namespace SupplyChain
             try
             {
                 await _productoRepository.Agregar(Prod);
+                return CreatedAtAction("GetProd", new { id = Prod.Id }, Prod);
             }
             catch (DbUpdateException exx) 
             {
-                if (!await _productoRepository.Existe(Prod.CG_PROD))
+                if (!await _productoRepository.Existe(Prod.Id))
                 {
                     return Conflict();
                 }
@@ -124,7 +151,6 @@ namespace SupplyChain
             {
                 return BadRequest(ex);
             }
-            return CreatedAtAction("GetProd", new { id = Prod.CG_PROD }, Prod);
         }
 
         [HttpPost("PostList")]
@@ -134,7 +160,7 @@ namespace SupplyChain
             {
                 foreach (var item in productos)
                 {
-                    await _productoRepository.Remover(item.CG_PROD.Trim());
+                    await _productoRepository.Remover(item.Id.Trim());
                 }
             }
             catch (Exception ex)
@@ -169,7 +195,7 @@ namespace SupplyChain
             List<Producto> lDesProd = new List<Producto>();
             if (await _productoRepository.Existe(CG_PROD))
             {
-                lDesProd = await _productoRepository.Obtener(p => p.CG_PROD == CG_PROD).ToListAsync();
+                lDesProd = await _productoRepository.Obtener(p => p.Id == CG_PROD).ToListAsync();
             }
             return lDesProd == null ? NotFound() : lDesProd;
         }

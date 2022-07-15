@@ -26,13 +26,31 @@ namespace SupplyChain
             return await _context.Cliente.ToListAsync();
         }
 
-        [HttpGet("GetClienteItris")]
-        public async Task<ActionResult<List<Cliente>>> GetClienteItris()
+        [HttpGet("GetClienteExterno")]
+        public async Task<ActionResult<List<ClienteExterno>>> GetClienteExterno()
         {
-            List<Cliente> lCliente = new();
-            return await _context.Cliente.ToListAsync();
+            return await _context.ClientesExternos.ToListAsync();
         }
 
+        [HttpGet("Search/{idExterno}/{descripcion}")]
+        public async Task<ActionResult<List<ClienteExterno>>> Search(int idExterno, string descripcion )
+        {
+            IQueryable<ClienteExterno> query = _context.ClientesExternos.AsQueryable();
+            if (idExterno > 0)
+            {
+                query = _context.ClientesExternos.Where(c => c.CG_CLI == idExterno.ToString());
+            }
+
+            if (descripcion != "VACIO")
+            {
+                query = query.Where(c => c.DESCRIPCION.Contains(descripcion));
+            }
+
+            var clientes = await query.ToListAsync();
+
+            return clientes;
+        }
+        
 
         // GET: api/Cliente/BuscarPorCliente/{CG_CLI}
         [HttpGet("BuscarPorCliente/{CG_CLI}")]
@@ -41,7 +59,7 @@ namespace SupplyChain
             List<Cliente> lCliente = new List<Cliente>();
             if (_context.Cliente.Any())
             {
-                lCliente = await _context.Cliente.Where(p => p.CG_CLI == CG_CLI).ToListAsync();
+                lCliente = await _context.Cliente.Where(p => p.Id == CG_CLI).ToListAsync();
             }
             if (lCliente == null)
             {

@@ -319,7 +319,7 @@ namespace SupplyChain.Client.Pages.Inventarios
             pedido.EXIGESERIE = prod.EXIGESERIE;
             pedido.EXIGELOTE = prod.EXIGELOTE;
             pedido.DES_ART = prod.DES_PROD;
-            pedido.REGISTRO = registronegativo;
+            pedido.Id = registronegativo;
 
             pedido.CG_PROVE = 0;
             Cg_CLI_Cg_PROVE = 0;
@@ -371,7 +371,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                     pedido.DESPACHO = item.DESPACHO;
                     pedido.ResumenStock = item.ResumenStock;
 
-                    pedido.REGISTRO = registronegativo;
+                    pedido.Id = registronegativo;
                     pedido.PENDIENTEOC = item.STOCK; //STOCK
                     itemsGrilla.Add(pedido);
 
@@ -459,7 +459,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                         await Http.GetFromJsonAsync<Genera>($"api/Genera/Libera/CG_ORDING");
                     }
 
-                    pedido.REGISTRO = registronegativo;
+                    pedido.Id = registronegativo;
 
 
                     lStock.Add(pedido);
@@ -480,7 +480,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                 await StockEncabezado.Items.ForEachAsync(async stock =>
                 {
                     registronegativo--;
-                    stock.REGISTRO = registronegativo;
+                    stock.Id = registronegativo;
                     stock.STOCK = Math.Abs((decimal)stock.STOCK);
                 });
             }

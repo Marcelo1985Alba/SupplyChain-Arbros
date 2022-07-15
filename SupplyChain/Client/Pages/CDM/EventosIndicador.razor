@@ -1,0 +1,269 @@
+﻿@using Syncfusion.Blazor.Charts
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Cards
+@using Syncfusion.Blazor.Layouts
+@using Syncfusion.Blazor.Gantt
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor
+@page "/eventos/indicador"
+
+@inherits EventosIndicadorCopia
+
+<SfTab HeaderPlacement="HeaderPosition.Top" CssClass="tab-pane">
+    <TabItems>
+        <TabItem>
+            <ChildContent>
+                <TabHeader Text="Eventos"></TabHeader>
+            </ChildContent>
+            <ContentTemplate>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="pane card-body card5">
+                                <SfChart Title="" Width="100%">
+                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                                    </ChartPrimaryXAxis>
+                                    <ChartPrimaryYAxis Title="Cantidad de Eventos Anuales" LabelFormat="{value}">
+                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                        <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
+                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                    </ChartPrimaryYAxis>
+                                    <ChartSeriesCollection>
+                                        <ChartSeries DataSource="@EventosAnual" XName="XSerieName" YName="YSerieName"
+                                                     Name="Año" Fill="url(#card5-gradient-chart)"
+                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                            <ChartMarker>
+                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                                </ChartDataLabel>
+                                            </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                        </ChartSeries>
+                                    </ChartSeriesCollection>
+                                    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+                                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetalleEventos(a))"></ChartEvents>
+                                </SfChart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="pane card-body card5">
+                                <SfChart @ref="refChartDetalleEventos" Title="" Width="100%">
+                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                                    </ChartPrimaryXAxis>
+                                    <ChartPrimaryYAxis LabelFormat="{value}" Title="@TituloGraficoEventosMensual" Minimum="0" Maximum="20">
+                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                        <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
+                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                    </ChartPrimaryYAxis>
+                                    <ChartSeriesCollection>
+                                        <ChartSeries DataSource="@EventosMensual" XName="XSerieName" YName="YSerieName"
+                                                     Name="Mes" Fill="url(#card5-gradient-chart)"
+                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                            <ChartMarker>
+                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                                </ChartDataLabel>
+                                            </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                        </ChartSeries>
+                                    </ChartSeriesCollection>
+                                    <ChartTooltipSettings Enable="true">
+                                    </ChartTooltipSettings>
+                                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetalleEventosMesTipo(a))"></ChartEvents>
+                                </SfChart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="pane card-body card5">
+                                <SfChart @ref="refChartDetalleEventosMesTipo" Title="" Width="100%">
+                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift" LabelFormat="{value}">
+                                    </ChartPrimaryXAxis>
+                                    <ChartPrimaryYAxis LabelFormat="{value}" Title="@TituloGraficoEventosTipo" Minimum="0" Maximum="20">
+                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                        <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
+                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                    </ChartPrimaryYAxis>
+                                    <ChartSeriesCollection>
+                                        <ChartSeries DataSource="@EventosMensualTipo" XName="XSerieName" YName="YSerieName"
+                                                     Name="Mes" Fill="url(#card5-gradient-chart)"
+                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                            <ChartMarker>
+                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                                </ChartDataLabel>
+                                            </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                        </ChartSeries>
+                                    </ChartSeriesCollection>
+                                    <ChartTooltipSettings Enable="true">
+                                    </ChartTooltipSettings>
+                                </SfChart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="pane card-body card5">
+                                <SfChart @ref="refChartDetalleEventosProveedor" Title="" Width="100%">
+                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift" LabelFormat="{value}">
+                                    </ChartPrimaryXAxis>
+                                    <ChartPrimaryYAxis LabelFormat="{value}" Title="@TituloGraficoEventosProveedor" Minimum="0" Maximum="10">
+                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                        <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
+                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                    </ChartPrimaryYAxis>
+                                    <ChartSeriesCollection>
+                                        <ChartSeries DataSource="@EventosProveedor" XName="XSerieName" YName="YSerieName"
+                                                     Name="Mes" Fill="url(#card5-gradient-chart)"
+                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                            <ChartMarker>
+                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                                </ChartDataLabel>
+                                            </ChartMarker>
+                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                        </ChartSeries>
+                                    </ChartSeriesCollection>
+                                    <ChartTooltipSettings Enable="true">
+                                    </ChartTooltipSettings>
+                                </SfChart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="pane card-body card5">
+                                <SfGrid @ref="gridDetalleEventos" DataSource="@DataEventosDetalle" GridLines="Syncfusion.Blazor.Grids.GridLine.Both" AllowResizing="true"
+                                        AllowReordering="true" AllowSorting="true"
+                                        AllowPaging="true" Height="450">
+                                    <GridColumns>
+                                        <GridColumn Field="@(nameof(vEstadEventos.FE_EMIT))" HeaderText="FECHA EMISION" Format="dd/MM/yyyy"></GridColumn>
+                                        <GridColumn Field="@(nameof(vEstadEventos.Cg_NoConf))" HeaderText="N EVENTO" Format="N0"></GridColumn>
+                                        <GridColumn Field="@(nameof(vEstadEventos.Des_TipoNc))" HeaderText="DESCRIPCION"></GridColumn>
+                                        <GridColumn Field="@(nameof(vEstadEventos.DES_PROVE))" HeaderText="PROVEEDOR"></GridColumn>
+                                    </GridColumns>
+                                </SfGrid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ContentTemplate>
+        </TabItem>
+    </TabItems>
+</SfTab>
+
+@*GRADIANTES*@
+<svg style="height: 0">
+    <defs>
+        <linearGradient id="card1-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color: rgb(33, 64, 220); stop-opacity: 1" />
+            <stop offset="100%" style="stop-color: rgb(0, 191, 213); stop-opacity: 1 " />
+        </linearGradient>
+        <linearGradient id="card2-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color: rgb(4, 171, 17); stop-opacity: 1" />
+            <stop offset="100%" style="stop-color: rgb(125, 214, 29); stop-opacity: 1 " />
+        </linearGradient>
+        <linearGradient id="card3-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color: rgb(242, 59, 59); stop-opacity: 1" />
+            <stop offset="100%" style="stop-color: rgb(239, 144, 39); stop-opacity: 1 " />
+        </linearGradient>
+        <linearGradient id="card4-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color: rgb(41, 37, 166); stop-opacity: 1" />
+            <stop offset="100%" style="stop-color: rgb(178, 80, 209); stop-opacity: 1 " />
+        </linearGradient>
+        <linearGradient id="card5-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color: rgb(239, 144, 39); stop-opacity: 1" />
+            <stop offset="100%" style="stop-color: rgb(238 166 86); stop-opacity: 1 " />
+        </linearGradient>
+        <linearGradient id="card6-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color: rgb(255 0 110); stop-opacity: 1" />
+            <stop offset="100%" style="stop-color: rgb(244 139 184); stop-opacity: 1 " />
+        </linearGradient>
+        <linearGradient id="card7-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color: rgb(166 107 37); stop-opacity: 1" />
+            <stop offset="100%" style="stop-color: rgb(254 237 3); stop-opacity: 1 " />
+        </linearGradient>
+        <linearGradient id="card8-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color: rgb(249 220 2); stop-opacity: 1" />
+            <stop offset="100%" style="stop-color: rgb(254 237 3); stop-opacity: 1 " />
+        </linearGradient>
+        <linearGradient id="card9-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color: rgb(0, 191, 213); stop-opacity: 1" />
+            <stop offset="100%" style="stop-color: rgb(88 114 247); stop-opacity: 1 " />
+        </linearGradient>
+        <linearGradient id="card10-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color: rgb(228 24 24); stop-opacity: 1" />
+            <stop offset="100%" style="stop-color: rgb(233 119 119); stop-opacity: 1 " />
+        </linearGradient>
+        <linearGradient id="card11-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color: rgb(33, 64, 220); stop-opacity: 1" />
+            <stop offset="100%" style="stop-color: rgb(69 64 236); stop-opacity: 1 " />
+        </linearGradient>
+        <linearGradient id="card12-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color: rgb(125, 214, 29); stop-opacity: 1 " />
+            <stop offset="100%" style="stop-color: rgb(33 116 39); stop-opacity: 1" />
+        </linearGradient>
+    </defs>
+</svg>
+
+<style>
+    .pane {
+        border: 1px solid transparent;
+        background: #FFFFFF;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+    }
+
+    .chart-title, .chart-subtitle {
+        font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        font-weight: 400;
+        font-weight: 400;
+        letter-spacing: 0.02em;
+        line-height: 16px;
+        color: #545454 !important;
+    }
+
+    .card1:hover {
+        background-color: #fff;
+        box-shadow: 0 1px 4px 1px rgb(24 103 218 / 30%);
+    }
+
+    .card2:hover {
+        background-color: #fff;
+        box-shadow: 0 1px 4px 1px rgb(76 219 83 / 30%);
+    }
+
+    .card3:hover {
+        background-color: #fff;
+        /*border-color: #000;*/
+        box-shadow: 0 1px 4px 1px rgb(241 106 48 / 20%);
+    }
+
+    .card4:hover {
+        background-color: #fff;
+        /*border-color: #000;*/
+        box-shadow: 0 1px 4px 1px rgb(24 103 218 / 30%);
+    }
+
+    .card5:hover {
+        background-color: #fff;
+        /*border-color: #000;*/
+        box-shadow: 0 1px 4px 1px rgb(216 157 28 / 30%);
+    }
+</style>

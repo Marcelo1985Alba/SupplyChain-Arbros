@@ -29,8 +29,7 @@
                                 CommandClicked="CommandClickHandler" OnToolbarClick="@(async(a)=> await ClickHandler(a))" 
                                 OnActionBegin="@((a)=> BeginHandler(a))"
                                 QueryCellInfo="@((a)=> QueryCellInfoHandler(a))"></GridEvents>
-                    <GridSelectionSettings CheckboxOnly="true"
-                                           Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                     <GridPageSettings PageSize="12" PageSizes="true"></GridPageSettings>
                     <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                     <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false">
