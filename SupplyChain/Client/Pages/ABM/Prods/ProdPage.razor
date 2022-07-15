@@ -188,7 +188,7 @@
                                     <SfNumericTextBox ID="Tiempo fabricacion" @bind-Value="@(prod.TIEMPOFAB)" Placeholder="Tiempo fabricacion"></SfNumericTextBox>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <a href="/sc/celda/list" target="_blank">Celda:</a>
+                                    <a href="/sc/celdas/list" target="_blank">Celda:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="Celdas" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(prod.CG_CELDA)" DataSource="@celda">
                                         <ComboBoxFieldSettings Value="CG_CELDA" Text="CG_CELDA"></ComboBoxFieldSettings>
@@ -205,7 +205,7 @@
                                     </SfComboBox>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <a href="/sc/linea/list" target="_blank">Linea/Posición:</a>
+                                    <a href="/sc/lineas/list" target="_blank">Linea/Posición:</a>
                                     <SfComboBox TValue="int?" CssClass="customClass" TItem="Lineas" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(prod.CG_LINEA)" DataSource="@linea">
                                         <ComboBoxFieldSettings Value="CG_LINEA" Text="DES_LINEA"></ComboBoxFieldSettings>
