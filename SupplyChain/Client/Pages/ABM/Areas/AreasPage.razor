@@ -27,7 +27,7 @@
         <div class="row">
             <div class="col-12">
                 <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                        DataSource="@(areas.OrderBy(s => s.CG_AREA))"
+                        DataSource="@(areas.OrderBy(s => s.CG_AREA))" AllowSelection="true"
                         ID="gridAreas" Height="100%" Width="100%" GridLines="GridLine.Both" RowHeight="27"
                         @ref="Grid" AllowExcelExport="true" AllowGrouping="true"
                         AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">

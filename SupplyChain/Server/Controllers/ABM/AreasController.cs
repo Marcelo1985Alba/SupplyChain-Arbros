@@ -99,6 +99,25 @@ namespace SupplyChain
             return CreatedAtAction("GetArea", new { id = area.CG_AREA }, area);
         }
 
+        [HttpPost("PostList")]
+        public async Task<ActionResult<Areas>> PostList(List<Areas> areas)
+        {
+            try
+            {
+                foreach (var item in areas)
+                {
+                    _context.Areas.Remove(item);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
         // DELETE: api/Unidades/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Areas>> DeleteArea(int id)
@@ -114,6 +133,7 @@ namespace SupplyChain
 
             return area;
         }
+
         [HttpGet("AreaExists/{CG_AREA}")]
         public bool AreaExists(int id)
         {

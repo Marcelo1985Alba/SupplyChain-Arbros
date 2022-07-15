@@ -122,38 +122,39 @@ namespace SupplyChain.Pages.Area
 
             if (args.Item.Text == "Eliminar")
             {
-                if (this.Grid.SelectedRecords.Count > 0)
+                var areas = await Grid.GetSelectedRecordsAsync();
+                if (areas.Count > 0)
                 {
                     bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar las areas seleccionadas?");
                     if (isConfirmed)
                     {
-                        foreach (Areas selectedRecord in this.Grid.SelectedRecords)
+                        var areasSeleccionadas = areas.Select(p => p.CG_AREA).ToList();
+                        var response = await Http.PostAsJsonAsync("api/Areas/PostList", areas);
+                        if (response.IsSuccessStatusCode)
                         {
-                            var response = await Http.DeleteAsync($"api/Areas/{selectedRecord.CG_AREA}");
-                            if (response.IsSuccessStatusCode)
+                            await this.ToastObj.Show(new ToastModel
                             {
-                                await this.ToastObj.Show(new ToastModel
-                                {
-                                    Title = "EXITO!",
-                                    Content = "las areas seleccionadas fueron eliminadas correctamente.",
-                                    CssClass = "e-toast-success",
-                                    Icon = "e-success toast-icons",
-                                    ShowCloseButton = true,
-                                    ShowProgressBar = true
-                                });
-                            }
-                            else
+                                Title = "EXITO!",
+                                Content = "las areas seleccionadas fueron eliminadas correctamente.",
+                                CssClass = "e-toast-success",
+                                Icon = "e-success toast-icons",
+                                ShowCloseButton = true,
+                                ShowProgressBar = true
+                            });
+                            args.Cancel = false;
+                        }
+                        else
+                        {
+                            await this.ToastObj.Show(new ToastModel
                             {
-                                await this.ToastObj.Show(new ToastModel
-                                {
-                                    Title = "ERROR!",
-                                    Content = "Hubo un problema al eliminar las areas seleccionadas",
-                                    CssClass = "e-toast-danger",
-                                    Icon = "e-error toast-icons",
-                                    ShowCloseButton = true,
-                                    ShowProgressBar = true
-                                });
-                            }
+                                Title = "ERROR!",
+                                Content = "Hubo un problema al eliminar las areas seleccionadas",
+                                CssClass = "e-toast-danger",
+                                Icon = "e-error toast-icons",
+                                ShowCloseButton = true,
+                                ShowProgressBar = true
+                            });
+                            args.Cancel = true;
                         }
                     }
                 }
