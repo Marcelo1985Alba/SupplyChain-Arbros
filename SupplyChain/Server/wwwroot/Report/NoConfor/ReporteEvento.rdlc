@@ -228,10 +228,10 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>2.39244in</Width>
+                  <Width>1.72167in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>5.2041in</Width>
+                  <Width>5.90264in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -439,7 +439,7 @@
             <Top>0.53014in</Top>
             <Left>0.11111in</Left>
             <Height>0.425in</Height>
-            <Width>7.59653in</Width>
+            <Width>7.62431in</Width>
             <ZIndex>4</ZIndex>
             <Style>
               <Border>
@@ -479,7 +479,7 @@
       <Width>7.91889in</Width>
       <Page>
         <PageHeader>
-          <Height>4.89709in</Height>
+          <Height>5.19291in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <ReportItems>
             <Image Name="Image2">
@@ -791,7 +791,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox3</rd:DefaultName>
-              <Top>2.78069in</Top>
+              <Top>3.10569in</Top>
               <Left>0.1389in</Left>
               <Height>0.25in</Height>
               <Width>3.26666in</Width>
@@ -821,7 +821,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>DES_PROD</rd:DefaultName>
-              <Top>3.0818in</Top>
+              <Top>3.4068in</Top>
               <Left>0.1389in</Left>
               <Height>0.25in</Height>
               <Width>3.26666in</Width>
@@ -854,7 +854,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox3</rd:DefaultName>
-              <Top>3.41513in</Top>
+              <Top>3.74013in</Top>
               <Left>0.15278in</Left>
               <Height>0.25in</Height>
               <Width>1.68in</Width>
@@ -888,7 +888,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>CANT</rd:DefaultName>
-              <Top>3.74847in</Top>
+              <Top>4.07347in</Top>
               <Left>6.69388in</Left>
               <Height>0.25in</Height>
               <Width>0.91667in</Width>
@@ -920,10 +920,10 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox14</rd:DefaultName>
-              <Top>3.41514in</Top>
-              <Left>6.7009in</Left>
+              <Top>3.72625in</Top>
+              <Left>6.57445in</Left>
               <Height>0.20833in</Height>
-              <Width>0.90965in</Width>
+              <Width>1.05687in</Width>
               <ZIndex>14</ZIndex>
               <Style>
                 <Border>
@@ -953,7 +953,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox3</rd:DefaultName>
-              <Top>3.73458in</Top>
+              <Top>4.05958in</Top>
               <Left>0.15278in</Left>
               <Height>0.25in</Height>
               <Width>4.23in</Width>
@@ -984,7 +984,7 @@
             <Line Name="Line5">
               <Top>0.12472in</Top>
               <Left>7.73542in</Left>
-              <Height>4.74319in</Height>
+              <Height>5.06819in</Height>
               <Width>0in</Width>
               <ZIndex>17</ZIndex>
               <Style>
@@ -1019,7 +1019,7 @@
               </Style>
             </Line>
             <Line Name="Line3">
-              <Top>3.37347in</Top>
+              <Top>3.69847in</Top>
               <Left>0.09722in</Left>
               <Height>0in</Height>
               <Width>7.6382in</Width>
@@ -1031,8 +1031,8 @@
               </Style>
             </Line>
             <Line Name="Line8">
-              <Top>2.74152in</Top>
-              <Left>0.09723in</Left>
+              <Top>2.98319in</Top>
+              <Left>0.09035in</Left>
               <Height>0in</Height>
               <Width>7.63819in</Width>
               <ZIndex>21</ZIndex>
@@ -1043,7 +1043,7 @@
               </Style>
             </Line>
             <Line Name="Line9">
-              <Top>4.05402in</Top>
+              <Top>4.37902in</Top>
               <Left>0.09722in</Left>
               <Height>0in</Height>
               <Width>7.6382in</Width>
@@ -1157,8 +1157,8 @@
               </Style>
             </Textbox>
             <Line Name="Line10">
-              <Top>3.37347in</Top>
-              <Left>6.65222in</Left>
+              <Top>3.69847in</Top>
+              <Left>6.51889in</Left>
               <Height>0.68889in</Height>
               <Width>0in</Width>
               <ZIndex>28</ZIndex>
@@ -1169,7 +1169,7 @@
               </Style>
             </Line>
             <Line Name="Line14">
-              <Top>3.69152in</Top>
+              <Top>4.01652in</Top>
               <Left>0.09722in</Left>
               <Height>0in</Height>
               <Width>7.6382in</Width>
@@ -1183,7 +1183,7 @@
             <Line Name="Line15">
               <Top>0.12473in</Top>
               <Left>0.09723in</Left>
-              <Height>4.74318in</Height>
+              <Height>5.06818in</Height>
               <Width>0in</Width>
               <ZIndex>30</ZIndex>
               <Style>
@@ -1194,7 +1194,7 @@
               </Style>
             </Line>
             <Line Name="Line16">
-              <Top>4.05402in</Top>
+              <Top>4.37902in</Top>
               <Left>1.51262in</Left>
               <Height>0.81389in</Height>
               <Width>0in</Width>
@@ -1222,7 +1222,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox18</rd:DefaultName>
-              <Top>4.12347in</Top>
+              <Top>4.44847in</Top>
               <Left>0.27167in</Left>
               <Height>0.35in</Height>
               <Width>1in</Width>
@@ -1237,46 +1237,12 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Textbox Name="FE_EMIT">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=First(Fields!FE_EMIT.Value, "dsEventos")</Value>
-                      <Style>
-                        <Format>dd/MM/yyyy</Format>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Left</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>FE_EMIT</rd:DefaultName>
-              <Top>4.54291in</Top>
-              <Left>0.27167in</Left>
-              <Height>0.25in</Height>
-              <Width>1in</Width>
-              <ZIndex>33</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
             <Line Name="Line17">
-              <Top>4.86791in</Top>
+              <Top>5.19291in</Top>
               <Left>0.09722in</Left>
               <Height>0in</Height>
               <Width>7.6382in</Width>
-              <ZIndex>34</ZIndex>
+              <ZIndex>33</ZIndex>
               <Style>
                 <Border>
                   <Style>Solid</Style>
@@ -1284,11 +1250,11 @@
               </Style>
             </Line>
             <Line Name="Line18">
-              <Top>4.05402in</Top>
+              <Top>4.37902in</Top>
               <Left>3.36388in</Left>
               <Height>0.81389in</Height>
               <Width>0in</Width>
-              <ZIndex>35</ZIndex>
+              <ZIndex>34</ZIndex>
               <Style>
                 <Border>
                   <Style>Solid</Style>
@@ -1312,11 +1278,11 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox18</rd:DefaultName>
-              <Top>4.14292in</Top>
+              <Top>4.46792in</Top>
               <Left>1.68556in</Left>
               <Height>0.35in</Height>
               <Width>1.375in</Width>
-              <ZIndex>36</ZIndex>
+              <ZIndex>35</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1328,11 +1294,11 @@
               </Style>
             </Textbox>
             <Line Name="Line19">
-              <Top>4.05402in</Top>
+              <Top>4.37902in</Top>
               <Left>5.21889in</Left>
               <Height>0.81389in</Height>
               <Width>0in</Width>
-              <ZIndex>37</ZIndex>
+              <ZIndex>36</ZIndex>
               <Style>
                 <Border>
                   <Style>Solid</Style>
@@ -1356,11 +1322,11 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox18</rd:DefaultName>
-              <Top>4.14292in</Top>
+              <Top>4.46792in</Top>
               <Left>3.58028in</Left>
               <Height>0.35in</Height>
               <Width>1.375in</Width>
-              <ZIndex>38</ZIndex>
+              <ZIndex>37</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1390,11 +1356,11 @@ First(Fields!DES_PROVE.Value, "dsEventos"))</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>DES_PROVE</rd:DefaultName>
-              <Top>3.44291in</Top>
+              <Top>3.76791in</Top>
               <Left>1.88833in</Left>
               <Height>0.19444in</Height>
-              <Width>4.69444in</Width>
-              <ZIndex>39</ZIndex>
+              <Width>4.50277in</Width>
+              <ZIndex>38</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1422,11 +1388,11 @@ First(Fields!Pedido.Value, "dsEventos"))</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Pedido</rd:DefaultName>
-              <Top>3.73458in</Top>
+              <Top>4.05958in</Top>
               <Left>4.93444in</Left>
               <Height>0.25in</Height>
               <Width>1in</Width>
-              <ZIndex>40</ZIndex>
+              <ZIndex>39</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1456,7 +1422,7 @@ First(Fields!Pedido.Value, "dsEventos"))</Value>
               <Left>1.45945in</Left>
               <Height>0.36397in</Height>
               <Width>3.63958in</Width>
-              <ZIndex>41</ZIndex>
+              <ZIndex>40</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1489,7 +1455,7 @@ First(Fields!Pedido.Value, "dsEventos"))</Value>
               <Left>0.13794in</Left>
               <Height>0.25in</Height>
               <Width>1.27984in</Width>
-              <ZIndex>42</ZIndex>
+              <ZIndex>41</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1514,16 +1480,16 @@ First(Fields!Pedido.Value, "dsEventos"))</Value>
                     </TextRun>
                   </TextRuns>
                   <Style>
-                    <TextAlign>Left</TextAlign>
+                    <TextAlign>Center</TextAlign>
                   </Style>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>fe_cierre</rd:DefaultName>
-              <Top>4.54848in</Top>
+              <Top>4.89848in</Top>
               <Left>3.58028in</Left>
               <Height>0.22222in</Height>
               <Width>1.375in</Width>
-              <ZIndex>43</ZIndex>
+              <ZIndex>42</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1541,7 +1507,7 @@ First(Fields!Pedido.Value, "dsEventos"))</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>COMENTARIOS:</Value>
+                      <Value>DETALLE:</Value>
                       <Style>
                         <FontSize>12pt</FontSize>
                         <FontWeight>Bold</FontWeight>
@@ -1555,8 +1521,8 @@ First(Fields!Pedido.Value, "dsEventos"))</Value>
               <Top>1.88465in</Top>
               <Left>0.1389in</Left>
               <Height>0.25in</Height>
-              <Width>1.37372in</Width>
-              <ZIndex>44</ZIndex>
+              <Width>0.91539in</Width>
+              <ZIndex>43</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1572,7 +1538,7 @@ First(Fields!Pedido.Value, "dsEventos"))</Value>
               <Left>0.09035in</Left>
               <Height>0in</Height>
               <Width>7.6382in</Width>
-              <ZIndex>45</ZIndex>
+              <ZIndex>44</ZIndex>
               <Style>
                 <Border>
                   <Style>Solid</Style>
@@ -1595,10 +1561,78 @@ First(Fields!Pedido.Value, "dsEventos"))</Value>
               </Paragraphs>
               <rd:DefaultName>Comentarios</rd:DefaultName>
               <Top>1.91374in</Top>
-              <Left>1.58206in</Left>
-              <Height>0.75833in</Height>
-              <Width>6.02849in</Width>
+              <Left>1.12373in</Left>
+              <Height>1in</Height>
+              <Width>6.48682in</Width>
+              <ZIndex>45</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Fe_Ocurrencia1">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!Fe_Ocurrencia.Value, "dsEventos")</Value>
+                      <Style>
+                        <Format>dd/MM/yyyy</Format>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Fe_Ocurrencia1</rd:DefaultName>
+              <Top>4.88874in</Top>
+              <Left>0.27167in</Left>
+              <Height>0.25in</Height>
+              <Width>0.89167in</Width>
               <ZIndex>46</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="fe_implemen">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!fe_implemen.Value, "dsEventos")</Value>
+                      <Style>
+                        <Format>dd/MM/yyyy</Format>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>fe_implemen</rd:DefaultName>
+              <Top>4.89848in</Top>
+              <Left>1.68556in</Left>
+              <Height>0.22637in</Height>
+              <Width>1.30556in</Width>
+              <ZIndex>47</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
