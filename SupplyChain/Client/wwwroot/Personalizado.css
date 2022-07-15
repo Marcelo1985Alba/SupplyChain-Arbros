@@ -130,3 +130,7 @@ e-grid .e-gridheader {
         margin: 0 auto;
     }
 }
+
+.e-tab .e-tab-header .e-toolbar-item .e-tab-text {
+    text-transform: inherit;
+}
