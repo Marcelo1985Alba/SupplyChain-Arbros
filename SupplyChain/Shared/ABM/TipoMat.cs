@@ -10,10 +10,7 @@ namespace SupplyChain
     public class TipoMat
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string TIPO { get; set; } = "";//
-
-
-        public int CG_CIA { get; set; } = 0;//
+        public string TIPO { get; set; } = "";
 
     }
 }

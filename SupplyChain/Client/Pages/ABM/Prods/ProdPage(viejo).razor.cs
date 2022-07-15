@@ -14,6 +14,7 @@ using SupplyChain.Shared.Models;
 using SupplyChain.Client.Shared;
 using Syncfusion.Blazor.Spinner;
 using Syncfusion.Blazor.Notifications;
+using SupplyChain.Shared;
 
 namespace SupplyChain.Pages.Prods
 {
@@ -40,6 +41,7 @@ namespace SupplyChain.Pages.Prods
         public Producto prodAux = new Producto();
 
         protected List<Unidades> unidades = new List<Unidades>();
+        protected List<TipoMat> tipomat = new List<TipoMat>();
         protected List<Moneda> monedas = new List<Moneda>();
         protected List<Celdas> celda = new List<Celdas>();
         protected List<Areas> area = new List<Areas>();
@@ -47,6 +49,8 @@ namespace SupplyChain.Pages.Prods
         protected List<TipoArea> tipoarea = new List<TipoArea>();
         protected List<Cat> cat = new List<Cat>();
 
+        protected const string APPNAME = "grdProdABM";
+        protected string state;
 
         protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
@@ -56,7 +60,7 @@ namespace SupplyChain.Pages.Prods
         "Print",
         new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
         "ExcelExport"
-    };
+        };
         [CascadingParameter] MainLayout MainLayout { get; set; }
         protected override async Task OnInitializedAsync()
         {
@@ -64,7 +68,10 @@ namespace SupplyChain.Pages.Prods
 
             SpinnerVisible = true;
             prods = await Http.GetFromJsonAsync<List<Producto>>("api/Prod");
+            prods = prods.OrderBy(s => s.CG_ORDEN).ToList();
+
             unidades = await Http.GetFromJsonAsync<List<Unidades>>("api/unidades");
+            //tipomat = await Http.GetFromJsonAsync<List<TipoMat>>("api/TipoMat");
             monedas = await Http.GetFromJsonAsync<List<Moneda>>("api/Monedas");
             celda = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
             area = await Http.GetFromJsonAsync<List<Areas>>("api/Areas");
@@ -76,6 +83,49 @@ namespace SupplyChain.Pages.Prods
             await base.OnInitializedAsync();
         }
 
+        protected async Task OnCompleteHandler(ActionEventArgs<Producto> args)
+        {
+            //Grid.PreventRender();
+        }
+
+        protected async Task OnActionBeginHandler(ActionEventArgs<Producto> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                //SolicitudSeleccionada = args.Data;
+                args.PreventRender = false;
+            }
+
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Sorting
+                )
+            {
+                //VisibleProperty = true;
+                Grid.PreventRender();
+                Grid.Refresh();
+
+                state = await Grid.GetPersistData();
+                await Grid.AutoFitColumnsAsync();
+                await Grid.RefreshColumns();
+                await Grid.RefreshHeader();
+            }
+        }
+
+        protected async Task OnActionCompleteHandler(ActionEventArgs<Producto> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                //SolicitudSeleccionada = args.Data;
+                args.PreventRender = false;
+            }
+        }
+
         public async Task Cerrar()
         {
             prod = new();
@@ -85,17 +135,30 @@ namespace SupplyChain.Pages.Prods
         {
             if (isAdding == true)
             {
-                var existe = await Http.GetFromJsonAsync<bool>($"api/Prod/ExisteProducto/{prodAux.CG_PROD}");
+                var existe = await Http.GetFromJsonAsync<bool>($"api/Prod/ExisteProducto/{prodAux.Id}");
 
-                if (!existe && prodAux.CG_ORDEN != 1 && prodAux.CG_ORDEN != 3 && prodAux.CG_ORDEN != 4)
+                if (!existe && prodAux.CG_ORDEN != 1 && prodAux.CG_ORDEN != 3)
                 {
+                    switch (prodAux.CG_ORDEN)
+                    {
+                        case 1:
+                            prodAux.EXIGESERIE = true;
+                            prodAux.EXIGEOA = true;
+                            break;
+                        case 3:
+                            prodAux.EXIGELOTE = true;
+                            break;
+                        case 4:
+                            prodAux.EXIGEDESPACHO = true;
+                            break;
+                    }
                     var response = await Http.PostAsJsonAsync("api/Prod", prodAux);
 
                     if (response.StatusCode == System.Net.HttpStatusCode.Created)
                     {
                         var prodNuevo = await response.Content.ReadFromJsonAsync<Producto>();
                         prods.Add(prodNuevo);
-                        prods.OrderByDescending(p => p.CG_PROD);
+                        prods.OrderByDescending(p => p.Id);
                         await Grid.RefreshColumns();
                         Grid.Refresh();
                         await Grid.RefreshHeader();
@@ -103,7 +166,7 @@ namespace SupplyChain.Pages.Prods
                         await this.ToastObj.Show(new ToastModel
                         {
                             Title = "EXITO!",
-                            Content = $"PRODUCTO {prodAux.CG_PROD} Guardado Correctamente.",
+                            Content = $"PRODUCTO {prodAux.Id} Guardado Correctamente.",
                             CssClass = "e-toast-success",
                             Icon = "e-success toast-icons",
                             ShowCloseButton = true,
@@ -142,14 +205,14 @@ namespace SupplyChain.Pages.Prods
             }
             else
             {
-                var response = await Http.PutAsJsonAsync($"api/Prod/{prodAux.CG_PROD}", prodAux);
+                var response = await Http.PutAsJsonAsync($"api/Prod/{prodAux.Id}", prodAux);
 
                 if (response.IsSuccessStatusCode)
                 {
                     var prodNuevo = await response.Content.ReadFromJsonAsync<Producto>();
-                    prodNuevo.CG_PROD = prodAux.CG_PROD;
-                    var prodSinModificar = prods.Where(p => p.CG_PROD == prodAux.CG_PROD).FirstOrDefault();
-                    prodSinModificar.CG_PROD = prodNuevo.CG_PROD;
+                    prodNuevo.Id = prodAux.Id;
+                    var prodSinModificar = prods.Where(p => p.Id == prodAux.Id).FirstOrDefault();
+                    prodSinModificar.Id = prodNuevo.Id;
                     prodSinModificar.DES_PROD = prodNuevo.DES_PROD;
                     prodSinModificar.CAMPOCOM1 = prodNuevo.CAMPOCOM1;
                     prodSinModificar.CAMPOCOM2 = prodNuevo.CAMPOCOM2;
@@ -187,11 +250,11 @@ namespace SupplyChain.Pages.Prods
                     prodSinModificar.CG_LINEA = prodNuevo.CG_LINEA;
                     prodSinModificar.CG_TIPOAREA = prodNuevo.CG_TIPOAREA;
                     prodSinModificar.FE_UC = prodNuevo.FE_UC;
-                    prods.OrderByDescending(p => p.CG_PROD);
+                    prods.OrderByDescending(p => p.Id);
                     await this.ToastObj.Show(new ToastModel
                     {
                         Title = "EXITO!",
-                        Content = $"PRODUCTO {prodAux.CG_PROD} editado Correctamente.",
+                        Content = $"PRODUCTO {prodAux.Id} editado Correctamente.",
                         CssClass = "e-toast-success",
                         Icon = "e-success toast-icons",
                         ShowCloseButton = true,
@@ -203,14 +266,6 @@ namespace SupplyChain.Pages.Prods
                 }
             }
         }
-        public async Task BeginHandler(Syncfusion.Blazor.Grids.ActionEventArgs<Producto> args)
-        {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
-            {
-                //args.PreventRender = false;
-            }
-        }
-
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {
             if (args.Item.Text == "Edit")
@@ -219,7 +274,7 @@ namespace SupplyChain.Pages.Prods
                 {
                     foreach (Producto selectedRecord in this.Grid.SelectedRecords)
                     {
-                        prod.CG_PROD = selectedRecord.CG_PROD;
+                        prod.Id = selectedRecord.Id;
                         prod.DES_PROD = selectedRecord.DES_PROD;
                         prod.CAMPOCOM1 = selectedRecord.CAMPOCOM1;
                         prod.CAMPOCOM2 = selectedRecord.CAMPOCOM2;
@@ -362,7 +417,7 @@ namespace SupplyChain.Pages.Prods
                 if ((await Grid.GetSelectedRecordsAsync()).Count > 0)
                 {
                     var productos = await Grid.GetSelectedRecordsAsync();
-                    var productosSeleccionados = productos.Select(p=> p.CG_PROD.Trim()).ToList();
+                    var productosSeleccionados = productos.Select(p=> p.Id.Trim()).ToList();
                     var query = string.Empty;
                     var i = 0;
                     foreach (var item in productosSeleccionados)
@@ -375,7 +430,6 @@ namespace SupplyChain.Pages.Prods
                         {
                             query += $"&&insumos={item}";
                         }
-
                         i++;
                     }
 
@@ -397,9 +451,7 @@ namespace SupplyChain.Pages.Prods
                                     ShowCloseButton = true,
                                     ShowProgressBar = true
                                 });
-
                                 //await Grid.ClearSelectionAsync();
-
                             }
                             else
                             {
@@ -438,6 +490,14 @@ namespace SupplyChain.Pages.Prods
                     }
                 }
             }
+        }
+        public async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
+        {
+            await Grid.SetPersistData(vistasGrillas.Layout);
+        }
+        public async Task OnReiniciarGrilla()
+        {
+            await Grid.ResetPersistData();
         }
     }
 }

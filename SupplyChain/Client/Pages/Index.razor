@@ -1,4 +1,5 @@
 ﻿@using Syncfusion.Blazor.Layouts
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @page "/index"
 
 <h1>Hola, @authState.User.Identity.Name!</h1>
@@ -19,6 +20,8 @@ Bienvenido a la nueva aplicación.
 
 
 @code{
+    [Inject] public IRepositoryHttp Http { get; set; }
+    [Inject] public IJSRuntime JS { get; set; }
     [CascadingParameter] public MainLayout Layout { get; set; }
     [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
     private AuthenticationState authState;
@@ -27,5 +30,33 @@ Bienvenido a la nueva aplicación.
         Layout.Titulo = "Inicio";
 
         authState = await authenticationState;
+
+        await RequestNotificationSubscriptionAsync();
+    }
+
+    protected async Task SubscribeToNotificacions(NotificacionSubscripcion notificacionSubscripcion)
+    {
+        var response = await Http.PutAsJsonAsync<NotificacionSubscripcion>("api/Notificaciones", notificacionSubscripcion);
+        response.HttpResponseMessage.EnsureSuccessStatusCode();
+
+
+    }
+
+    [JSInvokable]
+    public async Task RequestNotificationSubscriptionAsync()
+    {
+        var subscription = await JS.InvokeAsync<NotificacionSubscripcion>("blazorPushNotifications.requestSubscription");
+        if (subscription != null)
+        {
+            try
+            {
+                await SubscribeToNotificacions(subscription);
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex);
+            }
+        }
     }
 }

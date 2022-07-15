@@ -6,12 +6,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SupplyChain.Shared.Models
 {
     [Table("Prove")]
-    public class Proveedor : EntityBase
+    public class Proveedor : EntityBase<int>
     {
-        [Key]
+        [Key, Column("CG_PROVE")]
         [Display(Name = "Codigo")]
         //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CG_PROVE { get; set; }
+        new public int Id { get; set; }
         [Display(Name = "Nombre del proveedor")]
         public string DES_PROVE { get; set; }
         //[Display(Name = "Observaciones")]

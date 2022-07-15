@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
+using SupplyChain.Client.HelperService;
+using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared;
+using SupplyChain.Client.Shared.BuscadorCliente;
 using SupplyChain.Shared;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
@@ -17,29 +20,28 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
     public class SolicitudesBase : ComponentBase
     {
         [Inject] public HttpClient Http { get; set; }
+        [Inject] public SolicitudService SolicitudService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
         protected SfGrid<vSolicitudes> refGrid;
         protected SfSpinner refSpinner;
         protected SfToast ToastObj;
-        protected vSolicitudes SolicitudSeleccionada = new();
+        protected FormSolicitud refFormSolicitud;
+        protected Solicitud SolicitudSeleccionada = new();
         protected List<vSolicitudes> Solicitudes = new();
-        protected List<Cliente> Clientes = new();
+        protected string heightPopup = "420px";
         protected bool SpinnerVisible = true;
         protected bool SpinnerVisiblePresupuesto = false;
-        protected bool PopupBuscadorVisible = false;
-        protected Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
-        {
-           {"type", "button" }
-        };
+
+        protected bool popupFormVisible = false;
         protected List<Object> Toolbaritems = new(){
             "Search",
             "Add",
             "Edit",
             "Delete",
-            "Print",
-            //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
+            new ItemModel { Text = "Copia", TooltipText = "Copiar un item para generar una nueva solicitud", PrefixIcon = "e-copy", Id = "Copy" },
             "ExcelExport"
         };
+
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Solicitudes";
@@ -49,54 +51,155 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
 
         protected async Task GetSolicitudes()
         {
-            Solicitudes = await Http.GetFromJsonAsync<List<vSolicitudes>>("api/Solicitudes");
-        }
-
-        protected async Task GetClientes()
-        {
-            Clientes = await Http.GetFromJsonAsync<List<Cliente>>("api/Cliente");
-        }
-
-        protected async Task BuscarCliente()
-        {
-            await GetClientes();
-            PopupBuscadorVisible = true;
-        }
-
-        protected async Task GeneraPresupuesto()
-        {
-            SpinnerVisiblePresupuesto = true;
-            var presup = new Presupuesto
+            var response = await SolicitudService.GetVistaParaGrilla();
+            if (response.Error)
             {
-                CG_ART = SolicitudSeleccionada.Producto,
-                CANTENT = SolicitudSeleccionada.Cantidad,
-                CG_CLI = SolicitudSeleccionada.CG_CLI,
-                DES_CLI = SolicitudSeleccionada.DES_CLI
-            };
-            var response = await Http.PostAsJsonAsync("api/Presupuestos/PostFromSolicitud", presup);
-            if (response.IsSuccessStatusCode)
-            {
-                SpinnerVisiblePresupuesto = false;
-                SolicitudSeleccionada.TienePresupuesto = true;
-                await refGrid.EndEditAsync();
-                await ToastMensajeExito();
+                Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
             }
             else
             {
-                var error = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(error);
-                SpinnerVisiblePresupuesto = false;
+                Solicitudes = response.Response.OrderBy(s=> s.Id).ToList();
+            }
+        }
+
+        private async Task GetSolicitudFromDB(int id, vSolicitudes vSolicitud)
+        {
+            var response = await SolicitudService.GetById(id);
+            if (response.Error)
+            {
                 await ToastMensajeError();
             }
+            else
+            {
+                SolicitudSeleccionada = response.Response;
+                SolicitudSeleccionada.Cuit = vSolicitud.Cuit;
+                SolicitudSeleccionada.Des_Cli = vSolicitud.DES_CLI;
+                SolicitudSeleccionada.Des_Prod = vSolicitud.Descripcion;
+                //if (!SolicitudSeleccionada.Producto.StartsWith("00"))
+                //{
+                //    heightPopup = "600px";
+                //}
+            }
+        }
+
+        protected async Task OnActionBeginHandler(ActionEventArgs<vSolicitudes> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                args.Cancel = true;
+                args.PreventRender = false;
+                popupFormVisible = true;
+                SolicitudSeleccionada = new();
+                //heightPopup = "600px";
+            }
+
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                //TRAER DATOS QUE NO ESTAN ENLA GRILLA
+                await GetSolicitudFromDB(args.Data.Id, args.Data);
+            }
+        }
+
+        protected async Task OnActionCompleteHandler(ActionEventArgs<vSolicitudes> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                args.Cancel = true;
+                args.PreventRender = false;
+                popupFormVisible = true;
+            }
+
             
         }
+
+        protected async Task OnToolbarHandler(ClickEventArgs args)
+        {
+            if (args.Item.Id == "Copy")
+            {
+                await CopiarSolicitud();
+            }
+            else
+            {
+                if (args.Item.Id == "grdSol_excelexport")
+                {
+                    await refGrid.ExportToExcelAsync();
+                }
+            }
+        }
+
+        private async Task CopiarSolicitud()
+        {
+            if (refGrid.SelectedRecords.Count > 0)
+            {
+                var vSoli = refGrid.SelectedRecords[0];
+                await GetSolicitudFromDB(vSoli.Id, vSoli);
+                SolicitudSeleccionada.Id = 0;
+                popupFormVisible = true;
+            }
+        }
+
+        protected async Task Guardar(Solicitud solicitud)
+        {
+            if (solicitud.Guardado)
+            {
+                await ToastMensajeExito();
+                popupFormVisible = false;
+                if (solicitud.EsNuevo)
+                {
+                    var nuevaSol = new vSolicitudes()
+                    {
+                        Id = solicitud.Id,
+                        CalcId = solicitud.CalcId,
+                        Fecha = solicitud.Fecha,
+                        Cantidad = solicitud.Cantidad,
+                        CG_CLI = solicitud.CG_CLI,
+                        Cuit = solicitud.Cuit,
+                        DES_CLI = solicitud.Des_Cli,
+                        Descripcion = solicitud.Des_Prod,
+                        Producto = solicitud.Producto,
+                        TienePresupuesto = solicitud.TienePresupuesto
+                    };
+
+                    Solicitudes.Add(nuevaSol);
+                    
+                }
+                else
+                {
+                    //actualizar datos sin ir a la base de datos
+                    var sol =  Solicitudes.Where(s => s.Id == solicitud.Id).FirstOrDefault();
+                    sol.Producto = solicitud.Producto;
+                    sol.Descripcion = solicitud.Des_Prod;
+                    sol.Cantidad = solicitud.Cantidad;
+                    sol.CG_CLI = solicitud.CG_CLI;
+                    sol.DES_CLI = solicitud.Des_Cli;
+                    sol.Cuit = solicitud.Cuit;
+                }
+                
+                await refGrid.RefreshHeaderAsync();
+                refGrid.Refresh();
+                await refGrid.RefreshColumnsAsync();
+            }
+            else
+            {
+                await ToastMensajeError();
+            }
+        }
+
+        protected void OnCerraDialog()
+        {
+            popupFormVisible = false;
+            refFormSolicitud?.Hide();
+        }
+
 
         private async Task ToastMensajeExito()
         {
             await this.ToastObj.Show(new ToastModel
             {
                 Title = "EXITO!",
-                Content = $"Guardado Correctamente.",
+                Content = "Guardado Correctamente.",
                 CssClass = "e-toast-success",
                 Icon = "e-success toast-icons",
                 ShowCloseButton = true,
@@ -105,10 +208,10 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         }
         private async Task ToastMensajeError()
         {
-            await this.ToastObj.Show(new ToastModel
+            await ToastObj.Show(new ToastModel
             {
                 Title = "Error!",
-                Content = "Ocurrio un Error. Verifique si el producto existe en la base de datos",
+                Content = "Ocurrio un Error.",
                 CssClass = "e-toast-warning",
                 Icon = "e-warning toast-icons",
                 ShowCloseButton = true,
@@ -116,31 +219,6 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             });
         }
 
-        protected async Task OnObjectSelected(Cliente clienteSelected)
-        {
-            await refSpinner.ShowAsync();
-            PopupBuscadorVisible = false;
-            SolicitudSeleccionada.CG_CLI = clienteSelected.CG_CLI;
-            SolicitudSeleccionada.DES_CLI = clienteSelected.DES_CLI.Trim();
-            await refSpinner.HideAsync();
-        }
 
-        protected async Task OnActionBeginHandler(ActionEventArgs<vSolicitudes> args)
-        {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
-            {
-                SolicitudSeleccionada = args.Data;
-                args.PreventRender = false;
-            }
-        }
-
-        protected async Task OnActionCompleteHandler(ActionEventArgs<vSolicitudes> args)
-        {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
-            {
-                SolicitudSeleccionada = args.Data;
-                args.PreventRender = false;
-            }
-        }
     }
 }

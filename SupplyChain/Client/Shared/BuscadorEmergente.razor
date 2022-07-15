@@ -12,7 +12,7 @@
     <DialogEvents Closed="OnAfterDialogClosed" OnOpen="OnAfterDialogOpned"></DialogEvents>
     <DialogTemplates>
         <Header>
-            @Titulo
+            <p>@Titulo</p>
             <hr />
         </Header>
         <Content>
@@ -31,18 +31,18 @@
             else
             {
                 <div class="dialogContent">
-                    <div class="col-lg-12 control-section">
+                    <div class="row control-section">
                         <div class="content-wrapper">
                             <div class="row">
                                 <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="false" AllowFiltering="true" TValue="TItem"
                                         AllowResizing="true" GridLines="GridLine.Both" RowHeight="20" Height="290px"
                                         AllowReordering="true" AllowExcelExport="true"
                                         AllowSelection="true" AllowSorting="true" AllowTextWrap="true" EnableHover="true" Width="100%"
-                                        ShowColumnMenu="true" EnableVirtualization="true">
+                                        ShowColumnMenu="true" EnableVirtualization="false">
                                     @*<GridFilterSettings ShowFilterBarStatus="true" Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"
-        Operators="@(new Operator[] { Operator.Contains })"
-        Mode="FilterBarMode.Immediate"></GridFilterSettings>*@
-                                    @*<GridPageSettings PageCount="20" PageSize="20" PageSizes="false"></GridPageSettings>*@
+                                        Operators="@(new Operator[] { Operator.Contains })"
+                                        Mode="FilterBarMode.Immediate"></GridFilterSettings>*@
+                                    <GridPageSettings PageCount="20" PageSize="10" PageSizes="true" ></GridPageSettings>
                                     <GridSelectionSettings Type="@TipoSeleccion"></GridSelectionSettings>
                                     <GridEvents TValue="TItem" OnLoad="@(async(a)=>await OnLoadGrid(a))"
                                                 OnToolbarClick="@((a)=> ToolbarClick(a))"
@@ -61,7 +61,7 @@
                                             {
                                                 if (propiedades.Any(p => p.Name.ToUpper() == col.ToUpper()))
                                                 {
-                                                    var propiedad = propiedades.Where(p => p.Name == col.ToUpper()).FirstOrDefault();
+                                                    var propiedad = propiedades.Where(p => p.Name.ToUpper() == col.ToUpper()).FirstOrDefault();
 
                                                     //obtener el atributo para mostrar el nombre de columna
                                                     string nameColumn = propiedad.Name;

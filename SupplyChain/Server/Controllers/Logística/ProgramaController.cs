@@ -122,7 +122,7 @@ namespace SupplyChain
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPrograma(int id, Programa programa)
         {
-            if (id != programa.REGISTRO)
+            if (id != programa.Id)
             {
                 return BadRequest();
             }
@@ -154,7 +154,7 @@ namespace SupplyChain
         {
             await _programaRepository.Agregar(programa);
 
-            return CreatedAtAction("GetPrograma", new { id = programa.REGISTRO }, programa);
+            return CreatedAtAction("GetPrograma", new { id = programa.Id }, programa);
         }
 
         // DELETE: api/Programas/5

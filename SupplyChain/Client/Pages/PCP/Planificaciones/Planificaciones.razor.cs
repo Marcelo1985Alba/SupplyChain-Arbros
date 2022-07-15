@@ -235,7 +235,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
                 CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarPorDES_PROD/{args.Value}");
                 if (CG_PRODlist.Count > 0)
                 {
-                    CgString = CG_PRODlist.FirstOrDefault().CG_PROD;
+                    CgString = CG_PRODlist.FirstOrDefault().Id;
                 }
                 else
                 {

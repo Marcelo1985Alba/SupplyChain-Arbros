@@ -13,10 +13,6 @@ namespace SupplyChain.Server.Repositorios
         {
         }
 
-        public async Task<bool> Existe(int id)
-        {
-            return await base.DbSet.AnyAsync(e => e.REGISTRO == id);
-        }
         public async Task<IEnumerable<PedCli>> ObtenerPedCliPedidos()
         {
             string xSQL = string.Format("SELECT Pedcli.*, CAST( (CASE WHEN Pedidos.FLAG = 0 THEN 0 ELSE 1 END) AS BIT) AS FLAG " +

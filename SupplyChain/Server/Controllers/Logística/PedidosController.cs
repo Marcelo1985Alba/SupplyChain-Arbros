@@ -197,14 +197,14 @@ namespace SupplyChain
                 //RESERVA REGISTRO: El vale hay que hacerlo del lado del cliente porque debe reservar un solo vale
                 //y aqui se ejecuta por item.
                 await generaController.ReservaByCampo("REGSTOCK");
-                var genera = await _context.Genera.Where(g => g.CAMP3 == "REGSTOCK").FirstOrDefaultAsync();
-                stock.REGISTRO = (int?)genera.VALOR1;
+                var genera = await _context.Genera.Where(g => g.Id == "REGSTOCK").FirstOrDefaultAsync();
+                stock.Id = (int)genera.VALOR1;
                 stock.FE_REG = DateTime.Now;
                 stock.USUARIO = "USER";
 
                 if (stock.TIPOO == 9 || stock.TIPOO == 10)
                 {
-                    stock.CG_ORDEN = _context.Prod.Where(p => p.CG_PROD.Trim() == stock.CG_ART.Trim()).FirstOrDefault().CG_ORDEN;
+                    stock.CG_ORDEN = _context.Prod.Where(p => p.Id.Trim() == stock.CG_ART.Trim()).FirstOrDefault().CG_ORDEN;
                     stock.STOCK = -stock.STOCK;
                 }
 
@@ -223,7 +223,7 @@ namespace SupplyChain
             catch (DbUpdateException ex)
             {
                 await generaController.LiberaByCampo("REGSTOCK");
-                if (RegistroExists(stock.REGISTRO))
+                if (RegistroExists(stock.Id))
                 {
                     return Conflict();
                 }
@@ -250,7 +250,7 @@ namespace SupplyChain
             //MOVIM ENTRE DEP: GENERAR SEGUNDO REGISTROS: 
             if (stock?.TIPOO == 9)
             {
-                stock.REGISTRO = null;
+                stock.Id = null;
                 stock.USUARIO = "USER";
                 stock.CG_CIA = 1;
                 stock.STOCK = -stock.STOCK;
@@ -264,7 +264,7 @@ namespace SupplyChain
                 }
                 catch (DbUpdateException ex)
                 {
-                    if (RegistroExists(stock.REGISTRO))
+                    if (RegistroExists(stock.Id))
                     {
                         return Conflict();
                     }
@@ -293,10 +293,10 @@ namespace SupplyChain
         {
             int vale = lstock[0].VALE;
             bool liberaVale = false;
-            if (lstock.Count > 0 && !lstock.Any(s=> s.REGISTRO > 0))
+            if (lstock.Count > 0 && !lstock.Any(s=> s.Id > 0))
             {
                 await generaController.ReservaByCampo("VALE");
-                var generaVale = await _context.Genera.Where(g => g.CAMP3 == "VALE").FirstOrDefaultAsync();
+                var generaVale = await _context.Genera.Where(g => g.Id == "VALE").FirstOrDefaultAsync();
                 vale = (int)generaVale.VALOR1;
                 liberaVale = true;
             }
@@ -305,7 +305,7 @@ namespace SupplyChain
             {
                 try
                 {
-                    if (stock.REGISTRO < 0) 
+                    if (stock.Id < 0) 
                         await AddDb(vale, stock);
                     else
                         await ActualizaDb(stock);
@@ -313,7 +313,7 @@ namespace SupplyChain
                     if (stock.TIPOO == 5)
                     {
                         stock.Proveedor = _context.Proveedores.AsNoTracking()
-                            .Where(p => p.CG_PROVE == stock.CG_PROVE).FirstOrDefault();
+                            .Where(p => p.Id == stock.CG_PROVE).FirstOrDefault();
                     }
 
                 }
@@ -321,7 +321,7 @@ namespace SupplyChain
                 {
                     await generaController.LiberaByCampo("VALE");
                     await generaController.LiberaByCampo("REGSTOCK");
-                    if (RegistroExists(stock.REGISTRO))
+                    if (RegistroExists(stock.Id))
                     {
                         return Conflict();
                     }
@@ -358,14 +358,14 @@ namespace SupplyChain
             //RESERVA REGISTRO: El vale hay que hacerlo del lado del cliente porque debe reservar un solo vale
             //y aqui se ejecuta por item.
             await generaController.ReservaByCampo("REGSTOCK");
-            var genera = await _context.Genera.Where(g => g.CAMP3 == "REGSTOCK").FirstOrDefaultAsync();
-            stock.REGISTRO = (int?)genera.VALOR1;
+            var genera = await _context.Genera.Where(g => g.Id == "REGSTOCK").FirstOrDefaultAsync();
+            stock.Id = (int)genera.VALOR1;
             stock.FE_REG = DateTime.Now;
             stock.USUARIO = HttpContext.User.Identity.Name ?? "USER";
 
             if (stock.TIPOO == 9 || stock.TIPOO == 10 || stock.TIPOO == 28)
             {
-                stock.CG_ORDEN = _context.Prod.Where(p => p.CG_PROD.Trim() == stock.CG_ART.Trim()).FirstOrDefault().CG_ORDEN;
+                stock.CG_ORDEN = _context.Prod.Where(p => p.Id.Trim() == stock.CG_ART.Trim()).FirstOrDefault().CG_ORDEN;
                 stock.STOCK = -stock.STOCK;
             }
 
@@ -390,8 +390,8 @@ namespace SupplyChain
             if (stock.TIPOO == 9)
             {
                 await generaController.ReservaByCampo("REGSTOCK");
-                genera = await _context.Genera.Where(g => g.CAMP3 == "REGSTOCK").FirstOrDefaultAsync();
-                stock.REGISTRO = (int?)genera.VALOR1;
+                genera = await _context.Genera.Where(g => g.Id == "REGSTOCK").FirstOrDefaultAsync();
+                stock.Id = (int?)genera.VALOR1;
                 stock.USUARIO = "USER";
                 stock.CG_CIA = 1;
                 stock.STOCK = -stock.STOCK;
@@ -471,7 +471,7 @@ namespace SupplyChain
         {
             stock.USUARIO = "USER";
             stock.CG_CIA = 1;
-            if (registro != stock.REGISTRO)
+            if (registro != stock.Id)
             {
                 return BadRequest("Registro Incorrecto");
             }
@@ -566,7 +566,7 @@ namespace SupplyChain
 
         private bool RegistroExists(decimal? registro)
         {
-            return _context.Pedidos.Any(e => e.REGISTRO == registro);
+            return _context.Pedidos.Any(e => e.Id == registro);
         }
 
         

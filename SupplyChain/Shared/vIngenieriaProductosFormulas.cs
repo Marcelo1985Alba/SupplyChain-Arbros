@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Shared
 {
-    public class vIngenieriaProductosFormulas : EntityBase
+    public class vIngenieriaProductosFormulas
     {
         public string CG_PROD { get; set; }
         public string DES_PROD { get; set; }

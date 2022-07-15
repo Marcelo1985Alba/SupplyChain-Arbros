@@ -10,13 +10,20 @@
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
 
   </PropertyGroup>
+
+
+  <ItemGroup>
+    <Compile Remove="Shared\BuscarPrecios\**" />
+    <Content Remove="Shared\BuscarPrecios\**" />
+    <EmbeddedResource Remove="Shared\BuscarPrecios\**" />
+    <None Remove="Shared\BuscarPrecios\**" />
+  </ItemGroup>
 	<ItemGroup>
 		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
 	</ItemGroup>
 
 
 	<ItemGroup>
-    <None Include="Pages\ABM\Prods\ProdPage.razor" />
     <None Include="Pages\PCP\Fabricaciones\Fabricaciones.razor" />
     <None Include="Pages\PCP\Prevision\Prevision.razor" />
     <None Include="wwwroot\scss\colors\blue-dark.scss" />
@@ -422,10 +429,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="5.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="5.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Components.DataAnnotations.Validation" Version="3.2.0-rc1.20223.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.13" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.13" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.17" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Syncfusion.Blazor.BarcodeGenerator" Version="19.4.0.56" />
     <PackageReference Include="Syncfusion.Blazor.Buttons" Version="19.4.0.56" />
@@ -474,6 +482,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Ventas\2-Pedidos\" />
   </ItemGroup>
   <!-->Target Name="PublishServiceWorker" AfterTargets="CopyFilesToPublishDirectory">
     <WriteLinesToFile File="$(PublishDir)wwwroot\service-worker.js" Lines="/* $([System.Guid]::NewGuid()) */" />

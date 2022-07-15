@@ -17,12 +17,12 @@ namespace SupplyChain.Server.Repositorios
 
         public async Task<bool> Existe(int id)
         {
-            return await base.DbSet.AnyAsync(e => e.REGISTRO == id);
+            return await base.DbSet.AnyAsync(e => e.Id == id);
         }
 
         public async Task  AgregarBySP(Producto parametros)
         {
-            await Db.Database.ExecuteSqlRawAsync("NET_PCP_PrevisionAgregar '" + parametros.CG_PROD.Trim() + "', " +
+            await Db.Database.ExecuteSqlRawAsync("NET_PCP_PrevisionAgregar '" + parametros.Id.Trim() + "', " +
                                                                           "'" + parametros.DES_PROD.Trim() + "', " +
                                                                           "'" + parametros.UNID + "', " +
                                                                           " " + 1 );

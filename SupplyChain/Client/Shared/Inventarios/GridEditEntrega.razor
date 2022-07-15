@@ -152,7 +152,7 @@ else
                             </Template>
                         </GridColumn>
                         <GridColumn Field="@nameof(Pedidos.PENDIENTEOC)" HeaderText="Stock" EditType="EditType.NumericEdit" AutoFit="true"></GridColumn>
-                        <GridColumn Field="@nameof(Pedidos.REGISTRO)" IsPrimaryKey="true" HeaderText="ID" Visible="false"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.Id)" IsPrimaryKey="true" HeaderText="ID" Visible="false"></GridColumn>
                     </GridColumns>
 
                 </SfGrid>
@@ -175,18 +175,21 @@ else
     /*    #dialogo {
         min-height: 400px;
     }*/
-
-    .row-red {
-        background-color: #eb6969;
+    .sin-stock {
+        color: #f30b0b !important;
     }
+
+/*    .row-red {
+        background-color: #eb6969;
+    }*/
 
     #gridEditStock_dialogEdit_wrapper {
         top: 131px !important;
     }
 
-    .e-grid .e-gridcontent .e-rowcell.rojo {
-        background-color: #d59595;
-    }
+    /*.e-grid .e-gridcontent .e-rowcell.rojo {
+        color: #f30b0b !important;
+    }*/
 
     .e-btn .e-btn-icon.e-icon-right, .e-css.e-btn .e-btn-icon.e-icon-right {
         margin-right: 0.4286em !important;

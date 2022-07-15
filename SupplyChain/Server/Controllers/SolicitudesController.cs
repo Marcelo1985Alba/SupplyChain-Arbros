@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,9 @@ namespace SupplyChain.Server.Controllers
     [ApiController]
     public class SolicitudesController : ControllerBase
     {
-        private readonly Repositorios.SolicitudRepository _solicitudRepository;
+        private readonly SolicitudRepository _solicitudRepository;
 
-        public SolicitudesController(Repositorios.SolicitudRepository solicitudRepository)
+        public SolicitudesController(SolicitudRepository solicitudRepository)
         {
             _solicitudRepository = solicitudRepository;
         }
@@ -39,7 +40,28 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Solicitud>> GetSolicitud(int id)
         {
-            var solicitud = await _solicitudRepository.ObtenerPorId(id);
+            try
+            {
+                var solicitud = await _solicitudRepository.ObtenerPorId(id);
+
+                if (solicitud == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(solicitud);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        // GET: api/Compras/5
+        [HttpGet("GetSolicitudesNoPresupuestadas")]
+        public async Task<ActionResult<Solicitud>> GetSolicitudesNoPresupuestadas()
+        {
+            var solicitud = await _solicitudRepository.Obtener(s=> !s.TienePresupuesto).ToListAsync();
 
             if (solicitud == null)
             {
@@ -76,7 +98,7 @@ namespace SupplyChain.Server.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(solicitud);
         }
 
         // POST: api/Compras
@@ -85,10 +107,25 @@ namespace SupplyChain.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Solicitud>> PostCompra(Solicitud solicitud)
         {
-            await _solicitudRepository.AsignarClientByCuit(solicitud.Cuit, solicitud);
-            await _solicitudRepository.Agregar(solicitud);
+            try
+            {
+                if (solicitud.CG_CLI == 0)
+                {
+                    await _solicitudRepository.AsignarClientByCuit(solicitud.Cuit, solicitud);
+                }
+                await _solicitudRepository.Agregar(solicitud);
 
-            return CreatedAtAction("GetSolicitud", new { id = solicitud.Id }, solicitud);
+                if (solicitud.Producto.StartsWith("00")) //SI ES REPARACION
+	            {
+                    //TODO: ENVIAR A SERVICIO
+	            }
+
+                return CreatedAtAction("GetSolicitud", new { id = solicitud.Id }, solicitud);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         // DELETE: api/Compras/5

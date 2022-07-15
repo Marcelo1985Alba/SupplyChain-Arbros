@@ -11,8 +11,12 @@ using System.Text;
 namespace SupplyChain
 {
     [Table("Pedidos")]
-    public class Pedidos : EntityBase
+    public class Pedidos : EntityBase<int?>
     {
+        [Key, Column("REGISTRO")]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [ColumnaGridViewAtributo(Name = "Registro")]
+        new public int? Id { get; set; }
 
         /*AGREGO CAMPOS (EXIGEDESPACHO, EXIGELOTE, EXIGESERIE) NO MAPEADOS A LA BASE DE DATOS 
          * QUE DEBEN SER SETEADOS POR EL PRODUCTO PARA VALIDACIONES.
@@ -183,10 +187,7 @@ namespace SupplyChain
         public string USUARIO { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Fecha registro")]
         public DateTime FE_REG { get; set; }
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [ColumnaGridViewAtributo(Name = "Registro")]
-        public int? REGISTRO { get; set; }
+        
         [ColumnaGridViewAtributo(Name = "Compañía")]
         public int? CG_CIA { get; set; } = 0;
 

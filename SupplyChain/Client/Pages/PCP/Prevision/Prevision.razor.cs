@@ -95,7 +95,7 @@ namespace SupplyChain.Client.Pages.Prev
                 bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar el producto?");
                 if (isConfirmed)
                 {
-                    await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/BorrarPrevision/{this.Grid.GetSelectedRecords().Result.FirstOrDefault().REGISTRO}");
+                    await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/BorrarPrevision/{this.Grid.GetSelectedRecords().Result.FirstOrDefault().Id}");
                     previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
                     Grid.Refresh();
                 }
@@ -107,7 +107,7 @@ namespace SupplyChain.Client.Pages.Prev
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
                 HttpResponseMessage response;
-                response = await Http.PutAsJsonAsync($"api/Prevision/PutPrev/{args.Data.REGISTRO}", args.Data);
+                response = await Http.PutAsJsonAsync($"api/Prevision/PutPrev/{args.Data.Id}", args.Data);
                 previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
                 Grid.Refresh();
             }
@@ -120,7 +120,7 @@ namespace SupplyChain.Client.Pages.Prev
 
         public void OnSelected()
         {
-            CgString = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().CG_PROD; // return the details of selected record
+            CgString = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().Id; // return the details of selected record
             DesString = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().DES_PROD; // return the details of selected record
             CantidadMostrar = 0;
             IsVisible = false;
@@ -149,7 +149,7 @@ namespace SupplyChain.Client.Pages.Prev
                 CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarPorDES_PROD/{args.Value}");
                 if (CG_PRODlist.Count > 0)
                 {
-                    CgString = CG_PRODlist.FirstOrDefault().CG_PROD;
+                    CgString = CG_PRODlist.FirstOrDefault().Id;
                 }
                 else
                 {
@@ -237,15 +237,15 @@ namespace SupplyChain.Client.Pages.Prev
         {
             if (args.ColumnName == "CANTPED")
             {
-                previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateCant/{args.RowData.REGISTRO}/{args.Value}");
-                await Grid.UpdateCell(args.RowData.REGISTRO, "CANTPED", args.Value);
+                previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateCant/{args.RowData.Id}/{args.Value}");
+                await Grid.UpdateCell(args.RowData.Id, "CANTPED", args.Value);
             }
             else if (args.ColumnName == "FE_PED")
             {
                 string Dia = ((DateTime)args.Value).Day.ToString();
                 string Mes = ((DateTime)args.Value).Month.ToString();
                 string Anio = ((DateTime)args.Value).Year.ToString();
-                previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateFecha/{args.RowData.REGISTRO}/{Dia}/{Mes}/{Anio}");
+                previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateFecha/{args.RowData.Id}/{Dia}/{Mes}/{Anio}");
                 //await Grid.UpdateCell(args.RowData.REGISTRO, "FE_PED", args.Value);
                 Grid.Refresh();
                 Showgrid = false;
@@ -260,14 +260,14 @@ namespace SupplyChain.Client.Pages.Prev
         {
             if (args.ColumnName == "CANTPED")
             {
-                previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateCant/{args.RowData.REGISTRO}/{args.Value}");
+                previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateCant/{args.RowData.Id}/{args.Value}");
             }
             else if (args.ColumnName == "FE_PED")
             {
                 string Dia = ((DateTime)args.Value).Day.ToString();
                 string Mes = ((DateTime)args.Value).Month.ToString();
                 string Anio = ((DateTime)args.Value).Year.ToString();
-                prueba = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateFecha/{args.RowData.REGISTRO}/{Dia}/{Mes}/{Anio}");
+                prueba = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateFecha/{args.RowData.Id}/{Dia}/{Mes}/{Anio}");
             }
             await Grid.EndEdit();
         }

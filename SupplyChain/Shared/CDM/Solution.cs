@@ -8,9 +8,10 @@ using System.Text;
 
 namespace SupplyChain
 {
-    public class Solution : EntityBase
+    public class Solution : EntityBase<string>
     {
-        [Key]
+        [Key, Column("Registro")]
+        new public int Id { get; set; }
         public string CAMPO { get; set; }
         public string VALORC { get; set; }
         public string DESCRIP { get; set; }

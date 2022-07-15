@@ -15,28 +15,44 @@ namespace SupplyChain.Server.Controllers
     [ApiController]
     public class PresupuestosController : ControllerBase
     {
-        
-
+        private readonly PresupuestoAnteriorRepository _presupuestoAnteriorRepository;
         private readonly PresupuestoRepository _presupuestoRepository;
         private readonly GeneraRepository _generaRepository;
 
-        public PresupuestosController(PresupuestoRepository presupuestoRepository, GeneraRepository generaRepository)
+        public PresupuestosController(PresupuestoAnteriorRepository presupuestoAnteriorRepository, 
+            PresupuestoRepository presupuestoRepository, 
+            GeneraRepository generaRepository)
         {
+            _presupuestoAnteriorRepository = presupuestoAnteriorRepository;
             _presupuestoRepository = presupuestoRepository;
             this._generaRepository = generaRepository;
         }
         // GET: api/<PresupuestosController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<List<Presupuesto>> GetPresupuesto()
         {
-            return new string[] { "value1", "value2" };
+            return await _presupuestoRepository.ObtenerTodosQueryable().Include(p=> p.Items).ToListAsync();
+        }
+
+        [HttpGet("GetPresupuestoVista")]
+        public async Task<List<vPresupuestos>> GetPresupuestoVista()
+        {
+            return await _presupuestoRepository.GetForView();
         }
 
         // GET api/<PresupuestosController>/5
         [HttpGet("{id}")]
         public async Task<Presupuesto> GetPresupuesto(int id)
         {
-            return await _presupuestoRepository.Obtener(p=> p.PRESUP == id).FirstOrDefaultAsync();
+            var presup = await _presupuestoRepository.Obtener(p => p.Id == id).Include(p => p.Items)
+                //.ThenInclude(i=> i.Solicitud)
+                .FirstOrDefaultAsync();
+
+            
+            await _presupuestoRepository.AgregarDatosFaltantes(presup);
+
+
+            return presup;
         }
 
         // POST api/<PresupuestosController>
@@ -48,9 +64,25 @@ namespace SupplyChain.Server.Controllers
 
         private async Task<ActionResult<Presupuesto>> AgregarNuevoPresupuesto(Presupuesto presupuesto)
         {
-            await _presupuestoRepository.Agregar(presupuesto);
-            
-            return CreatedAtAction("GetPresupuesto", new { id = presupuesto.PRESUP }, presupuesto);
+            foreach (var item in presupuesto.Items)
+            {
+                item.Id = 0;
+            }
+            await _presupuestoRepository.BeginTransaction();
+            try
+            {
+                await _presupuestoRepository.Agregar(presupuesto);
+                await _presupuestoRepository.ActualizarCalculoConPresupuestoByIdCalculo(presupuesto.Id);
+                await _presupuestoRepository.CommitTransaction();
+                
+            }
+            catch (Exception ex)
+            {
+                await _presupuestoRepository.RollbackTransaction();
+                return BadRequest(ex.Message);
+            }
+
+            return CreatedAtAction("GetPresupuesto", new { id = presupuesto.Id }, presupuesto);
         }
 
         [HttpPost("PostFromSolicitud")]
@@ -70,8 +102,19 @@ namespace SupplyChain.Server.Controllers
 
         // PUT api/<PresupuestosController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult<Presupuesto>> Put(int id, Presupuesto presupuesto)
         {
+            try
+            {
+                await _presupuestoRepository.Actualizar(presupuesto);
+                await _presupuestoRepository.AgregarEliminarActualizarDetalles(presupuesto.Items);
+                await _presupuestoRepository.ActualizarCalculoConPresupuestoByIdCalculo(presupuesto.Id);
+                return Ok(presupuesto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         // DELETE api/<PresupuestosController>/5
