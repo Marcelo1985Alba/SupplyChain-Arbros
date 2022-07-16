@@ -16,15 +16,15 @@
         <Header>
             @if (Solicitud.Id == 0)
             {
-                <p>Nueva Solicitud</p>
+                <div class="e-dlg-header-titulo">Nueva Solicitud</div>
             }
             else
             {
-                <p>Detalle Solicitud:&nbsp;&nbsp;@Solicitud.Id&nbsp;-&nbsp;(@Solicitud.Producto)&nbsp;@Solicitud.Des_Prod</p>
+                <div class="e-dlg-header-titulo">Detalle Solicitud:&nbsp;&nbsp;@Solicitud.Id&nbsp;-&nbsp;(@Solicitud.Producto)&nbsp;@Solicitud.Des_Prod</div>
             }
         </Header>
         <Content>
-            <EditForm Model="@Solicitud" OnValidSubmit="@(async()=> await Guardar())">
+            <EditForm id="form-solicitud" Model="@Solicitud" OnValidSubmit="@(async()=> await Guardar())">
                 <DataAnnotationsValidator />
                 <div class="form-row">
                     <div class="form-group col-md-1">
@@ -146,12 +146,15 @@
                                OnCerrarDialog="CerrarDialogPrecio" OnObjectSelected="@PrecioSelected"></PreciosDialog>
 
                 <ValidationSummary />
-                <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit"></SfButton>
-                <SfButton Content="Cancel" IconCss="fa fa-window-close-o"></SfButton>
+                
             </EditForm>
 
             
         </Content>
+        <FooterTemplate>
+            <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit"></SfButton>
+            <SfButton Content="Cancel" IconCss="fa fa-window-close-o" OnClick="Hide"></SfButton>
+        </FooterTemplate>
     </DialogTemplates>
     
 </SfDialog>

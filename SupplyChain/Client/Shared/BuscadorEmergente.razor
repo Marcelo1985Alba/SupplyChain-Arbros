@@ -12,8 +12,7 @@
     <DialogEvents Closed="OnAfterDialogClosed" OnOpen="OnAfterDialogOpned"></DialogEvents>
     <DialogTemplates>
         <Header>
-            <p>@Titulo</p>
-            <hr />
+            <div class="e-dlg-header-titulo">@Titulo</div>
         </Header>
         <Content>
             @if (DataSource is null)
@@ -31,9 +30,9 @@
             else
             {
                 <div class="dialogContent">
-                    <div class="row control-section">
+                    <div class="row">
                         <div class="content-wrapper">
-                            <div class="row">
+                            <div class="col-12">
                                 <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="false" AllowFiltering="true" TValue="TItem"
                                         AllowResizing="true" GridLines="GridLine.Both" RowHeight="20" Height="290px"
                                         AllowReordering="true" AllowExcelExport="true"

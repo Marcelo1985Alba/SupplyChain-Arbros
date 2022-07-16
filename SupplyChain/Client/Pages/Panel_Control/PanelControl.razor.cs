@@ -112,7 +112,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
         ///////*****************PEDIDOS INGRESADOS*************////////////////////////////
         protected SfChart refChartDetallePedidos;
         protected SfGrid<vEstadPedidosIngresados> grdPedIngresados;
-        protected SfLinearGauge refChartGarantia;
+        protected SfChart refChartGarantia;
         protected List<vEstadPedidosIngresados> DataPedidosIngresados { get; set; } = new ();
         protected List<ChartData> PedidosIngresadosCategoria { get; set; } = new();
         protected List<ChartData> PedidosIngresadosMercado { get; set; } = new();
@@ -129,7 +129,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected string SerieSeleccionaPedidos = "";
         protected int añoSeleccionadoPedidosIngresados;
         protected int PromedioPedidosIngresadosMensuales;
-        protected double CantidadGarantiasPedidosIngresados = 0;
+        protected List<ChartData> PedidosIngresadosGarantia = new();
         ///////**********************************************////////////////////////////
 
         /////////////**********PEDIDOS VS PRESUPUESTO*********////////////////////
@@ -459,7 +459,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
             PedidosIngresadosDetalleMes = new();
             PedidosIngresadosCategoria = new();
             PromedioPedidosIngresadosMensuales = 0;
-            CantidadGarantiasPedidosIngresados = 0;
+            PedidosIngresadosGarantia = new();
             TituloGraficoGarantia = "Pedidos Garantia";
             await GetPedidos();
             VisibleSpinner = false;
@@ -631,15 +631,24 @@ namespace SupplyChain.Client.Pages.Panel_Control
             PedidosIngresadosMensuales = DataPedidosIngresados
                 .Where(p => p.FECHA >= PedidosIngresadosMinDate && p.FECHA <= PedidosIngresadosMaxDate)
                 .OrderBy(o => o.MES)
-                .GroupBy(g => new { g.MES }).Select(d => new ChartData()
+                .GroupBy(g => new { g.MES })
+                .Select(d => new ChartData()
                 {
                     XSerieName = d.Key.MES.ToString(),
                     YSerieName = Math.Round(d.Sum(p => p.TOT_DOL))
                 }).ToList();
 
             TituloGraficoGarantia = $"Pedidos Garantia Periodo {PedidosIngresadosMinDate:dd/MM/yyyy} {PedidosIngresadosMaxDate:dd/MM/yyyy}";
-            CantidadGarantiasPedidosIngresados = DataPedidosIngresados.Count(p => p.FECHA >= PedidosIngresadosMinDate 
-                && p.FECHA <= PedidosIngresadosMaxDate && p.DES_ART.ToLower().Contains("garan"));
+
+            PedidosIngresadosGarantia = DataPedidosIngresados.Where(p => p.FECHA >= PedidosIngresadosMinDate
+                && p.FECHA <= PedidosIngresadosMaxDate && p.DES_ART.ToLower().Contains("garan"))
+                .GroupBy(g=> new{ g.DES_ART})
+                .Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.DES_ART,
+                    YSerieName = Convert.ToDouble(d.Count())
+                }).ToList();
+
             PromedioPedidosIngresadosMensuales = Convert.ToInt32(PedidosIngresadosMensuales.Average(p => p.YSerieName));
 
             //categoria de cliente
@@ -938,9 +947,13 @@ namespace SupplyChain.Client.Pages.Panel_Control
                 }).ToList();
 
             TituloGraficoGarantia = $"Pedidos Garantia {añoSeleccionadoPedidosIngresados}";
-            CantidadGarantiasPedidosIngresados = DataPedidosIngresados.Count(v => v.ANIO == añoSeleccionadoPedidosIngresados
-                && v.DES_ART.ToLower().Contains("garan"));
-            PromedioPedidosIngresadosMensuales = Convert.ToInt32(PedidosIngresadosMensuales.Average(p => p.YSerieName));
+            PedidosIngresadosGarantia = DataPedidosIngresados.Where(p => p.ANIO == añoSeleccionadoPedidosIngresados && p.DES_ART.ToLower().Contains("garan"))
+                .GroupBy(g => new { g.DES_ART })
+                .Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.DES_ART,
+                    YSerieName = Convert.ToDouble(d.Count())
+                }).ToList();
 
             //categoria de cliente
             var totalPeriodoSeleccionado = Math.Round(DataPedidosIngresados
@@ -1008,8 +1021,16 @@ namespace SupplyChain.Client.Pages.Panel_Control
             TituloPedidosIngresadosCategoria = $"% por Categoria de {nombreMes} del {añoSeleccionadoPedidosIngresados} (US$ {totalPeriodoSeleccionado})";
             TituloPedidosIngresadosMercado = $"Mercado Externo de {nombreMes} del {añoSeleccionadoPedidosIngresados}";
             TituloGraficoGarantia = $"Pedidos Garantia de {nombreMes} del {añoSeleccionadoPedidosIngresados}";
-            CantidadGarantiasPedidosIngresados = DataPedidosIngresados.Count(p => p.ANIO == añoSeleccionadoPedidosIngresados 
-            && p.MES == mesSeleccionadoPedidosIngresados && p.DES_ART.ToLower().Contains("garan"));
+
+            PedidosIngresadosGarantia = DataPedidosIngresados.Where(p => p.ANIO == añoSeleccionadoPedidosIngresados
+            && p.MES == mesSeleccionadoPedidosIngresados && p.DES_ART.ToLower().Contains("garan"))
+                .GroupBy(g => new { g.DES_ART })
+                .Select(d => new ChartData()
+                {
+                    XSerieName = d.Key.DES_ART,
+                    YSerieName = Convert.ToDouble(d.Count())
+                }).ToList();
+
             PedidosIngresadosDetalleMes = DataPedidosIngresados
                 .Where(p => p.ANIO == añoSeleccionadoPedidosIngresados && p.MES == mesSeleccionadoPedidosIngresados)
                 .ToList();

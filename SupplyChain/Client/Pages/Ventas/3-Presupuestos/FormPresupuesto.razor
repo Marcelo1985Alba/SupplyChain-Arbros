@@ -15,11 +15,11 @@
         <Header>
             @if (Presupuesto.Id == 0)
             {
-                <p>Nuevo Presupuesto</p>
+                <div class="e-dlg-header-titulo">Nuevo Presupuesto</div>
             }
             else
             {
-                <p>Presupuesto:&nbsp;&nbsp;@Presupuesto.Id&nbsp;&nbsp;-&nbsp;&nbsp;@Presupuesto.DES_CLI</p>
+                <div class="e-dlg-header-titulo">Presupuesto:&nbsp;&nbsp;@Presupuesto.Id&nbsp;&nbsp;-&nbsp;&nbsp;@Presupuesto.DES_CLI</div>
             }
         </Header>
         <Content>
