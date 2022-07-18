@@ -50,12 +50,12 @@
     [Inject] public HttpClient Http { get; set; }
     [Inject] public ILoginService LoginService { get; set; }
 
-    [Parameter] public string AppName { get; set; }
-    [Parameter] public string StateApp { get; set; }
+    [Parameter] public string AppName { get; set; } = "";
+    [Parameter] public string StateApp { get; set; } = "";
     [Parameter] public EventCallback<VistasGrillas> OnVistaSelected { get; set; }
     [Parameter] public EventCallback OnReiniciar { get; set; }
 
-    public List<VistasGrillas> Source { get; set; }
+    public List<VistasGrillas> Source { get; set; } = new();
     public string ApiUrl { get; set; }
     public VistasGrillas VistaSeleccionada { get; set; } = new VistasGrillas();
     protected SfComboBox<string, VistasGrillas> refComboBox;

@@ -1262,11 +1262,10 @@
                 <div class="col-lg-12 control-section">
                     <div class="content-wrapper">
                         <div class="row">
-                            <SfGantt TValue="ProyectosGBPI" Height="450px" Width="100%" HighlightWeekends="true"
+                            <SfGantt TValue="ProyectosGBPI" Height="450px" Width="100%" HighlightWeekends="true" DataSource="@Proyectos"
                                      Toolbar="@(new List<string>(){ "Add", "Edit", "Update", "Delete", "Cancel", "ExpandAll", "CollapseAll","Indent","Outdent"})"
                                      AllowSelection="true" GridLines="Syncfusion.Blazor.Gantt.GridLine.Both" TreeColumnIndex="1"
                                      ProjectStartDate="@ProjectStart" ProjectEndDate="@ProjectEnd" @ref="refGanttProyectos">
-                                <SfDataManager Url="/api/Proyectos/Proyectos" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
                                 <GanttTaskFields Id="TaskId" Name="TaskName" StartDate="StartDate" EndDate="EndDate" Duration="Duration" Progress="Progress"
                                                  Dependency="Predecessor" ParentID="ParentId" Notes="Notes"></GanttTaskFields>
                                 <GanttEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" AllowTaskbarEditing="true" ShowDeleteConfirmDialog="true"></GanttEditSettings>

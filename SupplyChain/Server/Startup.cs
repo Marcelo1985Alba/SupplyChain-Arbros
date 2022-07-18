@@ -67,6 +67,8 @@ namespace SupplyChain.Server
             services.AddTransient<vCondicionesPagoRepository>();
             services.AddTransient<vCondicionesEntregaRepository>();
             services.AddTransient<vTipoCambioRepository>();
+            services.AddTransient<ProyectosGBPIRepository>();
+            services.AddTransient<CeldasRepository>();
             #endregion
 
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });

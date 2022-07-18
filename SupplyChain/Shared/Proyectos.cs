@@ -8,10 +8,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SupplyChain.Shared
 {
-    public class ProyectosGBPI
+    [Table("Proyectos")]
+    public class ProyectosGBPI : EntityBase<int>
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int TaskId { get; set; }
+        [Key, Column("TaskId")]
+        public new int Id { get; set; } = 0;
         public string TaskName { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }

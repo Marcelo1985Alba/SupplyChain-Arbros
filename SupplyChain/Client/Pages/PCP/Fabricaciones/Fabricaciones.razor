@@ -175,9 +175,9 @@
                                         var ordfab = (context as Fabricacion);
                                         if (!string.IsNullOrEmpty(ordfab.CG_CELDA))
                                         {
-                                            if (listaCelda.Any(c => c.CG_CELDA.Trim() == ordfab.CG_CELDA.Trim()))
+                                            if (listaCelda.Any(c => c.Id.Trim() == ordfab.CG_CELDA.Trim()))
                                             {
-                                                <span>@listaCelda.Where(c => c.CG_CELDA.Trim() == ordfab.CG_CELDA.Trim()).FirstOrDefault().DES_CELDA</span>
+                                                <span>@listaCelda.Where(c => c.Id.Trim() == ordfab.CG_CELDA.Trim()).FirstOrDefault().DES_CELDA</span>
 
                                             }
                                         }

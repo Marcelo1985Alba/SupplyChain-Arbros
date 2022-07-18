@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using SupplyChain.Client.HelperService;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
@@ -19,6 +20,7 @@ namespace SupplyChain.Pages.Fab
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
+        [Inject] protected CeldasService CeldasService { get; set; }
         protected SfGrid<Fabricacion> Grid;
         protected SfSpinner refSpinner;
         protected bool VisibleProperty { get; set; } = false;
@@ -49,7 +51,12 @@ namespace SupplyChain.Pages.Fab
         {
             VisibleProperty = true;
             listaFab = await Http.GetFromJsonAsync<List<Fabricacion>>("api/Fabricacion");
-            listaCelda = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
+            var response = await CeldasService.Get();
+            if (!response.Error)
+            {
+                listaCelda = response.Response;
+            }
+            //listaCelda = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
             listaEstadosCargaMaquina = await Http.GetFromJsonAsync<List<EstadosCargaMaquina>>("api/EstadosCargaMaquinas");
             VisibleProperty = false;
 
