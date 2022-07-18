@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+
 namespace SupplyChain.Client.Pages.ABM.Prods
 {
     public class ProductosPageBase : ComponentBase
@@ -59,7 +60,6 @@ namespace SupplyChain.Client.Pages.ABM.Prods
             //Productos = (await Http.GetFromJsonAsync<List<Producto>>("api/Prod")).OrderBy(s => s.CG_ORDEN).ToList();
             SpinnerVisible = false;
         }
-
 
         #region "Eventos Vista Grilla"
         protected async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)

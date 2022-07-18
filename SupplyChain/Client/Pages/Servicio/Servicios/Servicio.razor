@@ -716,6 +716,7 @@
     [Inject] protected HttpClient Http { get; set; }
     [Inject] protected IJSRuntime JS { get; set; }
     [CascadingParameter] public MainLayout Layout { get; set; }
+    [Inject] protected CeldasService CeldasService { get; set; }
     [Parameter] public string Pedido { get; set; } = "";
     protected SfToast ToastObj;
     protected SfSpinner SpinnerObj;
@@ -820,7 +821,12 @@
         opers = from opers in (IEnumerable<Operario>)operarios
                 where opers.ACTIVO == true
                 select opers;
-        celdas = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
+        var response = await CeldasService.Get();
+        if (!response.Error)
+        {
+                celdas = response.Response;
+        }
+        //celdas = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
         rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 
         await Grid?.AutoFitColumns();

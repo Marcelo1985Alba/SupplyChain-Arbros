@@ -17,6 +17,7 @@ namespace SupplyChain.Client.Pages.ABM.Precios
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] public PrecioArticuloService PrecioArticuloService { get; set; }
+        [Inject] protected CeldasService CeldasService { get; set; }
         [Parameter] public PreciosArticulos PrecioArticulo { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;
         [Parameter] public EventCallback<PreciosArticulos> OnGuardar { get; set; }
@@ -28,7 +29,7 @@ namespace SupplyChain.Client.Pages.ABM.Precios
         protected SfToast ToastObj;
         protected List<SupplyChain.Unidades> unidades = new();
         protected List<Moneda> monedas = new();
-        protected List<SupplyChain.Celdas> celda = new();
+        protected List<Celdas> celda = new();
         protected List<SupplyChain.Areas> area = new();
         protected List<SupplyChain.Lineas> linea = new();
         protected List<TipoArea> tipoarea = new();
@@ -44,7 +45,12 @@ namespace SupplyChain.Client.Pages.ABM.Precios
         {
             unidades = await Http.GetFromJsonAsync<List<SupplyChain.Unidades>>("api/unidades");
             monedas = await Http.GetFromJsonAsync<List<Moneda>>("api/Monedas");
-            celda = await Http.GetFromJsonAsync<List<SupplyChain.Celdas>>("api/Celdas");
+            var response = await CeldasService.Get();
+            if (!response.Error)
+            {
+                celda = response.Response;
+            }
+            //celda = await Http.GetFromJsonAsync<List<SupplyChain.Celdas>>("api/Celdas");
             area = await Http.GetFromJsonAsync<List<SupplyChain.Areas>>("api/Areas");
             linea = await Http.GetFromJsonAsync<List<SupplyChain.Lineas>>("api/Lineas");
             tipoarea = await Http.GetFromJsonAsync<List<TipoArea>>("api/TipoArea");
