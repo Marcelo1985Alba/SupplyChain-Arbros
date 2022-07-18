@@ -47,7 +47,9 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
 
         protected Dictionary<string, object> HtmlAttributeSubmit = new()
         {
-            { "type", "submit" }
+            { "type", "submit" },
+            { "form", "form-solicitud" }
+
         };
 
         protected async Task BuscarClientes()

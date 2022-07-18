@@ -111,11 +111,11 @@
           IsModal="true" EnableResize="false" >
     <DialogTemplates>
         <Header>
-            <p>Detalle Pedido @PedidoSeleccionado.PEDIDO - @PedidoSeleccionado.DES_ART.ToUpper()</p>
-            <hr />
+            Detalle Pedido @PedidoSeleccionado.PEDIDO - @PedidoSeleccionado.DES_ART.ToUpper()
         </Header>
         <Content>
-            <SfLinearGauge Orientation="Orientation.Horizontal" Background="transparent" Title="Estado Pedido" Height="250px">
+            <SfLinearGauge Orientation="Orientation.Horizontal" Background="transparent" Title="Estado Pedido"  AllowPdfExport="true"
+                           Height="250px">
                 <LinearGaugeEvents AxisLabelRendering="AxisLabelChange" />
                 <LinearGaugeAnnotations>
                     <LinearGaugeAnnotation ZIndex="1" AxisValue="100"

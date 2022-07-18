@@ -145,10 +145,10 @@ e-grid .e-gridheader {
 
 
 
-    .e-grid .e-groupdroparea {
-        background-color: #398bf7;
-        color: #ffffff;
-    }
+.e-grid .e-groupdroparea {
+    background-color: #398bf7;
+    color: #ffffff;
+}
 
 
 
@@ -221,17 +221,17 @@ e-grid .e-gridheader {
     /*border: 1px solid #5a70cc;*/
 }
 
-    .e-toolbar-item button[aria-label="Add"]:focus {
-        background: #0cc08d;
-        /*border-radius: 10%;*/
-        /*border: 1px solid #5a70cc;*/
-    }
+.e-toolbar-item button[aria-label="Add"]:focus {
+    background: #0cc08d;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
 
-    .e-toolbar-item button[aria-label="Add"]:hover {
-        background: #1cb78b;
-        /*border-radius: 10%;*/
-        /*border: 1px solid #5a70cc;*/
-    }
+.e-toolbar-item button[aria-label="Add"]:hover {
+    background: #1cb78b;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
 
 .e-toolbar-item button[aria-label="Edit"] {
     background: #fce87a;
@@ -239,17 +239,17 @@ e-grid .e-gridheader {
     /*border: 1px solid #5a70cc;*/
 }
 
-    .e-toolbar-item button[aria-label="Edit"]:focus {
-        background: #e1c31e;
-        /*border-radius: 10%;*/
-        /*border: 1px solid #5a70cc;*/
-    }
+.e-toolbar-item button[aria-label="Edit"]:focus {
+    background: #e1c31e;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
 
-    .e-toolbar-item button[aria-label="Edit"]:hover {
-        background: #ffd800;
-        /*border-radius: 10%;*/
-        /*border: 1px solid #5a70cc;*/
-    }
+.e-toolbar-item button[aria-label="Edit"]:hover {
+    background: #ffd800;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
 
 .e-toolbar-item button[aria-label="Eliminar"] {
     background: #ff886f;
@@ -368,10 +368,26 @@ e-grid .e-gridheader {
     font-weight: bold;
 }
 
-.e-dlg-header p {
-    font-weight: bold;
+.e-dlg-header .e-dlg-header-titulo {
+    color: #ffffff;
+    font-family: Tahoma;
+}
+
+.e-dialog.e-control.e-popup, .e-dialog.e-control.e-popup .e-dlg-header-content {
+    background-color: #61a4fd;
+}
+
+.e-dialog .e-dlg-content {
+    /*font-size: 12px;*/
+    padding-top: 12px !important;
+}
+
+.e-dialog.e-control.e-popup .e-dlg-header-content .e-dlg-header {
+    color: #ffffff;
+    font-family: Tahoma;
 }
 
 form label {
     color: blue;
 }
+

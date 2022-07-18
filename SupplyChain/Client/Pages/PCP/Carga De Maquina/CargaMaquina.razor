@@ -364,7 +364,7 @@
                       ShowCloseIcon="true" CloseOnEscape="true" Height="500" Width="900"
                       @bind-Visible="@isOrdenDialogVisible">
                 <DialogTemplates>
-                    <Header><p style="font-weight:800">@ordenTitulo - Cantidad: @(Decimal.ToInt32(ordenFabricacion.CANT))</p></Header>
+                    <Header><div class="e-dlg-header-titulo">@ordenTitulo - Cantidad: @(Decimal.ToInt32(ordenFabricacion.CANT))</div></Header>
                     <Content>
                         @if (ordenFabricacionEncabezado != null)
                         {
@@ -916,7 +916,7 @@
                       CloseOnEscape="true"
                       @bind-Visible="@isScrapDialogVisible">
                 <DialogTemplates>
-                    <Header><p style="font-weight:800">Seleccione Scrap</p></Header>
+                    <Header><div class="e-dlg-header-titulo">Seleccione Scrap</div></Header>
                     <Content>
                         <SfListView @ref="@listViewScrap" DataSource="@dbScrap" TValue="ModeloGenericoIntString">
                             <ListViewFieldSettings Id="Id" Text="Texto" TValue="ModeloGenericoIntString" />

@@ -786,7 +786,7 @@
         "Edit",
         //new ItemModel { Text = "Certificado", TooltipText = "Certificado", PrefixIcon = "e-copy", Id = "Certificado" },
         new ItemModel { Text = "OPDS", TooltipText = "OPDS", PrefixIcon = "e-copy", Id = "OPDS" },
-        "Exportar grilla en Excel",
+        "ExcelExport",
         new ItemModel { Text = "Seleccionar Columnas", TooltipText = "Seleccionar Columnas", Id = "Seleccionar Columnas" },
         //new ItemModel { Text = "Search", TooltipText = "OPDS", Id = "Search" }
         };
@@ -840,7 +840,7 @@
         {
             await Grid.OpenColumnChooser();
         }
-        if (args.Item.Text == "Exportar grilla en Excel")
+        if (args.Item.Text == "Exportar Excel")
         {
             await this.Grid.ExcelExport();
         }
@@ -1588,3 +1588,42 @@
     }
 
 }
+
+
+<style>
+    .e-toolbar-item button[aria-label="Certificado"] {
+        background: #e08b4f;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+    .e-toolbar-item button[aria-label="Certificado"]:focus {
+        background: #e08b4f;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+    .e-toolbar-item button[aria-label="Certificado"]:hover {
+        background: #ed7d2e;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+    .e-toolbar-item button[aria-label="OPDS"] {
+        background: #d5587a;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+    .e-toolbar-item button[aria-label="OPDS"]:focus {
+        background: #d5587a;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+    .e-toolbar-item button[aria-label="OPDS"]:hover {
+        background: #d5587a;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+</style>
