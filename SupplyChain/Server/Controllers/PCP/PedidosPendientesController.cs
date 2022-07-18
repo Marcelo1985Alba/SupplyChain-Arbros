@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared.Models;
 
 namespace SupplyChain.Server.Controllers
@@ -17,11 +18,11 @@ namespace SupplyChain.Server.Controllers
     [ApiController]
     public class PedidosPendientesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly PedCliRepository _pedCliRepository;
 
-        public PedidosPendientesController(AppDbContext context)
+        public PedidosPendientesController(PedCliRepository pedCliRepository)
         {
-            _context = context;
+            this._pedCliRepository = pedCliRepository;
         }
 
         // GET: api/PedidosPendientes
@@ -30,14 +31,37 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
-                String xSQLSelect = "EXEC NET_PCP_PEDIDOS";
-                var xLista = await _context.ModeloPedidosPendientes.FromSqlRaw(xSQLSelect).ToListAsync();
+                var xLista = await _pedCliRepository.ObtenerPedidosPedientes();
 
-                return xLista;
+                return xLista.ToList();
+            }
+            catch (Exception ex)
+                {
+                return new List<ModeloPedidosPendientes>();
+            }
+        }
+
+        [HttpPut("{pedido}")]
+        public async Task<ActionResult<ModeloPedidosPendientes>> Put(int pedido, ModeloPedidosPendientes modeloPedidosPendientes)
+        {
+            if (pedido != modeloPedidosPendientes.PEDIDO)
+            {
+                return NotFound();
+            }
+
+            var pedcli = await _pedCliRepository.Obtener(p => p.PEDIDO == modeloPedidosPendientes.PEDIDO).FirstOrDefaultAsync();
+            pedcli.CAMPOCOM2 = modeloPedidosPendientes.CAMPOCOM2;//resorte
+            pedcli.ENTRPREV = modeloPedidosPendientes.ENTRPREV;
+
+            try
+            {
+                await _pedCliRepository.Actualizar(pedcli);
+
+                return Ok(modeloPedidosPendientes);
             }
             catch (Exception ex)
             {
-                return new List<ModeloPedidosPendientes>();
+                return BadRequest(ex);
             }
         }
     }

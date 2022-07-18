@@ -29,12 +29,13 @@ namespace SupplyChain
         {
             try
             {
-                // Llena FECHA_PREVISTA_FABRICACION en casos que esté en null
-                //_context.Database.ExecuteSqlRawAsync("EXEC NET_PCP_Carga_Poner_Fecha_Prevista_Fabricacion 0");
+                //Llena FECHA_PREVISTA_FABRICACION en casos que esté en null
+                await _context.Database.ExecuteSqlRawAsync("EXEC NET_PCP_Carga_Poner_Fecha_Prevista_Fabricacion 0");
 
                 // Llena tabla de carga
                 List<ModeloCarga> dbCarga;
-                dbCarga = await _context.Cargas.FromSqlRaw("EXEC NET_PCP_Carga_Poner_Fecha_Prevista_Fabricacion 0; EXEC NET_PCP_Carga_Maq 1")
+
+                dbCarga = await _context.Cargas.FromSqlRaw("EXEC NET_PCP_Carga_Maq 1")
                     .ToListAsync();
                 dbCarga = dbCarga.OrderBy(x => x.ORDEN_CELDA)
                     .ThenBy(x => x.CG_CELDA)

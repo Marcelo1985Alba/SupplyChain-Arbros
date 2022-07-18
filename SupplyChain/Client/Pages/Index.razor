@@ -1,20 +1,62 @@
-﻿@page "/index"
+﻿@using Syncfusion.Blazor.Layouts
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@page "/index"
 
 <h1>Hola, @authState.User.Identity.Name!</h1>
 
 Bienvenido a la nueva aplicación.
-
+<br />
+@*<strong>Nuevas Caracteristicas: impresion de evento</strong>*@
+@*<a href="https://localhost:44379/api/ReportRDLC/GetReport?numeroVale=35071" target="_blank">Vale Pdf</a>
+    <a href="https://localhost:44379/api/ReportRDLC/GetReportEvento?noConf=136" target="_blank">No Conf PDF</a>
+    <a href="https://localhost:44379/api/ReportRDLC/GetReportEtiquetaOF?cg_ordf=72479" target="_blank">No Conf PDF</a>*@
 @*<SurveyPrompt Title="How is Blazor working for you?" />*@
 @*<ComboVistasGrilla></ComboVistasGrilla>*@
 
+@*<iframe src="http://localhost:8090/" width="100%" height="1200" frameborder="0"></iframe>*@
+
+
+
+
+
 @code{
+    [Inject] public IRepositoryHttp Http { get; set; }
+    [Inject] public IJSRuntime JS { get; set; }
     [CascadingParameter] public MainLayout Layout { get; set; }
     [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
     private AuthenticationState authState;
     protected async override Task OnInitializedAsync()
     {
         Layout.Titulo = "Inicio";
-    
+
         authState = await authenticationState;
+
+        await RequestNotificationSubscriptionAsync();
+    }
+
+    protected async Task SubscribeToNotificacions(NotificacionSubscripcion notificacionSubscripcion)
+    {
+        var response = await Http.PutAsJsonAsync<NotificacionSubscripcion>("api/Notificaciones", notificacionSubscripcion);
+        response.HttpResponseMessage.EnsureSuccessStatusCode();
+
+
+    }
+
+    [JSInvokable]
+    public async Task RequestNotificationSubscriptionAsync()
+    {
+        var subscription = await JS.InvokeAsync<NotificacionSubscripcion>("blazorPushNotifications.requestSubscription");
+        if (subscription != null)
+        {
+            try
+            {
+                await SubscribeToNotificacions(subscription);
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex);
+            }
+        }
     }
 }

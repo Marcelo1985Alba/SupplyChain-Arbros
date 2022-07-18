@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ArbrosDataSet5" targetNamespace="http://tempuri.org/ArbrosDataSet5.xsd" xmlns:mstns="http://tempuri.org/ArbrosDataSet5.xsd" xmlns="http://tempuri.org/ArbrosDataSet5.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="ArbrosConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="ArbrosConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.WindowsFormsForRDLC.Properties.Settings.GlobalReference.Default.ArbrosConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="vOrdenesFabTableAdapter" GeneratorDataComponentClassName="vOrdenesFabTableAdapter" Name="vOrdenesFab" UserDataComponentName="vOrdenesFabTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="ArbrosConnectionString (Settings)" DbObjectName="Arbros.dbo.vOrdenesFab" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="false">
+                    <CommandText>SELECT CG_ORDF, FE_ENTREGA, CG_PROD, DES_PROD, CG_FORM, PROCESO, CG_CELDA, CG_ORDFORIG, ULTIMAORDENASOCIADA, CG_ORDFASOC, CANT, CG_ESTADOCARGA, CANTFAB, AVANCE, DIASFAB, HORASFAB, EXIGEOA, PEDIDO, FECHA_PREVISTA_FABRICACION, FECHA_INICIO_REAL_FABRICACION, FE_CIERRE, CG_OPER, DES_OPER FROM dbo.vOrdenesFab</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="CG_ORDF" DataSetColumn="CG_ORDF" />
+              <Mapping SourceColumn="FE_ENTREGA" DataSetColumn="FE_ENTREGA" />
+              <Mapping SourceColumn="CG_PROD" DataSetColumn="CG_PROD" />
+              <Mapping SourceColumn="DES_PROD" DataSetColumn="DES_PROD" />
+              <Mapping SourceColumn="CG_FORM" DataSetColumn="CG_FORM" />
+              <Mapping SourceColumn="PROCESO" DataSetColumn="PROCESO" />
+              <Mapping SourceColumn="CG_CELDA" DataSetColumn="CG_CELDA" />
+              <Mapping SourceColumn="CG_ORDFORIG" DataSetColumn="CG_ORDFORIG" />
+              <Mapping SourceColumn="ULTIMAORDENASOCIADA" DataSetColumn="ULTIMAORDENASOCIADA" />
+              <Mapping SourceColumn="CG_ORDFASOC" DataSetColumn="CG_ORDFASOC" />
+              <Mapping SourceColumn="CANT" DataSetColumn="CANT" />
+              <Mapping SourceColumn="CG_ESTADOCARGA" DataSetColumn="CG_ESTADOCARGA" />
+              <Mapping SourceColumn="CANTFAB" DataSetColumn="CANTFAB" />
+              <Mapping SourceColumn="AVANCE" DataSetColumn="AVANCE" />
+              <Mapping SourceColumn="DIASFAB" DataSetColumn="DIASFAB" />
+              <Mapping SourceColumn="HORASFAB" DataSetColumn="HORASFAB" />
+              <Mapping SourceColumn="EXIGEOA" DataSetColumn="EXIGEOA" />
+              <Mapping SourceColumn="PEDIDO" DataSetColumn="PEDIDO" />
+              <Mapping SourceColumn="FECHA_PREVISTA_FABRICACION" DataSetColumn="FECHA_PREVISTA_FABRICACION" />
+              <Mapping SourceColumn="FECHA_INICIO_REAL_FABRICACION" DataSetColumn="FECHA_INICIO_REAL_FABRICACION" />
+              <Mapping SourceColumn="FE_CIERRE" DataSetColumn="FE_CIERRE" />
+              <Mapping SourceColumn="CG_OPER" DataSetColumn="CG_OPER" />
+              <Mapping SourceColumn="DES_OPER" DataSetColumn="DES_OPER" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ArbrosDataSet5" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="ArbrosDataSet5" msprop:Generator_UserDSName="ArbrosDataSet5">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="vOrdenesFab" msprop:Generator_TableClassName="vOrdenesFabDataTable" msprop:Generator_TableVarName="tablevOrdenesFab" msprop:Generator_TablePropName="vOrdenesFab" msprop:Generator_RowDeletingName="vOrdenesFabRowDeleting" msprop:Generator_RowChangingName="vOrdenesFabRowChanging" msprop:Generator_RowEvHandlerName="vOrdenesFabRowChangeEventHandler" msprop:Generator_RowDeletedName="vOrdenesFabRowDeleted" msprop:Generator_UserTableName="vOrdenesFab" msprop:Generator_RowChangedName="vOrdenesFabRowChanged" msprop:Generator_RowEvArgName="vOrdenesFabRowChangeEvent" msprop:Generator_RowClassName="vOrdenesFabRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="CG_ORDF" msprop:Generator_ColumnVarNameInTable="columnCG_ORDF" msprop:Generator_ColumnPropNameInRow="CG_ORDF" msprop:Generator_ColumnPropNameInTable="CG_ORDFColumn" msprop:Generator_UserColumnName="CG_ORDF" type="xs:int" />
+              <xs:element name="FE_ENTREGA" msprop:Generator_ColumnVarNameInTable="columnFE_ENTREGA" msprop:Generator_ColumnPropNameInRow="FE_ENTREGA" msprop:Generator_ColumnPropNameInTable="FE_ENTREGAColumn" msprop:Generator_UserColumnName="FE_ENTREGA" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="CG_PROD" msprop:Generator_ColumnVarNameInTable="columnCG_PROD" msprop:Generator_ColumnPropNameInRow="CG_PROD" msprop:Generator_ColumnPropNameInTable="CG_PRODColumn" msprop:Generator_UserColumnName="CG_PROD">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="15" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DES_PROD" msprop:Generator_ColumnVarNameInTable="columnDES_PROD" msprop:Generator_ColumnPropNameInRow="DES_PROD" msprop:Generator_ColumnPropNameInTable="DES_PRODColumn" msprop:Generator_UserColumnName="DES_PROD">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="500" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CG_FORM" msprop:Generator_ColumnVarNameInTable="columnCG_FORM" msprop:Generator_ColumnPropNameInRow="CG_FORM" msprop:Generator_ColumnPropNameInTable="CG_FORMColumn" msprop:Generator_UserColumnName="CG_FORM" type="xs:int" />
+              <xs:element name="PROCESO" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnPROCESO" msprop:Generator_ColumnPropNameInRow="PROCESO" msprop:Generator_ColumnPropNameInTable="PROCESOColumn" msprop:Generator_UserColumnName="PROCESO" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="10" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CG_CELDA" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnCG_CELDA" msprop:Generator_ColumnPropNameInRow="CG_CELDA" msprop:Generator_ColumnPropNameInTable="CG_CELDAColumn" msprop:Generator_UserColumnName="CG_CELDA" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CG_ORDFORIG" msprop:Generator_ColumnVarNameInTable="columnCG_ORDFORIG" msprop:Generator_ColumnPropNameInRow="CG_ORDFORIG" msprop:Generator_ColumnPropNameInTable="CG_ORDFORIGColumn" msprop:Generator_UserColumnName="CG_ORDFORIG" type="xs:int" />
+              <xs:element name="ULTIMAORDENASOCIADA" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnULTIMAORDENASOCIADA" msprop:Generator_ColumnPropNameInRow="ULTIMAORDENASOCIADA" msprop:Generator_ColumnPropNameInTable="ULTIMAORDENASOCIADAColumn" msprop:Generator_UserColumnName="ULTIMAORDENASOCIADA" type="xs:int" minOccurs="0" />
+              <xs:element name="CG_ORDFASOC" msprop:Generator_ColumnVarNameInTable="columnCG_ORDFASOC" msprop:Generator_ColumnPropNameInRow="CG_ORDFASOC" msprop:Generator_ColumnPropNameInTable="CG_ORDFASOCColumn" msprop:Generator_UserColumnName="CG_ORDFASOC" type="xs:int" />
+              <xs:element name="CANT" msprop:Generator_ColumnVarNameInTable="columnCANT" msprop:Generator_ColumnPropNameInRow="CANT" msprop:Generator_ColumnPropNameInTable="CANTColumn" msprop:Generator_UserColumnName="CANT" type="xs:decimal" />
+              <xs:element name="CG_ESTADOCARGA" msprop:Generator_ColumnVarNameInTable="columnCG_ESTADOCARGA" msprop:Generator_ColumnPropNameInRow="CG_ESTADOCARGA" msprop:Generator_ColumnPropNameInTable="CG_ESTADOCARGAColumn" msprop:Generator_UserColumnName="CG_ESTADOCARGA" type="xs:int" />
+              <xs:element name="CANTFAB" msprop:Generator_ColumnVarNameInTable="columnCANTFAB" msprop:Generator_ColumnPropNameInRow="CANTFAB" msprop:Generator_ColumnPropNameInTable="CANTFABColumn" msprop:Generator_UserColumnName="CANTFAB" type="xs:decimal" />
+              <xs:element name="AVANCE" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnAVANCE" msprop:Generator_ColumnPropNameInRow="AVANCE" msprop:Generator_ColumnPropNameInTable="AVANCEColumn" msprop:Generator_UserColumnName="AVANCE" type="xs:decimal" minOccurs="0" />
+              <xs:element name="DIASFAB" msprop:Generator_ColumnVarNameInTable="columnDIASFAB" msprop:Generator_ColumnPropNameInRow="DIASFAB" msprop:Generator_ColumnPropNameInTable="DIASFABColumn" msprop:Generator_UserColumnName="DIASFAB" type="xs:decimal" />
+              <xs:element name="HORASFAB" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnHORASFAB" msprop:Generator_ColumnPropNameInRow="HORASFAB" msprop:Generator_ColumnPropNameInTable="HORASFABColumn" msprop:Generator_UserColumnName="HORASFAB" type="xs:decimal" minOccurs="0" />
+              <xs:element name="EXIGEOA" msprop:Generator_ColumnVarNameInTable="columnEXIGEOA" msprop:Generator_ColumnPropNameInRow="EXIGEOA" msprop:Generator_ColumnPropNameInTable="EXIGEOAColumn" msprop:Generator_UserColumnName="EXIGEOA" type="xs:boolean" />
+              <xs:element name="PEDIDO" msprop:Generator_ColumnVarNameInTable="columnPEDIDO" msprop:Generator_ColumnPropNameInRow="PEDIDO" msprop:Generator_ColumnPropNameInTable="PEDIDOColumn" msprop:Generator_UserColumnName="PEDIDO" type="xs:int" />
+              <xs:element name="FECHA_PREVISTA_FABRICACION" msprop:Generator_ColumnVarNameInTable="columnFECHA_PREVISTA_FABRICACION" msprop:Generator_ColumnPropNameInRow="FECHA_PREVISTA_FABRICACION" msprop:Generator_ColumnPropNameInTable="FECHA_PREVISTA_FABRICACIONColumn" msprop:Generator_UserColumnName="FECHA_PREVISTA_FABRICACION" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="FECHA_INICIO_REAL_FABRICACION" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnFECHA_INICIO_REAL_FABRICACION" msprop:Generator_ColumnPropNameInRow="FECHA_INICIO_REAL_FABRICACION" msprop:Generator_ColumnPropNameInTable="FECHA_INICIO_REAL_FABRICACIONColumn" msprop:Generator_UserColumnName="FECHA_INICIO_REAL_FABRICACION" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="FE_CIERRE" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnFE_CIERRE" msprop:Generator_ColumnPropNameInRow="FE_CIERRE" msprop:Generator_ColumnPropNameInTable="FE_CIERREColumn" msprop:Generator_UserColumnName="FE_CIERRE" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="CG_OPER" msprop:Generator_ColumnVarNameInTable="columnCG_OPER" msprop:Generator_ColumnPropNameInRow="CG_OPER" msprop:Generator_ColumnPropNameInTable="CG_OPERColumn" msprop:Generator_UserColumnName="CG_OPER" type="xs:int" />
+              <xs:element name="DES_OPER" msprop:Generator_ColumnVarNameInTable="columnDES_OPER" msprop:Generator_ColumnPropNameInRow="DES_OPER" msprop:Generator_ColumnPropNameInTable="DES_OPERColumn" msprop:Generator_UserColumnName="DES_OPER">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

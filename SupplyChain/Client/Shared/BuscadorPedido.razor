@@ -1,15 +1,13 @@
 ﻿@inject HttpClient Http
 @using Syncfusion.Blazor.Buttons
 <div class="form-row">
-    <div class="col-10">
+    <div class="col-7">
         <SfNumericTextBox @bind-Value="@Valor" ShowClearButton="true" TValue="int" Format="n0"
                           Decimals="0" ShowSpinButton="@MostrarSpin" Readonly="@EsSoloLectura"></SfNumericTextBox>
     </div>
     @if (MostraBotonBusqueda)
     {
-        <div class="col-2 mb-1">
-
-
+        <div class="col-5 mb-1">
             <SfButton OnClick="@(async (e)=> await BuscarPedidos())" CssClass="e-smal e-round e-info"
                       IsPrimary="false" HtmlAttributes="@HtmlAttr"
                       IconCss="fa fa-search" Disabled="@HabilitaBotonBusqueda"></SfButton>
@@ -18,8 +16,13 @@
     }
     </div>
 
-<BuscadorEmergente @ref="Buscador" TItem="Pedidos" DataSource="@ItemsABuscar" Columnas="@ColumnasBuscador" 
-                   Titulo="@TituloBuscador" Height="85%" OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+    
+    <BuscadorEmergente @ref="@Buscador" TItem="Pedidos" DataSource="@ItemsABuscar" Columnas="@ColumnasBuscador" Width="85%"
+                       MostrarVerMas="true" OnBuscarMas="@(async()=> await BuscarPedidos())" Visible="PopupBuscadorVisible"
+                       OnCerrarDialog="@(async(v)=>await Cerrar(v))" 
+                   Titulo="@TituloBuscador" Height="600px" OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))">
+    </BuscadorEmergente>
+
 
 @code {
 
@@ -32,7 +35,7 @@
     [Parameter] public string[] ColumnasBuscador { get; set; }
     [Parameter] public string TituloBuscador { get; set; }
     [Parameter] public int TipoOperacion { get; set; }
-    [Parameter] public Dictionary<string, object> HtmlAttr { get; set; } = new Dictionary<string, object>() { { "type", "button" } };
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> HtmlAttr { get; set; } = new Dictionary<string, object>() { { "type", "button" } };
     private Pedidos[] ItemsABuscar = null;
     private bool PopupBuscadorVisible = false;
     private int CantRegistros = 0;
@@ -40,10 +43,11 @@
 
     private async Task BuscarPedidos()
     {
+        PopupBuscadorVisible = true;
+        await Buscador.ShowAsync();
         CantRegistros += 100;
         SetTituloBuscador();
-        ColumnasBuscador = new string[] { "VALE", "FE_MOV", "CG_ART", "DES_ART", "STOCK" };
-        await Buscador.ShowAsync();
+        ColumnasBuscador = new string[] { "VALE", "FE_MOV", "CG_ART", "DES_ART", "STOCK", "PEDIDO", "LOTE", "DESPACHO" };
         ItemsABuscar = await Http.GetFromJsonAsync<Pedidos[]>($"api/Stock/GetValesByTipo/{TipoOperacion}/{CantRegistros}");
         await InvokeAsync(StateHasChanged);
     }
@@ -56,18 +60,39 @@
         {
             TituloBuscador += "RECEPCION DE INSUMOS DE PROVEEDOR";
         }
-        if (TipoOperacion == 10)
+        else if (TipoOperacion == 9)
+        {
+            TituloBuscador += "MOVIMIENTOS ENTRE DEPOSITO";
+        }
+        else if (TipoOperacion == 10)
         {
             TituloBuscador += "ENTREGA A ORDEN DE FABRICACION";
+        }
+        else if (TipoOperacion == 21)
+        {
+            TituloBuscador += "AJUSTE DE INVENTARIO";
+        }
+        else if (TipoOperacion == 27)
+        {
+            TituloBuscador += "ENTREGA A PLANTA SIN OF";
+        }
+
+        else if (TipoOperacion == 28)
+        {
+            TituloBuscador += "ENTREGA A ORDENES DE ARMADO";
         }
     }
 
     public async Task EnviarObjetoSeleccionado(Pedidos pedido)
     {
         var oc = (Pedidos)pedido;
+        PopupBuscadorVisible = false;
         await Buscador.HideAsync();
         await OnOCSeleccionada.InvokeAsync(oc);
     }
 
-
+    public async Task Cerrar(bool visible)
+    {
+        PopupBuscadorVisible = visible;
+    }
 }

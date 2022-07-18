@@ -1,0 +1,215 @@
+﻿@page "/sc/celda/list"
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.DropDowns
+@using SupplyChain
+@using Syncfusion.Blazor.Calendars
+@using SupplyChain.Client.Shared
+@inherits CeldaPageBase
+
+<div class="row">
+    <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <SfToast ID="toast_default" @ref="ToastObj">
+            <ToastPosition X="Center" Y="Top"></ToastPosition>
+        </SfToast>
+
+        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="false" AllowResizing="true"
+                @ref="refGrid" DataSource="@celdas" Width="100%" Toolbar="Toolbaritems"
+                AllowExcelExport="true" AllowGrouping="true" ID="grdCeldas"
+                AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
+            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
+            <GridEvents OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolbarHandler"
+                        OnActionComplete="OnActionCompleteHandler" TValue="Celdas"></GridEvents>
+            <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
+                              ShowDeleteConfirmDialog="true" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
+            </GridEditSettings>
+            <GridColumns>
+                <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.Id) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.DES_CELDA) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.CG_AREA) HeaderText="Area" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.ILIMITADA) HeaderText="Serie" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.COEFI) HeaderText="Coefi" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.VALOR_AMOR) HeaderText="VALOR_AMOR" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.VALOR_MERC) HeaderText="VALOR_MERC" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.MONEDA) HeaderText="MONEDA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.CANT_ANOS) HeaderText="CANT_ANOS" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.CANT_UNID) HeaderText="CANT_UNID" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.REP_ANOS) HeaderText="REP_ANOS" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.M2) HeaderText="M2" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.ENERGIA) HeaderText="ENERGIA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.COMBUST) HeaderText="COMBUST" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.AIRE_COMP) HeaderText="AIRE_COMP" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.CG_TIPOCELDA) HeaderText="CG_TIPOCELDA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Celdas.CG_DEPOSM) HeaderText="CG_DEPOSM" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+            </GridColumns>
+            <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
+        </SfGrid>
+    </div>
+
+    @if (popupFormVisible)
+	{
+		 <FormCeldas Celda="celdaSeleccionado" Show="popupFormVisible" 
+                       OnCerrar="OnCerraDialog" OnGuardar="@(async(p)=>await Guardar(p))"></FormCeldas>
+	}
+</div>
+
+<!--
+
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+<div class="col control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                        DataSource="@(celdas.OrderBy(s => s.CG_CELDA))"
+                        ID="gridCeldas" Height="100%" Width="100%" GridLines="GridLine.Both" RowHeight="27"
+                        @ref="Grid" AllowExcelExport="true" AllowGrouping="true"
+                        AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
+                    <GridSelectionSettings CheckboxOnly="true"
+                                           Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                    <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                    <GridEvents OnToolbarClick="@ClickHandler" TValue="Areas"></GridEvents>
+                    <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+                    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true">
+                    </GridEditSettings>
+                    <GridColumns>
+                        <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.CG_CELDA) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.DES_CELDA) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.CG_AREA) HeaderText="Area" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.ILIMITADA) HeaderText="Serie" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.COEFI) HeaderText="Coefi" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.VALOR_AMOR) HeaderText="VALOR_AMOR" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.VALOR_MERC) HeaderText="VALOR_MERC" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.MONEDA) HeaderText="MONEDA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.CANT_ANOS) HeaderText="CANT_ANOS" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.CANT_UNID) HeaderText="CANT_UNID" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.REP_ANOS) HeaderText="REP_ANOS" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.M2) HeaderText="M2" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.ENERGIA) HeaderText="ENERGIA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.COMBUST) HeaderText="COMBUST" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.AIRE_COMP) HeaderText="AIRE_COMP" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.CG_TIPOCELDA) HeaderText="CG_TIPOCELDA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Celdas.CG_DEPOSM) HeaderText="CG_DEPOSM" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                    </GridColumns>
+                    <SfSpinner @ref="refSpinner" Type="SpinnerType.Bootstrap" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
+                </SfGrid>
+            </div>
+        </div>
+    </div>
+</div>
+
+<SfDialog Width="1000px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible" Target="DialogCeldas">
+    <DialogTemplates>
+        <Content>
+            <EditForm Model="celdas" OnValidSubmit="@guardarCelda">
+                <DataAnnotationsValidator />
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-Celdas" role="tab" aria-controls="pills-home" aria-selected="true">Celdas</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-Celdas" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Codigo:</label>
+                                    <SfTextBox ID="Codigo" @bind-Value="@(celda.CG_CELDA)" Enabled="false"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Descripcion:</label>
+                                    <SfTextBox ID="Descripcion" @bind-Value="@(celda.DES_CELDA)"></SfTextBox>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Area:</label>
+                                    <SfNumericTextBox ID="Area" @bind-Value="@(celda.CG_AREA)"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Coeficiente:</label>
+                                    <SfNumericTextBox ID="Coeficiente" @bind-Value="@(celda.COEFI)"></SfNumericTextBox>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Codigo Proveedor:</label>
+                                    <SfNumericTextBox ID="Codigo Proveedor" @bind-Value="@(celda.CG_PROVE)"></SfNumericTextBox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
+            </EditForm>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+-->
+
+<style>
+    .form-group.col-md-6 {
+        width: 200px;
+    }
+
+    label.e-float-text {
+        position: relative;
+        padding-left: 0;
+        top: 10%;
+    }
+
+    .e-input-group.e-control-wrapper.customClass {
+        color: black;
+        background-color: lightblue;
+    }
+</style>
+
+@code {
+
+    public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
+    public bool DblClick = true;
+    public bool CommandColumnsClick = false;
+
+    public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+    public void OnRadioChange(ChangeArgs<string> args)
+    {
+        if (args.Value == "inline")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+        }
+        else if (args.Value == "batch")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Batch;
+        }
+        else if (args.Value == "dialog")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Dialog;
+        }
+        else
+        {
+            this.CommandColumnsClick = true;
+        }
+    }
+}}

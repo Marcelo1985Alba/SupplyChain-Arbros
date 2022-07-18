@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using SupplyChain.Client.HelperService;
 using SupplyChain.Shared.Models;
 
 namespace SupplyChain
@@ -36,7 +37,8 @@ namespace SupplyChain
                 "(A.DIASFAB * isnull((Select Top 1 ValorN From Solution Where Campo = 'HORASDIA'), 1)) AS HORASFAB, B.EXIGEOA, A.PEDIDO, " +
                 "FECHA_PREVISTA_FABRICACION, " +
                 "CASE WHEN A.FECHA_INICIO_REAL_FABRICACION is not null THEN A.FECHA_INICIO_REAL_FABRICACION ELSE GETDATE() END FECHA_INICIO_REAL_FABRICACION, " +
-                "CASE WHEN A.FE_CIERRE is not null THEN A.FE_CIERRE ELSE GETDATE() END FE_CIERRE, " +
+                //"CASE WHEN A.FE_CIERRE is not null THEN A.FE_CIERRE ELSE GETDATE() END FE_CIERRE, " +
+                "A.FE_CIERRE," +
                 "A.CG_OPER, A.DES_OPER " +
                 "FROM Prod B, Programa A " +
                 "LEFT JOIN ProTab ON ProTab.PROCESO = A.PROCESO " +
@@ -128,6 +130,7 @@ namespace SupplyChain
                 programa.ORDEN = xItem.ORDEN;
                 programa.CG_ESTADOCARGA = xItem.CG_ESTADOCARGA;
                 programa.FE_CURSO = xItem.FE_CURSO;
+                programa.DIASFAB = xItem.DIASFAB;
 
 
                 _context.Attach(programa);
@@ -138,6 +141,7 @@ namespace SupplyChain
                 _context.Entry(programa).Property(p => p.ORDEN).IsModified = true;
                 _context.Entry(programa).Property(p => p.CG_ESTADOCARGA).IsModified = true;
                 _context.Entry(programa).Property(p => p.FE_CURSO).IsModified = true;
+                _context.Entry(programa).Property(p => p.DIASFAB).IsModified = true;
 
 
 
@@ -149,6 +153,34 @@ namespace SupplyChain
                 return BadRequest(ex);
             }
 
+        }
+
+        [HttpPut("actualizarFechaCursoPrimeraCelda")]
+        public async Task<IActionResult> ActualizarFechaCurso()
+        {
+            try
+            {
+                var ordenesCurso = await _context.Programa
+                     .Where(x => x.FE_CURSO != null && x.FE_CURSO.Value.Year != 1900 && x.CG_ESTADOCARGA == 3)
+                     .ToListAsync();
+
+                await ordenesCurso.ForEachAsync(async p =>
+                        {
+                            p.FE_CURSO = DateTime.Now;
+                            _context.Update(p);
+                            await _context.SaveChangesAsync();
+
+                        });
+                //var updateFeCurso = $"Update Programa SET FE_CURSO = '{DateTime.Now}' " +
+                //    "WHERE CG_ESTADOCARGA= 3 AND FE_CURSO IS NOT NULL AND YEAR(FE_CURSO) <> 1900 ";
+                //_context.Database.ExecuteSqlRaw(updateFeCurso);
+                
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }

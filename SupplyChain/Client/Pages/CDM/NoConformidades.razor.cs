@@ -34,6 +34,8 @@ namespace SupplyChain.Client.Pages.NoConf
         [Inject] protected IJSRuntime JsRuntime { get; set; }
         [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
 
+        [CascadingParameter] public MainLayout MainLayout { get; set; }
+
         // variables generales
         public bool IsVisible { get; set; } = false;
         public SfToast ToastObj;
@@ -578,6 +580,7 @@ namespace SupplyChain.Client.Pages.NoConf
         NoConformidadesQuery seleccionconf = new NoConformidadesQuery();
 
         public List<NoConformidadesAcciones> listaaccionesgrilla = new List<NoConformidadesAcciones>();
+        public List<NoConformidadesAcciones> AccionCgNoconfyOrden = new List<NoConformidadesAcciones>();
 
         public class ListaAcciones
         {
@@ -620,7 +623,7 @@ namespace SupplyChain.Client.Pages.NoConf
 
         protected override async Task OnInitializedAsync()
         {
-
+            MainLayout.Titulo = "Eventos y No Conformidades";
             fechahoy = DateTime.Now.Date;
 
             ListaAccionesData = await Http.GetFromJsonAsync<List<NoConformidadesListaAcciones>>("api/NoConformidadesAcciones/GetListaAcciones/");
@@ -631,7 +634,7 @@ namespace SupplyChain.Client.Pages.NoConf
                 listanoconf = await Http.GetFromJsonAsync<List<NoConformidadesQuery>>("api/NoConformidades");
                 TiposNc = await Http.GetFromJsonAsync<TiposNoConf[]>("api/TiposNoConf");
 
-                await Grid.AutoFitColumns();
+                //await Grid.AutoFitColumns();
             }
             else
             {
@@ -893,9 +896,9 @@ namespace SupplyChain.Client.Pages.NoConf
             MemoryStream xx = new MemoryStream();
             document.Save(xx);
             document.Close(true);
-            await JS.SaveAs("Evento" + registro.Cg_NoConf.ToString() + ".pdf", xx.ToArray());
+            //await JS.SaveAs("Evento" + registro.Cg_NoConf.ToString() + ".pdf", xx.ToArray());
 
-
+            await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportEvento?noConf={registro.Cg_NoConf}", "_blank" });
         }
 
         public async Task guardaaccion()
@@ -908,6 +911,19 @@ namespace SupplyChain.Client.Pages.NoConf
             NoConfAcciones.Fe_Ocurrencia = fechaaccion;
             NoConfAcciones.Usuario = "USER";
 
+
+            // se fija si existe una accion para esta no conformidad y tipoaccion
+            AccionCgNoconfyOrden = await Http.GetFromJsonAsync<List<NoConformidadesAcciones>>($"api/NoConformidadesAcciones/GetAccionxCgNoConf/" + seleccionconf.Cg_NoConf +"/" + tipoaccion);
+            if (AccionCgNoconfyOrden.Count > 0)
+            {
+                foreach (var item in AccionCgNoconfyOrden)
+                {
+                    await Http.DeleteAsync($"api/NoConformidadesAcciones/"+item.Cg_NoConfAcc);
+                    
+                }
+
+
+            }
             ValidationContext valContext = new ValidationContext(NoConfAcciones, null, null);
             var validationsResults = new List<ValidationResult>();
             bool correct = Validator.TryValidateObject(NoConfAcciones, valContext, validationsResults, true);

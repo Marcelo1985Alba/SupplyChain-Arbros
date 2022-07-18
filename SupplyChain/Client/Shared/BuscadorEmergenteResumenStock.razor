@@ -1,88 +1,50 @@
 ﻿@inject HttpClient Http
 
-<SfSpinner @bind-Visible="@visibliSpinner" Size="80" Target=".dialogContent" Label="Cargando..." Type="SpinnerType.Bootstrap" />
+<div class="dialogContent">
+    <BuscadorEmergente @ref="@Buscador" TItem="vResumenStock" DataSource="@DataSource" TipoSeleccion="@TipoSeleccion"
+                       Columnas="@Columnas" Visible="@Visible" Height="610px" Width="75%" 
+                       OnObjetosSeleccionados="@(async(l)=> await OnSeleccionados(l))"
+                       Titulo="@Titulo" OnObjetoSeleccionado="@(async(o)=> await OnSeleccionado(o))"
+                       OnCerrarDialog="@(async(b)=>await Cerrar(b))">
+    </BuscadorEmergente>
 
-<SfDialog Height="85%" Width="90%" Target="#target" ShowCloseIcon="true" @bind-Visible="Visible" IsModal="true">
-    <DialogTemplates>
-        <Header>
-            @Titulo
-        </Header>
-        <Content>
-            <div class="dialogContent">
-                @if (DataSource == null)
-                {
-                    visibliSpinner = true;
-                }
-                else
-                {
-                    visibliSpinner = false;
-                    if (DataSource.Length == 0)
-                    {
-                        <span class="text-muted">Sin Datos</span>
-                    }
-                    else
-                    {
-                        <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="true" AllowFiltering="true" TValue="vResumenStock"
-                                AllowResizing="true" GridLines="GridLine.Both" Height="320" Width="100%"
-                                AllowSelection="true" AllowSorting="true" AllowTextWrap="true" EnableHover="true"
-                                ShowColumnMenu="true">
-                            <GridPageSettings PageSizes="@(new int[] { 5,10,20 })" PageSize="20" PageCount="5"></GridPageSettings>
-                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-                            <GridEvents OnActionBegin="@(async()=> await BeginGrid())"
-                                        RowSelected="@(async(a)=> await GetSelectedRecords(a))"
-                                        TValue="vResumenStock"></GridEvents>
-                            <GridColumns>
-
-                                <GridColumn Field="@nameof(vResumenStock.CG_ART)" Width="120px"></GridColumn>
-                                <GridColumn Field="@nameof(vResumenStock.PRODUCTO)" Width="120px"></GridColumn>
-                                <GridColumn Field="@nameof(vResumenStock.STOCK)"></GridColumn>
-                                <GridColumn Field="@nameof(vResumenStock.CG_DEP)"></GridColumn>
-                                <GridColumn Field="@nameof(vResumenStock.DEPOSITO)"></GridColumn>
-                                <GridColumn Field="@nameof(vResumenStock.SERIE)"></GridColumn>
-                                <GridColumn Field="@nameof(vResumenStock.LOTE)" IsPrimaryKey="true"></GridColumn>
-                                <GridColumn Field="@nameof(vResumenStock.DESPACHO)"></GridColumn>
-
-                            </GridColumns>
-                        </SfGrid>
-                    }
-                }
-            </div>
-        </Content>
-        <FooterTemplate>
-            @*<SfTextBox ID="inVal" @bind-Value="@TextBoxValue" @ref="TextboxObj" Type="InputType.Text" Placeholder="Enter your message here!" />*@
-            <button id="sendButton" @onclick="@(async ()=> await EnviarObjetoSeleccionado())" class="e-control e-btn e-primary" data-ripple="true">Aceptar</button>
-        </FooterTemplate>
-    </DialogTemplates>
-    @*<DialogEvents OnOpen="@BeforeDialogOpen" Closed="@DialogClosed"></DialogEvents>*@
-</SfDialog>
-
+</div>
 @code {
+    protected BuscadorEmergente<vResumenStock> Buscador;
     SfGrid<vResumenStock> Grid;
-    protected bool visibliSpinner = false;
+    protected bool visibleSpinner = false;
     [Parameter] public vResumenStock[] DataSource { get; set; } = null!;
-    [Parameter] public string Titulo { get; set; } = null!;
+    [Parameter] public string Titulo { get; set; } = "Listado: INSUMOS EN STOCK";
     [Parameter] public bool Visible { get; set; } = false;
     [Parameter] public string[] Columnas { get; set; } = null!;
     [Parameter] public EventCallback<vResumenStock> OnObjetoSeleccionado { get; set; }
-
+    [Parameter] public EventCallback<List<vResumenStock>> OnObjetosSeleccionados { get; set; }
+    [Parameter] public SelectionType TipoSeleccion { get; set; } = SelectionType.Single;
 
     public vResumenStock Selected { get; set; }
-
-    //protected async override Task OnInitializedAsync()
-    //{
-    //    DataSource = await Http.GetFromJsonAsync<ResumenStock[]>($"api/ResumenStock/ByCodigo/{cg_art}");
-
-    //    await InvokeAsync(StateHasChanged);
-    //}
 
 
     public async Task ShowAsync()
     {
         Visible = true;
+        await Buscador.ShowAsync();
     }
     public async Task HideAsync()
     {
         Visible = false;
+        await Buscador.HideAsync();
+    }
+
+    public async Task OnSeleccionado(vResumenStock vResumenStock)
+    {
+        Visible = false;
+        await OnObjetoSeleccionado.InvokeAsync(vResumenStock);
+    }
+
+    public async Task OnSeleccionados(List<vResumenStock> lvResumenStock)
+    {
+        Visible = false;
+        await OnObjetosSeleccionados.InvokeAsync(lvResumenStock);
     }
 
     public async Task EnviarObjetoSeleccionado()
@@ -102,5 +64,10 @@
         //ListaSeleccionada = await this.Grid.GetSelectedRecords();
         Selected = args.Data;
         await InvokeAsync(StateHasChanged);
+    }
+
+    protected async Task Cerrar(bool visible)
+    {
+        Visible = visible;
     }
 }

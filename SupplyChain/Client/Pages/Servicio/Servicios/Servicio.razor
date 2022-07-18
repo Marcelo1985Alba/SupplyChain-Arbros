@@ -1,4 +1,4 @@
-﻿@page "/servicio/listado"
+﻿    @page "/servicio/listado"
 @page "/servicio/list/{Pedido}"
 @using System.IO
 @using Syncfusion.Blazor.DropDowns
@@ -64,10 +64,17 @@
                                 <div class="tab-pane fade show active" id="pills-Generalidades" role="tabpanel" aria-labelledby="pills-home-tab">
                                     <div>
 
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label>Pedido:</label>
-                                                <SfTextBox ID="PEDIDO" @bind-Value="@(servicio.PEDIDO)" Enabled="@Disabled" Placeholder="Pedido"></SfTextBox>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <label>Pedido:</label>
+                                                    <SfTextBox ID="PEDIDO" @bind-Value="@(servicio.Id)" Enabled="@Disabled" Placeholder="Pedido"></SfTextBox>
+                                                </div>
+
+                                                <div class="form-group col-md-6">
+                                                    <label>Fecha:</label>
+                                                    <SfDatePicker ID="FECHA" @bind-Value="@(servicio.FECHA)" Enabled="@Disabled" Placeholder="Fecha"></SfDatePicker>
+
+                                                </div>
                                             </div>
 
                                             <div class="form-group col-md-6">
@@ -265,8 +272,7 @@
                                     </div>
                                 </div>
 
-                                <div class="tab-pane fade" id="pills-EnsRecepcion" role="tabpanel" aria-labelledby="pills-contact-tab">
-                                    <div>
+                                        <VerEnsayos Accion="RUTAENSAYO" Codigo="@servicio.Id">
 
                                         <div class="form-row">
                                             @*<div class="form-group col-md-6">
@@ -490,19 +496,21 @@
                                         {
                                             if (ruta.CAMPO == "RUTAENSAYO")
                                             {
-                                                <div class="accordion" id="accordionExample">
-                                                    @{
-                                                        string rutaDiscojpg = ruta.VALORC + $"{servicio.PEDIDO}_disco.jpg";
-                                                        string rutaToberajpg = ruta.VALORC + $"{servicio.PEDIDO}_tobera.jpg";
-                                                        string rutaResortejpg = ruta.VALORC + $"{servicio.PEDIDO}_resorte.jpg";
-                                                        string rutaRecepcionjpg = ruta.VALORC + $"{servicio.PEDIDO}_recepcion.jpg";
-                                                        string rutaDespachojpg = ruta.VALORC + $"{servicio.PEDIDO}_despacho.jpg";
+                                                if (ruta.CAMPO == "RUTAENSAYO")
+                                                {
+                                                    <div class="accordion" id="accordionExample">
+                                                        @{
+                                                            string rutaDiscojpg = ruta.VALORC + $"{servicio.Id}_disco.jpg";
+                                                            string rutaToberajpg = ruta.VALORC + $"{servicio.Id}_tobera.jpg";
+                                                            string rutaResortejpg = ruta.VALORC + $"{servicio.Id}_resorte.jpg";
+                                                            string rutaRecepcionjpg = ruta.VALORC + $"{servicio.Id}_recepcion.jpg";
+                                                            string rutaDespachojpg = ruta.VALORC + $"{servicio.Id}_despacho.jpg";
 
-                                                        string rutaDiscopng = ruta.VALORC + $"{servicio.PEDIDO}_disco.png";
-                                                        string rutaToberapng = ruta.VALORC + $"{servicio.PEDIDO}_tobera.png";
-                                                        string rutaResortepng = ruta.VALORC + $"{servicio.PEDIDO}_resorte.png";
-                                                        string rutaRecepcionpng = ruta.VALORC + $"{servicio.PEDIDO}_recepcion.png";
-                                                        string rutaDespachopng = ruta.VALORC + $"{servicio.PEDIDO}_despacho.png";
+                                                            string rutaDiscopng = ruta.VALORC + $"{servicio.Id}_disco.png";
+                                                            string rutaToberapng = ruta.VALORC + $"{servicio.Id}_tobera.png";
+                                                            string rutaResortepng = ruta.VALORC + $"{servicio.Id}_resorte.png";
+                                                            string rutaRecepcionpng = ruta.VALORC + $"{servicio.Id}_recepcion.png";
+                                                            string rutaDespachopng = ruta.VALORC + $"{servicio.Id}_despacho.png";
 
                                                         <div class="card">
                                                             @{
@@ -686,25 +694,23 @@
                                         }
                                     }
                                 </div>
-
-
-                            </div>
-                        }
-                    </Template>
-                </GridEditSettings>
-                <GridColumns>
-                    <GridColumn Field=@nameof(Service.PEDIDO) AutoFit="true" HeaderText="Pedido"></GridColumn>
-                    <GridColumn Field=@nameof(Service.FECHA) AutoFit="true" HeaderText="Fecha" Format="dd/MM/yyyy"></GridColumn>
-                    <GridColumn Field=@nameof(Service.CLIENTE) AutoFit="true" HeaderText="Cliente"></GridColumn>
-                    <GridColumn Field=@nameof(Service.NSERIE) AutoFit="true" HeaderText="Numero de Serie" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="150"></GridColumn>
-                    <GridColumn Field=@nameof(Service.MARCA) AutoFit="true" HeaderText="Marca" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="120"></GridColumn>
-                    <GridColumn Field=@nameof(Service.MODELO) AutoFit="true" HeaderText="Modelo" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Service.MEDIDA) AutoFit="true" HeaderText="Medida" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Service.SERIE) AutoFit="true" HeaderText="Serie" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Service.IDENTIFICACION) AutoFit="true"></GridColumn>
-                    <GridColumn Field=@nameof(Service.OBSERV) AutoFit="true"></GridColumn>
-                </GridColumns>
-            </SfGrid>
+                            }
+                        </Template>
+                    </GridEditSettings>
+                    <GridColumns>
+                        <GridColumn Field=@nameof(Service.Id) AutoFit="true" HeaderText="Pedido"></GridColumn>
+                        <GridColumn Field=@nameof(Service.FECHA) AutoFit="true" HeaderText="Fecha" Format="dd/MM/yyyy"></GridColumn>
+                        <GridColumn Field=@nameof(Service.CLIENTE) AutoFit="true" HeaderText="Cliente"></GridColumn>
+                        <GridColumn Field=@nameof(Service.NSERIE) AutoFit="true" HeaderText="Numero de Serie" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="150"></GridColumn>
+                        <GridColumn Field=@nameof(Service.MARCA) AutoFit="true" HeaderText="Marca" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="120"></GridColumn>
+                        <GridColumn Field=@nameof(Service.MODELO) AutoFit="true" HeaderText="Modelo" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                        <GridColumn Field=@nameof(Service.MEDIDA) AutoFit="true" HeaderText="Medida" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                        <GridColumn Field=@nameof(Service.SERIE) AutoFit="true" HeaderText="Serie" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                        <GridColumn Field=@nameof(Service.IDENTIFICACION) AutoFit="true"></GridColumn>
+                        <GridColumn Field=@nameof(Service.OBSERV) AutoFit="true"></GridColumn>
+                    </GridColumns>
+                </SfGrid>
+            </div>
         </div>
     </div>
 </div>
@@ -717,6 +723,7 @@
     [Inject] protected HttpClient Http { get; set; }
     [Inject] protected IJSRuntime JS { get; set; }
     [CascadingParameter] public MainLayout Layout { get; set; }
+    [Inject] protected CeldasService CeldasService { get; set; }
     [Parameter] public string Pedido { get; set; } = "";
     protected SfToast ToastObj;
     protected SfSpinner SpinnerObj;
@@ -776,7 +783,7 @@
     protected List<Marca> marcas = new List<Marca>();
     protected List<Operario> operarios = new List<Operario>();
     protected List<Celdas> celdas = new List<Celdas>();
-    protected List<Prod> prods = new List<Prod>();
+    protected List<Producto> prods = new List<Producto>();
 
     protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "1100px" };
 
@@ -786,7 +793,7 @@
         "Edit",
         //new ItemModel { Text = "Certificado", TooltipText = "Certificado", PrefixIcon = "e-copy", Id = "Certificado" },
         new ItemModel { Text = "OPDS", TooltipText = "OPDS", PrefixIcon = "e-copy", Id = "OPDS" },
-        "Exportar grilla en Excel",
+        "ExcelExport",
         new ItemModel { Text = "Seleccionar Columnas", TooltipText = "Seleccionar Columnas", Id = "Seleccionar Columnas" },
         //new ItemModel { Text = "Search", TooltipText = "OPDS", Id = "Search" }
         };
@@ -800,13 +807,13 @@
         {
             ApiUrl = "api/Servicios";
             servicios = await Http.GetFromJsonAsync<List<Service>>("api/Servicios");
-            servDesc = servicios.Where(s => s.PEDIDO == Pedido).ToList();
+            servDesc = servicios.Where(s => s.Id == Pedido).ToList();
         }
         else
         {
             ApiUrl = $"api/Servicios/{Pedido}";
             servicios = await Http.GetFromJsonAsync<List<Service>>($"api/Servicios/{Pedido}");
-            servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
+            servDesc = servicios.OrderByDescending(s => s.Id).ToList();
         }
 
         medidas = await Http.GetFromJsonAsync<List<Medida>>("api/Medida");
@@ -821,7 +828,12 @@
         opers = from opers in (IEnumerable<Operario>)operarios
                 where opers.ACTIVO == true
                 select opers;
-        celdas = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
+        var response = await CeldasService.Get();
+        if (!response.Error)
+        {
+                celdas = response.Response;
+        }
+        //celdas = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
         rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 
         await Grid?.AutoFitColumns();
@@ -835,7 +847,7 @@
         {
             await Grid.OpenColumnChooser();
         }
-        if (args.Item.Text == "Exportar grilla en Excel")
+        if (args.Item.Text == "Exportar Excel")
         {
             await this.Grid.ExcelExport();
         }
@@ -864,6 +876,10 @@
                     PdfStringFormat Centrado = new PdfStringFormat();
                     Centrado.Alignment = PdfTextAlignment.Center;
                     Centrado.LineAlignment = PdfVerticalAlignment.Middle;
+
+                    PdfStringFormat CentradoTop = new PdfStringFormat();
+                    CentradoTop.Alignment = PdfTextAlignment.Center;
+                    CentradoTop.LineAlignment = PdfVerticalAlignment.Top;
                     //Create and customize the string formats
                     PdfStringFormat Izquierda = new PdfStringFormat();
                     Izquierda.Alignment = PdfTextAlignment.Left;
@@ -930,7 +946,7 @@
                     PdfGridCell gridCell5 = pdfGrid.Rows[1].Cells[4];
                     gridCell5.ColumnSpan = 2;
                     gridCell5.StringFormat = Centrado;
-                    gridCell5.Value = new PdfTextElement($"PEDIDO: {selectedRecord.PEDIDO}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+                    gridCell5.Value = new PdfTextElement($"PEDIDO: {selectedRecord.Id}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
                     //Add RowSpan
                     PdfGridCell gridCell6 = pdfGrid.Rows[2].Cells[0];
                     gridCell6.ColumnSpan = 6;
@@ -1198,7 +1214,7 @@
                     PdfGridCell gridCell56 = pdfGrid.Rows[30].Cells[0];
                     gridCell56.ColumnSpan = 3;
                     gridCell56.StringFormat = Centrado;
-                    gridCell56.Value = $"Responsable técnino:";
+                    gridCell56.Value = $"Se recomienda efectuar un mantenimiento periódico para extender su vida útil";
                     //Add RowSpan
                     PdfGridCell gridCell57 = pdfGrid.Rows[30].Cells[3];
                     gridCell57.ColumnSpan = 3;
@@ -1213,7 +1229,7 @@
                     PdfGridCell gridCell59 = pdfGrid.Rows[31].Cells[2];
                     gridCell59.ColumnSpan = 1;
                     gridCell59.StringFormat = Centrado;
-                    gridCell59.Value = "Ing. Iris Mónica Rabboni\r\nNº en OPDS s/res 1126: 188\r\nMatrícula: 47642";
+                    gridCell59.Value = "Responsable técnino:\nIng. Iris Mónica Rabboni\r\nNº en OPDS s/res 1126: 188\r\nMatrícula: 47642";
                     //Add RowSpan
                     PdfGridCell gridCell60 = pdfGrid.Rows[31].Cells[3];
                     gridCell60.ColumnSpan = 3;
@@ -1228,7 +1244,7 @@
                     stream.Position = 0;
                     //Close the document
                     document.Close(true);
-                    await JS.SaveAs($"{selectedRecord.PEDIDO} Certificado" + ".pdf", stream.ToArray());
+                    await JS.SaveAs($"{selectedRecord.Id} Certificado" + ".pdf", stream.ToArray());
                 }
             }
         }
@@ -1353,7 +1369,7 @@
                         $"\r\n" +
                         $"\r\n" +
                         $"\r\n" +//10
-                        $"         Nro. Serie Rep.: {selectedRecord.PEDIDO.Trim()}                                Fecha: {DateTime.Now.Day}/{DateTime.Now.Month}/{DateTime.Now.Year}\r\n" +
+                        $"         Nro. Serie Rep.: {selectedRecord.Id.Trim()}                                Fecha: {DateTime.Now.Day}/{DateTime.Now.Month}/{DateTime.Now.Year}\r\n" +
                         $"\r\n" +
                         $"                 {selectedRecord.CLIENTE.Trim()}\r\n" +
                         $"\r\n" +
@@ -1419,7 +1435,7 @@
                     MemoryStream xx = new MemoryStream();
                     document1.Save(xx);
                     document1.Close(true);
-                    await JS.SaveAs($"{selectedRecord.PEDIDO.Trim()} OPDS {selectedRecord.ACTA.Trim()}" + ".pdf", xx.ToArray());
+                    await JS.SaveAs($"{selectedRecord.Id.Trim()} OPDS {selectedRecord.ACTA.Trim()}" + ".pdf", xx.ToArray());
                 }
             }
         }
@@ -1436,7 +1452,7 @@
             {
                 foreach (Service selectedRecord in this.Grid.SelectedRecords)
                 {
-                    Pedido = selectedRecord.PEDIDO;
+                    Pedido = selectedRecord.Id;
                 }
             }
         }
@@ -1447,23 +1463,23 @@
         if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
         {
             HttpResponseMessage response;
-            bool found = servicios.Any(o => o.PEDIDO == args.Data.PEDIDO);
+            bool found = servicios.Any(o => o.Id == args.Data.Id);
             Service ur = new Service();
 
             if (!found)
             {
-                args.Data.PEDIDO = servicios.Max(s => s.PEDIDO) + 1;
+                args.Data.Id = servicios.Max(s => s.Id) + 1;
                 response = await Http.PostAsJsonAsync("api/Servicios", args.Data);
-                servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
+                servDesc = servicios.OrderByDescending(s => s.Id).ToList();
             }
             else
             {
-                var pedant = servicios.Where(s => s.PEDIDO == args.Data.PEDIDO).FirstOrDefault().PEDIDOANT;
+                var pedant = servicios.Where(s => s.Id == args.Data.Id).FirstOrDefault().PEDIDOANT;
                 if (pedant != args.Data.PEDIDOANT)
                 {
                     foreach (var ped in servicios)
                     {
-                        if (args.Data.PEDIDOANT == ped.PEDIDO)
+                        if (args.Data.PEDIDOANT == ped.Id)
                         {
                             bool isConfirmed = await JS.InvokeAsync<bool>("confirm", "Quiere traer los datos del pedido anterior?");
                             if (isConfirmed)
@@ -1523,7 +1539,7 @@
                 args.Data.OPDS = string.IsNullOrEmpty(args.Data.OPDS) ? "" : args.Data.OPDS;
                 args.Data.PRESENCIAINSPEC = string.IsNullOrEmpty(args.Data.PRESENCIAINSPEC) ? "" : args.Data.PRESENCIAINSPEC;
                 args.Data.MANOMETRO = string.IsNullOrEmpty(args.Data.MANOMETRO) ? "" : args.Data.MANOMETRO;
-                response = await Http.PutAsJsonAsync($"api/Servicios/{args.Data.PEDIDO}", args.Data);
+                response = await Http.PutAsJsonAsync($"api/Servicios/{args.Data.Id}", args.Data);
                 if (!response.IsSuccessStatusCode)
                 {
                     await this.ToastObj.Show(new ToastModel
@@ -1579,3 +1595,42 @@
     }
 
 }
+
+
+<style>
+    .e-toolbar-item button[aria-label="Certificado"] {
+        background: #e08b4f;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+    .e-toolbar-item button[aria-label="Certificado"]:focus {
+        background: #e08b4f;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+    .e-toolbar-item button[aria-label="Certificado"]:hover {
+        background: #ed7d2e;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+    .e-toolbar-item button[aria-label="OPDS"] {
+        background: #d5587a;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+    .e-toolbar-item button[aria-label="OPDS"]:focus {
+        background: #d5587a;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+
+    .e-toolbar-item button[aria-label="OPDS"]:hover {
+        background: #d5587a;
+        /*border-radius: 10%;*/
+        /*border: 1px solid #5a70cc;*/
+    }
+</style>

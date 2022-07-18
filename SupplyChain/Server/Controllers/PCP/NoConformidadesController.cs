@@ -41,7 +41,7 @@ namespace SupplyChain
             }
         }
         */
-        [HttpGet]   
+        [HttpGet]
         public IEnumerable<NoConformidadesQuery> Get()
         {
             string xSQL = string.Format("SELECT Cg_NoConf, noconfor.Cg_TipoNc, tiposnoconf.des_tiponc, " +
@@ -135,7 +135,7 @@ namespace SupplyChain
                 //RESERVA REGISTRO: El vale hay que hacerlo del lado del cliente porque debe reservar un solo vale
                 //y aqui se ejecuta por item.
                 await generaController.ReservaByCampo("NOCONF");
-                var genera = _context.Genera.Where(g => g.CAMP3 == "NOCONF").FirstOrDefault();
+                var genera = _context.Genera.Where(g => g.Id == "NOCONF").FirstOrDefault();
                 NoConf.Cg_NoConf = (int)genera.VALOR1;
 
 
@@ -214,5 +214,18 @@ namespace SupplyChain
             return await _context.NoConformidadesAcciones.FromSqlRaw(xSQL).ToListAsync();
         }
 
+        // GET: api/NoConformidades/Eventos
+        [HttpGet("Eventos")]
+        public async Task<ActionResult<List<vEstadEventos>>> GetEventos()
+        {
+            try
+            {
+                return await _context.vEstadEventos.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
     }
 }

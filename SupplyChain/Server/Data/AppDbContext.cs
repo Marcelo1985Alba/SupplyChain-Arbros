@@ -1,16 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Config;
 using SupplyChain.Shared;
+using SupplyChain.Shared.CDM;
 using SupplyChain.Shared.Login;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
+using System;
 
 namespace SupplyChain
 {
     public class AppDbContext : IdentityDbContext
     {
+        #region "DbSet"
         //MODULO CARGA DE MAQUINA
         public virtual DbSet<ModeloCarga> Cargas { get; set; }
+        public virtual DbSet<CargaMaq> CargaMaq { get; set; }
         public virtual DbSet<ModeloOrdenFabricacionHojaRuta> OrdenesFabricacionHojaRuta { get; set; }
         public virtual DbSet<ModeloOrdenFabricacionSE> OrdenesFabricacionSE { get; set; }
         public virtual DbSet<ModeloOrdenFabricacionMP> OrdenesFabricacionMP { get; set; }
@@ -23,12 +27,13 @@ namespace SupplyChain
         public virtual DbSet<EstadosCargaMaquina> EstadosCargaMaquinas { get; set; }
         //public virtual DbSet<Prod> Prod { get; set; }
         public virtual DbSet<Cliente> Cliente { get; set; }
+        public virtual DbSet<ClienteExterno> ClientesExternos { get; set; }
         //MODULO LOGÍSTICA
         public DbSet<PedCli> PedCli { get; set; }
         public DbSet<Pedidos> Pedidos { get; set; }
         public DbSet<Programa> Programa { get; set; }
-        //willy
         public DbSet<Areas> Areas { get; set; }
+        public DbSet<Cat> Cat { get; set; }
         public DbSet<Unidades> Unidades { get; set; }
         public DbSet<Lineas> Lineas { get; set; }
         public DbSet<CatOpe> CateOperarios { get; set; }
@@ -41,6 +46,8 @@ namespace SupplyChain
         public DbSet<ProTarea> ProTarea { get; set; }
         public DbSet<TipoMat> TipoMat { get; set; }
         public DbSet<Producto> Prod { get; set; }
+
+        public DbSet<PreciosArticulos> PrecioArticulo { get; set; }
         //MODULO SERVICIOS
         public DbSet<Celdas> Celdas { get; set; }
         public DbSet<Estado> Estado { get; set; }
@@ -62,6 +69,7 @@ namespace SupplyChain
         public virtual DbSet<Procun> Procun { get; set; }
         public virtual DbSet<Fabricacion> Fabricaciones { get; set; }
         public virtual DbSet<vProdMaquinaDataCore> VProdMaquinaDataCore { get; set; }
+        public virtual DbSet<Moneda> Monedas { get; set; }
         //MODULO LOGIN
         public DbSet<Usuarios> Usuarios { get; set; }
         //public DbSet<Rol> Roles { get; set; }
@@ -75,7 +83,11 @@ namespace SupplyChain
         public DbSet<NoConformidadesListaAcciones> NoConformidadesListaAcciones { get; set; }
         public DbSet<NoConformidadesAcciones> NoConformidadesAcciones { get; set; }
         public DbSet<Compra> ComprasDbSet { get; set; }
+        public DbSet<vEstadEventos> vEstadEventos { get; set; }
 
+
+        public DbSet<MovimientoStockSP> MovimientosStock { get; set; }
+        public DbSet<StockSP> StocksSP { get; set; }
         public DbSet<Compra> Compras { get; set; }
         public DbSet<ResumenStock> ResumenStock { get; set; }
         public DbSet<vResumenStock> vResumenStock { get; set; }
@@ -85,38 +97,83 @@ namespace SupplyChain
 
         public DbSet<Proveedor> Proveedores { get; set; }
         public DbSet<EstadVenta> EstadVentas { get; set; }
+        public DbSet<vEstadPedidosIngresados> vEstadPedidosIngresados { get; set; }
+        public DbSet<vEstadPedidosAlta> vEstadPedidosAltas { get; set; }
+        public DbSet<vEstadFacturacion> vEstadFacturaciones { get; set; }
+        public DbSet<vEstadCompras> vEstadCompras { get; set; }
+        public DbSet<vEstadPresupuestos> vEstadPresupuestos { get; set; }
         public DbSet<VistasGrillas> VistasGrillas { get; set; }
+        public DbSet<vEventos> vEventos { get; set; }
+        public DbSet<vIngenieriaProductosFormulas> vIngenieriaProductosFormulas { get; set; }
 
+        public DbSet<Formula> Formulas { get; set; }
+        public DbSet<StockCorregido> StockCorregidos { get; set; }
+
+        public DbSet<vEstadoPedido> vEstadoPedidos { get; set; }
+        public DbSet<Solicitud> Solicitudes { get; set; }
+        public DbSet<vSolicitudes> vSolicitudes { get; set; }
+        public DbSet<vPresupuestos> vPresupuestos { get; set; }
+        public DbSet<PresupuestoAnterior> Presupuestos { get; set; }
+        public DbSet<vCondicionesPago> vCondicionesPago { get; set; }
+        public DbSet<vCondicionesEntrega> vCondicionesEntrega { get; set; }
+        public DbSet<vTipoCambio> vTipoCambio { get; set; }
+        public DbSet<NotificacionSubscripcion> NotificacionSubscripcions { get; set; }
+        public DbSet<vCalculoSolicitudes> vCalculoSolicitudes { get; set; }
+
+        //MODULO PROYECTOS
+        public DbSet<ProyectosGBPI> Proyectos { get; set; }
+        #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        { 
-            
+        {
+            this.Database.SetCommandTimeout(60);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //identity
-            base.OnModelCreating(modelBuilder);
+            //Configure domain classes using modelBuilder here   
+            modelBuilder.ApplyConfiguration(new CompraConfig());
+            modelBuilder.ApplyConfiguration(new PedidoConfig());
+            modelBuilder.ApplyConfiguration(new ProveedorConfig());
 
-            //configuraciones de tablas sql
-            modelBuilder.Entity<Compra>(entity =>
+            modelBuilder.Entity<Solicitud>(entity => {
+                entity.HasOne(c => c.PresupuestoDetalle)
+                    .WithOne(p => p.Solicitud);
+            });
 
-            entity.HasOne(d => d.ProveedorNavigation)
-                    .WithMany(p => p.Compras)
-            .HasForeignKey(d => d.NROCLTE)
-            //.OnDelete(DeleteBehavior.ClientSetNull)
-            //.HasConstraintName("FK_Clientes_Companias");
-            );
+
+            modelBuilder.Entity<Presupuesto>(entity => {
+                entity.HasMany(c => c.Items)
+                    .WithOne(p => p.Presupuesto)
+                    .HasForeignKey(c => c.PRESUPUESTOID);
+
+            });
+
+            modelBuilder.Entity<PresupuestoDetalle>(entity=> {
+                entity.HasOne(d => d.Presupuesto)
+                .WithMany(p => p.Items)
+                .HasForeignKey(d => d.PRESUPUESTOID)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PRESUPUESTO_DETALLE_PRESUPUESTO_ENCABEZADO");
+
+                entity.HasOne(d => d.Solicitud)
+                .WithOne(p => p.PresupuestoDetalle)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+
+                entity.Property(p => p.TOTAL).HasComputedColumnSql("[PREC_UNIT_X_CANTIDAD] - ',' [TOTAL]");
+            });
+
             modelBuilder.Entity<Genera>()
-        .       HasKey(c => new { c.CAMP3, c.CG_CIA, c.PUNTO_VENTA });
+             .HasKey(c => new { c.Id, c.CG_CIA, c.PUNTO_VENTA });
 
-            modelBuilder .Entity<vPendienteFabricar>(
+            modelBuilder.Entity<vPendienteFabricar>(
             eb =>
             {
                 eb.ToView("vPendientesFabricar");
             });
-            
-            modelBuilder .Entity<vResumenStock>(
+
+            modelBuilder.Entity<vResumenStock>(
             eb =>
             {
                 eb.ToView("vResumenStock");
@@ -127,7 +184,7 @@ namespace SupplyChain
             {
                 eb.ToView("vTrazabilidad");
             });
-            
+
             modelBuilder.Entity<vProdMaquinaDataCore>(
             eb =>
             {
@@ -137,6 +194,29 @@ namespace SupplyChain
             modelBuilder.Entity<ItemAbastecimiento>().HasNoKey().ToView(null);
             modelBuilder.Entity<Procun>().HasNoKey().ToView(null);
             modelBuilder.Entity<EstadVenta>().HasNoKey().ToView(null);
+            modelBuilder.Entity<StockSP>().HasNoKey().ToView(null);
+            CreateVistasSQL(modelBuilder);
+        }
+
+        private static void CreateVistasSQL(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<vEventos>().HasNoKey().ToView("vEventos");
+            modelBuilder.Entity<vEstadPedidosIngresados>().HasNoKey().ToView("vEstad_PedidosIngresados");
+            modelBuilder.Entity<vEstadPedidosAlta>().HasNoKey().ToView("vEstad_PedidosAltas");
+            modelBuilder.Entity<vEstadFacturacion>().HasNoKey().ToView("vEstad_Facturacion");
+            modelBuilder.Entity<vIngenieriaProductosFormulas>().HasNoKey().ToView("vIngenieria_Productos_Formulas");
+            modelBuilder.Entity<vEstadCompras>().HasNoKey().ToView("vEstad_Compras");
+            modelBuilder.Entity<vEstadPresupuestos>().HasNoKey().ToView("vEstad_Presupuestos");
+            modelBuilder.Entity<vEstadEventos>().HasNoKey().ToView("vEstad_Eventos");
+            modelBuilder.Entity<vEstadoPedido>().HasNoKey().ToView("vEstadoPedido");
+            modelBuilder.Entity<vSolicitudes>().HasNoKey().ToView("vSolicitudes");
+            modelBuilder.Entity<ClienteExterno>().HasNoKey().ToView("vClientesItris");
+            modelBuilder.Entity<vPresupuestos>().HasNoKey().ToView("vPresupuestos");
+            modelBuilder.Entity<vDireccionesEntrega>().ToView("vDireccionesEntrega_Itris");
+            modelBuilder.Entity<vCondicionesPago>().ToView("vCondicionesPago");
+            modelBuilder.Entity<vCondicionesEntrega>().ToView("vCondicionesEntrega");
+            modelBuilder.Entity<vTipoCambio>().ToView("vTipoCambio");
+            modelBuilder.Entity<vCalculoSolicitudes>().ToView("vCalculoSolicitudes");
         }
     }
 }

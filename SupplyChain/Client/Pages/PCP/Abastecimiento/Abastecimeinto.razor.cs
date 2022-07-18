@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using SupplyChain.Shared.Models;
 using System.Data;
 using Syncfusion.Blazor.Navigations;
+using Syncfusion.Blazor.Spinner;
 
 namespace SupplyChain.Client.Pages.PCP.Abastecimiento
 {
@@ -19,6 +20,8 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
         [Inject] protected IJSRuntime JsRuntime { get; set; }
         protected SfGrid<ModeloAbastecimiento> GridMP;
         protected SfGrid<ModeloAbastecimiento> GridSE;
+        protected SfSpinner SpinnerObjSE;
+        protected SfSpinner SpinnerObjMP;
         protected string claseSE = "btn btn-sm btn-primary active";
         protected string claseMP = "btn btn-sm btn-outline-primary";
 
@@ -55,7 +58,7 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
         //protected bool ToastVisible { get; set; } = false;
         protected override async Task OnInitializedAsync()
         {
-            //VisiblePropertySE = true;
+            VisiblePropertySE = true;
             //VisiblePropertyMP = true;
             //HttpResponseMessage respuesta;
             var listAbastecimiento = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento");
@@ -76,14 +79,24 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             //}
 
             //await InvokeAsync(StateHasChanged);
+            VisiblePropertySE = false;
         }
 
-        public async Task DataBoundHandler()
+
+        protected async Task OnDataBoundGridSE(BeforeDataBoundArgs<ModeloAbastecimiento> args)
         {
-            await GridMP.AutoFitColumns();
+            VisiblePropertySE = true;
+            GridSE.PreventRender();
             await GridSE.AutoFitColumns();
-            //VisiblePropertySE = false;
-            //VisiblePropertyMP = false;
+            VisiblePropertySE = false;
+        }
+
+        public async Task DataBoundHandler(object args)
+        {
+            GridSE.PreventRender();
+            await GridSE.AutoFitColumns();
+            VisiblePropertySE = false;
+
         }
 
         public async Task ClickHandlerMP(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -199,6 +212,21 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             }
 
             
+        }
+
+        protected async Task OnLoadGridSE(object args)
+        {
+            GridSE.PreventRender();
+            VisiblePropertySE = false;
+        }
+        protected async Task OnLoadGridMP(object args)
+        {
+            VisiblePropertyMP = true;
+        }
+
+        protected void Selecting(SelectingEventArgs args)
+        {
+            VisiblePropertySE = false;
         }
     }
 }

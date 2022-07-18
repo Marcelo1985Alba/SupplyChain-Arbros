@@ -12,47 +12,40 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SupplyChain;
+using SupplyChain.Server.Repositorios;
+
 namespace SupplyChain
 {
     [Route("api/[controller]")]
     [ApiController]
     public class PedCliController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly PedCliRepository _pedCliRepository;
 
-        public PedCliController(AppDbContext context)
+        public PedCliController(PedCliRepository pedCliRpository)
         {
-            _context = context;
+            this._pedCliRepository = pedCliRpository;
         }
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IEnumerable<PedCli>> Get(string PEDIDO)
+        public async Task<IEnumerable<PedCli>> Get()
         {
-            string xSQL = string.Format("SELECT Pedcli.* FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
-                "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) where(pedidos.FLAG = 0 AND Programa.CG_ESTADO = 3 " +
-                "AND Pedidos.CG_ORDF != 0 AND(Pedidos.TIPOO = 1)) " +
-                "UNION " +
-                "SELECT Pedcli.* FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
-                "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) " +
-                "where Pedcli.PEDIDO NOT IN(select PEDIDO from Pedidos where TIPOO = 1) " +
-                "AND Programa.CG_ESTADO = 3  AND Pedcli.CANTPED > 0 AND Pedidos.TIPOO != 28");
-            return await _context.PedCli.FromSqlRaw(xSQL).ToListAsync();
+            return await _pedCliRepository.ObtenerPedCliPedidos();
         }
 
 
 
         [HttpGet("GetPedidos")]
-        public IEnumerable<PedCli> Gets(string PEDIDO)
+        public async Task<IEnumerable<PedCli>> Gets()
         {
-            string xSQL = string.Format("SELECT * FROM Pedcli ");
-            return _context.PedCli.FromSqlRaw(xSQL).ToList<PedCli>();
+            return await _pedCliRepository.ObtenerTodos();
         }
 
         [HttpGet("{pedido}")]
         public async Task<IEnumerable<PedCli>> Gets(int pedido)
         {
-            return await _context.PedCli.Where(p=> p.PEDIDO == pedido).ToListAsync();
+            return await _pedCliRepository.Obtener(p=> p.PEDIDO == pedido).ToListAsync();
         }
 
         // PUT: api/Servicios/5
@@ -61,50 +54,35 @@ namespace SupplyChain
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPedCli(int id, PedCli Pedclis)
         {
-            if (id != Pedclis.PEDIDO)
-            {
-                return BadRequest();
-            }
+            if (id != Pedclis.PEDIDO) return BadRequest();
 
-            _context.Entry(Pedclis).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _pedCliRepository.Actualizar(Pedclis);
             }
             catch (Exception ex)
             {
-                if (!PedidoExists(id))
+                if (!await _pedCliRepository.Existe(id))
                 {
-                    return NotFound();
+                    return NotFound(ex);
                 }
                 else
                 {
-                    throw;
+                    return BadRequest(ex);
                 }
             }
 
             return NoContent();
         }
-        private bool PedidoExists(int id)
-        {
-            return _context.PedCli.Any(e => e.PEDIDO == id);
-        }
+        
 
         // GET: api/pedcli/BuscarPorPedido/{PEDIDO}
         [HttpGet("BuscarPorPedido/{PEDIDO}")]
         public async Task<ActionResult<List<PedCli>>> BuscarPorPedido(string PEDIDO)
         {
-            List<PedCli> lpedcli = new List<PedCli>();
-            if (_context.PedCli.Any())
-            {
-                lpedcli = await _context.PedCli.Where(p => p.PEDIDO.ToString() == PEDIDO).ToListAsync();
-            }
-            if (lpedcli == null)
-            {
-                return NotFound();
-            }
-            return lpedcli;
+            List<PedCli> lpedcli = await _pedCliRepository.Obtener(p => p.PEDIDO.ToString() == PEDIDO).ToListAsync();
+            return lpedcli == null ? NotFound() : lpedcli;
         }
     }
 }

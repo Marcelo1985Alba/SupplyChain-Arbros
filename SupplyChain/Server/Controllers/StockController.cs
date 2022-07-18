@@ -10,6 +10,8 @@ using System.Data;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.AspNetCore.Identity;
 using SupplyChain.Client.HelperService;
+using SupplyChain.Shared;
+using SupplyChain.Server.Repositorios;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -20,19 +22,18 @@ namespace SupplyChain.Server.Controllers
         private int cg_cia_usuario = 1; /*CAMBIAR POR LA DEL USUARIO*/
 
         private readonly AppDbContext _context;
-        public StockController(AppDbContext context)
+        private readonly PedidosRepository _pedidosRepository;
+
+        public StockController(AppDbContext context, PedidosRepository pedidosRepository)
         {
             _context = context;
+            this._pedidosRepository = pedidosRepository;
         }
 
         [HttpGet("GetMaxVale")]
         public async Task<IActionResult> GetMaxVale()
         {
-            //var user = User.Identities.ToList().Select(u=> u.Claims);
-            int numero = 1;
-            if (await _context.Pedidos.CountAsync() > 0)
-                numero += await _context.Pedidos
-                    .Where(p => p.CG_CIA == cg_cia_usuario).MaxAsync(p => p.VALE);
+            int numero = await _pedidosRepository.MaxNumeroVale(cg_cia_usuario);
 
             return Json(numero);
         }
@@ -41,84 +42,28 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("GetValesByTipo/{tipoo}/{cantRegistros:int}")]
         public async Task<ActionResult<IEnumerable<Pedidos>>> GetValesByTipo(int tipoo, int cantRegistros)
         {
-            List<Pedidos> lStock = new List<Pedidos>();
-            if (_context.Pedidos.Any())
-            {
-                lStock = await _context.Pedidos
-                    //.Include(x=> x.Proveedor)
-                    .Where(p => p.TIPOO == tipoo && p.VOUCHER == 0 && p.CG_CIA == cg_cia_usuario)
-                    .OrderByDescending(s=> s.VALE)
-                    .Take(cantRegistros)
-                    .ToListAsync();
-            }
+            List<Pedidos> lStock = await _pedidosRepository
+                .Obtener(p => p.TIPOO == tipoo && p.VOUCHER == 0 && p.CG_CIA == cg_cia_usuario, cantRegistros,
+                         s => s.OrderByDescending(p=> p.VALE), true)
+                .ToListAsync();
+
             if (lStock == null)
             {
                 return NotFound();
             }
 
 
-            return lStock.OrderByDescending(s => s.VALE).ToList(); ;
+            return lStock;
         }
 
-        // GET: api/Stock/AbriVale/{vale}
-        [HttpGet("AbriVale/{vale}")]
+        // GET: api/Stock/{vale}
+        [HttpGet("ByNumeroVale/{vale}")]
         public async Task<ActionResult<List<Pedidos>>> AbriVale(int vale)
         {
             try
             {
-                List<Pedidos> lStock = new List<Pedidos>();
-                if (_context.Pedidos.Any())
-                {
-                    lStock = await _context.Pedidos
-                        .Where(p => p.VALE == vale && p.CG_CIA == cg_cia_usuario)
-                        .ToListAsync();
-                }
-
-
-
-                if (lStock == null)
-                {
-                    return NotFound();
-                }
-
-                //SI ES RECEPCION HAYQ EU CALCULAR PENDIENTE DE OC Y OBTENER EL PEDIDO
-                if ( lStock.Count > 0 && lStock[0].TIPOO == 5)
-                {
-                    await lStock.ForEachAsync(async s =>
-                    {
-                        var solicitado = await _context.Compras.Where(c => c.NUMERO == s.OCOMPRA && c.CG_MAT == s.CG_ART)
-                        .SumAsync(c => c.SOLICITADO);
-                        var recibido = await _context.Pedidos
-                            .Where(p => p.TIPOO == 5 && p.OCOMPRA == s.OCOMPRA && p.CG_ART == s.CG_ART)
-                            .SumAsync(p => p.STOCK);
-
-                        s.PENDIENTEOC = solicitado - recibido;
-
-
-                        s.Proveedor = await _context.Proveedores.Where(p => p.CG_PROVE == s.CG_PROVE).FirstOrDefaultAsync();
-                    });
-
-                }
-
-                if (lStock.Count > 0 && lStock[0].TIPOO == 10)
-                {
-                    await lStock.ForEachAsync(async i =>
-                    {
-                        i.ResumenStock = await _context.vResumenStock.Where(r =>
-                             r.CG_ART.ToUpper() == i.CG_ART.ToUpper()
-                             && r.LOTE.ToUpper() == i.LOTE.ToUpper()
-                             && r.DESPACHO.ToUpper() == i.DESPACHO.ToUpper()
-                             && r.SERIE.ToUpper() == i.SERIE.ToUpper()
-                             && r.CG_DEP == i.CG_DEP).FirstOrDefaultAsync();
-
-                        i.PENDIENTEOC = i.ResumenStock.STOCK - Math.Abs((decimal)i.STOCK);
-                    });
-                            
-
-                }
-
-
-                return lStock;
+                List<Pedidos> lStock = await _pedidosRepository.ObtenerByNumeroVale(vale, cg_cia_usuario);
+                return lStock == null ? NotFound() : lStock;
             }
             catch (Exception ex)
             {
@@ -144,7 +89,7 @@ namespace SupplyChain.Server.Controllers
                 && r.LOTE.ToUpper() == resumenStock.LOTE.ToUpper()
                 && r.DESPACHO.ToUpper() == resumenStock.DESPACHO.ToUpper()
                 && r.SERIE.ToUpper() == resumenStock.SERIE.ToUpper()
-                ).Take(1).OrderByDescending(r => r.REGISTRO).FirstAsync();
+                ).Take(1).OrderByDescending(r => r.Id).FirstAsync();
             }
             catch (Exception ex)
             {
@@ -192,7 +137,7 @@ namespace SupplyChain.Server.Controllers
         {
             stock.USUARIO = "USER";
             stock.CG_CIA = 1;
-            if (registro != stock.REGISTRO)
+            if (registro != stock.Id)
             {
                 return BadRequest("Registro Incorrecto");
             }
@@ -224,7 +169,7 @@ namespace SupplyChain.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Pedidos>> PostStock([FromBody] Pedidos stock)
         {
-            stock.REGISTRO = null;
+            stock.Id = null;
             stock.USUARIO = "USER";
             stock.CG_CIA = 1;
             
@@ -256,7 +201,7 @@ namespace SupplyChain.Server.Controllers
             }
             catch (DbUpdateException ex)
             {
-                if (RegistroExists(stock.REGISTRO))
+                if (RegistroExists(stock.Id))
                 {
                     return Conflict();
                 }
@@ -278,7 +223,7 @@ namespace SupplyChain.Server.Controllers
             //MOVIM ENTRE DEP: GENERAR SEGUNDO REGISTROS: 
             if (stock?.TIPOO == 9)
             {
-                stock.REGISTRO = null;
+                stock.Id = null;
                 stock.USUARIO = "USER";
                 stock.CG_CIA = 1;
                 stock.STOCK = -stock.STOCK;
@@ -292,7 +237,7 @@ namespace SupplyChain.Server.Controllers
                 }
                 catch (DbUpdateException ex)
                 {
-                    if (RegistroExists(stock.REGISTRO))
+                    if (RegistroExists(stock.Id))
                     {
                         return Conflict();
                     }
@@ -316,9 +261,47 @@ namespace SupplyChain.Server.Controllers
             return Ok(stock);
         }
 
+
+        [HttpGet("MovimientosStock")]
+        public async Task<List<MovimientoStockSP>> MovimientosStock([FromQuery]FilterMovimientosStock filter)
+        {
+            try
+            {
+                var query = "Exec NET_Listado_Movimientos_WEB" +
+                        $" @FechaDesde='{filter.Desde}', @FechaHasta ='{filter.Hasta}', @Tipoo = {filter.Tipoo}," +
+                        $" @Deposito = {filter.Deposito}";
+
+                var list = await _context.MovimientosStock.FromSqlRaw(query).ToListAsync();
+
+                return list;
+            }
+            catch (Exception ex)
+            {
+                return new List<MovimientoStockSP>();
+            }
+        }
+
+        [HttpGet("StockInventario")]
+        public async Task<List<StockSP>> Stocks([FromQuery] FilterMovimientosStock filter)
+        {
+            try
+            {
+                var query = "Exec NET_Listado_Stock_WEB" +
+                        $" @FechaHasta ='{filter.Hasta}', @Deposito = {filter.Deposito}";
+
+                var list = await _context.StocksSP.FromSqlRaw(query).ToListAsync();
+
+                return list;
+            }
+            catch (Exception ex)
+            {
+                return new List<StockSP>();
+            }
+        }
+
         private bool RegistroExists(decimal? registro)
         {
-            return _context.Pedidos.Any(e => e.REGISTRO == registro);
+            return _context.Pedidos.Any(e => e.Id == registro);
         }
     }
 }

@@ -5,8 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SupplyChain.Shared.Models
 {
     [Table("Compras")]
-    public class Compra
+    public class Compra : EntityBase<int>
     {
+
+        [Key, Column("REGISTRO")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Display(Name = "Registro")]
+        new public int Id { get; set; }
+
         [Display(Name = "Número")]
         public int NUMERO { get; set; }
         [Display(Name = "Fecha emisión")]
@@ -97,16 +103,13 @@ namespace SupplyChain.Shared.Models
         [Display(Name = "Fecha registro")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime FE_REG { get; set; }
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Display(Name = "Registro")]
-        public int REGISTRO { get; set; }
+        
         [Display(Name = "Compañía")]
         public int? CG_CIA { get; set; }
 
         [NotMapped]
         public decimal? PENDIENTE { get; set; } = 0;
         [NotMapped]
-        public Proveedor ProveedorNavigation { get; set; }
+        public virtual Proveedor ProveedorNavigation { get; set; }
     }
 }

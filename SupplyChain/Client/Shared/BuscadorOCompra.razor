@@ -2,16 +2,16 @@
 @inject ToastService toastService
 @using Syncfusion.Blazor.Buttons
 <div class="form-row">
-    <div class="col-10">
-        <SfNumericTextBox @bind-Value="@Valor" ShowClearButton="true" TValue="int" Format="n0" 
+    <div class="col-8">
+        <SfNumericTextBox @bind-Value="@Valor" ShowClearButton="true" TValue="int" Format="n0"
                           Decimals="0" ShowSpinButton="@MostrarSpin" Readonly="@EsSoloLectura"></SfNumericTextBox>
     </div>
-    <div class="col-2">
+    <div class="col-4 mb-1">
         @if (MostraBotonBusqueda)
         {
-            <SfButton HtmlAttributes="@HtmlAttribute" OnClick="@(async (e)=> await BuscarOCompras())" 
+            <SfButton OnClick="@(async (e)=> await BuscarOCompras())"
                       CssClass="e-smal e-round e-info" IsPrimary="false"
-                      IconCss="fa fa-search" Disabled="@DeshabilitaBotonBusqueda"></SfButton>
+                      IconCss="fa fa-search" Disabled="@DeshabilitaBotonBusqueda" HtmlAttributes="@HtmlAttribute"></SfButton>
         }
 
     </div>
@@ -21,10 +21,10 @@
 <SfToast ID="toast_default" @ref="ToastObj">
     <ToastPosition X="Center" Y="Top"></ToastPosition>
 </SfToast>
+<BuscadorEmergente Height="600px" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
+                       Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async(v)=>await Cerrar(v))"
+                       OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
 
-<BuscadorEmergente Height="85%" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" 
-                   Titulo="@TituloBuscador"
-                   OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
 
 @code {
 
@@ -37,13 +37,15 @@
     [Parameter] public int? CodigoDeposito { get; set; }
     [Parameter] public string Remito { get; set; } = "0000-00000000";
     [Parameter] public int? Tipoo { get; set; }
-    [Parameter] public Dictionary<string, object> HtmlAttribute { get; set; } = new Dictionary<string, object>() { { "type", "button" } };
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> HtmlAttribute { get; set; } =
+        new Dictionary<string, object>() { { "type", "button" } };
 
 
     BuscadorEmergente<Compra> Buscador;
     SfToast ToastObj;
     private Compra[] ItemsABuscar = null;
-    private string[] ColumnasBuscador = new string[] { "NUMERO", "FE_EMIT", "CG_MAT", "SOLICITADO","UNID", "DES_PROVE" };
+    private string[] ColumnasBuscador = new string[] { "NUMERO", "FE_EMIT", "CG_MAT", "SOLICITADO", "UNID", "DES_PROVE" };
     private string TituloBuscador = "Listado de Ordenes de Compra Abierta";
     private bool PopupBuscadorVisible = false;
 
@@ -80,7 +82,7 @@
                 });
                 return;
             }
-
+            PopupBuscadorVisible = true;
             await Buscador.ShowAsync();
             ItemsABuscar = await Http.GetFromJsonAsync<Compra[]>("api/Compras");
             await InvokeAsync(StateHasChanged);
@@ -99,9 +101,14 @@
     {
 
         var compras = ItemsABuscar.Where(c => c.NUMERO == compra.NUMERO).ToList();
+        PopupBuscadorVisible = false;
         await Buscador.HideAsync();
         await OnOCSeleccionada.InvokeAsync(compras);
     }
 
+    public async Task Cerrar(bool visible)
+    {
+        PopupBuscadorVisible = visible;
+    }
 
 }

@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared.Models;
+using SupplyChain.Shared;
 
 namespace SupplyChain
 {
@@ -12,111 +15,118 @@ namespace SupplyChain
     [ApiController]
     public class CeldasController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly CeldasRepository _celdasRepository;
 
-        public CeldasController(AppDbContext context)
+        public CeldasController(CeldasRepository celdasRepository)
         {
-            _context = context;
+            this._celdasRepository = celdasRepository;
         }
 
         // GET: api/Celdas
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Celdas>>> GetCeldas()
         {
-            return await _context.Celdas.ToListAsync();
+            try
+            {
+                return await _celdasRepository.ObtenerTodos();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
-        // GET: api/Celdas/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Celdas>> GetCeldas(string id)
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>> GetCeldas(string id)
         {
-            var Celdas = await _context.Celdas.FindAsync(id);
-
-            if (Celdas == null)
+            try
             {
-                return NotFound();
+                return await _celdasRepository.Existe(id);
             }
-
-            return Celdas;
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         // PUT: api/Celdas/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCeldas(string id, Celdas Celdas)
+        public async Task<IActionResult> PutCeldas(string id, Celdas Celda)
         {
-            if (id != Celdas.CG_CELDA)
+            if (id != Celda.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(Celdas).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _celdasRepository.Actualizar(Celda);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CeldasExists(id))
+                if (!await _celdasRepository.Existe(id))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            return Ok(Celda);
         }
 
         // POST: api/Celdas
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Celdas>> PostCeldas(Celdas Celdas)
+        public async Task<ActionResult<Celdas>> PostCeldas(Celdas Celda)
         {
-            _context.Celdas.Add(Celdas);
             try
             {
-                await _context.SaveChangesAsync();
+                await _celdasRepository.Agregar(Celda);
+                return CreatedAtAction("GetCeldas", new { id = Celda.Id }, Celda);
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException exx)
             {
-                if (CeldasExists(Celdas.CG_CELDA))
+                if (!await _celdasRepository.Existe(Celda.Id))
                 {
                     return Conflict();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
-
-            return CreatedAtAction("GetCeldas", new { id = Celdas.CG_CELDA }, Celdas);
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         // DELETE: api/Celdas/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Celdas>> DeleteCeldas(string id)
         {
-            var Celdas = await _context.Celdas.FindAsync(id);
-            if (Celdas == null)
+            var Celda = await _celdasRepository.ObtenerPorId(id);
+            if (Celda == null)
             {
                 return NotFound();
             }
 
-            _context.Celdas.Remove(Celdas);
-            await _context.SaveChangesAsync();
+            await _celdasRepository.Remover(id);
 
-            return Celdas;
+            return Celda;
         }
 
-        private bool CeldasExists(string id)
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>> Existe(string id)
         {
-            return _context.Celdas.Any(e => e.CG_CELDA == id);
+            bool existe = await _celdasRepository.Existe(id);
+
+            return Ok(existe);
         }
     }
 }

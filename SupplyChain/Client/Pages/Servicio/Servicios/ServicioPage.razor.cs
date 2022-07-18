@@ -20,6 +20,7 @@ using Syncfusion.Blazor.Spinner;
 using Syncfusion.Blazor.Navigations;
 using Microsoft.AspNetCore.Hosting;
 using SupplyChain.Client.Shared;
+using SupplyChain.Shared.Models;
 
 namespace SupplyChain.Pages.Servicios
 {
@@ -90,7 +91,7 @@ namespace SupplyChain.Pages.Servicios
         protected List<Operario> operarios = new List<Operario>();
         protected IEnumerable<Operario> opers;
         protected List<Celdas> celdas = new List<Celdas>();
-        protected List<Prod> prods = new List<Prod>();
+        protected List<Producto> prods = new List<Producto>();
         protected List<Solution> rutas;
         protected List<Service> servDesc;
         protected string pedant;
@@ -120,14 +121,14 @@ namespace SupplyChain.Pages.Servicios
             {
                 ApiUrl = "api/Servicios";
                 servicios = await Http.GetFromJsonAsync<List<Service>>("api/Servicios");
-                servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
+                servDesc = servicios.OrderByDescending(s => s.Id).ToList();
                 
             }
             else
             {
                 ApiUrl = $"api/Servicios/{pedido}";
                 servicios = await Http.GetFromJsonAsync<List<Service>>($"api/Servicios/{pedido}");
-                servDesc = servicios.Where(s => s.PEDIDO == pedido).ToList();
+                servDesc = servicios.Where(s => s.Id == pedido).ToList();
             }
             medidas = await Http.GetFromJsonAsync<List<Medida>>("api/Medida");
             //series = await Http.GetFromJsonAsync<List<Serie>>("api/Serie");
@@ -165,23 +166,23 @@ namespace SupplyChain.Pages.Servicios
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
                 HttpResponseMessage response;
-                bool found = servicios.Any(o => o.PEDIDO == args.Data.PEDIDO);
+                bool found = servicios.Any(o => o.Id == args.Data.Id);
                 Service ur = new Service();
 
                 if (!found)
                 {
-                    args.Data.PEDIDO = servicios.Max(s => s.PEDIDO) + 1;
+                    args.Data.Id = servicios.Max(s => s.Id) + 1;
                     response = await Http.PostAsJsonAsync("api/Servicios", args.Data);
-                    servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
+                    servDesc = servicios.OrderByDescending(s => s.Id).ToList();
                 }
                 else
                 {
-                    pedant = servicios.Where(s => s.PEDIDO == args.Data.PEDIDO).FirstOrDefault().PEDIDOANT;
+                    pedant = servicios.Where(s => s.Id == args.Data.Id).FirstOrDefault().PEDIDOANT;
                     if (pedant != args.Data.PEDIDOANT)
                     {
                         foreach (var ped in servicios)
                         {
-                            if (args.Data.PEDIDOANT == ped.PEDIDO)
+                            if (args.Data.PEDIDOANT == ped.Id)
                             {
                                 bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Quiere traer los datos del pedido anterior?");
                                 if (isConfirmed)
@@ -241,8 +242,8 @@ namespace SupplyChain.Pages.Servicios
                     args.Data.OPDS = string.IsNullOrEmpty(args.Data.OPDS) ? "" : args.Data.OPDS;
                     args.Data.PRESENCIAINSPEC = string.IsNullOrEmpty(args.Data.PRESENCIAINSPEC) ? "" : args.Data.PRESENCIAINSPEC;
                     args.Data.MANOMETRO = string.IsNullOrEmpty(args.Data.MANOMETRO) ? "" : args.Data.MANOMETRO;
-                    response = await Http.PutAsJsonAsync($"api/Servicios/{args.Data.PEDIDO}", args.Data);
-                    servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
+                    response = await Http.PutAsJsonAsync($"api/Servicios/{args.Data.Id}", args.Data);
+                    servDesc = servicios.OrderByDescending(s => s.Id).ToList();
                 }
 
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
@@ -262,12 +263,12 @@ namespace SupplyChain.Pages.Servicios
             
             if (args.Data != null)
             {
-                bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", $"Seguro de que desea eliminar la reparacion {args.Data.PEDIDO}?");
+                bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", $"Seguro de que desea eliminar la reparacion {args.Data.Id}?");
                 if (isConfirmed)
                 {
                     //servicios.Remove(servicios.Find(m => m.PEDIDO == args.Data.PEDIDO));
-                    await Http.DeleteAsync($"api/Servicios/{args.Data.PEDIDO}");
-                    servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
+                    await Http.DeleteAsync($"api/Servicios/{args.Data.Id}");
+                    servDesc = servicios.OrderByDescending(s => s.Id).ToList();
                 }
             }
         }
@@ -387,7 +388,7 @@ namespace SupplyChain.Pages.Servicios
                         PdfGridCell gridCell5 = pdfGrid.Rows[1].Cells[4];
                         gridCell5.ColumnSpan = 2;
                         gridCell5.StringFormat = Centrado;
-                        gridCell5.Value = new PdfTextElement($"PEDIDO: {selectedRecord.PEDIDO}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+                        gridCell5.Value = new PdfTextElement($"PEDIDO: {selectedRecord.Id}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
                         //Add RowSpan
                         PdfGridCell gridCell6 = pdfGrid.Rows[2].Cells[0];
                         gridCell6.ColumnSpan = 6;
@@ -685,7 +686,7 @@ namespace SupplyChain.Pages.Servicios
                         stream.Position = 0;
                         //Close the document 
                         document.Close(true);
-                        await JS.SaveAs($"{selectedRecord.PEDIDO} Certificado" + ".pdf", stream.ToArray());
+                        await JS.SaveAs($"{selectedRecord.Id} Certificado" + ".pdf", stream.ToArray());
                     }
                 }
             }
@@ -810,7 +811,7 @@ namespace SupplyChain.Pages.Servicios
                             $"\r\n" +
                             $"\r\n" +
                             $"\r\n" +//10
-                            $"         Nro. Serie Rep.: {selectedRecord.PEDIDO.Trim()}                                Fecha: {DateTime.Now.Day}/{DateTime.Now.Month}/{DateTime.Now.Year}\r\n" +
+                            $"         Nro. Serie Rep.: {selectedRecord.Id.Trim()}                                Fecha: {DateTime.Now.Day}/{DateTime.Now.Month}/{DateTime.Now.Year}\r\n" +
                             $"\r\n" +
                             $"                 {selectedRecord.CLIENTE.Trim()}\r\n" +
                             $"\r\n" +
@@ -876,7 +877,7 @@ namespace SupplyChain.Pages.Servicios
                         MemoryStream xx = new MemoryStream();
                         document1.Save(xx);
                         document1.Close(true);
-                        await JS.SaveAs($"{selectedRecord.PEDIDO.Trim()} OPDS {selectedRecord.ACTA.Trim()}" + ".pdf", xx.ToArray());
+                        await JS.SaveAs($"{selectedRecord.Id.Trim()} OPDS {selectedRecord.ACTA.Trim()}" + ".pdf", xx.ToArray());
                     }
                 }
             }
@@ -886,7 +887,7 @@ namespace SupplyChain.Pages.Servicios
                 {
                     foreach (Service selectedRecord in this.Grid.SelectedRecords)
                     {
-                        NroPedido = selectedRecord.PEDIDO;
+                        NroPedido = selectedRecord.Id;
                     }
                 }
             }

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿a<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -6,26 +6,85 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Report\ArbrosDataSet.Designer.cs" />
+    <Content Remove="wwwroot\Report\ArbrosDataSet.xsc" />
+    <Content Remove="wwwroot\Report\ArbrosDataSet.xsd" />
+    <Content Remove="wwwroot\Report\ArbrosDataSet.xss" />
+    <Content Remove="wwwroot\Report\Datasheet\vDataSheet.Designer.cs" />
+    <Content Remove="wwwroot\Report\Datasheet\vDataSheet.xsc" />
+    <Content Remove="wwwroot\Report\Datasheet\vDataSheet.xsd" />
+    <Content Remove="wwwroot\Report\Datasheet\vDataSheet.xss" />
+    <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.Designer.cs" />
+    <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsc" />
+    <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsd" />
+    <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xss" />
+    <Content Remove="wwwroot\Report\EtiquetaOF\ReporteEtiquetaOF.rdlc" />
+    <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.cs" /> 
+    <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.Designer.cs" />
+    <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xsc" />
+    <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xsd" />
+    <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xss" />
+    <Content Remove="wwwroot\Report\NoConfor\ReporteEvento.rdlc" />
+    <Content Remove="wwwroot\Report\Report1.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="wwwroot\Report\ArbrosDataSet.Designer.cs">
+      <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="wwwroot\Report\Datasheet\vDataSheet.Designer.cs">
+      <DependentUpon>vDataSheet.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.Designer.cs">
+      <DependentUpon>ArbrosDataSet5.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="wwwroot\Report\NoConfor\ArbrosDataSet1.cs">
+      <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="wwwroot\Report\NoConfor\ArbrosDataSet1.Designer.cs">
+      <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\Report\EtiquetaOF\ReporteEtiquetaOF.rdlc" />
+    <EmbeddedResource Include="wwwroot\Report\NoConfor\ReporteEvento.rdlc" />
+    <EmbeddedResource Include="wwwroot\Report\Report1.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.9.1" />
-    <PackageReference Include="BoldReports.Net.Core" Version="3.1.43" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.8" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.12.0" />
+    <PackageReference Include="BoldReports.Net.Core" Version="4.1.78" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.8">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.17">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="19.1.0.69" />
+    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="19.4.0.56" />
+    <PackageReference Include="Syncfusion.Blazor.FileManager.PhysicalFileProvider" Version="19.4.0.48" />
+    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="19.4.0.56" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="19.4.0.56" />
     <PackageReference Include="System.CodeDom" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\WindowsFormsForRDLC\WindowsFormsForRDLC.csproj" />
     <ProjectReference Include="..\Client\SupplyChain.Client.csproj" />
     <ProjectReference Include="..\Shared\SupplyChain.Shared.csproj" />
   </ItemGroup>
@@ -46,6 +105,58 @@
     <None Update="x64\pdfium.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Report\ArbrosDataSet.xsc">
+      <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="wwwroot\Report\ArbrosDataSet.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>ArbrosDataSet.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Include="wwwroot\Report\ArbrosDataSet.xss">
+      <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="wwwroot\Report\Datasheet\vDataSheet.xsc">
+      <DependentUpon>vDataSheet.xsd</DependentUpon>
+    </None>
+    <None Include="wwwroot\Report\Datasheet\vDataSheet.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>vDataSheet.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Include="wwwroot\Report\Datasheet\vDataSheet.xss">
+      <DependentUpon>vDataSheet.xsd</DependentUpon>
+    </None>
+    <None Include="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsc">
+      <DependentUpon>ArbrosDataSet5.xsd</DependentUpon>
+    </None>
+    <None Include="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>ArbrosDataSet5.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Include="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xss">
+      <DependentUpon>ArbrosDataSet5.xsd</DependentUpon>
+    </None>
+    <None Include="wwwroot\Report\NoConfor\ArbrosDataSet1.xsc">
+      <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="wwwroot\Report\NoConfor\ArbrosDataSet1.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>ArbrosDataSet1.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Include="wwwroot\Report\NoConfor\ArbrosDataSet1.xss">
+      <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\Report\Presupuesto\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

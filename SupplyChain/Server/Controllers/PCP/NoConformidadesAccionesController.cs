@@ -55,6 +55,42 @@ namespace SupplyChain
         }
         */
 
+
+        // GET: api/NoConformidadesAcciones/GetAccionxCgNoConf/1/2
+        [HttpGet("GetAccionxCgNoConf/{Cg_NoConf}/{Orden}")]
+        public async Task<ActionResult<IEnumerable<NoConformidadesAcciones>>> GetAccionxCgNoConf(int Cg_NoConf, int Orden)
+
+        {
+            try
+            {
+                string xSQL = "SELECT a.Cg_NoConfAcc, a.Cg_NoConf, a.Orden, b.Texto as DesOrden, a.Observaciones, a.Fe_ocurrencia, a.Usuario " +
+                    "FROM NoConfor_Acciones as a " +
+                    "left join NoConfor_ListaAcciones as b on a.Orden = b.Tipoaccion " +
+                    " WHERE a.Cg_NoConf = " + Cg_NoConf + " and a.Orden = " + Orden;
+                return await _context.NoConformidadesAcciones.FromSqlRaw(xSQL).ToListAsync();
+            }
+            catch
+            {
+                return new List<NoConformidadesAcciones>();
+            }
+        }
+
+        // DELETE: api/NoConformidadesAcciones/1
+        [HttpDelete("{Cg_NoConfAcc}")]
+        public async Task<ActionResult<NoConformidadesAcciones>> DeleteAccion(int Cg_NoConfAcc)
+        {
+            var NoConfAccion = await _context.NoConformidadesAcciones.FindAsync(Cg_NoConfAcc);
+            if (NoConfAccion == null)
+            {
+                return NotFound();
+            }
+
+            _context.NoConformidadesAcciones.Remove(NoConfAccion);
+            await _context.SaveChangesAsync();
+
+            return NoConfAccion;
+        }
+
         //POST: api/NoConfAcciones
         [HttpPost]
         public async Task<ActionResult<NoConformidadesAcciones>> PostStock([FromBody] NoConformidadesAcciones NoConfAcciones)

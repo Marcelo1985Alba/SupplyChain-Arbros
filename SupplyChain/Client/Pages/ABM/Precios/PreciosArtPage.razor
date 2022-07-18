@@ -1,0 +1,57 @@
+﻿@page "/Abms/precios-articulos"
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.DropDowns
+@using SupplyChain
+@using Syncfusion.Blazor.Calendars
+@attribute [Authorize]
+@inherits SupplyChain.Client.Pages.ABM.Precios.PreciosArtPageBase
+<div class="row mt-3">
+        <div class="col-12">
+            <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                               OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                               OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+        </div>
+ </div>
+
+
+
+<div class="row">
+    <div class="col-12">
+        <SfToast ID="toast_default" @ref="ToastObj">
+            <ToastPosition X="Center" Y="Top"></ToastPosition>
+        </SfToast>
+
+        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                DataSource="@(preciosArts)"
+                ID="gridPreciosArt" Height="100%" Width="100%" GridLines="GridLine.Both" RowHeight="27"
+                @ref="Grid" AllowExcelExport="true" AllowGrouping="true"
+                AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
+            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+            <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
+            <GridEvents TValue="PreciosArticulos"
+                        OnToolbarClick="@ClickHandler" OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"></GridEvents>
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
+            </GridEditSettings>
+            <GridColumns>
+                <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+                <GridColumn Field=@nameof(PreciosArticulos.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(PreciosArticulos.Descripcion) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(PreciosArticulos.Precio) HeaderText="Precio" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(PreciosArticulos.Moneda) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(PreciosArticulos.Marca) HeaderText="Marca" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(PreciosArticulos.Construccion) HeaderText="Construccion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+            </GridColumns>
+            <SfSpinner @ref="refSpinner" Type="SpinnerType.Bootstrap" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
+        </SfGrid>
+    </div>
+    @if (popupFormVisible)
+	{
+		 <FormPrecio PrecioArticulo="preciosArticuloSeleccionado" Show="popupFormVisible" 
+                     OnCerrar="OnCerraDialog" OnGuardar="@(async(p)=>await Guardar(p))"></FormPrecio>
+	}
+    
+</div>

@@ -6,23 +6,31 @@
 
 @if (!IsAdmin)
 {
-    <div id="treeview">
-        <SfTreeView TValue="Modulo" ID="treeviewMenuManual" CssClass="custom" >
-            <TreeViewFieldsSettings DataSource="dbMenu" Id="Id" Text="Descripcion" ParentID="ParentId" HasChildren="TieneChild"
-                                    NavigateUrl="Url" IconCss="IconCss">
-            </TreeViewFieldsSettings>
-            <TreeViewEvents TValue="Modulo" NodeSelected="@(async(a)=> await NodeClicked(a))"></TreeViewEvents>
-        </SfTreeView>
-    </div>
+<div id="treeview">
+    <span class="e-icons e-search"></span>
+    <SfTreeView TValue="Modulo" ID="treeviewMenuManual" CssClass="custom-tree" AllowTextWrap="true">
+        <TreeViewFieldsSettings DataSource="dbMenu" Id="Id" Text="Descripcion" ParentID="ParentId" HasChildren="TieneChild"
+                                NavigateUrl="Url" IconCss="IconCss">
+        </TreeViewFieldsSettings>
+        <TreeViewEvents TValue="Modulo" NodeSelected="@(async(a)=> await NodeClicked(a))"></TreeViewEvents>
+    </SfTreeView>
+</div>
 }
 else if(IsAdmin)
 {
     <div class="control-wrapper">
         <div id="treeview">
-            <SfTreeView TValue="Modulo" ID="treeviewMenuDB" CssClass="custom">
+            @*<SfTreeView TValue="Modulo" ID="treeviewMenuDB" CssClass="custom-tree">
                 <TreeViewFieldsSettings TValue="Modulo" Id="Id" Text="Descripcion" ParentID="ParentId" HasChildren="TieneChild"
                                         NavigateUrl="Url" IconCss="IconCss">
                     <SfDataManager Url="api/Modulo" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
+                </TreeViewFieldsSettings>
+                <TreeViewEvents TValue="Modulo" NodeSelected="@(async(a)=> await NodeClicked(a))"></TreeViewEvents>
+            </SfTreeView>*@
+            <SfTreeView TValue="Modulo" ID="treeviewMenuDB" CssClass="custom-tree">
+                <TreeViewFieldsSettings DataSource="dbMenu" TValue="Modulo" Id="Id" Text="Descripcion" 
+                                        ParentID="ParentId" HasChildren="TieneChild"
+                                        NavigateUrl="Url" IconCss="IconCss">
                 </TreeViewFieldsSettings>
                 <TreeViewEvents TValue="Modulo" NodeSelected="@(async(a)=> await NodeClicked(a))"></TreeViewEvents>
             </SfTreeView>
@@ -39,82 +47,95 @@ else
 @code{
     [CascadingParameter] public MainLayout Layout { get; set; }
     [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
-    protected ExpandAction Expand = ExpandAction.Click;
     private AuthenticationState authState;
+    protected ExpandAction Expand = ExpandAction.Click;
     protected bool IsAdmin = false;
     protected bool IsProd = false;
     protected List<Modulo> dbMenu = new List<Modulo>();
+    [Parameter] public EventCallback<bool> OnChangeToggle { get; set; }
+
     protected async override Task OnInitializedAsync()
     {
         // To get the last item index from the db
-        //var count = await Http.GetFromJsonAsync<int>("api/Modulo/index");
-        //var index = count + 1;
 
-        //Console.WriteLine("Count: " + count);
+        await GetMenu();
+
+    }
+    protected async Task GetMenu()
+    {
 
         authState = await authenticationState;
         if (authState.User.Identity.IsAuthenticated)
         {
             IsAdmin = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Admin"));
             IsProd = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Produccion"));
+
+            if (!IsAdmin && IsProd)
+            {
+                dbMenu.Add(new Modulo { Id = 4, Descripcion = "PCP", IconCss = "icon-docs icon", TieneChild = true });
+                dbMenu.Add(new Modulo
+                {
+                    Id = 7,
+                    Descripcion = "Carga de Máquina",
+                    IconCss = "",
+                    TieneChild = false,
+                    ParentId = 4,
+                    Url = "/cargamaquina"
+                });
+                dbMenu.Add(new Modulo { Id = 2, Descripcion = "VENTAS", IconCss = "icon-th icon", TieneChild = true });
+                dbMenu.Add(new Modulo
+                {
+                    Id = 8,
+                    Descripcion = "Logistica",
+                    IconCss = "",
+                    TieneChild = false,
+                    ParentId = 2,
+                    Url = "/logistica-listado"
+                });
+                dbMenu.Add(new Modulo
+                {
+                    Id = 13,
+                    Descripcion = "Servicios",
+                    IconCss = "",
+                    TieneChild = false,
+                    ParentId = 2,
+                    Url = "/servicio/listado"
+                });
+                dbMenu.Add(new Modulo { Id = 5, Descripcion = "CONTROL DE CALIDAD", IconCss = "icon-th icon", TieneChild = true });
+                dbMenu.Add(new Modulo
+                {
+                    Id = 14,
+                    Descripcion = "Trazabilidad",
+                    IconCss = "",
+                    TieneChild = false,
+                    ParentId = 5,
+                    Url = "/trazabilidad"
+                });
+                dbMenu.Add(new Modulo { Id = 3, Descripcion = "INVENTARIOS", IconCss = "icon-th icon", TieneChild = true });
+                dbMenu.Add(new Modulo
+                {
+                    Id = 14,
+                    Descripcion = "Recepcion de Insumos",
+                    IconCss = "",
+                    TieneChild = false,
+                    ParentId = 3,
+                    Url = "/inventario/5"
+                });
+            }
+            else
+            {
+                dbMenu = await Http.GetFromJsonAsync<List<Modulo>>("api/Modulo");
+                if (authState.User.Identity.Name.ToUpper() == "MONICA")
+                {
+                    var maxId = dbMenu.Max(m => m.Id) + 1;
+                    dbMenu.Add(new Modulo { Id = maxId, Descripcion = "Panel de Control", IconCss = "fa fa-tachometer",
+                        TieneChild = false, Url= "/panel-control/index"
+                    });
+                }
+            }
         }
 
-        if (!IsAdmin && IsProd)
-        {
-            dbMenu.Add(new Modulo { Id = 4, Descripcion = "PCP", IconCss = "icon-th icon", TieneChild = true });
-            dbMenu.Add(new Modulo
-            {
-                Id = 7,
-                Descripcion = "Carga de Máquina",
-                IconCss = "",
-                TieneChild = false,
-                ParentId = 4,
-                Url = "/cargamaquina"
-            });
-            dbMenu.Add(new Modulo { Id = 2, Descripcion = "VENTAS", IconCss = "icon-th icon", TieneChild = true });
-            dbMenu.Add(new Modulo
-            {
-                Id = 8,
-                Descripcion = "Logistica",
-                IconCss = "",
-                TieneChild = false,
-                ParentId = 2,
-                Url = "/logistica-listado"
-            });
-            dbMenu.Add(new Modulo
-            {
-                Id = 13,
-                Descripcion = "Servicios",
-                IconCss = "",
-                TieneChild = false,
-                ParentId = 2,
-                Url = "/servicio/listado"
-            });
-            dbMenu.Add(new Modulo { Id = 5, Descripcion = "CONTROL DE CALIDAD", IconCss = "icon-th icon", TieneChild = true });
-            dbMenu.Add(new Modulo
-            {
-                Id = 14,
-                Descripcion = "Trazabilidad",
-                IconCss = "",
-                TieneChild = false,
-                ParentId = 5,
-                Url = "/trazabilidad"
-            });
-            dbMenu.Add(new Modulo { Id = 3, Descripcion = "INVENTARIOS", IconCss = "icon-th icon", TieneChild = true });
-            dbMenu.Add(new Modulo
-            {
-                Id = 14,
-                Descripcion = "Recepcion de Insumos",
-                IconCss = "",
-                TieneChild = false,
-                ParentId = 3,
-                Url = "/inventario/5"
-            });
-        }
-    }
-    protected async Task TestApi()
-    {
-        var modulos = await Http.GetFromJsonAsync<IEnumerable<Modulo>>("api/Modulo");
+
     }
 
     protected async Task NodeClicked(NodeSelectEventArgs args)
@@ -123,8 +144,11 @@ else
         {
             var parentId = args.NodeData.ParentID;
             var modulo = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
+            //var moduloParent = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
             Layout.BreadCumParent = modulo.Descripcion;
-            await InvokeAsync(StateHasChanged);
+            await OnChangeToggle.InvokeAsync(false);
+
+            //await InvokeAsync(StateHasChanged);
         }
 
     }
@@ -171,38 +195,61 @@ else
     }*/
 
 
-    /* customize icon styles */
+    /* customize icon style: son los de FontAwesome v4.7 */
     .e-treeview.custom-tree .e-list-icon {
-        font-family: 'fontello';
+        font-family: 'FontAwesome';
         font-size: 20px;
         margin-top: -4px;
         color: white;
     }
+
     /* icon styles */
-    .custom .e-list-item .e-icons {
-        font-family: "Customize-icon";
+
+/*   @@font-face {
+      font-family: 'FontAwesome';
+      src: url('../fonts/fontawesome-webfont.eot?v=4.7.0');
+      src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('../fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+      font-weight: normal;
+      font-style: normal;
+    }*/
+
+    
+
+    /*To float the expand/collapse icon right*/
+    .e-treeview.custom-tree .e-icon-collapsible, .e-treeview .e-icon-expandable {
+        float: right;
+    }
+        /*To customize the expand collapse icon color*/
+        .e-treeview.custom-tree .e-icon-collapsible::before, .e-treeview.custom-tree .e-icon-expandable::before {
+            color: white;
+        }
+
+    /*To change the text color for treeview*/
+    .e-treeview .e-text-content > .e-list-text {
+        color: white;
     }
 
-    @@font-face {
-        font-family: 'Customize-icon';
-        src: url(data:application/x-font-ttf;charset=utf-8;base64,AAEAAAAKAIAAAwAgT1MvMj0gSRcAAAEoAAAAVmNtYXDnEOdaAAABjAAAADhnbHlmcYqIngAAAcwAAAD8aGVhZBWT124AAADQAAAANmhoZWEHmANtAAAArAAAACRobXR4C9AAAAAAAYAAAAAMbG9jYQBAAH4AAAHEAAAACG1heHABEAAxAAABCAAAACBuYW1l/qscPAAAAsgAAAJ5cG9zdIPGFvoAAAVEAAAAVgABAAADUv9qAFoEAAAA//8D6QABAAAAAAAAAAAAAAAAAAAAAwABAAAAAQAAIKcGUl8PPPUACwPoAAAAANlGSVAAAAAA2UZJUAAAAAAD6QPpAAAACAACAAAAAAAAAAEAAAADACUAAwAAAAAAAgAAAAoACgAAAP8AAAAAAAAAAQPwAZAABQAAAnoCvAAAAIwCegK8AAAB4AAxAQIAAAIABQMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUGZFZABA5wDnAQNS/2oAWgPpAJYAAAABAAAAAAAABAAAAAPoAAAD6AAAAAAAAgAAAAMAAAAUAAMAAQAAABQABAAkAAAABAAEAAEAAOcB//8AAOcA//8AAAABAAQAAAABAAIAAAAAAEAAfgADAAAAAAPpA+kACAAWACQAAAEhFSEHMzcnIyUWEAcGICcmEDc+ATIWBQYQFxYgNzYQJy4BIgYCMf6kAWqUqMK8rgF+goKK/qCEfn5Coquf/amRkZoBkpqRkUq3xLcCKmSTybt4if6ghYKChQFgiUJBQRma/m6akZGaAZKaSElJAAMAAAAAA+gD6QAGABQAIgAAASMXNyMRIyUWEAcGICcmEDc+ATIWBQYQFxYgNzYQJy4BIgYBvrLp6JmGAW6BgYf+oYiBgUGhqqH9qZOTmgGOmpOTSrbCtgGy6ekBbwuI/qGHgYGIAV6IQEFBFpr+cZmTk5oBj5lKSUkAAAAAABIA3gABAAAAAAAAAAEAAAABAAAAAAABAA4AAQABAAAAAAACAAcADwABAAAAAAADAA4AFgABAAAAAAAEAA4AJAABAAAAAAAFAAsAMgABAAAAAAAGAA4APQABAAAAAAAKACwASwABAAAAAAALABIAdwADAAEECQAAAAIAiQADAAEECQABABwAiwADAAEECQACAA4ApwADAAEECQADABwAtQADAAEECQAEABwA0QADAAEECQAFABYA7QADAAEECQAGABwBAwADAAEECQAKAFgBHwADAAEECQALACQBdyBDdXN0b21pemUtaWNvblJlZ3VsYXJDdXN0b21pemUtaWNvbkN1c3RvbWl6ZS1pY29uVmVyc2lvbiAxLjBDdXN0b21pemUtaWNvbkZvbnQgZ2VuZXJhdGVkIHVzaW5nIFN5bmNmdXNpb24gTWV0cm8gU3R1ZGlvd3d3LnN5bmNmdXNpb24uY29tACAAQwB1AHMAdABvAG0AaQB6AGUALQBpAGMAbwBuAFIAZQBnAHUAbABhAHIAQwB1AHMAdABvAG0AaQB6AGUALQBpAGMAbwBuAEMAdQBzAHQAbwBtAGkAegBlAC0AaQBjAG8AbgBWAGUAcgBzAGkAbwBuACAAMQAuADAAQwB1AHMAdABvAG0AaQB6AGUALQBpAGMAbwBuAEYAbwBuAHQAIABnAGUAbgBlAHIAYQB0AGUAZAAgAHUAcwBpAG4AZwAgAFMAeQBuAGMAZgB1AHMAaQBvAG4AIABNAGUAdAByAG8AIABTAHQAdQBkAGkAbwB3AHcAdwAuAHMAeQBuAGMAZgB1AHMAaQBvAG4ALgBjAG8AbQAAAAACAAAAAAAAAAoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMBAgEDAQQAFy1hcnJvdy1jaXJjbGUtcmlnaHQtXzAxEi1hcnJvdy1jaXJjbGUtZG93bgAAAAA=) format('truetype');
-        font-weight: normal;
-        font-style: normal;
-    }
+
 
     .e-treeview .e-list-item {
-       border-bottom: 1px #e5e5e58a solid;
+       /*border-bottom: 1px #e5e5e58a solid;*/
     }
 
-    .custom.e-treeview .e-list-item .e-icon-expandable::before, .custom.e-treeview .e-list-item .e-icon-collapsible:before {
+    /*To float the expand/collapse icon right*/
+    .e-treeview.custom-tree .e-icon-collapsible, .e-treeview .e-icon-expandable {
+        float: right;
+    }
+    .e-treeview .e-list-item .e-icon-expandable::before, e-treeview .e-list-item .e-icon-collapsible:before {
         content: '\e700';
-        font-size: 16px;
-        color: #687384 !important;
+        font-size: 12px;
+        color: white !important;
     }
-    e-treeview .e-text-content {
-        padding: 0 0 0 8px;
+    .e-treeview .e-text-content {
+        padding: 0 45px 0 0 !important;
     }
-    e-treeview .e-text-content, .e-treeview .e-fullrow {
+
+
+    .e-treeview .e-text-content, .e-treeview .e-fullrow {
         border-color: transparent;
         color: white;
         padding: 0 0 0 8px;
@@ -215,6 +262,14 @@ else
     }
 
 
+    /*.e-treeview .e-list-item.e-active {
+        background: white;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 7px;
+    }*/
+
     .e-treeview .e-list-item.e-active > .e-fullrow {
         color: #ffffff !important;
         background-color: transparent !important;
@@ -222,40 +277,53 @@ else
         font-weight: 500 !important;
     }
 
-    .custom.e-treeview .e-list-text {
-        font-size:14px;
-        color: #687384 !important;
+    .e-treeview .e-list-text {
+        font-size: 14px;
+        color: #fafafa !important;
     }
 
-    .custom.e-treeview .e-list-item.e-active > .e-text-content > .e-list-text {
+    .e-treeview .e-list-item.e-active > .e-text-content > .e-list-text {
+        color: #fafafa !important;
+        
+    }
+
+/*    .e-treeview .e-list-item.e-hover > .e-text-content > .e-list-text {
         color: #ffffff !important;
     }
-
-    .custom.e-treeview .e-list-item.e-hover > .e-text-content > .e-list-text {
-        color: #ffffff !important;
-    }
-
-        /*To float the expand/collapse icon right*/
-        /*    .e-treeview.custom-tree .e-icon-collapsible, .e-treeview .e-icon-expandable {
-        float: right;
-    }*/
-        /*To customize the expand collapse icon color*/
-        .e-treeview.custom-tree .e-icon-collapsible::before, .e-treeview.custom-tree .e-icon-expandable::before {
-            color: white;
-        }
-
-    /*To change the text color for treeview*/
-/*    .e-treeview .e-text-content > .e-list-text {
+*/
+    /*To customize the expand collapse icon color*/
+    .e-treeview .e-icon-collapsible::before, .e-treeview .e-icon-expandable::before {
         color: white;
-    }*/
+        float:right;
+    }
+
+    /*To customize for level*/
+    .custom-tree .e-level-2 > .e-text-content .e-list-text {
+        /*font-style: italic;*/
+        font-size: 12px;
+        padding-left: 0px !important;
+    }
+
+/*    .custom-tree .e-level-2 > .e-list-item.e-active > .e-text-content > .e-list-text {
+        color: #333 !important;
+    }
+*/
+    .custom-tree .e-level-2 >.e-list-item.e-active {
+        background: white;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 7px;
+    }
+
 
     .e-treeview .e-list-icon, .e-treeview .e-list-img {
         display: inline-block;
-        height: 18px;
-        margin: 0 0 0 -40px !important;
+        height: 20px;
+        margin: 0 0 0 4px !important;
         vertical-align: middle;
         width: 18px;
     }
 
-    
+
 </style>

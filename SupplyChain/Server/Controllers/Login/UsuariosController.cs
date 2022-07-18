@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared.Login;
 using SupplyChain.Shared.Models;
 using System;

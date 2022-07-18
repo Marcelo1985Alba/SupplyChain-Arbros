@@ -1,4 +1,5 @@
-﻿@page "/Trazabilidad"
+﻿@page "/control-calidad/Trazabilidad"
+@page "/control-calidad/Trazabilidad/{Pedido}"
 @using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.Notifications
 @using Syncfusion.Pdf;
@@ -23,26 +24,26 @@
         <ToastPosition X="Right"></ToastPosition>
     </SfToast>
 
-    <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Bootstrap" Size="100"></SfSpinner>
+    <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Bootstrap" Size="100" @bind-Visible="@ShowSpinner"></SfSpinner>
 
-    <div class="col-lg-12 control-section">
+    <div id="principal" class="col-lg-12 control-section">
         <div class="content-wrapper">
             <div class="row">
-                <div class="col-md-4  col-sm-6 my-1">
+                <div class="col-md-4  col-sm-6">
                     <SfTextBox ID="txtTrazPedido" Placeholder="Número de Pedido"
                                Input="OnInputPedido" @bind-Value="BoxPedido" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
                 </div>
-                <div class="col-md-4 col-sm-6 my-1">
+                <div class="col-md-4 col-sm-6">
                     <SfTextBox ID="txtTrazCliente" Placeholder="Nombre de Cliente"
                                Input="OnInputCliente" @bind-Value="BoxCliente" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
                 </div>
-                <div class=" col-md-4 col-sm-12 my-1">
+                <div class=" col-md-4 col-sm-12">
                     <SfTextBox ID="txtTrazCg_Prod" Placeholder="Codigo de Producto"
                                Input="OnInputCodigo" @bind-Value="BoxCodigo" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4 col-sm-6 my-1">
+                <div class="col-md-4 col-sm-6">
                     <button type="button" class="btn btn-success btn-sm" @onclick="@BuscarTrazabilidad">Buscar Pedido</button>
                 </div>
                 <div class="col-md-4 col-sm-6 my-1">
@@ -52,7 +53,7 @@
                     if (Showgrid)
                     {
                         <div class="col-md-4 col-sm-6 my-1">
-                            <button type="submit" class="btn btn-danger btn-sm" @onclick="@Catalogo">Imprimir catálogo</button>
+                            <button type="submit" class="btn btn-danger btn-sm" @onclick="@Catalogo">Certificado</button>
                         </div>
                         <div class="col-md-4 col-sm-6 my-1">
                             <button type="submit" class="btn btn-warning btn-sm" @onclick="@Etiqueta">Identificación</button>
@@ -65,11 +66,14 @@
             </div>
         </div>
     </div>
-    <SfDialog ID="dialogTrazPed" Width="1000px" MinHeight="450px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible">
+
+
+    <SfDialog ID="dialogTrazPed" Width="1000px" MinHeight="650px" IsModal="true" ShowCloseIcon="true" @ref="refDialogPedidos"
+              Visible="false">
         <DialogTemplates>
-            <Header>Listado de Pedidos del Cliente @BoxCliente.ToUpper().Trim() </Header>
+            <Header>Listado de Pedidos del Cliente </Header>
             <Content>
-                <SfGrid ID="dlgPedidoGrid" @ref="Grid2" GridLines="GridLine.Both" DataSource="@Busquedalist" Height="80%">
+                <SfGrid ID="dlgPedidoGrid" @ref="Grid2" GridLines="GridLine.Both" DataSource="@Busquedalist" Height="450px">
                     <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                     <GridEvents RowSelected="@(async ()=> await OnSelected())" TValue="Pedidos"></GridEvents>
                     <GridColumns>
@@ -94,222 +98,222 @@
 
     if (Showgrid == true)
     {
-<form>
-    @{
-        var lote = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim();
-        if (lote == null)
-        {
-            lote = "";
-        }
-        var fecha = vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro && t.TIPOO == 28).OrderByDescending(t => t.PEDIDO).FirstOrDefault().FE_MOV.ToString();
-        if (fecha == null)
-        {
-            fecha = "";
-        }
-        var prod = prodList.CG_PROD.ToString();
-        if (prod == null)
-        {
-            prod = "";
-        }
-        var orco = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().ORCO.Trim();
-        if (orco == null)
-        {
-            orco = "";
-        }
-        if (vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().TIPOO == 1)
-        {
-            var rem = vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro && t.TIPOO == 1).OrderByDescending(t => t.PEDIDO).FirstOrDefault().REMITO;
-            if (rem != "" && rem != null)
-            {
-                remito = rem;
+        <form>
+            @{
+                var lote = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim();
+                if (lote == null)
+                {
+                    lote = "";
+                }
+                var fecha = vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro && t.TIPOO == 28).OrderByDescending(t => t.PEDIDO).FirstOrDefault().FE_MOV.ToString();
+                if (fecha == null)
+                {
+                    fecha = "";
+                }
+                var prod = prodList.Id.ToString();
+                if (prod == null)
+                {
+                    prod = "";
+                }
+                var orco = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().ORCO.Trim();
+                if (orco == null)
+                {
+                    orco = "";
+                }
+                if (vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().TIPOO == 1)
+                {
+                    var rem = vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro && t.TIPOO == 1).OrderByDescending(t => t.PEDIDO).FirstOrDefault().REMITO;
+                    if (rem != "" && rem != null)
+                    {
+                        remito = rem;
+                    }
+                }
+                var modelo = prodList.CAMPOCOM1.Trim();
+                if (modelo == null)
+                {
+                    modelo = "";
+                }
+                var medida = prodList.CAMPOCOM2.Trim();
+                if (medida == null)
+                {
+                    medida = "";
+                }
+                var orificio = prodList.CAMPOCOM3.Trim();
+                if (orificio == null)
+                {
+                    orificio = "";
+                }
+                var area = prodList.CAMPOCOM4.Trim();
+                if (area == null)
+                {
+                    area = "";
+                }
+                var serie = prodList.CAMPOCOM5.Trim();
+                if (serie == null)
+                {
+                    serie = "";
+                }
+                var tipo = prodList.CAMPOCOM6.Trim();
+                if (tipo == null)
+                {
+                    tipo = "";
+                }
+                var presion = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
+                if (presion == null)
+                {
+                    presion = "";
+                }
+                var resorte = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim();
+                if (resorte == null)
+                {
+                    resorte = "";
+                }
+                var fluido = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim();
+                if (fluido == null)
+                {
+                    fluido = "";
+                }
+                var presAj = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim();
+                if (presAj == null)
+                {
+                    presAj = "";
+                }
+                var ctpre = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim();
+                if (ctpre == null)
+                {
+                    ctpre = "";
+                }
+                var temp = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim();
+                if (temp == null)
+                {
+                    temp = "";
+                }
             }
-        }
-        var modelo = prodList.CAMPOCOM1.Trim();
-        if (modelo == null)
-        {
-            modelo = "";
-        }
-        var medida = prodList.CAMPOCOM2.Trim();
-        if (medida == null)
-        {
-            medida = "";
-        }
-        var orificio = prodList.CAMPOCOM3.Trim();
-        if (orificio == null)
-        {
-            orificio = "";
-        }
-        var area = prodList.CAMPOCOM4.Trim();
-        if (area == null)
-        {
-            area = "";
-        }
-        var serie = prodList.CAMPOCOM5.Trim();
-        if (serie == null)
-        {
-            serie = "";
-        }
-        var tipo = prodList.CAMPOCOM6.Trim();
-        if (tipo == null)
-        {
-            tipo = "";
-        }
-        var presion = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
-        if (presion == null)
-        {
-            presion = "";
-        }
-        var resorte = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim();
-        if (resorte == null)
-        {
-            resorte = "";
-        }
-        var fluido = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim();
-        if (fluido == null)
-        {
-            fluido = "";
-        }
-        var presAj = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim();
-        if (presAj == null)
-        {
-            presAj = "";
-        }
-        var ctpre = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim();
-        if (ctpre == null)
-        {
-            ctpre = "";
-        }
-        var temp = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim();
-        if (temp == null)
-        {
-            temp = "";
-        }
-    }
-    <div class="row">
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="Pedido: @TrzNro"
-                   readonly />
-        </div>
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="Producto: @prod"
-                   readonly />
-        </div>
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="O.C.: @orco"
-                   readonly />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="PSV: @lote"
-                   readonly />
-        </div>
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="Fecha: @fecha"
-                   readonly />
-        </div>
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="Remito: @remito"
-                   readonly />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="Modelo: @modelo"
-                   readonly />
-        </div>
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="Medida: @medida"
-                   readonly />
-        </div>
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="Orificio: @orificio"
-                   readonly />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="Area: @area"
-                   readonly />
-        </div>
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="Serie: @serie"
-                   readonly />
-        </div>
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="Tipo: @tipo"
-                   readonly />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="Presion: @presion"
-                   readonly />
-        </div>
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="Resorte: @resorte"
-                   readonly />
-        </div>
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="Fluido: @fluido"
-                   readonly />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="P. Aj Banco: @presAj"
-                   readonly />
-        </div>
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="Contrapresión: @ctpre"
-                   readonly />
-        </div>
-        <div class="col">
-            <input type="text"
-                   class="form-control"
-                   placeholder="Temperatura: @temp"
-                   readonly />
-        </div>
-    </div>
-</form>
+            <div class="row">
+                <div class="col-lg-4 col-sm-12">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Pedido: @TrzNro"
+                           readonly />
+                </div>
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Producto: @prod"
+                           readonly />
+                </div>
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="O.C.: @orco"
+                           readonly />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="PSV: @lote"
+                           readonly />
+                </div>
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Fecha: @fecha"
+                           readonly />
+                </div>
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Remito: @remito"
+                           readonly />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Modelo: @modelo"
+                           readonly />
+                </div>
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Medida: @medida"
+                           readonly />
+                </div>
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Orificio: @orificio"
+                           readonly />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Area: @area"
+                           readonly />
+                </div>
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Serie: @serie"
+                           readonly />
+                </div>
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Tipo: @tipo"
+                           readonly />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Presion: @presion"
+                           readonly />
+                </div>
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Resorte: @resorte"
+                           readonly />
+                </div>
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Fluido: @fluido"
+                           readonly />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="P. Aj Banco: @presAj"
+                           readonly />
+                </div>
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Contrapresión: @ctpre"
+                           readonly />
+                </div>
+                <div class="col-lg-4 col-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Temperatura: @temp"
+                           readonly />
+                </div>
+            </div>
+        </form>
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row">
-                    <SfGrid ShowColumnChooser="true" AllowResizing="true" Width="auto" @ref="Grid4" ID="gridTrazPedidos"
+                    <SfGrid ShowColumnChooser="true" AllowResizing="true" Width="100%" @ref="Grid4" ID="gridTrazPedidos"
                             GridLines="GridLine.Both" AllowReordering="true" AllowSorting="true"
                             DataSource="@vpedidos" AllowExcelExport="true" AllowGrouping="true" Toolbar="@Toolbaritems">
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -336,25 +340,36 @@
                 <Content>
                     <SfTab>
                         <TabItems>
-                            <TabItem>
+                            <TabItem CssClass="tabCertif">
                                 <HeaderTemplate>Certificado</HeaderTemplate>
                                 <ContentTemplate>
                                     @{
 
-                                        if (ShowCertificado)
+                                        if (ShowCertificado && Archivos.Count > 0)
                                         {
-                                            var pdf_ruta = NroCertificado.Trim() + ".pdf,RUTATRAZABILIDAD";
-                                            <div class="mt-5">
-                                                @*<SfPdfViewer DocumentPath="@ruta"></SfPdfViewer>*@
-                                                <SfPdfViewer ID="CertifiPdf"
-                                                             ServiceUrl="/api/Values" DocumentPath="@pdf_ruta"
-                                                             Height="85%" Width="90%"></SfPdfViewer>
-                                            </div>
+                                            var file_ruta = $"{Archivos[0].Nombre},RUTATRAZABILIDAD";
+                                            if (Archivos.Any(a => a.IsAzure))
+                                            {
+                                                <SfPdfViewer ID="CertPdf" ServiceUrl="api/AdministracionArchivos" DocumentPath="@file_ruta"
+                                                             Height="1200px" Width="100%"></SfPdfViewer>
+                                            }
+                                            else
+                                            {
+                                                var pdf_ruta = NroCertificado.Trim() + ".pdf,RUTATRAZABILIDAD";
+                                                <div class="mt-5">
+                                                    @*<SfPdfViewer DocumentPath="@ruta"></SfPdfViewer>*@
+                                                    <SfPdfViewer ID="CertifiPdf"
+                                                                 ServiceUrl="/api/Values" DocumentPath="@pdf_ruta"
+                                                                 Height="300px" Width="100%"></SfPdfViewer>
+                                                </div>
+                                            }
+
+
                                         }
                                         else
                                         {
                                             <div class="mt-5">
-                                                <span class="text-danger text">No existe Certificado asociado</span>
+                                                <span class="text text-danger">No existe Certificado asociado</span>
                                             </div>
                                         }
                                     }
@@ -403,6 +418,12 @@
     }
 }
 
+@*<BuscadorEmergente DataSource="Busquedalist" Columnas="@(new string[]{"PEDIDO", "DES_CLI", "CG_ART", "DES_ART" })"
+    TItem="Pedidos" Width="80%" Height="600px" Titulo="Listado de Pedidos del Cliente"
+    MostrarVerMas="@(Busquedalist.Count == CantidadMostrar)" Visible="@IsVisible" IsModal="false"
+    OnBuscarMas="@(async() => await AgregarValores())" OnCerrarDialog="@(()=> IsVisible = !IsVisible )"
+    OnObjetoSeleccionado="@(async (o)=> await OnSelectedPedido(o))" />*@
+
 
 
 <style>
@@ -415,22 +436,24 @@
         text-align: center;
     }
 
-    .e-dialog.e-control.e-popup, .e-dialog.e-control.e-popup .e-dlg-header-content {
-        background-color: #d9edf7;
-    }
-
-    .dialog {
-        min-height: 650px;
-    }
+    
+/*    e-dialog {
+        max-height: 650px;
+    }*/
 </style>
 
 @code {
+
+    [Inject] public PdfService PdfService { get; set; }
+    [Parameter] public string Pedido { get; set; }
     protected SfGrid<Pedidos> Grid;
     protected SfGrid<Pedidos> Grid2;
     protected SfGrid<Pedidos> Grid3;
     protected SfGrid<vTrazabilidad> Grid4;
     protected SfSpinner refSpinner;
     protected SfDialog DialogRef;
+    protected SfDialog refDialogPedidos;
+    public bool ShowSpinner = false;
     public bool Enabled = true;
     public bool Disabled = false;
     public bool Showgrid = false;
@@ -444,11 +467,12 @@
     //protected List<Pedidos> Busquedalist = new List<Pedidos>();
     protected List<Pedidos> OF = new List<Pedidos>();
     protected List<PedCli> PedCliList = new List<PedCli>();
-    protected Prod prodList = new Prod();
+    protected Producto prodList = new();
     protected List<Solution> rutas;
-    protected List<Prod> ProdCertificado = new List<Prod>();
+    protected List<Producto> ProdCertificado = new List<Producto>();
     protected List<PedCli> PedcliCertificado = new List<PedCli>();
     protected List<Pedidos> PedidosCertificado = new List<Pedidos>();
+    protected List<Archivo> Archivos = new();
     protected string ruta;
     protected string BoxPedido = "";
     protected string BoxCliente = "";
@@ -485,7 +509,17 @@
     {
         Layout.Titulo = "Trazabilidad";
         //rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+
+        if (!string.IsNullOrEmpty(Pedido))
+        {
+            ShowSpinner = true;
+            BoxPedido = Pedido;
+            await CargaPedido();
+            ShowSpinner = false;
+        }
+
         await base.OnInitializedAsync();
+
     }
 
     public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -500,6 +534,23 @@
         }
     }
 
+    public async Task OnSelectedPedido(object pedido)
+    {
+        var ped = (Pedidos)pedido;
+        await refSpinner.ShowAsync();
+        BoxPedido = ped.PEDIDO.ToString(); // return the details of selected record
+        TrzNro = BoxPedido;
+        BoxCliente = ped.DES_CLI; // return the details of selected record
+        BoxCodigo = ped.CG_ART; // return the details of selected record
+        CodNro = BoxCodigo;
+        CantidadMostrar = 0;
+        await MostrarTrazabilidad();
+        //IsVisible = false;
+        await refDialogPedidos.HideAsync();
+        await refSpinner.HideAsync();
+    }
+
+
     public async Task OnSelected()
     {
         await refSpinner.ShowAsync();
@@ -510,7 +561,6 @@
         CodNro = BoxCodigo;
         CantidadMostrar = 0;
         await MostrarTrazabilidad();
-        IsVisible = false;
         await refSpinner.HideAsync();
     }
 
@@ -540,6 +590,8 @@
                 NroCertificado = row[0].DESPACHO;
                 var archivo = NroCertificado.Trim() + ".pdf";
                 ShowCertificado = await Http.GetFromJsonAsync<bool>($"api/AdministracionArchivos/ExisteCertificado/{archivo}");
+                Archivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/Certificado/{archivo}");
+
             }
             await DialogRef.Show(false);
         }
@@ -548,6 +600,10 @@
 
     protected async Task OnInputPedido(InputEventArgs args)
     {
+        if (string.IsNullOrEmpty(args.Value))
+        {
+            return;
+        }
         Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorPedido/{args.Value}");
         if (Pedidoslist.Count > 0)
         {
@@ -563,6 +619,11 @@
 
     protected async Task OnInputCodigo(InputEventArgs args)
     {
+        if (string.IsNullOrEmpty(args.Value))
+        {
+            return;
+        }
+
         Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorCodigo/{args.Value}");
         if (Pedidoslist.Count > 0)
         {
@@ -578,12 +639,17 @@
 
     protected async Task OnInputCliente(InputEventArgs args)
     {
+        if (string.IsNullOrEmpty(args.Value))
+        {
+            return;
+        }
+
         Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorCliente/{args.Value}");
         if (Pedidoslist.Count > 0)
         {
-            BoxPedido = Pedidoslist.FirstOrDefault().PEDIDO.ToString();
-            TrzNro = BoxPedido;
-            BoxCodigo = Pedidoslist.FirstOrDefault().CG_ART;
+            //BoxPedido = Pedidoslist.FirstOrDefault().PEDIDO.ToString();
+            //TrzNro = BoxPedido;
+            //BoxCodigo = Pedidoslist.FirstOrDefault().CG_ART;
         }
         else
         {
@@ -614,6 +680,7 @@
         }
 
         await refSpinner.HideAsync();
+        await refDialogPedidos.ShowAsync();
         IsVisible = true;
     }
     protected async Task MostrarTrazabilidad()
@@ -630,374 +697,28 @@
         }
         else
         {
-            PedCliList = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/{BoxPedido}");
-            prodList = await Http.GetFromJsonAsync<Prod>($"api/Prod/{CodNro}");
-            pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/MostrarTrazabilidad/{BoxPedido}");
-            vpedidos = await Http.GetFromJsonAsync<List<vTrazabilidad>>($"api/Trazabilidads/MostrarTrazabilidad/{BoxPedido}");
-            Showgrid = true;
-            BoxPedido = "";
-            BoxCliente = "";
-            BoxCodigo = "";
+            await refSpinner.ShowAsync();
+            await CargaPedido();
+            await refDialogPedidos.HideAsync();
+            await refSpinner.HideAsync();
         }
 
 
     }
-    protected async Task Catalogo()
+
+    protected async Task CargaPedido()
     {
-        ProdCertificado = await Http.GetFromJsonAsync<List<Prod>>($"api/Prod/BuscarPorCG_PROD/{CodNro}");
-        PedcliCertificado = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/BuscarPorPedido/{TrzNro}");
-        PedidosCertificado = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BusquedaParaFE_MOV/{TrzNro}");
-        string roscas = "";
-        string Ansi_Api = "";
-        if (CodNro.Substring(0, 1) == "1")
-        {
-            roscas = "Aprobado";
-            Ansi_Api = "-";
-        }
-        else
-        {
-            roscas = "-";
-            Ansi_Api = "Aprobado";
-        }
-        //Create a new PDF document
-        PdfDocument document = new PdfDocument();
-        //Create the page
-        PdfPage page = document.Pages.Add();
-        //Create PDF graphics for the page
-        var fuente = await Http.GetStreamAsync("./Calibri 400.ttf");
-        //FileStream fontStream = new FileStream(fuente);
-        //Create a PdfGrid
-        PdfGrid pdfGrid = new PdfGrid();
-
-        PdfGraphics graphics = page.Graphics;
-        //PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10, PdfFontStyle.Bold);
-        //PdfFont font = new PdfTrueTypeFont("wwwroot\\Calibri 400.ttf", 24);
-        PdfFont font = new PdfTrueTypeFont(fuente, 10, PdfFontStyle.Bold);
-
-        //Create and customize the string formats
-        PdfStringFormat Centrado = new PdfStringFormat();
-        Centrado.Alignment = PdfTextAlignment.Center;
-        Centrado.LineAlignment = PdfVerticalAlignment.Middle;
-        //Create and customize the string formats
-        PdfStringFormat Izquierda = new PdfStringFormat();
-        Izquierda.Alignment = PdfTextAlignment.Left;
-        Izquierda.LineAlignment = PdfVerticalAlignment.Middle;
-        //Add columns to PdfGrid
-        for (int i = 0; i < 6; i++)
-        {
-            PdfGridColumn column = pdfGrid.Columns.Add();
-            if (i == 0 || i == 1 || i == 4 || i == 5)
-            {
-                column.Width = 64;
-            }
-            if (i == 2 || i == 3)
-            {
-
-                column.Width = 128;
-            }
-        }
-        //Add rows to PdfGrid
-        for (int i = 0; i < 32; i++)
-        {
-            PdfGridRow row = pdfGrid.Rows.Add();
-            if (i == 0 || i == 1 || i == 2 || i == 3 || i == 7 || i == 17 || i == 21)
-            {
-                row.Height = 26;
-            }
-            else if (i == 31)
-            {
-                row.Height = 47;
-            }
-            else
-            {
-                row.Height = 22;
-            }
-        }
-        //Load the image from the stream
-        //FileStream fs = new FileStream("wwwroot\\logo_aerre.jpg", FileMode.Open);
-        //FileStream IMR = new FileStream("wwwroot\\IMR.jpg", FileMode.Open);
-        var fs = await Http.GetStreamAsync("./IMR.jpg");
-        var IMR = await Http.GetStreamAsync("./IMR.jpg");
-        //LINEA 1
-        //Add RowSpan
-        PdfGridCell gridCell1 = pdfGrid.Rows[0].Cells[0];
-        gridCell1.ColumnSpan = 2;
-        gridCell1.RowSpan = 2;
-        gridCell1.StringFormat = Centrado;
-        gridCell1.Value = new PdfTextElement("ARBROS S.A.", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell2 = pdfGrid.Rows[0].Cells[2];
-        gridCell2.ColumnSpan = 2;
-        gridCell2.RowSpan = 2;
-        gridCell2.StringFormat = Centrado;
-        gridCell2.Value = new PdfTextElement("ACTA DE INSPECCIÓN", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell3 = pdfGrid.Rows[0].Cells[4];
-        gridCell3.ColumnSpan = 2;
-        gridCell3.RowSpan = 2;
-        gridCell3.StringFormat = Centrado;
-        gridCell3.Value = new PdfTextElement($"Cliente: \n {PedcliCertificado.FirstOrDefault().DES_CLI.Trim()}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-
-        //LINEA 2
-        //Add RowSpan
-        PdfGridCell gridCell4 = pdfGrid.Rows[2].Cells[0];
-        gridCell4.ColumnSpan = 2;
-        gridCell4.RowSpan = 2;
-        gridCell4.StringFormat = Centrado;
-        gridCell4.Value = new PdfBitmap(fs);
-        //Add RowSpan
-        PdfGridCell gridCell5 = pdfGrid.Rows[2].Cells[2];
-        gridCell5.ColumnSpan = 2;
-        gridCell5.RowSpan = 2;
-        gridCell5.StringFormat = Centrado;
-        gridCell5.Value = new PdfTextElement("VÁLVULAS DE SEGURIDAD Y ALIVIO", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell6 = pdfGrid.Rows[2].Cells[4];
-        gridCell6.ColumnSpan = 2;
-        gridCell6.RowSpan = 2;
-        gridCell6.StringFormat = Centrado;
-        gridCell6.Value = new PdfTextElement($"O.C.I.: {PedcliCertificado.FirstOrDefault().NUMOCI}\n" +
-                                             $"{PedidosCertificado.FirstOrDefault().FE_MOV.ToShortDateString()}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-
-        //GENERALIDADES
-        //Add RowSpan
-        PdfGridCell gridCell7 = pdfGrid.Rows[4].Cells[0];
-        gridCell7.ColumnSpan = 2;
-        gridCell7.StringFormat = Izquierda;
-        gridCell7.Value = new PdfTextElement($"GENERALIDADES", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell8 = pdfGrid.Rows[4].Cells[2];
-        gridCell8.ColumnSpan = 1;
-        gridCell8.StringFormat = Izquierda;
-        gridCell8.Value = $"   Orden de compra:\n" +
-                          $"   Remito de entrega:";
-        //Add RowSpan
-        PdfGridCell gridCell9 = pdfGrid.Rows[4].Cells[3];
-        gridCell9.ColumnSpan = 3;
-        gridCell9.StringFormat = Izquierda;
-        gridCell9.Value = $"   {PedcliCertificado.FirstOrDefault().ORCO.Trim()}\n" +
-                          $"   {PedcliCertificado.FirstOrDefault().REMITO.Trim()}";
-
-        //DATOS DE PLACA
-        //Add RowSpan
-        PdfGridCell gridCell10 = pdfGrid.Rows[5].Cells[0];
-        gridCell10.ColumnSpan = 2;
-        gridCell10.RowSpan = 8;
-        gridCell10.StringFormat = Izquierda;
-        gridCell10.Value = new PdfTextElement("DATOS DE PLACA", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell11 = pdfGrid.Rows[5].Cells[2];
-        gridCell11.ColumnSpan = 1;
-        gridCell11.RowSpan = 8;
-        gridCell11.StringFormat = Izquierda;
-        gridCell11.Value = $"   Linea de Producto:\n" +
-                           $"   Nro de Serie:\n" +
-                           $"   TAG:\n" +
-                           $"   Medida (Ent x Sal):\n" +
-                           $"   Clase (Ent x Sal):\n" +
-                           $"   Orif. API 526 / Area:\n" +
-                           $"   Presión de Apertura:\n" +
-                           $"   Contrapresión:\n" +
-                           $"   Presión de ajuste en Banco:\n" +
-                           $"   Fluido:\n" +
-                           $"   Temperatura:\n" +
-                           $"   Código de Resorte:\n" +
-                           $"   Código de la válvula:";
-        //Add RowSpan
-        PdfGridCell gridCell12 = pdfGrid.Rows[5].Cells[3];
-        gridCell12.ColumnSpan = 3;
-        gridCell12.RowSpan = 8;
-        gridCell12.StringFormat = Izquierda;
-        gridCell12.Value = $"   {ProdCertificado.FirstOrDefault().CAMPOCOM1.Trim()}\n" +
-                           $"   {TrzNro}\n" +
-                           $"   {PedcliCertificado.FirstOrDefault().LOTE.Trim()}\n" +
-                           $"   {ProdCertificado.FirstOrDefault().CAMPOCOM2.Trim()}\n" +
-                           $"   {ProdCertificado.FirstOrDefault().CAMPOCOM5.Trim()}\n" +
-                           $"   {ProdCertificado.FirstOrDefault().CAMPOCOM3.Trim()}\n" +
-                           $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM1.Trim()}\n" +
-                           $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM5.Trim()}\n" +
-                           $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM4.Trim()}\n" +
-                           $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM3.Trim()}\n" +
-                           $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM6.Trim()}\n" +
-                           $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM2.Trim()}\n" +
-                           $"   {CodNro}";
-
-        //CONTROL DIMENSIONAL
-        //Add RowSpan
-        PdfGridCell gridCell13 = pdfGrid.Rows[13].Cells[0];
-        gridCell13.ColumnSpan = 2;
-        gridCell13.RowSpan = 2;
-        gridCell13.StringFormat = Izquierda;
-        gridCell13.Value = new PdfTextElement("CONTROL DIMENSIONAL", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell14 = pdfGrid.Rows[13].Cells[2];
-        gridCell14.ColumnSpan = 1;
-        gridCell14.StringFormat = Izquierda;
-        gridCell14.RowSpan = 2;
-        gridCell14.Value = $"   ANSI B-16.5 (Ent-Sal)\n" +
-                           $"   Roscas (Ent-Sal)\n" +
-                           $"   API 526";
-        //Add RowSpan
-        PdfGridCell gridCell15 = pdfGrid.Rows[13].Cells[3];
-        gridCell15.ColumnSpan = 3;
-        gridCell15.StringFormat = Izquierda;
-        gridCell15.RowSpan = 2;
-        gridCell15.Value = $"   {Ansi_Api}\n" +
-                           $"   {roscas}\n" +
-                           $"   {Ansi_Api}";
-
-        //PRUEBA HIDRAULICA Y MATERIALES
-        //Add RowSpan
-        PdfGridCell gridCell16 = pdfGrid.Rows[15].Cells[0];
-        gridCell16.ColumnSpan = 2;
-        gridCell16.RowSpan = 8;
-        gridCell16.StringFormat = Izquierda;
-        gridCell16.Value = new PdfTextElement("PRUEBA HIDRAULICA Y MATERIALES", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell17 = pdfGrid.Rows[15].Cells[2];
-        gridCell17.ColumnSpan = 1;
-        gridCell17.RowSpan = 2;
-        gridCell17.StringFormat = Izquierda;
-        gridCell17.Value = $"   Material Disco\n" +
-                           $"   Identificación Disco\n" +
-                           $"   Presión de Prueba Hidráulica";
-        //Add RowSpan
-        PdfGridCell gridCell18 = pdfGrid.Rows[15].Cells[3];
-        gridCell18.ColumnSpan = 3;
-        gridCell18.RowSpan = 2;
-        gridCell18.StringFormat = Izquierda;
-        gridCell18.Value = $"   X1";
-        //Add RowSpan
-        PdfGridCell gridCell19 = pdfGrid.Rows[17].Cells[2];
-        gridCell19.ColumnSpan = 1;
-        gridCell19.RowSpan = 2;
-        gridCell19.StringFormat = Izquierda;
-        gridCell19.Value = $"   Material Tobera\n" +
-                           $"   Identificación Tobera\n" +
-                           $"   Presión de Prueba Hidráulica";
-        //Add RowSpan
-        PdfGridCell gridCell20 = pdfGrid.Rows[17].Cells[3];
-        gridCell20.ColumnSpan = 3;
-        gridCell20.RowSpan = 2;
-        gridCell20.StringFormat = Izquierda;
-        gridCell20.Value = $"   X2";
-        //Add RowSpan
-        PdfGridCell gridCell21 = pdfGrid.Rows[19].Cells[2];
-        gridCell21.ColumnSpan = 1;
-        gridCell21.RowSpan = 2;
-        gridCell21.StringFormat = Izquierda;
-        gridCell21.Value = $"   Material Cuerpo\n" +
-                           $"   Identificación Cuerpo\n" +
-                           $"   Presión de Prueba Hidráulica";
-        //Add RowSpan
-        PdfGridCell gridCell22 = pdfGrid.Rows[19].Cells[3];
-        gridCell22.ColumnSpan = 3;
-        gridCell22.RowSpan = 2;
-        gridCell22.StringFormat = Izquierda;
-        gridCell22.Value = $"   X3";
-        //Add RowSpan
-        PdfGridCell gridCell23 = pdfGrid.Rows[21].Cells[2];
-        gridCell23.ColumnSpan = 1;
-        gridCell23.RowSpan = 2;
-        gridCell23.StringFormat = Izquierda;
-        gridCell23.Value = $"   Material Bonete\n" +
-                           $"   Identificación Bonete\n" +
-                           $"   Presión de Prueba Hidráulica";
-        //Add RowSpan
-        PdfGridCell gridCell24 = pdfGrid.Rows[21].Cells[3];
-        gridCell24.ColumnSpan = 3;
-        gridCell24.RowSpan = 2;
-        gridCell24.StringFormat = Izquierda;
-        gridCell24.Value = $"   X4";
-
-        //ENSAYOS OPERACIONALES EN BANCO HIDRONEUMÁTICO
-        //Add RowSpan
-        PdfGridCell gridCell25 = pdfGrid.Rows[23].Cells[0];
-        gridCell25.ColumnSpan = 2;
-        gridCell25.RowSpan = 4;
-        gridCell25.StringFormat = Izquierda;
-        gridCell25.Value = new PdfTextElement("ENSAYOS OPERACIONALES EN BANCO HIDRONEUMÁTICO - FLUIDO AIRE A TEMP. AMBIENTE ", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell26 = pdfGrid.Rows[23].Cells[2];
-        gridCell26.ColumnSpan = 3;
-        gridCell26.RowSpan = 3;
-        gridCell26.StringFormat = Izquierda;
-        gridCell26.Value = $"   Calibracion a la presión segun ASME PTC-25.3:\n" +
-                           $"   Ensayos de repetitividad (3):\n" +
-                           $"   Control estanqueidad de asientos segun API 527:";
-        //Add RowSpan
-        PdfGridCell gridCell27 = pdfGrid.Rows[23].Cells[5];
-        gridCell27.ColumnSpan = 1;
-        gridCell27.RowSpan = 3;
-        gridCell27.StringFormat = Izquierda;
-        gridCell27.Value = $"   X1";
-        //Add RowSpan
-        PdfGridCell gridCell28 = pdfGrid.Rows[26].Cells[2];
-        gridCell28.ColumnSpan = 3;
-        gridCell28.StringFormat = Izquierda;
-        gridCell28.Value = $" Patrón Utilizado:";
-        //Add RowSpan
-        PdfGridCell gridCell29 = pdfGrid.Rows[26].Cells[5];
-        gridCell29.ColumnSpan = 1;
-        gridCell29.StringFormat = Izquierda;
-        gridCell29.Value = $"   X1";
-
-        //RESULTADO
-        //Add RowSpan
-        PdfGridCell gridCell30 = pdfGrid.Rows[27].Cells[0];
-        gridCell30.ColumnSpan = 2;
-        gridCell30.StringFormat = Izquierda;
-        gridCell30.Value = new PdfTextElement("RESULTADO ", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell31 = pdfGrid.Rows[27].Cells[2];
-        gridCell31.ColumnSpan = 4;
-        gridCell31.StringFormat = Izquierda;
-        gridCell31.Value = new PdfTextElement("X1", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-
-        //FIRMA
-        //Add RowSpan
-        PdfGridCell gridCellx35 = pdfGrid.Rows[28].Cells[0];
-        gridCellx35.ColumnSpan = 2;
-        gridCellx35.RowSpan = 2;
-        gridCellx35.StringFormat = Izquierda;
-        gridCellx35.Value = new PdfTextElement("FIRMA INSPECTOR AERRE ", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCellx36 = pdfGrid.Rows[28].Cells[2];
-        gridCellx36.ColumnSpan = 4;
-        gridCellx36.RowSpan = 2;
-        gridCellx36.StringFormat = Izquierda;
-        gridCellx36.Value = new PdfBitmap(IMR);
-
-        //PRECINTO
-        //Add RowSpan
-        PdfGridCell gridCellx37 = pdfGrid.Rows[30].Cells[0];
-        gridCellx37.ColumnSpan = 2;
-        gridCellx37.StringFormat = Izquierda;
-        gridCellx37.Value = new PdfTextElement("PRECINTO Nro.", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCellx38 = pdfGrid.Rows[30].Cells[2];
-        gridCellx38.ColumnSpan = 4;
-        gridCellx38.StringFormat = Izquierda;
-        gridCellx38.Value = $"   AERRE 00024 ";
-
-        //GARANTIA
-        //Add RowSpan
-        PdfGridCell gridCell58 = pdfGrid.Rows[31].Cells[0];
-        gridCell58.ColumnSpan = 6;
-        gridCell58.StringFormat = Centrado;
-        gridCell58.Value = "GARANTIA: \n Los productos están garantizados por el término de 12 meses a partir de la salida de fábrica, contra todo defecto de materiales y / o fabricación, limitada a la reposición sin cargo en nuestra fábrica de un elemento similar. Esta garantía no ampara el desgaste anormal por la utilización en condiciones distintas a las especificadas";
-
-        //Draw the PdfGrid
-        pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, 0));
-        //Saving the PDF to the MemoryStream
-        MemoryStream stream = new MemoryStream();
-        document.Save(stream);
-        //Set the position as '0'
-        stream.Position = 0;
-        //Close the document
-        document.Close(true);
-        await JsRuntime.SaveAs($" Certificado" + ".pdf", stream.ToArray());
+        TrzNro = BoxPedido;
+        PedCliList = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/{BoxPedido}");
+        prodList = await Http.GetFromJsonAsync<Producto>($"api/Prod/{PedCliList.FirstOrDefault().CG_ART.Trim()}");
+        pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/MostrarTrazabilidad/{BoxPedido}");
+        vpedidos = await Http.GetFromJsonAsync<List<vTrazabilidad>>($"api/Trazabilidads/MostrarTrazabilidad/{BoxPedido}");
+        Showgrid = true;
+        BoxPedido = "";
+        BoxCliente = "";
+        BoxCodigo = "";
     }
+
     protected async Task AgregarValores()
     {
         CantidadMostrar = CantidadMostrar + 100;
@@ -1019,11 +740,25 @@
         }
     }
 
+    protected async Task Catalogo()
+    {
+        await refSpinner.ShowAsync();
+
+        if (!string.IsNullOrEmpty(Pedido) && Convert.ToInt32(Pedido) > 0)
+        {
+            TrzNro = Pedido;
+            CodNro = PedCliList[0].CG_ART.Trim();
+        }
+
+        await PdfService.Catalogo(CodNro, TrzNro, vpedidos);
+        await refSpinner.HideAsync();
+    }
+
     protected async Task Etiqueta()
     {
-        if (true)
+        if (PedCliList.Count > 0)
         {
-            if (CodNro.Substring(0, 1) == "2")
+            if (PedCliList[0].CG_ART.Substring(0, 1) == "2")
             {
                 string espaciosPedido = "";
                 string CLIENTE = PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().DES_CLI.Trim();
@@ -1157,7 +892,7 @@
                 //    await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
                 //}
             }
-            if (CodNro.Substring(0, 1) == "1")
+            if (PedCliList[0].CG_ART.Substring(0, 1) == "1")
             {
                 //Chapa de 25 x 95
                 PdfDocument document1 = new PdfDocument();
@@ -1218,9 +953,9 @@
                 document1.Close(true);
                 await JsRuntime.SaveAs("ETOF" + CodNro.Trim() + ".pdf", xx.ToArray());
             }
-            if (CodNro.Substring(0, 4) == "0012" ||
-                CodNro.Substring(0, 5) == "00130" ||
-                CodNro.Substring(0, 5) == "00131")
+            if (PedCliList[0].CG_ART.Substring(0, 4) == "0012" ||
+            PedCliList[0].CG_ART.Substring(0, 5) == "00130" ||
+            PedCliList[0].CG_ART.Substring(0, 5) == "00131")
             {
                 string espaciosbar = "";
                 for (int i = 0; i < (16 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
@@ -1288,6 +1023,9 @@
     {
         //NavigationManager.NavigateTo($"Pdf/{pedido}/ENSAYOS");
         //await JsRuntime.InvokeVoidAsync("open", new object[2] { $"Pdf/{TrzNro}/ENSAYOS", $"Pdf/{TrzNro}/ENSAYOS" });
+
+
+
         await JsRuntime.InvokeVoidAsync("open", new object[2] { $"pdf-ensayos/{TrzNro}/RUTAENSAYO", $"pdf-ensayos/{TrzNro}/RUTAENSAYO" });
     }
 }
@@ -1341,5 +1079,8 @@
 
     #toast_types {
         text-align: center;
+    }
+    .tabCertif{
+        height: 400px;
     }
 </style>

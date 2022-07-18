@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain;
+using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
 
 namespace SupplyChain.Server.Controllers
@@ -14,25 +15,25 @@ namespace SupplyChain.Server.Controllers
     [ApiController]
     public class GeneraController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly GeneraRepository _generaRepository;
 
-        public GeneraController(AppDbContext context)
+        public GeneraController(GeneraRepository generaRepository)
         {
-            _context = context;
+            _generaRepository = generaRepository;
         }
 
         // GET: api/Genera
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Genera>>> GetGenera()
         {
-            return await _context.Genera.ToListAsync();
+            return await _generaRepository.ObtenerTodos();
         }
 
         // GET: api/Genera/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Genera>> GetGenera(string id)
         {
-            var genera = await _context.Genera.FindAsync(id);
+            var genera = await _generaRepository.ObtenerPorId(id);
 
             if (genera == null)
             {
@@ -47,20 +48,18 @@ namespace SupplyChain.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutGenera(string id, Genera genera)
         {
-            if (id != genera.CAMP3)
+            if (id != genera.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(genera).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _generaRepository.Actualizar(genera);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!GeneraExists(id))
+                if (! await _generaRepository.Existe(id))
                 {
                     return NotFound();
                 }
@@ -78,14 +77,13 @@ namespace SupplyChain.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Genera>> PostGenera(Genera genera)
         {
-            _context.Genera.Add(genera);
             try
             {
-                await _context.SaveChangesAsync();
+                await _generaRepository.Agregar(genera);
             }
             catch (DbUpdateException)
             {
-                if (GeneraExists(genera.CAMP3))
+                if (await _generaRepository.Existe(genera.Id))
                 {
                     return Conflict();
                 }
@@ -95,21 +93,20 @@ namespace SupplyChain.Server.Controllers
                 }
             }
 
-            return CreatedAtAction("GetGenera", new { id = genera.CAMP3 }, genera);
+            return CreatedAtAction("GetGenera", new { id = genera.Id }, genera);
         }
 
         // DELETE: api/Genera/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGenera(string id)
         {
-            var genera = await _context.Genera.FindAsync(id);
+            var genera = await _generaRepository.ObtenerPorId(id);
             if (genera == null)
             {
                 return NotFound();
             }
 
-            _context.Genera.Remove(genera);
-            await _context.SaveChangesAsync();
+            await _generaRepository.Remover(id);
 
             return NoContent();
         }
@@ -121,8 +118,8 @@ namespace SupplyChain.Server.Controllers
             try
             {
 
-                await Reserva(campo);
-                var genera = await _context.Genera.Where(g => g.CAMP3 == campo).FirstOrDefaultAsync();
+                await _generaRepository.Reserva(campo);
+                var genera = await _generaRepository.Obtener(g => g.Id == campo).FirstOrDefaultAsync();
                 return Ok(genera);
             }
             catch (Exception ex)
@@ -137,8 +134,8 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
-                await Libera(campo);
-                var genera = await _context.Genera.Where(g => g.CAMP3 == campo).FirstOrDefaultAsync();
+                await _generaRepository.Libera(campo);
+                var genera = await _generaRepository.Obtener(g => g.Id == campo).FirstOrDefaultAsync();
                 return Ok(genera);
             }
             catch (Exception ex)
@@ -146,23 +143,6 @@ namespace SupplyChain.Server.Controllers
                 return BadRequest(ex);
             }
             
-        }
-
-        private bool GeneraExists(string id)
-        {
-            return _context.Genera.Any(e => e.CAMP3 == id);
-        }
-
-        private async Task Reserva(string campo)
-        {
-            var sp = $"Exec N_Genera 1, '{campo}', 'R', 0, '', 0, 0";
-            await _context.Database.ExecuteSqlRawAsync(sp); ;
-        }
-
-        private async Task Libera(string campo)
-        {
-            var sp = $"Exec N_Genera 1, '{campo}', 'L', 0, '', 0, 0";
-            await _context.Database.ExecuteSqlRawAsync(sp); ;
         }
     }
 }

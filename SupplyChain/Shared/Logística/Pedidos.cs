@@ -1,4 +1,5 @@
-﻿using SupplyChain.Shared.HelpersAtributo;
+﻿using SupplyChain.Shared;
+using SupplyChain.Shared.HelpersAtributo;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
 using System;
@@ -10,8 +11,12 @@ using System.Text;
 namespace SupplyChain
 {
     [Table("Pedidos")]
-    public class Pedidos
+    public class Pedidos : EntityBase<int?>
     {
+        [Key, Column("REGISTRO")]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [ColumnaGridViewAtributo(Name = "Registro")]
+        new public int? Id { get; set; }
 
         /*AGREGO CAMPOS (EXIGEDESPACHO, EXIGELOTE, EXIGESERIE) NO MAPEADOS A LA BASE DE DATOS 
          * QUE DEBEN SER SETEADOS POR EL PRODUCTO PARA VALIDACIONES.
@@ -38,9 +43,8 @@ namespace SupplyChain
 
         [NotMapped]
         public Cliente Cliente { get; set; } = new Cliente();
-
         [NotMapped]
-        public virtual Proveedor Proveedor { get; set; } = new Proveedor();
+        public Proveedor Proveedor { get; set; } = new Proveedor();
 
         /*
          * Agrego campo CG_DEP_ALT no mapeado para guardar el otro deposito: 
@@ -49,11 +53,12 @@ namespace SupplyChain
          * 2) con el deposito de salida
          */
         [NotMapped]
+        [RequireDepositoItem]
         public int CG_DEP_ALT { get; set; } = 0;
 
-        [Display(Name = "Vale")]
+        [ColumnaGridViewAtributo(Name = "Vale")]
         public int VALE { get; set; } = 0;
-        [Display(Name = "Fecha Vale")]
+        [ColumnaGridViewAtributo(Name = "Fecha Vale")]
         public DateTime FE_MOV { get; set; }
         [ColumnaGridViewAtributo(Name = "Asiento contable")]
         public int VOUCHER { get; set; } = 0;
@@ -182,10 +187,7 @@ namespace SupplyChain
         public string USUARIO { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Fecha registro")]
         public DateTime FE_REG { get; set; }
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [ColumnaGridViewAtributo(Name = "Registro")]
-        public int? REGISTRO { get; set; }
+        
         [ColumnaGridViewAtributo(Name = "Compañía")]
         public int? CG_CIA { get; set; } = 0;
 
@@ -195,5 +197,8 @@ namespace SupplyChain
         public bool Control4 { get; set; } = false;
         public bool Control5 { get; set; } = false;
         public bool Control6 { get; set; } = false;
+
+        [Column("FLAG")]
+        public decimal CONFIRMADO { get; set; }
     }
 }

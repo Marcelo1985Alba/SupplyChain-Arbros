@@ -19,57 +19,70 @@
 @inject NavigationManager NavManager
 @inherits SupplyChain.Pages.Area.AreaPageBase
 
-<div class="col-lg-12 control-section">
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+<div class="col control-section">
     <div class="content-wrapper">
         <div class="row">
-            <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" 
-                    EnablePersistence="true" ID="areaGrid"
-                    @ref="Grid" DataSource="@areas" AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true"
-                    AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
-                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                <GridEvents OnToolbarClick="@ClickHandler" OnActionBegin="ActionBegin" TValue="Areas"></GridEvents>
-                <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
-                <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-                <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@EditMode.Dialog">
-                    <Template>
-                        @{
-                            var area = (context as Areas);
-                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-Generalidades" role="tab" aria-controls="pills-home" aria-selected="true">Modelos</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content" id="pills-tabContent">
-                                <div class="tab-pane fade show active" id="pills-Generalidades" role="tabpanel" aria-labelledby="pills-home-tab">
-                                    <div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Codigo:</label>
-                                                <SfNumericTextBox ID="Codigo" @bind-Value="@(area.CG_AREA)"Enabled="@Disabled"></SfNumericTextBox>
-
-                                            </div>
-
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Descripcion:</label>
-                                                <SfTextBox ID="Descripcion" @bind-Value="@(area.DES_AREA)"></SfTextBox>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </Template>
-                </GridEditSettings>
-                <GridColumns>
-                    <GridColumn Field=@nameof(Areas.CG_AREA) HeaderText="Codigo" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Areas.DES_AREA) HeaderText="Descripcion" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
-               
-                </GridColumns>
-            </SfGrid>
+            <div class="col-12">
+                <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                        DataSource="@(areas.OrderBy(s => s.CG_AREA))" AllowSelection="true"
+                        ID="gridAreas" Height="100%" Width="100%" GridLines="GridLine.Both" RowHeight="27"
+                        @ref="Grid" AllowExcelExport="true" AllowGrouping="true"
+                        AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
+                    <GridSelectionSettings CheckboxOnly="true"
+                                           Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                    <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                    <GridEvents OnToolbarClick="@ClickHandler" TValue="Areas"></GridEvents>
+                    <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+                    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true">
+                    </GridEditSettings>
+                    <GridColumns>
+                        <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+                        <GridColumn Field=@nameof(Areas.CG_AREA) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Areas.DES_AREA) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                    </GridColumns>
+                    <SfSpinner @ref="refSpinner" Type="SpinnerType.Bootstrap" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
+                </SfGrid>
+            </div>
         </div>
     </div>
 </div>
+
+
+<SfDialog Width="1000px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible" Target="DialogAreas">
+    <DialogTemplates>
+        <Content>
+            <EditForm Model="areas" OnValidSubmit="@guardarArea">
+                <DataAnnotationsValidator />
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-Areas" role="tab" aria-controls="pills-home" aria-selected="true">Areas</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-Areas" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Codigo:</label>
+                                    <SfNumericTextBox ID="Codigo" @bind-Value="@(area.CG_AREA)"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Descripcion:</label>
+                                    <SfTextBox ID="Descripcion" @bind-Value="@(area.DES_AREA)"></SfTextBox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
+            </EditForm>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
 <style>
     .form-group.col-md-6 {
         width: 200px;
@@ -86,40 +99,37 @@
         background-color: lightblue;
     }
 </style>
-<style>
-    #DropArea {
-        padding: 50px 25px;
-        margin: 30px auto;
-        border: 1px solid #c3c3c3;
-        text-align: center;
-        width: 20%;
-        display: inline-flex;
-    }
 
-    .e-file-select,
-    .e-file-drop {
-        display: none;
-    }
-
-    body .e-upload-drag-hover {
-        outline: 2px dashed brown;
-    }
-
-    #uploadfile {
-        width: 60%;
-        display: inline-flex;
-        margin-left: 5%;
-    }
-</style>
-
-
-@*<SfQRCodeGenerator Width="200px" Height="150px" Value="http://www.aerre.com.ar/">
-        <QRCodeGeneratorDisplayText text=" "></QRCodeGeneratorDisplayText>
-    </SfQRCodeGenerator>*@
-<style>
-    #target {
-        height: 500px;
-    }
-</style>
 @code {
+
+    public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
+    public bool DblClick = true;
+    public bool CommandColumnsClick = false;
+
+    public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+    public void OnRadioChange(ChangeArgs<string> args)
+    {
+        if (args.Value == "inline")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+        }
+        else if (args.Value == "batch")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Batch;
+        }
+        else if (args.Value == "dialog")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Dialog;
+        }
+        else
+        {
+            this.CommandColumnsClick = true;
+        }
+    }
 }

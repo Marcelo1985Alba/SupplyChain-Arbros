@@ -5,8 +5,7 @@
 @inject HttpClient Http
 
 
-<SfSpinner Size="80" Label="Cargando..." Type="SpinnerType.Bootstrap4" @bind-Visible="@VisibleSpinner"
-           Target="#pdfViewer"></SfSpinner>
+<SfSpinner Size="80" Label="Cargando..." Type="SpinnerType.Bootstrap4" @bind-Visible="@VisibleSpinner"></SfSpinner>
 @if (Cargando)
 {
     VisibleSpinner = true;

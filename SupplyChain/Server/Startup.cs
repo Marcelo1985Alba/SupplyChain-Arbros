@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +16,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Syncfusion.Blazor;
 using System.IdentityModel.Tokens;
+using SupplyChain.Server.Data.Repository;
+using SupplyChain.Server.Repositorios;
+using Syncfusion.Blazor;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,6 +41,9 @@ namespace SupplyChain.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication();
+            services.AddAuthorization();
+
             services.AddDbContext<AppDbContext>(options =>
                             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -55,6 +68,38 @@ namespace SupplyChain.Server
 
 
 
+            {
+                options.EnableSensitiveDataLogging();
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            #region "Repositorios"
+            services.AddTransient<UsuariosRepository>();
+            services.AddTransient<ServiciosRepository>();
+            services.AddTransient<PedCliRepository>();
+            services.AddTransient<ProgramaRepository>();
+            services.AddTransient<ProductoRepository>();
+            services.AddTransient<PrevisionRepository>();
+            services.AddTransient<CompraRepository>();
+            services.AddTransient<ProveedorRepository>();
+            services.AddTransient<PedidosRepository>();
+            services.AddTransient<FormulaRepository>();
+            services.AddTransient<SolutionRepository>();
+            services.AddTransient<StockCorregidoRepository>();
+            services.AddTransient<SolicitudRepository>();
+            services.AddTransient<PresupuestoAnteriorRepository>();
+            services.AddTransient<PresupuestoRepository>();
+            services.AddTransient<PrecioArticulosRepository>();
+            services.AddTransient<GeneraRepository>();
+            services.AddTransient<vDireccionesEntregaRepository>();
+            services.AddTransient<NotificacionRepository>();
+            services.AddTransient<vCondicionesPagoRepository>();
+            services.AddTransient<vCondicionesEntregaRepository>();
+            services.AddTransient<vTipoCambioRepository>();
+            services.AddTransient<ProyectosGBPIRepository>();
+            services.AddTransient<CeldasRepository>();
+            #endregion
+
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
 
             services.AddControllersWithViews()
@@ -71,12 +116,12 @@ namespace SupplyChain.Server
             //Para invocar controladores en otros controladores a traves de DI
             services.AddMvc()
                 .AddControllersAsServices();
-                //.ConfigureApiBehaviorOptions(options =>
-                //{
-                //    options.SuppressModelStateInvalidFilter = true;
-                //    options.SuppressConsumesConstraintForFormFileParameters = true;
-                //    options.SuppressInferBindingSourcesForParameters = true;
-                //});
+            //.ConfigureApiBehaviorOptions(options =>
+            //{
+            //    options.SuppressModelStateInvalidFilter = true;
+            //    options.SuppressConsumesConstraintForFormFileParameters = true;
+            //    options.SuppressInferBindingSourcesForParameters = true;
+            //});
 
             services.AddResponseCompression(opts =>
             {
@@ -89,7 +134,7 @@ namespace SupplyChain.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() || env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
@@ -104,10 +149,12 @@ namespace SupplyChain.Server
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
@@ -122,5 +169,6 @@ namespace SupplyChain.Server
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             return Task.CompletedTask;
         }
+
     }
 }

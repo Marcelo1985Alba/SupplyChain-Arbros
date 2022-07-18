@@ -23,6 +23,10 @@ namespace SupplyChain.Shared.Models
         public decimal CANT_TOTAL { get; set; } = 0;
         public decimal SALDO_TOTAL { get; set; } = 0;
 
+        public decimal COMP_DE_ENTRADA => StockCorregido.COMP_DE_ENTRADA;
+        public decimal STOCK_CORREGIDO => StockCorregido.COMP_DE_ENTRADA + StockCorregido.STOCK;
+
         public List<ResumenStock> ResumenStocks { get; set; }
+        public StockCorregido StockCorregido { get; set; } = new StockCorregido();
     }
 }

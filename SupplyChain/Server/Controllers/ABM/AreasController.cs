@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Syncfusion.Blazor.Grids;
 
 namespace SupplyChain
 {
@@ -22,14 +23,14 @@ namespace SupplyChain
 
         // GET: api/Areas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Areas>>> GetUnidades()
+        public async Task<ActionResult<IEnumerable<Areas>>> GetAreas()
         {
             return await _context.Areas.ToListAsync();
         }
 
         // GET: api/Areas/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Areas>> GetUnidad(int id)
+        public async Task<ActionResult<Areas>> GetArea(int id)
         {
             var area = await _context.Areas.FindAsync(id);
 
@@ -45,7 +46,7 @@ namespace SupplyChain
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUnidad(int id, Areas area)
+        public async Task<IActionResult> PutArea(int id, Areas area)
         {
             if (id != area.CG_AREA)
             {
@@ -60,7 +61,7 @@ namespace SupplyChain
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UnidadExists(id))
+                if (!AreaExists(id))
                 {
                     return NotFound();
                 }
@@ -77,7 +78,7 @@ namespace SupplyChain
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Areas>> PostUnidad(Areas area)
+        public async Task<ActionResult<Areas>> PostArea(Areas area)
         {
             _context.Areas.Add(area);
             try
@@ -86,7 +87,7 @@ namespace SupplyChain
             }
             catch (DbUpdateException)
             {
-                if (UnidadExists(area.CG_AREA))
+                if (AreaExists(area.CG_AREA))
                 {
                     return Conflict();
                 }
@@ -96,12 +97,31 @@ namespace SupplyChain
                 }
             }
 
-            return CreatedAtAction("GetUnidad", new { id = area.CG_AREA }, area);
+            return CreatedAtAction("GetArea", new { id = area.CG_AREA }, area);
+        }
+
+        [HttpPost("PostList")]
+        public async Task<ActionResult<Areas>> PostList(List<Areas> areas)
+        {
+            try
+            {
+                foreach (var item in areas)
+                {
+                    _context.Areas.Remove(item);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
 
         // DELETE: api/Unidades/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Areas>> DeleteUnidad(int id)
+        public async Task<ActionResult<Areas>> DeleteArea(int id)
         {
             var area = await _context.Areas.FindAsync(id);
             if (area == null)
@@ -115,9 +135,10 @@ namespace SupplyChain
             return area;
         }
 
-        private bool UnidadExists(int id)
+        [HttpGet("AreaExists/{CG_AREA}")]
+        public bool AreaExists(int id)
         {
-            return _context.Areas.Any(e => e.CG_AREA == id);
+            return _context.Areas.Any(s => s.CG_AREA == id);
         }
     }
 }

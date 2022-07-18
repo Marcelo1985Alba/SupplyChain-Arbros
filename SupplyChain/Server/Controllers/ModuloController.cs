@@ -20,20 +20,20 @@ namespace SupplyChain.Server.Controllers
             this.appDbContext = appDbContext;
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Modulo>>> Get()
-        //{
-        //    try
-        //    {
-        //        return await appDbContext.Modulos.ToListAsync();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex);
-        //    }
-        //}
-
         [HttpGet]
+        public async Task<ActionResult<IEnumerable<Modulo>>> Get()
+        {
+            try
+            {
+                return await appDbContext.Modulos.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("GetSyncfusion")]
         public object GetSyncfusion()
         {
             //Get the DataSource from Database

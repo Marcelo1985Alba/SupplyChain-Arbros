@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Client.HelperService;
+using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared.Models;
 
 namespace SupplyChain.Server.Controllers
@@ -14,12 +15,17 @@ namespace SupplyChain.Server.Controllers
     [ApiController]
     public class ComprasController : ControllerBase
     {
-        private int cg_cia_usuario = 1; /*CAMBIAR POR LA DEL USUARIO*/
-        private readonly AppDbContext _context;
+        private readonly int cg_cia_usuario = 1; /*CAMBIAR POR LA DEL USUARIO*/
+        private readonly CompraRepository _compraRepository;
+        private readonly PedidosRepository _pedidosRepository;
+        private readonly ProveedorRepository _proveedorRepository;
 
-        public ComprasController(AppDbContext context)
+        public ComprasController(CompraRepository compraRepository, PedidosRepository pedidosRepository,
+                                 ProveedorRepository proveedorRepository)
         {
-            _context = context;
+            this._compraRepository = compraRepository;
+            this._pedidosRepository = pedidosRepository;
+            this._proveedorRepository = proveedorRepository;
         }
 
         // GET: api/Compras
@@ -29,17 +35,13 @@ namespace SupplyChain.Server.Controllers
             //OC ABIERTAS
             try
             {
-                var compras = await _context.Compras
-                    .Where(c => c.CG_CIA == cg_cia_usuario && c.FE_CIERRE == null && c.NUMERO > 0)
-                    .ToListAsync();
+                var compras = await _compraRepository
+                    .Obtener(c => c.CG_CIA == cg_cia_usuario && c.FE_CIERRE == null && c.NUMERO > 0).ToListAsync();
 
-                await compras.ForEachAsync( async c => 
+                await compras.ForEachAsync( async c =>
                 {
-                    c.PENDIENTE = c.SOLICITADO - _context.Pedidos
-                    .Where(p => p.TIPOO == 5 && p.OCOMPRA == c.NUMERO && p.CG_ART == c.CG_MAT)
-                    .Sum(p => p.STOCK);
-                    c.ProveedorNavigation = await _context.Proveedores.Where(p => p.CG_PROVE == c.NROCLTE).FirstOrDefaultAsync();
-                    
+                    c.PENDIENTE = c.SOLICITADO - await _pedidosRepository.ObtenerRecepSumByOcMp(c.NUMERO, c.CG_MAT);
+                    c.ProveedorNavigation = await _proveedorRepository.ObtenerPorId(c.NROCLTE);
                 });
 
                 return compras.OrderByDescending(c=> c.NUMERO).ToList();
@@ -48,14 +50,13 @@ namespace SupplyChain.Server.Controllers
             {
                 return BadRequest(ex);
             }
-            
         }
 
         // GET: api/Compras/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Compra>> GetCompra(int id)
         {
-            var compra = await _context.Compras.FindAsync(id);
+            var compra = await _compraRepository.ObtenerPorId(id);
 
             if (compra == null)
             {
@@ -71,12 +72,11 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
-               return await _context.Compras.Where(c=> c.NUMERO == numero).Take(20).ToListAsync();
+               return Ok(await _compraRepository.Obtener(c=> c.NUMERO == numero).ToListAsync());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return BadRequest(ex);
             }
         }
 
@@ -86,26 +86,24 @@ namespace SupplyChain.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCompra(decimal id, Compra compra)
         {
-            if (id != compra.REGISTRO)
+            if (id != compra.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(compra).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _compraRepository.Actualizar(compra);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CompraExists(id))
+                if (! await _compraRepository.Existe(id))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
 
@@ -118,31 +116,26 @@ namespace SupplyChain.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Compra>> PostCompra(Compra compra)
         {
-            _context.Compras.Add(compra);
-            await _context.SaveChangesAsync();
+            await _compraRepository.Agregar(compra);
 
-            return CreatedAtAction("GetCompra", new { id = compra.REGISTRO }, compra);
+            return CreatedAtAction("GetCompra", new { id = compra.Id }, compra);
         }
 
         // DELETE: api/Compras/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Compra>> DeleteCompra(decimal id)
+        public async Task<ActionResult<Compra>> DeleteCompra(int id)
         {
-            var compra = await _context.Compras.FindAsync(id);
+            var compra = await _compraRepository.ObtenerPorId(id);
             if (compra == null)
             {
                 return NotFound();
             }
 
-            _context.Compras.Remove(compra);
-            await _context.SaveChangesAsync();
+            await _compraRepository.Remover(id);
 
             return compra;
         }
 
-        private bool CompraExists(decimal id)
-        {
-            return _context.Compras.Any(e => e.REGISTRO == id);
-        }
+        
     }
 }

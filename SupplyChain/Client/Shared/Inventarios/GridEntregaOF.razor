@@ -272,7 +272,7 @@ else
 
 
                 //agregar nuero de registro una vez guardado y obtner los importes
-                Args.Data.REGISTRO = RegistroGenerado.REGISTRO;
+                Args.Data.Id = RegistroGenerado.Id;
                 Args.Data.IMPORTE1 = RegistroGenerado.IMPORTE1;
                 Args.Data.IMPORTE2 = RegistroGenerado.IMPORTE2;
                 Args.Data.IMPORTE3 = RegistroGenerado.IMPORTE3;
@@ -433,7 +433,7 @@ else
         var registroCompleto = await Http
             .GetFromJsonAsync<Pedidos>($"api/Stock/GetByResumenStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
 
-        registroCompleto.REGISTRO = DataSource.Count > 0 ? -1 : DataSource.Count * -1;//indica que es un nuevo registro
+        registroCompleto.Id = DataSource.Count > 0 ? -1 : DataSource.Count * -1;//indica que es un nuevo registro
         registroCompleto.TIPOO = RegistroGenerado.TIPOO;
         registroCompleto.STOCK = 0;
         registroCompleto.ResumenStock = resumenStock;

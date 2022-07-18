@@ -19,7 +19,7 @@ namespace SupplyChain
     [ApiController]
     public class ValuesController : ControllerBase
     { 
-        private IWebHostEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         //Initialize the memory cache object   
         public IMemoryCache _cache;
         private readonly AppDbContext _context;
@@ -42,13 +42,14 @@ namespace SupplyChain
         public IActionResult Load([FromBody] Dictionary<string, string> jsonObject)
         {
             //Initialize the PDF viewer object with memory cache object
-            PdfRenderer pdfviewer = new PdfRenderer(_cache);
-            MemoryStream stream = new MemoryStream();
-            object jsonResult = new object();
+            PdfRenderer pdfviewer = new(_cache);
+            MemoryStream stream = new();
+            object jsonResult = new();
             if (jsonObject != null && jsonObject.ContainsKey("document"))
             {
                 if (bool.Parse(jsonObject["isFileName"]))
                 {
+                    
                     string documentPath = GetDocumentPath(jsonObject["document"]);
                     if (!string.IsNullOrEmpty(documentPath))
                     {
@@ -70,7 +71,6 @@ namespace SupplyChain
             jsonResult = pdfviewer.Load(stream, jsonObject);
 
             var result = Content(JsonConvert.SerializeObject(jsonResult));
-            
             return result;
         }
 
@@ -266,21 +266,16 @@ namespace SupplyChain
 
             if (!System.IO.File.Exists(ubicacion + "/" + document))
             {
-                //var sol = ubicaciones.Where(s => s.CAMPO == contenido[1]).FirstOrDefault();
-                //var path = _hostingEnvironment.ContentRootPath;
-                //string webRootPath = _hostingEnvironment.WebRootPath;
-                //if (System.IO.File.Exists(path + "/documentos/" + document))
-                //    documentPath = path + "/documentos/" + document;
                 ubicacion = "D:\\Descargas\\";
                 document = "27303156459_011_00001_00000058.pdf";
-                if (System.IO.File.Exists(ubicacion +"/" + document))
+                if (System.IO.File.Exists(ubicacion + "/" + document))
                     documentPath = ubicacion + "/" + document;
             }
             else
             {
                 documentPath = ubicacion + "/" + document;
             }
-            Console.WriteLine(documentPath);
+
             return documentPath;
         }
         // GET api/values

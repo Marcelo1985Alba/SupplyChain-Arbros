@@ -18,41 +18,69 @@ namespace SupplyChain.Pages.Unidad
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
         protected SfGrid<Unidades> Grid;
+        protected string state;
 
         public bool Enabled = true;
         public bool Disabled = false;
 
         protected List<Unidades> unidades = new List<Unidades>();
+        protected Unidades unidadSeleccionado = new();
+
+        protected bool popupFormVisible = false;
 
         protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
         "Add",
         "Edit",
-        "Delete",
-        "Print",
-        new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
-        "ExcelExport"
-    };
+        "Delete"
+        };
+        protected bool SpinnerVisible = false;
 
         protected override async Task OnInitializedAsync()
         {
+            SpinnerVisible = true;
             unidades = await Http.GetFromJsonAsync<List<Unidades>>("api/Unidades");
-
-            await base.OnInitializedAsync();
+            SpinnerVisible = false;
         }
 
-        public void ActionBeginHandler(ActionEventArgs<Unidades> args)
+        protected async Task OnActionBeginHandler(ActionEventArgs<Unidades> args)
         {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                args.Cancel = true;
+                args.PreventRender = false;
+                popupFormVisible = true;
+                unidadSeleccionado = new();
+                unidadSeleccionado.ESNUEVO = true;
+            }
+
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                this.Enabled = false;
+                unidadSeleccionado = args.Data;
+                unidadSeleccionado.ESNUEVO = false;
             }
-            else
+
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Sorting
+                )
             {
-                this.Enabled = true;
+                Grid.PreventRender();
+                Grid.Refresh();
+
+                state = await Grid.GetPersistData();
+                await Grid.AutoFitColumnsAsync();
+                await Grid.RefreshColumns();
+                await Grid.RefreshHeader();
             }
         }
-        public async Task ActionBegin(ActionEventArgs<Unidades> args)
+        /*public async Task ActionBegin(ActionEventArgs<Unidades> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
@@ -69,20 +97,14 @@ namespace SupplyChain.Pages.Unidad
                 {
                     response = await Http.PutAsJsonAsync($"api/Unidades/{args.Data.UNID}", args.Data);
                 }
-
-                if (response.StatusCode == System.Net.HttpStatusCode.Created)
-                {
-
-                }
             }
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
             {
                 await EliminarCeldas(args);
             }
-        }
-
-        private async Task EliminarCeldas(ActionEventArgs<Unidades> args)
+        }*/
+        /*private async Task EliminarCeldas(ActionEventArgs<Unidades> args)
         {
             try
             {
@@ -99,6 +121,19 @@ namespace SupplyChain.Pages.Unidad
             catch (Exception ex)
             {
 
+            }
+        }*/
+
+        protected async Task OnToolbarHandler(ClickEventArgs args)
+        {
+        }
+        protected async Task OnActionCompleteHandler(ActionEventArgs<Unidades> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                args.Cancel = true;
+                args.PreventRender = false;
+                popupFormVisible = true;
             }
         }
 
@@ -122,7 +157,6 @@ namespace SupplyChain.Pages.Unidad
                             Nuevo.TIPOUNID = selectedRecord.TIPOUNID;
                             Nuevo.CG_DENBASICA = selectedRecord.CG_DENBASICA;
                             Nuevo.CODIGO = selectedRecord.CODIGO;
-                            Nuevo.CG_CIA = selectedRecord.CG_CIA;
 
 
 

@@ -105,7 +105,8 @@ namespace SupplyChain
             {
                 if (_context.Pedidos.Any())
                 {
-                    lContiene = await _context.Pedidos.Where(p => p.PEDIDO.ToString().Contains(Pedido) && p.AVISO == "ALTA DE PRODUCTO FABRICADO").OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
+                    lContiene = await _context.Pedidos.Where(p => p.PEDIDO.ToString().Contains(Pedido) 
+                    && p.AVISO == "ALTA DE PRODUCTO FABRICADO").OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
                 }
                 if (lContiene == null)
                 {
@@ -116,7 +117,8 @@ namespace SupplyChain
             {
                 if (_context.Pedidos.Any())
                 {
-                    lContiene = await _context.Pedidos.Where(p => p.DES_CLI.Contains(Cliente) && p.AVISO == "ALTA DE PRODUCTO FABRICADO").OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
+                    lContiene = await _context.Pedidos.Where(p => p.DES_CLI.Contains(Cliente) && p.AVISO == "ALTA DE PRODUCTO FABRICADO")
+                        .OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
                 }
                 if (lContiene == null)
                 {
@@ -152,12 +154,19 @@ namespace SupplyChain
         [HttpGet("MostrarTrazabilidad/{Pedido}")]
         public async Task<ActionResult<List<Pedidos>>> MostrarTrazabilidad(string Pedido)
         {
-            List<Pedidos> lPedidos = new();
-            if (_context.Pedidos.Any())
+            try
             {
-                lPedidos = await _context.Pedidos.Where(p => p.PEDIDO.ToString() == Pedido).ToListAsync();
+                List<Pedidos> lPedidos = new();
+                if (_context.Pedidos.Any())
+                {
+                    lPedidos = await _context.Pedidos.Where(p => p.PEDIDO.ToString() == Pedido).ToListAsync();
+                }
+                return lPedidos == null ? NotFound() : lPedidos;
             }
-            return lPedidos == null ? NotFound() : lPedidos;
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         // GET: api/Pedidos/BusquedaParaFE_MOV/{PEDIDO}
@@ -188,14 +197,14 @@ namespace SupplyChain
                 //RESERVA REGISTRO: El vale hay que hacerlo del lado del cliente porque debe reservar un solo vale
                 //y aqui se ejecuta por item.
                 await generaController.ReservaByCampo("REGSTOCK");
-                var genera = await _context.Genera.Where(g => g.CAMP3 == "REGSTOCK").FirstOrDefaultAsync();
-                stock.REGISTRO = (int?)genera.VALOR1;
+                var genera = await _context.Genera.Where(g => g.Id == "REGSTOCK").FirstOrDefaultAsync();
+                stock.Id = (int)genera.VALOR1;
                 stock.FE_REG = DateTime.Now;
                 stock.USUARIO = "USER";
 
                 if (stock.TIPOO == 9 || stock.TIPOO == 10)
                 {
-                    stock.CG_ORDEN = _context.Prod.Where(p => p.CG_PROD.Trim() == stock.CG_ART.Trim()).FirstOrDefault().CG_ORDEN;
+                    stock.CG_ORDEN = _context.Prod.Where(p => p.Id.Trim() == stock.CG_ART.Trim()).FirstOrDefault().CG_ORDEN;
                     stock.STOCK = -stock.STOCK;
                 }
 
@@ -214,7 +223,7 @@ namespace SupplyChain
             catch (DbUpdateException ex)
             {
                 await generaController.LiberaByCampo("REGSTOCK");
-                if (RegistroExists(stock.REGISTRO))
+                if (RegistroExists(stock.Id))
                 {
                     return Conflict();
                 }
@@ -241,7 +250,7 @@ namespace SupplyChain
             //MOVIM ENTRE DEP: GENERAR SEGUNDO REGISTROS: 
             if (stock?.TIPOO == 9)
             {
-                stock.REGISTRO = null;
+                stock.Id = null;
                 stock.USUARIO = "USER";
                 stock.CG_CIA = 1;
                 stock.STOCK = -stock.STOCK;
@@ -255,7 +264,7 @@ namespace SupplyChain
                 }
                 catch (DbUpdateException ex)
                 {
-                    if (RegistroExists(stock.REGISTRO))
+                    if (RegistroExists(stock.Id))
                     {
                         return Conflict();
                     }
@@ -277,6 +286,122 @@ namespace SupplyChain
             }
 
             return Ok(stock);
+        }
+
+        [HttpPost("PostList")]
+        public async Task<ActionResult<List<Pedidos>>> PostListStock([FromBody] List<Pedidos> lstock)
+        {
+            int vale = lstock[0].VALE;
+            bool liberaVale = false;
+            if (lstock.Count > 0 && !lstock.Any(s=> s.Id > 0))
+            {
+                await generaController.ReservaByCampo("VALE");
+                var generaVale = await _context.Genera.Where(g => g.Id == "VALE").FirstOrDefaultAsync();
+                vale = (int)generaVale.VALOR1;
+                liberaVale = true;
+            }
+            
+            foreach (var stock in lstock)
+            {
+                try
+                {
+                    if (stock.Id < 0) 
+                        await AddDb(vale, stock);
+                    else
+                        await ActualizaDb(stock);
+
+                    if (stock.TIPOO == 5)
+                    {
+                        stock.Proveedor = _context.Proveedores.AsNoTracking()
+                            .Where(p => p.Id == stock.CG_PROVE).FirstOrDefault();
+                    }
+
+                }
+                catch (DbUpdateException ex)
+                {
+                    await generaController.LiberaByCampo("VALE");
+                    await generaController.LiberaByCampo("REGSTOCK");
+                    if (RegistroExists(stock.Id))
+                    {
+                        return Conflict();
+                    }
+                    else
+                    {
+                        return BadRequest(ex);
+                    }
+                }
+                catch (Exception e)
+                {
+                    await generaController.LiberaByCampo("VALE");
+                    await generaController.LiberaByCampo("REGSTOCK");
+                    return BadRequest(e);
+                }
+
+            }
+
+            
+            await FirmeOF(lstock[0]);
+
+            if(liberaVale)
+                await generaController.LiberaByCampo("VALE");
+
+
+            return Ok(lstock);
+        }
+
+        private async Task AddDb(int vale, Pedidos stock)
+        {
+            
+
+            stock.VALE = vale;//el vale se analiza
+            stock.CG_CIA = 1;
+            //RESERVA REGISTRO: El vale hay que hacerlo del lado del cliente porque debe reservar un solo vale
+            //y aqui se ejecuta por item.
+            await generaController.ReservaByCampo("REGSTOCK");
+            var genera = await _context.Genera.Where(g => g.Id == "REGSTOCK").FirstOrDefaultAsync();
+            stock.Id = (int)genera.VALOR1;
+            stock.FE_REG = DateTime.Now;
+            stock.USUARIO = HttpContext.User.Identity.Name ?? "USER";
+
+            if (stock.TIPOO == 9 || stock.TIPOO == 10 || stock.TIPOO == 28)
+            {
+                stock.CG_ORDEN = _context.Prod.Where(p => p.Id.Trim() == stock.CG_ART.Trim()).FirstOrDefault().CG_ORDEN;
+                stock.STOCK = -stock.STOCK;
+            }
+
+            if (stock.TIPOO == 5)
+                stock.CUIT = stock.Proveedor?.CUIT.Trim();
+
+
+            stock.Cliente = null;
+            stock.Proveedor = null;
+            stock.ResumenStock = null;
+
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTrackingWithIdentityResolution;
+
+            _context.Pedidos.Add(stock);
+            await _context.SaveChangesAsync();
+
+            await CerrarOC(stock);
+
+            await generaController.LiberaByCampo("REGSTOCK");
+
+
+            if (stock.TIPOO == 9)
+            {
+                await generaController.ReservaByCampo("REGSTOCK");
+                genera = await _context.Genera.Where(g => g.Id == "REGSTOCK").FirstOrDefaultAsync();
+                stock.Id = (int?)genera.VALOR1;
+                stock.USUARIO = "USER";
+                stock.CG_CIA = 1;
+                stock.STOCK = -stock.STOCK;
+                stock.CG_DEP = stock.CG_DEP_ALT;
+                _context.Pedidos.Add(stock);
+                await _context.SaveChangesAsync();
+                await generaController.LiberaByCampo("REGSTOCK");
+            }
+
+
         }
 
         private async Task CerrarOC(Pedidos stock)
@@ -307,20 +432,35 @@ namespace SupplyChain
         }
         private async Task FirmeOF(Pedidos stock)
         {
+            if (stock.TIPOO == 28)
+            {
+                var programa = await _context.Programa.AsNoTracking()
+                               .FirstOrDefaultAsync(c => c.CG_ORDF == stock.CG_ORDF || c.CG_ORDFASOC == stock.CG_ORDF);
+
+                programa.CG_ESTADO = 1;
+                programa.CG_ESTADOCARGA = 2;
+                programa.FE_FIRME = DateTime.Now;
+                _context.Entry(programa).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+
+
             if (stock.TIPOO == 10)
             {
-                var programa = await _context.Programa
-                        .Where(c => c.CG_ORDF == stock.CG_ORDF || c.CG_ORDFASOC == stock.CG_ORDF).ToListAsync();
+                var programa = await _context.Programa.AsNoTracking()
+                                .Where(c => c.CG_ORDF == stock.CG_ORDF || c.CG_ORDFASOC == stock.CG_ORDF).ToListAsync();
 
-
-                await programa.ForEachAsync(async p=>
+                if (programa.Count > 0 && programa.Any(p => p.CG_ESTADOCARGA != 2))
                 {
-                    p.CG_ESTADO = 1;
-                    p.CG_ESTADOCARGA = 2;
-                    p.FE_FIRME = DateTime.Now;
-                    _context.Entry(p).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                });
+                    await programa.ForEachAsync(async p =>
+                    {
+                        p.CG_ESTADO = 1;
+                        p.CG_ESTADOCARGA = 2;
+                        p.FE_FIRME = DateTime.Now;
+                        _context.Entry(p).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+                    });
+                }
             }
             
         }
@@ -331,19 +471,16 @@ namespace SupplyChain
         {
             stock.USUARIO = "USER";
             stock.CG_CIA = 1;
-            if (registro != stock.REGISTRO)
+            if (registro != stock.Id)
             {
                 return BadRequest("Registro Incorrecto");
             }
 
-            if (stock.TIPOO == 9 || stock.TIPOO == 10)
-                stock.STOCK = -stock.STOCK;
-
-            _context.Entry(stock).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                 await ActualizaDb(stock);
+                
             }
             catch (DbUpdateConcurrencyException dbEx)
             {
@@ -364,6 +501,39 @@ namespace SupplyChain
             return Ok(stock);
         }
 
+        [HttpPut("FromPedCli")]
+        public async Task<ActionResult<Pedidos>> PutStockFromPedCli(PedCli pedCli)
+        {
+            List<Pedidos> lStocks = new();
+            try
+            {
+                lStocks = await _context.Pedidos.Where(p => p.PEDIDO == pedCli.PEDIDO && p.TIPOO == 1).ToListAsync();
+                foreach (var stock in lStocks)
+                {
+                    stock.CONFIRMADO = pedCli.CONFIRMADO ? 1: 0;
+                    await ActualizaDb(stock);
+                }
+            }
+            catch (DbUpdateConcurrencyException dbEx)
+            {
+                return BadRequest(dbEx);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+            return Ok(lStocks);
+        }
+
+        private async Task ActualizaDb(Pedidos stock)
+        {
+            if (stock.TIPOO == 9 || stock.TIPOO == 10 || stock.TIPOO == 28)
+                stock.STOCK = -stock.STOCK;
+
+            _context.Entry(stock).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
 
         [HttpDelete("{vale}")]
         public async Task<IActionResult> DeleteByVale(int vale)
@@ -377,6 +547,8 @@ namespace SupplyChain
             foreach (var item in pedidos)
             {
                 item.STOCK = 0;
+                item.PEDIDO = 0;
+                item.CG_ORDF = 0;
                 item.AVISO = "VALE ANULADO";
                 _context.Entry(item).State = EntityState.Modified;
             }
@@ -394,7 +566,7 @@ namespace SupplyChain
 
         private bool RegistroExists(decimal? registro)
         {
-            return _context.Pedidos.Any(e => e.REGISTRO == registro);
+            return _context.Pedidos.Any(e => e.Id == registro);
         }
 
         

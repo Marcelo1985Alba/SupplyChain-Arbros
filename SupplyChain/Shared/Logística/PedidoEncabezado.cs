@@ -12,7 +12,8 @@ namespace SupplyChain.Shared
         public int REGISTRO { get; set; }
         public DateTime FE_MOV { get; set; } = DateTime.Now;
         public int VALE { get; set; }
-        public int TIPOO { get; set; }
+        [Required(ErrorMessage = "Ingresar Tipo de Operación de Stock")]
+        public int TIPOO { get; set; } = 0;
         public int PEDIDO { get; set; } = 0;
         public int? OCOMPRA { get; set; } = 0;
         public int CG_ORDF { get; set; } = 0;
@@ -22,7 +23,7 @@ namespace SupplyChain.Shared
         public int CG_DEP_ALT { get; set; } = 0;
         public int VOUCHER { get; set; } = 0;
         [ValidateComplexType]
-        public List<Pedidos> Items { get; set; }
+        public List<Pedidos> Items { get; set; } = new List<Pedidos>();
 
         [NotMapped]
         public ModeloOrdenFabricacionEncabezado ModeloOrdenFabricacionEncabezado { get; set; } = new();

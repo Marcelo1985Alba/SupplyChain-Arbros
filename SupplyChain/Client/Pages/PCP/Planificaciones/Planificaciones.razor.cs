@@ -93,8 +93,10 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         protected const string APPNAME_OF_CERRADAS_ANULADAS = "OFCerradasAnuladas";
         protected string state_of_cerradas_anuladas;
         protected Planificacion PlanificacionSeleccionadaOFCerrada;
+        protected bool SpinnerVisible = false;
         protected override async Task OnInitializedAsync()
         {
+
             EstadosCargaMaquinas = await Http.GetFromJsonAsync<List<EstadosCargaMaquina>>("api/EstadosCargaMaquinas");
             listaPlanificacion = await Http.GetFromJsonAsync<List<Planificacion>>("api/Planificacion/0/1");
             //await GridPlanificacion?.AutoFitColumns();
@@ -195,11 +197,19 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.ColumnState
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
-                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder || 
+                || args.RequestType == Syncfusion.Blazor.Grids.Action.Reorder ||
                 args.RequestType == Syncfusion.Blazor.Grids.Action.Sorting
                 )
             {
+                //VisibleProperty = true;
+                GridPlanificacion.PreventRender();
+                GridPlanificacion.Refresh();
+                
                 state = await GridPlanificacion.GetPersistData();
+                await GridPlanificacion.AutoFitColumnsAsync();
+                await GridPlanificacion.RefreshColumns();
+                await GridPlanificacion.RefreshHeader();
+                //VisibleProperty = false;
             }
         }
 
@@ -225,7 +235,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
                 CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarPorDES_PROD/{args.Value}");
                 if (CG_PRODlist.Count > 0)
                 {
-                    CgString = CG_PRODlist.FirstOrDefault().CG_PROD;
+                    CgString = CG_PRODlist.FirstOrDefault().Id;
                 }
                 else
                 {
@@ -265,10 +275,15 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
             ProdSeleccionada = await Http.GetFromJsonAsync<Producto>($"api/Prod/GetByFilter?Codigo={args.RowData.CG_PROD}&Descripcion={string.Empty}");
             if (args.CommandColumn.Title == "Entrega")
             {
+                var tipoo = 10;
                 OrdenFabricacionSelected = args.RowData.CG_ORDF;
-                await JsRuntime.InvokeAsync<object>("open", $"inventario/10/true/{OrdenFabricacionSelected}", "_blank");
+                if (ProdSeleccionada.EXIGEOA )
+                {
+                    tipoo = 28;
+                }
 
-                await refDialogEntrega.Show(true);
+
+                await JsRuntime.InvokeAsync<object>("open", $"inventario/{tipoo}/true/{OrdenFabricacionSelected}", "_blank");
             }
             if (args.CommandColumn.Title == "Despiece")
             {

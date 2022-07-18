@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SupplyChain.Shared;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,11 +7,15 @@ using System.Text;
 
 namespace SupplyChain
 {
-    public class PedCli
+    public class PedCli : EntityBase<int>
     {
-        [Key]
-        public int REGISTRO { get; set; } = 0; 
+        private string _color;
+
+        [Key, Column("REGISTRO")]
+        new public int Id { get; set; } = 0;
+        public DateTime FE_PED { get; set; }
         public int PEDIDO { get; set; } = 0;
+        public decimal CANTPED { get; set; }
         public int NUMOCI { get; set; } = 0;
         public int CG_CLI { get; set; } = 0;
         public string DES_CLI { get; set; } = "";
@@ -30,5 +35,29 @@ namespace SupplyChain
         public string CAMPOCOM5 { get; set; } = "";
         public string CAMPOCOM2 { get; set; } = "";
         public string REMITO { get; set; } = "";
+        public DateTime ENTRPREV { get; set; }
+
+        //[Column("FLAG")]
+        [NotMapped]
+        public bool CONFIRMADO { get; set; }
+        [NotMapped]
+        public string COLOR
+        {
+            get { return _color; }
+            set
+            {
+                _color = ESTADO_LOGISTICA switch
+                {
+                    "Remitir" => "red",
+                    "Inspeccion" => "yellow",
+                    "Ret.Planta" => "greenyellow",
+                    "Ret.CABA" => "greenyellow",
+                    "Entregar" => "pink",
+                    "Facturar" => "maroon",
+                    "Pago" => "blue",
+                    _ => "black",
+                };
+            }
+        }
     }
 }

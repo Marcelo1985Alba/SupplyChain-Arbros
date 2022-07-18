@@ -26,27 +26,21 @@ namespace SupplyChain
             _context = context;
         }
 
-        [HttpGet("GetSyncf")]
-        public object GetSyncf()
+        [HttpGet("Proyectos")]
+        public async Task<ActionResult> GetProyectos()
         {
-            IQueryable<EstadVenta> data = _context.EstadVentas.AsQueryable();
-            return new { Items = data, Count = data.Count() };
+            IQueryable<Pedidos> data = _context.Pedidos.AsQueryable();
+            return Ok( new { Items = data, Count = data.Count() });
         }
 
 
         [HttpGet("GetPresupuestos")]
-        public object GetPresupuestos()
+        public object GetPresupuestos2()
         {
             IQueryable<EstadVenta> data = _context.EstadVentas.Where(e => e.Presup > 0).AsQueryable();
             return new { Items = data, Count = data.Count() };
         }
 
-        [HttpGet("GetFacturacion")]
-        public object GetFacturacion()
-        {
-            IQueryable<EstadVenta> data = _context.EstadVentas.Where(e=> e.AnoFactura > 0).AsQueryable();
-            return new { Items = data, Count = data.Count() };
-        }
 
         // GET: api/Indicadores
         [HttpGet]
@@ -55,9 +49,7 @@ namespace SupplyChain
             try
             {
                 List<EstadVenta> Estad;
-                Estad = await _context.EstadVentas.ToListAsync();
-
-                return Estad;
+                return await _context.EstadVentas.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -73,6 +65,71 @@ namespace SupplyChain
                 Estad = await _context.EstadVentas.Where(e=> e.AnoFactura > 0).ToListAsync();
 
                 return Estad;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("PedidosIngresados")]
+        public async Task<ActionResult<List<vEstadPedidosIngresados>>> GetPedidosIngresados()
+        {
+            try
+            {
+                return await _context.vEstadPedidosIngresados.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("PedidosAltas")]
+        public async Task<ActionResult<List<vEstadPedidosAlta>>> GetPedidosAltas()
+        {
+            try
+            {
+                return await _context.vEstadPedidosAltas.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("Facturacion")]
+        public async Task<ActionResult<List<vEstadFacturacion>>> GetFacturacion()
+        {
+            try
+            {
+                return await _context.vEstadFacturaciones.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("Compras")]
+        public async Task<ActionResult<List<vEstadCompras>>> GetCompras()
+        {
+            try
+            {
+                return await _context.vEstadCompras.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("Presupuestos")]
+        public async Task<ActionResult<List<vEstadPresupuestos>>> GetPresupuestos()
+        {
+            try
+            {
+                return await _context.vEstadPresupuestos.ToListAsync();
             }
             catch (Exception ex)
             {

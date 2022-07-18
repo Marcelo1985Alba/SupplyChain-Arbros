@@ -1,0 +1,71 @@
+﻿@page "/inventarios/listado/stock-inventarios"
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Calendars
+@using SupplyChain.Shared
+@inherits StockInventariosBase
+
+<div class="control-section">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card-body">
+                <div class="form-body">
+                    <hr>
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="col-form-label text-info">Deposito</label>
+
+                            <ComboDeposito DepositoSeleccionado="filter.Deposito"
+                                           OnSelectedDepositoChanged="@(async(t)=> await ChangeDeposito(t))" />
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-3">
+                            <label class="col-form-label text-info">Fecha Hasta</label>
+                            <SfDatePicker TValue="DateTime" @bind-Value='@hasta' Format='dd/MM/yyyy'></SfDatePicker>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="form-actions text-right">
+                    <SfButton Content="Buscar" CssClass="btn btn-sm btn-info" IconCss="fa fa-search"
+                              OnClick="@(async()=> await Buscar())" />
+                    <SfButton Content="Limpiar Filtros" CssClass="btn btn-sm btn-inverse" IconCss="fa fa-filter"
+                              OnClick="@(async()=> await LimpiarFiltros())" />
+                </div>
+            </div>
+            @*<div class="card">
+                <div class="card-header">
+                    <h4 class="m-b-0">Filtros</h4>
+                </div>
+
+
+            </div>*@
+        </div>
+
+    </div>
+</div>
+<hr />
+<SfGrid DataSource="@DataSource" AllowReordering="true" ShowColumnChooser="true"
+        ShowColumnMenu="true" AllowResizing="true" GridLines="GridLine.Both"
+        RowHeight="20" AllowExcelExport="true" 
+        AllowGrouping="true" Height="100%" Width="100%"
+        AllowSorting="true" AllowPaging="false" AllowFiltering="true">
+    <GridGroupSettings Columns="@InitialGroup" EnableLazyLoading="true"></GridGroupSettings>
+    <GridPageSettings PageCount="20" PageSize="10" PageSizes="true"></GridPageSettings>
+    <GridColumns>
+        <GridColumn Field=@nameof(StockSP.Codigo) TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+        <GridColumn Field=@nameof(StockSP.Descripcion) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+        <GridColumn Field=@nameof(StockSP.Stock_Fisico) HeaderText="Stock Físico" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+        <GridColumn Field=@nameof(StockSP.Despacho) HeaderText="Despacho" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(StockSP.Serie) HeaderText="Serie" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(StockSP.Lote) HeaderText="Lote" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(StockSP.Deposito) HeaderText="Deposito" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(StockSP.Cg_Clas) HeaderText="Clase" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+        <GridColumn Field=@nameof(StockSP.Tipo_Insumo) HeaderText="Tipo Insumo" TextAlign="TextAlign.Left" Width="140px"></GridColumn>
+        <GridColumn Field=@nameof(StockSP.Pendiente_Entrada) HeaderText="Pendiente Entrada" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+        <GridColumn Field=@nameof(StockSP.Pendiente_Salida) HeaderText="Pendiente Salida" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+
+    </GridColumns>
+    <SfSpinner @bind-Visible="@spinnerVisible" Label="Cargando..." Type="SpinnerType.Bootstrap" Size="50"></SfSpinner>
+</SfGrid>
+

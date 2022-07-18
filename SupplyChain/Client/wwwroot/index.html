@@ -13,8 +13,6 @@
     <link href="manifest.json" rel="manifest" />
     <link async href="_content/Syncfusion.Blazor.Themes/material.css" rel="stylesheet" />
     <link rel="apple-touch-icon" sizes="512x512" href="logo_aerre.jpg" />
-    <!--<script src="https://cdn.syncfusion.com/blazor/19.1.69/syncfusion-blazor.min.js"></script>-->
-    <link rel='preload' href="_content/Syncfusion.Blazor.Core/scripts/syncfusion-blazor-23e27d.min.js"  as='script' crossorigin="anonymous"/>
     <link async href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <script src="FuncionesJavaScript.js"></script>
     <link defer href="css/font-awesome/font-awesome.css" rel="stylesheet" />
@@ -22,11 +20,11 @@
     <link href="css/themify-icons/themify-icons.css" rel="stylesheet" />-->
     <link defer href="css/animate.css" rel="stylesheet" />
     <link defer href="css/style.css" rel="stylesheet" />
-    <link defer href="css/default-dark.css" id="theme" rel="stylesheet" />
+    <link href="_content/Syncfusion.Blazor.Themes/fabric.css" rel="stylesheet" />
     <link defer href="css/pages.css" rel="stylesheet" />
-
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js"></script>
     <link href="Personalizado.css" rel="stylesheet" />
+    <link defer href="css/default-dark.css" id="theme" rel="stylesheet" />
 
     <!--PARA REPORTING-->
     <!--<link href="https://cdn.syncfusion.com/4.1.0.25/js/reports/material/ej.reports.all.min.css" rel="stylesheet" />
@@ -144,14 +142,50 @@
     <script src="_framework/blazor.webassembly.js"></script>
 
     <script>
-        navigator.serviceWorker.register('service-worker.js',
-            { scope: './' }).then(function (registration) {
-                // Registration was successful
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            }, function (err) {
-                // registration failed :(
-                console.log('ServiceWorker registration failed: ', err);
-            });
+        window.updateAvailable = new Promise(function (resolve, reject) {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('service-worker.js',
+                    { scope: './' }).then(function (registration) {
+                        // Registration was successful
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                        registration.onupdatefound = () => {
+                            const installingWorker = registration.installing;
+                            installingWorker.onstatechange = () => {
+                                switch (installingWorker.state) {
+                                    case 'installed':
+                                        if (navigator.serviceWorker.controller) {
+                                            resolve(true);
+                                        } else {
+                                            resolve(false);
+                                        }
+                                        break;
+                                    default:
+                                }
+                            };
+                        };
+                    }, function (err) {
+                        // registration failed :(
+                        console.log('ServiceWorker registration failed: ', err);
+
+                    });
+            }
+        });
+
+        window.blazorFuncs = {
+            registerClient: function (caller) {
+                window['updateAvailable']
+                    .then(isAvailable => {
+                        if (isAvailable) {
+                            caller.invokeMethodAsync("onupdateavailable").then(r => console.log(r));
+                        }
+                    });
+            }
+        };
+
+        function reload() {
+            window.location.reload();
+        }
+        
     </script>
     <!--<script>navigator.serviceWorker.register('actualiza-cache.js', { scope: './' }).then(() => {
             console.log('Service Worker Registrado');
@@ -163,7 +197,10 @@
                 reportPath: reportPathInfo
             });
         };
+
+        
     </script>
+    <script src="js/pushNotifications.js"></script>
 </body>
 
 </html>

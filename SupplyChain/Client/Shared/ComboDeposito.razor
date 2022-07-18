@@ -2,10 +2,11 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Data
 
-<SfDropDownList TValue="int" TItem="Deposito" Placeholder="Seleccione Deposito..." Readonly="@EsSoloLectura" 
+<SfDropDownList TValue="int" TItem="Deposito" Placeholder="Seleccione Deposito..." 
+                Readonly="@EsSoloLectura" 
                 @bind-Value="DepositoSeleccionado">
     <SfDataManager Url="api/Deposito" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>
-    @*<DropDownListEvents TItem="Deposito" TValue="int" ValueChange="SelectedDepositoChangedSync" ></DropDownListEvents>*@
+    <DropDownListEvents TItem="Deposito" TValue="int" ValueChange="@((d)=> SelectedDepositoChanged(d))" ></DropDownListEvents>
     <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP"></DropDownListFieldSettings>
 </SfDropDownList>
 
@@ -32,15 +33,15 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    private void SelectedDepositoChanged(Deposito depos)
+    private async Task SelectedDepositoChanged(Deposito depos)
     {
         DepositoSeleccionado = depos.CG_DEP;
         var depo = Depositos.Where(d => d.CG_DEP == DepositoSeleccionado).FirstOrDefault();
-        OnSelectedDepositoChanged.InvokeAsync(depo);
+        await OnSelectedDepositoChanged.InvokeAsync(depo);
         InvokeAsync(StateHasChanged);
     }
 
-    private void SelectedDepositoChangedSync(ChangeEventArgs<int, Deposito> dep)
+    private async Task SelectedDepositoChanged(ChangeEventArgs<int, Deposito> dep)
     {
         if (dep.Value == (int)default)
         {
@@ -48,8 +49,8 @@
         }
 
         DepositoSeleccionado = dep.ItemData.CG_DEP;
-        OnSelectedDepositoChanged.InvokeAsync(dep.ItemData);
-        InvokeAsync(StateHasChanged);
+        await OnSelectedDepositoChanged.InvokeAsync(dep.ItemData);
+        await InvokeAsync(StateHasChanged);
     }
 
 }

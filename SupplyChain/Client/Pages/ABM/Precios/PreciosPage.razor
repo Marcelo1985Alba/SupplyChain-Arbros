@@ -1,0 +1,130 @@
+﻿@page "/Abms/precios-articulos-anterior"
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.DropDowns
+@using SupplyChain
+@using Syncfusion.Blazor.Calendars
+@attribute [Authorize]
+@inject IJSRuntime JsRuntime
+@inherits SupplyChain.Client.Pages.ABM.Precios.PreciosPageBase
+
+@*<div class="row mt-3">
+    <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+    </div>
+</div>*@
+
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+<div class="col control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                        DataSource="@(preciosArts.OrderBy(s => s.Id))"
+                        ID="gridPreciosArt" Height="100%" Width="100%" GridLines="GridLine.Both" RowHeight="27"
+                        @ref="Grid" AllowExcelExport="true" AllowGrouping="true"
+                        AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
+                    <GridSelectionSettings CheckboxOnly="true"
+                                           Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                    <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                    <GridEvents TValue="PreciosArticulos"
+                                OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"></GridEvents>
+                    <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
+                    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
+                    </GridEditSettings>
+                    <GridColumns>
+                        <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+                        <GridColumn Field=@nameof(PreciosArticulos.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(PreciosArticulos.Descripcion) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(PreciosArticulos.Precio) HeaderText="Precio" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(PreciosArticulos.Moneda) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(PreciosArticulos.Marca) HeaderText="Marca" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        <GridColumn Field=@nameof(PreciosArticulos.Construccion) HeaderText="Construccion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    </GridColumns>
+                    <SfSpinner @ref="refSpinner" Type="SpinnerType.Bootstrap" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
+                </SfGrid>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<SfDialog Width="1000px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible" Target="DialogProd">
+    <DialogTemplates>
+        <Content>
+            <EditForm Model="precioArt" OnValidSubmit="@guardarPrecioArt">
+                <DataAnnotationsValidator />
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-Campos" role="tab" aria-controls="pills-home" aria-selected="true">Campos</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-Campos" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Id:</label>
+                                    <SfTextBox ID="Id" @bind-Value="@(precioArt.Id)" Enabled="true" Placeholder="Codigo"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Descripcion:</label>
+                                    <SfTextBox ID="Descripcion" @bind-Value="@(precioArt.Descripcion)" Placeholder="Descripcion"></SfTextBox>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Precio:</label>
+                                    <SfNumericTextBox ID="Precio" @bind-Value="@(precioArt.Precio)" Placeholder="Precio"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a>Moneda:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Moneda" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(precioArt.Moneda)" DataSource="@monedas">
+                                        <ComboBoxFieldSettings Value="MONEDA" Text="MONEDA"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Marca:</label>
+                                    <SfTextBox ID="Marca" @bind-Value="@(precioArt.Marca)" Placeholder="Marca"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Construccion:</label>
+                                    <SfTextBox ID="Construccion" @bind-Value="@(precioArt.Construccion)" Placeholder="Construccion"></SfTextBox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
+            </EditForm>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
+<style>
+    .form-group.col-md-6 {
+        width: 200px;
+    }
+
+    label.e-float-text {
+        position: relative;
+        padding-left: 0;
+        top: 10%;
+    }
+
+    .e-input-group.e-control-wrapper.customClass {
+        color: black;
+        background-color: lightblue;
+    }
+</style>

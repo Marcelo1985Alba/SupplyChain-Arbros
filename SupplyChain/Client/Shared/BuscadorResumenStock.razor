@@ -1,48 +1,23 @@
-﻿@inject HttpClient Http
+﻿
 @using Syncfusion.Blazor.Buttons
+@inherits BuscadorResumenStockBase
+
 <div class="form-row">
     <div class="col-6">
         @if (MostraBotonBusqueda)
         {
-            <SfButton HtmlAttributes="@HtmlAtrr" OnClick="@(async (e)=> await BuscarStock())" CssClass="btn btn-sm btn-info" 
-                      IsPrimary="false" 
+            <SfButton HtmlAttributes="@HtmlAtrr" OnClick="@(async (e)=> await BuscarStock())" CssClass="btn btn-sm btn-info"
+                      IsPrimary="false"
                       IconCss="fa fa-search" Disabled="@HabilitaBotonBusqueda">@TextoButon</SfButton>
-         }
+                }
     </div>
 
 </div>
-
-<BuscadorEmergente TItem="vResumenStock" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" Titulo="@TituloBuscador"
-                   Visible="@PopupBuscadorVisible" OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
-
-
-@code {
-
-        [Parameter] public string TextoButon { get; set; } = "";
-        [Parameter] public bool EsSoloLectura { get; set; } = false;
-        [Parameter] public bool MostraBotonBusqueda { get; set; } = false;
-        [Parameter] public bool HabilitaBotonBusqueda { get; set; } = false;
-        [Parameter] public bool MostrarSpin { get; set; } = true;
-        [Parameter] public EventCallback<vResumenStock> OnRSSeleccionada { get; set; }
-        [Parameter] public Dictionary<string, object> HtmlAtrr { get; set; } = new Dictionary<string, object>() { { "type","button"} };
-
-    private vResumenStock[] ItemsABuscar = null;
-    private string[] ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE" };
-    private string TituloBuscador = "Listado Insumos con Stock";
-    private bool PopupBuscadorVisible = false;
-
-    private async Task BuscarStock()
-    {
-        PopupBuscadorVisible = true;
-        ItemsABuscar = await Http.GetFromJsonAsync<vResumenStock[]>("api/ResumenStock");
-        await InvokeAsync(StateHasChanged);
-    }
-
-    public async Task EnviarObjetoSeleccionado(vResumenStock vresumenStock)
-    {
-        PopupBuscadorVisible = false;
-        await OnRSSeleccionada.InvokeAsync(vresumenStock);
-    }
-
-
+@if (PopupBuscadorVisible)
+{
+    <BuscadorEmergente @ref="Buscador" TItem="vResumenStock" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" 
+                       Titulo="@TituloBuscador" TipoSeleccion="@TipoSeleccion"
+                       Visible="@PopupBuscadorVisible" OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
 }
+
+

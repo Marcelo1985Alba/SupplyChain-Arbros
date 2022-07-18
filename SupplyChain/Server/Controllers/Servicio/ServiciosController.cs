@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Repositorios;
 
 namespace SupplyChain
 {
@@ -16,34 +17,35 @@ namespace SupplyChain
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ServiciosController : ControllerBase
     {
-        //private IHostingEnvironment hostingEnv;
-        private readonly AppDbContext _context;
+        private readonly ServiciosRepository _serviciosRepository;
 
-        public ServiciosController(AppDbContext context)
+        public ServiciosController(ServiciosRepository serviciosRepository)
         {
-            _context = context;
+            this._serviciosRepository = serviciosRepository;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Service>>> Get()
         {
-            var xitem = await _context.Servicios.OrderByDescending(s=> s.PEDIDO).ToListAsync();
-            
-            return xitem;
+            var xitem = await _serviciosRepository.ObtenerTodos();
+                
+            return xitem.OrderByDescending(s => s.Id).ToList();
         }
 
         // GET: api/Servicios/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Service>>> GetServicios(string id)
+        public async Task<ActionResult<IEnumerable<Service>>> Get(string id)
         {
-            var Servicios = await _context.Servicios.Where(s=> s.PEDIDO == id).ToListAsync();
-
-            if (Servicios == null)
+            try
             {
-                return NotFound();
-            }
+                var Servicios = await _serviciosRepository.Obtener(s => s.Id == id).ToListAsync();
 
-            return Servicios;
+                return Servicios == null ? NotFound() : Ok(Servicios);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         // PUT: api/Servicios/5
@@ -52,30 +54,25 @@ namespace SupplyChain
         [HttpPut("{id}")]
         public async Task<IActionResult> PutServicios(string id, Service Servicios)
         {
-            if (id != Servicios.PEDIDO)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(Servicios).State = EntityState.Modified;
+            if (id != Servicios.Id) return BadRequest();
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _serviciosRepository.Actualizar(Servicios);
             }
             catch (Exception ex)
             {
-                if (!ServiciosExists(id))
+                if (!await _serviciosRepository.Existe(id))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
 
@@ -85,45 +82,38 @@ namespace SupplyChain
         [HttpPost]
         public async Task<ActionResult<Service>> PostServicios(Service Servicios)
         {
-            _context.Servicios.Add(Servicios);
             try
             {
-                await _context.SaveChangesAsync();
+                await _serviciosRepository.Agregar(Servicios);
             }
             catch (DbUpdateException)
             {
-                if (ServiciosExists(Servicios.PEDIDO))
+                if (await _serviciosRepository.Existe(Servicios.Id))
                 {
                     return Conflict();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
 
-            return CreatedAtAction("GetServicios", new { id = Servicios.PEDIDO }, Servicios);
+            return CreatedAtAction("Get", new { id = Servicios.Id }, Servicios);
         }
 
         // DELETE: api/Servicios/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Service>> DeleteServicios(string id)
         {
-            var Servicios = await _context.Servicios.FindAsync(id);
-            if (Servicios == null)
-            {
-                return NotFound();
-            }
+            var Servicios = await _serviciosRepository.ObtenerPorId(id);
+            if (Servicios == null) return NotFound();
 
-            _context.Servicios.Remove(Servicios);
-            await _context.SaveChangesAsync();
+            //_context.Servicios.Remove(Servicios);
+            //await _context.SaveChangesAsync();
+            await _serviciosRepository.Remover(id);
 
-            return Servicios;
+            return Ok(Servicios);
         }
 
-        private bool ServiciosExists(string id)
-        {
-            return _context.Servicios.Any(e => e.PEDIDO == id);
-        }
     }
 }

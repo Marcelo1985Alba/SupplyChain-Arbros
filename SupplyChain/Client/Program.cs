@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using SupplyChain.Client.Auth;
 using SupplyChain.Client.HelperService;
-using SupplyChain.Client.Repos;
+using SupplyChain.Client.RepositoryHttp;
 using Syncfusion.Blazor;
 using System;
 using System.Globalization;
@@ -18,9 +18,9 @@ namespace SupplyChain.Client
     {
         public static async Task Main(string[] args)
         {
-
+    
             Syncfusion.Licensing.SyncfusionLicenseProvider
-    .RegisterLicense("NDIwNjc3QDMxMzkyZTMxMmUzMGJqUU1qRXlHTkN1K1hScURFdkdjUjhUTTRQQkFRcTRCa0wvWkpaMTRhaVE9;NDIwNjc4QDMxMzkyZTMxMmUzMFBPRXpBd0hUSVMrK1hudkR2bHhlWHZuQUVPbmhqTDFvZ3l1ODAybndwczA9");
+                .RegisterLicense("NTU5NDk0QDMxMzkyZTM0MmUzMEtURElKREJxU1B4WVhyUFZYdGRoYVJ4WHU1ZVNZN1U4QjFGNCs0cGRORmM9");
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -49,8 +49,7 @@ namespace SupplyChain.Client
         {
             services.AddOptions();//Sistema de Autorizacion
             services.AddAuthorizationCore();
-
-            services.AddScoped<IRepositorio, Repositorio>();
+            services.AddScoped<IRepositoryHttp, RepositoryHttp.RepositoryHttp>();
             services.AddScoped<ProveedorAutenticacion>();
 
             //Auth sin jwt
@@ -71,6 +70,20 @@ namespace SupplyChain.Client
 
             
             services.AddScoped<RenovadorToken>();
+            services.AddScoped<ProductoService>();
+            services.AddScoped<ClienteService>();
+            services.AddScoped<DireccionEntregaService>();
+            services.AddScoped<SolicitudService>();
+            services.AddScoped<PrecioArticuloService>();
+            services.AddScoped<PresupuestoService>();
+            services.AddScoped<InventarioService>();
+            services.AddScoped<CondicionPagoService>();
+            services.AddScoped<CondicionEntregaService>();
+            services.AddScoped<TipoCambioService>();
+            services.AddScoped<PdfService>();
+            services.AddScoped<ExcelService>();
+
+
             services.AddSingleton<ToastService>();
             services.AddApiAuthorization();
         }

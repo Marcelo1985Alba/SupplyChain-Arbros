@@ -163,16 +163,24 @@ namespace SupplyChain
         [HttpGet("MostrarTrazabilidad/{Pedido}")]
         public async Task<ActionResult<List<vTrazabilidad>>> MostrarTrazabilidad(string Pedido)
         {
-            List<vTrazabilidad> lPedidos = new List<vTrazabilidad>();
-            if (_context.VTrazabilidads.Any())
+            try
             {
-                lPedidos = await _context.VTrazabilidads.Where(p => p.PEDIDO.ToString() == Pedido).OrderBy(t => t.CG_LINEA).ToListAsync();
+                List<vTrazabilidad> lPedidos = new();
+                if (_context.VTrazabilidads.Any())
+                {
+                    lPedidos = await _context.VTrazabilidads.Where(p => p.PEDIDO.ToString() == Pedido)
+                        .OrderBy(t => t.CG_LINEA).ToListAsync();
+                }
+                if (lPedidos == null)
+                {
+                    return NotFound();
+                }
+                return lPedidos;
             }
-            if (lPedidos == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(ex);
             }
-            return lPedidos;
         }
 
         // GET: api/Pedidos/BusquedaParaFE_MOV/{PEDIDO}
@@ -204,8 +212,8 @@ namespace SupplyChain
                 //RESERVA REGISTRO: El vale hay que hacerlo del lado del cliente porque debe reservar un solo vale
                 //y aqui se ejecuta por item.
                 await generaController.ReservaByCampo("REGSTOCK");
-                var genera = await _context.Genera.Where(g => g.CAMP3 == "REGSTOCK").FirstOrDefaultAsync();
-                stock.REGISTRO = (int?)genera.VALOR1;
+                var genera = await _context.Genera.Where(g => g.Id == "REGSTOCK").FirstOrDefaultAsync();
+                stock.Id = (int?)genera.VALOR1;
                 stock.FE_REG = DateTime.Now;
                 stock.USUARIO = "USER";
 
@@ -226,7 +234,7 @@ namespace SupplyChain
             catch (DbUpdateException ex)
             {
                 await generaController.LiberaByCampo("REGSTOCK");
-                if (RegistroExists(stock.REGISTRO))
+                if (RegistroExists(stock.Id))
                 {
                     return Conflict();
                 }
@@ -253,7 +261,7 @@ namespace SupplyChain
             //MOVIM ENTRE DEP: GENERAR SEGUNDO REGISTROS: 
             if (stock?.TIPOO == 9)
             {
-                stock.REGISTRO = null;
+                stock.Id = 0;
                 stock.USUARIO = "USER";
                 stock.CG_CIA = 1;
                 stock.STOCK = -stock.STOCK;
@@ -267,7 +275,7 @@ namespace SupplyChain
                 }
                 catch (DbUpdateException ex)
                 {
-                    if (RegistroExists(stock.REGISTRO))
+                    if (RegistroExists(stock.Id))
                     {
                         return Conflict();
                     }
@@ -324,7 +332,7 @@ namespace SupplyChain
         {
             stock.USUARIO = "USER";
             stock.CG_CIA = 1;
-            if (registro != stock.REGISTRO)
+            if (registro != stock.Id)
             {
                 return BadRequest("Registro Incorrecto");
             }
@@ -384,7 +392,7 @@ namespace SupplyChain
 
         private bool RegistroExists(decimal? registro)
         {
-            return _context.Pedidos.Any(e => e.REGISTRO == registro);
+            return _context.Pedidos.Any(e => e.Id == registro);
         }
 
         
