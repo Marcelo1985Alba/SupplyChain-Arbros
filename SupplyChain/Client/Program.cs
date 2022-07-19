@@ -62,6 +62,7 @@ namespace SupplyChain.Client
             services.AddScoped<CondicionEntregaService>();
             services.AddScoped<TipoCambioService>();
             services.AddScoped<CeldasService>();
+            services.AddScoped<ProyectosService>();
             services.AddScoped<PdfService>();
             services.AddScoped<ExcelService>();
 
