@@ -381,7 +381,7 @@ namespace SupplyChain.Client.Shared.Inventarios
                 args.Data.STOCKA = Math.Round((decimal)(args.Data.STOCK / args.Data.CG_DEN), 4);
                 if (args.Data.ResumenStock?.STOCK < args.Data.STOCK)
                 {
-                    args.Cell.AddClass(new string[] { "sin-stcok" });
+                    args.Cell.AddClass(new string[] { "sin-stock" });
                 }
             }
             
