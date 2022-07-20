@@ -63,15 +63,12 @@ namespace SupplyChain
             }
         }
 
-        /*
-
-        // GET: api/GetProyectos
+        // GET: api/Proyectos/Proyectos
         [HttpGet("Proyectos")]
-        public object GetProyectos()
+        public object GetProyectosQueryable()
         {
-            IQueryable<ProyectosGBPI> data = _context.Proyectos.AsQueryable();
+            IQueryable<ProyectosGBPI> data = _proyectosRepository.ObtenerTodosQueryable();
             return new { Items = data, Count = data.Count() };
         }
-        */
     }
 }

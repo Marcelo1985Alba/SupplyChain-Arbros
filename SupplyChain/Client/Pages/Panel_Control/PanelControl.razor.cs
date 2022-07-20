@@ -23,7 +23,6 @@ namespace SupplyChain.Client.Pages.Panel_Control
     {
         [Inject] public HttpClient Http { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
-        //[Inject] protected ProyectosService ProyectosService { get; set; }
 
         protected SfDashboardLayout dashboardObject;
         protected SfChart refChartDetalle;
@@ -144,10 +143,11 @@ namespace SupplyChain.Client.Pages.Panel_Control
         //////////////////////////////////////////////////////////////////
 
         /////////////**********PROYECTOS*********////////////////////
+        [Inject] protected ProyectosService ProyectosService { get; set; }
         protected DateTime ProjectStart = new DateTime(2021, 3, 25);
         protected DateTime ProjectEnd = new DateTime(2023, 7, 28);
         protected SfGantt<ProyectosGBPI> refGanttProyectos;
-        protected List<ProyectosGBPI> Proyectos = new();
+        protected List<ProyectosGBPI> Proyectos { get; set; } = new();
         //protected List<ProyectosGBPI> DataProyectos { get; set; } = new();
         /////////////////////////////////////////////////////////////
 
@@ -196,11 +196,11 @@ namespace SupplyChain.Client.Pages.Panel_Control
             await GetPedidos();
             await GetPedidosAltas();
             await GetPresupuestos();
-            //var response = await ProyectosService.Get();
-            //if (!response.Error)
-            //{
-            //    Proyectos = response.Response;
-            //}
+            var response = await ProyectosService.Get();
+            if (!response.Error)
+            {
+                Proyectos = response.Response;
+            }
             //await GetProyectos();
 
             VisibleSpinner = false;

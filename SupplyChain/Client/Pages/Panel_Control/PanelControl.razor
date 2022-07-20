@@ -1438,14 +1438,11 @@
                                      Toolbar="@(new List<string>(){ "Add", "Edit", "Update", "Delete", "Cancel", "ExpandAll", "CollapseAll","Indent","Outdent"})"
                                      AllowSelection="true" GridLines="Syncfusion.Blazor.Gantt.GridLine.Both" TreeColumnIndex="1"
                                      ProjectStartDate="@ProjectStart" ProjectEndDate="@ProjectEnd" @ref="refGanttProyectos">
-                                <GanttTaskFields Id="TaskId" Name="TaskName" StartDate="StartDate" EndDate="EndDate" Duration="Duration" Progress="Progress"
+                                <GanttTaskFields Id="Id" Name="TaskName" StartDate="StartDate" EndDate="EndDate" Duration="Duration" Progress="Progress"
                                                  Dependency="Predecessor" ParentID="ParentId" Notes="Notes"></GanttTaskFields>
                                 <GanttEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" AllowTaskbarEditing="true" ShowDeleteConfirmDialog="true"></GanttEditSettings>
-                                <GanttTaskFields Id="TaskId" Name="TaskName" StartDate="StartDate"
-                                                 Duration="Duration" Progress="Progress" Dependency="Predecessor" Child="SubTasks">
-                                </GanttTaskFields>
                                 <GanttColumns>
-                                    <GanttColumn Field="TaskId" IsPrimaryKey="true" Width="100"></GanttColumn>
+                                    <GanttColumn Field="Id" IsPrimaryKey="true" Width="100"></GanttColumn>
                                     <GanttColumn Field="TaskName" HeaderText="Job Name" Width="250" ClipMode="Syncfusion.Blazor.Grids.ClipMode.EllipsisWithTooltip"></GanttColumn>
                                     <GanttColumn Field="StartDate" HeaderText="Start Date"></GanttColumn>
                                     <GanttColumn Field="EndDate" HeaderText="End Date"></GanttColumn>
@@ -1462,7 +1459,6 @@
                 </div>
             </ContentTemplate>
         </TabItem>
-
     </TabItems>
 </SfTab>
 
