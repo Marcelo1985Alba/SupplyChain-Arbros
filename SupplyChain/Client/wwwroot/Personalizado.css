@@ -125,7 +125,7 @@ e-grid .e-gridheader {
 
 
 /*GRID*/
-.e-grid .e-rowcell {
+/*.e-grid .e-rowcell {
     border-style: solid;
     border-width: 1px 0 0 0;
     display: table-cell;
@@ -136,7 +136,7 @@ e-grid .e-gridheader {
     vertical-align: middle;
     white-space: nowrap;
     width: auto;
-}
+}*/
 
 .e-grid {
     font: 16px Arial;
@@ -152,9 +152,9 @@ e-grid .e-gridheader {
 
 
 
-    .e-grid .e-gridheader .e-icons:not(.e-icon-hide):not(.e-check):not(.e-stop) {
-        padding: 0.015rem;
-    }
+.e-grid .e-gridheader .e-icons:not(.e-icon-hide):not(.e-check):not(.e-stop) {
+    padding: 0.015rem;
+}
 
 .e-gridheader .e-headercell, .e-grid-min-height .e-gridheader .e-detailheadercell,
 .e-gridheader .e-headercell .e-headercelldiv {
