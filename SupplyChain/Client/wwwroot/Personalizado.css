@@ -257,17 +257,17 @@ e-grid .e-gridheader {
     /*border: 1px solid #5a70cc;*/
 }
 
-    .e-toolbar-item button[aria-label="Eliminar"]:focus {
-        background: #ff6140;
-        /*border-radius: 10%;*/
-        /*border: 1px solid #5a70cc;*/
-    }
+.e-toolbar-item button[aria-label="Eliminar"]:focus {
+    background: #ff6140;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
 
-    .e-toolbar-item button[aria-label="Eliminar"]:hover {
-        background: #ff694a;
-        /*border-radius: 10%;*/
-        /*border: 1px solid #5a70cc;*/
-    }
+.e-toolbar-item button[aria-label="Eliminar"]:hover {
+    background: #ff694a;
+    /*border-radius: 10%;*/
+    /*border: 1px solid #5a70cc;*/
+}
 
 
 .e-toolbar-item button[aria-label="Imprimir"] {
