@@ -76,12 +76,38 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
             {
                 await CopiarCelda();
             }
-            else
+            else if (args.Item.Id == "grdCeldas_delete")
             {
-                if (args.Item.Id == "grdCelda_excelexport")
+                if ((await refGrid.GetSelectedRecordsAsync()).Count > 0)
                 {
-                    await refGrid.ExportToExcelAsync();
+                    bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar el precio de articulo?");
+                    if (isConfirmed)
+                    {
+                        List<Celdas> celdasABorrar = await refGrid.GetSelectedRecordsAsync();
+                        var response = CeldasService.Eliminar(celdasABorrar);
+                        if (!response.IsCompletedSuccessfully)
+                        {
+                            await this.ToastObj.Show(new ToastModel
+                            {
+                                Title = "EXITO!",
+                                Content = "las celdas seleccionadas fueron eliminadas correctamente.",
+                                CssClass = "e-toast-success",
+                                Icon = "e-success toast-icons",
+                                ShowCloseButton = true,
+                                ShowProgressBar = true
+                            });
+                        }
+                        else
+                        {
+                            await ToastMensajeError();
+                        }
+                    }
                 }
+                //await EliminarCelda();
+            }
+            else if (args.Item.Id == "grdCelda_excelexport")
+            {
+                await refGrid.ExportToExcelAsync();
             }
         }
 
@@ -98,7 +124,6 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
                     celdaSeleccionada.DES_CELDA= selectedRecord.DES_CELDA;
                     popupFormVisible = true;
                 }
-
             }
             else
             {
@@ -113,7 +138,7 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
                 });
             }
         }
-        
+
         protected async Task OnActionBeginHandler(ActionEventArgs<Celdas> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
@@ -162,7 +187,7 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
             }
         }
 
-        protected void OnCerraDialog()
+        protected void OnCerrarDialog()
         {
             popupFormVisible = false;
         }

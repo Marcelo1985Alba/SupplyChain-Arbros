@@ -20,6 +20,7 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
         [Parameter] public Celdas celdas { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;
         [Parameter] public EventCallback<Celdas> OnGuardar { get; set; }
+        [Parameter] public EventCallback<Celdas> OnEliminar { get; set; }
         [Parameter] public EventCallback OnCerrar { get; set; }
 
         protected SfGrid<Celdas> refGridItems;
@@ -38,7 +39,7 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
         protected async Task<bool> Agregar(Celdas celda)
         {
             var response = await CeldasService.Existe(celda.Id);
-            if (response)
+            if (!response)
             {
                 var response_2 = await CeldasService.Agregar(celda);
                 if (response_2.Error)
@@ -84,8 +85,8 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
                 celdas.GUARDADO = guardado;
                 await OnGuardar.InvokeAsync(celdas);
             }
-
         }
+
         public async Task Hide()
         {
             Show = false;

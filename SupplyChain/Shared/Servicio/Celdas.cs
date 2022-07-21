@@ -11,7 +11,7 @@ namespace SupplyChain.Shared.Models
         public new string Id { get; set; } = "";
         public string DES_CELDA { get; set; } = "";
         public int CG_AREA { get; set; } = 0;
-        public bool ILIMITADA { get; set; } = false;
+        public bool? ILIMITADA { get; set; } = false;
         public decimal COEFI { get; set; } = 0;
         public int CG_PROVE { get; set; } = 0;
         public decimal VALOR_AMOR { get; set; } = 0;

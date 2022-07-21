@@ -122,8 +122,6 @@ namespace SupplyChain.Client.Pages.ABM.Precios
             Show = false;
         }
 
-
-
         protected async Task OnCerrarDialog()
         {
             await OnCerrar.InvokeAsync();

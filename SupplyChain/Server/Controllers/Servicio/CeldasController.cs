@@ -121,6 +121,24 @@ namespace SupplyChain
             return Celda;
         }
 
+        [HttpPost("PostList")]
+        public async Task<ActionResult<Celdas>> PostList(List<Celdas> celdas)
+        {
+            try
+            {
+                foreach (var item in celdas)
+                {
+                    await _celdasRepository.Remover(item.Id.Trim());
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
         [HttpGet("Existe/{id}")]
         public async Task<ActionResult<bool>> Existe(string id)
         {

@@ -73,8 +73,6 @@ namespace SupplyChain.Client.Pages.ABM.Precios
                 preciosArticuloSeleccionado.ESNUEVO = true;
             }
 
-
-
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
                 preciosArticuloSeleccionado = args.Data;

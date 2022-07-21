@@ -51,7 +51,6 @@ namespace SupplyChain.Client.Pages.ABM.Prods
             MainLayout.Titulo = "Productos";
 
             SpinnerVisible = true;
-            //Productos = await ProductoService.Get();
             var response = await ProductoService.Get();
             if (!response.Error)
             {

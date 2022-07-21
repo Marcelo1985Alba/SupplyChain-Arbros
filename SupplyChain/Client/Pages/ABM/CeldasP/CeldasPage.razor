@@ -22,10 +22,9 @@
         <SfToast ID="toast_default" @ref="ToastObj">
             <ToastPosition X="Center" Y="Top"></ToastPosition>
         </SfToast>
-
-        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="false" AllowResizing="true"
+        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
                 @ref="refGrid" DataSource="@celdas" Width="100%" Toolbar="Toolbaritems"
-                AllowExcelExport="true" AllowGrouping="true" ID="grdCeldas"
+                AllowExcelExport="true" AllowGrouping="true" ID="grdCeldas" AllowFiltering="true"
                 AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
             <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
@@ -61,8 +60,8 @@
 
     @if (popupFormVisible)
 	{
-		 <FormCeldas celdas="celdaSeleccionada" Show="popupFormVisible" 
-                       OnCerrar="OnCerraDialog" OnGuardar="@(async(p)=>await Guardar(p))"></FormCeldas>
+		 <FormCeldas celdas="celdaSeleccionada" Show="popupFormVisible" OnEliminar="@(async(p)=>await Guardar(p))"
+                     OnCerrar="OnCerrarDialog" OnGuardar="@(async(p)=>await Guardar(p))"></FormCeldas>
 	}
 </div>
 
@@ -115,4 +114,4 @@
             this.CommandColumnsClick = true;
         }
     }
-}}
+}

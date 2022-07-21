@@ -154,8 +154,6 @@ namespace SupplyChain.Client.Pages.ABM.Prods
             Show = false;
         }
 
-
-
         protected async Task OnCerrarDialog()
         {
             await OnCerrar.InvokeAsync();

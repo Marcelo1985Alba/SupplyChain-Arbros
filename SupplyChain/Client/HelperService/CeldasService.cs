@@ -31,5 +31,17 @@ namespace SupplyChain.Client.HelperService
 
             return response.Response;
         }
+
+        public async Task<bool> Eliminar(List<Celdas> celdas)
+        {
+            var response = await http.PostAsJsonAsync<List<Celdas>>($"{API}/PostList", celdas);
+            if (response.Error)
+            {
+                Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+                return false;
+            }
+
+            return true;
+        }
     }
 }
