@@ -24,7 +24,7 @@
 
         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
                 @ref="refGrid" DataSource="@Productos" Width="100%" Toolbar="Toolbaritems"
-                AllowExcelExport="true" AllowGrouping="true" ID="grdProd"
+                AllowExcelExport="true" AllowGrouping="true" ID="grdProd" AllowFiltering="true"
                 AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
             <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
@@ -32,7 +32,7 @@
                         OnActionComplete="OnActionCompleteHandler" TValue="Producto"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
-                              ShowDeleteConfirmDialog="true" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
+                              ShowDeleteConfirmDialog="false" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
             </GridEditSettings>
             <GridColumns>
                 <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
