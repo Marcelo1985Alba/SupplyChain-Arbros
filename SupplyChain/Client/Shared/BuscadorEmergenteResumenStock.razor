@@ -2,8 +2,9 @@
 
 <div class="dialogContent">
     <BuscadorEmergente @ref="@Buscador" TItem="vResumenStock" DataSource="@DataSource" TipoSeleccion="@TipoSeleccion"
-                       Columnas="@Columnas" Visible="@Visible" Height="610px" Width="75%" 
-                       OnObjetosSeleccionados="@(async(l)=> await OnSeleccionados(l))"
+                       Columnas="@Columnas" Visible="@Visible" Height="600px" Width="75%" HabilitarPaginacion="true"
+                       OnObjetosSeleccionados="@(async(l)=> await OnSeleccionados(l))" HeightGrid="210px" 
+                       Target="@Target" SpinnerVisible="@VisibleSpinner" IsModal="@EsModal"
                        Titulo="@Titulo" OnObjetoSeleccionado="@(async(o)=> await OnSeleccionado(o))"
                        OnCerrarDialog="@(async(b)=>await Cerrar(b))">
     </BuscadorEmergente>
@@ -12,16 +13,35 @@
 @code {
     protected BuscadorEmergente<vResumenStock> Buscador;
     SfGrid<vResumenStock> Grid;
-    protected bool visibleSpinner = false;
+    [Parameter] public bool VisibleSpinner { get; set; } = false;
     [Parameter] public vResumenStock[] DataSource { get; set; } = null!;
     [Parameter] public string Titulo { get; set; } = "Listado: INSUMOS EN STOCK";
     [Parameter] public bool Visible { get; set; } = false;
+    [Parameter] public bool EsModal { get; set; } = false;
     [Parameter] public string[] Columnas { get; set; } = null!;
     [Parameter] public EventCallback<vResumenStock> OnObjetoSeleccionado { get; set; }
     [Parameter] public EventCallback<List<vResumenStock>> OnObjetosSeleccionados { get; set; }
     [Parameter] public SelectionType TipoSeleccion { get; set; } = SelectionType.Single;
+    [Parameter] public string Target { get; set; } = "";
+    [Parameter] public EventCallback OnCerrar { get; set; }
 
     public vResumenStock Selected { get; set; }
+
+    public async Task ShowAsyncStockPositivo()
+    {
+        VisibleSpinner = true;
+        DataSource = await Http.GetFromJsonAsync<vResumenStock[]>("api/ResumenStock/GetResumenStockPositivo");
+        await ShowAsync();
+        VisibleSpinner = false;
+    }
+
+    public async Task ShowAsyncStockPositivoSinVentas()
+    {
+        VisibleSpinner = true;
+        await ShowAsync();
+        DataSource = await Http.GetFromJsonAsync<vResumenStock[]>("api/ResumenStock/GetResumenStockPositivo?sinDepositoVentas=true");
+        VisibleSpinner = false;
+    }
 
 
     public async Task ShowAsync()

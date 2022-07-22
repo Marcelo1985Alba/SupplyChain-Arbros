@@ -38,13 +38,18 @@ namespace SupplyChain.Server.Controllers
 
         // GET: api/ResumenStocksPositivo/GetResumenStockPositivo
         [HttpGet("GetResumenStockPositivo")]
-        public async Task<ActionResult<IEnumerable<vResumenStock>>> GetResumenStockPositivo()
+        public async Task<ActionResult<IEnumerable<vResumenStock>>> GetResumenStockPositivo(bool sinDepositoVentas = false)
         {
             try
             {
-                return await _context.vResumenStock
-                    .AsNoTracking()
-                    .Where(rs=> rs.STOCK > 0).ToListAsync();
+                var query = _context.vResumenStock.AsNoTracking()
+                    .Where(rs => rs.STOCK > 0);
+
+                if (sinDepositoVentas)
+                {
+                    query = query.Where(r => r.CG_DEP != 1);
+                }
+                return await query.ToListAsync();
             }
             catch (Exception ex)
             {

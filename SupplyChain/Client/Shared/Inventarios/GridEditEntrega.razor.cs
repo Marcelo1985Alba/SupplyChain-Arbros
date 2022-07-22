@@ -96,16 +96,16 @@ namespace SupplyChain.Client.Shared.Inventarios
             }
 
             PopupBuscadorStockVisible = true;
+            await BuscadorEmergenteRS.ShowAsync();
+            visibleSpinnerRS = true;
             bAgregarInsumo = true;
             Items = null;
-            await BuscadorEmergenteRS.ShowAsync();
-            tituloBuscador = "Listado de Insumos en Stock";
-
-            ColumnasBuscador = new string[] { "CG_ART", "DEPOSITO", "DESPACHO", "SERIE", "LOTE", "STOCK" };
-
             Items = await Http.GetFromJsonAsync<vResumenStock[]>("api/ResumenStock/GetResumenStockPositivo");
-
+            tituloBuscador = "Listado de Insumos en Stock";
+            ColumnasBuscador = new string[] { "CG_ART", "DEPOSITO", "DESPACHO", "SERIE", "LOTE", "STOCK" };
+            visibleSpinnerRS = false;
             
+
         }
 
         public void RowBound(RowDataBoundEventArgs<Pedidos> args)
@@ -172,6 +172,7 @@ namespace SupplyChain.Client.Shared.Inventarios
         }
 
         protected string tituloBuscador { get; set; } = "";
+        protected bool visibleSpinnerRS = false;
         private bool popupBuscadorVisible = false;
         protected bool PopupBuscadorStockVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
         protected bool PopupBuscadorProdVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
@@ -298,6 +299,7 @@ namespace SupplyChain.Client.Shared.Inventarios
         }
         protected async Task OnResumenStockSelected(vResumenStock resumenStock)
         {
+            PopupBuscadorStockVisible = false;
             await BuscadorEmergenteRS.HideAsync();
 
             await GetSeleccionResumenStock(resumenStock);

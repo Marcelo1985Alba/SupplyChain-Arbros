@@ -22,12 +22,16 @@ namespace SupplyChain.Client.Shared
         /// Tipo de seleccion para las filas: por defecto Single
         /// </summary>
         [Parameter] public SelectionType TipoSeleccion { get; set; } = SelectionType.Single;
+        [Parameter] public bool HabilitarPaginacion { get; set; } = true;
+        [Parameter] public bool SpinnerVisible { get; set; } = false;
         [Parameter] public IEnumerable<TItem> DataSource { get; set; }
         /// <summary>
         /// Acepta valores en pixeles y porcentaje: 310px o 90%
+        /// Por defecto esta en 290px
         /// </summary>
-        [Parameter] public string HeightGrid { get; set; } = "310px";
+        [Parameter] public string HeightGrid { get; set; } = "290px";
         [Parameter] public string[] Columnas { get; set; } = null!;
+        [Parameter] public string Target { get; set; } = "";
         /// <summary>
         /// Evento que se ejecuta al seleccionar
         /// </summary>

@@ -7,8 +7,10 @@
 
 
 
-<SfDialog Height="@Height" Width="@Width" Target="#target" ShowCloseIcon="true" @bind-Visible="@Visible"
+<SfDialog Height="@Height" Width="@Width" Target="@Target" ShowCloseIcon="true" @bind-Visible="@Visible"
           IsModal="@IsModal" EnableResize="false">
+    <SfSpinner @ref="@sfSpinner" @bind-Visible="@SpinnerVisible" Size="80" Label="Cargando..." Type="SpinnerType.Fabric">
+    </SfSpinner>
     <DialogEvents Closed="OnAfterDialogClosed" OnOpen="OnAfterDialogOpned"></DialogEvents>
     <DialogTemplates>
         <Header>
@@ -33,15 +35,16 @@
                     <div class="row">
                         <div class="content-wrapper">
                             <div class="col-12">
-                                <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="false" AllowFiltering="true" TValue="TItem"
-                                        AllowResizing="true" GridLines="GridLine.Both" RowHeight="20" Height="290px"
+                                <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="@HabilitarPaginacion"
+                                        AllowFiltering="true" TValue="TItem"
+                                        AllowResizing="true" GridLines="GridLine.Both" RowHeight="20" Height="@HeightGrid"
                                         AllowReordering="true" AllowExcelExport="true"
                                         AllowSelection="true" AllowSorting="true" AllowTextWrap="true" EnableHover="true" Width="100%"
                                         ShowColumnMenu="true" EnableVirtualization="false">
                                     @*<GridFilterSettings ShowFilterBarStatus="true" Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"
                                         Operators="@(new Operator[] { Operator.Contains })"
                                         Mode="FilterBarMode.Immediate"></GridFilterSettings>*@
-                                    <GridPageSettings PageCount="20" PageSize="10" PageSizes="true" ></GridPageSettings>
+                                    <GridPageSettings PageCount="20" PageSize="10" PageSizes="true"></GridPageSettings>
                                     <GridSelectionSettings Type="@TipoSeleccion"></GridSelectionSettings>
                                     <GridEvents TValue="TItem" OnLoad="@(async(a)=>await OnLoadGrid(a))"
                                                 OnToolbarClick="@((a)=> ToolbarClick(a))"
@@ -49,7 +52,7 @@
                                                 DataBound="@(async()=>await DataBoundGrid())"
                                                 RowSelected="GetSelectedRecords"
                                                 OnRecordDoubleClick="EnviarObjetoSeleccionado">
-                                                  
+
                                     </GridEvents>
                                     <GridColumns>
                                         @{
@@ -95,9 +98,7 @@
                                         }
 
                                     </GridColumns>
-                                    <SfSpinner @ref="@sfSpinner" @bind-Visible="@visibliSpinner" Size="80"
-                                                Label="Cargando..." Type="SpinnerType.Bootstrap">
-                                    </SfSpinner>
+
                                 </SfGrid>
                             </div>
                         </div>
@@ -126,7 +127,6 @@
 
     </DialogTemplates>
     @*<DialogEvents OnOpen="@BeforeDialogOpen" Closed="@DialogClosed"></DialogEvents>*@
-<SfSpinner @bind-Visible="visibliSpinner"></SfSpinner>
 </SfDialog>
 
 
