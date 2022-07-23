@@ -37,7 +37,7 @@ namespace SupplyChain
         }
 
         [HttpGet("Existe/{id}")]
-        public async Task<ActionResult<bool>> GetCeldas(string id)
+        public async Task<ActionResult<bool>> ExisteCelda(string id)
         {
             try
             {
@@ -137,14 +137,6 @@ namespace SupplyChain
             }
 
             return Ok();
-        }
-
-        [HttpGet("Existe/{id}")]
-        public async Task<ActionResult<bool>> Existe(string id)
-        {
-            bool existe = await _celdasRepository.Existe(id);
-
-            return Ok(existe);
         }
     }
 }

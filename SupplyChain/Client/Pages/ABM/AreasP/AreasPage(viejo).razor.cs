@@ -62,7 +62,7 @@ namespace SupplyChain.Pages.Area
                 {
                     foreach (Areas selectedRecord in this.Grid.SelectedRecords)
                     {
-                        area.CG_AREA = selectedRecord.CG_AREA;
+                        area.Id = selectedRecord.Id;
                         area.DES_AREA = selectedRecord.DES_AREA;
                     }
                     isAdding = false;
@@ -93,7 +93,7 @@ namespace SupplyChain.Pages.Area
                         bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar el area?");
                         if (isConfirmed)
                         {
-                            area.CG_AREA = selectedRecord.CG_AREA;
+                            area.Id = selectedRecord.Id;
                             area.DES_AREA = selectedRecord.DES_AREA;
                         }
                     }
@@ -128,7 +128,7 @@ namespace SupplyChain.Pages.Area
                     bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar las areas seleccionadas?");
                     if (isConfirmed)
                     {
-                        var areasSeleccionadas = areas.Select(p => p.CG_AREA).ToList();
+                        var areasSeleccionadas = areas.Select(p => p.Id).ToList();
                         var response = await Http.PostAsJsonAsync("api/Areas/PostList", areas);
                         if (response.IsSuccessStatusCode)
                         {
@@ -177,7 +177,7 @@ namespace SupplyChain.Pages.Area
         {
             if (isAdding == true)
             {
-                var existe = await Http.GetFromJsonAsync<bool>($"api/Areas/AreaExists/{area.CG_AREA}");
+                var existe = await Http.GetFromJsonAsync<bool>($"api/Areas/AreaExists/{area.Id}");
 
                 if (!existe)
                 {
@@ -187,7 +187,7 @@ namespace SupplyChain.Pages.Area
                     {
                         var newArea = await response.Content.ReadFromJsonAsync<Areas>();
                         areas.Add(newArea);
-                        areas.OrderByDescending(p => p.CG_AREA);
+                        areas.OrderByDescending(p => p.Id);
                         await Grid.RefreshColumns();
                         Grid.Refresh();
                         await Grid.RefreshHeader();
@@ -195,7 +195,7 @@ namespace SupplyChain.Pages.Area
                         await this.ToastObj.Show(new ToastModel
                         {
                             Title = "EXITO!",
-                            Content = $"AREA {area.CG_AREA} Guardada Correctamente.",
+                            Content = $"AREA {area.Id} Guardada Correctamente.",
                             CssClass = "e-toast-success",
                             Icon = "e-success toast-icons",
                             ShowCloseButton = true,
@@ -234,20 +234,20 @@ namespace SupplyChain.Pages.Area
             }
             else
             {
-                var response = await Http.PutAsJsonAsync($"api/Areas/{area.CG_AREA}", area);
+                var response = await Http.PutAsJsonAsync($"api/Areas/{area.Id}", area);
 
                 if (response.IsSuccessStatusCode)
                 {
                     var newArea = await response.Content.ReadFromJsonAsync<Areas>();
-                    newArea.CG_AREA = area.CG_AREA;
-                    var areaSinModificar = areas.Where(p => p.CG_AREA == area.CG_AREA).FirstOrDefault();
-                    areaSinModificar.CG_AREA = newArea.CG_AREA;
+                    newArea.Id = area.Id;
+                    var areaSinModificar = areas.Where(p => p.Id == area.Id).FirstOrDefault();
+                    areaSinModificar.Id = newArea.Id;
                     areaSinModificar.DES_AREA = newArea.DES_AREA;
-                    areas.OrderByDescending(p => p.CG_AREA);
+                    areas.OrderByDescending(p => p.Id);
                     await this.ToastObj.Show(new ToastModel
                     {
                         Title = "EXITO!",
-                        Content = $"AREA {area.CG_AREA} editada Correctamente.",
+                        Content = $"AREA {area.Id} editada Correctamente.",
                         CssClass = "e-toast-success",
                         Icon = "e-success toast-icons",
                         ShowCloseButton = true,

@@ -1,26 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SupplyChain.Shared;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace SupplyChain
 {
     [Table("Areas")]
-    public class Areas
+    public class Areas : EntityBase<int>
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CG_AREA { get; set; } = 0;//
-        public string DES_AREA { get; set; } = "";//
-      //  public string RESP { get; set; } = "";
+        [Key, Column("CG_AREA")]
+        public new int Id { get; set; } = 0;
+        public string DES_AREA { get; set; } = "";
         public string CONTROLES { get; set; } = "";
-      //  public decimal TARA { get; set; } = 0;
-        public int CG_TIPOAREA { get; set; } = 0;//
-        public int CG_PROVE { get; set; } = 0;//
-        public int CG_CIA { get; set; } = 0;//
-     //   public int CG_DEP { get; set; } = 0;
-      //  public int CG_COS { get; set; } = 0;
-
+        public int CG_TIPOAREA { get; set; } = 0;
+        public int CG_PROVE { get; set; } = 0;
+        public int CG_CIA { get; set; } = 0;
+        [NotMapped]
+        public bool GUARDADO { get; set; }
+        [NotMapped]
+        public bool ESNUEVO { get; set; }
     }
 }
 

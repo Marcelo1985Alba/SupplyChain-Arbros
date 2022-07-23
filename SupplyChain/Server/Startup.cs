@@ -68,6 +68,7 @@ namespace SupplyChain.Server
             services.AddTransient<vCondicionesEntregaRepository>();
             services.AddTransient<vTipoCambioRepository>();
             services.AddTransient<ProyectosGBPIRepository>();
+            services.AddTransient<AreasRepository>();
             services.AddTransient<CeldasRepository>();
             #endregion
 

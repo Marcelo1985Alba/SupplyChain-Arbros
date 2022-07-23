@@ -15,15 +15,15 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace SupplyChain.Client.Pages.ABM.CeldasP
+namespace SupplyChain.Client.Pages.ABM.AreasP
 {
-    public class CeldaPageBase : ComponentBase
+    public class AreaPageBase : ComponentBase
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime jSRuntime { get; set; }
-        [Inject] protected CeldasService CeldasService { get; set; }
+        [Inject] protected AreasService AreasService { get; set; }
         #region "Vista Grilla"
-        protected const string APPNAME = "grdCeldasABM";
+        protected const string APPNAME = "grdAreasABM";
         protected string state;
         #endregion
         protected List<Object> Toolbaritems = new List<Object>(){
@@ -32,15 +32,15 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
         "Edit",
         "Delete",
         "Print",
-        new ItemModel { Text = "Copia", TooltipText = "Copiar una celda", PrefixIcon = "e-copy", Id = "Copy" },
+        new ItemModel { Text = "Copia", TooltipText = "Copiar un area", PrefixIcon = "e-copy", Id = "Copy" },
         "ExcelExport"
         };
-        protected List<Celdas> celdas = new();
+        protected List<Areas> areas = new();
 
         protected SfToast ToastObj;
         protected SfSpinner refSpinner;
-        protected SfGrid<Celdas> refGrid;
-        protected Celdas celdaSeleccionada = new();
+        protected SfGrid<Areas> refGrid;
+        protected Areas areaSeleccionada = new();
         protected bool SpinnerVisible = false;
 
         protected bool popupFormVisible = false;
@@ -48,13 +48,13 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
         [CascadingParameter] MainLayout MainLayout { get; set; }
         protected override async Task OnInitializedAsync()
         {
-            MainLayout.Titulo = "Celdas";
+            MainLayout.Titulo = "Areas";
 
             SpinnerVisible = true;
-            var response = await CeldasService.Get();
+            var response = await AreasService.Get();
             if (!response.Error)
             {
-                celdas = response.Response;
+                areas = response.Response;
             }
             SpinnerVisible = false;
         }
@@ -74,23 +74,23 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
         {
             if (args.Item.Id == "Copy")
             {
-                await CopiarCelda();
+                await CopiarArea();
             }
-            else if (args.Item.Id == "grdCeldas_delete")
+            else if (args.Item.Id == "grdAreas_delete")
             {
                 if ((await refGrid.GetSelectedRecordsAsync()).Count > 0)
                 {
-                    bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar la celda?");
+                    bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar el area?");
                     if (isConfirmed)
                     {
-                        List<Celdas> celdasABorrar = await refGrid.GetSelectedRecordsAsync();
-                        var response = CeldasService.Eliminar(celdasABorrar);
+                        List<Areas> areasABorrar = await refGrid.GetSelectedRecordsAsync();
+                        var response = AreasService.Eliminar(areasABorrar);
                         if (!response.IsCompletedSuccessfully)
                         {
                             await this.ToastObj.Show(new ToastModel
                             {
                                 Title = "EXITO!",
-                                Content = "las celdas seleccionadas fueron eliminadas correctamente.",
+                                Content = "las areas seleccionadas fueron eliminadas correctamente.",
                                 CssClass = "e-toast-success",
                                 Icon = "e-success toast-icons",
                                 ShowCloseButton = true,
@@ -103,41 +103,28 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
                         }
                     }
                 }
-                //await EliminarCelda();
             }
-            else if (args.Item.Id == "grdCelda_excelexport")
+            else if (args.Item.Id == "grdArea_excelexport")
             {
                 await refGrid.ExportToExcelAsync();
             }
         }
 
-        private async Task CopiarCelda()
+        private async Task CopiarArea()
         {
             if (refGrid.SelectedRecords.Count == 1)
             {
-                celdaSeleccionada = new();
-                Celdas selectedRecord = refGrid.SelectedRecords[0];
-                bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar la celda?");
+                areaSeleccionada = new();
+                Areas selectedRecord = refGrid.SelectedRecords[0];
+                bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar el area?");
                 if (isConfirmed)
                 {
-                    celdaSeleccionada.ESNUEVO = true;
-                    celdaSeleccionada.AIRE_COMP = selectedRecord.AIRE_COMP;
-                    celdaSeleccionada.CANT_ANOS = selectedRecord.CANT_ANOS;
-                    celdaSeleccionada.CANT_UNID = selectedRecord.CANT_UNID;
-                    celdaSeleccionada.CG_AREA = selectedRecord.CG_AREA;
-                    celdaSeleccionada.CG_DEPOSM = selectedRecord.CG_DEPOSM;
-                    celdaSeleccionada.CG_PROVE = selectedRecord.CG_PROVE;
-                    celdaSeleccionada.CG_TIPOCELDA = selectedRecord.CG_TIPOCELDA;
-                    celdaSeleccionada.COEFI = selectedRecord.COEFI;
-                    celdaSeleccionada.COMBUST = selectedRecord.COMBUST;
-                    celdaSeleccionada.DES_CELDA = selectedRecord.DES_CELDA;
-                    celdaSeleccionada.ENERGIA = selectedRecord.ENERGIA;
-                    celdaSeleccionada.ILIMITADA = selectedRecord.ILIMITADA;
-                    celdaSeleccionada.M2 = selectedRecord.M2;
-                    celdaSeleccionada.MONEDA = selectedRecord.MONEDA;
-                    celdaSeleccionada.REP_ANOS = selectedRecord.REP_ANOS;
-                    celdaSeleccionada.VALOR_AMOR = selectedRecord.VALOR_AMOR;
-                    celdaSeleccionada.VALOR_MERC = selectedRecord.VALOR_MERC;
+                    areaSeleccionada.ESNUEVO = true;
+                    areaSeleccionada.CG_CIA = selectedRecord.CG_CIA;
+                    areaSeleccionada.CG_PROVE = selectedRecord.CG_PROVE;
+                    areaSeleccionada.CG_TIPOAREA = selectedRecord.CG_TIPOAREA;
+                    areaSeleccionada.CONTROLES = selectedRecord.CONTROLES;
+                    areaSeleccionada.DES_AREA = selectedRecord.DES_AREA;
                     popupFormVisible = true;
                 }
             }
@@ -155,7 +142,7 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
             }
         }
 
-        protected async Task OnActionBeginHandler(ActionEventArgs<Celdas> args)
+        protected async Task OnActionBeginHandler(ActionEventArgs<Areas> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
                 args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
@@ -163,13 +150,13 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
                 args.Cancel = true;
                 args.PreventRender = false;
                 popupFormVisible = true;
-                celdaSeleccionada = new();
-                celdaSeleccionada.ESNUEVO = true;
+                areaSeleccionada = new();
+                areaSeleccionada.ESNUEVO = true;
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                celdaSeleccionada = args.Data;
-                celdaSeleccionada.ESNUEVO = false;
+                areaSeleccionada = args.Data;
+                areaSeleccionada.ESNUEVO = false;
             }
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
@@ -193,7 +180,7 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
             }
         }
 
-        protected async Task OnActionCompleteHandler(ActionEventArgs<Celdas> args)
+        protected async Task OnActionCompleteHandler(ActionEventArgs<Areas> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
@@ -208,39 +195,27 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
             popupFormVisible = false;
         }
 
-        protected async Task Guardar(Celdas celda)
+        protected async Task Guardar(Areas area)
         {
-            if (celda.GUARDADO)
+            if (area.GUARDADO)
             {
                 await ToastMensajeExito();
                 popupFormVisible = false;
-                if (celda.ESNUEVO)
+                if (area.ESNUEVO)
                 {
-                    celdas.Add(celda);
+                    areas.Add(area);
                 }
                 else
                 {
                     //actualizar datos sin ir a la base de datos
-                    var celdaSinModificar = celdas.Where(p => p.Id == celda.Id).FirstOrDefault();
-                    celdaSinModificar.Id = celda.Id;
-                    celdaSinModificar.AIRE_COMP = celda.AIRE_COMP;
-                    celdaSinModificar.CANT_ANOS = celda.CANT_ANOS;
-                    celdaSinModificar.CANT_UNID = celda.CANT_UNID;
-                    celdaSinModificar.CG_AREA = celda.CG_AREA;
-                    celdaSinModificar.CG_DEPOSM = celda.CG_DEPOSM;
-                    celdaSinModificar.CG_PROVE = celda.CG_PROVE;
-                    celdaSinModificar.CG_TIPOCELDA = celda.CG_TIPOCELDA;
-                    celdaSinModificar.COEFI = celda.COEFI;
-                    celdaSinModificar.COMBUST = celda.COMBUST;
-                    celdaSinModificar.DES_CELDA = celda.DES_CELDA;
-                    celdaSinModificar.ENERGIA = celda.ENERGIA;
-                    celdaSinModificar.ILIMITADA = celda.ILIMITADA;
-                    celdaSinModificar.M2 = celda.M2;
-                    celdaSinModificar.MONEDA = celda.MONEDA;
-                    celdaSinModificar.REP_ANOS = celda.REP_ANOS;
-                    celdaSinModificar.VALOR_AMOR = celda.VALOR_AMOR;
-                    celdaSinModificar.VALOR_MERC = celda.VALOR_MERC;
-                    celdas.OrderByDescending(p => p.Id);
+                    var areaSinModificar = areas.Where(p => p.Id == area.Id).FirstOrDefault();
+                    areaSinModificar.Id = area.Id;
+                    areaSinModificar.CG_CIA = area.CG_CIA;
+                    areaSinModificar.CG_PROVE = area.CG_PROVE;
+                    areaSinModificar.CG_TIPOAREA = area.CG_TIPOAREA;
+                    areaSinModificar.CONTROLES = area.CONTROLES;
+                    areaSinModificar.DES_AREA = area.DES_AREA;
+                    areas.OrderByDescending(p => p.Id);
                 }
                 await refGrid.RefreshHeaderAsync();
                 refGrid.Refresh();

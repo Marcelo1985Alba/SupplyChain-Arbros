@@ -18,6 +18,7 @@ namespace SupplyChain.Client.Pages.ABM.Prods
         [Inject] protected HttpClient Http { get; set; }
         [Inject] public ProductoService ProductoService { get; set; }
         [Inject] protected CeldasService CeldasService { get; set; }
+        [Inject] protected AreasService AreasService { get; set; }
         [Parameter] public Producto Producto { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;
         [Parameter] public EventCallback<Producto> OnGuardar { get; set; }
@@ -63,7 +64,12 @@ namespace SupplyChain.Client.Pages.ABM.Prods
                 celda = response.Response;
             }
             //celda = await Http.GetFromJsonAsync<List<SupplyChain.Celdas>>("api/Celdas");
-            area = await Http.GetFromJsonAsync<List<SupplyChain.Areas>>("api/Areas");
+            var response_2 = await AreasService.Get();
+            if (!response_2.Error)
+            {
+                area = response_2.Response;
+            }
+            //area = await Http.GetFromJsonAsync<List<SupplyChain.Areas>>("api/Areas");
             linea = await Http.GetFromJsonAsync<List<SupplyChain.Lineas>>("api/Lineas");
             tipoarea = await Http.GetFromJsonAsync<List<TipoArea>>("api/TipoArea");
             cat = await Http.GetFromJsonAsync<List<Cat>>("api/Cat");

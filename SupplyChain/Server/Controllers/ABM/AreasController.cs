@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Syncfusion.Blazor.Grids;
+using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared.Models;
+using SupplyChain.Shared;
 
 namespace SupplyChain
 {
@@ -13,90 +15,110 @@ namespace SupplyChain
     [ApiController]
     public class AreasController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly AreasRepository _areasRepository;
 
-        public AreasController(AppDbContext context)
+        public AreasController(AreasRepository areasRepository)
         {
-            _context = context;
+            this._areasRepository = areasRepository;
         }
 
         // GET: api/Areas
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Areas>>> GetAreas()
         {
-            return await _context.Areas.ToListAsync();
-        }
-
-        // GET: api/Areas/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Areas>> GetArea(int id)
-        {
-            var area = await _context.Areas.FindAsync(id);
-
-            if (area == null)
+            try
             {
-                return NotFound();
+                return await _areasRepository.ObtenerTodos();
             }
-
-            return area;
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
-        // PUT: api/Unidades/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutArea(int id, Areas area)
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>> ExisteArea(string id)
         {
-            if (id != area.CG_AREA)
+            try
+            {
+                return await _areasRepository.Existe(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        // PUT: api/Areas/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAreas(int id, Areas Area)
+        {
+            if (id != Area.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(area).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _areasRepository.Actualizar(Area);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AreaExists(id))
+                if (!await _areasRepository.Existe(id))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            return Ok(Area);
         }
 
-        // POST: api/Unidades
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        // POST: api/Areas
         [HttpPost]
-        public async Task<ActionResult<Areas>> PostArea(Areas area)
+        public async Task<ActionResult<Areas>> PostAreas(Areas Area)
         {
-            _context.Areas.Add(area);
             try
             {
-                await _context.SaveChangesAsync();
+                await _areasRepository.Agregar(Area);
+                return CreatedAtAction("GetAreas", new { id = Area.Id }, Area);
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException exx)
             {
-                if (AreaExists(area.CG_AREA))
+                if (!await _areasRepository.Existe(Area.Id))
                 {
                     return Conflict();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
 
-            return CreatedAtAction("GetArea", new { id = area.CG_AREA }, area);
+        // DELETE: api/Areas/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Areas>> DeleteAreas(int id)
+        {
+            var Area = await _areasRepository.ObtenerPorId(id);
+            if (Area == null)
+            {
+                return NotFound();
+            }
+
+            await _areasRepository.Remover(id);
+
+            return Area;
         }
 
         [HttpPost("PostList")]
@@ -106,8 +128,7 @@ namespace SupplyChain
             {
                 foreach (var item in areas)
                 {
-                    _context.Areas.Remove(item);
-                    await _context.SaveChangesAsync();
+                    await _areasRepository.Remover(item.Id);
                 }
             }
             catch (Exception ex)
@@ -116,28 +137,6 @@ namespace SupplyChain
             }
 
             return Ok();
-        }
-
-        // DELETE: api/Unidades/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Areas>> DeleteArea(int id)
-        {
-            var area = await _context.Areas.FindAsync(id);
-            if (area == null)
-            {
-                return NotFound();
-            }
-
-            _context.Areas.Remove(area);
-            await _context.SaveChangesAsync();
-
-            return area;
-        }
-
-        [HttpGet("AreaExists/{CG_AREA}")]
-        public bool AreaExists(int id)
-        {
-            return _context.Areas.Any(s => s.CG_AREA == id);
         }
     }
 }

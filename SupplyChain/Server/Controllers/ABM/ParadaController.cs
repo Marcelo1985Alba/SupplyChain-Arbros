@@ -19,16 +19,16 @@ namespace SupplyChain
             _context = context;
         }
 
-        // GET: api/Areas
+        // GET: api/Parada
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Parada>>> GetUnidades()
+        public async Task<ActionResult<IEnumerable<Parada>>> GetParadas()
         {
             return await _context.Parada.ToListAsync();
         }
 
-        // GET: api/Areas/5
+        // GET: api/Parada/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Parada>> GetUnidad(int id)
+        public async Task<ActionResult<Parada>> GetParada(int id)
         {
             var parada = await _context.Parada.FindAsync(id);
 
@@ -40,11 +40,11 @@ namespace SupplyChain
             return parada;
         }
 
-        // PUT: api/Unidades/5
+        // PUT: api/Parada/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUnidad(int id, Parada parada)
+        public async Task<IActionResult> PutParada(int id, Parada parada)
         {
             if (id != parada.CP)
             {
@@ -59,7 +59,7 @@ namespace SupplyChain
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UnidadExists(id))
+                if (!ParadaExists(id))
                 {
                     return NotFound();
                 }
@@ -72,11 +72,11 @@ namespace SupplyChain
             return NoContent();
         }
 
-        // POST: api/Unidades
+        // POST: api/Parada
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Parada>> PostUnidad(Parada parada)
+        public async Task<ActionResult<Parada>> PostParada(Parada parada)
         {
             _context.Parada.Add(parada);
             try
@@ -85,7 +85,7 @@ namespace SupplyChain
             }
             catch (DbUpdateException)
             {
-                if (UnidadExists(parada.CP))
+                if (ParadaExists(parada.CP))
                 {
                     return Conflict();
                 }
@@ -95,12 +95,12 @@ namespace SupplyChain
                 }
             }
 
-            return CreatedAtAction("GetUnidad", new { id = parada.CP }, parada);
+            return CreatedAtAction("GetParada", new { id = parada.CP }, parada);
         }
 
-        // DELETE: api/Unidades/5
+        // DELETE: api/Parada/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Parada>> DeleteUnidad(int id)
+        public async Task<ActionResult<Parada>> DeleteParada(int id)
         {
             var parada = await _context.Parada.FindAsync(id);
             if (parada == null)
@@ -114,7 +114,7 @@ namespace SupplyChain
             return parada;
         }
 
-        private bool UnidadExists(decimal id)
+        private bool ParadaExists(decimal id)
         {
             return _context.Parada.Any(e => e.CP == id);
         }

@@ -1,4 +1,4 @@
-﻿@page "/sc/areas/list"
+﻿@page "/sc/areas2/list"
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Data
 @using Syncfusion.Blazor.Calendars
@@ -27,7 +27,7 @@
         <div class="row">
             <div class="col-12">
                 <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                        DataSource="@(areas.OrderBy(s => s.CG_AREA))" AllowSelection="true"
+                        DataSource="@(areas.OrderBy(s => s.Id))" AllowSelection="true"
                         ID="gridAreas" Height="100%" Width="100%" GridLines="GridLine.Both" RowHeight="27"
                         @ref="Grid" AllowExcelExport="true" AllowGrouping="true"
                         AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
@@ -40,7 +40,7 @@
                     </GridEditSettings>
                     <GridColumns>
                         <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                        <GridColumn Field=@nameof(Areas.CG_AREA) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Areas.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                         <GridColumn Field=@nameof(Areas.DES_AREA) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                     </GridColumns>
                     <SfSpinner @ref="refSpinner" Type="SpinnerType.Bootstrap" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
@@ -67,7 +67,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-label-top">Codigo:</label>
-                                    <SfNumericTextBox ID="Codigo" @bind-Value="@(area.CG_AREA)"></SfNumericTextBox>
+                                    <SfNumericTextBox ID="Codigo" @bind-Value="@(area.Id)"></SfNumericTextBox>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-label-top">Descripcion:</label>

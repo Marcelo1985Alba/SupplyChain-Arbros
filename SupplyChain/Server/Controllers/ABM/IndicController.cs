@@ -19,14 +19,14 @@ namespace SupplyChain
             _context = context;
         }
 
-        // GET: api/Areas
+        // GET: api/Indic
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Indic>>> GetUnidades()
         {
             return await _context.Indic.ToListAsync();
         }
 
-        // GET: api/Areas/5
+        // GET: api/Indic/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Indic>> GetUnidad(int id)
         {
