@@ -99,96 +99,6 @@
     if (Showgrid == true)
     {
         <form>
-            @{
-                var lote = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim();
-                if (lote == null)
-                {
-                    lote = "";
-                }
-                var fecha = vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro && t.TIPOO == 28).OrderByDescending(t => t.PEDIDO).FirstOrDefault().FE_MOV.ToString();
-                if (fecha == null)
-                {
-                    fecha = "";
-                }
-                var prod = prodList.Id.ToString();
-                if (prod == null)
-                {
-                    prod = "";
-                }
-                var orco = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().ORCO.Trim();
-                if (orco == null)
-                {
-                    orco = "";
-                }
-                if (vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().TIPOO == 1)
-                {
-                    var rem = vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro && t.TIPOO == 1).OrderByDescending(t => t.PEDIDO).FirstOrDefault().REMITO;
-                    if (rem != "" && rem != null)
-                    {
-                        remito = rem;
-                    }
-                }
-                var modelo = prodList.CAMPOCOM1.Trim();
-                if (modelo == null)
-                {
-                    modelo = "";
-                }
-                var medida = prodList.CAMPOCOM2.Trim();
-                if (medida == null)
-                {
-                    medida = "";
-                }
-                var orificio = prodList.CAMPOCOM3.Trim();
-                if (orificio == null)
-                {
-                    orificio = "";
-                }
-                var area = prodList.CAMPOCOM4.Trim();
-                if (area == null)
-                {
-                    area = "";
-                }
-                var serie = prodList.CAMPOCOM5.Trim();
-                if (serie == null)
-                {
-                    serie = "";
-                }
-                var tipo = prodList.CAMPOCOM6.Trim();
-                if (tipo == null)
-                {
-                    tipo = "";
-                }
-                var presion = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
-                if (presion == null)
-                {
-                    presion = "";
-                }
-                var resorte = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim();
-                if (resorte == null)
-                {
-                    resorte = "";
-                }
-                var fluido = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim();
-                if (fluido == null)
-                {
-                    fluido = "";
-                }
-                var presAj = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim();
-                if (presAj == null)
-                {
-                    presAj = "";
-                }
-                var ctpre = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim();
-                if (ctpre == null)
-                {
-                    ctpre = "";
-                }
-                var temp = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim();
-                if (temp == null)
-                {
-                    temp = "";
-                }
-            }
             <div class="row">
                 <div class="col-lg-4 col-sm-12">
                     <input type="text"
@@ -363,8 +273,6 @@
                                                                  Height="300px" Width="100%"></SfPdfViewer>
                                                 </div>
                                             }
-
-
                                         }
                                         else
                                         {
@@ -485,6 +393,23 @@
     protected bool IsVisibleCertificado { get; set; } = false;
     public int GridRowHeight = 20;
     string remito = "";
+    public string lote = "";
+    public string fecha = "";
+    public string prod = "";
+    public string orco = "";
+    public string rem = "";
+    public string modelo = "";
+    public string medida = "";
+    public string orificio = "";
+    public string area = "";
+    public string serie = "";
+    public string tipo = "";
+    public string presion = "";
+    public string resorte = "";
+    public string fluido = "";
+    public string presAj = "";
+    public string ctpre = "";
+    public string temp = "";
 
     protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "1100px" };
 
@@ -519,7 +444,6 @@
         }
 
         await base.OnInitializedAsync();
-
     }
 
     public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -550,14 +474,13 @@
         await refSpinner.HideAsync();
     }
 
-
     public async Task OnSelected()
     {
         await refSpinner.ShowAsync();
-        BoxPedido = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().PEDIDO.ToString(); // return the details of selected record
+        BoxPedido = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().PEDIDO.ToString();
         TrzNro = BoxPedido;
-        BoxCliente = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().DES_CLI; // return the details of selected record
-        BoxCodigo = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().CG_ART; // return the details of selected record
+        BoxCliente = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().DES_CLI;
+        BoxCodigo = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().CG_ART;
         CodNro = BoxCodigo;
         CantidadMostrar = 0;
         await MostrarTrazabilidad();
@@ -591,7 +514,6 @@
                 var archivo = NroCertificado.Trim() + ".pdf";
                 ShowCertificado = await Http.GetFromJsonAsync<bool>($"api/AdministracionArchivos/ExisteCertificado/{archivo}");
                 Archivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/Certificado/{archivo}");
-
             }
             await DialogRef.Show(false);
         }
@@ -643,7 +565,6 @@
         {
             return;
         }
-
         Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorCliente/{args.Value}");
         if (Pedidoslist.Count > 0)
         {
@@ -678,7 +599,6 @@
         {
             Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/{BoxCliente}/{BoxCodigo}/{CantidadMostrar}");
         }
-
         await refSpinner.HideAsync();
         await refDialogPedidos.ShowAsync();
         IsVisible = true;
@@ -702,8 +622,6 @@
             await refDialogPedidos.HideAsync();
             await refSpinner.HideAsync();
         }
-
-
     }
 
     protected async Task CargaPedido()
@@ -713,10 +631,68 @@
         prodList = await Http.GetFromJsonAsync<Producto>($"api/Prod/{PedCliList.FirstOrDefault().CG_ART.Trim()}");
         pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/MostrarTrazabilidad/{BoxPedido}");
         vpedidos = await Http.GetFromJsonAsync<List<vTrazabilidad>>($"api/Trazabilidads/MostrarTrazabilidad/{BoxPedido}");
+        CargarValores();
         Showgrid = true;
         BoxPedido = "";
         BoxCliente = "";
         BoxCodigo = "";
+    }
+
+    protected void CargarValores(){
+        lote = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim();
+        if (lote == null)
+            lote = "";
+        fecha = vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro && t.TIPOO == 28).OrderByDescending(t => t.PEDIDO).FirstOrDefault().FE_MOV.ToString();
+        if (fecha == null)
+            fecha = "";
+        prod = prodList.Id.ToString();
+        if (prod == null)
+            prod = "";
+        orco = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().ORCO.Trim();
+        if (orco == null)
+            orco = "";
+        if (vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().TIPOO == 1)
+        {
+            rem = vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro && t.TIPOO == 1).OrderByDescending(t => t.PEDIDO).FirstOrDefault().REMITO;
+            if (rem != "" && rem != null)
+                remito = rem;
+        }
+        modelo = prodList.CAMPOCOM1.Trim();
+        if (modelo == null)
+            modelo = "";
+        medida = prodList.CAMPOCOM2.Trim();
+        if (medida == null)
+            medida = "";
+        orificio = prodList.CAMPOCOM3.Trim();
+        if (orificio == null)
+            orificio = "";
+        area = prodList.CAMPOCOM4.Trim();
+        if (area == null)
+            area = "";
+        serie = prodList.CAMPOCOM5.Trim();
+        if (serie == null)
+            serie = "";
+        tipo = prodList.CAMPOCOM6.Trim();
+        if (tipo == null)
+            tipo = "";
+        presion = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
+        if (presion == null)
+            presion = "";
+        resorte = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim();
+        if (resorte == null)
+            resorte = "";
+        fluido = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim();
+        if (fluido == null)
+            fluido = "";
+        presAj = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim();
+        if (presAj == null)
+            presAj = "";
+        ctpre = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim();
+        if (ctpre == null)
+            ctpre = "";
+        temp = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim();
+        if (temp == null)
+            temp = "";
     }
 
     protected async Task AgregarValores()
@@ -747,8 +723,8 @@
         if (!string.IsNullOrEmpty(Pedido) && Convert.ToInt32(Pedido) > 0)
         {
             TrzNro = Pedido;
-            CodNro = PedCliList[0].CG_ART.Trim();
         }
+        CodNro = PedCliList[0].CG_ART.Trim();
 
         await PdfService.Catalogo(CodNro, TrzNro, vpedidos);
         await refSpinner.HideAsync();
@@ -1023,9 +999,6 @@
     {
         //NavigationManager.NavigateTo($"Pdf/{pedido}/ENSAYOS");
         //await JsRuntime.InvokeVoidAsync("open", new object[2] { $"Pdf/{TrzNro}/ENSAYOS", $"Pdf/{TrzNro}/ENSAYOS" });
-
-
-
         await JsRuntime.InvokeVoidAsync("open", new object[2] { $"pdf-ensayos/{TrzNro}/RUTAENSAYO", $"pdf-ensayos/{TrzNro}/RUTAENSAYO" });
     }
 }
