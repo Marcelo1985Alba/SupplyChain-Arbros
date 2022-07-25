@@ -10,10 +10,16 @@ using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.LinearGauge;
 using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
+using Syncfusion.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Syncfusion.Pdf.Parsing;
+using Syncfusion.Pdf.Graphics;
+using Syncfusion.Pdf.Grid;
+using System.IO;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SupplyChain.Client.Pages.EstadoPedidos
 {
@@ -82,8 +88,8 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
 
             if (args.CommandColumn.ID == "btnDescargarCertificado")
             {
-                string pedido = args.RowData.PEDIDO.ToString();
-
+                await DescargarCertificado(args.RowData.PEDIDO);
+                /*
                 //OBTENGO TRAZABILIDAD PARA PODER OBTENER LOS CERTIFICADO DE MP
                 var listTrazab = new List<vTrazabilidad>();
                 var listArchivosDescargar = new List<Archivo>();
@@ -154,16 +160,19 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
                     {
                         listArchivosDescargar.Add(item);
                     }
-
                     foreach (Archivo item in listArchivosDescargar)
                     {
                         await JS.SaveAs(item.Nombre, item.ContenidoByte);
-
                     }
-                }
 
-                
+                }
+                */
             }
+        }
+
+        private async Task DescargarCertificado(int pedido)
+        {
+            await JS.InvokeVoidAsync("descargarCertificado", pedido);
         }
 
         private async Task DescargarRemito(vEstadoPedido pedido)
