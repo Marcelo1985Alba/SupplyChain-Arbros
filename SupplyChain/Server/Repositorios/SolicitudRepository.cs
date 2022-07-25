@@ -11,27 +11,32 @@ namespace SupplyChain.Server.Repositorios
 {
     public class SolicitudRepository : Repository<Solicitud, int>
     {
-        private readonly ProductoRepository productoRepository;
+        private readonly PrecioArticulosRepository _precioArticulosRepository;
 
-        public SolicitudRepository(AppDbContext appDbContext, ProductoRepository productoRepository) : base (appDbContext)
+        public SolicitudRepository(AppDbContext appDbContext, PrecioArticulosRepository precioArticulosRepository) : base (appDbContext)
         {
-            this.productoRepository = productoRepository;
+            this._precioArticulosRepository = precioArticulosRepository;
         }
 
-        //public override async Task<Solicitud> ObtenerPorId(int Id)
-        //{
-        //    var solicitud =  await DbSet.FindAsync(Id);
-        //    if (solicitud != null)
-        //    {
-        //        var prod = await productoRepository.ObtenerPorId(solicitud.Producto);
-        //        if (prod != null)
-        //        {
-        //            solicitud.Des_Prod = prod.DES_PROD;
-        //        }
-        //    }
+        public override async Task<Solicitud> ObtenerPorId(int Id)
+        {
+            var solicitud = await DbSet.FindAsync(Id);
+            if (solicitud != null)
+            {
+                var prod = await _precioArticulosRepository.ObtenerPorId(solicitud.Producto);
+                if (prod != null)
+                {
+                    solicitud.Des_Prod = prod.Descripcion;
+                }
+                //var prod = await _precioArticulosRepository.ObtenerPorId(solicitud.Producto);
+                if (true)
+                {
 
-        //    return solicitud;
-        //}
+                }
+            }
+
+            return solicitud;
+        }
 
         public async Task<List<vSolicitudes>> ObtenerTodosFromVista()
         {
@@ -47,6 +52,34 @@ namespace SupplyChain.Server.Repositorios
             {
                 solicitud.CG_CLI = Convert.ToInt32(cliente.CG_CLI);
             }
+        }
+
+
+        /// <summary>
+        /// guarda en servicio en caso de ser una reparacion
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async override Task Agregar(Solicitud entity)
+        {
+            await base.Agregar(entity);
+
+
+            if (entity.Producto.StartsWith("0012")) //SI ES REPARACION
+            {
+                //TODO: ENVIAR A SERVICIO
+                var servicio = new Service()
+                {
+                    SOLICITUD = entity.Id,
+                    CG_CLI = entity.CG_CLI,
+                    CLIENTE = entity.Des_Cli,
+                    DESCARTICULO = entity.Des_Prod
+                };
+
+                Db.Servicios.Add(servicio);
+                await Db.SaveChangesAsync();
+            }
+
         }
     }
 }

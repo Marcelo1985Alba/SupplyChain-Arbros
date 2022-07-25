@@ -32,7 +32,7 @@ namespace SupplyChain
 
         // GET: api/Servicios/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Service>>> Get(string id)
+        public async Task<ActionResult<IEnumerable<Service>>> Get(int id)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace SupplyChain
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutServicios(string id, Service Servicios)
+        public async Task<IActionResult> PutServicios(int id, Service Servicios)
         {
             if (id != Servicios.Id) return BadRequest();
 
@@ -101,7 +101,7 @@ namespace SupplyChain
 
         // DELETE: api/Servicios/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Service>> DeleteServicios(string id)
+        public async Task<ActionResult<Service>> DeleteServicios(int id)
         {
             var Servicios = await _serviciosRepository.ObtenerPorId(id);
             if (Servicios == null) return NotFound();

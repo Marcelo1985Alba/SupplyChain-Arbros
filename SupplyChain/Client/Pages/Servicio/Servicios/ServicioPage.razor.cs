@@ -30,7 +30,7 @@ namespace SupplyChain.Pages.Servicios
         [Inject] protected IJSRuntime JsRuntime { get; set; }
         [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
         [CascadingParameter] public MainLayout Layout { get; set; }
-        [Parameter] public string pedido { get; set; } = "";
+        [Parameter] public int pedido { get; set; } = 0;
         protected bool SpinnerVisible { get; set; } = false;
         protected SfGrid<Service> Grid;
         public string NroPedido = "";
@@ -117,7 +117,7 @@ namespace SupplyChain.Pages.Servicios
             Layout.Titulo = "Servicios";
 
             //SpinnerVisible = true;
-            if (string.IsNullOrEmpty(pedido))
+            if (pedido == 0)
             {
                 ApiUrl = "api/Servicios";
                 servicios = await Http.GetFromJsonAsync<List<Service>>("api/Servicios");
@@ -128,7 +128,7 @@ namespace SupplyChain.Pages.Servicios
             {
                 ApiUrl = $"api/Servicios/{pedido}";
                 servicios = await Http.GetFromJsonAsync<List<Service>>($"api/Servicios/{pedido}");
-                servDesc = servicios.Where(s => s.Id == pedido).ToList();
+                servDesc = servicios.Where(s => s.PEDIDO == pedido).ToList();
             }
             medidas = await Http.GetFromJsonAsync<List<Medida>>("api/Medida");
             //series = await Http.GetFromJsonAsync<List<Serie>>("api/Serie");
@@ -182,7 +182,7 @@ namespace SupplyChain.Pages.Servicios
                     {
                         foreach (var ped in servicios)
                         {
-                            if (args.Data.PEDIDOANT == ped.Id)
+                            if (args.Data.PEDIDOANT == ped.PEDIDO.ToString())
                             {
                                 bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Quiere traer los datos del pedido anterior?");
                                 if (isConfirmed)
@@ -811,7 +811,7 @@ namespace SupplyChain.Pages.Servicios
                             $"\r\n" +
                             $"\r\n" +
                             $"\r\n" +//10
-                            $"         Nro. Serie Rep.: {selectedRecord.Id.Trim()}                                Fecha: {DateTime.Now.Day}/{DateTime.Now.Month}/{DateTime.Now.Year}\r\n" +
+                            $"         Nro. Serie Rep.: {selectedRecord.PEDIDO}                                Fecha: {DateTime.Now.Day}/{DateTime.Now.Month}/{DateTime.Now.Year}\r\n" +
                             $"\r\n" +
                             $"                 {selectedRecord.CLIENTE.Trim()}\r\n" +
                             $"\r\n" +
@@ -877,7 +877,7 @@ namespace SupplyChain.Pages.Servicios
                         MemoryStream xx = new MemoryStream();
                         document1.Save(xx);
                         document1.Close(true);
-                        await JS.SaveAs($"{selectedRecord.Id.Trim()} OPDS {selectedRecord.ACTA.Trim()}" + ".pdf", xx.ToArray());
+                        await JS.SaveAs($"{selectedRecord.PEDIDO} OPDS {selectedRecord.ACTA.Trim()}" + ".pdf", xx.ToArray());
                     }
                 }
             }
@@ -887,7 +887,7 @@ namespace SupplyChain.Pages.Servicios
                 {
                     foreach (Service selectedRecord in this.Grid.SelectedRecords)
                     {
-                        NroPedido = selectedRecord.Id;
+                        //NroPedido = selectedRecord.Id;
                     }
                 }
             }

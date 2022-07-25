@@ -43,7 +43,6 @@ namespace SupplyChain.Server.Controllers
             try
             {
                 var solicitud = await _solicitudRepository.ObtenerPorId(id);
-
                 if (solicitud == null)
                 {
                     return NotFound();
@@ -115,10 +114,7 @@ namespace SupplyChain.Server.Controllers
                 }
                 await _solicitudRepository.Agregar(solicitud);
 
-                if (solicitud.Producto.StartsWith("00")) //SI ES REPARACION
-	            {
-                    //TODO: ENVIAR A SERVICIO
-	            }
+                
 
                 return CreatedAtAction("GetSolicitud", new { id = solicitud.Id }, solicitud);
             }

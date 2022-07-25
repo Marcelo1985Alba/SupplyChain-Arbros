@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Server.Repositorios
 {
-    public class ServiciosRepository : Repository<Service, string>
+    public class ServiciosRepository : Repository<Service, int>
     {
         public ServiciosRepository(AppDbContext db) : base(db)
         {
