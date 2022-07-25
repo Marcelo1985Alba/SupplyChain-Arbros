@@ -36,8 +36,9 @@ namespace SupplyChain
             }
         }
 
+        // GET: api/Areas/Existe/{id}
         [HttpGet("Existe/{id}")]
-        public async Task<ActionResult<bool>> ExisteArea(string id)
+        public async Task<ActionResult<bool>> ExisteArea(int id)
         {
             try
             {
@@ -49,7 +50,7 @@ namespace SupplyChain
             }
         }
 
-        // PUT: api/Areas/5
+        // PUT: api/Areas/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAreas(int id, Areas Area)
         {
@@ -106,7 +107,7 @@ namespace SupplyChain
             }
         }
 
-        // DELETE: api/Areas/5
+        // DELETE: api/Areas/{id}
         [HttpDelete("{id}")]
         public async Task<ActionResult<Areas>> DeleteAreas(int id)
         {
@@ -121,6 +122,7 @@ namespace SupplyChain
             return Area;
         }
 
+        // POST: api/Areas/PostList
         [HttpPost("PostList")]
         public async Task<ActionResult<Areas>> PostList(List<Areas> areas)
         {

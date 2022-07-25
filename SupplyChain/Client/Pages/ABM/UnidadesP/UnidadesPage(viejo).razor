@@ -46,7 +46,7 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="e-float-text e-label-top">Unidad:</label>
-                                                <SfNumericTextBox ID="UNID" @bind-Value="@(uni.UNID)" Enabled="@Disabled"></SfNumericTextBox>
+                                                <SfNumericTextBox ID="UNID" @bind-Value="@(uni.Id)" Enabled="@Disabled"></SfNumericTextBox>
 
                                             </div>
 
@@ -81,7 +81,7 @@
                     </Template>
                 </GridEditSettings>
                 <GridColumns>
-                    <GridColumn Field=@nameof(Unidades.UNID) HeaderText="Unidad" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Unidades.Id) HeaderText="Unidad" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Unidades.DES_UNID) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Unidades.TIPOUNID) HeaderText="tipo" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Unidades.CG_DENBASICA) HeaderText="den basica" TextAlign="TextAlign.Left" Width="200"></GridColumn>

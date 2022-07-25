@@ -39,7 +39,7 @@
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
                                             <label class="e-float-text e-label-top">Id:</label>
-                                            <SfNumericTextBox ID="CG_TIPOAREA" @bind-Value="@(tiparea.CG_TIPOAREA)" Enabled="@Disabled"></SfNumericTextBox>
+                                            <SfNumericTextBox ID="CG_TIPOAREA" @bind-Value="@(tiparea.Id)" Enabled="@Disabled"></SfNumericTextBox>
                                         </div>
 
                                         <div class="form-group col-md-6">
@@ -47,18 +47,12 @@
                                             <SfTextBox CssClass="customClass" ID="DES_TIPOAREA" @bind-Value="@(tiparea.DES_TIPOAREA)"></SfTextBox>
                                         </div>
                                     </div>
-
-
-
-
-
-
                                 </div>
                             }
                         </Template>
                     </GridEditSettings>
                     <GridColumns>
-                        <GridColumn Field=@nameof(TipoArea.CG_TIPOAREA) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true"></GridColumn>
+                        <GridColumn Field=@nameof(TipoArea.Id) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true"></GridColumn>
                         <GridColumn Field=@nameof(TipoArea.DES_TIPOAREA) HeaderText="Tipo" TextAlign="TextAlign.Left"></GridColumn>
 
 

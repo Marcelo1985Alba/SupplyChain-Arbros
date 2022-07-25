@@ -45,7 +45,7 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="e-float-text e-label-top">Codigo:</label>
-                                                <SfNumericTextBox ID="Codigo" @bind-Value="@(lin.CG_LINEA)" Enabled="@Disabled"></SfNumericTextBox>
+                                                <SfNumericTextBox ID="Codigo" @bind-Value="@(lin.Id)" Enabled="@Disabled"></SfNumericTextBox>
 
                                             </div>
 
@@ -65,7 +65,7 @@
                     </Template>
                 </GridEditSettings>
                 <GridColumns>
-                    <GridColumn Field=@nameof(Lineas.CG_LINEA) HeaderText="Codigo" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Lineas.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Lineas.DES_LINEA) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200"></GridColumn>
 
                 </GridColumns>

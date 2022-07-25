@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Repositorios;
 
 
 namespace SupplyChain
@@ -13,111 +14,130 @@ namespace SupplyChain
     [ApiController]
     public class TipoAreaController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly TipoAreaRepository _tipoAreaRepository;
 
-        public TipoAreaController(AppDbContext context)
+        public TipoAreaController(TipoAreaRepository tipoAreaRepository)
         {
-            _context = context;
+            this._tipoAreaRepository = tipoAreaRepository;
         }
 
         // GET: api/TipoArea
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TipoArea>>> GetTipoArea()
+        public async Task<ActionResult<IEnumerable<TipoArea>>> GetTipoAreas()
         {
-            return await _context.TipoArea.ToListAsync();
-        }
-
-        // GET: api/TipoArea/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TipoArea>> GetTipoArea(int id)
-        {
-            var TipoArea = await _context.TipoArea.FindAsync(id);
-
-            if (TipoArea == null)
+            try
             {
-                return NotFound();
+                return await _tipoAreaRepository.ObtenerTodos();
             }
-
-            return TipoArea;
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
-        // PUT: api/TipoArea/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTipoArea(int id, TipoArea TipoArea)
+        // GET: api/TipoArea/Existe/{id}
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>> ExisteTipoArea(int id)
         {
-            if (id != TipoArea.CG_TIPOAREA)
+            try
+            {
+                return await _tipoAreaRepository.Existe(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        // PUT: api/TipoArea/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutTipoAreas(int id, TipoArea tipoArea)
+        {
+            if (id != tipoArea.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(TipoArea).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _tipoAreaRepository.Actualizar(tipoArea);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TipoAreaExists(id))
+                if (!await _tipoAreaRepository.Existe(id))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            return Ok(tipoArea);
         }
 
         // POST: api/TipoArea
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<TipoArea>> PostTipoArea(TipoArea TipoArea)
+        public async Task<ActionResult<TipoArea>> PostTipoAreas(TipoArea tipoArea)
         {
-            _context.TipoArea.Add(TipoArea);
             try
             {
-                await _context.SaveChangesAsync();
+                await _tipoAreaRepository.Agregar(tipoArea);
+                return CreatedAtAction("GetTipoAreas", new { id = tipoArea.Id }, tipoArea);
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException exx)
             {
-                if (TipoAreaExists(TipoArea.CG_TIPOAREA))
+                if (!await _tipoAreaRepository.Existe(tipoArea.Id))
                 {
                     return Conflict();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
-
-            return CreatedAtAction("GetTipoArea", new { id = TipoArea.CG_TIPOAREA }, TipoArea);
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
-        // DELETE: api/TipoArea/5
+        // DELETE: api/TipoArea/{id}
         [HttpDelete("{id}")]
-        public async Task<ActionResult<TipoArea>> DeleteTipoArea(int id)
+        public async Task<ActionResult<TipoArea>> DeleteTipoAreas(int id)
         {
-            var TipoArea = await _context.TipoArea.FindAsync(id);
-            if (TipoArea == null)
+            var tipoArea = await _tipoAreaRepository.ObtenerPorId(id);
+            if (tipoArea == null)
             {
                 return NotFound();
             }
 
-            _context.TipoArea.Remove(TipoArea);
-            await _context.SaveChangesAsync();
+            await _tipoAreaRepository.Remover(id);
 
-            return TipoArea;
+            return tipoArea;
         }
 
-        private bool TipoAreaExists(int id)
+        // POST: api/TipoArea/PostList
+        [HttpPost("PostList")]
+        public async Task<ActionResult<TipoArea>> PostList(List<TipoArea> tipoAreas)
         {
-            return _context.TipoArea.Any(e => e.CG_TIPOAREA == id);
+            try
+            {
+                foreach (var item in tipoAreas)
+                {
+                    await _tipoAreaRepository.Remover(item.Id);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }

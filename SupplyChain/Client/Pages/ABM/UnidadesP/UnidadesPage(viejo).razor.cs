@@ -150,7 +150,7 @@ namespace SupplyChain.Pages.Unidad
                         {
                             Unidades Nuevo = new Unidades();
 
-                            Nuevo.UNID = unidades.Max(s => s.UNID) + 1;
+                            Nuevo.Id = unidades.Max(s => s.Id) + 1;
                             Nuevo.DES_UNID = selectedRecord.DES_UNID;
                             
                         
@@ -167,11 +167,11 @@ namespace SupplyChain.Pages.Unidad
                                 Grid.Refresh();
                                 var unidad = await response.Content.ReadFromJsonAsync<Unidades>();
                                 await InvokeAsync(StateHasChanged);
-                                Nuevo.UNID = unidad.UNID;
+                                Nuevo.Id = unidad.Id;
                                 unidades.Add(Nuevo);
                                 var itemsJson = JsonSerializer.Serialize(unidad);
                                 Console.WriteLine(itemsJson);
-                                unidades.OrderByDescending(o => o.UNID);
+                                unidades.OrderByDescending(o => o.Id);
                             }
 
                         }

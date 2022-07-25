@@ -1,0 +1,51 @@
+﻿@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@inherits FormTipoAreasBase
+
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+
+<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
+    <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
+    <DialogTemplates>
+        <Header>
+            @if (string.IsNullOrEmpty(tipoAreas.Id.ToString()))
+            {
+                <p>Nuevo Tipo de Area</p>
+            }
+            else
+            {
+                <p>&nbsp;&nbsp;@tipoAreas.Id&nbsp;&nbsp;-&nbsp;&nbsp;@tipoAreas.DES_TIPOAREA</p>
+            }
+        </Header>
+        <Content>
+            <EditForm Model="tipoAreas" OnValidSubmit="@GuardarTipoArea">
+                <DataAnnotationsValidator />
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales" role="tab" aria-controls="pills-home" aria-selected="true">Datos Generales</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-DatosGenerales" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Id:</label>
+                                    <SfNumericTextBox ID="CG_TIPOAREA" @bind-Value="@(tipoAreas.Id)" Enabled="@tipoAreas.ESNUEVO"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Nombre:</label>
+                                    <SfTextBox CssClass="customClass" ID="DES_TIPOAREA" @bind-Value="@(tipoAreas.DES_TIPOAREA)"></SfTextBox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
+            </EditForm>
+        </Content>
+    </DialogTemplates>
+</SfDialog>

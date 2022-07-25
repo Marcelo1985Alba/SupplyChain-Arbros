@@ -76,7 +76,7 @@
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <a href="/sc/unidades/list" target="_blank">Unidad de uso:</a>
+                                    <a href="/Abms/unidades" target="_blank">Unidad de uso:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="SupplyChain.Unidades" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(Producto.UNID)" DataSource="@unidades">
                                         <ComboBoxFieldSettings Value="UNID" Text="UNID"></ComboBoxFieldSettings>
@@ -91,7 +91,7 @@
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <a href="/sc/unidades/list" target="_blank">Unidad comercial:</a>
+                                    <a href="/Abms/unidades" target="_blank">Unidad comercial:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="SupplyChain.Unidades" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(Producto.UNIDSEG)" DataSource="@unidades">
                                         <ComboBoxFieldSettings Value="UNID" Text="UNID"></ComboBoxFieldSettings>
@@ -105,7 +105,7 @@
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <a href="/sc/unidades/list" target="_blank">Unidad de peso:</a>
+                                    <a href="/Abms/unidades" target="_blank">Unidad de peso:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="SupplyChain.Unidades" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(Producto.UNIDPESO)" DataSource="@unidades">
                                         <ComboBoxFieldSettings Value="UNID" Text="UNID"></ComboBoxFieldSettings>
@@ -153,7 +153,7 @@
                                     </SfComboBox>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <a href="/sc/linea/list" target="_blank">Linea/Posición:</a>
+                                    <a href="/Abms/lineas" target="_blank">Linea/Posición:</a>
                                     <SfComboBox TValue="int?" CssClass="customClass" TItem="SupplyChain.Lineas" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(Producto.CG_LINEA)" DataSource="@linea">
                                         <ComboBoxFieldSettings Value="CG_LINEA" Text="DES_LINEA"></ComboBoxFieldSettings>
@@ -164,7 +164,7 @@
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <a href="/sc/tipoarea/list" target="_blank">Tipo Area:</a>
+                                    <a href="/Abms/tipoArea" target="_blank">Tipo Area:</a>
                                     <SfComboBox TValue="int?" CssClass="customClass" TItem="TipoArea" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(Producto.CG_TIPOAREA)" DataSource="@tipoarea">
                                         <ComboBoxFieldSettings Value="CG_TIPOAREA" Text="DES_TIPOAREA"></ComboBoxFieldSettings>

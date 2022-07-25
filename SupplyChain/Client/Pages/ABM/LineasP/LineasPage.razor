@@ -1,0 +1,102 @@
+﻿@page "/Abms/lineas"
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.DropDowns
+@using SupplyChain
+@using Syncfusion.Blazor.Calendars
+@using SupplyChain.Client.Shared
+@inherits LineaPageBase
+
+<div class="row">
+    <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <SfToast ID="toast_default" @ref="ToastObj">
+            <ToastPosition X="Center" Y="Top"></ToastPosition>
+        </SfToast>
+        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                @ref="refGrid" DataSource="@lineas" Width="100%" Toolbar="Toolbaritems"
+                AllowExcelExport="true" AllowGrouping="true" ID="grdLineas" AllowFiltering="true"
+                AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
+            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
+            <GridEvents OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolbarHandler"
+                        OnActionComplete="OnActionCompleteHandler" TValue="Lineas"></GridEvents>
+            <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
+                              ShowDeleteConfirmDialog="false" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
+            </GridEditSettings>
+            <GridColumns>
+                <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+                <GridColumn Field=@nameof(Lineas.Id) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Lineas.DES_LINEA) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+            </GridColumns>
+            <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
+        </SfGrid>
+    </div>
+
+    @if (popupFormVisible)
+	{
+		 <FormLineas lineas="lineaSeleccionada" Show="popupFormVisible" OnEliminar="@(async(p)=>await Guardar(p))"
+                     OnCerrar="OnCerrarDialog" OnGuardar="@(async(p)=>await Guardar(p))"></FormLineas>
+	}
+</div>
+
+<style>
+    .form-group.col-md-6 {
+        width: 200px;
+    }
+
+    label.e-float-text {
+        position: relative;
+        padding-left: 0;
+        top: 10%;
+    }
+
+    .e-input-group.e-control-wrapper.customClass {
+        color: black;
+        background-color: lightblue;
+    }
+</style>
+
+@code {
+
+    public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
+    public bool DblClick = true;
+    public bool CommandColumnsClick = false;
+
+    public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+    public void OnRadioChange(ChangeArgs<string> args)
+    {
+        if (args.Value == "inline")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+        }
+        else if (args.Value == "batch")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Batch;
+        }
+        else if (args.Value == "dialog")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Dialog;
+        }
+        else
+        {
+            this.CommandColumnsClick = true;
+        }
+    }
+}

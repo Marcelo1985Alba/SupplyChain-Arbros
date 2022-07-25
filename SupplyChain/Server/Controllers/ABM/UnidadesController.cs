@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Repositorios;
 
 namespace SupplyChain
 {
@@ -12,111 +13,130 @@ namespace SupplyChain
     [ApiController]
     public class UnidadesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly UnidadesRepository _unidadesRepository;
 
-        public UnidadesController(AppDbContext context)
+        public UnidadesController(UnidadesRepository unidadesRepository)
         {
-            _context = context;
+            this._unidadesRepository = unidadesRepository;
         }
 
         // GET: api/Unidades
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Unidades>>> GetUnidades()
         {
-            return await _context.Unidades.ToListAsync();
-        }
-
-        // GET: api/Unidades/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Unidades>> GetUnidad(string id)
-        {
-            var unidad = await _context.Unidades.FindAsync(id);
-
-            if (unidad == null)
+            try
             {
-                return NotFound();
+                return await _unidadesRepository.ObtenerTodos();
             }
-
-            return unidad;
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
-        // PUT: api/Unidades/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUnidad(string id, Unidades unidad)
+        // GET: api/Unidades/Existe/{id}
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>> ExisteUnidad(string id)
         {
-            if (id != unidad.UNID)
+            try
+            {
+                return await _unidadesRepository.Existe(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        // PUT: api/Unidades/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUnidades(string id, Unidades Unidad)
+        {
+            if (id != Unidad.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(unidad).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _unidadesRepository.Actualizar(Unidad);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UnidadExists(id))
+                if (!await _unidadesRepository.Existe(id))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            return Ok(Unidad);
         }
 
         // POST: api/Unidades
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Unidades>> PostUnidad(Unidades unidad)
+        public async Task<ActionResult<Unidades>> PostUnidades(Unidades Unidad)
         {
-            _context.Unidades.Add(unidad);
             try
             {
-                await _context.SaveChangesAsync();
+                await _unidadesRepository.Agregar(Unidad);
+                return CreatedAtAction("GetUnidades", new { id = Unidad.Id }, Unidad);
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException exx)
             {
-                if (UnidadExists(unidad.UNID))
+                if (!await _unidadesRepository.Existe(Unidad.Id))
                 {
                     return Conflict();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
-
-            return CreatedAtAction("GetUnidad", new { id = unidad.UNID }, unidad);
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
-        // DELETE: api/Unidades/5
+        // DELETE: api/Unidades/{id}
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Unidades>> DeleteUnidad(string id)
+        public async Task<ActionResult<Unidades>> DeleteUnidades(string id)
         {
-            var unidad = await _context.Unidades.FindAsync(id);
-            if (unidad == null)
+            var Unidad = await _unidadesRepository.ObtenerPorId(id);
+            if (Unidad == null)
             {
                 return NotFound();
             }
 
-            _context.Unidades.Remove(unidad);
-            await _context.SaveChangesAsync();
+            await _unidadesRepository.Remover(id);
 
-            return unidad;
+            return Unidad;
         }
 
-        private bool UnidadExists(string id)
+        // POST: api/Unidades/PostList
+        [HttpPost("PostList")]
+        public async Task<ActionResult<Unidades>> PostList(List<Unidades> unidades)
         {
-            return _context.Unidades.Any(e => e.UNID == id);
+            try
+            {
+                foreach (var item in unidades)
+                {
+                    await _unidadesRepository.Remover(item.Id);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }

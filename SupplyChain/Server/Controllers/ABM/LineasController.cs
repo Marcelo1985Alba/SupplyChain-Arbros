@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using SupplyChain.Server.Repositorios;
 
 namespace SupplyChain
 {
@@ -13,111 +13,130 @@ namespace SupplyChain
     [ApiController]
     public class LineasController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly LineasRepository _lineasRepository;
 
-        public LineasController(AppDbContext context)
+        public LineasController(LineasRepository lineasRepository)
         {
-            _context = context;
+            this._lineasRepository = lineasRepository;
         }
 
         // GET: api/Lineas
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Lineas>>> GetLineas()
         {
-            return await _context.Lineas.ToListAsync();
-        }
-
-        // GET: api/Lineas/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Lineas>> GetLineas(int id)
-        {
-            var Lineas = await _context.Lineas.FindAsync(id);
-
-            if (Lineas == null)
+            try
             {
-                return NotFound();
+                return await _lineasRepository.ObtenerTodos();
             }
-
-            return Lineas;
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
-        // PUT: api/Lineas/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutLineas(int id, Lineas Lineas)
+        // GET: api/Lineas/Existe/{id}
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>> ExisteLinea(int id)
         {
-            if (id != Lineas.CG_LINEA)
+            try
+            {
+                return await _lineasRepository.Existe(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        // PUT: api/Lineas/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutLineas(int id, Lineas Linea)
+        {
+            if (id != Linea.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(Lineas).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _lineasRepository.Actualizar(Linea);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!LineasExists(id))
+                if (!await _lineasRepository.Existe(id))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            return Ok(Linea);
         }
 
         // POST: api/Lineas
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Lineas>> PostLineas(Lineas Lineas)
+        public async Task<ActionResult<Lineas>> PostLineas(Lineas Linea)
         {
-            _context.Lineas.Add(Lineas);
             try
             {
-                await _context.SaveChangesAsync();
+                await _lineasRepository.Agregar(Linea);
+                return CreatedAtAction("GetLineas", new { id = Linea.Id }, Linea);
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException exx)
             {
-                if (LineasExists(Lineas.CG_LINEA))
+                if (!await _lineasRepository.Existe(Linea.Id))
                 {
                     return Conflict();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
-
-            return CreatedAtAction("GetLineas", new { id = Lineas.CG_LINEA }, Lineas);
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
-        // DELETE: api/Lineas/5
+        // DELETE: api/Lineas/{id}
         [HttpDelete("{id}")]
         public async Task<ActionResult<Lineas>> DeleteLineas(int id)
         {
-            var Lineas = await _context.Lineas.FindAsync(id);
-            if (Lineas == null)
+            var Linea = await _lineasRepository.ObtenerPorId(id);
+            if (Linea == null)
             {
                 return NotFound();
             }
 
-            _context.Lineas.Remove(Lineas);
-            await _context.SaveChangesAsync();
+            await _lineasRepository.Remover(id);
 
-            return Lineas;
+            return Linea;
         }
 
-        private bool LineasExists(int id)
+        // POST: api/Lineas/PostList
+        [HttpPost("PostList")]
+        public async Task<ActionResult<Lineas>> PostList(List<Lineas> lineas)
         {
-            return _context.Lineas.Any(e => e.CG_LINEA == id);
+            try
+            {
+                foreach (var item in lineas)
+                {
+                    await _lineasRepository.Remover(item.Id);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }

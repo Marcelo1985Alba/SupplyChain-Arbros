@@ -80,7 +80,7 @@ namespace SupplyChain
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
                 HttpResponseMessage response;
-                bool found = tipoareas.Any(p => p.CG_TIPOAREA == args.Data.CG_TIPOAREA);
+                bool found = tipoareas.Any(p => p.Id == args.Data.Id);
                 TipoArea ur = new TipoArea();
 
                 if (!found)
@@ -91,7 +91,7 @@ namespace SupplyChain
                 else
                 {
 
-                    response = await Http.PutAsJsonAsync($"api/TipoArea/{args.Data.CG_TIPOAREA}", args.Data);
+                    response = await Http.PutAsJsonAsync($"api/TipoArea/{args.Data.Id}", args.Data);
                 }
 
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
@@ -116,7 +116,7 @@ namespace SupplyChain
                     if (isConfirmed)
                     {
                         //operarios.Remove(operarios.Find(m => m.CG_OPER == args.Data.CG_OPER));
-                        await Http.DeleteAsync($"api/TipoArea/{args.Data.CG_TIPOAREA}");
+                        await Http.DeleteAsync($"api/TipoArea/{args.Data.Id}");
                     }
                 }
             }
@@ -150,12 +150,12 @@ namespace SupplyChain
                                 Grid.Refresh();
                                 var tipoarea = await response.Content.ReadFromJsonAsync<TipoArea>();
                                 await InvokeAsync(StateHasChanged);
-                                Nuevo.CG_TIPOAREA = tipoarea.CG_TIPOAREA;
+                                Nuevo.Id = tipoarea.Id;
                                 tipoareas.Add(Nuevo);
                                 var itemsJson = JsonSerializer.Serialize(tipoarea);
                                 Console.WriteLine(itemsJson);
                                 //toastService.ShowToast($"Registrado Correctemente.Vale {StockGuardado.VALE}", TipoAlerta.Success);
-                                tipoareas.OrderByDescending(p => p.CG_TIPOAREA);
+                                tipoareas.OrderByDescending(p => p.Id);
                             }
 
                         }

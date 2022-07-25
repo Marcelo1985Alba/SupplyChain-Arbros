@@ -57,17 +57,17 @@ namespace SupplyChain.Pages.Linea
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
                 HttpResponseMessage response;
-                bool found = lineas.Any(o => o.CG_LINEA == args.Data.CG_LINEA);
+                bool found = lineas.Any(o => o.Id == args.Data.Id);
                 Orificio ur = new Orificio();
 
                 if (!found)
                 {
-                    args.Data.CG_LINEA = lineas.Max(s => s.CG_LINEA) + 1;
+                    args.Data.Id = lineas.Max(s => s.Id) + 1;
                     response = await Http.PostAsJsonAsync("api/Lineas", args.Data);
                 }
                 else
                 {
-                    response = await Http.PutAsJsonAsync($"api/Lineas/{args.Data.CG_LINEA}", args.Data);
+                    response = await Http.PutAsJsonAsync($"api/Lineas/{args.Data.Id}", args.Data);
                 }
 
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
@@ -92,7 +92,7 @@ namespace SupplyChain.Pages.Linea
                     if (isConfirmed)
                     {
                         //servicios.Remove(servicios.Find(m => m.PEDIDO == args.Data.PEDIDO));
-                        await Http.DeleteAsync($"api/Lineas/{args.Data.CG_LINEA}");
+                        await Http.DeleteAsync($"api/Lineas/{args.Data.Id}");
                     }
                 }
             }
@@ -115,7 +115,7 @@ namespace SupplyChain.Pages.Linea
                         {
                             Lineas Nuevo = new Lineas();
 
-                            Nuevo.CG_LINEA = lineas.Max(s => s.CG_LINEA) + 1;
+                            Nuevo.Id = lineas.Max(s => s.Id) + 1;
                             Nuevo.DES_LINEA = selectedRecord.DES_LINEA;
 
                             var response = await Http.PostAsJsonAsync("api/Lineas", Nuevo);
@@ -125,11 +125,11 @@ namespace SupplyChain.Pages.Linea
                                 Grid.Refresh();
                                 var linea = await response.Content.ReadFromJsonAsync<Lineas>();
                                 await InvokeAsync(StateHasChanged);
-                                Nuevo.CG_LINEA = linea.CG_LINEA;
+                                Nuevo.Id = linea.Id;
                                 lineas.Add(Nuevo);
                                 var itemsJson = JsonSerializer.Serialize(linea);
                                 Console.WriteLine(itemsJson);
-                                lineas.OrderByDescending(o => o.CG_LINEA);
+                                lineas.OrderByDescending(o => o.Id);
                             }
 
                         }

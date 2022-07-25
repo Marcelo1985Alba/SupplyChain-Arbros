@@ -70,6 +70,9 @@ namespace SupplyChain.Server
             services.AddTransient<ProyectosGBPIRepository>();
             services.AddTransient<AreasRepository>();
             services.AddTransient<CeldasRepository>();
+            services.AddTransient<TipoAreaRepository>();
+            services.AddTransient<LineasRepository>();
+            services.AddTransient<UnidadesRepository>();
             #endregion
 
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
