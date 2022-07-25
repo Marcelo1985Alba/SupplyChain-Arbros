@@ -70,6 +70,8 @@ namespace SupplyChain.Server
             services.AddTransient<ProyectosGBPIRepository>();
             services.AddTransient<AreasRepository>();
             services.AddTransient<CeldasRepository>();
+            services.AddTransient<ClienteRepository>();
+            services.AddTransient<ClienteExternoRepository>();
             services.AddTransient<TipoAreaRepository>();
             services.AddTransient<LineasRepository>();
             services.AddTransient<UnidadesRepository>();

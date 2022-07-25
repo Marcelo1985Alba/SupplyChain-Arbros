@@ -1806,15 +1806,6 @@
 
         }
 
-        protected async Task OnGuardarPresupuesto(Presupuesto presupuestoGuardado)
-        {
-            if (presupuestoGuardado.GUARDADO)
-            {
-                presupuesto.Id = presupuestoGuardado.Id;
-                servicio.PRESUPUESTO = presupuesto.Id;
-                await ActualizarServicio(servicio.Id, servicio);
-                verDialogPresupuesto = false;
-                await InvokeAsync(StateHasChanged);
             }
 
             SpinnerVisible = false;
@@ -1823,48 +1814,23 @@
 
         }
 
-        protected async Task GetSolicitud()
-        {
-            var response = await SolicitudService.GetById(servicio.SOLICITUD);
-            if (response.Error)
-            {
+        //if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+        //{
+        //    await EliminarServicio(args);
+        //}
+    }
 
-            }
-            else
-            {
-                solicitud = response.Response;
-            }
-        }
+    protected async Task<Stream> GetFile(string nameFile)
+    {
+        var file = await Http.GetStreamAsync(nameFile);
 
-        protected async Task MostrarSolicitud()
-        {
-            solicitud = new();
-            if (servicio.SOLICITUD > 0)
-            {
-                await GetSolicitud();
-            }
+        return file;
+    }
 
-            verDialogSolicitud = true;
-
-        }
-
-
-        protected async Task MostrarPresupuesto()
-        {
-            presupuesto = new();
-            if (presupuesto.Id == 0)
-            {
-                presupuesto.CG_CLI = servicio.CG_CLI;
-
-                PresupuestoDetalle item = new();
-                item.CG_ART = solicitud.Producto;
-                presupuesto.Items.Add(item);
-            }
-            await refFormPresupuesto.ShowAsync(servicio.PRESUPUESTO);
-
-
-            verDialogPresupuesto = true;
-        }
+    public async Task DataBound()//Hide the spinner after the data is bound to Grid(during data operations also this will be triggered)
+    {
+        await Grid?.AutoFitColumns();
+    }
 
 
 }
