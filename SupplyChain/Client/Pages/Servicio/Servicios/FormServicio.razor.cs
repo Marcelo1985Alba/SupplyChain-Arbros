@@ -90,6 +90,12 @@ namespace SupplyChain.Client.Pages.Servicio.Servicios
             { "title", "Generar Pedido"}
         };
 
+        protected Dictionary<string, object> HtmlAttributeSubmit = new()
+        {
+            { "type", "submit" },
+            { "form", "formServicio" }
+
+        };
         protected FormPresupuesto refFormPresupuesto;
         protected bool verDialogPresupuesto = false;
         protected Presupuesto presupuesto = new();
