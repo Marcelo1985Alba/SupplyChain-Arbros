@@ -483,10 +483,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\Ventas\2-Pedidos\" />
-  </ItemGroup>
   <!-->Target Name="PublishServiceWorker" AfterTargets="CopyFilesToPublishDirectory">
     <WriteLinesToFile File="$(PublishDir)wwwroot\service-worker.js" Lines="/* $([System.Guid]::NewGuid()) */" />
   </Target-->
