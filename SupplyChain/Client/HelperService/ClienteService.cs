@@ -28,7 +28,12 @@ namespace SupplyChain.Client.HelperService
         /// <returns></returns>
         public async Task<HttpResponseWrapper<List<ClienteExterno>>> GetClientesExterno()
         {
-            return await http.GetFromJsonAsync<List<ClienteExterno>>("api/Cliente/GetClienteExterno");
+            return await http.GetFromJsonAsync<List<ClienteExterno>>($"{API}/GetClienteExterno");
+        }
+
+        public async Task<HttpResponseWrapper<ClienteExterno>> GetClientesExternoByCg_Cli(int cg_cli)
+        {
+            return await http.GetFromJsonAsync<ClienteExterno>($"{API}/GetClienteExternoByCgCli/{cg_cli}");
         }
 
         public async Task<HttpResponseWrapper<List<ClienteExterno>>> Search(int idSolutiion, string descripcion)

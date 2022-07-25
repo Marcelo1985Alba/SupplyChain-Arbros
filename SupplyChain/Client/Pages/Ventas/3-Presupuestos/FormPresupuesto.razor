@@ -34,6 +34,7 @@
 
             <EditForm id="formPresupuesto" Model="@Presupuesto" OnValidSubmit="@(async()=> await Guardar())">
                 <ObjectGraphDataAnnotationsValidator />
+                <ValidationSummary />
                 <div class="form-row">
                     <div class="form-group col-md-1">
                         <label class="">Id:</label>
@@ -145,7 +146,7 @@
                                         @{
                                             var value = (detalle as PresupuestoDetalle);
                                             var res = value.CANTIDAD * (decimal)value.PREC_UNIT;
-                                            value.PREC_UNIT_X_CANTIDAD = Math.Round( value.CANTIDAD * (decimal)value.PREC_UNIT, 2);
+                                            value.PREC_UNIT_X_CANTIDAD = Math.Round(value.CANTIDAD * (decimal)value.PREC_UNIT, 2);
                                             <span> @value.PREC_UNIT_X_CANTIDAD </span>
                                         }
                                     </Template>
@@ -214,8 +215,8 @@
                                 OnCerrarDialog="CerrarDialogCliente"></ClientesDialog>
 
                 <SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog @ref="refPrecioDialog" PopupBuscadorVisible="@popupBuscadorVisiblePrecio"
-                                OnObjectSelected="@PrecioSelected" SoloReparaciones="@buscarSoloReparaciones"
-                                OnCerrarDialog="CerrarDialogPrecio"></SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog>
+                                                                         OnObjectSelected="@PrecioSelected" SoloReparaciones="@buscarSoloReparaciones"
+                                                                         OnCerrarDialog="CerrarDialogPrecio"></SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog>
 
 
                 <ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto"
@@ -226,12 +227,13 @@
                                    OnObjectSelected="@SolicitudSelected" ConPrecio="true" CompararCliente="true"
                                    OnCerrarDialog="CerrarDialogSolicitud" Cg_Cli_Comparar="@Presupuesto.CG_CLI"></SolicitudesDialog>
 
-                <ValidationSummary />
 
+                <ValidationSummary />
 
             </EditForm>
         </Content>
         <FooterTemplate>
+            
             <div class="container-total">
 
                 @{

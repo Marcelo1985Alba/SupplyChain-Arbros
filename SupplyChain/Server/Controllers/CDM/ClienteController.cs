@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Repositorios;
 
 namespace SupplyChain
 {
@@ -12,33 +13,41 @@ namespace SupplyChain
     [ApiController]
     public class ClienteController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ClienteRepository _clienteRepository;
+        private readonly ClienteExternoRepository _clienteExternoRepository;
 
-        public ClienteController(AppDbContext context)
+        public ClienteController(ClienteRepository clienteRepository, ClienteExternoRepository clienteExternoRepository )
         {
-            _context = context;
+            _clienteRepository = clienteRepository;
+            this._clienteExternoRepository = clienteExternoRepository;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Cliente>>> Get()
         {
             List<Cliente> lCliente = new();
-            return await _context.Cliente.ToListAsync();
+            return await _clienteRepository.ObtenerTodos();
         }
 
         [HttpGet("GetClienteExterno")]
         public async Task<ActionResult<List<ClienteExterno>>> GetClienteExterno()
         {
-            return await _context.ClientesExternos.ToListAsync();
+            return await _clienteExternoRepository.ObtenerTodos();
+        }
+
+        [HttpGet("GetClienteExternoByCgCli/{cg_cli}")]
+        public async Task<ActionResult<ClienteExterno>> GetClienteExternoByCgCli(int cg_cli)
+        {
+            return await _clienteExternoRepository.Obtener(c => c.CG_CLI == cg_cli.ToString()).FirstOrDefaultAsync();
         }
 
         [HttpGet("Search/{idExterno}/{descripcion}")]
         public async Task<ActionResult<List<ClienteExterno>>> Search(int idExterno, string descripcion )
         {
-            IQueryable<ClienteExterno> query = _context.ClientesExternos.AsQueryable();
+            IQueryable<ClienteExterno> query = _clienteExternoRepository.ObtenerTodosQueryable();
             if (idExterno > 0)
             {
-                query = _context.ClientesExternos.Where(c => c.CG_CLI == idExterno.ToString());
+                query = query.Where(c => c.CG_CLI == idExterno.ToString());
             }
 
             if (descripcion != "VACIO")
@@ -57,9 +66,9 @@ namespace SupplyChain
         public async Task<ActionResult<List<Cliente>>> BuscarPorCliente(int CG_CLI)
         {
             List<Cliente> lCliente = new List<Cliente>();
-            if (_context.Cliente.Any())
+            if (_clienteRepository.ObtenerTodosQueryable().Any())
             {
-                lCliente = await _context.Cliente.Where(p => p.Id == CG_CLI).ToListAsync();
+                lCliente = await _clienteRepository.Obtener(p => p.Id == CG_CLI).ToListAsync();
             }
             if (lCliente == null)
             {

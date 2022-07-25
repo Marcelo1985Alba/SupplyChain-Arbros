@@ -11,7 +11,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-
+using SupplyChain.Client.Shared;
 namespace SupplyChain.Client.Shared.Inventarios
 {
     public class GridEditEntregaBase: ComponentBase
@@ -24,7 +24,7 @@ namespace SupplyChain.Client.Shared.Inventarios
         protected Pedidos stockCopiado;
         protected bool confirmaCopy = false;
         protected bool bAgregarInsumo = false;
-        protected SupplyChain.Client.Shared.BuscadorEmergenteResumenStock BuscadorEmergenteRS;
+        protected BuscadorEmergenteResumenStock BuscadorEmergenteRS;
         protected Producto[] DataSourceProductos;
         [Parameter] public string Titulo { get; set; } = null!;
         [Parameter] public List<Pedidos> DataSource { get; set; } = null!;

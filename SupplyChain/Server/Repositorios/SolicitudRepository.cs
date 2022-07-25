@@ -12,10 +12,13 @@ namespace SupplyChain.Server.Repositorios
     public class SolicitudRepository : Repository<Solicitud, int>
     {
         private readonly PrecioArticulosRepository _precioArticulosRepository;
+        private readonly ClienteExternoRepository _clienteExternoRepository;
 
-        public SolicitudRepository(AppDbContext appDbContext, PrecioArticulosRepository precioArticulosRepository) : base (appDbContext)
+        public SolicitudRepository(AppDbContext appDbContext, PrecioArticulosRepository precioArticulosRepository,
+            ClienteExternoRepository clienteExternoRepository) : base (appDbContext)
         {
             this._precioArticulosRepository = precioArticulosRepository;
+            this._clienteExternoRepository = clienteExternoRepository;
         }
 
         public override async Task<Solicitud> ObtenerPorId(int Id)
@@ -23,15 +26,22 @@ namespace SupplyChain.Server.Repositorios
             var solicitud = await DbSet.FindAsync(Id);
             if (solicitud != null)
             {
-                var prod = await _precioArticulosRepository.ObtenerPorId(solicitud.Producto);
-                if (prod != null)
+                var precioArticulo = await _precioArticulosRepository.ObtenerPorId(solicitud.Producto);
+                if (precioArticulo != null)
                 {
-                    solicitud.Des_Prod = prod.Descripcion;
+                    solicitud.PrecioArticulo = precioArticulo;
+                    solicitud.Des_Prod = precioArticulo.Descripcion;
                 }
-                //var prod = await _precioArticulosRepository.ObtenerPorId(solicitud.Producto);
-                if (true)
-                {
 
+
+                if (solicitud.CG_CLI > 0)
+                {
+                    var cliente = await _clienteExternoRepository.ObtenerTodosQueryable()
+                        .Where(c => c.CG_CLI == solicitud.CG_CLI.ToString()).FirstOrDefaultAsync();
+                    if (cliente != null)
+                    {
+                        solicitud.Des_Cli = cliente.DESCRIPCION;
+                    } 
                 }
             }
 

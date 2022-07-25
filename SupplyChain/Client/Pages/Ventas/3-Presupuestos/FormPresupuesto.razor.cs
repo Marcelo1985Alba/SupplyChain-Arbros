@@ -108,7 +108,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             
         }
 
-        protected async Task GetTipoCambioDolarHoy()
+        public async Task GetTipoCambioDolarHoy()
         {
             var tc = await TipoCambioService.GetValorDolarHoy();
             if (tc == 0)
@@ -202,9 +202,13 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             popupBuscadorVisibleSolicitud = true;
         }
 
-        protected async Task ClienteExternoSelected(ClienteExterno clienteSelected)
+        public async Task ClienteExternoSelected(ClienteExterno clienteSelected)
         {
-            await refSpinnerCli.ShowAsync();
+            if (refSpinnerCli != null)
+            {
+                await refSpinnerCli.ShowAsync();
+            }
+            
             popupBuscadorVisibleCliente = false;
             Presupuesto.CG_CLI = Convert.ToInt32(clienteSelected.CG_CLI);
             Presupuesto.DES_CLI = clienteSelected.DESCRIPCION.Trim();
@@ -212,7 +216,12 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             Presupuesto.BONIFIC = clienteSelected.DESC_COMERCIAL == null ? 0 : (decimal)clienteSelected.DESC_COMERCIAL;
             Presupuesto.CG_COND_ENTREGA = clienteSelected.ID_CON_ENT == null ? 0 : (int)clienteSelected.ID_CON_ENT;
             await GetDireccionesEntregaCliente(Presupuesto.CG_CLI);
-            await refSpinnerCli.HideAsync();
+
+            if (refSpinnerCli != null)
+            {
+                await refSpinnerCli?.HideAsync();
+            }
+            
         }
 
         private async Task GetDireccionesEntregaCliente(int idCliente)
@@ -636,6 +645,11 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected async Task OnCerrarDialog()
         {
             await OnCerrar.InvokeAsync();
+        }
+
+        public void HabilitarComboMoneda()
+        {
+            ReadOnlyMoneda = false;
         }
 
         private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
