@@ -655,7 +655,7 @@ namespace SupplyChain.Server.Controllers
                 streams[i] = new FileStream(listArchivosDescargar[i].Directorio, FileMode.Open, FileAccess.Read);
             }
             PdfDocumentBase.Merge(finalDoc, streams);
-            MemoryStream stream = new MemoryStream();
+            MemoryStream stream = new();
             finalDoc.Save(stream);
             stream.Position = 0;
             finalDoc.Close(true);
