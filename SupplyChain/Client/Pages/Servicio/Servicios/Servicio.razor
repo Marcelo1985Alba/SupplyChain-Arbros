@@ -1816,6 +1816,11 @@
                 verDialogPresupuesto = false;
                 await InvokeAsync(StateHasChanged);
             }
+
+            SpinnerVisible = false;
+            verDialogPresupuesto = true;
+
+
         }
 
         protected async Task GetSolicitud()
@@ -1860,6 +1865,7 @@
 
             verDialogPresupuesto = true;
         }
+
 
 }
 
