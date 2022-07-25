@@ -755,7 +755,7 @@
                 </SfGrid>
             </div>
         </div>
-    </div>
+</div>
 
     @if (verDialogSolicitud)
     {
@@ -858,16 +858,6 @@
         };
 
         private Dictionary<string, object> presupuestoButton = new Dictionary<string, object>()
-    {
-        { "title", "Generar Presupuesto"}
-    };
-
-        private Dictionary<string, object> pedidoButton = new Dictionary<string, object>()
-    {
-        { "title", "Generar Pedido"}
-    };
-
-        private Dictionary<string, object> presupuestoButton = new Dictionary<string, object>()
         {
             { "title", "Generar Presupuesto"}
         };
@@ -876,6 +866,8 @@
         {
             { "title", "Generar Pedido"}
         };
+
+
 
         protected Service servicio = new();
         protected FormPresupuesto refFormPresupuesto;
@@ -1557,96 +1549,96 @@
             }
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
+            {
+                HttpResponseMessage response;
+                bool esNuevo = args.RowData.Id  == 0;
+                Service ur = new Service();
+
+                if (esNuevo)
                 {
-                    HttpResponseMessage response;
-                    bool esNuevo = args.RowData.Id  == 0;
-                    Service ur = new Service();
-
-                    if (esNuevo)
+                    //args.Data.Id = servicios.Max(s => s.Id) + 1;
+                    response = await Http.PostAsJsonAsync("api/Servicios", args.Data);
+                    if (!response.IsSuccessStatusCode)
                     {
-                        //args.Data.Id = servicios.Max(s => s.Id) + 1;
-                        response = await Http.PostAsJsonAsync("api/Servicios", args.Data);
-                        if (!response.IsSuccessStatusCode)
-                        {
-                            Console.WriteLine(await response.Content.ReadAsStringAsync());
-
-                        }
-
-                        servDesc = servicios.OrderByDescending(s => s.Id).ToList();
+                        Console.WriteLine(await response.Content.ReadAsStringAsync());
 
                     }
-                    else
+
+                    servDesc = servicios.OrderByDescending(s => s.Id).ToList();
+
+                }
+                else
+                {
+                    var pedant = servicios.FirstOrDefault(s => s.Id == args.Data.Id)?.PEDIDOANT;
+                    if (pedant != args.Data.PEDIDOANT)
                     {
-                        var pedant = servicios.FirstOrDefault(s => s.Id == args.Data.Id)?.PEDIDOANT;
-                        if (pedant != args.Data.PEDIDOANT)
+                        foreach (var ped in servicios)
                         {
-                            foreach (var ped in servicios)
+                            if (args.Data.PEDIDOANT == ped.PEDIDO.ToString())
                             {
-                                if (args.Data.PEDIDOANT == ped.PEDIDO.ToString())
+                                bool isConfirmed = await JS.InvokeAsync<bool>("confirm", "Quiere traer los datos del pedido anterior?");
+                                if (isConfirmed)
                                 {
-                                    bool isConfirmed = await JS.InvokeAsync<bool>("confirm", "Quiere traer los datos del pedido anterior?");
-                                    if (isConfirmed)
+                                    if (ped.FECHA.ToString().Substring(3, 1) == "/")
                                     {
-                                        if (ped.FECHA.ToString().Substring(3, 1) == "/")
-                                        {
-                                            args.Data.FECMANTANT = ped.FECHA.ToString().Substring(0, 8);
-                                        }
-                                        else if (ped.FECHA.ToString().Substring(4, 1) == "/")
-                                        {
-                                            args.Data.FECMANTANT = ped.FECHA.ToString().Substring(0, 9);
-                                        }
-                                        else if (ped.FECHA.ToString().Substring(5, 1) == "/")
-                                        {
-                                            args.Data.FECMANTANT = ped.FECHA.ToString().Substring(0, 10);
-                                        }
-                                        args.Data.IDENTIFICACION = ped.IDENTIFICACION;
-                                        args.Data.MARCA = ped.MARCA;
-                                        args.Data.NSERIE = ped.NSERIE;
-                                        args.Data.MODELO = ped.MODELO;
-                                        args.Data.MEDIDA = ped.MEDIDA;
-                                        args.Data.SERIE = ped.SERIE;
-                                        args.Data.ORIFICIO = ped.ORIFICIO;
-                                        args.Data.AÑO = ped.AÑO;
-                                        args.Data.AREA = ped.AREA;
-                                        args.Data.FLUIDO = ped.FLUIDO;
-                                        args.Data.SOBREPRESION = ped.SOBREPRESION;
-                                        args.Data.PRESION = ped.PRESION;
-                                        args.Data.CONTRAPRESION = ped.CONTRAPRESION;
-                                        args.Data.TIPO = ped.TIPO;
-                                        args.Data.TEMP = ped.TEMP;
-                                        args.Data.RESORTE = ped.RESORTE;
-                                        args.Data.PRESIONBANCO = ped.PRESIONBANCO;
-                                        args.Data.SERVICIO = ped.SERVICIO;
+                                        args.Data.FECMANTANT = ped.FECHA.ToString().Substring(0, 8);
                                     }
+                                    else if (ped.FECHA.ToString().Substring(4, 1) == "/")
+                                    {
+                                        args.Data.FECMANTANT = ped.FECHA.ToString().Substring(0, 9);
+                                    }
+                                    else if (ped.FECHA.ToString().Substring(5, 1) == "/")
+                                    {
+                                        args.Data.FECMANTANT = ped.FECHA.ToString().Substring(0, 10);
+                                    }
+                                    args.Data.IDENTIFICACION = ped.IDENTIFICACION;
+                                    args.Data.MARCA = ped.MARCA;
+                                    args.Data.NSERIE = ped.NSERIE;
+                                    args.Data.MODELO = ped.MODELO;
+                                    args.Data.MEDIDA = ped.MEDIDA;
+                                    args.Data.SERIE = ped.SERIE;
+                                    args.Data.ORIFICIO = ped.ORIFICIO;
+                                    args.Data.AÑO = ped.AÑO;
+                                    args.Data.AREA = ped.AREA;
+                                    args.Data.FLUIDO = ped.FLUIDO;
+                                    args.Data.SOBREPRESION = ped.SOBREPRESION;
+                                    args.Data.PRESION = ped.PRESION;
+                                    args.Data.CONTRAPRESION = ped.CONTRAPRESION;
+                                    args.Data.TIPO = ped.TIPO;
+                                    args.Data.TEMP = ped.TEMP;
+                                    args.Data.RESORTE = ped.RESORTE;
+                                    args.Data.PRESIONBANCO = ped.PRESIONBANCO;
+                                    args.Data.SERVICIO = ped.SERVICIO;
                                 }
                             }
                         }
-                        args.Data.MARCA = string.IsNullOrEmpty(args.Data.MARCA) ? "" : args.Data.MARCA;
-                        args.Data.MODELO = string.IsNullOrEmpty(args.Data.MODELO) ? "" : args.Data.MODELO;
-                        args.Data.MEDIDA = string.IsNullOrEmpty(args.Data.MEDIDA) ? "" : args.Data.MEDIDA;
-                        args.Data.SERIE = string.IsNullOrEmpty(args.Data.SERIE) ? "" : args.Data.SERIE;
-                        args.Data.ORIFICIO = string.IsNullOrEmpty(args.Data.ORIFICIO) ? "" : args.Data.ORIFICIO;
-                        args.Data.SOBREPRESION = string.IsNullOrEmpty(args.Data.SOBREPRESION) ? "" : args.Data.SOBREPRESION;
-                        args.Data.TIPO = string.IsNullOrEmpty(args.Data.TIPO) ? "" : args.Data.TIPO;
-                        args.Data.ENSRECEP = string.IsNullOrEmpty(args.Data.ENSRECEP) ? "" : args.Data.ENSRECEP;
-                        args.Data.ESTADO = string.IsNullOrEmpty(args.Data.ESTADO) ? "" : args.Data.ESTADO;
-                        args.Data.FUGAS = string.IsNullOrEmpty(args.Data.FUGAS) ? "" : args.Data.FUGAS;
-                        args.Data.CAMBIOPRESION = string.IsNullOrEmpty(args.Data.CAMBIOPRESION) ? "" : args.Data.CAMBIOPRESION;
-                        args.Data.CAMBIOREPUESTO = string.IsNullOrEmpty(args.Data.CAMBIOREPUESTO) ? "" : args.Data.CAMBIOREPUESTO;
-                        args.Data.ENSAYOCONTRAP = string.IsNullOrEmpty(args.Data.ENSAYOCONTRAP) ? "" : args.Data.ENSAYOCONTRAP;
-                        args.Data.TRABAJOSEFEC = string.IsNullOrEmpty(args.Data.TRABAJOSEFEC) ? "" : args.Data.TRABAJOSEFEC;
-                        args.Data.RESP = string.IsNullOrEmpty(args.Data.RESP) ? "" : args.Data.RESP;
-                        args.Data.CONTROLO = string.IsNullOrEmpty(args.Data.CONTROLO) ? "" : args.Data.CONTROLO;
-                        args.Data.POP = string.IsNullOrEmpty(args.Data.POP) ? "" : args.Data.POP;
-                        args.Data.RESPTECNICO = string.IsNullOrEmpty(args.Data.RESPTECNICO) ? "" : args.Data.RESPTECNICO;
-                        args.Data.OPDS = string.IsNullOrEmpty(args.Data.OPDS) ? "" : args.Data.OPDS;
-                        args.Data.PRESENCIAINSPEC = string.IsNullOrEmpty(args.Data.PRESENCIAINSPEC) ? "" : args.Data.PRESENCIAINSPEC;
-                        args.Data.MANOMETRO = string.IsNullOrEmpty(args.Data.MANOMETRO) ? "" : args.Data.MANOMETRO;
-
-                        await ActualizarServicio(args.Data.Id, args.Data);
                     }
+                    args.Data.MARCA = string.IsNullOrEmpty(args.Data.MARCA) ? "" : args.Data.MARCA;
+                    args.Data.MODELO = string.IsNullOrEmpty(args.Data.MODELO) ? "" : args.Data.MODELO;
+                    args.Data.MEDIDA = string.IsNullOrEmpty(args.Data.MEDIDA) ? "" : args.Data.MEDIDA;
+                    args.Data.SERIE = string.IsNullOrEmpty(args.Data.SERIE) ? "" : args.Data.SERIE;
+                    args.Data.ORIFICIO = string.IsNullOrEmpty(args.Data.ORIFICIO) ? "" : args.Data.ORIFICIO;
+                    args.Data.SOBREPRESION = string.IsNullOrEmpty(args.Data.SOBREPRESION) ? "" : args.Data.SOBREPRESION;
+                    args.Data.TIPO = string.IsNullOrEmpty(args.Data.TIPO) ? "" : args.Data.TIPO;
+                    args.Data.ENSRECEP = string.IsNullOrEmpty(args.Data.ENSRECEP) ? "" : args.Data.ENSRECEP;
+                    args.Data.ESTADO = string.IsNullOrEmpty(args.Data.ESTADO) ? "" : args.Data.ESTADO;
+                    args.Data.FUGAS = string.IsNullOrEmpty(args.Data.FUGAS) ? "" : args.Data.FUGAS;
+                    args.Data.CAMBIOPRESION = string.IsNullOrEmpty(args.Data.CAMBIOPRESION) ? "" : args.Data.CAMBIOPRESION;
+                    args.Data.CAMBIOREPUESTO = string.IsNullOrEmpty(args.Data.CAMBIOREPUESTO) ? "" : args.Data.CAMBIOREPUESTO;
+                    args.Data.ENSAYOCONTRAP = string.IsNullOrEmpty(args.Data.ENSAYOCONTRAP) ? "" : args.Data.ENSAYOCONTRAP;
+                    args.Data.TRABAJOSEFEC = string.IsNullOrEmpty(args.Data.TRABAJOSEFEC) ? "" : args.Data.TRABAJOSEFEC;
+                    args.Data.RESP = string.IsNullOrEmpty(args.Data.RESP) ? "" : args.Data.RESP;
+                    args.Data.CONTROLO = string.IsNullOrEmpty(args.Data.CONTROLO) ? "" : args.Data.CONTROLO;
+                    args.Data.POP = string.IsNullOrEmpty(args.Data.POP) ? "" : args.Data.POP;
+                    args.Data.RESPTECNICO = string.IsNullOrEmpty(args.Data.RESPTECNICO) ? "" : args.Data.RESPTECNICO;
+                    args.Data.OPDS = string.IsNullOrEmpty(args.Data.OPDS) ? "" : args.Data.OPDS;
+                    args.Data.PRESENCIAINSPEC = string.IsNullOrEmpty(args.Data.PRESENCIAINSPEC) ? "" : args.Data.PRESENCIAINSPEC;
+                    args.Data.MANOMETRO = string.IsNullOrEmpty(args.Data.MANOMETRO) ? "" : args.Data.MANOMETRO;
 
+                    await ActualizarServicio(args.Data.Id, args.Data);
                 }
+
+            }
 
             //if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
             //{
@@ -1656,6 +1648,68 @@
 
         protected async Task<bool> ActualizarServicio(int id, Service serv)
         {
+            var pedidoAnterior = servicios.FirstOrDefault(s => s.PEDIDO.ToString() == serv.PEDIDOANT);
+            var pedant = servicios.FirstOrDefault(s => s.Id == id)?.PEDIDOANT;
+            if (pedant != serv.PEDIDOANT && pedidoAnterior != null && !string.IsNullOrEmpty(pedidoAnterior.PEDIDOANT))
+            {
+                bool isConfirmed = await JS.InvokeAsync<bool>("confirm", "Quiere traer los datos del pedido anterior?");
+                if (isConfirmed)
+                {
+                    if (pedidoAnterior.FECHA.ToString().Substring(3, 1) == "/")
+                    {
+                        serv.FECMANTANT = pedidoAnterior.FECHA.ToString().Substring(0, 8);
+                    }
+                    else if (pedidoAnterior.FECHA.ToString().Substring(4, 1) == "/")
+                    {
+                        serv.FECMANTANT = pedidoAnterior.FECHA.ToString().Substring(0, 9);
+                    }
+                    else if (pedidoAnterior.FECHA.ToString().Substring(5, 1) == "/")
+                    {
+                        serv.FECMANTANT = pedidoAnterior.FECHA.ToString().Substring(0, 10);
+                    }
+                    serv.IDENTIFICACION = pedidoAnterior.IDENTIFICACION;
+                    serv.MARCA = pedidoAnterior.MARCA;
+                    serv.NSERIE = pedidoAnterior.NSERIE;
+                    serv.MODELO = pedidoAnterior.MODELO;
+                    serv.MEDIDA = pedidoAnterior.MEDIDA;
+                    serv.SERIE = pedidoAnterior.SERIE;
+                    serv.ORIFICIO = pedidoAnterior.ORIFICIO;
+                    serv.AÑO = pedidoAnterior.AÑO;
+                    serv.AREA = pedidoAnterior.AREA;
+                    serv.FLUIDO = pedidoAnterior.FLUIDO;
+                    serv.SOBREPRESION = pedidoAnterior.SOBREPRESION;
+                    serv.PRESION = pedidoAnterior.PRESION;
+                    serv.CONTRAPRESION = pedidoAnterior.CONTRAPRESION;
+                    serv.TIPO = pedidoAnterior.TIPO;
+                    serv.TEMP = pedidoAnterior.TEMP;
+                    serv.RESORTE = pedidoAnterior.RESORTE;
+                    serv.PRESIONBANCO = pedidoAnterior.PRESIONBANCO;
+                    serv.SERVICIO = pedidoAnterior.SERVICIO;
+                }
+            }
+            //args.Data.MARCA = string.IsNullOrEmpty(args.Data.MARCA) ? "" : args.Data.MARCA;
+            //args.Data.MODELO = string.IsNullOrEmpty(args.Data.MODELO) ? "" : args.Data.MODELO;
+            //args.Data.MEDIDA = string.IsNullOrEmpty(args.Data.MEDIDA) ? "" : args.Data.MEDIDA;
+            //args.Data.SERIE = string.IsNullOrEmpty(args.Data.SERIE) ? "" : args.Data.SERIE;
+            //args.Data.ORIFICIO = string.IsNullOrEmpty(args.Data.ORIFICIO) ? "" : args.Data.ORIFICIO;
+            //args.Data.SOBREPRESION = string.IsNullOrEmpty(args.Data.SOBREPRESION) ? "" : args.Data.SOBREPRESION;
+            //args.Data.TIPO = string.IsNullOrEmpty(args.Data.TIPO) ? "" : args.Data.TIPO;
+            //args.Data.ENSRECEP = string.IsNullOrEmpty(args.Data.ENSRECEP) ? "" : args.Data.ENSRECEP;
+            //args.Data.ESTADO = string.IsNullOrEmpty(args.Data.ESTADO) ? "" : args.Data.ESTADO;
+            //args.Data.FUGAS = string.IsNullOrEmpty(args.Data.FUGAS) ? "" : args.Data.FUGAS;
+            //args.Data.CAMBIOPRESION = string.IsNullOrEmpty(args.Data.CAMBIOPRESION) ? "" : args.Data.CAMBIOPRESION;
+            //args.Data.CAMBIOREPUESTO = string.IsNullOrEmpty(args.Data.CAMBIOREPUESTO) ? "" : args.Data.CAMBIOREPUESTO;
+            //args.Data.ENSAYOCONTRAP = string.IsNullOrEmpty(args.Data.ENSAYOCONTRAP) ? "" : args.Data.ENSAYOCONTRAP;
+            //args.Data.TRABAJOSEFEC = string.IsNullOrEmpty(args.Data.TRABAJOSEFEC) ? "" : args.Data.TRABAJOSEFEC;
+            //args.Data.RESP = string.IsNullOrEmpty(args.Data.RESP) ? "" : args.Data.RESP;
+            //args.Data.CONTROLO = string.IsNullOrEmpty(args.Data.CONTROLO) ? "" : args.Data.CONTROLO;
+            //args.Data.POP = string.IsNullOrEmpty(args.Data.POP) ? "" : args.Data.POP;
+            //args.Data.RESPTECNICO = string.IsNullOrEmpty(args.Data.RESPTECNICO) ? "" : args.Data.RESPTECNICO;
+            //args.Data.OPDS = string.IsNullOrEmpty(args.Data.OPDS) ? "" : args.Data.OPDS;
+            //args.Data.PRESENCIAINSPEC = string.IsNullOrEmpty(args.Data.PRESENCIAINSPEC) ? "" : args.Data.PRESENCIAINSPEC;
+            //args.Data.MANOMETRO = string.IsNullOrEmpty(args.Data.MANOMETRO) ? "" : args.Data.MANOMETRO;
+
+
             var response = await Http.PutAsJsonAsync($"api/Servicios/{id}", serv);
             if (!response.IsSuccessStatusCode)
             {
@@ -1669,7 +1723,7 @@
                     ShowProgressBar = true
                 });
 
-                
+
 
                 return false;
             }
@@ -1678,7 +1732,7 @@
                 await this.ToastObj.Show(new ToastModel
                 {
                     Title = "EXITO!",
-                    Content = "Pedido actualizado correctamente",
+                    Content = $"Servico actualizado correctamente",
                     CssClass = "e-toast-success",
                     Icon = "e-success toast-icons",
                     ShowCloseButton = true,
@@ -1687,6 +1741,15 @@
 
                 var servAct = servicios.Where(s => s.Id == id).FirstOrDefault();
                 servAct.PRESUPUESTO = serv.PRESUPUESTO;
+                servAct.PEDIDO = serv.PEDIDO;
+                servAct.CLIENTE = serv.CLIENTE;
+                servAct.NSERIE = serv.NSERIE;
+                servAct.MARCA = serv.MARCA;
+                servAct.MODELO = serv.MODELO;
+                servAct.MEDIDA = serv.MEDIDA;
+                servAct.SERIE = serv.SERIE;
+                servAct.IDENTIFICACION = serv.IDENTIFICACION;
+                servAct.OBSERV = serv.OBSERV;
                 await Grid.RefreshHeader();
                 await Grid.RefreshColumns();
                 Grid.Refresh();
@@ -1806,34 +1869,8 @@
 
         }
 
-            }
-
-            SpinnerVisible = false;
-            verDialogPresupuesto = true;
-
-
-        }
-
-        //if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
-        //{
-        //    await EliminarServicio(args);
-        //}
     }
 
-    protected async Task<Stream> GetFile(string nameFile)
-    {
-        var file = await Http.GetStreamAsync(nameFile);
-
-        return file;
-    }
-
-    public async Task DataBound()//Hide the spinner after the data is bound to Grid(during data operations also this will be triggered)
-    {
-        await Grid?.AutoFitColumns();
-    }
-
-
-}
 
 
 <style>

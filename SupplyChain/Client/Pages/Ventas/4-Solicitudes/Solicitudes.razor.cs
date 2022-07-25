@@ -89,15 +89,20 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             {
                 args.Cancel = true;
                 args.PreventRender = false;
-                popupFormVisible = true;
                 SolicitudSeleccionada = new();
                 //heightPopup = "600px";
+            }
+
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
+            {
+                popupFormVisible = true;
             }
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
                 //TRAER DATOS QUE NO ESTAN ENLA GRILLA
                 await GetSolicitudFromDB(args.Data.Id, args.Data);
+                popupFormVisible = true;
             }
         }
 

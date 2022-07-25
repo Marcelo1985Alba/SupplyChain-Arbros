@@ -19,8 +19,11 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         protected SfGrid<PedCli> refGrid;
         protected SfSpinner refSpinner;
         protected SfToast ToastObj;
+        protected FormPedido refFormPedido;
         protected List<PedCli> pedidos = new();
+        protected PedCli PedidoSeleccionado = new();
         protected bool SpinnerVisible = false;
+        protected bool popupFormVisible = false;
 
         protected List<Object> Toolbaritems = new()
         {
@@ -38,7 +41,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         {
             SpinnerVisible = true;
             await GetPedidos();
-            await refGrid.AutoFitColumnsAsync();
+            //await refGrid.AutoFitColumnsAsync();
             SpinnerVisible = false;
         }
 
@@ -55,5 +58,77 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             }
         }
 
+
+        protected async Task OnActionBeginHandler(ActionEventArgs<PedCli> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                args.Cancel = true;
+                args.PreventRender = false;
+            }
+
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
+            {
+                SpinnerVisible = true;
+                PedidoSeleccionado = new();
+                await refFormPedido.ShowAsync(0);
+                popupFormVisible = true;
+                SpinnerVisible = false;
+            }
+
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                SpinnerVisible = true;
+                var response = await PedCliService.GetById(args.Data.Id);
+                if (response.Error)
+                {
+                    await ToastMensajeError();
+                }
+                else
+                {
+                    PedidoSeleccionado = response.Response;
+                    await refFormPedido.ShowAsync(args.Data.Id);
+                    popupFormVisible = true;
+                }
+                SpinnerVisible = false;
+            }
+        }
+
+        protected async Task OnActionCompleteHandler(ActionEventArgs<PedCli> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                args.Cancel = true;
+                args.PreventRender = false;
+            }
+
+
+        }
+
+        protected async Task OnToolbarHandler(ClickEventArgs args)
+        {
+            if (args.Item.Id == "refresh")
+            {
+                SpinnerVisible = true;
+                await GetPedidos();
+                SpinnerVisible = false;
+            }
+        }
+
+
+        private async Task ToastMensajeError()
+        {
+            await ToastObj.Show(new ToastModel
+            {
+                Title = "Error!",
+                Content = "Ocurrio un Error.",
+                CssClass = "e-toast-warning",
+                Icon = "e-warning toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
     }
 }

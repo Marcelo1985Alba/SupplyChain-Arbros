@@ -15,28 +15,39 @@
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
-            @*<GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"
+            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"
                         OnToolbarClick="OnToolbarHandler"
-                        TValue="vPresupuestos"></GridEvents>*@
+                        TValue="PedCli"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" NewRowPosition="NewRowPosition.Top"
                               Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
             </GridEditSettings>
-            @*<GridColumns>
-                <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.Fecha) HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.TOTAL) HeaderText="Total" TextAlign="TextAlign.Left" Width="150px" Format="N2"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.USUARIO) HeaderText="Usuario" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+            <GridColumns>
+                @*<GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>*@
+                <GridColumn Field=@nameof(PedCli.Id) HeaderText="Id" Visible="false" IsPrimaryKey="true" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.FE_PED) HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.UNID) HeaderText="Unidad" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.CANTPED) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.NUMOCI) HeaderText="OCI" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.ORCO) HeaderText="Orden Compra" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.CG_ART) HeaderText="Articulo" TextAlign="TextAlign.Left" Width="160px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.DES_ART) HeaderText="Descripcion Articulo" TextAlign="TextAlign.Left" Width="220px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
 
-            </GridColumns>*@
+
+
+
+            </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
         </SfGrid>
     </div>
 
+    @if (popupFormVisible)
+    {
+        <FormPedido @ref="@refFormPedido"></FormPedido>
+    }
 
 
 </div>

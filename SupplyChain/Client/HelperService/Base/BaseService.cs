@@ -18,7 +18,7 @@ namespace SupplyChain.Client.HelperService.Base
             this.api = api;
         }
 
-        public async Task<HttpResponseWrapper<List<TEntity>>> Get()
+        public virtual async Task<HttpResponseWrapper<List<TEntity>>> Get()
         {
             return await http.GetFromJsonAsync<List<TEntity>>(api);
         }

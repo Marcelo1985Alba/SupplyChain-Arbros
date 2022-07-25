@@ -20,27 +20,32 @@ namespace SupplyChain
     {
         private readonly PedCliRepository _pedCliRepository;
 
+
         public PedCliController(PedCliRepository pedCliRpository)
         {
             this._pedCliRepository = pedCliRpository;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<PedCli>> Get()
-        {
-            return await _pedCliRepository.ObtenerPedCliPedidos();
-        }
-
-
-
-        [HttpGet("GetPedidos")]
         public async Task<IEnumerable<PedCli>> Gets()
         {
             return await _pedCliRepository.ObtenerTodos();
         }
 
-        [HttpGet("{pedido}")]
-        public async Task<IEnumerable<PedCli>> Gets(int pedido)
+        [HttpGet("ObtenerPedCliPedidos")]
+        public async Task<IEnumerable<PedCli>> Get()
+        {
+            return await _pedCliRepository.ObtenerPedCliPedidos();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<PedCli> Get(int id)
+        {
+            return await _pedCliRepository.Obtener(p=> p.Id == id).FirstOrDefaultAsync();
+        }
+
+        [HttpGet("ByPedido/{pedido}")]
+        public async Task<IEnumerable<PedCli>> GetByPedido(int pedido)
         {
             return await _pedCliRepository.Obtener(p=> p.PEDIDO == pedido).ToListAsync();
         }

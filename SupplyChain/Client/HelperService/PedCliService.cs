@@ -22,7 +22,5 @@ namespace SupplyChain.Client.HelperService
         {
         }
 
-
-
     }
 }
