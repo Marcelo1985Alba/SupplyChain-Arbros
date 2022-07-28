@@ -11,9 +11,11 @@ namespace SupplyChain.Shared
     public class vPresupuestos
     {
         [Key]
+        [Display(Name ="PRESUPUESTOS")]
         public int Id { get; set; }
         public DateTime Fecha { get; set; } = DateTime.Now;
         public int CG_CLI { get; set; } = 0;
+        [Display(Name = "CLIENTE")]
         public string DES_CLI { get; set; }
         public string USUARIO { get; set; }
         public string MONEDA { get; set; }

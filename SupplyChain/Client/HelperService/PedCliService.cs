@@ -3,6 +3,7 @@ using SupplyChain.Client.HelperService.Base;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
+using SupplyChain.Shared.Logística;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,5 +23,10 @@ namespace SupplyChain.Client.HelperService
         {
         }
 
+
+        public async Task<HttpResponseWrapper<PedCliEncabezado>> GetPedidoEncabezadoById(int id)
+        {
+            return await http.GetFromJsonAsync<PedCliEncabezado>($"{API}/GetPedidoEncabezadoById/{id}");
+        }
     }
 }

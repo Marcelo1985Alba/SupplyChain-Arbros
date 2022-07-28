@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Shared;
+using SupplyChain.Shared;
+using SupplyChain.Shared.Logística;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
@@ -15,13 +17,16 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
     public class PedidosBase : ComponentBase
     {
         [Inject] public PedCliService PedCliService { get; set; }
+        [Inject] public CondicionPagoService CondicionPagoService { get; set; }
+        [Inject] public CondicionEntregaService CondicionEntregaService { get; set; }
+        [Inject] public DireccionEntregaService DireccionEntregaService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
         protected SfGrid<PedCli> refGrid;
         protected SfSpinner refSpinner;
         protected SfToast ToastObj;
         protected FormPedido refFormPedido;
         protected List<PedCli> pedidos = new();
-        protected PedCli PedidoSeleccionado = new();
+        protected PedCliEncabezado PedidoSeleccionado = new();
         protected bool SpinnerVisible = false;
         protected bool popupFormVisible = false;
 
@@ -37,6 +42,10 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             "ExcelExport",
             new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh" },
         };
+        protected List<string> direccionesEntregas = new();
+        protected List<vCondicionesPago> condicionesPagos = new();
+        protected List<vCondicionesEntrega> condicionesEntrega = new();
+
         protected async override Task OnInitializedAsync()
         {
             SpinnerVisible = true;
@@ -54,7 +63,34 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             }
             else
             {
+                await GetCondicionesPago();
+                await GetCondicionesEntrega();
                 pedidos = response.Response;
+            }
+        }
+
+        protected async Task GetCondicionesPago()
+        {
+            var response = await CondicionPagoService.Get();
+            if (response.Error)
+            {
+                //await ToastMensajeError("Error al obtener Condiciones de Pago.");
+            }
+            else
+            {
+                condicionesPagos = response.Response;
+            }
+        }
+        protected async Task GetCondicionesEntrega()
+        {
+            var response = await CondicionEntregaService.Get();
+            if (response.Error)
+            {
+                //await ToastMensajeError("Error al obtener Condiciones de Entrega.");
+            }
+            else
+            {
+                condicionesEntrega = response.Response;
             }
         }
 
@@ -72,7 +108,6 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             {
                 SpinnerVisible = true;
                 PedidoSeleccionado = new();
-                await refFormPedido.ShowAsync(0);
                 popupFormVisible = true;
                 SpinnerVisible = false;
             }
@@ -80,15 +115,16 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
                 SpinnerVisible = true;
-                var response = await PedCliService.GetById(args.Data.Id);
+                var response = await PedCliService.GetPedidoEncabezadoById(args.Data.Id);
                 if (response.Error)
                 {
                     await ToastMensajeError();
                 }
                 else
                 {
+
                     PedidoSeleccionado = response.Response;
-                    await refFormPedido.ShowAsync(args.Data.Id);
+                    direccionesEntregas = PedidoSeleccionado.DireccionesEntregas.Select(d=> d.DESCRIPCION).ToList();
                     popupFormVisible = true;
                 }
                 SpinnerVisible = false;

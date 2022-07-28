@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Data.Repository;
+using SupplyChain.Shared;
+using SupplyChain.Shared.Logística;
 using SupplyChain.Shared.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +11,11 @@ namespace SupplyChain.Server.Repositorios
 {
     public class PedCliRepository : Repository<PedCli, int>
     {
-        public PedCliRepository(AppDbContext db) : base(db)
+        private readonly vDireccionesEntregaRepository direccionesEntregaRepository;
+
+        public PedCliRepository(AppDbContext db, vDireccionesEntregaRepository direccionesEntregaRepository) : base(db)
         {
+            this.direccionesEntregaRepository = direccionesEntregaRepository;
         }
 
 
@@ -35,5 +40,45 @@ namespace SupplyChain.Server.Repositorios
             return await base.Db.ModeloPedidosPendientes.FromSqlRaw(xSQL).ToListAsync();
         }
 
+        public async Task<PedCliEncabezado> ObtenerPedidosEncabezado(int id)
+        {
+            var ped = await DbSet.FindAsync(id);
+            var pedEncabezado = new PedCliEncabezado();
+            if (ped != null)
+            {
+                pedEncabezado.FE_MOV = ped.FE_PED;
+                pedEncabezado.CONDICION_PAGO = ped.DPP;
+                pedEncabezado.DIRENT = ped.DIRENT;
+                pedEncabezado.CG_CLI = ped.CG_CLI;
+                pedEncabezado.DES_CLI = ped.DES_CLI;
+                pedEncabezado.FE_MOV = ped.FE_PED;
+                pedEncabezado.PEDIDO = ped.PEDIDO;
+                pedEncabezado.NUMOCI = ped.NUMOCI;
+                pedEncabezado.MONEDA = ped.MONEDA;
+                pedEncabezado.BONIFIC = ped.BONIFIC;
+                pedEncabezado.TC = (double)ped.VA_INDIC;
+
+                await AgregarDireccionesEntrega(pedEncabezado);
+
+                pedEncabezado.Items.Add(ped);
+            }
+            return pedEncabezado;
+        }
+
+        public async Task AgregarDireccionesEntrega(PedCliEncabezado pedCliEncabezado)
+        {
+            pedCliEncabezado.DireccionesEntregas = await direccionesEntregaRepository
+                    .Obtener(d => d.ID_CLIENTE == pedCliEncabezado.CG_CLI.ToString()).ToListAsync();
+
+            if (!string.IsNullOrEmpty(pedCliEncabezado.DIRENT) && 
+                !pedCliEncabezado.DireccionesEntregas.Any(d=> d.DESCRIPCION.ToUpper() == pedCliEncabezado.DIRENT.ToUpper()))
+            {
+                var dirEntrega = new vDireccionesEntrega();
+                dirEntrega.Id = 999999999;
+                dirEntrega.ID_CLIENTE = pedCliEncabezado.CG_CLI.ToString();
+                dirEntrega.DESCRIPCION = pedCliEncabezado.DIRENT;
+                pedCliEncabezado.DireccionesEntregas.Add(dirEntrega);
+            }
+        }
     }
 }

@@ -164,6 +164,12 @@ namespace SupplyChain
                 entity.Property(p => p.TOTAL).HasComputedColumnSql("[PREC_UNIT_X_CANTIDAD] - ',' [TOTAL]");
             });
 
+
+            modelBuilder.Entity<PedCli>(entity => {
+
+                entity.Property(p => p.SUBTOTAL).HasComputedColumnSql("[PREC_UNIT_X_CANTIDAD] - ',' [TOTAL]");
+            });
+
             modelBuilder.Entity<Genera>()
              .HasKey(c => new { c.Id, c.CG_CIA, c.PUNTO_VENTA });
 

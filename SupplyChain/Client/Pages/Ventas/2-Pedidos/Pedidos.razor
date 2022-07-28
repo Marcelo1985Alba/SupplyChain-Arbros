@@ -36,9 +36,6 @@
                 <GridColumn Field=@nameof(PedCli.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px"></GridColumn>
                 <GridColumn Field=@nameof(PedCli.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
 
-
-
-
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
         </SfGrid>
@@ -46,7 +43,9 @@
 
     @if (popupFormVisible)
     {
-        <FormPedido @ref="@refFormPedido"></FormPedido>
+        <FormPedido @ref="@refFormPedido" Show="popupFormVisible" Pedido="@PedidoSeleccionado" CondicionesPagos="@condicionesPagos"
+                    OnCerrar="@(()=> popupFormVisible = false)" CondicionesEntrega="@condicionesEntrega"
+                    DireccionesEntregas="@direccionesEntregas"></FormPedido>
     }
 
 

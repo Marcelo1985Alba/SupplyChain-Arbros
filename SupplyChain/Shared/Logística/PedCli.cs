@@ -1,4 +1,5 @@
 ﻿using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,12 +18,26 @@ namespace SupplyChain
         public int PEDIDO { get; set; } = 0;
         public decimal CANTPED { get; set; }
         public int NUMOCI { get; set; } = 0;
+        public int DPP { get; set; } = 0;
+        public string MONEDA { get; set; }
         public int CG_CLI { get; set; } = 0;
         public string DES_CLI { get; set; } = "";
         public string UNID { get; set; } = "";
         public string ORCO { get; set; } = "";
         public string CG_ART { get; set; } = "";
         public string DES_ART { get; set; } = "";
+        public decimal BONIFIC { get; set; } = 0;
+        public decimal DESCUENTO { get; set; }
+        public decimal VA_INDIC { get; set; } = 0;
+
+        [Column("IMPORTE1")]
+        public decimal PREC_UNIT { get; set; }
+        [Column("IMPORTE2")]
+        public decimal PREC_UNIT_X_CANTIDAD { get; set; }
+        [Column("IMPORTE3")]
+        public decimal IMP_DESCUENTO { get; set; }
+        [Column("IMPORTE4")]
+        public decimal TOTAL { get; set; } = 0;
         public string OBSERITEM { get; set; } = "";
         public string DIRENT { get; set; } = "";
         public string CG_ESTADO { get; set; } = "";
@@ -37,6 +52,10 @@ namespace SupplyChain
         public string CAMPOCOM2 { get; set; } = "";
         public string REMITO { get; set; } = "";
         public DateTime ENTRPREV { get; set; }
+        public decimal SUBTOTAL { get; set; } = 0;
+
+        [NotMapped]
+        public EstadoItem ESTADO { get; set; }
 
         //[Column("FLAG")]
         [NotMapped]

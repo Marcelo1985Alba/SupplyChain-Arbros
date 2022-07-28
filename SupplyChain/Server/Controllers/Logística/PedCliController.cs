@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SupplyChain;
 using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared.Logística;
 
 namespace SupplyChain
 {
@@ -85,6 +86,12 @@ namespace SupplyChain
         {
             List<PedCli> lpedcli = await _pedCliRepository.Obtener(p => p.PEDIDO.ToString() == PEDIDO).ToListAsync();
             return lpedcli == null ? NotFound() : lpedcli;
+        }
+
+        [HttpGet("GetPedidoEncabezadoById/{id}")]
+        public async Task<PedCliEncabezado> GetPedidoEncabezadoById(int id)
+        {
+            return await _pedCliRepository.ObtenerPedidosEncabezado(id);
         }
     }
 }

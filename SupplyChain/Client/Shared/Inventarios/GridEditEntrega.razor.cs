@@ -19,12 +19,12 @@ namespace SupplyChain.Client.Shared.Inventarios
         [Inject] public IJSRuntime JsRuntime { get; set; }
         [Inject] HttpClient Http { get; set; }
         protected ConfirmacionDialog ConfirmacionDialog;
-        protected BuscadorEmergente<Pedidos> BuscadorProducto;
+        protected SupplyChain.Client.Shared.BuscadorEmergente<Pedidos> BuscadorProducto;
         protected Pedidos stock;
         protected Pedidos stockCopiado;
         protected bool confirmaCopy = false;
         protected bool bAgregarInsumo = false;
-        protected BuscadorEmergenteResumenStock BuscadorEmergenteRS;
+        protected SupplyChain.Client.Shared.BuscadorEmergenteResumenStock BuscadorEmergenteRS;
         protected Producto[] DataSourceProductos;
         [Parameter] public string Titulo { get; set; } = null!;
         [Parameter] public List<Pedidos> DataSource { get; set; } = null!;

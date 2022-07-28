@@ -392,7 +392,6 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             await OnGuardar.InvokeAsync(Presupuesto);
             await ImprimirDataSheet();
             
-            
         }
 
         protected async Task ImprimirDataSheet()

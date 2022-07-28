@@ -1,0 +1,13 @@
+﻿@inherits PresupuestosDialogBase
+
+<SfSpinner @ref="@refSpinner" Size="80"
+           Label="Cargando..." Type="SpinnerType.Fabric">
+</SfSpinner>
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+<BuscadorEmergente Height="620px" TItem="vPresupuestos" Titulo="Listado de Solicitudes sin Presupuesto" Visible="@PopupBuscadorVisible"
+                   DataSource="@presupuestos" IsModal="true" Width="90%" HeightGrid="270px" TipoSeleccion="SelectionType.Single"
+                   Columnas="@(new string[] { "ID", "DES_CLI", "MONEDA", "TOTAL"})"
+                   OnObjetoSeleccionado="SendObjectSelected"
+                   OnCerrarDialog="CerrarDialog" />
