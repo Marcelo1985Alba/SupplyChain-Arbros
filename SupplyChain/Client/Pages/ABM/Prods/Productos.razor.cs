@@ -77,11 +77,36 @@ namespace SupplyChain.Client.Pages.ABM.Prods
             {
                 await CopiarProducto();
             }
-            else
+            else if (args.Item.Id == "grdProd_excelexport")
             {
-                if (args.Item.Id == "grdProd_excelexport")
+                await refGrid.ExportToExcelAsync();
+            }
+            else if (args.Item.Id == "grdProd_delete")
+            {
+                if ((await refGrid.GetSelectedRecordsAsync()).Count > 0)
                 {
-                    await refGrid.ExportToExcelAsync();
+                    bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar los productos seleccionados?");
+                    if (isConfirmed)
+                    {
+                        List<Producto> productosABorrar = await refGrid.GetSelectedRecordsAsync();
+                        var response = ProductoService.Eliminar(productosABorrar);
+                        if (!response.IsCompletedSuccessfully)
+                        {
+                            await this.ToastObj.Show(new ToastModel
+                            {
+                                Title = "EXITO!",
+                                Content = "los productos seleccionados fueron eliminados correctamente.",
+                                CssClass = "e-toast-success",
+                                Icon = "e-success toast-icons",
+                                ShowCloseButton = true,
+                                ShowProgressBar = true
+                            });
+                        }
+                        else
+                        {
+                            await ToastMensajeError();
+                        }
+                    }
                 }
             }
         }
