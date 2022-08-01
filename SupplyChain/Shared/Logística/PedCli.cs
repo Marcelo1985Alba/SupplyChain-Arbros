@@ -29,6 +29,7 @@ namespace SupplyChain
         public decimal BONIFIC { get; set; } = 0;
         public decimal DESCUENTO { get; set; }
         public decimal VA_INDIC { get; set; } = 0;
+        public int CG_TRANS { get; set; } = 0;
 
         [Column("IMPORTE1")]
         public decimal PREC_UNIT { get; set; }
