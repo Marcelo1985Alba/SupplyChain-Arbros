@@ -19,6 +19,9 @@ namespace SupplyChain.Client.Pages.ABM.Prods
         [Inject] public ProductoService ProductoService { get; set; }
         [Inject] protected CeldasService CeldasService { get; set; }
         [Inject] protected AreasService AreasService { get; set; }
+        [Inject] protected LineasService LineasService { get; set; }
+        [Inject] protected TipoAreaService TipoAreaService { get; set; }
+        [Inject] protected UnidadesService UnidadesService { get; set; }
         [Parameter] public Producto Producto { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;
         [Parameter] public EventCallback<Producto> OnGuardar { get; set; }
@@ -56,22 +59,37 @@ namespace SupplyChain.Client.Pages.ABM.Prods
 
         protected async override Task OnInitializedAsync()
         {
-            unidades = await Http.GetFromJsonAsync<List<SupplyChain.Unidades>>("api/unidades");
-            monedas = await Http.GetFromJsonAsync<List<Moneda>>("api/Monedas");
-            var response = await CeldasService.Get();
-            if (!response.Error)
+            var response_1 = await UnidadesService.Get();
+            if (!response_1.Error)
             {
-                celda = response.Response;
+                unidades = response_1.Response;
             }
-            //celda = await Http.GetFromJsonAsync<List<SupplyChain.Celdas>>("api/Celdas");
-            var response_2 = await AreasService.Get();
+            //unidades = await Http.GetFromJsonAsync<List<SupplyChain.Unidades>>("api/unidades");
+            monedas = await Http.GetFromJsonAsync<List<Moneda>>("api/Monedas");
+            var response_2 = await CeldasService.Get();
             if (!response_2.Error)
             {
-                area = response_2.Response;
+                celda = response_2.Response;
+            }
+            //celda = await Http.GetFromJsonAsync<List<SupplyChain.Celdas>>("api/Celdas");
+            var response_3 = await AreasService.Get();
+            if (!response_3.Error)
+            {
+                area = response_3.Response;
             }
             //area = await Http.GetFromJsonAsync<List<SupplyChain.Areas>>("api/Areas");
-            linea = await Http.GetFromJsonAsync<List<SupplyChain.Lineas>>("api/Lineas");
-            tipoarea = await Http.GetFromJsonAsync<List<TipoArea>>("api/TipoArea");
+            var response_4 = await LineasService.Get();
+            if (!response_4.Error)
+            {
+                linea = response_4.Response;
+            }
+            //linea = await Http.GetFromJsonAsync<List<SupplyChain.Lineas>>("api/Lineas");
+            var response_5 = await TipoAreaService.Get();
+            if (!response_5.Error)
+            {
+                tipoarea = response_5.Response;
+            }
+            //tipoarea = await Http.GetFromJsonAsync<List<TipoArea>>("api/TipoArea");
             cat = await Http.GetFromJsonAsync<List<Cat>>("api/Cat");
             //tipomat = await Http.GetFromJsonAsync<List<SupplyChain.TipoMat>>("api/TipoMat");
         }

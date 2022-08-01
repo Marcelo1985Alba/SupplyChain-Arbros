@@ -25,5 +25,17 @@ namespace SupplyChain.Client.HelperService
             return await http.GetFromJsonAsync<List<Producto>>($"{API}/GetProdAndReparaciones");
         }
 
+        public async Task<bool> Eliminar(List<Producto> productos)
+        {
+            var response = await http.PostAsJsonAsync<List<Producto>>($"{API}/PostList", productos);
+            if (response.Error)
+            {
+                Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+                return false;
+            }
+
+            return true;
+        }
+
     }
 }
