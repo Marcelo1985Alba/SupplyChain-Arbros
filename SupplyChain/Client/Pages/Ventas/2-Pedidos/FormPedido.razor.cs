@@ -274,24 +274,22 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         }
         protected async Task Guardar()
         {
-            //BotonGuardarDisabled = true;
-            //bool guardado;
-            //if (Pedido.PEDIDO == 0)
-            //{
-            //    guardado = await Agregar(Pedido.Items);
-            //    Pedido.ESNUEVO = true;
-            //}
-            //else
-            //{
-            //    guardado = await Actualizar(Pedido.Items);
-            //}
+            BotonGuardarDisabled = true;
+            bool guardado;
 
-            //Show = false;
-            
-            //Pedido.GUARDADO = guardado;
-            //await OnGuardar.InvokeAsync(Pedido);
-            //BotonGuardarDisabled = false;
+            var response = await PedCliService.GuardarLista(Pedido.Items);
+            if (response.Error)
+            {
+                await ToastMensajeError();
 
+            }
+            else
+            {
+                Show = false;
+                await OnGuardar.InvokeAsync(Pedido);
+            }
+
+            BotonGuardarDisabled = false;
         }
 
         protected void CambioMoneda(ChangeEventArgs<string, string> args)

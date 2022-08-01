@@ -93,5 +93,12 @@ namespace SupplyChain
         {
             return await _pedCliRepository.ObtenerPedidosEncabezado(id);
         }
+
+        [HttpPost("PostList")]
+        public async Task<List<PedCli>> PostList(List<PedCli> lista)
+        {
+            await _pedCliRepository.GuardarList(lista);
+            return lista;
+        }
     }
 }

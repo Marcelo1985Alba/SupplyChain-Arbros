@@ -80,5 +80,30 @@ namespace SupplyChain.Server.Repositorios
                 pedCliEncabezado.DireccionesEntregas.Add(dirEntrega);
             }
         }
+
+
+        public async Task GuardarList(List<PedCli> list)
+        {
+            foreach (PedCli item in list)
+            {
+                if (item.ESTADO == Shared.Enum.EstadoItem.Agregado)
+                {
+                    DbSet.Add(item);
+                }
+
+                if (item.ESTADO == Shared.Enum.EstadoItem.Modificado)
+                {
+                    Db.Entry(item).State = EntityState.Modified;
+                }
+
+                if (item.ESTADO == Shared.Enum.EstadoItem.Eliminado)
+                {
+                    Db.Remove(item);
+                }
+            }
+
+            await SaveChanges();
+        }
+
     }
 }
