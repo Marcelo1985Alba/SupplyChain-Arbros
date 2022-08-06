@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 using SupplyChain.Shared.Models;
 using System;
 using System.Collections.Generic;
@@ -48,9 +49,18 @@ namespace SupplyChain.Server.Repositorios
             return solicitud;
         }
 
-        public async Task<List<vSolicitudes>> ObtenerTodosFromVista()
+        public async Task<List<vSolicitudes>> ObtenerVista(TipoFiltro tipoFiltro)
         {
-            return await Db.vSolicitudes.Where(s => !s.TienePresupuesto).ToListAsync();
+            if (tipoFiltro == TipoFiltro.Todos)
+            {
+                return await Db.vSolicitudes.ToListAsync();
+            }
+
+            if (tipoFiltro == TipoFiltro.Pendientes)
+            {
+                return await Db.vSolicitudes.Where(s => !s.TienePresupuesto).ToListAsync();
+            }
+            return await Db.vSolicitudes.Where(s => s.TienePresupuesto).ToListAsync();
         }
 
         public async Task AsignarClientByCuit(string cuit, Solicitud solicitud)

@@ -2,6 +2,7 @@
 @using SupplyChain.Client.Shared.BuscadorCliente
 @using SupplyChain.Client.Shared.BuscadorProducto
 @using SupplyChain.Client.Shared.BuscadorPrecios 
+@using SupplyChain.Client.Pages.ABM.Precios  
 
 @inherits FormSolicitudBase
 
@@ -20,23 +21,93 @@
             }
             else
             {
-                <div class="e-dlg-header-titulo">Detalle Solicitud:&nbsp;&nbsp;@Solicitud.Id&nbsp;-&nbsp;(@Solicitud.Producto)&nbsp;@Solicitud.Des_Prod</div>
+                <div class="e-dlg-header-titulo">Detalle Solicitud:&nbsp;&nbsp;@Solicitud.Id&nbsp;-&nbsp;&nbsp;@Solicitud.Des_Prod&nbsp;-&nbsp;&nbsp;@Solicitud.Des_Cli</div>
             }
         </Header>
         <Content>
             <EditForm id="form-solicitud" Model="@Solicitud" OnValidSubmit="@(async()=> await Guardar())">
                 <DataAnnotationsValidator />
                 <div class="form-row">
+                    @*<div class="form-group col-md-1">
+                <label class="">Id:</label>
+                <SfNumericTextBox ID="SolicitudId" @bind-Value="@(Solicitud.Id)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
+            </div>*@
                     <div class="form-group col-md-1">
-                        <label class="">Id:</label>
-                        <SfNumericTextBox ID="SolicitudId" @bind-Value="@(Solicitud.Id)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
-                    </div>
-                    <div class="form-group col-md-1">
-                        <label title="Id de la solicitud de cotizacion proveniente de la app de Calculo" class="">CalcId:</label>
+                        <label title="Id de la solicitud de cotizacion proveniente de la app de Sofware de Calculo" class="">CalcId:</label>
                         <SfNumericTextBox ID="CalculoId" @bind-Value="@(Solicitud.CalcId)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
                     </div>
+                    <div class="form-group col-md-2">
+                        <label class="">Cuit:</label>
+                        <SfTextBox CssClass="customClass" ID="Cuit" @bind-Value="@(Solicitud.Cuit)" Readonly="true"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="">Cod. Cliente:</label>
+                        <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Solicitud.CG_CLI)" ShowSpinButton="false" Readonly="false"
+                                          OnInput="@(e => Cg_cli_Changed(e))"></SfNumericTextBox>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="">Cliente:</label>
+                        <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Solicitud.Des_Cli)" Readonly="false"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-1 mt-4">
+                        <SfButton IconCss="fa fa-search" CssClass="e-smal e-round e-info" OnClick="@(async ()=> await BuscarClientes())"
+                                  HtmlAttributes="@HtmlAttribute"></SfButton>
+                    </div>
+
+                </div>
+
+                @*@if (!Solicitud.Producto.StartsWith("00"))
+        {
+
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label class="">Medida:</label>
+                    <SfTextBox ID="Medida" @bind-Value="@(Solicitud.Medidas)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="">Orificio:</label>
+                    <SfTextBox ID="Orificio" @bind-Value="@(Solicitud.Orificio)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="">Serie Entrada:</label>
+                    <SfTextBox ID="SerieEntrada" @bind-Value="@(Solicitud.SerieEntrada)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="">Tipo Entrada:</label>
+                    <SfTextBox ID="TipoEntrada" @bind-Value="@(Solicitud.TipoEntrada)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="">Serie Salida:</label>
+                    <SfTextBox ID="SerieSalida" @bind-Value="@(Solicitud.SerieSalida)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="">Tipo Salida:</label>
+                    <SfTextBox ID="TipoSalida" @bind-Value="@(Solicitud.TipoSalida)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-9">
+                    <label class="">Accesorios:</label>
+                    <SfTextBox ID="Accesorios" @bind-Value="@(Solicitud.Accesorios)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="">Asiento:</label>
+                    <SfTextBox ID="Asiento" @bind-Value="@(Solicitud.Asiento)"></SfTextBox>
+                </div>
+            </div>
+
+
+        }*@
+
+
+                <div class="form-row">
+
+
                     <div class="form-group col-md-3">
-                        <label class="">Producto:</label>
+                        <label class="">
+                            Producto:
+                            <a style="cursor:pointer" @onclick="@(async()=> await AbrirFormPrecio())">
+                                <SfIcon Name="IconName.Link"></SfIcon>
+                            </a>
+                        </label>
                         <SfTextBox CssClass="customClass" ID="Producto" @bind-Value="@(Solicitud.Producto)" Readonly="false"
                                    Input="@(e => Cg_Prod_Changed(e))"></SfTextBox>
                     </div>
@@ -58,76 +129,50 @@
 
                 </div>
 
-                @*@if (!Solicitud.Producto.StartsWith("00"))
-                {
-                    
-                    <div class="form-row">
-                        <div class="form-group col-md-2">
-                            <label class="">Medida:</label>
-                            <SfTextBox ID="Medida" @bind-Value="@(Solicitud.Medidas)"></SfTextBox>
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label class="">Orificio:</label>
-                            <SfTextBox ID="Orificio" @bind-Value="@(Solicitud.Orificio)"></SfTextBox>
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label class="">Serie Entrada:</label>
-                            <SfTextBox ID="SerieEntrada" @bind-Value="@(Solicitud.SerieEntrada)"></SfTextBox>
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label class="">Tipo Entrada:</label>
-                            <SfTextBox ID="TipoEntrada" @bind-Value="@(Solicitud.TipoEntrada)"></SfTextBox>
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label class="">Serie Salida:</label>
-                            <SfTextBox ID="SerieSalida" @bind-Value="@(Solicitud.SerieSalida)"></SfTextBox>
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label class="">Tipo Salida:</label>
-                            <SfTextBox ID="TipoSalida" @bind-Value="@(Solicitud.TipoSalida)"></SfTextBox>
-                        </div>
-                        <div class="form-group col-md-9">
-                            <label class="">Accesorios:</label>
-                            <SfTextBox ID="Accesorios" @bind-Value="@(Solicitud.Accesorios)"></SfTextBox>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label class="">Asiento:</label>
-                            <SfTextBox ID="Asiento" @bind-Value="@(Solicitud.Asiento)"></SfTextBox>
-                        </div>
-                    </div>
-
-                    
-                }*@
-
-
-                <div class="form-row">
+                <div class="form-row align-items-end">
                     <div class="form-group col-md-2">
-                        <label class="">Cuit:</label>
-                        <SfTextBox CssClass="customClass" ID="Cuit" @bind-Value="@(Solicitud.Cuit)" Readonly="true"></SfTextBox>
+                        <label class="">Presión:</label>
+                        <SfTextBox CssClass="customClass" ID="PresionApertura" @bind-Value="@(Solicitud.PresionApertura)" Readonly="false"></SfTextBox>
                     </div>
                     <div class="form-group col-md-2">
-                        <label class="">Cod. Cliente:</label>
-                        <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Solicitud.CG_CLI)" ShowSpinButton="false" Readonly="false"
-                                          OnInput="@(e => Cg_cli_Changed(e))"></SfNumericTextBox>
+                        <label class="">Temperatura:</label>
+                        <SfTextBox CssClass="customClass" ID="TemperaturaDescargaT" @bind-Value="@(Solicitud.TemperaturaDescargaT)" Readonly="false"></SfTextBox>
                     </div>
-                    <div class="form-group col-md-7">
-                        <label class="">Cliente:</label>
-                        <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Solicitud.Des_Cli)" Readonly="false"></SfTextBox>
+                    <div class="form-group col-md-2">
+                        <label class="">Fluido:</label>
+                        <SfTextBox CssClass="customClass" ID="Fluido" @bind-Value="@(Solicitud.DescripcionFluido)" Readonly="false"></SfTextBox>
                     </div>
-                    <div class="form-group col-md-1 mt-4">
-                        <SfButton IconCss="fa fa-search" CssClass="e-smal e-round e-info" OnClick="@(async ()=> await BuscarClientes())"
-                                  HtmlAttributes="@HtmlAttribute"></SfButton>
+                    <div class="form-group col-md-2">
+                        <label class="">Contrapresion Variable:</label>
+                        <SfTextBox CssClass="customClass" ID="ContrapresionVariable" @bind-Value="@(Solicitud.ContrapresionVariable)" Readonly="false"></SfTextBox>
                     </div>
-                </div>
-
-                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label class="">Contrapresion Fija:</label>
+                        <SfTextBox CssClass="customClass" ID="ContrapresionFija" @bind-Value="@(Solicitud.ContrapresionFija)" Readonly="false"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="">Capacidad:</label>
+                        <SfTextBox CssClass="customClass" ID="CapacidadRequerida" @bind-Value="@(Solicitud.CapacidadRequerida)" Readonly="false"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="">Identificación:</label>
+                        <SfTextBox CssClass="customClass" ID="DescripcionTag" @bind-Value="@(Solicitud.DescripcionTag)" Readonly="false"></SfTextBox>
+                    </div>
                     <div class="form-group col-md-2 checkbox checkbox-success">
                         <SfCheckBox Label="Con Presupuesto" CssClass="e-info checkbox checkbox-success"
                                     @bind-Checked="@Solicitud.TienePresupuesto" Disabled="true" />
                     </div>
                 </div>
 
-
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group col-md-12">
+                            <label class="">Observaciones:</label>
+                            <SfTextBox CssClass="customClass" ID="Observaciones" @bind-Value="@(Solicitud.Observaciones)" Readonly="false"
+                                       Multiline="true"></SfTextBox>
+                        </div>
+                    </div>
+                </div>
                 <SfSpinner @ref="@refSpinnerCli" Size="50" @bind-Visible="@SpinnerVisible"
                            Label="Buscando ..." Type="SpinnerType.Fabric">
                 </SfSpinner>
@@ -138,15 +183,25 @@
 
 
                 @*<ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto"
-                                OnObjectSelected="@ProductoSelected" 
-                                OnCerrarDialog="CerrarDialogProducto"></ProductoDialog>*@
+        OnObjectSelected="@ProductoSelected"
+        OnCerrarDialog="CerrarDialogProducto"></ProductoDialog>*@
 
-                <PreciosDialog @ref="refPreciosDialog" PopupBuscadorVisible="@popupBuscadorVisiblePrecio" SoloReparaciones="false" 
+                <PreciosDialog @ref="refPreciosDialog" PopupBuscadorVisible="@popupBuscadorVisiblePrecio" SoloReparaciones="false"
                                Codigo="@Solicitud.Producto" Descripcion="@Solicitud.Des_Prod"
                                OnCerrarDialog="CerrarDialogPrecio" OnObjectSelected="@PrecioSelected"></PreciosDialog>
 
-                <ValidationSummary />
+                @if (popupBuscadorVisibleFormPrecio)
+	            {
+                    <FormPrecio PrecioArticulo="@PreciosArticulos" Show="@popupBuscadorVisibleFormPrecio"
+                                OnGuardar="@(async(p)=> await OnPrecioGuardado(p))"
+                                OnCerrar="@(()=> popupBuscadorVisibleFormPrecio = false)">
+
+                    </FormPrecio>
+	            }
                 
+
+                <ValidationSummary />
+
             </EditForm>
 
             

@@ -41,6 +41,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         protected bool popupBuscadorVisibleCliente = false;
         protected bool popupBuscadorVisiblePresupuestos = false;
         protected bool BotonGuardarDisabled = false;
+        protected bool spinerVisible = false;
         
         protected List<string> Monedas = new() { "PESOS", "DOLARES" };
         protected bool SpinnerVisible = false;
@@ -60,7 +61,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         protected Dictionary<string, object> HtmlAttributeSubmit = new()
         {
             { "type", "submit" },
-            { "form", "formPresupuesto" }
+            { "form", "formPedido" }
 
         };
 
@@ -74,6 +75,11 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             {
                 ReadOnlyMoneda = false;
             }
+            if (Pedido.CG_CLI> 0)
+            {
+                await GetDireccionesEntregaCliente(Pedido.CG_CLI);
+            }
+
             await GetTipoCambioDolarHoy();
         }
 
@@ -244,29 +250,71 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
 
                 Pedido.TC = presupuestoSelected.TC;
                 Pedido.BONIFIC = presupuestoSelected.BONIFIC;
-                pedcli = new PedCli()
+                Pedido.DIRENT = presupuestoSelected.DIRENT;
+                if (item.CANTIDAD > 1)
                 {
-                    Id = Pedido.Items.Count == 0 ? -1 : Pedido.Items.Count * -1 - 1,
-                    CG_CLI = Pedido.CG_CLI,
-                    DES_CLI = Pedido.DES_CLI,
-                    DPP = Pedido.CONDICION_PAGO,
-                    BONIFIC = Pedido.BONIFIC,
-                    DIRENT = Pedido.DIRENT,
-                    PEDIDO = Pedido.PEDIDO,
-                    CG_ART = item.CG_ART,
-                    DES_ART = item.DES_ART,
-                    CANTPED = item.CANTIDAD,
-                    MONEDA = presupuestoSelected.MONEDA,
-                    PREC_UNIT = item.PREC_UNIT,
-                    PREC_UNIT_X_CANTIDAD = item.PREC_UNIT_X_CANTIDAD,
-                    DESCUENTO = item.DESCUENTO,
-                    IMP_DESCUENTO = item.IMP_DESCUENTO,
-                    SUBTOTAL = item.TOTAL,
-                    OBSERITEM = item.OBSERITEM,
-                    ESTADO = SupplyChain.Shared.Enum.EstadoItem.Agregado,
+                    for (int i = 0; i < item.CANTIDAD; i++)
+                    {
 
-                };
-                Pedido.Items.Add(pedcli);
+                        pedcli = new PedCli()
+                        {
+                            FE_PED = DateTime.Now,
+                            Id = Pedido.Items.Count == 0 ? -1 : Pedido.Items.Count * -1 - 1,
+                            PRESUPUESTOID = presupuestoSelected.Id,
+                            CG_CLI = Pedido.CG_CLI,
+                            DES_CLI = Pedido.DES_CLI,
+                            DPP = Pedido.CONDICION_PAGO,
+                            BONIFIC = Pedido.BONIFIC,
+                            DIRENT = Pedido.DIRENT,
+                            PEDIDO = Pedido.PEDIDO,
+                            CG_ART = item.CG_ART,
+                            DES_ART = item.DES_ART,
+                            CANTPED = 1,
+                            MONEDA = presupuestoSelected.MONEDA,
+                            PREC_UNIT = item.PREC_UNIT,
+                            PREC_UNIT_X_CANTIDAD = item.PREC_UNIT_X_CANTIDAD,
+                            DESCUENTO = item.DESCUENTO,
+                            IMP_DESCUENTO = item.IMP_DESCUENTO,
+                            SUBTOTAL = item.TOTAL,
+                            OBSERITEM = item.OBSERITEM,
+                            ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA),
+                            ESTADO = SupplyChain.Shared.Enum.EstadoItem.Agregado,
+
+                        };
+                        Pedido.Items.Add(pedcli);
+                    }
+                }
+                else
+                {
+                    pedcli = new PedCli()
+                    {
+                        FE_PED = DateTime.Now,
+                        Id = Pedido.Items.Count == 0 ? -1 : Pedido.Items.Count * -1 - 1,
+                        PRESUPUESTOID = presupuestoSelected.Id,
+                        CG_CLI = Pedido.CG_CLI,
+                        DES_CLI = Pedido.DES_CLI,
+                        DPP = Pedido.CONDICION_PAGO,
+                        BONIFIC = Pedido.BONIFIC,
+                        DIRENT = Pedido.DIRENT,
+                        PEDIDO = Pedido.PEDIDO,
+                        CG_ART = item.CG_ART,
+                        DES_ART = item.DES_ART,
+                        CANTPED = item.CANTIDAD,
+                        MONEDA = presupuestoSelected.MONEDA,
+                        PREC_UNIT = item.PREC_UNIT,
+                        PREC_UNIT_X_CANTIDAD = item.PREC_UNIT_X_CANTIDAD,
+                        DESCUENTO = item.DESCUENTO,
+                        IMP_DESCUENTO = item.IMP_DESCUENTO,
+                        SUBTOTAL = item.TOTAL,
+                        OBSERITEM = item.OBSERITEM,
+                        ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA),
+                        ESTADO = SupplyChain.Shared.Enum.EstadoItem.Agregado,
+
+                    };
+                    Pedido.Items.Add(pedcli);
+                }
+
+                
             }
             await refGridItems.RefreshColumnsAsync();
             refGridItems.Refresh();
@@ -274,18 +322,22 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         }
         protected async Task Guardar()
         {
+            spinerVisible = true;
             BotonGuardarDisabled = true;
-            bool guardado;
 
             var response = await PedCliService.GuardarLista(Pedido.Items);
             if (response.Error)
             {
+                spinerVisible = false;
+                BotonGuardarDisabled = false;
                 await ToastMensajeError();
 
             }
             else
             {
+                spinerVisible = false;
                 Show = false;
+                Pedido.Items = response.Response;
                 await OnGuardar.InvokeAsync(Pedido);
             }
 

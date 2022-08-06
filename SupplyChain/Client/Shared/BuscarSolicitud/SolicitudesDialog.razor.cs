@@ -2,6 +2,7 @@
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
@@ -22,9 +23,10 @@ namespace SupplyChain.Client.Shared.BuscarSolicitud
         /// <summary>
         /// Verifica la existencia del precio al seleccionar solicitud
         /// </summary>
+        [Parameter] public TipoFiltro TipoFiltro { get; set; } = TipoFiltro.Todos;
         [Parameter] public bool ConPrecio { get; set; } = false;
         [Parameter] public bool CompararCliente { get; set; } = false;
-        [Parameter] public int Cg_Cli_Comparar { get; set; } = 0;
+        //[Parameter] public int Cg_Cli_Comparar { get; set; } = 0;
 
         protected List<vSolicitudes> solicitudes = new();
         protected SfSpinner refSpinner;
@@ -32,7 +34,7 @@ namespace SupplyChain.Client.Shared.BuscarSolicitud
         public async Task Show()
         {
             refSpinner?.ShowAsync();
-            var response = await SolicitudService.GetVistaParaGrilla();
+            var response = await SolicitudService.GetVistaParaGrilla(TipoFiltro);
             if (response.Error)
             {
                 refSpinner?.HideAsync();
@@ -41,10 +43,10 @@ namespace SupplyChain.Client.Shared.BuscarSolicitud
             else
             {
                 solicitudes = response.Response.OrderBy(s=> s.Id).ToList();
-                if (Cg_Cli_Comparar > 0)
-                {
-                    solicitudes = solicitudes.Where(c => c.CG_CLI == Cg_Cli_Comparar).ToList();
-                }
+                //if (Cg_Cli_Comparar > 0)
+                //{
+                //    solicitudes = solicitudes.Where(c => c.CG_CLI == Cg_Cli_Comparar).ToList();
+                //}
                 refSpinner?.HideAsync();
                 PopupBuscadorVisible = true;
             }
@@ -74,19 +76,12 @@ namespace SupplyChain.Client.Shared.BuscarSolicitud
 
                     if (CompararCliente)
                     {
-                        if (solicitud.CG_CLI != Cg_Cli_Comparar)
+                        if (ConPrecio && solicitud.PrecioArticulo != null)
                         {
-                            await ToastMensajeError("No se puede agrega Solicitud.\nEl Cliente es distinto");
-                        }
-                        else
-                        {
-                            if (ConPrecio && solicitud.PrecioArticulo != null)
+                            if (solicitud != null)
                             {
-                                if (solicitud != null)
-                                {
-                                    await OnObjectSelected.InvokeAsync(solicitud);
-                                    await Hide();
-                                }
+                                await OnObjectSelected.InvokeAsync(solicitud);
+                                await Hide();
                             }
                         }
                     }

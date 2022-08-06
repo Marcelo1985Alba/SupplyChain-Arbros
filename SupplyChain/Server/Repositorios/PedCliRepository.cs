@@ -3,6 +3,7 @@ using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Logística;
 using SupplyChain.Shared.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,10 +13,13 @@ namespace SupplyChain.Server.Repositorios
     public class PedCliRepository : Repository<PedCli, int>
     {
         private readonly vDireccionesEntregaRepository direccionesEntregaRepository;
+        private readonly GeneraRepository generaRepository;
 
-        public PedCliRepository(AppDbContext db, vDireccionesEntregaRepository direccionesEntregaRepository) : base(db)
+        public PedCliRepository(AppDbContext db, vDireccionesEntregaRepository direccionesEntregaRepository, 
+            GeneraRepository generaRepository) : base(db)
         {
             this.direccionesEntregaRepository = direccionesEntregaRepository;
+            this.generaRepository = generaRepository;
         }
 
 
@@ -84,26 +88,80 @@ namespace SupplyChain.Server.Repositorios
 
         public async Task GuardarList(List<PedCli> list)
         {
-            foreach (PedCli item in list)
+            const string NUMOCI = "NUMOCI";
+            const string PEDIDO = "PEDIDO";
+            const string REGPED = "REGPED";
+
+            try
             {
-                if (item.ESTADO == Shared.Enum.EstadoItem.Agregado)
+                await generaRepository.Reserva(NUMOCI);
+                var genera = await generaRepository.Obtener(g => g.Id == NUMOCI).FirstOrDefaultAsync();
+
+                foreach (PedCli item in list)
                 {
-                    DbSet.Add(item);
+
+                    item.NUMOCI = Convert.ToInt32(genera.VALOR1);
+
+                    if (item.ESTADO == Shared.Enum.EstadoItem.Agregado)
+                    {
+                        //PEDIDO
+                        await generaRepository.Reserva(PEDIDO);
+                        var generaPedido = await generaRepository.Obtener(g => g.Id == PEDIDO).FirstOrDefaultAsync();
+                        //REGISTRO
+                        await generaRepository.Reserva(REGPED);
+                        var generaRegPedido = await generaRepository.Obtener(g => g.Id == REGPED).FirstOrDefaultAsync();
+
+                        item.PEDIDO = Convert.ToInt32(generaPedido.VALOR1);
+                        item.Id = Convert.ToInt32(generaRegPedido.VALOR1);
+                        Db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTrackingWithIdentityResolution;
+                        Db.Add(item);
+
+
+                        await generaRepository.Libera(PEDIDO);
+                        await generaRepository.Libera(REGPED);
+                    }
+
+                    if (item.ESTADO == Shared.Enum.EstadoItem.Modificado)
+                    {
+                        Db.Entry(item).State = EntityState.Modified;
+                    }
+
+                    if (item.ESTADO == Shared.Enum.EstadoItem.Eliminado)
+                    {
+                        Db.Remove(item);
+                    }
                 }
 
-                if (item.ESTADO == Shared.Enum.EstadoItem.Modificado)
-                {
-                    Db.Entry(item).State = EntityState.Modified;
-                }
+                await generaRepository.Libera(NUMOCI);
+                await SaveChanges();
 
-                if (item.ESTADO == Shared.Enum.EstadoItem.Eliminado)
-                {
-                    Db.Remove(item);
-                }
+                //lo ejecuta despues de obtener el numero de pedido
+                await AsignarServicio(list);
             }
-
-            await SaveChanges();
+            catch (Exception ex)
+            {
+                await generaRepository.Libera(NUMOCI);
+                await generaRepository.Libera(PEDIDO);
+                await generaRepository.Libera(REGPED);
+            }
         }
 
+        private async Task AsignarServicio(List<PedCli> list)
+        {
+            foreach (var item in list.Where(p => p.CG_ART.StartsWith("0012")))
+            {
+
+                if (item.CG_ART.StartsWith("0012") && item.PRESUPUESTOID > 0)
+                {
+                    var servicio = Db.Servicios.Where(s => s.PRESUPUESTO == item.PRESUPUESTOID).FirstOrDefault();
+                    servicio.FECHA = DateTime.Now;
+                    servicio.PEDIDO = item.PEDIDO;
+                    Db.Entry(servicio).State = EntityState.Modified;
+                    Db.Entry(servicio).Property(p=> p.PEDIDO).IsModified = true;
+                    Db.Entry(servicio).Property(p=> p.FECHA).IsModified = true;
+                    Db.SaveChangesAsync();
+                }
+            }
+        }
     }
 }

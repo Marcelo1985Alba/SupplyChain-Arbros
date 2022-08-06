@@ -12,7 +12,8 @@ namespace SupplyChain.Server.Repositorios
     {
         private readonly PrecioArticulosRepository _precioArticulosRepository;
 
-        public PresupuestoRepository(AppDbContext appDbContext, PrecioArticulosRepository precioArticulosRepository) : base (appDbContext)
+        public PresupuestoRepository(AppDbContext appDbContext, PrecioArticulosRepository precioArticulosRepository
+            ) : base (appDbContext)
         {
             _precioArticulosRepository = precioArticulosRepository;
         }
@@ -28,12 +29,41 @@ namespace SupplyChain.Server.Repositorios
             try
             {
                 await base.Agregar(entity);
+                await CerrarSolicitud(entity);
             }
             catch (Exception)
             {
                 throw;
             }
   
+        }
+
+
+        public override async Task Actualizar(Presupuesto entity)
+        {
+
+            try
+            {
+                await base.Actualizar(entity);
+                //cerrar solicitudes asociadas
+                await CerrarSolicitud(entity);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        private async Task CerrarSolicitud(Presupuesto entity)
+        {
+            foreach (var item in entity.Items)
+            {
+                if (item.SOLICITUDID > 0)
+                {
+                    await Db.Database.ExecuteSqlRawAsync($"UPDATE SOLICITUD SET TIENEPRESUPUESTO = 1 WHERE ID = {item.SOLICITUDID}");
+                }
+            }
         }
 
         internal async Task AgregarDatosFaltantes(Presupuesto presupuesto)

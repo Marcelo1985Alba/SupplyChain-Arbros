@@ -26,9 +26,9 @@ namespace SupplyChain.Client.HelperService
         /// Carga una vista con los nombres de producto y cliente
         /// </summary>
         /// <returns></returns>
-        public async Task<HttpResponseWrapper<List<vSolicitudes>>> GetVistaParaGrilla()
+        public async Task<HttpResponseWrapper<List<vSolicitudes>>> GetVistaParaGrilla(TipoFiltro tipoFiltro = TipoFiltro.Todos)
         {
-            return await http.GetFromJsonAsync<List<vSolicitudes>>(API);
+            return await http.GetFromJsonAsync<List<vSolicitudes>>($"{API}/Vista/{tipoFiltro}");
             
         }
 

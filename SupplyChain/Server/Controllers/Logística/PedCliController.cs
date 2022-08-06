@@ -95,10 +95,17 @@ namespace SupplyChain
         }
 
         [HttpPost("PostList")]
-        public async Task<List<PedCli>> PostList(List<PedCli> lista)
+        public async Task<ActionResult<List<PedCli>>> PostList(List<PedCli> lista)
         {
-            await _pedCliRepository.GuardarList(lista);
-            return lista;
+            try
+            {
+                await _pedCliRepository.GuardarList(lista);
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

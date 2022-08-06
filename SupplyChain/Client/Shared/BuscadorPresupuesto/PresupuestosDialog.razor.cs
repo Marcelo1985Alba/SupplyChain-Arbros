@@ -40,7 +40,7 @@ namespace SupplyChain.Client.Shared.BuscadorPresupuesto
                 presupuestos = response.Response.OrderBy(s => s.Id).ToList();
                 if (Cg_Cli_Comparar > 0)
                 {
-                    presupuestos = presupuestos.Where(c => c.CG_CLI == Cg_Cli_Comparar).ToList();
+                    presupuestos = presupuestos.Where(c => c.CG_CLI == Cg_Cli_Comparar).OrderByDescending(p=> p.Id).ToList();
                 }
                 refSpinner?.HideAsync();
                 PopupBuscadorVisible = true;

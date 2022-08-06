@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,23 +9,21 @@ namespace SupplyChain.Shared.DTOs
 {
     public class SolicitudDTO
     {
-        public DateTime Fecha { get; set; }
-        public string Producto { get; set; }
-        public int Cantidad { get; set; } = 1;
-        public int TagId { get; set; }
-        public string Cuit { get; set; }
-        public string Medidas { get; set; }
-        public string Orifico { get; set; }
-        public string SerieEntrada { get; set; }
-        public string TipoEntrada { get; set; }
-        public string SerieSalida { get; set; }
-        public string TipoSalida { get; set; }
-        public string Accesorios { get; set; }
-        public string Asiento { get; set; }
-        public string Bonete { get; set; }
-        public string Cuerpo { get; set; }
-        public string Resorte { get; set; }
-        public string Disco { get; set; }
-        public string Tobera { get; set; }
+        public DateTime Fecha { get; set; } = DateTime.Now;
+        [Required(ErrorMessage = "El Producto es requerido")]
+        [StringLength(maximumLength: 15, MinimumLength = 3, ErrorMessage = "El producto debe tener entre 3 y 15 digitos")]
+        public string Producto { get; set; } = string.Empty;
+        public int CalcId { get; set; } = 0;
+        public string Cuit { get; set; } = string.Empty;
+
+        [Range(minimum: 1, maximum: 9999999, ErrorMessage = "La Cantidad es requerida")]
+        public int Cantidad { get; set; }
+        public string ContrapresionFija { get; set; }
+        public string ContrapresionVariable { get; set; }
+        public string PresionApertura { get; set; }
+        public string DescripcionFluido { get; set; }
+        public string TemperaturaDescargaT { get; set; }
+        public string CapacidadRequerida { get; set; }
+        public string DescripcionTag { get; set; }
     }
 }

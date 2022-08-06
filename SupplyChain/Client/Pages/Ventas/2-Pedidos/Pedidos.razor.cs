@@ -65,7 +65,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             {
                 await GetCondicionesPago();
                 await GetCondicionesEntrega();
-                pedidos = response.Response;
+                pedidos = response.Response.OrderByDescending(p=> p.FE_PED).ToList();
             }
         }
 
@@ -141,6 +141,28 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             }
 
 
+        }
+
+        protected async Task OnPedidoGuardado(PedCliEncabezado pedidoEncabezado )
+        {
+            foreach (var item in pedidoEncabezado.Items)
+            {
+                if (item.ESTADO == SupplyChain.Shared.Enum.EstadoItem.Agregado)
+                {
+                    pedidos.Add(item);
+                }
+
+                if (item.ESTADO == SupplyChain.Shared.Enum.EstadoItem.Modificado)
+                {
+                    var pedido = pedidos.Where(p => p.PEDIDO == item.PEDIDO).First();
+                    pedido.CANTPED = item.CANTPED;
+                    pedido.TOTAL = item.TOTAL;
+                }
+            }
+
+            popupFormVisible = false;
+            pedidos = pedidos.OrderByDescending(c => c.PEDIDO).ToList();
+            refGrid.Refresh();
         }
 
         protected async Task OnToolbarHandler(ClickEventArgs args)

@@ -28,7 +28,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         protected FormSolicitud refFormSolicitud;
         protected Solicitud SolicitudSeleccionada = new();
         protected List<vSolicitudes> Solicitudes = new();
-        protected string heightPopup = "420px";
+        protected string heightPopup = "510px";
         protected bool SpinnerVisible = true;
         protected bool SpinnerVisiblePresupuesto = false;
 

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
+using SupplyChain.Shared.DTOs;
+using SupplyChain.Shared.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +24,12 @@ namespace SupplyChain.Server.Controllers
         }
 
         // GET: api/Compras
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<vSolicitudes>>> GetSolicitudes()
+        [HttpGet("Vista/{tipoFiltro}")]
+        public async Task<ActionResult<IEnumerable<vSolicitudes>>> GetSolicitudes(TipoFiltro tipoFiltro)
         {
-            //OC ABIERTAS
             try
             {
-                return await _solicitudRepository.ObtenerTodosFromVista();
+                return await _solicitudRepository.ObtenerVista(tipoFiltro);
             }
             catch (Exception ex)
             {
@@ -99,6 +100,49 @@ namespace SupplyChain.Server.Controllers
 
             return Ok(solicitud);
         }
+
+
+        // POST: api/Compras
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPost("Externo")]
+        public async Task<ActionResult<Solicitud>> PostCompra(SolicitudDTO solicitudDTO)
+        {
+            try
+            {
+
+                var solicitud = new Solicitud() 
+                {
+                    Cuit = solicitudDTO.Cuit,
+                    CalcId = solicitudDTO.CalcId,
+                    Cantidad = solicitudDTO.Cantidad,
+                    CapacidadRequerida = solicitudDTO.CapacidadRequerida,
+                    ContrapresionFija = solicitudDTO.ContrapresionFija,
+                    ContrapresionVariable = solicitudDTO.ContrapresionVariable,
+                    DescripcionFluido = solicitudDTO.DescripcionFluido,
+                    DescripcionTag = solicitudDTO.DescripcionTag,
+                    TemperaturaDescargaT = solicitudDTO.TemperaturaDescargaT,
+                    Fecha = DateTime.Now,
+                    PresionApertura = solicitudDTO.PresionApertura,
+                };
+
+
+                if (solicitud.CG_CLI == 0)
+                {
+                    await _solicitudRepository.AsignarClientByCuit(solicitud.Cuit, solicitud);
+                }
+                await _solicitudRepository.Agregar(solicitud);
+
+
+
+                return CreatedAtAction("GetSolicitud", new { id = solicitud.Id }, solicitud);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
 
         // POST: api/Compras
         // To protect from overposting attacks, enable the specific properties you want to bind to, for

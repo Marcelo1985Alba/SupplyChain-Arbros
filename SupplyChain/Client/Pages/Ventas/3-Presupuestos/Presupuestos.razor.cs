@@ -38,7 +38,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             "Print",
             //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
             "ExcelExport",
-            new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh" },
+            new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh", Type = ItemType.Button},
         };
 
         protected List<string> Monedas = new() { "PESOS", "DOLARES" };

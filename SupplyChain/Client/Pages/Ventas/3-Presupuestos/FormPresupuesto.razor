@@ -225,7 +225,7 @@
 
                 <SolicitudesDialog @ref="refSolicitudDialog" PopupBuscadorVisible="@popupBuscadorVisibleSolicitud"
                                    OnObjectSelected="@SolicitudSelected" ConPrecio="true" CompararCliente="true"
-                                   OnCerrarDialog="CerrarDialogSolicitud" Cg_Cli_Comparar="@Presupuesto.CG_CLI"></SolicitudesDialog>
+                                   OnCerrarDialog="CerrarDialogSolicitud" TipoFiltro="SupplyChain.Shared.Enum.TipoFiltro.Pendientes" ></SolicitudesDialog>
 
 
                 <ValidationSummary />
@@ -250,7 +250,7 @@
                         moneda = "U$S";
                     }
 
-                    <div class="total-price">TOTAL @moneda : @totalItems</div>
+                    <div class="total-price">SUBTOTAL @moneda : @totalItems</div>
                     <div class="total-price">BONIFICACION (@Presupuesto.BONIFIC %) @moneda : @bonficacion</div>
                     <div class="total-price">TOTAL @moneda : @total</div>
                 }

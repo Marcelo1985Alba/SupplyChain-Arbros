@@ -190,11 +190,11 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task BuscarSolicitudes()
         {
-            if (Presupuesto.CG_CLI == 0)
-            {
-                await ToastMensajeError("Seleccione Cliente.");
-                return;
-            }
+            //if (Presupuesto.CG_CLI == 0)
+            //{
+            //    await ToastMensajeError("Seleccione Cliente.");
+            //    return;
+            //}
 
             SpinnerVisible = true;
             await refSolicitudDialog.Show();
@@ -284,11 +284,24 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task SolicitudSelected(Solicitud solicitudSelected)
         {
-            if (Presupuesto.CG_CLI != solicitudSelected.CG_CLI)
+            if (Presupuesto.CG_CLI > 0 && Presupuesto.CG_CLI != solicitudSelected.CG_CLI)
             {
                 await ToastMensajeError("No se puede agregar item.\nCliente no corresponde al presupuesto.");
-                return;
             }
+
+            if (Presupuesto.CG_CLI == 0)
+            {
+                var response = await ClienteService.GetClientesExternoByCg_Cli(solicitudSelected.CG_CLI);
+                if (response.Error)
+                {
+                    await ToastMensajeError("No se pudo obtener cliente");
+                }
+                else
+                {
+                    await ClienteExternoSelected(response.Response);
+                }
+            }
+
             //Debe venir siempre con precio
             if (solicitudSelected.PrecioArticulo != null)
             {
@@ -390,8 +403,11 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             BotonGuardarDisabled = false;
             Presupuesto.GUARDADO = guardado;
             await OnGuardar.InvokeAsync(Presupuesto);
+
+
             await ImprimirDataSheet();
-            
+
+
         }
 
         protected async Task ImprimirDataSheet()

@@ -82,11 +82,13 @@ namespace SupplyChain.Client.Pages.Servicio.Servicios
 
         protected Dictionary<string, object> presupuestoButton = new Dictionary<string, object>()
         {
+            { "type", "button" },
             { "title", "Generar Presupuesto"}
         };
 
         protected Dictionary<string, object> pedidoButton = new Dictionary<string, object>()
         {
+            { "type", "submit" },
             { "title", "Generar Pedido"}
         };
 

@@ -6,6 +6,8 @@
 
 @inherits FormPedidoBase
 
+
+
 <SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
     <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
     <DialogAnimationSettings Effect="DialogEffect.FadeZoom" Duration="200"></DialogAnimationSettings>
@@ -29,6 +31,7 @@
                 </ToolbarItems>
             </SfToolbar>
             <EditForm id="formPedido" Model="@Pedido" OnValidSubmit="@(async()=> await Guardar())">
+                <SfSpinner @bind-Visible="@spinerVisible" Label="Guardando..." Type="SpinnerType.Fabric"></SfSpinner>
                 <ObjectGraphDataAnnotationsValidator />
                 <ValidationSummary />
                 <div class="form-row">
@@ -76,7 +79,7 @@
 
                     <div class="form-group col-md-8">
                         <label class="">Direccion de Entrega:</label>
-                        <SfDropDownList TValue="string" TItem="string" DataSource="DireccionesEntregas"
+                        <SfDropDownList TValue="string" TItem="string" DataSource="@DireccionesEntregas"
                                         @bind-Value="Pedido.DIRENT"></SfDropDownList>
                     </div>
 
@@ -185,13 +188,13 @@
                                 </GridColumn>
                                 <GridColumn Field="@nameof(PedCli.OBSERITEM)" HeaderText="Observaciones" Width="250"></GridColumn>
                                 @*<GridColumn Field="@nameof(PedCli.DIAS_PLAZO_ENTREGA)" HeaderText="Dias Entrega" Width="100">
-                                    <EditTemplate Context="detalle">
-                                        @{
-                                            var value = (detalle as PedCli);
-                                            <SfNumericTextBox @bind-Value="value.DIAS_PLAZO_ENTREGA" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
-                                        }
-                                    </EditTemplate>
-                                </GridColumn>*@
+                            <EditTemplate Context="detalle">
+                                @{
+                                    var value = (detalle as PedCli);
+                                    <SfNumericTextBox @bind-Value="value.DIAS_PLAZO_ENTREGA" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
+                                }
+                            </EditTemplate>
+                        </GridColumn>*@
                             </GridColumns>
                         </SfGrid>
                     </div>
@@ -207,13 +210,13 @@
                                 OnCerrarDialog="@(()=> popupBuscadorVisibleCliente = false)"></ClientesDialog>
 
                 @*<SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog @ref="refPrecioDialog" PopupBuscadorVisible="@popupBuscadorVisiblePrecio"
-                                                                         OnObjectSelected="@PrecioSelected" SoloReparaciones="@buscarSoloReparaciones"
-                                                                         OnCerrarDialog="CerrarDialogPrecio"></SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog>*@
+        OnObjectSelected="@PrecioSelected" SoloReparaciones="@buscarSoloReparaciones"
+        OnCerrarDialog="CerrarDialogPrecio"></SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog>*@
 
 
                 @*<ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto"
-                                OnObjectSelected="@ProductoSelected"
-                                OnCerrarDialog="CerrarDialogProducto"></ProductoDialog>*@
+        OnObjectSelected="@ProductoSelected"
+        OnCerrarDialog="CerrarDialogProducto"></ProductoDialog>*@
 
 
 
