@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +12,27 @@ namespace SupplyChain.Server.Repositorios
     public class PresupuestoRepository : Repository<Presupuesto, int>
     {
         private readonly PrecioArticulosRepository _precioArticulosRepository;
+        private readonly SolicitudRepository _solicitudRepository;
 
-        public PresupuestoRepository(AppDbContext appDbContext, PrecioArticulosRepository precioArticulosRepository
+        public PresupuestoRepository(AppDbContext appDbContext, PrecioArticulosRepository precioArticulosRepository,
+            SolicitudRepository solicitudRepository
             ) : base (appDbContext)
         {
             _precioArticulosRepository = precioArticulosRepository;
+            this._solicitudRepository = solicitudRepository;
         }
 
-        public async Task<List<vPresupuestos>> GetForView()
+        public async Task<List<vPresupuestos>> GetForView(TipoFiltro tipoFiltro = TipoFiltro.Todos)
         {
+            if (tipoFiltro == TipoFiltro.Pendientes)
+            {
+                return await Db.vPresupuestos.Where(p=> !p.TIENEPEDIDO).ToListAsync();
+            }
+
+            if (tipoFiltro == TipoFiltro.NoPendientes)
+            {
+                return await Db.vPresupuestos.Where(p => p.TIENEPEDIDO).ToListAsync();
+            }
             return await Db.vPresupuestos.ToListAsync();
         }
 
@@ -88,6 +101,15 @@ namespace SupplyChain.Server.Repositorios
                             //presupuesto.UNID = precio..Trim();
                         }
 
+                    }
+
+                    if (item.SOLICITUDID > 0)
+                    {
+                        var solicitud = await _solicitudRepository.ObtenerPorId(item.SOLICITUDID);
+                        if (solicitud != null)
+                        {
+                            item.Solicitud = solicitud;
+                        }
                     }
                 } 
             }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Shared
 {
-    public class vTransportes : EntityBase<int>
+    public class vTransporte : EntityBase<int>
     {
         public string DESCRIPCION { get; set; }
         public string CALLE { get; set; }

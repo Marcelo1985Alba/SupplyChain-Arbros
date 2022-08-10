@@ -25,12 +25,14 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         [Inject] public CondicionPagoService CondicionPagoService { get; set; }
         [Inject] public CondicionEntregaService CondicionEntregaService { get; set; }
         [Inject] public DireccionEntregaService DireccionEntregaService { get; set; }
+        [Inject] public TransporteService TransporteService { get; set; }
         [Inject] public TipoCambioService TipoCambioService { get; set; }
         [Parameter] public PedCliEncabezado Pedido { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;
         [Parameter] public List<string> DireccionesEntregas { get; set; } = new();
         [Parameter] public List<vCondicionesPago> CondicionesPagos { get; set; } = new();
         [Parameter] public List<vCondicionesEntrega> CondicionesEntrega { get; set; } = new();
+        [Parameter] public List<vTransporte> Transportes { get; set; } = new();
         [Parameter] public EventCallback<PedCliEncabezado> OnGuardar { get; set; }
         [Parameter] public EventCallback OnCerrar { get; set; }
 
@@ -79,7 +81,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             {
                 await GetDireccionesEntregaCliente(Pedido.CG_CLI);
             }
-
+            await GetTransportes();
             await GetTipoCambioDolarHoy();
         }
 
@@ -162,6 +164,18 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             }
         }
 
+        protected async Task GetTransportes()
+        {
+            var response = await TransporteService.Get();
+            if (response.Error)
+            {
+                await ToastMensajeError("Error al obtener Transportes.");
+            }
+            else
+            {
+                Transportes = response.Response;
+            }
+        }
         protected async Task BuscarClientes()
         {
             SpinnerVisible = true;
@@ -270,12 +284,17 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                             CG_ART = item.CG_ART,
                             DES_ART = item.DES_ART,
                             CANTPED = 1,
+                            UNID = "UNID",
                             MONEDA = presupuestoSelected.MONEDA,
                             PREC_UNIT = item.PREC_UNIT,
                             PREC_UNIT_X_CANTIDAD = item.PREC_UNIT_X_CANTIDAD,
                             DESCUENTO = item.DESCUENTO,
                             IMP_DESCUENTO = item.IMP_DESCUENTO,
                             SUBTOTAL = item.TOTAL,
+                            CAMPOCOM1 = item.Solicitud?.PresionApertura,
+                            CAMPOCOM3 = item.Solicitud?.DescripcionFluido,
+                            CAMPOCOM5 = item.Solicitud?.ContrapresionVariable,
+                            CAMPOCOM6 = item.Solicitud?.TemperaturaDescargaT,
                             OBSERITEM = item.OBSERITEM,
                             ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA),
                             ESTADO = SupplyChain.Shared.Enum.EstadoItem.Agregado,
@@ -300,12 +319,17 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                         CG_ART = item.CG_ART,
                         DES_ART = item.DES_ART,
                         CANTPED = item.CANTIDAD,
+                        UNID = "UNID",
                         MONEDA = presupuestoSelected.MONEDA,
                         PREC_UNIT = item.PREC_UNIT,
                         PREC_UNIT_X_CANTIDAD = item.PREC_UNIT_X_CANTIDAD,
                         DESCUENTO = item.DESCUENTO,
                         IMP_DESCUENTO = item.IMP_DESCUENTO,
                         SUBTOTAL = item.TOTAL,
+                        CAMPOCOM1 = item.Solicitud?.PresionApertura,
+                        CAMPOCOM3 = item.Solicitud?.DescripcionFluido,
+                        CAMPOCOM5 = item.Solicitud?.ContrapresionVariable,
+                        CAMPOCOM6 = item.Solicitud?.TemperaturaDescargaT,
                         OBSERITEM = item.OBSERITEM,
                         ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA),
                         ESTADO = SupplyChain.Shared.Enum.EstadoItem.Agregado,

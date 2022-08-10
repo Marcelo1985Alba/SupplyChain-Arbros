@@ -25,9 +25,9 @@ namespace SupplyChain.Client.HelperService
             return await Http.GetFromJsonAsync<List<PresupuestoAnterior>>("api/PresupuestosAnterior");
         }
 
-        public async Task<HttpResponseWrapper<List<vPresupuestos>>> GetVistaParaGrilla()
+        public async Task<HttpResponseWrapper<List<vPresupuestos>>> GetVistaParaGrilla(TipoFiltro tipoFiltro = TipoFiltro.Todos) 
         {
-            return await http.GetFromJsonAsync<List<vPresupuestos>>(API+ "/GetPresupuestoVista");
+            return await http.GetFromJsonAsync<List<vPresupuestos>>($"{API}/GetPresupuestoVista/{tipoFiltro}");
 
         }
     }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,10 +35,10 @@ namespace SupplyChain.Server.Controllers
             return await _presupuestoRepository.ObtenerTodosQueryable().Include(p=> p.Items).ToListAsync();
         }
 
-        [HttpGet("GetPresupuestoVista")]
-        public async Task<List<vPresupuestos>> GetPresupuestoVista()
+        [HttpGet("GetPresupuestoVista/{tipoFiltro}")]
+        public async Task<List<vPresupuestos>> GetPresupuestoVista(TipoFiltro tipoFiltro = TipoFiltro.Todos)
         {
-            return await _presupuestoRepository.GetForView();
+            return await _presupuestoRepository.GetForView(tipoFiltro);
         }
 
         // GET api/<PresupuestosController>/5

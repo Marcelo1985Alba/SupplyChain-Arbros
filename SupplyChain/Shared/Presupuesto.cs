@@ -29,6 +29,7 @@ namespace SupplyChain.Shared
 
         [Required(ErrorMessage = "La Direccion de Entrega es requerida")]
         public string DIRENT { get; set; }
+        public bool TienePedido { get; set; }
         
         [ValidateComplexType]
         public virtual List<PresupuestoDetalle> Items { get; set; } = new();

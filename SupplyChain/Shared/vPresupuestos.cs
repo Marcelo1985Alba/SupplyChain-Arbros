@@ -20,5 +20,6 @@ namespace SupplyChain.Shared
         public string USUARIO { get; set; }
         public string MONEDA { get; set; }
         public decimal TOTAL { get; set; } = 0;
+        public bool TIENEPEDIDO { get; set; }
     }
 }

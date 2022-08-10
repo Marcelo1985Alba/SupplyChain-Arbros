@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared.Enum;
 
 namespace SupplyChain
 {
@@ -23,9 +24,23 @@ namespace SupplyChain
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Service>>> Get()
+        public async Task<ActionResult<IEnumerable<Service>>> Gets()
         {
             var xitem = await _serviciosRepository.ObtenerTodos();
+
+            return xitem.OrderByDescending(s => new { s.Id, s.SOLICITUD }).ToList();
+        }
+
+
+        [HttpGet("GetByFiltro/{tipoFiltro}")]
+        public async Task<ActionResult<IEnumerable<Service>>> GetByFiltro(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+        {
+            var xitem = await _serviciosRepository.GetByFilter(tipoFiltro);
+
+            if (tipoFiltro != TipoFiltro.Todos)
+            {
+                return xitem.OrderByDescending(s => s.SOLICITUD ).ToList();
+            }
                 
             return xitem.OrderByDescending(s => s.Id).ToList();
         }
@@ -37,6 +52,22 @@ namespace SupplyChain
             try
             {
                 var Servicios = await _serviciosRepository.Obtener(s => s.Id == id).ToListAsync();
+
+                return Servicios == null ? NotFound() : Ok(Servicios);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        // GET: api/Servicios/5
+        [HttpGet("GetByPedido/{pedido}")]
+        public async Task<ActionResult<Service>> GetByPedido(int pedido)
+        {
+            try
+            {
+                var Servicios = await _serviciosRepository.Obtener(s => s.PEDIDO == pedido).FirstOrDefaultAsync();
 
                 return Servicios == null ? NotFound() : Ok(Servicios);
             }

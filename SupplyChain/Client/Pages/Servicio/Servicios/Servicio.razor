@@ -13,6 +13,7 @@
 @using SelectionType = Syncfusion.Blazor.Grids.SelectionType
 @using SupplyChain.Client.Pages.Ventas._3_Presupuestos
 @using SupplyChain.Client.Pages.Ventas._4_Solicitudes
+@using SupplyChain.Shared.Enum 
 @*CssClass="e-spin-overlay"*@
 <SfSpinner @ref="SpinnerObj" @bind-Visible="@SpinnerVisible" Label="Cargando..." Type="SpinnerType.Bootstrap" Size="100"></SfSpinner>
 <SfToast ID="toast_default" @ref="ToastObj">
@@ -775,6 +776,7 @@
     @code {
         [Inject] public ClienteService ClienteService { get; set; }
         [Inject] public SolicitudService SolicitudService { get; set; }
+        [Inject] public ServicioService ServicioService { get; set; }
         [Inject] public PresupuestoService PresupuestoService { get; set; }
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JS { get; set; }
@@ -853,6 +855,8 @@
         //new ItemModel { Text = "Certificado", TooltipText = "Certificado", PrefixIcon = "e-copy", Id = "Certificado" },
         new ItemModel { Text = "OPDS", TooltipText = "OPDS", PrefixIcon = "e-copy", Id = "OPDS" },
         "ExcelExport",
+        new ItemModel { Text = "Ver Todos", Id = "VerTodos" },
+        new ItemModel { Text = "Ver Pendientes", Id = "VerPendientes" },
         new ItemModel { Text = "Seleccionar Columnas", TooltipText = "Seleccionar Columnas", Id = "Seleccionar Columnas" },
         //new ItemModel { Text = "Search", TooltipText = "OPDS", Id = "Search" }
         };
@@ -885,15 +889,24 @@
             SpinnerVisible = true;
             if (Pedido == 0)
             {
-                ApiUrl = "api/Servicios";
-                servicios = await Http.GetFromJsonAsync<List<Service>>("api/Servicios");
-                servDesc = servicios.Where(s => s.PEDIDO == Pedido).ToList();
+
+                await GetServicios(TipoFiltro.Pendientes);
             }
             else
             {
                 ApiUrl = $"api/Servicios/{Pedido}";
-                servicios = await Http.GetFromJsonAsync<List<Service>>($"api/Servicios/{Pedido}");
-                servDesc = servicios.OrderByDescending(s => s.Id).ToList();
+                //servicios = await Http.GetFromJsonAsync<List<Service>>($"api/Servicios/{Pedido}");
+                var responseServicePedido= await ServicioService.GetByPedido(Pedido);
+                if (responseServicePedido.Error)
+                {
+
+                }
+                else
+                {
+                    servicios = new();
+                    servicios.Add(responseServicePedido.Response);
+                    servDesc = servicios.Where(s => s.PEDIDO == Pedido).ToList();
+                }
             }
 
             medidas = await Http.GetFromJsonAsync<List<Medida>>("api/Medida");
@@ -921,17 +934,47 @@
             await base.OnInitializedAsync();
         }
 
+
+        private async Task GetServicios(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+        {
+            ApiUrl = "api/Servicios";
+            //servicios = await Http.GetFromJsonAsync<List<Service>>("api/Servicios");
+            var responseService = await ServicioService.GetByFilter(tipoFiltro);
+            if (responseService.Error)
+            {
+
+            }
+            else
+            {
+                servicios = responseService.Response;
+                servDesc = servicios.Where(s => s.PEDIDO == Pedido).ToList();
+            }
+        }
+
+
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {
             if (args.Item.Text == "Seleccionar Columnas")
             {
                 await Grid.OpenColumnChooser();
             }
-            if (args.Item.Text == "Exportar Excel")
+            else if(args.Item.Id == "VerTodos")
+            {
+                SpinnerVisible = true;
+                await GetServicios(TipoFiltro.Todos);
+                SpinnerVisible = false;
+            }
+            else if (args.Item.Id == "VerPendientes")
+            {
+                SpinnerVisible = true;
+                await GetServicios(TipoFiltro.Pendientes);
+                SpinnerVisible = false;
+            }
+            else if (args.Item.Text == "Exportar Excel")
             {
                 await this.Grid.ExcelExport();
             }
-            if (args.Item.Text == "Certificado")
+            else if (args.Item.Text == "Certificado")
             {
                 if (this.Grid.SelectedRecords.Count > 0)
                 {
@@ -1328,7 +1371,7 @@
                     }
                 }
             }
-            if (args.Item.Text == "OPDS")
+            else if (args.Item.Text == "OPDS")
             {
                 if (this.Grid.SelectedRecords.Count > 0)
                 {
@@ -1519,14 +1562,11 @@
                     }
                 }
             }
-
-
-            if (args.Item.Id == "Search")
+            else if (args.Item.Id == "Search")
             {
                 //await Grid.Search();
             }
-
-            if (args.Item.Text == "Edit")
+            else if (args.Item.Text == "Edit")
             {
                 if (this.Grid.SelectedRecords.Count > 0)
                 {

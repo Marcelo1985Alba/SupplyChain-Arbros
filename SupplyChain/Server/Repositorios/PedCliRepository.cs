@@ -159,7 +159,7 @@ namespace SupplyChain.Server.Repositorios
                     Db.Entry(servicio).State = EntityState.Modified;
                     Db.Entry(servicio).Property(p=> p.PEDIDO).IsModified = true;
                     Db.Entry(servicio).Property(p=> p.FECHA).IsModified = true;
-                    Db.SaveChangesAsync();
+                    await Db.SaveChangesAsync();
                 }
             }
         }

@@ -4,6 +4,7 @@ using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared;
 using SupplyChain.Client.Shared.BuscadorCliente;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
@@ -39,19 +40,22 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             "Edit",
             "Delete",
             new ItemModel { Text = "Copia", TooltipText = "Copiar un item para generar una nueva solicitud", PrefixIcon = "e-copy", Id = "Copy" },
-            "ExcelExport"
+            "ExcelExport",
+            new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh", Type = ItemType.Button },
+            new ItemModel { Text = "Ver Todos", Type = ItemType.Button, Id = "VerTodos", PrefixIcon = "e-icons e-eye" },
+            new ItemModel { Text = "Ver Pendientes", Type = ItemType.Button, Id = "VerPendientes" },
         };
 
         protected async override Task OnInitializedAsync()
         {
-            MainLayout.Titulo = "Solicitudes";
-            await GetSolicitudes();
+            MainLayout.Titulo = "Solicitudes: Pendientes";
+            await GetSolicitudes(TipoFiltro.Pendientes);
             SpinnerVisible = false;
         }
 
-        protected async Task GetSolicitudes()
+        protected async Task GetSolicitudes(TipoFiltro tipoFiltro = TipoFiltro.Todos)
         {
-            var response = await SolicitudService.GetVistaParaGrilla();
+            var response = await SolicitudService.GetVistaParaGrilla(tipoFiltro);
             if (response.Error)
             {
                 Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
@@ -75,6 +79,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                 SolicitudSeleccionada.Cuit = vSolicitud.Cuit;
                 SolicitudSeleccionada.Des_Cli = vSolicitud.DES_CLI;
                 SolicitudSeleccionada.Des_Prod = vSolicitud.Descripcion;
+                SolicitudSeleccionada.TienePresupuesto = false;
                 //if (!SolicitudSeleccionada.Producto.StartsWith("00"))
                 //{
                 //    heightPopup = "600px";
@@ -124,6 +129,20 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             if (args.Item.Id == "Copy")
             {
                 await CopiarSolicitud();
+            }
+            else if (args.Item.Id == "VerTodos")
+            {
+                MainLayout.Titulo = "Solicitudes";
+                SpinnerVisible = true;
+                await GetSolicitudes();
+                SpinnerVisible = false;
+            }
+            else if (args.Item.Id == "VerPendientes")
+            {
+                MainLayout.Titulo = "Solicitudes: Pendientes";
+                SpinnerVisible = true;
+                await GetSolicitudes(TipoFiltro.Pendientes);
+                SpinnerVisible = false;
             }
             else
             {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Data.Repository;
+using SupplyChain.Shared.Enum;
 using SupplyChain.Shared.Models;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,21 @@ namespace SupplyChain.Server.Repositorios
     {
         public ServiciosRepository(AppDbContext db) : base(db)
         {
+        }
+
+        public async Task<List<Service>> GetByFilter(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+        {
+            if (tipoFiltro == TipoFiltro.Pendientes)
+            {
+                return await base.Obtener(s => s.PEDIDO == 0).ToListAsync();
+            }
+
+            if (tipoFiltro == TipoFiltro.NoPendientes)
+            {
+                return await base.Obtener(s => s.PEDIDO > 0).ToListAsync();
+            }
+
+            return await base.ObtenerTodos();
         }
     }
 }

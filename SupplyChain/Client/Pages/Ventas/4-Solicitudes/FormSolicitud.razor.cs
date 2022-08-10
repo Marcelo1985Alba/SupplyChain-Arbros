@@ -307,30 +307,34 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         protected async Task AbrirFormPrecio()
         {
             PreciosArticulos = new();
-            var response = await PrecioArticuloService.GetById(Solicitud.Producto);
-            if (response.Error)
+            if (!string.IsNullOrEmpty(Solicitud.Producto))
             {
-                if(response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+                var response = await PrecioArticuloService.GetById(Solicitud.Producto);
+                if (response.Error)
                 {
-                    PreciosArticulos.Id = Solicitud.Producto;
-                    PreciosArticulos.ESNUEVO = true;
-                    popupBuscadorVisibleFormPrecio = true;
+                    if (response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        PreciosArticulos.Id = Solicitud.Producto;
+                        PreciosArticulos.ESNUEVO = true;
+                        popupBuscadorVisibleFormPrecio = true;
+                    }
+                    else
+                    {
+                        await ToastMensajeError("Ocurrio un Error al obtener Precio");
+                    }
+
                 }
                 else
                 {
-                    await ToastMensajeError("Ocurrio un Error al obtener Precio");
-                }
-                
-            }
-            else
-            {
-                if (response.Response != null)
-                {
-                    PreciosArticulos = response.Response;
-                }
+                    if (response.Response != null)
+                    {
+                        PreciosArticulos = response.Response;
+                    }
 
-                popupBuscadorVisibleFormPrecio = true;
+                    popupBuscadorVisibleFormPrecio = true;
+                }
             }
+            
         }
 
         protected async Task OnPrecioGuardado(PreciosArticulos precio)

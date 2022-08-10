@@ -48,6 +48,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
 
         protected async override Task OnInitializedAsync()
         {
+            MainLayout.Titulo = "Pedidos";
             SpinnerVisible = true;
             await GetPedidos();
             //await refGrid.AutoFitColumnsAsync();

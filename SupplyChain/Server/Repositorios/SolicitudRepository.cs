@@ -49,7 +49,7 @@ namespace SupplyChain.Server.Repositorios
             return solicitud;
         }
 
-        public async Task<List<vSolicitudes>> ObtenerVista(TipoFiltro tipoFiltro)
+        public async Task<List<vSolicitudes>> ObtenerVista(TipoFiltro tipoFiltro = TipoFiltro.Todos)
         {
             if (tipoFiltro == TipoFiltro.Todos)
             {

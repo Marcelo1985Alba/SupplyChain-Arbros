@@ -140,6 +140,14 @@
                                         }
                                     </EditTemplate>
                                 </GridColumn>
+                                <GridColumn Field="@nameof(PresupuestoDetalle.DIAS_PLAZO_ENTREGA)" HeaderText="Dias Entrega" Width="100">
+                                    <EditTemplate Context="detalle">
+                                        @{
+                                            var value = (detalle as PresupuestoDetalle);
+                                            <SfNumericTextBox @bind-Value="value.DIAS_PLAZO_ENTREGA" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
+                                        }
+                                    </EditTemplate>
+                                </GridColumn>
                                 <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT_X_CANTIDAD) AllowEditing="false" Format="C2"
                                             HeaderText="Neto" TextAlign="TextAlign.Left" Width="100px">
                                     <Template Context="detalle">
@@ -192,14 +200,7 @@
                                     </Template>
                                 </GridColumn>
                                 <GridColumn Field="@nameof(PresupuestoDetalle.OBSERITEM)" HeaderText="Observaciones" Width="250"></GridColumn>
-                                <GridColumn Field="@nameof(PresupuestoDetalle.DIAS_PLAZO_ENTREGA)" HeaderText="Dias Entrega" Width="100">
-                                    <EditTemplate Context="detalle">
-                                        @{
-                                            var value = (detalle as PresupuestoDetalle);
-                                            <SfNumericTextBox @bind-Value="value.DIAS_PLAZO_ENTREGA" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
-                                        }
-                                    </EditTemplate>
-                                </GridColumn>
+
                             </GridColumns>
                         </SfGrid>
                     </div>
