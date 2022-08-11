@@ -101,5 +101,10 @@ namespace SupplyChain.Server.Repositorios
             }
 
         }
+
+        internal async Task<vSolicitudes> GetVSolicitudById(int id)
+        {
+            return await Db.vSolicitudes.FirstOrDefaultAsync(s=> s.Id == id);
+        }
     }
 }

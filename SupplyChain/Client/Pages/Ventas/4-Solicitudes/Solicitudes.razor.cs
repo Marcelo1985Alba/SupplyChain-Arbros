@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.SignalR.Client;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared;
@@ -20,6 +21,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
 {
     public class SolicitudesBase : ComponentBase
     {
+        [Inject] public NavigationManager NavigationManager { get; set; }
         [Inject] public HttpClient Http { get; set; }
         [Inject] public SolicitudService SolicitudService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
@@ -46,11 +48,35 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             new ItemModel { Text = "Ver Pendientes", Type = ItemType.Button, Id = "VerPendientes" },
         };
 
+        private HubConnection? hubConnection;
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Solicitudes: Pendientes";
             await GetSolicitudes(TipoFiltro.Pendientes);
+
+
+            RegistrarHub();
+            await OnRecibirSolicitudFromCalculoSignalR();
+
+            await hubConnection.StartAsync();
             SpinnerVisible = false;
+        }
+
+        protected void RegistrarHub()
+        {
+            hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
+            .Build();
+        }
+
+        protected async Task OnRecibirSolicitudFromCalculoSignalR()
+        {
+            _ = hubConnection.On<vSolicitudes>("ReceiveVSolicitud", (vSolicitud) =>
+            {
+                Solicitudes.Add(vSolicitud);
+                refGrid?.Refresh();
+                StateHasChanged();
+            });
         }
 
         protected async Task GetSolicitudes(TipoFiltro tipoFiltro = TipoFiltro.Todos)

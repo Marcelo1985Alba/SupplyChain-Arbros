@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SupplyChain.Server.Data.Repository;
+using SupplyChain.Server.Hubs;
 using SupplyChain.Server.Repositorios;
 using Syncfusion.Blazor;
 using System;
@@ -99,7 +100,7 @@ namespace SupplyChain.Server
             //    options.SuppressConsumesConstraintForFormFileParameters = true;
             //    options.SuppressInferBindingSourcesForParameters = true;
             //});
-
+            services.AddSignalR();
             services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
@@ -111,6 +112,7 @@ namespace SupplyChain.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseResponseCompression();
             if (env.IsDevelopment() || env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
@@ -135,6 +137,7 @@ namespace SupplyChain.Server
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
                 //endpoints.Map("api/{**slug}", HandleApiFallback);
+                endpoints.MapHub<SolicitudHub>("/chathub");
                 endpoints.MapFallbackToFile("index.html");
             });
         }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Hubs;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
 using SupplyChain.Shared.DTOs;
@@ -17,10 +19,12 @@ namespace SupplyChain.Server.Controllers
     public class SolicitudesController : ControllerBase
     {
         private readonly SolicitudRepository _solicitudRepository;
+        private readonly IHubContext<SolicitudHub> _hubContext;
 
-        public SolicitudesController(SolicitudRepository solicitudRepository)
+        public SolicitudesController(SolicitudRepository solicitudRepository, IHubContext<SolicitudHub> hubContext )
         {
             _solicitudRepository = solicitudRepository;
+            this._hubContext = hubContext;
         }
 
         // GET: api/Compras
@@ -111,8 +115,9 @@ namespace SupplyChain.Server.Controllers
             try
             {
 
-                var solicitud = new Solicitud() 
+                var solicitud = new Solicitud()
                 {
+                    Producto = solicitudDTO.Producto,
                     Cuit = solicitudDTO.Cuit,
                     CalcId = solicitudDTO.CalcId,
                     Cantidad = solicitudDTO.Cantidad,
@@ -131,9 +136,11 @@ namespace SupplyChain.Server.Controllers
                 {
                     await _solicitudRepository.AsignarClientByCuit(solicitud.Cuit, solicitud);
                 }
+
                 await _solicitudRepository.Agregar(solicitud);
 
-
+                var vSolicitud = await _solicitudRepository.GetVSolicitudById(solicitud.Id);
+                await _hubContext.Clients.All.SendAsync("ReceiveVSolicitud", vSolicitud);
 
                 return CreatedAtAction("GetSolicitud", new { id = solicitud.Id }, solicitud);
             }
@@ -159,7 +166,6 @@ namespace SupplyChain.Server.Controllers
                 await _solicitudRepository.Agregar(solicitud);
 
                 
-
                 return CreatedAtAction("GetSolicitud", new { id = solicitud.Id }, solicitud);
             }
             catch (Exception ex)
