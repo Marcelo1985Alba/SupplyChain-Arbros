@@ -73,15 +73,21 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         protected bool agregadoPorPresupuesto = false;
         protected async override Task OnInitializedAsync()
         {
+            if (Transportes.Count == 0)
+            {
+                await GetTransportes();
+            }
+            
+
             if (Pedido.PEDIDO == 0)
             {
                 ReadOnlyMoneda = false;
             }
-            if (Pedido.CG_CLI> 0)
+            if (Pedido.CG_CLI> 0 && DireccionesEntregas.Count == 0)
             {
                 await GetDireccionesEntregaCliente(Pedido.CG_CLI);
             }
-            await GetTransportes();
+            
             await GetTipoCambioDolarHoy();
         }
 
@@ -286,15 +292,19 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                             CANTPED = 1,
                             UNID = "UNID",
                             MONEDA = presupuestoSelected.MONEDA,
+                            VA_INDIC = Convert.ToDecimal(presupuestoSelected.TC),
                             PREC_UNIT = item.PREC_UNIT,
                             PREC_UNIT_X_CANTIDAD = item.PREC_UNIT_X_CANTIDAD,
                             DESCUENTO = item.DESCUENTO,
                             IMP_DESCUENTO = item.IMP_DESCUENTO,
-                            SUBTOTAL = item.TOTAL,
+                            TOTAL = item.TOTAL,
+                            LOTE = item.Solicitud?.DescripcionTag,
                             CAMPOCOM1 = item.Solicitud?.PresionApertura,
                             CAMPOCOM3 = item.Solicitud?.DescripcionFluido,
                             CAMPOCOM5 = item.Solicitud?.ContrapresionVariable,
                             CAMPOCOM6 = item.Solicitud?.TemperaturaDescargaT,
+                            CAMPOCOM7 = item.Solicitud?.ContrapresionFija,
+                            CAMPOCOM8 = item.Solicitud?.CapacidadRequerida,
                             OBSERITEM = item.OBSERITEM,
                             ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA),
                             ESTADO = SupplyChain.Shared.Enum.EstadoItem.Agregado,
@@ -321,15 +331,19 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                         CANTPED = item.CANTIDAD,
                         UNID = "UNID",
                         MONEDA = presupuestoSelected.MONEDA,
+                        VA_INDIC = Convert.ToDecimal(presupuestoSelected.TC),
                         PREC_UNIT = item.PREC_UNIT,
                         PREC_UNIT_X_CANTIDAD = item.PREC_UNIT_X_CANTIDAD,
                         DESCUENTO = item.DESCUENTO,
                         IMP_DESCUENTO = item.IMP_DESCUENTO,
-                        SUBTOTAL = item.TOTAL,
+                        TOTAL = item.TOTAL,
+                        LOTE = item.Solicitud?.DescripcionTag,
                         CAMPOCOM1 = item.Solicitud?.PresionApertura,
                         CAMPOCOM3 = item.Solicitud?.DescripcionFluido,
                         CAMPOCOM5 = item.Solicitud?.ContrapresionVariable,
                         CAMPOCOM6 = item.Solicitud?.TemperaturaDescargaT,
+                        CAMPOCOM7 = item.Solicitud?.ContrapresionFija,
+                        CAMPOCOM8 = item.Solicitud?.CapacidadRequerida,
                         OBSERITEM = item.OBSERITEM,
                         ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA),
                         ESTADO = SupplyChain.Shared.Enum.EstadoItem.Agregado,
@@ -348,6 +362,16 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         {
             spinerVisible = true;
             BotonGuardarDisabled = true;
+
+            //actualiza todos los campos de encabezado a los items
+            foreach (var item in Pedido.Items)
+            {
+                item.VA_INDIC = Convert.ToDecimal(Pedido.TC); 
+                item.CG_TRANS = Pedido.CG_TRANS;
+                item.ORCO = Pedido.ORCO;
+                item.CG_COND_ENTREGA = Pedido.CG_COND_ENTREGA;
+                item.DPP = Pedido.CONDICION_PAGO;
+            }
 
             var response = await PedCliService.GuardarLista(Pedido.Items);
             if (response.Error)

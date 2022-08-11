@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SupplyChain;
 using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared.Enum;
 using SupplyChain.Shared.Logística;
 
 namespace SupplyChain
@@ -31,6 +32,12 @@ namespace SupplyChain
         public async Task<IEnumerable<PedCli>> Gets()
         {
             return await _pedCliRepository.ObtenerTodos();
+        }
+
+        [HttpGet("ByFilter/{tipoFiltro}")]
+        public async Task<IEnumerable<PedCli>> GetByFilter(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+        {
+            return await _pedCliRepository.ByFilter(tipoFiltro);
         }
 
         [HttpGet("ObtenerPedCliPedidos")]

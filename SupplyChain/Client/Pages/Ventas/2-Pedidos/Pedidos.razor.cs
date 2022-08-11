@@ -2,6 +2,7 @@
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 using SupplyChain.Shared.Logística;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
@@ -20,6 +21,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         [Inject] public CondicionPagoService CondicionPagoService { get; set; }
         [Inject] public CondicionEntregaService CondicionEntregaService { get; set; }
         [Inject] public DireccionEntregaService DireccionEntregaService { get; set; }
+        [Inject] public TransporteService TransporteService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
         protected SfGrid<PedCli> refGrid;
         protected SfSpinner refSpinner;
@@ -41,23 +43,26 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
             "ExcelExport",
             new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh" },
+            new ItemModel { Text = "Ver Todos", Id = "VerTodos" },
+            new ItemModel { Text = "Ver Pendientes", Id = "VerPendientes" },
         };
         protected List<string> direccionesEntregas = new();
         protected List<vCondicionesPago> condicionesPagos = new();
         protected List<vCondicionesEntrega> condicionesEntrega = new();
+        protected List<vTransporte> transportes = new();
 
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Pedidos";
             SpinnerVisible = true;
-            await GetPedidos();
+            await GetPedidos(TipoFiltro.Pendientes);
             //await refGrid.AutoFitColumnsAsync();
             SpinnerVisible = false;
         }
 
-        protected async Task GetPedidos()
+        protected async Task GetPedidos(TipoFiltro tipoFiltro = TipoFiltro.Todos)
         {
-            var response = await PedCliService.Get();
+            var response = await PedCliService.GetByFilter(tipoFiltro);
             if (response.Error)
             {
 
@@ -66,6 +71,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             {
                 await GetCondicionesPago();
                 await GetCondicionesEntrega();
+                await GetTransportes();
                 pedidos = response.Response.OrderByDescending(p=> p.FE_PED).ToList();
             }
         }
@@ -92,6 +98,19 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             else
             {
                 condicionesEntrega = response.Response;
+            }
+        }
+
+        protected async Task GetTransportes()
+        {
+            var response = await TransporteService.Get();
+            if (response.Error)
+            {
+                //await ToastMensajeError("Error al obtener Transportes.");
+            }
+            else
+            {
+                transportes = response.Response;
             }
         }
 
@@ -125,6 +144,10 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                 {
 
                     PedidoSeleccionado = response.Response;
+                    foreach (var item in PedidoSeleccionado.Items)
+                    {
+                        item.ESTADO = SupplyChain.Shared.Enum.EstadoItem.Modificado;
+                    }
                     direccionesEntregas = PedidoSeleccionado.DireccionesEntregas.Select(d=> d.DESCRIPCION).ToList();
                     popupFormVisible = true;
                 }
@@ -156,7 +179,9 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                 if (item.ESTADO == SupplyChain.Shared.Enum.EstadoItem.Modificado)
                 {
                     var pedido = pedidos.Where(p => p.PEDIDO == item.PEDIDO).First();
+                    pedido.ORCO = item.ORCO;
                     pedido.CANTPED = item.CANTPED;
+                    pedido.OBSERITEM = item.OBSERITEM;
                     pedido.TOTAL = item.TOTAL;
                 }
             }
@@ -168,12 +193,19 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
 
         protected async Task OnToolbarHandler(ClickEventArgs args)
         {
-            if (args.Item.Id == "refresh")
+            if (args.Item.Id == "refresh" || args.Item.Id == "VerTodos")
             {
                 SpinnerVisible = true;
                 await GetPedidos();
                 SpinnerVisible = false;
             }
+            else if(args.Item.Id == "VerPendientes")
+            {
+                SpinnerVisible = true;
+                await GetPedidos(TipoFiltro.Pendientes);
+                SpinnerVisible = false;
+            }
+
         }
 
 

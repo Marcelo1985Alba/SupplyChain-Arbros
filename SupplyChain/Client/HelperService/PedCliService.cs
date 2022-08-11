@@ -23,7 +23,6 @@ namespace SupplyChain.Client.HelperService
         {
         }
 
-
         public async Task<HttpResponseWrapper<PedCliEncabezado>> GetPedidoEncabezadoById(int id)
         {
             return await http.GetFromJsonAsync<PedCliEncabezado>($"{API}/GetPedidoEncabezadoById/{id}");

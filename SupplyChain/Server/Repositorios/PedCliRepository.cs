@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 using SupplyChain.Shared.Logística;
 using SupplyChain.Shared.Models;
 using System;
@@ -22,7 +23,26 @@ namespace SupplyChain.Server.Repositorios
             this.generaRepository = generaRepository;
         }
 
+        public async Task<IEnumerable<PedCli>> ByFilter(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+        {
+            if (tipoFiltro == TipoFiltro.Pendientes)
+            {
+                var query = "Select * from Pedcli WHERE " +
+                    "PEDIDO NOT IN (SELECT PEDIDO FROM PEDIDOS WHERE remito <> '' AND TIPOO = 1 ) " +
+                    "AND CG_ESTADO NOT IN ('C') AND CANTPED > 0 AND IMPORTE1 > 0";
+                return await base.DbSet.FromSqlRaw(query).ToListAsync();
+            }
+            else if (tipoFiltro == TipoFiltro.NoPendientes)
+            {
+                var query = "Select * from Pedcli WHERE " +
+                    "PEDIDO IN (SELECT PEDIDO FROM PEDIDOS WHERE REMITO <> '' AND TIPOO = 1 )";
+                return await base.DbSet.Where(p => p.CG_ESTADO == "C").ToListAsync();
+            }
 
+
+            return await base.ObtenerTodos();
+
+        }
         public async Task<IEnumerable<PedCli>> ObtenerPedCliPedidos()
         {
             string xSQL = string.Format("SELECT Pedcli.*, CAST( (CASE WHEN Pedidos.FLAG = 0 THEN 0 ELSE 1 END) AS BIT) AS FLAG " +
@@ -57,9 +77,12 @@ namespace SupplyChain.Server.Repositorios
                 pedEncabezado.DES_CLI = ped.DES_CLI;
                 pedEncabezado.FE_MOV = ped.FE_PED;
                 pedEncabezado.PEDIDO = ped.PEDIDO;
+                pedEncabezado.CG_TRANS = ped.CG_TRANS;
+                pedEncabezado.CG_COND_ENTREGA = ped.CG_COND_ENTREGA;
                 pedEncabezado.NUMOCI = ped.NUMOCI;
                 pedEncabezado.MONEDA = ped.MONEDA;
                 pedEncabezado.BONIFIC = ped.BONIFIC;
+                pedEncabezado.ORCO = ped.ORCO;
                 pedEncabezado.TC = (double)ped.VA_INDIC;
 
                 await AgregarDireccionesEntrega(pedEncabezado);

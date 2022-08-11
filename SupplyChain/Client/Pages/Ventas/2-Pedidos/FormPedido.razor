@@ -95,14 +95,17 @@
                         <SfDropDownList TValue="string" TItem="string" DataSource="@DireccionesEntregas"
                                         @bind-Value="Pedido.DIRENT"></SfDropDownList>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label class="">Transporte:</label>
                         <SfDropDownList TValue="int" TItem="vTransporte" DataSource="@Transportes"
                                         @bind-Value="Pedido.CG_TRANS">
                             <DropDownListFieldSettings Value="Id" Text="DESCRIPCION"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
-
+                    <div class="form-group col-md-2">
+                        <label class="">O. Compra:</label>
+                        <SfTextBox ID="ORCO" @bind-Value="@(Pedido.ORCO)"></SfTextBox>
+                    </div>
 
                 </div>
 
@@ -170,7 +173,8 @@
                                         }
                                     </EditTemplate>
                                 </GridColumn>
-                                <GridColumn Field=@nameof(PedCli.IMP_DESCUENTO) HeaderText="Descuento" Format="N2" TextAlign="TextAlign.Left" Width="120px">
+                                <GridColumn Field=@nameof(PedCli.IMP_DESCUENTO) HeaderText="Descuento" Format="N2" TextAlign="TextAlign.Left"
+                                            Width="120px" AllowEditing="false">
                                     <Template Context="detalle">
                                         @{
                                             var value = (detalle as PedCli);
@@ -184,30 +188,26 @@
                                         }
                                     </Template>
                                 </GridColumn>
-                                <GridColumn Field="@nameof(PedCli.SUBTOTAL)" Format="N2" HeaderText="Total" Width="100">
+                                <GridColumn Field="@nameof(PedCli.TOTAL)" Format="N2" HeaderText="Total" Width="100">
                                     <Template Context="detalle">
                                         @{
                                             var value = (detalle as PedCli);
                                             var res = Math.Round(value.PREC_UNIT_X_CANTIDAD - value.IMP_DESCUENTO, 2);
-                                            value.SUBTOTAL = Math.Round(res, 2);
-                                            <span>@value.SUBTOTAL</span>
+                                            value.TOTAL = Math.Round(res, 2);
+                                            <span>@value.TOTAL</span>
                                         }
                                     </Template>
                                 </GridColumn>
-                                <GridColumn Field="@nameof(PedCli.CAMPOCOM1)" HeaderText="Presion" Width="200"></GridColumn>
-                                <GridColumn Field="@nameof(PedCli.CAMPOCOM3)" HeaderText="DescripcionFluido" Width="200"></GridColumn>
-                                <GridColumn Field="@nameof(PedCli.CAMPOCOM5)" HeaderText="Contrapresion Variable" Width="250"></GridColumn>
-                                <GridColumn Field="@nameof(PedCli.CAMPOCOM6)" HeaderText="TemperaturaDescargaT" Width="250"></GridColumn>
-                                <GridColumn Field="@nameof(PedCli.PRESUPUESTOID)" HeaderText="Presup" AllowEditing="false" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.LOTE)" HeaderText="Lote" Width="170"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM2)" HeaderText="Resorte" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM1)" HeaderText="Presion" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM3)" HeaderText="DescripcionFluido" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM5)" HeaderText="Contrapresion Variable" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM6)" HeaderText="TemperaturaDescargaT" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM7)" HeaderText="Contrapresion Fija" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM8)" HeaderText="Capacidad Requerida" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.PRESUPUESTOID)" HeaderText="Presup" AllowEditing="false" Width="100"></GridColumn>
                                 <GridColumn Field="@nameof(PedCli.OBSERITEM)" HeaderText="Observaciones" Width="250"></GridColumn>
-                                @*<GridColumn Field="@nameof(PedCli.DIAS_PLAZO_ENTREGA)" HeaderText="Dias Entrega" Width="100">
-            <EditTemplate Context="detalle">
-                @{
-                    var value = (detalle as PedCli);
-                    <SfNumericTextBox @bind-Value="value.DIAS_PLAZO_ENTREGA" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
-                }
-            </EditTemplate>
-        </GridColumn>*@
                             </GridColumns>
                         </SfGrid>
                     </div>
@@ -242,7 +242,7 @@
             <div class="container-total">
 
                 @{
-                    var totalItems = Math.Round(Pedido.Items.Sum(i => i.SUBTOTAL), 2);
+                    var totalItems = Math.Round(Pedido.Items.Sum(i => i.TOTAL), 2);
                     var bonficacion = Math.Round(totalItems * Pedido.BONIFIC / 100, 2);
                     var total = Pedido.TOTAL = Math.Round(totalItems - bonficacion, 2);
                     var moneda = "$";

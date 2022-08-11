@@ -44,6 +44,7 @@ namespace SupplyChain
         public string OBSERITEM { get; set; } = "";
         public string DIRENT { get; set; } = "";
         public string CG_ESTADO { get; set; } = "";
+        public int CG_COND_ENTREGA { get; set; } = 0;
         public int CG_ESTADPEDCLI { get; set; } = 0;
         public string ESTADO_LOGISTICA { get; set; } = "";
         public string LOTE { get; set; } = "";
@@ -53,10 +54,14 @@ namespace SupplyChain
         public string CAMPOCOM4 { get; set; } = "";
         public string CAMPOCOM5 { get; set; } = "";
         public string CAMPOCOM2 { get; set; } = "";
+        public string CAMPOCOM7 { get; set; } = "";
+        public string CAMPOCOM8 { get; set; } = "";
         public string REMITO { get; set; } = "";
         public DateTime ENTRPREV { get; set; }
-        public decimal SUBTOTAL { get; set; } = 0;
 
+        /// <summary>
+        /// Estado que sirve para determinar si el item se va a actualizar o agregar en la base dedatos
+        /// </summary>
         [NotMapped]
         public EstadoItem ESTADO { get; set; }
 
