@@ -12,7 +12,7 @@ namespace SupplyChain.Shared.HelpersAtributo
             var remito = value as string;
             var noTieneFormato = string.IsNullOrEmpty(remito) || remito.Length > 13 || remito == "0000-00000000";
 
-            return stock.TIPOO == 5 && noTieneFormato
+            return stock.TIPOO == 5 || stock.TIPOO == 1 && noTieneFormato
                 ? new ValidationResult("Ingresar remito válido")
                 : ValidationResult.Success;
         }

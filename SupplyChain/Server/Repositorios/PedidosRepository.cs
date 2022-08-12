@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Data.Repository;
+using SupplyChain.Shared.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,6 +78,25 @@ namespace SupplyChain.Server.Repositorios
             }
             return list;
 
+        }
+
+        internal async Task<List<Pedidos>> GetRemitos(TipoFiltro tipoFiltro = TipoFiltro.Todos , int cg_cia = 1)
+        {
+            if (tipoFiltro == TipoFiltro.Pendientes)
+            {
+                var query = $"SELECT * FROM Pedidos Where tipoo = 1 And Cg_Cia = {cg_cia} " +
+                    "AND VOUCHER = 0 AND Factura = '' " +
+                    $"AND REMITO NOT IN(SELECT REMITO FROM Pedidos WHERE tipoo = 1 And Cg_Cia = {cg_cia} " +
+                    "AND VOUCHER <> 0 ) " +
+                    "ORDER BY FE_MOV DESC";
+
+                return await DbSet.FromSqlRaw(query).ToListAsync();
+            }
+
+
+            return await Obtener(p => p.TIPOO == 1 && p.VOUCHER == 0 && p.CG_CIA == cg_cia, 0,
+                         s => s.OrderByDescending(p => p.FE_MOV), true)
+                .ToListAsync();
         }
     }
 }

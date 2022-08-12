@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Shared;
 using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared.Enum;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -55,6 +56,17 @@ namespace SupplyChain.Server.Controllers
 
             return lStock;
         }
+
+
+        // GET:   
+        [HttpGet("GetRemitos/{tipoFiltro}")]
+        public async Task<ActionResult<IEnumerable<Pedidos>>> GetRemitos(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+        {
+            List<Pedidos> lStock = await _pedidosRepository.GetRemitos(tipoFiltro, cg_cia_usuario);
+
+            return lStock;
+        }
+
 
         // GET: api/Stock/{vale}
         [HttpGet("ByNumeroVale/{vale}")]

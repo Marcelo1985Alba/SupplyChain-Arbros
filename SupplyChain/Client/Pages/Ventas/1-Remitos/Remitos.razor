@@ -1,0 +1,56 @@
+﻿@page "/ventas/remitos"
+@inherits RemitosBase
+
+<div class="row">
+    <div class="col-12">
+        <SfToast ID="toast_default" @ref="ToastObj">
+            <ToastPosition X="Center" Y="Top"></ToastPosition>
+        </SfToast>
+
+
+        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="false" AllowResizing="true"
+                @ref="refGrid" DataSource="@remitos" Width="100%"
+                AllowExcelExport="true" AllowGrouping="true" ID="grdPedidos"
+                AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
+            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+            <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
+            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"
+                        OnToolbarClick="OnToolbarHandler"
+                        TValue="Pedidos"></GridEvents>
+            <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" NewRowPosition="NewRowPosition.Top"
+                              Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
+            </GridEditSettings>
+            <GridColumns>
+                @*<GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>*@
+                <GridColumn Field=@nameof(Pedidos.Id) HeaderText="Id" Visible="false" IsPrimaryKey="true" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.FE_MOV) HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.REMITO) HeaderText="Remito" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.CG_ART) HeaderText="Articulo" TextAlign="TextAlign.Left" Width="160px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.DES_ART) HeaderText="Descripcion Articulo" TextAlign="TextAlign.Left" Width="220px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.UNID) HeaderText="Unidad" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                
+
+
+            </GridColumns>
+            <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
+        </SfGrid>
+    </div>
+
+    @if (popupFormVisible)
+    {
+        @*<FormPedido @ref="@refFormPedido" Show="popupFormVisible" Pedido="@PedidoSeleccionado" CondicionesPagos="@condicionesPagos"
+                    OnCerrar="@(()=> popupFormVisible = false)" CondicionesEntrega="@condicionesEntrega"
+                    DireccionesEntregas="@direccionesEntregas"
+                    OnGuardar="@((p)=> OnPedidoGuardado(p))">
+        </FormPedido>*@
+        <FormRemito Show="@popupFormVisible" Pedido="@PedidoSeleccionado" 
+                    OnCerrar="@(()=> popupFormVisible = false)"></FormRemito>
+    }
+
+
+</div>
