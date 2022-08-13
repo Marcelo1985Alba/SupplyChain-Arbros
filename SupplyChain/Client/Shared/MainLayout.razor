@@ -1,8 +1,8 @@
 ﻿@using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Navigations
 @using SupplyChain.Client.Auth
+@using Microsoft.AspNetCore.SignalR.Client;
 @inject IJSRuntime JS
-@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 @attribute [Authorize]
 @inject NavigationManager MyNavigationManager
 @inherits LayoutComponentBase
@@ -374,15 +374,15 @@
 
             </div>
             @*<div class="footer">
-                <div class="version">
-                    Version 0.1
-                </div>
+                    <div class="version">
+                        Version 0.1
+                    </div>
 
-            </div>*@
+                </div>*@
         </ChildContent>
-        
+
     </SfSidebar>
-    
+
 
 
     <div class="page-wrapper">
@@ -432,10 +432,11 @@
 
 
 @code{
+    [Inject] public ILoginServiceJWT LoginService { get; set; }
     protected SfSidebar sidebarObj;
 
     private Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
-    {
+{
          {"class", "sidebar-treeview" }
     };
     [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
@@ -453,8 +454,11 @@
         if (authState.User.Identity.IsAuthenticated)
             nombreUsuario = authState.User.Identity.Name;
 
-        await JS.InvokeAsync<object>( "blazorFuncs.registerClient", DotNetObjectReference.Create(this));
+        await JS.InvokeAsync<object>("blazorFuncs.registerClient", DotNetObjectReference.Create(this));
+
+
     }
+
 
     [JSInvokable("onupdateavailable")]
     public async Task<string> AppUpdate()
@@ -468,8 +472,8 @@
 
     protected async Task Logout()
     {
-        await Logout();
-        navigationManager.NavigateTo("/login");
+        await LoginService.Logout();
+        MyNavigationManager.NavigateTo("/login");
     }
 
     public void Close()
@@ -497,7 +501,7 @@
         box-shadow: 1px 0px 20px rgb(0 0 0 / 8%);
     }
 
-    .profile-img{
+    .profile-img {
         border-bottom: 1px solid #656a70;
         /*padding-bottom: 5px;*/
     }
@@ -630,7 +634,7 @@
     }
 
     .sidebar.e-dock.e-close > .profile-img {
-        visibility:hidden;
+        visibility: hidden;
     }
 
 
@@ -640,6 +644,7 @@
         border-top: 1px solid #E8E8E8;
         background-color: #395b7b;
     }
+
     .e-sidebar.e-lib.e-dock.e-left .footer {
         position: absolute;
         bottom: 0;
@@ -647,7 +652,7 @@
         right: 18px;
     }
 
-/*    .card {
+    /*    .card {
         margin-bottom: 30px !important;
     }
 

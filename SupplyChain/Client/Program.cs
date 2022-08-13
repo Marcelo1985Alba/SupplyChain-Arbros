@@ -51,6 +51,14 @@ namespace SupplyChain.Client
             services.AddScoped<ILoginService, ProveedorAutenticacion>(
                 provider => provider.GetRequiredService<ProveedorAutenticacion>());
 
+            //JWT
+            services.AddScoped<ProveedorAutenticacionJWT>();
+            services.AddScoped<AuthenticationStateProvider, ProveedorAutenticacionJWT>(
+                provider => provider.GetRequiredService<ProveedorAutenticacionJWT>());
+
+            services.AddScoped<ILoginServiceJWT, ProveedorAutenticacionJWT>(
+                provider => provider.GetRequiredService<ProveedorAutenticacionJWT>());
+
             services.AddScoped<ProductoService>();
             services.AddScoped<ClienteService>();
             services.AddScoped<DireccionEntregaService>();

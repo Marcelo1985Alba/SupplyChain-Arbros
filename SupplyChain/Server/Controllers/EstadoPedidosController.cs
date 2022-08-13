@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain;
@@ -12,19 +16,31 @@ namespace SupplyChain.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class EstadoPedidosController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public EstadoPedidosController(AppDbContext context)
+        public EstadoPedidosController(AppDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            this.userManager = userManager;
         }
 
         // GET: api/Genera
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<vEstadoPedido>>> GetGenera()
+        public async Task<ActionResult<IEnumerable<vEstadoPedido>>> Get()
         {
+            List<Claim> roleClaims = HttpContext.User.FindAll(ClaimTypes.Role).ToList();
+            if (roleClaims.Any(c=> c.Value == "Cliente"))
+            {
+                var userName = HttpContext.User.Identity.Name;
+                var user = await userManager.FindByNameAsync(userName);
+                var cg_cli_usuario = user.Cg_Cli;
+                return await _context.vEstadoPedidos.Where(p => p.CG_CLI == cg_cli_usuario).ToListAsync();
+            }
+
             return await _context.vEstadoPedidos.ToListAsync();
         }
     }

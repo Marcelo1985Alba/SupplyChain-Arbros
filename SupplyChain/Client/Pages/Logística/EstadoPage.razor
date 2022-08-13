@@ -2,7 +2,11 @@
 
 @using Syncfusion.Blazor.Kanban
 @using System.Diagnostics
+@attribute [Authorize(Roles = "Administrador")]
+
 @inherits SupplyChain.Pages.Modelos.EstadoPageBase
+
+
 <SfSpinner @ref="spinnerRef" @bind-Visible="@SpinnerVisible" Label="Cargando..." Size="100" Type="SpinnerType.Fabric" />
 
 <SfToast ID="toast_default" @ref="ToastObj">
@@ -15,7 +19,7 @@
                OnChange="OnCardSearch" OnFocus="@(() => { PriorityValue = "None";  StatusValue = "None"; })">
 
     </SfTextBox>
-    
+
     <div class="col-12">
         <SfKanban @ref="@refKanban" ID="logisticaKanban" TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis"
                   AllowDragAndDrop="true" Height="440px" Query="@CardQuery">

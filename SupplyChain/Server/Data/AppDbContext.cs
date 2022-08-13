@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Config;
 using SupplyChain.Shared;
 using SupplyChain.Shared.CDM;
@@ -9,7 +11,12 @@ using System;
 
 namespace SupplyChain
 {
-    public class AppDbContext : DbContext
+    public class ApplicationUser : IdentityUser
+    {
+        public int Cg_Cli { get; set; } = 0;
+    }
+
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         #region "DbSet"
         //MODULO CARGA DE MAQUINA
@@ -172,24 +179,28 @@ namespace SupplyChain
             modelBuilder.Entity<vPendienteFabricar>(
             eb =>
             {
+                eb.HasNoKey();
                 eb.ToView("vPendientesFabricar");
             });
 
             modelBuilder.Entity<vResumenStock>(
             eb =>
             {
+                eb.HasNoKey();
                 eb.ToView("vResumenStock");
             });
 
             modelBuilder.Entity<vTrazabilidad>(
             eb =>
             {
+                eb.HasNoKey();
                 eb.ToView("vTrazabilidad");
             });
 
             modelBuilder.Entity<vProdMaquinaDataCore>(
             eb =>
             {
+                eb.HasNoKey();
                 eb.ToView("vProdMaquinaDataCore");
             });
 
@@ -198,6 +209,8 @@ namespace SupplyChain
             modelBuilder.Entity<EstadVenta>().HasNoKey().ToView(null);
             modelBuilder.Entity<StockSP>().HasNoKey().ToView(null);
             CreateVistasSQL(modelBuilder);
+
+            base.OnModelCreating(modelBuilder);
         }
 
         private static void CreateVistasSQL(ModelBuilder modelBuilder)

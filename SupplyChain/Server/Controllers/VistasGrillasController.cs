@@ -22,9 +22,10 @@ namespace SupplyChain.Server.Controllers
             this._context = appDbContext;
         }
 
-        [HttpGet("GetByName/{name}/{userName}")]
-        public async Task<ActionResult<List<VistasGrillas>>> GetByName(string name, string userName)
+        [HttpGet("GetByName/{name}")]
+        public async Task<ActionResult<List<VistasGrillas>>> GetByName(string name)
         {
+            var userName = HttpContext.User.Identity.Name;
             return await _context.VistasGrillas.Where(v => v.AppName == name && v.Usuario == userName).ToListAsync();
         }
 

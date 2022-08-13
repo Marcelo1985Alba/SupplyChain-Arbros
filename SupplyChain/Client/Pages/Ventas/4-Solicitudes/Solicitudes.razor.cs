@@ -65,7 +65,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         protected void RegistrarHub()
         {
             hubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
+            .WithUrl(NavigationManager.ToAbsoluteUri("/solicitudhub"))
             .Build();
         }
 

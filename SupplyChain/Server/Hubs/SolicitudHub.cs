@@ -8,7 +8,11 @@ namespace SupplyChain.Server.Hubs
     {
         public async Task SendMessage(vSolicitudes vSolicitud)
         {
+            var userName = Context.GetHttpContext().User.Identity.Name;
+
             await Clients.All.SendAsync("ReceiveVSolicitud", vSolicitud);
         }
+
+        
     }
 }

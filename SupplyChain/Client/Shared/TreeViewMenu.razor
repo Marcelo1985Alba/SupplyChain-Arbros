@@ -20,13 +20,6 @@ else
 {
     <div class="control-wrapper">
         <div id="treeview">
-            @*<SfTreeView TValue="Modulo" ID="treeviewMenuDB" CssClass="custom-tree">
-                <TreeViewFieldsSettings TValue="Modulo" Id="Id" Text="Descripcion" ParentID="ParentId" HasChildren="TieneChild"
-                                        NavigateUrl="Url" IconCss="IconCss">
-                    <SfDataManager Url="api/Modulo" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
-                </TreeViewFieldsSettings>
-                <TreeViewEvents TValue="Modulo" NodeSelected="@(async(a)=> await NodeClicked(a))"></TreeViewEvents>
-            </SfTreeView>*@
             <SfTreeView TValue="Modulo" ID="treeviewMenuDB" CssClass="custom-tree">
                 <TreeViewFieldsSettings DataSource="dbMenu" TValue="Modulo" Id="Id" Text="Descripcion" 
                                         ParentID="ParentId" HasChildren="TieneChild"
@@ -65,8 +58,13 @@ else
         {
             IsAdmin = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Admin"));
             IsProd = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Produccion"));
-
-            if (!IsAdmin && IsProd)
+            if (authState.User.Claims.Any(c=> c.Value == "Cliente"))
+            {
+                dbMenu.Add(new Modulo { Id = 2, Descripcion = "VENTAS", IconCss = "icon-th icon", TieneChild = true });
+                dbMenu.Add(new Modulo { Id = 3, ParentId = 2, Descripcion = "Estado de Pedidos", Url = "/ventas/estado-pedidos",
+                    IconCss = "icon-th icon", TieneChild = false });
+            }
+            else if (!IsAdmin && IsProd)
             {
                 dbMenu.Add(new Modulo { Id = 4, Descripcion = "PCP", IconCss = "icon-docs icon", TieneChild = true });
                 dbMenu.Add(new Modulo

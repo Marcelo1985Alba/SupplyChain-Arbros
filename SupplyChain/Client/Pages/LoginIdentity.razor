@@ -1,15 +1,15 @@
 ﻿@layout LoginLayout
-@page "/login"
+@page "/"
+@page "/login-identity"
 
 @inject SupplyChain.Client.RepositoryHttp.IRepositoryHttp Http
 @inject IJSRuntime JsRuntime
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
-@inject ILoginService loginService
+
 
 <SfToast ID="toast_default" @ref="ToastObj">
-    <ToastPosition X="Right" ></ToastPosition>
+    <ToastPosition X="Right"></ToastPosition>
 </SfToast>
-
 
 <section id="wrapper" class="login-register login-sidebar" style="background-image:url(./Imagenes/login-register.jpg);">
     <div class="login-box card">
@@ -18,14 +18,14 @@
                 <a href="javascript:void(0)" class="text-center db">
                     <img src="./logo_aerre.jpg" class="img-thumbnail" alt="Home" /><br />
                 </a>
-                <DataAnnotationsValidator/>
+                <DataAnnotationsValidator />
                 <div class="form-group m-t-40">
                     <div class="col-xs-12">
                         <label>Usuario</label>
                         <SfTextBox ShowClearButton="true" Placeholder="Ingresar Usuario"
-                                                            @bind-Value="@usuarioLogin.Usuario" ID="txtUsuarioLogin"
-                                                            FloatLabelType="FloatLabelType.Never" Type="InputType.Text" />
-                        <ValidationMessage For="@(()=>usuarioLogin.Usuario)"/>
+                                   @bind-Value="@usuarioLogin.UserName" ID="txtUsuarioLogin"
+                                   FloatLabelType="FloatLabelType.Never" Type="InputType.Text" />
+                        <ValidationMessage For="@(()=>usuarioLogin.UserName)" />
                     </div>
                 </div>
                 <SfSpinner @bind-Visible="SpinnerVisible" Label="Iniciando Sesion..." Size="100" Type="SpinnerType.Bootstrap"></SfSpinner>
@@ -34,16 +34,16 @@
                         <label>Contraseña</label>
                         <div class="e-input-group">
                             <div class="e-input-in-wrap">
-                                <input class="e-input" type="@type" placeholder="Ingresar Password" @bind-value="@usuarioLogin.Contras"/>
+                                <input class="e-input" type="@type" placeholder="Ingresar Password" @bind-value="@usuarioLogin.Password" />
                             </div>
                             <span class="e-input-group-icon @cssIconEye" @onclick="ShowPassword"></span>
                         </div>
                         @*<SfTextBox ShowClearButton="true" Placeholder="Ingresar Password"
-                                   @bind-Value="@usuarioLogin.Usuario" ID="txtUsuarioLogin"
-                                   FloatLabelType="FloatLabelType.Never" Type="InputType.Password" />*@
+                            @bind-Value="@usuarioLogin.Usuario" ID="txtUsuarioLogin"
+                            FloatLabelType="FloatLabelType.Never" Type="InputType.Password" />*@
                         @*<input class='e-input' type="password" placeholder='Enter Password' @bind-value="@usuarioLogin.Contras" />*@
                         @*<SfTextBox @ref="txtbox2" CssClass="e-input" Type="@TxtType" Placeholder="Enter Password" Created="onCreateTextBox"></SfTextBox>*@
-                        <ValidationMessage For="@(()=>usuarioLogin.Contras)" />
+                        <ValidationMessage For="@(()=>usuarioLogin.Password)" />
                     </div>
                 </div>
 
@@ -53,7 +53,7 @@
                                 type="submit">
                             Ingresar <span class="fa fa-long-arrow-right"></span>
                         </button>
-                        
+
                     </div>
                 </div>
                 <div class="form-group">
@@ -70,51 +70,47 @@
         <div class="pt-5 mt-5">
             <p>Cargar Menu</p>
         </div>
-
     }*@
 
 @code {
-
+    [Inject] public ILoginServiceJWT loginServiceJWT { get; set; }
     public string type { get; set; } = "password";
     public InputType TxtType = InputType.Password;
     protected string cssIconEye = "fa fa-eye";
-
+    protected string Token = string.Empty;
     protected string Usuario;
     protected string MensajeServidor = "";
     protected string contras = "";
     protected bool IsDialogLoginVisible { get; set; } = true;
     protected SfToast ToastObj;
     private bool SpinnerVisible = false;
-    Usuarios usuarioLogin = new Usuarios();
+    SupplyChain.Shared.Login.UserInfo usuarioLogin = new();
 
     protected async override Task OnInitializedAsync()
     {
         // Recoge usuario
-        Usuario = await JsRuntime.InvokeAsync<string>("sessionStorage.getItem", "Usuario");
+        Token = await JsRuntime.InvokeAsync<string>("sessionStorage.getItem", "TOKEN_KEY");
         StateHasChanged();
     }
 
     private async Task LoginDialogOk(/*Object args*/)
     {
-        //if (usuarioLogin.Usuario != "" && usuarioLogin.Contras != "")
-        //{
-        SpinnerVisible = true;
 
-        var httpResponse = await Http.PostAsJsonAsync<Usuarios>($"api/Usuarios",usuarioLogin);
+        SpinnerVisible = true;
+        var httpResponse = await Http.Post<UserInfo, UserToken>($"api/Cuentas/login", usuarioLogin);
         if (!httpResponse.Error)
         {
             var xUser = httpResponse.Response;
 
-            //IsDialogLoginVisible = false;
             await this.ToastObj.Show(new ToastModel
             {
-                Title = $"Bienvenid@ {xUser.Usuario}!",
+                Title = $"Bienvenido {usuarioLogin.UserName}!",
                 Content = "Usuario y contraseña correcta.",
                 CssClass = "e-toast-success",
                 Icon = "e-success toast-icons"
             });
 
-            await loginService.Login(xUser);
+            await loginServiceJWT.Login(xUser);
             navigationManager.NavigateTo("/index");
         }
         else
@@ -154,77 +150,74 @@
 }
 
 <style>
-    .dialogLogin {
-        position: relative;
-        height: 410px;
-        max-height: 410px;
-        width: 30%;
-        margin-top: 100px;
-        margin-right: 35%;
-        margin-left: 180px;
-        margin-bottom: auto;
-    }
-    /*
-Template Name: Admin pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
-    /*
-Template Name: Admin Pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
-    /*Theme Colors*/
-    /*bootstrap Color*/
-    /*Light colors*/
-    /*Normal Color*/
-    /*Extra Variable*/
-    /*******************
-Login register and recover password Page
-******************/
-    .login-register {
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-        height: 100%;
-        width: 100%;
-        padding: 10% 0;
-        position: fixed;
-    }
+        .dialogLogin {
+            position: relative;
+            height: 410px;
+            max-height: 410px;
+            width: 30%;
+            margin-top: 100px;
+            margin-right: 35%;
+            margin-left: 180px;
+            margin-bottom: auto;
+        }
+        /*
+    Template Name: Admin pro Admin
+    Author: Wrappixel
+    Email: niravjoshi87@gmail.com
+    File: scss
+    */
+        /*
+    Template Name: Admin Pro Admin
+    Author: Wrappixel
+    Email: niravjoshi87@gmail.com
+    File: scss
+    */
+        /*Theme Colors*/
+        /*bootstrap Color*/
+        /*Light colors*/
+        /*Normal Color*/
+        /*Extra Variable*/
+        /*******************
+    Login register and recover password Page
+    ******************/
+        .login-register {
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            height: 100%;
+            width: 100%;
+            padding: 10% 0;
+            position: fixed;
+        }
 
-    .login-box {
-        width: 400px;
-        margin: 0 auto;
-    }
+        .login-box {
+            width: 400px;
+            margin: 0 auto;
+        }
 
-    .login-box .footer {
-        width: 100%;
-        left: 0px;
-        right: 0px;
-    }
+            .login-box .footer {
+                width: 100%;
+                left: 0px;
+                right: 0px;
+            }
 
-    .login-box .social {
-        display: block;
-        margin-bottom: 30px;
-    }
+            .login-box .social {
+                display: block;
+                margin-bottom: 30px;
+            }
 
-    #recoverform {
-        display: none;
-    }
+        #recoverform {
+            display: none;
+        }
 
-    .login-sidebar {
-        padding: 0px;
-        margin-top: 0px;
-    }
+        .login-sidebar {
+            padding: 0px;
+            margin-top: 0px;
+        }
 
-    .login-sidebar .login-box {
-        right: 0px;
-        position: absolute;
-        height: 100%;
-    }
-
-    
-
+            .login-sidebar .login-box {
+                right: 0px;
+                position: absolute;
+                height: 100%;
+            }
 </style>

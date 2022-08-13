@@ -50,7 +50,8 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             var response = await Http.GetFromJsonAsync<List<vEstadoPedido>>("api/EstadoPedidos");
             if (response.Error)
             {
-                Console.WriteLine("ERROR OBTENER DATOS");
+                Console.WriteLine("E R R O R !!!");
+                Console.WriteLine(response.HttpResponseMessage.Content.ReadAsStringAsync());
             }
             else
             {

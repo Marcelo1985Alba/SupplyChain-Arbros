@@ -1,5 +1,6 @@
 ﻿@using Syncfusion.Blazor.Layouts
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Microsoft.AspNetCore.SignalR.Client
 @page "/index"
 
 <h1>Hola, @authState.User.Identity.Name!</h1>
@@ -15,24 +16,79 @@ Bienvenido a la nueva aplicación.
 
 @*<iframe src="http://localhost:8090/" width="100%" height="1200" frameborder="0"></iframe>*@
 
-
+<SfTextBox @bind-Value="@user"></SfTextBox>
+<Syncfusion.Blazor.Buttons.SfButton Content="EnviarMensajePredefinido" OnClick="@EnviarMensaje"></Syncfusion.Blazor.Buttons.SfButton>
+<SfTextBox @bind-Value="@MensajeEnviar" Placeholder="MensajeEnviar"></SfTextBox>
+<SfTextBox @bind-Value="@MensajeRecibido"></SfTextBox>
 
 
 
 @code{
+    [Inject] public NavigationManager NavigationManager { get; set; }
     [Inject] public IRepositoryHttp Http { get; set; }
     [Inject] public IJSRuntime JS { get; set; }
+    [Inject] public ILoginServiceJWT LoginService { get; set; }
     [CascadingParameter] public MainLayout Layout { get; set; }
     [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
     private AuthenticationState authState;
+    protected string user = string.Empty;
+    protected string MensajeRecibido = string.Empty;
+    protected string MensajeEnviar = string.Empty;
+
     protected async override Task OnInitializedAsync()
     {
         Layout.Titulo = "Inicio";
-
+        //var token = await JS.GetFromSessionStorage("TOKEN_KEY");
         authState = await authenticationState;
-
+        RegistrarHub();
+        OnRecibirSolicitudFromCalculoSignalR();
         //await RequestNotificationSubscriptionAsync();
+
+        await hubConnection.StartAsync();
+        Console.WriteLine(hubConnection.ConnectionId);
     }
+
+    private HubConnection? hubConnection;
+    protected void RegistrarHub()
+    {
+        hubConnection = new HubConnectionBuilder()
+        .WithUrl(NavigationManager.ToAbsoluteUri("/chathub") )
+        .Build();
+
+        //hubConnection = new HubConnectionBuilder()
+        //.WithUrl(NavigationManager.ToAbsoluteUri("/chathub"), options=>
+        //{
+        //    options.AccessTokenProvider = () => Task.FromResult(token);
+        //})
+        //.Build();
+    }
+
+
+    protected async Task OnRecibirSolicitudFromCalculoSignalR()
+    {
+        _ = hubConnection.On<string, string>("ReceiveMessage", (userSender, message) =>
+        {
+
+            MensajeRecibido = message;
+            StateHasChanged();
+        });
+    }
+
+
+    protected async Task EnviarMensaje()
+    {
+        authState = await authenticationState;
+        var userSENDER = authState.User.Identity.Name;
+        var receiverConnectionId = hubConnection.ConnectionId;
+        await Http.GetFromJsonAsync<Chat>($"api/Chats/SendMessage?USER={userSENDER}" +
+            $"&RECEIVERCONNECTIONID={user}&MESSAGE={MensajeEnviar}");
+
+
+        //var resumen = await Http
+        //                .GetFromJsonAsync<vResumenStock>($"api/ResumenStock/GetByStock?CG_ART={cg_art}" +
+        //                $"&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
+    }
+
 
     protected async Task SubscribeToNotificacions(NotificacionSubscripcion notificacionSubscripcion)
     {

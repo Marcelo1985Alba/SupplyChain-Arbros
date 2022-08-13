@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
@@ -11,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Server.Hubs;
 using SupplyChain.Server.Repositorios;
@@ -19,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SupplyChain.Server
@@ -44,6 +48,31 @@ namespace SupplyChain.Server
                 options.EnableSensitiveDataLogging();
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+
+            #region "identity"
+            services.AddIdentity<ApplicationUser, IdentityRole>(op =>
+            {
+                op.Password.RequireUppercase = false;
+                op.Password.RequireDigit = false;
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                 options.TokenValidationParameters = new TokenValidationParameters()
+                 {
+                     ValidateIssuer = false,
+                     ValidateAudience = false,
+                     ValidateLifetime = true,
+                     ValidateIssuerSigningKey = true,
+                     IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
+                         Encoding.UTF8.GetBytes(Configuration["jwt:llave"]))
+                 });
+
+            #endregion
+
 
             #region "Repositorios"
             services.AddTransient<UsuariosRepository>();
@@ -137,7 +166,9 @@ namespace SupplyChain.Server
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
                 //endpoints.Map("api/{**slug}", HandleApiFallback);
-                endpoints.MapHub<SolicitudHub>("/chathub");
+                endpoints.MapHub<SolicitudHub>("/solicitudhub");
+                endpoints.MapHub<OnlineUsersHub>("/onlinehub");
+                endpoints.MapHub<ChatHub>("/chathub");
                 endpoints.MapFallbackToFile("index.html");
             });
         }
