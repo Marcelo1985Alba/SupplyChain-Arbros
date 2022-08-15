@@ -122,6 +122,9 @@ namespace SupplyChain
 
         //MODULO PROYECTOS
         public DbSet<ProyectosGBPI> Proyectos { get; set; }
+
+
+        public DbSet<MantCeldas> MantCeldas { get; set; }
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

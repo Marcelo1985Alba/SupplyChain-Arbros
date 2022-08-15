@@ -73,6 +73,7 @@ namespace SupplyChain.Server
             services.AddTransient<TipoAreaRepository>();
             services.AddTransient<LineasRepository>();
             services.AddTransient<UnidadesRepository>();
+            services.AddTransient<MantCeldasRepository>();
             #endregion
 
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
