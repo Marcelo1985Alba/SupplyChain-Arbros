@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @page "/index"
 
-<h1>Hola, @authState.User.Identity.Name!</h1>
+<h5>Hola, @CurrentUserEmail (@CurrentUserId)</h5>
 
 Bienvenido a la nueva aplicación.
 <br />
@@ -16,10 +16,32 @@ Bienvenido a la nueva aplicación.
 
 @*<iframe src="http://localhost:8090/" width="100%" height="1200" frameborder="0"></iframe>*@
 
-<SfTextBox @bind-Value="@user"></SfTextBox>
+<SfTextBox @bind-Value="@ContactId" Placeholder="id usuario contacto"></SfTextBox>
 <Syncfusion.Blazor.Buttons.SfButton Content="EnviarMensajePredefinido" OnClick="@EnviarMensaje"></Syncfusion.Blazor.Buttons.SfButton>
-<SfTextBox @bind-Value="@MensajeEnviar" Placeholder="MensajeEnviar"></SfTextBox>
-<SfTextBox @bind-Value="@MensajeRecibido"></SfTextBox>
+<SfTextBox @bind-Value="@CurrentMessage" Placeholder="MensajeEnviar"></SfTextBox>
+
+@foreach (var item in messages.OrderBy(m=> m.CreatedDate))
+{
+<div class="row">
+    @if (item.ToUserId == CurrentUserId)
+    {
+        <div style="text-align:right">
+            <label class="badge badge-success">@item.Message</label>
+            <small>@item.CreatedDate</small>
+        </div>
+    }
+    else
+    {
+        <div style="text-align:left">
+            <label class="badge badge-danger">@item.Message</label>
+            <small>@item.CreatedDate</small>
+        </div>
+    }
+
+
+</div>
+    
+}
 
 
 
@@ -29,7 +51,16 @@ Bienvenido a la nueva aplicación.
     [Inject] public IJSRuntime JS { get; set; }
     [Inject] public ILoginServiceJWT LoginService { get; set; }
     [CascadingParameter] public MainLayout Layout { get; set; }
+    [CascadingParameter] public HubConnection? hubConnection { get; set; }
     [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
+
+    [Parameter] public string ContactEmail { get; set; }
+    [Parameter] public string ContactId { get; set; }
+    [Parameter] public string CurrentMessage { get; set; }
+    [Parameter] public string CurrentUserId { get; set; }
+    [Parameter] public string CurrentUserEmail { get; set; }
+    private List<ChatMessage> messages = new List<ChatMessage>();
+
     private AuthenticationState authState;
     protected string user = string.Empty;
     protected string MensajeRecibido = string.Empty;
@@ -38,17 +69,45 @@ Bienvenido a la nueva aplicación.
     protected async override Task OnInitializedAsync()
     {
         Layout.Titulo = "Inicio";
-        //var token = await JS.GetFromSessionStorage("TOKEN_KEY");
-        authState = await authenticationState;
-        RegistrarHub();
-        OnRecibirSolicitudFromCalculoSignalR();
-        //await RequestNotificationSubscriptionAsync();
+        if (hubConnection == null)
+        {
+            hubConnection = new HubConnectionBuilder().WithUrl(NavigationManager.ToAbsoluteUri("/chathub")).Build();
+        }
+        if (hubConnection.State == HubConnectionState.Disconnected)
+        {
+            await hubConnection?.StartAsync();
+        }
+        hubConnection?.On<ChatMessage, string>("ReceiveMessage", async (message, userName) =>
+        {
+            if ((ContactId == message.ToUserId && CurrentUserId == message.FromUserId) || (ContactId == message.FromUserId && CurrentUserId == message.ToUserId))
+            {
 
-        await hubConnection.StartAsync();
-        Console.WriteLine(hubConnection.ConnectionId);
+                if ((ContactId == message.ToUserId && CurrentUserId == message.FromUserId))
+                {
+                    messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { Email = CurrentUserEmail } });
+                    await hubConnection?.SendAsync("ChatNotificationAsync", $"New Message From {userName}", ContactId, CurrentUserId);
+                }
+                else if ((ContactId == message.FromUserId && CurrentUserId == message.ToUserId))
+                {
+                    messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { Email = ContactEmail } });
+                }
+                //await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chatContainer");
+                StateHasChanged();
+            }
+        });
+
+        //await GetUsersAsync();
+        var state = await authenticationState;
+        var user = state.User;
+        var claims = user.Claims.ToList();
+        CurrentUserId = user.Claims.Where(a => a.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")
+            .Select(a => a.Value).FirstOrDefault();
+        CurrentUserEmail = user.Claims.Where(a => a.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")
+            .Select(a => a.Value).FirstOrDefault();
+
+
     }
 
-    private HubConnection? hubConnection;
     protected void RegistrarHub()
     {
         hubConnection = new HubConnectionBuilder()
@@ -77,12 +136,31 @@ Bienvenido a la nueva aplicación.
 
     protected async Task EnviarMensaje()
     {
-        authState = await authenticationState;
-        var userSENDER = authState.User.Identity.Name;
-        var receiverConnectionId = hubConnection.ConnectionId;
-        await Http.GetFromJsonAsync<Chat>($"api/Chats/SendMessage?USER={userSENDER}" +
-            $"&RECEIVERCONNECTIONID={user}&MESSAGE={MensajeEnviar}");
+        if (!string.IsNullOrEmpty(CurrentMessage) && !string.IsNullOrEmpty(ContactId))
+        {
+            //Save Message to DB
+            var chatHistory = new ChatMessage()
+            {
+                Message = CurrentMessage,
+                ToUserId = ContactId,
+                CreatedDate = DateTime.Now
 
+            };
+            var response = await Http.PostAsJsonAsync("api/Chats", chatHistory);
+            if (response.Error)
+            {
+                Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+
+            }
+
+            chatHistory.FromUserId = CurrentUserId;
+            if (hubConnection.State == HubConnectionState.Disconnected)
+            {
+                await hubConnection?.StartAsync();
+            }
+            await hubConnection.SendAsync("SendMessageAsync", chatHistory, CurrentUserEmail);
+            CurrentMessage = string.Empty;
+        }
 
         //var resumen = await Http
         //                .GetFromJsonAsync<vResumenStock>($"api/ResumenStock/GetByStock?CG_ART={cg_art}" +

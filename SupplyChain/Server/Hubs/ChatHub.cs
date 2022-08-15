@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using SupplyChain.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,21 +9,13 @@ namespace SupplyChain.Server.Hubs
 {
     public class ChatHub : Hub
     {
-        public string GetConnectionId() => Context.ConnectionId;
-
-        public override Task OnConnectedAsync()
+        public async Task SendMessageAsync(ChatMessage message, string userName)
         {
-            Groups.AddToGroupAsync(Context.ConnectionId, Context.User.Identity.Name);
-            return base.OnConnectedAsync();
+            await Clients.All.SendAsync("ReceiveMessage", message, userName);
         }
-
-        public async Task SendMessage(string user, string message)
+        public async Task ChatNotificationAsync(string message, string receiverUserId, string senderUserId)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
-        }
-        public async Task SendMessageToUser(string user, string groupNameReceiber, string message)
-        {
-            await Clients.Group(groupNameReceiber).SendAsync("ReceiveMessage", user, message);
+            await Clients.All.SendAsync("ReceiveChatNotification", message, receiverUserId, senderUserId);
         }
     }
 }

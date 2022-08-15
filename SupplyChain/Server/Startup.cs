@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Server.Hubs;
 using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared;
 using Syncfusion.Blazor;
 using System;
 using System.Collections.Generic;
@@ -168,8 +169,9 @@ namespace SupplyChain.Server
                 //endpoints.Map("api/{**slug}", HandleApiFallback);
                 endpoints.MapHub<SolicitudHub>("/solicitudhub");
                 endpoints.MapHub<OnlineUsersHub>("/onlinehub");
-                endpoints.MapHub<ChatHub>("/chathub");
+                
                 endpoints.MapFallbackToFile("index.html");
+                endpoints.MapHub<ChatHub>("/chathub");
             });
         }
 

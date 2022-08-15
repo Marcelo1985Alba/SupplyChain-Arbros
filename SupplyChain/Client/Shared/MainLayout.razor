@@ -415,8 +415,9 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-
-                            @Body
+                            <CascadingValue Value="hubConnection">
+                                @Body
+                            </CascadingValue>
                         </div>
                     </div>
 
@@ -444,10 +445,12 @@
 
     private bool SidebarToggle = false;
     private string nombreUsuario = "";
-
+    private string CurrentUserId { get; set; }
     public string Titulo { get; set; } = "";
     public string BreadCumParent { get; set; } = "";
     bool updateReady;
+    private HubConnection hubConnection;
+    public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
     protected async override Task OnInitializedAsync()
     {
         authState = await authenticationState;
@@ -455,6 +458,34 @@
             nombreUsuario = authState.User.Identity.Name;
 
         await JS.InvokeAsync<object>("blazorFuncs.registerClient", DotNetObjectReference.Create(this));
+
+        hubConnection = new HubConnectionBuilder().WithUrl(MyNavigationManager.ToAbsoluteUri("/chathub")).Build();
+        await hubConnection?.StartAsync();
+        hubConnection?.On<string, string, string>("ReceiveChatNotification", (message, receiverUserId, senderUserId) =>
+        {
+            if (CurrentUserId == receiverUserId)
+            {
+                //_jsRuntime.InvokeAsync<string>("PlayAudio", "notification");
+                //_snackBar.Add(message, Severity.Info, config =>
+                //{
+                //    config.VisibleStateDuration = 10000;
+                //    config.HideTransitionDuration = 500;
+                //    config.ShowTransitionDuration = 500;
+                //    config.Action = "Chat?";
+                //    config.ActionColor = Color.Info;
+                //    config.Onclick = snackbar =>
+                //    {
+                //        _navigationManager.NavigateTo($"chat/{senderUserId}");
+                //        return Task.CompletedTask;
+                //    };
+                //});
+            }
+        });
+
+        var user = authState.User;
+        var claims = user.Claims.ToList();
+        CurrentUserId = user.Claims.Where(a => a.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")
+            .Select(a => a.Value).FirstOrDefault();
 
 
     }

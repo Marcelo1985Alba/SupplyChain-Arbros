@@ -11,10 +11,6 @@ using System;
 
 namespace SupplyChain
 {
-    public class ApplicationUser : IdentityUser
-    {
-        public int Cg_Cli { get; set; } = 0;
-    }
 
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
@@ -127,7 +123,7 @@ namespace SupplyChain
         public DbSet<NotificacionSubscripcion> NotificacionSubscripcions { get; set; }
         public DbSet<vCalculoSolicitudes> vCalculoSolicitudes { get; set; }
         public DbSet<vTransporte> vTransportes { get; set; }
-
+        public DbSet<ChatMessage> ChatMessages { get; set; }
         //MODULO PROYECTOS
         public DbSet<ProyectosGBPI> Proyectos { get; set; }
         #endregion
@@ -143,6 +139,19 @@ namespace SupplyChain
             modelBuilder.ApplyConfiguration(new CompraConfig());
             modelBuilder.ApplyConfiguration(new PedidoConfig());
             modelBuilder.ApplyConfiguration(new ProveedorConfig());
+
+            modelBuilder.Entity<ChatMessage>(entity =>
+            {
+                entity.HasOne(d => d.FromUser)
+                    .WithMany(p => p.ChatMessagesFromUsers)
+                    .HasForeignKey(d => d.FromUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.ToUser)
+                    .WithMany(p => p.ChatMessagesToUsers)
+                    .HasForeignKey(d => d.ToUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
 
             modelBuilder.Entity<Solicitud>(entity => {
                 entity.HasOne(c => c.PresupuestoDetalle)

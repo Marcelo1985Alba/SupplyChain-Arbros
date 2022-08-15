@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SupplyChain.Server.Hubs;
+using SupplyChain.Shared;
 using SupplyChain.Shared.Login;
 using System;
 using System.Collections.Generic;
@@ -52,8 +53,7 @@ namespace SupplyChain.Server.Controllers
 
             var user = await userManager.FindByNameAsync(userInfo.UserName);
             var roles = await userManager.GetRolesAsync(user);
-
-            return BuildToken(userInfo, roles);
+            return BuildToken(user, roles);
         }
 
         [HttpPost("resetearpassword")]
@@ -109,7 +109,7 @@ namespace SupplyChain.Server.Controllers
             var result = await userManager.CreateAsync(user, userInfo.Password);
             if (result.Succeeded)
             {
-                return BuildToken(userInfo, new List<string>());
+                return BuildToken(user, new List<string>());
             }
             else
             {
@@ -128,7 +128,7 @@ namespace SupplyChain.Server.Controllers
                 await _hubOnlineUsersContext.Clients.All.SendAsync("UpdateOnlineUsers", 1);
                 var user = await userManager.FindByNameAsync(userInfo.UserName);
                 var roles = await userManager.GetRolesAsync(user);
-                return BuildToken(userInfo, roles);
+                return BuildToken(user, roles);
             }
             else
             {
@@ -146,7 +146,7 @@ namespace SupplyChain.Server.Controllers
         }
 
 
-        private UserToken BuildToken(UserInfo userInfo, IList<string> roles)
+        private UserToken BuildToken(ApplicationUser userInfo, IList<string> roles)
         {
             List<Claim> claims = AgregaClaims(userInfo, roles);
 
@@ -165,13 +165,14 @@ namespace SupplyChain.Server.Controllers
             };
         }
 
-        private static List<Claim> AgregaClaims(UserInfo userInfo, IList<string> roles)
+        private static List<Claim> AgregaClaims(ApplicationUser userInfo, IList<string> roles)
         {
             var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.UserName),
                 new Claim(ClaimTypes.Name, userInfo.UserName),
-                //new Claim(ClaimTypes.Role, "Admin"),
+                new Claim(ClaimTypes.NameIdentifier, userInfo.Id),
+                new Claim(ClaimTypes.Email, userInfo.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
