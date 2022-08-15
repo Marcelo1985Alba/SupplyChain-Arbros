@@ -126,6 +126,9 @@ namespace SupplyChain
         public DbSet<ChatMessage> ChatMessages { get; set; }
         //MODULO PROYECTOS
         public DbSet<ProyectosGBPI> Proyectos { get; set; }
+
+
+        public DbSet<MantCeldas> MantCeldas { get; set; }
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

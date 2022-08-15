@@ -1,0 +1,110 @@
+﻿@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@inherits FormMantCeldasBase
+
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+
+<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
+    <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
+    <DialogTemplates>
+        <Header>
+            @if (string.IsNullOrEmpty(mantCeldas.Id.ToString()))
+            {
+                <p>Nuevo Mantenimiento de celda</p>
+            }
+            else
+            {
+                <p>&nbsp;&nbsp;@mantCeldas.Id&nbsp;&nbsp;-&nbsp;&nbsp;@mantCeldas.Mantenimiento</p>
+            }
+        </Header>
+        <Content>
+            <EditForm Model="mantCeldas" OnValidSubmit="@GuardarMantCelda">
+                <DataAnnotationsValidator />
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales" role="tab" aria-controls="pills-home" aria-selected="true">Datos Generales</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-DatosGenerales" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Id:</label>
+                                    <SfNumericTextBox ID="Id" @bind-Value="@(mantCeldas.Id)" Placeholder="Id" Enabled="@mantCeldas.ESNUEVO"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a>Codigo:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Celdas" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(mantCeldas.Cg_Celda)" DataSource="@celda">
+                                        <ComboBoxFieldSettings Value="Id" Text="Id"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label>Mantenimiento:</label>
+                                    <SfTextBox ID="Mantenimiento" @bind-Value="@(mantCeldas.Mantenimiento)" Placeholder="Mantenimiento"></SfTextBox>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Fecha:</label>
+                                    <SfDateTimePicker ID="Fecha" @bind-Value="@(mantCeldas.Fecha)" Placeholder="Fecha"></SfDateTimePicker>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Tarea:</label>
+                                    <SfTextBox ID="Tarea" @bind-Value="@(mantCeldas.Tarea)" Placeholder="Tarea"></SfTextBox>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Causa:</label>
+                                    <SfTextBox ID="Causa" @bind-Value="@(mantCeldas.Causa)" Placeholder="Causa"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Tiempo de Parada:</label>
+                                    <SfNumericTextBox ID="TiempoParada" @bind-Value="@(mantCeldas.TiempoParada)" Placeholder="Tiempo de Parada"></SfNumericTextBox>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Repuesto:</label>
+                                    <SfTextBox ID="Repuesto" @bind-Value="@(mantCeldas.Repuesto)" Placeholder="Repuesto"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Costo:</label>
+                                    <SfNumericTextBox ID="Costo" @bind-Value="@(mantCeldas.Costo)" Placeholder="Costo"></SfNumericTextBox>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Operario:</label>
+                                    <SfTextBox ID="Operario" @bind-Value="@(mantCeldas.Operario)" Placeholder="Operario"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Operador:</label>
+                                    <SfTextBox ID="Operador" @bind-Value="@(mantCeldas.Operador)" Placeholder="Operador"></SfTextBox>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Proveedor:</label>
+                                    <SfTextBox ID="Proveedor" @bind-Value="@(mantCeldas.Proveedor)" Placeholder="Proveedor"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Estado:</label>
+                                    <SfTextBox ID="Estado" @bind-Value="@(mantCeldas.Estado)" Placeholder="Estado"></SfTextBox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
+            </EditForm>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
