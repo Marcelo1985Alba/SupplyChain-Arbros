@@ -135,22 +135,21 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
                 SpinnerVisible = true;
-                //var response = await PedCliService.GetPedidoEncabezadoById(args.Data.Id);
-                //if (response.Error)
-                //{
-                //    await ToastMensajeError();
-                //}
-                //else
-                //{
-
-                //    //PedidoSeleccionado = response.Response;
-                //    //foreach (var item in PedidoSeleccionado.Items)
-                //    //{
-                //    //    item.ESTADO = SupplyChain.Shared.Enum.EstadoItem.Modificado;
-                //    //}
-                //    //direccionesEntregas = PedidoSeleccionado.DireccionesEntregas.Select(d => d.DESCRIPCION).ToList();
-                //    //popupFormVisible = true;
-                //}
+                var response = await StockService.GetPedidoEncabezadoById((int)args.Data.Id);
+                if (response.Error)
+                {
+                    await ToastMensajeError();
+                }
+                else
+                {
+                    PedidoSeleccionado = response.Response;
+                    foreach (var item in PedidoSeleccionado.Items)
+                    {
+                        item.ESTADO = SupplyChain.Shared.Enum.EstadoItem.Modificado;
+                    }
+                    //direccionesEntregas = PedidoSeleccionado.DireccionesEntregas.Select(d => d.DESCRIPCION).ToList();
+                    popupFormVisible = true;
+                }
                 SpinnerVisible = false;
             }
         }

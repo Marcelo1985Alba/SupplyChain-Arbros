@@ -15,17 +15,17 @@
         <Header>
             @if (Pedido.PEDIDO == 0)
             {
-                <div class="e-dlg-header-titulo">Nuevo Pedido</div>
+                <div class="e-dlg-header-titulo">Nuevo Remito</div>
             }
             else
             {
-                <div class="e-dlg-header-titulo">Pedido:&nbsp;&nbsp;@Pedido.PEDIDO&nbsp;&nbsp;-&nbsp;&nbsp;@Pedido.DES_CLI</div>
+                <div class="e-dlg-header-titulo">Remito:&nbsp;&nbsp;@Pedido.PEDIDO&nbsp;&nbsp;-&nbsp;&nbsp;@Pedido.DES_CLI</div>
             }
         </Header>
         <Content>
             <SfToolbar ID="toolbar-form-pedido" CssClass="">
                 <ToolbarItems>
-                    <ToolbarItem Id="tiPresupuestos" CssClass="e-round e-small" Type="ItemType.Button" Text="Presupuestos" OnClick="BuscarPresupuestos" Align="ItemAlign.Right"></ToolbarItem>
+                    <ToolbarItem Id="tiPresupuestos" CssClass="e-round e-small" Type="ItemType.Button" Text="Pedidos" OnClick="BuscarPedidosPendientes" Align="ItemAlign.Right"></ToolbarItem>
                     @*<ToolbarItem Id="tiProductos" CssClass="e-round" Text="Productos" OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>*@
 
                 </ToolbarItems>
@@ -122,92 +122,45 @@
                             @*<GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>*@
                             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowConfirmDialog="false"
                                               Mode="@Syncfusion.Blazor.Grids.EditMode.Batch">
-                                <GridEvents TValue="PedCli" OnBatchDelete="BatchDeleteHandler"
+                                <GridEvents TValue="Pedidos" OnBatchDelete="BatchDeleteHandler"
                                             CellSaved="CellSavedHandler" OnBatchAdd="BatchAddHandler" OnBatchSave="BatchSaveHandler"></GridEvents>
                             </GridEditSettings>
                             <GridColumns>
-                                <GridColumn Field=@nameof(PedCli.Id) IsPrimaryKey="true" Width="3"></GridColumn>
-                                <GridColumn Field=@nameof(PedCli.CG_ART) AllowEditing="false" HeaderText="Producto" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
-                                <GridColumn Field=@nameof(PedCli.DES_ART) AllowEditing="false" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
-                                <GridColumn Field=@nameof(PedCli.CANTPED) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px">
+                                <GridColumn Field=@nameof(Pedidos.Id) IsPrimaryKey="true" Width="3"></GridColumn>
+                                <GridColumn Field=@nameof(Pedidos.CG_ART) AllowEditing="false" HeaderText="Producto" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
+                                <GridColumn Field=@nameof(Pedidos.DES_ART) AllowEditing="false" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
+                                <GridColumn Field=@nameof(Pedidos.CANTPED) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px">
                                     <EditTemplate Context="detalle">
                                         @{
-                                            var value = (detalle as PedCli);
-                                            <SfNumericTextBox @bind-Value="value.CANTPED" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
+                                            var value = (detalle as Pedidos);
+                                            <SfNumericTextBox @bind-Value="value.STOCK" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
                                         }
                                     </EditTemplate>
                                 </GridColumn>
-                                <GridColumn Field=@nameof(PedCli.PREC_UNIT) HeaderText="Precio Unit." TextAlign="TextAlign.Left" Width="100px"
+                                <GridColumn Field=@nameof(Pedidos.IMPORTE1) HeaderText="Precio Unit." TextAlign="TextAlign.Left" Width="100px"
                                             EditType="EditType.NumericEdit" Format="N2">
                                     <EditTemplate Context="detalle">
                                         @{
-                                            var value = (detalle as PedCli);
-                                            <SfNumericTextBox @bind-Value="value.PREC_UNIT" Decimals="2" ShowSpinButton="false"></SfNumericTextBox>
+                                            var value = (detalle as Pedidos);
+                                            <SfNumericTextBox @bind-Value="value.IMPORTE1" Decimals="2" ShowSpinButton="false"></SfNumericTextBox>
                                         }
                                     </EditTemplate>
                                 </GridColumn>
-                                <GridColumn Field=@nameof(PedCli.PREC_UNIT_X_CANTIDAD) AllowEditing="false" Format="C2"
+                                <GridColumn Field=@nameof(Pedidos.IMPORTE2) AllowEditing="false" Format="C2"
                                             HeaderText="Neto" TextAlign="TextAlign.Left" Width="100px">
                                     <Template Context="detalle">
                                         @{
-                                            var value = (detalle as PedCli);
-                                            var res = value.CANTPED * (decimal)value.PREC_UNIT;
-                                            value.PREC_UNIT_X_CANTIDAD = Math.Round(value.CANTPED * (decimal)value.PREC_UNIT, 2);
-                                            <span> @value.PREC_UNIT_X_CANTIDAD </span>
+                                            var value = (detalle as Pedidos);
+                                            var res = Math.Abs((decimal)value.STOCK * (decimal)value.IMPORTE1);
+                                            value.IMPORTE2 = res;
+                                            <span> @value.IMPORTE2 </span>
                                         }
                                     </Template>
                                 </GridColumn>
-                                <GridColumn Field=@nameof(PedCli.DESCUENTO) HeaderText="% Descuento" Format="N2" TextAlign="TextAlign.Left" Width="120px">
-                                    <Template Context="detalle">
-                                        @{
-                                            var value = (detalle as PedCli);
-                                            value.DESCUENTO = Math.Round(value.DESCUENTO, 2);
-                                            <span>@value.DESCUENTO</span>
-
-                                        }
-                                    </Template>
-                                    <EditTemplate Context="detalle">
-                                        @{
-                                            var value = (detalle as PedCli);
-                                            <SfNumericTextBox @bind-Value="value.DESCUENTO" Decimals="2" ShowSpinButton="false"></SfNumericTextBox>
-                                        }
-                                    </EditTemplate>
-                                </GridColumn>
-                                <GridColumn Field=@nameof(PedCli.IMP_DESCUENTO) HeaderText="Descuento" Format="N2" TextAlign="TextAlign.Left"
-                                            Width="120px" AllowEditing="false">
-                                    <Template Context="detalle">
-                                        @{
-                                            var value = (detalle as PedCli);
-                                            if (value.DESCUENTO > 0)
-                                            {
-                                                var res = Math.Round(value.PREC_UNIT_X_CANTIDAD * (decimal)value.DESCUENTO / 100, 2);
-                                                value.IMP_DESCUENTO = Math.Round(res, 2);
-                                            }
-
-                                            <span>@value.IMP_DESCUENTO</span>
-                                        }
-                                    </Template>
-                                </GridColumn>
-                                <GridColumn Field="@nameof(PedCli.TOTAL)" Format="N2" HeaderText="Total" Width="100">
-                                    <Template Context="detalle">
-                                        @{
-                                            var value = (detalle as PedCli);
-                                            var res = Math.Round(value.PREC_UNIT_X_CANTIDAD - value.IMP_DESCUENTO, 2);
-                                            value.TOTAL = Math.Round(res, 2);
-                                            <span>@value.TOTAL</span>
-                                        }
-                                    </Template>
-                                </GridColumn>
-                                <GridColumn Field="@nameof(PedCli.LOTE)" HeaderText="Lote" Width="170"></GridColumn>
-                                <GridColumn Field="@nameof(PedCli.CAMPOCOM2)" HeaderText="Resorte" Width="150"></GridColumn>
-                                <GridColumn Field="@nameof(PedCli.CAMPOCOM1)" HeaderText="Presion" Width="150"></GridColumn>
-                                <GridColumn Field="@nameof(PedCli.CAMPOCOM3)" HeaderText="DescripcionFluido" Width="150"></GridColumn>
-                                <GridColumn Field="@nameof(PedCli.CAMPOCOM5)" HeaderText="Contrapresion Variable" Width="150"></GridColumn>
-                                <GridColumn Field="@nameof(PedCli.CAMPOCOM6)" HeaderText="TemperaturaDescargaT" Width="150"></GridColumn>
-                                <GridColumn Field="@nameof(PedCli.CAMPOCOM7)" HeaderText="Contrapresion Fija" Width="150"></GridColumn>
-                                <GridColumn Field="@nameof(PedCli.CAMPOCOM8)" HeaderText="Capacidad Requerida" Width="150"></GridColumn>
-                                <GridColumn Field="@nameof(PedCli.PRESUPUESTOID)" HeaderText="Presup" AllowEditing="false" Width="100"></GridColumn>
-                                <GridColumn Field="@nameof(PedCli.OBSERITEM)" HeaderText="Observaciones" Width="250"></GridColumn>
+                                <GridColumn Field="@nameof(Pedidos.IMPORTE4)" Format="N2" HeaderText="Total" Width="100"></GridColumn>
+                                <GridColumn Field="@nameof(Pedidos.LOTE)" HeaderText="Lote" Width="170"></GridColumn>
+                                <GridColumn Field="@nameof(Pedidos.SERIE)" HeaderText="Resorte" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(Pedidos.DESPACHO)" HeaderText="Presion" Width="150"></GridColumn>
                             </GridColumns>
                         </SfGrid>
                     </div>

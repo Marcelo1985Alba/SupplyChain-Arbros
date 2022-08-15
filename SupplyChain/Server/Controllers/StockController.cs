@@ -142,6 +142,11 @@ namespace SupplyChain.Server.Controllers
             return lStock;
         }
 
+        [HttpGet("GetPedidoEncabezadoById/{id}")]
+        public async Task<PedidoEncabezado> GetPedidoEncabezadoById(int id)
+        {
+            return await _pedidosRepository.ObtenerPedidosEncabezado(id);
+        }
 
         // PUT: api/Stock/PutStock/123729
         [HttpPut("PutStock/{registro}")]

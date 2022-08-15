@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Data.Repository;
+using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
 using System;
 using System.Collections.Generic;
@@ -78,6 +79,31 @@ namespace SupplyChain.Server.Repositorios
             }
             return list;
 
+        }
+
+
+        public async Task<PedidoEncabezado> ObtenerPedidosEncabezado(int id)
+        {
+            var ped = await DbSet.FindAsync(id);
+            var pedEncabezado = new PedidoEncabezado();
+            if (ped != null)
+            {
+                pedEncabezado.FE_MOV = ped.FE_MOV;
+                pedEncabezado.CG_CONDICION_PAGO = ped.CG_CONDICION_PAGO;
+                pedEncabezado.DIRENT = ped.DIRENT;
+                pedEncabezado.CG_CLI = (int)ped.CG_CLI;
+                pedEncabezado.DES_CLI = ped.DES_CLI;
+                pedEncabezado.PEDIDO = (int)ped.PEDIDO;
+                pedEncabezado.CG_TRANS = ped.CG_TRANS;
+                pedEncabezado.CG_COND_ENTREGA = ped.CG_COND_ENTREGA;
+                pedEncabezado.MONEDA = ped.MONEDA;
+                pedEncabezado.BONIFIC = (decimal)ped.BONIFIC;
+                pedEncabezado.VA_INDIC = ped.VA_INDIC;
+                pedEncabezado.REMITO = ped.REMITO;
+
+                pedEncabezado.Items.Add(ped);
+            }
+            return pedEncabezado;
         }
 
         internal async Task<List<Pedidos>> GetRemitos(TipoFiltro tipoFiltro = TipoFiltro.Todos , int cg_cia = 1)

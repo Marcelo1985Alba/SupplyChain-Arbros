@@ -28,6 +28,7 @@ namespace SupplyChain.Client.HelperService
             return await http.GetFromJsonAsync<PedCliEncabezado>($"{API}/GetPedidoEncabezadoById/{id}");
         }
 
+
         public async Task<HttpResponseWrapper<List<PedCli>>> GuardarLista(List<PedCli> lista)
         {
             return await http.PostAsJsonAsync($"{API}/PostList", lista);

@@ -115,7 +115,6 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             }
             else
             {
-
                 Pedido.PEDIDO = response.Response.Id;
                 Pedido.CG_CLI = response.Response.CG_CLI;
                 Pedido.DES_CLI = response.Response.DES_CLI;
@@ -253,7 +252,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
 
         }
 
-        protected async Task BuscarPresupuestos()
+        protected async Task BuscarPedidosPendientes()
         {
             if (Pedido.CG_CLI == 0)
             {
@@ -528,80 +527,77 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             }
         }
 
-        protected async Task BatchDeleteHandler(BeforeBatchDeleteArgs<PedCli> args)
+        protected async Task BatchDeleteHandler(BeforeBatchDeleteArgs<Pedidos> args)
         {
             var item = Pedido.Items.Find(i => i.Id == args.RowData.Id);
             item.ESTADO = SupplyChain.Shared.Enum.EstadoItem.Eliminado;
         }
 
-        public async Task CellSavedHandler(CellSaveArgs<PedCli> args)
+        public async Task CellSavedHandler(CellSaveArgs<Pedidos> args)
         {
             var index = await refGridItems.GetRowIndexByPrimaryKey(args.RowData.Id);
-            if (args.ColumnName == "Cantidad")
-            {
-                args.RowData.CANTPED = (decimal)args.Value;
-                if (IsAdd)
-                {
+            //if (args.ColumnName == "Cantidad")
+            //{
+            //    args.RowData.CANTPED = (decimal)args.Value;
+            //    if (IsAdd)
+            //    {
 
-                    await refGridItems.UpdateCell(index, "PREC_UNIT", Convert.ToInt32(args.Value) * args.RowData.PREC_UNIT);
-                    //await refGridItems.UpdateCell(index, "Sum", Convert.ToInt32(args.Value) + 0);
-                }
-                await refGridItems.UpdateCell(index, "PREC_UNIT", Convert.ToInt32(args.Value) * args.RowData.PREC_UNIT);
+            //        await refGridItems.UpdateCell(index, "PREC_UNIT", Convert.ToInt32(args.Value) * args.RowData.PREC_UNIT);
+            //        //await refGridItems.UpdateCell(index, "Sum", Convert.ToInt32(args.Value) + 0);
+            //    }
+            //    await refGridItems.UpdateCell(index, "PREC_UNIT", Convert.ToInt32(args.Value) * args.RowData.PREC_UNIT);
 
-            }
-            else if (args.ColumnName == "PREC_UNIT")
-            {
-                args.RowData.PREC_UNIT = (decimal)args.Value;
-                if (IsAdd)
-                {
+            //}
+            //else if (args.ColumnName == "PREC_UNIT")
+            //{
+            //    args.RowData.PREC_UNIT = (decimal)args.Value;
+            //    if (IsAdd)
+            //    {
 
-                    await refGridItems.UpdateCell(index, "PREC_UNIT_X_CANTIDAD",
-                        Convert.ToDouble(args.Value) * (double)args.RowData.CANTPED);
-                    //await refGridItems.UpdateCell(index, "Sum", Convert.ToDouble(args.Value) + 0);
-                }
-                await refGridItems.UpdateCell(index, "PREC_UNIT_X_CANTIDAD", Convert.ToDouble(args.Value) * (double)args.RowData.CANTPED);
+            //        await refGridItems.UpdateCell(index, "PREC_UNIT_X_CANTIDAD",
+            //            Convert.ToDouble(args.Value) * (double)args.RowData.CANTPED);
+            //        //await refGridItems.UpdateCell(index, "Sum", Convert.ToDouble(args.Value) + 0);
+            //    }
+            //    await refGridItems.UpdateCell(index, "PREC_UNIT_X_CANTIDAD", Convert.ToDouble(args.Value) * (double)args.RowData.CANTPED);
 
-            }
-            else if (args.ColumnName == "DESCUENTO")
-            {
-                args.RowData.DESCUENTO = (decimal)args.Value;
-                if (IsAdd)
-                {
+            //}
+            //else if (args.ColumnName == "DESCUENTO")
+            //{
+            //    args.RowData.DESCUENTO = (decimal)args.Value;
+            //    if (IsAdd)
+            //    {
 
-                    if (args.RowData.CANTPED == 0 || args.RowData.PREC_UNIT_X_CANTIDAD == 0 || (decimal)args.Value == 0)
-                    {
-                        await refGridItems.UpdateCell(index, "IMP_DESCUENTO", (double)0);
-                    }
-                    else
-                    {
-                        await refGridItems.UpdateCell(index, "IMP_DESCUENTO",
-                            args.RowData.PREC_UNIT_X_CANTIDAD / (1 + (decimal)args.Value / 100));
-                        //await refGridItems.UpdateCell(index, "Sum", Convert.ToDouble(args.Value) + 0);
-                    }
-
-
-
-                }
-                var descuento = Math.Round(args.RowData.PREC_UNIT_X_CANTIDAD * args.RowData.DESCUENTO / 100, 2);
-                await refGridItems.UpdateCell(index, "IMP_DESCUENTO", descuento);
-            }
-
-            //var item = Presupuesto.Items.Find(i=> i.Id == args.RowData.Id);
-            //item.TOTAL = args.RowData.PREC_UNIT_X_CANTIDAD - args.RowData.IMP_DESCUENTO;
+            //        if (args.RowData.CANTPED == 0 || args.RowData.PREC_UNIT_X_CANTIDAD == 0 || (decimal)args.Value == 0)
+            //        {
+            //            await refGridItems.UpdateCell(index, "IMP_DESCUENTO", (double)0);
+            //        }
+            //        else
+            //        {
+            //            await refGridItems.UpdateCell(index, "IMP_DESCUENTO",
+            //                args.RowData.PREC_UNIT_X_CANTIDAD / (1 + (decimal)args.Value / 100));
+            //            //await refGridItems.UpdateCell(index, "Sum", Convert.ToDouble(args.Value) + 0);
+            //        }
 
 
-            await refGridItems.UpdateCell(index, "TOTAL", args.RowData.PREC_UNIT_X_CANTIDAD - args.RowData.IMP_DESCUENTO);// total del item
 
-            //Presupuesto.TOTAL = Math.Round(Presupuesto.Items.Sum(i => i.TOTAL)); //total del presupuesto - la 
+            //    }
+            //    //var descuento = Math.Round(args.RowData.PREC_UNIT_X_CANTIDAD * args.RowData.DESCUENTO / 100, 2);
+            //    //await refGridItems.UpdateCell(index, "IMP_DESCUENTO", descuento);
+            //}
+
+
+
+            //await refGridItems.UpdateCell(index, "TOTAL", args.RowData.PREC_UNIT_X_CANTIDAD - args.RowData.IMP_DESCUENTO);// total del item
+
             await refGridItems.EndEditAsync();
             //refGridItems.Refresh();
         }
 
-        public void BatchAddHandler(BeforeBatchAddArgs<PedCli> args)
+        public void BatchAddHandler(BeforeBatchAddArgs<Pedidos> args)
         {
             IsAdd = true;
         }
-        public void BatchSaveHandler(BeforeBatchSaveArgs<PedCli> args)
+        public void BatchSaveHandler(BeforeBatchSaveArgs<Pedidos> args)
         {
             IsAdd = false;
         }

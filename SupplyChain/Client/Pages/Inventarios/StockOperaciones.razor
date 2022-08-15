@@ -11,7 +11,7 @@
 @using SupplyChain.Shared.Prod;
 @using System.IO;
 @inherits StockOperacionesBase
-@attribute [Authorize(Roles = "Admin, Produccion")]
+@attribute [Authorize(Roles = "Administrador, Produccion")]
 
 
 <SfSpinner @ref="@refSpinner" @bind-Visible="@SpinnerVisible" Label="Procesando..." Size="80" Type="SpinnerType.Bootstrap">

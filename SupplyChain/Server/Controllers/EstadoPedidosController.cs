@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -43,5 +44,21 @@ namespace SupplyChain.Server.Controllers
 
             return await _context.vEstadoPedidos.ToListAsync();
         }
+
+        
+        [HttpGet("ByEstado/estado")]
+        public async Task<ActionResult<IEnumerable<vEstadoPedido>>> Get(EstadoPedido estado = EstadoPedido.PendienteRemitir)
+        {
+            if (estado != EstadoPedido.Todos)
+            {
+                return await _context.vEstadoPedidos.Where(e => e.ESTADO_PEDIDO == (int)estado)
+                .ToListAsync();
+            }
+
+            return await _context.vEstadoPedidos.ToListAsync();
+
+        }
+
     }
+
 }
