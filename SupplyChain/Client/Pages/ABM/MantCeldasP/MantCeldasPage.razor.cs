@@ -46,7 +46,6 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
         protected bool SpinnerVisible = false;
 
         protected bool popupFormVisible = false;
-
         [CascadingParameter] MainLayout MainLayout { get; set; }
         protected override async Task OnInitializedAsync()
         {
@@ -276,6 +275,21 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
                 ShowCloseButton = true,
                 ShowProgressBar = true
             });
+        }
+        protected async Task QueryCellInfoHandler(QueryCellInfoEventArgs<MantCeldas> args)
+        {
+            if (args.Data.Estado == "Programado")
+            {
+                args.Cell.AddClass(new string[] { "azules" });
+            }
+            else if (args.Data.Estado == "Realizado")
+            {
+                args.Cell.AddClass(new string[] { "verdes" });
+            }
+            else if (args.Data.Estado == "Cancelado")
+            {
+                args.Cell.AddClass(new string[] { "rojas" });
+            }
         }
     }
 }

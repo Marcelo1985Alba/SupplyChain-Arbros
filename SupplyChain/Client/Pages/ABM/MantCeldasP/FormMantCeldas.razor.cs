@@ -26,12 +26,30 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
 
         protected SfGrid<MantCeldas> refGridItems;
         protected List<Celdas> celda = new();
+        protected List<Operario> operario = new();
         protected SfSpinner refSpinnerCli;
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
         protected Dictionary<string, object> HtmlAttributeSubmit = new()
         {
             { "type", "submit" }
+        };
+        protected class MantenimientoOptions
+        {
+            public string Text { get; set; }
+        }
+        protected List<MantenimientoOptions> MantenimientoData = new List<MantenimientoOptions> {
+            new MantenimientoOptions() {Text= "Preventivo" },
+            new MantenimientoOptions() {Text= "Correctivo" },
+        };
+        protected class EstadoOptions
+        {
+            public string Text { get; set; }
+        }
+        protected List<EstadoOptions> EstadoData = new List<EstadoOptions> {
+            new EstadoOptions() {Text= "Programado" },
+            new EstadoOptions() {Text= "Realizado" },
+            new EstadoOptions() {Text= "Cancelado" },
         };
         protected bool IsAdd { get; set; }
         protected async override Task OnInitializedAsync()
@@ -41,8 +59,8 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
             {
                 celda = response.Response;
             }
+            operario = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
         }
-
         protected async Task<bool> Agregar(MantCeldas mantCelda)
         {
             var response = await MantCeldasService.Existe(mantCelda.Id);
@@ -64,6 +82,7 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
 
         protected async Task<bool> Actualizar(MantCeldas mantCelda)
         {
+            mantCelda.Des_Celda = celda.Where(a => a.Id == mantCelda.Cg_Celda).FirstOrDefault().DES_CELDA;
             var response = await MantCeldasService.Actualizar(mantCelda.Id, mantCelda);
             if (response.Error)
             {

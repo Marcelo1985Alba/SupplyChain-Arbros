@@ -32,72 +32,78 @@
                     <div class="tab-pane fade show active" id="pills-DatosGenerales" role="tabpanel" aria-labelledby="pills-home-tab">
                         <div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-3">
                                     <label>Id:</label>
                                     <SfNumericTextBox ID="Id" @bind-Value="@(mantCeldas.Id)" Placeholder="Id" Enabled="@mantCeldas.ESNUEVO"></SfNumericTextBox>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <a>Codigo:</a>
+                                <div class="form-group col-md-3">
+                                    <a>Celda:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="Celdas" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(mantCeldas.Cg_Celda)" DataSource="@celda">
-                                        <ComboBoxFieldSettings Value="Id" Text="Id"></ComboBoxFieldSettings>
+                                        <ComboBoxFieldSettings Value="Id" Text="DES_CELDA"></ComboBoxFieldSettings>
                                     </SfComboBox>
                                 </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-md-3">
                                     <label>Mantenimiento:</label>
-                                    <SfTextBox ID="Mantenimiento" @bind-Value="@(mantCeldas.Mantenimiento)" Placeholder="Mantenimiento"></SfTextBox>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="MantenimientoOptions" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(mantCeldas.Mantenimiento)" DataSource="@MantenimientoData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Fecha:</label>
+                                    <SfDatePicker ID="Fecha" @bind-Value="@(mantCeldas.Fecha)" Placeholder="Fecha"></SfDatePicker>
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Fecha:</label>
-                                    <SfDateTimePicker ID="Fecha" @bind-Value="@(mantCeldas.Fecha)" Placeholder="Fecha"></SfDateTimePicker>
-                                </div>
                                 <div class="form-group col-md-6">
                                     <label>Tarea:</label>
                                     <SfTextBox ID="Tarea" @bind-Value="@(mantCeldas.Tarea)" Placeholder="Tarea"></SfTextBox>
                                 </div>
-                            </div>
-                            <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label>Causa:</label>
                                     <SfTextBox ID="Causa" @bind-Value="@(mantCeldas.Causa)" Placeholder="Causa"></SfTextBox>
                                 </div>
-                                <div class="form-group col-md-6">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
                                     <label>Tiempo de Parada:</label>
                                     <SfNumericTextBox ID="TiempoParada" @bind-Value="@(mantCeldas.TiempoParada)" Placeholder="Tiempo de Parada"></SfNumericTextBox>
                                 </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-3">
                                     <label>Repuesto:</label>
                                     <SfTextBox ID="Repuesto" @bind-Value="@(mantCeldas.Repuesto)" Placeholder="Repuesto"></SfTextBox>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-3">
                                     <label>Costo:</label>
                                     <SfNumericTextBox ID="Costo" @bind-Value="@(mantCeldas.Costo)" Placeholder="Costo"></SfNumericTextBox>
                                 </div>
+                                <div class="form-group col-md-3">
+                                    <label>Estado:</label>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="EstadoOptions" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(mantCeldas.Estado)" DataSource="@EstadoData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-4">
                                     <label>Operario:</label>
-                                    <SfTextBox ID="Operario" @bind-Value="@(mantCeldas.Operario)" Placeholder="Operario"></SfTextBox>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(mantCeldas.Operario)" DataSource="@operario">
+                                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                                    </SfComboBox>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-4">
                                     <label>Operador:</label>
-                                    <SfTextBox ID="Operador" @bind-Value="@(mantCeldas.Operador)" Placeholder="Operador"></SfTextBox>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(mantCeldas.Operador)" DataSource="@operario">
+                                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                                    </SfComboBox>
                                 </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-4">
                                     <label>Proveedor:</label>
                                     <SfTextBox ID="Proveedor" @bind-Value="@(mantCeldas.Proveedor)" Placeholder="Proveedor"></SfTextBox>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>Estado:</label>
-                                    <SfTextBox ID="Estado" @bind-Value="@(mantCeldas.Estado)" Placeholder="Estado"></SfTextBox>
                                 </div>
                             </div>
                         </div>
