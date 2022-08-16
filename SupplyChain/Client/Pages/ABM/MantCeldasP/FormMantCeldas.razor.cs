@@ -63,6 +63,7 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
         }
         protected async Task<bool> Agregar(MantCeldas mantCelda)
         {
+            mantCelda.Des_Celda = celda.Where(a => a.Id == mantCelda.Cg_Celda).FirstOrDefault().DES_CELDA;
             var response = await MantCeldasService.Existe(mantCelda.Id);
             if (!response)
             {
@@ -104,7 +105,6 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
             {
                 guardado = await Actualizar(mantCeldas);
             }
-
             if (guardado)
             {
                 Show = false;

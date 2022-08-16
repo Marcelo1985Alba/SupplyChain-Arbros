@@ -34,10 +34,10 @@
                             <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <label>Id:</label>
-                                    <SfNumericTextBox ID="Id" @bind-Value="@(mantCeldas.Id)" Placeholder="Id" Enabled="@mantCeldas.ESNUEVO"></SfNumericTextBox>
+                                    <SfNumericTextBox ID="Id" @bind-Value="@(mantCeldas.Id)" Placeholder="Id" Enabled="false"></SfNumericTextBox>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <a>Celda:</a>
+                                    <label>Celda:</label>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="Celdas" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(mantCeldas.Cg_Celda)" DataSource="@celda">
                                         <ComboBoxFieldSettings Value="Id" Text="DES_CELDA"></ComboBoxFieldSettings>
@@ -96,10 +96,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Operador:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(mantCeldas.Operador)" DataSource="@operario">
-                                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
-                                    </SfComboBox>
+                                    <SfTextBox ID="Operador" @bind-Value="@(mantCeldas.Operador)" Placeholder="Operador"></SfTextBox>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Proveedor:</label>

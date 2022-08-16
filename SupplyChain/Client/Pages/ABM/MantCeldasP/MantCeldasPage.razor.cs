@@ -278,7 +278,13 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
         }
         protected async Task QueryCellInfoHandler(QueryCellInfoEventArgs<MantCeldas> args)
         {
-            if (args.Data.Estado == "Programado")
+            DateTime today = DateTime.Now;
+            TimeSpan Diff_dates = today.Subtract((DateTime)args.Data.Fecha);
+            if (args.Data.Estado == "Programado" && Diff_dates.Days > 0)
+            {
+                args.Cell.AddClass(new string[] { "amarillas" });
+            }
+            else if (args.Data.Estado == "Programado")
             {
                 args.Cell.AddClass(new string[] { "azules" });
             }
