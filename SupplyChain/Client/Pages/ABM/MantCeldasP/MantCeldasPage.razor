@@ -29,6 +29,7 @@
             <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolbarHandler"
+                        QueryCellInfo="(async(args)=> await QueryCellInfoHandler(args))"
                         OnActionComplete="OnActionCompleteHandler" TValue="MantCeldas"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
@@ -112,3 +113,18 @@
         }
     }
 }
+
+<style>
+    .e-grid .e-gridcontent .e-rowcell.azules {
+        background-color: #40CFFF;
+    }
+    .e-grid .e-gridcontent .e-rowcell.verdes {
+        background-color: #009846;
+    }
+    .e-grid .e-gridcontent .e-rowcell.rojas {
+        background-color: #FF0000;
+    }
+    .e-grid .e-gridcontent .e-rowcell.amarillas {
+        background-color: #FFFF00;
+    }
+</style>
