@@ -2,7 +2,7 @@
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.DropDowns
 @using SupplyChain.Client.Shared.BuscadorCliente
-@using SupplyChain.Client.Shared.BuscadorPresupuesto
+@using SupplyChain.Client.Shared.BuscadorPedidos
 
 @inherits FormRemitoBase
 
@@ -25,7 +25,7 @@
         <Content>
             <SfToolbar ID="toolbar-form-pedido" CssClass="">
                 <ToolbarItems>
-                    <ToolbarItem Id="tiPresupuestos" CssClass="e-round e-small" Type="ItemType.Button" Text="Pedidos" OnClick="BuscarPedidosPendientes" Align="ItemAlign.Right"></ToolbarItem>
+                    <ToolbarItem Id="tiPedidos" CssClass="e-round e-small" Type="ItemType.Button" Text="Pedidos" OnClick="BuscarPedidosPendientes" Align="ItemAlign.Right"></ToolbarItem>
                     @*<ToolbarItem Id="tiProductos" CssClass="e-round" Text="Productos" OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>*@
 
                 </ToolbarItems>
@@ -222,9 +222,10 @@
     </DialogTemplates>
 </SfDialog>
 
-<PresupuestosDialog @ref="@refPresupuestosDialog" CompararCliente="true" Cg_Cli_Comparar="@Pedido.CG_CLI" PopupBuscadorVisible="@popupBuscadorVisiblePresupuestos"
+<PedidosEstados @ref="@refPresupuestosDialog" CompararCliente="true" Cg_Cli_Comparar="@Pedido.CG_CLI" 
+                PopupBuscadorVisible="@popupBuscadorVisiblePresupuestos"
                     OnCerrarDialog="@(() => popupBuscadorVisiblePresupuestos = false)"
-                    OnObjectSelected="@PresupuestoSelected"></PresupuestosDialog>
+                    OnObjectSelected="@PresupuestoSelected"></PedidosEstados>
 
 
 

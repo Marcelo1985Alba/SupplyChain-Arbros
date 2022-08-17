@@ -46,7 +46,7 @@ namespace SupplyChain.Server.Controllers
         }
 
         
-        [HttpGet("ByEstado/estado")]
+        [HttpGet("ByEstado/{estado}")]
         public async Task<ActionResult<IEnumerable<vEstadoPedido>>> Get(EstadoPedido estado = EstadoPedido.PendienteRemitir)
         {
             if (estado != EstadoPedido.Todos)
