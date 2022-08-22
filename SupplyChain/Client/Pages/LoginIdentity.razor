@@ -1,6 +1,7 @@
 ﻿@layout LoginLayout
 @page "/"
 @page "/login-identity"
+@page "/login-identity/{returnUrl}"
 
 @inject SupplyChain.Client.RepositoryHttp.IRepositoryHttp Http
 @inject IJSRuntime JsRuntime
@@ -74,6 +75,7 @@
 
 @code {
     [Inject] public ILoginServiceJWT loginServiceJWT { get; set; }
+    [Parameter] public string returnUrl { get; set; }
     public string type { get; set; } = "password";
     public InputType TxtType = InputType.Password;
     protected string cssIconEye = "fa fa-eye";
@@ -89,6 +91,7 @@
     protected async override Task OnInitializedAsync()
     {
         // Recoge usuario
+        returnUrl = returnUrl;
         Token = await JsRuntime.InvokeAsync<string>("sessionStorage.getItem", "TOKEN_KEY");
         StateHasChanged();
     }
@@ -111,7 +114,27 @@
             });
 
             await loginServiceJWT.Login(xUser);
-            navigationManager.NavigateTo("/index");
+            var geturl = navigationManager.ToBaseRelativePath(navigationManager.Uri);
+            var url = geturl.Split("=");
+
+            if (url.Length <= 1)
+            {
+                navigationManager.NavigateTo("/index");
+                //if (string.IsNullOrEmpty(url[0]))
+                //{
+                //    navigationManager.NavigateTo("/index");
+                //}
+                //else
+                //{
+                //    navigationManager.NavigateTo(url[1]);
+                //}
+            }
+            else
+            {
+                navigationManager.NavigateTo(url[1]);
+            }
+
+
         }
         else
         {

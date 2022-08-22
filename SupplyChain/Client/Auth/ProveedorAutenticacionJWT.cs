@@ -187,8 +187,8 @@ namespace SupplyChain.Client.Auth
 
         public async Task Logout()
         {
+            //var response = await Repositorio.get<int>("api/Cuentas/Logout");
             await Limpiar();
-            var response = await Repositorio.GetFromJsonAsync<int>("api/Cuentas/Logout");
             NotifyAuthenticationStateChanged(Task.FromResult(Anonimo));
         }
 

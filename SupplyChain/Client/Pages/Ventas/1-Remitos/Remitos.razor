@@ -1,56 +1,107 @@
 ﻿@page "/ventas/remitos"
 @inherits RemitosBase
-
+@attribute [Authorize(Roles = "Administrador")]
 <div class="row">
     <div class="col-12">
         <SfToast ID="toast_default" @ref="ToastObj">
             <ToastPosition X="Center" Y="Top"></ToastPosition>
         </SfToast>
 
-
-        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="false" AllowResizing="true"
-                @ref="refGrid" DataSource="@remitos" Width="100%"
-                AllowExcelExport="true" AllowGrouping="true" ID="grdPedidos"
-                AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
-            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
-            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-            <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
-            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"
-                        OnToolbarClick="OnToolbarHandler"
-                        TValue="Pedidos"></GridEvents>
+        <SfGrid @ref="refGrid" AllowReordering="true" ShowColumnChooser="false" ShowColumnMenu="true" AllowResizing="true"
+                DataSource="@pedidosPendientesRemitir" Width="100%"
+                AllowExcelExport="true" AllowGrouping="true" ID="grdEstadosPedidos" Toolbar="@Toolbaritems"
+                AllowSorting="true" AllowPaging="true" AllowFiltering="true" GridLines="GridLine.Both">
+            <GridEvents RowDataBound="RowBound" TValue="vEstadoPedido"
+                        CommandClicked="CommandClickHandler" OnToolbarClick="@(async(a)=> await ClickHandler(a))"
+                        OnActionBegin="@((a)=> OnActionBeginHandler(a))" OnActionComplete="OnActionCompleteHandler"
+                        QueryCellInfo="@((a)=> QueryCellInfoHandler(a))"></GridEvents>
+            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridPageSettings PageSize="12" PageSizes="true"></GridPageSettings>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
-            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" NewRowPosition="NewRowPosition.Top"
-                              Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
-            </GridEditSettings>
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="false" Mode="EditMode.Dialog"></GridEditSettings>
             <GridColumns>
-                @*<GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>*@
-                <GridColumn Field=@nameof(Pedidos.Id) HeaderText="Id" Visible="false" IsPrimaryKey="true" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.FE_MOV) HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.REMITO) HeaderText="Remito" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.CG_ART) HeaderText="Articulo" TextAlign="TextAlign.Left" Width="160px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.DES_ART) HeaderText="Descripcion Articulo" TextAlign="TextAlign.Left" Width="220px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.UNID) HeaderText="Unidad" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
-                
+                <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+                <GridColumn Field=@nameof(vEstadoPedido.FE_PED) HeaderText="FECHA PEDIDO" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
+                <GridColumn Field=@nameof(vEstadoPedido.PEDIDO) HeaderText="PEDIDO" Width="120"></GridColumn>
+                <GridColumn Field=@nameof(vEstadoPedido.NUM_OCI) HeaderText="OC INTERNA" Width="150"></GridColumn>
+                <GridColumn Field=@nameof(vEstadoPedido.REMITO) HeaderText="REMITO" Width="120"></GridColumn>
+                <GridColumn Field=@nameof(vEstadoPedido.FACTURA) HeaderText="FACTURA" Width="120"></GridColumn>
+                <GridColumn Field=@nameof(vEstadoPedido.DESCRIPCION_ESTADO_PEDIDO) HeaderText="ESTADO PEDIDO" Width="180">
+                </GridColumn>
+                <GridColumn Field=@nameof(vEstadoPedido.CG_CLI) HeaderText="CODIGO CLIENTE" Width="150"></GridColumn>
+                <GridColumn Field=@nameof(vEstadoPedido.DES_CLI) HeaderText="DESCRIPCION CLIENTE" Width="230"></GridColumn>
+                <GridColumn Field=@nameof(vEstadoPedido.CG_ART) HeaderText="CODIGO PRODUCTO" Width="180"></GridColumn>
+                <GridColumn Field=@nameof(vEstadoPedido.DES_ART) HeaderText="PRODUCTO" Width="250"></GridColumn>
+                <GridColumn Field=@nameof(vEstadoPedido.CANTPED) HeaderText="CANTIDAD" Width="150"></GridColumn>
+                <GridColumn Field=@nameof(vEstadoPedido.UNID) HeaderText="UNIDAD" Width="120"></GridColumn>
+                <GridColumn Field=@nameof(vEstadoPedido.ORCO) HeaderText="ORDEN DE COMPRA" Width="120"></GridColumn>
 
-
+                <GridColumn Field=@nameof(vEstadoPedido.FE_PREV) HeaderText="FECHA PREVISTA" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
+                <GridColumn Field=@nameof(vEstadoPedido.OBSERITEM) HeaderText="OBSERVACIONES" Width="220"></GridColumn>
             </GridColumns>
-            <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
+            <SfSpinner Type="SpinnerType.Fabric" Size="50" Label="Cargando..." @bind-Visible="@SpinnerVisible"></SfSpinner>
         </SfGrid>
     </div>
 
     @if (popupFormVisible)
     {
-        @*<FormPedido @ref="@refFormPedido" Show="popupFormVisible" Pedido="@PedidoSeleccionado" CondicionesPagos="@condicionesPagos"
-                    OnCerrar="@(()=> popupFormVisible = false)" CondicionesEntrega="@condicionesEntrega"
-                    DireccionesEntregas="@direccionesEntregas"
-                    OnGuardar="@((p)=> OnPedidoGuardado(p))">
-        </FormPedido>*@
-        <FormRemito Show="@popupFormVisible" Pedido="@PedidoSeleccionado" 
+        <FormRemito Show="@popupFormVisible" Pedido="@PedidoSeleccionado" CondicionesEntrega="@condicionesEntrega"
+                    CondicionesPagos="@condicionesPagos" Transportes="@transportes"
+                    OnGuardar="@((p)=> OnRemitoGuardado(p))"
                     OnCerrar="@(()=> popupFormVisible = false)"></FormRemito>
     }
 
 
 </div>
+
+<style>
+    /*to remove the edit button alone*/
+    .e-removeEditcommand .e-unboundcell .e-unboundcelldiv button.e-Editbutton {
+        display: none;
+    }
+
+    .e-removeDeletecommand .e-unboundcell .e-unboundcelldiv button.e-Deletebutton {
+        display: none;
+    }
+
+    .color-estado-pedido-a-confirmar {
+        /*background-color: #f89b9b;*/
+        color: #e3165b !important;
+    }
+
+    .color-estado-pedido-confirmado {
+        color: #0094ff !important;
+    }
+
+    .color-estado-pedido-produccion {
+        color: #b200ff !important;
+    }
+
+    .color-estado-pedido-componentes {
+        color: #b89f16 !important;
+    }
+
+    .color-estado-pedido-armado {
+        color: #3e7846 !important;
+    }
+
+    .color-estado-pedido-pendiente-remitir {
+        color: #8e6b29 !important;
+    }
+
+    .color-estado-pedido-entregar {
+        color: #ff0000 !important;
+    }
+
+    .color-estado-pedido-entregado {
+        color: #808080 !important;
+    }
+
+    .color-estado-pedido-facturado {
+        color: #f30b0b !important;
+    }
+
+    .color-estado-pedido-anulado {
+        color: #000000 !important;
+    }
+</style>

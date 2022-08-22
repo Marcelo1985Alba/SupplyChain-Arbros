@@ -18,6 +18,7 @@
 @inject HttpClient Http
 @using Syncfusion.Blazor.PdfViewer
 @using Syncfusion.Pdf.Tables
+@attribute [Authorize(Roles = "Administrador")]
 @{
 
     <SfToast ID="toast_default" @ref="ToastObj">
@@ -344,8 +345,8 @@
         text-align: center;
     }
 
-    
-/*    e-dialog {
+
+    /*    e-dialog {
         max-height: 650px;
     }*/
 </style>
@@ -638,7 +639,8 @@
         BoxCodigo = "";
     }
 
-    protected void CargarValores(){
+    protected void CargarValores()
+    {
         lote = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim();
         if (lote == null)
             lote = "";
@@ -1053,7 +1055,8 @@
     #toast_types {
         text-align: center;
     }
-    .tabCertif{
+
+    .tabCertif {
         height: 400px;
     }
 </style>

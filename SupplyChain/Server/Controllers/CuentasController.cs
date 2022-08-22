@@ -101,6 +101,8 @@ namespace SupplyChain.Server.Controllers
             return Ok("El rol fue asignado correctamente!");
         }
 
+        
+
         [HttpPost("crear")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<UserToken>> CrearUsuario([FromBody] UserInfo userInfo)

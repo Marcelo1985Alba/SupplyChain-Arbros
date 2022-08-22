@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Shared
 {
-    public class ChatMessage
+    public class ChatMessage : EntityBase<long>
     {
-        public long Id { get; set; }
+        public new long Id { get; set; }
         public string FromUserId { get; set; }
         public string ToUserId { get; set; }
         public string Message { get; set; }

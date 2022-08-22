@@ -51,7 +51,7 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             if (response.Error)
             {
                 Console.WriteLine("E R R O R !!!");
-                Console.WriteLine(response.HttpResponseMessage.Content.ReadAsStringAsync());
+                Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
             }
             else
             {

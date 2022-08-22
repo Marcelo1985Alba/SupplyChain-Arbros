@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SupplyChain.Server.Hubs;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Login;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace SupplyChain.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ChatsController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -48,17 +49,21 @@ namespace SupplyChain.Server.Controllers
                     }).ToListAsync();
             return Ok(messages);
         }
+
         [HttpGet("users")]
-        public async Task<IActionResult> GetUsersAsync()
+        public async Task<ActionResult<List<Usuario>>> GetUsersAsync()
         {
             var userId = User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
-            var allUsers = await _context.Users.Where(user => user.Id != userId).ToListAsync();
-            return Ok(allUsers);
+            var allUsers = await _context.Users.Where(user => user.Id != userId)
+                .Select(s=> new Usuario() { Id = s.Id, Nombre = s.UserName, Email = s.Email }).ToListAsync();
+            return allUsers;
         }
+
         [HttpGet("users/{userId}")]
         public async Task<IActionResult> GetUserDetailsAsync(string userId)
         {
-            var user = await _context.Users.Where(user => user.Id == userId).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(user => user.Id == userId)
+                .Select(s=> new Usuario() { Id = s.Id, Nombre = s.UserName, Email = s.Email }).FirstOrDefaultAsync();
             return Ok(user);
         }
         [HttpPost]

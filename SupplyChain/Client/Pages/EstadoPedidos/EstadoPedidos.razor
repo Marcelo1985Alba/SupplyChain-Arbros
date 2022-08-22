@@ -1,7 +1,7 @@
 ﻿@page "/ventas/estado-pedidos"
 @using Syncfusion.Blazor.LinearGauge
 @inherits EstadoPedidosBase
-
+@attribute [Authorize]
 
 <SfToast ID="toast_default" @ref="ToastObj">
     <ToastPosition X="Center" Y="Top"></ToastPosition>
@@ -24,9 +24,9 @@
                         DataSource="@DataEstadosPedidos" Width="100%"
                         AllowExcelExport="true" AllowGrouping="true" ID="grdEstadosPedidos"
                         AllowSorting="true" AllowPaging="true" AllowFiltering="true" GridLines="GridLine.Both">
-                    <GridEvents RowDataBound="RowBound" TValue="vEstadoPedido" RowSelected="@((a)=> OnRowSelected(a))" 
-                                OnRecordDoubleClick="@((a)=> OnRowSelectedDouble_Click(a))" 
-                                CommandClicked="CommandClickHandler" OnToolbarClick="@(async(a)=> await ClickHandler(a))" 
+                    <GridEvents RowDataBound="RowBound" TValue="vEstadoPedido" RowSelected="@((a)=> OnRowSelected(a))"
+                                OnRecordDoubleClick="@((a)=> OnRowSelectedDouble_Click(a))"
+                                CommandClicked="CommandClickHandler" OnToolbarClick="@(async(a)=> await ClickHandler(a))"
                                 OnActionBegin="@((a)=> BeginHandler(a))"
                                 QueryCellInfo="@((a)=> QueryCellInfoHandler(a))"></GridEvents>
                     <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -36,16 +36,16 @@
                     <GridColumns>
                         <GridColumn HeaderText="Acciones" Width="130">
                             <GridCommandColumns>
-                                
+
                                 @*LAS BOTONES SE ESCONDEN AGREGANDO LA CLASE ATRAVES DEL EVENTO RowBound*@
-                                
+
                                 <GridCommandColumn Type="CommandButtonType.Delete" Title="Descargar Factura" ID="btnDescargarFactura"
                                                    ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-usd", CssClass = "" })"></GridCommandColumn>
                                 <GridCommandColumn Type="CommandButtonType.Edit" Title="Descargar Remito" ID="btnDescargarRemito"
                                                    ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-cubes fa-1", CssClass = "" })"></GridCommandColumn>
 
-                            <GridCommandColumn Type="CommandButtonType.Edit" Title="Descargar Certificados" ID="btnDescargarCertificado"
-                                               ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-download fa-1", CssClass = "" })"></GridCommandColumn>
+                                <GridCommandColumn Type="CommandButtonType.Edit" Title="Descargar Certificados" ID="btnDescargarCertificado"
+                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-download fa-1", CssClass = "" })"></GridCommandColumn>
                             </GridCommandColumns>
                         </GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.FE_PED) HeaderText="FECHA PEDIDO" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
@@ -73,13 +73,13 @@
     </div>
 </div>
 <SfDialog Height="450px" Width="80%" Target="#target" ShowCloseIcon="true" @bind-Visible="@VisibleDialog"
-          IsModal="true" EnableResize="false" >
+          IsModal="true" EnableResize="false">
     <DialogTemplates>
         <Header>
             Detalle Pedido @PedidoSeleccionado.PEDIDO - @PedidoSeleccionado.DES_ART.ToUpper()
         </Header>
         <Content>
-            <SfLinearGauge Orientation="Orientation.Horizontal" Background="transparent" Title="Estado Pedido"  AllowPdfExport="true"
+            <SfLinearGauge Orientation="Orientation.Horizontal" Background="transparent" Title="Estado Pedido" AllowPdfExport="true"
                            Height="250px">
                 <LinearGaugeEvents AxisLabelRendering="AxisLabelChange" />
                 <LinearGaugeAnnotations>
@@ -310,7 +310,7 @@
         color: #000000 !important;
     }
 
-/*    .e-btn .e-btn-icon, .e-css.e-btn .e-btn-icon {
+    /*    .e-btn .e-btn-icon, .e-css.e-btn .e-btn-icon {
         font-size: 9px;
         color: blue;
     }*/
@@ -324,5 +324,4 @@
         font-size: 9px;
         color: blue;
     }
-
 </style>

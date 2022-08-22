@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @page "/index"
 
-<h5>Hola, @CurrentUserEmail (@CurrentUserId)</h5>
+<h5>Hola, @CurrentUserEmail</h5>
 
 Bienvenido a la nueva aplicación.
 <br />
@@ -69,42 +69,6 @@ Bienvenido a la nueva aplicación.
     protected async override Task OnInitializedAsync()
     {
         Layout.Titulo = "Inicio";
-        if (hubConnection == null)
-        {
-            hubConnection = new HubConnectionBuilder().WithUrl(NavigationManager.ToAbsoluteUri("/chathub")).Build();
-        }
-        if (hubConnection.State == HubConnectionState.Disconnected)
-        {
-            await hubConnection?.StartAsync();
-        }
-        hubConnection?.On<ChatMessage, string>("ReceiveMessage", async (message, userName) =>
-        {
-            if ((ContactId == message.ToUserId && CurrentUserId == message.FromUserId) || (ContactId == message.FromUserId && CurrentUserId == message.ToUserId))
-            {
-
-                if ((ContactId == message.ToUserId && CurrentUserId == message.FromUserId))
-                {
-                    messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { Email = CurrentUserEmail } });
-                    await hubConnection?.SendAsync("ChatNotificationAsync", $"New Message From {userName}", ContactId, CurrentUserId);
-                }
-                else if ((ContactId == message.FromUserId && CurrentUserId == message.ToUserId))
-                {
-                    messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { Email = ContactEmail } });
-                }
-                //await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chatContainer");
-                StateHasChanged();
-            }
-        });
-
-        //await GetUsersAsync();
-        var state = await authenticationState;
-        var user = state.User;
-        var claims = user.Claims.ToList();
-        CurrentUserId = user.Claims.Where(a => a.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")
-            .Select(a => a.Value).FirstOrDefault();
-        CurrentUserEmail = user.Claims.Where(a => a.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")
-            .Select(a => a.Value).FirstOrDefault();
-
 
     }
 

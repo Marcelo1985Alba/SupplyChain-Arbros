@@ -19,6 +19,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
     public class FormRemitoBase : ComponentBase
     {
         [Inject] public PedCliService PedCliService { get; set; }
+        [Inject] public StockService StockService { get; set; }
         [Inject] public ClienteService ClienteService { get; set; }
         [Inject] public PresupuestoService PresupuestoService { get; set; }
         [Inject] public PrecioArticuloService PrecioArticuloService { get; set; }
@@ -33,7 +34,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
         [Parameter] public List<vCondicionesPago> CondicionesPagos { get; set; } = new();
         [Parameter] public List<vCondicionesEntrega> CondicionesEntrega { get; set; } = new();
         [Parameter] public List<vTransporte> Transportes { get; set; } = new();
-        [Parameter] public EventCallback<Pedidos> OnGuardar { get; set; }
+        [Parameter] public EventCallback<List<Pedidos>> OnGuardar { get; set; }
         [Parameter] public EventCallback OnCerrar { get; set; }
 
         protected SfGrid<Pedidos> refGridItems;
@@ -77,7 +78,10 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             {
                 await GetTransportes();
             }
-
+            if (CondicionesPagos.Count == 0)
+            {
+                await GetCondicionesPago();
+            }
 
             if (Pedido.PEDIDO == 0)
             {
@@ -88,7 +92,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 await GetDireccionesEntregaCliente(Pedido.CG_CLI);
             }
 
-            //await GetTipoCambioDolarHoy();
+            await GetTipoCambioDolarHoy();
         }
 
         public async Task GetTipoCambioDolarHoy()
@@ -102,7 +106,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 }
                 else
                 {
-                    //Pedido.TC = (double)tc;
+                    Pedido.VA_INDIC = tc;
                 }
             }
 
@@ -160,7 +164,6 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 Pedido.Items.Add(itemPedido);
             }
         }
-
         protected async Task GetCondicionesPago()
         {
             var response = await CondicionPagoService.Get();
@@ -185,7 +188,6 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 CondicionesEntrega = response.Response;
             }
         }
-
         protected async Task GetTransportes()
         {
             var response = await TransporteService.Get();
@@ -381,33 +383,39 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             BotonGuardarDisabled = true;
 
             //actualiza todos los campos de encabezado a los items
-            //foreach (var item in Pedido.Items)
-            //{
-            //    item.VA_INDIC = Convert.ToDecimal(Pedido.TC);
-            //    item.CG_TRANS = Pedido.CG_TRANS;
-            //    item.ORCO = Pedido.ORCO;
-            //    item.CG_COND_ENTREGA = Pedido.CG_COND_ENTREGA;
-            //    item.DPP = Pedido.CONDICION_PAGO;
-            //}
+            foreach (var item in Pedido.Items)
+            {
+                item.CG_TRANS = Pedido.CG_TRANS;
+                item.CG_COND_ENTREGA = Pedido.CG_COND_ENTREGA;
+                item.CG_CONDICION_PAGO = Pedido.CG_CONDICION_PAGO;
+                item.TIPOO = 1;
+                item.COMPROB = "REMITO";
+            }
 
-            //var response = await PedCliService.GuardarLista(Pedido.Items);
-            //if (response.Error)
-            //{
-            //    spinerVisible = false;
-            //    BotonGuardarDisabled = false;
-            //    await ToastMensajeError();
+            var response = await StockService.GuardarLista(Pedido.Items);
+            if (response.Error)
+            {
+                spinerVisible = false;
+                BotonGuardarDisabled = false;
+                await ToastMensajeError();
 
-            //}
-            //else
-            //{
-            //    spinerVisible = false;
-            //    Show = false;
-            //    Pedido.Items = response.Response;
-            //    await OnGuardar.InvokeAsync(Pedido);
-            //}
+            }
+            else
+            {
+                spinerVisible = false;
+                Show = false;
+                Pedido.Items = response.Response;
+
+                if (OnGuardar.HasDelegate)
+                {
+                    await OnGuardar.InvokeAsync(Pedido.Items);
+                }
+                
+            }
 
             BotonGuardarDisabled = false;
         }
+
 
         protected void CambioMoneda(ChangeEventArgs<string, string> args)
         {

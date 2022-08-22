@@ -371,6 +371,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                 item.ORCO = Pedido.ORCO;
                 item.CG_COND_ENTREGA = Pedido.CG_COND_ENTREGA;
                 item.DPP = Pedido.CONDICION_PAGO;
+                item.MONEDA = Pedido.MONEDA;
             }
 
             var response = await PedCliService.GuardarLista(Pedido.Items);

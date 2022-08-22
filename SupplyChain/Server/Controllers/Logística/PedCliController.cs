@@ -52,6 +52,7 @@ namespace SupplyChain
             return await _pedCliRepository.Obtener(p=> p.Id == id).FirstOrDefaultAsync();
         }
 
+
         [HttpGet("ByPedido/{pedido}")]
         public async Task<IEnumerable<PedCli>> GetByPedido(int pedido)
         {

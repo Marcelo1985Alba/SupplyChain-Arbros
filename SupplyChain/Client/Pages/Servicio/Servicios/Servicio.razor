@@ -14,6 +14,9 @@
 @using SupplyChain.Client.Pages.Ventas._3_Presupuestos
 @using SupplyChain.Client.Pages.Ventas._4_Solicitudes
 @using SupplyChain.Shared.Enum 
+
+
+
 @*CssClass="e-spin-overlay"*@
 <SfSpinner @ref="SpinnerObj" @bind-Visible="@SpinnerVisible" Label="Cargando..." Type="SpinnerType.Bootstrap" Size="100"></SfSpinner>
 <SfToast ID="toast_default" @ref="ToastObj">
@@ -778,7 +781,7 @@
         [Inject] public SolicitudService SolicitudService { get; set; }
         [Inject] public ServicioService ServicioService { get; set; }
         [Inject] public PresupuestoService PresupuestoService { get; set; }
-        [Inject] protected HttpClient Http { get; set; }
+        [Inject] protected IRepositoryHttp Http { get; set; }
         [Inject] protected IJSRuntime JS { get; set; }
         [CascadingParameter] public MainLayout Layout { get; set; }
         [Inject] protected CeldasService CeldasService { get; set; }
@@ -909,25 +912,110 @@
                 }
             }
 
-            medidas = await Http.GetFromJsonAsync<List<Medida>>("api/Medida");
-            series = await Http.GetFromJsonAsync<List<Serie>>("api/Serie");
-            orificios = await Http.GetFromJsonAsync<List<Orificio>>("api/Orificio");
-            sobrepresiones = await Http.GetFromJsonAsync<List<Sobrepresion>>("api/Sobrepresion");
-            tipos = await Http.GetFromJsonAsync<List<Tipo>>("api/Tipo");
-            estados = await Http.GetFromJsonAsync<List<Estado>>("api/Estado");
-            trabajosEfectuados = await Http.GetFromJsonAsync<List<Trabajosefec>>("api/TrabajosEfec");
-            marcas = await Http.GetFromJsonAsync<List<Marca>>("api/Marca");
-            operarios = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
-            opers = from opers in (IEnumerable<Operario>)operarios
-                    where opers.ACTIVO == true
-                    select opers;
+            var responseMedidas = await Http.GetFromJsonAsync<List<Medida>>("api/Medida");
+            if (responseMedidas.Error)
+            {
+
+            }
+            else
+            {
+                medidas = responseMedidas.Response;
+            }
+
+            var responseSeries = await Http.GetFromJsonAsync<List<Serie>>("api/Serie");
+            if (responseSeries.Error)
+            {
+
+            }
+            else
+            {
+                series = responseSeries.Response;
+            }
+
+
+            var responseOrificios = await Http.GetFromJsonAsync<List<Orificio>>("api/Orificio");
+            if (responseOrificios.Error)
+            {
+
+            }
+            else
+            {
+                orificios = responseOrificios.Response;
+            }
+            var responseSobrepresiones = await Http.GetFromJsonAsync<List<Sobrepresion>>("api/Sobrepresion");
+            if (responseSobrepresiones.Error)
+            {
+
+            }
+            else
+            {
+                sobrepresiones = responseSobrepresiones.Response;
+            }
+            var responseTipos = await Http.GetFromJsonAsync<List<Tipo>>("api/Tipo");
+            if (responseTipos.Error)
+            {
+
+            }
+            else
+            {
+                tipos = responseTipos.Response;
+            }
+            var responseEstados = await Http.GetFromJsonAsync<List<Estado>>("api/Estado");
+            if (responseEstados.Error)
+            {
+
+            }
+            else
+            {
+                estados = responseEstados.Response;
+            }
+            var responseTrabajosEfectuados = await Http.GetFromJsonAsync<List<Trabajosefec>>("api/TrabajosEfec");
+            if (responseTrabajosEfectuados.Error)
+            {
+
+            }
+            else
+            {
+                trabajosEfectuados = responseTrabajosEfectuados.Response;
+            }
+            var responseMarcas = await Http.GetFromJsonAsync<List<Marca>>("api/Marca");
+            if (responseMarcas.Error)
+            {
+
+            }
+            else
+            {
+                marcas = responseMarcas.Response;
+            }
+            var responseOperarios = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
+            if (responseOperarios.Error)
+            {
+
+            }
+            else
+            {
+                operarios = responseOperarios.Response;
+
+                opers = from opers in (IEnumerable<Operario>)operarios
+                        where opers.ACTIVO == true
+                        select opers;
+            }
+
             var response = await CeldasService.Get();
             if (!response.Error)
             {
                 celdas = response.Response;
             }
             //celdas = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
-            rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+            var responseRutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+            if (responseRutas.Error)
+            {
+
+            }
+            else
+            {
+                rutas = responseRutas.Response;
+            }
 
             await Grid?.AutoFitColumns();
             SpinnerVisible = false;
@@ -1377,7 +1465,13 @@
                 {
                     foreach (Service selectedRecord in this.Grid.SelectedRecords)
                     {
-                        var ClienteList = await Http.GetFromJsonAsync<List<Cliente>>($"api/Cliente/BuscarPorCliente/{selectedRecord.CG_CLI}");
+                        var responseClienteList = await Http.GetFromJsonAsync<List<Cliente>>($"api/Cliente/BuscarPorCliente/{selectedRecord.CG_CLI}");
+                        if (responseClienteList.Error)
+                        {
+
+                        }
+
+                        var ClienteList = responseClienteList.Response;
                         PdfDocument document1 = new PdfDocument();
                         document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(612, 1009);
                         document1.PageSettings.Margins.All = 0;
@@ -1590,7 +1684,7 @@
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
-                HttpResponseMessage response;
+                HttpResponseWrapper<Service> response;
                 bool esNuevo = args.RowData.Id  == 0;
                 Service ur = new Service();
 
@@ -1598,9 +1692,9 @@
                 {
                     //args.Data.Id = servicios.Max(s => s.Id) + 1;
                     response = await Http.PostAsJsonAsync("api/Servicios", args.Data);
-                    if (!response.IsSuccessStatusCode)
+                    if (response.Error)
                     {
-                        Console.WriteLine(await response.Content.ReadAsStringAsync());
+                        Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
 
                     }
 
@@ -1751,7 +1845,7 @@
 
 
             var response = await Http.PutAsJsonAsync($"api/Servicios/{id}", serv);
-            if (!response.IsSuccessStatusCode)
+            if (response.Error)
             {
                 await this.ToastObj.Show(new ToastModel
                 {
@@ -1800,7 +1894,8 @@
 
         protected async Task<Stream> GetFile(string nameFile)
         {
-            var file = await Http.GetStreamAsync(nameFile);
+            HttpClient httpClient = new HttpClient();
+            var file = await httpClient.GetStreamAsync(nameFile);
 
             return file;
         }

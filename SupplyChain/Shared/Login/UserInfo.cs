@@ -4,9 +4,9 @@ namespace SupplyChain.Shared.Login
 {
     public class UserInfo
     {
-        [Required]
+        [Required(ErrorMessage = "El Nombre de Usuario requerido")]
         public string UserName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "La Contraseña es requerida")]
         public string Password { get; set; }
 
         public int Cg_Cli { get; set; } = 0;

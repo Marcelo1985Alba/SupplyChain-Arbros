@@ -34,9 +34,26 @@ namespace SupplyChain.Client.HelperService
             return await http.GetFromJsonAsync<PedidoEncabezado>($"{API}/GetPedidoEncabezadoById/{id}");
         }
 
+        public async Task<HttpResponseWrapper<PedidoEncabezado>> GetPedidoEncabezadoByLista(List<int> pedidoIds)
+        {
+            var baseUri = $"{API}/GetListaByPedidos?";
+            var queryString = "";
+            for (int i = 0; i < pedidoIds.Count; i++)
+            {
+                if (i == 0)
+                {
+                    queryString = $"pedidoIds={pedidoIds[i]}";
+                }
+
+                queryString = $"&pedidoIds={pedidoIds[i]}";
+            }
+            var url = $"{baseUri}{queryString}";
+            return await http.GetFromJsonAsync<PedidoEncabezado>(url);
+        }
+
         public async Task<HttpResponseWrapper<List<Pedidos>>> GuardarLista(List<Pedidos> lista)
         {
-            return await http.PostAsJsonAsync($"{API}/PostList", lista);
+            return await http.PostAsJsonAsync($"api/Pedidos/PostList", lista);
         }
     }
 }

@@ -23,13 +23,13 @@
             }
         </Header>
         <Content>
-            <SfToolbar ID="toolbar-form-pedido" CssClass="">
+            <!--<SfToolbar ID="toolbar-form-pedido" CssClass="">
                 <ToolbarItems>
-                    <ToolbarItem Id="tiPedidos" CssClass="e-round e-small" Type="ItemType.Button" Text="Pedidos" OnClick="BuscarPedidosPendientes" Align="ItemAlign.Right"></ToolbarItem>
+                    <ToolbarItem Id="tiPedidos" CssClass="e-round e-small" Type="ItemType.Button" Text="Pedidos" OnClick="BuscarPedidosPendientes" Align="ItemAlign.Right"></ToolbarItem>-->
                     @*<ToolbarItem Id="tiProductos" CssClass="e-round" Text="Productos" OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>*@
 
-                </ToolbarItems>
-            </SfToolbar>
+                <!--</ToolbarItems>
+            </SfToolbar>-->
             <EditForm id="formPedido" Model="@Pedido" OnValidSubmit="@(async()=> await Guardar())">
                 <SfSpinner @bind-Visible="@spinerVisible" Label="Guardando..." Type="SpinnerType.Fabric"></SfSpinner>
                 <ObjectGraphDataAnnotationsValidator />
@@ -50,7 +50,7 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label class="">Moneda:</label>
-                        <SfDropDownList TValue="string" TItem="string" DataSource="Monedas" Readonly="ReadOnlyMoneda"
+                        <SfDropDownList TValue="string" TItem="string" DataSource="Monedas" Readonly="true"
                                         @bind-Value="Pedido.MONEDA">
                             <DropDownListEvents TItem="string" TValue="string" ValueChange="@CambioMoneda"></DropDownListEvents>
                         </SfDropDownList>
@@ -59,15 +59,15 @@
                         <label class="">TC:</label>
                         <SfNumericTextBox ID="TC" @bind-Value="@(Pedido.VA_INDIC)" ShowSpinButton="false" Decimals="2" Readonly="true"></SfNumericTextBox>
                     </div>
-                    <div class="form-group col-md-1 mt-4">
+                    @*<div class="form-group col-md-1 mt-4">
                         <SfButton IconCss="e-icons e-repeat" CssClass="e-round e-warning"
                                   OnClick="@(async ()=> await GetTipoCambioDolarHoy())"
                                   HtmlAttributes="@HtmlAttributeButtonTC"></SfButton>
-                    </div>
-                    <div class="form-group col-md-1">
+                    </div>*@
+                    @*<div class="form-group col-md-1">
                         <label class="">Bonificacion:</label>
                         <SfNumericTextBox ID="Bonifc" @bind-Value="@(Pedido.BONIFIC)" ShowSpinButton="false" Decimals="2"></SfNumericTextBox>
-                    </div>
+                    </div>*@
 
                 </div>
                 <div class="form-row">
@@ -129,7 +129,7 @@
                                 <GridColumn Field=@nameof(Pedidos.Id) IsPrimaryKey="true" Width="3"></GridColumn>
                                 <GridColumn Field=@nameof(Pedidos.CG_ART) AllowEditing="false" HeaderText="Producto" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
                                 <GridColumn Field=@nameof(Pedidos.DES_ART) AllowEditing="false" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
-                                <GridColumn Field=@nameof(Pedidos.CANTPED) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px">
+                                <GridColumn Field=@nameof(Pedidos.STOCK) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px">
                                     <EditTemplate Context="detalle">
                                         @{
                                             var value = (detalle as Pedidos);
@@ -159,8 +159,11 @@
                                 </GridColumn>
                                 <GridColumn Field="@nameof(Pedidos.IMPORTE4)" Format="N2" HeaderText="Total" Width="100"></GridColumn>
                                 <GridColumn Field="@nameof(Pedidos.LOTE)" HeaderText="Lote" Width="170"></GridColumn>
-                                <GridColumn Field="@nameof(Pedidos.SERIE)" HeaderText="Resorte" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(Pedidos.SERIE)" HeaderText="Serie" Width="150"></GridColumn>
                                 <GridColumn Field="@nameof(Pedidos.DESPACHO)" HeaderText="Presion" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(Pedidos.OBS1)" HeaderText="Bulto" Width="170"></GridColumn>
+                                <GridColumn Field="@nameof(Pedidos.OBS3)" HeaderText="Importe" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(Pedidos.OBSERITEM)" HeaderText="Observaciones" Width="150"></GridColumn>
                             </GridColumns>
                         </SfGrid>
                     </div>
@@ -192,7 +195,7 @@
         </Content>
         <FooterTemplate>
 
-            <div class="container-total">
+            @*<div class="container-total">
 
                 @{
                     var totalItems = Math.Round(Pedido.Items.Sum(i => (decimal)i.IMPORTE4), 2);
@@ -213,8 +216,8 @@
                     <div class="total-price">TOTAL @moneda : @total</div>
                 }
 
-            </div>
-            <div class=" mt-5">
+            </div>*@
+            <div class="">
                 <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
                 <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async()=>await Hide())" IconCss="fa fa-window-close-o"></SfButton>
             </div>

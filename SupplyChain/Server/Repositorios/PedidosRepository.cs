@@ -81,7 +81,6 @@ namespace SupplyChain.Server.Repositorios
 
         }
 
-
         public async Task<PedidoEncabezado> ObtenerPedidosEncabezado(int id)
         {
             var ped = await DbSet.FindAsync(id);
@@ -104,6 +103,79 @@ namespace SupplyChain.Server.Repositorios
                 pedEncabezado.Items.Add(ped);
             }
             return pedEncabezado;
+        }
+
+        public async Task<PedidoEncabezado> GetListaByPedidos(List<int> listaPedidos)
+        {
+            try
+            {
+                var pedidos = await Db.vPedidoAltas.Where(p => listaPedidos.Contains(p.PEDIDO)).ToListAsync();
+                var pedEncabezado = new PedidoEncabezado();
+                if (pedidos != null && pedidos.Count > 0)
+                {
+                    var cabacera = pedidos.First();
+                    pedEncabezado = new PedidoEncabezado()
+                    {
+                        BONIFIC = (decimal)cabacera.BONIFIC,
+                        MONEDA = cabacera.MONEDA,
+                        CG_CLI = cabacera.CG_CLI,
+                        CG_CONDICION_PAGO = cabacera.DPP,
+                        DES_CLI = cabacera.DES_CLI,
+                        CG_COND_ENTREGA = cabacera.CG_COND_ENTREGA,
+                        CG_TRANS = cabacera.CG_TRANS,
+                        DIRENT = cabacera.DIRENT,
+                        VA_INDIC = cabacera.VA_INDIC,
+                        VOUCHER = 0,
+                    };
+                    var id = 0;
+                    foreach (var item in pedidos)
+                    {
+                        id--;
+                        var pedido = new Pedidos
+                        {
+                            Id = id,
+                            FE_MOV = DateTime.Now,
+                            CG_CONDICION_PAGO = pedEncabezado.CG_CONDICION_PAGO,
+                            DIRENT = pedEncabezado.DIRENT,
+                            CG_CLI = pedEncabezado.CG_CLI,
+                            DES_CLI = pedEncabezado.DES_CLI,
+                            CG_TRANS = pedEncabezado.CG_TRANS,
+                            CG_COND_ENTREGA = pedEncabezado.CG_COND_ENTREGA,
+                            MONEDA = pedEncabezado.MONEDA,
+                            BONIFIC = pedEncabezado.BONIFIC,
+                            VA_INDIC = pedEncabezado.VA_INDIC,
+
+                            CG_ART = item.CG_ART,
+                            DES_ART = item.DES_ART,
+                            STOCK = item.STOCK,
+                            PEDIDO = item.PEDIDO,
+                            CG_CIA = 1,
+                            CG_DEP = 1,
+                            CG_ORDF = item.CG_ORDF,
+                            DESCUENTO = item.DESCUENTO,
+                            IMPORTE1 = item.IMPORTE1,
+                            IMPORTE2 = item.IMPORTE2,
+                            IMPORTE3 = item.IMPORTE3,
+                            IMPORTE4 = item.IMPORTE4,
+                            IMPORTE6 = item.IMPORTE6,
+                            DESPACHO = item.DESPACHO,
+                            LOTE = item.LOTE,
+                            SERIE = item.SERIE,
+
+                        };
+
+
+                        pedEncabezado.Items.Add(pedido);
+                    }
+                }
+
+
+                return pedEncabezado;
+            }
+            catch (Exception ex)
+            {
+                return new PedidoEncabezado();
+            }
         }
 
         internal async Task<List<Pedidos>> GetRemitos(TipoFiltro tipoFiltro = TipoFiltro.Todos , int cg_cia = 1)

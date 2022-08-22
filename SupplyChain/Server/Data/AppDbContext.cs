@@ -127,7 +127,7 @@ namespace SupplyChain
         //MODULO PROYECTOS
         public DbSet<ProyectosGBPI> Proyectos { get; set; }
 
-
+        public DbSet<vPedidoAlta> vPedidoAltas { get; set; }
         public DbSet<MantCeldas> MantCeldas { get; set; }
         #endregion
 
@@ -245,6 +245,7 @@ namespace SupplyChain
             modelBuilder.Entity<vTipoCambio>().ToView("vTipoCambio");
             modelBuilder.Entity<vCalculoSolicitudes>().ToView("vCalculoSolicitudes");
             modelBuilder.Entity<vTransporte>().ToView("vTransportes");
+            modelBuilder.Entity<vPedidoAlta>().HasNoKey().ToView("vPedidosAltas");
         }
     }
 }
