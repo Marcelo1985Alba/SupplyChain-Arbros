@@ -3333,7 +3333,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Top>17.86146cm</Top>
             <Left>15.65161cm</Left>
             <Height>0.52538cm</Height>
-            <Width>3.2232cm</Width>
+            <Width>3.13132cm</Width>
             <ZIndex>93</ZIndex>
             <Style>
               <Border>
@@ -4003,7 +4003,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             </Style>
           </Textbox>
         </ReportItems>
-        <Height>8.28928in</Height>
+        <Height>8.66403in</Height>
         <Style />
       </Body>
       <Width>7.5737in</Width>
