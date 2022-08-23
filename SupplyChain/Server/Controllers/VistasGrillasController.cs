@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
@@ -13,6 +15,7 @@ namespace SupplyChain.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class VistasGrillasController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -53,6 +56,8 @@ namespace SupplyChain.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<VistasGrillas>> Post(VistasGrillas vistasGrillas)
         {
+            var userName = HttpContext.User.Identity.Name;
+            vistasGrillas.Usuario = userName;
             if (vistasGrillas.Id > 0)
             {
                 _context.Entry(vistasGrillas).State = EntityState.Modified;

@@ -103,7 +103,6 @@
             AppName = AppName,
             Descripcion = VistaSeleccionada.Descripcion,
             Layout = StateApp,
-            Usuario = LoginService.UsuarioLogin.Usuario
         };
         var response = await Http.PostAsJsonAsync<VistasGrillas>($"api/VistasGrillas", vista);
         if (response.IsSuccessStatusCode)

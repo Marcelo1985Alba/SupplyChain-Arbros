@@ -5,7 +5,7 @@ namespace SupplyChain.Client.RepositoryHttp
 {
     public interface IRepositoryHttp
     {
-        AuthenticationHeaderValue Authorization { get; set; }
+        AuthenticationHeaderValue? Authorization { get; set; }
 
         Task<HttpResponseWrapper<T>> GetFromJsonAsync<T>(string url);
         //Task<HttpResponseWrapper<TResponse>> Get<T, TResponse>(string url);
