@@ -55,10 +55,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="E:\Escritorio\CotizacionREV1.rdlc" Link="CotizacionREV1.rdlc" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="wwwroot\Report\EtiquetaOF\ReporteEtiquetaOF.rdlc" />
     <EmbeddedResource Include="wwwroot\Report\NoConfor\ReporteEvento.rdlc" />
     <EmbeddedResource Include="wwwroot\Report\Report1.rdlc" />
