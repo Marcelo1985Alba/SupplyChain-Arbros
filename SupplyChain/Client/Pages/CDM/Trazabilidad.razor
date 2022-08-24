@@ -260,17 +260,21 @@
                                             var file_ruta = $"{Archivos[0].Nombre},RUTATRAZABILIDAD";
                                             if (Archivos.Any(a => a.IsAzure))
                                             {
-                                                <SfPdfViewer ID="CertPdf" ServiceUrl="api/AdministracionArchivos" DocumentPath="@file_ruta"
-                                                             Height="1200px" Width="100%"></SfPdfViewer>
+                                                <SfPdfViewer ID="CertPdf" ServiceUrl="api/AdministracionArchivos" 
+                                                             DocumentPath="@file_ruta"
+                                                             Height="1200px" Width="100%">
+                                                    
+                                                </SfPdfViewer>
                                             }
                                             else
                                             {
                                                 var pdf_ruta = NroCertificado.Trim() + ".pdf,RUTATRAZABILIDAD";
                                                 <div class="mt-5">
-                                                    @*<SfPdfViewer DocumentPath="@ruta"></SfPdfViewer>*@
                                                     <SfPdfViewer ID="CertifiPdf"
                                                                  ServiceUrl="/api/Values" DocumentPath="@pdf_ruta"
-                                                                 Height="300px" Width="100%"></SfPdfViewer>
+                                                                 Height="300px" Width="100%">
+                                                        @*<PdfViewerAjaxRequestSettings AjaxHeaders="@Headers" WithCredentials="true"></PdfViewerAjaxRequestSettings>*@
+                                                    </SfPdfViewer>
                                                 </div>
                                             }
                                         }
@@ -351,6 +355,7 @@
 </style>
 
 @code {
+    [Inject] public IJSRuntime Js { get; set; }
     [Inject] public IRepositoryHttp Http { get; set; }
     [Inject] public PdfService PdfService { get; set; }
     [Parameter] public string Pedido { get; set; }
@@ -430,10 +435,23 @@
         };
     [CascadingParameter]
     public MainLayout Layout { get; set; }
+    protected string token = string.Empty;
+
+
+    public List<AjaxHeader> Headers = new();
+
     protected override async Task OnInitializedAsync()
     {
         Layout.Titulo = "Trazabilidad";
         //rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+        token = await Js.GetFromSessionStorage("TOKEN_KEY");
+        var header = new AjaxHeader
+        {
+            HeaderName = "Authorization",
+            HeaderValue = $"Bearer {token}"
+        };
+
+        Headers.Add(header);
 
         if (!string.IsNullOrEmpty(Pedido))
         {
@@ -1149,7 +1167,11 @@
         //await JsRuntime.InvokeVoidAsync("open", new object[2] { $"Pdf/{TrzNro}/ENSAYOS", $"Pdf/{TrzNro}/ENSAYOS" });
         await JsRuntime.InvokeVoidAsync("open", new object[2] { $"pdf-ensayos/{TrzNro}/RUTAENSAYO", $"pdf-ensayos/{TrzNro}/RUTAENSAYO" });
     }
+
+
+
 }
+
 <style>
     @@font-face {
         font-family: 'Toast_icons';

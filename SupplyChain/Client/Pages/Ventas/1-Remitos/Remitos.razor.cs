@@ -80,7 +80,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 await GetCondicionesPago();
                 await GetCondicionesEntrega();
                 await GetTransportes();
-                pedidosPendientesRemitir = response.Response.OrderByDescending(p => p.ESTADO_PEDIDO).ToList();
+                pedidosPendientesRemitir = response.Response.OrderByDescending(p => p.PEDIDO).ToList();
             }
         }
 

@@ -8,7 +8,7 @@
 @inject NavigationManager MyNavigationManager
 @inherits LayoutComponentBase
 
-    
+<audio id="notification" src="/media/notification.mp3" />
     <CascadingValue Value="this">
         <div id="main-wrapper">
             <!-- ============================================================== -->
@@ -79,24 +79,28 @@
                             <!-- ============================================================== -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="mdi mdi-message"></i>
+                                    <i class="mdi @iconClassNotification"></i>
                                     <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
                                     <ul>
                                         <li>
-                                            <div class="drop-title">Notifications</div>
+                                            <div class="drop-title">Tiene @mensajes.Count() mensajes nuevos!</div>
                                         </li>
+                                        
                                         <li>
+                                            @foreach (var item in mensajes.Take(4).OrderByDescending(m=> m.CreatedDate).ToList())
+                                            {
                                             <div class="message-center">
-                                                Message
-                                                <a href="#">
-                                                    <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i></div>
+                                                Mensaje
+                                                <a href="/chat-app/@item.FromUserId">
+                                                    <div class="btn btn-primary btn-circle"><i class="ti-user"></i></div>
                                                     <div class="mail-contnet">
-                                                        <h5>Luanch Admin</h5> <span class="mail-desc">Just see the my new admin!</span> <span class="time">9:30 AM</span>
+                                                        <h5>@item.FromUser?.UserName</h5> <span class="mail-desc">@item.Message</span> 
+                                                        <span class="time">@item.CreatedDate</span>
                                                     </div>
                                                 </a>
-                                                Message
+                                                @*Message
                                                 <a href="#">
                                                     <div class="btn btn-success btn-circle"><i class="ti-calendar"></i></div>
                                                     <div class="mail-contnet">
@@ -110,17 +114,20 @@
                                                         <h5>Settings</h5> <span class="mail-desc">You can customize this template as you want</span> <span class="time">9:08 AM</span>
                                                     </div>
                                                 </a>
+
                                                 Message
                                                 <a href="#">
-                                                    <div class="btn btn-primary btn-circle"><i class="ti-user"></i></div>
+                                                    <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i></div>
                                                     <div class="mail-contnet">
-                                                        <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:02 AM</span>
+                                                        <h5>Luanch Admin</h5> <span class="mail-desc">Just see the my new admin!</span> <span class="time">9:30 AM</span>
                                                     </div>
-                                                </a>
+                                                </a>*@
                                             </div>
+                                            }
+
                                         </li>
                                         <li>
-                                            <a class="nav-link text-center" href="javascript:void(0);"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>
+                                            <a class="nav-link text-center" href="/chat-app"> <strong>Ver todas las notificaciones</strong> <i class="fa fa-angle-right"></i> </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -433,9 +440,36 @@
         <ToastPosition X="Right" Y="Bottom"></ToastPosition>
     </SfToast>
 
+    @*<SfToast ID="toast_custom" @ref="@ToastObj" Width="400px" ExtendedTimeout=0 Timeout="200">
+        <ToastPosition X="Right" Y="Bottom"></ToastPosition>
+        <ToastTemplates>
+            <Template>
+                <div id='template_toast'>
+                    <div class="horizontal-align">
+                        <div class='e-icons toast-icons e-alarm'></div>
+                        <div class='toast-content'>
+                            <div class='toast-title'>
+                                Weekend Alarm
+                            </div>
+                            <div class='toast-message'>
+                                With traffic, its likely to take 45 minutes to get to jenny's 24th Birthday Bash at Hillside Bar, 454 E.
+                                Olive Way by 10:00 PM
+                            </div>
+                        </div>
+                    </div>
+                    <div class="snoozeBtn">
+                        <SfButton ID="snooze" CssClass="e-btn e-flat e-info"> Snooze </SfButton>
+                        <SfButton ID="dismiss" CssClass="e-btn e-flat e-info"> Dismiss </SfButton>
+                    </div>
+                </div>
+            </Template>
+        </ToastTemplates>
+    </SfToast>*@
+
 @code{
     [Inject] public ILoginServiceJWT LoginService { get; set; }
     [Inject] public IJSRuntime Js { get; set; }
+    [Inject] public HelperService.ChatService ChatService { get; set; }
     protected SfSidebar sidebarObj;
     protected SfToast ToastObj;
     protected string ToastContent;
@@ -455,6 +489,9 @@
     bool updateReady;
     private HubConnection hubConnection;
     public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
+    protected List<ChatMessage> mensajes = new();
+    protected string iconClassNotification = string.Empty;
+
     protected async override Task OnInitializedAsync()
     {
         authState = await authenticationState;
@@ -469,6 +506,19 @@
             emailUsuario = user.Claims.Where(a => a.Type == ClaimTypes.Email)
                 .Select(a => a.Value).FirstOrDefault();
 
+            var response = await ChatService.GetConversationNoViewAsync();
+            if (response.Error)
+            {
+
+            }
+            else
+            {
+                mensajes = response.Response;
+                if (mensajes.Count > 0)
+                {
+                    iconClassNotification = "mdi-message";
+                }
+            }
         }
 
 
@@ -480,8 +530,18 @@
         {
             if (CurrentUserId == receiverUserId)
             {
+                iconClassNotification = "mdi-message";
                 Js.InvokeAsync<string>("PlayAudio", "notification");
-                ToastObj.ShowAsync();
+                ToastObj.ShowAsync(new ToastModel()
+                {
+                    Title = "Nuevo Mensaje Recibido",
+                    Content = message,
+                    NewestOnTop = true,
+                    ShowCloseButton = true,
+                    ShowProgressBar = true,
+                }) ;
+
+                StateHasChanged();
                 //_snackBar.Add(message, Severity.Info, config =>
                 //{
                 //    config.VisibleStateDuration = 10000;

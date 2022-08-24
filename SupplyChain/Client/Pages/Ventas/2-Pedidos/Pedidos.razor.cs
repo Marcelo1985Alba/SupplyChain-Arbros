@@ -72,7 +72,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                 await GetCondicionesPago();
                 await GetCondicionesEntrega();
                 await GetTransportes();
-                pedidos = response.Response.OrderByDescending(p=> p.FE_PED).ToList();
+                pedidos = response.Response.OrderByDescending(p=> p.PEDIDO).ToList();
             }
         }
 

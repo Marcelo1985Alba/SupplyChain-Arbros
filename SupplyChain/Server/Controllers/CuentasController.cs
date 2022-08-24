@@ -107,7 +107,7 @@ namespace SupplyChain.Server.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<UserToken>> CrearUsuario([FromBody] UserInfo userInfo)
         {
-            var user = new ApplicationUser { UserName = userInfo.UserName, Cg_Cli = userInfo.Cg_Cli };
+            var user = new ApplicationUser { UserName = userInfo.UserName, Cg_Cli = userInfo.Cg_Cli, Email = userInfo.Email };
             var result = await userManager.CreateAsync(user, userInfo.Password);
             if (result.Succeeded)
             {
@@ -115,7 +115,7 @@ namespace SupplyChain.Server.Controllers
             }
             else
             {
-                return BadRequest("Usuario o Contraseña invalida");
+                return BadRequest(result.Errors.Select(s=> s.Description));
             }
 
         }

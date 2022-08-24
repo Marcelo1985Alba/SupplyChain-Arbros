@@ -9,6 +9,8 @@ namespace SupplyChain.Shared.Login
         [Required(ErrorMessage = "La Contraseña es requerida")]
         public string Password { get; set; }
 
+        public string Email { get; set; }
+
         public int Cg_Cli { get; set; } = 0;
 
     }

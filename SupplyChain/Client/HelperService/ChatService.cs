@@ -24,6 +24,11 @@ namespace SupplyChain.Client.HelperService
         {
             return await http.GetFromJsonAsync<List<ChatMessage>>($"{API}/{contactId}");
         }
+
+        public async Task<HttpResponseWrapper<List<ChatMessage>>> GetConversationNoViewAsync()
+        {
+            return await http.GetFromJsonAsync<List<ChatMessage>>($"{API}/NoView");
+        }
         public async Task<HttpResponseWrapper<Usuario>> GetUserDetailsAsync(string userId)
         {
             return await http.GetFromJsonAsync<Usuario>($"{API}/users/{userId}");

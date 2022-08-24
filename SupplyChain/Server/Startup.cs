@@ -50,10 +50,18 @@ namespace SupplyChain.Server
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-
+            services.AddCors(op=> 
+            {
+                op.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
             #region "identity"
             services.AddIdentity<ApplicationUser, IdentityRole>(op =>
             {
+                op.Password.RequireLowercase = false;
+                op.Password.RequireNonAlphanumeric = false;
                 op.Password.RequireUppercase = false;
                 op.Password.RequireDigit = false;
             })
@@ -159,6 +167,7 @@ namespace SupplyChain.Server
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
+            app.UseCors();
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
@@ -169,7 +178,7 @@ namespace SupplyChain.Server
                 endpoints.MapControllers();
                 //endpoints.Map("api/{**slug}", HandleApiFallback);
                 endpoints.MapHub<SolicitudHub>("/solicitudhub");
-                endpoints.MapHub<OnlineUsersHub>("/onlinehub");
+                //endpoints.MapHub<OnlineUsersHub>("/onlinehub");
                 
                 endpoints.MapFallbackToFile("index.html");
                 endpoints.MapHub<ChatHub>("/chathub");

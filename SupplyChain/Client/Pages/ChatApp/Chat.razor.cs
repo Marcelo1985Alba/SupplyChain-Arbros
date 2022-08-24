@@ -96,7 +96,7 @@ namespace SupplyChain.Client.Pages.ChatApp
                     if ((ContactId == message.ToUserId && CurrentUserId == message.FromUserId))
                     {
                         messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { Email = CurrentUserEmail } });
-                        await hubConnection?.SendAsync("ReceiveChatNotification", $"New Message From {userName}", ContactId, CurrentUserId);
+                        await hubConnection?.SendAsync("ChatNotificationAsync", $"Nuevo Mensaje de {userName}", ContactId, CurrentUserId);
                     }
                     else if ((ContactId == message.FromUserId && CurrentUserId == message.ToUserId))
                     {
@@ -201,10 +201,6 @@ namespace SupplyChain.Client.Pages.ChatApp
                 }
 
                 chatHistory.FromUserId = CurrentUserId;
-                if (hubConnection.State == HubConnectionState.Disconnected)
-                {
-                    await hubConnection?.StartAsync();
-                }
                 await hubConnection.SendAsync("SendMessageAsync", chatHistory, CurrentUserEmail);
                 CurrentMessage = string.Empty;
             }

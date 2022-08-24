@@ -88,7 +88,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             }
             else
             {
-                Solicitudes = response.Response.OrderBy(s=> s.Id).ToList();
+                Solicitudes = response.Response.OrderByDescending(s=> s.Id).ToList();
             }
         }
 

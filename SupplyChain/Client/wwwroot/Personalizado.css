@@ -399,11 +399,12 @@ form label {
 }
 
 .ribbon {
-    background-color: #c66;
+    background-color: #d38181;
     overflow: hidden;
     white-space: nowrap;
+    opacity: 0.8;
     /* top left corner */
-    position: absolute;
+    position: fixed;
     left: -45px;
     top: 45px;
     width: 250px;
@@ -417,7 +418,7 @@ form label {
     -webkit-box-shadow: 0 0 10px #888;
     -moz-box-shadow: 0 0 10px #888;
     box-shadow: 0 0 10px #888;
-    z-index:9999;
+    z-index: 9999;
 }
 
     .ribbon span {

@@ -29,11 +29,45 @@ namespace SupplyChain.Server.Controllers
             _context = context;
         }
         [HttpGet("{contactId}")]
-        public async Task<IActionResult> GetConversationAsync(string contactId)
+        public async Task<ActionResult<List<ChatMessage>>> GetConversationAsync(string contactId)
         {
-            var userId = User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
+            var userId = HttpContext.User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
             var messages = await _context.ChatMessages
-                    .Where(h => (h.FromUserId == contactId && h.ToUserId == userId) || (h.FromUserId == userId && h.ToUserId == contactId))
+                    .Where(h => (h.FromUserId == contactId && h.ToUserId == userId)
+                        || (h.FromUserId == userId && h.ToUserId == contactId))
+                    .OrderBy(a => a.CreatedDate)
+                    .Include(a => a.FromUser)
+                    .Include(a => a.ToUser)
+                    .Select(x => new ChatMessage
+                    {
+                        FromUserId = x.FromUserId,
+                        Message = x.Message,
+                        CreatedDate = x.CreatedDate,
+                        Id = x.Id,
+                        ToUserId = x.ToUserId,
+                        //ToUser = x.ToUser,
+                        NameToUser = x.ToUser.UserName,
+                        //FromUser = x.FromUser,
+                        NameFromUser = x.FromUser.UserName,
+                        Visto = x.Visto
+                    }).ToListAsync();
+
+            foreach (var item in messages.Where(m=> !m.Visto))
+            {
+                item.Visto = true;
+                _context.Entry(item).State = EntityState.Modified;
+            }
+
+            await _context.SaveChangesAsync();
+            return messages;
+        }
+
+        [HttpGet("NoView")]
+        public async Task<IActionResult> GetAllConversationsNoViewAsync()
+        {
+            var userId = HttpContext.User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
+            var messages = await _context.ChatMessages
+                    .Where(h => !h.Visto && h.ToUserId == userId)
                     .OrderBy(a => a.CreatedDate)
                     .Include(a => a.FromUser)
                     .Include(a => a.ToUser)

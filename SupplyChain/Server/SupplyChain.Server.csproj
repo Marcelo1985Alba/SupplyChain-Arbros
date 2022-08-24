@@ -25,6 +25,7 @@
     <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xsd" />
     <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xss" />
     <Content Remove="wwwroot\Report\NoConfor\ReporteEvento.rdlc" />
+    <Content Remove="wwwroot\Report\Presupuesto\Presupuesto.rdlc" />
     <Content Remove="wwwroot\Report\Report1.rdlc" />
   </ItemGroup>
 
@@ -57,6 +58,7 @@
   <ItemGroup>
     <EmbeddedResource Include="wwwroot\Report\EtiquetaOF\ReporteEtiquetaOF.rdlc" />
     <EmbeddedResource Include="wwwroot\Report\NoConfor\ReporteEvento.rdlc" />
+    <EmbeddedResource Include="wwwroot\Report\Presupuesto\Presupuesto.rdlc" />
     <EmbeddedResource Include="wwwroot\Report\Report1.rdlc" />
   </ItemGroup>
 
@@ -156,7 +158,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="wwwroot\Report\Presupuesto\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
