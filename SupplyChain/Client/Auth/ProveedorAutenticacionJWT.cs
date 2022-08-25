@@ -106,7 +106,7 @@ namespace SupplyChain.Client.Auth
 
         private bool DebeRenovarToken(DateTime tiempoExpira)
         {
-            var tiempoEx = TimeSpan.FromMinutes(5);
+            var tiempoEx = TimeSpan.FromMinutes(45);
             var tiempoSubs = tiempoExpira.Subtract(DateTime.Now);
             bool t = tiempoSubs <= tiempoEx;
 

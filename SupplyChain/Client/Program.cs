@@ -84,7 +84,7 @@ namespace SupplyChain.Client
             services.AddScoped<ChatService>();
             services.AddScoped<PdfService>();
             services.AddScoped<ExcelService>();
-
+            services.AddScoped<RenovadorToken>();
 
             services.AddSingleton<ToastService>();
         }

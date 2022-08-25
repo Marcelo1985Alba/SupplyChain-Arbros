@@ -470,6 +470,7 @@
     [Inject] public ILoginServiceJWT LoginService { get; set; }
     [Inject] public IJSRuntime Js { get; set; }
     [Inject] public HelperService.ChatService ChatService { get; set; }
+    [Inject] public RenovadorToken RenovadorToken { get; set; }
     protected SfSidebar sidebarObj;
     protected SfToast ToastObj;
     protected string ToastContent;
@@ -497,6 +498,7 @@
         authState = await authenticationState;
         if (authState.User.Identity.IsAuthenticated)
         {
+            RenovadorToken.Iniciar();
             nombreUsuario = authState.User.Identity.Name;
             var user = authState.User;
             var claims = user.Claims.ToList();

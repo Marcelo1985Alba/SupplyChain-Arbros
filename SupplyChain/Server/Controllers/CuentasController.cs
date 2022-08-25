@@ -155,7 +155,7 @@ namespace SupplyChain.Server.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["jwt:llave"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var expiration = DateTime.Now.AddMinutes(30);
+            var expiration = DateTime.Now.AddHours(12);
 
             JwtSecurityToken token = new(issuer: null,
                 audience: null, claims: claims, expires: expiration, signingCredentials: creds);
