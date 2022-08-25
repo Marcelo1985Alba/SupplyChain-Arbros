@@ -472,8 +472,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!CodigoDiseño.Value, "DataSet2")+
-First(Fields!NumeroPlano.Value, "DataSet2")</Value>
+                    <Value>=First(Fields!NumeroPlano.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light Condensed</FontFamily>
                     </Style>
@@ -556,7 +555,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
             <Top>2.92676cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
-            <Width>2.13586cm</Width>
+            <Width>2.55695cm</Width>
             <ZIndex>5</ZIndex>
             <Style>
               <Border>
@@ -620,7 +619,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
             <Top>4.58399cm</Top>
             <Left>6.31386cm</Left>
             <Height>0.73033cm</Height>
-            <Width>2.85119cm</Width>
+            <Width>3.4591cm</Width>
             <ZIndex>7</ZIndex>
             <Style>
               <Border>
@@ -681,8 +680,8 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>TagId</rd:DefaultName>
-            <Top>4.58399cm</Top>
-            <Left>9.39187cm</Left>
+            <Top>4.54871cm</Top>
+            <Left>9.94484cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.44035cm</Width>
             <ZIndex>9</ZIndex>
@@ -761,40 +760,6 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
-          <Textbox Name="Servicio2">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Servicio.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Servicio</rd:DefaultName>
-            <Top>5.42015cm</Top>
-            <Left>3.46493cm</Left>
-            <Height>0.73033cm</Height>
-            <Width>1.94109cm</Width>
-            <ZIndex>12</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
           <Textbox Name="Textbox25">
             <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
@@ -819,7 +784,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
             <Left>0.30712cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.52972cm</Width>
-            <ZIndex>13</ZIndex>
+            <ZIndex>12</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -852,7 +817,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.50594cm</Width>
-            <ZIndex>14</ZIndex>
+            <ZIndex>13</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -885,7 +850,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
             <Left>9.29043cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.54104cm</Width>
-            <ZIndex>15</ZIndex>
+            <ZIndex>14</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -917,7 +882,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
             <Left>6.98136cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.61521cm</Width>
-            <ZIndex>16</ZIndex>
+            <ZIndex>15</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -949,7 +914,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.50594cm</Width>
-            <ZIndex>17</ZIndex>
+            <ZIndex>16</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -981,7 +946,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
             <Left>12.83555cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.61521cm</Width>
-            <ZIndex>18</ZIndex>
+            <ZIndex>17</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1012,7 +977,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.83905cm</Width>
-            <ZIndex>19</ZIndex>
+            <ZIndex>18</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1045,7 +1010,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
             <Left>16.75014cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.8687cm</Width>
-            <ZIndex>20</ZIndex>
+            <ZIndex>19</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1077,7 +1042,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
             <Left>12.56918cm</Left>
             <Height>0.73033cm</Height>
             <Width>3.51119cm</Width>
-            <ZIndex>21</ZIndex>
+            <ZIndex>20</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1110,7 +1075,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
             <Left>6.11587in</Left>
             <Height>0.28753in</Height>
             <Width>0.79234in</Width>
-            <ZIndex>22</ZIndex>
+            <ZIndex>21</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1145,7 +1110,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
             <Left>3.53584cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.76596cm</Width>
-            <ZIndex>23</ZIndex>
+            <ZIndex>22</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1163,9 +1128,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>= Fields!DescargaA.Value +"/" +Fields!LineaEntrada.Value + 
-First(Fields!LineaEntrada.Value, "DataSet2")+
-First(Fields!LineaEntrada.Value, "DataSet2")</Value>
+                    <Value>=First(Fields!LineaEntrada.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                     </Style>
@@ -1178,10 +1141,10 @@ First(Fields!LineaEntrada.Value, "DataSet2")</Value>
             </Paragraphs>
             <rd:DefaultName>Servicio</rd:DefaultName>
             <Top>2.93951cm</Top>
-            <Left>2.90037cm</Left>
+            <Left>3.53584cm</Left>
             <Height>0.73033cm</Height>
-            <Width>6.19754cm</Width>
-            <ZIndex>24</ZIndex>
+            <Width>5.56207cm</Width>
+            <ZIndex>23</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1219,7 +1182,7 @@ First(Fields!LineaEntrada.Value, "DataSet2")</Value>
             <Left>9.77296cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.52554cm</Width>
-            <ZIndex>25</ZIndex>
+            <ZIndex>24</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1240,7 +1203,7 @@ First(Fields!LineaEntrada.Value, "DataSet2")</Value>
                     <Value>=IIF(Fields!NombreFase.Value = "MasaLiquido" Or 
 		Fields!NombreFase.Value = "VolumenLiquido" , "Liquido",
  IIF(Fields!NombreFase.Value = "MasaGas" Or 
-		Fields!NombreFase.Value = "VolumenGas" , "Gas","Agua"))</Value>
+		Fields!NombreFase.Value = "VolumenGas" , "Gas","Vapor"))</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                     </Style>
@@ -1255,8 +1218,8 @@ First(Fields!LineaEntrada.Value, "DataSet2")</Value>
             <Top>13.29323cm</Top>
             <Left>12.18054cm</Left>
             <Height>0.73033cm</Height>
-            <Width>2.30006cm</Width>
-            <ZIndex>26</ZIndex>
+            <Width>5.86022cm</Width>
+            <ZIndex>25</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1272,7 +1235,7 @@ First(Fields!LineaEntrada.Value, "DataSet2")</Value>
             <Left>0.10083in</Left>
             <Height>8.84088in</Height>
             <Width>0in</Width>
-            <ZIndex>27</ZIndex>
+            <ZIndex>26</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -1283,7 +1246,7 @@ First(Fields!LineaEntrada.Value, "DataSet2")</Value>
             <Left>7.41522in</Left>
             <Height>8.84088in</Height>
             <Width>0in</Width>
-            <ZIndex>28</ZIndex>
+            <ZIndex>27</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -1316,7 +1279,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>3.53584cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.72561cm</Width>
-            <ZIndex>29</ZIndex>
+            <ZIndex>28</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1350,7 +1313,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>6.20715in</Left>
             <Height>0.28753in</Height>
             <Width>0.89551in</Width>
-            <ZIndex>30</ZIndex>
+            <ZIndex>29</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1384,7 +1347,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>1.39206in</Left>
             <Height>0.28753in</Height>
             <Width>1.08896in</Width>
-            <ZIndex>31</ZIndex>
+            <ZIndex>30</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1420,7 +1383,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.29139cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.47831cm</Width>
-            <ZIndex>32</ZIndex>
+            <ZIndex>31</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -1453,7 +1416,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.25601cm</Width>
-            <ZIndex>33</ZIndex>
+            <ZIndex>32</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1485,7 +1448,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.25601cm</Width>
-            <ZIndex>34</ZIndex>
+            <ZIndex>33</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1517,7 +1480,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>9.28856cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.15916cm</Width>
-            <ZIndex>35</ZIndex>
+            <ZIndex>34</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1548,8 +1511,8 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Top>10.16448cm</Top>
             <Left>9.27243cm</Left>
             <Height>0.73033cm</Height>
-            <Width>0.92991cm</Width>
-            <ZIndex>36</ZIndex>
+            <Width>1.21515cm</Width>
+            <ZIndex>35</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1581,7 +1544,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.51893cm</Width>
-            <ZIndex>37</ZIndex>
+            <ZIndex>36</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1613,7 +1576,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>9.33776cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.27134cm</Width>
-            <ZIndex>38</ZIndex>
+            <ZIndex>37</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1647,7 +1610,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.89374in</Left>
             <Height>0.28753in</Height>
             <Width>2.44401in</Width>
-            <ZIndex>39</ZIndex>
+            <ZIndex>38</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1682,7 +1645,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.90644in</Left>
             <Height>0.28753in</Height>
             <Width>2.44401in</Width>
-            <ZIndex>40</ZIndex>
+            <ZIndex>39</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1716,7 +1679,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>4.18272in</Left>
             <Height>0.28753in</Height>
             <Width>2.67185in</Width>
-            <ZIndex>41</ZIndex>
+            <ZIndex>40</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1748,10 +1711,10 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             </Paragraphs>
             <rd:DefaultName>Disco_Interno</rd:DefaultName>
             <Top>4.00754in</Top>
-            <Left>4.15161in</Left>
+            <Left>4.27661in</Left>
             <Height>0.28753in</Height>
             <Width>2.74058in</Width>
-            <ZIndex>42</ZIndex>
+            <ZIndex>41</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1785,7 +1748,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.99281in</Left>
             <Height>0.28753in</Height>
             <Width>2.44401in</Width>
-            <ZIndex>43</ZIndex>
+            <ZIndex>42</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1818,7 +1781,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>7.01663cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.61521cm</Width>
-            <ZIndex>44</ZIndex>
+            <ZIndex>43</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1850,7 +1813,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>12.83555cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.61521cm</Width>
-            <ZIndex>45</ZIndex>
+            <ZIndex>44</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1882,7 +1845,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>6.98136cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.7916cm</Width>
-            <ZIndex>46</ZIndex>
+            <ZIndex>45</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1915,7 +1878,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>3.84762in</Left>
             <Height>0.28753in</Height>
             <Width>0.99431in</Width>
-            <ZIndex>47</ZIndex>
+            <ZIndex>46</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1949,7 +1912,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>6.22621in</Left>
             <Height>0.28753in</Height>
             <Width>0.90694in</Width>
-            <ZIndex>48</ZIndex>
+            <ZIndex>47</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1983,7 +1946,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>3.90318in</Left>
             <Height>0.28753in</Height>
             <Width>0.99341in</Width>
-            <ZIndex>49</ZIndex>
+            <ZIndex>48</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2019,7 +1982,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.25931cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.54007cm</Width>
-            <ZIndex>50</ZIndex>
+            <ZIndex>49</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -2055,7 +2018,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.05486cm</Width>
-            <ZIndex>51</ZIndex>
+            <ZIndex>50</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2088,7 +2051,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.60414cm</Width>
-            <ZIndex>52</ZIndex>
+            <ZIndex>51</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2119,7 +2082,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>1.5722in</Left>
             <Height>0.28753in</Height>
             <Width>0.74585in</Width>
-            <ZIndex>53</ZIndex>
+            <ZIndex>52</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2150,7 +2113,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>8.84373cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.15605cm</Width>
-            <ZIndex>54</ZIndex>
+            <ZIndex>53</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2182,7 +2145,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.74422cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.48231cm</Width>
-            <ZIndex>55</ZIndex>
+            <ZIndex>54</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2214,7 +2177,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>6.853cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.15605cm</Width>
-            <ZIndex>56</ZIndex>
+            <ZIndex>55</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2246,7 +2209,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.81542cm</Width>
-            <ZIndex>57</ZIndex>
+            <ZIndex>56</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2278,7 +2241,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.80052cm</Width>
-            <ZIndex>58</ZIndex>
+            <ZIndex>57</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2309,7 +2272,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>7.46708cm</Left>
             <Height>0.73033cm</Height>
             <Width>3.38523cm</Width>
-            <ZIndex>59</ZIndex>
+            <ZIndex>58</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2341,7 +2304,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>13.76136cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.83038cm</Width>
-            <ZIndex>60</ZIndex>
+            <ZIndex>59</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2372,7 +2335,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>12.24126cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.33495cm</Width>
-            <ZIndex>61</ZIndex>
+            <ZIndex>60</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2404,7 +2367,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>6.1006cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.28864cm</Width>
-            <ZIndex>62</ZIndex>
+            <ZIndex>61</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2436,7 +2399,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>12.37627cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.14158cm</Width>
-            <ZIndex>63</ZIndex>
+            <ZIndex>62</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2468,7 +2431,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>4.56183cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.63442cm</Width>
-            <ZIndex>64</ZIndex>
+            <ZIndex>63</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2501,7 +2464,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>2.1682in</Left>
             <Height>0.28753in</Height>
             <Width>1.12559in</Width>
-            <ZIndex>65</ZIndex>
+            <ZIndex>64</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2535,7 +2498,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.73719in</Left>
             <Height>0.28753in</Height>
             <Width>2.70687in</Width>
-            <ZIndex>66</ZIndex>
+            <ZIndex>65</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2569,7 +2532,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>1.5722in</Left>
             <Height>0.28753in</Height>
             <Width>1.24049in</Width>
-            <ZIndex>67</ZIndex>
+            <ZIndex>66</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2604,7 +2567,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>4.27257in</Left>
             <Height>0.28753in</Height>
             <Width>0.74327in</Width>
-            <ZIndex>68</ZIndex>
+            <ZIndex>67</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2638,7 +2601,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>6.54607in</Left>
             <Height>0.28753in</Height>
             <Width>0.5657in</Width>
-            <ZIndex>69</ZIndex>
+            <ZIndex>68</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2671,7 +2634,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>6.57254in</Left>
             <Height>0.28753in</Height>
             <Width>0.76394in</Width>
-            <ZIndex>70</ZIndex>
+            <ZIndex>69</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2705,7 +2668,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>3.58458in</Left>
             <Height>0.28753in</Height>
             <Width>0.54439in</Width>
-            <ZIndex>71</ZIndex>
+            <ZIndex>70</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2740,7 +2703,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.23728cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.52682cm</Width>
-            <ZIndex>72</ZIndex>
+            <ZIndex>71</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -2758,7 +2721,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>9.77296cm</Left>
             <Height>0.73033cm</Height>
             <Width>0cm</Width>
-            <ZIndex>73</ZIndex>
+            <ZIndex>72</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -2770,7 +2733,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>5.80846cm</Left>
             <Height>0.73033cm</Height>
             <Width>0cm</Width>
-            <ZIndex>74</ZIndex>
+            <ZIndex>73</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -2799,7 +2762,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.20107cm</Width>
-            <ZIndex>75</ZIndex>
+            <ZIndex>74</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2832,7 +2795,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.15605cm</Width>
-            <ZIndex>76</ZIndex>
+            <ZIndex>75</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2865,7 +2828,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>10.01653cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.08795cm</Width>
-            <ZIndex>77</ZIndex>
+            <ZIndex>76</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2881,7 +2844,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>14.54711cm</Left>
             <Height>0.73033cm</Height>
             <Width>0cm</Width>
-            <ZIndex>78</ZIndex>
+            <ZIndex>77</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -2911,7 +2874,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>2.36096in</Left>
             <Height>0.28753in</Height>
             <Width>1.41722in</Width>
-            <ZIndex>79</ZIndex>
+            <ZIndex>78</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2944,7 +2907,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.20107cm</Width>
-            <ZIndex>80</ZIndex>
+            <ZIndex>79</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2977,7 +2940,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.15605cm</Width>
-            <ZIndex>81</ZIndex>
+            <ZIndex>80</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3010,7 +2973,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.15605cm</Width>
-            <ZIndex>82</ZIndex>
+            <ZIndex>81</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3042,10 +3005,10 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             </Paragraphs>
             <rd:DefaultName>Orifico</rd:DefaultName>
             <Top>7.36849in</Top>
-            <Left>5.76888in</Left>
+            <Left>5.6085in</Left>
             <Height>0.28753in</Height>
-            <Width>1.67664in</Width>
-            <ZIndex>83</ZIndex>
+            <Width>1.73728in</Width>
+            <ZIndex>82</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3079,7 +3042,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>2.38102in</Left>
             <Height>0.28753in</Height>
             <Width>1.41105in</Width>
-            <ZIndex>84</ZIndex>
+            <ZIndex>83</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3114,7 +3077,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>2.37056in</Left>
             <Height>0.28753in</Height>
             <Width>1.40762in</Width>
-            <ZIndex>85</ZIndex>
+            <ZIndex>84</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3149,7 +3112,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>2.37056in</Left>
             <Height>0.28753in</Height>
             <Width>1.42151in</Width>
-            <ZIndex>86</ZIndex>
+            <ZIndex>85</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3182,7 +3145,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>10.00227cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.08795cm</Width>
-            <ZIndex>87</ZIndex>
+            <ZIndex>86</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3215,7 +3178,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>10.00227cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.08795cm</Width>
-            <ZIndex>88</ZIndex>
+            <ZIndex>87</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3248,7 +3211,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>10.00227cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.05267cm</Width>
-            <ZIndex>89</ZIndex>
+            <ZIndex>88</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3281,7 +3244,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>10.00227cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.05267cm</Width>
-            <ZIndex>90</ZIndex>
+            <ZIndex>89</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3313,10 +3276,10 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             </Paragraphs>
             <rd:DefaultName>DescripcionSerieSalida</rd:DefaultName>
             <Top>8.24806in</Top>
-            <Left>5.72721in</Left>
+            <Left>5.61678in</Left>
             <Height>0.28753in</Height>
-            <Width>1.60521in</Width>
-            <ZIndex>91</ZIndex>
+            <Width>1.71564in</Width>
+            <ZIndex>90</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3347,11 +3310,11 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>DescripcionTipoSalida</rd:DefaultName>
-            <Top>8.52595in</Top>
-            <Left>5.78276in</Left>
+            <Top>8.55335in</Top>
+            <Left>5.61678in</Left>
             <Height>0.28753in</Height>
-            <Width>1.63332in</Width>
-            <ZIndex>92</ZIndex>
+            <Width>1.7993in</Width>
+            <ZIndex>91</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3382,10 +3345,10 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             </Paragraphs>
             <rd:DefaultName>CodigoFinal</rd:DefaultName>
             <Top>7.67915in</Top>
-            <Left>5.79665in</Left>
+            <Left>5.57511in</Left>
             <Height>0.28753in</Height>
-            <Width>1.54912in</Width>
-            <ZIndex>93</ZIndex>
+            <Width>1.77066in</Width>
+            <ZIndex>92</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3401,7 +3364,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.10083in</Left>
             <Height>0in</Height>
             <Width>7.31439in</Width>
-            <ZIndex>94</ZIndex>
+            <ZIndex>93</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -3431,7 +3394,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>4.74186in</Left>
             <Height>0.28753in</Height>
             <Width>1.07505in</Width>
-            <ZIndex>95</ZIndex>
+            <ZIndex>94</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3466,7 +3429,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>3.36188in</Left>
             <Height>0.28753in</Height>
             <Width>0.80628in</Width>
-            <ZIndex>96</ZIndex>
+            <ZIndex>95</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3495,11 +3458,11 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>2.16116cm</Top>
+            <Top>2.2068cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>0.76361cm</Width>
-            <ZIndex>97</ZIndex>
+            <ZIndex>96</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3533,7 +3496,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.79444in</Left>
             <Height>0.28753in</Height>
             <Width>2.80765in</Width>
-            <ZIndex>98</ZIndex>
+            <ZIndex>97</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3564,7 +3527,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>9.38012cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.40109cm</Width>
-            <ZIndex>99</ZIndex>
+            <ZIndex>98</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3591,11 +3554,11 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>2.21015cm</Top>
+            <Top>2.2068cm</Top>
             <Left>9.2563cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.33083cm</Width>
-            <ZIndex>100</ZIndex>
+            <ZIndex>99</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3624,11 +3587,11 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Servicio</rd:DefaultName>
-            <Top>2.25973cm</Top>
+            <Top>2.2068cm</Top>
             <Left>10.97844cm</Left>
             <Height>0.73033cm</Height>
             <Width>7.77348cm</Width>
-            <ZIndex>101</ZIndex>
+            <ZIndex>100</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3659,11 +3622,11 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>TagId1</rd:DefaultName>
-            <Top>0.53268in</Top>
+            <Top>0.55351in</Top>
             <Left>4.77761in</Left>
             <Height>0.28753in</Height>
             <Width>1.2482in</Width>
-            <ZIndex>102</ZIndex>
+            <ZIndex>101</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3681,7 +3644,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Fields!DescargaA.Value + "/" + Fields!LineaEntrada.Value</Value>
+                    <Value>=First(Fields!CodigoDiseño.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                     </Style>
@@ -3697,7 +3660,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>4.05136cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.89751cm</Width>
-            <ZIndex>103</ZIndex>
+            <ZIndex>102</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3731,7 +3694,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>2.52174cm</Left>
             <Height>0.73033cm</Height>
             <Width>6.69813cm</Width>
-            <ZIndex>104</ZIndex>
+            <ZIndex>103</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3749,7 +3712,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=IIF(Left(Fields!CodigoFinal.Value, 1) = "2", "SI", "NO")</Value>
+                    <Value>=First(Fields!Contingencia.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                     </Style>
@@ -3765,7 +3728,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>8.71679cm</Left>
             <Height>0.73033cm</Height>
             <Width>3.13956cm</Width>
-            <ZIndex>105</ZIndex>
+            <ZIndex>104</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3805,7 +3768,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>4.15161in</Left>
             <Height>0.28753in</Height>
             <Width>2.67185in</Width>
-            <ZIndex>106</ZIndex>
+            <ZIndex>105</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3838,7 +3801,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>3.21987cm</Width>
-            <ZIndex>107</ZIndex>
+            <ZIndex>106</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3872,7 +3835,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>1.53157in</Left>
             <Height>0.28753in</Height>
             <Width>1.07505in</Width>
-            <ZIndex>108</ZIndex>
+            <ZIndex>107</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3907,7 +3870,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>1.22722in</Left>
             <Height>0.28753in</Height>
             <Width>0.49933in</Width>
-            <ZIndex>109</ZIndex>
+            <ZIndex>108</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
