@@ -26,6 +26,10 @@
     <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xss" />
     <Content Remove="wwwroot\Report\NoConfor\ReporteEvento.rdlc" />
     <Content Remove="wwwroot\Report\Presupuesto\Presupuesto.rdlc" />
+    <Content Remove="wwwroot\Report\Presupuesto\vPresupuesto.Designer.cs" />
+    <Content Remove="wwwroot\Report\Presupuesto\vPresupuesto.xsc" />
+    <Content Remove="wwwroot\Report\Presupuesto\vPresupuesto.xsd" />
+    <Content Remove="wwwroot\Report\Presupuesto\vPresupuesto.xss" />
     <Content Remove="wwwroot\Report\Report1.rdlc" />
   </ItemGroup>
 
@@ -158,6 +162,7 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\pdf\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

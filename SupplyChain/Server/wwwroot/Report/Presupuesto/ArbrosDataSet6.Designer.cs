@@ -10,7 +10,7 @@
 
 #pragma warning disable 1591
 
-namespace WindowsFormsForRDLC {
+namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
     
     
     /// <summary>
@@ -1587,7 +1587,7 @@ namespace WindowsFormsForRDLC {
         }
     }
 }
-namespace WindowsFormsForRDLC.ArbrosDataSet1TableAdapters {
+namespace SupplyChain.Server.wwwroot.Report.Presupuesto.ArbrosDataSet1TableAdapters {
     
     
     /// <summary>
@@ -1748,7 +1748,8 @@ namespace WindowsFormsForRDLC.ArbrosDataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = global::WindowsFormsForRDLC.Properties.Settings.Default.ArbrosConnectionString1;
+            this._connection.ConnectionString = "Data Source=MARCELO-PC\\SQL_2017;Initial Catalog=Arbros;User ID=sa;Password=Marce0" +
+                "31010";
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1757,7 +1758,9 @@ namespace WindowsFormsForRDLC.ArbrosDataSet1TableAdapters {
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT * FROM dbo.vEventos";
+            this._commandCollection[0].CommandText = @"SELECT FE_EMIT, Cg_NoConf, Cg_TipoNc, Des_TipoNc, Observaciones, Fe_Ocurrencia, Fe_Aprobacion, Cg_Cli, Cg_Prod, DES_CLI, DES_PROVE, DES_PROD, Lote, Serie, Despacho, Cg_Ordf, Pedido, Usuario, OCOMPRA, CANT, Cg_NoConfAcc, 
+                  Texto, Orden, ObservacionesAccion, fe_implemen, Origen, FE_SOLUC, fe_cierre, Aprob, Comentarios
+FROM     vEventos";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         

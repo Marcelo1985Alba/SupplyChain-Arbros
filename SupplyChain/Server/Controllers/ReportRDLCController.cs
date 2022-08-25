@@ -108,6 +108,29 @@ namespace SupplyChain.Server.Controllers
         }
 
         [HttpGet]
+        [Route(template: "GetReportPresupuesto")]
+        public IActionResult GetReportPresupuesto(int id)
+        {
+            var file = "Presupuesto.rdlc";
+            var vale = _context.vPresupuestosReporte.Where(c => c.PRESUPUESTO == id).ToList();
+            var path = string.Empty;
+            path = configuration["ReportesRDLC:Presupuesto"] + $"\\{file}";
+
+
+            Dictionary<string, string> parameter = new();
+            parameter.Add("param", "Primer Reporte");
+
+            LocalReport localReport = new(path);
+
+            localReport.AddDataSource(dataSetName: "DataSet1", vale);
+
+            var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
+
+            return File(result.MainStream, contentType: "application/pdf", $"Cotizacion_{id}.pdf");
+        }
+
+
+        [HttpGet]
         [Route(template: "GetReportEtiquetaOF")]
         public async Task<IActionResult> GetReportEtiquetaOF(int cg_ordf)
         {

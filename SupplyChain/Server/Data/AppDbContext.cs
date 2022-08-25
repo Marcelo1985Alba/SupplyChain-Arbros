@@ -122,6 +122,7 @@ namespace SupplyChain
         public DbSet<vTipoCambio> vTipoCambio { get; set; }
         public DbSet<NotificacionSubscripcion> NotificacionSubscripcions { get; set; }
         public DbSet<vCalculoSolicitudes> vCalculoSolicitudes { get; set; }
+        public DbSet<vPresupuestoReporte> vPresupuestosReporte { get; set; }
         public DbSet<vTransporte> vTransportes { get; set; }
         public DbSet<ChatMessage> ChatMessages { get; set; }
         //MODULO PROYECTOS
@@ -246,6 +247,7 @@ namespace SupplyChain
             modelBuilder.Entity<vCalculoSolicitudes>().ToView("vCalculoSolicitudes");
             modelBuilder.Entity<vTransporte>().ToView("vTransportes");
             modelBuilder.Entity<vPedidoAlta>().HasNoKey().ToView("vPedidosAltas");
+            modelBuilder.Entity<vPresupuestoReporte>().HasNoKey().ToView("vPresupuestoReporte");
         }
     }
 }

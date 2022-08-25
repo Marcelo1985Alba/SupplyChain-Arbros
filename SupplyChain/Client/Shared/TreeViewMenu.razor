@@ -114,6 +114,16 @@ else
                     ParentId = 3,
                     Url = "/inventario/recepcion-mercaderia"
                 });
+                dbMenu.Add(new Modulo { Id = 6, Descripcion = "CHAT", IconCss = "", TieneChild = true });
+                dbMenu.Add(new Modulo
+                {
+                    Id = 15,
+                    Descripcion = "Recepcion de Insumos",
+                    IconCss = "",
+                    TieneChild = false,
+                    ParentId = 6,
+                    Url = "/chat-app"
+                });
             }
             else
             {

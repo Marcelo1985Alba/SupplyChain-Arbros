@@ -404,10 +404,23 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             Presupuesto.GUARDADO = guardado;
             await OnGuardar.InvokeAsync(Presupuesto);
 
+            await DescargarPresupuestoDataSheet();
+            
 
+
+        }
+
+
+        private async Task DescargarPresupuestoDataSheet()
+        {
+            await Js.InvokeVoidAsync("descargarPresupuestDataSheet", Presupuesto.Id);
+        }
+
+        protected async Task ImprimirPresupuesto()
+        {
+            await Js.InvokeVoidAsync("open",
+                                new object[2] { $"/api/ReportRDLC/GetReportPresupuesto?id={Presupuesto.Id}", "" });
             await ImprimirDataSheet();
-
-
         }
 
         protected async Task ImprimirDataSheet()

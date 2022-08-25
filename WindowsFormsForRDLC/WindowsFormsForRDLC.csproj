@@ -46,38 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArbrosDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="ArbrosDataSet1.cs">
-      <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="ArbrosDataSet1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>
-    </Compile>
     <Compile Include="vDataSheet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>vDataSheet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="ArbrosDataSet3.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ArbrosDataSet3.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="ArbrosDataSet4.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ArbrosDataSet4.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="ArbrosDataSet5.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ArbrosDataSet5.xsd</DependentUpon>
     </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -99,28 +71,6 @@
     <EmbeddedResource Include="ReporteEtiquetaOF.rdlc" />
     <EmbeddedResource Include="ReporteEvento.rdlc" />
     <EmbeddedResource Include="Report1.rdlc" />
-    <None Include="ArbrosDataSet.xsc">
-      <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="ArbrosDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>ArbrosDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="ArbrosDataSet.xss">
-      <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="ArbrosDataSet1.xsc">
-      <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>
-    </None>
-    <None Include="ArbrosDataSet1.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>ArbrosDataSet1.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="ArbrosDataSet1.xss">
-      <DependentUpon>ArbrosDataSet1.xsd</DependentUpon>
-    </None>
     <None Include="vDataSheet.xsc">
       <DependentUpon>vDataSheet.xsd</DependentUpon>
     </None>
@@ -131,39 +81,6 @@
     </None>
     <None Include="vDataSheet.xss">
       <DependentUpon>vDataSheet.xsd</DependentUpon>
-    </None>
-    <None Include="ArbrosDataSet3.xsc">
-      <DependentUpon>ArbrosDataSet3.xsd</DependentUpon>
-    </None>
-    <None Include="ArbrosDataSet3.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>ArbrosDataSet3.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="ArbrosDataSet3.xss">
-      <DependentUpon>ArbrosDataSet3.xsd</DependentUpon>
-    </None>
-    <None Include="ArbrosDataSet4.xsc">
-      <DependentUpon>ArbrosDataSet4.xsd</DependentUpon>
-    </None>
-    <None Include="ArbrosDataSet4.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>ArbrosDataSet4.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="ArbrosDataSet4.xss">
-      <DependentUpon>ArbrosDataSet4.xsd</DependentUpon>
-    </None>
-    <None Include="ArbrosDataSet5.xsc">
-      <DependentUpon>ArbrosDataSet5.xsd</DependentUpon>
-    </None>
-    <None Include="ArbrosDataSet5.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>ArbrosDataSet5.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="ArbrosDataSet5.xss">
-      <DependentUpon>ArbrosDataSet5.xsd</DependentUpon>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
