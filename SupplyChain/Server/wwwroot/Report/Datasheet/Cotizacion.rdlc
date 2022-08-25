@@ -472,7 +472,8 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!CodigoDiseño.Value, "DataSet2")First(Fields!Contingencia.Value, "DataSet2")First(Fields!NumeroPlano.Value, "DataSet2")First(Fields!NumeroPlano.Value, "DataSet2")</Value>
+                    <Value>=First(Fields!CodigoDiseño.Value, "DataSet2")+
+First(Fields!NumeroPlano.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light Condensed</FontFamily>
                     </Style>
@@ -1162,7 +1163,9 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>= Fields!DescargaA.Value +"/" +Fields!LineaEntrada.ValueFirst(Fields!LineaEntrada.Value, "DataSet2")First(Fields!LineaEntrada.Value, "DataSet2")</Value>
+                    <Value>= Fields!DescargaA.Value +"/" +Fields!LineaEntrada.Value + 
+First(Fields!LineaEntrada.Value, "DataSet2")+
+First(Fields!LineaEntrada.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                     </Style>
