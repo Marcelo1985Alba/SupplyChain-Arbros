@@ -386,7 +386,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>0.72876cm</Top>
+            <Top>0.03528cm</Top>
             <Left>0.28532cm</Left>
             <Height>0.60661cm</Height>
             <Width>18.57504cm</Width>
@@ -419,8 +419,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>1.40592cm</Top>
-            <Left>0.72059cm</Left>
+            <Top>0.73889cm</Top>
+            <Left>0.6975cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.9237cm</Width>
             <ZIndex>1</ZIndex>
@@ -451,8 +451,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>2.97831cm</Top>
-            <Left>9.27429cm</Left>
+            <Top>2.31128cm</Top>
+            <Left>9.2512cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.52776cm</Width>
             <ZIndex>2</ZIndex>
@@ -476,6 +476,7 @@
 First(Fields!NumeroPlano.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light Condensed</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -485,8 +486,8 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>CodigoDiseño</rd:DefaultName>
-            <Top>2.96596cm</Top>
-            <Left>10.97844cm</Left>
+            <Top>2.29893cm</Top>
+            <Left>10.95535cm</Left>
             <Height>0.73033cm</Height>
             <Width>7.67984cm</Width>
             <ZIndex>3</ZIndex>
@@ -520,7 +521,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>3.73157cm</Top>
+            <Top>3.2659cm</Top>
             <Left>0.23728cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.54328cm</Width>
@@ -553,10 +554,10 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>2.92676cm</Top>
-            <Left>0.72059cm</Left>
+            <Top>2.25973cm</Top>
+            <Left>0.6975cm</Left>
             <Height>0.73033cm</Height>
-            <Width>2.13586cm</Width>
+            <Width>2.55695cm</Width>
             <ZIndex>5</ZIndex>
             <Style>
               <Border>
@@ -585,7 +586,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>4.58399cm</Top>
+            <Top>4.11832cm</Top>
             <Left>0.7716cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.59726cm</Width>
@@ -617,7 +618,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>4.58399cm</Top>
+            <Top>4.11832cm</Top>
             <Left>6.31386cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.85119cm</Width>
@@ -648,7 +649,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>4.58399cm</Top>
+            <Top>4.11832cm</Top>
             <Left>12.56117cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.7954cm</Width>
@@ -681,7 +682,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>TagId</rd:DefaultName>
-            <Top>4.58399cm</Top>
+            <Top>4.11832cm</Top>
             <Left>9.39187cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.44035cm</Width>
@@ -714,7 +715,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>5.42015cm</Top>
+            <Top>4.95448cm</Top>
             <Left>0.7716cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.50594cm</Width>
@@ -746,7 +747,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>5.42015cm</Top>
+            <Top>4.95448cm</Top>
             <Left>6.338cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.07925cm</Width>
@@ -779,7 +780,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Servicio</rd:DefaultName>
-            <Top>5.42015cm</Top>
+            <Top>4.95448cm</Top>
             <Left>3.46493cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.94109cm</Width>
@@ -815,7 +816,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>6.25632cm</Top>
+            <Top>5.79065cm</Top>
             <Left>0.30712cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.52972cm</Width>
@@ -848,7 +849,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>7.02193cm</Top>
+            <Top>6.55626cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.50594cm</Width>
@@ -881,7 +882,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>13.29323cm</Top>
+            <Top>12.82756cm</Top>
             <Left>9.29043cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.54104cm</Width>
@@ -913,7 +914,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>7.02193cm</Top>
+            <Top>6.55626cm</Top>
             <Left>6.98136cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.61521cm</Width>
@@ -945,7 +946,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>7.78753cm</Top>
+            <Top>7.32186cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.50594cm</Width>
@@ -977,7 +978,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>7.02193cm</Top>
+            <Top>6.55626cm</Top>
             <Left>12.83555cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.61521cm</Width>
@@ -1001,6 +1002,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
                     <Value>Tipo de Conexiones:</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -1008,7 +1010,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>8.54209cm</Top>
+            <Top>8.07642cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.83905cm</Width>
@@ -1041,7 +1043,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>CodigoDiseño</rd:DefaultName>
-            <Top>5.42015cm</Top>
+            <Top>4.95448cm</Top>
             <Left>16.75014cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.8687cm</Width>
@@ -1073,7 +1075,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>5.42015cm</Top>
+            <Top>4.95448cm</Top>
             <Left>12.56918cm</Left>
             <Height>0.73033cm</Height>
             <Width>3.51119cm</Width>
@@ -1106,7 +1108,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>DiscoRuptura</rd:DefaultName>
-            <Top>1.80472in</Top>
+            <Top>1.62139in</Top>
             <Left>6.11587in</Left>
             <Height>0.28753in</Height>
             <Width>0.79234in</Width>
@@ -1141,7 +1143,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>TagId</rd:DefaultName>
-            <Top>7.02193cm</Top>
+            <Top>6.55626cm</Top>
             <Left>3.53584cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.76596cm</Width>
@@ -1163,9 +1165,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>= Fields!DescargaA.Value +"/" +Fields!LineaEntrada.Value + 
-First(Fields!LineaEntrada.Value, "DataSet2")+
-First(Fields!LineaEntrada.Value, "DataSet2")</Value>
+                    <Value>= Fields!LineaEntrada.Value</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                     </Style>
@@ -1177,10 +1177,10 @@ First(Fields!LineaEntrada.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Servicio</rd:DefaultName>
-            <Top>2.93951cm</Top>
-            <Left>2.90037cm</Left>
+            <Top>2.27248cm</Top>
+            <Left>3.51274cm</Left>
             <Height>0.73033cm</Height>
-            <Width>6.19754cm</Width>
+            <Width>5.56208cm</Width>
             <ZIndex>24</ZIndex>
             <Style>
               <Border>
@@ -1215,7 +1215,7 @@ First(Fields!LineaEntrada.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>TagId</rd:DefaultName>
-            <Top>7.02193cm</Top>
+            <Top>6.55626cm</Top>
             <Left>9.77296cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.52554cm</Width>
@@ -1252,7 +1252,7 @@ First(Fields!LineaEntrada.Value, "DataSet2")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>TagId</rd:DefaultName>
-            <Top>13.29323cm</Top>
+            <Top>12.82756cm</Top>
             <Left>12.18054cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.30006cm</Width>
@@ -1312,7 +1312,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>TagId</rd:DefaultName>
-            <Top>8.54209cm</Top>
+            <Top>8.07642cm</Top>
             <Left>3.53584cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.72561cm</Width>
@@ -1337,6 +1337,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>=First(Fields!DescripcionAsiento.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                      <FontSize>8pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -1346,10 +1347,10 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>DescripcionAsiento</rd:DefaultName>
-            <Top>2.76454in</Top>
-            <Left>6.20715in</Left>
+            <Top>2.58121in</Top>
+            <Left>6.11075in</Left>
             <Height>0.28753in</Height>
-            <Width>0.89551in</Width>
+            <Width>1.23502in</Width>
             <ZIndex>30</ZIndex>
             <Style>
               <Border>
@@ -1380,7 +1381,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Bonete</rd:DefaultName>
-            <Top>3.08009in</Top>
+            <Top>2.89676in</Top>
             <Left>1.39206in</Left>
             <Height>0.28753in</Height>
             <Width>1.08896in</Width>
@@ -1416,7 +1417,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>9.37825cm</Top>
+            <Top>8.91258cm</Top>
             <Left>0.29139cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.47831cm</Width>
@@ -1449,7 +1450,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>10.11887cm</Top>
+            <Top>9.6532cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.25601cm</Width>
@@ -1481,7 +1482,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>10.93974cm</Top>
+            <Top>10.47407cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.25601cm</Width>
@@ -1513,7 +1514,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>10.93974cm</Top>
+            <Top>10.47407cm</Top>
             <Left>9.28856cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.15916cm</Width>
@@ -1545,10 +1546,10 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>10.16448cm</Top>
+            <Top>9.69881cm</Top>
             <Left>9.27243cm</Left>
             <Height>0.73033cm</Height>
-            <Width>0.92991cm</Width>
+            <Width>1.09627cm</Width>
             <ZIndex>36</ZIndex>
             <Style>
               <Border>
@@ -1577,7 +1578,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>11.68081cm</Top>
+            <Top>11.21514cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.51893cm</Width>
@@ -1609,7 +1610,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>11.68081cm</Top>
+            <Top>11.21514cm</Top>
             <Left>9.33776cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.27134cm</Width>
@@ -1643,7 +1644,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Cuerpo_Externo</rd:DefaultName>
-            <Top>3.98958in</Top>
+            <Top>3.80625in</Top>
             <Left>0.89374in</Left>
             <Height>0.28753in</Height>
             <Width>2.44401in</Width>
@@ -1678,7 +1679,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Bonete_Externo</rd:DefaultName>
-            <Top>4.30699in</Top>
+            <Top>4.12366in</Top>
             <Left>0.90644in</Left>
             <Height>0.28753in</Height>
             <Width>2.44401in</Width>
@@ -1712,7 +1713,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Tobera_Interno</rd:DefaultName>
-            <Top>4.30699in</Top>
+            <Top>4.12366in</Top>
             <Left>4.18272in</Left>
             <Height>0.28753in</Height>
             <Width>2.67185in</Width>
@@ -1747,7 +1748,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Disco_Interno</rd:DefaultName>
-            <Top>4.00754in</Top>
+            <Top>3.82421in</Top>
             <Left>4.15161in</Left>
             <Height>0.28753in</Height>
             <Width>2.74058in</Width>
@@ -1781,7 +1782,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Resorte_Externo</rd:DefaultName>
-            <Top>4.59875in</Top>
+            <Top>4.41542in</Top>
             <Left>0.99281in</Left>
             <Height>0.28753in</Height>
             <Width>2.44401in</Width>
@@ -1814,7 +1815,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>7.82344cm</Top>
+            <Top>7.35777cm</Top>
             <Left>7.01663cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.61521cm</Width>
@@ -1846,7 +1847,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>7.82344cm</Top>
+            <Top>7.35777cm</Top>
             <Left>12.83555cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.61521cm</Width>
@@ -1878,7 +1879,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>8.54209cm</Top>
+            <Top>8.07642cm</Top>
             <Left>6.98136cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.7916cm</Width>
@@ -1911,7 +1912,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Capuchon</rd:DefaultName>
-            <Top>3.08009in</Top>
+            <Top>2.89676in</Top>
             <Left>3.84762in</Left>
             <Height>0.28753in</Height>
             <Width>0.99431in</Width>
@@ -1936,6 +1937,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>=First(Fields!Palanca.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -1945,10 +1947,10 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Palanca</rd:DefaultName>
-            <Top>3.08009in</Top>
+            <Top>2.89676in</Top>
             <Left>6.22621in</Left>
             <Height>0.28753in</Height>
-            <Width>0.90694in</Width>
+            <Width>1.10404in</Width>
             <ZIndex>48</ZIndex>
             <Style>
               <Border>
@@ -1979,7 +1981,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Tornillo</rd:DefaultName>
-            <Top>3.36303in</Top>
+            <Top>3.1797in</Top>
             <Left>3.90318in</Left>
             <Height>0.28753in</Height>
             <Width>0.99341in</Width>
@@ -2015,7 +2017,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>12.4817cm</Top>
+            <Top>12.01603cm</Top>
             <Left>0.25931cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.54007cm</Width>
@@ -2051,7 +2053,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>13.29323cm</Top>
+            <Top>12.82756cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.05486cm</Width>
@@ -2084,7 +2086,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>15.59006cm</Top>
+            <Top>15.12439cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.60414cm</Width>
@@ -2115,7 +2117,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Tornillo</rd:DefaultName>
-            <Top>5.82251in</Top>
+            <Top>5.63918in</Top>
             <Left>1.5722in</Left>
             <Height>0.28753in</Height>
             <Width>0.74585in</Width>
@@ -2146,7 +2148,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>15.59006cm</Top>
+            <Top>15.12439cm</Top>
             <Left>8.84373cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.15605cm</Width>
@@ -2178,7 +2180,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>16.32039cm</Top>
+            <Top>15.85472cm</Top>
             <Left>0.74422cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.48231cm</Width>
@@ -2210,7 +2212,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>17.086cm</Top>
+            <Top>16.62033cm</Top>
             <Left>6.853cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.15605cm</Width>
@@ -2242,7 +2244,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>14.05884cm</Top>
+            <Top>13.59317cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.81542cm</Width>
@@ -2267,6 +2269,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>Temperatura Alivio:</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -2274,7 +2277,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>14.78917cm</Top>
+            <Top>14.3235cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.80052cm</Width>
@@ -2298,6 +2301,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>Contrapresion Variable:</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -2305,7 +2309,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>14.05884cm</Top>
+            <Top>13.59317cm</Top>
             <Left>7.46708cm</Left>
             <Height>0.73033cm</Height>
             <Width>3.38523cm</Width>
@@ -2337,7 +2341,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>14.05884cm</Top>
+            <Top>13.59317cm</Top>
             <Left>13.76136cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.83038cm</Width>
@@ -2368,7 +2372,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>14.78917cm</Top>
+            <Top>14.3235cm</Top>
             <Left>12.24126cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.33495cm</Width>
@@ -2400,7 +2404,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>14.78917cm</Top>
+            <Top>14.3235cm</Top>
             <Left>6.1006cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.28864cm</Width>
@@ -2432,7 +2436,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>16.32039cm</Top>
+            <Top>15.85472cm</Top>
             <Left>12.37627cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.14158cm</Width>
@@ -2457,6 +2461,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>Relacion de Calores Especificos::</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -2464,7 +2469,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>16.32039cm</Top>
+            <Top>15.85472cm</Top>
             <Left>4.56183cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.63442cm</Width>
@@ -2497,7 +2502,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>CapacidadRequerida_V</rd:DefaultName>
-            <Top>6.13782in</Top>
+            <Top>5.95449in</Top>
             <Left>2.1682in</Left>
             <Height>0.28753in</Height>
             <Width>1.12559in</Width>
@@ -2531,7 +2536,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Descripcion</rd:DefaultName>
-            <Top>5.23356in</Top>
+            <Top>5.05023in</Top>
             <Left>0.73719in</Left>
             <Height>0.28753in</Height>
             <Width>2.70687in</Width>
@@ -2565,7 +2570,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>PresionApertura</rd:DefaultName>
-            <Top>5.53498in</Top>
+            <Top>5.35165in</Top>
             <Left>1.5722in</Left>
             <Height>0.28753in</Height>
             <Width>1.24049in</Width>
@@ -2600,7 +2605,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>ContrapresionVariable</rd:DefaultName>
-            <Top>5.53498in</Top>
+            <Top>5.35165in</Top>
             <Left>4.27257in</Left>
             <Height>0.28753in</Height>
             <Width>0.74327in</Width>
@@ -2634,7 +2639,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>ContrapresionFija</rd:DefaultName>
-            <Top>5.53498in</Top>
+            <Top>5.35165in</Top>
             <Left>6.54607in</Left>
             <Height>0.28753in</Height>
             <Width>0.5657in</Width>
@@ -2667,7 +2672,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>CoeficienteDeCompresibilidad_z</rd:DefaultName>
-            <Top>6.42535in</Top>
+            <Top>6.24202in</Top>
             <Left>6.57254in</Left>
             <Height>0.28753in</Height>
             <Width>0.76394in</Width>
@@ -2701,7 +2706,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>CocienteCaloresEspecificos_k</rd:DefaultName>
-            <Top>6.42535in</Top>
+            <Top>6.24202in</Top>
             <Left>3.58458in</Left>
             <Height>0.28753in</Height>
             <Width>0.54439in</Width>
@@ -2736,7 +2741,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>17.88688cm</Top>
+            <Top>17.42121cm</Top>
             <Left>0.23728cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.52682cm</Width>
@@ -2754,7 +2759,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             </Style>
           </Textbox>
           <Line Name="Line29">
-            <Top>18.71544cm</Top>
+            <Top>18.24977cm</Top>
             <Left>9.77296cm</Left>
             <Height>0.73033cm</Height>
             <Width>0cm</Width>
@@ -2766,7 +2771,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             </Style>
           </Line>
           <Line Name="Line30">
-            <Top>18.71544cm</Top>
+            <Top>18.24977cm</Top>
             <Left>5.80846cm</Left>
             <Height>0.73033cm</Height>
             <Width>0cm</Width>
@@ -2787,7 +2792,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>Area Calculada de Orificio</Value>
                     <Style>
                       <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -2795,7 +2800,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>18.68776cm</Top>
+            <Top>18.22209cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.20107cm</Width>
@@ -2820,7 +2825,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>Area de Orificio Efectiva Seleccionada</Value>
                     <Style>
                       <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -2828,7 +2833,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>19.39359cm</Top>
+            <Top>18.92792cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.15605cm</Width>
@@ -2853,7 +2858,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>Designacion de Orificio</Value>
                     <Style>
                       <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -2861,7 +2866,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>18.71594cm</Top>
+            <Top>18.25027cm</Top>
             <Left>10.01653cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.08795cm</Width>
@@ -2877,7 +2882,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             </Style>
           </Textbox>
           <Line Name="Line31">
-            <Top>18.71544cm</Top>
+            <Top>18.24977cm</Top>
             <Left>14.54711cm</Left>
             <Height>0.73033cm</Height>
             <Width>0cm</Width>
@@ -2897,7 +2902,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>=First(Fields!AreaOrificio.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -2907,7 +2912,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>AreaOrificio</rd:DefaultName>
-            <Top>7.35739in</Top>
+            <Top>7.17406in</Top>
             <Left>2.36096in</Left>
             <Height>0.28753in</Height>
             <Width>1.41722in</Width>
@@ -2932,7 +2937,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>Medida</Value>
                     <Style>
                       <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -2940,7 +2945,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>20.17558cm</Top>
+            <Top>19.70991cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.20107cm</Width>
@@ -2965,7 +2970,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>Clase de Brida Entrada</Value>
                     <Style>
                       <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -2973,7 +2978,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>20.85373cm</Top>
+            <Top>20.38806cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.15605cm</Width>
@@ -2998,7 +3003,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>Tipo de Cara Entrada</Value>
                     <Style>
                       <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3006,7 +3011,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>21.6554cm</Top>
+            <Top>21.18973cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.15605cm</Width>
@@ -3031,7 +3036,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>=First(Fields!Orifico.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3041,10 +3046,10 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Orifico</rd:DefaultName>
-            <Top>7.36849in</Top>
+            <Top>7.18516in</Top>
             <Left>5.76888in</Left>
             <Height>0.28753in</Height>
-            <Width>1.67664in</Width>
+            <Width>1.61856in</Width>
             <ZIndex>83</ZIndex>
             <Style>
               <Border>
@@ -3065,7 +3070,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>=First(Fields!DescripcionMedida.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3075,7 +3080,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>DescripcionMedida</rd:DefaultName>
-            <Top>7.93224in</Top>
+            <Top>7.74891in</Top>
             <Left>2.38102in</Left>
             <Height>0.28753in</Height>
             <Width>1.41105in</Width>
@@ -3100,7 +3105,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>=First(Fields!DescripcionSerieEntrada.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3110,7 +3115,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>DescripcionSerieEntrada</rd:DefaultName>
-            <Top>8.21013in</Top>
+            <Top>8.0268in</Top>
             <Left>2.37056in</Left>
             <Height>0.28753in</Height>
             <Width>1.40762in</Width>
@@ -3135,7 +3140,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>=First(Fields!DescripcionTipoEntrada.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3145,7 +3150,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>DescripcionTipoEntrada</rd:DefaultName>
-            <Top>8.51485in</Top>
+            <Top>8.33152in</Top>
             <Left>2.37056in</Left>
             <Height>0.28753in</Height>
             <Width>1.42151in</Width>
@@ -3170,7 +3175,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>Fabricante</Value>
                     <Style>
                       <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3178,7 +3183,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>20.17558cm</Top>
+            <Top>19.70991cm</Top>
             <Left>10.00227cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.08795cm</Width>
@@ -3203,7 +3208,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>Clase de Brida Salida</Value>
                     <Style>
                       <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3211,7 +3216,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>20.95007cm</Top>
+            <Top>20.4844cm</Top>
             <Left>10.00227cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.08795cm</Width>
@@ -3236,7 +3241,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>Tipo de Cara Salida</Value>
                     <Style>
                       <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3244,7 +3249,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>21.6559cm</Top>
+            <Top>21.19023cm</Top>
             <Left>10.00227cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.05267cm</Width>
@@ -3269,7 +3274,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>Codigo de producto</Value>
                     <Style>
                       <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3277,7 +3282,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>19.47857cm</Top>
+            <Top>19.0129cm</Top>
             <Left>10.00227cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.05267cm</Width>
@@ -3302,7 +3307,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>=First(Fields!DescripcionSerieSalida.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3312,7 +3317,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>DescripcionSerieSalida</rd:DefaultName>
-            <Top>8.24806in</Top>
+            <Top>8.06473in</Top>
             <Left>5.72721in</Left>
             <Height>0.28753in</Height>
             <Width>1.60521in</Width>
@@ -3337,7 +3342,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>=First(Fields!DescripcionTipoSalida.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3347,7 +3352,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>DescripcionTipoSalida</rd:DefaultName>
-            <Top>8.52595in</Top>
+            <Top>8.34262in</Top>
             <Left>5.78276in</Left>
             <Height>0.28753in</Height>
             <Width>1.63332in</Width>
@@ -3370,7 +3375,6 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                   <TextRun>
                     <Value>=First(Fields!CodigoFinal.Value, "DataSet2")</Value>
                     <Style>
-                      <FontSize>12pt</FontSize>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
@@ -3381,7 +3385,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>CodigoFinal</rd:DefaultName>
-            <Top>7.67915in</Top>
+            <Top>7.49582in</Top>
             <Left>5.79665in</Left>
             <Height>0.28753in</Height>
             <Width>1.54912in</Width>
@@ -3427,7 +3431,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Viscusidad_Mu</rd:DefaultName>
-            <Top>6.72677in</Top>
+            <Top>6.54344in</Top>
             <Left>4.74186in</Left>
             <Height>0.28753in</Height>
             <Width>1.07505in</Width>
@@ -3462,7 +3466,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>SobrepresionAdmisible</rd:DefaultName>
-            <Top>5.82251in</Top>
+            <Top>5.63918in</Top>
             <Left>3.36188in</Left>
             <Height>0.28753in</Height>
             <Width>0.80628in</Width>
@@ -3495,8 +3499,8 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>2.16116cm</Top>
-            <Left>0.72059cm</Left>
+            <Top>1.49413cm</Top>
+            <Left>0.6975cm</Left>
             <Height>0.73033cm</Height>
             <Width>0.76361cm</Width>
             <ZIndex>97</ZIndex>
@@ -3529,8 +3533,8 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Nombre</rd:DefaultName>
-            <Top>0.86882in</Top>
-            <Left>0.79444in</Left>
+            <Top>0.60621in</Top>
+            <Left>0.78535in</Left>
             <Height>0.28753in</Height>
             <Width>2.80765in</Width>
             <ZIndex>98</ZIndex>
@@ -3560,8 +3564,8 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>1.40592cm</Top>
-            <Left>9.38012cm</Left>
+            <Top>0.73889cm</Top>
+            <Left>9.35703cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.40109cm</Width>
             <ZIndex>99</ZIndex>
@@ -3591,8 +3595,8 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>2.21015cm</Top>
-            <Left>9.2563cm</Left>
+            <Top>1.54312cm</Top>
+            <Left>9.23321cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.33083cm</Width>
             <ZIndex>100</ZIndex>
@@ -3615,6 +3619,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>=First(Fields!Servicio.Value, "DataSet2")First(Fields!Servicio.Value, "DataSet2")</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -3624,8 +3629,8 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Servicio</rd:DefaultName>
-            <Top>2.25973cm</Top>
-            <Left>10.97844cm</Left>
+            <Top>1.5927cm</Top>
+            <Left>10.95535cm</Left>
             <Height>0.73033cm</Height>
             <Width>7.77348cm</Width>
             <ZIndex>101</ZIndex>
@@ -3659,8 +3664,8 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>TagId1</rd:DefaultName>
-            <Top>0.53268in</Top>
-            <Left>4.77761in</Left>
+            <Top>0.27007in</Top>
+            <Left>4.76852in</Left>
             <Height>0.28753in</Height>
             <Width>1.2482in</Width>
             <ZIndex>102</ZIndex>
@@ -3693,7 +3698,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Servicio</rd:DefaultName>
-            <Top>4.58399cm</Top>
+            <Top>4.11832cm</Top>
             <Left>4.05136cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.89751cm</Width>
@@ -3727,8 +3732,8 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Servicio</rd:DefaultName>
-            <Top>1.40592cm</Top>
-            <Left>2.52174cm</Left>
+            <Top>0.73889cm</Top>
+            <Left>2.49865cm</Left>
             <Height>0.73033cm</Height>
             <Width>6.69813cm</Width>
             <ZIndex>104</ZIndex>
@@ -3761,7 +3766,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>TagId</rd:DefaultName>
-            <Top>5.42015cm</Top>
+            <Top>4.95448cm</Top>
             <Left>8.71679cm</Left>
             <Height>0.73033cm</Height>
             <Width>3.13956cm</Width>
@@ -3788,12 +3793,6 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                     </Style>
                   </TextRun>
-                  <TextRun>
-                    <Value>&lt;</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
                 </TextRuns>
                 <Style>
                   <TextAlign>Left</TextAlign>
@@ -3801,7 +3800,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Tobera_Interno</rd:DefaultName>
-            <Top>4.59875in</Top>
+            <Top>4.41542in</Top>
             <Left>4.15161in</Left>
             <Height>0.28753in</Height>
             <Width>2.67185in</Width>
@@ -3834,7 +3833,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>17.086cm</Top>
+            <Top>16.62033cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>3.21987cm</Width>
@@ -3868,7 +3867,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Viscusidad_Mu</rd:DefaultName>
-            <Top>6.72677in</Top>
+            <Top>6.54344in</Top>
             <Left>1.53157in</Left>
             <Height>0.28753in</Height>
             <Width>1.07505in</Width>
@@ -3903,7 +3902,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Viscusidad_Mu</rd:DefaultName>
-            <Top>6.42535in</Top>
+            <Top>6.24202in</Top>
             <Left>1.22722in</Left>
             <Height>0.28753in</Height>
             <Width>0.49933in</Width>

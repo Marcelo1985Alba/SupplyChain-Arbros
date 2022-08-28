@@ -133,7 +133,9 @@
                 <TextRuns>
                   <TextRun>
                     <Value>=First(Fields!ARTICULO.Value, "DataSet1")</Value>
-                    <Style />
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                    </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
@@ -141,39 +143,9 @@
             </Paragraphs>
             <rd:DefaultName>ARTICULO</rd:DefaultName>
             <Top>0.25834in</Top>
-            <Left>0.56333in</Left>
+            <Left>2.24666in</Left>
             <Height>0.25in</Height>
-            <Width>1in</Width>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="ARTICULO1">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!ARTICULO.Value, "DataSet1")</Value>
-                    <Style />
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>ARTICULO1</rd:DefaultName>
-            <Top>0.25834in</Top>
-            <Left>1.805in</Left>
-            <Height>0.25in</Height>
-            <Width>1in</Width>
-            <ZIndex>1</ZIndex>
+            <Width>2.43611in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -192,7 +164,9 @@
                 <TextRuns>
                   <TextRun>
                     <Value>=Sum(Fields!TOTAL_ITEM.Value, "DataSet1")</Value>
-                    <Style />
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                    </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
@@ -200,10 +174,10 @@
             </Paragraphs>
             <rd:DefaultName>TOTAL_ITEM</rd:DefaultName>
             <Top>0.25834in</Top>
-            <Left>3.055in</Left>
+            <Left>5.03834in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
-            <ZIndex>2</ZIndex>
+            <ZIndex>1</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -233,7 +207,7 @@
             <Left>4.41333in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
-            <ZIndex>3</ZIndex>
+            <ZIndex>2</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -259,10 +233,42 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>MONEDA</rd:DefaultName>
-            <Top>1.27501in</Top>
-            <Left>0.49667in</Left>
+            <Top>1.55834in</Top>
+            <Left>3.27167in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
+            <ZIndex>3</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="CG_ART">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CG_ART.Value, "DataSet1")</Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>CG_ART</rd:DefaultName>
+            <Top>0.25834in</Top>
+            <Left>0.08333in</Left>
+            <Height>0.25in</Height>
+            <Width>2.04167in</Width>
             <ZIndex>4</ZIndex>
             <Style>
               <Border>
@@ -278,7 +284,7 @@
         <Height>1.90208in</Height>
         <Style />
       </Body>
-      <Width>6.08833in</Width>
+      <Width>6.33833in</Width>
       <Page>
         <PageHeader>
           <Height>1.44666in</Height>
@@ -312,36 +318,6 @@
                 </Border>
               </Style>
             </Line>
-            <Textbox Name="PRESUPUESTO">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Sum(Fields!PRESUPUESTO.Value, "DataSet1")</Value>
-                      <Style />
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>PRESUPUESTO</rd:DefaultName>
-              <Top>0.23in</Top>
-              <Left>4.93833in</Left>
-              <Height>0.25in</Height>
-              <Width>1in</Width>
-              <ZIndex>2</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
             <Textbox Name="CLIENTE">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
@@ -360,8 +336,70 @@
               <Top>1.13833in</Top>
               <Left>1.255in</Left>
               <Height>0.25in</Height>
+              <Width>3.13333in</Width>
+              <ZIndex>2</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="CG_CLI">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Sum(Fields!CG_CLI.Value, "DataSet1")</Value>
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>CG_CLI</rd:DefaultName>
+              <Top>1.13833in</Top>
+              <Left>0.13918in</Left>
+              <Height>0.25in</Height>
               <Width>1in</Width>
               <ZIndex>3</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="PRESUPUESTO">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Sum(Fields!PRESUPUESTO.Value, "DataSet1")</Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>PRESUPUESTO</rd:DefaultName>
+              <Top>0.51055in</Top>
+              <Left>5.03834in</Left>
+              <Height>0.25in</Height>
+              <Width>1in</Width>
+              <ZIndex>4</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -385,6 +423,8 @@
           <PrintOnLastPage>true</PrintOnLastPage>
           <Style />
         </PageFooter>
+        <PageHeight>11.69in</PageHeight>
+        <PageWidth>8.27in</PageWidth>
         <LeftMargin>0.25in</LeftMargin>
         <RightMargin>0.25in</RightMargin>
         <TopMargin>0.25in</TopMargin>
