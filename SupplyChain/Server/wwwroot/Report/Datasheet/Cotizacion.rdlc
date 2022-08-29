@@ -522,7 +522,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
             <Top>3.2659cm</Top>
-            <Left>0.23728cm</Left>
+            <Left>0.26903cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.54328cm</Width>
             <ZIndex>4</ZIndex>
@@ -611,6 +611,7 @@ First(Fields!NumeroPlano.Value, "DataSet2")</Value>
                     <Value>Cumple con API 526 </Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -1808,6 +1809,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <Value>Tipo de Capuchón:</Value>
                     <Style>
                       <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -4051,9 +4053,9 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                   <Value>logo_aerre</Value>
                   <Sizing>FitProportional</Sizing>
                   <Top>0.2912cm</Top>
-                  <Left>0.62822cm</Left>
+                  <Left>0.51549cm</Left>
                   <Height>1.28263cm</Height>
-                  <Width>3.72891cm</Width>
+                  <Width>3.52414cm</Width>
                   <ZIndex>4</ZIndex>
                   <Style>
                     <Border>

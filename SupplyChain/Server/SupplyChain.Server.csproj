@@ -25,11 +25,13 @@
     <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xsd" />
     <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xss" />
     <Content Remove="wwwroot\Report\NoConfor\ReporteEvento.rdlc" />
+    <Content Remove="wwwroot\Report\Pedido\Pedido.rdlc" />
     <Content Remove="wwwroot\Report\Presupuesto\Presupuesto.rdlc" />
     <Content Remove="wwwroot\Report\Presupuesto\vPresupuesto.Designer.cs" />
     <Content Remove="wwwroot\Report\Presupuesto\vPresupuesto.xsc" />
     <Content Remove="wwwroot\Report\Presupuesto\vPresupuesto.xsd" />
     <Content Remove="wwwroot\Report\Presupuesto\vPresupuesto.xss" />
+    <Content Remove="wwwroot\Report\Remito\Remito.rdlc" />
     <Content Remove="wwwroot\Report\Report1.rdlc" />
   </ItemGroup>
 
@@ -62,7 +64,15 @@
   <ItemGroup>
     <EmbeddedResource Include="wwwroot\Report\EtiquetaOF\ReporteEtiquetaOF.rdlc" />
     <EmbeddedResource Include="wwwroot\Report\NoConfor\ReporteEvento.rdlc" />
-    <EmbeddedResource Include="wwwroot\Report\Presupuesto\Presupuesto.rdlc" />
+    <EmbeddedResource Include="wwwroot\Report\Pedido\Pedido.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="wwwroot\Report\Presupuesto\Presupuesto.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="wwwroot\Report\Remito\Remito.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="wwwroot\Report\Report1.rdlc" />
   </ItemGroup>
 
@@ -163,6 +173,30 @@
   <ItemGroup>
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\pdf\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\Report\Datasheet\Cotizacion.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\Report\Pedido\ArbrosPedDataSet6.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ArbrosPedDataSet6.xsd</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\Report\Pedido\ArbrosPedDataSet6.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ArbrosPedDataSet6.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Update="wwwroot\Report\Remito\ArbrosRemDataSet6.Designer.cs">
+      <DependentUpon>ArbrosRemDataSet6.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Content>
+    <Content Update="wwwroot\Report\Remito\ArbrosRemDataSet6.xsd">
+      <LastGenOutput>ArbrosRemDataSet6.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </Content>
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

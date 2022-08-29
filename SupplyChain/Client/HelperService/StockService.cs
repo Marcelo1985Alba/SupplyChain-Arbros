@@ -19,9 +19,11 @@ namespace SupplyChain.Client.HelperService
     public class StockService : BaseService<Pedidos, int?>
     {
         private const string API = "api/Stock";
+        private readonly IJSRuntime js;
 
-        public StockService(IRepositoryHttp httpClient): base(httpClient, API)
+        public StockService(IJSRuntime js, IRepositoryHttp httpClient): base(httpClient, API)
         {
+            this.js = js;
         }
 
         public async Task<HttpResponseWrapper<List<Pedidos>>> GetRemitos(TipoFiltro tipoFiltro = TipoFiltro.Todos)
@@ -54,6 +56,11 @@ namespace SupplyChain.Client.HelperService
         public async Task<HttpResponseWrapper<List<Pedidos>>> GuardarLista(List<Pedidos> lista)
         {
             return await http.PostAsJsonAsync($"api/Pedidos/PostList", lista);
+        }
+
+        internal async ValueTask Imprimir(string remito)
+        {
+            await js.InvokeVoidAsync("descargarRemito", remito);
         }
     }
 }
