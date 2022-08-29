@@ -405,7 +405,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 spinerVisible = false;
                 Show = false;
                 Pedido.Items = response.Response;
-
+                await StockService.Imprimir(Pedido.Items[0].REMITO);
                 if (OnGuardar.HasDelegate)
                 {
                     await OnGuardar.InvokeAsync(Pedido.Items);

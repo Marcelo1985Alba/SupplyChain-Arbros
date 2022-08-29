@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Shared.BuscadorCliente;
 using SupplyChain.Client.Shared.BuscadorPresupuesto;
@@ -18,6 +19,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
 {
     public class FormPedidoBase: ComponentBase
     {
+        [Inject] public IJSRuntime js { get; set; }
         [Inject] public PedCliService PedCliService { get; set; }
         [Inject] public ClienteService ClienteService { get; set; }
         [Inject] public PresupuestoService PresupuestoService { get; set; }
@@ -387,11 +389,15 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                 spinerVisible = false;
                 Show = false;
                 Pedido.Items = response.Response;
+                var numOci = Pedido.Items[0].NUMOCI;
+                await PedCliService.ImprimirNumOci(numOci);
                 await OnGuardar.InvokeAsync(Pedido);
             }
 
             BotonGuardarDisabled = false;
         }
+
+        
 
         protected void CambioMoneda(ChangeEventArgs<string, string> args)
         {

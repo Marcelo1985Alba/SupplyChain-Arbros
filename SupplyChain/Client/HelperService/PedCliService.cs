@@ -18,9 +18,11 @@ namespace SupplyChain.Client.HelperService
     public class PedCliService : BaseService<PedCli, int>
     {
         private const string API = "api/PedCli";
+        private readonly IJSRuntime js;
 
-        public PedCliService(IRepositoryHttp httpClient): base(httpClient, API)
+        public PedCliService(IJSRuntime js, IRepositoryHttp httpClient): base(httpClient, API)
         {
+            this.js = js;
         }
 
         public async Task<HttpResponseWrapper<PedCliEncabezado>> GetPedidoEncabezadoById(int id)
@@ -32,6 +34,11 @@ namespace SupplyChain.Client.HelperService
         public async Task<HttpResponseWrapper<List<PedCli>>> GuardarLista(List<PedCli> lista)
         {
             return await http.PostAsJsonAsync($"{API}/PostList", lista);
+        }
+
+        internal async ValueTask ImprimirNumOci(int numOci)
+        {
+            await js.InvokeVoidAsync("descargarPedido", numOci);
         }
     }
 }

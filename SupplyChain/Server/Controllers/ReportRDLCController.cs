@@ -129,6 +129,49 @@ namespace SupplyChain.Server.Controllers
             return File(result.MainStream, contentType: "application/pdf", $"Cotizacion_{id}.pdf");
         }
 
+        [HttpGet]
+        [Route(template: "GetReportPedido")]
+        public IActionResult GetReportPedido(int numOci)
+        {
+            var file = "Pedido.rdlc";
+            var pedido = _context.vPedidoReporte.Where(c => c.NUMOCI == numOci).ToList();
+            var path = string.Empty;
+            path = configuration["ReportesRDLC:Pedido"] + $"\\{file}";
+
+
+            Dictionary<string, string> parameter = new();
+            parameter.Add("param", "Primer Reporte");
+
+            LocalReport localReport = new(path);
+            //DataSet1: debe ser igual al nombre que esta en el conjunto de datos del reporte
+            localReport.AddDataSource(dataSetName: "DataSet1", pedido);
+
+            var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
+
+            return File(result.MainStream, contentType: "application/pdf", $"OCI_{numOci}.pdf");
+        }
+
+        [HttpGet]
+        [Route(template: "GetReportRemito")]
+        public IActionResult GetReportRemito(string remito)
+        {
+            var file = "Remito.rdlc";
+            var pedido = _context.vRemitoReporte.Where(c => c.REMITO == remito).ToList();
+            var path = string.Empty;
+            path = configuration["ReportesRDLC:Remito"] + $"\\{file}";
+
+
+            Dictionary<string, string> parameter = new();
+            parameter.Add("param", "Primer Reporte");
+
+            LocalReport localReport = new(path);
+            //DataSet1: debe ser igual al nombre que esta en el conjunto de datos del reporte
+            localReport.AddDataSource(dataSetName: "DataSet1", pedido);
+
+            var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
+
+            return File(result.MainStream, contentType: "application/pdf", $"Remito_{remito}.pdf");
+        }
 
         [HttpGet]
         [Route(template: "GetReportEtiquetaOF")]

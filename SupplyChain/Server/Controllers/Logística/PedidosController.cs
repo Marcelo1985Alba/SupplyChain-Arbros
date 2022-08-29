@@ -305,7 +305,7 @@ namespace SupplyChain
             }
 
             //remitos
-            if (lstock.Any(s => s.TIPOO == 1 || s.Id < 0))
+            if (lstock.Any(s => s.TIPOO == 1 && s.Id < 0))
             {
                 await generaController.ReservaByCampo("REMITO");
                 var generaVale = await _context.Genera.Where(g => g.Id == "REMITO").FirstOrDefaultAsync();

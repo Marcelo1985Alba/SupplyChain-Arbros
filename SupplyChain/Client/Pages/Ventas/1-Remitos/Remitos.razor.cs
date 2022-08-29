@@ -122,7 +122,6 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             }
         }
 
-
         protected async Task OnActionBeginHandler(ActionEventArgs<vEstadoPedido> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
@@ -161,7 +160,6 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 SpinnerVisible = false;
             }
         }
-
         protected async Task OnActionCompleteHandler(ActionEventArgs<vEstadoPedido> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
@@ -381,6 +379,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             }
             else
             {
+                Console.WriteLine("Pedidos Seleccionados " + selecciones.Select(s => s.PEDIDO.ToString()).ToArray());
                 var response = await StockService.GetPedidoEncabezadoByLista(selecciones.Select(s=> s.PEDIDO).ToList());
                 if (response.Error)
                 {
@@ -401,6 +400,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
         protected async Task OnRemitoGuardado(List<Pedidos> pedidosGuardados)
         {
             SpinnerVisible = true;
+            popupFormVisible = false;
             await GetPedidoPendientesRemitir();
             SpinnerVisible = false;
         }

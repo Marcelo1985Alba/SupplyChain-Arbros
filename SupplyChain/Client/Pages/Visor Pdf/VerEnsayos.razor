@@ -2,7 +2,9 @@
 @using Syncfusion.Blazor.PdfViewer;
 @using SupplyChain.Shared;
 @using Syncfusion.Blazor.Navigations
+@attribute [Authorize(Roles ="Administrador, Produccion")]
 @inject HttpClient Http
+
 
 <SfSpinner Size="80" Label="Cargando..." Type="SpinnerType.Bootstrap4" @bind-Visible="@VisibleSpinner"  ></SfSpinner>
 @if (archivos is null)

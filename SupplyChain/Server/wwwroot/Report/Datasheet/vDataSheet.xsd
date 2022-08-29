@@ -6,7 +6,7 @@
         <Connections>
           <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="ArbrosConnectionString" IsAppSettingsProperty="true" Modifier="Assembly" Name="ArbrosConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.WindowsFormsForRDLC.Properties.Settings.GlobalReference.Default.ArbrosConnectionString" Provider="System.Data.SqlClient" />
           <Connection ConnectionStringObject="Data Source=MARCELO-PC;Initial Catalog=new_aerre;Integrated Security=True" IsAppSettingsProperty="false" Modifier="Assembly" Name="marcelo-pc.new_aerre.dbo" ParameterPrefix="@" Provider="System.Data.SqlClient" />
-          <Connection ConnectionStringObject="Data Source=MARCELO-PC;Initial Catalog=Arbros;User ID=sa;Password=Marce031010" IsAppSettingsProperty="false" Modifier="Assembly" Name="marcelo-pc.Arbros.dbo1" ParameterPrefix="@" Provider="System.Data.SqlClient" />
+          <Connection ConnectionStringObject="Data Source=MARCELO-PC\SQL_2017;Initial Catalog=Arbros;User ID=sa" IsAppSettingsProperty="false" Modifier="Assembly" Name="marcelo-pc.Arbros.dbo1" ParameterPrefix="@" Provider="System.Data.SqlClient" />
         </Connections>
         <Tables>
           <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="vCalculoSolicitudesTableAdapter" GeneratorDataComponentClassName="vCalculoSolicitudesTableAdapter" Name="vCalculoSolicitudes" UserDataComponentName="vCalculoSolicitudesTableAdapter">

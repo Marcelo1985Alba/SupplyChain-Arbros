@@ -107,9 +107,7 @@ namespace SupplyChain.Server.Repositorios
 
         public async Task<PedidoEncabezado> GetListaByPedidos(List<int> listaPedidos)
         {
-            try
-            {
-                var pedidos = await Db.vPedidoAltas.Where(p => listaPedidos.Contains(p.PEDIDO)).ToListAsync();
+             var pedidos = await Db.vPedidoAltas.Where(p => listaPedidos.Contains(p.PEDIDO)).ToListAsync();
                 var pedEncabezado = new PedidoEncabezado();
                 if (pedidos != null && pedidos.Count > 0)
                 {
@@ -171,11 +169,7 @@ namespace SupplyChain.Server.Repositorios
 
 
                 return pedEncabezado;
-            }
-            catch (Exception ex)
-            {
-                return new PedidoEncabezado();
-            }
+            
         }
 
         internal async Task<List<Pedidos>> GetRemitos(TipoFiltro tipoFiltro = TipoFiltro.Todos , int cg_cia = 1)
