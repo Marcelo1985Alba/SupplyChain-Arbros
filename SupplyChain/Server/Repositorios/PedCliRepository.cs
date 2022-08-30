@@ -114,11 +114,14 @@ namespace SupplyChain.Server.Repositorios
             const string NUMOCI = "NUMOCI";
             const string PEDIDO = "PEDIDO";
             const string REGPED = "REGPED";
-
+            var genera = new Genera();
             try
             {
-                await generaRepository.Reserva(NUMOCI);
-                var genera = await generaRepository.Obtener(g => g.Id == NUMOCI).FirstOrDefaultAsync();
+                if (list.Any(p=> p.ESTADO == EstadoItem.Agregado))
+                {
+                    await generaRepository.Reserva(NUMOCI);
+                    genera = await generaRepository.Obtener(g => g.Id == NUMOCI).FirstOrDefaultAsync();
+                }
 
                 foreach (PedCli item in list)
                 {
@@ -155,7 +158,12 @@ namespace SupplyChain.Server.Repositorios
                     }
                 }
 
-                await generaRepository.Libera(NUMOCI);
+
+                if (list.Any(p => p.ESTADO == EstadoItem.Agregado))
+                {
+                    await generaRepository.Libera(NUMOCI);
+                }
+                
                 await SaveChanges();
 
                 //lo ejecuta despues de obtener el numero de pedido

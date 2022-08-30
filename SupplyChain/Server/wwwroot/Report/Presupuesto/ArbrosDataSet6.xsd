@@ -43,12 +43,16 @@
               <Mapping SourceColumn="TOTAL_PRESUPUESTO" DataSetColumn="TOTAL_PRESUPUESTO" />
               <Mapping SourceColumn="Construccion" DataSetColumn="Construccion" />
               <Mapping SourceColumn="Marca" DataSetColumn="Marca" />
+              <Mapping SourceColumn="DESCRIPCION_IVA" DataSetColumn="DESCRIPCION_IVA" />
+              <Mapping SourceColumn="CUIT_CLIENTE" DataSetColumn="CUIT_CLIENTE" />
+              <Mapping SourceColumn="TRANSPORTE" DataSetColumn="TRANSPORTE" />
+              <Mapping SourceColumn="CALLE_TRANSPORTE" DataSetColumn="CALLE_TRANSPORTE" />
             </Mappings>
             <Sources>
               <DbSource ConnectionRef="marcelo-pc\sql_2017.Arbros.dbo" DbObjectName="Arbros.dbo.vPresupuestoReporte" DbObjectType="View" FillMethodModifier="Public" FillMethodName="FillBy" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetDataBy" GeneratorSourceName="FillBy" GetMethodModifier="Public" GetMethodName="GetDataBy" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="FillBy">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
-                    <CommandText>Select * From vPresupuestoReporte</CommandText>
+                    <CommandText>SELECT ARTICULO, BONIFIC, CALLE_CLIENTE, CALLE_TRANSPORTE, CANTIDAD, CG_ART, CG_CLI, CLIENTE, CONDICION_ENTREGA, CONDICION_PAGO, CP_CLIENTE, CUIT_CLIENTE, Construccion, DESCRIPCION_IVA, DIRENT, EMAIL_CLIENTE, FECHAS_PRESUP, MONEDA, Marca, PORC_DESCUENTO, PREC_UNIT, PRESUPUESTO, PROVINCIA_CLIENTE, TELEFONO_CLIENTE, TOTAL_ITEM, TOTAL_PRESUPUESTO, TRANSPORTE FROM vPresupuestoReporte</CommandText>
                     <Parameters />
                   </DbCommand>
                 </SelectCommand>
@@ -63,7 +67,7 @@
   <xs:element name="ArbrosDataSet6" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="ArbrosDataSet6" msprop:Generator_UserDSName="ArbrosDataSet6">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="vPresupuestoReporte" msprop:Generator_TableClassName="vPresupuestoReporteDataTable" msprop:Generator_TableVarName="tablevPresupuestoReporte" msprop:Generator_TablePropName="vPresupuestoReporte" msprop:Generator_RowDeletingName="vPresupuestoReporteRowDeleting" msprop:Generator_RowChangingName="vPresupuestoReporteRowChanging" msprop:Generator_RowEvHandlerName="vPresupuestoReporteRowChangeEventHandler" msprop:Generator_RowDeletedName="vPresupuestoReporteRowDeleted" msprop:Generator_UserTableName="vPresupuestoReporte" msprop:Generator_RowChangedName="vPresupuestoReporteRowChanged" msprop:Generator_RowEvArgName="vPresupuestoReporteRowChangeEvent" msprop:Generator_RowClassName="vPresupuestoReporteRow">
+        <xs:element name="vPresupuestoReporte" msprop:Generator_TableClassName="vPresupuestoReporteDataTable" msprop:Generator_TableVarName="tablevPresupuestoReporte" msprop:Generator_RowChangedName="vPresupuestoReporteRowChanged" msprop:Generator_TablePropName="vPresupuestoReporte" msprop:Generator_RowDeletingName="vPresupuestoReporteRowDeleting" msprop:Generator_RowChangingName="vPresupuestoReporteRowChanging" msprop:Generator_RowEvHandlerName="vPresupuestoReporteRowChangeEventHandler" msprop:Generator_RowDeletedName="vPresupuestoReporteRowDeleted" msprop:Generator_RowClassName="vPresupuestoReporteRow" msprop:Generator_UserTableName="vPresupuestoReporte" msprop:Generator_RowEvArgName="vPresupuestoReporteRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="PRESUPUESTO" msprop:Generator_ColumnVarNameInTable="columnPRESUPUESTO" msprop:Generator_ColumnPropNameInRow="PRESUPUESTO" msprop:Generator_ColumnPropNameInTable="PRESUPUESTOColumn" msprop:Generator_UserColumnName="PRESUPUESTO" type="xs:int" />
@@ -170,6 +174,34 @@
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="500" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DESCRIPCION_IVA" msprop:Generator_ColumnVarNameInTable="columnDESCRIPCION_IVA" msprop:Generator_ColumnPropNameInRow="DESCRIPCION_IVA" msprop:Generator_ColumnPropNameInTable="DESCRIPCION_IVAColumn" msprop:Generator_UserColumnName="DESCRIPCION_IVA" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CUIT_CLIENTE" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnCUIT_CLIENTE" msprop:Generator_ColumnPropNameInRow="CUIT_CLIENTE" msprop:Generator_ColumnPropNameInTable="CUIT_CLIENTEColumn" msprop:Generator_UserColumnName="CUIT_CLIENTE" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="8000" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="TRANSPORTE" msprop:Generator_ColumnVarNameInTable="columnTRANSPORTE" msprop:Generator_ColumnPropNameInRow="TRANSPORTE" msprop:Generator_ColumnPropNameInTable="TRANSPORTEColumn" msprop:Generator_UserColumnName="TRANSPORTE" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CALLE_TRANSPORTE" msprop:Generator_ColumnVarNameInTable="columnCALLE_TRANSPORTE" msprop:Generator_ColumnPropNameInRow="CALLE_TRANSPORTE" msprop:Generator_ColumnPropNameInTable="CALLE_TRANSPORTEColumn" msprop:Generator_UserColumnName="CALLE_TRANSPORTE" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
