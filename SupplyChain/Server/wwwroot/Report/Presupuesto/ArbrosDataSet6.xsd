@@ -47,12 +47,14 @@
               <Mapping SourceColumn="CUIT_CLIENTE" DataSetColumn="CUIT_CLIENTE" />
               <Mapping SourceColumn="TRANSPORTE" DataSetColumn="TRANSPORTE" />
               <Mapping SourceColumn="CALLE_TRANSPORTE" DataSetColumn="CALLE_TRANSPORTE" />
+              <Mapping SourceColumn="OBSERITEM" DataSetColumn="OBSERITEM" />
+              <Mapping SourceColumn="DIAS_PLAZO_ENTREGA" DataSetColumn="DIAS_PLAZO_ENTREGA" />
             </Mappings>
             <Sources>
               <DbSource ConnectionRef="marcelo-pc\sql_2017.Arbros.dbo" DbObjectName="Arbros.dbo.vPresupuestoReporte" DbObjectType="View" FillMethodModifier="Public" FillMethodName="FillBy" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetDataBy" GeneratorSourceName="FillBy" GetMethodModifier="Public" GetMethodName="GetDataBy" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="FillBy">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
-                    <CommandText>SELECT ARTICULO, BONIFIC, CALLE_CLIENTE, CALLE_TRANSPORTE, CANTIDAD, CG_ART, CG_CLI, CLIENTE, CONDICION_ENTREGA, CONDICION_PAGO, CP_CLIENTE, CUIT_CLIENTE, Construccion, DESCRIPCION_IVA, DIRENT, EMAIL_CLIENTE, FECHAS_PRESUP, MONEDA, Marca, PORC_DESCUENTO, PREC_UNIT, PRESUPUESTO, PROVINCIA_CLIENTE, TELEFONO_CLIENTE, TOTAL_ITEM, TOTAL_PRESUPUESTO, TRANSPORTE FROM vPresupuestoReporte</CommandText>
+                    <CommandText>SELECT ARTICULO, BONIFIC, CALLE_CLIENTE, CALLE_TRANSPORTE, CANTIDAD, CG_ART, CG_CLI, CLIENTE, CONDICION_ENTREGA, CONDICION_PAGO, CP_CLIENTE, CUIT_CLIENTE, Construccion, DESCRIPCION_IVA, DIAS_PLAZO_ENTREGA, DIRENT, EMAIL_CLIENTE, FECHAS_PRESUP, MONEDA, Marca, OBSERITEM, PORC_DESCUENTO, PREC_UNIT, PRESUPUESTO, PROVINCIA_CLIENTE, TELEFONO_CLIENTE, TOTAL_ITEM, TOTAL_PRESUPUESTO, TRANSPORTE FROM vPresupuestoReporte</CommandText>
                     <Parameters />
                   </DbCommand>
                 </SelectCommand>
@@ -67,7 +69,7 @@
   <xs:element name="ArbrosDataSet6" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="ArbrosDataSet6" msprop:Generator_UserDSName="ArbrosDataSet6">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="vPresupuestoReporte" msprop:Generator_TableClassName="vPresupuestoReporteDataTable" msprop:Generator_TableVarName="tablevPresupuestoReporte" msprop:Generator_RowChangedName="vPresupuestoReporteRowChanged" msprop:Generator_TablePropName="vPresupuestoReporte" msprop:Generator_RowDeletingName="vPresupuestoReporteRowDeleting" msprop:Generator_RowChangingName="vPresupuestoReporteRowChanging" msprop:Generator_RowEvHandlerName="vPresupuestoReporteRowChangeEventHandler" msprop:Generator_RowDeletedName="vPresupuestoReporteRowDeleted" msprop:Generator_RowClassName="vPresupuestoReporteRow" msprop:Generator_UserTableName="vPresupuestoReporte" msprop:Generator_RowEvArgName="vPresupuestoReporteRowChangeEvent">
+        <xs:element name="vPresupuestoReporte" msprop:Generator_TableClassName="vPresupuestoReporteDataTable" msprop:Generator_TableVarName="tablevPresupuestoReporte" msprop:Generator_TablePropName="vPresupuestoReporte" msprop:Generator_RowDeletingName="vPresupuestoReporteRowDeleting" msprop:Generator_RowChangingName="vPresupuestoReporteRowChanging" msprop:Generator_RowEvHandlerName="vPresupuestoReporteRowChangeEventHandler" msprop:Generator_RowDeletedName="vPresupuestoReporteRowDeleted" msprop:Generator_UserTableName="vPresupuestoReporte" msprop:Generator_RowChangedName="vPresupuestoReporteRowChanged" msprop:Generator_RowEvArgName="vPresupuestoReporteRowChangeEvent" msprop:Generator_RowClassName="vPresupuestoReporteRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="PRESUPUESTO" msprop:Generator_ColumnVarNameInTable="columnPRESUPUESTO" msprop:Generator_ColumnPropNameInRow="PRESUPUESTO" msprop:Generator_ColumnPropNameInTable="PRESUPUESTOColumn" msprop:Generator_UserColumnName="PRESUPUESTO" type="xs:int" />
@@ -205,6 +207,14 @@
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
+              <xs:element name="OBSERITEM" msprop:Generator_ColumnVarNameInTable="columnOBSERITEM" msprop:Generator_ColumnPropNameInRow="OBSERITEM" msprop:Generator_ColumnPropNameInTable="OBSERITEMColumn" msprop:Generator_UserColumnName="OBSERITEM">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="8000" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DIAS_PLAZO_ENTREGA" msprop:Generator_ColumnVarNameInTable="columnDIAS_PLAZO_ENTREGA" msprop:Generator_ColumnPropNameInRow="DIAS_PLAZO_ENTREGA" msprop:Generator_ColumnPropNameInTable="DIAS_PLAZO_ENTREGAColumn" msprop:Generator_UserColumnName="DIAS_PLAZO_ENTREGA" type="xs:int" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

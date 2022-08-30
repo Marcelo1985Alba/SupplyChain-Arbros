@@ -368,7 +368,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Bonfic</Value>
+                                  <Value>Desc.</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -492,6 +492,20 @@
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!ARTICULO.Value</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
@@ -583,14 +597,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="BONIFIC">
+                        <Textbox Name="Textbox13">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!BONIFIC.Value</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -602,7 +616,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>BONIFIC</rd:DefaultName>
+                          <rd:DefaultName>Textbox13</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -705,7 +719,7 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value> [ARTICULO]</Value>
+                                  <Value xml:space="preserve"> </Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -1088,7 +1102,7 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>0.93334in</Height>
+        <Height>1.03334in</Height>
         <Style />
       </Body>
       <Width>7.86334in</Width>
@@ -1705,10 +1719,10 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>0.12222in</Top>
-              <Left>4.91571in</Left>
+              <Top>0.06944in</Top>
+              <Left>5.71571in</Left>
               <Height>0.225in</Height>
-              <Width>2.7393in</Width>
+              <Width>1.9393in</Width>
               <Style>
                 <Border>
                   <Style>None</Style>

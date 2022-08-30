@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SupplyChain.Client.HelperService;
+using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
@@ -26,6 +27,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         protected SfGrid<PedCli> refGrid;
         protected SfSpinner refSpinner;
         protected SfToast ToastObj;
+        protected ConfirmacionDialog refConfirmacionDialog;
         protected FormPedido refFormPedido;
         protected List<PedCli> pedidos = new();
         protected PedCliEncabezado PedidoSeleccionado = new();
@@ -39,7 +41,8 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             "Add",
             "Edit",
             "Delete",
-            "Print",
+            new ItemModel { Text = "Imprimir", TooltipText = "Imprimir por Pedido o OCI", 
+                PrefixIcon = "e-print e-icons e-btn-icon e-icon-left", Id = "imprimir" },
             //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
             "ExcelExport",
             new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh" },
@@ -114,6 +117,16 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             }
         }
 
+        protected async Task Imprimir()
+        {
+            var seleccion = await refGrid.GetSelectedRecordsAsync();
+            if (seleccion != null && seleccion.Count > 0)
+            {
+                await PedCliService.ImprimirNumOci(seleccion[0].NUMOCI);
+            }
+            
+        }
+
 
         protected async Task OnActionBeginHandler(ActionEventArgs<PedCli> args)
         {
@@ -134,25 +147,44 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                SpinnerVisible = true;
-                var response = await PedCliService.GetPedidoEncabezadoById(args.Data.Id);
-                if (response.Error)
-                {
-                    await ToastMensajeError();
-                }
-                else
-                {
-
-                    PedidoSeleccionado = response.Response;
-                    foreach (var item in PedidoSeleccionado.Items)
-                    {
-                        item.ESTADO = SupplyChain.Shared.Enum.EstadoItem.Modificado;
-                    }
-                    direccionesEntregas = PedidoSeleccionado.DireccionesEntregas.Select(d=> d.DESCRIPCION).ToList();
-                    popupFormVisible = true;
-                }
-                SpinnerVisible = false;
+                //TODO preguntar si abre por pedido o numoci
+                PedidoSeleccionado.PEDIDO = args.Data.PEDIDO;
+                PedidoSeleccionado.NUMOCI = args.Data.NUMOCI;
+                PedidoSeleccionado.Items.Add(args.Data);
+                await refConfirmacionDialog.ShowAsync();
             }
+        }
+
+        protected async Task AbrirNumOCIPedido(bool abrePedido)
+        {
+            await refConfirmacionDialog.HideAsync();
+            SpinnerVisible = true;
+            HttpResponseWrapper<PedCliEncabezado> response;
+            if (abrePedido)
+            {
+                response = await PedCliService.GetPedidoEncabezadoById(PedidoSeleccionado.Items[0].Id);
+            }
+            else
+            {
+                response = await PedCliService.GetPedidoEncabezadoByNumOci(PedidoSeleccionado.NUMOCI);
+            }
+
+            if (response.Error)
+            {
+                await ToastMensajeError();
+            }
+            else
+            {
+
+                PedidoSeleccionado = response.Response;
+                foreach (var item in PedidoSeleccionado.Items)
+                {
+                    item.ESTADO = SupplyChain.Shared.Enum.EstadoItem.Modificado;
+                }
+                direccionesEntregas = PedidoSeleccionado.DireccionesEntregas.Select(d => d.DESCRIPCION).ToList();
+                popupFormVisible = true;
+            }
+            SpinnerVisible = false;
         }
 
         protected async Task OnActionCompleteHandler(ActionEventArgs<PedCli> args)
@@ -203,6 +235,12 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             {
                 SpinnerVisible = true;
                 await GetPedidos(TipoFiltro.Pendientes);
+                SpinnerVisible = false;
+            }
+            else if (args.Item.Id == "imprimir")
+            {
+                SpinnerVisible = true;
+                await Imprimir();
                 SpinnerVisible = false;
             }
 

@@ -92,6 +92,39 @@ namespace SupplyChain.Server.Repositorios
             return pedEncabezado;
         }
 
+        public async Task<PedCliEncabezado> ObtenerPedidosEncabezadoByNumOci(int numOci)
+        {
+            var pedidos = await DbSet.Where(p=> p.NUMOCI == numOci).ToListAsync();
+            var pedEncabezado = new PedCliEncabezado();
+            if (pedidos != null && pedidos.Count > 0) 
+            {
+                pedEncabezado.FE_MOV = pedidos[0].FE_PED;
+                pedEncabezado.CONDICION_PAGO = pedidos[0].DPP;
+                pedEncabezado.DIRENT = pedidos[0].DIRENT;
+                pedEncabezado.CG_CLI = pedidos[0].CG_CLI;
+                pedEncabezado.DES_CLI = pedidos[0].DES_CLI;
+                pedEncabezado.FE_MOV = pedidos[0].FE_PED;
+                pedEncabezado.PEDIDO = pedidos[0].PEDIDO;
+                pedEncabezado.CG_TRANS = pedidos[0].CG_TRANS;
+                pedEncabezado.CG_COND_ENTREGA = pedidos[0].CG_COND_ENTREGA;
+                pedEncabezado.NUMOCI = pedidos[0].NUMOCI;
+                pedEncabezado.MONEDA = pedidos[0].MONEDA;
+                pedEncabezado.BONIFIC = pedidos[0].BONIFIC;
+                pedEncabezado.ORCO = pedidos[0].ORCO;
+                pedEncabezado.TC = (double)pedidos[0].VA_INDIC;
+
+                await AgregarDireccionesEntrega(pedEncabezado);
+                foreach (var item in pedidos)
+                {
+                    item.ESTADO = EstadoItem.Modificado;
+                    pedEncabezado.Items.Add(item);
+                }
+
+            }
+
+            return pedEncabezado;
+        }
+
         public async Task AgregarDireccionesEntrega(PedCliEncabezado pedCliEncabezado)
         {
             pedCliEncabezado.DireccionesEntregas = await direccionesEntregaRepository
@@ -117,7 +150,7 @@ namespace SupplyChain.Server.Repositorios
             var genera = new Genera();
             try
             {
-                if (list.Any(p=> p.ESTADO == EstadoItem.Agregado))
+                if (list.Any(p=> p.ESTADO == EstadoItem.Agregado && p.NUMOCI == 0))
                 {
                     await generaRepository.Reserva(NUMOCI);
                     genera = await generaRepository.Obtener(g => g.Id == NUMOCI).FirstOrDefaultAsync();
@@ -125,8 +158,12 @@ namespace SupplyChain.Server.Repositorios
 
                 foreach (PedCli item in list)
                 {
-
-                    item.NUMOCI = Convert.ToInt32(genera.VALOR1);
+                    //agregar nueva oci: en la edidicon debe venir con la oci del grupo
+                    if (item.NUMOCI == 0 && item.ESTADO == EstadoItem.Agregado && !list.Any(p=> p.NUMOCI > 0))
+                    {
+                        item.NUMOCI = Convert.ToInt32(genera.VALOR1);
+                    }
+                    
 
                     if (item.ESTADO == Shared.Enum.EstadoItem.Agregado)
                     {
