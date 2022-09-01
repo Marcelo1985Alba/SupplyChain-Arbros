@@ -718,8 +718,31 @@ namespace SupplyChain.Server.Controllers
                 Nombre = $"Cotizacion{presupuesto}.pdf",
                 Directorio = path
             };
-
             listArchivosDescargar.Add(archivoPresup);
+
+            //obtengo pdf de condiciones comerciales
+            var fileCC = "CondicionesComerciales.rdlc";
+            path = configuration["ReportesRDLC:Presupuesto"] + $"\\{fileCC}";
+            LocalReport localReportCC = new(path);
+            //localReportCC.AddDataSource(dataSetName: "DataSet1", vale);
+
+            var resultCC = localReportCC.Execute(RenderType.Pdf, 1);
+            path = Path.Combine(env.WebRootPath, "pdf/", $"CC{presupuesto}.pdf");
+
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                Stream streamCot = new MemoryStream(resultCC.MainStream);
+                await streamCot.CopyToAsync(fileStream);
+                await streamCot.DisposeAsync();
+            }
+
+            var archivoCC = new Archivo()
+            {
+                Nombre = $"CC{presupuesto}.pdf",
+                Directorio = path
+            };
+
+            listArchivosDescargar.Add(archivoCC);
 
             //obtener el datasheet por item
             foreach (var item in presup?.Items)
@@ -729,35 +752,34 @@ namespace SupplyChain.Server.Controllers
                     //obtengo pdf del reporte rdlc
                     var fileDS = "Cotizacion.rdlc";
                     var sol = _context.Solicitudes.Find(item.SOLICITUDID);
-                    if (sol.CalcId > 0)
+                    if (sol != null && sol.CalcId > 0)
                     {
                         var valeDS = _context.vCalculoSolicitudes.Where(c => c.SolicitudId == sol.CalcId).ToList();
-                        var pathDS = string.Empty;
-                        pathDS = configuration["ReportesRDLC:DataSheet"] + $"\\{fileDS}";
-
-
-                        //Dictionary<string, string> parameter = new();
-                        //parameter.Add("param", "Primer Reporte");
-
-                        LocalReport localReportDS = new(pathDS);
-                        localReportDS.AddDataSource(dataSetName: "DataSet2", valeDS);
-
-                        var resultDS = localReportDS.Execute(RenderType.Pdf, 1);
-                        pathDS = Path.Combine(env.WebRootPath, "pdf/", $"DataSheet{presupuesto}_{item.SOLICITUDID}.pdf");
-                        using (var fileStream = new FileStream(pathDS, FileMode.Create))
+                        if (valeDS != null && valeDS.Count > 0)
                         {
-                            Stream streamCot = new MemoryStream(resultDS.MainStream);
-                            await streamCot.CopyToAsync(fileStream);
-                            await streamCot.DisposeAsync();
+                            var pathDS = string.Empty;
+                            pathDS = configuration["ReportesRDLC:DataSheet"] + $"\\{fileDS}";
+
+                            LocalReport localReportDS = new(pathDS);
+                            localReportDS.AddDataSource(dataSetName: "DataSet1", valeDS);
+
+                            var resultDS = localReportDS.Execute(RenderType.Pdf, 1);
+                            pathDS = Path.Combine(env.WebRootPath, "pdf/", $"DataSheet{presupuesto}_{item.SOLICITUDID}.pdf");
+                            using (var fileStream = new FileStream(pathDS, FileMode.Create))
+                            {
+                                Stream streamCot = new MemoryStream(resultDS.MainStream);
+                                await streamCot.CopyToAsync(fileStream);
+                                await streamCot.DisposeAsync();
+                            }
+
+                            var archivoDataSheet = new Archivo()
+                            {
+                                Id = sol.CalcId,
+                                Nombre = $"DataSheet.pdf",
+                                Directorio = pathDS
+                            };
+                            listArchivosDescargar.Add(archivoDataSheet);  
                         }
-
-                        var archivoDataSheet = new Archivo()
-                        {
-                            Id = sol.CalcId,
-                            Nombre = $"DataSheet.pdf",
-                            Directorio = pathDS
-                        };
-                        listArchivosDescargar.Add(archivoDataSheet); 
                     }
 
                 }

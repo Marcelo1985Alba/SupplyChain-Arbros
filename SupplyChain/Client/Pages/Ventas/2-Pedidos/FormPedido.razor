@@ -129,7 +129,7 @@
                                 <GridColumn Field=@nameof(PedCli.Id) IsPrimaryKey="true" Width="3"></GridColumn>
                                 @if (Pedido.NUMOCI > 0)
                                 {
-                                    <GridColumn Field=@nameof(PedCli.PEDIDO) Width="40" AllowEditing="false"></GridColumn>
+                                    <GridColumn Field=@nameof(PedCli.PEDIDO) Width="70" AllowEditing="false"></GridColumn>
                                 }
 
                                 <GridColumn Field=@nameof(PedCli.CG_ART) AllowEditing="false" HeaderText="Producto" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
@@ -205,7 +205,8 @@
                                 </GridColumn>
                                 <GridColumn Field="@nameof(PedCli.LOTE)" HeaderText="Lote" Width="170"></GridColumn>
                                 <GridColumn Field="@nameof(PedCli.CAMPOCOM2)" HeaderText="Resorte" Width="150"></GridColumn>
-                                <GridColumn Field="@nameof(PedCli.CAMPOCOM1)" HeaderText="Presion" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM1)" HeaderText="Presion de Set" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM4)" HeaderText="Presion de Prueba en Banco" Width="190"></GridColumn>
                                 <GridColumn Field="@nameof(PedCli.CAMPOCOM3)" HeaderText="DescripcionFluido" Width="150"></GridColumn>
                                 <GridColumn Field="@nameof(PedCli.CAMPOCOM5)" HeaderText="Contrapresion Variable" Width="150"></GridColumn>
                                 <GridColumn Field="@nameof(PedCli.CAMPOCOM6)" HeaderText="TemperaturaDescargaT" Width="150"></GridColumn>

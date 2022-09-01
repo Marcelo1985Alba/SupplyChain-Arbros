@@ -2,360 +2,141 @@
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
-    <DataSource Name="dsCotizacion">
+    <DataSource Name="ArbrosDataSheet">
       <ConnectionProperties>
         <DataProvider>System.Data.DataSet</DataProvider>
         <ConnectString>/* Local Connection */</ConnectString>
       </ConnectionProperties>
-      <rd:DataSourceID>622fab0a-d755-4cf6-ba62-8ffeb7298d6f</rd:DataSourceID>
-    </DataSource>
-    <DataSource Name="ArbrosDataSet2">
-      <ConnectionProperties>
-        <DataProvider>System.Data.DataSet</DataProvider>
-        <ConnectString>/* Local Connection */</ConnectString>
-      </ConnectionProperties>
-      <rd:DataSourceID>2f5d4329-f90b-45cb-8162-e75935fbd777</rd:DataSourceID>
+      <rd:DataSourceID>494671ab-06d4-4837-9993-ffda16384e59</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="DataSet2">
+    <DataSet Name="DataSet1">
       <Query>
-        <DataSourceName>ArbrosDataSet2</DataSourceName>
+        <DataSourceName>ArbrosDataSheet</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="SolicitudId">
-          <DataField>SolicitudId</DataField>
+        <Field Name="PRESUPUESTO">
+          <DataField>PRESUPUESTO</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="PresupuestoId">
-          <DataField>PresupuestoId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CodigoFinal">
-          <DataField>CodigoFinal</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Model">
-          <DataField>Model</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DescripcionLinea">
-          <DataField>DescripcionLinea</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Medida">
-          <DataField>Medida</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DescripcionMedida">
-          <DataField>DescripcionMedida</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Orifico">
-          <DataField>Orifico</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="AreaOrificio">
-          <DataField>AreaOrificio</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SerieEntrada">
-          <DataField>SerieEntrada</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DescripcionSerieEntrada">
-          <DataField>DescripcionSerieEntrada</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="TipoEntrada">
-          <DataField>TipoEntrada</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DescripcionTipoEntrada">
-          <DataField>DescripcionTipoEntrada</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SerieSalida">
-          <DataField>SerieSalida</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DescripcionSerieSalida">
-          <DataField>DescripcionSerieSalida</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="TipoSalida">
-          <DataField>TipoSalida</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DescripcionTipoSalida">
-          <DataField>DescripcionTipoSalida</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CodigoDTT">
-          <DataField>CodigoDTT</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="TipoAsiento">
-          <DataField>TipoAsiento</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DescripcionAsiento">
-          <DataField>DescripcionAsiento</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CodigoCBR">
-          <DataField>CodigoCBR</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Cuerpo_Externo">
-          <DataField>Cuerpo_Externo</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Bonete_Externo">
-          <DataField>Bonete_Externo</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Resorte_Externo">
-          <DataField>Resorte_Externo</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CodigoDT">
-          <DataField>CodigoDT</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Disco_Interno">
-          <DataField>Disco_Interno</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Tobera_Interno">
-          <DataField>Tobera_Interno</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Capuchon">
-          <DataField>Capuchon</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Palanca">
-          <DataField>Palanca</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Bonete">
-          <DataField>Bonete</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Tornillo">
-          <DataField>Tornillo</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="TagId">
-          <DataField>TagId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Cantidad">
-          <DataField>Cantidad</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Servicio">
-          <DataField>Servicio</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="IndiceInstrumento">
-          <DataField>IndiceInstrumento</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="NumeroPlanta">
-          <DataField>NumeroPlanta</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="NumeroPlano">
-          <DataField>NumeroPlano</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DescargaA">
-          <DataField>DescargaA</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="LineaEntrada">
-          <DataField>LineaEntrada</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="LineaSalida">
-          <DataField>LineaSalida</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Contingencia">
-          <DataField>Contingencia</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="NumeroHoja">
-          <DataField>NumeroHoja</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="PresionOperacion">
-          <DataField>PresionOperacion</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="TemperaturaOperacion">
-          <DataField>TemperaturaOperacion</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="PresionDiseño">
-          <DataField>PresionDiseño</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="MaximaTemperaturaDiseño">
-          <DataField>MaximaTemperaturaDiseño</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="MinimaTemperaturaDiseño">
-          <DataField>MinimaTemperaturaDiseño</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="PresionAtmosfera">
-          <DataField>PresionAtmosfera</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DiscoRuptura">
-          <DataField>DiscoRuptura</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Modelo">
-          <DataField>Modelo</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Norma">
-          <DataField>Norma</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ContrapresionFija">
-          <DataField>ContrapresionFija</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ContrapresionVariable">
-          <DataField>ContrapresionVariable</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ValvulaSimpleMultiple">
-          <DataField>ValvulaSimpleMultiple</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SobrepresionAdmisible">
-          <DataField>SobrepresionAdmisible</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="PresionApertura">
-          <DataField>PresionApertura</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CodigoDiseño">
-          <DataField>CodigoDiseño</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="UserId">
-          <DataField>UserId</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Nombre">
-          <DataField>Nombre</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="FaseId">
-          <DataField>FaseId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TipoFase">
-          <DataField>TipoFase</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="NombreFase">
-          <DataField>NombreFase</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Descripcion">
-          <DataField>Descripcion</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CapacidadRequerida_V">
-          <DataField>CapacidadRequerida_V</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Temperatura_de_Descarga_T">
-          <DataField>Temperatura_de_Descarga_T</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="MasaMolecular_M">
-          <DataField>MasaMolecular_M</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CocienteCaloresEspecificos_k">
-          <DataField>CocienteCaloresEspecificos_k</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CoeficienteDeCompresibilidad_z">
-          <DataField>CoeficienteDeCompresibilidad_z</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CapacidadRequerida_W">
-          <DataField>CapacidadRequerida_W</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CapacidadRequerida_Q">
-          <DataField>CapacidadRequerida_Q</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DensidadRelativa_G">
-          <DataField>DensidadRelativa_G</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Viscusidad_Mu">
-          <DataField>Viscusidad_Mu</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Temperatura_Saturado">
-          <DataField>Temperatura_Saturado</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="AreaCalculada">
-          <DataField>AreaCalculada</DataField>
+        <Field Name="FECHAS_PRESUP">
+          <DataField>FECHAS_PRESUP</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="BONIFIC">
+          <DataField>BONIFIC</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="Temperatura_de_Descarga_IN">
-          <DataField>Temperatura_de_Descarga_IN</DataField>
+        <Field Name="CG_CLI">
+          <DataField>CG_CLI</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CLIENTE">
+          <DataField>CLIENTE</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Temperatura_de_Descarga_IN_Unit">
-          <DataField>Temperatura_de_Descarga_IN_Unit</DataField>
+        <Field Name="CALLE_CLIENTE">
+          <DataField>CALLE_CLIENTE</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="CapacidadRequerida_IN">
-          <DataField>CapacidadRequerida_IN</DataField>
+        <Field Name="CP_CLIENTE">
+          <DataField>CP_CLIENTE</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="CapacidadRequerida_IN_Unit">
-          <DataField>CapacidadRequerida_IN_Unit</DataField>
+        <Field Name="DIRENT">
+          <DataField>DIRENT</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Id">
-          <DataField>Id</DataField>
+        <Field Name="CONDICION_PAGO">
+          <DataField>CONDICION_PAGO</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Email">
-          <DataField>Email</DataField>
+        <Field Name="CONDICION_ENTREGA">
+          <DataField>CONDICION_ENTREGA</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="UserName">
-          <DataField>UserName</DataField>
+        <Field Name="PROVINCIA_CLIENTE">
+          <DataField>PROVINCIA_CLIENTE</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Cuit">
-          <DataField>Cuit</DataField>
+        <Field Name="TELEFONO_CLIENTE">
+          <DataField>TELEFONO_CLIENTE</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="EMAIL_CLIENTE">
+          <DataField>EMAIL_CLIENTE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CG_ART">
+          <DataField>CG_ART</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ARTICULO">
+          <DataField>ARTICULO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CANTIDAD">
+          <DataField>CANTIDAD</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="PORC_DESCUENTO">
+          <DataField>PORC_DESCUENTO</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="PREC_UNIT">
+          <DataField>PREC_UNIT</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="TOTAL_ITEM">
+          <DataField>TOTAL_ITEM</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="MONEDA">
+          <DataField>MONEDA</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TOTAL_PRESUPUESTO">
+          <DataField>TOTAL_PRESUPUESTO</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="Construccion">
+          <DataField>Construccion</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Marca">
+          <DataField>Marca</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DESCRIPCION_IVA">
+          <DataField>DESCRIPCION_IVA</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CUIT_CLIENTE">
+          <DataField>CUIT_CLIENTE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TRANSPORTE">
+          <DataField>TRANSPORTE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CALLE_TRANSPORTE">
+          <DataField>CALLE_TRANSPORTE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OBSERITEM">
+          <DataField>OBSERITEM</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DIAS_PLAZO_ENTREGA">
+          <DataField>DIAS_PLAZO_ENTREGA</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>ArbrosDataSet2</rd:DataSetName>
-        <rd:SchemaPath>D:\Clientes\Arbros\Marcelo1985Alba\SupplyChain-Arbros\SupplyChain\Server\wwwroot\Report\Datasheet\vDataSheet.xsd</rd:SchemaPath>
+        <rd:DataSetName>ArbrosDataSheet</rd:DataSetName>
+        <rd:SchemaPath>D:\Clientes\Arbros\Marcelo1985Alba\SupplyChain-Arbros\SupplyChain\Server\wwwroot\Report\Datasheet\DataSheet.xsd</rd:SchemaPath>
         <rd:TableName>vCalculoSolicitudes</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
@@ -466,39 +247,6 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
-          <Textbox Name="CodigoDiseño">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!NumeroPlano.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light Condensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>CodigoDiseño</rd:DefaultName>
-            <Top>2.96596cm</Top>
-            <Left>10.97844cm</Left>
-            <Height>0.73033cm</Height>
-            <Width>7.67984cm</Width>
-            <ZIndex>3</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
           <Textbox Name="Textbox16">
             <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
@@ -523,7 +271,7 @@
             <Left>0.23728cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.54328cm</Width>
-            <ZIndex>4</ZIndex>
+            <ZIndex>3</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -555,8 +303,8 @@
             <Top>2.92676cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
-            <Width>2.13586cm</Width>
-            <ZIndex>5</ZIndex>
+            <Width>3.89265cm</Width>
+            <ZIndex>4</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -588,7 +336,7 @@
             <Left>0.7716cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.59726cm</Width>
-            <ZIndex>6</ZIndex>
+            <ZIndex>5</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -620,7 +368,7 @@
             <Left>6.31386cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.85119cm</Width>
-            <ZIndex>7</ZIndex>
+            <ZIndex>6</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -651,45 +399,11 @@
             <Left>12.56117cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.7954cm</Width>
-            <ZIndex>8</ZIndex>
+            <ZIndex>7</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="TagId2">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=IIF(Left(Fields!CodigoFinal.Value, 1) = "2", "SI", "NO")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>TagId</rd:DefaultName>
-            <Top>4.58399cm</Top>
-            <Left>9.39187cm</Left>
-            <Height>0.73033cm</Height>
-            <Width>2.44035cm</Width>
-            <ZIndex>9</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
@@ -717,7 +431,7 @@
             <Left>0.7716cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.50594cm</Width>
-            <ZIndex>10</ZIndex>
+            <ZIndex>8</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -749,7 +463,7 @@
             <Left>6.338cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.07925cm</Width>
-            <ZIndex>11</ZIndex>
+            <ZIndex>9</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -784,7 +498,7 @@
             <Left>0.30712cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.52972cm</Width>
-            <ZIndex>12</ZIndex>
+            <ZIndex>10</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -817,7 +531,7 @@
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.50594cm</Width>
-            <ZIndex>13</ZIndex>
+            <ZIndex>11</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -850,7 +564,7 @@
             <Left>9.29043cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.54104cm</Width>
-            <ZIndex>14</ZIndex>
+            <ZIndex>12</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -882,7 +596,7 @@
             <Left>6.98136cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.61521cm</Width>
-            <ZIndex>15</ZIndex>
+            <ZIndex>13</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -914,39 +628,7 @@
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.50594cm</Width>
-            <ZIndex>16</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox30">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Tipo de Asiento:</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>7.02193cm</Top>
-            <Left>12.83555cm</Left>
-            <Height>0.73033cm</Height>
-            <Width>2.61521cm</Width>
-            <ZIndex>17</ZIndex>
+            <ZIndex>14</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -976,8 +658,8 @@
             <Top>8.54209cm</Top>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
-            <Width>2.83905cm</Width>
-            <ZIndex>18</ZIndex>
+            <Width>5.59072cm</Width>
+            <ZIndex>15</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1010,7 +692,7 @@
             <Left>16.75014cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.8687cm</Width>
-            <ZIndex>19</ZIndex>
+            <ZIndex>16</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1042,189 +724,11 @@
             <Left>12.56918cm</Left>
             <Height>0.73033cm</Height>
             <Width>3.51119cm</Width>
-            <ZIndex>20</ZIndex>
+            <ZIndex>17</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="DiscoRuptura">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!DiscoRuptura.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>DiscoRuptura</rd:DefaultName>
-            <Top>1.80472in</Top>
-            <Left>6.11587in</Left>
-            <Height>0.28753in</Height>
-            <Width>0.79234in</Width>
-            <ZIndex>21</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="TagId4">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=IIF(Left(Fields!CodigoFinal.Value, 2) = "26", "Balanceada Fuelle", 
-	IIF(Left(Fields!CodigoFinal.Value, 2) = "24", "Balanceada Pistón", "Convencional"))</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>TagId</rd:DefaultName>
-            <Top>7.02193cm</Top>
-            <Left>3.53584cm</Left>
-            <Height>0.73033cm</Height>
-            <Width>2.76596cm</Width>
-            <ZIndex>22</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Servicio4">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>= First(Fields!LineaEntrada.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Servicio</rd:DefaultName>
-            <Top>2.93951cm</Top>
-            <Left>2.88237cm</Left>
-            <Height>0.73033cm</Height>
-            <Width>6.19754cm</Width>
-            <ZIndex>23</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="TagId5">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=IIF(Left(Fields!CodigoFinal.Value, 2) = "12" 
-	Or Left(Fields!CodigoFinal.Value, 2) = "14"
-	Or Left(Fields!CodigoFinal.Value, 2) = "15"
-	Or Left(Fields!CodigoFinal.Value, 2) = "17"
-, "Semi", "Full")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>TagId</rd:DefaultName>
-            <Top>7.02193cm</Top>
-            <Left>9.77296cm</Left>
-            <Height>0.73033cm</Height>
-            <Width>2.52554cm</Width>
-            <ZIndex>24</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="TagId7">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=IIF(Fields!NombreFase.Value = "MasaLiquido" Or 
-		Fields!NombreFase.Value = "VolumenLiquido" , "Liquido",
- IIF(Fields!NombreFase.Value = "MasaGas" Or 
-		Fields!NombreFase.Value = "VolumenGas" , "Gas","Agua"))</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>TagId</rd:DefaultName>
-            <Top>13.29323cm</Top>
-            <Left>12.18054cm</Left>
-            <Height>0.73033cm</Height>
-            <Width>2.30006cm</Width>
-            <ZIndex>25</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
@@ -1235,7 +739,7 @@
             <Left>0.10083in</Left>
             <Height>8.84088in</Height>
             <Width>0in</Width>
-            <ZIndex>26</ZIndex>
+            <ZIndex>18</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -1246,119 +750,13 @@
             <Left>7.41522in</Left>
             <Height>8.84088in</Height>
             <Width>0in</Width>
-            <ZIndex>27</ZIndex>
+            <ZIndex>19</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
               </Border>
             </Style>
           </Line>
-          <Textbox Name="TagId6">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=IIF(Left(Fields!CodigoFinal.Value, 2) = "12" 
-Or Left(Fields!CodigoFinal.Value, 2) = "14" 
-Or Left(Fields!CodigoFinal.Value, 2) = "15" 
-Or Left(Fields!CodigoFinal.Value, 2) = "17"
-Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>TagId</rd:DefaultName>
-            <Top>8.54209cm</Top>
-            <Left>3.53584cm</Left>
-            <Height>0.73033cm</Height>
-            <Width>2.72561cm</Width>
-            <ZIndex>28</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="DescripcionAsiento">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!DescripcionAsiento.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>DescripcionAsiento</rd:DefaultName>
-            <Top>2.76454in</Top>
-            <Left>6.20715in</Left>
-            <Height>0.28753in</Height>
-            <Width>0.89551in</Width>
-            <ZIndex>29</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Bonete">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Bonete.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Bonete</rd:DefaultName>
-            <Top>3.08009in</Top>
-            <Left>1.39206in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.08896in</Width>
-            <ZIndex>30</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
           <Textbox Name="Textbox33">
             <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
@@ -1383,7 +781,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.29139cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.47831cm</Width>
-            <ZIndex>31</ZIndex>
+            <ZIndex>20</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -1416,7 +814,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.25601cm</Width>
-            <ZIndex>32</ZIndex>
+            <ZIndex>21</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1448,7 +846,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.25601cm</Width>
-            <ZIndex>33</ZIndex>
+            <ZIndex>22</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1480,7 +878,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>9.28856cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.15916cm</Width>
-            <ZIndex>34</ZIndex>
+            <ZIndex>23</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1512,7 +910,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>9.27243cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.17529cm</Width>
-            <ZIndex>35</ZIndex>
+            <ZIndex>24</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1544,7 +942,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.51893cm</Width>
-            <ZIndex>36</ZIndex>
+            <ZIndex>25</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1576,184 +974,11 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>9.28856cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.32054cm</Width>
-            <ZIndex>37</ZIndex>
+            <ZIndex>26</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Cuerpo_Externo">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Cuerpo_Externo.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Cuerpo_Externo</rd:DefaultName>
-            <Top>3.98958in</Top>
-            <Left>0.89374in</Left>
-            <Height>0.28753in</Height>
-            <Width>2.44401in</Width>
-            <ZIndex>38</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Bonete_Externo">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Bonete_Externo.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Bonete_Externo</rd:DefaultName>
-            <Top>4.30699in</Top>
-            <Left>0.90644in</Left>
-            <Height>0.28753in</Height>
-            <Width>2.44401in</Width>
-            <ZIndex>39</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Tobera_Interno">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Tobera_Interno.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Tobera_Interno</rd:DefaultName>
-            <Top>4.30699in</Top>
-            <Left>4.18272in</Left>
-            <Height>0.28753in</Height>
-            <Width>2.67185in</Width>
-            <ZIndex>40</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Disco_Interno">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Disco_Interno.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Disco_Interno</rd:DefaultName>
-            <Top>4.00754in</Top>
-            <Left>4.15161in</Left>
-            <Height>0.28753in</Height>
-            <Width>2.74058in</Width>
-            <ZIndex>41</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Resorte_Externo">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Resorte_Externo.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Resorte_Externo</rd:DefaultName>
-            <Top>4.59875in</Top>
-            <Left>0.99281in</Left>
-            <Height>0.28753in</Height>
-            <Width>2.44401in</Width>
-            <ZIndex>42</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
@@ -1780,40 +1005,8 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Top>7.82344cm</Top>
             <Left>7.01663cm</Left>
             <Height>0.73033cm</Height>
-            <Width>2.61521cm</Width>
-            <ZIndex>43</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox42">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Tipo de Palanca:</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>7.82344cm</Top>
-            <Left>12.83555cm</Left>
-            <Height>0.73033cm</Height>
-            <Width>2.61521cm</Width>
-            <ZIndex>44</ZIndex>
+            <Width>3.83568cm</Width>
+            <ZIndex>27</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1845,113 +1038,11 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>6.98136cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.7916cm</Width>
-            <ZIndex>45</ZIndex>
+            <ZIndex>28</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Capuchon">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Capuchon.Value, "DataSet2")First(Fields!Capuchon.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Capuchon</rd:DefaultName>
-            <Top>3.08009in</Top>
-            <Left>3.84762in</Left>
-            <Height>0.28753in</Height>
-            <Width>0.99431in</Width>
-            <ZIndex>46</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Palanca">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Palanca.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Palanca</rd:DefaultName>
-            <Top>3.08009in</Top>
-            <Left>6.22621in</Left>
-            <Height>0.28753in</Height>
-            <Width>0.90694in</Width>
-            <ZIndex>47</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Tornillo">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Tornillo.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Tornillo</rd:DefaultName>
-            <Top>3.36303in</Top>
-            <Left>3.90318in</Left>
-            <Height>0.28753in</Height>
-            <Width>0.99341in</Width>
-            <ZIndex>48</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
@@ -1982,7 +1073,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.25931cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.54007cm</Width>
-            <ZIndex>49</ZIndex>
+            <ZIndex>29</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -2018,7 +1109,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.05486cm</Width>
-            <ZIndex>50</ZIndex>
+            <ZIndex>30</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2051,38 +1142,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.60414cm</Width>
-            <ZIndex>51</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Tornillo2">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Tornillo.Value, "DataSet2")</Value>
-                    <Style />
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Tornillo</rd:DefaultName>
-            <Top>5.82251in</Top>
-            <Left>1.5722in</Left>
-            <Height>0.28753in</Height>
-            <Width>0.74585in</Width>
-            <ZIndex>52</ZIndex>
+            <ZIndex>31</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2113,7 +1173,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>8.84373cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.15605cm</Width>
-            <ZIndex>53</ZIndex>
+            <ZIndex>32</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2145,7 +1205,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.74422cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.48231cm</Width>
-            <ZIndex>54</ZIndex>
+            <ZIndex>33</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2177,7 +1237,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>6.853cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.15605cm</Width>
-            <ZIndex>55</ZIndex>
+            <ZIndex>34</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2209,7 +1269,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.81542cm</Width>
-            <ZIndex>56</ZIndex>
+            <ZIndex>35</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2241,7 +1301,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.80052cm</Width>
-            <ZIndex>57</ZIndex>
+            <ZIndex>36</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2272,7 +1332,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>7.46708cm</Left>
             <Height>0.73033cm</Height>
             <Width>3.38523cm</Width>
-            <ZIndex>58</ZIndex>
+            <ZIndex>37</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2304,7 +1364,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>13.76136cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.83038cm</Width>
-            <ZIndex>59</ZIndex>
+            <ZIndex>38</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2335,7 +1395,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>12.24126cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.33495cm</Width>
-            <ZIndex>60</ZIndex>
+            <ZIndex>39</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2367,7 +1427,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>6.1006cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.28864cm</Width>
-            <ZIndex>61</ZIndex>
+            <ZIndex>40</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2399,7 +1459,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>12.37627cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.14158cm</Width>
-            <ZIndex>62</ZIndex>
+            <ZIndex>41</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2430,245 +1490,8 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Top>16.32039cm</Top>
             <Left>4.56183cm</Left>
             <Height>0.73033cm</Height>
-            <Width>4.63442cm</Width>
-            <ZIndex>63</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="CapacidadRequerida_V">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!CapacidadRequerida_V.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>CapacidadRequerida_V</rd:DefaultName>
-            <Top>6.13782in</Top>
-            <Left>2.1682in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.12559in</Width>
-            <ZIndex>64</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Descripcion">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Descripcion.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Descripcion</rd:DefaultName>
-            <Top>5.23356in</Top>
-            <Left>0.73719in</Left>
-            <Height>0.28753in</Height>
-            <Width>2.70687in</Width>
-            <ZIndex>65</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="PresionApertura">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!PresionApertura.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>PresionApertura</rd:DefaultName>
-            <Top>5.53498in</Top>
-            <Left>1.5722in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.24049in</Width>
-            <ZIndex>66</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="ContrapresionVariable">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!ContrapresionVariable.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>ContrapresionVariable</rd:DefaultName>
-            <Top>5.53498in</Top>
-            <Left>4.27257in</Left>
-            <Height>0.28753in</Height>
-            <Width>0.74327in</Width>
-            <ZIndex>67</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="ContrapresionFija">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!ContrapresionFija.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>ContrapresionFija</rd:DefaultName>
-            <Top>5.53498in</Top>
-            <Left>6.54607in</Left>
-            <Height>0.28753in</Height>
-            <Width>0.5657in</Width>
-            <ZIndex>68</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="CoeficienteDeCompresibilidad_z">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!CoeficienteDeCompresibilidad_z.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>CoeficienteDeCompresibilidad_z</rd:DefaultName>
-            <Top>6.42535in</Top>
-            <Left>6.57254in</Left>
-            <Height>0.28753in</Height>
-            <Width>0.76394in</Width>
-            <ZIndex>69</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="CocienteCaloresEspecificos_k">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!CocienteCaloresEspecificos_k.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>CocienteCaloresEspecificos_k</rd:DefaultName>
-            <Top>6.42535in</Top>
-            <Left>3.58458in</Left>
-            <Height>0.28753in</Height>
-            <Width>0.54439in</Width>
-            <ZIndex>70</ZIndex>
+            <Width>5.88589cm</Width>
+            <ZIndex>42</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2703,7 +1526,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.23728cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.52682cm</Width>
-            <ZIndex>71</ZIndex>
+            <ZIndex>43</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -2721,7 +1544,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>9.77296cm</Left>
             <Height>0.73033cm</Height>
             <Width>0cm</Width>
-            <ZIndex>72</ZIndex>
+            <ZIndex>44</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -2733,7 +1556,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>5.80846cm</Left>
             <Height>0.73033cm</Height>
             <Width>0cm</Width>
-            <ZIndex>73</ZIndex>
+            <ZIndex>45</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -2762,7 +1585,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.20107cm</Width>
-            <ZIndex>74</ZIndex>
+            <ZIndex>46</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2795,7 +1618,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.15605cm</Width>
-            <ZIndex>75</ZIndex>
+            <ZIndex>47</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2828,7 +1651,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>10.01653cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.08795cm</Width>
-            <ZIndex>76</ZIndex>
+            <ZIndex>48</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2844,47 +1667,13 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>14.54711cm</Left>
             <Height>0.73033cm</Height>
             <Width>0cm</Width>
-            <ZIndex>77</ZIndex>
+            <ZIndex>49</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
               </Border>
             </Style>
           </Line>
-          <Textbox Name="AreaOrificio">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!AreaOrificio.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>AreaOrificio</rd:DefaultName>
-            <Top>7.35739in</Top>
-            <Left>2.36096in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.41722in</Width>
-            <ZIndex>78</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
           <Textbox Name="Textbox66">
             <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
@@ -2907,7 +1696,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.20107cm</Width>
-            <ZIndex>79</ZIndex>
+            <ZIndex>50</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2940,7 +1729,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.15605cm</Width>
-            <ZIndex>80</ZIndex>
+            <ZIndex>51</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2973,146 +1762,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>5.15605cm</Width>
-            <ZIndex>81</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Orifico">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Orifico.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Orifico</rd:DefaultName>
-            <Top>7.36849in</Top>
-            <Left>5.76888in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.67664in</Width>
-            <ZIndex>82</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="DescripcionMedida">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!DescripcionMedida.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>DescripcionMedida</rd:DefaultName>
-            <Top>7.93224in</Top>
-            <Left>2.38102in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.41105in</Width>
-            <ZIndex>83</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="DescripcionSerieEntrada">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!DescripcionSerieEntrada.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>DescripcionSerieEntrada</rd:DefaultName>
-            <Top>8.21013in</Top>
-            <Left>2.37056in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.40762in</Width>
-            <ZIndex>84</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="DescripcionTipoEntrada">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!DescripcionTipoEntrada.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>DescripcionTipoEntrada</rd:DefaultName>
-            <Top>8.51485in</Top>
-            <Left>2.37056in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.42151in</Width>
-            <ZIndex>85</ZIndex>
+            <ZIndex>52</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3145,7 +1795,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>10.00227cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.08795cm</Width>
-            <ZIndex>86</ZIndex>
+            <ZIndex>53</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3178,7 +1828,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>10.00227cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.08795cm</Width>
-            <ZIndex>87</ZIndex>
+            <ZIndex>54</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3211,7 +1861,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>10.00227cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.05267cm</Width>
-            <ZIndex>88</ZIndex>
+            <ZIndex>55</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3244,111 +1894,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>10.00227cm</Left>
             <Height>0.73033cm</Height>
             <Width>4.05267cm</Width>
-            <ZIndex>89</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="DescripcionSerieSalida">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!DescripcionSerieSalida.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>DescripcionSerieSalida</rd:DefaultName>
-            <Top>8.24806in</Top>
-            <Left>5.72721in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.60521in</Width>
-            <ZIndex>90</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="DescripcionTipoSalida">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!DescripcionTipoSalida.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                      <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>DescripcionTipoSalida</rd:DefaultName>
-            <Top>8.52595in</Top>
-            <Left>5.78276in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.63332in</Width>
-            <ZIndex>91</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="CodigoFinal">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!CodigoFinal.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontSize>12pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>CodigoFinal</rd:DefaultName>
-            <Top>7.67915in</Top>
-            <Left>5.79665in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.54912in</Width>
-            <ZIndex>92</ZIndex>
+            <ZIndex>56</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3364,82 +1910,13 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.10083in</Left>
             <Height>0in</Height>
             <Width>7.31439in</Width>
-            <ZIndex>93</ZIndex>
+            <ZIndex>57</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
               </Border>
             </Style>
           </Line>
-          <Textbox Name="Viscusidad_Mu">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Viscusidad_Mu.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Viscusidad_Mu</rd:DefaultName>
-            <Top>6.72677in</Top>
-            <Left>4.74186in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.07505in</Width>
-            <ZIndex>94</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="SobrepresionAdmisible">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!SobrepresionAdmisible.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light Condensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>SobrepresionAdmisible</rd:DefaultName>
-            <Top>5.82251in</Top>
-            <Left>3.36188in</Left>
-            <Height>0.28753in</Height>
-            <Width>0.80628in</Width>
-            <ZIndex>95</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
           <Textbox Name="Textbox19">
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
@@ -3462,45 +1939,12 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>0.76361cm</Width>
-            <ZIndex>96</ZIndex>
+            <ZIndex>58</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
               <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Nombre">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Id.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light Condensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Nombre</rd:DefaultName>
-            <Top>0.53963in</Top>
-            <Left>1.09661in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.56037in</Width>
-            <ZIndex>97</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
@@ -3527,7 +1971,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>9.38012cm</Left>
             <Height>0.73033cm</Height>
             <Width>2.40109cm</Width>
-            <ZIndex>98</ZIndex>
+            <ZIndex>59</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3558,188 +2002,11 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>9.2563cm</Left>
             <Height>0.73033cm</Height>
             <Width>1.59601cm</Width>
-            <ZIndex>99</ZIndex>
+            <ZIndex>60</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Servicio">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Servicio.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Servicio</rd:DefaultName>
-            <Top>2.25973cm</Top>
-            <Left>10.97844cm</Left>
-            <Height>0.73033cm</Height>
-            <Width>7.77348cm</Width>
-            <ZIndex>100</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="TagId1">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!TagId.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>TagId1</rd:DefaultName>
-            <Top>0.84198in</Top>
-            <Left>0.73719in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.2482in</Width>
-            <ZIndex>101</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Servicio5">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!CodigoDiseño.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Servicio</rd:DefaultName>
-            <Top>4.58399cm</Top>
-            <Left>3.89019cm</Left>
-            <Height>0.73033cm</Height>
-            <Width>2.05868cm</Width>
-            <ZIndex>102</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="TagId3">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Contingencia.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>TagId</rd:DefaultName>
-            <Top>5.42015cm</Top>
-            <Left>8.71679cm</Left>
-            <Height>0.73033cm</Height>
-            <Width>3.13956cm</Width>
-            <ZIndex>103</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Tobera_Interno2">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Tobera_Interno.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>&lt;</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Tobera_Interno</rd:DefaultName>
-            <Top>4.59875in</Top>
-            <Left>4.15161in</Left>
-            <Height>0.28753in</Height>
-            <Width>2.67185in</Width>
-            <ZIndex>104</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
@@ -3767,110 +2034,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>0.72059cm</Left>
             <Height>0.73033cm</Height>
             <Width>3.21987cm</Width>
-            <ZIndex>105</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Viscusidad_Mu2">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Viscusidad_Mu.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Viscusidad_Mu</rd:DefaultName>
-            <Top>6.72677in</Top>
-            <Left>1.53157in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.07505in</Width>
-            <ZIndex>106</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Viscusidad_Mu3">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Viscusidad_Mu.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Viscusidad_Mu</rd:DefaultName>
-            <Top>6.42535in</Top>
-            <Left>1.22722in</Left>
-            <Height>0.28753in</Height>
-            <Width>0.49933in</Width>
-            <ZIndex>107</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Nombre2">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Sum(Fields!SolicitudId.Value, "DataSet2")</Value>
-                    <Style>
-                      <FontFamily>Bahnschrift Light Condensed</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Nombre</rd:DefaultName>
-            <Top>0.53963in</Top>
-            <Left>4.69383in</Left>
-            <Height>0.28753in</Height>
-            <Width>1.56037in</Width>
-            <ZIndex>108</ZIndex>
+            <ZIndex>61</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3904,7 +2068,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
             <Left>5.72721in</Left>
             <Height>0.25in</Height>
             <Width>1.60304in</Width>
-            <ZIndex>109</ZIndex>
+            <ZIndex>62</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3961,46 +2125,11 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                     <PaddingBottom>2pt</PaddingBottom>
                   </Style>
                 </Textbox>
-                <Textbox Name="Textbox4">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>Nro de Hoja:</Value>
-                          <Style>
-                            <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style>
-                        <TextAlign>Left</TextAlign>
-                      </Style>
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>Textbox4</rd:DefaultName>
-                  <Top>0.2912cm</Top>
-                  <Left>15.90032cm</Left>
-                  <Height>0.59322cm</Height>
-                  <Width>1.89203cm</Width>
-                  <ZIndex>1</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <VerticalAlign>Middle</VerticalAlign>
-                    <PaddingLeft>2pt</PaddingLeft>
-                    <PaddingRight>2pt</PaddingRight>
-                    <PaddingTop>2pt</PaddingTop>
-                    <PaddingBottom>2pt</PaddingBottom>
-                  </Style>
-                </Textbox>
                 <Line Name="Line5">
                   <Left>12.21878cm</Left>
                   <Height>2.57884cm</Height>
                   <Width>0cm</Width>
-                  <ZIndex>2</ZIndex>
+                  <ZIndex>1</ZIndex>
                   <Style>
                     <Border>
                       <Style>Solid</Style>
@@ -4032,7 +2161,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                   <Left>4.35713cm</Left>
                   <Height>0.65942cm</Height>
                   <Width>7.77195cm</Width>
-                  <ZIndex>3</ZIndex>
+                  <ZIndex>2</ZIndex>
                   <Style>
                     <Border>
                       <Style>None</Style>
@@ -4051,48 +2180,13 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                   <Left>0.62822cm</Left>
                   <Height>1.28263cm</Height>
                   <Width>3.72891cm</Width>
-                  <ZIndex>4</ZIndex>
+                  <ZIndex>3</ZIndex>
                   <Style>
                     <Border>
                       <Style>None</Style>
                     </Border>
                   </Style>
                 </Image>
-                <Textbox Name="ExecutionTime">
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>=Globals!ExecutionTime</Value>
-                          <Style>
-                            <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                            <Format>dd/MM/yyyy</Format>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style>
-                        <TextAlign>Left</TextAlign>
-                      </Style>
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>ExecutionTime</rd:DefaultName>
-                  <Top>0.2912cm</Top>
-                  <Left>13.45499cm</Left>
-                  <Height>0.59322cm</Height>
-                  <Width>2.37478cm</Width>
-                  <ZIndex>5</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <VerticalAlign>Middle</VerticalAlign>
-                    <PaddingLeft>2pt</PaddingLeft>
-                    <PaddingRight>2pt</PaddingRight>
-                    <PaddingTop>2pt</PaddingTop>
-                    <PaddingBottom>2pt</PaddingBottom>
-                  </Style>
-                </Textbox>
                 <Textbox Name="Textbox6">
                   <CanGrow>true</CanGrow>
                   <KeepTogether>true</KeepTogether>
@@ -4118,7 +2212,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                   <Left>4.35713cm</Left>
                   <Height>0.65942cm</Height>
                   <Width>7.80723cm</Width>
-                  <ZIndex>6</ZIndex>
+                  <ZIndex>4</ZIndex>
                   <Style>
                     <Border>
                       <Style>None</Style>
@@ -4150,8 +2244,8 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                   <Top>1.42768cm</Top>
                   <Left>12.25405cm</Left>
                   <Height>0.59322cm</Height>
-                  <Width>2.9406cm</Width>
-                  <ZIndex>7</ZIndex>
+                  <Width>4.35877cm</Width>
+                  <ZIndex>5</ZIndex>
                   <Style>
                     <Border>
                       <Style>None</Style>
@@ -4186,7 +2280,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                   <Left>4.30572cm</Left>
                   <Height>0.65942cm</Height>
                   <Width>1.07025cm</Width>
-                  <ZIndex>8</ZIndex>
+                  <ZIndex>6</ZIndex>
                   <Style>
                     <Border>
                       <Style>None</Style>
@@ -4221,47 +2315,12 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                   <Left>12.25405cm</Left>
                   <Height>0.59322cm</Height>
                   <Width>1.43322cm</Width>
-                  <ZIndex>9</ZIndex>
+                  <ZIndex>7</ZIndex>
                   <Style>
                     <Border>
                       <Style>None</Style>
                     </Border>
                     <VerticalAlign>Middle</VerticalAlign>
-                    <PaddingLeft>2pt</PaddingLeft>
-                    <PaddingRight>2pt</PaddingRight>
-                    <PaddingTop>2pt</PaddingTop>
-                    <PaddingBottom>2pt</PaddingBottom>
-                  </Style>
-                </Textbox>
-                <Textbox Name="UserName">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>=First(Fields!UserName.Value, "DataSet2")</Value>
-                          <Style>
-                            <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style>
-                        <TextAlign>Left</TextAlign>
-                      </Style>
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>UserName</rd:DefaultName>
-                  <Top>0.88442cm</Top>
-                  <Left>13.52554cm</Left>
-                  <Height>0.59322cm</Height>
-                  <Width>4.97027cm</Width>
-                  <ZIndex>10</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <VerticalAlign>Top</VerticalAlign>
                     <PaddingLeft>2pt</PaddingLeft>
                     <PaddingRight>2pt</PaddingRight>
                     <PaddingTop>2pt</PaddingTop>
@@ -4291,42 +2350,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                   <Left>12.25405cm</Left>
                   <Height>0.59322cm</Height>
                   <Width>1.16566cm</Width>
-                  <ZIndex>11</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <VerticalAlign>Middle</VerticalAlign>
-                    <PaddingLeft>2pt</PaddingLeft>
-                    <PaddingRight>2pt</PaddingRight>
-                    <PaddingTop>2pt</PaddingTop>
-                    <PaddingBottom>2pt</PaddingBottom>
-                  </Style>
-                </Textbox>
-                <Textbox Name="PresupuestoId">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>=Sum(Fields!PresupuestoId.Value, "DataSet2")</Value>
-                          <Style>
-                            <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style>
-                        <TextAlign>Left</TextAlign>
-                      </Style>
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>PresupuestoId</rd:DefaultName>
-                  <Top>0.56208in</Top>
-                  <Left>6.10632in</Left>
-                  <Height>0.23355in</Height>
-                  <Width>1.18236in</Width>
-                  <ZIndex>12</ZIndex>
+                  <ZIndex>8</ZIndex>
                   <Style>
                     <Border>
                       <Style>None</Style>
@@ -4342,7 +2366,7 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                   <Left>4.19988cm</Left>
                   <Height>2.61412cm</Height>
                   <Width>0cm</Width>
-                  <ZIndex>13</ZIndex>
+                  <ZIndex>9</ZIndex>
                   <Style>
                     <Border>
                       <Style>Solid</Style>
@@ -4374,81 +2398,11 @@ Or Left(Fields!CodigoFinal.Value, 2) = "18", "Roscadas", "Bridadas")</Value>
                   <Left>0.22022cm</Left>
                   <Height>0.59972cm</Height>
                   <Width>3.80327cm</Width>
-                  <ZIndex>14</ZIndex>
+                  <ZIndex>10</ZIndex>
                   <Style>
                     <Border>
                       <Style>None</Style>
                     </Border>
-                    <PaddingLeft>2pt</PaddingLeft>
-                    <PaddingRight>2pt</PaddingRight>
-                    <PaddingTop>2pt</PaddingTop>
-                    <PaddingBottom>2pt</PaddingBottom>
-                  </Style>
-                </Textbox>
-                <Textbox Name="PresupuestoId2">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>=Sum(Fields!PresupuestoId.Value, "DataSet2")</Value>
-                          <Style>
-                            <FontFamily>Bahnschrift SemiBold</FontFamily>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style>
-                        <TextAlign>Left</TextAlign>
-                      </Style>
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>PresupuestoId</rd:DefaultName>
-                  <Top>0.73372in</Top>
-                  <Left>2.17208in</Left>
-                  <Height>0.25961in</Height>
-                  <Width>2.56902in</Width>
-                  <ZIndex>15</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <VerticalAlign>Middle</VerticalAlign>
-                    <PaddingLeft>2pt</PaddingLeft>
-                    <PaddingRight>2pt</PaddingRight>
-                    <PaddingTop>2pt</PaddingTop>
-                    <PaddingBottom>2pt</PaddingBottom>
-                  </Style>
-                </Textbox>
-                <Textbox Name="PresupuestoId3">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>=Sum(Fields!PresupuestoId.Value, "DataSet2")</Value>
-                          <Style>
-                            <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style>
-                        <TextAlign>Left</TextAlign>
-                      </Style>
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>PresupuestoId</rd:DefaultName>
-                  <Top>0.78809in</Top>
-                  <Left>5.47084in</Left>
-                  <Height>0.23355in</Height>
-                  <Width>1.31646in</Width>
-                  <ZIndex>16</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <VerticalAlign>Middle</VerticalAlign>
                     <PaddingLeft>2pt</PaddingLeft>
                     <PaddingRight>2pt</PaddingRight>
                     <PaddingTop>2pt</PaddingTop>
