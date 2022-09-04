@@ -23,10 +23,10 @@ namespace SupplyChain.Shared
 		public string Tipo { get; set; }
 		public decimal Stock_Fisico { get; set; }
 		public decimal Stock_Fisico_anterior { get; set; }
-		public decimal Pendiente_Entrada { get; set; }
-		public decimal Pendiente_Salida { get; set; }
-		public decimal Stock_Seguridad { get; set; }
-		public decimal Stock_Corregido { get; set; }
+		public decimal? Pendiente_Entrada { get; set; }
+		public decimal? Pendiente_Salida { get; set; }
+		public decimal? Stock_Seguridad { get; set; }
+		public decimal? Stock_Corregido { get; set; }
 		public decimal Pesos { get; set; }
 		public decimal Dolares { get; set; }
 		public int Codigo_Deposito { get; set; }

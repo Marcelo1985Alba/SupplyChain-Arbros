@@ -39,7 +39,7 @@ namespace SupplyChain.Pages.Modelos
         {
             SpinnerVisible = true;
             Layout.Titulo = "Logistica";
-            Pedclis = await Http.GetFromJsonAsync<List<PedCli>>("api/PedCli");
+            Pedclis = await Http.GetFromJsonAsync<List<PedCli>>("api/PedCli/ObtenerPedCliPedidos");
             //Pedidoss = await Http.GetFromJsonAsync<List<Pedidos>>("api/Pedidos");
             //Programas = await Http.GetFromJsonAsync<List<Programa>>("api/Programa");
             SpinnerVisible = false;

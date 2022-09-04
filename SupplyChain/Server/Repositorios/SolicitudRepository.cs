@@ -90,7 +90,7 @@ namespace SupplyChain.Server.Repositorios
                 //TODO: ENVIAR A SERVICIO
                 var servicio = new Service()
                 {
-                    SOLICITUD = entity.Id,
+                    //SOLICITUD = entity.Id,
                     CG_CLI = entity.CG_CLI,
                     CLIENTE = entity.Des_Cli,
                     DESCARTICULO = entity.Des_Prod
