@@ -45,7 +45,7 @@ namespace SupplyChain.Client.Pages.Inventarios.Listados
 
         private string GeneraUrl()
         {
-            filter.Hasta = hasta.ToString("dd/MM/yyyy");
+            filter.Hasta = hasta.ToString("yyyyMMdd");
             string api = "api/Stock/StockInventario";
 
             api += $"?Deposito={filter.Deposito}&Hasta={filter.Hasta}";
