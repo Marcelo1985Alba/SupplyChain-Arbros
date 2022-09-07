@@ -188,6 +188,15 @@
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>ArbrosPedDataSet6.Designer.cs</LastGenOutput>
     </Content>
+    <Content Update="wwwroot\Report\Presupuesto\ArbrosDataSet6.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ArbrosDataSet6.xsd</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\Report\Presupuesto\ArbrosDataSet6.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ArbrosDataSet6.Designer.cs</LastGenOutput>
+    </Content>
     <Content Update="wwwroot\Report\Remito\ArbrosRemDataSet6.Designer.cs">
       <DependentUpon>ArbrosRemDataSet6.xsd</DependentUpon>
       <DesignTime>True</DesignTime>
