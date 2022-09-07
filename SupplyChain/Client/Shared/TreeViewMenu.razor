@@ -67,9 +67,7 @@ else
             }
             else if (!IsAdmin && IsProd)
             {
-                if (true)
-                {
-                    dbMenu = dbMenu.Where(m => (m.Id == 2 || m.Id == 8 || m.Id == 13) //Ventas: Logistica y servicios
+                dbMenu = dbMenu.Where(m => (m.Id == 2 || m.Id == 8 || m.Id == 13) //Ventas: Logistica y servicios
                         ||
                         (m.Id == 3 || m.Id == 12) //Inventarios: recepcion
                         ||
@@ -77,7 +75,6 @@ else
                         ||
                         (m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
                     ).ToList();
-                }
 
                 if (authState.User.Identity.Name.ToLower() == "planta")
                 {
