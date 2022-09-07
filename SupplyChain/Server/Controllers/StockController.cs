@@ -12,11 +12,15 @@ using Microsoft.AspNetCore.Identity;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Shared;
 using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared.Enum;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace SupplyChain.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class StockController : Controller
     {
         private int cg_cia_usuario = 1; /*CAMBIAR POR LA DEL USUARIO*/
@@ -55,6 +59,17 @@ namespace SupplyChain.Server.Controllers
 
             return lStock;
         }
+
+
+        // GET:   
+        [HttpGet("GetRemitos/{tipoFiltro}")]
+        public async Task<ActionResult<IEnumerable<Pedidos>>> GetRemitos(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+        {
+            List<Pedidos> lStock = await _pedidosRepository.GetRemitos(tipoFiltro, cg_cia_usuario);
+
+            return lStock;
+        }
+
 
         // GET: api/Stock/{vale}
         [HttpGet("ByNumeroVale/{vale}")]
@@ -99,6 +114,18 @@ namespace SupplyChain.Server.Controllers
         }
 
 
+        [HttpGet("GetListaByPedidos")]
+        public async Task<ActionResult<PedidoEncabezado>> GetListaByPedidos([FromQuery] List<int> pedidoIds)
+        {
+            try
+            {
+                return await _pedidosRepository.GetListaByPedidos(pedidoIds);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
 
         // GET: api/Stock/AbriValeByOCParaDevol/{oc}
         [HttpGet("AbriValeByOCParaDevol/{oc}")]
@@ -130,12 +157,17 @@ namespace SupplyChain.Server.Controllers
             return lStock;
         }
 
+        [HttpGet("GetPedidoEncabezadoById/{id}")]
+        public async Task<PedidoEncabezado> GetPedidoEncabezadoById(int id)
+        {
+            return await _pedidosRepository.ObtenerPedidosEncabezado(id);
+        }
 
         // PUT: api/Stock/PutStock/123729
         [HttpPut("PutStock/{registro}")]
         public async Task<ActionResult<Pedidos>> PutStock(decimal registro, Pedidos stock)
         {
-            stock.USUARIO = "USER";
+            stock.USUARIO = User.Identity.Name;
             stock.CG_CIA = 1;
             if (registro != stock.Id)
             {
@@ -170,10 +202,10 @@ namespace SupplyChain.Server.Controllers
         public async Task<ActionResult<Pedidos>> PostStock([FromBody] Pedidos stock)
         {
             stock.Id = null;
-            stock.USUARIO = "USER";
+            stock.USUARIO = HttpContext.User.Identity.Name;
             stock.CG_CIA = 1;
             
-            if (stock.TIPOO == 9) 
+            if (stock.TIPOO == 1 || stock.TIPOO == 9) 
                 stock.STOCK = -stock.STOCK;
 
             if (stock.TIPOO == 5)
@@ -183,6 +215,8 @@ namespace SupplyChain.Server.Controllers
 
             stock.Cliente = null;
             stock.Proveedor = null;
+
+
             _context.Pedidos.Add(stock);
 
             try
@@ -282,7 +316,7 @@ namespace SupplyChain.Server.Controllers
         }
 
         [HttpGet("StockInventario")]
-        public async Task<List<StockSP>> Stocks([FromQuery] FilterMovimientosStock filter)
+        public async Task<ActionResult<List<StockSP>>> Stocks([FromQuery] FilterMovimientosStock filter)
         {
             try
             {
@@ -295,9 +329,11 @@ namespace SupplyChain.Server.Controllers
             }
             catch (Exception ex)
             {
-                return new List<StockSP>();
+                return BadRequest(ex.Message);
             }
         }
+
+
 
         private bool RegistroExists(decimal? registro)
         {

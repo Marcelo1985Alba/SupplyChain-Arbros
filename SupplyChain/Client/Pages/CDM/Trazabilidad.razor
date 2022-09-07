@@ -15,9 +15,9 @@
 @using System.Text.Json
 @using Syncfusion.Blazor.Grids
 @inject IJSRuntime JsRuntime
-@inject HttpClient Http
 @using Syncfusion.Blazor.PdfViewer
 @using Syncfusion.Pdf.Tables
+@attribute [Authorize(Roles = "Administrador, Produccion")]
 @{
 
     <SfToast ID="toast_default" @ref="ToastObj">
@@ -260,17 +260,21 @@
                                             var file_ruta = $"{Archivos[0].Nombre},RUTATRAZABILIDAD";
                                             if (Archivos.Any(a => a.IsAzure))
                                             {
-                                                <SfPdfViewer ID="CertPdf" ServiceUrl="api/AdministracionArchivos" DocumentPath="@file_ruta"
-                                                             Height="1200px" Width="100%"></SfPdfViewer>
+                                                <SfPdfViewer ID="CertPdf" ServiceUrl="api/AdministracionArchivos" 
+                                                             DocumentPath="@file_ruta"
+                                                             Height="1200px" Width="100%">
+                                                    
+                                                </SfPdfViewer>
                                             }
                                             else
                                             {
                                                 var pdf_ruta = NroCertificado.Trim() + ".pdf,RUTATRAZABILIDAD";
                                                 <div class="mt-5">
-                                                    @*<SfPdfViewer DocumentPath="@ruta"></SfPdfViewer>*@
                                                     <SfPdfViewer ID="CertifiPdf"
                                                                  ServiceUrl="/api/Values" DocumentPath="@pdf_ruta"
-                                                                 Height="300px" Width="100%"></SfPdfViewer>
+                                                                 Height="300px" Width="100%">
+                                                        @*<PdfViewerAjaxRequestSettings AjaxHeaders="@Headers" WithCredentials="true"></PdfViewerAjaxRequestSettings>*@
+                                                    </SfPdfViewer>
                                                 </div>
                                             }
                                         }
@@ -344,14 +348,15 @@
         text-align: center;
     }
 
-    
-/*    e-dialog {
+
+    /*    e-dialog {
         max-height: 650px;
     }*/
 </style>
 
 @code {
-
+    [Inject] public IJSRuntime Js { get; set; }
+    [Inject] public IRepositoryHttp Http { get; set; }
     [Inject] public PdfService PdfService { get; set; }
     [Parameter] public string Pedido { get; set; }
     protected SfGrid<Pedidos> Grid;
@@ -430,10 +435,23 @@
         };
     [CascadingParameter]
     public MainLayout Layout { get; set; }
+    protected string token = string.Empty;
+
+
+    public List<AjaxHeader> Headers = new();
+
     protected override async Task OnInitializedAsync()
     {
         Layout.Titulo = "Trazabilidad";
         //rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+        token = await Js.GetFromSessionStorage("TOKEN_KEY");
+        var header = new AjaxHeader
+        {
+            HeaderName = "Authorization",
+            HeaderValue = $"Bearer {token}"
+        };
+
+        Headers.Add(header);
 
         if (!string.IsNullOrEmpty(Pedido))
         {
@@ -498,22 +516,50 @@
                 string ordFab = row[0].LOTE.Substring(3).Trim();
 
                 // Materias Primas entregadas
-                var programa = await Http.GetFromJsonAsync<List<Programa>>($"api/Programa/GetProgramaByOF/{Convert.ToDecimal(ordFab)}");
-                if (programa != null && programa.Count != 0)
+                var responsPrograma = await Http.GetFromJsonAsync<List<Programa>>($"api/Programa/GetProgramaByOF/{Convert.ToDecimal(ordFab)}");
+                if (responsPrograma.Error)
                 {
-                    ordenFabricacionMP = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionMP>>($"api/OrdenesFabricacionMP/{programa[0].CG_ORDFASOC.ToString()}");
+                    Console.WriteLine(responsPrograma.HttpResponseMessage.ReasonPhrase);
                 }
                 else
                 {
-                    ordenFabricacionMP = new List<ModeloOrdenFabricacionMP>();
+                    var programa = responsPrograma.Response;
+                    if (programa != null && programa.Count != 0)
+                    {
+                        var responseOrdenFabricacionMP = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionMP>>($"api/OrdenesFabricacionMP/{programa[0].CG_ORDFASOC.ToString()}");
+                        if (responseOrdenFabricacionMP.Error)
+                        {
+                            ordenFabricacionMP = new List<ModeloOrdenFabricacionMP>();
+                            Console.WriteLine(responseOrdenFabricacionMP.HttpResponseMessage.ReasonPhrase);
+                        }
+                        else
+                        {
+                            ordenFabricacionMP = responseOrdenFabricacionMP.Response;
+                        }
+                    }
+
                 }
+
             }
             if (!string.IsNullOrEmpty(row[0].DESPACHO))
             {
                 NroCertificado = row[0].DESPACHO;
                 var archivo = NroCertificado.Trim() + ".pdf";
-                ShowCertificado = await Http.GetFromJsonAsync<bool>($"api/AdministracionArchivos/ExisteCertificado/{archivo}");
-                Archivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/Certificado/{archivo}");
+                var responseShowCertificado = await Http.GetFromJsonAsync<bool>($"api/AdministracionArchivos/ExisteCertificado/{archivo}");
+                if (!responseShowCertificado.Error)
+                {
+                    ShowCertificado = responseShowCertificado.Response;
+                }
+
+                var responseArchivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/Certificado/{archivo}");
+                if (responseArchivos.Error)
+                {
+                    Console.WriteLine(responseArchivos.HttpResponseMessage.ReasonPhrase);
+                }
+                else
+                {
+                    Archivos = responseArchivos.Response;
+                }
             }
             await DialogRef.Show(false);
         }
@@ -526,16 +572,24 @@
         {
             return;
         }
-        Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorPedido/{args.Value}");
-        if (Pedidoslist.Count > 0)
+        var responsePedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorPedido/{args.Value}");
+        if (responsePedidoslist.Error)
         {
-            BoxCliente = Pedidoslist.FirstOrDefault().DES_CLI;
-            BoxCodigo = Pedidoslist.FirstOrDefault().CG_ART;
+            Console.WriteLine(responsePedidoslist.HttpResponseMessage.ReasonPhrase);
         }
         else
         {
-            BoxCliente = "";
-            BoxCodigo = "";
+            Pedidoslist = responsePedidoslist.Response;
+            if (Pedidoslist.Count > 0)
+            {
+                BoxCliente = Pedidoslist.FirstOrDefault().DES_CLI;
+                BoxCodigo = Pedidoslist.FirstOrDefault().CG_ART;
+            }
+            else
+            {
+                BoxCliente = "";
+                BoxCodigo = "";
+            }
         }
     }
 
@@ -546,17 +600,26 @@
             return;
         }
 
-        Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorCodigo/{args.Value}");
-        if (Pedidoslist.Count > 0)
+        var responsePedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorCodigo/{args.Value}");
+        if (responsePedidoslist.Error)
         {
-            BoxCliente = Pedidoslist.FirstOrDefault().DES_CLI;
-            BoxPedido = Pedidoslist.FirstOrDefault().PEDIDO.ToString();
+            Console.WriteLine(responsePedidoslist.HttpResponseMessage.ReasonPhrase);
         }
         else
         {
-            BoxCliente = "";
-            BoxPedido = "";
+            Pedidoslist = responsePedidoslist.Response;
+            if (Pedidoslist.Count > 0)
+            {
+                BoxCliente = Pedidoslist.FirstOrDefault().DES_CLI;
+                BoxPedido = Pedidoslist.FirstOrDefault().PEDIDO.ToString();
+            }
+            else
+            {
+                BoxCliente = "";
+                BoxPedido = "";
+            }
         }
+
     }
 
     protected async Task OnInputCliente(InputEventArgs args)
@@ -565,18 +628,27 @@
         {
             return;
         }
-        Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorCliente/{args.Value}");
-        if (Pedidoslist.Count > 0)
+        var responsePedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorCliente/{args.Value}");
+        if (responsePedidoslist.Error)
         {
-            //BoxPedido = Pedidoslist.FirstOrDefault().PEDIDO.ToString();
-            //TrzNro = BoxPedido;
-            //BoxCodigo = Pedidoslist.FirstOrDefault().CG_ART;
+            Console.WriteLine(responsePedidoslist.HttpResponseMessage.ReasonPhrase);
         }
         else
         {
-            BoxPedido = "";
-            BoxCodigo = "";
+            Pedidoslist = responsePedidoslist.Response;
+            if (Pedidoslist.Count > 0)
+            {
+                //BoxPedido = Pedidoslist.FirstOrDefault().PEDIDO.ToString();
+                //TrzNro = BoxPedido;
+                //BoxCodigo = Pedidoslist.FirstOrDefault().CG_ART;
+            }
+            else
+            {
+                BoxPedido = "";
+                BoxCodigo = "";
+            }
         }
+
     }
 
     protected async Task BuscarTrazabilidad()
@@ -585,19 +657,51 @@
         CantidadMostrar = 100;
         if (BoxPedido != "")
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/Vacio/Vacio/{CantidadMostrar}");
+            var responseBusquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/Vacio/Vacio/{CantidadMostrar}");
+            if (responseBusquedalist.Error)
+            {
+
+            }
+            else
+            {
+                Busquedalist = responseBusquedalist.Response;
+            }
         }
         else if (BoxCliente != "")
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/{BoxCliente}/Vacio/{CantidadMostrar}");
+            var responseBusquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/{BoxCliente}/Vacio/{CantidadMostrar}");
+            if (responseBusquedalist.Error)
+            {
+
+            }
+            else
+            {
+                Busquedalist = responseBusquedalist.Response;
+            }
         }
         else if (BoxCodigo != "")
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/Vacio/{BoxCodigo}/{CantidadMostrar}");
+            var responseBusquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/Vacio/{BoxCodigo}/{CantidadMostrar}");
+            if (responseBusquedalist.Error)
+            {
+
+            }
+            else
+            {
+                Busquedalist = responseBusquedalist.Response;
+            }
         }
         else
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/{BoxCliente}/{BoxCodigo}/{CantidadMostrar}");
+            var responseBusquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/{BoxCliente}/{BoxCodigo}/{CantidadMostrar}");
+            if (responseBusquedalist.Error)
+            {
+
+            }
+            else
+            {
+                Busquedalist = responseBusquedalist.Response;
+            }
         }
         await refSpinner.HideAsync();
         await refDialogPedidos.ShowAsync();
@@ -627,18 +731,48 @@
     protected async Task CargaPedido()
     {
         TrzNro = BoxPedido;
-        PedCliList = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/{BoxPedido}");
-        prodList = await Http.GetFromJsonAsync<Producto>($"api/Prod/{PedCliList.FirstOrDefault().CG_ART.Trim()}");
-        pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/MostrarTrazabilidad/{BoxPedido}");
-        vpedidos = await Http.GetFromJsonAsync<List<vTrazabilidad>>($"api/Trazabilidads/MostrarTrazabilidad/{BoxPedido}");
-        CargarValores();
-        Showgrid = true;
-        BoxPedido = "";
-        BoxCliente = "";
-        BoxCodigo = "";
+        var responsePedCliList = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/ByPedido/{Convert.ToInt32(BoxPedido.Trim())}");
+        if (responsePedCliList.Error)
+        {
+
+        }
+        else
+        {
+            PedCliList = responsePedCliList.Response;
+            var responseprodList = await Http.GetFromJsonAsync<Producto>($"api/Prod/{PedCliList.FirstOrDefault().CG_ART.Trim()}");
+            if (responseprodList.Error)
+            {
+
+            }
+            else
+            {
+                prodList = responseprodList.Response;
+                var responsepedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/MostrarTrazabilidad/{BoxPedido}");
+                if (!responsepedidos.Error)
+                {
+                    pedidos = responsepedidos.Response;
+                    var responsevpedidos = await Http.GetFromJsonAsync<List<vTrazabilidad>>($"api/Trazabilidads/MostrarTrazabilidad/{BoxPedido}");
+                    if (!responsevpedidos.Error)
+                    {
+                        vpedidos = responsevpedidos.Response;
+                        CargarValores();
+                        Showgrid = true;
+                        BoxPedido = "";
+                        BoxCliente = "";
+                        BoxCodigo = "";
+                    }
+
+                }
+
+            }
+
+
+        }
+
     }
 
-    protected void CargarValores(){
+    protected void CargarValores()
+    {
         lote = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim();
         if (lote == null)
             lote = "";
@@ -700,19 +834,51 @@
         CantidadMostrar = CantidadMostrar + 100;
         if (BoxPedido != "")
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/Vacio/Vacio/{CantidadMostrar}");
+            var responseBusquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/Vacio/Vacio/{CantidadMostrar}");
+            if (responseBusquedalist.Error)
+            {
+
+            }
+            else
+            {
+                Busquedalist = responseBusquedalist.Response;
+            }
         }
         else if (BoxCliente != "")
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/{BoxCliente}/Vacio/{CantidadMostrar}");
+            var responseBusquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/{BoxCliente}/Vacio/{CantidadMostrar}");
+            if (responseBusquedalist.Error)
+            {
+
+            }
+            else
+            {
+                Busquedalist = responseBusquedalist.Response;
+            }
         }
         else if (BoxCodigo != "")
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/Vacio/{BoxCodigo}/{CantidadMostrar}");
+            var responseBusquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/Vacio/{BoxCodigo}/{CantidadMostrar}");
+            if (responseBusquedalist.Error)
+            {
+
+            }
+            else
+            {
+                Busquedalist = responseBusquedalist.Response;
+            }
         }
         else
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/{BoxCliente}/{BoxCodigo}/{CantidadMostrar}");
+            var responseBusquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/{BoxCliente}/{BoxCodigo}/{CantidadMostrar}");
+            if (responseBusquedalist.Error)
+            {
+
+            }
+            else
+            {
+                Busquedalist = responseBusquedalist.Response;
+            }
         }
     }
 
@@ -1001,7 +1167,11 @@
         //await JsRuntime.InvokeVoidAsync("open", new object[2] { $"Pdf/{TrzNro}/ENSAYOS", $"Pdf/{TrzNro}/ENSAYOS" });
         await JsRuntime.InvokeVoidAsync("open", new object[2] { $"pdf-ensayos/{TrzNro}/RUTAENSAYO", $"pdf-ensayos/{TrzNro}/RUTAENSAYO" });
     }
+
+
+
 }
+
 <style>
     @@font-face {
         font-family: 'Toast_icons';
@@ -1053,7 +1223,8 @@
     #toast_types {
         text-align: center;
     }
-    .tabCertif{
+
+    .tabCertif {
         height: 400px;
     }
 </style>

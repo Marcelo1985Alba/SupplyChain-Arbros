@@ -1,0 +1,359 @@
+﻿@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.DropDowns
+@using SupplyChain.Client.Shared.BuscadorCliente 
+@using SupplyChain.Client.Shared.BuscadorPresupuesto
+
+@inherits FormPedidoBase
+
+
+
+<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
+    <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
+    <DialogAnimationSettings Effect="DialogEffect.FadeZoom" Duration="200"></DialogAnimationSettings>
+    <DialogTemplates>
+        <Header>
+            @if (Pedido.PEDIDO == 0)
+            {
+                <div class="e-dlg-header-titulo">Nuevo Pedido</div>
+            }
+            else
+            {
+                <div class="e-dlg-header-titulo">OCI:&nbsp;&nbsp;@Pedido.NUMOCI&nbsp;&nbsp;-&nbsp;&nbsp;@Pedido.DES_CLI</div>
+            }
+        </Header>
+        <Content>
+            <SfToolbar ID="toolbar-form-pedido" CssClass="">
+                <ToolbarItems>
+                    <ToolbarItem Id="tiPresupuestos" CssClass="e-round e-small" Type="ItemType.Button" Text="Presupuestos" OnClick="BuscarPresupuestos" Align="ItemAlign.Right"></ToolbarItem>
+                    @*<ToolbarItem Id="tiProductos" CssClass="e-round" Text="Productos" OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>*@
+                    
+                </ToolbarItems>
+            </SfToolbar>
+            <EditForm id="formPedido" Model="@Pedido" OnValidSubmit="@(async()=> await Guardar())">
+                <SfSpinner @bind-Visible="@spinerVisible" Label="Guardando..." Type="SpinnerType.Fabric"></SfSpinner>
+                <ObjectGraphDataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label class="">Cod. Cliente:</label>
+                        <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Pedido.CG_CLI)" ShowSpinButton="false" Readonly="false"
+                                          OnInput="@(e => Cg_cli_Changed(e))"></SfNumericTextBox>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="">Cliente:</label>
+                        <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Pedido.DES_CLI)" Input="@(e => Des_cli_Changed(e))" Readonly="false"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-1 mt-4">
+                        <SfButton IconCss="fa fa-search" CssClass="e-round e-info" OnClick="@(async ()=> await BuscarClientes())"
+                                  HtmlAttributes="@HtmlAttribute"></SfButton>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="">Moneda:</label>
+                        <SfDropDownList TValue="string" TItem="string" DataSource="Monedas" Readonly="ReadOnlyMoneda"
+                                        @bind-Value="Pedido.MONEDA">
+                            <DropDownListEvents TItem="string" TValue="string" ValueChange="@CambioMoneda"></DropDownListEvents>
+                        </SfDropDownList>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label class="">TC:</label>
+                        <SfNumericTextBox ID="TC" @bind-Value="@(Pedido.TC)" ShowSpinButton="false" Decimals="2" Readonly="true"></SfNumericTextBox>
+                    </div>
+                    <div class="form-group col-md-1 mt-4">
+                        <SfButton IconCss="e-icons e-repeat" CssClass="e-round e-warning"
+                                  OnClick="@(async ()=> await GetTipoCambioDolarHoy())"
+                                  HtmlAttributes="@HtmlAttributeButtonTC"></SfButton>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label class="">Bonificacion:</label>
+                        <SfNumericTextBox ID="Bonifc" @bind-Value="@(Pedido.BONIFIC)" ShowSpinButton="false" Decimals="2"></SfNumericTextBox>
+                    </div>
+
+                </div>
+                <div class="form-row">
+
+                    <div class="form-group col-md-4">
+                        <label class="">Condicion de Pago:</label>
+                        <SfDropDownList TValue="int" TItem="vCondicionesPago" @bind-Value="Pedido.CONDICION_PAGO"
+                                        DataSource="CondicionesPagos">
+                            <DropDownListFieldSettings Text="DESCRIPCION" Value="Id"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label class="">Condicion de Entrega:</label>
+                        <SfDropDownList TValue="int" TItem="vCondicionesEntrega" @bind-Value="Pedido.CG_COND_ENTREGA"
+                                        DataSource="CondicionesEntrega">
+                            <DropDownListFieldSettings Text="OBSERVACIONES" Value="Id"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                    </div>
+
+                </div>
+                <div class="form-row">
+
+                    <div class="form-group col-md-6">
+                        <label class="">Direccion de Entrega:</label>
+                        <SfDropDownList TValue="string" TItem="string" DataSource="@DireccionesEntregas"
+                                        @bind-Value="Pedido.DIRENT"></SfDropDownList>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="">Transporte:</label>
+                        <SfDropDownList TValue="int" TItem="vTransporte" DataSource="@Transportes"
+                                        @bind-Value="Pedido.CG_TRANS">
+                            <DropDownListFieldSettings Value="Id" Text="DESCRIPCION"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="">O. Compra:</label>
+                        <SfTextBox ID="ORCO" @bind-Value="@(Pedido.ORCO)"></SfTextBox>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <SfToast ID="toast_default" @ref="ToastObj">
+                            <ToastPosition X="Center" Y="Top"></ToastPosition>
+                        </SfToast>
+
+                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="90px"
+                                @ref="refGridItems" DataSource="@Pedido.Items" Width="100%" ID="grdItemsPresup"
+                                AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
+                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                            @*<GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>*@
+                            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowConfirmDialog="false"
+                                              Mode="@Syncfusion.Blazor.Grids.EditMode.Batch">
+                                <GridEvents TValue="PedCli" OnBatchDelete="BatchDeleteHandler"
+                                            CellSaved="CellSavedHandler" OnBatchAdd="BatchAddHandler" OnBatchSave="BatchSaveHandler"></GridEvents>
+                            </GridEditSettings>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(PedCli.Id) IsPrimaryKey="true" Width="3"></GridColumn>
+                                @if (Pedido.NUMOCI > 0)
+                                {
+                                    <GridColumn Field=@nameof(PedCli.PEDIDO) Width="70" AllowEditing="false"></GridColumn>
+                                }
+
+                                <GridColumn Field=@nameof(PedCli.CG_ART) AllowEditing="false" HeaderText="Producto" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
+                                <GridColumn Field=@nameof(PedCli.DES_ART) AllowEditing="false" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
+                                <GridColumn Field=@nameof(PedCli.CANTPED) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px">
+                                    <EditTemplate Context="detalle">
+                                        @{
+                                            var value = (detalle as PedCli);
+                                            <SfNumericTextBox @bind-Value="value.CANTPED" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
+                                        }
+                                    </EditTemplate>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(PedCli.PREC_UNIT) HeaderText="Precio Unit." TextAlign="TextAlign.Left" Width="100px"
+                                            EditType="EditType.NumericEdit" Format="N2">
+                                    <EditTemplate Context="detalle">
+                                        @{
+                                            var value = (detalle as PedCli);
+                                            <SfNumericTextBox @bind-Value="value.PREC_UNIT" Decimals="2" ShowSpinButton="false"></SfNumericTextBox>
+                                        }
+                                    </EditTemplate>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(PedCli.PREC_UNIT_X_CANTIDAD) AllowEditing="false" Format="C2"
+                                            HeaderText="Neto" TextAlign="TextAlign.Left" Width="100px">
+                                    <Template Context="detalle">
+                                        @{
+                                            var value = (detalle as PedCli);
+                                            var res = value.CANTPED * (decimal)value.PREC_UNIT;
+                                            value.PREC_UNIT_X_CANTIDAD = Math.Round(value.CANTPED * (decimal)value.PREC_UNIT, 2);
+                                            <span> @value.PREC_UNIT_X_CANTIDAD </span>
+                                        }
+                                    </Template>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(PedCli.DESCUENTO) HeaderText="% Descuento" Format="N2" TextAlign="TextAlign.Left" Width="120px">
+                                    <Template Context="detalle">
+                                        @{
+                                            var value = (detalle as PedCli);
+                                            value.DESCUENTO = Math.Round(value.DESCUENTO, 2);
+                                            <span>@value.DESCUENTO</span>
+
+                                        }
+                                    </Template>
+                                    <EditTemplate Context="detalle">
+                                        @{
+                                            var value = (detalle as PedCli);
+                                            <SfNumericTextBox @bind-Value="value.DESCUENTO" Decimals="2" ShowSpinButton="false"></SfNumericTextBox>
+                                        }
+                                    </EditTemplate>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(PedCli.IMP_DESCUENTO) HeaderText="Descuento" Format="N2" TextAlign="TextAlign.Left"
+                                            Width="120px" AllowEditing="false">
+                                    <Template Context="detalle">
+                                        @{
+                                            var value = (detalle as PedCli);
+                                            if (value.DESCUENTO > 0)
+                                            {
+                                                var res = Math.Round(value.PREC_UNIT_X_CANTIDAD * (decimal)value.DESCUENTO / 100, 2);
+                                                value.IMP_DESCUENTO = Math.Round(res, 2);
+                                            }
+
+                                            <span>@value.IMP_DESCUENTO</span>
+                                        }
+                                    </Template>
+                                </GridColumn>
+                                <GridColumn Field="@nameof(PedCli.TOTAL)" Format="N2" HeaderText="Total" Width="100">
+                                    <Template Context="detalle">
+                                        @{
+                                            var value = (detalle as PedCli);
+                                            var res = Math.Round(value.PREC_UNIT_X_CANTIDAD - value.IMP_DESCUENTO, 2);
+                                            value.TOTAL = Math.Round(res, 2);
+                                            <span>@value.TOTAL</span>
+                                        }
+                                    </Template>
+                                </GridColumn>
+                                <GridColumn Field="@nameof(PedCli.LOTE)" HeaderText="Lote" Width="170"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM2)" HeaderText="Resorte" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM1)" HeaderText="Presion de Set" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM4)" HeaderText="Presion de Prueba en Banco" Width="190"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM3)" HeaderText="DescripcionFluido" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM5)" HeaderText="Contrapresion Variable" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM6)" HeaderText="TemperaturaDescargaT" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM7)" HeaderText="Contrapresion Fija" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.CAMPOCOM8)" HeaderText="Capacidad Requerida" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.PRESUPUESTOID)" HeaderText="Presup" AllowEditing="false" Width="100"></GridColumn>
+                                <GridColumn Field="@nameof(PedCli.OBSERITEM)" HeaderText="Observaciones" Width="250"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    </div>
+
+
+                </div>
+                <SfSpinner @ref="@refSpinnerCli" Size="50" @bind-Visible="@SpinnerVisible"
+                           Label="Buscando ..." Type="SpinnerType.Fabric">
+                </SfSpinner>
+
+                <ClientesDialog @ref="refClienteDialog" PopupBuscadorVisible="@popupBuscadorVisibleCliente"
+                                OnObjectSelected="@ClienteExternoSelected" Cg_Cli="@Pedido.CG_CLI" Des_Cli="@Pedido.DES_CLI"
+                                OnCerrarDialog="@(()=> popupBuscadorVisibleCliente = false)"></ClientesDialog>
+
+                @*<SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog @ref="refPrecioDialog" PopupBuscadorVisible="@popupBuscadorVisiblePrecio"
+        OnObjectSelected="@PrecioSelected" SoloReparaciones="@buscarSoloReparaciones"
+        OnCerrarDialog="CerrarDialogPrecio"></SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog>*@
+
+
+                @*<ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto"
+        OnObjectSelected="@ProductoSelected"
+        OnCerrarDialog="CerrarDialogProducto"></ProductoDialog>*@
+
+
+
+                <ValidationSummary />
+
+            </EditForm>
+        </Content>
+        <FooterTemplate>
+
+            <div class="container-total">
+
+                @{
+                    var totalItems = Math.Round(Pedido.Items.Sum(i => i.TOTAL), 2);
+                    var bonficacion = Math.Round(totalItems * Pedido.BONIFIC / 100, 2);
+                    var total = Pedido.TOTAL = Math.Round(totalItems - bonficacion, 2);
+                    var moneda = "$";
+                    if (Pedido.MONEDA == "PESOS")
+                    {
+                        moneda = "$";
+                    }
+                    else
+                    {
+                        moneda = "U$S";
+                    }
+
+                    <div class="total-price">SUBTOTAL @moneda : @totalItems</div>
+                    <div class="total-price">BONIFICACION (@Pedido.BONIFIC %) @moneda : @bonficacion</div>
+                    <div class="total-price">TOTAL @moneda : @total</div>
+                }
+
+            </div>
+            <div class=" mt-5">
+                
+                <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
+                <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async()=>await Hide())" IconCss="fa fa-window-close-o"></SfButton>
+            </div>
+        </FooterTemplate>
+    </DialogTemplates>
+</SfDialog>
+
+<PresupuestosDialog @ref="@refPresupuestosDialog" CompararCliente="true" Cg_Cli_Comparar="@Pedido.CG_CLI" PopupBuscadorVisible="@popupBuscadorVisiblePresupuestos"
+                    OnCerrarDialog="@(() => popupBuscadorVisiblePresupuestos = false)"
+                    OnObjectSelected="@PresupuestoSelected"></PresupuestosDialog>
+
+
+
+<style>
+
+    #toolbar-form-pedido {
+        border: 0px solid rgb(173, 255, 47) !important;
+    }
+
+        #toolbar-form-pedido .e-toolbar-item {
+            /*background: #add8e6;*/
+            /*border: 1px solid #5a70cc;*/
+        }
+
+        #toolbar-form-pedido .e-tbar-btn {
+            background: #398bf7;
+            border-radius: 10%;
+            /*border: 1px solid #5a70cc;*/
+        }
+
+        #toolbar-form-pedido .e-toolbar-item:hover {
+            background: #619ded;
+            /*border: 1px solid #5a70cc;*/
+        }
+
+        #toolbar-form-pedido .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn {
+            min-height: 20px;
+        }
+
+        #toolbar-form-pedido .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:hover {
+            background-color: #4f70ee;
+            border-radius: 10%;
+        }
+
+
+        #toolbar-form-pedido .e-toolbar-items .e-toolbar-item .e-tbar-btn-text {
+            color: white;
+        }
+
+        #toolbar-form-pedido .e-tbar-btn:focus {
+            background: #3d53a8;
+            border-color: #eaeaea;
+            border-radius: 0;
+            color: #000;
+        }
+
+
+    .container-total {
+        text-align: right;
+    }
+
+    .total-price {
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    #grdItemsPresup .e-gridheader .e-headercell, .e-grid-min-height .e-gridheader .e-detailheadercell,
+    #grdItemsPresup .e-gridheader .e-headercell .e-headercelldiv {
+        background-color: #398bf7 !important;
+        color: #ffffff !important;
+        font-weight: 500 !important;
+        font-size: 11px !important;
+        padding: .2rem !important;
+    }
+
+    #grdItemsPresup .e-gridheader {
+        background-color: #398bf7 !important;
+        color: #ffffff !important;
+        font-weight: 500 !important;
+        font-size: 10px !important;
+        /*padding: .5rem !important;*/
+    }
+
+    #grdItemsPresup .e-row .e-rowcell {
+        font-size: 10px !important;
+    }
+</style>
+

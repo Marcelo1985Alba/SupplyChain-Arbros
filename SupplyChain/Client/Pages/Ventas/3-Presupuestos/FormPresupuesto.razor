@@ -34,6 +34,7 @@
 
             <EditForm id="formPresupuesto" Model="@Presupuesto" OnValidSubmit="@(async()=> await Guardar())">
                 <ObjectGraphDataAnnotationsValidator />
+                <ValidationSummary />
                 <div class="form-row">
                     <div class="form-group col-md-1">
                         <label class="">Id:</label>
@@ -139,13 +140,21 @@
                                         }
                                     </EditTemplate>
                                 </GridColumn>
+                                <GridColumn Field="@nameof(PresupuestoDetalle.DIAS_PLAZO_ENTREGA)" HeaderText="Dias Entrega" Width="100">
+                                    <EditTemplate Context="detalle">
+                                        @{
+                                            var value = (detalle as PresupuestoDetalle);
+                                            <SfNumericTextBox @bind-Value="value.DIAS_PLAZO_ENTREGA" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
+                                        }
+                                    </EditTemplate>
+                                </GridColumn>
                                 <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT_X_CANTIDAD) AllowEditing="false" Format="C2"
                                             HeaderText="Neto" TextAlign="TextAlign.Left" Width="100px">
                                     <Template Context="detalle">
                                         @{
                                             var value = (detalle as PresupuestoDetalle);
                                             var res = value.CANTIDAD * (decimal)value.PREC_UNIT;
-                                            value.PREC_UNIT_X_CANTIDAD = Math.Round( value.CANTIDAD * (decimal)value.PREC_UNIT, 2);
+                                            value.PREC_UNIT_X_CANTIDAD = Math.Round(value.CANTIDAD * (decimal)value.PREC_UNIT, 2);
                                             <span> @value.PREC_UNIT_X_CANTIDAD </span>
                                         }
                                     </Template>
@@ -190,15 +199,9 @@
                                         }
                                     </Template>
                                 </GridColumn>
+                                <GridColumn Field="@nameof(PresupuestoDetalle.SOLICITUDID)" HeaderText="Nº Solicitud" Width="100" AllowEditing="false"></GridColumn>
                                 <GridColumn Field="@nameof(PresupuestoDetalle.OBSERITEM)" HeaderText="Observaciones" Width="250"></GridColumn>
-                                <GridColumn Field="@nameof(PresupuestoDetalle.DIAS_PLAZO_ENTREGA)" HeaderText="Dias Entrega" Width="100">
-                                    <EditTemplate Context="detalle">
-                                        @{
-                                            var value = (detalle as PresupuestoDetalle);
-                                            <SfNumericTextBox @bind-Value="value.DIAS_PLAZO_ENTREGA" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
-                                        }
-                                    </EditTemplate>
-                                </GridColumn>
+
                             </GridColumns>
                         </SfGrid>
                     </div>
@@ -214,8 +217,8 @@
                                 OnCerrarDialog="CerrarDialogCliente"></ClientesDialog>
 
                 <SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog @ref="refPrecioDialog" PopupBuscadorVisible="@popupBuscadorVisiblePrecio"
-                                OnObjectSelected="@PrecioSelected" SoloReparaciones="@buscarSoloReparaciones"
-                                OnCerrarDialog="CerrarDialogPrecio"></SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog>
+                                                                         OnObjectSelected="@PrecioSelected" SoloReparaciones="@buscarSoloReparaciones"
+                                                                         OnCerrarDialog="CerrarDialogPrecio"></SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog>
 
 
                 <ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto"
@@ -224,14 +227,15 @@
 
                 <SolicitudesDialog @ref="refSolicitudDialog" PopupBuscadorVisible="@popupBuscadorVisibleSolicitud"
                                    OnObjectSelected="@SolicitudSelected" ConPrecio="true" CompararCliente="true"
-                                   OnCerrarDialog="CerrarDialogSolicitud" Cg_Cli_Comparar="@Presupuesto.CG_CLI"></SolicitudesDialog>
+                                   OnCerrarDialog="CerrarDialogSolicitud" TipoFiltro="SupplyChain.Shared.Enum.TipoFiltro.Pendientes" ></SolicitudesDialog>
+
 
                 <ValidationSummary />
-
 
             </EditForm>
         </Content>
         <FooterTemplate>
+            
             <div class="container-total">
 
                 @{
@@ -248,7 +252,7 @@
                         moneda = "U$S";
                     }
 
-                    <div class="total-price">TOTAL @moneda : @totalItems</div>
+                    <div class="total-price">SUBTOTAL @moneda : @totalItems</div>
                     <div class="total-price">BONIFICACION (@Presupuesto.BONIFIC %) @moneda : @bonficacion</div>
                     <div class="total-price">TOTAL @moneda : @total</div>
                 }

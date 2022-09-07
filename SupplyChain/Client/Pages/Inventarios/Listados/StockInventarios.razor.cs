@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
 using System;
@@ -12,7 +13,7 @@ namespace SupplyChain.Client.Pages.Inventarios.Listados
 {
     public class StockInventariosBase : ComponentBase
     {
-        [Inject] public HttpClient Http { get; set; }
+        [Inject] public IRepositoryHttp Http { get; set; }
         [CascadingParameter] public MainLayout ML { get; set; }
         protected List<StockSP> DataSource;
         protected bool spinnerVisible = false;
@@ -28,17 +29,27 @@ namespace SupplyChain.Client.Pages.Inventarios.Listados
         {
 
             spinnerVisible = true;
-            DataSource = await Http.GetFromJsonAsync<List<StockSP>>(GeneraUrl());
+            //DataSource = await Http.GetFromJsonAsync<List<StockSP>>(GeneraUrl());
+            var response = await Http.GetFromJsonAsync<List<StockSP>>(GeneraUrl());
+            if (response.Error)
+            {
+                Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
+                Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+            }
+            else
+            {
+                DataSource = response.Response;
+            }
             spinnerVisible = false;
         }
 
         private string GeneraUrl()
         {
-            filter.Hasta = hasta.ToString("dd/MM/yyyy");
+            filter.Hasta = hasta.ToString("yyyyMMdd");
             string api = "api/Stock/StockInventario";
 
             api += $"?Deposito={filter.Deposito}&Hasta={filter.Hasta}";
-
+            Console.WriteLine(api);
             return api;
         }
 

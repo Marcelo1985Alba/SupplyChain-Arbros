@@ -8,13 +8,18 @@ using System.Text;
 namespace SupplyChain
 {
     [Table("Servicios")]
-    public class Service : EntityBase<string>
+    public class Service : EntityBase<int>
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Column("PEDIDO")]
-        new public string Id { get; set; } = "";
         public DateTime? FECHA { get; set; }
         public string CLIENTE { get; set; } = "";
         public int CG_CLI { get; set; } = 0;
+
+
+        //[Column("SolicitudId")]
+        //public int SOLICITUD { get; set; } = 0;
+        //[Column("PresupuestoId")]
+        //public int PRESUPUESTO { get; set; } = 0;
+        public string PEDIDO { get; set; } = string.Empty;
         public string PLANTA { get; set; } = "";
         public string OCOMPRA { get; set; } = "";
         public string REMITOREC { get; set; } = "";

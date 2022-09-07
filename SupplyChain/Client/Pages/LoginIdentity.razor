@@ -1,0 +1,246 @@
+﻿@layout LoginLayout
+@page "/"
+@page "/login-identity"
+@page "/login-identity/{returnUrl}"
+
+@inject SupplyChain.Client.RepositoryHttp.IRepositoryHttp Http
+@inject IJSRuntime JsRuntime
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+
+
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Right"></ToastPosition>
+</SfToast>
+
+<section id="wrapper" class="login-register login-sidebar" style="background-image:url(./Imagenes/login-register.jpg);">
+    <div class="login-box card">
+        <div class="card-body">
+            <EditForm Model="@usuarioLogin" OnValidSubmit="@(async() => await LoginDialogOk())">
+                <a class="text-center db">
+                    <img src="./logo_aerre.jpg" class="img-thumbnail" alt="Home" /><br />
+                </a>
+                <DataAnnotationsValidator />
+                <div class="form-group m-t-40">
+                    <div class="col-xs-12">
+                        <label>Usuario</label>
+                        <SfTextBox ShowClearButton="true" Placeholder="Ingresar Usuario"
+                                   @bind-Value="@usuarioLogin.UserName" ID="txtUsuarioLogin"
+                                   FloatLabelType="FloatLabelType.Never" Type="InputType.Text" />
+                        <ValidationMessage For="@(()=>usuarioLogin.UserName)" />
+                    </div>
+                </div>
+                <SfSpinner @bind-Visible="SpinnerVisible" Label="Iniciando Sesion..." Size="100" Type="SpinnerType.Bootstrap"></SfSpinner>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <label>Contraseña</label>
+                        <div class="e-input-group">
+                            <div class="e-input-in-wrap">
+                                <input class="e-input" type="@type" placeholder="Ingresar Password" @bind-value="@usuarioLogin.Password" />
+                            </div>
+                            <span class="e-input-group-icon @cssIconEye" @onclick="ShowPassword"></span>
+                        </div>
+                        @*<SfTextBox ShowClearButton="true" Placeholder="Ingresar Password"
+                            @bind-Value="@usuarioLogin.Usuario" ID="txtUsuarioLogin"
+                            FloatLabelType="FloatLabelType.Never" Type="InputType.Password" />*@
+                        @*<input class='e-input' type="password" placeholder='Enter Password' @bind-value="@usuarioLogin.Contras" />*@
+                        @*<SfTextBox @ref="txtbox2" CssClass="e-input" Type="@TxtType" Placeholder="Enter Password" Created="onCreateTextBox"></SfTextBox>*@
+                        <ValidationMessage For="@(()=>usuarioLogin.Password)" />
+                    </div>
+                </div>
+
+                <div class="form-group text-center m-t-20">
+                    <div class="col-xs-12">
+                        <button class="btn btn-info btn-lg btn-block text-uppercase btn-rounded"
+                                type="submit">
+                            Ingresar <span class="fa fa-long-arrow-right"></span>
+                        </button>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p class="text text-danger">@MensajeServidor</p>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</section>
+
+@*else
+    {
+        //  L L A M A R   A L    M E N U
+        <div class="pt-5 mt-5">
+            <p>Cargar Menu</p>
+        </div>
+    }*@
+
+@code {
+    [Inject] public ILoginServiceJWT loginServiceJWT { get; set; }
+    [Parameter] public string returnUrl { get; set; }
+    public string type { get; set; } = "password";
+    public InputType TxtType = InputType.Password;
+    protected string cssIconEye = "fa fa-eye";
+    protected string Token = string.Empty;
+    protected string Usuario;
+    protected string MensajeServidor = "";
+    protected string contras = "";
+    protected bool IsDialogLoginVisible { get; set; } = true;
+    protected SfToast ToastObj;
+    private bool SpinnerVisible = false;
+    SupplyChain.Shared.Login.UserInfo usuarioLogin = new();
+
+    protected async override Task OnInitializedAsync()
+    {
+        // Recoge usuario
+        returnUrl = returnUrl;
+        Token = await JsRuntime.InvokeAsync<string>("sessionStorage.getItem", "TOKEN_KEY");
+        StateHasChanged();
+    }
+
+    private async Task LoginDialogOk(/*Object args*/)
+    {
+
+        SpinnerVisible = true;
+        var httpResponse = await Http.Post<UserInfo, UserToken>($"api/Cuentas/login", usuarioLogin);
+        if (!httpResponse.Error)
+        {
+            var xUser = httpResponse.Response;
+
+            await this.ToastObj.Show(new ToastModel
+            {
+                Title = $"Bienvenido {usuarioLogin.UserName}!",
+                Content = "Usuario y contraseña correcta.",
+                CssClass = "e-toast-success",
+                Icon = "e-success toast-icons"
+            });
+
+            await loginServiceJWT.Login(xUser);
+            var geturl = navigationManager.ToBaseRelativePath(navigationManager.Uri);
+            var url = geturl.Split("=");
+
+            if (url.Length <= 1)
+            {
+                navigationManager.NavigateTo("/index");
+                //if (string.IsNullOrEmpty(url[0]))
+                //{
+                //    navigationManager.NavigateTo("/index");
+                //}
+                //else
+                //{
+                //    navigationManager.NavigateTo(url[1]);
+                //}
+            }
+            else
+            {
+                navigationManager.NavigateTo(url[1]);
+            }
+
+
+        }
+        else
+        {
+            MensajeServidor = "Usuario o Contraseña incorrecta.";
+            ;
+            Console.WriteLine(await httpResponse.HttpResponseMessage.Content.ReadAsStringAsync());
+            await this.ToastObj.Show(new ToastModel
+            {
+                Title = "Error!",
+                Content = "Usuario o contraseña incorrecta.",
+                CssClass = "e-toast-danger",
+                Icon = "e-error toast-icons"
+            });
+        }
+
+        SpinnerVisible = false;
+
+    }
+
+    public void ShowPassword()
+    {
+        if (TxtType == InputType.Password)
+        {
+            TxtType = InputType.Text;
+            type = "text";
+            cssIconEye = "fa fa-eye-slash";
+        }
+        else
+        {
+            TxtType = InputType.Password;
+            type = "password";
+            cssIconEye = "fa fa-eye";
+        }
+    }
+
+}
+
+<style>
+        .dialogLogin {
+            position: relative;
+            height: 410px;
+            max-height: 410px;
+            width: 30%;
+            margin-top: 100px;
+            margin-right: 35%;
+            margin-left: 180px;
+            margin-bottom: auto;
+        }
+        /*
+    Template Name: Admin pro Admin
+    Author: Wrappixel
+    Email: niravjoshi87@gmail.com
+    File: scss
+    */
+        /*
+    Template Name: Admin Pro Admin
+    Author: Wrappixel
+    Email: niravjoshi87@gmail.com
+    File: scss
+    */
+        /*Theme Colors*/
+        /*bootstrap Color*/
+        /*Light colors*/
+        /*Normal Color*/
+        /*Extra Variable*/
+        /*******************
+    Login register and recover password Page
+    ******************/
+        .login-register {
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            height: 100%;
+            width: 100%;
+            padding: 10% 0;
+            position: fixed;
+        }
+
+        .login-box {
+            width: 400px;
+            margin: 0 auto;
+        }
+
+            .login-box .footer {
+                width: 100%;
+                left: 0px;
+                right: 0px;
+            }
+
+            .login-box .social {
+                display: block;
+                margin-bottom: 30px;
+            }
+
+        #recoverform {
+            display: none;
+        }
+
+        .login-sidebar {
+            padding: 0px;
+            margin-top: 0px;
+        }
+
+            .login-sidebar .login-box {
+                right: 0px;
+                position: absolute;
+                height: 100%;
+            }
+</style>

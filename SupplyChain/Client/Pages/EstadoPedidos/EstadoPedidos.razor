@@ -1,7 +1,7 @@
 ﻿@page "/ventas/estado-pedidos"
 @using Syncfusion.Blazor.LinearGauge
 @inherits EstadoPedidosBase
-
+@attribute [Authorize]
 
 <SfToast ID="toast_default" @ref="ToastObj">
     <ToastPosition X="Center" Y="Top"></ToastPosition>
@@ -24,62 +24,28 @@
                         DataSource="@DataEstadosPedidos" Width="100%"
                         AllowExcelExport="true" AllowGrouping="true" ID="grdEstadosPedidos"
                         AllowSorting="true" AllowPaging="true" AllowFiltering="true" GridLines="GridLine.Both">
-                    <GridEvents RowDataBound="RowBound" TValue="vEstadoPedido" RowSelected="@((a)=> OnRowSelected(a))" 
-                                OnRecordDoubleClick="@((a)=> OnRowSelectedDouble_Click(a))" 
-                                CommandClicked="CommandClickHandler" OnToolbarClick="@(async(a)=> await ClickHandler(a))" 
+                    <GridEvents RowDataBound="RowBound" TValue="vEstadoPedido" RowSelected="@((a)=> OnRowSelected(a))"
+                                OnRecordDoubleClick="@((a)=> OnRowSelectedDouble_Click(a))"
+                                CommandClicked="CommandClickHandler" OnToolbarClick="@(async(a)=> await ClickHandler(a))"
                                 OnActionBegin="@((a)=> BeginHandler(a))"
                                 QueryCellInfo="@((a)=> QueryCellInfoHandler(a))"></GridEvents>
                     <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                     <GridPageSettings PageSize="12" PageSizes="true"></GridPageSettings>
                     <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-                    <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false">
-                        @*<Template>
-                                @{
-                                    var prod = (context as Producto);
-                                    <div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Id:</label>
-                                                <SfTextBox ID="CG_OPER" @bind-Value="@(prod.CG_PROD)" Enabled="@Disabled"></SfTextBox>
-                                            </div>
-
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Nombre:</label>
-                                                <SfTextBox CssClass="customClass" ID="DES_OPER" @bind-Value="@(prod.DES_PROD)"></SfTextBox>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Horas Finales:</label>
-                                                <SfNumericTextBox ID="HS_FINAL" @bind-Value="@(prod.CG_ORDEN)"></SfNumericTextBox>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Valor Por Hora:</label>
-                                                <SfNumericTextBox ID="VALOR_HORA" @bind-Value="@(prod.CG_CLAS)"></SfNumericTextBox>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            </Template>*@
-                    </GridEditSettings>
-
+                    <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false"></GridEditSettings>
                     <GridColumns>
                         <GridColumn HeaderText="Acciones" Width="130">
                             <GridCommandColumns>
-                                
+
                                 @*LAS BOTONES SE ESCONDEN AGREGANDO LA CLASE ATRAVES DEL EVENTO RowBound*@
-                                
+
                                 <GridCommandColumn Type="CommandButtonType.Delete" Title="Descargar Factura" ID="btnDescargarFactura"
                                                    ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-usd", CssClass = "" })"></GridCommandColumn>
                                 <GridCommandColumn Type="CommandButtonType.Edit" Title="Descargar Remito" ID="btnDescargarRemito"
                                                    ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-cubes fa-1", CssClass = "" })"></GridCommandColumn>
 
-                            <GridCommandColumn Type="CommandButtonType.Edit" Title="Descargar Certificados" ID="btnDescargarCertificado"
-                                               ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-download fa-1", CssClass = "" })"></GridCommandColumn>
+                                <GridCommandColumn Type="CommandButtonType.Edit" Title="Descargar Certificados" ID="btnDescargarCertificado"
+                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-download fa-1", CssClass = "" })"></GridCommandColumn>
                             </GridCommandColumns>
                         </GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.FE_PED) HeaderText="FECHA PEDIDO" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
@@ -94,7 +60,6 @@
                         <GridColumn Field=@nameof(vEstadoPedido.DES_ART) HeaderText="PRODUCTO" Width="250"></GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.CANTPED) HeaderText="CANTIDAD" Width="150"></GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.UNID) HeaderText="UNIDAD" Width="120"></GridColumn>
-                        @*<GridColumn Field=@nameof(vEstadoPedido.ESTADO_PEDIDO) HeaderText="ESTADO PEDIDO" EditType="EditType.DropDownEdit" EditorSettings="@CustomerIDEditParams" Width="180"></GridColumn>*@
                         <GridColumn Field=@nameof(vEstadoPedido.ORCO) HeaderText="ORDEN DE COMPRA" Width="120"></GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.NUM_OCI) HeaderText="OC INTERNA" Width="120"></GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.FE_PREV) HeaderText="FECHA PREVISTA" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
@@ -108,13 +73,13 @@
     </div>
 </div>
 <SfDialog Height="450px" Width="80%" Target="#target" ShowCloseIcon="true" @bind-Visible="@VisibleDialog"
-          IsModal="true" EnableResize="false" >
+          IsModal="true" EnableResize="false">
     <DialogTemplates>
         <Header>
             Detalle Pedido @PedidoSeleccionado.PEDIDO - @PedidoSeleccionado.DES_ART.ToUpper()
         </Header>
         <Content>
-            <SfLinearGauge Orientation="Orientation.Horizontal" Background="transparent" Title="Estado Pedido"  AllowPdfExport="true"
+            <SfLinearGauge Orientation="Orientation.Horizontal" Background="transparent" Title="Estado Pedido" AllowPdfExport="true"
                            Height="250px">
                 <LinearGaugeEvents AxisLabelRendering="AxisLabelChange" />
                 <LinearGaugeAnnotations>
@@ -134,21 +99,6 @@
                             <LinearGaugeAxisLabelFont FontFamily="inherit" Size="12px" FontWeight="100" />
                         </LinearGaugeAxisLabelStyle>
                         <LinearGaugePointers>
-                            @*@if (PedidoSeleccionado.ESTADO_PEDIDO == 1)
-                    {
-                        <LinearGaugePointer PointerValue="2" Height="25" Width="25"
-                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="https://blazor.syncfusion.com/demos/_content/blazorservercommon_net6/images/linear-gauge/tick-icon.png" />
-                        <LinearGaugePointer PointerValue="3" Height="25" Width="25"
-                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                        <LinearGaugePointer PointerValue="5" Height="25" Width="25"
-                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                        <LinearGaugePointer PointerValue="6" Height="25" Width="25"
-                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                        <LinearGaugePointer PointerValue="7" Height="25" Width="25"
-                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                        <LinearGaugePointer PointerValue="8" Height="25" Width="15"
-                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                    }*@
                             @if (PedidoSeleccionado.ESTADO_PEDIDO == 1 || PedidoSeleccionado.ESTADO_PEDIDO == 2)
                             {
                                 <LinearGaugePointer PointerValue="2" Height="25" Width="25"
@@ -360,7 +310,7 @@
         color: #000000 !important;
     }
 
-/*    .e-btn .e-btn-icon, .e-css.e-btn .e-btn-icon {
+    /*    .e-btn .e-btn-icon, .e-css.e-btn .e-btn-icon {
         font-size: 9px;
         color: blue;
     }*/
@@ -374,5 +324,4 @@
         font-size: 9px;
         color: blue;
     }
-
 </style>

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Config;
 using SupplyChain.Shared;
 using SupplyChain.Shared.CDM;
@@ -9,7 +11,8 @@ using System;
 
 namespace SupplyChain
 {
-    public class AppDbContext : DbContext
+
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         #region "DbSet"
         //MODULO CARGA DE MAQUINA
@@ -119,11 +122,15 @@ namespace SupplyChain
         public DbSet<vTipoCambio> vTipoCambio { get; set; }
         public DbSet<NotificacionSubscripcion> NotificacionSubscripcions { get; set; }
         public DbSet<vCalculoSolicitudes> vCalculoSolicitudes { get; set; }
-
+        public DbSet<vPresupuestoReporte> vPresupuestosReporte { get; set; }
+        public DbSet<vPedidoReporte> vPedidoReporte { get; set; }
+        public DbSet<vRemitoReporte> vRemitoReporte { get; set; }
+        public DbSet<vTransporte> vTransportes { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
         //MODULO PROYECTOS
         public DbSet<ProyectosGBPI> Proyectos { get; set; }
 
-
+        public DbSet<vPedidoAlta> vPedidoAltas { get; set; }
         public DbSet<MantCeldas> MantCeldas { get; set; }
         #endregion
 
@@ -138,6 +145,19 @@ namespace SupplyChain
             modelBuilder.ApplyConfiguration(new CompraConfig());
             modelBuilder.ApplyConfiguration(new PedidoConfig());
             modelBuilder.ApplyConfiguration(new ProveedorConfig());
+
+            modelBuilder.Entity<ChatMessage>(entity =>
+            {
+                entity.HasOne(d => d.FromUser)
+                    .WithMany(p => p.ChatMessagesFromUsers)
+                    .HasForeignKey(d => d.FromUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.ToUser)
+                    .WithMany(p => p.ChatMessagesToUsers)
+                    .HasForeignKey(d => d.ToUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
 
             modelBuilder.Entity<Solicitud>(entity => {
                 entity.HasOne(c => c.PresupuestoDetalle)
@@ -167,30 +187,35 @@ namespace SupplyChain
                 entity.Property(p => p.TOTAL).HasComputedColumnSql("[PREC_UNIT_X_CANTIDAD] - ',' [TOTAL]");
             });
 
+
             modelBuilder.Entity<Genera>()
              .HasKey(c => new { c.Id, c.CG_CIA, c.PUNTO_VENTA });
 
             modelBuilder.Entity<vPendienteFabricar>(
             eb =>
             {
+                eb.HasNoKey();
                 eb.ToView("vPendientesFabricar");
             });
 
             modelBuilder.Entity<vResumenStock>(
             eb =>
             {
+                eb.HasNoKey();
                 eb.ToView("vResumenStock");
             });
 
             modelBuilder.Entity<vTrazabilidad>(
             eb =>
             {
+                eb.HasNoKey();
                 eb.ToView("vTrazabilidad");
             });
 
             modelBuilder.Entity<vProdMaquinaDataCore>(
             eb =>
             {
+                eb.HasNoKey();
                 eb.ToView("vProdMaquinaDataCore");
             });
 
@@ -199,6 +224,8 @@ namespace SupplyChain
             modelBuilder.Entity<EstadVenta>().HasNoKey().ToView(null);
             modelBuilder.Entity<StockSP>().HasNoKey().ToView(null);
             CreateVistasSQL(modelBuilder);
+
+            base.OnModelCreating(modelBuilder);
         }
 
         private static void CreateVistasSQL(ModelBuilder modelBuilder)
@@ -220,6 +247,11 @@ namespace SupplyChain
             modelBuilder.Entity<vCondicionesEntrega>().ToView("vCondicionesEntrega");
             modelBuilder.Entity<vTipoCambio>().ToView("vTipoCambio");
             modelBuilder.Entity<vCalculoSolicitudes>().ToView("vCalculoSolicitudes");
+            modelBuilder.Entity<vTransporte>().ToView("vTransportes");
+            modelBuilder.Entity<vPedidoAlta>().HasNoKey().ToView("vPedidosAltas");
+            modelBuilder.Entity<vPresupuestoReporte>().HasNoKey().ToView("vPresupuestoReporte");
+            modelBuilder.Entity<vPedidoReporte>().HasNoKey().ToView("vPedidoReporte");
+            modelBuilder.Entity<vRemitoReporte>().HasNoKey().ToView("vRemitoReporte");
         }
     }
 }

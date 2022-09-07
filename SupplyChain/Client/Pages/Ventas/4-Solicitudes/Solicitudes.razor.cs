@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.SignalR.Client;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared;
 using SupplyChain.Client.Shared.BuscadorCliente;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
@@ -19,6 +21,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
 {
     public class SolicitudesBase : ComponentBase
     {
+        [Inject] public NavigationManager NavigationManager { get; set; }
         [Inject] public HttpClient Http { get; set; }
         [Inject] public SolicitudService SolicitudService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
@@ -28,7 +31,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         protected FormSolicitud refFormSolicitud;
         protected Solicitud SolicitudSeleccionada = new();
         protected List<vSolicitudes> Solicitudes = new();
-        protected string heightPopup = "420px";
+        protected string heightPopup = "510px";
         protected bool SpinnerVisible = true;
         protected bool SpinnerVisiblePresupuesto = false;
 
@@ -39,26 +42,53 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             "Edit",
             "Delete",
             new ItemModel { Text = "Copia", TooltipText = "Copiar un item para generar una nueva solicitud", PrefixIcon = "e-copy", Id = "Copy" },
-            "ExcelExport"
+            "ExcelExport",
+            new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh", Type = ItemType.Button },
+            new ItemModel { Text = "Ver Todos", Type = ItemType.Button, Id = "VerTodos", PrefixIcon = "e-icons e-eye" },
+            new ItemModel { Text = "Ver Pendientes", Type = ItemType.Button, Id = "VerPendientes" },
         };
 
+        private HubConnection? hubConnection;
         protected async override Task OnInitializedAsync()
         {
-            MainLayout.Titulo = "Solicitudes";
-            await GetSolicitudes();
+            MainLayout.Titulo = "Solicitudes: Pendientes";
+            await GetSolicitudes(TipoFiltro.Pendientes);
+
+
+            RegistrarHub();
+            await OnRecibirSolicitudFromCalculoSignalR();
+
+            await hubConnection.StartAsync();
             SpinnerVisible = false;
         }
 
-        protected async Task GetSolicitudes()
+        protected void RegistrarHub()
         {
-            var response = await SolicitudService.GetVistaParaGrilla();
+            hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/solicitudhub"))
+            .Build();
+        }
+
+        protected async Task OnRecibirSolicitudFromCalculoSignalR()
+        {
+            _ = hubConnection.On<vSolicitudes>("ReceiveVSolicitud", (vSolicitud) =>
+            {
+                Solicitudes.Add(vSolicitud);
+                refGrid?.Refresh();
+                StateHasChanged();
+            });
+        }
+
+        protected async Task GetSolicitudes(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+        {
+            var response = await SolicitudService.GetVistaParaGrilla(tipoFiltro);
             if (response.Error)
             {
                 Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
             }
             else
             {
-                Solicitudes = response.Response.OrderBy(s=> s.Id).ToList();
+                Solicitudes = response.Response.OrderByDescending(s=> s.Id).ToList();
             }
         }
 
@@ -75,6 +105,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                 SolicitudSeleccionada.Cuit = vSolicitud.Cuit;
                 SolicitudSeleccionada.Des_Cli = vSolicitud.DES_CLI;
                 SolicitudSeleccionada.Des_Prod = vSolicitud.Descripcion;
+                SolicitudSeleccionada.TienePresupuesto = false;
                 //if (!SolicitudSeleccionada.Producto.StartsWith("00"))
                 //{
                 //    heightPopup = "600px";
@@ -89,15 +120,20 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             {
                 args.Cancel = true;
                 args.PreventRender = false;
-                popupFormVisible = true;
                 SolicitudSeleccionada = new();
                 //heightPopup = "600px";
+            }
+
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
+            {
+                popupFormVisible = true;
             }
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
                 //TRAER DATOS QUE NO ESTAN ENLA GRILLA
                 await GetSolicitudFromDB(args.Data.Id, args.Data);
+                popupFormVisible = true;
             }
         }
 
@@ -119,6 +155,20 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             if (args.Item.Id == "Copy")
             {
                 await CopiarSolicitud();
+            }
+            else if (args.Item.Id == "VerTodos")
+            {
+                MainLayout.Titulo = "Solicitudes";
+                SpinnerVisible = true;
+                await GetSolicitudes();
+                SpinnerVisible = false;
+            }
+            else if (args.Item.Id == "VerPendientes")
+            {
+                MainLayout.Titulo = "Solicitudes: Pendientes";
+                SpinnerVisible = true;
+                await GetSolicitudes(TipoFiltro.Pendientes);
+                SpinnerVisible = false;
             }
             else
             {

@@ -58,6 +58,22 @@ namespace SupplyChain.Client.RepositoryHttp
             return await CreateWrapper<T>(responseHttp);
         }
 
+        public async Task<HttpResponseWrapper<TResponse>> Post<T, TResponse>(string url, T enviar)
+        {
+            var enviarJSON = JsonSerializer.Serialize(enviar);
+            var enviarContent = new StringContent(enviarJSON, Encoding.UTF8, "application/json");
+            var responseHttp = await httpClient.PostAsync(url, enviarContent);
+            if (responseHttp.IsSuccessStatusCode)
+            {
+                var response = await DeserealizeResponse<TResponse>(responseHttp, OpcionesPorDefecto);
+                return new HttpResponseWrapper<TResponse>(response, responseHttp, false);
+            }
+            else
+            {
+                return new HttpResponseWrapper<TResponse>(default, responseHttp, true);
+            }
+        }
+
         public async Task<HttpResponseMessage> DeleteAsync(string requestUri)
         {
             var response = await httpClient.DeleteAsync(requestUri);

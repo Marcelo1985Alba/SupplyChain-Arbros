@@ -2,6 +2,7 @@
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
@@ -38,7 +39,9 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             "Print",
             //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
             "ExcelExport",
-            new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh" },
+            new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh", Type = ItemType.Button},
+            new ItemModel { Text = "Ver Todos", Type = ItemType.Button, Id = "VerTodos", PrefixIcon = "e-icons e-eye" },
+            new ItemModel { Text = "Ver Pendientes", Type = ItemType.Button, Id = "VerPendientes" },
         };
 
         protected List<string> Monedas = new() { "PESOS", "DOLARES" };
@@ -47,13 +50,13 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Presupuestos";
-            await GetPresupuestos();
+            await GetPresupuestos(TipoFiltro.Pendientes);
             SpinnerVisible = false;
         }
 
-        protected async Task GetPresupuestos()
+        protected async Task GetPresupuestos(TipoFiltro tipoFiltro = TipoFiltro.Todos )
         {
-            var response = await PresupuestoService.GetVistaParaGrilla();
+            var response = await PresupuestoService.GetVistaParaGrilla(tipoFiltro);
             if (response.Error)
             {
                 Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
@@ -118,6 +121,18 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             {
                 SpinnerVisible = true;
                 await GetPresupuestos();
+                SpinnerVisible = false;
+            }
+            else if (args.Item.Id == "VerPendientes")
+            {
+                SpinnerVisible = true;
+                await GetPresupuestos(TipoFiltro.Pendientes);
+                SpinnerVisible = false;
+            }
+            else if (args.Item.Id == "VerTodos")
+            {
+                SpinnerVisible = true;
+                await GetPresupuestos(TipoFiltro.Todos);
                 SpinnerVisible = false;
             }
         }

@@ -1,5 +1,6 @@
 ﻿using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,14 @@ namespace SupplyChain.Client.HelperService.Base
             this.api = api;
         }
 
-        public async Task<HttpResponseWrapper<List<TEntity>>> Get()
+        public virtual async Task<HttpResponseWrapper<List<TEntity>>> Get()
         {
             return await http.GetFromJsonAsync<List<TEntity>>(api);
+        }
+
+        public virtual async Task<HttpResponseWrapper<List<TEntity>>> GetByFilter(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+        {
+            return await http.GetFromJsonAsync<List<TEntity>>($"{api}/ByFilter/{tipoFiltro}");
         }
 
         public async Task<HttpResponseWrapper<TEntity>> GetById(TId id)

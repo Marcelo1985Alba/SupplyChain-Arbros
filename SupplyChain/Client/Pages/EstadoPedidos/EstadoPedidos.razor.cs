@@ -38,6 +38,8 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
         protected bool VisibleDialog = false;
         protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
+        new ItemModel { Text = "Ver Todos", TooltipText = "Seleccionar Columnas", Id = "VerTodo" },
+        new ItemModel { Text = "Ver Ultimos 6 Meses", TooltipText = "Seleccionar Columnas", Id = "VerUltimos6Meses" },
         new ItemModel { Text = "Seleccionar Columnas", TooltipText = "Seleccionar Columnas", Id = "SeleccionarColumnas" }
         };
         //new
@@ -50,7 +52,8 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             var response = await Http.GetFromJsonAsync<List<vEstadoPedido>>("api/EstadoPedidos");
             if (response.Error)
             {
-                Console.WriteLine("ERROR OBTENER DATOS");
+                Console.WriteLine("E R R O R !!!");
+                Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
             }
             else
             {

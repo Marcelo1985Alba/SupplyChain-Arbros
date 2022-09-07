@@ -1,8 +1,9 @@
 ﻿@using Syncfusion.Blazor.Layouts
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Microsoft.AspNetCore.SignalR.Client
 @page "/index"
 
-<h1>Hola, @authState.User.Identity.Name!</h1>
+<h5>Hola, @CurrentUserEmail</h5>
 
 Bienvenido a la nueva aplicación.
 <br />
@@ -15,24 +16,121 @@ Bienvenido a la nueva aplicación.
 
 @*<iframe src="http://localhost:8090/" width="100%" height="1200" frameborder="0"></iframe>*@
 
+@*<SfTextBox @bind-Value="@ContactId" Placeholder="id usuario contacto"></SfTextBox>
+<Syncfusion.Blazor.Buttons.SfButton Content="EnviarMensajePredefinido" OnClick="@EnviarMensaje"></Syncfusion.Blazor.Buttons.SfButton>
+<SfTextBox @bind-Value="@CurrentMessage" Placeholder="MensajeEnviar"></SfTextBox>
 
+@foreach (var item in messages.OrderBy(m=> m.CreatedDate))
+{
+<div class="row">
+    @if (item.ToUserId == CurrentUserId)
+    {
+        <div style="text-align:right">
+            <label class="badge badge-success">@item.Message</label>
+            <small>@item.CreatedDate</small>
+        </div>
+    }
+    else
+    {
+        <div style="text-align:left">
+            <label class="badge badge-danger">@item.Message</label>
+            <small>@item.CreatedDate</small>
+        </div>
+    }
+
+
+</div>
+    
+}*@
 
 
 
 @code{
+    [Inject] public NavigationManager NavigationManager { get; set; }
     [Inject] public IRepositoryHttp Http { get; set; }
     [Inject] public IJSRuntime JS { get; set; }
+    [Inject] public ILoginServiceJWT LoginService { get; set; }
     [CascadingParameter] public MainLayout Layout { get; set; }
+    [CascadingParameter] public HubConnection? hubConnection { get; set; }
     [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
+
+    [Parameter] public string ContactEmail { get; set; }
+    [Parameter] public string ContactId { get; set; }
+    [Parameter] public string CurrentMessage { get; set; }
+    [Parameter] public string CurrentUserId { get; set; }
+    [Parameter] public string CurrentUserEmail { get; set; }
+    private List<ChatMessage> messages = new List<ChatMessage>();
+
     private AuthenticationState authState;
+    protected string user = string.Empty;
+    protected string MensajeRecibido = string.Empty;
+    protected string MensajeEnviar = string.Empty;
+
     protected async override Task OnInitializedAsync()
     {
         Layout.Titulo = "Inicio";
 
-        authState = await authenticationState;
-
-        //await RequestNotificationSubscriptionAsync();
     }
+
+    protected void RegistrarHub()
+    {
+        hubConnection = new HubConnectionBuilder()
+        .WithUrl(NavigationManager.ToAbsoluteUri("/chathub") )
+        .Build();
+
+        //hubConnection = new HubConnectionBuilder()
+        //.WithUrl(NavigationManager.ToAbsoluteUri("/chathub"), options=>
+        //{
+        //    options.AccessTokenProvider = () => Task.FromResult(token);
+        //})
+        //.Build();
+    }
+
+
+    protected async Task OnRecibirSolicitudFromCalculoSignalR()
+    {
+        _ = hubConnection.On<string, string>("ReceiveMessage", (userSender, message) =>
+        {
+
+            MensajeRecibido = message;
+            StateHasChanged();
+        });
+    }
+
+
+    protected async Task EnviarMensaje()
+    {
+        if (!string.IsNullOrEmpty(CurrentMessage) && !string.IsNullOrEmpty(ContactId))
+        {
+            //Save Message to DB
+            var chatHistory = new ChatMessage()
+            {
+                Message = CurrentMessage,
+                ToUserId = ContactId,
+                CreatedDate = DateTime.Now
+
+            };
+            var response = await Http.PostAsJsonAsync("api/Chats", chatHistory);
+            if (response.Error)
+            {
+                Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+
+            }
+
+            chatHistory.FromUserId = CurrentUserId;
+            if (hubConnection.State == HubConnectionState.Disconnected)
+            {
+                await hubConnection?.StartAsync();
+            }
+            await hubConnection.SendAsync("SendMessageAsync", chatHistory, CurrentUserEmail);
+            CurrentMessage = string.Empty;
+        }
+
+        //var resumen = await Http
+        //                .GetFromJsonAsync<vResumenStock>($"api/ResumenStock/GetByStock?CG_ART={cg_art}" +
+        //                $"&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
+    }
+
 
     protected async Task SubscribeToNotificacions(NotificacionSubscripcion notificacionSubscripcion)
     {

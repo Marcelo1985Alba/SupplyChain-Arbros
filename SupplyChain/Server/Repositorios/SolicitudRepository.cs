@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 using SupplyChain.Shared.Models;
 using System;
 using System.Collections.Generic;
@@ -11,31 +12,55 @@ namespace SupplyChain.Server.Repositorios
 {
     public class SolicitudRepository : Repository<Solicitud, int>
     {
-        private readonly ProductoRepository productoRepository;
+        private readonly PrecioArticulosRepository _precioArticulosRepository;
+        private readonly ClienteExternoRepository _clienteExternoRepository;
 
-        public SolicitudRepository(AppDbContext appDbContext, ProductoRepository productoRepository) : base (appDbContext)
+        public SolicitudRepository(AppDbContext appDbContext, PrecioArticulosRepository precioArticulosRepository,
+            ClienteExternoRepository clienteExternoRepository) : base (appDbContext)
         {
-            this.productoRepository = productoRepository;
+            this._precioArticulosRepository = precioArticulosRepository;
+            this._clienteExternoRepository = clienteExternoRepository;
         }
 
-        //public override async Task<Solicitud> ObtenerPorId(int Id)
-        //{
-        //    var solicitud =  await DbSet.FindAsync(Id);
-        //    if (solicitud != null)
-        //    {
-        //        var prod = await productoRepository.ObtenerPorId(solicitud.Producto);
-        //        if (prod != null)
-        //        {
-        //            solicitud.Des_Prod = prod.DES_PROD;
-        //        }
-        //    }
-
-        //    return solicitud;
-        //}
-
-        public async Task<List<vSolicitudes>> ObtenerTodosFromVista()
+        public override async Task<Solicitud> ObtenerPorId(int Id)
         {
-            return await Db.vSolicitudes.Where(s => !s.TienePresupuesto).ToListAsync();
+            var solicitud = await DbSet.FindAsync(Id);
+            if (solicitud != null)
+            {
+                var precioArticulo = await _precioArticulosRepository.ObtenerPorId(solicitud.Producto);
+                if (precioArticulo != null)
+                {
+                    solicitud.PrecioArticulo = precioArticulo;
+                    solicitud.Des_Prod = precioArticulo.Descripcion;
+                }
+
+
+                if (solicitud.CG_CLI > 0)
+                {
+                    var cliente = await _clienteExternoRepository.ObtenerTodosQueryable()
+                        .Where(c => c.CG_CLI == solicitud.CG_CLI.ToString()).FirstOrDefaultAsync();
+                    if (cliente != null)
+                    {
+                        solicitud.Des_Cli = cliente.DESCRIPCION;
+                    } 
+                }
+            }
+
+            return solicitud;
+        }
+
+        public async Task<List<vSolicitudes>> ObtenerVista(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+        {
+            if (tipoFiltro == TipoFiltro.Todos)
+            {
+                return await Db.vSolicitudes.ToListAsync();
+            }
+
+            if (tipoFiltro == TipoFiltro.Pendientes)
+            {
+                return await Db.vSolicitudes.Where(s => !s.TienePresupuesto).ToListAsync();
+            }
+            return await Db.vSolicitudes.Where(s => s.TienePresupuesto).ToListAsync();
         }
 
         public async Task AsignarClientByCuit(string cuit, Solicitud solicitud)
@@ -47,6 +72,39 @@ namespace SupplyChain.Server.Repositorios
             {
                 solicitud.CG_CLI = Convert.ToInt32(cliente.CG_CLI);
             }
+        }
+
+
+        /// <summary>
+        /// guarda en servicio en caso de ser una reparacion
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async override Task Agregar(Solicitud entity)
+        {
+            await base.Agregar(entity);
+
+
+            if (entity.Producto.StartsWith("0012")) //SI ES REPARACION
+            {
+                //TODO: ENVIAR A SERVICIO
+                var servicio = new Service()
+                {
+                    //SOLICITUD = entity.Id,
+                    CG_CLI = entity.CG_CLI,
+                    CLIENTE = entity.Des_Cli,
+                    DESCARTICULO = entity.Des_Prod
+                };
+
+                Db.Servicios.Add(servicio);
+                await Db.SaveChangesAsync();
+            }
+
+        }
+
+        internal async Task<vSolicitudes> GetVSolicitudById(int id)
+        {
+            return await Db.vSolicitudes.FirstOrDefaultAsync(s=> s.Id == id);
         }
     }
 }

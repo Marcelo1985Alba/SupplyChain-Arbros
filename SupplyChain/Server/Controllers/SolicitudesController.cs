@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Hubs;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
+using SupplyChain.Shared.DTOs;
+using SupplyChain.Shared.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,20 +19,21 @@ namespace SupplyChain.Server.Controllers
     public class SolicitudesController : ControllerBase
     {
         private readonly SolicitudRepository _solicitudRepository;
+        private readonly IHubContext<SolicitudHub> _hubContext;
 
-        public SolicitudesController(SolicitudRepository solicitudRepository)
+        public SolicitudesController(SolicitudRepository solicitudRepository, IHubContext<SolicitudHub> hubContext )
         {
             _solicitudRepository = solicitudRepository;
+            this._hubContext = hubContext;
         }
 
         // GET: api/Compras
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<vSolicitudes>>> GetSolicitudes()
+        [HttpGet("Vista/{tipoFiltro}")]
+        public async Task<ActionResult<IEnumerable<vSolicitudes>>> GetSolicitudes(TipoFiltro tipoFiltro)
         {
-            //OC ABIERTAS
             try
             {
-                return await _solicitudRepository.ObtenerTodosFromVista();
+                return await _solicitudRepository.ObtenerVista(tipoFiltro);
             }
             catch (Exception ex)
             {
@@ -43,7 +48,6 @@ namespace SupplyChain.Server.Controllers
             try
             {
                 var solicitud = await _solicitudRepository.ObtenerPorId(id);
-
                 if (solicitud == null)
                 {
                     return NotFound();
@@ -101,6 +105,52 @@ namespace SupplyChain.Server.Controllers
             return Ok(solicitud);
         }
 
+
+        // POST: api/Compras
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPost("Externo")]
+        public async Task<ActionResult<Solicitud>> PostCompra(SolicitudDTO solicitudDTO)
+        {
+            try
+            {
+
+                var solicitud = new Solicitud()
+                {
+                    Producto = solicitudDTO.Producto,
+                    Cuit = solicitudDTO.Cuit,
+                    CalcId = solicitudDTO.CalcId,
+                    Cantidad = solicitudDTO.Cantidad,
+                    CapacidadRequerida = solicitudDTO.CapacidadRequerida,
+                    ContrapresionFija = solicitudDTO.ContrapresionFija,
+                    ContrapresionVariable = solicitudDTO.ContrapresionVariable,
+                    DescripcionFluido = solicitudDTO.DescripcionFluido,
+                    DescripcionTag = solicitudDTO.DescripcionTag,
+                    TemperaturaDescargaT = solicitudDTO.TemperaturaDescargaT,
+                    Fecha = DateTime.Now,
+                    PresionApertura = solicitudDTO.PresionApertura,
+                };
+
+
+                if (solicitud.CG_CLI == 0)
+                {
+                    await _solicitudRepository.AsignarClientByCuit(solicitud.Cuit, solicitud);
+                }
+
+                await _solicitudRepository.Agregar(solicitud);
+
+                var vSolicitud = await _solicitudRepository.GetVSolicitudById(solicitud.Id);
+                await _hubContext.Clients.All.SendAsync("ReceiveVSolicitud", vSolicitud);
+
+                return CreatedAtAction("GetSolicitud", new { id = solicitud.Id }, solicitud);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
         // POST: api/Compras
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -115,11 +165,7 @@ namespace SupplyChain.Server.Controllers
                 }
                 await _solicitudRepository.Agregar(solicitud);
 
-                if (solicitud.Producto.StartsWith("00")) //SI ES REPARACION
-	            {
-                    //TODO: ENVIAR A SERVICIO
-	            }
-
+                
                 return CreatedAtAction("GetSolicitud", new { id = solicitud.Id }, solicitud);
             }
             catch (Exception ex)

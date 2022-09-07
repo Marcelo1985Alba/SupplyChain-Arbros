@@ -1,0 +1,71 @@
+﻿@page "/proyectos-prueba"
+@using Syncfusion.Blazor.Gantt
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor
+<div class="row">
+    <div class="col-12">
+        <SfGantt TValue="ProyectosGBPI" Height="450px" Width="100%" AllowSelection="true" 
+                 GridLines="Syncfusion.Blazor.Gantt.GridLine.Both" ProjectStartDate="@ProjectStart" ProjectEndDate="@ProjectEnd">
+            <SfDataManager Url="api/Proyectos/Proyectos" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true" ></SfDataManager>
+            <GanttTaskFields Id="Id" Name="TaskName" StartDate="StartDate" ParentID="ParentId" EndDate="EndDate" 
+                             Duration="Duration" Progress="Progress" Dependency="Predecessor">
+            </GanttTaskFields>
+            <GanttColumns>
+                <GanttColumn Field="Id" HeaderText="Task Id" Visible="false"></GanttColumn>
+                <GanttColumn Field="TaskName" HeaderText="Task Name" Width="250" ClipMode="Syncfusion.Blazor.Grids.ClipMode.EllipsisWithTooltip"></GanttColumn>
+                <GanttColumn Field="StartDate"></GanttColumn>
+                <GanttColumn Field="Duration"></GanttColumn>
+            </GanttColumns>
+            @*<GanttTimelineSettings TimelineUnitSize="300">
+                <GanttTopTierSettings Unit="TimelineViewMode.Month" Format="MMMM yyyy"></GanttTopTierSettings>
+                <GanttBottomTierSettings Unit="TimelineViewMode.Week" Format="dddd, dd MMMM"></GanttBottomTierSettings>
+            </GanttTimelineSettings>*@
+            @*<GanttLabelSettings LeftLabel="TaskName" TValue="ProyectosGBPI"></GanttLabelSettings>*@
+            <GanttSplitterSettings Position="28%"> </GanttSplitterSettings>
+        </SfGantt>
+    </div>
+</div>
+
+
+@code{
+    [Inject] public ProyectosService ProyectosService { get; set; }
+    protected SfGantt<ProyectosGBPI> refGanttProyectos;
+    private List<ProyectosGBPI> TaskCollection { get; set; }
+    protected bool cargarndo = true;
+    private string NumberFormat = "C";
+    private DateTime? ProjectStart = new DateTime(2021, 2, 4);
+    private DateTime? ProjectEnd = new DateTime(2021, 12, 10);
+
+    public class GanttRemoteData
+    {
+        public int TaskId { get; set; }
+        public string TaskName { get; set; }
+        public DateTime StartDate { get; set; }
+        public int? Duration { get; set; }
+        public int Progress { get; set; }
+        public string Predecessor { get; set; }
+        public List<GanttRemoteData> SubTasks { get; set; }
+    }
+
+
+    public class TaskData
+    {
+        public int TaskId { get; set; }
+        public string TaskName { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string Duration { get; set; }
+        public int Progress { get; set; }
+        public int? ParentId { get; set; }
+    }
+
+    public static List<ProyectosGBPI> GetTaskCollection()
+    {
+        List<ProyectosGBPI> Tasks = new List<ProyectosGBPI>() {
+            new ProyectosGBPI() { Id = 1, TaskName = "Project initiation", StartDate = new DateTime(2022, 04, 05), EndDate = new DateTime(2022, 04, 21), },
+            new ProyectosGBPI() { Id = 2, TaskName = "Identify Site location", StartDate = new DateTime(2022, 04, 05), Duration = "4", Progress = 50, ParentId = 1 },
+            new ProyectosGBPI() { Id = 3, TaskName = "Perform soil test", StartDate = new DateTime(2022, 04, 05), Duration = "4", Progress = 50, ParentId = 1 }
+        };
+        return Tasks;
+    }
+}

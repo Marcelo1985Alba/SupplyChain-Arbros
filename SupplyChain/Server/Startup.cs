@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
@@ -11,13 +13,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using SupplyChain.Server.Data.Repository;
+using SupplyChain.Server.Hubs;
 using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared;
 using Syncfusion.Blazor;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SupplyChain.Server
@@ -43,6 +49,39 @@ namespace SupplyChain.Server
                 options.EnableSensitiveDataLogging();
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddCors(op=> 
+            {
+                op.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
+            #region "identity"
+            services.AddIdentity<ApplicationUser, IdentityRole>(op =>
+            {
+                op.Password.RequireLowercase = false;
+                op.Password.RequireNonAlphanumeric = false;
+                op.Password.RequireUppercase = false;
+                op.Password.RequireDigit = false;
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                 options.TokenValidationParameters = new TokenValidationParameters()
+                 {
+                     ValidateIssuer = false,
+                     ValidateAudience = false,
+                     ValidateLifetime = true,
+                     ValidateIssuerSigningKey = true,
+                     IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
+                         Encoding.UTF8.GetBytes(Configuration["jwt:llave"]))
+                 });
+
+            #endregion
+
 
             #region "Repositorios"
             services.AddTransient<UsuariosRepository>();
@@ -70,9 +109,12 @@ namespace SupplyChain.Server
             services.AddTransient<ProyectosGBPIRepository>();
             services.AddTransient<AreasRepository>();
             services.AddTransient<CeldasRepository>();
+            services.AddTransient<ClienteRepository>();
+            services.AddTransient<ClienteExternoRepository>();
             services.AddTransient<TipoAreaRepository>();
             services.AddTransient<LineasRepository>();
             services.AddTransient<UnidadesRepository>();
+            services.AddTransient<vTransportesRepository>();
             services.AddTransient<MantCeldasRepository>();
             #endregion
 
@@ -97,7 +139,7 @@ namespace SupplyChain.Server
             //    options.SuppressConsumesConstraintForFormFileParameters = true;
             //    options.SuppressInferBindingSourcesForParameters = true;
             //});
-
+            services.AddSignalR();
             services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
@@ -109,6 +151,7 @@ namespace SupplyChain.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseResponseCompression();
             if (env.IsDevelopment() || env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
@@ -124,6 +167,7 @@ namespace SupplyChain.Server
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
+            app.UseCors();
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
@@ -133,7 +177,11 @@ namespace SupplyChain.Server
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
                 //endpoints.Map("api/{**slug}", HandleApiFallback);
+                endpoints.MapHub<SolicitudHub>("/solicitudhub");
+                //endpoints.MapHub<OnlineUsersHub>("/onlinehub");
+                
                 endpoints.MapFallbackToFile("index.html");
+                endpoints.MapHub<ChatHub>("/chathub");
             });
         }
 

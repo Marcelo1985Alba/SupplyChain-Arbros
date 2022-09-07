@@ -4,21 +4,28 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SupplyChain;
 using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared.Enum;
+using SupplyChain.Shared.Logística;
 
 namespace SupplyChain
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PedCliController : ControllerBase
     {
         private readonly PedCliRepository _pedCliRepository;
+
 
         public PedCliController(PedCliRepository pedCliRpository)
         {
@@ -26,23 +33,40 @@ namespace SupplyChain
         }
 
         [HttpGet]
-        public async Task<IEnumerable<PedCli>> Get()
-        {
-            return await _pedCliRepository.ObtenerPedCliPedidos();
-        }
-
-
-
-        [HttpGet("GetPedidos")]
         public async Task<IEnumerable<PedCli>> Gets()
         {
             return await _pedCliRepository.ObtenerTodos();
         }
 
-        [HttpGet("{pedido}")]
-        public async Task<IEnumerable<PedCli>> Gets(int pedido)
+        [HttpGet("ByFilter/{tipoFiltro}")]
+        public async Task<IEnumerable<PedCli>> GetByFilter(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+        {
+            return await _pedCliRepository.ByFilter(tipoFiltro);
+        }
+
+        [HttpGet("ObtenerPedCliPedidos")]
+        public async Task<IEnumerable<PedCli>> Get()
+        {
+            return await _pedCliRepository.ObtenerPedCliPedidos();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<PedCli> Get(int id)
+        {
+            return await _pedCliRepository.Obtener(p=> p.Id == id).FirstOrDefaultAsync();
+        }
+
+
+        [HttpGet("ByPedido/{pedido}")]
+        public async Task<IEnumerable<PedCli>> GetByPedido(int pedido)
         {
             return await _pedCliRepository.Obtener(p=> p.PEDIDO == pedido).ToListAsync();
+        }
+
+        [HttpGet("ByNumOci/{numOci}")]
+        public async Task<IEnumerable<PedCli>> ByNumOci(int numOci)
+        {
+            return await _pedCliRepository.Obtener(p => p.NUMOCI == numOci).ToListAsync();
         }
 
         // PUT: api/Servicios/5
@@ -80,6 +104,32 @@ namespace SupplyChain
         {
             List<PedCli> lpedcli = await _pedCliRepository.Obtener(p => p.PEDIDO.ToString() == PEDIDO).ToListAsync();
             return lpedcli == null ? NotFound() : lpedcli;
+        }
+
+        [HttpGet("GetPedidoEncabezadoById/{id}")]
+        public async Task<PedCliEncabezado> GetPedidoEncabezadoById(int id)
+        {
+            return await _pedCliRepository.ObtenerPedidosEncabezado(id);
+        }
+
+        [HttpGet("GetPedidoEncabezadoByNumOci/{numOci}")]
+        public async Task<PedCliEncabezado> GetPedidoEncabezadoByNumOci(int numOci)
+        {
+            return await _pedCliRepository.ObtenerPedidosEncabezadoByNumOci(numOci);
+        }
+
+        [HttpPost("PostList")]
+        public async Task<ActionResult<List<PedCli>>> PostList(List<PedCli> lista)
+        {
+            try
+            {
+                await _pedCliRepository.GuardarList(lista);
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

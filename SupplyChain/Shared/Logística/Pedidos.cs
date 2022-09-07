@@ -1,4 +1,5 @@
 ﻿using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 using SupplyChain.Shared.HelpersAtributo;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
@@ -10,6 +11,9 @@ using System.Text;
 
 namespace SupplyChain
 {
+    /// <summary>
+    /// La tabla que muestra, modifica o elimina registros para stock
+    /// </summary>
     [Table("Pedidos")]
     public class Pedidos : EntityBase<int?>
     {
@@ -190,7 +194,12 @@ namespace SupplyChain
         
         [ColumnaGridViewAtributo(Name = "Compañía")]
         public int? CG_CIA { get; set; } = 0;
+        [ColumnaGridViewAtributo(Name = "Condicion de Entrega")]
+        public int CG_COND_ENTREGA { get; set; } = 0;
 
+        [Column("DPP"),ColumnaGridViewAtributo(Name = "Condicion de Entrega")]
+        public int CG_CONDICION_PAGO { get; set; } = 0;
+        public int CG_TRANS { get; set; } = 0;
         public bool Control1 { get; set; } = false;
         public bool Control2 { get; set; } = false;
         public bool Control3 { get; set; } = false;
@@ -200,5 +209,9 @@ namespace SupplyChain
 
         [Column("FLAG")]
         public decimal CONFIRMADO { get; set; }
+
+
+        [NotMapped]
+        public EstadoItem ESTADO { get; set; } = EstadoItem.Agregado;
     }
 }

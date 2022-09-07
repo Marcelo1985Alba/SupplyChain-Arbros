@@ -28,14 +28,15 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         [Parameter] public EventCallback<Solicitud> OnGuardar { get; set; }
         [Parameter] public EventCallback OnCerrar { get; set; }
 
-        [Parameter] public string HeightDialog { get; set; } = "280px";
+        [Parameter] public string HeightDialog { get; set; } = "350px";
         protected ClientesDialog refClienteDialog;
         protected SfSpinner refSpinnerCli;
         protected bool popupBuscadorVisibleCliente { get; set; } = false;
 
         protected PreciosDialog refPreciosDialog;
         protected bool popupBuscadorVisiblePrecio { get; set; } = false;
-        
+        protected bool popupBuscadorVisibleFormPrecio { get; set; } = false;
+        protected PreciosArticulos PreciosArticulos = new PreciosArticulos();
 
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
@@ -301,6 +302,49 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                 ShowCloseButton = true,
                 ShowProgressBar = true
             });
+        }
+
+        protected async Task AbrirFormPrecio()
+        {
+            PreciosArticulos = new();
+            if (!string.IsNullOrEmpty(Solicitud.Producto))
+            {
+                var response = await PrecioArticuloService.GetById(Solicitud.Producto);
+                if (response.Error)
+                {
+                    if (response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        PreciosArticulos.Id = Solicitud.Producto;
+                        PreciosArticulos.ESNUEVO = true;
+                        popupBuscadorVisibleFormPrecio = true;
+                    }
+                    else
+                    {
+                        await ToastMensajeError("Ocurrio un Error al obtener Precio");
+                    }
+
+                }
+                else
+                {
+                    if (response.Response != null)
+                    {
+                        PreciosArticulos = response.Response;
+                    }
+
+                    popupBuscadorVisibleFormPrecio = true;
+                }
+            }
+            
+        }
+
+        protected async Task OnPrecioGuardado(PreciosArticulos precio)
+        {
+            if (precio.GUARDADO)
+            {
+                Solicitud.Des_Prod = precio.Descripcion;
+            }
+
+            popupBuscadorVisibleFormPrecio = false;
         }
         protected async Task CerrarDialogCliente()
         {

@@ -64,7 +64,11 @@ namespace SupplyChain.Client.Shared.BuscadorPrecios
         }
         protected async Task SendObjectSelected(PreciosArticulos obj)
         {
-            await OnObjectSelected.InvokeAsync(obj);
+            if (obj != null)
+            {
+                await OnObjectSelected.InvokeAsync(obj);
+            }
+            
             await Hide();
         }
 

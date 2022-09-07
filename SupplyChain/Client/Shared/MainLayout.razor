@@ -1,135 +1,144 @@
 ﻿@using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Navigations
 @using SupplyChain.Client.Auth
+@using Microsoft.AspNetCore.SignalR.Client
+@using System.Security.Claims
 @inject IJSRuntime JS
-@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 @attribute [Authorize]
 @inject NavigationManager MyNavigationManager
 @inherits LayoutComponentBase
 
-<CascadingValue Value="this">
-    <div id="main-wrapper">
-        <!-- ============================================================== -->
-        <!-- Topbar header - style you can find in pages.scss -->
-        <!-- ============================================================== -->
-        <header class="topbar">
-            <nav class="navbar top-navbar navbar-expand-md navbar-light">
-                <!-- ============================================================== -->
-                <!-- Logo -->
-                <!-- ============================================================== -->
+<audio id="notification" src="/media/notification.mp3" />
+    <CascadingValue Value="this">
+        <div id="main-wrapper">
+            <!-- ============================================================== -->
+            <!-- Topbar header - style you can find in pages.scss -->
+            <!-- ============================================================== -->
+            <header class="topbar">
+                <nav class="navbar top-navbar navbar-expand-md navbar-light">
+                    <!-- ============================================================== -->
+                    <!-- Logo -->
+                    <!-- ============================================================== -->
 
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/index">
-                        <!-- Logo icon --><b>
-                            <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                            <!-- Dark Logo icon -->
-                            <img src="aerre.jpg" alt="homepage" class="dark-logo" />
-                            <!-- Light Logo icon -->
-                            <img src="aerre.jpg" alt="homepage" class="light-logo" />
-                        </b>
-                        <!--End Logo icon -->
-                        <!-- Logo text --><span>
-                            <!-- dark Logo text -->
-                            <!--<img src="aerre.jpg" alt="homepage" class="dark-logo" />-->
-                            <!-- Light Logo text -->
-                            <!--<img src="aerre.jpg" class="light-logo" alt="homepage" />-->
-                        </span>
-                    </a>
-                </div>
-                <!-- ============================================================== -->
-                <!-- End Logo -->
-                <!-- ============================================================== -->
-                <div class="navbar-collapse">
-                    <!-- ============================================================== -->
-                    <!-- toggle and nav items -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav mr-auto">
-                        <!-- This is  -->
-                        <li class="nav-item">
-                            <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark"
-                               @onclick="@(()=> SidebarToggle = !SidebarToggle)">
-                                <i class="e-icons e-play-icon"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link sidebartoggler hidden-sm-down waves-effect waves-dark"
-                               @onclick="@(()=> SidebarToggle = !SidebarToggle)">
-                                <i class="e-icons e-play-icon"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item hidden-sm-down"></li>
-                    </ul>
-                    <!-- ============================================================== -->
-                    <!-- User profile and search -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav my-lg-0">
-                        <!-- ============================================================== -->
-                        <!-- Search -->
-                        <!-- ============================================================== -->
-                        @*<li class="nav-item hidden-xs-down search-box">
-                                <a class="nav-link hidden-sm-down waves-effect waves-dark" href="javascript:void(0)"><i class="ti-search"></i></a>
-                                <form class="app-search">
-                                    <input type="text" class="form-control" placeholder="Search & enter"> <a class="srh-btn"><i class="ti-close"></i></a>
-                                </form>
-                            </li>*@
-                        <!-- ============================================================== -->
-                        <!-- Comment -->
-                        <!-- ============================================================== -->
-                        <!--<li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="mdi mdi-message"></i>
-                            <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="/index">
+                            <!-- Logo icon --><b>
+                                <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                                <!-- Dark Logo icon -->
+                                <img src="aerre.jpg" alt="homepage" class="dark-logo" />
+                                <!-- Light Logo icon -->
+                                @*<img src="aerre.jpg" alt="homepage" class="light-logo" />*@
+                            </b>
+                            <!--End Logo icon -->
+                            <!-- Logo text --><span>
+                                <!-- dark Logo text -->
+                                <!--<img src="aerre.jpg" alt="homepage" class="dark-logo" />-->
+                                <!-- Light Logo text -->
+                                <!--<img src="aerre.jpg" class="light-logo" alt="homepage" />-->
+                            </span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
-                            <ul>
-                                <li>
-                                    <div class="drop-title">Notifications</div>
-                                </li>
-                                <li>
-                                    <div class="message-center">-->
-                        <!-- Message -->
-                        <!--<a href="#">
-                            <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i></div>
-                            <div class="mail-contnet">
-                                <h5>Luanch Admin</h5> <span class="mail-desc">Just see the my new admin!</span> <span class="time">9:30 AM</span>
-                            </div>
-                        </a>-->
-                        <!-- Message -->
-                        <!--<a href="#">
-                            <div class="btn btn-success btn-circle"><i class="ti-calendar"></i></div>
-                            <div class="mail-contnet">
-                                <h5>Event today</h5> <span class="mail-desc">Just a reminder that you have event</span> <span class="time">9:10 AM</span>
-                            </div>
-                        </a>-->
-                        <!-- Message -->
-                        <!--<a href="#">
-                            <div class="btn btn-info btn-circle"><i class="ti-settings"></i></div>
-                            <div class="mail-contnet">
-                                <h5>Settings</h5> <span class="mail-desc">You can customize this template as you want</span> <span class="time">9:08 AM</span>
-                            </div>
-                        </a>-->
-                        <!-- Message -->
-                        <!--<a href="#">
-                                                <div class="btn btn-primary btn-circle"><i class="ti-user"></i></div>
-                                                <div class="mail-contnet">
-                                                    <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:02 AM</span>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a class="nav-link text-center" href="javascript:void(0);"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>-->
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- End Logo -->
+                    <!-- ============================================================== -->
+                    <div class="navbar-collapse">
                         <!-- ============================================================== -->
-                        <!-- End Comment -->
+                        <!-- toggle and nav items -->
                         <!-- ============================================================== -->
+                        <ul class="navbar-nav mr-auto">
+                            <!-- This is  -->
+                            <li class="nav-item">
+                                <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark"
+                                   @onclick="@(()=> SidebarToggle = !SidebarToggle)">
+                                    <i class="e-icons e-play-icon"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link sidebartoggler hidden-sm-down waves-effect waves-dark"
+                                   @onclick="@(()=> SidebarToggle = !SidebarToggle)">
+                                    <i class="e-icons e-play-icon"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item hidden-sm-down"></li>
+                        </ul>
                         <!-- ============================================================== -->
-                        <!-- Messages -->
+                        <!-- User profile and search -->
                         <!-- ============================================================== -->
-                        <!--<li class="nav-item dropdown">
+                        <ul class="navbar-nav my-lg-0">
+                            <!-- ============================================================== -->
+                            <!-- Search -->
+                            <!-- ============================================================== -->
+                            @*<li class="nav-item hidden-xs-down search-box">
+                            <a class="nav-link hidden-sm-down waves-effect waves-dark" href="javascript:void(0)"><i class="ti-search"></i></a>
+                            <form class="app-search">
+                                <input type="text" class="form-control" placeholder="Search & enter"> <a class="srh-btn"><i class="ti-close"></i></a>
+                            </form>
+                        </li>*@
+                            <!-- ============================================================== -->
+                            <!-- Comment -->
+                            <!-- ============================================================== -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="mdi @iconClassNotification"></i>
+                                    <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
+                                    <ul>
+                                        <li>
+                                            <div class="drop-title">Tiene @mensajes.Count() mensajes nuevos!</div>
+                                        </li>
+                                        
+                                        <li>
+                                            @foreach (var item in mensajes.Take(4).OrderByDescending(m=> m.CreatedDate).ToList())
+                                            {
+                                            <div class="message-center">
+                                                Mensaje
+                                                <a href="/chat-app/@item.FromUserId">
+                                                    <div class="btn btn-primary btn-circle"><i class="ti-user"></i></div>
+                                                    <div class="mail-contnet">
+                                                        <h5>@item.FromUser?.UserName</h5> <span class="mail-desc">@item.Message</span> 
+                                                        <span class="time">@item.CreatedDate</span>
+                                                    </div>
+                                                </a>
+                                                @*Message
+                                                <a href="#">
+                                                    <div class="btn btn-success btn-circle"><i class="ti-calendar"></i></div>
+                                                    <div class="mail-contnet">
+                                                        <h5>Event today</h5> <span class="mail-desc">Just a reminder that you have event</span> <span class="time">9:10 AM</span>
+                                                    </div>
+                                                </a>
+                                                Message
+                                                <a href="#">
+                                                    <div class="btn btn-info btn-circle"><i class="ti-settings"></i></div>
+                                                    <div class="mail-contnet">
+                                                        <h5>Settings</h5> <span class="mail-desc">You can customize this template as you want</span> <span class="time">9:08 AM</span>
+                                                    </div>
+                                                </a>
+
+                                                Message
+                                                <a href="#">
+                                                    <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i></div>
+                                                    <div class="mail-contnet">
+                                                        <h5>Luanch Admin</h5> <span class="mail-desc">Just see the my new admin!</span> <span class="time">9:30 AM</span>
+                                                    </div>
+                                                </a>*@
+                                            </div>
+                                            }
+
+                                        </li>
+                                        <li>
+                                            <a class="nav-link text-center" href="/chat-app"> <strong>Ver todas las notificaciones</strong> <i class="fa fa-angle-right"></i> </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <!-- ============================================================== -->
+                            <!-- End Comment -->
+                            <!-- ============================================================== -->
+                            <!-- ============================================================== -->
+                            <!-- Messages -->
+                            <!-- ============================================================== -->
+                            @*<li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="mdi mdi-email"></i>
                             <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
@@ -140,30 +149,30 @@
                                     <div class="drop-title">You have 4 new messages</div>
                                 </li>
                                 <li>
-                                    <div class="message-center">-->
-                        <!-- Message -->
-                        <!--<a href="#">
+                                    <div class="message-center">
+                         Message
+                        <a href="#">
                             <div class="user-img"> <img src="img1-150x150.png" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
                             <div class="mail-contnet">
                                 <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:30 AM</span>
                             </div>
-                        </a>-->
-                        <!-- Message -->
-                        <!--<a href="#">
+                        </a>
+                         Message
+                        <a href="#">
                             <div class="user-img"> <img src="../img1-150x150.png" alt="user" class="img-circle"> <span class="profile-status busy pull-right"></span> </div>
                             <div class="mail-contnet">
                                 <h5>Sonu Nigam</h5> <span class="mail-desc">I've sung a song! See you at</span> <span class="time">9:10 AM</span>
                             </div>
-                        </a>-->
-                        <!-- Message -->
-                        <!--<a href="#">
+                        </a>
+                         Message
+                        <a href="#">
                             <div class="user-img"> <img src="./img1-150x150.png" alt="user" class="img-circle"> <span class="profile-status away pull-right"></span> </div>
                             <div class="mail-contnet">
                                 <h5>Arijit Sinh</h5> <span class="mail-desc">I am a singer!</span> <span class="time">9:08 AM</span>
                             </div>
-                        </a>-->
-                        <!-- Message -->
-                        <!--<a href="#">
+                        </a>
+                         Message
+                        <a href="#">
                                                 <div class="user-img"> <img src="./img1-150x150.png" alt="user" class="img-circle"> <span class="profile-status offline pull-right"></span> </div>
                                                 <div class="mail-contnet">
                                                     <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:02 AM</span>
@@ -176,264 +185,295 @@
                                     </li>
                                 </ul>
                             </div>
-                        </li>-->
-                        <!-- ============================================================== -->
-                        <!-- End Messages -->
-                        <!-- ============================================================== -->
-                        <!-- ============================================================== -->
-                        <!-- mega menu -->
-                        <!-- ============================================================== -->
-                        <!--<li class="nav-item dropdown mega-dropdown">
-                        <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mdi mdi-view-grid"></i></a>
-                        <div class="dropdown-menu animated bounceInDown">
-                            <ul class="mega-dropdown-menu row">
-                                <li class="col-lg-3 col-xlg-2 m-b-30">
-                                    <h4 class="m-b-20">CAROUSEL</h4>-->
-                        <!-- CAROUSEL -->
-                        <!--<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                            <div class="carousel-inner" role="listbox">
-                                <div class="carousel-item active">
-                                    <div class="container"> <img class="d-block img-fluid" src="./img1-150x150.png" alt="First slide"></div>
+                        </li>*@
+                            <!-- ============================================================== -->
+                            <!-- End Messages -->
+                            <!-- ============================================================== -->
+                            <!-- ============================================================== -->
+                            <!-- mega menu -->
+                            <!-- ============================================================== -->
+                            <!--<li class="nav-item dropdown mega-dropdown">
+                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mdi mdi-view-grid"></i></a>
+                    <div class="dropdown-menu animated bounceInDown">
+                        <ul class="mega-dropdown-menu row">
+                            <li class="col-lg-3 col-xlg-2 m-b-30">
+                                <h4 class="m-b-20">CAROUSEL</h4>-->
+                            <!-- CAROUSEL -->
+                            <!--<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner" role="listbox">
+                            <div class="carousel-item active">
+                                <div class="container"> <img class="d-block img-fluid" src="./img1-150x150.png" alt="First slide"></div>
+                            </div>
+                            <div class="carousel-item"
+                                <div class="container"><img class="d-block img-fluid" src="./logo_aerre.jpg" alt="Second slide"></div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="container"><img class="d-block img-fluid" src="./IMR.jpg" alt="Third slide"></div>
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span> <span class="sr-only">Previous</span> </a>
+                        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next"> <span class="carousel-control-next-icon" aria-hidden="true"></span> <span class="sr-only">Next</span> </a>
+                    </div>-->
+                            <!-- End CAROUSEL -->
+                            <!--</li>
+                    <li class="col-lg-3 m-b-30">
+                        <h4 class="m-b-20">ACCORDION</h4>
+                         Accordian-->
+                            <!--<div id="accordion" class="nav-accordion" role="tablist" aria-multiselectable="true">
+                            <div class="card">
+                                <div class="card-header" role="tab" id="headingOne">
+                                    <h5 class="mb-0">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Collapsible Group Item #1
+                                        </a>
+                                    </h5>
                                 </div>
-                                <div class="carousel-item"
-                                    <div class="container"><img class="d-block img-fluid" src="./logo_aerre.jpg" alt="Second slide"></div>
-                                </div>
-                                <div class="carousel-item">
-                                    <div class="container"><img class="d-block img-fluid" src="./IMR.jpg" alt="Third slide"></div>
+                                <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="card-body"> Anim pariatur cliche reprehenderit, enim eiusmod high. </div>
                                 </div>
                             </div>
-                            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span> <span class="sr-only">Previous</span> </a>
-                            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next"> <span class="carousel-control-next-icon" aria-hidden="true"></span> <span class="sr-only">Next</span> </a>
-                        </div>-->
-                        <!-- End CAROUSEL -->
-                        <!--</li>
-                        <li class="col-lg-3 m-b-30">
-                            <h4 class="m-b-20">ACCORDION</h4>
-                             Accordian-->
-                        <!--<div id="accordion" class="nav-accordion" role="tablist" aria-multiselectable="true">
-                                <div class="card">
-                                    <div class="card-header" role="tab" id="headingOne">
-                                        <h5 class="mb-0">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                Collapsible Group Item #1
-                                            </a>
-                                        </h5>
-                                    </div>
-                                    <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-                                        <div class="card-body"> Anim pariatur cliche reprehenderit, enim eiusmod high. </div>
-                                    </div>
+                            <div class="card">
+                                <div class="card-header" role="tab" id="headingTwo">
+                                    <h5 class="mb-0">
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            Collapsible Group Item #2
+                                        </a>
+                                    </h5>
                                 </div>
-                                <div class="card">
-                                    <div class="card-header" role="tab" id="headingTwo">
-                                        <h5 class="mb-0">
-                                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                                Collapsible Group Item #2
-                                            </a>
-                                        </h5>
-                                    </div>
-                                    <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                        <div class="card-body"> Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-header" role="tab" id="headingThree">
-                                        <h5 class="mb-0">
-                                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                Collapsible Group Item #3
-                                            </a>
-                                        </h5>
-                                    </div>
-                                    <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
-                                        <div class="card-body"> Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. </div>
-                                    </div>
+                                <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                    <div class="card-body"> Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. </div>
                                 </div>
                             </div>
-                        </li>
-                        <li class="col-lg-3  m-b-30">
-                            <h4 class="m-b-20">CONTACT US</h4>-->
-                        <!-- Contact -->
-                        <!--<form>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="exampleInputname1" placeholder="Enter Name">
+                            <div class="card">
+                                <div class="card-header" role="tab" id="headingThree">
+                                    <h5 class="mb-0">
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            Collapsible Group Item #3
+                                        </a>
+                                    </h5>
                                 </div>
-                                <div class="form-group">
-                                    <input type="email" class="form-control" placeholder="Enter email">
+                                <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+                                    <div class="card-body"> Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. </div>
                                 </div>
-                                <div class="form-group">
-                                    <textarea class="form-control" id="exampleTextarea" rows="3" placeholder="Message"></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-info">Submit</button>
-                            </form>
-                        </li>
-                        <li class="col-lg-3 col-xlg-4 m-b-30">
-                            <h4 class="m-b-20">List style</h4>-->
-                        <!-- List style -->
-                        <!--<ul class="list-style-none">
-                                            <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> You can give link</a></li>
-                                            <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Give link</a></li>
-                                            <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Another Give link</a></li>
-                                            <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Forth link</a></li>
-                                            <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Another fifth link</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
                             </div>
-                        </li>-->
-                        <!-- ============================================================== -->
-                        <!-- End mega menu -->
-                        <!-- ============================================================== -->
-                        <!-- ============================================================== -->
-                        <!-- Language -->
-                        <!-- ============================================================== -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="flag-icon flag-icon-es"></i></a>
-                            <div class="dropdown-menu dropdown-menu-right animated bounceInDown">
+                        </div>
+                    </li>
+                    <li class="col-lg-3  m-b-30">
+                        <h4 class="m-b-20">CONTACT US</h4>-->
+                            <!-- Contact -->
+                            <!--<form>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="exampleInputname1" placeholder="Enter Name">
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control" placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" id="exampleTextarea" rows="3" placeholder="Message"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-info">Submit</button>
+                        </form>
+                    </li>
+                    <li class="col-lg-3 col-xlg-4 m-b-30">
+                        <h4 class="m-b-20">List style</h4>-->
+                            <!-- List style -->
+                            <!--<ul class="list-style-none">
+                                        <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> You can give link</a></li>
+                                        <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Give link</a></li>
+                                        <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Another Give link</a></li>
+                                        <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Forth link</a></li>
+                                        <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Another fifth link</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>-->
+                            <!-- ============================================================== -->
+                            <!-- End mega menu -->
+                            <!-- ============================================================== -->
+                            <!-- ============================================================== -->
+                            <!-- Language -->
+                            <!-- ============================================================== -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="flag-icon flag-icon-es"></i></a>
+                                @*<div class="dropdown-menu dropdown-menu-right animated bounceInDown">
                                 <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-in"></i> India</a>
                                 <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-fr"></i> French</a>
                                 <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-cn"></i> China</a>
                                 <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-de"></i> Dutch</a>
                                 <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-us"></i> US</a>
-                            </div>
-                        </li>
-                        <!-- ============================================================== -->
-                        <!-- Profile -->
-                        <!-- ============================================================== -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="img1-150x150.png" alt="user" class="profile-pic" />
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right animated flipInY">
-                                <ul class="dropdown-user">
-                                    <li>
-                                        <div class="dw-user-box">
-                                            <div class="u-img"><img src="img1-150x150.png" alt="user"></div>
-                                            <div class="u-text">
-                                                @if (authState != null)
-                                                {
-                                                    if (authState.User.Identity.IsAuthenticated)
-                                                    {
-                                                        <h4>@authState.User.Identity.Name</h4>
-                                                    }
-                                                }
+                            </div>*@
+                            </li>
+                            <!-- ============================================================== -->
+                            <!-- Profile -->
+                            <!-- ============================================================== -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="img1-150x150.png" alt="user" class="profile-pic" />
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right animated flipInY">
+                                    <ul class="dropdown-user">
+                                        <li>
+                                            <div class="dw-user-box">
+                                                <div class="u-img"><img src="img1-150x150.png" alt="user"></div>
+                                                <div class="u-text">
+                                                    <h4>@nombreUsuario</h4>
 
-                                                <p class="text-muted">mail@gmail.com</p>
-                                                <a href="#" class="btn btn-rounded btn-danger btn-sm">Ver Perfil</a>
+                                                    <p class="text-muted">@emailUsuario</p>
+                                                    <a href="#" class="btn btn-rounded btn-danger btn-sm">Ver Perfil</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="#" @onclick:preventDefault><i class="ti-user"></i> Mi Perfil</a></li>
-                                    @*<li><a href="#"><i class="ti-wallet"></i> My Balance</a></li>
-                                        <li><a href="#"><i class="ti-email"></i> Inbox</a></li>
+                                        </li>
                                         <li role="separator" class="divider"></li>
-                                        <li><a href="#"><i class="ti-settings"></i> Account Setting</a></li>*@
+                                        <li><a href="#" @onclick:preventDefault><i class="ti-user"></i> Mi Perfil</a></li>
+                                        @*<li><a href="#"><i class="ti-wallet"></i> My Balance</a></li>
+                                    <li><a href="#"><i class="ti-email"></i> Inbox</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li>
-                                        <a href="#"><i class="fa fa-power-off"></i> Logout</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
-        </header>
-
-    </div>
-
-    <SfSidebar ID="sidebarInit" @ref="sidebarObj" Animate="false" EnableRtl="false" Width="280px" @bind-IsOpen="SidebarToggle"
-               ZIndex="20" EnableDock="true"
-               DockSize="0px" Position="SidebarPosition.Left"
-               MediaQuery="(min-width: 600px)">
-        <ChildContent>
-
-            @*<span class="e-avatar e-avatar-large e-avatar-circle image text-center"></span>*@
-            @if (authState != null)
-            {
-                if (authState.User.Identity.IsAuthenticated)
-                {
-                    <div class="profile-img">
-                        <img src="img1-150x150.png" alt="user" class="profile-pic" />
-                        <div class="text text-white-50" style="width: 100%;font-size: 30px;text-align: center;">
-                            @authState.User.Identity.Name
-                        </div>
+                                    <li><a href="#"><i class="ti-settings"></i> Account Setting</a></li>*@
+                                        <li role="separator" class="divider"></li>
+                                        <li>
+                                            <a @onclick="@Logout"><i class="fa fa-power-off"></i> Logout</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
+                </nav>
 
-
-                }
-            }
-            @*<hr />*@
-            <div class="main-menu">
-                <div class="table-content">
-                    @*<input type="text" placeholder="Search..." class="search-icon">*@
-                    @*<p class="main-menu-header">TABLE OF CONTENTS</p>*@
-                </div>
-                <TreeViewMenu OnChangeToggle="@Close"></TreeViewMenu>
-
-
+            </header>
+            <div class="ribbon">
+                <span>DESARROLLO</span>
             </div>
-            @*<div class="footer">
-                <div class="version">
-                    Version 0.1
-                </div>
-
-            </div>*@
-        </ChildContent>
+        </div>
         
-    </SfSidebar>
-    
+        <SfSidebar ID="sidebarInit" @ref="sidebarObj" Animate="false" EnableRtl="false" Width="280px" @bind-IsOpen="SidebarToggle"
+                   ZIndex="20" EnableDock="true"
+                   DockSize="0px" Position="SidebarPosition.Left"
+                   MediaQuery="(min-width: 600px)">
+            <ChildContent>
+                
+                @*<span class="e-avatar e-avatar-large e-avatar-circle image text-center"></span>*@
+                @if (authState != null)
+                {
+                    if (authState.User.Identity.IsAuthenticated)
+                    {
+                        <div class="profile-img">
+                            <img src="img1-150x150.png" alt="user" class="profile-pic" />
+                            <div class="text text-white-50" style="width: 100%;font-size: 30px;text-align: center;">
+                                @authState.User.Identity.Name
+                            </div>
+                        </div>
 
 
-    <div class="page-wrapper">
-        @if (updateReady)
-        {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong class="">Hay una nueva Version Disponible!</strong>
-                <SfButton Content="Actualizar" CssClass="btn btn-sm btn-success" IconCss="fa fa-refresh" OnClick="Reload" />
+                    }
+                }
+                @*<hr />*@
+                <div class="main-menu">
+                    <div class="table-content">
+                        @*<input type="text" placeholder="Search..." class="search-icon">*@
+                        @*<p class="main-menu-header">TABLE OF CONTENTS</p>*@
+                    </div>
+                    <TreeViewMenu OnChangeToggle="@Close"></TreeViewMenu>
+
+
+                </div>
+                @*<div class="footer">
+            <div class="version">
+                Version 0.1
             </div>
 
-        }
-        <div class="container-fluid">
-            <div class="row page-titles">
-                <div class="col-md-5 align-self-center">
-                    <h3 class="text-themecolor">@Titulo</h3>
+        </div>*@
+            </ChildContent>
+
+        </SfSidebar>
+
+
+
+        <div class="page-wrapper">
+            @if (updateReady)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong class="">Hay una nueva Version Disponible!</strong>
+                    <SfButton Content="Actualizar" CssClass="btn btn-sm btn-success" IconCss="fa fa-refresh" OnClick="Reload" />
                 </div>
-                <div class="col-md-7 align-self-center">
-                    <ol class="breadcrumb">
-                        @*<li class="breadcrumb-item"><a href="javascript:void(0)">@BreadCumParent</a></li>
+
+            }
+            <div class="container-fluid">
+                <div class="row page-titles">
+                    <div class="col-md-5 align-self-center">
+                        <h3 class="text-themecolor">@Titulo</h3>
+                    </div>
+                    <div class="col-md-7 align-self-center">
+                        <ol class="breadcrumb">
+                            @*<li class="breadcrumb-item"><a href="javascript:void(0)">@BreadCumParent</a></li>
                             <li class="breadcrumb-item">Forms</li>
                             <li class="breadcrumb-item active">Form Basic</li>*@
-                    </ol>
-                </div>
-                @*<div class="">
+                        </ol>
+                    </div>
+                    @*<div class="">
                         <button class="right-side-toggle waves-effect waves-light btn-inverse btn btn-circle btn-sm pull-right m-l-10">
                             <i class="ti-settings text-white"></i></button>
                     </div>*@
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <CascadingValue Value="hubConnection">
 
-                            @Body
+                                    @Body
+                                </CascadingValue>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+    </CascadingValue>
+    <SfToast @ref="ToastObj" Content="@ToastContent" Width="100%" Title="Nuevo Mensaje" Icon="e-laura">
+        <ToastPosition X="Right" Y="Bottom"></ToastPosition>
+    </SfToast>
+
+    @*<SfToast ID="toast_custom" @ref="@ToastObj" Width="400px" ExtendedTimeout=0 Timeout="200">
+        <ToastPosition X="Right" Y="Bottom"></ToastPosition>
+        <ToastTemplates>
+            <Template>
+                <div id='template_toast'>
+                    <div class="horizontal-align">
+                        <div class='e-icons toast-icons e-alarm'></div>
+                        <div class='toast-content'>
+                            <div class='toast-title'>
+                                Weekend Alarm
+                            </div>
+                            <div class='toast-message'>
+                                With traffic, its likely to take 45 minutes to get to jenny's 24th Birthday Bash at Hillside Bar, 454 E.
+                                Olive Way by 10:00 PM
+                            </div>
                         </div>
                     </div>
-
+                    <div class="snoozeBtn">
+                        <SfButton ID="snooze" CssClass="e-btn e-flat e-info"> Snooze </SfButton>
+                        <SfButton ID="dismiss" CssClass="e-btn e-flat e-info"> Dismiss </SfButton>
+                    </div>
                 </div>
-            </div>
-
-
-        </div>
-    </div>
-
-
-</CascadingValue>
-
+            </Template>
+        </ToastTemplates>
+    </SfToast>*@
 
 @code{
+    [Inject] public ILoginServiceJWT LoginService { get; set; }
+    [Inject] public IJSRuntime Js { get; set; }
+    [Inject] public HelperService.ChatService ChatService { get; set; }
+    [Inject] public RenovadorToken RenovadorToken { get; set; }
     protected SfSidebar sidebarObj;
-
+    protected SfToast ToastObj;
+    protected string ToastContent;
     private Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
     {
          {"class", "sidebar-treeview" }
@@ -443,18 +483,88 @@
 
     private bool SidebarToggle = false;
     private string nombreUsuario = "";
-
+    private string emailUsuario = "";
+    private string CurrentUserId { get; set; }
     public string Titulo { get; set; } = "";
     public string BreadCumParent { get; set; } = "";
     bool updateReady;
+    private HubConnection hubConnection;
+    public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
+    protected List<ChatMessage> mensajes = new();
+    protected string iconClassNotification = string.Empty;
+
     protected async override Task OnInitializedAsync()
     {
         authState = await authenticationState;
         if (authState.User.Identity.IsAuthenticated)
+        {
+            RenovadorToken.Iniciar();
             nombreUsuario = authState.User.Identity.Name;
+            var user = authState.User;
+            var claims = user.Claims.ToList();
+            CurrentUserId = user.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier)
+                .Select(a => a.Value).FirstOrDefault();
 
-        await JS.InvokeAsync<object>( "blazorFuncs.registerClient", DotNetObjectReference.Create(this));
+            emailUsuario = user.Claims.Where(a => a.Type == ClaimTypes.Email)
+                .Select(a => a.Value).FirstOrDefault();
+
+            var response = await ChatService.GetConversationNoViewAsync();
+            if (response.Error)
+            {
+
+            }
+            else
+            {
+                mensajes = response.Response;
+                if (mensajes.Count > 0)
+                {
+                    iconClassNotification = "mdi-message";
+                }
+            }
+        }
+
+
+        await JS.InvokeAsync<object>("blazorFuncs.registerClient", DotNetObjectReference.Create(this));
+
+        hubConnection = new HubConnectionBuilder().WithUrl(MyNavigationManager.ToAbsoluteUri("/chathub")).Build();
+        await hubConnection?.StartAsync();
+        hubConnection?.On<string, string, string>("ReceiveChatNotification", (message, receiverUserId, senderUserId) =>
+        {
+            if (CurrentUserId == receiverUserId)
+            {
+                iconClassNotification = "mdi-message";
+                Js.InvokeAsync<string>("PlayAudio", "notification");
+                ToastObj.ShowAsync(new ToastModel()
+                {
+                    Title = "Nuevo Mensaje Recibido",
+                    Content = message,
+                    NewestOnTop = true,
+                    ShowCloseButton = true,
+                    ShowProgressBar = true,
+                }) ;
+
+                StateHasChanged();
+                //_snackBar.Add(message, Severity.Info, config =>
+                //{
+                //    config.VisibleStateDuration = 10000;
+                //    config.HideTransitionDuration = 500;
+                //    config.ShowTransitionDuration = 500;
+                //    config.Action = "Chat?";
+                //    config.ActionColor = Color.Info;
+                //    config.Onclick = snackbar =>
+                //    {
+                //        _navigationManager.NavigateTo($"chat/{senderUserId}");
+                //        return Task.CompletedTask;
+                //    };
+                //});
+            }
+        });
+
+
+
+
     }
+
 
     [JSInvokable("onupdateavailable")]
     public async Task<string> AppUpdate()
@@ -468,8 +578,8 @@
 
     protected async Task Logout()
     {
-        await Logout();
-        navigationManager.NavigateTo("/login");
+        await LoginService.Logout();
+        MyNavigationManager.NavigateTo("/login-identity");
     }
 
     public void Close()
@@ -497,7 +607,7 @@
         box-shadow: 1px 0px 20px rgb(0 0 0 / 8%);
     }
 
-    .profile-img{
+    .profile-img {
         border-bottom: 1px solid #656a70;
         /*padding-bottom: 5px;*/
     }
@@ -630,7 +740,7 @@
     }
 
     .sidebar.e-dock.e-close > .profile-img {
-        visibility:hidden;
+        visibility: hidden;
     }
 
 
@@ -640,6 +750,7 @@
         border-top: 1px solid #E8E8E8;
         background-color: #395b7b;
     }
+
     .e-sidebar.e-lib.e-dock.e-left .footer {
         position: absolute;
         bottom: 0;
@@ -647,7 +758,7 @@
         right: 18px;
     }
 
-/*    .card {
+    /*    .card {
         margin-bottom: 30px !important;
     }
 

@@ -23,8 +23,18 @@ namespace SupplyChain.Shared
 
         [Range(minimum: 1, maximum: 9999999, ErrorMessage = "La Cantidad es requerida")]
         public int Cantidad { get; set; }
-        public bool TienePresupuesto { get; set; }
+        public string ContrapresionFija { get; set; } = string.Empty;
+        public string ContrapresionVariable { get; set; } = string.Empty;
+        public string PresionApertura { get; set; } = string.Empty;
+        public string DescripcionFluido { get; set; } = string.Empty;
+        public string TemperaturaDescargaT { get; set; } = string.Empty;
+        public string CapacidadRequerida { get; set; } = string.Empty;
+        public string DescripcionTag { get; set; } = string.Empty;
+        [StringLength(maximumLength:500, ErrorMessage = "*Las observaciones tienen un maximo de 500 caracteres")]
+        public string Observaciones { get; set; } = string.Empty;
+        public bool TienePresupuesto { get; set; } = false;
         public PresupuestoDetalle PresupuestoDetalle { get; set; }
+
         [NotMapped] public PreciosArticulos PrecioArticulo { get; set; }
         [NotMapped] public string Des_Cli { get; set; } = string.Empty;
         [NotMapped] public string Des_Prod { get; set; } = string.Empty;

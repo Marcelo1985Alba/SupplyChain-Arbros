@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,20 +12,14 @@ namespace SupplyChain.Shared.DTOs
         public DateTime Fecha { get; set; }
         public string Producto { get; set; }
         public int Cantidad { get; set; } = 1;
-        public int TagId { get; set; }
+        public int CalcId { get; set; }
         public string Cuit { get; set; }
-        public string Medidas { get; set; }
-        public string Orifico { get; set; }
-        public string SerieEntrada { get; set; }
-        public string TipoEntrada { get; set; }
-        public string SerieSalida { get; set; }
-        public string TipoSalida { get; set; }
-        public string Accesorios { get; set; }
-        public string Asiento { get; set; }
-        public string Bonete { get; set; }
-        public string Cuerpo { get; set; }
-        public string Resorte { get; set; }
-        public string Disco { get; set; }
-        public string Tobera { get; set; }
+        public string ContrapresionFija { get; set; } = string.Empty;
+        public string ContrapresionVariable { get; set; } = string.Empty;
+        public string PresionApertura { get; set; } = string.Empty;
+        public string DescripcionFluido { get; set; } = string.Empty;
+        public string TemperaturaDescargaT { get; set; } = string.Empty;
+        public string CapacidadRequerida { get; set; } = string.Empty;
+        public string DescripcionTag { get; set; } = string.Empty;
     }
 }

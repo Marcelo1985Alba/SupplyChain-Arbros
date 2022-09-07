@@ -209,158 +209,165 @@ e-grid .e-gridheader {
     font-weight: bold;
 }
 
-/*.e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn {
-    height: 9px !important;
+.e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn {
+    /*height: 9px !important;
     min-height: 29px !important;
-    min-width: 34px !important;
-}*/
+    min-width: 34px !important;*/
+    background: #549bf9;
+}
+    .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:focus {
+        background: #2f86f9;
+    }
+    .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:hover {
+        background: #3582e8;
+    }
 
-.e-toolbar-item button[aria-label="Add"] {
-    background: #04cb93;
+/*.e-toolbar-item button[aria-label="Add"] {
+    background: #04cb93;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Add"]:focus {
-    background: #0cc08d;
+    background: #0cc08d;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Add"]:hover {
-    background: #1cb78b;
+    background: #1cb78b;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Edit"] {
-    background: #fce87a;
+    background: #fce87a;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Edit"]:focus {
-    background: #e1c31e;
+    background: #e1c31e;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Edit"]:hover {
-    background: #ffd800;
+    background: #ffd800;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Eliminar"] {
-    background: #ff886f;
+    background: #ff886f;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Eliminar"]:focus {
-    background: #ff6140;
+    background: #ff6140;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Eliminar"]:hover {
-    background: #ff694a;
+    background: #ff694a;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 
 .e-toolbar-item button[aria-label="Imprimir"] {
-    background: #ab7d4c;
+    background: #ab7d4c;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
     .e-toolbar-item button[aria-label="Imprimir"]:focus {
-        background: #c19669;
+        background: #c19669;*/
         /*border-radius: 10%;*/
         /*border: 1px solid #5a70cc;*/
-    }
+    /*}
 
     .e-toolbar-item button[aria-label="Imprimir"]:hover {
-        background: #7e5932;
+        background: #7e5932;*/
         /*border-radius: 10%;*/
         /*border: 1px solid #5a70cc;*/
-    }
+    /*}
 
 
 .e-toolbar-item button[aria-label="Exportar Excel"] {
-    background: #87c96b;
+    background: #87c96b;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Exportar Excel"]:focus {
-    background: #56a434;
+    background: #56a434;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Exportar Excel"]:hover {
-    background: #74bc55;
+    background: #74bc55;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Seleccionar Columnas"] {
-    background: #a584c4;
+    background: #a584c4;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Seleccionar Columnas"]:focus {
-    background: #8151ae;
+    background: #8151ae;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Seleccionar Columnas"]:hover {
-    background: #966abe;
+    background: #966abe;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}*/
 
 
-.e-toolbar-item button[aria-label="Copia"] {
-    background: #549bf9;
+/*.e-toolbar-item button[aria-label="Copia"] {
+    background: #549bf9;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Copia"]:focus {
-    background: #2f86f9;
+    background: #2f86f9;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Copia"]:hover {
-    background: #3582e8;
+    background: #3582e8;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}*/
 
-.e-toolbar-item button[aria-label="Actualizar Grilla"] {
+/*.e-toolbar-item button[aria-label="Actualizar Grilla"] {
     background: #f88d42;
-    font-size: 9px;
+    font-size: 9px;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Actualizar Grilla"]:focus {
-    background: #fa7213;
+    background: #fa7213;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}
 
 .e-toolbar-item button[aria-label="Actualizar Grilla"]:hover {
-    background: #fa7213;
+    background: #fa7213;*/
     /*border-radius: 10%;*/
     /*border: 1px solid #5a70cc;*/
-}
+/*}*/
 
 
 .e-toolbar-item .e-control .e-btn .e-icons .e-btn-icon {
@@ -391,3 +398,38 @@ form label {
     color: blue;
 }
 
+.ribbon {
+    background-color: #d38181;
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 0.8;
+    /* top left corner */
+    position: fixed;
+    left: -45px;
+    top: 45px;
+    width: 250px;
+    /* 45 deg ccw rotation */
+    -webkit-transform: rotate(-40deg);
+    -moz-transform: rotate(-40deg);
+    -ms-transform: rotate(-40deg);
+    -o-transform: rotate(-40deg);
+    transform: rotate(-40deg);
+    /* shadow */
+    -webkit-box-shadow: 0 0 10px #888;
+    -moz-box-shadow: 0 0 10px #888;
+    box-shadow: 0 0 10px #888;
+    z-index: 9999;
+}
+
+    .ribbon span {
+        border: 1px solid #faa;
+        color: #fff;
+        display: block;
+        font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        margin: 1px 0;
+        padding: 10px 50px;
+        text-align: center;
+        text-decoration: none;
+        /* shadow */
+        text-shadow: 0 0 5px #444;
+    }

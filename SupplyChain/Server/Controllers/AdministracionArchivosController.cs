@@ -1,9 +1,11 @@
-﻿using Azure.Storage.Blobs;
+﻿using AspNetCore.Reporting;
+using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SupplyChain.Client.HelperService;
@@ -31,14 +33,21 @@ namespace SupplyChain.Server.Controllers
         private readonly ILogger<AdministracionArchivosController> logger;
         private readonly SolutionRepository _solutionRepository;
         private readonly AppDbContext _context;
+        private readonly IConfiguration configuration;
+        private readonly IWebHostEnvironment env;
+        private readonly PresupuestoRepository _presupuestoRepository;
 
         public AdministracionArchivosController(IWebHostEnvironment hostingEnvironment, IMemoryCache cache
-            , SolutionRepository solutionRepository, AppDbContext context
-            , ILogger<AdministracionArchivosController> logger)
+            , SolutionRepository solutionRepository, AppDbContext context, IConfiguration configuration
+            , ILogger<AdministracionArchivosController> logger, IWebHostEnvironment env
+            , PresupuestoRepository presupuestoRepository)
         {
             _hostingEnvironment = hostingEnvironment;
             this._solutionRepository = solutionRepository;
             _context = context;
+            this.configuration = configuration;
+            this.env = env;
+            this._presupuestoRepository = presupuestoRepository;
             this._cache = cache;
         }
 
@@ -615,12 +624,19 @@ namespace SupplyChain.Server.Controllers
         }
 
         [HttpGet("MergePdf/{nroPedido}")]
-        public async Task<FileResult> MergePdf(int nroPedido)
+        public async Task<ActionResult> MergePdf(int nroPedido)
         {
             var listaTrazabilidad = await _context.VTrazabilidads.Where(v => v.PEDIDO == nroPedido).ToListAsync();
             var listArchivosDescargar = new List<Archivo>();
             List<vTrazabilidad> lineasCertif = new();
             var lineasCertificados = await GetFileLocalServer("RUTACERTIFICADOS", nroPedido.ToString());
+
+            if (lineasCertificados.Count == 0)
+            {
+                return NotFound();
+            }
+
+
             listArchivosDescargar.Add(lineasCertificados[0]);
             if (listaTrazabilidad.Count > 0)
             {
@@ -666,6 +682,141 @@ namespace SupplyChain.Server.Controllers
             string contentType = "application/pdf";
             string fileName = $"{nroPedido}.pdf";
             return File(stream, contentType, fileName);
+        }
+
+
+        [HttpGet("PresupuestoDataSheetPdf/{presupuesto}")]
+        public async Task<ActionResult> PresupuestoDataSheetPdf(int presupuesto)
+        {
+            //elimino si existe el archivo por si viene el mismo archivo con data actualizada
+            string path = EliminarArchivos();
+
+            //Obtener pdf presupuesto
+            var presup = await _presupuestoRepository.Obtener(v => v.Id == presupuesto).Include(i=> i.Items).FirstOrDefaultAsync();
+            var listArchivosDescargar = new List<Archivo>();
+            //obtengo pdf del reporte rdlc
+            var file = "Presupuesto.rdlc";
+            var vale = _context.vPresupuestosReporte.Where(c => c.PRESUPUESTO == presupuesto).ToList();
+            path = configuration["ReportesRDLC:Presupuesto"] + $"\\{file}";
+            Dictionary<string, string> parameter = new();
+            parameter.Add("param", "Primer Reporte");
+            LocalReport localReport = new(path);
+            localReport.AddDataSource(dataSetName: "DataSet1", vale);
+
+            var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
+            path = Path.Combine(env.WebRootPath, "pdf/", $"Cotizacion{presupuesto}.pdf");
+
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                Stream streamCot = new MemoryStream(result.MainStream);
+                await streamCot.CopyToAsync(fileStream);
+                await streamCot.DisposeAsync();
+            }
+
+            var archivoPresup = new Archivo()
+            {
+                Nombre = $"Cotizacion{presupuesto}.pdf",
+                Directorio = path
+            };
+            listArchivosDescargar.Add(archivoPresup);
+
+            //obtengo pdf de condiciones comerciales
+            var fileCC = "CondicionesComerciales.rdlc";
+            path = configuration["ReportesRDLC:Presupuesto"] + $"\\{fileCC}";
+            LocalReport localReportCC = new(path);
+            //localReportCC.AddDataSource(dataSetName: "DataSet1", vale);
+
+            var resultCC = localReportCC.Execute(RenderType.Pdf, 1);
+            path = Path.Combine(env.WebRootPath, "pdf/", $"CC{presupuesto}.pdf");
+
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                Stream streamCot = new MemoryStream(resultCC.MainStream);
+                await streamCot.CopyToAsync(fileStream);
+                await streamCot.DisposeAsync();
+            }
+
+            var archivoCC = new Archivo()
+            {
+                Nombre = $"CC{presupuesto}.pdf",
+                Directorio = path
+            };
+
+            listArchivosDescargar.Add(archivoCC);
+
+            //obtener el datasheet por item
+            foreach (var item in presup?.Items)
+            {
+                if (item.SOLICITUDID > 0)
+                {
+                    //obtengo pdf del reporte rdlc
+                    var fileDS = "Cotizacion.rdlc";
+                    var sol = _context.Solicitudes.Find(item.SOLICITUDID);
+                    if (sol != null && sol.CalcId > 0)
+                    {
+                        var valeDS = _context.vCalculoSolicitudes.Where(c => c.SolicitudId == sol.CalcId).ToList();
+                        if (valeDS != null && valeDS.Count > 0)
+                        {
+                            var pathDS = string.Empty;
+                            pathDS = configuration["ReportesRDLC:DataSheet"] + $"\\{fileDS}";
+
+                            LocalReport localReportDS = new(pathDS);
+                            localReportDS.AddDataSource(dataSetName: "DataSet1", valeDS);
+
+                            var resultDS = localReportDS.Execute(RenderType.Pdf, 1);
+                            pathDS = Path.Combine(env.WebRootPath, "pdf/", $"DataSheet{presupuesto}_{item.SOLICITUDID}.pdf");
+                            using (var fileStream = new FileStream(pathDS, FileMode.Create))
+                            {
+                                Stream streamCot = new MemoryStream(resultDS.MainStream);
+                                await streamCot.CopyToAsync(fileStream);
+                                await streamCot.DisposeAsync();
+                            }
+
+                            var archivoDataSheet = new Archivo()
+                            {
+                                Id = sol.CalcId,
+                                Nombre = $"DataSheet.pdf",
+                                Directorio = pathDS
+                            };
+                            listArchivosDescargar.Add(archivoDataSheet);  
+                        }
+                    }
+
+                }
+            }
+
+            Stream[] streams = new Stream[listArchivosDescargar.Count];
+            PdfDocument finalDoc = new PdfDocument();
+            for (int i = 0; i < listArchivosDescargar.Count; i++)
+            {
+                streams[i] = new FileStream(listArchivosDescargar[i].Directorio, FileMode.Open, FileAccess.Read);
+            }
+            PdfDocumentBase.Merge(finalDoc, streams);
+            MemoryStream stream = new();
+            finalDoc.Save(stream);
+            stream.Position = 0;
+            finalDoc.Close(true);
+            for (int i = 0; i < listArchivosDescargar.Count; i++)
+            {
+                streams[i].Dispose();
+            }
+            string contentType = "application/pdf";
+            string fileName = $"Presupuesto{presupuesto}.pdf";
+            return File(stream, contentType, fileName);
+        }
+
+
+        private string EliminarArchivos()
+        {
+            var path = Path.Combine(env.WebRootPath, "pdf/");
+            System.IO.DirectoryInfo di = new DirectoryInfo(path);
+
+            foreach (FileInfo file in di.GetFiles())
+            {
+                file.Delete();
+            }
+
+            return path;
         }
 
         private bool ExisteDoc(string file)

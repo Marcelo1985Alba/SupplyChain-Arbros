@@ -292,19 +292,42 @@ namespace SupplyChain
         public async Task<ActionResult<List<Pedidos>>> PostListStock([FromBody] List<Pedidos> lstock)
         {
             int vale = lstock[0].VALE;
+            int remito = 0;
             bool liberaVale = false;
-            if (lstock.Count > 0 && !lstock.Any(s=> s.Id > 0))
+            bool liberaRemito = false;
+            //vales
+            if (lstock.Count > 0 && !lstock.Any(s=> s.Id > 0) && lstock.All(s=> s.TIPOO != 1))
             {
                 await generaController.ReservaByCampo("VALE");
                 var generaVale = await _context.Genera.Where(g => g.Id == "VALE").FirstOrDefaultAsync();
                 vale = (int)generaVale.VALOR1;
                 liberaVale = true;
             }
+
+            //remitos
+            if (lstock.Any(s => s.TIPOO == 1 && s.Id < 0))
+            {
+                await generaController.ReservaByCampo("REMITO");
+                var generaVale = await _context.Genera.Where(g => g.Id == "REMITO").FirstOrDefaultAsync();
+                remito = (int)generaVale.VALOR1;
+                liberaRemito = true;
+
+            }
+
             
             foreach (var stock in lstock)
             {
                 try
                 {
+                    if (liberaRemito)
+                    {
+                        var rem = remito.ToString().PadLeft(8, '0');
+                        stock.REMITO = $"0001-{rem}";
+
+                        stock.Id ??= 0;
+                    }
+
+
                     if (stock.Id < 0) 
                         await AddDb(vale, stock);
                     else
@@ -319,7 +342,12 @@ namespace SupplyChain
                 }
                 catch (DbUpdateException ex)
                 {
-                    await generaController.LiberaByCampo("VALE");
+                    if (liberaVale)
+                        await generaController.LiberaByCampo("VALE");
+
+                    if (liberaRemito)
+                        await generaController.LiberaByCampo("REMITO");
+
                     await generaController.LiberaByCampo("REGSTOCK");
                     if (RegistroExists(stock.Id))
                     {
@@ -332,7 +360,12 @@ namespace SupplyChain
                 }
                 catch (Exception e)
                 {
-                    await generaController.LiberaByCampo("VALE");
+                    if (liberaVale)
+                        await generaController.LiberaByCampo("VALE");
+
+                    if (liberaRemito)
+                        await generaController.LiberaByCampo("REMITO");
+
                     await generaController.LiberaByCampo("REGSTOCK");
                     return BadRequest(e);
                 }
@@ -344,6 +377,9 @@ namespace SupplyChain
 
             if(liberaVale)
                 await generaController.LiberaByCampo("VALE");
+
+            if (liberaRemito)
+                await generaController.LiberaByCampo("REMITO");
 
 
             return Ok(lstock);

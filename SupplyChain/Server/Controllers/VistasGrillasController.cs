@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
@@ -13,6 +15,7 @@ namespace SupplyChain.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class VistasGrillasController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -22,9 +25,10 @@ namespace SupplyChain.Server.Controllers
             this._context = appDbContext;
         }
 
-        [HttpGet("GetByName/{name}/{userName}")]
-        public async Task<ActionResult<List<VistasGrillas>>> GetByName(string name, string userName)
+        [HttpGet("GetByName/{name}")]
+        public async Task<ActionResult<List<VistasGrillas>>> GetByName(string name)
         {
+            var userName = HttpContext.User.Identity.Name;
             return await _context.VistasGrillas.Where(v => v.AppName == name && v.Usuario == userName).ToListAsync();
         }
 
@@ -52,6 +56,8 @@ namespace SupplyChain.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<VistasGrillas>> Post(VistasGrillas vistasGrillas)
         {
+            var userName = HttpContext.User.Identity.Name;
+            vistasGrillas.Usuario = userName;
             if (vistasGrillas.Id > 0)
             {
                 _context.Entry(vistasGrillas).State = EntityState.Modified;

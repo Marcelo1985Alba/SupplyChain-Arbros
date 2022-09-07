@@ -101,6 +101,8 @@ namespace SupplyChain.Server.Controllers
                 foreach (DespiecePlanificacion item in xLista)
                 {
                     var codigoInsumo = string.IsNullOrWhiteSpace(item.CG_SE) ? item.CG_MAT.Trim() : item.CG_SE.Trim();
+
+
                     item.ResumenStocks = await _context.ResumenStock
                         .Where(r => r.CG_ART == codigoInsumo && r.STOCK > 0)
                         .ToListAsync();

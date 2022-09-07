@@ -22,7 +22,7 @@ namespace SupplyChain.Client
         {
     
             Syncfusion.Licensing.SyncfusionLicenseProvider
-                .RegisterLicense("NTU5NDk0QDMxMzkyZTM0MmUzMEtURElKREJxU1B4WVhyUFZYdGRoYVJ4WHU1ZVNZN1U4QjFGNCs0cGRORmM9");
+                .RegisterLicense("NzA0MTg5QDMxMzkyZTM0MmUzMEZNWW52OG1QdGtyV1lOK2grcU1KbmpJamtuUTgxWjZ6M1RiUGl3Q3hIc1U9");
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -51,6 +51,14 @@ namespace SupplyChain.Client
             services.AddScoped<ILoginService, ProveedorAutenticacion>(
                 provider => provider.GetRequiredService<ProveedorAutenticacion>());
 
+            //JWT
+            services.AddScoped<ProveedorAutenticacionJWT>();
+            services.AddScoped<AuthenticationStateProvider, ProveedorAutenticacionJWT>(
+                provider => provider.GetRequiredService<ProveedorAutenticacionJWT>());
+
+            services.AddScoped<ILoginServiceJWT, ProveedorAutenticacionJWT>(
+                provider => provider.GetRequiredService<ProveedorAutenticacionJWT>());
+
             services.AddScoped<ProductoService>();
             services.AddScoped<ClienteService>();
             services.AddScoped<DireccionEntregaService>();
@@ -67,10 +75,16 @@ namespace SupplyChain.Client
             services.AddScoped<LineasService>();
             services.AddScoped<UnidadesService>();
             services.AddScoped<ProyectosService>();
+            services.AddScoped<PedCliService>();
+            services.AddScoped<ServicioService>();
+            services.AddScoped<TransporteService>();
+            services.AddScoped<StockService>();
             services.AddScoped<MantCeldasService>();
+            services.AddScoped<EstadoPedidoService>();
+            services.AddScoped<ChatService>();
             services.AddScoped<PdfService>();
             services.AddScoped<ExcelService>();
-
+            services.AddScoped<RenovadorToken>();
 
             services.AddSingleton<ToastService>();
         }

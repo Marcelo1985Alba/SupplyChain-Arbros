@@ -23,6 +23,7 @@ namespace SupplyChain.Shared
         public decimal IMP_DESCUENTO { get; set; }
         public string OBSERITEM { get; set; } = "";
         public decimal DESCUENTO { get; set; }
+        [Range(minimum: 1, maximum: 100, ErrorMessage = "Dias Plazo Entrega es requerido")]
         public int DIAS_PLAZO_ENTREGA { get; set; } = 0;
         public decimal TOTAL { get; set; } = 0;
         public Presupuesto Presupuesto { get; set; }

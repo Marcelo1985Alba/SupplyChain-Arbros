@@ -11,7 +11,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-
+using SupplyChain.Client.Shared;
 namespace SupplyChain.Client.Shared.Inventarios
 {
     public class GridEditEntregaBase: ComponentBase
@@ -19,7 +19,7 @@ namespace SupplyChain.Client.Shared.Inventarios
         [Inject] public IJSRuntime JsRuntime { get; set; }
         [Inject] HttpClient Http { get; set; }
         protected ConfirmacionDialog ConfirmacionDialog;
-        protected BuscadorEmergente<Pedidos> BuscadorProducto;
+        protected SupplyChain.Client.Shared.BuscadorEmergente<Pedidos> BuscadorProducto;
         protected Pedidos stock;
         protected Pedidos stockCopiado;
         protected bool confirmaCopy = false;

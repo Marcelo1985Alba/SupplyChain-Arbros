@@ -108,7 +108,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             
         }
 
-        protected async Task GetTipoCambioDolarHoy()
+        public async Task GetTipoCambioDolarHoy()
         {
             var tc = await TipoCambioService.GetValorDolarHoy();
             if (tc == 0)
@@ -190,11 +190,11 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task BuscarSolicitudes()
         {
-            if (Presupuesto.CG_CLI == 0)
-            {
-                await ToastMensajeError("Seleccione Cliente.");
-                return;
-            }
+            //if (Presupuesto.CG_CLI == 0)
+            //{
+            //    await ToastMensajeError("Seleccione Cliente.");
+            //    return;
+            //}
 
             SpinnerVisible = true;
             await refSolicitudDialog.Show();
@@ -202,9 +202,13 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             popupBuscadorVisibleSolicitud = true;
         }
 
-        protected async Task ClienteExternoSelected(ClienteExterno clienteSelected)
+        public async Task ClienteExternoSelected(ClienteExterno clienteSelected)
         {
-            await refSpinnerCli.ShowAsync();
+            if (refSpinnerCli != null)
+            {
+                await refSpinnerCli.ShowAsync();
+            }
+            
             popupBuscadorVisibleCliente = false;
             Presupuesto.CG_CLI = Convert.ToInt32(clienteSelected.CG_CLI);
             Presupuesto.DES_CLI = clienteSelected.DESCRIPCION.Trim();
@@ -212,7 +216,12 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             Presupuesto.BONIFIC = clienteSelected.DESC_COMERCIAL == null ? 0 : (decimal)clienteSelected.DESC_COMERCIAL;
             Presupuesto.CG_COND_ENTREGA = clienteSelected.ID_CON_ENT == null ? 0 : (int)clienteSelected.ID_CON_ENT;
             await GetDireccionesEntregaCliente(Presupuesto.CG_CLI);
-            await refSpinnerCli.HideAsync();
+
+            if (refSpinnerCli != null)
+            {
+                await refSpinnerCli?.HideAsync();
+            }
+            
         }
 
         private async Task GetDireccionesEntregaCliente(int idCliente)
@@ -275,11 +284,24 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task SolicitudSelected(Solicitud solicitudSelected)
         {
-            if (Presupuesto.CG_CLI != solicitudSelected.CG_CLI)
+            if (Presupuesto.CG_CLI > 0 && Presupuesto.CG_CLI != solicitudSelected.CG_CLI)
             {
                 await ToastMensajeError("No se puede agregar item.\nCliente no corresponde al presupuesto.");
-                return;
             }
+
+            if (Presupuesto.CG_CLI == 0)
+            {
+                var response = await ClienteService.GetClientesExternoByCg_Cli(solicitudSelected.CG_CLI);
+                if (response.Error)
+                {
+                    await ToastMensajeError("No se pudo obtener cliente");
+                }
+                else
+                {
+                    await ClienteExternoSelected(response.Response);
+                }
+            }
+
             //Debe venir siempre con precio
             if (solicitudSelected.PrecioArticulo != null)
             {
@@ -316,6 +338,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                     //TIPOENTRADA = solicitudSelected.TipoEntrada,
                     //TIPOSALIDA = solicitudSelected.TipoSalida,
                     //TOBERA = solicitudSelected.Tobera,
+                    OBSERITEM = solicitudSelected.Observaciones,
                     PREC_UNIT = (decimal)solicitudSelected.PrecioArticulo?.Precio,
                     Estado = SupplyChain.Shared.Enum.EstadoItem.Agregado
                 };
@@ -380,10 +403,21 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             Show = false;
             BotonGuardarDisabled = false;
             Presupuesto.GUARDADO = guardado;
+            await DescargarPresupuestoDataSheet();
             await OnGuardar.InvokeAsync(Presupuesto);
+        }
+
+
+        private async Task DescargarPresupuestoDataSheet()
+        {
+            await Js.InvokeVoidAsync("descargarPresupuestDataSheet", Presupuesto.Id);
+        }
+
+        protected async Task ImprimirPresupuesto()
+        {
+            await Js.InvokeVoidAsync("open",
+                                new object[2] { $"/api/ReportRDLC/GetReportPresupuesto?id={Presupuesto.Id}", "" });
             await ImprimirDataSheet();
-            
-            
         }
 
         protected async Task ImprimirDataSheet()
@@ -636,6 +670,11 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected async Task OnCerrarDialog()
         {
             await OnCerrar.InvokeAsync();
+        }
+
+        public void HabilitarComboMoneda()
+        {
+            ReadOnlyMoneda = false;
         }
 
         private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
