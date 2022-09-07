@@ -63,6 +63,12 @@ namespace SupplyChain
             return await _pedCliRepository.Obtener(p=> p.PEDIDO == pedido).ToListAsync();
         }
 
+        [HttpGet("ByNumOci/{numOci}")]
+        public async Task<IEnumerable<PedCli>> ByNumOci(int numOci)
+        {
+            return await _pedCliRepository.Obtener(p => p.NUMOCI == numOci).ToListAsync();
+        }
+
         // PUT: api/Servicios/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -104,6 +110,12 @@ namespace SupplyChain
         public async Task<PedCliEncabezado> GetPedidoEncabezadoById(int id)
         {
             return await _pedCliRepository.ObtenerPedidosEncabezado(id);
+        }
+
+        [HttpGet("GetPedidoEncabezadoByNumOci/{numOci}")]
+        public async Task<PedCliEncabezado> GetPedidoEncabezadoByNumOci(int numOci)
+        {
+            return await _pedCliRepository.ObtenerPedidosEncabezadoByNumOci(numOci);
         }
 
         [HttpPost("PostList")]

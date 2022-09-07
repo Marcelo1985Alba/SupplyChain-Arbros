@@ -51,4 +51,14 @@
     }
 
 
+    <ConfirmacionDialog @ref="@refConfirmacionDialog" ContentButtonConfirm="Por Pedido" ContentButtonConfirmTwo="Por OCI"
+                        OnConfirm="@(()=> AbrirNumOCIPedido(true))" MontrarOtroButton="true"
+                        OnConfirmTwo="@(()=> AbrirNumOCIPedido(false))">
+        <HeaderTempalte><div class="text-white-50">Confirmarcion</div></HeaderTempalte>
+        <ContentTemplate>
+            Como desea editar?
+        </ContentTemplate>
+        
+    </ConfirmacionDialog>
+
 </div>

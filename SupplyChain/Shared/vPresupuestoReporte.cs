@@ -33,5 +33,11 @@ namespace SupplyChain.Shared
 		public decimal TOTAL_PRESUPUESTO { get; set; }
 		public string Construccion { get; set; }
 		public string Marca { get; set; }
-	}
+		public string CUIT_CLIENTE { get; set; }
+		public string DESCRIPCION_IVA { get; set; }
+		public string TRANSPORTE { get; set; }
+		public string CALLE_TRANSPORTE { get; set; }
+		public string OBSERITEM { get; set; }
+        public int DIAS_PLAZO_ENTREGA { get; set; }
+    }
 }

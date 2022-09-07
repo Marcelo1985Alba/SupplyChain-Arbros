@@ -483,10 +483,6 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         protected async Task Des_cli_Changed(InputEventArgs args)
         {
             string des_cli = args.Value.ToString();
-            //if (!string.IsNullOrEmpty(des_cli))
-            //{
-
-            //}
 
             Pedido.DES_CLI = des_cli;
             var response = await ClienteService.Search(Pedido.CG_CLI, Pedido.DES_CLI);

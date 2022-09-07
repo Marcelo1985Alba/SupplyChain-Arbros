@@ -13,8 +13,7 @@
               <DbSource ConnectionRef="marcelo-pc\sql_2017.Arbros.dbo" DbObjectName="Arbros.dbo.vRemitoReporte" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
-                    <CommandText>SELECT REMITO, PEDIDO, FE_PED, BONIFIC, CG_CLI, CLIENTE, CALLE_CLIENTE, CP_CLIENTE, DIRENT, CONDICION_PAGO, CONDICION_ENTREGA, PROVINCIA_CLIENTE, TELEFONO_CLIENTE, EMAIL_CLIENTE, NUMOCI, ORCO, CG_ART, 
-                  ARTICULO, CANTIDAD, PORC_DESCUENTO, PREC_UNIT, TOTAL_ITEM, MONEDA, CAMPOCOM1, CAMPOCOM2, CAMPOCOM3, CAMPOCOM4, CAMPOCOM5, CAMPOCOM6, CAMPOCOM7, CAMPOCOM8, Construccion, Marca
+                    <CommandText>SELECT *
 FROM     vRemitoReporte</CommandText>
                     <Parameters />
                   </DbCommand>
@@ -56,6 +55,10 @@ FROM     vRemitoReporte</CommandText>
               <Mapping SourceColumn="CAMPOCOM8" DataSetColumn="CAMPOCOM8" />
               <Mapping SourceColumn="REMITO" DataSetColumn="REMITO" />
               <Mapping SourceColumn="CANTIDAD" DataSetColumn="CANTIDAD" />
+              <Mapping SourceColumn="CUIT_CLIENTE" DataSetColumn="CUIT_CLIENTE" />
+              <Mapping SourceColumn="DESCRIPCION_IVA" DataSetColumn="DESCRIPCION_IVA" />
+              <Mapping SourceColumn="TRANSPORTE" DataSetColumn="TRANSPORTE" />
+              <Mapping SourceColumn="CALLE_TRANSPORTE" DataSetColumn="CALLE_TRANSPORTE" />
             </Mappings>
             <Sources>
               <DbSource ConnectionRef="marcelo-pc\sql_2017.Arbros.dbo" DbObjectName="Arbros.dbo.vPresupuestoReporte" DbObjectType="View" FillMethodModifier="Public" FillMethodName="FillBy" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetDataBy" GeneratorSourceName="FillBy" GetMethodModifier="Public" GetMethodName="GetDataBy" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="FillBy">
@@ -76,7 +79,7 @@ FROM     vRemitoReporte</CommandText>
   <xs:element name="ArbrosRemDataSet6" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="ArbrosRemDataSet6" msprop:Generator_UserDSName="ArbrosRemDataSet6">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="vRemitoReporte" msprop:Generator_TableClassName="vRemitoReporteDataTable" msprop:Generator_TableVarName="tablevRemitoReporte" msprop:Generator_TablePropName="vRemitoReporte" msprop:Generator_RowDeletingName="vRemitoReporteRowDeleting" msprop:Generator_RowChangingName="vRemitoReporteRowChanging" msprop:Generator_RowEvHandlerName="vRemitoReporteRowChangeEventHandler" msprop:Generator_RowDeletedName="vRemitoReporteRowDeleted" msprop:Generator_UserTableName="vRemitoReporte" msprop:Generator_RowChangedName="vRemitoReporteRowChanged" msprop:Generator_RowEvArgName="vRemitoReporteRowChangeEvent" msprop:Generator_RowClassName="vRemitoReporteRow">
+        <xs:element name="vRemitoReporte" msprop:Generator_TableClassName="vRemitoReporteDataTable" msprop:Generator_TableVarName="tablevRemitoReporte" msprop:Generator_RowChangedName="vRemitoReporteRowChanged" msprop:Generator_TablePropName="vRemitoReporte" msprop:Generator_RowDeletingName="vRemitoReporteRowDeleting" msprop:Generator_RowChangingName="vRemitoReporteRowChanging" msprop:Generator_RowEvHandlerName="vRemitoReporteRowChangeEventHandler" msprop:Generator_RowDeletedName="vRemitoReporteRowDeleted" msprop:Generator_RowClassName="vRemitoReporteRow" msprop:Generator_UserTableName="vRemitoReporte" msprop:Generator_RowEvArgName="vRemitoReporteRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="BONIFIC" msprop:Generator_ColumnVarNameInTable="columnBONIFIC" msprop:Generator_ColumnPropNameInRow="BONIFIC" msprop:Generator_ColumnPropNameInTable="BONIFICColumn" msprop:Generator_UserColumnName="BONIFIC" type="xs:decimal" />
@@ -257,6 +260,34 @@ FROM     vRemitoReporte</CommandText>
                 </xs:simpleType>
               </xs:element>
               <xs:element name="CANTIDAD" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnCANTIDAD" msprop:Generator_ColumnPropNameInRow="CANTIDAD" msprop:Generator_ColumnPropNameInTable="CANTIDADColumn" msprop:Generator_UserColumnName="CANTIDAD" type="xs:decimal" minOccurs="0" />
+              <xs:element name="CUIT_CLIENTE" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnCUIT_CLIENTE" msprop:Generator_ColumnPropNameInRow="CUIT_CLIENTE" msprop:Generator_ColumnPropNameInTable="CUIT_CLIENTEColumn" msprop:Generator_UserColumnName="CUIT_CLIENTE" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="8000" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DESCRIPCION_IVA" msprop:Generator_ColumnVarNameInTable="columnDESCRIPCION_IVA" msprop:Generator_ColumnPropNameInRow="DESCRIPCION_IVA" msprop:Generator_ColumnPropNameInTable="DESCRIPCION_IVAColumn" msprop:Generator_UserColumnName="DESCRIPCION_IVA" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="TRANSPORTE" msprop:Generator_ColumnVarNameInTable="columnTRANSPORTE" msprop:Generator_ColumnPropNameInRow="TRANSPORTE" msprop:Generator_ColumnPropNameInTable="TRANSPORTEColumn" msprop:Generator_UserColumnName="TRANSPORTE" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CALLE_TRANSPORTE" msprop:Generator_ColumnVarNameInTable="columnCALLE_TRANSPORTE" msprop:Generator_ColumnPropNameInRow="CALLE_TRANSPORTE" msprop:Generator_ColumnPropNameInTable="CALLE_TRANSPORTEColumn" msprop:Generator_UserColumnName="CALLE_TRANSPORTE" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
             </xs:sequence>
           </xs:complexType>
         </xs:element>

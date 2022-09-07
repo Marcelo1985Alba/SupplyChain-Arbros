@@ -51,7 +51,7 @@ namespace SupplyChain.Server.Controllers
         {
             if (estado == EstadoPedido.PendienteRemitir)
             {
-                return await _context.vEstadoPedidos.Where(e => e.ESTADO_PEDIDO == (int)estado || string.IsNullOrEmpty(e.REMITO))
+                return await _context.vEstadoPedidos.Where(e => e.ESTADO_PEDIDO == (int)estado && string.IsNullOrEmpty(e.REMITO))
                 .ToListAsync();
             }
             else if(estado != EstadoPedido.PendienteRemitir || estado != EstadoPedido.Todos)
