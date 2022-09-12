@@ -144,10 +144,10 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
         /////////////**********PROYECTOS*********////////////////////
         [Inject] protected ProyectosService ProyectosService { get; set; }
-        protected DateTime ProjectStart = new DateTime(2021, 3, 25);
-        protected DateTime ProjectEnd = new DateTime(2023, 7, 28);
+        protected DateTime ProjectStart = new DateTime(2022, 9, 11);
+        protected DateTime ProjectEnd = new DateTime(2022, 9, 28);
         protected SfGantt<ProyectosGBPI> refGanttProyectos;
-        protected List<ProyectosGBPI> Proyectos { get; set; } = new();
+        protected List<ProyectosGBPI> DataProyectos { get; set; } = new();
         //protected List<ProyectosGBPI> DataProyectos { get; set; } = new();
         /////////////////////////////////////////////////////////////
 
@@ -199,9 +199,9 @@ namespace SupplyChain.Client.Pages.Panel_Control
             var response = await ProyectosService.Get();
             if (!response.Error)
             {
-                Proyectos = response.Response;
+                DataProyectos = response.Response;
             }
-            //await GetProyectos();
+            await GetProyectos();
 
             VisibleSpinner = false;
         }
@@ -1205,9 +1205,9 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
         }
 
-        /*protected async Task GetProyectos()
+        protected async Task GetProyectos()
         {
-            this.DataProyectos = await Http.GetFromJsonAsync<List<ProyectosGBPI>>("api/Proyectos/Proyectos");
-        }*/
+            this.DataProyectos = await Http.GetFromJsonAsync<List<ProyectosGBPI>>("api/Proyectos");
+        }
     }
 }
