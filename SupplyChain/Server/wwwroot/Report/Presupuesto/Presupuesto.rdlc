@@ -1525,7 +1525,7 @@
                     </TextRun>
                   </TextRuns>
                   <Style>
-                    <TextAlign>Center</TextAlign>
+                    <TextAlign>Right</TextAlign>
                   </Style>
                 </Paragraph>
               </Paragraphs>
@@ -1533,7 +1533,7 @@
               <Top>0.13361in</Top>
               <Left>4.32167in</Left>
               <Height>0.25in</Height>
-              <Width>2.70833in</Width>
+              <Width>3.33298in</Width>
               <ZIndex>2</ZIndex>
               <Style>
                 <Border>
@@ -1576,7 +1576,7 @@
               <Top>0.38361in</Top>
               <Left>4.32167in</Left>
               <Height>0.19444in</Height>
-              <Width>2.70833in</Width>
+              <Width>3.33298in</Width>
               <ZIndex>3</ZIndex>
               <Style>
                 <Border>
@@ -1618,7 +1618,7 @@
               <Top>0.60861in</Top>
               <Left>4.32167in</Left>
               <Height>0.27917in</Height>
-              <Width>2.70833in</Width>
+              <Width>3.33334in</Width>
               <ZIndex>4</ZIndex>
               <Style>
                 <Border>
@@ -1948,6 +1948,9 @@
               <Height>0.25in</Height>
               <Width>0.36111in</Width>
               <ZIndex>3</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <Border>
                   <Style>None</Style>
