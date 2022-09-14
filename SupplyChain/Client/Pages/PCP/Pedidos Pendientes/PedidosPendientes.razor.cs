@@ -123,6 +123,10 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
             {
                 args.Cell.AddClass(new string[] { "verdes" });
             }
+            else if(args.Data.CG_ESTADOCARGA == 4)
+            {
+                args.Cell.AddClass(new string[] { "amarillas" });
+            }
         }
 
         public async Task ActionComplete(ActionEventArgs<ModeloPedidosPendientes> args)
