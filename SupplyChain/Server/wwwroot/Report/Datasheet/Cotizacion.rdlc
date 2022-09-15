@@ -1355,7 +1355,7 @@
             <Top>2.41116in</Top>
             <Left>0.33458in</Left>
             <Height>0.74583in</Height>
-            <Width>7.22769in</Width>
+            <Width>7.22768in</Width>
             <ZIndex>8</ZIndex>
             <Style>
               <Border>
@@ -2421,7 +2421,7 @@
             <Top>4.61678in</Top>
             <Left>0.33458in</Left>
             <Height>1.49583in</Height>
-            <Width>7.22768in</Width>
+            <Width>7.22769in</Width>
             <ZIndex>12</ZIndex>
             <Style>
               <Border>
@@ -2530,7 +2530,14 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Codigo de producto</Value>
+                                  <Value>Codigo de Producto                      </Value>
+                                  <Style>
+                                    <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
+                                    <FontSize>11pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!CodigoFinal.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
                                     <FontSize>11pt</FontSize>
@@ -2696,7 +2703,14 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Area Calculada de Orificio:</Value>
+                                <Value>Area Calculada de Orificio:   </Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
+                                  <FontSize>11pt</FontSize>
+                                </Style>
+                              </TextRun>
+                              <TextRun>
+                                <Value>=Fields!AreaCalculada.Value</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
                                   <FontSize>11pt</FontSize>
@@ -2796,6 +2810,7 @@
                           <PaddingBottom>2pt</PaddingBottom>
                         </Style>
                       </Textbox>
+                      <rd:Selected>true</rd:Selected>
                     </CellContents>
                   </TablixHeader>
                   <TablixMembers>
@@ -2886,7 +2901,7 @@
             <Top>6.45569in</Top>
             <Left>0.33458in</Left>
             <Height>1.24583in</Height>
-            <Width>7.22768in</Width>
+            <Width>7.22769in</Width>
             <ZIndex>14</ZIndex>
             <Style>
               <Border>
@@ -2898,7 +2913,7 @@
         <Height>7.87421in</Height>
         <Style />
       </Body>
-      <Width>8.17061in</Width>
+      <Width>7.97061in</Width>
       <Page>
         <PageHeader>
           <Height>1.155in</Height>

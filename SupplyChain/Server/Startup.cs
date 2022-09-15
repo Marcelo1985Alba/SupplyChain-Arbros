@@ -18,6 +18,7 @@ using SupplyChain.Server.Data.Repository;
 using SupplyChain.Server.Hubs;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Context;
 using Syncfusion.Blazor;
 using System;
 using System.Collections.Generic;
@@ -50,6 +51,13 @@ namespace SupplyChain.Server
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            //especial para el gantt
+            services.AddDbContext<GanttContext>(options =>
+            {
+                options.EnableSensitiveDataLogging();
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
+            
             services.AddCors(op=> 
             {
                 op.AddDefaultPolicy(builder =>

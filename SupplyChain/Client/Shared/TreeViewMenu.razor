@@ -74,11 +74,15 @@ else
                         (m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
                         ||
                         (m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
+                        ||
+                        (m.Id == 25 || m.ParentId == 25) //Ingenieria
+                        ||
+                        (m.Id == 40  ) //Mnat celdas
                     ).ToList();
 
                 if (authState.User.Identity.Name.ToLower() == "planta")
                 {
-                    int[] exclusiones = new int[] { 2, 18 }; //Sin ventas e Indicadores de Pcp, listado de inventarios
+                    int[] exclusiones = new int[] { 2, 18, 25, 40 }; //quito los menus
                     dbMenu = dbMenu.Where(m => !exclusiones.Contains(m.Id)).ToList();
                 }
 
