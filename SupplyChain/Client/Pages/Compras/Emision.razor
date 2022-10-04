@@ -1,0 +1,83 @@
+﻿@page "/compras/emision"
+
+
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Notifications
+@using Syncfusion.Pdf;
+@using Syncfusion.Pdf.Grid;
+@using System.Drawing;
+@using System.IO;
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.BarcodeGenerator
+@using Syncfusion.Blazor.Buttons
+@using System.Text.Json
+@using Syncfusion.Blazor.Grids
+@inject IJSRuntime JsRuntime
+@inject Microsoft.JSInterop.IJSRuntime JS
+@inject HttpClient Http
+@using Syncfusion.Blazor.PdfViewer
+@using Syncfusion.Pdf.Tables
+@inherits SupplyChain.Client.Pages.Emision.EmisionPageBase
+
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+
+<div class="col-12 control-section mt-4">
+    <div class="content-wrapper">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label class="col-form-label">Proveedor</label>
+                <SfDropDownList TValue="int" TItem="Proveedores_compras" CssClass="customClass" PopupWidth="auto" AllowFiltering="false"
+                                DataSource="@proveedorescompras" Placeholder="Seleccione un proveedor...">
+                    <DropDownListEvents TItem="Proveedores_compras" TValue="int" ValueChange="SeleccionProveedor"></DropDownListEvents>
+                    <DropDownListFieldSettings Value="NROCLTE" Text="DES_PROVE"></DropDownListFieldSettings>
+                </SfDropDownList>
+            </div>
+            <div class="form-group col-lg-3 col-md-5 col-sm-9">
+                <label class="col-form-label">O. de Compra</label>
+                <div class="form-row">
+
+                    <div class="col-8">
+                        <SfNumericTextBox @bind-Value="@ocompra" ShowClearButton="true" TValue="int" Format="n0"
+                                          Decimals="0"></SfNumericTextBox>
+                    </div>
+                    <div class="col-4 mb-1">
+                        <SfButton OnClick="@(async (e)=> await BuscarOC())"
+                                  CssClass="e-smal e-round e-info" IsPrimary="false"
+                                  IconCss="fa fa-search" HtmlAttributes="@HtmlAttribute"></SfButton>
+
+                    </div>
+                </div>
+            </div>
+            <div hidden="@IsVisibleguarda" style="margin-top: 20px;" class="form-group col-lg-3 col-md-6 col-sm-8">
+                <SfButton style="height: 50px;" IsPrimary="true" @onclick="guardaoc">Generar OC</SfButton>
+            </div>
+            <div hidden="@IsVisibleimprime" style="margin-top: 20px;" class="form-group col-lg-3 col-md-6 col-sm-8">
+                <SfButton style="height: 50px;" IsPrimary="true" @onclick="imprimiroc">Imprimir OC</SfButton>
+            </div>
+        </div>
+        <hr />
+        <hr style="border:0px;" />
+        <SfGrid @ref="GridProve" DataSource="@insumosproveedor" Height="100%" Width="100%" AllowSelection="true" AllowPaging="true">
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple" CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+            <GridColumns>
+                <GridColumn Field=@nameof(Compra.Id) Type="ColumnType.CheckBox" Width="50px"></GridColumn>
+                <GridColumn Field=@nameof(Compra.CG_MAT) HeaderText="Insumo" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                <GridColumn Field=@nameof(Compra.DES_MAT) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(Compra.AUTORIZADO) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Compra.UNID1) HeaderText="Unidad" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(Compra.PRECIO) HeaderText="Precio" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Compra.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+            </GridColumns>
+        </SfGrid>
+
+    </div>
+</div>
+
+@code {
+
+}

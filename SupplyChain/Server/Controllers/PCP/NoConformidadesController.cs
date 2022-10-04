@@ -102,7 +102,7 @@ namespace SupplyChain
         {
             string xSQL = "SELECT * FROM Compras A " +
                               "WHERE A.NUMERO = " + ocompra;
-            return _context.ComprasDbSet.FromSqlRaw(xSQL).ToList();
+            return _context.Compras.FromSqlRaw(xSQL).ToList();
         }
 
         // GET: api/NoConformidades/GetDespachosByOC/ocompra

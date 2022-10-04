@@ -24,6 +24,8 @@
 
 
 	<ItemGroup>
+    <None Include="Pages\Compras\Emision.razor" />
+    <None Include="Pages\Compras\Preparacion.razor" />
     <None Include="Pages\PCP\Fabricaciones\Fabricaciones.razor" />
     <None Include="Pages\PCP\Prevision\Prevision.razor" />
     <None Include="wwwroot\scss\colors\blue-dark.scss" />

@@ -36,6 +36,54 @@ namespace SupplyChain
             }
         }
 
+        // GET: api/Productos/BuscarProducto/{CG_PROD}/{DES_PROD}
+        [HttpGet("BuscarProducto/{CG_PROD}/{DES_PROD}/{Busqueda}")]
+        public async Task<ActionResult<List<Producto>>> BuscarProducto(string CG_PROD, string DES_PROD, int Busqueda)
+        {
+            List<Producto> lContiene = new();
+            if ((string.IsNullOrEmpty(CG_PROD) && string.IsNullOrEmpty(DES_PROD)) || (CG_PROD == "Vacio" && DES_PROD == "Vacio"))
+            {
+                lContiene = (await _productoRepository.ObtenerTodos())
+                    .Take(Busqueda).ToList();
+            }
+            else if (string.IsNullOrEmpty(DES_PROD) || DES_PROD == "Vacio")
+            {
+                lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD), Busqueda)
+                    .ToListAsync();
+                if (lContiene == null)
+                {
+                    return NotFound();
+                }
+
+
+
+            }
+            else if (string.IsNullOrEmpty(CG_PROD) || CG_PROD == "Vacio")
+            {
+                lContiene = await _productoRepository.Obtener(p => p.DES_PROD.Contains(DES_PROD), Busqueda)
+                    .ToListAsync();
+
+                if (lContiene == null)
+                {
+                    return NotFound();
+                }
+
+            }
+
+
+            else if (CG_PROD != "Vacio" && DES_PROD != "Vacio")
+            {
+                lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD)
+                    && p.DES_PROD.Contains(DES_PROD), Busqueda).ToListAsync();
+
+                if (lContiene == null)
+                {
+                    return NotFound();
+                }
+            }
+            return lContiene;
+        }
+
         [HttpGet("Existe/{id}")]
         public async Task<ActionResult<bool>> GetProd(string id)
         {

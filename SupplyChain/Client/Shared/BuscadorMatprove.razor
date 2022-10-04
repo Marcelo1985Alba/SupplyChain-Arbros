@@ -1,0 +1,110 @@
+﻿@using Microsoft.AspNetCore.Components;
+@using Syncfusion.Blazor.Grids;
+@using System.Collections.Generic;
+@using System.Net.Http;
+@using SupplyChain.Shared.Models;
+@using Syncfusion.Blazor.Notifications;
+
+@inject HttpClient Http
+@using Syncfusion.Blazor.Buttons
+
+
+<SfButton OnClick="@((e)=> BuscarProveedorMatprovePreparacion())" Disabled="buttondisableprove" IconCss="fa fa-search" CssClass="btn btn-sm btn-outline-primary"
+          IsPrimary="false">Buscar x Vinculación</SfButton>
+
+<SfDialog Width="1000px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisibleMatprove" Target="">
+    <DialogTemplates>
+        <Content>
+            <h2>BUSQUEDA PRODUCTO @xCgMat    FECHA PREVISTA @xFeprev</h2>
+
+            <div class="col-lg-12 control-section">
+                <div class="content-wrapper">
+                    <p>Seleccionar Proveedor</p>
+                    <div class="row">
+                        <SfGrid @ref="Grid3" DataSource="@Busquedamatprove" AllowPaging="false" AllowFiltering="true" AllowResizing="true" GridLines="GridLine.Both" RowHeight="20" Height="290px" AllowReordering="true" AllowExcelExport="true" AllowSelection="true" AllowSorting="true" AllowTextWrap="true" EnableHover="true" Width="100%" ShowColumnMenu="true" EnableVirtualization="true" TValue="Matprove_busquedaprove">
+                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                            <GridEvents TValue="Matprove_busquedaprove" RowSelected="GetSelectedRecords" OnRecordDoubleClick="EnviarObjetoSeleccionado"></GridEvents>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(Matprove_busquedaprove.CG_PROVE) HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                <GridColumn Field=@nameof(Matprove_busquedaprove.DES_PROVE) HeaderText="Razon Social" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Matprove_busquedaprove.PRECIO) HeaderText="Precio" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                                <GridColumn Field=@nameof(Matprove_busquedaprove.UNID) HeaderText="Medida" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Matprove_busquedaprove.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Matprove_busquedaprove.FE_PREC) HeaderText="Fecha Precio" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Matprove_busquedaprove.DIASVIGE) HeaderText="Lead Time" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="col-lg-12 control-section">
+                <div class="content-wrapper">
+                    <p>Ultimas Compras</p>
+                    <div class="row">
+                        <SfGrid @ref="Gridultc" DataSource="@ultimascompras" AllowPaging="false" Height="100%" Width="100%" TValue="Compra">
+                            <GridColumns>
+                                <GridColumn Field=@nameof(Compra.FE_EMIT) HeaderText="Fecha Emisión" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                                <GridColumn Field=@nameof(Compra.NUMERO) HeaderText="Orden de Compra" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                <GridColumn Field=@nameof(Compra.DES_PROVE) HeaderText="Razon Social" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Compra.AUTORIZADO) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Compra.PRECIO) HeaderText="Precio" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    </div>
+                </div>
+            </div>
+
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
+@code {
+
+    [Parameter] public string xCgMat { get; set; } = "";
+    [Parameter] public DateTime? xFeprev { get; set; } = DateTime.Now;
+  
+    [Parameter] public bool IsVisibleMatprove { get; set; } = false;
+    [Parameter] public bool buttondisableprove { get; set; } = true;
+    [Parameter] public EventCallback<Matprove_busquedaprove> OnMatproveSeleccionada { get; set; }
+    //    [Parameter] public EventCallback<Matprove_busquedaprove> OnMatproveSeleccionada { get; set; }
+
+    public SfToast ToastObj;
+    protected NotificacionToast NotificacionObj;
+    protected bool ToastVisible { get; set; } = false;
+    public Matprove_busquedaprove Selected { get; set; }
+
+    protected List<Compra> ultimascompras = new();
+
+    protected List<Matprove_busquedaprove> Busquedamatprove = new();
+    protected SfGrid<Matprove_busquedaprove> Grid3;
+    protected SfGrid<Compra> Gridultc;
+
+
+    protected async Task BuscarProveedorMatprovePreparacion()
+    {
+        if (!string.IsNullOrEmpty(xCgMat))
+        {
+            Busquedamatprove = await Http.GetFromJsonAsync<List<Matprove_busquedaprove>>($"api/Matprove/BuscarProve/{xCgMat}");
+            ultimascompras = await Http.GetFromJsonAsync<List<Compra>>($"api/Compras/Ultimascompras/{xCgMat}");
+            IsVisibleMatprove = true;
+        }
+    }
+
+    protected void GetSelectedRecords(RowSelectEventArgs<Matprove_busquedaprove> args)
+    {
+        args.PreventRender = true; //without this, you may see noticable delay in selection with 75 rows in grid.
+                                   //var items = await this.Grid.GetSelectedRecords();
+        Selected = args.Data;
+    }
+
+    public async Task EnviarObjetoSeleccionado()
+    {
+        IsVisibleMatprove = false;
+        await OnMatproveSeleccionada.InvokeAsync(Selected);
+
+    }
+
+
+}

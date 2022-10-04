@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using SupplyChain.Shared;
 using System;
 using System.Collections.Generic;
@@ -12,11 +13,14 @@ namespace SupplyChain.Server.Data.Repository
     {
         protected readonly AppDbContext Db;
         protected readonly DbSet<TEntity> DbSet;
+        public readonly DatabaseFacade Database;
 
         protected Repository(AppDbContext db)
         {
             Db = db;
             DbSet = Db.Set<TEntity>();
+            Database = Db.Database;
+
         }
 
         private IQueryable<TEntity> GetAsQueryable(Expression<Func<TEntity, bool>> filter, int take,

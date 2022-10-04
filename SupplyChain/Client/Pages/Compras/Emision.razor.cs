@@ -1,0 +1,204 @@
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using SupplyChain.Client.RepositoryHttp;
+using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Navigations;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
+using SupplyChain.Shared.Models;
+using System.IO;
+using Syncfusion.Blazor.Inputs;
+using Newtonsoft.Json;
+using Syncfusion.Blazor.Notifications;
+using Syncfusion.Blazor.DropDowns;
+using Syncfusion.Blazor.Data;
+using Syncfusion.Blazor.Buttons;
+using SupplyChain.Client.Shared;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Syncfusion.Pdf;
+using Syncfusion.Pdf.Graphics;
+using Syncfusion.Pdf.Grid;
+using Syncfusion.Pdf.Tables;
+using SupplyChain.Client.HelperService;
+
+
+namespace SupplyChain.Client.Pages.Emision
+{
+    public class EmisionPageBase : ComponentBase
+    {
+        [Inject] protected HttpClient Http { get; set; }
+        [Inject] protected IJSRuntime JsRuntime { get; set; }
+        [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
+
+        [CascadingParameter] public MainLayout MainLayout { get; set; }
+
+        // variables generales
+        public bool IsVisibleguarda { get; set; } = false;
+        public bool IsVisibleimprime { get; set; } = true;
+        public int ocompra { get; set; } = 0;
+        public string listaordenescompra { get; set; } = "";
+
+        public SfToast ToastObj;
+        protected NotificacionToast NotificacionObj;
+        protected bool ToastVisible { get; set; } = false;
+
+        protected List<Proveedores_compras> proveedorescompras = new List<Proveedores_compras>();
+        protected List<Compra> insumosproveedor = new();
+        protected SfGrid<Compra> GridProve;
+
+        protected Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
+        {
+                {"type", "button" }
+        };
+
+        public MainLayout Layout { get; set; }
+        protected override async Task OnInitializedAsync()
+        {
+            MainLayout.Titulo = "Emisión de Ordenes de Compras";
+
+            proveedorescompras = await Http.GetFromJsonAsync<List<Proveedores_compras>>("api/compras/GetProveedorescompras/");
+
+        }
+
+//        public void SeleccionProveedor(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int, Proveedores_compras> args)
+        public async Task SeleccionProveedor(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int, Proveedores_compras> args)
+        {
+            if (args.Value > 0)
+            {
+                insumosproveedor = await Http.GetFromJsonAsync<List<Compra>>("api/Compras/GetPreparacion/"+ args.Value);
+                IsVisibleguarda = false;
+                IsVisibleimprime = true;
+                ocompra = 0;
+
+            }
+        }
+
+        
+        protected async Task BuscarOC()
+        {
+            if ( ocompra == 0)
+            {
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "Debe Indicar la Orden de compra para abrir",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }else {
+                insumosproveedor = await Http.GetFromJsonAsync<List<Compra>>("api/compras/GetCompraByNumero/" + ocompra);
+                IsVisibleguarda = true;
+                IsVisibleimprime = false;
+            }
+        }
+        public async Task imprimiroc()
+        {
+            if (ocompra == 0)
+            {
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "Debe Indicar la Orden de compra para abrir",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }
+            else
+            {
+
+                PdfDocument document = new PdfDocument();
+                PdfPage page = document.Pages.Add();
+                PdfGraphics graphics = page.Graphics;
+                PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+                graphics.DrawString("Orden de Compra: " + ocompra.ToString(), font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+
+                /*
+                PdfGrid pdfGrid = new PdfGrid();
+                pdfGrid.DataSource = insumosproveedor;
+                //Create string format for PdfGrid
+                PdfStringFormat format = new PdfStringFormat();
+                format.Alignment = PdfTextAlignment.Center;
+                format.LineAlignment = PdfVerticalAlignment.Bottom;
+                //Assign string format for each column in PdfGrid
+                foreach (PdfGridColumn column in pdfGrid.Columns)
+                    column.Format = format;
+                //Apply a built-in style
+                pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent6);
+                //Set properties to paginate the grid
+                PdfGridLayoutFormat layoutFormat = new PdfGridLayoutFormat();
+                layoutFormat.Break = PdfLayoutBreakType.FitPage;
+                layoutFormat.Layout = PdfLayoutType.Paginate;
+                pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, 200), layoutFormat);
+                //Save the document.
+               // document.Save("Output.pdf");
+                */
+                MemoryStream xx = new MemoryStream();
+                document.Save(xx);
+                document.Close(true);
+
+                await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportOC?numero={ocompra}", "_blank" });
+
+            }
+        }
+
+        public async Task guardaoc()
+        {
+
+            var SelectedRecords = await GridProve.GetSelectedRecords();
+            listaordenescompra = "";
+            await SelectedRecords.ForEachAsync(async s =>
+            {
+                listaordenescompra = listaordenescompra + s.Id + ",";
+            });
+            HttpResponseMessage response = null;
+
+            //                  string sqlCommandString = string.Format("UPDATE COMPRAS SET NUMERO = 9999 WHERE REGISTRO IN ("+ listaordenescompra + ")");
+            response = await Http.PutAsJsonAsync("api/compras/actualizaoc/" + listaordenescompra, listaordenescompra);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
+                || response.StatusCode == System.Net.HttpStatusCode.NotFound
+                || response.StatusCode == System.Net.HttpStatusCode.Conflict)
+            {
+                var mensServidor = await response.Content.ReadAsStringAsync();
+
+                Console.WriteLine($"Error: {mensServidor}");
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "Error al actualizar OC",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }
+            else
+            {
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    await this.ToastObj.Show(new ToastModel
+                    {
+                        Title = "EXITO!",
+                        Content = "Orden de Compra Generada",
+                        CssClass = "e-toast-success",
+                        Icon = "e-success toast-icons",
+                        ShowCloseButton = false,
+                        ShowProgressBar = false
+                    });
+                }
+                proveedorescompras = await Http.GetFromJsonAsync<List<Proveedores_compras>>("api/compras/GetProveedorescompras/");
+
+                insumosproveedor = new();
+            }
+        }
+    }
+}

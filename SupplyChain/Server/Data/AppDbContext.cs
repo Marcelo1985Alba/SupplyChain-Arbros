@@ -85,7 +85,6 @@ namespace SupplyChain
         public DbSet<NoConformidadesQuery> NoConformidadesQuery { get; set; }
         public DbSet<NoConformidadesListaAcciones> NoConformidadesListaAcciones { get; set; }
         public DbSet<NoConformidadesAcciones> NoConformidadesAcciones { get; set; }
-        public DbSet<Compra> ComprasDbSet { get; set; }
         public DbSet<vEstadEventos> vEstadEventos { get; set; }
 
 
@@ -132,6 +131,11 @@ namespace SupplyChain
 
         public DbSet<vPedidoAlta> vPedidoAltas { get; set; }
         public DbSet<MantCeldas> MantCeldas { get; set; }
+
+        public DbSet<Matprove_busquedaprove> Matprove_busquedaprove { get; set; }
+
+        public DbSet<Proveedores_compras> proveedores_compras { get; set; }
+
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
