@@ -626,62 +626,69 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("MergePdf/{nroPedido}")]
         public async Task<ActionResult> MergePdf(int nroPedido)
         {
-            var listaTrazabilidad = await _context.VTrazabilidads.Where(v => v.PEDIDO == nroPedido).ToListAsync();
-            var listArchivosDescargar = new List<Archivo>();
-            List<vTrazabilidad> lineasCertif = new();
-            var lineasCertificados = await GetFileLocalServer("RUTACERTIFICADOS", nroPedido.ToString());
-
-            if (lineasCertificados.Count == 0)
+            try
             {
-                return NotFound();
-            }
+                var listaTrazabilidad = await _context.VTrazabilidads.Where(v => v.PEDIDO == nroPedido).ToListAsync();
+                var listArchivosDescargar = new List<Archivo>();
+                List<vTrazabilidad> lineasCertif = new();
+                var lineasCertificados = await GetFileLocalServer("RUTACERTIFICADOS", nroPedido.ToString());
+
+                if (lineasCertificados.Count == 0)
+                {
+                    return NotFound();
+                }
 
 
-            listArchivosDescargar.Add(lineasCertificados[0]);
-            if (listaTrazabilidad.Count > 0)
-            {
-                var lineasRoscada = new List<int>(new int[] { 8, 18, 52, 23 });
-                var lineasBridada = new List<int>(new int[] { 8, 18, 23, 19 });
-                var producto = listaTrazabilidad.FirstOrDefault(t => t.TIPOO == 1).CG_ART;
-                if (producto.StartsWith("00"))//reparacion
+                listArchivosDescargar.Add(lineasCertificados[0]);
+                if (listaTrazabilidad.Count > 0)
                 {
-
-                }
-                else if (producto.StartsWith("1")) //roscada
-                {
-                    lineasCertif = listaTrazabilidad.Where(t => lineasRoscada.Contains((int)t.CG_LINEA)).ToList();
-                }
-                else if (producto.StartsWith("2")) //bridada
-                {
-                    lineasCertif = listaTrazabilidad.Where(t => lineasBridada.Contains((int)t.CG_LINEA)).ToList();
-                }
-                if (lineasCertif.Count > 0)
-                {
-                    foreach (var item in lineasCertif)
+                    var lineasRoscada = new List<int>(new int[] { 8, 18, 52, 23 });
+                    var lineasBridada = new List<int>(new int[] { 8, 18, 23, 19 });
+                    var producto = listaTrazabilidad.FirstOrDefault(t => t.TIPOO == 1).CG_ART;
+                    if (producto.StartsWith("00"))//reparacion
                     {
-                        var responseMp = await GetFileLocalServer("RUTATRAZABILIDAD", $"{item.DESPACHO}.pdf");
-                        listArchivosDescargar.Add(responseMp[0]);
+
+                    }
+                    else if (producto.StartsWith("1")) //roscada
+                    {
+                        lineasCertif = listaTrazabilidad.Where(t => lineasRoscada.Contains((int)t.CG_LINEA)).ToList();
+                    }
+                    else if (producto.StartsWith("2")) //bridada
+                    {
+                        lineasCertif = listaTrazabilidad.Where(t => lineasBridada.Contains((int)t.CG_LINEA)).ToList();
+                    }
+                    if (lineasCertif.Count > 0)
+                    {
+                        foreach (var item in lineasCertif)
+                        {
+                            var responseMp = await GetFileLocalServer("RUTATRAZABILIDAD", $"{item.DESPACHO}.pdf");
+                            listArchivosDescargar.Add(responseMp[0]);
+                        }
                     }
                 }
+                Stream[] streams = new Stream[listArchivosDescargar.Count];
+                PdfDocument finalDoc = new PdfDocument();
+                for (int i = 0; i < listArchivosDescargar.Count; i++)
+                {
+                    streams[i] = new FileStream(listArchivosDescargar[i].Directorio, FileMode.Open, FileAccess.Read);
+                }
+                PdfDocumentBase.Merge(finalDoc, streams);
+                MemoryStream stream = new();
+                finalDoc.Save(stream);
+                stream.Position = 0;
+                finalDoc.Close(true);
+                for (int i = 0; i < listArchivosDescargar.Count; i++)
+                {
+                    streams[i].Dispose();
+                }
+                string contentType = "application/pdf";
+                string fileName = $"{nroPedido}.pdf";
+                return File(stream, contentType, fileName);
             }
-            Stream[] streams = new Stream[listArchivosDescargar.Count];
-            PdfDocument finalDoc = new PdfDocument();
-            for (int i = 0; i < listArchivosDescargar.Count; i++)
+            catch (Exception ex)
             {
-                streams[i] = new FileStream(listArchivosDescargar[i].Directorio, FileMode.Open, FileAccess.Read);
+                return BadRequest(ex.Message);
             }
-            PdfDocumentBase.Merge(finalDoc, streams);
-            MemoryStream stream = new();
-            finalDoc.Save(stream);
-            stream.Position = 0;
-            finalDoc.Close(true);
-            for (int i = 0; i < listArchivosDescargar.Count; i++)
-            {
-                streams[i].Dispose();
-            }
-            string contentType = "application/pdf";
-            string fileName = $"{nroPedido}.pdf";
-            return File(stream, contentType, fileName);
         }
 
 

@@ -217,7 +217,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         {
             if (args.Value != "")
             {
-                CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarPorCG_PROD/{args.Value}");
+                CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{args.Value}/Vacio/100");
                 if (CG_PRODlist.Count > 0)
                 {
                     DesString = CG_PRODlist.FirstOrDefault().DES_PROD;
