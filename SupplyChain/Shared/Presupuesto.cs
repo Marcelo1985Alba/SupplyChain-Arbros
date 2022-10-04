@@ -27,8 +27,8 @@ namespace SupplyChain.Shared
 
         public string USUARIO { get; set; } = "";
 
-        [Required(ErrorMessage = "La Direccion de Entrega es requerida")]
-        public string DIRENT { get; set; }
+        ////[Required(ErrorMessage = "La Direccion de Entrega es requerida")]
+        public string DIRENT { get; set; } = "";
         public bool TienePedido { get; set; }
         
         [ValidateComplexType]

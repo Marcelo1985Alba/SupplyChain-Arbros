@@ -79,7 +79,7 @@ namespace SupplyChain.Shared.Models
         [Display(Name = "Proveedor")]
         public int NROCLTE { get; set; }
         [Display(Name = "Proveedor")]
-        public int? CG_PROVEREQ { get; set; }
+        public int? CG_PROVEREQ { get; set; } = 0;
         [Display(Name = "Observaciones")]
         public string OBSEREQ { get; set; } = "";
         [Display(Name = "Tilde")]
