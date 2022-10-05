@@ -22,6 +22,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
         [Inject] public HttpClient Http { get; set; }
         [Inject] public ExcelService ExcelService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
+        protected SfTab refSfTab;
         protected SfSpinner refSpinner;
         protected bool VisibleSpinner = false;
 
@@ -39,8 +40,16 @@ namespace SupplyChain.Client.Pages.Ingenieria
         protected List<vIngenieriaProductosFormulas> DataOrdeProductosFormulas { get; set; } = new List<vIngenieriaProductosFormulas>();
         protected vIngenieriaProductosFormulas ProdSelected = new();
 
+        public class TabData
+        {
+            public string Header { get; set; }
+            public string CodigoInsumo { get; set; }
+            public RenderFragment Content { get; set; }
+        }
+        protected List<TabData> TabItems = new();
 
-
+        protected string tituloTabFormulas = string.Empty;
+        protected bool mostrarCerrarTab = false;
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Consulta de Fórmulas";
@@ -62,6 +71,34 @@ namespace SupplyChain.Client.Pages.Ingenieria
 
                 VisibleSpinner = false;
                 await DialogDespieceRef.Show();
+            }
+            else if (args.CommandColumn.Title == "Ver Plano")
+            {
+                VisibleSpinner = true;
+                tituloTabFormulas = "Formulas";
+                mostrarCerrarTab = true;
+                TabItems.Add(new TabData
+                {
+                    Header = $"Plano ({args.RowData.CG_PROD.Trim()})",
+                    //Verificar si es un semi o un prod, los semis obtener los primeros 7 digitos
+                    CodigoInsumo = new string(args.RowData.CG_PROD.Take(2).ToArray()) == "C-" 
+                                || new string(args.RowData.CG_PROD.Take(2).ToArray()) == "D-" ?
+                    args.RowData.CG_PROD.Substring(0, 7) : args.RowData.CG_PROD
+
+                });
+
+
+                //El primer tab no se encuentra dentro de la lista
+                //le resto el que agregue para que no lo desactive
+                //for (int i = 0; i < TabItems.Count + 1; i++)
+                //{
+                //    await refSfTab.EnableTab(i, false);
+                //}
+
+
+                //await refSfTab.EnableTab(TabItems.Count, true);
+                //await refSfTab.Select(TabItems.Count);
+                VisibleSpinner = false;
             }
 
         }
@@ -132,6 +169,35 @@ namespace SupplyChain.Client.Pages.Ingenieria
             if (args.Data.TIENE_FORM && !args.Data.FORM_ACTIVA)
             {
                 args.Cell.AddClass(new string[] { "amarillas" });
+            }
+        }
+
+        protected async Task TabEliminando(RemoveEventArgs removeEventArgs)
+        {
+            var tab = refSfTab.Items[removeEventArgs.RemovedIndex];
+            //if (string.IsNullOrEmpty(tab.Header.Text) || tab.Header.Text == "Formulas")
+            //{
+            //    removeEventArgs.Cancel = true;
+            //}
+            if (removeEventArgs.RemovedIndex == 0)
+            {
+                removeEventArgs.Cancel = true;
+            }
+            //if (refSfTab.Items.Count == 1)
+            //{
+            //    mostrarCerrarTab = false;
+            //}
+
+            
+        }
+
+
+        protected async Task TabEliminado(RemoveEventArgs removeEventArgs)
+        {
+            if (refSfTab.Items.Count == 1)
+            {
+                mostrarCerrarTab = false;
+                tituloTabFormulas = string.Empty;
             }
         }
     }

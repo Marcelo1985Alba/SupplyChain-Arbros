@@ -88,48 +88,60 @@ namespace SupplyChain.Server.Controllers
             var ruta = await _solutionRepository.Obtener(s => s.CAMPO == parametro).FirstOrDefaultAsync();
             var endLength = ruta.CAMPO.Trim() == "RUTAENSAYO" ? 9 :
                     ruta.CAMPO.Trim() == "RUTACERTIFICADOS" || ruta.CAMPO.Trim() == "RUTATRAZABILIDAD"
-                    || ruta.CAMPO.Trim() == "RUTAREMITO" || ruta.CAMPO.Trim() == "RUTAFACTURA" ? codigo.Length : 7;
-            codigo = codigo.Split(',')[0];
-            var file = codigo.Substring(0, endLength);
-            if (ruta.CAMPO.Trim() == "RUTAENSAYO")
+                    || ruta.CAMPO.Trim() == "RUTAREMITO" || ruta.CAMPO.Trim() == "RUTAFACTURA" ? codigo.Length :
+                    ruta.CAMPO.Trim() == "RUTAOF" ? codigo.Split(',')[0].Length : 7;
+            try
             {
-                file += "_*.pdf";
-            }
-            else if (ruta.CAMPO.Trim() == "RUTATRAZABILIDAD")
-            {
-                file = codigo;
-            }
-            else if (ruta.CAMPO.Trim() == "RUTACERTIFICADOS")
-            {
-                file += "*.pdf";
-            }
-            else if (ruta.CAMPO.Trim() == "RUTAREMITO" || ruta.CAMPO.Trim() == "RUTAFACTURA")
-            {
-                file += "*.*";
-            }
-
-            string[] dirs = Directory.GetFiles($"{ruta.VALORC}",$"{file}",
-                new EnumerationOptions() { MatchCasing = MatchCasing.CaseInsensitive, MatchType = MatchType.Simple, IgnoreInaccessible = true});
-            int identificacion = 0;
-            foreach (string item in dirs)
-            {
-                identificacion++;
-                var archivo = new Archivo()
+                codigo = codigo.Split(',')[0];
+                var file = codigo.Substring(0, endLength);
+                if (ruta.CAMPO.Trim() == "RUTAENSAYO")
                 {
-                    Id = identificacion,
-                    Nombre = Path.GetFileName(item),
-                    Directorio = item,
-                    Contenido = parametro == "RUTACNC" ? System.IO.File.ReadAllLines(item) : null,
-                    ContenidoByte = parametro == "RUTACNC" || ruta.CAMPO.Trim() == "RUTACERTIFICADOS" || ruta.CAMPO.Trim() == "RUTATRAZABILIDAD"
-                                    || ruta.CAMPO.Trim() == "RUTAFACTURA" || ruta.CAMPO.Trim() == "RUTAREMITO" ? System.IO.File.ReadAllBytes(item) : null
-                    //ContenidoBase64 = "data:application/pdf;base64," + Convert.ToBase64String(System.IO.File.ReadAllBytes(item))
-                };
+                    file += "_*.pdf";
+                }
+                else if (ruta.CAMPO.Trim() == "RUTATRAZABILIDAD")
+                {
+                    file = codigo;
+                }
+                else if (ruta.CAMPO.Trim() == "RUTACERTIFICADOS")
+                {
+                    file += "*.pdf";
+                }
+                else if (ruta.CAMPO.Trim() == "RUTAREMITO" || ruta.CAMPO.Trim() == "RUTAFACTURA")
+                {
+                    file += "*.*";
+                }
+                else if (ruta.CAMPO.Trim() == "RUTAOF")
+                {
+                    file += ".pdf";
+                }
 
-                archivos.Add(archivo);
+                string[] dirs = Directory.GetFiles($"{ruta.VALORC}", $"{file}",
+                    new EnumerationOptions() { MatchCasing = MatchCasing.CaseInsensitive, MatchType = MatchType.Simple, IgnoreInaccessible = true });
+                int identificacion = 0;
+                foreach (string item in dirs)
+                {
+                    identificacion++;
+                    var archivo = new Archivo()
+                    {
+                        Id = identificacion,
+                        Nombre = Path.GetFileName(item),
+                        Directorio = item,
+                        Contenido = parametro == "RUTACNC" ? System.IO.File.ReadAllLines(item) : null,
+                        ContenidoByte = parametro == "RUTACNC" || ruta.CAMPO.Trim() == "RUTACERTIFICADOS" || ruta.CAMPO.Trim() == "RUTATRAZABILIDAD"
+                                        || ruta.CAMPO.Trim() == "RUTAFACTURA" || ruta.CAMPO.Trim() == "RUTAREMITO" ? System.IO.File.ReadAllBytes(item) : null
+                        //ContenidoBase64 = "data:application/pdf;base64," + Convert.ToBase64String(System.IO.File.ReadAllBytes(item))
+                    };
+
+                    archivos.Add(archivo);
+                }
+
+
+                return archivos;
             }
-
-
-            return archivos;
+            catch (Exception e)
+            {
+                return archivos;
+            }
         }
 
         [HttpPost("DownloadText")]
