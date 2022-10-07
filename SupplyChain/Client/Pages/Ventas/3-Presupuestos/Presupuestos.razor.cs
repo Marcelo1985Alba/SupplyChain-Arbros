@@ -83,6 +83,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             {
                 SpinnerVisible = true;
                 PresupuestoSeleccionado = new();
+                PresupuestoSeleccionado.DIRENT = "";
                 await refFormPresupuesto.ShowAsync(0);
                 popupFormVisible = true;
                 SpinnerVisible = false;

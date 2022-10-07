@@ -86,9 +86,9 @@
                                     <label>Solicitud:</label>
                                     
                                     <div class="form-row">
-                                        @*<div class="col-10">
+                                        <div class="col-10">
                                             <SfNumericTextBox ID="SOLICITUD" @bind-Value="@(servicio.SOLICITUD)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
-                                        </div>*@
+                                        </div>
                                         <div class="col-2">
                                             <SfButton CssClass="e-smal e-round e-success" IconCss="e-icons e-save"
                                                       HtmlAttributes="@presupuestoButton" OnClick="@(async()=> await MostrarSolicitud())"></SfButton>
@@ -748,10 +748,10 @@
                     <GridColumns>
                         <GridColumn Field=@nameof(Service.Id) HeaderText="Id" AllowSearching="true" Visible="false" IsPrimaryKey="true"
                                     TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                        @*<GridColumn Field=@nameof(Service.SOLICITUD) HeaderText="Solicitud" AllowSearching="true"
+                        <GridColumn Field=@nameof(Service.SOLICITUD) HeaderText="Solicitud" AllowSearching="true"
                                     TextAlign="TextAlign.Left" Width="90"></GridColumn>
                         <GridColumn Field=@nameof(Service.PRESUPUESTO) HeaderText="Presupuesto" AllowSearching="true"
-                                    TextAlign="TextAlign.Left" Width="90"></GridColumn>*@
+                                    TextAlign="TextAlign.Left" Width="90"></GridColumn>
                         <GridColumn Field=@nameof(Service.PEDIDO) HeaderText="Pedido" AllowSearching="true"
                                     TextAlign="TextAlign.Left" Width="90"></GridColumn>
                         <GridColumn Field=@nameof(Service.REMITO) HeaderText="Remito" AllowSearching="true"
@@ -914,7 +914,7 @@
             if (Pedido == 0)
             {
 
-                await GetServicios(TipoFiltro.Todos);
+                await GetServicios(TipoFiltro.Pendientes);
             }
             else
             {
@@ -929,7 +929,7 @@
                 {
                     servicios = new();
                     servicios.Add(responseServicePedido.Response);
-                    servDesc = servicios.Where(s => s.PEDIDO == Pedido.ToString()).ToList();
+                    servDesc = servicios.Where(s => s.PEDIDO == Pedido).ToList();
                 }
             }
 
@@ -1066,7 +1066,7 @@
             else
             {
                 servicios = responseService.Response;
-                servDesc = servicios.Where(s => s.PEDIDO == Pedido.ToString()).ToList();
+                servDesc = servicios.Where(s => s.PEDIDO == Pedido).ToList();
             }
         }
 
