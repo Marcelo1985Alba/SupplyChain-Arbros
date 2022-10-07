@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
@@ -18,6 +19,8 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
     {
         [Inject] public PresupuestoService PresupuestoService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
+        [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
+        public AuthenticationState authState;
         protected SfGrid<vPresupuestos> refGrid;
         protected SfSpinner refSpinner;
         protected SfToast ToastObj;
@@ -141,6 +144,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         {
             if (presupuesto.GUARDADO)
             {
+                var auth = await authenticationState;
                 await ToastMensajeExito($"Guardado Correctamente.\nPresupuesto Nro {presupuesto.Id}");
                 popupFormVisible = false;
                 if (presupuesto.ESNUEVO)
@@ -153,7 +157,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                         Fecha = presupuesto.FECHA,
                         MONEDA = presupuesto.MONEDA,
                         TOTAL = presupuesto.TOTAL,
-                        USUARIO = ""
+                        USUARIO = auth.User.Identity.Name
                     };
                     Presupuestos.Add(nuevoPresup);
                     Presupuestos = Presupuestos.OrderByDescending(p => p.Id).ToList();

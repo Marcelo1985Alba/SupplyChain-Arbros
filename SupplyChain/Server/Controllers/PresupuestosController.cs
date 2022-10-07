@@ -72,6 +72,8 @@ namespace SupplyChain.Server.Controllers
             await _presupuestoRepository.BeginTransaction();
             try
             {
+                var userName = HttpContext.User.Identity.Name;
+                presupuesto.USUARIO = userName;
                 await _presupuestoRepository.Agregar(presupuesto);
                 await _presupuestoRepository.ActualizarCalculoConPresupuestoByIdCalculo(presupuesto.Id);
                 await _presupuestoRepository.CommitTransaction();
