@@ -29,7 +29,7 @@
 <div class="col-12 control-section mt-4">
     <div class="content-wrapper">
         <div class="form-row">
-            <div class="form-group col-md-6">
+            <div hidden="@ocabierta" class="form-group col-md-5">
                 <label class="col-form-label">Proveedor</label>
                 <SfDropDownList TValue="int" TItem="Proveedores_compras" CssClass="customClass" PopupWidth="auto" AllowFiltering="false"
                                 DataSource="@proveedorescompras" Placeholder="Seleccione un proveedor...">
@@ -37,27 +37,39 @@
                     <DropDownListFieldSettings Value="NROCLTE" Text="DES_PROVE"></DropDownListFieldSettings>
                 </SfDropDownList>
             </div>
+            <div hidden="@ocagenerar" class="form-group col-md-5">
+                <label class="col-form-label">Proveedor</label>
+                <SfTextBox Multiline=true ID="comentarios" ShowClearButton="true"
+                           @bind-Value="@proveocabierta" Readonly="true">
+                </SfTextBox>
+            </div>
+
             <div class="form-group col-lg-3 col-md-5 col-sm-9">
                 <label class="col-form-label">O. de Compra</label>
                 <div class="form-row">
 
                     <div class="col-8">
-                        <SfNumericTextBox @bind-Value="@ocompra" ShowClearButton="true" TValue="int" Format="n0"
+                        <SfNumericTextBox Readonly="true" @bind-Value="@ocompra" ShowClearButton="true" TValue="int" Format="n0"
                                           Decimals="0"></SfNumericTextBox>
                     </div>
                     <div class="col-4 mb-1">
-                        <SfButton OnClick="@(async (e)=> await BuscarOC())"
+                        <SfButton OnClick="@(async (e)=> await BuscarOCompras())"
                                   CssClass="e-smal e-round e-info" IsPrimary="false"
                                   IconCss="fa fa-search" HtmlAttributes="@HtmlAttribute"></SfButton>
 
                     </div>
                 </div>
             </div>
-            <div hidden="@IsVisibleguarda" style="margin-top: 20px;" class="form-group col-lg-3 col-md-6 col-sm-8">
+
+
+            <div hidden="@IsVisibleguarda" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
                 <SfButton style="height: 50px;" IsPrimary="true" @onclick="guardaoc">Generar OC</SfButton>
             </div>
-            <div hidden="@IsVisibleimprime" style="margin-top: 20px;" class="form-group col-lg-3 col-md-6 col-sm-8">
+            <div hidden="@IsVisibleimprime" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
                 <SfButton style="height: 50px;" IsPrimary="true" @onclick="imprimiroc">Imprimir OC</SfButton>
+            </div>
+            <div hidden="@ocagenerar" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
+                <SfButton style="height: 50px;" IsPrimary="true" @onclick="limpia">Limpia</SfButton>
             </div>
         </div>
         <hr />
@@ -77,6 +89,11 @@
 
     </div>
 </div>
+
+<BuscadorEmergente Height="600px" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
+                   Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async(v)=>await Cerrar(v))"
+                   OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+
 
 @code {
 

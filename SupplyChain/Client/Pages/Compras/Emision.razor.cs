@@ -40,6 +40,10 @@ namespace SupplyChain.Client.Pages.Emision
         // variables generales
         public bool IsVisibleguarda { get; set; } = false;
         public bool IsVisibleimprime { get; set; } = true;
+        public bool ocagenerar { get; set; } = true;
+        public bool ocabierta { get; set; } = false;
+        public string proveocabierta { get; set; } = "";
+                
         public int ocompra { get; set; } = 0;
         public string listaordenescompra { get; set; } = "";
 
@@ -50,6 +54,13 @@ namespace SupplyChain.Client.Pages.Emision
         protected List<Proveedores_compras> proveedorescompras = new List<Proveedores_compras>();
         protected List<Compra> insumosproveedor = new();
         protected SfGrid<Compra> GridProve;
+
+        protected BuscadorEmergente<Compra> Buscador;
+        protected Compra[] ItemsABuscar = null;
+        protected string[] ColumnasBuscador = new string[] { "NUMERO", "FE_EMIT", "CG_MAT", "SOLICITADO", "UNID", "DES_PROVE" };
+        protected string TituloBuscador = "Seleccion de Orden de Compra para apertura";
+        protected bool PopupBuscadorVisible = false;
+
 
         protected Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
         {
@@ -77,8 +88,36 @@ namespace SupplyChain.Client.Pages.Emision
 
             }
         }
+        public async Task limpia()
+        {
+            ocabierta = false;
+            ocagenerar = true;
+            insumosproveedor = new();
+            ocompra = 0;
 
-        
+        }
+
+        public async Task BuscarOCompras()
+        {
+            // Busca todas las OC sin filtros para la apertura en emision
+            await Buscador.ShowAsync();
+            PopupBuscadorVisible = true;
+            ItemsABuscar = await Http.GetFromJsonAsync<Compra[]>("api/Compras/todas");
+            await InvokeAsync(StateHasChanged);
+        }
+        public async Task Cerrar(bool visible)
+        {
+            PopupBuscadorVisible = visible;
+        }
+
+        public async Task EnviarObjetoSeleccionado(Compra compra)
+        {
+            ocompra = compra.NUMERO;
+            PopupBuscadorVisible = false;
+            await Buscador.HideAsync();
+            BuscarOC();
+        }
+
         protected async Task BuscarOC()
         {
             if ( ocompra == 0)
@@ -96,6 +135,14 @@ namespace SupplyChain.Client.Pages.Emision
                 insumosproveedor = await Http.GetFromJsonAsync<List<Compra>>("api/compras/GetCompraByNumero/" + ocompra);
                 IsVisibleguarda = true;
                 IsVisibleimprime = false;
+
+                ocabierta = true;
+                ocagenerar = false;
+                var primerreg = insumosproveedor.FirstOrDefault();
+                proveocabierta = primerreg.DES_PROVE;
+
+
+
             }
         }
         public async Task imprimiroc()
@@ -150,6 +197,8 @@ namespace SupplyChain.Client.Pages.Emision
             }
         }
 
+
+
         public async Task guardaoc()
         {
 
@@ -183,12 +232,14 @@ namespace SupplyChain.Client.Pages.Emision
             }
             else
             {
+
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
+                    String responseString = await response.Content.ReadAsStringAsync();
                     await this.ToastObj.Show(new ToastModel
                     {
                         Title = "EXITO!",
-                        Content = "Orden de Compra Generada",
+                        Content = "Orden de Compra "+responseString+" Generada",
                         CssClass = "e-toast-success",
                         Icon = "e-success toast-icons",
                         ShowCloseButton = false,

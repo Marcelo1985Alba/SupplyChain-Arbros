@@ -291,12 +291,12 @@ namespace SupplyChain.Client.Pages.Preparacion
                 });
                 return;
             }
-            if (xCgProve == 0)
+            if (xCant == 0)
             {
                 await this.ToastObj.Show(new ToastModel
                 {
                     Title = "ERROR!",
-                    Content = "Debe Indicar un Proveedor",
+                    Content = "Debe Indicar la cantidad",
                     CssClass = "e-toast-danger",
                     Icon = "e-error toast-icons",
                     ShowCloseButton = true,
@@ -304,12 +304,13 @@ namespace SupplyChain.Client.Pages.Preparacion
                 });
                 return;
             }
-            if (xCant == 0)
+            /*
+            if (xCgProve == 0)
             {
                 await this.ToastObj.Show(new ToastModel
                 {
                     Title = "ERROR!",
-                    Content = "Debe Indicar la cantidad",
+                    Content = "Debe Indicar un Proveedor",
                     CssClass = "e-toast-danger",
                     Icon = "e-error toast-icons",
                     ShowCloseButton = true,
@@ -330,6 +331,7 @@ namespace SupplyChain.Client.Pages.Preparacion
                 });
                 return;
             }
+            */
             //Console.WriteLine(itemagregarcompras);
             Compra itemagregarcompras = new Compra();
 
@@ -438,6 +440,10 @@ namespace SupplyChain.Client.Pages.Preparacion
                         xMoneda = selectedRecord.MONEDA;
                         xCgden = selectedRecord.CG_DEN.GetValueOrDefault();
                         xCant = selectedRecord.SOLICITADO.GetValueOrDefault();
+                        if ( xCant == 0)
+                        {
+                            xCant = selectedRecord.NECESARIO.GetValueOrDefault();
+                        }
                         xPrecio = selectedRecord.PRECIO.GetValueOrDefault();
                     }
 
