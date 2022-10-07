@@ -6,6 +6,9 @@
 @using SupplyChain.Client.Pages.Ventas._3_Presupuestos
 @inherits FormServicioBase
 
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
 
 <SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
     <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
@@ -46,14 +49,14 @@
                         <div>
 
                             <div class="form-row">
-                                <div class="form-group col-md-3">
+                                <!--<div class="form-group col-md-3">
                                     <label>Solicitud:</label>
 
-                                    <div class="form-row">
-                                        <div class="col-10">
+                                    <div class="form-row">-->
+                                        @*<div class="col-10">
                                             <SfNumericTextBox ID="SOLICITUD" @bind-Value="@(Servicio.SOLICITUD)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
-                                        </div>
-                                        <div class="col-2">
+                                        </div>*@
+                                        <!--<div class="col-2">
                                             <SfButton CssClass="e-smal e-round e-success" IconCss="e-icons e-save"
                                                       HtmlAttributes="@presupuestoButton" OnClick="@(async()=> await MostrarSolicitud())"></SfButton>
                                         </div>
@@ -61,23 +64,23 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Presupuesto:</label>
-                                    <div class="form-row">
-                                        <div class="col-10">
+                                    <div class="form-row">-->
+                                        @*<div class="col-10">
                                             <SfNumericTextBox ID="PRESUPUESTO" @bind-Value="@(Servicio.PRESUPUESTO)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
-                                        </div>
-                                        <div class="col-2">
+                                        </div>*@
+                                        <!--<div class="col-2">
                                     <SfButton CssClass="e-smal e-round e-info" IconCss="e-icons e-save"
                                               HtmlAttributes="@presupuestoButton" OnClick="@(async()=> await MostrarPresupuesto())"></SfButton>
                                 </div>
                                     </div>
 
 
-                                </div>
+                                </div>-->
                                 <div class="form-group col-md-2">
                                     <label>Pedido:</label>
                                     <div class="form-row">
                                         <div class="col-9">
-                                            <SfNumericTextBox ID="PEDIDO" @bind-Value="@(Servicio.PEDIDO)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
+                                            <SfTextBox ID="PEDIDO" @bind-Value="@(Servicio.PEDIDO)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfTextBox>
                                         </div>
                                         @*<div class="col-2">
                                             <SfButton CssClass="e-smal e-round e-warning" IconCss="e-icons e-upload"

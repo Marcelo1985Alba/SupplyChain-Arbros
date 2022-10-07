@@ -10,6 +10,7 @@
     <Content Remove="wwwroot\Report\ArbrosDataSet.xsc" />
     <Content Remove="wwwroot\Report\ArbrosDataSet.xsd" />
     <Content Remove="wwwroot\Report\ArbrosDataSet.xss" />
+    <Content Remove="wwwroot\Report\Datasheet\Cotizacion.rdlc" />
     <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.Designer.cs" />
     <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsc" />
     <Content Remove="wwwroot\Report\EtiquetaOF\ArbrosDataSet5.xsd" />
@@ -55,6 +56,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="wwwroot\Report\Datasheet\Cotizacion.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="wwwroot\Report\EtiquetaOF\ReporteEtiquetaOF.rdlc" />
     <EmbeddedResource Include="wwwroot\Report\NoConfor\ReporteEvento.rdlc" />
     <EmbeddedResource Include="wwwroot\Report\Pedido\PedidoV1.rdlc">
@@ -176,7 +180,7 @@
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>DataSheet.Designer.cs</LastGenOutput>
     </Content>
-    <Content Update="wwwroot\Report\Datasheet\Cotizacion.rdlc">
+    <Content Update="wwwroot\Report\Datasheet\CotizacionV1.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\Report\Pedido\ArbrosPedDataSet6.Designer.cs">
@@ -187,6 +191,15 @@
     <Content Update="wwwroot\Report\Pedido\ArbrosPedDataSet6.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>ArbrosPedDataSet6.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Update="wwwroot\Report\Presupuesto\ArbrosDataSet6.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ArbrosDataSet6.xsd</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\Report\Presupuesto\ArbrosDataSet6.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ArbrosDataSet6.Designer.cs</LastGenOutput>
     </Content>
     <Content Update="wwwroot\Report\Remito\ArbrosRemDataSet6.Designer.cs">
       <DependentUpon>ArbrosRemDataSet6.xsd</DependentUpon>

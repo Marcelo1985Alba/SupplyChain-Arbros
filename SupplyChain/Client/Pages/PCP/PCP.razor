@@ -5,42 +5,46 @@
 
 <SfTab LoadOn="ContentLoad.Dynamic" @bind-SelectedItem="@SelectedTab" OverflowMode="OverflowMode.Scrollable">
     <TabItems>
-        <TabItem Disabled="@Disabled">
-            <HeaderTemplate>Prevision</HeaderTemplate>
-            <ContentTemplate>
-                <div class="mt-3">
+        @if (!restringido)
+        {
+            <TabItem Disabled="@Disabled">
+                <HeaderTemplate>Prevision</HeaderTemplate>
+                <ContentTemplate>
+                    <div class="mt-3">
 
-                    <SupplyChain.Client.Pages.PCP.Prevision.Prevision></SupplyChain.Client.Pages.PCP.Prevision.Prevision>
-                </div>
-            </ContentTemplate>
-        </TabItem>
-        <TabItem Disabled="@Disabled">
-            <HeaderTemplate>Pendientes de Entrega</HeaderTemplate>
-            <ContentTemplate>
-                <div class="mt-3">
-                    <SupplyChain.Client.Pages.PCP.Pedidos_Pendientes.PedidosPendientes></SupplyChain.Client.Pages.PCP.Pedidos_Pendientes.PedidosPendientes>
+                        <SupplyChain.Client.Pages.PCP.Prevision.Prevision></SupplyChain.Client.Pages.PCP.Prevision.Prevision>
+                    </div>
+                </ContentTemplate>
+            </TabItem>
+            <TabItem Disabled="@Disabled">
+                <HeaderTemplate>Pendientes de Entrega</HeaderTemplate>
+                <ContentTemplate>
+                    <div class="mt-3">
+                        <SupplyChain.Client.Pages.PCP.Pedidos_Pendientes.PedidosPendientes></SupplyChain.Client.Pages.PCP.Pedidos_Pendientes.PedidosPendientes>
 
-                </div>
-            </ContentTemplate>
-        </TabItem>
-        <TabItem Disabled="@Disabled">
-            <HeaderTemplate>Pendientes de Fabricar</HeaderTemplate>
-            <ContentTemplate>
-                <SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion.PendientesFabricacion></SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion.PendientesFabricacion>
-            </ContentTemplate>
-        </TabItem>
-        <TabItem Disabled="@Disabled">
-            <HeaderTemplate>Planificacion</HeaderTemplate>
-            <ContentTemplate>
-                <SupplyChain.Client.Pages.PCP.Planificaciones.Planificaciones></SupplyChain.Client.Pages.PCP.Planificaciones.Planificaciones>
-            </ContentTemplate>
-        </TabItem>
-        <TabItem Disabled="@Disabled">
-            <HeaderTemplate>Abastecimiento</HeaderTemplate>
-            <ContentTemplate>
-                <SupplyChain.Client.Pages.PCP.Abastecimiento.Abasteciemiento></SupplyChain.Client.Pages.PCP.Abastecimiento.Abasteciemiento>
-            </ContentTemplate>
-        </TabItem>
+                    </div>
+                </ContentTemplate>
+            </TabItem>
+            <TabItem Disabled="@Disabled">
+                <HeaderTemplate>Pendientes de Fabricar</HeaderTemplate>
+                <ContentTemplate>
+                    <SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion.PendientesFabricacion></SupplyChain.Client.Pages.PCP.Pendientes_Fabricacion.PendientesFabricacion>
+                </ContentTemplate>
+            </TabItem>
+            <TabItem Disabled="@Disabled">
+                <HeaderTemplate>Planificacion</HeaderTemplate>
+                <ContentTemplate>
+                    <SupplyChain.Client.Pages.PCP.Planificaciones.Planificaciones></SupplyChain.Client.Pages.PCP.Planificaciones.Planificaciones>
+                </ContentTemplate>
+            </TabItem>
+            <TabItem Disabled="@Disabled">
+                <HeaderTemplate>Abastecimiento</HeaderTemplate>
+                <ContentTemplate>
+                    <SupplyChain.Client.Pages.PCP.Abastecimiento.Abasteciemiento></SupplyChain.Client.Pages.PCP.Abastecimiento.Abasteciemiento>
+                </ContentTemplate>
+            </TabItem>
+        }
+
         <TabItem Disabled="@Disabled">
             <HeaderTemplate>Fabricacion</HeaderTemplate>
             <ContentTemplate>
@@ -69,9 +73,26 @@
     [CascadingParameter]
     public MainLayout Layout { get; set; }
 
-    protected override void OnInitialized()
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationState { get; set; }
+
+    protected bool restringido = false;
+
+    protected async override void OnInitialized()
     {
         Layout.Titulo = "Programacion y Control de la Produccion";
+
+        var auth = await AuthenticationState;
+        if (auth.User.Identity.IsAuthenticated)
+        {
+            var user = auth.User.Identity.Name;
+
+            if (user.ToLower().Contains("planta"))
+            {
+                restringido = true;
+            }
+        }
+
     }
 
     private void OnClicked()

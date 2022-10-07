@@ -8,7 +8,10 @@
 @using Syncfusion.Blazor
 @using Syncfusion.Blazor.Calendars
 @using Syncfusion.Blazor.LinearGauge
-@attribute [Authorize( Roles="Administrador")]
+@using SupplyChain.Client.Shared.CustomAdaptor
+@using SupplyChain.Shared.Context 
+
+@attribute [Authorize(Roles = "Administrador")]
 @page "/panel-control/index"
 
 @inherits BasePanelControl
@@ -1429,31 +1432,34 @@
         </TabItem>
         <TabItem CssClass="tab-content">
             <ChildContent>
-                <TabHeader Text="Proyectos"></TabHeader>
+                <TabHeader Text="Proyectos New">
+                </TabHeader>
             </ChildContent>
             <ContentTemplate>
                 <div class="col-lg-12 control-section">
                     <div class="content-wrapper">
                         <div class="row">
-                            <SfGantt TValue="ProyectosGBPI" Height="450px" Width="100%" HighlightWeekends="true" DataSource="@Proyectos"
-                                     Toolbar="@(new List<string>(){ "Add", "Edit", "Update", "Delete", "Cancel", "ExpandAll", "CollapseAll","Indent","Outdent"})"
-                                     AllowSelection="true" GridLines="Syncfusion.Blazor.Gantt.GridLine.Both" TreeColumnIndex="1"
-                                     ProjectStartDate="@ProjectStart" ProjectEndDate="@ProjectEnd" @ref="refGanttProyectos">
-                                <GanttTaskFields Id="Id" Name="TaskName" StartDate="StartDate" EndDate="EndDate" Duration="Duration" Progress="Progress"
-                                                 Dependency="Predecessor" ParentID="ParentId" Notes="Notes"></GanttTaskFields>
-                                <GanttEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" AllowTaskbarEditing="true" ShowDeleteConfirmDialog="true"></GanttEditSettings>
+
+                            <SfGantt ID="GanttExport" TValue="GanttDataDetails" HighlightWeekends="true" RowHeight="75" DurationUnit="DurationUnit.Day"
+                                     Toolbar="@(new List<string>(){ "Add", "Edit", "Update", "Delete", "Cancel", "ExpandAll", "CollapseAll"})">
+                                <SfDataManager Adaptor="Adaptors.CustomAdaptor" DataType="GanttDataDetails" >
+                                    <CustomDataAdaptor></CustomDataAdaptor>
+                                </SfDataManager>
                                 <GanttColumns>
-                                    <GanttColumn Field="Id" IsPrimaryKey="true" Width="100"></GanttColumn>
-                                    <GanttColumn Field="TaskName" HeaderText="Job Name" Width="250" ClipMode="Syncfusion.Blazor.Grids.ClipMode.EllipsisWithTooltip"></GanttColumn>
-                                    <GanttColumn Field="StartDate" HeaderText="Start Date"></GanttColumn>
-                                    <GanttColumn Field="EndDate" HeaderText="End Date"></GanttColumn>
-                                    <GanttColumn Field="Duration" HeaderText="Duration"></GanttColumn>
-                                    <GanttColumn Field="Progress" HeaderText="Progress"></GanttColumn>
-                                    <GanttColumn Field="Predecessor" HeaderText="Dependency"></GanttColumn>
+                                    <GanttColumn Field=@nameof(GanttDataDetails.Id) Width="100"></GanttColumn>
+                                    <GanttColumn Field=@nameof(GanttDataDetails.Name) Width="250"></GanttColumn>
+                                    <GanttColumn Field=@nameof(GanttDataDetails.Sdate)></GanttColumn>
+                                    <GanttColumn Field=@nameof(GanttDataDetails.Edate)></GanttColumn>
+                                    <GanttColumn Field=@nameof(GanttDataDetails.Duration)></GanttColumn>
+                                    <GanttColumn Field=@nameof(GanttDataDetails.Progress)></GanttColumn>
+                                    <GanttColumn Field=@nameof(GanttDataDetails.ParentId)></GanttColumn>
                                 </GanttColumns>
-                                <GanttLabelSettings LeftLabel="TaskName" TValue="ProyectosGBPI">
-                                </GanttLabelSettings>
-                                <GanttSplitterSettings Position="40%"> </GanttSplitterSettings>
+                                <GanttEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" AllowTaskbarEditing="true"></GanttEditSettings>
+                                <GanttTimelineSettings>
+                                    <GanttTopTierSettings Unit="TimelineViewMode.Week" Format="MMM dd, yyyy"></GanttTopTierSettings>
+                                    <GanttBottomTierSettings Unit="TimelineViewMode.Day"></GanttBottomTierSettings>
+                                </GanttTimelineSettings>
+                                <GanttTaskFields Id="Id" Name="Name" StartDate="Sdate" EndDate="Edate" ParentID="ParentId" Progress="Progress" Duration="Duration"></GanttTaskFields>
                             </SfGantt>
                         </div>
                     </div>

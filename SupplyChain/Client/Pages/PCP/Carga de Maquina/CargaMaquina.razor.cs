@@ -621,7 +621,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
         }
         protected async Task Etiqueta()
         {
-            PedCliList = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/{ordenFabricacion.PEDIDO}");
+            PedCliList = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/ByPedido/{ordenFabricacion.PEDIDO}");
 
             prodList = await Http.GetFromJsonAsync<Producto>($"api/Prod/GetByFilter?Codigo={ordenFabricacion.CG_PROD.Trim()}" +
                 $"&Descripcion={string.Empty}");

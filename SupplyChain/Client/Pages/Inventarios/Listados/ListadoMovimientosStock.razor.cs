@@ -46,8 +46,8 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         private string GeneraUrl()
         {
-            filter.Desde = desde.ToString("dd/MM/yyyy");
-            filter.Hasta = hasta.ToString("dd/MM/yyyy");
+            filter.Desde = desde.ToString("yyyyMMdd");
+            filter.Hasta = hasta.ToString("yyyyMMdd");
             string api = "api/Stock/MovimientosStock";
 
             api += $"?Tipoo={filter.Tipoo}&Desde={filter.Desde}&Hasta={filter.Hasta}";

@@ -69,19 +69,19 @@ namespace SupplyChain.Server.Controllers
             {
                 item.Id = 0;
             }
-            await _presupuestoRepository.BeginTransaction();
+            //await _presupuestoRepository.BeginTransaction();
             try
             {
                 var userName = HttpContext.User.Identity.Name;
                 presupuesto.USUARIO = userName;
                 await _presupuestoRepository.Agregar(presupuesto);
                 await _presupuestoRepository.ActualizarCalculoConPresupuestoByIdCalculo(presupuesto.Id);
-                await _presupuestoRepository.CommitTransaction();
+                //await _presupuestoRepository.CommitTransaction();
                 
             }
             catch (Exception ex)
             {
-                await _presupuestoRepository.RollbackTransaction();
+                //await _presupuestoRepository.RollbackTransaction();
                 return BadRequest(ex.Message);
             }
 

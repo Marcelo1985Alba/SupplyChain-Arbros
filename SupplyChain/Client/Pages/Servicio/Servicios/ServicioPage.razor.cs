@@ -128,7 +128,7 @@ namespace SupplyChain.Pages.Servicios
             {
                 ApiUrl = $"api/Servicios/{pedido}";
                 servicios = await Http.GetFromJsonAsync<List<Service>>($"api/Servicios/{pedido}");
-                servDesc = servicios.Where(s => s.PEDIDO == pedido).ToList();
+                servDesc = servicios.Where(s => s.PEDIDO == pedido.ToString()).ToList();
             }
             medidas = await Http.GetFromJsonAsync<List<Medida>>("api/Medida");
             //series = await Http.GetFromJsonAsync<List<Serie>>("api/Serie");

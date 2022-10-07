@@ -502,43 +502,13 @@
 <SfDialog Width="500px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible4">
     <DialogTemplates>
         <Content>
-            @*<div class="form-row">
-                    <div class="form-group col-md-2">
-                        <label style="color:blue">Planificada Inicio:</label>
-                        <SfDateTimePicker Format="dd/MM/yyyy" TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_PREVISTA_FABRICACION"></SfDateTimePicker>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label style="color:blue">Inicio real:</label>
-                        <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_INICIO_REAL_FABRICACION"></SfDateTimePicker>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label style="color:blue">Finalización real:</label>
-                        <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FE_CIERRE"></SfDateTimePicker>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label style="color:blue">Cantidad fabricada:</label>
-                        <SfNumericTextBox TValue="decimal" Format="N0" @bind-Value="@ordenFabricacion.CANTFAB" ShowClearButton="true" Step="1"></SfNumericTextBox>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label style="color:blue">Seleccione Acción:</label>
-                        <SfDropDownList TValue="int" TItem="ModeloGenericoIntString" @bind-Value="@ordenFabricacion.CG_ESTADOCARGA" DataSource="@dbEstadoCarga">
-                            <DropDownListFieldSettings Value="ID" Text="TEXTO"></DropDownListFieldSettings>
-                        </SfDropDownList>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label style="color:blue">Dependencia:</label>
-                        <SfDropDownList TValue="int" TItem="ModeloGenericoIntString" @bind-Value="@ordenFabricacion.CG_ORDFORIG" DataSource="@dbOrdenesDependientes">
-                            <DropDownListFieldSettings Value="ID" Text="TEXTO"></DropDownListFieldSettings>
-                        </SfDropDownList>
-                    </div>
-                </div>*@
             <div class="form-row">
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <SfTextBox Placeholder="Código de Producto" Input="OnInputCG_PROD" @bind-Value="CgString" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                        <SfTextBox Placeholder="Código de Producto" Input="OnInputCG_PROD" @bind-Value="CgString" FloatLabelType="@FloatLabelType.Never"></SfTextBox>
                     </div>
                     <div class="form-group col-md-6">
-                        <SfTextBox Placeholder="Descripción de Producto" Input="OnInputDES_PROD" @bind-Value="DesString" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                        <SfTextBox Placeholder="Descripción de Producto" Input="OnInputDES_PROD" @bind-Value="DesString" FloatLabelType="@FloatLabelType.Never"></SfTextBox>
                     </div>
                 </div>
                 <div class="row">

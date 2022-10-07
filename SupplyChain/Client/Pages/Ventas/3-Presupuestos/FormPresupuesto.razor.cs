@@ -368,6 +368,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             if (response.Error)
             {
                 Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+                Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
                 return false;
             }
             Presupuesto = response.Response;

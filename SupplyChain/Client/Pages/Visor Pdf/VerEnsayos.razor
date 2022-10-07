@@ -15,7 +15,15 @@ else
 {
     if (archivos.Count == 0)
     {
-        <p>Sin Ensayos</p>
+        if (Accion == "RUTAENSAYO")
+        {
+            <p>Sin Ensayos</p>
+        }
+        else if (Accion == "RUTAOF")
+        {
+            <p>Sin Planos</p>
+        }
+        
     }
     else
     {
@@ -39,7 +47,7 @@ else
                             }
                             else
                             {
-                                <SfPdfViewer ID="@idPdf" ServiceUrl="/api/Values" DocumentPath="@pdf_ruta"
+                                <SfPdfViewer ID="@idPdf" ServiceUrl="/api/Values" DocumentPath="@pdf_ruta" ZoomValue="100" ZoomMode="ZoomMode.FitToWidth"
                                         Height="1200px" Width="100%"></SfPdfViewer>
                             }
                             
@@ -64,8 +72,17 @@ else
     protected async override Task OnInitializedAsync()
     {
         VisibleSpinner = true;
-        Accion = "RUTAENSAYO";
-        var CodigoAccion = $"ENS_{Codigo}_1.pdf," + Accion;
+        //Accion = "RUTAENSAYO";
+
+        var CodigoAccion = "";
+        if (Accion == "RUTAENSAYO")
+        {
+            CodigoAccion = $"ENS_{Codigo}_1.pdf," + Accion;
+        }
+        else if (Accion == "RUTAOF")
+        {
+            CodigoAccion = $"{Codigo}," + Accion;
+        }
 
 
         archivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/ByParamRuta/{Accion}/{CodigoAccion}");
