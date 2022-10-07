@@ -100,6 +100,31 @@ namespace SupplyChain.Client.Pages.Ingenieria
                 //await refSfTab.Select(TabItems.Count);
                 VisibleSpinner = false;
             }
+            else if (args.CommandColumn.Title == "Ver Programas")
+            {
+                VisibleSpinner = true;
+                tituloTabFormulas = "Formulas";
+                mostrarCerrarTab = true;
+                TabItems.Add(new TabData
+                {
+                    Header = $"Programas ({args.RowData.CG_PROD.Trim()})",
+                    CodigoInsumo = args.RowData.CG_PROD.Trim()
+
+                });
+
+
+                //El primer tab no se encuentra dentro de la lista
+                //le resto el que agregue para que no lo desactive
+                //for (int i = 0; i < TabItems.Count + 1; i++)
+                //{
+                //    await refSfTab.EnableTab(i, false);
+                //}
+
+
+                //await refSfTab.EnableTab(TabItems.Count, true);
+                //await refSfTab.Select(TabItems.Count);
+                VisibleSpinner = false;
+            }
 
         }
 

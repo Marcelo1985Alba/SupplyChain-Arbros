@@ -1,6 +1,7 @@
 ﻿@using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Navigations
 @using SupplyChain.Client.Pages.Visor_Pdf 
+@using SupplyChain.Client.Pages.CDM
 @page "/ingenieria/consulta-formulas"
 @inherits BaseConsultaFormulas
 
@@ -51,6 +52,15 @@
                                                            })" />
                             </GridCommandColumns>
                         </GridColumn>
+                        <GridColumn HeaderText="Programas" Width="30px">
+                            <GridCommandColumns>
+                                <GridCommandColumn Type="CommandButtonType.None" Title="Ver Programas"
+                                                   ButtonOption="@(new CommandButtonOptions()
+                                                           {
+                                                               IconCss = "fa fa-eye", Content="", CssClass="botonGrilla"
+                                                           })" />
+                            </GridCommandColumns>
+                        </GridColumn>
                     </GridColumns>
                 </SfGrid>
             </ContentTemplate>
@@ -65,6 +75,18 @@
                     </HeaderTemplate>
                     <ContentTemplate>
                         <VerEnsayos Accion="RUTAOF" Codigo=@Item.CodigoInsumo></VerEnsayos>
+                    </ContentTemplate>
+                </TabItem>
+            }
+
+            if (Item.Header.ToLower().Contains("programas"))
+            {
+                <TabItem>
+                    <HeaderTemplate>
+                        <div>@(Item.Header)</div>
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        <Pdf accion="RUTACNC" codigo=@Item.CodigoInsumo></Pdf>
                     </ContentTemplate>
                 </TabItem>
             }

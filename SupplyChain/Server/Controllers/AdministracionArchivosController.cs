@@ -114,6 +114,10 @@ namespace SupplyChain.Server.Controllers
                 {
                     file += ".pdf";
                 }
+                else if (ruta.CAMPO.Trim() == "RUTACNC")
+                {
+                    file += "*";
+                }
 
                 string[] dirs = Directory.GetFiles($"{ruta.VALORC}", $"{file}",
                     new EnumerationOptions() { MatchCasing = MatchCasing.CaseInsensitive, MatchType = MatchType.Simple, IgnoreInaccessible = true });
