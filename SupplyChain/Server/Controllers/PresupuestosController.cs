@@ -81,8 +81,10 @@ namespace SupplyChain.Server.Controllers
             }
             catch (Exception ex)
             {
-                //await _presupuestoRepository.RollbackTransaction();
-                return BadRequest(ex.Message);
+                var details = ex.Message;
+                details += ex.InnerException?.Message;
+
+                return BadRequest(details);
             }
 
             return CreatedAtAction("GetPresupuesto", new { id = presupuesto.Id }, presupuesto);

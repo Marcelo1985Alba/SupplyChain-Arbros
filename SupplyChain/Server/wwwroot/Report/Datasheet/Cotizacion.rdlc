@@ -18,20 +18,24 @@
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="INGENIERIA">
-          <DataField>INGENIERIA</DataField>
+        <Field Name="Ingenieria">
+          <DataField>Ingenieria</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="PROYECTO">
-          <DataField>PROYECTO</DataField>
+        <Field Name="Proyecto">
+          <DataField>Proyecto</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="REVISION">
-          <DataField>REVISION</DataField>
+        <Field Name="Revision">
+          <DataField>Revision</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="NRODOC">
-          <DataField>NRODOC</DataField>
+        <Field Name="Nrodoc">
+          <DataField>Nrodoc</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Cliente">
+          <DataField>Cliente</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="SolicitudId">
@@ -360,10 +364,6 @@
         </Field>
         <Field Name="Cuit">
           <DataField>Cuit</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CLIENTE">
-          <DataField>CLIENTE</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -697,13 +697,7 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Linea / Equipo: </Value>
-                                <Style>
-                                  <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                                </Style>
-                              </TextRun>
-                              <TextRun>
-                                <Value>=Fields!CLIENTE.Value</Value>
+                                <Value>Linea / Equipo:</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
@@ -2484,7 +2478,6 @@
                           <PaddingBottom>2pt</PaddingBottom>
                         </Style>
                       </Textbox>
-                      <rd:Selected>true</rd:Selected>
                     </CellContents>
                   </TablixHeader>
                   <TablixMembers>
@@ -3044,7 +3037,7 @@
         <Height>7.86669in</Height>
         <Style />
       </Body>
-      <Width>8.07893in</Width>
+      <Width>7.98726in</Width>
       <Page>
         <PageHeader>
           <Height>1.44667in</Height>
@@ -3190,7 +3183,7 @@
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>Nro de Presupuesto: </Value>
+                          <Value>Nro de Presupuesto:  </Value>
                           <Style>
                             <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                           </Style>
@@ -3238,7 +3231,7 @@
                           </Style>
                         </TextRun>
                         <TextRun>
-                          <Value>=Fields!PROYECTO.Value</Value>
+                          <Value>=Fields!Proyecto.Value</Value>
                           <Style>
                             <FontFamily>Bahnschrift SemiBold</FontFamily>
                           </Style>
@@ -3273,15 +3266,16 @@
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>Revision: </Value>
+                          <Value>Revision:  </Value>
                           <Style>
                             <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                           </Style>
                         </TextRun>
                         <TextRun>
-                          <Value>=Fields!REVISION.Value</Value>
+                          <Value>=Fields!Revision.Value</Value>
                           <Style>
                             <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                            <FontWeight>Bold</FontWeight>
                           </Style>
                         </TextRun>
                       </TextRuns>
@@ -3314,15 +3308,16 @@
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>Cliente: </Value>
+                          <Value>Cliente:  </Value>
                           <Style>
                             <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                           </Style>
                         </TextRun>
                         <TextRun>
-                          <Value>=Fields!CLIENTE.Value</Value>
+                          <Value>=Fields!Cliente.Value</Value>
                           <Style>
                             <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                            <FontWeight>Bold</FontWeight>
                           </Style>
                         </TextRun>
                       </TextRuns>
@@ -3402,15 +3397,16 @@
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>Doc cliente: </Value>
+                          <Value>Doc cliente:  </Value>
                           <Style>
                             <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                           </Style>
                         </TextRun>
                         <TextRun>
-                          <Value>=Fields!NRODOC.Value</Value>
+                          <Value>=Fields!Nrodoc.Value</Value>
                           <Style>
                             <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                            <FontWeight>Bold</FontWeight>
                           </Style>
                         </TextRun>
                       </TextRuns>
@@ -3422,7 +3418,7 @@
                   <rd:DefaultName>Textbox4</rd:DefaultName>
                   <Top>2.59498cm</Top>
                   <Left>12.25406cm</Left>
-                  <Height>0.52266cm</Height>
+                  <Height>0.56346cm</Height>
                   <Width>6.3245cm</Width>
                   <ZIndex>11</ZIndex>
                   <Style>
@@ -3449,7 +3445,7 @@
                           </Style>
                         </TextRun>
                         <TextRun>
-                          <Value>=Fields!INGENIERIA.Value</Value>
+                          <Value>=Fields!Ingenieria.Value</Value>
                           <Style>
                             <FontFamily>Bahnschrift SemiBold</FontFamily>
                           </Style>
@@ -3502,6 +3498,7 @@
           <PrintOnLastPage>true</PrintOnLastPage>
           <Style />
         </PageFooter>
+        <PageHeight>10in</PageHeight>
         <LeftMargin>0.25in</LeftMargin>
         <RightMargin>0.25in</RightMargin>
         <TopMargin>0.25in</TopMargin>

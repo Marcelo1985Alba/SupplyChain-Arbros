@@ -13,7 +13,12 @@ namespace SupplyChain.Shared
 
 		public int SolicitudId { get; set; }
 		public int PresupuestoId { get; set; }
-		public string CodigoFinal { get; set; }
+        public string? Cliente { get; set; }
+        public string? Ingenieria { get; set; }
+        public string? Proyecto { get; set; }
+        public string? Revision { get; set; }
+        public string? Nrodoc { get; set; }
+        public string CodigoFinal { get; set; }
 		public string Model { get; set; }
 		public string DescripcionLinea { get; set; }
 		public string Medida { get; set; }

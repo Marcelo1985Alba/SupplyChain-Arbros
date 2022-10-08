@@ -279,13 +279,15 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class vCalculoSolicitudesDataTable : global::System.Data.TypedTableBase<vCalculoSolicitudesRow> {
             
-            private global::System.Data.DataColumn columnINGENIERIA;
+            private global::System.Data.DataColumn columnIngenieria;
             
-            private global::System.Data.DataColumn columnPROYECTO;
+            private global::System.Data.DataColumn columnProyecto;
             
-            private global::System.Data.DataColumn columnREVISION;
+            private global::System.Data.DataColumn columnRevision;
             
-            private global::System.Data.DataColumn columnNRODOC;
+            private global::System.Data.DataColumn columnNrodoc;
+            
+            private global::System.Data.DataColumn columnCliente;
             
             private global::System.Data.DataColumn columnSolicitudId;
             
@@ -354,8 +356,6 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             private global::System.Data.DataColumn columnCantidad;
             
             private global::System.Data.DataColumn columnServicio;
-            
-            private global::System.Data.DataColumn _columnNumeroP_ID;
             
             private global::System.Data.DataColumn columnIndiceInstrumento;
             
@@ -453,8 +453,6 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             
             private global::System.Data.DataColumn columnCuit;
             
-            private global::System.Data.DataColumn columnCLIENTE;
-            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public vCalculoSolicitudesDataTable() {
@@ -490,33 +488,41 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn INGENIERIAColumn {
+            public global::System.Data.DataColumn IngenieriaColumn {
                 get {
-                    return this.columnINGENIERIA;
+                    return this.columnIngenieria;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn PROYECTOColumn {
+            public global::System.Data.DataColumn ProyectoColumn {
                 get {
-                    return this.columnPROYECTO;
+                    return this.columnProyecto;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn REVISIONColumn {
+            public global::System.Data.DataColumn RevisionColumn {
                 get {
-                    return this.columnREVISION;
+                    return this.columnRevision;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn NRODOCColumn {
+            public global::System.Data.DataColumn NrodocColumn {
                 get {
-                    return this.columnNRODOC;
+                    return this.columnNrodoc;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn ClienteColumn {
+                get {
+                    return this.columnCliente;
                 }
             }
             
@@ -789,14 +795,6 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             public global::System.Data.DataColumn ServicioColumn {
                 get {
                     return this.columnServicio;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn _NumeroP_IDColumn {
-                get {
-                    return this._columnNumeroP_ID;
                 }
             }
             
@@ -1186,14 +1184,6 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn CLIENTEColumn {
-                get {
-                    return this.columnCLIENTE;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1230,10 +1220,11 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public vCalculoSolicitudesRow AddvCalculoSolicitudesRow(
-                        string INGENIERIA, 
-                        string PROYECTO, 
-                        string REVISION, 
-                        string NRODOC, 
+                        string Ingenieria, 
+                        string Proyecto, 
+                        string Revision, 
+                        string Nrodoc, 
+                        string Cliente, 
                         int SolicitudId, 
                         int PresupuestoId, 
                         string CodigoFinal, 
@@ -1268,7 +1259,6 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                         int TagId, 
                         string Cantidad, 
                         string Servicio, 
-                        string _NumeroP_ID, 
                         string IndiceInstrumento, 
                         string NumeroPlanta, 
                         string NumeroPlano, 
@@ -1316,14 +1306,14 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                         string Id, 
                         string Email, 
                         string UserName, 
-                        string Cuit, 
-                        string CLIENTE) {
+                        string Cuit) {
                 vCalculoSolicitudesRow rowvCalculoSolicitudesRow = ((vCalculoSolicitudesRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        INGENIERIA,
-                        PROYECTO,
-                        REVISION,
-                        NRODOC,
+                        Ingenieria,
+                        Proyecto,
+                        Revision,
+                        Nrodoc,
+                        Cliente,
                         SolicitudId,
                         PresupuestoId,
                         CodigoFinal,
@@ -1358,7 +1348,6 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                         TagId,
                         Cantidad,
                         Servicio,
-                        _NumeroP_ID,
                         IndiceInstrumento,
                         NumeroPlanta,
                         NumeroPlano,
@@ -1406,8 +1395,7 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                         Id,
                         Email,
                         UserName,
-                        Cuit,
-                        CLIENTE};
+                        Cuit};
                 rowvCalculoSolicitudesRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowvCalculoSolicitudesRow);
                 return rowvCalculoSolicitudesRow;
@@ -1430,10 +1418,11 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             internal void InitVars() {
-                this.columnINGENIERIA = base.Columns["INGENIERIA"];
-                this.columnPROYECTO = base.Columns["PROYECTO"];
-                this.columnREVISION = base.Columns["REVISION"];
-                this.columnNRODOC = base.Columns["NRODOC"];
+                this.columnIngenieria = base.Columns["Ingenieria"];
+                this.columnProyecto = base.Columns["Proyecto"];
+                this.columnRevision = base.Columns["Revision"];
+                this.columnNrodoc = base.Columns["Nrodoc"];
+                this.columnCliente = base.Columns["Cliente"];
                 this.columnSolicitudId = base.Columns["SolicitudId"];
                 this.columnPresupuestoId = base.Columns["PresupuestoId"];
                 this.columnCodigoFinal = base.Columns["CodigoFinal"];
@@ -1468,7 +1457,6 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                 this.columnTagId = base.Columns["TagId"];
                 this.columnCantidad = base.Columns["Cantidad"];
                 this.columnServicio = base.Columns["Servicio"];
-                this._columnNumeroP_ID = base.Columns["NumeroP&ID"];
                 this.columnIndiceInstrumento = base.Columns["IndiceInstrumento"];
                 this.columnNumeroPlanta = base.Columns["NumeroPlanta"];
                 this.columnNumeroPlano = base.Columns["NumeroPlano"];
@@ -1517,20 +1505,21 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                 this.columnEmail = base.Columns["Email"];
                 this.columnUserName = base.Columns["UserName"];
                 this.columnCuit = base.Columns["Cuit"];
-                this.columnCLIENTE = base.Columns["CLIENTE"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             private void InitClass() {
-                this.columnINGENIERIA = new global::System.Data.DataColumn("INGENIERIA", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnINGENIERIA);
-                this.columnPROYECTO = new global::System.Data.DataColumn("PROYECTO", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPROYECTO);
-                this.columnREVISION = new global::System.Data.DataColumn("REVISION", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnREVISION);
-                this.columnNRODOC = new global::System.Data.DataColumn("NRODOC", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNRODOC);
+                this.columnIngenieria = new global::System.Data.DataColumn("Ingenieria", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIngenieria);
+                this.columnProyecto = new global::System.Data.DataColumn("Proyecto", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnProyecto);
+                this.columnRevision = new global::System.Data.DataColumn("Revision", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnRevision);
+                this.columnNrodoc = new global::System.Data.DataColumn("Nrodoc", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnNrodoc);
+                this.columnCliente = new global::System.Data.DataColumn("Cliente", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCliente);
                 this.columnSolicitudId = new global::System.Data.DataColumn("SolicitudId", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSolicitudId);
                 this.columnPresupuestoId = new global::System.Data.DataColumn("PresupuestoId", typeof(int), null, global::System.Data.MappingType.Element);
@@ -1599,10 +1588,6 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                 base.Columns.Add(this.columnCantidad);
                 this.columnServicio = new global::System.Data.DataColumn("Servicio", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnServicio);
-                this._columnNumeroP_ID = new global::System.Data.DataColumn("NumeroP&ID", typeof(string), null, global::System.Data.MappingType.Element);
-                this._columnNumeroP_ID.ExtendedProperties.Add("Generator_ColumnVarNameInTable", "_columnNumeroP_ID");
-                this._columnNumeroP_ID.ExtendedProperties.Add("Generator_UserColumnName", "NumeroP&ID");
-                base.Columns.Add(this._columnNumeroP_ID);
                 this.columnIndiceInstrumento = new global::System.Data.DataColumn("IndiceInstrumento", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnIndiceInstrumento);
                 this.columnNumeroPlanta = new global::System.Data.DataColumn("NumeroPlanta", typeof(string), null, global::System.Data.MappingType.Element);
@@ -1699,12 +1684,11 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                 base.Columns.Add(this.columnUserName);
                 this.columnCuit = new global::System.Data.DataColumn("Cuit", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCuit);
-                this.columnCLIENTE = new global::System.Data.DataColumn("CLIENTE", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCLIENTE);
-                this.columnINGENIERIA.MaxLength = 50;
-                this.columnPROYECTO.MaxLength = 50;
-                this.columnREVISION.MaxLength = 50;
-                this.columnNRODOC.MaxLength = 50;
+                this.columnIngenieria.MaxLength = 50;
+                this.columnProyecto.MaxLength = 50;
+                this.columnRevision.MaxLength = 50;
+                this.columnNrodoc.MaxLength = 50;
+                this.columnCliente.MaxLength = 100;
                 this.columnSolicitudId.AllowDBNull = false;
                 this.columnPresupuestoId.AllowDBNull = false;
                 this.columnCodigoFinal.AllowDBNull = false;
@@ -1767,7 +1751,6 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                 this.columnTornillo.MaxLength = 200;
                 this.columnCantidad.MaxLength = 50;
                 this.columnServicio.MaxLength = 200;
-                this._columnNumeroP_ID.MaxLength = 200;
                 this.columnIndiceInstrumento.MaxLength = 200;
                 this.columnNumeroPlanta.MaxLength = 200;
                 this.columnNumeroPlano.MaxLength = 200;
@@ -1814,7 +1797,6 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                 this.columnEmail.MaxLength = 256;
                 this.columnUserName.MaxLength = 256;
                 this.columnCuit.MaxLength = 13;
-                this.columnCLIENTE.MaxLength = 100;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1957,65 +1939,81 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string INGENIERIA {
+            public string Ingenieria {
                 get {
                     try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.INGENIERIAColumn]));
+                        return ((string)(this[this.tablevCalculoSolicitudes.IngenieriaColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'INGENIERIA\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Ingenieria\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.INGENIERIAColumn] = value;
+                    this[this.tablevCalculoSolicitudes.IngenieriaColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string PROYECTO {
+            public string Proyecto {
                 get {
                     try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.PROYECTOColumn]));
+                        return ((string)(this[this.tablevCalculoSolicitudes.ProyectoColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'PROYECTO\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Proyecto\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.PROYECTOColumn] = value;
+                    this[this.tablevCalculoSolicitudes.ProyectoColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string REVISION {
+            public string Revision {
                 get {
                     try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.REVISIONColumn]));
+                        return ((string)(this[this.tablevCalculoSolicitudes.RevisionColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'REVISION\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Revision\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.REVISIONColumn] = value;
+                    this[this.tablevCalculoSolicitudes.RevisionColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string NRODOC {
+            public string Nrodoc {
                 get {
                     try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.NRODOCColumn]));
+                        return ((string)(this[this.tablevCalculoSolicitudes.NrodocColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'NRODOC\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Nrodoc\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.NRODOCColumn] = value;
+                    this[this.tablevCalculoSolicitudes.NrodocColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Cliente {
+                get {
+                    try {
+                        return ((string)(this[this.tablevCalculoSolicitudes.ClienteColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Cliente\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablevCalculoSolicitudes.ClienteColumn] = value;
                 }
             }
             
@@ -2520,22 +2518,6 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                 }
                 set {
                     this[this.tablevCalculoSolicitudes.ServicioColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string _NumeroP_ID {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes._NumeroP_IDColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'NumeroP&ID\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes._NumeroP_IDColumn] = value;
                 }
             }
             
@@ -3344,66 +3326,62 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string CLIENTE {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.CLIENTEColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CLIENTE\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.CLIENTEColumn] = value;
-                }
+            public bool IsIngenieriaNull() {
+                return this.IsNull(this.tablevCalculoSolicitudes.IngenieriaColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsINGENIERIANull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.INGENIERIAColumn);
+            public void SetIngenieriaNull() {
+                this[this.tablevCalculoSolicitudes.IngenieriaColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetINGENIERIANull() {
-                this[this.tablevCalculoSolicitudes.INGENIERIAColumn] = global::System.Convert.DBNull;
+            public bool IsProyectoNull() {
+                return this.IsNull(this.tablevCalculoSolicitudes.ProyectoColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsPROYECTONull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.PROYECTOColumn);
+            public void SetProyectoNull() {
+                this[this.tablevCalculoSolicitudes.ProyectoColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetPROYECTONull() {
-                this[this.tablevCalculoSolicitudes.PROYECTOColumn] = global::System.Convert.DBNull;
+            public bool IsRevisionNull() {
+                return this.IsNull(this.tablevCalculoSolicitudes.RevisionColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsREVISIONNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.REVISIONColumn);
+            public void SetRevisionNull() {
+                this[this.tablevCalculoSolicitudes.RevisionColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetREVISIONNull() {
-                this[this.tablevCalculoSolicitudes.REVISIONColumn] = global::System.Convert.DBNull;
+            public bool IsNrodocNull() {
+                return this.IsNull(this.tablevCalculoSolicitudes.NrodocColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsNRODOCNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.NRODOCColumn);
+            public void SetNrodocNull() {
+                this[this.tablevCalculoSolicitudes.NrodocColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetNRODOCNull() {
-                this[this.tablevCalculoSolicitudes.NRODOCColumn] = global::System.Convert.DBNull;
+            public bool IsClienteNull() {
+                return this.IsNull(this.tablevCalculoSolicitudes.ClienteColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetClienteNull() {
+                this[this.tablevCalculoSolicitudes.ClienteColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3692,18 +3670,6 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetServicioNull() {
                 this[this.tablevCalculoSolicitudes.ServicioColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool Is_NumeroP_IDNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes._NumeroP_IDColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void Set_NumeroP_IDNull() {
-                this[this.tablevCalculoSolicitudes._NumeroP_IDColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4281,18 +4247,6 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             public void SetCuitNull() {
                 this[this.tablevCalculoSolicitudes.CuitColumn] = global::System.Convert.DBNull;
             }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsCLIENTENull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.CLIENTEColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetCLIENTENull() {
-                this[this.tablevCalculoSolicitudes.CLIENTEColumn] = global::System.Convert.DBNull;
-            }
         }
         
         /// <summary>
@@ -4454,10 +4408,11 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet.ArbrosDataSheetTableAdapte
             global::System.Data.Common.DataTableMapping tableMapping = new global::System.Data.Common.DataTableMapping();
             tableMapping.SourceTable = "Table";
             tableMapping.DataSetTable = "vCalculoSolicitudes";
-            tableMapping.ColumnMappings.Add("INGENIERIA", "INGENIERIA");
-            tableMapping.ColumnMappings.Add("PROYECTO", "PROYECTO");
-            tableMapping.ColumnMappings.Add("REVISION", "REVISION");
-            tableMapping.ColumnMappings.Add("NRODOC", "NRODOC");
+            tableMapping.ColumnMappings.Add("Ingenieria", "Ingenieria");
+            tableMapping.ColumnMappings.Add("Proyecto", "Proyecto");
+            tableMapping.ColumnMappings.Add("Revision", "Revision");
+            tableMapping.ColumnMappings.Add("Nrodoc", "Nrodoc");
+            tableMapping.ColumnMappings.Add("Cliente", "Cliente");
             tableMapping.ColumnMappings.Add("SolicitudId", "SolicitudId");
             tableMapping.ColumnMappings.Add("PresupuestoId", "PresupuestoId");
             tableMapping.ColumnMappings.Add("CodigoFinal", "CodigoFinal");
@@ -4492,7 +4447,6 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet.ArbrosDataSheetTableAdapte
             tableMapping.ColumnMappings.Add("TagId", "TagId");
             tableMapping.ColumnMappings.Add("Cantidad", "Cantidad");
             tableMapping.ColumnMappings.Add("Servicio", "Servicio");
-            tableMapping.ColumnMappings.Add("NumeroP&ID", "NumeroP&ID");
             tableMapping.ColumnMappings.Add("IndiceInstrumento", "IndiceInstrumento");
             tableMapping.ColumnMappings.Add("NumeroPlanta", "NumeroPlanta");
             tableMapping.ColumnMappings.Add("NumeroPlano", "NumeroPlano");
@@ -4541,7 +4495,6 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet.ArbrosDataSheetTableAdapte
             tableMapping.ColumnMappings.Add("Email", "Email");
             tableMapping.ColumnMappings.Add("UserName", "UserName");
             tableMapping.ColumnMappings.Add("Cuit", "Cuit");
-            tableMapping.ColumnMappings.Add("CLIENTE", "CLIENTE");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -4559,7 +4512,14 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet.ArbrosDataSheetTableAdapte
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "Select * From vCalculoSolicitudes";
+            this._commandCollection[0].CommandText = @"SELECT Ingenieria, Proyecto, Revision, Nrodoc, Cliente, SolicitudId, PresupuestoId, CodigoFinal, Model, DescripcionLinea, Medida, DescripcionMedida, Orifico, AreaOrificio, SerieEntrada, DescripcionSerieEntrada, TipoEntrada, 
+                  DescripcionTipoEntrada, SerieSalida, DescripcionSerieSalida, TipoSalida, DescripcionTipoSalida, CodigoDTT, TipoAsiento, DescripcionAsiento, CodigoCBR, Cuerpo_Externo, Bonete_Externo, Resorte_Externo, CodigoDT, Disco_Interno, 
+                  Tobera_Interno, Capuchon, Palanca, Bonete, Tornillo, TagId, Cantidad, Servicio, IndiceInstrumento, NumeroPlanta, NumeroPlano, DescargaA, LineaEntrada, LineaSalida, Contingencia, NumeroHoja, PresionOperacion, 
+                  TemperaturaOperacion, PresionDiseño, MaximaTemperaturaDiseño, MinimaTemperaturaDiseño, PresionAtmosfera, DiscoRuptura, Modelo, Norma, ContrapresionFija, ContrapresionVariable, ValvulaSimpleMultiple, 
+                  SobrepresionAdmisible, PresionApertura, CodigoDiseño, UserId, Nombre, FaseId, TipoFase, NombreFase, Descripcion, CapacidadRequerida_V, Temperatura_de_Descarga_T, MasaMolecular_M, CocienteCaloresEspecificos_k, 
+                  CoeficienteDeCompresibilidad_z, CapacidadRequerida_W, CapacidadRequerida_Q, DensidadRelativa_G, Viscusidad_Mu, Temperatura_Saturado, AreaCalculada, Temperatura_de_Descarga_IN, Temperatura_de_Descarga_IN_Unit, 
+                  CapacidadRequerida_IN, CapacidadRequerida_IN_Unit, Id, Email, UserName, Cuit
+FROM     vCalculoSolicitudes";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         

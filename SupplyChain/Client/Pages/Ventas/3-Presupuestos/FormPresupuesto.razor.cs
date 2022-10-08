@@ -91,10 +91,6 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             {
                 await GetPresupuesto(id);
             }
-            else
-            {
-                Presupuesto.DIRENT = string.IsNullOrEmpty(Presupuesto?.DIRENT) ? "" : Presupuesto?.DIRENT;
-            }
             
             await GetCondicionesPago();
             await GetCondicionesEntrega();
@@ -396,6 +392,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         {
             BotonGuardarDisabled = true;
             bool guardado;
+
             if (Presupuesto.Id == 0)
             {
                 guardado = await Agregar(Presupuesto);
