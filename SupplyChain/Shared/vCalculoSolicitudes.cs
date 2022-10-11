@@ -95,7 +95,8 @@ namespace SupplyChain.Shared
 		public string? CapacidadRequerida_IN { get; set; }
 		public string? CapacidadRequerida_IN_Unit { get; set; }
 		public string? Id { get; set; }
-		public string Email { get; set; }
+        public string? LineaEquipo { get; set; }
+        public string Email { get; set; }
 		public string UserName { get; set; }
 		public string Cuit { get; set; }
 }

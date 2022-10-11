@@ -153,10 +153,10 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>4.03027in</Width>
+                  <Width>3.83861in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.56152in</Width>
+                  <Width>0.75318in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.56569in</Width>
@@ -221,7 +221,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Plazo</Value>
+                                  <Value>Plazo Dias</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1835,13 +1835,13 @@
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>0.97223in</Height>
+          <Height>1.16946in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
             <Line Name="Line4">
-              <Top>0.06944in</Top>
-              <Left>0.1555in</Left>
+              <Top>0.375in</Top>
+              <Left>0.15514in</Left>
               <Height>0in</Height>
               <Width>7.49915in</Width>
               <Style>
@@ -1871,8 +1871,8 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TOTAL_PRESUPUESTO</rd:DefaultName>
-              <Top>0.61667in</Top>
-              <Left>5.64349in</Left>
+              <Top>0.06944in</Top>
+              <Left>5.64313in</Left>
               <Height>0.25in</Height>
               <Width>0.69687in</Width>
               <ZIndex>1</ZIndex>
@@ -1909,8 +1909,8 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox16</rd:DefaultName>
-              <Top>0.61667in</Top>
-              <Left>6.75702in</Left>
+              <Top>0.06944in</Top>
+              <Left>6.75666in</Left>
               <Height>0.25in</Height>
               <Width>0.89763in</Width>
               <ZIndex>2</ZIndex>
@@ -1943,8 +1943,8 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>MONEDA1</rd:DefaultName>
-              <Top>0.61667in</Top>
-              <Left>6.38202in</Left>
+              <Top>0.06944in</Top>
+              <Left>6.38166in</Left>
               <Height>0.25in</Height>
               <Width>0.36111in</Width>
               <ZIndex>3</ZIndex>
@@ -1995,7 +1995,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Ver condiciones comerciales generales en hoja adjunta</Value>
+                      <Value />
                       <Style>
                         <FontStyle>Normal</FontStyle>
                         <FontFamily>Times New Roman</FontFamily>
@@ -2010,11 +2010,47 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox29</rd:DefaultName>
-              <Top>0.1889in</Top>
-              <Left>0.15586in</Left>
-              <Height>0.67777in</Height>
-              <Width>5.32414in</Width>
+              <Top>0.49446in</Top>
+              <Left>0.1555in</Left>
+              <Height>0.26944in</Height>
+              <Width>7.49879in</Width>
               <ZIndex>4</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox2">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Ver condiciones comerciales generales en hoja adjunta</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontSize>12pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
+                        <TextDecoration>None</TextDecoration>
+                        <Color>#000000</Color>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox2</rd:DefaultName>
+              <Top>0.81945in</Top>
+              <Left>0.1555in</Left>
+              <Height>0.25in</Height>
+              <Width>5.04167in</Width>
+              <ZIndex>5</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>

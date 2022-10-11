@@ -453,6 +453,8 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             
             private global::System.Data.DataColumn columnCuit;
             
+            private global::System.Data.DataColumn columnLineaEquipo;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public vCalculoSolicitudesDataTable() {
@@ -1184,6 +1186,14 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn LineaEquipoColumn {
+                get {
+                    return this.columnLineaEquipo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1306,7 +1316,8 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                         string Id, 
                         string Email, 
                         string UserName, 
-                        string Cuit) {
+                        string Cuit, 
+                        string LineaEquipo) {
                 vCalculoSolicitudesRow rowvCalculoSolicitudesRow = ((vCalculoSolicitudesRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Ingenieria,
@@ -1395,7 +1406,8 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                         Id,
                         Email,
                         UserName,
-                        Cuit};
+                        Cuit,
+                        LineaEquipo};
                 rowvCalculoSolicitudesRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowvCalculoSolicitudesRow);
                 return rowvCalculoSolicitudesRow;
@@ -1505,6 +1517,7 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                 this.columnEmail = base.Columns["Email"];
                 this.columnUserName = base.Columns["UserName"];
                 this.columnCuit = base.Columns["Cuit"];
+                this.columnLineaEquipo = base.Columns["LineaEquipo"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1684,6 +1697,8 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                 base.Columns.Add(this.columnUserName);
                 this.columnCuit = new global::System.Data.DataColumn("Cuit", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCuit);
+                this.columnLineaEquipo = new global::System.Data.DataColumn("LineaEquipo", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnLineaEquipo);
                 this.columnIngenieria.MaxLength = 50;
                 this.columnProyecto.MaxLength = 50;
                 this.columnRevision.MaxLength = 50;
@@ -1797,6 +1812,7 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                 this.columnEmail.MaxLength = 256;
                 this.columnUserName.MaxLength = 256;
                 this.columnCuit.MaxLength = 13;
+                this.columnLineaEquipo.MaxLength = 200;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3326,6 +3342,23 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string LineaEquipo {
+                get {
+                    try {
+                        return ((string)(this[this.tablevCalculoSolicitudes.LineaEquipoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'LineaEquipo\' de la tabla \'vCalculoSolicitudes\' es DBNull." +
+                                "", e);
+                    }
+                }
+                set {
+                    this[this.tablevCalculoSolicitudes.LineaEquipoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsIngenieriaNull() {
                 return this.IsNull(this.tablevCalculoSolicitudes.IngenieriaColumn);
             }
@@ -4247,6 +4280,18 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             public void SetCuitNull() {
                 this[this.tablevCalculoSolicitudes.CuitColumn] = global::System.Convert.DBNull;
             }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsLineaEquipoNull() {
+                return this.IsNull(this.tablevCalculoSolicitudes.LineaEquipoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetLineaEquipoNull() {
+                this[this.tablevCalculoSolicitudes.LineaEquipoColumn] = global::System.Convert.DBNull;
+            }
         }
         
         /// <summary>
@@ -4495,6 +4540,7 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet.ArbrosDataSheetTableAdapte
             tableMapping.ColumnMappings.Add("Email", "Email");
             tableMapping.ColumnMappings.Add("UserName", "UserName");
             tableMapping.ColumnMappings.Add("Cuit", "Cuit");
+            tableMapping.ColumnMappings.Add("LineaEquipo", "LineaEquipo");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -4512,14 +4558,7 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet.ArbrosDataSheetTableAdapte
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT Ingenieria, Proyecto, Revision, Nrodoc, Cliente, SolicitudId, PresupuestoId, CodigoFinal, Model, DescripcionLinea, Medida, DescripcionMedida, Orifico, AreaOrificio, SerieEntrada, DescripcionSerieEntrada, TipoEntrada, 
-                  DescripcionTipoEntrada, SerieSalida, DescripcionSerieSalida, TipoSalida, DescripcionTipoSalida, CodigoDTT, TipoAsiento, DescripcionAsiento, CodigoCBR, Cuerpo_Externo, Bonete_Externo, Resorte_Externo, CodigoDT, Disco_Interno, 
-                  Tobera_Interno, Capuchon, Palanca, Bonete, Tornillo, TagId, Cantidad, Servicio, IndiceInstrumento, NumeroPlanta, NumeroPlano, DescargaA, LineaEntrada, LineaSalida, Contingencia, NumeroHoja, PresionOperacion, 
-                  TemperaturaOperacion, PresionDiseño, MaximaTemperaturaDiseño, MinimaTemperaturaDiseño, PresionAtmosfera, DiscoRuptura, Modelo, Norma, ContrapresionFija, ContrapresionVariable, ValvulaSimpleMultiple, 
-                  SobrepresionAdmisible, PresionApertura, CodigoDiseño, UserId, Nombre, FaseId, TipoFase, NombreFase, Descripcion, CapacidadRequerida_V, Temperatura_de_Descarga_T, MasaMolecular_M, CocienteCaloresEspecificos_k, 
-                  CoeficienteDeCompresibilidad_z, CapacidadRequerida_W, CapacidadRequerida_Q, DensidadRelativa_G, Viscusidad_Mu, Temperatura_Saturado, AreaCalculada, Temperatura_de_Descarga_IN, Temperatura_de_Descarga_IN_Unit, 
-                  CapacidadRequerida_IN, CapacidadRequerida_IN_Unit, Id, Email, UserName, Cuit
-FROM     vCalculoSolicitudes";
+            this._commandCollection[0].CommandText = "SELECT *\r\nFROM     vCalculoSolicitudes";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         

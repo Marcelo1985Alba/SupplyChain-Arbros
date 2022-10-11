@@ -10,16 +10,10 @@
         <Tables>
           <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="vCalculoSolicitudesTableAdapter" GeneratorDataComponentClassName="vCalculoSolicitudesTableAdapter" Name="vCalculoSolicitudes" UserDataComponentName="vCalculoSolicitudesTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="marcelo-pc\sql_2017.Arbros.dbo" DbObjectName="Arbros.dbo.vCalculoSolicitudes" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="marcelo-pc\sql_2017.Arbros.dbo" DbObjectName="Arbros.dbo.vCalculoSolicitudes" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
-                    <CommandText>SELECT Ingenieria, Proyecto, Revision, Nrodoc, Cliente, SolicitudId, PresupuestoId, CodigoFinal, Model, DescripcionLinea, Medida, DescripcionMedida, Orifico, AreaOrificio, SerieEntrada, DescripcionSerieEntrada, TipoEntrada, 
-                  DescripcionTipoEntrada, SerieSalida, DescripcionSerieSalida, TipoSalida, DescripcionTipoSalida, CodigoDTT, TipoAsiento, DescripcionAsiento, CodigoCBR, Cuerpo_Externo, Bonete_Externo, Resorte_Externo, CodigoDT, Disco_Interno, 
-                  Tobera_Interno, Capuchon, Palanca, Bonete, Tornillo, TagId, Cantidad, Servicio, IndiceInstrumento, NumeroPlanta, NumeroPlano, DescargaA, LineaEntrada, LineaSalida, Contingencia, NumeroHoja, PresionOperacion, 
-                  TemperaturaOperacion, PresionDiseño, MaximaTemperaturaDiseño, MinimaTemperaturaDiseño, PresionAtmosfera, DiscoRuptura, Modelo, Norma, ContrapresionFija, ContrapresionVariable, ValvulaSimpleMultiple, 
-                  SobrepresionAdmisible, PresionApertura, CodigoDiseño, UserId, Nombre, FaseId, TipoFase, NombreFase, Descripcion, CapacidadRequerida_V, Temperatura_de_Descarga_T, MasaMolecular_M, CocienteCaloresEspecificos_k, 
-                  CoeficienteDeCompresibilidad_z, CapacidadRequerida_W, CapacidadRequerida_Q, DensidadRelativa_G, Viscusidad_Mu, Temperatura_Saturado, AreaCalculada, Temperatura_de_Descarga_IN, Temperatura_de_Descarga_IN_Unit, 
-                  CapacidadRequerida_IN, CapacidadRequerida_IN_Unit, Id, Email, UserName, Cuit
+                    <CommandText>SELECT *
 FROM     vCalculoSolicitudes</CommandText>
                     <Parameters />
                   </DbCommand>
@@ -114,6 +108,7 @@ FROM     vCalculoSolicitudes</CommandText>
               <Mapping SourceColumn="Email" DataSetColumn="Email" />
               <Mapping SourceColumn="UserName" DataSetColumn="UserName" />
               <Mapping SourceColumn="Cuit" DataSetColumn="Cuit" />
+              <Mapping SourceColumn="LineaEquipo" DataSetColumn="LineaEquipo" />
             </Mappings>
             <Sources />
           </TableAdapter>
@@ -125,7 +120,7 @@ FROM     vCalculoSolicitudes</CommandText>
   <xs:element name="ArbrosDataSheet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="ArbrosDataSheet" msprop:Generator_UserDSName="ArbrosDataSheet">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="vCalculoSolicitudes" msprop:Generator_TableClassName="vCalculoSolicitudesDataTable" msprop:Generator_TableVarName="tablevCalculoSolicitudes" msprop:Generator_TablePropName="vCalculoSolicitudes" msprop:Generator_RowDeletingName="vCalculoSolicitudesRowDeleting" msprop:Generator_RowChangingName="vCalculoSolicitudesRowChanging" msprop:Generator_RowEvHandlerName="vCalculoSolicitudesRowChangeEventHandler" msprop:Generator_RowDeletedName="vCalculoSolicitudesRowDeleted" msprop:Generator_UserTableName="vCalculoSolicitudes" msprop:Generator_RowChangedName="vCalculoSolicitudesRowChanged" msprop:Generator_RowEvArgName="vCalculoSolicitudesRowChangeEvent" msprop:Generator_RowClassName="vCalculoSolicitudesRow">
+        <xs:element name="vCalculoSolicitudes" msprop:Generator_TableClassName="vCalculoSolicitudesDataTable" msprop:Generator_TableVarName="tablevCalculoSolicitudes" msprop:Generator_RowChangedName="vCalculoSolicitudesRowChanged" msprop:Generator_TablePropName="vCalculoSolicitudes" msprop:Generator_RowDeletingName="vCalculoSolicitudesRowDeleting" msprop:Generator_RowChangingName="vCalculoSolicitudesRowChanging" msprop:Generator_RowEvHandlerName="vCalculoSolicitudesRowChangeEventHandler" msprop:Generator_RowDeletedName="vCalculoSolicitudesRowDeleted" msprop:Generator_RowClassName="vCalculoSolicitudesRow" msprop:Generator_UserTableName="vCalculoSolicitudes" msprop:Generator_RowEvArgName="vCalculoSolicitudesRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Ingenieria" msprop:Generator_ColumnVarNameInTable="columnIngenieria" msprop:Generator_ColumnPropNameInRow="Ingenieria" msprop:Generator_ColumnPropNameInTable="IngenieriaColumn" msprop:Generator_UserColumnName="Ingenieria" minOccurs="0">
@@ -704,6 +699,13 @@ FROM     vCalculoSolicitudes</CommandText>
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="13" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="LineaEquipo" msprop:Generator_ColumnVarNameInTable="columnLineaEquipo" msprop:Generator_ColumnPropNameInRow="LineaEquipo" msprop:Generator_ColumnPropNameInTable="LineaEquipoColumn" msprop:Generator_UserColumnName="LineaEquipo" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="200" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
