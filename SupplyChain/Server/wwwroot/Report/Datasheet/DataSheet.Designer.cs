@@ -455,6 +455,20 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             
             private global::System.Data.DataColumn columnLineaEquipo;
             
+            private global::System.Data.DataColumn columnCumpleApi;
+            
+            private global::System.Data.DataColumn columnTipoValvula;
+            
+            private global::System.Data.DataColumn columnTipoConexion;
+            
+            private global::System.Data.DataColumn columnTipoTobera;
+            
+            private global::System.Data.DataColumn columnFuelle;
+            
+            private global::System.Data.DataColumn columnEstadoFluido;
+            
+            private global::System.Data.DataColumn columnCapacidadRequerida;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public vCalculoSolicitudesDataTable() {
@@ -1194,6 +1208,62 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn CumpleApiColumn {
+                get {
+                    return this.columnCumpleApi;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn TipoValvulaColumn {
+                get {
+                    return this.columnTipoValvula;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn TipoConexionColumn {
+                get {
+                    return this.columnTipoConexion;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn TipoToberaColumn {
+                get {
+                    return this.columnTipoTobera;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn FuelleColumn {
+                get {
+                    return this.columnFuelle;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn EstadoFluidoColumn {
+                get {
+                    return this.columnEstadoFluido;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn CapacidadRequeridaColumn {
+                get {
+                    return this.columnCapacidadRequerida;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1317,7 +1387,14 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                         string Email, 
                         string UserName, 
                         string Cuit, 
-                        string LineaEquipo) {
+                        string LineaEquipo, 
+                        string CumpleApi, 
+                        string TipoValvula, 
+                        string TipoConexion, 
+                        string TipoTobera, 
+                        string Fuelle, 
+                        string EstadoFluido, 
+                        string CapacidadRequerida) {
                 vCalculoSolicitudesRow rowvCalculoSolicitudesRow = ((vCalculoSolicitudesRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Ingenieria,
@@ -1407,7 +1484,14 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                         Email,
                         UserName,
                         Cuit,
-                        LineaEquipo};
+                        LineaEquipo,
+                        CumpleApi,
+                        TipoValvula,
+                        TipoConexion,
+                        TipoTobera,
+                        Fuelle,
+                        EstadoFluido,
+                        CapacidadRequerida};
                 rowvCalculoSolicitudesRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowvCalculoSolicitudesRow);
                 return rowvCalculoSolicitudesRow;
@@ -1518,6 +1602,13 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                 this.columnUserName = base.Columns["UserName"];
                 this.columnCuit = base.Columns["Cuit"];
                 this.columnLineaEquipo = base.Columns["LineaEquipo"];
+                this.columnCumpleApi = base.Columns["CumpleApi"];
+                this.columnTipoValvula = base.Columns["TipoValvula"];
+                this.columnTipoConexion = base.Columns["TipoConexion"];
+                this.columnTipoTobera = base.Columns["TipoTobera"];
+                this.columnFuelle = base.Columns["Fuelle"];
+                this.columnEstadoFluido = base.Columns["EstadoFluido"];
+                this.columnCapacidadRequerida = base.Columns["CapacidadRequerida"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1699,6 +1790,20 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                 base.Columns.Add(this.columnCuit);
                 this.columnLineaEquipo = new global::System.Data.DataColumn("LineaEquipo", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnLineaEquipo);
+                this.columnCumpleApi = new global::System.Data.DataColumn("CumpleApi", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCumpleApi);
+                this.columnTipoValvula = new global::System.Data.DataColumn("TipoValvula", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTipoValvula);
+                this.columnTipoConexion = new global::System.Data.DataColumn("TipoConexion", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTipoConexion);
+                this.columnTipoTobera = new global::System.Data.DataColumn("TipoTobera", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTipoTobera);
+                this.columnFuelle = new global::System.Data.DataColumn("Fuelle", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFuelle);
+                this.columnEstadoFluido = new global::System.Data.DataColumn("EstadoFluido", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnEstadoFluido);
+                this.columnCapacidadRequerida = new global::System.Data.DataColumn("CapacidadRequerida", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCapacidadRequerida);
                 this.columnIngenieria.MaxLength = 50;
                 this.columnProyecto.MaxLength = 50;
                 this.columnRevision.MaxLength = 50;
@@ -1813,6 +1918,20 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
                 this.columnUserName.MaxLength = 256;
                 this.columnCuit.MaxLength = 13;
                 this.columnLineaEquipo.MaxLength = 200;
+                this.columnCumpleApi.ReadOnly = true;
+                this.columnCumpleApi.MaxLength = 2;
+                this.columnTipoValvula.ReadOnly = true;
+                this.columnTipoValvula.MaxLength = 12;
+                this.columnTipoConexion.ReadOnly = true;
+                this.columnTipoConexion.MaxLength = 7;
+                this.columnTipoTobera.ReadOnly = true;
+                this.columnTipoTobera.MaxLength = 6;
+                this.columnFuelle.ReadOnly = true;
+                this.columnFuelle.MaxLength = 15;
+                this.columnEstadoFluido.ReadOnly = true;
+                this.columnEstadoFluido.MaxLength = 7;
+                this.columnCapacidadRequerida.ReadOnly = true;
+                this.columnCapacidadRequerida.MaxLength = 200;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3359,6 +3478,122 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string CumpleApi {
+                get {
+                    try {
+                        return ((string)(this[this.tablevCalculoSolicitudes.CumpleApiColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CumpleApi\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablevCalculoSolicitudes.CumpleApiColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string TipoValvula {
+                get {
+                    try {
+                        return ((string)(this[this.tablevCalculoSolicitudes.TipoValvulaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TipoValvula\' de la tabla \'vCalculoSolicitudes\' es DBNull." +
+                                "", e);
+                    }
+                }
+                set {
+                    this[this.tablevCalculoSolicitudes.TipoValvulaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string TipoConexion {
+                get {
+                    try {
+                        return ((string)(this[this.tablevCalculoSolicitudes.TipoConexionColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TipoConexion\' de la tabla \'vCalculoSolicitudes\' es DBNull" +
+                                ".", e);
+                    }
+                }
+                set {
+                    this[this.tablevCalculoSolicitudes.TipoConexionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string TipoTobera {
+                get {
+                    try {
+                        return ((string)(this[this.tablevCalculoSolicitudes.TipoToberaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TipoTobera\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablevCalculoSolicitudes.TipoToberaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Fuelle {
+                get {
+                    try {
+                        return ((string)(this[this.tablevCalculoSolicitudes.FuelleColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Fuelle\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablevCalculoSolicitudes.FuelleColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string EstadoFluido {
+                get {
+                    try {
+                        return ((string)(this[this.tablevCalculoSolicitudes.EstadoFluidoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'EstadoFluido\' de la tabla \'vCalculoSolicitudes\' es DBNull" +
+                                ".", e);
+                    }
+                }
+                set {
+                    this[this.tablevCalculoSolicitudes.EstadoFluidoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string CapacidadRequerida {
+                get {
+                    try {
+                        return ((string)(this[this.tablevCalculoSolicitudes.CapacidadRequeridaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CapacidadRequerida\' de la tabla \'vCalculoSolicitudes\' es " +
+                                "DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablevCalculoSolicitudes.CapacidadRequeridaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsIngenieriaNull() {
                 return this.IsNull(this.tablevCalculoSolicitudes.IngenieriaColumn);
             }
@@ -4292,6 +4527,90 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet {
             public void SetLineaEquipoNull() {
                 this[this.tablevCalculoSolicitudes.LineaEquipoColumn] = global::System.Convert.DBNull;
             }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsCumpleApiNull() {
+                return this.IsNull(this.tablevCalculoSolicitudes.CumpleApiColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetCumpleApiNull() {
+                this[this.tablevCalculoSolicitudes.CumpleApiColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsTipoValvulaNull() {
+                return this.IsNull(this.tablevCalculoSolicitudes.TipoValvulaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetTipoValvulaNull() {
+                this[this.tablevCalculoSolicitudes.TipoValvulaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsTipoConexionNull() {
+                return this.IsNull(this.tablevCalculoSolicitudes.TipoConexionColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetTipoConexionNull() {
+                this[this.tablevCalculoSolicitudes.TipoConexionColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsTipoToberaNull() {
+                return this.IsNull(this.tablevCalculoSolicitudes.TipoToberaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetTipoToberaNull() {
+                this[this.tablevCalculoSolicitudes.TipoToberaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsFuelleNull() {
+                return this.IsNull(this.tablevCalculoSolicitudes.FuelleColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetFuelleNull() {
+                this[this.tablevCalculoSolicitudes.FuelleColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsEstadoFluidoNull() {
+                return this.IsNull(this.tablevCalculoSolicitudes.EstadoFluidoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetEstadoFluidoNull() {
+                this[this.tablevCalculoSolicitudes.EstadoFluidoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsCapacidadRequeridaNull() {
+                return this.IsNull(this.tablevCalculoSolicitudes.CapacidadRequeridaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetCapacidadRequeridaNull() {
+                this[this.tablevCalculoSolicitudes.CapacidadRequeridaColumn] = global::System.Convert.DBNull;
+            }
         }
         
         /// <summary>
@@ -4541,6 +4860,13 @@ namespace SupplyChain.Server.wwwroot.Report.Datasheet.ArbrosDataSheetTableAdapte
             tableMapping.ColumnMappings.Add("UserName", "UserName");
             tableMapping.ColumnMappings.Add("Cuit", "Cuit");
             tableMapping.ColumnMappings.Add("LineaEquipo", "LineaEquipo");
+            tableMapping.ColumnMappings.Add("CumpleApi", "CumpleApi");
+            tableMapping.ColumnMappings.Add("TipoValvula", "TipoValvula");
+            tableMapping.ColumnMappings.Add("TipoConexion", "TipoConexion");
+            tableMapping.ColumnMappings.Add("TipoTobera", "TipoTobera");
+            tableMapping.ColumnMappings.Add("Fuelle", "Fuelle");
+            tableMapping.ColumnMappings.Add("EstadoFluido", "EstadoFluido");
+            tableMapping.ColumnMappings.Add("CapacidadRequerida", "CapacidadRequerida");
             this._adapter.TableMappings.Add(tableMapping);
         }
         

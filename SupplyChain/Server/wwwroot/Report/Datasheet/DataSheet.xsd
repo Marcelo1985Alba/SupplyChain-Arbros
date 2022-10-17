@@ -109,6 +109,13 @@ FROM     vCalculoSolicitudes</CommandText>
               <Mapping SourceColumn="UserName" DataSetColumn="UserName" />
               <Mapping SourceColumn="Cuit" DataSetColumn="Cuit" />
               <Mapping SourceColumn="LineaEquipo" DataSetColumn="LineaEquipo" />
+              <Mapping SourceColumn="CumpleApi" DataSetColumn="CumpleApi" />
+              <Mapping SourceColumn="TipoValvula" DataSetColumn="TipoValvula" />
+              <Mapping SourceColumn="TipoConexion" DataSetColumn="TipoConexion" />
+              <Mapping SourceColumn="TipoTobera" DataSetColumn="TipoTobera" />
+              <Mapping SourceColumn="Fuelle" DataSetColumn="Fuelle" />
+              <Mapping SourceColumn="EstadoFluido" DataSetColumn="EstadoFluido" />
+              <Mapping SourceColumn="CapacidadRequerida" DataSetColumn="CapacidadRequerida" />
             </Mappings>
             <Sources />
           </TableAdapter>
@@ -703,6 +710,55 @@ FROM     vCalculoSolicitudes</CommandText>
                 </xs:simpleType>
               </xs:element>
               <xs:element name="LineaEquipo" msprop:Generator_ColumnVarNameInTable="columnLineaEquipo" msprop:Generator_ColumnPropNameInRow="LineaEquipo" msprop:Generator_ColumnPropNameInTable="LineaEquipoColumn" msprop:Generator_UserColumnName="LineaEquipo" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="200" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CumpleApi" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnCumpleApi" msprop:Generator_ColumnPropNameInRow="CumpleApi" msprop:Generator_ColumnPropNameInTable="CumpleApiColumn" msprop:Generator_UserColumnName="CumpleApi" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="TipoValvula" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnTipoValvula" msprop:Generator_ColumnPropNameInRow="TipoValvula" msprop:Generator_ColumnPropNameInTable="TipoValvulaColumn" msprop:Generator_UserColumnName="TipoValvula" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="12" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="TipoConexion" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnTipoConexion" msprop:Generator_ColumnPropNameInRow="TipoConexion" msprop:Generator_ColumnPropNameInTable="TipoConexionColumn" msprop:Generator_UserColumnName="TipoConexion" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="7" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="TipoTobera" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnTipoTobera" msprop:Generator_ColumnPropNameInRow="TipoTobera" msprop:Generator_ColumnPropNameInTable="TipoToberaColumn" msprop:Generator_UserColumnName="TipoTobera" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="6" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Fuelle" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnFuelle" msprop:Generator_ColumnPropNameInRow="Fuelle" msprop:Generator_ColumnPropNameInTable="FuelleColumn" msprop:Generator_UserColumnName="Fuelle" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="15" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="EstadoFluido" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnEstadoFluido" msprop:Generator_ColumnPropNameInRow="EstadoFluido" msprop:Generator_ColumnPropNameInTable="EstadoFluidoColumn" msprop:Generator_UserColumnName="EstadoFluido" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="7" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CapacidadRequerida" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnCapacidadRequerida" msprop:Generator_ColumnPropNameInRow="CapacidadRequerida" msprop:Generator_ColumnPropNameInTable="CapacidadRequeridaColumn" msprop:Generator_UserColumnName="CapacidadRequerida" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="200" />

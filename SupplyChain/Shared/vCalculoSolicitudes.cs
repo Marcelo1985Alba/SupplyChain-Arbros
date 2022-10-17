@@ -13,6 +13,14 @@ namespace SupplyChain.Shared
 
 		public int SolicitudId { get; set; }
 		public int PresupuestoId { get; set; }
+
+        public string? CumpleApi { get; set; }
+        public string? TipoValvula { get; set; }
+        public string? TipoConexion { get; set; }
+        public string? TipoTobera { get; set; }
+        public string? Fuelle { get; set; }
+        public string? EstadoFluido { get; set; }
+        public string? CapacidadRequerida { get; set; }
         public string? Cliente { get; set; }
         public string? Ingenieria { get; set; }
         public string? Proyecto { get; set; }
