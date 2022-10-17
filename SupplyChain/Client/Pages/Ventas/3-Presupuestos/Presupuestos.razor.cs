@@ -39,7 +39,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             "Add",
             "Edit",
             "Delete",
-            "Print",
+            new ItemModel { Text = "Imprimir", TooltipText = "Imprimir presupuesto, codiciones comerciales y datasheet", PrefixIcon = "e-print", Id = "Imprimir", Type = ItemType.Button },
             //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
             "ExcelExport",
             new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh", Type = ItemType.Button},
@@ -138,6 +138,17 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 SpinnerVisible = true;
                 await GetPresupuestos(TipoFiltro.Todos);
                 SpinnerVisible = false;
+            }
+            else if (args.Item.Id == "Imprimir")
+            {
+                var seleccionado = await refGrid.GetSelectedRecordsAsync();
+                if (seleccionado.Count > 0)
+                {
+                    SpinnerVisible = true;
+                    await PresupuestoService.Imprimir(seleccionado[0].Id);
+                    SpinnerVisible = false;
+                }
+                
             }
         }
 

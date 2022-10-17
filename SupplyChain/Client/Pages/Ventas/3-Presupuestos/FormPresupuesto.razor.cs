@@ -419,10 +419,10 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         private async Task DescargarPresupuestoDataSheet()
         {
-            await Js.InvokeVoidAsync("descargarPresupuestDataSheet", Presupuesto.Id);
+            await PresupuestoService.Imprimir(Presupuesto.Id);
         }
 
-        protected async Task ImprimirPresupuesto()
+        protected async Task ImprimirPresupuesto(int presupuestoId)
         {
             await Js.InvokeVoidAsync("open",
                                 new object[2] { $"/api/ReportRDLC/GetReportPresupuesto?id={Presupuesto.Id}", "" });

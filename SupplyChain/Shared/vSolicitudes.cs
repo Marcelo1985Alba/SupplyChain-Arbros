@@ -25,6 +25,12 @@ namespace SupplyChain.Shared
         public string DES_CLI { get; set; }
         public int CalcId { get; set; } = 0;
         public string Cuit { get; set; } = "";
+
+        [Display(Name = "Idenficacion")]
+        public string DescripcionTag { get; set; } = "";
+
+        [Display(Name = "Nº Plano")]
+        public string NumeroPlano { get; set; } = "";
         public int Cantidad { get; set; }
         public bool TienePresupuesto { get; set; }
     }

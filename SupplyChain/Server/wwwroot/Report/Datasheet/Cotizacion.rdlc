@@ -1337,7 +1337,6 @@
                           <PaddingBottom>2pt</PaddingBottom>
                         </Style>
                       </Textbox>
-                      <rd:Selected>true</rd:Selected>
                     </CellContents>
                   </TablixHeader>
                   <KeepWithGroup>After</KeepWithGroup>
@@ -3248,7 +3247,7 @@
                 </Textbox>
                 <Line Name="Line5">
                   <Left>12.21878cm</Left>
-                  <Height>3.33483cm</Height>
+                  <Height>3.50417cm</Height>
                   <Width>0cm</Width>
                   <ZIndex>1</ZIndex>
                   <Style>
@@ -3512,7 +3511,7 @@
                 </Textbox>
                 <Line Name="Line6">
                   <Left>4.19988cm</Left>
-                  <Height>3.33483cm</Height>
+                  <Height>3.483cm</Height>
                   <Width>0cm</Width>
                   <ZIndex>9</ZIndex>
                   <Style>
@@ -3644,7 +3643,7 @@
               <KeepTogether>true</KeepTogether>
               <Top>0.29737cm</Top>
               <Left>0.62962cm</Left>
-              <Height>3.483cm</Height>
+              <Height>3.50417cm</Height>
               <Width>18.95956cm</Width>
               <Style>
                 <Border>
