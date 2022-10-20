@@ -57,6 +57,24 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
+        // GET: api/Compras/todas
+        [HttpGet("todas")]
+        public async Task<ActionResult<IEnumerable<Compra>>> GetComprastodas()
+        {
+            //OC ABIERTAS
+            try
+            {
+                var compras = await _compraRepository
+                    .Obtener(c => c.CG_CIA == cg_cia_usuario && c.NUMERO > 0).ToListAsync();
+
+                return compras.OrderByDescending(c => c.NUMERO).ToList();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         // GET: api/Compras/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Compra>> GetCompra(int id)
@@ -235,9 +253,9 @@ namespace SupplyChain.Server.Controllers
             return Ok( await _compraRepository.UltimasCompras(3, cgmat));
         }
 
-        [HttpPut("actualizaoc/{listaordenescompra}")]
+        [HttpPut("actualizaoc/{listaordenescompra}/{especif}/{condven}/{bonif}")]
         //POST: api/compras/generaoc
-        public async Task<ActionResult<Compra>> actualizaoc(string listaordenescompra)
+        public async Task<ActionResult<Compra>> actualizaoc(string listaordenescompra, string especif, string condven, decimal? bonif)
         {
             var numoc = (int)0;
 
@@ -249,11 +267,15 @@ namespace SupplyChain.Server.Controllers
                 var genera = _generaRepository.Obtener(g => g.Id == "NUMERO").FirstOrDefault();
                 numoc = (int)genera.VALOR1;
 
-                string sqlCommandString = string.Format("UPDATE COMPRAS SET NUMERO = " + numoc + " " +
-                    "WHERE REGISTRO IN (" + listaordenescompra.Remove(listaordenescompra.Length - 1) + ")");
+                string sqlCommandString = string.Format("UPDATE COMPRAS SET NUMERO = " + numoc + ", " +
+                    "ESPEGEN = '"+especif+ "', CONDVEN = '" + condven + "', BON = " + bonif + 
+                    " WHERE REGISTRO IN (" + listaordenescompra.Remove(listaordenescompra.Length - 1) + ")");
                 await _generaRepository.Database.ExecuteSqlRawAsync(sqlCommandString);
 
                 await _generaRepository.Libera("NUMERO");
+
+                return Ok(numoc);
+
             }
             catch (Exception e)
             {

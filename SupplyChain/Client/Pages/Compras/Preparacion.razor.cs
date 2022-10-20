@@ -47,22 +47,26 @@ namespace SupplyChain.Client.Pages.Preparacion
         protected NotificacionToast NotificacionObj;
         protected bool ToastVisible { get; set; } = false;
 
-        
+
         protected string CgMat = "";
         protected DateTime? xFeprev;
         protected string DesMat = "";
+        protected string xespecif = "";
         protected int xCgProve = 0;
         protected int xRegistrocompras = 0;
         protected string xDesProve = "";
         protected string xtituloboton = "Agregar";
         protected decimal xPrecio = 0;
+        protected decimal xDescuento = 0;
         protected decimal xCant = 0;
         protected decimal xCant1 = 0;
         protected decimal xCgden = 0;
+        protected int xDiasvige = 0;
         protected string xUnid = "";
         protected string xUnid1 = "";
         protected string xUnidMP = "";
         protected string xMoneda = "";
+        protected bool enableprecio = false;
         protected bool enablepreciocant = false;
         protected bool buttondisableprove = true;
         protected bool buttondisablepreciocant = true;
@@ -105,7 +109,7 @@ namespace SupplyChain.Client.Pages.Preparacion
         {
             if (args.Value != "")
             {
-                CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarPorCG_PROD/{args.Value}");
+                CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarPorCG_PROD_PREP/{args.Value}");
                 if (CG_PRODlist.Count > 0)
                 {
                     DesMat = CG_PRODlist.FirstOrDefault().DES_PROD;
@@ -125,7 +129,7 @@ namespace SupplyChain.Client.Pages.Preparacion
         {
             if (args.Value != "")
             {
-                CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarPorDES_PROD/{args.Value}");
+                CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarPorDES_PROD_PREP/{args.Value}");
                 if (CG_PRODlist.Count > 0)
                 {
                     CgMat = CG_PRODlist.FirstOrDefault().Id;
@@ -145,7 +149,7 @@ namespace SupplyChain.Client.Pages.Preparacion
         {
             if (string.IsNullOrEmpty(DesMat) && string.IsNullOrEmpty(CgMat))
             {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarProducto/Vacio" +
+                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarProducto_PREP/Vacio" +
                         $"/Vacio/{CantidadMostrar}");
                 IsVisible = true;
             }
@@ -153,16 +157,17 @@ namespace SupplyChain.Client.Pages.Preparacion
             {
                 if (string.IsNullOrEmpty(DesMat))
                 {
-                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarProducto/{CgMat}" +
+                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarProducto_PREP/{CgMat}" +
                         $"/Vacio/{CantidadMostrar}");
+
                 }
                 else if (string.IsNullOrEmpty(CgMat))
                 {
-                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/ProdBuscarProducto/Vacio/{DesMat}/{CantidadMostrar}");
+                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarProducto_PREP/Vacio/{DesMat}/{CantidadMostrar}");
                 }
                 else
                 {
-                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarProducto/{CgMat}/{DesMat}/{CantidadMostrar}");
+                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarProducto_PREP/{CgMat}/{DesMat}/{CantidadMostrar}");
                 }
                 IsVisible = true;
             }
@@ -200,6 +205,7 @@ namespace SupplyChain.Client.Pages.Preparacion
             xCgProve = matp.NROCLTE;
             xDesProve = matp.DES_PROVE;
             xPrecio = matp.PRECIO;
+            xDiasvige = matp.DIASVIGE;
             xUnid = matp.UNID;
             xUnid1 = matp.UNID1;
             xMoneda = matp.MONEDA;
@@ -223,6 +229,7 @@ namespace SupplyChain.Client.Pages.Preparacion
             xUnid1 = "";
             xCgden = 0;
             xMoneda = "PESOS";
+            xDiasvige = 0;
             IsVisibleProveedores = false;
             cambiapaso(3);
         }
@@ -231,6 +238,7 @@ namespace SupplyChain.Client.Pages.Preparacion
         {
             if (flag == 0)
             {
+                enableprecio = false;
                 enablepreciocant = false;
                 buttondisableprove = true;
                 buttondisablepreciocant = true;
@@ -239,16 +247,21 @@ namespace SupplyChain.Client.Pages.Preparacion
                 xCgProve = 0;
                 xDesProve = "";
                 xCgden = 0;
+                xespecif = "";
                 xUnid = "";
                 xUnid1 = "";
                 xUnidMP = "";
                 xMoneda = "PESOS";
+                xDiasvige = 0;
                 xCant = 0;
                 xCant1 = 0;
                 xPrecio = 0;
+                xDescuento = 0;
+                xFeprev = DateTime.Now.Date;
             }
             else if (flag == 1)
             {
+                enableprecio = false;
                 enablepreciocant = false;
                 buttondisableprove = true;
                 buttondisablepreciocant = true;
@@ -258,18 +271,22 @@ namespace SupplyChain.Client.Pages.Preparacion
                 xUnid = "";
                 xUnid1 = "";
                 xMoneda = "PESOS";
+                xDiasvige = 0;
                 xCant = 0;
                 xCant1 = 0;
                 xPrecio = 0;
+                xDescuento = 0;
             }
             else if (flag == 2)
             {
-                enablepreciocant = false;
+                enableprecio = false;
+                enablepreciocant = true;
                 buttondisableprove = false;
-                buttondisablepreciocant = true;
+                buttondisablepreciocant = false;
             }
             else if (flag == 3)
             {
+                enableprecio = true;
                 enablepreciocant = true;
                 buttondisableprove = false;
                 buttondisablepreciocant = false;
@@ -291,12 +308,12 @@ namespace SupplyChain.Client.Pages.Preparacion
                 });
                 return;
             }
-            if (xCgProve == 0)
+            if (xCant == 0)
             {
                 await this.ToastObj.Show(new ToastModel
                 {
                     Title = "ERROR!",
-                    Content = "Debe Indicar un Proveedor",
+                    Content = "Debe Indicar la cantidad",
                     CssClass = "e-toast-danger",
                     Icon = "e-error toast-icons",
                     ShowCloseButton = true,
@@ -304,12 +321,13 @@ namespace SupplyChain.Client.Pages.Preparacion
                 });
                 return;
             }
-            if (xCant == 0)
+            /*
+            if (xCgProve == 0)
             {
                 await this.ToastObj.Show(new ToastModel
                 {
                     Title = "ERROR!",
-                    Content = "Debe Indicar la cantidad",
+                    Content = "Debe Indicar un Proveedor",
                     CssClass = "e-toast-danger",
                     Icon = "e-error toast-icons",
                     ShowCloseButton = true,
@@ -330,6 +348,7 @@ namespace SupplyChain.Client.Pages.Preparacion
                 });
                 return;
             }
+            */
             //Console.WriteLine(itemagregarcompras);
             Compra itemagregarcompras = new Compra();
 
@@ -342,9 +361,21 @@ namespace SupplyChain.Client.Pages.Preparacion
             itemagregarcompras.UNID = xUnid;
             itemagregarcompras.UNID1 = xUnid1;
             itemagregarcompras.MONEDA = xMoneda;
+            itemagregarcompras.DIASVIGE = xDiasvige;
             itemagregarcompras.CG_DEN = xCgden;
             itemagregarcompras.PRECIO = xPrecio;
-            itemagregarcompras.PRECIONETO = xPrecio;
+            itemagregarcompras.DESCUENTO = xDescuento;
+
+            if (xDescuento > 0)
+            {
+                itemagregarcompras.PRECIONETO = Math.Round(xPrecio * (1 - (xDescuento / 100)), 2);
+            }
+            else
+            {
+                itemagregarcompras.PRECIONETO = xPrecio;
+            }
+
+            itemagregarcompras.ESPECIFICA = xespecif;
             if (xUnid != xUnid1 && xCgden > 0)
             {
                 itemagregarcompras.AUTORIZADO = xCant / xCgden;
@@ -356,10 +387,9 @@ namespace SupplyChain.Client.Pages.Preparacion
             itemagregarcompras.PRECIOTOT = xPrecio * itemagregarcompras.AUTORIZADO;
             itemagregarcompras.NROCLTE = xCgProve;
             itemagregarcompras.DES_PROVE = xDesProve;
-            itemagregarcompras.FE_PREV = DateTime.Now.Date;
+            itemagregarcompras.FE_PREV = xFeprev;
             itemagregarcompras.FE_VENC = DateTime.Now.Date;
             itemagregarcompras.CONDVEN = "";
-            itemagregarcompras.ESPECIFICA = "";
             itemagregarcompras.CG_CIA = 1;
             itemagregarcompras.USUARIO = "USER";
             itemagregarcompras.FE_REG = DateTime.Now.Date;
@@ -436,12 +466,23 @@ namespace SupplyChain.Client.Pages.Preparacion
                         xUnid1 = selectedRecord.UNID1;
                         xUnidMP = selectedRecord.UNID;
                         xMoneda = selectedRecord.MONEDA;
+                        xDiasvige = selectedRecord.DIASVIGE;
+                        xespecif = selectedRecord.ESPECIFICA;
                         xCgden = selectedRecord.CG_DEN.GetValueOrDefault();
                         xCant = selectedRecord.SOLICITADO.GetValueOrDefault();
+                        xFeprev = selectedRecord.FE_PREV.GetValueOrDefault();
+                        if ( xCant == 0)
+                        {
+                            xCant = selectedRecord.NECESARIO.GetValueOrDefault();
+                        }
                         xPrecio = selectedRecord.PRECIO.GetValueOrDefault();
+                        xDescuento = selectedRecord.DESCUENTO.GetValueOrDefault();
                     }
-
-                    cambiapaso(3);
+                    if (xCgProve > 0){
+                        cambiapaso(3);
+                    }else {
+                        cambiapaso(2);
+                    }
                     xtituloboton = "Actualizar";
                 }
             }

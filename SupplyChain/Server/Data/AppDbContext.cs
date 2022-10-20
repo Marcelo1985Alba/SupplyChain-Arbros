@@ -44,6 +44,7 @@ namespace SupplyChain
         public DbSet<TipoArea> TipoArea { get; set; }
         public DbSet<TipoCelda> TipoCelda { get; set; }
         public DbSet<TiposNoConf> TiposNoConf { get; set; }
+        public DbSet<Condven> Condven { get; set; }
         public DbSet<Indic> Indic { get; set; }
         public DbSet<Parada> Parada { get; set; }
         public DbSet<ProTarea> ProTarea { get; set; }

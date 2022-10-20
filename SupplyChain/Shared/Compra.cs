@@ -39,7 +39,9 @@ namespace SupplyChain.Shared.Models
         public decimal? PRECIO { get; set; }
         [Display(Name = "Descuento")]
         public decimal? BON { get; set; } = 0;
-        [Display(Name = "Precio con descuento")]
+        [Display(Name = "Bonificación")]
+        public decimal? DESCUENTO { get; set; } = 0;
+        [Display(Name = "Descuento")]
         public decimal? PRECIONETO { get; set; }
         [Display(Name = "Precio total")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
@@ -68,6 +70,9 @@ namespace SupplyChain.Shared.Models
         //public string CONDVENEX { get; set; }
         [Display(Name = "Especific.particulares")]
         public string ESPECIFICA { get; set; }
+
+        [Display(Name = "Especific.generales")]
+        public string ESPEGEN { get; set; }
         //[ColumnaGridViewAtributo(Name = "Especific.grales")]
         //public string ESTEGEN { get; set; }
         [Display(Name = "Preparación")]
@@ -83,6 +88,7 @@ namespace SupplyChain.Shared.Models
         [Display(Name = "Observaciones")]
         public string OBSEREQ { get; set; } = "";
         [Display(Name = "Tilde")]
+        public int DIASVIGE { get; set; }
         public string MARCAREQ { get; set; } = "";
         [Display(Name = "Avance")]
         public decimal? AVANCE { get; set; } = 0;
