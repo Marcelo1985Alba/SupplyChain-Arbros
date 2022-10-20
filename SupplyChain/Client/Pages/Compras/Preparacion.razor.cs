@@ -470,10 +470,7 @@ namespace SupplyChain.Client.Pages.Preparacion
                         xespecif = selectedRecord.ESPECIFICA;
                         xCgden = selectedRecord.CG_DEN.GetValueOrDefault();
                         xCant = selectedRecord.SOLICITADO.GetValueOrDefault();
-<<<<<<< HEAD
                         xFeprev = selectedRecord.FE_PREV.GetValueOrDefault();
-=======
->>>>>>> 061b98cc39f07d729f28228c620022a771d4d924
                         if ( xCant == 0)
                         {
                             xCant = selectedRecord.NECESARIO.GetValueOrDefault();

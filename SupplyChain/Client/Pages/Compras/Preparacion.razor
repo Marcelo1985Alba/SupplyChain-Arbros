@@ -111,10 +111,6 @@
 
             <div class="form-group col-lg-2 my-4" style="margin-top: 10px !important;">
                 <BuscadorMatprove IsVisibleMatprove="IsVisibleMatprove" xCgmat="@CgMat" xFeprev="@xFeprev" buttondisableprove="buttondisableprove" OnMatproveSeleccionada="OnSelectedMatproveProve" />
-                <!--
-                </div>
-                <div class="form-group col-lg-2 my-4">
-        -->
                 <BuscadorProveedores IsVisibleProveedores="IsVisibleProveedores" buttondisableprove="buttondisableprove" OnProveSeleccionado="OnSelectedProve" />
             </div>
         </div>
@@ -142,45 +138,38 @@
             <div class="form-group col-lg-3 my-4">
                 <SfButton OnClick="@((e)=> Agregaritem())" Disabled="buttondisablepreciocant" IconCss="fa fa-plus" CssClass="btn btn-sm btn-outline-primary"
                           IsPrimary="false">@xtituloboton</SfButton>
-                    </div>
-                </div>
-<<<<<<< HEAD
-                <div style="margin-top:20px;" class="form-row">
-
-                </div>
-
-
-                <div style="margin-top:20px;" class="form-row">
-                    <div class="col-lg-12 control-section">
-                        <div class="content-wrapper">
-                            <div class="row" id="gridPreparaciones">
-                                <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                                        @ref="Gridprep" DataSource="@listapreparacion" AllowExcelExport="true" AllowGrouping="true" ID="Preparacion"
-                                        RowHeight="20" Width="100%"
-                                        AllowSorting="true" AllowPaging="true" AllowFiltering="true"
-                                        Toolbar="@Toolbaritems" GridLines="GridLine.Both">
-                                    <GridPageSettings PageCount="10" PageSizes="true" PageSize="20"></GridPageSettings>
-                                    <GridEvents OnToolbarClick="@ClickHandler" TValue="Compra"></GridEvents>
-                                    <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
-                                    <GridColumns>
-                                        <GridColumn Field=@nameof(Compra.CG_MAT) HeaderText="Código" AllowEditing="false" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
-                                        <GridColumn Field=@nameof(Compra.DES_MAT) HeaderText="Descripcion" AllowEditing="false" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                        <GridColumn Field=@nameof(Compra.DES_PROVE) HeaderText="Proveedor" AllowEditing="false" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                        <GridColumn Field=@nameof(Compra.NECESARIO) HeaderText="Necesario" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                        <GridColumn Field=@nameof(Compra.SOLICITADO) HeaderText="Solicitado" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                        <GridColumn Field=@nameof(Compra.AUTORIZADO) HeaderText="Autorizado" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                        <GridColumn Field=@nameof(Compra.PRECIO) HeaderText="Precio" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                        <GridColumn Field=@nameof(Compra.MONEDA) HeaderText="Moneda" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                        <GridColumn Field=@nameof(Compra.FE_PREV) HeaderText="Fecha Entrega" Format="dd/MM/yyyy" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                    </GridColumns>
-                                </SfGrid>
-                            </div>
-                        </div>
-=======
+            </div>
+        </div>
         <div style="margin-top:20px;" class="form-row">
             <div class="col-lg-12 control-section">
                 <div class="content-wrapper">
                     <div class="row" id="gridPreparaciones">
+                        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                            @ref="Gridprep" DataSource="@listapreparacion" AllowExcelExport="true" AllowGrouping="true" ID="Preparacion"
+                            RowHeight="20" Width="100%"
+                            AllowSorting="true" AllowPaging="true" AllowFiltering="true"
+                            Toolbar="@Toolbaritems" GridLines="GridLine.Both">
+                        <GridPageSettings PageCount="10" PageSizes="true" PageSize="20"></GridPageSettings>
+                        <GridEvents OnToolbarClick="@ClickHandler" TValue="Compra"></GridEvents>
+                        <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(Compra.CG_MAT) HeaderText="Código" AllowEditing="false" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
+                            <GridColumn Field=@nameof(Compra.DES_MAT) HeaderText="Descripcion" AllowEditing="false" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field=@nameof(Compra.DES_PROVE) HeaderText="Proveedor" AllowEditing="false" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field=@nameof(Compra.NECESARIO) HeaderText="Necesario" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                            <GridColumn Field=@nameof(Compra.SOLICITADO) HeaderText="Solicitado" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                            <GridColumn Field=@nameof(Compra.AUTORIZADO) HeaderText="Autorizado" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                            <GridColumn Field=@nameof(Compra.PRECIO) HeaderText="Precio" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                            <GridColumn Field=@nameof(Compra.MONEDA) HeaderText="Moneda" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                            <GridColumn Field=@nameof(Compra.FE_PREV) HeaderText="Fecha Entrega" Format="dd/MM/yyyy" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                        </GridColumns>
+                        </SfGrid>
+                    </div>
+                </div>
+                <div style="margin-top:20px;" class="form-row">
+                    <div class="col-lg-12 control-section">
+                        <div class="content-wrapper">
+                            <div class="row" id="gridPreparaciones">
                         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
                                 @ref="Gridprep" DataSource="@listapreparacion" AllowExcelExport="true" AllowGrouping="true" ID="Preparacion"
                                 RowHeight="20" Width="100%"
@@ -201,10 +190,13 @@
                                 <GridColumn Field=@nameof(Compra.FE_PREV) HeaderText="Fecha Entrega" Format="dd/MM/yyyy" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                             </GridColumns>
                         </SfGrid>
->>>>>>> 061b98cc39f07d729f28228c620022a771d4d924
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 </div>
 
 @code {

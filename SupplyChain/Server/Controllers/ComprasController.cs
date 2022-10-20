@@ -196,25 +196,6 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
-        // GET: api/Compras/todas
-        [HttpGet("todas")]
-        public async Task<ActionResult<IEnumerable<Compra>>> GetComprastodas()
-        {
-            //OC ABIERTAS
-            try
-            {
-                var compras = await _compraRepository
-                    .Obtener(c => c.CG_CIA == cg_cia_usuario && c.NUMERO > 0).ToListAsync();
-
-                return compras.OrderByDescending(c => c.NUMERO).ToList();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-
         [HttpPost("agregaitem")]
         //POST: api/compras/agregaitem
         public async Task<ActionResult<Compra>> PostStock([FromBody] Compra Itemcompras)
