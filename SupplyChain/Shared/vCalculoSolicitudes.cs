@@ -13,7 +13,20 @@ namespace SupplyChain.Shared
 
 		public int SolicitudId { get; set; }
 		public int PresupuestoId { get; set; }
-		public string CodigoFinal { get; set; }
+
+        public string? CumpleApi { get; set; }
+        public string? TipoValvula { get; set; }
+        public string? TipoConexion { get; set; }
+        public string? TipoTobera { get; set; }
+        public string? Fuelle { get; set; }
+        public string? EstadoFluido { get; set; }
+        public string? CapacidadRequerida { get; set; }
+        public string? Cliente { get; set; }
+        public string? Ingenieria { get; set; }
+        public string? Proyecto { get; set; }
+        public string? Revision { get; set; }
+        public string? Nrodoc { get; set; }
+        public string CodigoFinal { get; set; }
 		public string Model { get; set; }
 		public string DescripcionLinea { get; set; }
 		public string Medida { get; set; }
@@ -90,7 +103,8 @@ namespace SupplyChain.Shared
 		public string? CapacidadRequerida_IN { get; set; }
 		public string? CapacidadRequerida_IN_Unit { get; set; }
 		public string? Id { get; set; }
-		public string Email { get; set; }
+        public string? LineaEquipo { get; set; }
+        public string Email { get; set; }
 		public string UserName { get; set; }
 		public string Cuit { get; set; }
 }

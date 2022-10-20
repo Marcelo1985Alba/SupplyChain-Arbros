@@ -20,11 +20,12 @@ namespace SupplyChain.Server.Repositorios
             if (tipoFiltro == TipoFiltro.Pendientes)
             {
                 return await base.Obtener(s => s.PEDIDO == 0).ToListAsync();
+                //return await base.Obtener(s => string.IsNullOrEmpty(s.PEDIDO)).ToListAsync();
             }
 
             if (tipoFiltro == TipoFiltro.NoPendientes)
             {
-                return await base.Obtener(s => s.PEDIDO > 0).ToListAsync();
+                //return await base.Obtener(s => s.PEDIDO > 0).ToListAsync();
             }
 
             return await base.ObtenerTodos();

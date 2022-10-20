@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
@@ -18,6 +19,8 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
     {
         [Inject] public PresupuestoService PresupuestoService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
+        [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
+        public AuthenticationState authState;
         protected SfGrid<vPresupuestos> refGrid;
         protected SfSpinner refSpinner;
         protected SfToast ToastObj;
@@ -36,7 +39,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             "Add",
             "Edit",
             "Delete",
-            "Print",
+            new ItemModel { Text = "Imprimir", TooltipText = "Imprimir presupuesto, codiciones comerciales y datasheet", PrefixIcon = "e-print", Id = "Imprimir", Type = ItemType.Button },
             //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
             "ExcelExport",
             new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh", Type = ItemType.Button},
@@ -80,6 +83,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             {
                 SpinnerVisible = true;
                 PresupuestoSeleccionado = new();
+                PresupuestoSeleccionado.DIRENT = "";
                 await refFormPresupuesto.ShowAsync(0);
                 popupFormVisible = true;
                 SpinnerVisible = false;
@@ -135,12 +139,24 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 await GetPresupuestos(TipoFiltro.Todos);
                 SpinnerVisible = false;
             }
+            else if (args.Item.Id == "Imprimir")
+            {
+                var seleccionado = await refGrid.GetSelectedRecordsAsync();
+                if (seleccionado.Count > 0)
+                {
+                    SpinnerVisible = true;
+                    await PresupuestoService.Imprimir(seleccionado[0].Id);
+                    SpinnerVisible = false;
+                }
+                
+            }
         }
 
         protected async Task Guardar(Presupuesto presupuesto)
         {
             if (presupuesto.GUARDADO)
             {
+                var auth = await authenticationState;
                 await ToastMensajeExito($"Guardado Correctamente.\nPresupuesto Nro {presupuesto.Id}");
                 popupFormVisible = false;
                 if (presupuesto.ESNUEVO)
@@ -153,7 +169,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                         Fecha = presupuesto.FECHA,
                         MONEDA = presupuesto.MONEDA,
                         TOTAL = presupuesto.TOTAL,
-                        USUARIO = ""
+                        USUARIO = auth.User.Identity.Name
                     };
                     Presupuestos.Add(nuevoPresup);
                     Presupuestos = Presupuestos.OrderByDescending(p => p.Id).ToList();

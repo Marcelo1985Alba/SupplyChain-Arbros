@@ -1,5 +1,5 @@
 ﻿    @page "/servicio/listado"
-@page "/servicio/list/{Pedido}"
+@page "/servicio/list/{Pedido:int}"
 @using System.IO
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Grids
@@ -98,9 +98,9 @@
                                 <div class="form-group col-md-3">
                                     <label>Presupuesto:</label>
                                     <div class="form-row">
-                                        <div class="col-10">
+                                        @*<div class="col-10">
                                             <SfNumericTextBox ID="PRESUPUESTO" @bind-Value="@(servicio.PRESUPUESTO)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
-                                        </div>
+                                        </div>*@
                                         <div class="col-2">
                                             <SfButton CssClass="e-smal e-round e-info" IconCss="e-icons e-save"
                                                       HtmlAttributes="@presupuestoButton" OnClick="@(async()=> await MostrarPresupuesto())"></SfButton>
@@ -778,29 +778,34 @@
 
     @if (visibleDialogDetalleServicio)
 	{
-		 <FormServicio Servicio="@servicio" Show="@visibleDialogDetalleServicio" Disabled="true"
+		 <FormServicio Servicio="@servicio" Show="@visibleDialogDetalleServicio" Disabled="true" Servicios="@servicios"
                        OnCerrar="@(()=> visibleDialogDetalleServicio = false)"
-                       OnGuardar="@((p)=> ActualizarServicio(p.Id, p))"></FormServicio>
+                       OnGuardar="@((p)=> ActualizarServicioFromForm(p.Id, p))"></FormServicio>
 	}
 
     
 
 
     @code {
+
         [Inject] public ClienteService ClienteService { get; set; }
         [Inject] public SolicitudService SolicitudService { get; set; }
         [Inject] public ServicioService ServicioService { get; set; }
         [Inject] public PresupuestoService PresupuestoService { get; set; }
+        [Inject] protected HttpClient Http2 { get; set; }
         [Inject] protected IRepositoryHttp Http { get; set; }
         [Inject] protected IJSRuntime JS { get; set; }
-        [CascadingParameter] public MainLayout Layout { get; set; }
         [Inject] protected CeldasService CeldasService { get; set; }
+
+        [CascadingParameter] public MainLayout Layout { get; set; }
+
         [Parameter] public int Pedido { get; set; } = 0;
         #region "Vista Grilla"
         protected const string APPNAME = "grdServicio";
         protected string state;
         #endregion
 
+        #region "Variables"
         protected bool visibleDialogDetalleServicio = false;
         protected SfToast ToastObj;
         protected SfSpinner SpinnerObj;
@@ -813,6 +818,8 @@
         protected const string IDGRID = "gridServicios";
         public bool Disabled = false;
         protected IEnumerable<Operario> opers;
+        #endregion
+
         public class SIoNO
         {
             public string Text { get; set; }
@@ -1153,6 +1160,7 @@
                         //Load the image from the stream
                         //FileStream fs = new FileStream("./wwwrroot/logo_aerre.jpg", FileMode.Open);
                         //FileStream IMR = new FileStream("wwwroot\\IMR.jpg", FileMode.Open);
+
                         var fs = await GetFile("logo_aerre.jpg");
                         var IMR = await GetFile("IMR.jpg");
 
@@ -1181,7 +1189,7 @@
                         PdfGridCell gridCell5 = pdfGrid.Rows[1].Cells[4];
                         gridCell5.ColumnSpan = 2;
                         gridCell5.StringFormat = Centrado;
-                        gridCell5.Value = new PdfTextElement($"PEDIDO: {selectedRecord.Id}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+                        gridCell5.Value = new PdfTextElement($"PEDIDO: {selectedRecord.PEDIDO}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
                         //Add RowSpan
                         PdfGridCell gridCell6 = pdfGrid.Rows[2].Cells[0];
                         gridCell6.ColumnSpan = 6;
@@ -1479,7 +1487,7 @@
                         stream.Position = 0;
                         //Close the document
                         document.Close(true);
-                        await JS.SaveAs($"{selectedRecord.Id} Certificado" + ".pdf", stream.ToArray());
+                        await JS.SaveAs($"{selectedRecord.PEDIDO} Certificado" + ".pdf", stream.ToArray());
                     }
                 }
             }
@@ -1899,7 +1907,7 @@
                 });
 
                 var servAct = servicios.Where(s => s.Id == id).FirstOrDefault();
-                servAct.PRESUPUESTO = serv.PRESUPUESTO;
+                //servAct.PRESUPUESTO = serv.PRESUPUESTO;
                 servAct.PEDIDO = serv.PEDIDO;
                 servAct.CLIENTE = serv.CLIENTE;
                 servAct.NSERIE = serv.NSERIE;
@@ -1917,13 +1925,40 @@
             }
         }
 
+        protected async Task ActualizarServicioFromForm(int id, Service serv)
+        {
+            var servAct = servicios.Where(s => s.Id == id).FirstOrDefault();
+            //servAct.PRESUPUESTO = serv.PRESUPUESTO;
+            servAct.PEDIDO = serv.PEDIDO;
+            servAct.CLIENTE = serv.CLIENTE;
+            servAct.NSERIE = serv.NSERIE;
+            servAct.MARCA = serv.MARCA;
+            servAct.MODELO = serv.MODELO;
+            servAct.MEDIDA = serv.MEDIDA;
+            servAct.SERIE = serv.SERIE;
+            servAct.IDENTIFICACION = serv.IDENTIFICACION;
+            servAct.OBSERV = serv.OBSERV;
+            await Grid.RefreshHeader();
+            await Grid.RefreshColumns();
+            Grid.Refresh();
+
+        }
+
         protected async Task<Stream> GetFile(string nameFile)
         {
-            HttpClient httpClient = new HttpClient();
-            var file = await httpClient.GetStreamAsync(nameFile);
+            try
+            {
+                var file = await Http2.GetStreamAsync(nameFile);
 
-            return file;
+                return file;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
+
+
 
         public async Task DataBound()//Hide the spinner after the data is bound to Grid(during data operations also this will be triggered)
         {
@@ -1932,26 +1967,26 @@
 
         protected async Task GetSolicitud()
         {
-            var response = await SolicitudService.GetById(servicio.SOLICITUD);
-            if (response.Error)
-            {
+            //var response = await SolicitudService.GetById(servicio.SOLICITUD);
+            //if (response.Error)
+            //{
 
-            }
-            else
-            {
-                solicitud = response.Response;
-            }
+            //}
+            //else
+            //{
+            //    solicitud = response.Response;
+            //}
         }
 
         protected async Task MostrarSolicitud()
         {
-            solicitud = new();
-            if (servicio.SOLICITUD > 0)
-            {
-                await GetSolicitud();
-            }
+            //solicitud = new();
+            //if (servicio.SOLICITUD > 0)
+            //{
+            //    await GetSolicitud();
+            //}
 
-            verDialogSolicitud = true;
+            //verDialogSolicitud = true;
 
         }
 
@@ -1973,58 +2008,59 @@
 
         protected async Task<Presupuesto> GetPresupuesto()
         {
-            var response = await PresupuestoService.GetById(servicio.PRESUPUESTO);
-            if (response.Error)
-            {
-                //TODO: MOSTRAR ERROR
-                return new Presupuesto();
-            }
-            else
-            {
-                return response.Response;
-            }
+            //var response = await PresupuestoService.GetById(servicio.PRESUPUESTO);
+            //if (response.Error)
+            //{
+            //    //TODO: MOSTRAR ERROR
+            //    return new Presupuesto();
+            //}
+            //else
+            //{
+            //    return response.Response;
+            //}
 
+            return new Presupuesto();
         }
 
         protected async Task MostrarPresupuesto()
         {
-            SpinnerVisible = true;
-            presupuesto = new();
-            if (servicio.PRESUPUESTO == 0)
-            {
-                var clienteExterno = await GetCliente();
+            //SpinnerVisible = true;
+            //presupuesto = new();
+            //if (servicio.PRESUPUESTO == 0)
+            //{
+            //    var clienteExterno = await GetCliente();
 
-                presupuesto.CG_CLI = servicio.CG_CLI;
-                presupuesto.DES_CLI = clienteExterno.DESCRIPCION.Trim();
-                presupuesto.CONDICION_PAGO = clienteExterno.ID_CON_VEN == null ? 0 : (int)clienteExterno.ID_CON_VEN;//hay cliente que no tienen asignado una condicion de pago
-                presupuesto.BONIFIC = clienteExterno.DESC_COMERCIAL == null ? 0 : (decimal)clienteExterno.DESC_COMERCIAL;
-                presupuesto.CG_COND_ENTREGA = clienteExterno.ID_CON_ENT == null ? 0 : (int)clienteExterno.ID_CON_ENT;
-                await refFormPresupuesto.ClienteExternoSelected(clienteExterno);
+            //    presupuesto.CG_CLI = servicio.CG_CLI;
+            //    presupuesto.DES_CLI = clienteExterno.DESCRIPCION.Trim();
+            //    presupuesto.CONDICION_PAGO = clienteExterno.ID_CON_VEN == null ? 0 : (int)clienteExterno.ID_CON_VEN;//hay cliente que no tienen asignado una condicion de pago
+            //    presupuesto.BONIFIC = clienteExterno.DESC_COMERCIAL == null ? 0 : (decimal)clienteExterno.DESC_COMERCIAL;
+            //    presupuesto.CG_COND_ENTREGA = clienteExterno.ID_CON_ENT == null ? 0 : (int)clienteExterno.ID_CON_ENT;
+            //    await refFormPresupuesto.ClienteExternoSelected(clienteExterno);
 
-                PresupuestoDetalle item = new();
-                if (solicitud.Id == 0)
-                {
-                    await GetSolicitud();
-                }
-                presupuesto.DES_CLI = solicitud.Des_Cli;
-                item.CG_ART = solicitud.Producto;
-                item.DES_ART = solicitud.Des_Prod;
-                item.CANTIDAD = solicitud.Cantidad;
-                item.SOLICITUDID = solicitud.Id;
-                item.PREC_UNIT = solicitud.PrecioArticulo.Precio;
-                presupuesto.Items.Add(item);
-                await refFormPresupuesto.GetTipoCambioDolarHoy();
-                await refFormPresupuesto.ShowAsync(servicio.PRESUPUESTO);
-                refFormPresupuesto.HabilitarComboMoneda();
-            }
-            else
-            {
-                presupuesto = await GetPresupuesto();
-                await refFormPresupuesto.ShowAsync(servicio.PRESUPUESTO);
-            }
+            //    PresupuestoDetalle item = new();
+            //    if (solicitud.Id == 0)
+            //    {
+            //        await GetSolicitud();
+            //    }
+            //    presupuesto.DES_CLI = solicitud.Des_Cli;
+            //    item.CG_ART = solicitud.Producto;
+            //    item.DES_ART = solicitud.Des_Prod;
+            //    item.CANTIDAD = solicitud.Cantidad;
+            //    item.SOLICITUDID = solicitud.Id;
+            //    item.PREC_UNIT = solicitud.PrecioArticulo.Precio;
+            //    presupuesto.Items.Add(item);
+            //    await refFormPresupuesto.GetTipoCambioDolarHoy();
+            //    await refFormPresupuesto.ShowAsync(servicio.PRESUPUESTO);
+            //    refFormPresupuesto.HabilitarComboMoneda();
+            //}
+            //else
+            //{
+            //    presupuesto = await GetPresupuesto();
+            //    await refFormPresupuesto.ShowAsync(servicio.PRESUPUESTO);
+            //}
 
-            SpinnerVisible = false;
-            verDialogPresupuesto = true;
+            //SpinnerVisible = false;
+            //verDialogPresupuesto = true;
 
 
         }

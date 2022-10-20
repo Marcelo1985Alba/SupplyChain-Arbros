@@ -6,6 +6,9 @@
 @using SupplyChain.Client.Pages.Ventas._3_Presupuestos
 @inherits FormServicioBase
 
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
 
 <SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
     <DialogEvents Closed="OnCerrarDialog"></DialogEvents>

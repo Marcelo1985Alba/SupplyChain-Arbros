@@ -15,6 +15,8 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Syncfusion.Blazor.Calendars;
 using Syncfusion.Blazor.LinearGauge;
+using Syncfusion.Blazor.Data;
+using Syncfusion.Blazor;
 
 namespace SupplyChain.Client.Pages.Panel_Control
 {
@@ -144,11 +146,13 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
         /////////////**********PROYECTOS*********////////////////////
         [Inject] protected ProyectosService ProyectosService { get; set; }
-        protected DateTime ProjectStart = new DateTime(2021, 3, 25);
-        protected DateTime ProjectEnd = new DateTime(2023, 7, 28);
+        protected DateTime ProjectStart = new DateTime(2020, 1, 11);
+        protected DateTime ProjectEnd = new DateTime(2022, 9, 28);
         protected SfGantt<ProyectosGBPI> refGanttProyectos;
-        protected List<ProyectosGBPI> Proyectos { get; set; } = new();
-        //protected List<ProyectosGBPI> DataProyectos { get; set; } = new();
+        protected List<ProyectosGBPI> DataProyectos { get; set; } = new();
+        public Query Qry = new Query().AddParams("Id", 10).AddParams("TaskName", "Test2").AddParams("StartDate", DateTime.Now)
+            .AddParams("EndDate", DateTime.Now.AddDays(1)).AddParams("Duration", "1 days")
+            .AddParams("Progress", 0).AddParams("Predecessor", "").AddParams("Notes", "").AddParams("ParentId", 0);
         /////////////////////////////////////////////////////////////
 
 
@@ -196,12 +200,6 @@ namespace SupplyChain.Client.Pages.Panel_Control
             await GetPedidos();
             await GetPedidosAltas();
             await GetPresupuestos();
-            var response = await ProyectosService.Get();
-            if (!response.Error)
-            {
-                Proyectos = response.Response;
-            }
-            //await GetProyectos();
 
             VisibleSpinner = false;
         }
@@ -1208,9 +1206,6 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
         }
 
-        /*protected async Task GetProyectos()
-        {
-            this.DataProyectos = await Http.GetFromJsonAsync<List<ProyectosGBPI>>("api/Proyectos/Proyectos");
-        }*/
+
     }
 }

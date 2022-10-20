@@ -56,10 +56,13 @@ namespace SupplyChain.Client.Pages.Emision
         protected List<Compra> insumosproveedor = new();
         protected SfGrid<Compra> GridProve;
 
+<<<<<<< HEAD
         public string xespecif = "";
 
         public string DropVal = "";
 
+=======
+>>>>>>> 061b98cc39f07d729f28228c620022a771d4d924
         protected BuscadorEmergente<Compra> Buscador;
         protected Compra[] ItemsABuscar = null;
         protected string[] ColumnasBuscador = new string[] { "NUMERO", "FE_EMIT", "CG_MAT", "SOLICITADO", "UNID", "DES_PROVE" };
@@ -98,9 +101,13 @@ namespace SupplyChain.Client.Pages.Emision
             ocagenerar = true;
             insumosproveedor = new();
             ocompra = 0;
+<<<<<<< HEAD
             bonif = 0;
             xespecif = "";
             DropVal = "";
+=======
+
+>>>>>>> 061b98cc39f07d729f28228c620022a771d4d924
         }
 
         public async Task BuscarOCompras()
@@ -146,9 +153,15 @@ namespace SupplyChain.Client.Pages.Emision
                 ocagenerar = false;
                 var primerreg = insumosproveedor.FirstOrDefault();
                 proveocabierta = primerreg.DES_PROVE;
+<<<<<<< HEAD
                 DropVal = primerreg.CONDVEN;
                 bonif = primerreg.BON;
                 xespecif = primerreg.ESPEGEN;
+=======
+
+
+
+>>>>>>> 061b98cc39f07d729f28228c620022a771d4d924
             }
         }
         public async Task imprimiroc()

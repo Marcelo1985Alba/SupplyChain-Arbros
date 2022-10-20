@@ -17,7 +17,7 @@
 @inject IJSRuntime JsRuntime
 @using Syncfusion.Blazor.PdfViewer
 @using Syncfusion.Pdf.Tables
-@attribute [Authorize(Roles = "Administrador")]
+@attribute [Authorize(Roles = "Administrador, Produccion")]
 @{
 
     <SfToast ID="toast_default" @ref="ToastObj">

@@ -41,6 +41,11 @@ namespace SupplyChain.Server.Repositorios
 
             try
             {
+
+                if (string.IsNullOrEmpty(entity.DIRENT))
+                {
+                    entity.DIRENT = string.Empty;
+                }
                 await base.Agregar(entity);
                 await CerrarSolicitud(entity);
             }
@@ -57,6 +62,10 @@ namespace SupplyChain.Server.Repositorios
 
             try
             {
+                if (string.IsNullOrEmpty(entity.DIRENT))
+                {
+                    entity.DIRENT = string.Empty;
+                }
                 await base.Actualizar(entity);
                 //cerrar solicitudes asociadas
                 await CerrarSolicitud(entity);

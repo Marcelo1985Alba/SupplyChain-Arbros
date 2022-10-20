@@ -71,6 +71,7 @@
             <div hidden="@ocagenerar" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
                 <SfButton style="height: 50px;" IsPrimary="true" @onclick="limpia">Limpia</SfButton>
             </div>
+<<<<<<< HEAD
         </div>
         <div class="form-row">
             <div class="form-group col-lg-7 my-1">
@@ -90,6 +91,8 @@
                                   @bind-Value="@bonif" ShowClearButton="true" TValue="decimal?" Format="n0"
                                   Decimals="2"></SfNumericTextBox>
             </div>
+=======
+>>>>>>> 061b98cc39f07d729f28228c620022a771d4d924
         </div>
         <hr />
 
@@ -109,6 +112,11 @@
 
     </div>
     </div>
+
+<BuscadorEmergente Height="600px" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
+                   Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async(v)=>await Cerrar(v))"
+                   OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+
 
 <BuscadorEmergente Height="600px" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
                    Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async(v)=>await Cerrar(v))"

@@ -3,12 +3,13 @@
 @using Syncfusion.Blazor.Data
 @using Syncfusion.Blazor
 <div class="row">
+    <p>test</p>
     <div class="col-12">
         <SfGantt TValue="ProyectosGBPI" Height="450px" Width="100%" AllowSelection="true" 
-                 GridLines="Syncfusion.Blazor.Gantt.GridLine.Both" ProjectStartDate="@ProjectStart" ProjectEndDate="@ProjectEnd">
+                 GridLines="Syncfusion.Blazor.Gantt.GridLine.Both">
             <SfDataManager Url="api/Proyectos/Proyectos" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true" ></SfDataManager>
-            <GanttTaskFields Id="Id" Name="TaskName" StartDate="StartDate" ParentID="ParentId" EndDate="EndDate" 
-                             Duration="Duration" Progress="Progress" Dependency="Predecessor">
+            <GanttTaskFields Id="id" Name="taskName" StartDate="startDate" ParentID="parentId" EndDate="endDate" 
+                             Duration="duration" Progress="progress" Dependency="predecessor" Notes="notes">
             </GanttTaskFields>
             <GanttColumns>
                 <GanttColumn Field="Id" HeaderText="Task Id" Visible="false"></GanttColumn>

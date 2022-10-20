@@ -37,38 +37,30 @@
                   <TextRuns>
                     <TextRun>
                       <Value>PAGOS
-Valores expresados en dólares USA, pagaderos en pesos, según cotización del Banco de la
-Nación, tipo vendedor, vigente a la fecha de emisión de la factura o entrega contractual (la que
-corresponda primero).
-Si la diferencia existente entre el valor de la factura y el correspondiente a la fecha del cobro
-efectivo fuera mayor del 5%, se emitirá una nota de débito o crédito según corresponda por
-diferencia de cambio entre la fecha de facturación y la acreditación efectiva del pago
+Valores expresados en dólares USA, pagaderos en pesos, según cotización del Banco de la Nación, tipo vendedor, vigente a la fecha de emisión de la factura.
+Si la diferencia existente entre el valor de la factura y el correspondiente a la fecha del cobro efectivo fuera mayor del 5%, se emitirá una nota de débito o crédito según corresponda por diferencia de cambio entre la fecha de facturación y la acreditación efectiva del pago
 ENTREGAS
-Entregas en depósitos indicados por el cliente podrán tener recargo por fletes y/o embalajes si
-los gastos resultaren desproporcionados con el valor del producto.
+Entregas en depósitos indicados por el cliente podrán tener recargo por fletes y/o embalajes si los gastos resultaren desproporcionados con el valor del producto.
 Las mercaderías viajan siempre a cargo y riesgo del comprador.
 GARANTIA
-Los productos cotizados están garantizados contra todo defecto de materiales y/o fabricación
-por el término de 12 meses desde la salida de fábrica. Esta garantía está limitada a la reparación
-o reposición sin cargo del material defectuoso en nuestra fábrica. La garantía no cubre mal
-funcionamiento por instalación inadecuada, maltrato o intervención de personal no autorizado.
-La atención de la garantía en domicilio del cliente podrá hacerse con cargo del 50 % de los
-gastos de viáticos y estadía del personal concurrente.
-En el caso que el cliente no especifique las condiciones de servicio, Arbros S.A. no se
-responsabilizará por la selección y/o uso del producto.</Value>
+Los productos cotizados están garantizados contra todo defecto de materiales y/o fabricación por el término de 12 meses desde la salida de fábrica. Esta garantía está limitada a la reparación o reposición sin cargo del material defectuoso en nuestra fábrica. La garantía no cubre mal funcionamiento por instalación inadecuada, maltrato o intervención de personal no autorizado.
+La atención de la garantía en domicilio del cliente podrá hacerse con cargo del 50 % de los gastos de viáticos y estadía del personal concurrente.
+En el caso que el cliente no especifique las condiciones de servicio, Arbros S.A. no se responsabilizará por la selección y/o uso del producto.</Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
                   </TextRuns>
-                  <Style />
+                  <Style>
+                    <TextAlign>General</TextAlign>
+                  </Style>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox1</rd:DefaultName>
               <Top>1.42167in</Top>
               <Left>0.44667in</Left>
               <Height>3.40833in</Height>
-              <Width>6.94167in</Width>
+              <Width>6.9in</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>
@@ -90,7 +82,6 @@ responsabilizará por la selección y/o uso del producto.</Value>
                       <Value>Condiciones Comerciales Generales</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontFamily>Times New Roman</FontFamily>
                         <FontSize>12pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <TextDecoration>Underline</TextDecoration>

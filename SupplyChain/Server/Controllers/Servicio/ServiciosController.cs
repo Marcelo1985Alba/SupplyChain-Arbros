@@ -27,8 +27,8 @@ namespace SupplyChain
         public async Task<ActionResult<IEnumerable<Service>>> Gets()
         {
             var xitem = await _serviciosRepository.ObtenerTodos();
-
-            return xitem.OrderByDescending(s => new { s.Id, s.SOLICITUD }).ToList();
+            return xitem;
+            //return xitem.OrderByDescending(s => new { s.Id, s.SOLICITUD }).ToList();
         }
 
 
@@ -37,10 +37,10 @@ namespace SupplyChain
         {
             var xitem = await _serviciosRepository.GetByFilter(tipoFiltro);
 
-            if (tipoFiltro != TipoFiltro.Todos)
-            {
-                return xitem.OrderByDescending(s => s.SOLICITUD ).ToList();
-            }
+            //if (tipoFiltro != TipoFiltro.Todos)
+            //{
+            //    return xitem.OrderByDescending(s => s.SOLICITUD ).ToList();
+            //}
                 
             return xitem.OrderByDescending(s => s.Id).ToList();
         }

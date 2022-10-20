@@ -367,7 +367,9 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             var response = await PresupuestoService.Agregar(presupueto);
             if (response.Error)
             {
+                await ToastMensajeError();
                 Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+                Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
                 return false;
             }
             Presupuesto = response.Response;
@@ -390,6 +392,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         {
             BotonGuardarDisabled = true;
             bool guardado;
+
             if (Presupuesto.Id == 0)
             {
                 guardado = await Agregar(Presupuesto);
@@ -400,20 +403,26 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 guardado = await Actualizar(Presupuesto);
             }
 
-            Show = false;
+
+            
             BotonGuardarDisabled = false;
-            Presupuesto.GUARDADO = guardado;
-            await DescargarPresupuestoDataSheet();
-            await OnGuardar.InvokeAsync(Presupuesto);
+            if (guardado)
+            {
+                Show = false;
+                Presupuesto.GUARDADO = guardado;
+                await DescargarPresupuestoDataSheet();
+                await OnGuardar.InvokeAsync(Presupuesto);
+            }
+            
         }
 
 
         private async Task DescargarPresupuestoDataSheet()
         {
-            await Js.InvokeVoidAsync("descargarPresupuestDataSheet", Presupuesto.Id);
+            await PresupuestoService.Imprimir(Presupuesto.Id);
         }
 
-        protected async Task ImprimirPresupuesto()
+        protected async Task ImprimirPresupuesto(int presupuestoId)
         {
             await Js.InvokeVoidAsync("open",
                                 new object[2] { $"/api/ReportRDLC/GetReportPresupuesto?id={Presupuesto.Id}", "" });

@@ -10,7 +10,7 @@
 
 #pragma warning disable 1591
 
-namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
+namespace SupplyChain.Server.wwwroot.Report.Datasheet {
     
     
     /// <summary>
@@ -20,9 +20,9 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
     [global::System.ComponentModel.DesignerCategoryAttribute("code")]
     [global::System.ComponentModel.ToolboxItem(true)]
     [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedDataSetSchema")]
-    [global::System.Xml.Serialization.XmlRootAttribute("ArbrosDataSet6")]
+    [global::System.Xml.Serialization.XmlRootAttribute("ArbrosDataSet2")]
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.DataSet")]
-    public partial class ArbrosDataSet6 : global::System.Data.DataSet {
+    public partial class ArbrosDataSet2 : global::System.Data.DataSet {
         
         private vCalculoSolicitudesDataTable tablevCalculoSolicitudes;
         
@@ -30,7 +30,7 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public ArbrosDataSet6() {
+        public ArbrosDataSet2() {
             this.BeginInit();
             this.InitClass();
             global::System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler = new global::System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
@@ -41,7 +41,7 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        protected ArbrosDataSet6(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+        protected ArbrosDataSet2(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                 base(info, context, false) {
             if ((this.IsBinarySerialized(info, context) == true)) {
                 this.InitVars(false);
@@ -127,7 +127,7 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         public override global::System.Data.DataSet Clone() {
-            ArbrosDataSet6 cln = ((ArbrosDataSet6)(base.Clone()));
+            ArbrosDataSet2 cln = ((ArbrosDataSet2)(base.Clone()));
             cln.InitVars();
             cln.SchemaSerializationMode = this.SchemaSerializationMode;
             return cln;
@@ -199,9 +199,9 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private void InitClass() {
-            this.DataSetName = "ArbrosDataSet6";
+            this.DataSetName = "ArbrosDataSet2";
             this.Prefix = "";
-            this.Namespace = "http://tempuri.org/ArbrosDataSet1.xsd";
+            this.Namespace = "http://tempuri.org/ArbrosDataSet2.xsd";
             this.EnforceConstraints = true;
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
             this.tablevCalculoSolicitudes = new vCalculoSolicitudesDataTable();
@@ -225,7 +225,7 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedDataSetSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-            ArbrosDataSet6 ds = new ArbrosDataSet6();
+            ArbrosDataSet2 ds = new ArbrosDataSet2();
             global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
             global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
             global::System.Xml.Schema.XmlSchemaAny any = new global::System.Xml.Schema.XmlSchemaAny();
@@ -1802,7 +1802,7 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
             public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
                 global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
                 global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                ArbrosDataSet6 ds = new ArbrosDataSet6();
+                ArbrosDataSet2 ds = new ArbrosDataSet2();
                 global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
                 any1.Namespace = "http://www.w3.org/2001/XMLSchema";
                 any1.MinOccurs = new decimal(0);
@@ -4110,7 +4110,7 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
         }
     }
 }
-namespace SupplyChain.Server.wwwroot.Report.Presupuesto.ArbrosDataSet6TableAdapters {
+namespace SupplyChain.Server.wwwroot.Report.Datasheet.ArbrosDataSet2TableAdapters {
     
     
     /// <summary>
@@ -4324,36 +4324,24 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto.ArbrosDataSet6TableAdapt
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = "Data Source=MARCELO-PC\\SQL_2017;Initial Catalog=Arbros;User ID=sa;Password=Marce0" +
-                "31010";
+            this._connection.ConnectionString = "Data Source=MARCELO-PC;Initial Catalog=Arbros;User ID=sa;Password=Marce031010";
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[2];
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT SolicitudId, PresupuestoId, CodigoFinal, Model, DescripcionLinea, Medida, DescripcionMedida, Orifico, AreaOrificio, SerieEntrada, DescripcionSerieEntrada, TipoEntrada, DescripcionTipoEntrada, SerieSalida, DescripcionSerieSalida, 
-                  TipoSalida, DescripcionTipoSalida, CodigoDTT, TipoAsiento, DescripcionAsiento, CodigoCBR, Cuerpo_Externo, Bonete_Externo, Resorte_Externo, CodigoDT, Disco_Interno, Tobera_Interno, Capuchon, Palanca, Bonete, Tornillo, TagId, 
-                  Cantidad, Servicio, [NumeroP&ID], IndiceInstrumento, NumeroPlanta, NumeroPlano, DescargaA, LineaEntrada, LineaSalida, Contingencia, NumeroHoja, PresionOperacion, TemperaturaOperacion, PresionDiseño, 
-                  MaximaTemperaturaDiseño, MinimaTemperaturaDiseño, PresionAtmosfera, DiscoRuptura, Modelo, Norma, ContrapresionFija, ContrapresionVariable, ValvulaSimpleMultiple, SobrepresionAdmisible, PresionApertura, CodigoDiseño, 
-                  UserId, Nombre, FaseId, TipoFase, NombreFase, Descripcion, CapacidadRequerida_V, Temperatura_de_Descarga_T, MasaMolecular_M, CocienteCaloresEspecificos_k, CoeficienteDeCompresibilidad_z, CapacidadRequerida_W, 
-                  CapacidadRequerida_Q, DensidadRelativa_G, Viscusidad_Mu, Temperatura_Saturado, AreaCalculada, Temperatura_de_Descarga_IN, Temperatura_de_Descarga_IN_Unit, CapacidadRequerida_IN, CapacidadRequerida_IN_Unit, Id, 
-                  Email, UserName, Cuit
-FROM     vCalculoSolicitudes";
+            this._commandCollection[0].CommandText = "Select * From vCalculoSolicitudes";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
-            this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
-            this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = @"SELECT ARTICULO, BONIFIC, CALLE_CLIENTE, CALLE_TRANSPORTE, CANTIDAD, CG_ART, CG_CLI, CLIENTE, CONDICION_ENTREGA, CONDICION_PAGO, CP_CLIENTE, CUIT_CLIENTE, Construccion, DESCRIPCION_IVA, DIAS_PLAZO_ENTREGA, DIRENT, EMAIL_CLIENTE, FECHAS_PRESUP, MONEDA, Marca, OBSERITEM, PORC_DESCUENTO, PREC_UNIT, PRESUPUESTO, PROVINCIA_CLIENTE, TELEFONO_CLIENTE, TOTAL_ITEM, TOTAL_PRESUPUESTO, TRANSPORTE FROM vPresupuestoReporte";
-            this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
-        public virtual int Fill(ArbrosDataSet6.vCalculoSolicitudesDataTable dataTable) {
+        public virtual int Fill(ArbrosDataSet2.vCalculoSolicitudesDataTable dataTable) {
             this.Adapter.SelectCommand = this.CommandCollection[0];
             if ((this.ClearBeforeFill == true)) {
                 dataTable.Clear();
@@ -4366,33 +4354,9 @@ FROM     vCalculoSolicitudes";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual ArbrosDataSet6.vCalculoSolicitudesDataTable GetData() {
+        public virtual ArbrosDataSet2.vCalculoSolicitudesDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            ArbrosDataSet6.vCalculoSolicitudesDataTable dataTable = new ArbrosDataSet6.vCalculoSolicitudesDataTable();
-            this.Adapter.Fill(dataTable);
-            return dataTable;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, false)]
-        public virtual int FillBy(ArbrosDataSet6.vCalculoSolicitudesDataTable dataTable) {
-            this.Adapter.SelectCommand = this.CommandCollection[1];
-            if ((this.ClearBeforeFill == true)) {
-                dataTable.Clear();
-            }
-            int returnValue = this.Adapter.Fill(dataTable);
-            return returnValue;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual ArbrosDataSet6.vCalculoSolicitudesDataTable GetDataBy() {
-            this.Adapter.SelectCommand = this.CommandCollection[1];
-            ArbrosDataSet6.vCalculoSolicitudesDataTable dataTable = new ArbrosDataSet6.vCalculoSolicitudesDataTable();
+            ArbrosDataSet2.vCalculoSolicitudesDataTable dataTable = new ArbrosDataSet2.vCalculoSolicitudesDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -4466,7 +4430,7 @@ FROM     vCalculoSolicitudes";
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        private int UpdateUpdatedRows(ArbrosDataSet6 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
+        private int UpdateUpdatedRows(ArbrosDataSet2 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
             int result = 0;
             return result;
         }
@@ -4476,7 +4440,7 @@ FROM     vCalculoSolicitudes";
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        private int UpdateInsertedRows(ArbrosDataSet6 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
+        private int UpdateInsertedRows(ArbrosDataSet2 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
             int result = 0;
             return result;
         }
@@ -4486,7 +4450,7 @@ FROM     vCalculoSolicitudes";
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        private int UpdateDeletedRows(ArbrosDataSet6 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows) {
+        private int UpdateDeletedRows(ArbrosDataSet2 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows) {
             int result = 0;
             return result;
         }
@@ -4520,7 +4484,7 @@ FROM     vCalculoSolicitudes";
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public virtual int UpdateAll(ArbrosDataSet6 dataSet) {
+        public virtual int UpdateAll(ArbrosDataSet2 dataSet) {
             if ((dataSet == null)) {
                 throw new global::System.ArgumentNullException("dataSet");
             }

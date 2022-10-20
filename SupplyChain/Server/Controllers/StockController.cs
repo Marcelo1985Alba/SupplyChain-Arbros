@@ -316,7 +316,7 @@ namespace SupplyChain.Server.Controllers
         }
 
         [HttpGet("StockInventario")]
-        public async Task<List<StockSP>> Stocks([FromQuery] FilterMovimientosStock filter)
+        public async Task<ActionResult<List<StockSP>>> Stocks([FromQuery] FilterMovimientosStock filter)
         {
             try
             {
@@ -329,7 +329,7 @@ namespace SupplyChain.Server.Controllers
             }
             catch (Exception ex)
             {
-                return new List<StockSP>();
+                return BadRequest(ex.Message);
             }
         }
 
