@@ -124,6 +124,7 @@ namespace SupplyChain.Server
             services.AddTransient<UnidadesRepository>();
             services.AddTransient<vTransportesRepository>();
             services.AddTransient<MantCeldasRepository>();
+            services.AddTransient<ProcunRepository>();
             #endregion
 
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });

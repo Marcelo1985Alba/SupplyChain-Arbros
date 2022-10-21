@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SupplyChain.Shared
 {
 	[Table("Procun")]
-	public class Procun
+	public class Procun : EntityBase<decimal>
 	{
+		[Key, Column("REGISTRO")]
+		public new decimal Id { get; set; } = 0;
 		public int ORDEN { get; set; }
 		public string CG_PROD { get; set; }
 		public int CG_FORM { get; set; }
@@ -44,7 +43,6 @@ namespace SupplyChain.Shared
 		public decimal VALOR4 { get; set; }
 		public decimal COSTOCOMB { get; set; }
 		public decimal COSTOENERG { get; set; }
-		public decimal REGISTRO { get; set; }
 		public decimal PLANTEL { get; set; }
 		public string CG_CATEOP { get; set; }
 		public decimal COSTAC { get; set; }
@@ -56,5 +54,9 @@ namespace SupplyChain.Shared
 		public decimal REVISION { get; set; }
 		public string USUARIO { get; set; }
 		public string AUTORIZA { get; set; }
+		[NotMapped]
+		public bool GUARDADO { get; set; }
+		[NotMapped]
+		public bool ESNUEVO { get; set; }
 	}
 }

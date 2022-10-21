@@ -80,6 +80,7 @@ namespace SupplyChain.Client
             services.AddScoped<TransporteService>();
             services.AddScoped<StockService>();
             services.AddScoped<MantCeldasService>();
+            services.AddScoped<ProcunService>();
             services.AddScoped<EstadoPedidoService>();
             services.AddScoped<ChatService>();
             services.AddScoped<PdfService>();
