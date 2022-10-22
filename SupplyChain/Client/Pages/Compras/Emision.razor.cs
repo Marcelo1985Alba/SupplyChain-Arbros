@@ -45,6 +45,7 @@ namespace SupplyChain.Client.Pages.Emision
         public string proveocabierta { get; set; } = "";
                 
         public int ocompra { get; set; } = 0;
+        public decimal? bonif { get; set; } = 0;
         public string listaordenescompra { get; set; } = "";
 
         public SfToast ToastObj;
@@ -54,6 +55,10 @@ namespace SupplyChain.Client.Pages.Emision
         protected List<Proveedores_compras> proveedorescompras = new List<Proveedores_compras>();
         protected List<Compra> insumosproveedor = new();
         protected SfGrid<Compra> GridProve;
+
+        public string xespecif = "";
+
+        public string DropVal = "";
 
         protected BuscadorEmergente<Compra> Buscador;
         protected Compra[] ItemsABuscar = null;
@@ -81,11 +86,10 @@ namespace SupplyChain.Client.Pages.Emision
         {
             if (args.Value > 0)
             {
+                limpia();
                 insumosproveedor = await Http.GetFromJsonAsync<List<Compra>>("api/Compras/GetPreparacion/"+ args.Value);
                 IsVisibleguarda = false;
                 IsVisibleimprime = true;
-                ocompra = 0;
-
             }
         }
         public async Task limpia()
@@ -94,7 +98,9 @@ namespace SupplyChain.Client.Pages.Emision
             ocagenerar = true;
             insumosproveedor = new();
             ocompra = 0;
-
+            bonif = 0;
+            xespecif = "";
+            DropVal = "";
         }
 
         public async Task BuscarOCompras()
@@ -140,9 +146,9 @@ namespace SupplyChain.Client.Pages.Emision
                 ocagenerar = false;
                 var primerreg = insumosproveedor.FirstOrDefault();
                 proveocabierta = primerreg.DES_PROVE;
-
-
-
+                DropVal = primerreg.CONDVEN;
+                bonif = primerreg.BON;
+                xespecif = primerreg.ESPEGEN;
             }
         }
         public async Task imprimiroc()
@@ -203,6 +209,7 @@ namespace SupplyChain.Client.Pages.Emision
         {
 
             var SelectedRecords = await GridProve.GetSelectedRecords();
+
             listaordenescompra = "";
             await SelectedRecords.ForEachAsync(async s =>
             {
@@ -211,7 +218,7 @@ namespace SupplyChain.Client.Pages.Emision
             HttpResponseMessage response = null;
 
             //                  string sqlCommandString = string.Format("UPDATE COMPRAS SET NUMERO = 9999 WHERE REGISTRO IN ("+ listaordenescompra + ")");
-            response = await Http.PutAsJsonAsync("api/compras/actualizaoc/" + listaordenescompra, listaordenescompra);
+            response = await Http.PutAsJsonAsync("api/compras/actualizaoc/" + listaordenescompra+ '/'+xespecif + '/' + @DropVal + '/' + bonif, listaordenescompra);
 
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
                 || response.StatusCode == System.Net.HttpStatusCode.NotFound
@@ -248,7 +255,7 @@ namespace SupplyChain.Client.Pages.Emision
                 }
                 proveedorescompras = await Http.GetFromJsonAsync<List<Proveedores_compras>>("api/compras/GetProveedorescompras/");
 
-                insumosproveedor = new();
+                limpia();
             }
         }
     }

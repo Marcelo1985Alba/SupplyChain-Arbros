@@ -72,7 +72,27 @@
                 <SfButton style="height: 50px;" IsPrimary="true" @onclick="limpia">Limpia</SfButton>
             </div>
         </div>
+        <div class="form-row">
+            <div class="form-group col-lg-7 my-1">
+                <SfTextBox Placeholder="Especificación" @bind-Value="xespecif"
+                           FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+            </div>
+            <div class="form-group col-lg-3 my-1">
+                <SfDropDownList TValue="string" TItem="Condven" @bind-Value="DropVal" 
+                    Placeholder="Condición de Pago"  FloatLabelType="@FloatLabelType.Auto">
+                    <SfDataManager Url="api/Condven" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"
+                                   CrossDomain=false></SfDataManager>
+                    <DropDownListFieldSettings Text="CG_CONDV" Value="CG_CONDV"></DropDownListFieldSettings>
+                </SfDropDownList>
+            </div>
+            <div class="form-group col-lg-2 my-1">
+                <SfNumericTextBox Placeholder="Bonificación %" FloatLabelType="@FloatLabelType.Auto"
+                                  @bind-Value="@bonif" ShowClearButton="true" TValue="decimal?" Format="n0"
+                                  Decimals="2"></SfNumericTextBox>
+            </div>
+        </div>
         <hr />
+
         <hr style="border:0px;" />
         <SfGrid @ref="GridProve" DataSource="@insumosproveedor" Height="100%" Width="100%" AllowSelection="true" AllowPaging="true">
             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple" CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
@@ -82,13 +102,18 @@
                 <GridColumn Field=@nameof(Compra.DES_MAT) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                 <GridColumn Field=@nameof(Compra.AUTORIZADO) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(Compra.UNID1) HeaderText="Unidad" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(Compra.PRECIO) HeaderText="Precio" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Compra.PRECIONETO) HeaderText="Precio" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(Compra.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
             </GridColumns>
         </SfGrid>
 
     </div>
-</div>
+    </div>
+
+<BuscadorEmergente Height="600px" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
+                   Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async(v)=>await Cerrar(v))"
+                   OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+
 
 <BuscadorEmergente Height="600px" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
                    Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async(v)=>await Cerrar(v))"

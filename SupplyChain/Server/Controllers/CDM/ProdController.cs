@@ -260,5 +260,83 @@ namespace SupplyChain
             }
             return lDesProd;
         }
+
+
+        // GET: api/Prod/BuscarPorCG_PROD_PREP/{CG_PROD}
+        [HttpGet("BuscarPorCG_PROD_PREP/{CG_PROD}")]
+        public async Task<ActionResult<List<Producto>>> BuscarPorCG_PROD_PREP(string CG_PROD)
+        {
+            List<Producto> lDesProd = new List<Producto>();
+            if (await _productoRepository.Existe(CG_PROD))
+            {
+                lDesProd = await _productoRepository.Obtener(p => p.Id == CG_PROD && p.CG_ORDEN != 1 && p.CG_ORDEN != 3).ToListAsync();
+            }
+            return lDesProd == null ? NotFound() : lDesProd;
+        }
+
+        // GET: api/Prod/BuscarPorDES_PROD_PREP/{DES_PROD}
+        [HttpGet("BuscarPorDES_PROD_PREP/{DES_PROD}")]
+        public async Task<ActionResult<List<Producto>>> BuscarPorDES_PROD_PREP(string DES_PROD)
+        {
+            List<Producto> lDesProd = new List<Producto>();
+            lDesProd = await _productoRepository.Obtener(p => p.DES_PROD == DES_PROD && p.CG_ORDEN != 1 && p.CG_ORDEN != 3).ToListAsync();
+            if (lDesProd == null)
+            {
+                return NotFound();
+            }
+            return lDesProd;
+        }
+
+
+        // GET: api/Productos/BuscarProducto_PREP/{CG_PROD}/{DES_PROD}
+        [HttpGet("BuscarProducto_PREP/{CG_PROD}/{DES_PROD}/{Busqueda}")]
+        public async Task<ActionResult<List<Producto>>> BuscarProducto_PREP(string CG_PROD, string DES_PROD, int Busqueda)
+        {
+            List<Producto> lContiene = new();
+            if ((string.IsNullOrEmpty(CG_PROD) && string.IsNullOrEmpty(DES_PROD)) || (CG_PROD == "Vacio" && DES_PROD == "Vacio"))
+            {
+                /*
+                lContiene = (await _productoRepository.ObtenerTodos())
+                    .Take(Busqueda).ToList();
+                */
+                lContiene = await _productoRepository.Obtener(p => p.CG_ORDEN != 1 && p.CG_ORDEN != 3,Busqueda).ToListAsync();
+
+            }
+            else if (string.IsNullOrEmpty(DES_PROD) || DES_PROD == "Vacio")
+            {
+                lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
+                    .ToListAsync();
+                if (lContiene == null)
+                {
+                    return NotFound();
+                }
+            }
+            else if (string.IsNullOrEmpty(CG_PROD) || CG_PROD == "Vacio")
+            {
+                lContiene = await _productoRepository.Obtener(p => p.DES_PROD.Contains(DES_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
+                    .ToListAsync();
+
+                if (lContiene == null)
+                {
+                    return NotFound();
+                }
+
+            }
+
+            else if (CG_PROD != "Vacio" && DES_PROD != "Vacio")
+            {
+                lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD)
+                    && p.DES_PROD.Contains(DES_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda).ToListAsync();
+
+                if (lContiene == null)
+                {
+                    return NotFound();
+                }
+            }
+            return lContiene;
+
+
+        }
+
     }
 }
