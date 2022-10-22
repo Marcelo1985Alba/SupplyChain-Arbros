@@ -42,6 +42,16 @@ namespace SupplyChain.Server.Controllers
             this._context = context;
         }
 
+
+
+        [HttpGet("usuarios")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<List<ApplicationUser>>> GetUsuarios()
+        {
+            return await userManager.Users.ToListAsync();
+        }
+
+
         [HttpGet("renovarToken")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<UserToken>> RenovarToken()
