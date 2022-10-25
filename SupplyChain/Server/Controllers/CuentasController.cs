@@ -42,6 +42,16 @@ namespace SupplyChain.Server.Controllers
             this._context = context;
         }
 
+
+
+        [HttpGet("usuarios")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<List<ApplicationUser>>> GetUsuarios()
+        {
+            return await userManager.Users.ToListAsync();
+        }
+
+
         [HttpGet("renovarToken")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<UserToken>> RenovarToken()
@@ -111,7 +121,23 @@ namespace SupplyChain.Server.Controllers
             var result = await userManager.CreateAsync(user, userInfo.Password);
             if (result.Succeeded)
             {
-                return BuildToken(user, new List<string>());
+
+                if (userInfo.Roles.Count > 0)
+                {
+                    foreach (var rol in userInfo.Roles)
+                    {
+                        var resultRoles = await userManager.AddToRoleAsync(user, rol);
+
+                        if (!resultRoles.Succeeded)
+                        {
+                            return BadRequest(resultRoles.Errors.Select(s => s.Description));
+                        }
+                    }
+                    
+                }
+
+
+                return BuildToken(user, userInfo.Roles);
             }
             else
             {
@@ -127,9 +153,15 @@ namespace SupplyChain.Server.Controllers
                 isPersistent: false, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-                await _hubOnlineUsersContext.Clients.All.SendAsync("UpdateOnlineUsers", 1);
+                //await _hubOnlineUsersContext.Clients.All.SendAsync("UpdateOnlineUsers", 1);
                 var user = await userManager.FindByNameAsync(userInfo.UserName);
                 var roles = await userManager.GetRolesAsync(user);
+
+                if (roles.Any(r=> r== "Cliente") && user.Cg_Cli ==0)
+                {
+                    return BadRequest("Solicite autorizacion");
+                }
+
                 return BuildToken(user, roles);
             }
             else

@@ -24,7 +24,7 @@ namespace SupplyChain.Shared.Logística
         public int CG_CLI { get; set; } = 0;
         public string DES_CLI { get; set; } = string.Empty;
         public DateTime FE_MOV { get; set; } = DateTime.Now;
-        [Required(ErrorMessage = "La Direccion de Entrega es requerida")]
+        //[Required(ErrorMessage = "La Direccion de Entrega es requerida")]
         public string DIRENT { get; set; }
 
         [Required(ErrorMessage = "* La Condicion de Entrega es requerida")]
