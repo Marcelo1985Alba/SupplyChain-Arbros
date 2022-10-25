@@ -166,34 +166,6 @@
                         </SfGrid>
                     </div>
                 </div>
-                <div style="margin-top:20px;" class="form-row">
-                    <div class="col-lg-12 control-section">
-                        <div class="content-wrapper">
-                            <div class="row" id="gridPreparaciones">
-                        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                                @ref="Gridprep" DataSource="@listapreparacion" AllowExcelExport="true" AllowGrouping="true" ID="Preparacion"
-                                RowHeight="20" Width="100%"
-                                AllowSorting="true" AllowPaging="true" AllowFiltering="true"
-                                Toolbar="@Toolbaritems" GridLines="GridLine.Both">
-                            <GridPageSettings PageCount="10" PageSizes="true" PageSize="20"></GridPageSettings>
-                            <GridEvents OnToolbarClick="@ClickHandler" TValue="Compra"></GridEvents>
-                            <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
-                            <GridColumns>
-                                <GridColumn Field=@nameof(Compra.CG_MAT) HeaderText="Código" AllowEditing="false" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
-                                <GridColumn Field=@nameof(Compra.DES_MAT) HeaderText="Descripcion" AllowEditing="false" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                <GridColumn Field=@nameof(Compra.DES_PROVE) HeaderText="Proveedor" AllowEditing="false" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                <GridColumn Field=@nameof(Compra.NECESARIO) HeaderText="Necesario" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                <GridColumn Field=@nameof(Compra.SOLICITADO) HeaderText="Solicitado" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                <GridColumn Field=@nameof(Compra.AUTORIZADO) HeaderText="Autorizado" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                <GridColumn Field=@nameof(Compra.PRECIO) HeaderText="Precio" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                <GridColumn Field=@nameof(Compra.MONEDA) HeaderText="Moneda" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                <GridColumn Field=@nameof(Compra.FE_PREV) HeaderText="Fecha Entrega" Format="dd/MM/yyyy" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                            </GridColumns>
-                        </SfGrid>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
