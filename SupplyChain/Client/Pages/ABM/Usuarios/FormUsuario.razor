@@ -1,0 +1,94 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Data
+@using SupplyChain.Client.Shared.BuscadorCliente
+@using SupplyChain.Client.Shared.BuscadorProducto
+@using SupplyChain.Client.Shared.BuscadorPrecios
+@using SupplyChain.Client.Pages.ABM.Precios
+
+@inherits FormUsuarioBase
+
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+
+
+<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="@HeightDialog" ShowCloseIcon="true">
+    <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
+    <DialogTemplates>
+        <Header>
+            @if (string.IsNullOrEmpty(ApplicationUser.Id))
+            {
+                <div class="e-dlg-header-titulo">Nueva Usuario</div>
+            }
+            else
+            {
+                <div class="e-dlg-header-titulo">Detalle Usuario:&nbsp;&nbsp;@ApplicationUser.UserName&nbsp;</div>
+            }
+        </Header>
+        <Content>
+            <EditForm id="form-usuario" Model="@ApplicationUser" OnValidSubmit="@(async()=> await Guardar())">
+                <DataAnnotationsValidator />
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="">Usuario:</label>
+                        <SfTextBox CssClass="customClass" ID="Usuario" @bind-Value="@(ApplicationUser.UserName)" Readonly="false"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="">Email:</label>
+                        <SfTextBox CssClass="customClass" ID="Email" @bind-Value="@(ApplicationUser.Email)" Readonly="false"
+                                   Type="InputType.Email" ShowClearButton="true"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="">Cod. Cliente:</label>
+                        <SfDropDownList TValue="string" TItem="ClienteExterno" Placeholder="Seleccione Cliente..." AllowFiltering="true"
+                                        Readonly="false" DataSource="@Clientes" @bind-Value="@CodigoClienteSeleccionado">
+                            @*<SfDataManager Url="api/Cliente/GetClienteExterno" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>*@
+                            <DropDownListEvents TItem="ClienteExterno" TValue="string" ValueChange="@(async(d)=> await SelectedClienteChanged(d))"></DropDownListEvents>
+                            <DropDownListFieldSettings Text="DESCRIPCION" Value="CG_CLI"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                    </div>
+
+                </div>
+
+
+                <div class="form-row align-items-end">
+                    @if (ApplicationUser.EsNuevo)
+	                {
+                        <div class="form-group col-md-6">
+                            <label class="">Contraseña:</label>
+                            <SfTextBox CssClass="customClass" ID="Contra" @bind-Value="@(ApplicationUser.PasswordHash)" Readonly="false" Type="InputType.Password"
+                                       ShowClearButton="true"></SfTextBox>
+                        </div>
+	                }
+                    
+                    <div class="form-group col-md-6">
+                        <label class="">Rol:</label>
+                        <SfMultiSelect @ref="@refMultiSelect" TValue="string[]" TItem="string" DataSource="@Roles"
+                                       Placeholder="Seleccione Roles..." @bind-Value="@RolesSeleccionados">
+                            <MultiSelectFieldSettings Text="Name" Value="Id"></MultiSelectFieldSettings>
+                            @*<MultiSelectEvents TItem="string" TValue="string[]" OnChipTag="@OnTagging" />*@
+                        </SfMultiSelect>
+                    </div>
+                </div>
+
+                <SfSpinner @ref="@refSpinnerCli" Size="50" @bind-Visible="@SpinnerVisible"
+                           Label="Buscando ..." Type="SpinnerType.Fabric">
+                </SfSpinner>
+
+
+
+                <ValidationSummary />
+
+            </EditForm>
+
+
+        </Content>
+        <FooterTemplate>
+            <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit"></SfButton>
+            <SfButton Content="Cancel" IconCss="fa fa-window-close-o" OnClick="Hide"></SfButton>
+        </FooterTemplate>
+    </DialogTemplates>
+
+</SfDialog>

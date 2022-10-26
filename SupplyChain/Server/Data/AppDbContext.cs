@@ -136,6 +136,7 @@ namespace SupplyChain
         public DbSet<Matprove_busquedaprove> Matprove_busquedaprove { get; set; }
 
         public DbSet<Proveedores_compras> proveedores_compras { get; set; }
+        public DbSet<vUsuario> vUsuarios { get; set; }
 
         #endregion
 
@@ -257,6 +258,7 @@ namespace SupplyChain
             modelBuilder.Entity<vPresupuestoReporte>().HasNoKey().ToView("vPresupuestoReporte");
             modelBuilder.Entity<vPedidoReporte>().HasNoKey().ToView("vPedidoReporte");
             modelBuilder.Entity<vRemitoReporte>().HasNoKey().ToView("vRemitoReporte");
+            modelBuilder.Entity<vUsuario>().HasNoKey().ToView("vUsuarios");
         }
     }
 }

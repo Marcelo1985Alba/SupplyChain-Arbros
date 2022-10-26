@@ -46,11 +46,35 @@ namespace SupplyChain.Server.Controllers
 
         [HttpGet("usuarios")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<List<ApplicationUser>>> GetUsuarios()
+        public async Task<ActionResult<List<vUsuario>>> GetUsuarios()
         {
-            return await userManager.Users.ToListAsync();
+            return await _context.vUsuarios.ToListAsync();
         }
 
+        [HttpGet("usuarios/byId/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<ApplicationUser>> GetUsuarioById(string id)
+        {
+            var user = await userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
+            user.Roles = (List<string>)await userManager.GetRolesAsync(user);
+
+            return user;
+        }
+
+        [HttpGet("roles")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<List<IdentityRole>>> GetRoles()
+        {
+            return await roleManager.Roles.ToListAsync();
+        }
+
+        [HttpGet("roles/byUserId/{userId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<List<string>> GetRolesByUserId(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            return (List<string>)await userManager.GetRolesAsync(user);
+        }
 
         [HttpGet("renovarToken")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -144,6 +168,58 @@ namespace SupplyChain.Server.Controllers
                 return BadRequest(result.Errors.Select(s=> s.Description));
             }
 
+        }
+
+        [HttpPut("actualizar")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<ApplicationUser>> ActualizarUsuario(UserInfo userInfo)
+        {
+            var user = await userManager.FindByNameAsync(userInfo.UserName);
+            user.Cg_Cli = userInfo.Cg_Cli;
+            user.Email = userInfo.Email;
+            var result = await userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                //var resultPass = await userManager.ChangePasswordAsync(user, userInfo.Password);
+                var rolesAnteriores = (await userManager.GetRolesAsync(user)).Select(r => r);
+                var resultRemoveRoles = await userManager.RemoveFromRolesAsync(user, rolesAnteriores);
+                if (userInfo.Roles.Count > 0)
+                {
+                    foreach (var rol in userInfo.Roles)
+                    {
+                        var resultRoles = await userManager.AddToRoleAsync(user, rol);
+
+                        if (!resultRoles.Succeeded)
+                        {
+                            return BadRequest(resultRoles.Errors.Select(s => s.Description));
+                        }
+                    }
+
+                }
+            }
+            else
+            {
+                return BadRequest(result.Errors.Select(s => s.Description));
+            }
+
+            return Ok(user);
+        }
+
+
+        [HttpDelete("remover")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<ApplicationUser>> RemoverUsuario(UserInfo userInfo)
+        {
+            var user = await userManager.FindByNameAsync(userInfo.UserName);
+            var roles = (await userManager.GetRolesAsync(user)).Select(r => r);
+            var resultRemoveRoles = await userManager.RemoveFromRolesAsync(user, roles);
+            var result = await userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return BadRequest(result.Errors.Select(s => s.Description));
+            }
+
+            return Ok(user);
         }
 
         [HttpPost("login")]

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,5 +18,15 @@ namespace SupplyChain.Shared
             ChatMessagesFromUsers = new HashSet<ChatMessage>();
             ChatMessagesToUsers = new HashSet<ChatMessage>();
         }
+
+
+        [NotMapped]
+        public string NombreCliente { get; set; } = string.Empty;
+
+        [NotMapped]
+        public List<string> Roles { get; set; } = new();
+
+        [NotMapped]
+        public bool EsNuevo { get; set; } = false;
     }
 }
