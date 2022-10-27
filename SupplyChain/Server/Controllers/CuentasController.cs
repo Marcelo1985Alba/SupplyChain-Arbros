@@ -63,9 +63,9 @@ namespace SupplyChain.Server.Controllers
 
         [HttpGet("roles")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<List<IdentityRole>>> GetRoles()
+        public async Task<ActionResult<List<string>>> GetRoles()
         {
-            return await roleManager.Roles.ToListAsync();
+            return await roleManager.Roles.Select(r=> r.Name).ToListAsync();
         }
 
         [HttpGet("roles/byUserId/{userId}")]

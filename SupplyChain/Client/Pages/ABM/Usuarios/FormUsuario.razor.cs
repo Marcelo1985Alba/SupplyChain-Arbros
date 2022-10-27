@@ -64,14 +64,14 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
 
 
 
-            var response = await Http.GetFromJsonAsync<List<IdentityRole>>("api/Cuentas/roles");
+            var response = await Http.GetFromJsonAsync<List<string>>("api/Cuentas/roles");
             if (response.Error)
             {
 
             }
             else
             {
-                Roles = response.Response.Select(r=> r.Name).ToList();
+                Roles = response.Response;
                 Console.WriteLine(ApplicationUser.Roles.Select(r=> r));
             }
 
