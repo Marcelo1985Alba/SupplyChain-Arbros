@@ -159,7 +159,7 @@ namespace SupplyChain.Server.Repositorios
                 foreach (PedCli item in list)
                 {
                     //agregar nueva oci: en la edidicon debe venir con la oci del grupo
-                    if (item.NUMOCI == 0 && item.ESTADO == EstadoItem.Agregado && !list.Any(p=> p.NUMOCI > 0))
+                    if (item.NUMOCI == 0 && item.ESTADO == EstadoItem.Agregado)
                     {
                         item.NUMOCI = Convert.ToInt32(genera.VALOR1);
                     }

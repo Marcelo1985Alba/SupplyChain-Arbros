@@ -230,6 +230,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                 await refGrid.RefreshHeaderAsync();
                 refGrid.Refresh();
                 await refGrid.RefreshColumnsAsync();
+                
             }
             else
             {

@@ -745,27 +745,29 @@
                 }
                 </Template>
                 </GridEditSettings>
-                    <GridColumns>
-                        <GridColumn Field=@nameof(Service.Id) HeaderText="Id" AllowSearching="true" Visible="false" IsPrimaryKey="true"
-                                    TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                        <GridColumn Field=@nameof(Service.SOLICITUD) HeaderText="Solicitud" AllowSearching="true"
-                                    TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                        <GridColumn Field=@nameof(Service.PRESUPUESTO) HeaderText="Presupuesto" AllowSearching="true"
-                                    TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                        <GridColumn Field=@nameof(Service.PEDIDO) HeaderText="Pedido" AllowSearching="true"
-                                    TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                        <GridColumn Field=@nameof(Service.REMITO) HeaderText="Remito" AllowSearching="true"
-                                    TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                        <GridColumn Field=@nameof(Service.FECHA) AutoFit="true" HeaderText="Fecha" Format="dd/MM/yyyy"></GridColumn>
-                        <GridColumn Field=@nameof(Service.CLIENTE) AutoFit="true" HeaderText="Cliente"></GridColumn>
-                        <GridColumn Field=@nameof(Service.NSERIE) AutoFit="true" HeaderText="Numero de Serie" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="150"></GridColumn>
-                        <GridColumn Field=@nameof(Service.MARCA) AutoFit="true" HeaderText="Marca" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="120"></GridColumn>
-                        <GridColumn Field=@nameof(Service.MODELO) AutoFit="true" HeaderText="Modelo" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
-                        <GridColumn Field=@nameof(Service.MEDIDA) AutoFit="true" HeaderText="Medida" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
-                        <GridColumn Field=@nameof(Service.SERIE) AutoFit="true" HeaderText="Serie" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
-                        <GridColumn Field=@nameof(Service.IDENTIFICACION) AutoFit="true"></GridColumn>
-                        <GridColumn Field=@nameof(Service.OBSERV) AutoFit="true"></GridColumn>
-                    </GridColumns>
+                <GridColumns>
+                    <GridColumn Field=@nameof(Service.Id) HeaderText="Id" AllowSearching="true" Visible="false" IsPrimaryKey="true"
+                                TextAlign="TextAlign.Left" Width="90"></GridColumn>
+                    <GridColumn Field=@nameof(Service.SOLICITUD) HeaderText="Solicitud" AllowSearching="true"
+                                TextAlign="TextAlign.Left" Width="90"></GridColumn>
+                    <GridColumn Field=@nameof(Service.PRESUPUESTO) HeaderText="Presupuesto" AllowSearching="true"
+                                TextAlign="TextAlign.Left" Width="90"></GridColumn>
+                    <GridColumn Field=@nameof(Service.PEDIDO) HeaderText="Pedido" AllowSearching="true"
+                                TextAlign="TextAlign.Left" Width="90"></GridColumn>
+                    <GridColumn Field=@nameof(Service.REMITO) HeaderText="Remito" AllowSearching="true"
+                                TextAlign="TextAlign.Left" Width="90"></GridColumn>
+                    <GridColumn Field=@nameof(Service.DESCARTICULO) HeaderText="Articulo" AllowSearching="true"
+                                TextAlign="TextAlign.Left" Width="190"></GridColumn>
+                    <GridColumn Field=@nameof(Service.FECHA) AutoFit="true" HeaderText="Fecha" Format="dd/MM/yyyy"></GridColumn>
+                    <GridColumn Field=@nameof(Service.CLIENTE) AutoFit="true" HeaderText="Cliente"></GridColumn>
+                    <GridColumn Field=@nameof(Service.NSERIE) AutoFit="true" HeaderText="Numero de Serie" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="150"></GridColumn>
+                    <GridColumn Field=@nameof(Service.MARCA) AutoFit="true" HeaderText="Marca" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="120"></GridColumn>
+                    <GridColumn Field=@nameof(Service.MODELO) AutoFit="true" HeaderText="Modelo" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.MEDIDA) AutoFit="true" HeaderText="Medida" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.SERIE) AutoFit="true" HeaderText="Serie" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.IDENTIFICACION) AutoFit="true"></GridColumn>
+                    <GridColumn Field=@nameof(Service.OBSERV) AutoFit="true"></GridColumn>
+                </GridColumns>
                 </SfGrid>
             </div>
         </div>

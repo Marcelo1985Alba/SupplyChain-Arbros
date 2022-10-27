@@ -768,45 +768,87 @@ namespace SupplyChain.Server.Controllers
             listArchivosDescargar.Add(archivoCC);
 
             //obtener el datasheet por item
+            var fileDS = "Cotizacion.rdlc";
+            List<Solicitud> solicitudes = new();
             foreach (var item in presup?.Items)
             {
                 if (item.SOLICITUDID > 0)
                 {
-                    //obtengo pdf del reporte rdlc
-                    var fileDS = "Cotizacion.rdlc";
                     var sol = _context.Solicitudes.Find(item.SOLICITUDID);
                     if (sol != null && sol.CalcId > 0)
                     {
-                        var valeDS = _context.vCalculoSolicitudes.Where(c => c.SolicitudId == sol.CalcId).ToList();
-                        if (valeDS != null && valeDS.Count > 0)
-                        {
-                            var pathDS = string.Empty;
-                            pathDS = configuration["ReportesRDLC:DataSheet"] + $"\\{fileDS}";
-
-                            LocalReport localReportDS = new(pathDS);
-                            localReportDS.AddDataSource(dataSetName: "DataSet1", valeDS);
-
-                            var resultDS = localReportDS.Execute(RenderType.Pdf, 1);
-                            pathDS = Path.Combine(env.WebRootPath, "pdf/", $"DataSheet{presupuesto}_{item.SOLICITUDID}.pdf");
-                            using (var fileStream = new FileStream(pathDS, FileMode.Create))
-                            {
-                                Stream streamCot = new MemoryStream(resultDS.MainStream);
-                                await streamCot.CopyToAsync(fileStream);
-                                await streamCot.DisposeAsync();
-                            }
-
-                            var archivoDataSheet = new Archivo()
-                            {
-                                Id = sol.CalcId,
-                                Nombre = $"DataSheet.pdf",
-                                Directorio = pathDS
-                            };
-                            listArchivosDescargar.Add(archivoDataSheet);  
-                        }
+                        solicitudes.Add(sol);
                     }
-
                 }
             }
+
+            if (solicitudes.Count > 0)
+            {
+                var idsSolicitudes = solicitudes.Select(s => s.CalcId).ToList();
+                var dataSheets = _context.vCalculoSolicitudes.Where(c => idsSolicitudes.Contains(c.SolicitudId)).ToList();
+                foreach (var item in dataSheets)
+                {
+                    var pathDS = string.Empty;
+                    pathDS = configuration["ReportesRDLC:DataSheet"] + $"\\{fileDS}";
+
+                    var list = dataSheets.Where(d => d.SolicitudId == item.SolicitudId).ToList();
+                    LocalReport localReportDS = new(pathDS);
+                    localReportDS.AddDataSource(dataSetName: "DataSet1", list);//debere recibir una lista
+
+                    var resultDS = localReportDS.Execute(RenderType.Pdf, 1);
+                    pathDS = Path.Combine(env.WebRootPath, "pdf/", $"DataSheet{presupuesto}_{item.SolicitudId}.pdf");
+                    using (var fileStream = new FileStream(pathDS, FileMode.Create))
+                    {
+                        Stream streamCot = new MemoryStream(resultDS.MainStream);
+                        await streamCot.CopyToAsync(fileStream);
+                        await streamCot.DisposeAsync();
+                    }
+
+                    var archivoDataSheet = new Archivo()
+                    {
+                        Id = item.SolicitudId,
+                        Nombre = $"DataSheet.pdf",
+                        Directorio = pathDS
+                    };
+                    listArchivosDescargar.Add(archivoDataSheet);
+                }
+            }
+            
+
+            //foreach (var sol in solicitudes)
+            //{
+
+            //    var valeDS = _context.vCalculoSolicitudes.Where(c => c.SolicitudId == sol.CalcId).ToList();
+            //    if (valeDS != null && valeDS.Count > 0)
+            //    {
+            //        var pathDS = string.Empty;
+            //        pathDS = configuration["ReportesRDLC:DataSheet"] + $"\\{fileDS}";
+
+            //        LocalReport localReportDS = new(pathDS);
+            //        localReportDS.AddDataSource(dataSetName: "DataSet1", valeDS);
+
+            //        var resultDS = localReportDS.Execute(RenderType.Pdf, 1);
+            //        pathDS = Path.Combine(env.WebRootPath, "pdf/", $"DataSheet{presupuesto}_{item.SOLICITUDID}.pdf");
+            //        using (var fileStream = new FileStream(pathDS, FileMode.Create))
+            //        {
+            //            Stream streamCot = new MemoryStream(resultDS.MainStream);
+            //            await streamCot.CopyToAsync(fileStream);
+            //            await streamCot.DisposeAsync();
+            //        }
+
+            //        var archivoDataSheet = new Archivo()
+            //        {
+            //            Id = sol.CalcId,
+            //            Nombre = $"DataSheet.pdf",
+            //            Directorio = pathDS
+            //        };
+            //        listArchivosDescargar.Add(archivoDataSheet);
+            //    }
+
+            //    valeDS = null;
+            //}
+
+            
 
             Stream[] streams = new Stream[listArchivosDescargar.Count];
             PdfDocument finalDoc = new PdfDocument();
