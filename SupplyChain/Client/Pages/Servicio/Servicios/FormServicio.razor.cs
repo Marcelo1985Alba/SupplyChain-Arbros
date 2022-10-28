@@ -158,26 +158,26 @@ namespace SupplyChain.Client.Pages.Servicio.Servicios
         }
         protected async Task GetSolicitud()
         {
-            //var response = await SolicitudService.GetById(Servicio.SOLICITUD);
-            //if (response.Error)
-            //{
+            var response = await SolicitudService.GetById(Servicio.SOLICITUD);
+            if (response.Error)
+            {
 
-            //}
-            //else
-            //{
-            //    solicitud = response.Response;
-            //}
+            }
+            else
+            {
+                solicitud = response.Response;
+            }
         }
 
         protected async Task MostrarSolicitud()
         {
-            //solicitud = new();
-            //if (Servicio.SOLICITUD > 0)
-            //{
-            //    await GetSolicitud();
-            //}
+            solicitud = new();
+            if (Servicio.SOLICITUD > 0)
+            {
+                await GetSolicitud();
+            }
 
-            //verDialogSolicitud = true;
+            verDialogSolicitud = true;
 
         }
 
@@ -199,75 +199,75 @@ namespace SupplyChain.Client.Pages.Servicio.Servicios
 
         protected async Task<Presupuesto> GetPresupuesto()
         {
-            //var response = await PresupuestoService.GetById(Servicio.PRESUPUESTO);
-            //if (response.Error)
-            //{
-            //    //TODO: MOSTRAR ERROR
-            //    return new Presupuesto();
-            //}
-            //else
-            //{
-            //    return response.Response;
-            //}
+            var response = await PresupuestoService.GetById(Servicio.PRESUPUESTO);
+            if (response.Error)
+            {
+                //TODO: MOSTRAR ERROR
+                return new Presupuesto();
+            }
+            else
+            {
+                return response.Response;
+            }
 
-            return new Presupuesto();
+            //return new Presupuesto();
         }
 
         protected async Task MostrarPresupuesto()
         {
-            //presupuesto = new();
-            //if (Servicio.PRESUPUESTO == 0)
-            //{
-            //    var clienteExterno = await GetCliente();
+            presupuesto = new();
+            if (Servicio.PRESUPUESTO == 0)
+            {
+                var clienteExterno = await GetCliente();
 
-            //    presupuesto.CG_CLI = Servicio.CG_CLI;
-            //    presupuesto.DES_CLI = clienteExterno.DESCRIPCION.Trim();
-            //    presupuesto.CONDICION_PAGO = clienteExterno.ID_CON_VEN == null ? 0 : (int)clienteExterno.ID_CON_VEN;//hay cliente que no tienen asignado una condicion de pago
-            //    presupuesto.BONIFIC = clienteExterno.DESC_COMERCIAL == null ? 0 : (decimal)clienteExterno.DESC_COMERCIAL;
-            //    presupuesto.CG_COND_ENTREGA = clienteExterno.ID_CON_ENT == null ? 0 : (int)clienteExterno.ID_CON_ENT;
-            //    await refFormPresupuesto.ClienteExternoSelected(clienteExterno);
+                presupuesto.CG_CLI = Servicio.CG_CLI;
+                presupuesto.DES_CLI = clienteExterno.DESCRIPCION.Trim();
+                presupuesto.CONDICION_PAGO = clienteExterno.ID_CON_VEN == null ? 0 : (int)clienteExterno.ID_CON_VEN;//hay cliente que no tienen asignado una condicion de pago
+                presupuesto.BONIFIC = clienteExterno.DESC_COMERCIAL == null ? 0 : (decimal)clienteExterno.DESC_COMERCIAL;
+                presupuesto.CG_COND_ENTREGA = clienteExterno.ID_CON_ENT == null ? 0 : (int)clienteExterno.ID_CON_ENT;
+                await refFormPresupuesto.ClienteExternoSelected(clienteExterno);
 
-            //    PresupuestoDetalle item = new();
-            //    if (solicitud.Id == 0)
-            //    {
-            //        await GetSolicitud();
-            //    }
-            //    presupuesto.DES_CLI = solicitud.Des_Cli;
-            //    item.CG_ART = solicitud.Producto;
-            //    item.DES_ART = solicitud.Des_Prod;
-            //    item.CANTIDAD = solicitud.Cantidad;
-            //    item.SOLICITUDID = solicitud.Id;
-            //    item.PREC_UNIT = solicitud.PrecioArticulo.Precio;
-            //    presupuesto.Items.Add(item);
-            //    await refFormPresupuesto.GetTipoCambioDolarHoy();
-            //    await refFormPresupuesto.ShowAsync(Servicio.PRESUPUESTO);
-            //    refFormPresupuesto.HabilitarComboMoneda();
-            //}
-            //else
-            //{
-            //    presupuesto = await GetPresupuesto();
-            //    await refFormPresupuesto.ShowAsync(Servicio.PRESUPUESTO);
-            //}
+                PresupuestoDetalle item = new();
+                if (solicitud.Id == 0)
+                {
+                    await GetSolicitud();
+                }
+                presupuesto.DES_CLI = solicitud.Des_Cli;
+                item.CG_ART = solicitud.Producto;
+                item.DES_ART = solicitud.Des_Prod;
+                item.CANTIDAD = solicitud.Cantidad;
+                item.SOLICITUDID = solicitud.Id;
+                item.PREC_UNIT = solicitud.PrecioArticulo.Precio;
+                presupuesto.Items.Add(item);
+                await refFormPresupuesto.GetTipoCambioDolarHoy();
+                await refFormPresupuesto.ShowAsync(Servicio.PRESUPUESTO);
+                refFormPresupuesto.HabilitarComboMoneda();
+            }
+            else
+            {
+                presupuesto = await GetPresupuesto();
+                await refFormPresupuesto.ShowAsync(Servicio.PRESUPUESTO);
+            }
 
-            //verDialogPresupuesto = true;
+            verDialogPresupuesto = true;
 
 
         }
 
         protected async Task OnGuardarPresupuesto(Presupuesto presupuestoGuardado)
         {
-            //if (presupuestoGuardado.GUARDADO)
-            //{
-            //    presupuesto.Id = presupuestoGuardado.Id;
-            //    Servicio.PRESUPUESTO = presupuesto.Id;
-                
-            //    if (OnGuardar.HasDelegate)
-            //    {
-            //        await OnGuardar.InvokeAsync(Servicio);
-            //    }
-            //    verDialogPresupuesto = false;
-            //    await InvokeAsync(StateHasChanged);
-            //}
+            if (presupuestoGuardado.GUARDADO)
+            {
+                presupuesto.Id = presupuestoGuardado.Id;
+                Servicio.PRESUPUESTO = presupuesto.Id;
+
+                if (OnGuardar.HasDelegate)
+                {
+                    await OnGuardar.InvokeAsync(Servicio);
+                }
+                verDialogPresupuesto = false;
+                await InvokeAsync(StateHasChanged);
+            }
         }
 
         protected async Task Guardar()
