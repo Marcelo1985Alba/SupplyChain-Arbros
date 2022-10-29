@@ -46,8 +46,12 @@ namespace SupplyChain.Client.HelperService
                 {
                     queryString = $"pedidoIds={pedidoIds[i]}";
                 }
+                else
+                {
+                    queryString += $"&pedidoIds={pedidoIds[i]}";
+                }
 
-                queryString = $"&pedidoIds={pedidoIds[i]}";
+                
             }
             var url = $"{baseUri}{queryString}";
             return await http.GetFromJsonAsync<PedidoEncabezado>(url);
