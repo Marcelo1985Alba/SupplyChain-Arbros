@@ -10,21 +10,34 @@
       </ConnectionProperties>
       <rd:DataSourceID>8319d06e-7c7d-429b-b6e9-7e8dd6451363</rd:DataSourceID>
     </DataSource>
-    <DataSource Name="ArbrosDataSet6">
-      <ConnectionProperties>
-        <DataProvider>System.Data.DataSet</DataProvider>
-        <ConnectString>/* Local Connection */</ConnectString>
-      </ConnectionProperties>
-      <rd:DataSourceID>d7b5aafd-e301-4be9-af91-12bdfa0d9dad</rd:DataSourceID>
-    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="DataSet1">
       <Query>
-        <DataSourceName>ArbrosDataSet6</DataSourceName>
+        <DataSourceName>ArbrosDataSheet</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
+        <Field Name="Ingenieria">
+          <DataField>Ingenieria</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Proyecto">
+          <DataField>Proyecto</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Revision">
+          <DataField>Revision</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Nrodoc">
+          <DataField>Nrodoc</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Cliente">
+          <DataField>Cliente</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="SolicitudId">
           <DataField>SolicitudId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -353,10 +366,42 @@
           <DataField>Cuit</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="LineaEquipo">
+          <DataField>LineaEquipo</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CumpleApi">
+          <DataField>CumpleApi</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TipoValvula">
+          <DataField>TipoValvula</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TipoConexion">
+          <DataField>TipoConexion</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TipoTobera">
+          <DataField>TipoTobera</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Fuelle">
+          <DataField>Fuelle</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="EstadoFluido">
+          <DataField>EstadoFluido</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CapacidadRequerida">
+          <DataField>CapacidadRequerida</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>ArbrosDataSet6</rd:DataSetName>
-        <rd:SchemaPath>D:\Clientes\Arbros\Marcelo1985Alba\SupplyChain-Arbros\SupplyChain\Server\wwwroot\Report\Presupuesto\ArbrosDataSet6.xsd</rd:SchemaPath>
+        <rd:DataSetName>ArbrosDataSheet</rd:DataSetName>
+        <rd:SchemaPath>D:\Clientes\Arbros\Marcelo1985Alba\SupplyChain-Arbros\SupplyChain\Server\wwwroot\Report\Datasheet\DataSheet.xsd</rd:SchemaPath>
         <rd:TableName>vCalculoSolicitudes</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
@@ -369,9 +414,9 @@
       <Body>
         <ReportItems>
           <Line Name="Line47">
-            <Top>0.05595cm</Top>
+            <Top>0.05594cm</Top>
             <Left>7.71228in</Left>
-            <Height>7.79069in</Height>
+            <Height>7.80458in</Height>
             <Width>0in</Width>
             <Style>
               <Border>
@@ -380,9 +425,9 @@
             </Style>
           </Line>
           <Line Name="Line48">
-            <Top>0.05595cm</Top>
+            <Top>0.05594cm</Top>
             <Left>0.24788in</Left>
-            <Height>7.79069in</Height>
+            <Height>7.80458in</Height>
             <Width>0in</Width>
             <ZIndex>1</ZIndex>
             <Style>
@@ -422,8 +467,9 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
+            <Top>0.01411cm</Top>
             <Left>0.62957cm</Left>
-            <Height>0.60661cm</Height>
+            <Height>0.59249cm</Height>
             <Width>18.95956cm</Width>
             <ZIndex>3</ZIndex>
             <Style>
@@ -547,7 +593,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Diagrama:</Value>
+                                  <Value>Diagrama: </Value>
+                                  <Style>
+                                    <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!IndiceInstrumento.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -592,7 +644,13 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Nro de Item:</Value>
+                                <Value>Nro de Item: </Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                </Style>
+                              </TextRun>
+                              <TextRun>
+                                <Value>=Fields!NumeroHoja.Value</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
@@ -618,23 +676,12 @@
                       </Textbox>
                     </CellContents>
                   </TablixHeader>
-                  <KeepWithGroup>After</KeepWithGroup>
                 </TablixMember>
                 <TablixMember>
-                  <Group Name="TagId">
-                    <GroupExpressions>
-                      <GroupExpression>=Fields!TagId.Value</GroupExpression>
-                    </GroupExpressions>
-                  </Group>
-                  <SortExpressions>
-                    <SortExpression>
-                      <Value>=Fields!TagId.Value</Value>
-                    </SortExpression>
-                  </SortExpressions>
                   <TablixHeader>
                     <Size>3.82822in</Size>
                     <CellContents>
-                      <Textbox Name="Textbox17">
+                      <Textbox Name="Nombre">
                         <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
@@ -645,14 +692,14 @@
                                 <Style />
                               </TextRun>
                               <TextRun>
-                                <Value>=Fields!TagId.Value</Value>
+                                <Value>=Fields!Nombre.Value</Value>
                                 <Style />
                               </TextRun>
                             </TextRuns>
                             <Style />
                           </Paragraph>
                         </Paragraphs>
-                        <rd:DefaultName>Textbox17</rd:DefaultName>
+                        <rd:DefaultName>Nombre</rd:DefaultName>
                         <Style>
                           <Border>
                             <Style>None</Style>
@@ -689,6 +736,12 @@
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
                               </TextRun>
+                              <TextRun>
+                                <Value>=Fields!LineaEquipo.Value</Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                </Style>
+                              </TextRun>
                             </TextRuns>
                             <Style />
                           </Paragraph>
@@ -710,7 +763,6 @@
                       </Textbox>
                     </CellContents>
                   </TablixHeader>
-                  <KeepWithGroup>Before</KeepWithGroup>
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
@@ -746,7 +798,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>2.5778cm</Top>
+            <Top>2.57777cm</Top>
             <Left>0.62957cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.9596cm</Width>
@@ -789,7 +841,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Incendio:</Value>
+                                  <Value>Incendio: </Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -804,6 +856,7 @@
                               <Color>LightGrey</Color>
                               <Style>None</Style>
                             </Border>
+                            <BackgroundColor>Red</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -952,19 +1005,8 @@
                       </Textbox>
                     </CellContents>
                   </TablixHeader>
-                  <KeepWithGroup>After</KeepWithGroup>
                 </TablixMember>
                 <TablixMember>
-                  <Group Name="TagId2">
-                    <GroupExpressions>
-                      <GroupExpression>=Fields!TagId.Value</GroupExpression>
-                    </GroupExpressions>
-                  </Group>
-                  <SortExpressions>
-                    <SortExpression>
-                      <Value>=Fields!TagId.Value</Value>
-                    </SortExpression>
-                  </SortExpressions>
                   <TablixHeader>
                     <Size>3.82822in</Size>
                     <CellContents>
@@ -975,7 +1017,13 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Cumple con API 526: </Value>
+                                <Value>Cumple con API 526:  </Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                </Style>
+                              </TextRun>
+                              <TextRun>
+                                <Value>=Fields!CumpleApi.Value</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
@@ -1016,7 +1064,7 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Estanqueidad API 527:</Value>
+                                <Value>Estanqueidad API 527: Si</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
@@ -1042,7 +1090,6 @@
                       </Textbox>
                     </CellContents>
                   </TablixHeader>
-                  <KeepWithGroup>Before</KeepWithGroup>
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
@@ -1078,7 +1125,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>5.17433cm</Top>
+            <Top>5.1743cm</Top>
             <Left>0.62959cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.95958cm</Width>
@@ -1127,7 +1174,7 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=Fields!Tobera_Interno.Value</Value>
+                                  <Value>=Fields!TipoTobera.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -1258,7 +1305,13 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Tipo de Válvula:</Value>
+                                <Value>Tipo de Válvula: </Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                </Style>
+                              </TextRun>
+                              <TextRun>
+                                <Value>=Fields!TipoValvula.Value</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
@@ -1363,6 +1416,12 @@
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
                               </TextRun>
+                              <TextRun>
+                                <Value>=Fields!TipoConexion.Value</Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                </Style>
+                              </TextRun>
                             </TextRuns>
                             <Style />
                           </Paragraph>
@@ -1422,7 +1481,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>8.01073cm</Top>
+            <Top>8.0107cm</Top>
             <Left>0.62959cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.95956cm</Width>
@@ -1478,8 +1537,10 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=Fields!SolicitudId.Value</Value>
-                                  <Style />
+                                  <Value>=Fields!Disco_Interno.Value</Value>
+                                  <Style>
+                                    <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -1519,7 +1580,7 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=Fields!Servicio.Value</Value>
+                                  <Value>=Fields!Tobera_Interno.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -1556,7 +1617,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Fuelle:</Value>
+                                  <Value>=Fields!Fuelle.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -1601,7 +1662,7 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Cuerpo: </Value>
+                                <Value>Cuerpo:  </Value>
                                 <Style>
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
@@ -1656,7 +1717,7 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Bonete: </Value>
+                                <Value>Bonete:   </Value>
                                 <Style>
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
@@ -1703,7 +1764,7 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Resorte: </Value>
+                                <Value>Resorte:  </Value>
                                 <Style>
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
@@ -1771,7 +1832,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>10.7413cm</Top>
+            <Top>10.74127cm</Top>
             <Left>0.62959cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.95957cm</Width>
@@ -1817,7 +1878,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Estado de Fluido:</Value>
+                                  <Value>Estado de Fluido: [EstadoFluido]</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -1888,7 +1949,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Contrapresion Variable:</Value>
+                                  <Value>Contrapresion Variable: </Value>
+                                  <Style>
+                                    <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!ContrapresionVariable.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -1923,7 +1990,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Contrapresion Fija:</Value>
+                                  <Value>Contrapresion Fija: </Value>
+                                  <Style>
+                                    <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!ContrapresionFija.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -1960,7 +2033,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Sobrepresion:</Value>
+                                  <Value>Sobrepresion: </Value>
+                                  <Style>
+                                    <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!SobrepresionAdmisible.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -2005,6 +2084,9 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox132</rd:DefaultName>
+                          <Visibility>
+                            <Hidden>true</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2032,7 +2114,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Flujo Masico Por Area:</Value>
+                                  <Value>Flujo Masico Por Area: </Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -2104,7 +2186,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Relacion de Calores Especificos:</Value>
+                                  <Value>Relacion de Calores Especificos: </Value>
+                                  <Style>
+                                    <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!CocienteCaloresEspecificos_k.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -2139,7 +2227,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Factor de Compresibilidad, Z:</Value>
+                                  <Value>Factor de Compresibilidad, Z: </Value>
+                                  <Style>
+                                    <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!CoeficienteDeCompresibilidad_z.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -2176,7 +2270,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Viscosidad a Temperatura de fluido:</Value>
+                                  <Value>Viscosidad a Temperatura de fluido: </Value>
+                                  <Style>
+                                    <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!Viscusidad_Mu.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -2263,7 +2363,7 @@
                                 </Style>
                               </TextRun>
                               <TextRun>
-                                <Value>=Fields!NombreFase.Value</Value>
+                                <Value>=Fields!Descripcion.Value</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
@@ -2304,7 +2404,13 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Presion de Timbre:</Value>
+                                <Value>Presion de Set: </Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                </Style>
+                              </TextRun>
+                              <TextRun>
+                                <Value>=Fields!PresionApertura.Value</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
@@ -2345,7 +2451,13 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Temperatura Alivio:</Value>
+                                <Value>Temperatura Alivio: </Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                </Style>
+                              </TextRun>
+                              <TextRun>
+                                <Value>=Fields!Temperatura_de_Descarga_T.Value</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
@@ -2386,7 +2498,13 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Capacidad Requerida por Valvula:</Value>
+                                <Value>Capacidad Requerida por Valvula: </Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                </Style>
+                              </TextRun>
+                              <TextRun>
+                                <Value>=Fields!CapacidadRequerida.Value</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
@@ -2420,14 +2538,20 @@
                   <TablixHeader>
                     <Size>2.75322in</Size>
                     <CellContents>
-                      <Textbox Name="Textbox52">
+                      <Textbox Name="MasaMolecular_M">
                         <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Peso Molecular:</Value>
+                                <Value>Peso Molecular: </Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                </Style>
+                              </TextRun>
+                              <TextRun>
+                                <Value>=Fields!MasaMolecular_M.Value</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
@@ -2436,7 +2560,7 @@
                             <Style />
                           </Paragraph>
                         </Paragraphs>
-                        <rd:DefaultName>Textbox52</rd:DefaultName>
+                        <rd:DefaultName>MasaMolecular_M</rd:DefaultName>
                         <Style>
                           <Border>
                             <Style>None</Style>
@@ -2468,7 +2592,13 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Densidad Especifica:</Value>
+                                <Value>Densidad Especifica: </Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                </Style>
+                              </TextRun>
+                              <TextRun>
+                                <Value>=Fields!DensidadRelativa_G.Value</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                 </Style>
@@ -2532,7 +2662,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>15.48271cm</Top>
+            <Top>15.48268cm</Top>
             <Left>0.62958cm</Left>
             <Height>0.73033cm</Height>
             <Width>18.95959cm</Width>
@@ -2575,7 +2705,14 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Designacion de Orificio</Value>
+                                  <Value>Designacion de Orificio                  </Value>
+                                  <Style>
+                                    <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
+                                    <FontSize>11pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!Orifico.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
                                     <FontSize>11pt</FontSize>
@@ -2623,7 +2760,7 @@
                                   <Value>=Fields!CodigoFinal.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
-                                    <FontSize>11pt</FontSize>
+                                    <FontSize>12pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -2658,14 +2795,14 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Fabricante                                     </Value>
+                                  <Value>Marca/Fabricante:   </Value>
                                   <Style>
                                     <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
                                     <FontSize>11pt</FontSize>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>ARBROS S.A.</Value>
+                                  <Value>AERRE    ARBROS S.A.</Value>
                                   <Style>
                                     <FontFamily>Arial Black</FontFamily>
                                   </Style>
@@ -2702,7 +2839,14 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Clase de Brida Salida</Value>
+                                  <Value>Clase de Brida Salida </Value>
+                                  <Style>
+                                    <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
+                                    <FontSize>11pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!DescripcionSerieSalida.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
                                     <FontSize>11pt</FontSize>
@@ -2740,7 +2884,14 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Tipo de Cara Salida</Value>
+                                  <Value>Tipo de Cara Salida </Value>
+                                  <Style>
+                                    <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
+                                    <FontSize>11pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!DescripcionTipoSalida.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
                                     <FontSize>11pt</FontSize>
@@ -2799,6 +2950,13 @@
                                   <FontSize>11pt</FontSize>
                                 </Style>
                               </TextRun>
+                              <TextRun>
+                                <Value> (mm2)</Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
+                                  <FontSize>11pt</FontSize>
+                                </Style>
+                              </TextRun>
                             </TextRuns>
                             <Style />
                           </Paragraph>
@@ -2835,7 +2993,21 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Area de Orificio Efectiva Seleccionada:</Value>
+                                <Value>Area de Orificio Efectiva Seleccionada:   </Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
+                                  <FontSize>11pt</FontSize>
+                                </Style>
+                              </TextRun>
+                              <TextRun>
+                                <Value>=Fields!AreaOrificio.Value</Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
+                                  <FontSize>11pt</FontSize>
+                                </Style>
+                              </TextRun>
+                              <TextRun>
+                                <Value> (mm2)</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
                                   <FontSize>11pt</FontSize>
@@ -2877,7 +3049,14 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Medida</Value>
+                                <Value>Medida </Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
+                                  <FontSize>11pt</FontSize>
+                                </Style>
+                              </TextRun>
+                              <TextRun>
+                                <Value>=Fields!DescripcionMedida.Value</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
                                   <FontSize>11pt</FontSize>
@@ -2919,7 +3098,14 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Clase de Brida Entrada</Value>
+                                <Value>Clase de Brida Entrada </Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
+                                  <FontSize>11pt</FontSize>
+                                </Style>
+                              </TextRun>
+                              <TextRun>
+                                <Value>=Fields!DescripcionSerieEntrada.Value</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
                                   <FontSize>11pt</FontSize>
@@ -2961,7 +3147,14 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Tipo de Cara Entrada</Value>
+                                <Value>Tipo de Cara Entrada </Value>
+                                <Style>
+                                  <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
+                                  <FontSize>11pt</FontSize>
+                                </Style>
+                              </TextRun>
+                              <TextRun>
+                                <Value>=Fields!DescripcionTipoEntrada.Value</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
                                   <FontSize>11pt</FontSize>
@@ -3007,13 +3200,13 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>8.12957in</Height>
+        <Height>7.86669in</Height>
         <Style />
       </Body>
-      <Width>8.3456in</Width>
+      <Width>7.98726in</Width>
       <Page>
         <PageHeader>
-          <Height>1.43in</Height>
+          <Height>1.49667in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <ReportItems>
             <Rectangle Name="RectangleEncabezado">
@@ -3054,7 +3247,7 @@
                 </Textbox>
                 <Line Name="Line5">
                   <Left>12.21878cm</Left>
-                  <Height>3.33483cm</Height>
+                  <Height>3.50417cm</Height>
                   <Width>0cm</Width>
                   <ZIndex>1</ZIndex>
                   <Style>
@@ -3156,7 +3349,7 @@
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>Nro de Presupuesto: </Value>
+                          <Value>Nro de Presupuesto:  </Value>
                           <Style>
                             <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                           </Style>
@@ -3198,7 +3391,13 @@
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>Proyecto:</Value>
+                          <Value>Proyecto: </Value>
+                          <Style>
+                            <FontFamily>Bahnschrift SemiBold</FontFamily>
+                          </Style>
+                        </TextRun>
+                        <TextRun>
+                          <Value>=Fields!Proyecto.Value</Value>
                           <Style>
                             <FontFamily>Bahnschrift SemiBold</FontFamily>
                           </Style>
@@ -3233,9 +3432,16 @@
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>Revision:</Value>
+                          <Value>Revision:  </Value>
                           <Style>
                             <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                          </Style>
+                        </TextRun>
+                        <TextRun>
+                          <Value>=Fields!Revision.Value</Value>
+                          <Style>
+                            <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                            <FontWeight>Bold</FontWeight>
                           </Style>
                         </TextRun>
                       </TextRuns>
@@ -3268,9 +3474,16 @@
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>Cliente:</Value>
+                          <Value>Cliente:  </Value>
                           <Style>
                             <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                          </Style>
+                        </TextRun>
+                        <TextRun>
+                          <Value>=Fields!Cliente.Value</Value>
+                          <Style>
+                            <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                            <FontWeight>Bold</FontWeight>
                           </Style>
                         </TextRun>
                       </TextRuns>
@@ -3298,7 +3511,7 @@
                 </Textbox>
                 <Line Name="Line6">
                   <Left>4.19988cm</Left>
-                  <Height>3.33483cm</Height>
+                  <Height>3.483cm</Height>
                   <Width>0cm</Width>
                   <ZIndex>9</ZIndex>
                   <Style>
@@ -3350,9 +3563,16 @@
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>Doc cliente:</Value>
+                          <Value>Doc cliente:  </Value>
                           <Style>
                             <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                          </Style>
+                        </TextRun>
+                        <TextRun>
+                          <Value>=Fields!Nrodoc.Value</Value>
+                          <Style>
+                            <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                            <FontWeight>Bold</FontWeight>
                           </Style>
                         </TextRun>
                       </TextRuns>
@@ -3364,9 +3584,50 @@
                   <rd:DefaultName>Textbox4</rd:DefaultName>
                   <Top>2.59498cm</Top>
                   <Left>12.25406cm</Left>
-                  <Height>0.52266cm</Height>
+                  <Height>0.56346cm</Height>
                   <Width>6.3245cm</Width>
                   <ZIndex>11</ZIndex>
+                  <Style>
+                    <Border>
+                      <Style>None</Style>
+                    </Border>
+                    <VerticalAlign>Middle</VerticalAlign>
+                    <PaddingLeft>2pt</PaddingLeft>
+                    <PaddingRight>2pt</PaddingRight>
+                    <PaddingTop>2pt</PaddingTop>
+                    <PaddingBottom>2pt</PaddingBottom>
+                  </Style>
+                </Textbox>
+                <Textbox Name="Textbox45">
+                  <CanGrow>true</CanGrow>
+                  <KeepTogether>true</KeepTogether>
+                  <Paragraphs>
+                    <Paragraph>
+                      <TextRuns>
+                        <TextRun>
+                          <Value>Ingenieria: </Value>
+                          <Style>
+                            <FontFamily>Bahnschrift SemiBold</FontFamily>
+                          </Style>
+                        </TextRun>
+                        <TextRun>
+                          <Value>=Fields!Ingenieria.Value</Value>
+                          <Style>
+                            <FontFamily>Bahnschrift SemiBold</FontFamily>
+                          </Style>
+                        </TextRun>
+                      </TextRuns>
+                      <Style>
+                        <TextAlign>Left</TextAlign>
+                      </Style>
+                    </Paragraph>
+                  </Paragraphs>
+                  <rd:DefaultName>Textbox4</rd:DefaultName>
+                  <Top>2.55779cm</Top>
+                  <Left>4.341cm</Left>
+                  <Height>0.60065cm</Height>
+                  <Width>7.77195cm</Width>
+                  <ZIndex>12</ZIndex>
                   <Style>
                     <Border>
                       <Style>None</Style>
@@ -3382,7 +3643,7 @@
               <KeepTogether>true</KeepTogether>
               <Top>0.29737cm</Top>
               <Left>0.62962cm</Left>
-              <Height>3.33483cm</Height>
+              <Height>3.50417cm</Height>
               <Width>18.95956cm</Width>
               <Style>
                 <Border>
@@ -3398,11 +3659,12 @@
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>0.30556in</Height>
+          <Height>0.10556in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <Style />
         </PageFooter>
+        <PageHeight>10in</PageHeight>
         <LeftMargin>0.25in</LeftMargin>
         <RightMargin>0.25in</RightMargin>
         <TopMargin>0.25in</TopMargin>

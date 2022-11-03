@@ -159,7 +159,7 @@ namespace SupplyChain.Server.Repositorios
                 foreach (PedCli item in list)
                 {
                     //agregar nueva oci: en la edidicon debe venir con la oci del grupo
-                    if (item.NUMOCI == 0 && item.ESTADO == EstadoItem.Agregado && !list.Any(p=> p.NUMOCI > 0))
+                    if (item.NUMOCI == 0 && item.ESTADO == EstadoItem.Agregado)
                     {
                         item.NUMOCI = Convert.ToInt32(genera.VALOR1);
                     }
@@ -221,13 +221,13 @@ namespace SupplyChain.Server.Repositorios
 
                 if (item.CG_ART.StartsWith("0012") && item.PRESUPUESTOID > 0)
                 {
-                    //var servicio = Db.Servicios.Where(s => s.PRESUPUESTO == item.PRESUPUESTOID).FirstOrDefault();
-                    //servicio.FECHA = DateTime.Now;
-                    //servicio.PEDIDO = item.PEDIDO;
-                    //Db.Entry(servicio).State = EntityState.Modified;
-                    //Db.Entry(servicio).Property(p=> p.PEDIDO).IsModified = true;
-                    //Db.Entry(servicio).Property(p=> p.FECHA).IsModified = true;
-                    //await Db.SaveChangesAsync();
+                    var servicio = Db.Servicios.Where(s => s.PRESUPUESTO == item.PRESUPUESTOID).FirstOrDefault();
+                    servicio.FECHA = DateTime.Now;
+                    servicio.PEDIDO = item.PEDIDO;
+                    Db.Entry(servicio).State = EntityState.Modified;
+                    Db.Entry(servicio).Property(p=> p.PEDIDO).IsModified = true;
+                    Db.Entry(servicio).Property(p=> p.FECHA).IsModified = true;
+                    await Db.SaveChangesAsync();
                 }
             }
         }

@@ -1,0 +1,83 @@
+﻿@using Microsoft.AspNetCore.Components;
+@using Syncfusion.Blazor.Grids;
+@using System.Collections.Generic;
+@using System.Net.Http;
+@using SupplyChain.Shared.Models;
+@using Syncfusion.Blazor.Notifications;
+
+@inject HttpClient Http
+@using Syncfusion.Blazor.Buttons
+
+
+<SfButton OnClick="@((e)=> BuscarProveedores())" Disabled="buttondisableprove" IconCss="fa fa-search" CssClass="btn btn-sm btn-outline-primary" IsPrimary="false">Todos los proveedores</SfButton>
+
+<SfDialog Width="1000px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisibleProveedores" Target="">
+    <DialogTemplates>
+        <Content>
+            <h2>TODOS LOS PROVEEDORES</h2>
+            <div class="col-lg-12 control-section">
+                <div class="content-wrapper">
+                    <p>Seleccionar Proveedor</p>
+                    <div class="row">
+                        <SfGrid @ref="Gridprove" DataSource="@Busquedaprove" AllowPaging="true" AllowFiltering="true" 
+                                AllowResizing="true" GridLines="GridLine.Both" RowHeight="20" Height="290px" 
+                                AllowReordering="true" AllowExcelExport="false" AllowSelection="true" 
+                                AllowSorting="true" AllowTextWrap="true" EnableHover="true" Width="100%" ShowColumnMenu="true" EnableVirtualization="true" TValue="Proveedor">
+                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                            <GridEvents TValue="Proveedor" RowSelected="GetSelectedRecords" OnRecordDoubleClick="EnviarObjetoSeleccionado"></GridEvents>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(Proveedor.Id) HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                <GridColumn Field=@nameof(Proveedor.DES_PROVE) HeaderText="Razon Social" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    </div>
+                </div>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
+@code {
+
+
+    [Parameter] public bool IsVisibleProveedores { get; set; } = false;
+    [Parameter] public bool buttondisableprove { get; set; } = true;
+
+    [Parameter] public EventCallback<Proveedor> OnProveSeleccionado { get; set; }
+
+    public SfToast ToastObj;
+    protected NotificacionToast NotificacionObj;
+    protected bool ToastVisible { get; set; } = false;
+    public Proveedor Selected { get; set; }
+
+    protected List<Proveedor> Busquedaprove = new();
+    protected SfGrid<Proveedor> Gridprove;
+
+
+    protected async Task BuscarProveedores()
+    {
+        Busquedaprove = await Http.GetFromJsonAsync<List<Proveedor>>($"api/Proveedores");
+        IsVisibleProveedores = true;
+    }
+
+    protected void GetSelectedRecords(RowSelectEventArgs<Proveedor> args)
+    {
+        args.PreventRender = true; //without this, you may see noticable delay in selection with 75 rows in grid.
+                                   //var items = await this.Grid.GetSelectedRecords();
+        Selected = args.Data;
+    }
+
+    public async Task EnviarObjetoSeleccionado()
+    {
+        IsVisibleProveedores = false;
+        await OnProveSeleccionado.InvokeAsync(Selected);
+
+    }
+
+
+
+    public async Task OnSelectedProve()
+    {
+
+    }
+}

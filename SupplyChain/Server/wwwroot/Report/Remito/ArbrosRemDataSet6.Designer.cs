@@ -347,14 +347,6 @@ namespace SupplyChain.Server.wwwroot.Report.Remito {
             
             private global::System.Data.DataColumn columnCANTIDAD;
             
-            private global::System.Data.DataColumn columnCUIT_CLIENTE;
-            
-            private global::System.Data.DataColumn columnDESCRIPCION_IVA;
-            
-            private global::System.Data.DataColumn columnTRANSPORTE;
-            
-            private global::System.Data.DataColumn columnCALLE_TRANSPORTE;
-            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public vRemitoReporteDataTable() {
@@ -662,38 +654,6 @@ namespace SupplyChain.Server.wwwroot.Report.Remito {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CUIT_CLIENTEColumn {
-                get {
-                    return this.columnCUIT_CLIENTE;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn DESCRIPCION_IVAColumn {
-                get {
-                    return this.columnDESCRIPCION_IVA;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn TRANSPORTEColumn {
-                get {
-                    return this.columnTRANSPORTE;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CALLE_TRANSPORTEColumn {
-                get {
-                    return this.columnCALLE_TRANSPORTE;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -763,11 +723,7 @@ namespace SupplyChain.Server.wwwroot.Report.Remito {
                         string CAMPOCOM7, 
                         string CAMPOCOM8, 
                         string REMITO, 
-                        decimal CANTIDAD, 
-                        string CUIT_CLIENTE, 
-                        string DESCRIPCION_IVA, 
-                        string TRANSPORTE, 
-                        string CALLE_TRANSPORTE) {
+                        decimal CANTIDAD) {
                 vRemitoReporteRow rowvRemitoReporteRow = ((vRemitoReporteRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         BONIFIC,
@@ -803,11 +759,7 @@ namespace SupplyChain.Server.wwwroot.Report.Remito {
                         CAMPOCOM7,
                         CAMPOCOM8,
                         REMITO,
-                        CANTIDAD,
-                        CUIT_CLIENTE,
-                        DESCRIPCION_IVA,
-                        TRANSPORTE,
-                        CALLE_TRANSPORTE};
+                        CANTIDAD};
                 rowvRemitoReporteRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowvRemitoReporteRow);
                 return rowvRemitoReporteRow;
@@ -864,10 +816,6 @@ namespace SupplyChain.Server.wwwroot.Report.Remito {
                 this.columnCAMPOCOM8 = base.Columns["CAMPOCOM8"];
                 this.columnREMITO = base.Columns["REMITO"];
                 this.columnCANTIDAD = base.Columns["CANTIDAD"];
-                this.columnCUIT_CLIENTE = base.Columns["CUIT_CLIENTE"];
-                this.columnDESCRIPCION_IVA = base.Columns["DESCRIPCION_IVA"];
-                this.columnTRANSPORTE = base.Columns["TRANSPORTE"];
-                this.columnCALLE_TRANSPORTE = base.Columns["CALLE_TRANSPORTE"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -941,14 +889,6 @@ namespace SupplyChain.Server.wwwroot.Report.Remito {
                 base.Columns.Add(this.columnREMITO);
                 this.columnCANTIDAD = new global::System.Data.DataColumn("CANTIDAD", typeof(decimal), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCANTIDAD);
-                this.columnCUIT_CLIENTE = new global::System.Data.DataColumn("CUIT_CLIENTE", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCUIT_CLIENTE);
-                this.columnDESCRIPCION_IVA = new global::System.Data.DataColumn("DESCRIPCION_IVA", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDESCRIPCION_IVA);
-                this.columnTRANSPORTE = new global::System.Data.DataColumn("TRANSPORTE", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTRANSPORTE);
-                this.columnCALLE_TRANSPORTE = new global::System.Data.DataColumn("CALLE_TRANSPORTE", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCALLE_TRANSPORTE);
                 this.columnBONIFIC.AllowDBNull = false;
                 this.columnCG_CLI.AllowDBNull = false;
                 this.columnCLIENTE.MaxLength = 100;
@@ -999,11 +939,6 @@ namespace SupplyChain.Server.wwwroot.Report.Remito {
                 this.columnREMITO.AllowDBNull = false;
                 this.columnREMITO.MaxLength = 13;
                 this.columnCANTIDAD.ReadOnly = true;
-                this.columnCUIT_CLIENTE.ReadOnly = true;
-                this.columnCUIT_CLIENTE.MaxLength = 8000;
-                this.columnDESCRIPCION_IVA.MaxLength = 50;
-                this.columnTRANSPORTE.MaxLength = 50;
-                this.columnCALLE_TRANSPORTE.MaxLength = 50;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1578,71 +1513,6 @@ namespace SupplyChain.Server.wwwroot.Report.Remito {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string CUIT_CLIENTE {
-                get {
-                    try {
-                        return ((string)(this[this.tablevRemitoReporte.CUIT_CLIENTEColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CUIT_CLIENTE\' de la tabla \'vRemitoReporte\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevRemitoReporte.CUIT_CLIENTEColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string DESCRIPCION_IVA {
-                get {
-                    try {
-                        return ((string)(this[this.tablevRemitoReporte.DESCRIPCION_IVAColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'DESCRIPCION_IVA\' de la tabla \'vRemitoReporte\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevRemitoReporte.DESCRIPCION_IVAColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string TRANSPORTE {
-                get {
-                    try {
-                        return ((string)(this[this.tablevRemitoReporte.TRANSPORTEColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TRANSPORTE\' de la tabla \'vRemitoReporte\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevRemitoReporte.TRANSPORTEColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string CALLE_TRANSPORTE {
-                get {
-                    try {
-                        return ((string)(this[this.tablevRemitoReporte.CALLE_TRANSPORTEColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CALLE_TRANSPORTE\' de la tabla \'vRemitoReporte\' es DBNull." +
-                                "", e);
-                    }
-                }
-                set {
-                    this[this.tablevRemitoReporte.CALLE_TRANSPORTEColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public bool IsCLIENTENull() {
                 return this.IsNull(this.tablevRemitoReporte.CLIENTEColumn);
             }
@@ -1771,54 +1641,6 @@ namespace SupplyChain.Server.wwwroot.Report.Remito {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public void SetCANTIDADNull() {
                 this[this.tablevRemitoReporte.CANTIDADColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCUIT_CLIENTENull() {
-                return this.IsNull(this.tablevRemitoReporte.CUIT_CLIENTEColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCUIT_CLIENTENull() {
-                this[this.tablevRemitoReporte.CUIT_CLIENTEColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsDESCRIPCION_IVANull() {
-                return this.IsNull(this.tablevRemitoReporte.DESCRIPCION_IVAColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetDESCRIPCION_IVANull() {
-                this[this.tablevRemitoReporte.DESCRIPCION_IVAColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsTRANSPORTENull() {
-                return this.IsNull(this.tablevRemitoReporte.TRANSPORTEColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetTRANSPORTENull() {
-                this[this.tablevRemitoReporte.TRANSPORTEColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCALLE_TRANSPORTENull() {
-                return this.IsNull(this.tablevRemitoReporte.CALLE_TRANSPORTEColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCALLE_TRANSPORTENull() {
-                this[this.tablevRemitoReporte.CALLE_TRANSPORTEColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -2015,10 +1837,6 @@ namespace SupplyChain.Server.wwwroot.Report.Remito.ArbrosRemDataSet6TableAdapter
             tableMapping.ColumnMappings.Add("CAMPOCOM8", "CAMPOCOM8");
             tableMapping.ColumnMappings.Add("REMITO", "REMITO");
             tableMapping.ColumnMappings.Add("CANTIDAD", "CANTIDAD");
-            tableMapping.ColumnMappings.Add("CUIT_CLIENTE", "CUIT_CLIENTE");
-            tableMapping.ColumnMappings.Add("DESCRIPCION_IVA", "DESCRIPCION_IVA");
-            tableMapping.ColumnMappings.Add("TRANSPORTE", "TRANSPORTE");
-            tableMapping.ColumnMappings.Add("CALLE_TRANSPORTE", "CALLE_TRANSPORTE");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -2036,7 +1854,9 @@ namespace SupplyChain.Server.wwwroot.Report.Remito.ArbrosRemDataSet6TableAdapter
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[2];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT *\r\nFROM     vRemitoReporte";
+            this._commandCollection[0].CommandText = @"SELECT REMITO, PEDIDO, FE_PED, BONIFIC, CG_CLI, CLIENTE, CALLE_CLIENTE, CP_CLIENTE, DIRENT, CONDICION_PAGO, CONDICION_ENTREGA, PROVINCIA_CLIENTE, TELEFONO_CLIENTE, EMAIL_CLIENTE, NUMOCI, ORCO, CG_ART, 
+                  ARTICULO, CANTIDAD, PORC_DESCUENTO, PREC_UNIT, TOTAL_ITEM, MONEDA, CAMPOCOM1, CAMPOCOM2, CAMPOCOM3, CAMPOCOM4, CAMPOCOM5, CAMPOCOM6, CAMPOCOM7, CAMPOCOM8, Construccion, Marca
+FROM     vRemitoReporte";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;

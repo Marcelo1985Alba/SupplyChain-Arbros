@@ -41,8 +41,15 @@ namespace SupplyChain.Server.Repositorios
 
             try
             {
+
+                if (string.IsNullOrEmpty(entity.DIRENT))
+                {
+                    entity.DIRENT = string.Empty;
+                }
                 await base.Agregar(entity);
                 await CerrarSolicitud(entity);
+
+                await AsignarServicio(entity);
             }
             catch (Exception)
             {
@@ -51,12 +58,36 @@ namespace SupplyChain.Server.Repositorios
   
         }
 
+        private async Task AsignarServicio(Presupuesto entity)
+        {
+            foreach (var item in entity.Items.Where(p => p.CG_ART.StartsWith("0012")))
+            {
+
+                if (item.CG_ART.StartsWith("0012") && item.SOLICITUDID > 0)
+                {
+                    var servicio = Db.Servicios.Where(s => s.SOLICITUD == item.SOLICITUDID).FirstOrDefault();
+                    if (servicio is not null )
+                    {
+                        servicio.FECHA = DateTime.Now;
+                        servicio.PRESUPUESTO = item.PRESUPUESTOID;
+                        Db.Entry(servicio).State = EntityState.Modified;
+                        Db.Entry(servicio).Property(p => p.PRESUPUESTO).IsModified = true;
+                        Db.Entry(servicio).Property(p => p.FECHA).IsModified = true;
+                        await Db.SaveChangesAsync(); 
+                    }
+                }
+            }
+        }
 
         public override async Task Actualizar(Presupuesto entity)
         {
 
             try
             {
+                if (string.IsNullOrEmpty(entity.DIRENT))
+                {
+                    entity.DIRENT = string.Empty;
+                }
                 await base.Actualizar(entity);
                 //cerrar solicitudes asociadas
                 await CerrarSolicitud(entity);

@@ -35,6 +35,8 @@
                 <GridColumn Field=@nameof(vSolicitudes.DES_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
                 <GridColumn Field=@nameof(vSolicitudes.Cuit) HeaderText="Cuit" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
                 <GridColumn Field=@nameof(vSolicitudes.CalcId) HeaderText="CalculoId" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(vSolicitudes.NumeroPlano) TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(vSolicitudes.DescripcionTag) TextAlign="TextAlign.Left" Width="100px"></GridColumn>
 
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>

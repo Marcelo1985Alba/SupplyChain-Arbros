@@ -138,8 +138,8 @@
         }
         else
         {
-            MensajeServidor = "Usuario o Contraseña incorrecta.";
-            ;
+            MensajeServidor = await httpResponse.HttpResponseMessage.Content.ReadAsStringAsync();
+            
             Console.WriteLine(await httpResponse.HttpResponseMessage.Content.ReadAsStringAsync());
             await this.ToastObj.Show(new ToastModel
             {

@@ -42,7 +42,7 @@ namespace SupplyChain.Client.Shared.BuscarSolicitud
             }
             else
             {
-                solicitudes = response.Response.OrderBy(s=> s.Id).ToList();
+                solicitudes = response.Response.OrderByDescending(s=> s.Id).ToList();
                 //if (Cg_Cli_Comparar > 0)
                 //{
                 //    solicitudes = solicitudes.Where(c => c.CG_CLI == Cg_Cli_Comparar).ToList();

@@ -133,9 +133,13 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                 guardado = await Actualizar(Solicitud);
             }
 
-            Show = false;
-            Solicitud.Guardado = guardado;
-            await OnGuardar.InvokeAsync(Solicitud);
+            if (guardado)
+            {
+                Show = false;
+                Solicitud.Guardado = guardado;
+                await OnGuardar.InvokeAsync(Solicitud);
+            }
+            
         }
 
         public async Task Hide()

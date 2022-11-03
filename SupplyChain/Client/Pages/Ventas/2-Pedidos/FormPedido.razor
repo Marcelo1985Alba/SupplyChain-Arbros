@@ -97,7 +97,7 @@
                     </div>
                     <div class="form-group col-md-4">
                         <label class="">Transporte:</label>
-                        <SfDropDownList TValue="int" TItem="vTransporte" DataSource="@Transportes"
+                        <SfDropDownList TValue="int" TItem="vTransporte" DataSource="@Transportes" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
                                         @bind-Value="Pedido.CG_TRANS">
                             <DropDownListFieldSettings Value="Id" Text="DESCRIPCION"></DropDownListFieldSettings>
                         </SfDropDownList>
@@ -115,7 +115,7 @@
                             <ToastPosition X="Center" Y="Top"></ToastPosition>
                         </SfToast>
 
-                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="90px"
+                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="112px"
                                 @ref="refGridItems" DataSource="@Pedido.Items" Width="100%" ID="grdItemsPresup"
                                 AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -245,8 +245,6 @@
         </Content>
         <FooterTemplate>
 
-            <div class="container-total">
-
                 @{
                     var totalItems = Math.Round(Pedido.Items.Sum(i => i.TOTAL), 2);
                     var bonficacion = Math.Round(totalItems * Pedido.BONIFIC / 100, 2);
@@ -261,14 +259,25 @@
                         moneda = "U$S";
                     }
 
-                    <div class="total-price">SUBTOTAL @moneda : @totalItems</div>
-                    <div class="total-price">BONIFICACION (@Pedido.BONIFIC %) @moneda : @bonficacion</div>
-                    <div class="total-price">TOTAL @moneda : @total</div>
+                    
+                    
+                    
                 }
-
+            <div class="row" style="text-align:left">
+                <div class="col-3">
+                    <div class="total-price">SUBTOTAL @moneda : @totalItems</div>
+                </div>
+                <div class="col-5" style="text-align:center">
+                    <div class="total-price">BONIFICACION (@Pedido.BONIFIC %) @moneda : @bonficacion</div>
+                </div>
+                <div class="col-4" style="text-align:right">
+                    <div class="total-price">TOTAL @moneda : @total</div>
+                </div>
             </div>
+
+
             <div class=" mt-5">
-                
+
                 <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
                 <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async()=>await Hide())" IconCss="fa fa-window-close-o"></SfButton>
             </div>

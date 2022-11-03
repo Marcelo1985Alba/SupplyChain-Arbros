@@ -67,7 +67,7 @@ namespace SupplyChain
         {
             try
             {
-                var Servicios = await _serviciosRepository.Obtener(s => s.PEDIDO == pedido.ToString()).FirstOrDefaultAsync();
+                var Servicios = await _serviciosRepository.Obtener(s => s.PEDIDO == pedido).FirstOrDefaultAsync();
 
                 return Servicios == null ? NotFound() : Ok(Servicios);
             }

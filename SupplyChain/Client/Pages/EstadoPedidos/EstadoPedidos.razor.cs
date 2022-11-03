@@ -331,13 +331,10 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             //2   PEDIDO CONFIRMADO
             //3   EN PROCESO
             //4   CON TOTALIDAD DE COMPONENTES
-            //5   ARMADO Y CALIBRACION
-            //6   PENDIENTE DE REMITIR
-            //7   A ENTREGAR
-            //8   ENTREGADO
-            //9   FACTURADO
-            //10  ANULADO
-            
+            //5   A REMITIR
+            //6   A ENTREGAR
+            //7   ENTREGADO
+
             if (args.Text == "1")
                 args.Text = "PEDIDO A CONFIRMAR";
             else if (args.Text == "2")
@@ -346,14 +343,14 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
                 args.Text = "EN PROCESO";
             //else if (args.Text == "4")
             //    args.Text = "CON TOTALIDAD DE COMPONENTES";
+            else if (args.Text == "4")
+                args.Text = "ARMADO Y PRUEBA";
             else if (args.Text == "5")
-                args.Text = "ARMADO Y CALIBRACION";
+                args.Text = "A REMITIR";
             else if (args.Text == "6")
-                args.Text = "PENDIENTE DE REMITIR";
-            else if (args.Text == "7")
                 args.Text = "A ENTREGAR";
-            else if (args.Text == "8")
-                args.Text = $"ENTREGADO\n{PedidoSeleccionado.REMITO}";
+            else if (args.Text == "7")
+                args.Text = "ENTREGADO";
             //else if (args.Text == "9")
             //    args.Text = "FACTURADO";
             else

@@ -44,6 +44,7 @@ namespace SupplyChain
         public DbSet<TipoArea> TipoArea { get; set; }
         public DbSet<TipoCelda> TipoCelda { get; set; }
         public DbSet<TiposNoConf> TiposNoConf { get; set; }
+        public DbSet<Condven> Condven { get; set; }
         public DbSet<Indic> Indic { get; set; }
         public DbSet<Parada> Parada { get; set; }
         public DbSet<ProTarea> ProTarea { get; set; }
@@ -85,7 +86,6 @@ namespace SupplyChain
         public DbSet<NoConformidadesQuery> NoConformidadesQuery { get; set; }
         public DbSet<NoConformidadesListaAcciones> NoConformidadesListaAcciones { get; set; }
         public DbSet<NoConformidadesAcciones> NoConformidadesAcciones { get; set; }
-        public DbSet<Compra> ComprasDbSet { get; set; }
         public DbSet<vEstadEventos> vEstadEventos { get; set; }
 
 
@@ -132,6 +132,12 @@ namespace SupplyChain
 
         public DbSet<vPedidoAlta> vPedidoAltas { get; set; }
         public DbSet<MantCeldas> MantCeldas { get; set; }
+
+        public DbSet<Matprove_busquedaprove> Matprove_busquedaprove { get; set; }
+
+        public DbSet<Proveedores_compras> proveedores_compras { get; set; }
+        public DbSet<vUsuario> vUsuarios { get; set; }
+
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -252,6 +258,7 @@ namespace SupplyChain
             modelBuilder.Entity<vPresupuestoReporte>().HasNoKey().ToView("vPresupuestoReporte");
             modelBuilder.Entity<vPedidoReporte>().HasNoKey().ToView("vPedidoReporte");
             modelBuilder.Entity<vRemitoReporte>().HasNoKey().ToView("vRemitoReporte");
+            modelBuilder.Entity<vUsuario>().HasNoKey().ToView("vUsuarios");
         }
     }
 }

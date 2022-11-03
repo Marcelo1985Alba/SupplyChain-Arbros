@@ -23,6 +23,14 @@
     <ToastPosition X="Center" Y="Top"></ToastPosition>
 </SfToast>
 
+<div class="row">
+    <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+    </div>
+</div>
+
 <div class="col-lg-12 control-section">
         <div class="content-wrapper">
             <div class="row">
@@ -78,9 +86,9 @@
                                     <label>Solicitud:</label>
                                     
                                     <div class="form-row">
-                                        @*<div class="col-10">
+                                        <div class="col-10">
                                             <SfNumericTextBox ID="SOLICITUD" @bind-Value="@(servicio.SOLICITUD)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
-                                        </div>*@
+                                        </div>
                                         <div class="col-2">
                                             <SfButton CssClass="e-smal e-round e-success" IconCss="e-icons e-save"
                                                       HtmlAttributes="@presupuestoButton" OnClick="@(async()=> await MostrarSolicitud())"></SfButton>
@@ -737,25 +745,29 @@
                 }
                 </Template>
                 </GridEditSettings>
-                    <GridColumns>
-                        <GridColumn Field=@nameof(Service.Id) HeaderText="Id" AllowSearching="true" Visible="false" IsPrimaryKey="true"
-                                    TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                        @*<GridColumn Field=@nameof(Service.SOLICITUD) HeaderText="Solicitud" AllowSearching="true"
-                                    TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                        <GridColumn Field=@nameof(Service.PRESUPUESTO) HeaderText="Presupuesto" AllowSearching="true"
-                                    TextAlign="TextAlign.Left" Width="90"></GridColumn>*@
-                        <GridColumn Field=@nameof(Service.PEDIDO) HeaderText="Pedido" AllowSearching="true"
-                                    TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                        <GridColumn Field=@nameof(Service.FECHA) AutoFit="true" HeaderText="Fecha" Format="dd/MM/yyyy"></GridColumn>
-                        <GridColumn Field=@nameof(Service.CLIENTE) AutoFit="true" HeaderText="Cliente"></GridColumn>
-                        <GridColumn Field=@nameof(Service.NSERIE) AutoFit="true" HeaderText="Numero de Serie" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="150"></GridColumn>
-                        <GridColumn Field=@nameof(Service.MARCA) AutoFit="true" HeaderText="Marca" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="120"></GridColumn>
-                        <GridColumn Field=@nameof(Service.MODELO) AutoFit="true" HeaderText="Modelo" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
-                        <GridColumn Field=@nameof(Service.MEDIDA) AutoFit="true" HeaderText="Medida" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
-                        <GridColumn Field=@nameof(Service.SERIE) AutoFit="true" HeaderText="Serie" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
-                        <GridColumn Field=@nameof(Service.IDENTIFICACION) AutoFit="true"></GridColumn>
-                        <GridColumn Field=@nameof(Service.OBSERV) AutoFit="true"></GridColumn>
-                    </GridColumns>
+                <GridColumns>
+                    <GridColumn Field=@nameof(Service.Id) HeaderText="Id" AllowSearching="true" Visible="false" IsPrimaryKey="true"
+                                TextAlign="TextAlign.Left" Width="90"></GridColumn>
+                    <GridColumn Field=@nameof(Service.SOLICITUD) HeaderText="Solicitud" AllowSearching="true"
+                                TextAlign="TextAlign.Left" Width="90"></GridColumn>
+                    <GridColumn Field=@nameof(Service.PRESUPUESTO) HeaderText="Presupuesto" AllowSearching="true"
+                                TextAlign="TextAlign.Left" Width="90"></GridColumn>
+                    <GridColumn Field=@nameof(Service.PEDIDO) HeaderText="Pedido" AllowSearching="true"
+                                TextAlign="TextAlign.Left" Width="90"></GridColumn>
+                    <GridColumn Field=@nameof(Service.REMITO) HeaderText="Remito" AllowSearching="true"
+                                TextAlign="TextAlign.Left" Width="90"></GridColumn>
+                    <GridColumn Field=@nameof(Service.DESCARTICULO) HeaderText="Articulo" AllowSearching="true"
+                                TextAlign="TextAlign.Left" Width="190"></GridColumn>
+                    <GridColumn Field=@nameof(Service.FECHA) AutoFit="true" HeaderText="Fecha" Format="dd/MM/yyyy"></GridColumn>
+                    <GridColumn Field=@nameof(Service.CLIENTE) AutoFit="true" HeaderText="Cliente"></GridColumn>
+                    <GridColumn Field=@nameof(Service.NSERIE) AutoFit="true" HeaderText="Numero de Serie" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="150"></GridColumn>
+                    <GridColumn Field=@nameof(Service.MARCA) AutoFit="true" HeaderText="Marca" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="120"></GridColumn>
+                    <GridColumn Field=@nameof(Service.MODELO) AutoFit="true" HeaderText="Modelo" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.MEDIDA) AutoFit="true" HeaderText="Medida" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.SERIE) AutoFit="true" HeaderText="Serie" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.IDENTIFICACION) AutoFit="true"></GridColumn>
+                    <GridColumn Field=@nameof(Service.OBSERV) AutoFit="true"></GridColumn>
+                </GridColumns>
                 </SfGrid>
             </div>
         </div>
@@ -790,6 +802,10 @@
         [CascadingParameter] public MainLayout Layout { get; set; }
 
         [Parameter] public int Pedido { get; set; } = 0;
+        #region "Vista Grilla"
+        protected const string APPNAME = "grdServicio";
+        protected string state;
+        #endregion
 
         #region "Variables"
         protected bool visibleDialogDetalleServicio = false;
@@ -900,7 +916,7 @@
             if (Pedido == 0)
             {
 
-                await GetServicios(TipoFiltro.Todos);
+                await GetServicios(TipoFiltro.Pendientes);
             }
             else
             {
@@ -915,7 +931,7 @@
                 {
                     servicios = new();
                     servicios.Add(responseServicePedido.Response);
-                    servDesc = servicios.Where(s => s.PEDIDO == Pedido.ToString()).ToList();
+                    servDesc = servicios.Where(s => s.PEDIDO == Pedido).ToList();
                 }
             }
 
@@ -1029,6 +1045,16 @@
             await base.OnInitializedAsync();
         }
 
+        #region "Eventos Vista Grilla"
+        protected async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
+        {
+            await Grid.SetPersistData(vistasGrillas.Layout);
+        }
+        protected async Task OnReiniciarGrilla()
+        {
+            await Grid.ResetPersistData();
+        }
+        #endregion
 
         private async Task GetServicios(TipoFiltro tipoFiltro = TipoFiltro.Todos)
         {
@@ -1042,7 +1068,7 @@
             else
             {
                 servicios = responseService.Response;
-                servDesc = servicios.Where(s => s.PEDIDO == Pedido.ToString()).ToList();
+                servDesc = servicios.Where(s => s.PEDIDO == Pedido).ToList();
             }
         }
 
@@ -1781,6 +1807,7 @@
                 }
 
             }
+            state = await Grid.GetPersistData();
 
             //if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
             //{

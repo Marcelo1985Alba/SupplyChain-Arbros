@@ -72,6 +72,8 @@ namespace SupplyChain.Server.Controllers
             //await _presupuestoRepository.BeginTransaction();
             try
             {
+                var userName = HttpContext.User.Identity.Name;
+                presupuesto.USUARIO = userName;
                 await _presupuestoRepository.Agregar(presupuesto);
                 await _presupuestoRepository.ActualizarCalculoConPresupuestoByIdCalculo(presupuesto.Id);
                 //await _presupuestoRepository.CommitTransaction();
@@ -79,8 +81,10 @@ namespace SupplyChain.Server.Controllers
             }
             catch (Exception ex)
             {
-                //await _presupuestoRepository.RollbackTransaction();
-                return BadRequest(ex.Message);
+                var details = ex.Message;
+                details += ex.InnerException?.Message;
+
+                return BadRequest(details);
             }
 
             return CreatedAtAction("GetPresupuesto", new { id = presupuesto.Id }, presupuesto);

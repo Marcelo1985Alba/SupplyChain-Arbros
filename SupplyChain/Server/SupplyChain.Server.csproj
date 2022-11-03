@@ -180,9 +180,6 @@
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>DataSheet.Designer.cs</LastGenOutput>
     </Content>
-    <Content Update="wwwroot\Report\Datasheet\CotizacionV1.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Update="wwwroot\Report\Pedido\ArbrosPedDataSet6.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

@@ -968,7 +968,10 @@ namespace SupplyChain.Client.Pages.Panel_Control
                 .Sum(s => s.TOT_DOL), 2);
 
             TituloPedidosIngresadosCategoria = $"% por Categoria del {añoSeleccionadoPedidosIngresados} (US$ {totalPeriodoSeleccionado})";
-            
+
+
+            PromedioPedidosIngresadosMensuales = Convert.ToInt32(PedidosIngresadosMensuales.Average(p => p.YSerieName));
+
             PedidosIngresadosCategoria = DataPedidosIngresados
                 .Where(p => p.ANIO == añoSeleccionadoPedidosIngresados)
                 .GroupBy(g => new { g.CATEGORIA })
