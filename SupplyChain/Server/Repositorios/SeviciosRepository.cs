@@ -19,7 +19,7 @@ namespace SupplyChain.Server.Repositorios
         {
             if (tipoFiltro == TipoFiltro.Pendientes)
             {
-                return await base.Obtener(s => s.PEDIDO == 0).ToListAsync();
+                return await base.Obtener(s => string.IsNullOrEmpty(s.REMITO)).ToListAsync();
                 //return await base.Obtener(s => string.IsNullOrEmpty(s.PEDIDO)).ToListAsync();
             }
 
