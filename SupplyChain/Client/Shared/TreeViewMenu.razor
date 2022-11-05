@@ -38,8 +38,10 @@ else
     private AuthenticationState authState;
     protected ExpandAction Expand = ExpandAction.Click;
     protected bool IsAdmin = false;
-    protected bool IsProd = false;
     protected bool IsVentas = false;
+    protected bool IsProd = false;
+    protected bool IsIngenieria = false;
+    protected bool IsCompras = false;
     protected List<Modulo> dbMenu = new List<Modulo>();
     [Parameter] public EventCallback<bool> OnChangeToggle { get; set; }
 
@@ -59,6 +61,8 @@ else
             IsAdmin = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Administrador"));
             IsProd = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Produccion"));
             IsVentas = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Ventas"));
+            IsIngenieria = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Ingenieria"));
+            IsCompras = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Compras"));
             dbMenu = await Http.GetFromJsonAsync<List<Modulo>>("api/Modulo");
 
             if (IsAdmin || IsVentas)
@@ -105,6 +109,58 @@ else
                     dbMenu = dbMenu.Where(m => !exclusiones.Contains(m.Id)).ToList();
                 }
 
+            }
+            else if (IsVentas)
+            {
+                dbMenu = dbMenu.Where(m => (m.Id == 2 || m.ParentId == 2) //Ventas: Logistica y servicios
+                                                                          //||
+                                                                          //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
+                                                                          //||
+                                                                          //(m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
+                                                                          //||
+                                                                          //(m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
+                                                                          //||
+                                                                          //(m.Id == 25 || m.ParentId == 25) //Ingenieria
+                                                                          //||
+                                                                          //(m.Id == 40) //Mnat celdas
+                    ).ToList();
+
+                if (authState.User.Identity.Name.ToLower() == "planta")
+                {
+                    int[] exclusiones = new int[] { 2, 18, 25, 40 }; //quito los menus
+                    dbMenu = dbMenu.Where(m => !exclusiones.Contains(m.Id)).ToList();
+                }
+
+            }
+            else if (IsIngenieria)
+            {
+                dbMenu = dbMenu.Where(m => (m.Id == 25 || m.ParentId == 25) //Ventas: Logistica y servicios
+                                                                            //||
+                                                                            //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
+                                                                            //||
+                                                                            //(m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
+                                                                            //||
+                                                                            //(m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
+                                                                            //||
+                                                                            //(m.Id == 25 || m.ParentId == 25) //Ingenieria
+                                                                            //||
+                                                                            //(m.Id == 40) //Mnat celdas
+                    ).ToList();
+            }
+            else if (IsCompras)
+            {
+                dbMenu = dbMenu.Where(m => (m.Id == 45 || m.ParentId == 45) //Ventas: Logistica y servicios
+                                                                            //||
+                                                                            //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
+                                                                            //||
+                                                                            //(m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
+                                                                            //||
+                                                                            //(m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
+                                                                            //||
+                                                                            //(m.Id == 25 || m.ParentId == 25) //Ingenieria
+                                                                            //||
+                                                                            //(m.Id == 40) //Mnat celdas
+                    ).ToList();
             }
             else
             {

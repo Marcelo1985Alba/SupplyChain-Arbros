@@ -197,6 +197,7 @@ namespace SupplyChain
         [ColumnaGridViewAtributo(Name = "Condicion de Entrega")]
         public int CG_COND_ENTREGA { get; set; } = 0;
 
+
         [Column("DPP"),ColumnaGridViewAtributo(Name = "Condicion de Entrega")]
         public int CG_CONDICION_PAGO { get; set; } = 0;
         public int CG_TRANS { get; set; } = 0;

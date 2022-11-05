@@ -13,13 +13,13 @@
     <DialogAnimationSettings Effect="DialogEffect.FadeZoom" Duration="200"></DialogAnimationSettings>
     <DialogTemplates>
         <Header>
-            @if (Pedido.PEDIDO == 0)
+            @if (string.IsNullOrEmpty(Pedido.REMITO))
             {
                 <div class="e-dlg-header-titulo">Nuevo Remito</div>
             }
             else
             {
-                <div class="e-dlg-header-titulo">Remito:&nbsp;&nbsp;@Pedido.PEDIDO&nbsp;&nbsp;-&nbsp;&nbsp;@Pedido.DES_CLI</div>
+                <div class="e-dlg-header-titulo">Remito:&nbsp;&nbsp;@Pedido.REMITO&nbsp;&nbsp;-&nbsp;&nbsp;@Pedido.DES_CLI</div>
             }
         </Header>
         <Content>
@@ -115,7 +115,7 @@
                             <ToastPosition X="Center" Y="Top"></ToastPosition>
                         </SfToast>
 
-                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="90px"
+                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="120px"
                                 @ref="refGridItems" DataSource="@Pedido.Items" Width="100%" ID="grdItemsPresup"
                                 AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -177,15 +177,6 @@
                 <ClientesDialog @ref="refClienteDialog" PopupBuscadorVisible="@popupBuscadorVisibleCliente"
                                 OnObjectSelected="@ClienteExternoSelected" Cg_Cli="@Pedido.CG_CLI" Des_Cli="@Pedido.DES_CLI"
                                 OnCerrarDialog="@(()=> popupBuscadorVisibleCliente = false)"></ClientesDialog>
-
-                @*<SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog @ref="refPrecioDialog" PopupBuscadorVisible="@popupBuscadorVisiblePrecio"
-                    OnObjectSelected="@PrecioSelected" SoloReparaciones="@buscarSoloReparaciones"
-                    OnCerrarDialog="CerrarDialogPrecio"></SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog>*@
-
-
-                @*<ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto"
-                    OnObjectSelected="@ProductoSelected"
-                    OnCerrarDialog="CerrarDialogProducto"></ProductoDialog>*@
 
 
 

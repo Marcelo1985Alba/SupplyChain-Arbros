@@ -84,6 +84,21 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             }
         }
 
+        protected async Task GetRemitidos()
+        {
+            var response = await EstadoPedidoService.ByEstado(EstadoPedido.Entregado);
+            if (response.Error)
+            {
+                await ToastMensajeError("Ocurrio un error al obtener Remitos");
+            }
+            else
+            {
+                pedidosPendientesRemitir = response.Response.OrderByDescending(p => p.PEDIDO).ToList();
+            }
+        }
+
+
+
         protected async Task GetCondicionesPago()
         {
             var response = await CondicionPagoService.Get();
@@ -142,21 +157,27 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
                 SpinnerVisible = true;
-                var response = await StockService.GetPedidoEncabezadoById((int)args.Data.Id);
-                if (response.Error)
+
+                if (!string.IsNullOrEmpty(args.Data.REMITO)) //traer remito
                 {
-                    await ToastMensajeError();
-                }
-                else
-                {
-                    PedidoSeleccionado = response.Response;
-                    foreach (var item in PedidoSeleccionado.Items)
+                    var response = await StockService.GetPedidoEncabezadoByRemito(args.Data.REMITO);
+                    if (response.Error)
                     {
-                        item.ESTADO = SupplyChain.Shared.Enum.EstadoItem.Modificado;
+                        await ToastMensajeError();
                     }
-                    //direccionesEntregas = PedidoSeleccionado.DireccionesEntregas.Select(d => d.DESCRIPCION).ToList();
-                    popupFormVisible = true;
+                    else
+                    {
+                        PedidoSeleccionado = response.Response;
+                        foreach (var item in PedidoSeleccionado.Items)
+                        {
+                            item.ESTADO = SupplyChain.Shared.Enum.EstadoItem.Modificado;
+                        }
+                        //direccionesEntregas = PedidoSeleccionado.DireccionesEntregas.Select(d => d.DESCRIPCION).ToList();
+                        popupFormVisible = true;
+                    }
                 }
+
+                
                 SpinnerVisible = false;
             }
         }
@@ -343,7 +364,9 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             }
             else if (args.Item.Id == "VerRemitidos")
             {
-                await GetPedidoPendientesRemitir();
+                SpinnerVisible = true;
+                await GetRemitidos();
+                SpinnerVisible = false;
             }
             else if (args.Item.Id == "GenerarRemito")
             {

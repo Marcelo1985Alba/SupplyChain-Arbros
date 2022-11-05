@@ -218,7 +218,7 @@ namespace SupplyChain.Server.Repositorios
         {
             foreach (var item in list.Where(p => p.CG_ART.StartsWith("0012")))
             {
-
+                //COMO DETECTAR UN PEDIDO VIEJO QUE NO EXISTE EN SERVICIO
                 if (item.CG_ART.StartsWith("0012") && item.PRESUPUESTOID > 0)
                 {
                     var servicio = Db.Servicios.Where(s => s.PRESUPUESTO == item.PRESUPUESTOID && s.PEDIDO == 0).FirstOrDefault();

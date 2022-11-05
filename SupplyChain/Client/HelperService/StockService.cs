@@ -30,6 +30,11 @@ namespace SupplyChain.Client.HelperService
         {
             return await http.GetFromJsonAsync<List<Pedidos>>($"{API}/GetRemitos/{tipoFiltro}");
         }
+        
+        public async Task<HttpResponseWrapper<PedidoEncabezado>> GetPedidoEncabezadoByRemito(string remito)
+        {
+            return await http.GetFromJsonAsync<PedidoEncabezado>($"{API}/GetRemito/{remito}");
+        }
 
         public async Task<HttpResponseWrapper<PedidoEncabezado>> GetPedidoEncabezadoById(int id)
         {
