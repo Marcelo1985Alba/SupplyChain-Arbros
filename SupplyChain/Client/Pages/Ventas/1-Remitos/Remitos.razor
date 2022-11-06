@@ -1,6 +1,6 @@
 ﻿@page "/ventas/remitos"
 @inherits RemitosBase
-@attribute [Authorize(Roles = "Administrador")]
+@attribute [Authorize(Roles = "Administrador, Ventas")]
 <div class="row">
     <div class="col-12">
         <SfToast ID="toast_default" @ref="ToastObj">

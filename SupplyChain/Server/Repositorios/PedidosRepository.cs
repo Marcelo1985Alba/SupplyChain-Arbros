@@ -211,6 +211,8 @@ namespace SupplyChain.Server.Repositorios
                     DIRENT = cabacera.DIRENT,
                     VA_INDIC = cabacera.VA_INDIC,
                     VOUCHER = 0,
+                    BULTOS = cabacera.OBS1,
+                    MONTO = cabacera.OBS3
                 };
 
                 pedEncabezado.Items = itemsRemito;

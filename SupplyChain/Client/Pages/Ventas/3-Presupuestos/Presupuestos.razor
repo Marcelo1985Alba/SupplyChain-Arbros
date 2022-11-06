@@ -1,5 +1,6 @@
 ﻿
 @page "/ventas/presupuestos"
+@attribute [Authorize(Roles = "Administrador, Ventas")]
 @inherits PresupuestosBase
 
 
@@ -17,7 +18,7 @@
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
-            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler" 
+            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"
                         OnToolbarClick="OnToolbarHandler"
                         TValue="vPresupuestos"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
@@ -29,9 +30,9 @@
                 <GridColumn Field=@nameof(vPresupuestos.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.Fecha) HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.DES_CLI) HeaderText="Descripcion Cliente"  TextAlign="TextAlign.Left" Width="250px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.MONEDA) HeaderText="Moneda"  TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.TOTAL) HeaderText="Total"  TextAlign="TextAlign.Left" Width="150px" Format="N2"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.TOTAL) HeaderText="Total" TextAlign="TextAlign.Left" Width="150px" Format="N2"></GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.USUARIO) HeaderText="Usuario" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
 
             </GridColumns>
@@ -43,7 +44,7 @@
                @bind-Visible="@SpinnerVisiblePresupuesto"></SfSpinner>
 
     <FormPresupuesto @ref="refFormPresupuesto" Presupuesto="@PresupuestoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
-            OnGuardar="@(async(s)=> await Guardar(s))"></FormPresupuesto>
+                     OnGuardar="@(async(s)=> await Guardar(s))"></FormPresupuesto>
 
 
 </div>

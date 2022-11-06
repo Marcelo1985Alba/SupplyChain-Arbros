@@ -1,4 +1,5 @@
 ﻿@page "/ventas/pedidos"
+@attribute [Authorize(Roles = "Administrador, Ventas")]
 @inherits PedidosBase
 
 <div class="row">
@@ -58,7 +59,7 @@
         <ContentTemplate>
             Como desea editar?
         </ContentTemplate>
-        
+
     </ConfirmacionDialog>
 
 </div>

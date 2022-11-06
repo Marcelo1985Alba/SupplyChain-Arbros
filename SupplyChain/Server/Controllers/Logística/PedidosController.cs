@@ -348,7 +348,11 @@ namespace SupplyChain
                     if (liberaRemito)
                         await generaController.LiberaByCampo("REMITO");
 
-                    await generaController.LiberaByCampo("REGSTOCK");
+                    if (stock.Id < 0)
+                    {
+                        await generaController.LiberaByCampo("REGSTOCK");
+                    }
+                    
                     if (RegistroExists(stock.Id))
                     {
                         return Conflict();
