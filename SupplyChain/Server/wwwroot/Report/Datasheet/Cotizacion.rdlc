@@ -841,7 +841,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Incendio: </Value>
+                                  <Value>Contingencia: </Value>
+                                  <Style>
+                                    <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!Contingencia.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -856,7 +862,6 @@
                               <Color>LightGrey</Color>
                               <Style>None</Style>
                             </Border>
-                            <BackgroundColor>Red</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -879,13 +884,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Contingencia: </Value>
+                                  <Value>Disco de Ruptura: </Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=Fields!Contingencia.Value</Value>
+                                  <Value>=Fields!DiscoRuptura.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -922,13 +927,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Disco de Ruptura: </Value>
-                                  <Style>
-                                    <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!DiscoRuptura.Value</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -1878,7 +1877,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Estado de Fluido: [EstadoFluido]</Value>
+                                  <Value>Estado de Fluido: </Value>
+                                  <Style>
+                                    <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!EstadoFluido.Value</Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
