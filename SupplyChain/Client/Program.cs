@@ -34,8 +34,10 @@ namespace SupplyChain.Client
             builder.Services.AddSingleton(typeof(ISyncfusionStringLocalizer), typeof(SyncfusionLocalizer));
 
             // Set the default culture of the application
-            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("es");
-            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("es");
+            //CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("es");
+            //CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("es");
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
             await builder.Build().RunAsync();
         }
 

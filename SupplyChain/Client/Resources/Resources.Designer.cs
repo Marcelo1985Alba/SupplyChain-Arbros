@@ -39,7 +39,7 @@ namespace SupplyChain.Client.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SupplyChain.Client.Resources.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SupplyChain.Client.Resources.SfResources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

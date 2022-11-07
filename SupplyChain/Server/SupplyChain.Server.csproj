@@ -98,10 +98,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0" />
-    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="19.4.0.56" />
-    <PackageReference Include="Syncfusion.Blazor.FileManager.PhysicalFileProvider" Version="19.4.0.48" />
-    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="19.4.0.56" />
-    <PackageReference Include="Syncfusion.Blazor.Themes" Version="19.4.0.56" />
+    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="20.1.0.47" />
+    <PackageReference Include="Syncfusion.Blazor.FileManager.PhysicalFileProvider" Version="20.1.0.47" />
+    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="20.1.0.47" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.1.0.47" />
     <PackageReference Include="System.CodeDom" Version="6.0.0" />
   </ItemGroup>
 
