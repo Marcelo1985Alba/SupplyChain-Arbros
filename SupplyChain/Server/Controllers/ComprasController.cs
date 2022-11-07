@@ -260,6 +260,15 @@ namespace SupplyChain.Server.Controllers
 
             try
             {
+
+                if (especif == "vacio")
+                {
+                    especif = "";
+                }
+                if (condven == "vacio")
+                {
+                    condven = "";
+                }
                 //RESERVA REGISTRO: El vale hay que hacerlo del lado del cliente porque debe reservar un solo vale
                 //y aqui se ejecuta por item.
                 await _generaRepository.Reserva("NUMERO");

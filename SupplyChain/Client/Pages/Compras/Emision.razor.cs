@@ -57,8 +57,10 @@ namespace SupplyChain.Client.Pages.Emision
         protected SfGrid<Compra> GridProve;
 
         public string xespecif = "";
+        public string xespecif2 = "";
 
         public string DropVal = "";
+        public string xcondven = "";
 
         protected BuscadorEmergente<Compra> Buscador;
         protected Compra[] ItemsABuscar = null;
@@ -217,8 +219,24 @@ namespace SupplyChain.Client.Pages.Emision
             });
             HttpResponseMessage response = null;
 
+            if (string.IsNullOrEmpty(xespecif) && string.IsNullOrEmpty(xespecif))
+            {
+                xespecif2 = "vacio";
+            }
+            else
+            {
+                xespecif2 = xespecif;
+            }
+            if (string.IsNullOrEmpty(@DropVal) && string.IsNullOrEmpty(@DropVal))
+            {
+                xcondven = "vacio";
+            }
+            else
+            {
+                xcondven = @DropVal;
+            }
             //                  string sqlCommandString = string.Format("UPDATE COMPRAS SET NUMERO = 9999 WHERE REGISTRO IN ("+ listaordenescompra + ")");
-            response = await Http.PutAsJsonAsync("api/compras/actualizaoc/" + listaordenescompra+ '/'+xespecif + '/' + @DropVal + '/' + bonif, listaordenescompra);
+            response = await Http.PutAsJsonAsync("api/compras/actualizaoc/" + listaordenescompra+ '/'+xespecif2 + '/' + xcondven + '/' + bonif, listaordenescompra);
 
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
                 || response.StatusCode == System.Net.HttpStatusCode.NotFound
