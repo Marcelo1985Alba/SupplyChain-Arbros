@@ -23,12 +23,12 @@
             }
         </Header>
         <Content>
-            <SfToolbar ID="toolbar-form-solicitud" CssClass="" >
+            <SfToolbar ID="toolbar-form-solicitud" CssClass="">
                 <ToolbarItems>
                     <ToolbarItem Id="tiSolicitudes" CssClass="e-round e-small" Type="ItemType.Button" Text="Solicitudes" OnClick="BuscarSolicitudes" Align="ItemAlign.Right"></ToolbarItem>
-                    <ToolbarItem Id="tiProductos" CssClass="e-round" Text="Productos"  OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>
+                    <ToolbarItem Id="tiProductos" CssClass="e-round" Text="Productos" OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>
                     <ToolbarItem Id="tiReparaciones" CssClass="e-round" Text="Reparaciones" OnClick="BuscarReparaciones" Align="ItemAlign.Right"></ToolbarItem>
-                    
+
                 </ToolbarItems>
             </SfToolbar>
 
@@ -37,9 +37,9 @@
                 <ValidationSummary />
                 <div class="form-row">
                     @*<div class="form-group col-md-1">
-            <label class="">Id:</label>
-            <SfNumericTextBox ID="SolicitudId" @bind-Value="@(Presupuesto.Id)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
-        </div>*@
+                            <label class="">Id:</label>
+                            <SfNumericTextBox ID="SolicitudId" @bind-Value="@(Presupuesto.Id)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
+                        </div>*@
                     <div class="form-group col-lg-2 col-md-2">
                         <label class="">Cod. Cliente:</label>
                         <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Presupuesto.CG_CLI)" ShowSpinButton="false" Readonly="false"
@@ -126,7 +126,7 @@
                             <ToastPosition X="Center" Y="Top"></ToastPosition>
                         </SfToast>
 
-                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="90px"
+                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="120px"
                                 @ref="refGridItems" DataSource="@Presupuesto.Items" Width="100%" ID="grdItemsPresup"
                                 AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -225,26 +225,6 @@
 
 
                 </div>
-                <SfSpinner @ref="@refSpinnerCli" Size="50" @bind-Visible="@SpinnerVisible"
-                           Label="Buscando ..." Type="SpinnerType.Fabric">
-                </SfSpinner>
-
-                <ClientesDialog @ref="refClienteDialog" PopupBuscadorVisible="@popupBuscadorVisibleCliente"
-                                OnObjectSelected="@ClienteExternoSelected" Cg_Cli="@Presupuesto.CG_CLI" Des_Cli="@Presupuesto.DES_CLI"
-                                OnCerrarDialog="CerrarDialogCliente"></ClientesDialog>
-
-                <SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog @ref="refPrecioDialog" PopupBuscadorVisible="@popupBuscadorVisiblePrecio"
-                                                                         OnObjectSelected="@PrecioSelected" SoloReparaciones="@buscarSoloReparaciones"
-                                                                         OnCerrarDialog="CerrarDialogPrecio"></SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog>
-
-
-                <ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto"
-                                OnObjectSelected="@ProductoSelected"
-                                OnCerrarDialog="CerrarDialogProducto"></ProductoDialog>
-
-                <SolicitudesDialog @ref="refSolicitudDialog" PopupBuscadorVisible="@popupBuscadorVisibleSolicitud"
-                                   OnObjectSelected="@SolicitudSelected" ConPrecio="true" CompararCliente="true"
-                                   OnCerrarDialog="CerrarDialogSolicitud" TipoFiltro="SupplyChain.Shared.Enum.TipoFiltro.Pendientes" ></SolicitudesDialog>
 
 
                 <ValidationSummary />
@@ -252,87 +232,120 @@
             </EditForm>
         </Content>
         <FooterTemplate>
-            
-            <div class="container-total">
 
-                @{
-                    var totalItems = Math.Round(Presupuesto.Items.Sum(i => i.TOTAL), 2);
-                    var bonficacion = Math.Round(totalItems * Presupuesto.BONIFIC / 100, 2);
-                    var total = Presupuesto.TOTAL = Math.Round(totalItems - bonficacion, 2);
-                    var moneda = "$";
-                    if (Presupuesto.MONEDA == "PESOS")
-                    {
-                        moneda = "$";
-                    }
-                    else
-                    {
-                        moneda = "U$S";
-                    }
-
-                    <div class="total-price">SUBTOTAL @moneda : @totalItems</div>
-                    <div class="total-price">BONIFICACION (@Presupuesto.BONIFIC %) @moneda : @bonficacion</div>
-                    <div class="total-price">TOTAL @moneda : @total</div>
+            @{
+                var totalItems = Math.Round(Presupuesto.Items.Sum(i => i.TOTAL), 2);
+                var bonficacion = Math.Round(totalItems * Presupuesto.BONIFIC / 100, 2);
+                var total = Presupuesto.TOTAL = Math.Round(totalItems - bonficacion, 2);
+                var moneda = "$";
+                if (Presupuesto.MONEDA == "PESOS")
+                {
+                    moneda = "$";
+                }
+                else
+                {
+                    moneda = "U$S";
                 }
 
+
+
+
+            }
+            <div class="row" style="text-align:left">
+                <div class="col-3">
+                    <div class="total-price">SUBTOTAL @moneda : @totalItems</div>
+                </div>
+                <div class="col-5" style="text-align:center">
+                    <div class="total-price">BONIFICACION (@Presupuesto.BONIFIC %) @moneda : @bonficacion</div>
+                </div>
+                <div class="col-4" style="text-align:right">
+                    <div class="total-price">TOTAL @moneda : @total</div>
+                </div>
             </div>
-            <div class=" mt-5">
+            <div class="mt-5">
                 <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
                 <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async()=>await Hide())" IconCss="fa fa-window-close-o"></SfButton>
             </div>
         </FooterTemplate>
     </DialogTemplates>
 </SfDialog>
+
+<SfSpinner @ref="@refSpinnerCli" Size="50" @bind-Visible="@SpinnerVisible"
+           Label="Buscando ..." Type="SpinnerType.Fabric">
+</SfSpinner>
+
+<ClientesDialog @ref="refClienteDialog" PopupBuscadorVisible="@popupBuscadorVisibleCliente"
+                OnObjectSelected="@ClienteExternoSelected" Cg_Cli="@Presupuesto.CG_CLI" Des_Cli="@Presupuesto.DES_CLI"
+                OnCerrarDialog="CerrarDialogCliente"></ClientesDialog>
+
+<SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog @ref="refPrecioDialog" PopupBuscadorVisible="@popupBuscadorVisiblePrecio"
+                                                         OnObjectSelected="@PrecioSelected" SoloReparaciones="@buscarSoloReparaciones"
+                                                         OnCerrarDialog="CerrarDialogPrecio"></SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog>
+
+
+<ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto"
+                OnObjectSelected="@ProductoSelected"
+                OnCerrarDialog="CerrarDialogProducto"></ProductoDialog>
+
+<SolicitudesDialog @ref="refSolicitudDialog" PopupBuscadorVisible="@popupBuscadorVisibleSolicitud"
+                   OnObjectSelected="@SolicitudSelected" ConPrecio="true" CompararCliente="true"
+                   OnCerrarDialog="CerrarDialogSolicitud" TipoFiltro="SupplyChain.Shared.Enum.TipoFiltro.Pendientes"></SolicitudesDialog>
+
+
+
+
 <style>
 
     #toolbar-form-solicitud {
         border: 0px solid rgb(173, 255, 47) !important;
     }
 
-    #toolbar-form-solicitud .e-toolbar-item {
-        /*background: #add8e6;*/
-        /*border: 1px solid #5a70cc;*/
-    }
+        #toolbar-form-solicitud .e-toolbar-item {
+            /*background: #add8e6;*/
+            /*border: 1px solid #5a70cc;*/
+        }
 
-    #toolbar-form-solicitud .e-tbar-btn {
-        background: #398bf7;
-        border-radius: 10%;
-        /*border: 1px solid #5a70cc;*/
-    }
-
-    #toolbar-form-solicitud .e-toolbar-item:hover {
-        background: #619ded;
-        /*border: 1px solid #5a70cc;*/
-    }
-
-    #toolbar-form-solicitud .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn {
-        min-height: 20px;
-    }
-
-        #toolbar-form-solicitud .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:hover {
-            background-color: #4f70ee;
+        #toolbar-form-solicitud .e-tbar-btn {
+            background: #398bf7;
             border-radius: 10%;
+            /*border: 1px solid #5a70cc;*/
+        }
+
+        #toolbar-form-solicitud .e-toolbar-item:hover {
+            background: #619ded;
+            /*border: 1px solid #5a70cc;*/
+        }
+
+        #toolbar-form-solicitud .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn {
+            min-height: 20px;
+        }
+
+            #toolbar-form-solicitud .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:hover {
+                background-color: #4f70ee;
+                border-radius: 10%;
+            }
+
+
+        #toolbar-form-solicitud .e-toolbar-items .e-toolbar-item .e-tbar-btn-text {
+            color: white;
+        }
+
+        #toolbar-form-solicitud .e-tbar-btn:focus {
+            background: #3d53a8;
+            border-color: #eaeaea;
+            border-radius: 0;
+            color: #000;
         }
 
 
-    #toolbar-form-solicitud .e-toolbar-items .e-toolbar-item .e-tbar-btn-text {
-        color: white;
-    }
-
-    #toolbar-form-solicitud .e-tbar-btn:focus {
-        background: #3d53a8;
-        border-color: #eaeaea;
-        border-radius: 0;
-        color: #000;
-    }
-
-
     .container-total {
-        text-align: right;
+        text-align: left;
     }
 
-    .total-price{
+    .total-price {
+        font-family: Tahoma;
         font-weight: bold;
-        font-size: 12px;
+        font-size: 13px;
     }
 
     #grdItemsPresup .e-gridheader .e-headercell, .e-grid-min-height .e-gridheader .e-detailheadercell,
@@ -355,5 +368,4 @@
     #grdItemsPresup .e-row .e-rowcell {
         font-size: 10px !important;
     }
-
 </style>

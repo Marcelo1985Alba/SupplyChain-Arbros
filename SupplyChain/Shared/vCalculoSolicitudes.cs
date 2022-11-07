@@ -10,7 +10,7 @@ namespace SupplyChain.Shared
 {
     public class vCalculoSolicitudes
     {
-
+		[Key]
 		public int SolicitudId { get; set; }
 		public int PresupuestoId { get; set; }
 

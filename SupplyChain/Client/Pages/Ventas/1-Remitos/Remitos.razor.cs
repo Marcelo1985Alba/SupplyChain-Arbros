@@ -379,7 +379,8 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             }
             else
             {
-                Console.WriteLine("Pedidos Seleccionados " + selecciones.Select(s => s.PEDIDO.ToString()).ToArray());
+                var pedidoSeleccionados = string.Join(',', selecciones.Select(s => s.PEDIDO.ToString()).ToArray());
+                Console.WriteLine("Pedidos Seleccionados " + pedidoSeleccionados);
                 var response = await StockService.GetPedidoEncabezadoByLista(selecciones.Select(s=> s.PEDIDO).ToList());
                 if (response.Error)
                 {

@@ -39,6 +39,7 @@ else
     protected ExpandAction Expand = ExpandAction.Click;
     protected bool IsAdmin = false;
     protected bool IsProd = false;
+    protected bool IsVentas = false;
     protected List<Modulo> dbMenu = new List<Modulo>();
     [Parameter] public EventCallback<bool> OnChangeToggle { get; set; }
 
@@ -55,12 +56,30 @@ else
         authState = await authenticationState;
         if (authState.User.Identity.IsAuthenticated)
         {
-            IsAdmin = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Admin"));
+            IsAdmin = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Administrador"));
             IsProd = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Produccion"));
+            IsVentas = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Ventas"));
             dbMenu = await Http.GetFromJsonAsync<List<Modulo>>("api/Modulo");
+
+            if (IsAdmin || IsVentas)
+            {
+                var maxId = dbMenu.Max(m => m.Id) + 1;
+                dbMenu.Add(new Modulo
+                {
+                    Id = 2000,
+                    ParentId = 2,
+                    Descripcion = "Usuarios",
+                    IconCss = "",
+                    TieneChild = false,
+                    Url = "/ventas/usuarios"
+                });
+            }
+
+
 
             if (authState.User.Claims.Any(c=> c.Value == "Cliente"))
             {
+                dbMenu.Clear();
                 dbMenu.Add(new Modulo { Id = 2, Descripcion = "VENTAS", IconCss = "icon-th icon", TieneChild = true });
                 dbMenu.Add(new Modulo { Id = 3, ParentId = 2, Descripcion = "Estado de Pedidos", Url = "/ventas/estado-pedidos",
                     IconCss = "icon-th icon", TieneChild = false });
@@ -94,8 +113,11 @@ else
                 {
                     var maxId = dbMenu.Max(m => m.Id) + 1;
                     dbMenu.Add(new Modulo { Id = maxId, Descripcion = "Panel de Control", IconCss = "fa fa-tachometer",
-                        TieneChild = false, Url= "/panel-control/index"
-                    });
+                        TieneChild = false, Url= "/panel-control/index" }
+                    );
+
+
+
                 }
             }
         }

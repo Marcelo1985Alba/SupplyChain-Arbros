@@ -1893,7 +1893,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=First(Fields!TOTAL_PRESUPUESTO.Value, "DataSet1")</Value>
+                      <Value>=Round(First(Fields!TOTAL_PRESUPUESTO.Value, "DataSet1"),2)</Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
                       </Style>
