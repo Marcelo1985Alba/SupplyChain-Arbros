@@ -498,7 +498,7 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="CG_ART1">
+                        <Textbox Name="CAMPOCOM1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -519,7 +519,14 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value> Presion(Bar): [CAMPOCOM1]</Value>
+                                  <Value> Presion(Bar):</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!CAMPOCOM1.Value</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -529,7 +536,7 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>CG_ART1</rd:DefaultName>
+                          <rd:DefaultName>CAMPOCOM1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>

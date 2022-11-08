@@ -320,11 +320,20 @@ namespace SupplyChain
                 try
                 {
                     if (liberaRemito)
-                    {
+                    { 
                         var rem = remito.ToString().PadLeft(8, '0');
                         stock.REMITO = $"0001-{rem}";
 
                         stock.Id ??= 0;
+                    }
+
+                    if(stock.TIPOO == 1)
+                    {
+                        stock.STOCKA = -1;
+                        if (stock.STOCK > 0)
+                        {
+                            stock.STOCK = -stock.STOCK;
+                        }
                     }
 
 
@@ -421,6 +430,13 @@ namespace SupplyChain
 
             _context.Pedidos.Add(stock);
             await _context.SaveChangesAsync();
+
+            //if (stock.TIPOO == 1)
+            //{
+            //    var update = "UPDATE PEDCLI SET CG_ESTADO = 'C' " +
+            //        $"WHERE PEDIDO = {stock.PEDIDO} AND CG_ART = '{stock.CG_ART}'";
+            //    _context.Database.ExecuteSqlRaw(update);
+            //}
 
             await CerrarOC(stock);
 

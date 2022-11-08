@@ -193,7 +193,7 @@ namespace SupplyChain.Server.Repositorios
 
         internal async Task<PedidoEncabezado> GetRemito(string remito)
         {
-            var itemsRemito = await DbSet.Where(p => p.REMITO == remito).ToListAsync(); 
+            var itemsRemito = await DbSet.Where(p => p.TIPOO == 1 && p.REMITO == remito).ToListAsync(); 
             var pedEncabezado = new PedidoEncabezado();
             if (itemsRemito != null && itemsRemito.Count > 0)
             {

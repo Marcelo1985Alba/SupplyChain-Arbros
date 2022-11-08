@@ -40,7 +40,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
 
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
-
+        protected bool BotonGuardarDisabled = false;
         protected Dictionary<string, object> HtmlAttribute = new()
         {
            {"type", "button" }
@@ -122,6 +122,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
 
         protected async Task Guardar()
         {
+            BotonGuardarDisabled = true;
             bool guardado;
             if (Solicitud.Id == 0)
             {
@@ -135,6 +136,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
 
             if (guardado)
             {
+                BotonGuardarDisabled = false;
                 Show = false;
                 Solicitud.Guardado = guardado;
                 await OnGuardar.InvokeAsync(Solicitud);

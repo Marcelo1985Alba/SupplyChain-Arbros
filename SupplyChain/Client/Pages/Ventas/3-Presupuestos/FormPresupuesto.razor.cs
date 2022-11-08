@@ -339,6 +339,13 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                     //TIPOSALIDA = solicitudSelected.TipoSalida,
                     //TOBERA = solicitudSelected.Tobera,
                     //Solicitud = solicitudSelected,
+                    CAPACIDADREQUERIDA = solicitudSelected.CapacidadRequerida,
+                    CONTRAPRESIONFIJA = solicitudSelected.ContrapresionFija,
+                    CONTRAPRESIONVARIABLE = solicitudSelected.ContrapresionVariable,
+                    DESCRIPCIONFLUIDO = solicitudSelected.DescripcionFluido,
+                    DESCRIPCIONTAG = solicitudSelected.DescripcionTag,
+                    PRESIONAPERTURA = solicitudSelected.PresionApertura,
+                    TEMPERATURADESCARGAT = solicitudSelected.TemperaturaDescargaT,
                     OBSERITEM = solicitudSelected.Observaciones,
                     PREC_UNIT = (decimal)solicitudSelected.PrecioArticulo?.Precio,
                     Estado = SupplyChain.Shared.Enum.EstadoItem.Agregado
