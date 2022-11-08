@@ -22,7 +22,7 @@ namespace SupplyChain.Client
         {
     
             Syncfusion.Licensing.SyncfusionLicenseProvider
-                .RegisterLicense("NzA0MTg5QDMxMzkyZTM0MmUzMEZNWW52OG1QdGtyV1lOK2grcU1KbmpJamtuUTgxWjZ6M1RiUGl3Q3hIc1U9");
+                .RegisterLicense("NzU2NDA3QDMyMzAyZTMxMmUzMGFVZjhnN2RLRWdLay8rdExyR2V1aFFyWjRIRncvZjErcDBvWDBsVmw0QlU9");
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
 

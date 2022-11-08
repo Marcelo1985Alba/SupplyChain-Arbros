@@ -338,7 +338,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                     //TIPOENTRADA = solicitudSelected.TipoEntrada,
                     //TIPOSALIDA = solicitudSelected.TipoSalida,
                     //TOBERA = solicitudSelected.Tobera,
-                    Solicitud = solicitudSelected,
+                    //Solicitud = solicitudSelected,
                     OBSERITEM = solicitudSelected.Observaciones,
                     PREC_UNIT = (decimal)solicitudSelected.PrecioArticulo?.Precio,
                     Estado = SupplyChain.Shared.Enum.EstadoItem.Agregado
