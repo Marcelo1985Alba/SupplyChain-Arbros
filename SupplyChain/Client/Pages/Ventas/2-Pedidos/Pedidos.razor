@@ -27,9 +27,11 @@
                 @*<GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>*@
                 <GridColumn Field=@nameof(PedCli.Id) HeaderText="Id" Visible="false" IsPrimaryKey="true" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(PedCli.FE_PED) HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.PRESUPUESTOID) HeaderText="Presupuesto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                 <GridColumn Field=@nameof(PedCli.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(PedCli.UNID) HeaderText="Unidad" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
                 <GridColumn Field=@nameof(PedCli.CANTPED) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="120px" Format="N2"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.TOTAL) HeaderText="TOTAL" TextAlign="TextAlign.Left" Width="120px" Format="N2"></GridColumn>
                 <GridColumn Field=@nameof(PedCli.NUMOCI) HeaderText="OCI" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(PedCli.ORCO) HeaderText="Orden Compra" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                 <GridColumn Field=@nameof(PedCli.CG_ART) HeaderText="Articulo" TextAlign="TextAlign.Left" Width="160px"></GridColumn>

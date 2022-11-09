@@ -693,6 +693,9 @@
         }
         else
         {
+            BoxPedido = (string.IsNullOrEmpty(BoxPedido) ? "Vacio" : BoxPedido);
+            BoxCliente = (string.IsNullOrEmpty(BoxCliente) ? "Vacio" : BoxCliente);
+            BoxCodigo = (string.IsNullOrEmpty(BoxCodigo) ? "Vacio" : BoxCodigo);
             var responseBusquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/{BoxCliente}/{BoxCodigo}/{CantidadMostrar}");
             if (responseBusquedalist.Error)
             {

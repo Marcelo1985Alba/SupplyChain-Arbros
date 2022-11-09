@@ -46,5 +46,7 @@ namespace SupplyChain.Shared
 		public string DESCRIPCION_IVA { get; set; }
 		public string TRANSPORTE { get; set; }
 		public string CALLE_TRANSPORTE { get; set; }
-	}
+
+        public DateTime ENTRPREV { get; set; }
+    }
 }
