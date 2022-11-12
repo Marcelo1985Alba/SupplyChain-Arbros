@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 namespace filemanager.Server.Controllers
 {
     [Route("api/[controller]")]
-    public class FilesManagerController : Controller
+    public class FilesManagerServiciosController : Controller
     {
         private readonly SolutionRepository _solutionRepository;
         public PhysicalFileProvider operation;
@@ -26,21 +26,22 @@ namespace filemanager.Server.Controllers
         string root = "";
         private readonly AuthenticationStateProvider _authenticationStateProvider;
 
-        public FilesManagerController(SolutionRepository solutionRepository, AuthenticationStateProvider authenticationStateProvider )
+        public FilesManagerServiciosController(SolutionRepository solutionRepository, AuthenticationStateProvider authenticationStateProvider )
         {
             this.operation = new PhysicalFileProvider();
             this._solutionRepository = solutionRepository;
-            this.root = solutionRepository.Obtener(s => s.CAMPO == "RUTADOCS").FirstOrDefault().VALORC;
+            this.root = solutionRepository.Obtener(s => s.CAMPO == "RUTAFOTOSSOL").FirstOrDefault().VALORC;
             this.operation.RootFolder(this.root); // It denotes in which files and folders are available.
             this._authenticationStateProvider = authenticationStateProvider;
-            var iser = HttpContext.User;
-            this.operation.SetRules(GetRules());
+            
         }
 
         // Processing the File Manager operations
         [Route("FileOperations")]
         public object FileOperations([FromBody] Syncfusion.Blazor.FileManager.Base.FileManagerDirectoryContent args)
         {
+            
+            this.operation.SetRules(GetRules());
             switch (args.Action)
             {
                 // Add your custom action here
@@ -108,26 +109,27 @@ namespace filemanager.Server.Controllers
             AccessDetails accessDetails = new();
             //var result = _authenticationStateProvider.GetAuthenticationStateAsync();
             //result.Wait();
-
-            //var user = result.Result;
+            var userName = HttpContext.User.Identity.Name;
+            var AllowCopyWrite = HttpContext.User.Claims.Any(c => c.Value == "ArchivosServicios" || c.Value == "Administrador");
+            var permiteCopyWhrite = AllowCopyWrite ? Permission.Allow : Permission.Deny;
             accessDetails.AccessRules = (List<AccessRule>)(new()
             {
                 new AccessRule
                 {
                     Path = "/*.*",
                     Read = Permission.Allow,
-                    Write = Permission.Deny,
-                    Copy = Permission.Deny,
-                    WriteContents = Permission.Deny,
+                    Write = permiteCopyWhrite,
+                    Copy = permiteCopyWhrite,
+                    WriteContents = permiteCopyWhrite,
                     Upload = Permission.Allow,
                     Download = Permission.Allow,
-                    IsFile = true
+                    IsFile = true, 
                 },
 
                 new AccessRule { Path = "/*.*",
                     Read = Permission.Allow,
                     Write = Permission.Allow,
-                    Copy = Permission.Deny,
+                    Copy = permiteCopyWhrite,
                     WriteContents = Permission.Allow, Upload = Permission.Allow, Download = Permission.Allow, IsFile = false },
             });
 

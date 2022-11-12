@@ -84,8 +84,8 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.12.0" />
-    <PackageReference Include="BoldReports.Net.Core" Version="4.1.78" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.13.0" />
+    <PackageReference Include="BoldReports.Net.Core" Version="4.1.86" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0" />
@@ -98,11 +98,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0" />
-    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="20.1.0.58" />
-    <PackageReference Include="Syncfusion.Blazor.FileManager.PhysicalFileProvider" Version="20.1.0.55" />
-    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="20.1.0.58" />
-    <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.1.0.58" />
-    <PackageReference Include="Syncfusion.Licensing" Version="20.1.0.58" />
+    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="20.1.0.61" />
+    <PackageReference Include="Syncfusion.Blazor.FileManager.PhysicalFileProvider" Version="20.1.0.61" />
+    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="20.1.0.61" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.1.0.61" />
+    <PackageReference Include="Syncfusion.Licensing" Version="20.1.0.61" />
     <PackageReference Include="System.CodeDom" Version="6.0.0" />
   </ItemGroup>
 
