@@ -33,7 +33,7 @@ namespace filemanager.Server.Controllers
             this.root = solutionRepository.Obtener(s => s.CAMPO == "RUTAFOTOSSOL").FirstOrDefault().VALORC;
             this.operation.RootFolder(this.root); // It denotes in which files and folders are available.
             this._authenticationStateProvider = authenticationStateProvider;
-            
+            this.operation.SetRules(GetRules());
         }
 
         // Processing the File Manager operations
@@ -41,7 +41,7 @@ namespace filemanager.Server.Controllers
         public object FileOperations([FromBody] Syncfusion.Blazor.FileManager.Base.FileManagerDirectoryContent args)
         {
             
-            this.operation.SetRules(GetRules());
+            
             switch (args.Action)
             {
                 // Add your custom action here
@@ -68,7 +68,7 @@ namespace filemanager.Server.Controllers
                     return this.operation.ToCamelCase(this.operation.Search(args.Path, args.SearchString, args.ShowHiddenItems, args.CaseSensitive));
                 case "rename":
                     // Path - Current path of the renamed file; Name - Old file name; NewName - New file name
-                    return this.operation.ToCamelCase(this.operation.Rename(args.Path, args.Name, args.NewName));
+                     return this.operation.ToCamelCase(this.operation.Rename(args.Path, args.Name, args.NewName));
             }
             return null;
         }
@@ -109,18 +109,18 @@ namespace filemanager.Server.Controllers
             AccessDetails accessDetails = new();
             //var result = _authenticationStateProvider.GetAuthenticationStateAsync();
             //result.Wait();
-            var userName = HttpContext.User.Identity.Name;
-            var AllowCopyWrite = HttpContext.User.Claims.Any(c => c.Value == "ArchivosServicios" || c.Value == "Administrador");
-            var permiteCopyWhrite = AllowCopyWrite ? Permission.Allow : Permission.Deny;
+            //var userName = HttpContext.User.Identity.Name;
+            //var AllowCopyWrite = HttpContext.User.Claims.Any(c => c.Value == "ArchivosServicios" || c.Value == "Administrador");
+            //var permiteCopyWhrite = AllowCopyWrite ? Permission.Allow : Permission.Deny;
             accessDetails.AccessRules = (List<AccessRule>)(new()
             {
                 new AccessRule
                 {
                     Path = "/*.*",
                     Read = Permission.Allow,
-                    Write = permiteCopyWhrite,
-                    Copy = permiteCopyWhrite,
-                    WriteContents = permiteCopyWhrite,
+                    Write = Permission.Allow,
+                    Copy = Permission.Allow,
+                    WriteContents = Permission.Allow,
                     Upload = Permission.Allow,
                     Download = Permission.Allow,
                     IsFile = true, 
@@ -129,7 +129,7 @@ namespace filemanager.Server.Controllers
                 new AccessRule { Path = "/*.*",
                     Read = Permission.Allow,
                     Write = Permission.Allow,
-                    Copy = permiteCopyWhrite,
+                    Copy = Permission.Allow,
                     WriteContents = Permission.Allow, Upload = Permission.Allow, Download = Permission.Allow, IsFile = false },
             });
 

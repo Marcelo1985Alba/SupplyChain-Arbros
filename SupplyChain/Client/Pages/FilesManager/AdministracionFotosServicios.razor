@@ -1,0 +1,34 @@
+﻿@page "/ventas/servicios/fotos"
+@using Syncfusion.Blazor;
+@using Syncfusion.Blazor.FileManager;
+@inject IJSRuntime JsRuntime;
+
+<div class="control-section">
+    <SfFileManager TValue="FileManagerDirectoryContent" Height="400px" View="ViewType.Details">
+        <FileManagerAjaxSettings Url="/api/FilesManagerServicios/FileOperations"
+                                 DownloadUrl="/api/FilesManagerServicios/Download"
+                                 UploadUrl="/api/FilesManagerServicios/Upload"
+                                 GetImageUrl="/api/FilesManagerServicios/GetImage">
+        </FileManagerAjaxSettings>
+        <FileManagerEvents TValue="FileManagerDirectoryContent"></FileManagerEvents>
+        <FileManagerNavigationPaneSettings Visible=false></FileManagerNavigationPaneSettings>
+    </SfFileManager>
+</div>
+
+@code {
+
+    [CascadingParameter] public MainLayout Layout { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        Layout.Titulo = "Fotos Servicios";
+        return base.OnInitializedAsync();
+    }
+
+    protected async Task FileSelectedHandler(FileSelectEventArgs<FileManagerDirectoryContent> args)
+    {
+        var details = args.FileDetails.FilterPath;
+        var name = args.FileDetails.Name;
+    }
+
+}
