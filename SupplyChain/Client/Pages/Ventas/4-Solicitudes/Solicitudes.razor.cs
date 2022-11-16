@@ -28,6 +28,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         protected SfGrid<vSolicitudes> refGrid;
         protected SfSpinner refSpinner;
         protected SfToast ToastObj;
+        protected ConfirmacionDialog ConfirmacionEliminarDialog;
         protected FormSolicitud refFormSolicitud;
         protected Solicitud SolicitudSeleccionada = new();
         protected List<vSolicitudes> Solicitudes = new();
@@ -116,7 +117,8 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         protected async Task OnActionBeginHandler(ActionEventArgs<vSolicitudes> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
-                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit || 
+                args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
             {
                 args.Cancel = true;
                 args.PreventRender = false;
@@ -134,6 +136,14 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                 //TRAER DATOS QUE NO ESTAN ENLA GRILLA
                 await GetSolicitudFromDB(args.Data.Id, args.Data);
                 popupFormVisible = true;
+            }
+
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+            {
+                //await GetSolicitudFromDB(args.Data.Id, args.Data);
+                SolicitudSeleccionada.Id= args.Data.Id;
+                SolicitudSeleccionada.TienePresupuesto = args.Data.TienePresupuesto;
+                await ConfirmacionEliminarDialog.ShowAsync();
             }
         }
 
@@ -190,6 +200,33 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             }
         }
 
+        protected async Task Eliminar()
+        {
+            SpinnerVisible= true;
+            await ConfirmacionEliminarDialog.HideAsync();
+            if (!SolicitudSeleccionada.TienePresupuesto)
+            {
+                var response = await SolicitudService.Eliminar(SolicitudSeleccionada.Id);
+                if (response.IsSuccessStatusCode)
+                {
+                    await ToastMensajeExito("Eliminado Correctamente!");
+                    Solicitudes = Solicitudes.Where(s=> s.Id != SolicitudSeleccionada.Id)
+                        .OrderByDescending(s=> s.Id)
+                        .ToList();
+                }
+                else
+                {
+                    await ToastMensajeError();
+                }
+                
+            }
+            else
+            {
+                await ToastMensajeError("La Solicitud tiene presupuesto asociado.");
+            }
+            SpinnerVisible= false;
+        }
+
         protected async Task Guardar(Solicitud solicitud)
         {
             if (solicitud.Guardado)
@@ -227,6 +264,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                     sol.Cuit = solicitud.Cuit;
                 }
                 
+                Solicitudes = Solicitudes.OrderByDescending(s => s.Id).ToList();
                 await refGrid.RefreshHeaderAsync();
                 refGrid.Refresh();
                 await refGrid.RefreshColumnsAsync();
@@ -245,24 +283,24 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         }
 
 
-        private async Task ToastMensajeExito()
+        private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
         {
             await this.ToastObj.Show(new ToastModel
             {
                 Title = "EXITO!",
-                Content = "Guardado Correctamente.",
+                Content = content,
                 CssClass = "e-toast-success",
                 Icon = "e-success toast-icons",
                 ShowCloseButton = true,
                 ShowProgressBar = true
             });
         }
-        private async Task ToastMensajeError()
+        private async Task ToastMensajeError(string content = "Ocurrio un Error.")
         {
             await ToastObj.Show(new ToastModel
             {
                 Title = "Error!",
-                Content = "Ocurrio un Error.",
+                Content = content,
                 CssClass = "e-toast-warning",
                 Icon = "e-warning toast-icons",
                 ShowCloseButton = true,
