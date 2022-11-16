@@ -300,13 +300,13 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                             DESCUENTO = item.DESCUENTO,
                             IMP_DESCUENTO = item.IMP_DESCUENTO,
                             TOTAL = item.TOTAL,
-                            LOTE = item.Solicitud?.DescripcionTag,
-                            CAMPOCOM1 = item.Solicitud?.PresionApertura,
-                            CAMPOCOM3 = item.Solicitud?.DescripcionFluido,
-                            CAMPOCOM5 = item.Solicitud?.ContrapresionVariable,
-                            CAMPOCOM6 = item.Solicitud?.TemperaturaDescargaT,
-                            CAMPOCOM7 = item.Solicitud?.ContrapresionFija,
-                            CAMPOCOM8 = item.Solicitud?.CapacidadRequerida,
+                            LOTE = item.Solicitud == null ? string.Empty : item.Solicitud?.DescripcionTag,
+                            CAMPOCOM1 = item.Solicitud == null ? string.Empty : item.Solicitud?.PresionApertura ,
+                            CAMPOCOM3 = item.Solicitud == null ? string.Empty : item.Solicitud?.DescripcionFluido,
+                            CAMPOCOM5 = item.Solicitud == null ? string.Empty : item.Solicitud?.ContrapresionVariable,
+                            CAMPOCOM6 = item.Solicitud == null ? string.Empty : item.Solicitud?.TemperaturaDescargaT,
+                            CAMPOCOM7 = item.Solicitud == null ? string.Empty : item.Solicitud?.ContrapresionFija,
+                            CAMPOCOM8 = item.Solicitud == null ? string.Empty : item.Solicitud?.CapacidadRequerida,
                             OBSERITEM = item.OBSERITEM,
                             ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA),
                             ESTADO = SupplyChain.Shared.Enum.EstadoItem.Agregado,
@@ -339,13 +339,13 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                         DESCUENTO = item.DESCUENTO,
                         IMP_DESCUENTO = item.IMP_DESCUENTO,
                         TOTAL = item.TOTAL,
-                        LOTE = item.Solicitud?.DescripcionTag,
-                        CAMPOCOM1 = item.Solicitud?.PresionApertura,
-                        CAMPOCOM3 = item.Solicitud?.DescripcionFluido,
-                        CAMPOCOM5 = item.Solicitud?.ContrapresionVariable,
-                        CAMPOCOM6 = item.Solicitud?.TemperaturaDescargaT,
-                        CAMPOCOM7 = item.Solicitud?.ContrapresionFija,
-                        CAMPOCOM8 = item.Solicitud?.CapacidadRequerida,
+                        LOTE = item.Solicitud == null ? string.Empty : item.Solicitud?.DescripcionTag,
+                        CAMPOCOM1 = item.Solicitud == null ? string.Empty : item.Solicitud?.PresionApertura,
+                        CAMPOCOM3 = item.Solicitud == null ? string.Empty : item.Solicitud?.DescripcionFluido,
+                        CAMPOCOM5 = item.Solicitud == null ? string.Empty : item.Solicitud?.ContrapresionVariable,
+                        CAMPOCOM6 = item.Solicitud == null ? string.Empty : item.Solicitud?.TemperaturaDescargaT,
+                        CAMPOCOM7 = item.Solicitud == null ? string.Empty : item.Solicitud?.ContrapresionFija,
+                        CAMPOCOM8 = item.Solicitud == null ? string.Empty : item.Solicitud?.CapacidadRequerida,
                         OBSERITEM = item.OBSERITEM,
                         ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA),
                         ESTADO = SupplyChain.Shared.Enum.EstadoItem.Agregado,
@@ -374,6 +374,14 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                 item.CG_COND_ENTREGA = Pedido.CG_COND_ENTREGA;
                 item.DPP = Pedido.CONDICION_PAGO;
                 item.MONEDA = Pedido.MONEDA;
+                item.CAMPOCOM1 = item.CAMPOCOM1.Trim();
+                item.CAMPOCOM2 = item.CAMPOCOM2.Trim();
+                item.CAMPOCOM3 = item.CAMPOCOM3.Trim();
+                item.CAMPOCOM4 = item.CAMPOCOM4.Trim();
+                item.CAMPOCOM5 = item.CAMPOCOM5.Trim();
+                item.CAMPOCOM6 = item.CAMPOCOM6.Trim();
+                item.CAMPOCOM7 = item.CAMPOCOM7.Trim();
+                item.CAMPOCOM8 = item.CAMPOCOM8.Trim();
             }
 
             var response = await PedCliService.GuardarLista(Pedido.Items);

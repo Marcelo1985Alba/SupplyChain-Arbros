@@ -184,6 +184,7 @@ namespace SupplyChain.Server.Controllers
                 return NotFound();
             }
 
+
             await _solicitudRepository.Remover(id);
 
             return solicitud;

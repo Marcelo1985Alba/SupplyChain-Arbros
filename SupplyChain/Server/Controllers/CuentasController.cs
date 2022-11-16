@@ -114,6 +114,7 @@ namespace SupplyChain.Server.Controllers
             var result = await roleManager.CreateAsync(rol);
             if (!result.Succeeded)
             {
+                //var errores = string.Join(",", result.Errors.ToArray());
                 return BadRequest("El Rol no pudo ser creado!");
             }
 

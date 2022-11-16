@@ -71,6 +71,16 @@ namespace SupplyChain.Server.Controllers
         }
 
 
+        // GET:   
+        [HttpGet("GetRemito/{remito}")]
+        public async Task<ActionResult<PedidoEncabezado>> GetRemito(string remito)
+        {
+            var remLista = await _pedidosRepository.GetRemito(remito);
+
+            return remLista;
+        }
+
+
         // GET: api/Stock/{vale}
         [HttpGet("ByNumeroVale/{vale}")]
         public async Task<ActionResult<List<Pedidos>>> AbriVale(int vale)

@@ -218,16 +218,19 @@ namespace SupplyChain.Server.Repositorios
         {
             foreach (var item in list.Where(p => p.CG_ART.StartsWith("0012")))
             {
-
+                //COMO DETECTAR UN PEDIDO VIEJO QUE NO EXISTE EN SERVICIO
                 if (item.CG_ART.StartsWith("0012") && item.PRESUPUESTOID > 0)
                 {
-                    var servicio = Db.Servicios.Where(s => s.PRESUPUESTO == item.PRESUPUESTOID).FirstOrDefault();
-                    servicio.FECHA = DateTime.Now;
-                    servicio.PEDIDO = item.PEDIDO;
-                    Db.Entry(servicio).State = EntityState.Modified;
-                    Db.Entry(servicio).Property(p=> p.PEDIDO).IsModified = true;
-                    Db.Entry(servicio).Property(p=> p.FECHA).IsModified = true;
-                    await Db.SaveChangesAsync();
+                    var servicio = Db.Servicios.Where(s => s.PRESUPUESTO == item.PRESUPUESTOID && s.PEDIDO == 0).FirstOrDefault();
+                    if (servicio is not null)
+                    {
+                        servicio.FECHA = DateTime.Now;
+                        servicio.PEDIDO = item.PEDIDO;
+                        Db.Entry(servicio).State = EntityState.Modified;
+                        Db.Entry(servicio).Property(p => p.PEDIDO).IsModified = true;
+                        Db.Entry(servicio).Property(p => p.FECHA).IsModified = true;
+                        await Db.SaveChangesAsync(); 
+                    }
                 }
             }
         }

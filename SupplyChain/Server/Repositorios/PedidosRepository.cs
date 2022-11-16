@@ -190,5 +190,41 @@ namespace SupplyChain.Server.Repositorios
                          s => s.OrderByDescending(p => p.FE_MOV), true)
                 .ToListAsync();
         }
+
+        internal async Task<PedidoEncabezado> GetRemito(string remito)
+        {
+            var itemsRemito = await DbSet.Where(p => p.TIPOO == 1 && p.REMITO == remito).ToListAsync(); 
+            var pedEncabezado = new PedidoEncabezado();
+            if (itemsRemito != null && itemsRemito.Count > 0)
+            {
+                var cabacera = itemsRemito.First();
+                pedEncabezado = new PedidoEncabezado()
+                {
+                    REMITO = cabacera.REMITO,
+                    BONIFIC = (decimal)cabacera.BONIFIC,
+                    MONEDA = cabacera.MONEDA,
+                    CG_CLI = (int)cabacera.CG_CLI,
+                    CG_CONDICION_PAGO = cabacera.CG_CONDICION_PAGO,
+                    DES_CLI = cabacera.DES_CLI,
+                    CG_COND_ENTREGA = cabacera.CG_COND_ENTREGA,
+                    CG_TRANS = cabacera.CG_TRANS,
+                    DIRENT = cabacera.DIRENT,
+                    VA_INDIC = cabacera.VA_INDIC,
+                    VOUCHER = 0,
+                    BULTOS = cabacera.OBS1,
+                    MONTO = cabacera.OBS3
+                };
+
+                pedEncabezado.Items = itemsRemito;
+
+                foreach (var item in pedEncabezado.Items)
+                {
+                    item.STOCK = Math.Abs((decimal)item.STOCK);
+                }
+            }
+
+
+            return pedEncabezado;
+        }
     }
 }

@@ -36,6 +36,10 @@ namespace SupplyChain.Shared
         public int CG_DEP_ALT { get; set; } = 0;
         public int VOUCHER { get; set; } = 0;
         public decimal TOTAL { get; set; } = 0;
+
+        public string BULTOS { get; set; } = string.Empty;
+        public string MONTO { get; set; } = string.Empty;
+
         [ValidateComplexType]
         public List<Pedidos> Items { get; set; } = new List<Pedidos>();
 

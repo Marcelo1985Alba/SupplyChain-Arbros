@@ -1,4 +1,4 @@
-﻿    @page "/servicio/listado"
+﻿@page "/servicio/listado"
 @page "/servicio/list/{Pedido:int}"
 @using System.IO
 @using Syncfusion.Blazor.DropDowns
@@ -8,6 +8,7 @@
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Pdf;
 @using Syncfusion.Pdf.Graphics;
+@using Syncfusion.Blazor.FileManager;
 @using SupplyChain.Client.Pages.Visor_Pdf
 @using TextAlign = Syncfusion.Blazor.Grids.TextAlign
 @using SelectionType = Syncfusion.Blazor.Grids.SelectionType
@@ -34,9 +35,6 @@
 <div class="col-lg-12 control-section">
         <div class="content-wrapper">
             <div class="row">
-                @*<p>Cargar Combo con vistas</p>*@
-            </div>
-            <div class="row">
                 <SfGrid @ref="Grid" DataSource="@servicios" AllowPaging="true" AllowGrouping="true" AllowReordering="true"
                         GridLines="GridLine.Both" Width="100%" AllowSorting="true" AllowSelection="true"
                         Toolbar="@Toolbaritems" EnableHover="true" AllowExcelExport="true" AllowFiltering="true"
@@ -52,711 +50,536 @@
                 <Template>
                 @{
                     servicio = (context as Service);
-                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-Generalidades" role="tab" aria-controls="pills-home" aria-selected="true">Generalidades</a>
-                        </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-DatosPlaca" role="tab" aria-controls="pills-profile" aria-selected="false">Datos de Placa</a>
-                        </li>
+                    <SfTab OverflowMode="OverflowMode.Scrollable">
+                        <TabItems>
+                            <TabItem>
+                                <HeaderTemplate>Generalidades</HeaderTemplate>
+                                <ContentTemplate>
+                                    <p>test</p>
+                                </ContentTemplate>
+                            </TabItem>
+                        </TabItems>
+                    </SfTab>
 
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-EnsRecepcion" role="tab" aria-controls="pills-contact" aria-selected="false">Ensayos a la Recepcion</a>
-                        </li>
+                    //<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    //    <li class="nav-item">
+                    //        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-Generalidades" role="tab" aria-controls="pills-home" aria-selected="true">Generalidades</a>
+                    //    </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-TrEfec" role="tab" aria-controls="pills-contact" aria-selected="false">Trabajos Efectuados</a>
-                        </li>
+                    //    <li class="nav-item">
+                    //        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-DatosPlaca" role="tab" aria-controls="pills-profile" aria-selected="false">Datos de Placa</a>
+                    //    </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-file" role="tab" aria-controls="pills-contact" aria-selected="false">Documentación</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-img" role="tab" aria-controls="pills-contact" aria-selected="false">Fotos</a>
-                        </li>
-                    </ul>
+                    //    <li class="nav-item">
+                    //        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-EnsRecepcion" role="tab" aria-controls="pills-contact" aria-selected="false">Ensayos a la Recepcion</a>
+                    //    </li>
 
-                    <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="pills-Generalidades" role="tabpanel" aria-labelledby="pills-home-tab">
-                        <div>
+                    //    <li class="nav-item">
+                    //        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-TrEfec" role="tab" aria-controls="pills-contact" aria-selected="false">Trabajos Efectuados</a>
+                    //    </li>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-3">
-                                    <label>Solicitud:</label>
+                    //    <li class="nav-item">
+                    //        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-file" role="tab" aria-controls="pills-contact" aria-selected="false">Documentación</a>
+                    //    </li>
+                    //    <li class="nav-item">
+                    //        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-img" role="tab" aria-controls="pills-contact" aria-selected="false">Fotos</a>
+                    //    </li>
+                    //    <li class="nav-item">
+                    //        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-test" role="tab" aria-controls="pills-contact" aria-selected="false">Test1</a>
+                    //    </li>
+                    //</ul>
+
+                    //<div class="tab-content" id="pills-tabContent">
+                    //    <div class="tab-pane fade show active" id="pills-Generalidades" role="tabpanel" aria-labelledby="pills-home-tab">
+                    //        <div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-3">
+                    //                    <label>Solicitud:</label>
                                     
-                                    <div class="form-row">
-                                        <div class="col-10">
-                                            <SfNumericTextBox ID="SOLICITUD" @bind-Value="@(servicio.SOLICITUD)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
-                                        </div>
-                                        <div class="col-2">
-                                            <SfButton CssClass="e-smal e-round e-success" IconCss="e-icons e-save"
-                                                      HtmlAttributes="@presupuestoButton" OnClick="@(async()=> await MostrarSolicitud())"></SfButton>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Presupuesto:</label>
-                                    <div class="form-row">
-                                        @*<div class="col-10">
-                                            <SfNumericTextBox ID="PRESUPUESTO" @bind-Value="@(servicio.PRESUPUESTO)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
-                                        </div>*@
-                                        <div class="col-2">
-                                            <SfButton CssClass="e-smal e-round e-info" IconCss="e-icons e-save"
-                                                      HtmlAttributes="@presupuestoButton" OnClick="@(async()=> await MostrarPresupuesto())"></SfButton>
-                                        </div>
-                                    </div>
+                    //                    <div class="form-row">
+                    //                        <div class="col-10">
+                    //                            <SfNumericTextBox ID="SOLICITUD" @bind-Value="@(servicio.SOLICITUD)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
+                    //                        </div>
+                    //                        <div class="col-2">
+                    //                            <SfButton CssClass="e-smal e-round e-success" IconCss="e-icons e-save"
+                    //                                      HtmlAttributes="@presupuestoButton" OnClick="@(async()=> await MostrarSolicitud())"></SfButton>
+                    //                        </div>
+                    //                    </div>
+                    //                </div>
+                    //                <div class="form-group col-md-3">
+                    //                    <label>Presupuesto:</label>
+                    //                    <div class="form-row">
+                    //                        @*<div class="col-10">
+                    //                            <SfNumericTextBox ID="PRESUPUESTO" @bind-Value="@(servicio.PRESUPUESTO)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
+                    //                        </div>*@
+                    //                        <div class="col-2">
+                    //                            <SfButton CssClass="e-smal e-round e-info" IconCss="e-icons e-save"
+                    //                                      HtmlAttributes="@presupuestoButton" OnClick="@(async()=> await MostrarPresupuesto())"></SfButton>
+                    //                        </div>
+                    //                    </div>
                                     
 
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label>Pedido:</label>
-                                    <div class ="form-row">
-                                        <div class="col-9">
-                                            <SfNumericTextBox ID="PEDIDO" @bind-Value="@(servicio.PEDIDO)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
-                                        </div>
-                                        <div class="col-2">
-                                            <SfButton CssClass="e-smal e-round e-warning" IconCss="e-icons e-upload"
-                                                      HtmlAttributes="@pedidoButton"></SfButton>
-                                        </div>
-                                    </div>
+                    //                </div>
+                    //                <div class="form-group col-md-2">
+                    //                    <label>Pedido:</label>
+                    //                    <div class ="form-row">
+                    //                        <div class="col-9">
+                    //                            <SfNumericTextBox ID="PEDIDO" @bind-Value="@(servicio.PEDIDO)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
+                    //                        </div>
+                    //                        <div class="col-2">
+                    //                            <SfButton CssClass="e-smal e-round e-warning" IconCss="e-icons e-upload"
+                    //                                      HtmlAttributes="@pedidoButton"></SfButton>
+                    //                        </div>
+                    //                    </div>
                                     
-                                </div>
-
-                                <div class="form-group col-md-4">
-                                    <label>Fecha:</label>
-                                    <SfDatePicker ID="FECHA" @bind-Value="@(servicio.FECHA)" Enabled="@Disabled" Placeholder="Fecha"></SfDatePicker>
-
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Cliente:</label>
-                                    <SfTextBox ID="CLIENTE" @bind-Value="@(servicio.CLIENTE)" Enabled="@Disabled"></SfTextBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Planta:</label>
-                                    <SfTextBox ID="PLANTA" @bind-Value="@(servicio.PLANTA)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Orden de Compra:</label>
-                                    <SfTextBox ID="OCOMPRA" @bind-Value="@(servicio.OCOMPRA)" Enabled="@Disabled"></SfTextBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Remito Recepcion:</label>
-                                    <SfTextBox ID="REMITOREC" @bind-Value="@(servicio.REMITOREC)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Descripción artículo:</label>
-                                    <SfTextBox ID="DESCARTICULO" @bind-Value="@(servicio.DESCARTICULO)" Enabled="@Disabled"></SfTextBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Pedido anterior:</label>
-                                    <SfTextBox ID="PEDIDOANT" @bind-Value="@(servicio.PEDIDOANT)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Fecha de mantenimiento anterior:</label>
-                                    <SfTextBox ID="FECMANTANT" @bind-Value="@(servicio.FECMANTANT)"></SfTextBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Remito:</label>
-                                    <SfTextBox ID="REMITO" @bind-Value="@(servicio.REMITO)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label>Observaciones:</label>
-                                    <SfTextBox ID="OBSERV" @bind-Value="@(servicio.OBSERV)" Enabled="@Disabled" Multiline="true"></SfTextBox>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade" id="pills-DatosPlaca" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>TAG:</label>
-                                    <SfTextBox ID="IDENTIFICACION" @bind-Value="@(servicio.IDENTIFICACION)"></SfTextBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <a href="/sc/marca/list" target="_blank">Marca:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Marca" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.MARCA)" DataSource="@marcas">
-                                        <ComboBoxFieldSettings Value="MARCA" Text="MARCA"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Numero de Serie:</label>
-                                    <SfTextBox ID="NSERIE" @bind-Value="@(servicio.NSERIE)"></SfTextBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Modelo:</label>
-                                    <SfTextBox ID="MODELO" @bind-Value="@(servicio.MODELO)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <a href="/sc/medida/list" target="_blank">Medida:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Medida" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.MEDIDA)" DataSource="@medidas">
-                                        <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <a href="/sc/serie/list" target="_blank">Serie:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Serie" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.SERIE)" DataSource="@series">
-                                        <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <a href="/sc/orificio/list" target="_blank">Orificio:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Orificio" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.ORIFICIO)" DataSource="@orificios">
-                                        <ComboBoxFieldSettings Value="Codigo" Text="Codigo"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Año:</label>
-                                    <SfTextBox ID="AÑO" @bind-Value="@(servicio.AÑO)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Area:</label>
-                                    <SfTextBox ID="AREA" @bind-Value="@(servicio.AREA)"></SfTextBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Fluido:</label>
-                                    <SfTextBox ID="FLUIDO" @bind-Value="@(servicio.FLUIDO)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Sobrepresión:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Sobrepresiones" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.SOBREPRESION)" DataSource="@SobrepresionData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Presión:</label>
-                                    <SfTextBox ID="PRESION" @bind-Value="@(servicio.PRESION)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Contrapresión:</label>
-                                    <SfTextBox ID="CONTRAPRESION" @bind-Value="@(servicio.CONTRAPRESION)"></SfTextBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Tipo:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Tipos" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.TIPO)" DataSource="@TipoData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Temperatura:</label>
-                                    <SfTextBox ID="TEMP" @bind-Value="@(servicio.TEMP)"></SfTextBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Resorte:</label>
-                                    <SfTextBox ID="RESORTE" @bind-Value="@(servicio.RESORTE)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Presión en Banco:</label>
-                                    <SfTextBox ID="PRESIONBANCO" @bind-Value="@(servicio.PRESIONBANCO)"></SfTextBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Servicio:</label>
-                                    <SfTextBox ID="SERVICIO" @bind-Value="@(servicio.SERVICIO)"></SfTextBox>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade" id="pills-EnsRecepcion" role="tabpanel" aria-labelledby="pills-contact-tab">
-                        <div>
-
-                            <div class="form-row">
-                                @*<div class="form-group col-md-6">
-                                        <label>Ensayo a la Recepcion:</label>
-                                        <SfTextBox ID="ENSRECEP" @bind-Value="@(servicio.ENSRECEP)"></SfTextBox>
-                                    </div>*@
-
-                                <div class="form-group col-md-6">
-                                    <label>Ensayo a la Recepcion:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.ENSRECEP)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Estado:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Estados" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.ESTADO)" DataSource="@EstadosData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Presión Ensayo Recepción:</label>
-                                    <SfTextBox ID="PRESIONRECEP" @bind-Value="@(servicio.PRESIONRECEP)"></SfTextBox>
-                                </div>
-
-                                @*<div class="form-group col-md-6">
-                                        <label>Fugas:</label>
-                                        <SfTextBox ID="FUGAS" @bind-Value="@(servicio.FUGAS)"></SfTextBox>
-                                    </div>*@
-
-                                <div class="form-group col-md-6">
-                                    <label>Fugas:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.FUGAS)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Presión de Fuga:</label>
-                                    <SfTextBox ID="PRESIONFUGA" @bind-Value="@(servicio.PRESIONFUGA)"></SfTextBox>
-                                </div>
-
-                                @*<div class="form-group col-md-6">
-                                        <label>Cambio de Presión:</label>
-                                        <SfTextBox ID="CAMBIOPRESION" @bind-Value="@(servicio.CAMBIOPRESION)"></SfTextBox>
-                                    </div>*@
-
-                                <div class="form-group col-md-6">
-                                    <label>Cambio de Presión:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.CAMBIOPRESION)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Presión solicitada:</label>
-                                    <SfTextBox ID="PRESIONSOLIC" @bind-Value="@(servicio.PRESIONSOLIC)"></SfTextBox>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade" id="pills-TrEfec" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <div>
-                            <div class="form-row">
-                                @*<div class="form-group col-md-6">
-                                        <label>Cambio de Repuesto:</label>
-                                        <SfTextBox ID="CAMBIOREPUESTO" @bind-Value="@(servicio.CAMBIOREPUESTO)"></SfTextBox>
-                                    </div>*@
-
-                                <div class="form-group col-md-6">
-                                    <label>Cambio de Repuesto:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.CAMBIOREPUESTO)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Repuestos:</label>
-                                    <SfTextBox ID="REPUESTOS" @bind-Value="@(servicio.REPUESTOS)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Codigo de nuevo Resorte:</label>
-                                    <SfTextBox ID="CODRESORTE" @bind-Value="@(servicio.CODRESORTE)"></SfTextBox>
-                                </div>
-
-                                @*<div class="form-group col-md-6">
-                                        <label>Ensayo Contrapresion:</label>
-                                        <SfTextBox ID="ENSAYOCONTRAP" @bind-Value="@(servicio.ENSAYOCONTRAP)"></SfTextBox>
-                                    </div>*@
-
-                                <div class="form-group col-md-6">
-                                    <label>Ensayo Contrapresion:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.ENSAYOCONTRAP)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Trabajos efectuados:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Trabajosefec" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.TRABAJOSEFEC)" DataSource="@trabajosEfectuados">
-                                        <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Trabajos Accesorios:</label>
-                                    <SfTextBox ID="TRABAJOSACCES" @bind-Value="@(servicio.TRABAJOSACCES)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <a href="/sc/operario/list" target="_blank">Responsable:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.RESP)" DataSource="@opers">
-                                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <a href="/sc/operario/list" target="_blank">Controlo:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.CONTROLO)" DataSource="@opers">
-                                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                @*<div class="form-group col-md-6">
-                                        <label>POP:</label>
-                                        <SfTextBox ID="POP" @bind-Value="@(servicio.POP)"></SfTextBox>
-                                    </div>*@
-
-                                <div class="form-group col-md-6">
-                                    <label>POP:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.POP)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-
-                                <!--
-                                <div class="form-group col-md-6">
-                                    <label>Responsable Técnico:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.RESPTECNICO)" DataSource="@opers">
-                                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                                -->
-
-                                <div class="form-group col-md-6">
-                                    <label>Presencia Inspector:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.PRESENCIAINSPEC)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                @*<div class="form-group col-md-6">
-                                        <label>OPDS:</label>
-                                        <SfTextBox ID="OPDS" @bind-Value="@(servicio.OPDS)"></SfTextBox>
-                                    </div>*@
-
-                                <div class="form-group col-md-6">
-                                    <label>OPDS:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(servicio.OPDS)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Acta:</label>
-                                    <SfTextBox ID="ACTA" @bind-Value="@(servicio.ACTA)"></SfTextBox>
-                                </div>
-                            </div>
-
-
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label>Observaciones del trabajo efectuado:</label>
-                                    <SfTextBox ID="OBSERVMANT" @bind-Value="@(servicio.OBSERVMANT)" Multiline="true"></SfTextBox>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="pills-file" role="tabpanel" aria-labelledby="pills-profile-tab">
-
-                        <VerEnsayos Accion="RUTAENSAYO" Codigo="@servicio.PEDIDO.ToString()">
-
-                        </VerEnsayos>
-                    </div>
-                    <div class="tab-pane fade" id="pills-img" role="tabpanel" aria-labelledby="pills-profile-tab">
-                    @{
-                        @foreach (Solution ruta in rutas)
-                        {
-                            if (ruta.CAMPO == "RUTAENSAYO")
-                            {
-                                <div class="accordion" id="accordionExample">
-                                    @{
-                                        string rutaDiscojpg = ruta.VALORC + $"{servicio.Id}_disco.jpg";
-                                        string rutaToberajpg = ruta.VALORC + $"{servicio.Id}_tobera.jpg";
-                                        string rutaResortejpg = ruta.VALORC + $"{servicio.Id}_resorte.jpg";
-                                        string rutaRecepcionjpg = ruta.VALORC + $"{servicio.Id}_recepcion.jpg";
-                                        string rutaDespachojpg = ruta.VALORC + $"{servicio.Id}_despacho.jpg";
-
-                                        string rutaDiscopng = ruta.VALORC + $"{servicio.Id}_disco.png";
-                                        string rutaToberapng = ruta.VALORC + $"{servicio.Id}_tobera.png";
-                                        string rutaResortepng = ruta.VALORC + $"{servicio.Id}_resorte.png";
-                                        string rutaRecepcionpng = ruta.VALORC + $"{servicio.Id}_recepcion.png";
-                                        string rutaDespachopng = ruta.VALORC + $"{servicio.Id}_despacho.png";
-
-                                        <div class="card">
-                                            @{
-                                                if (File.Exists(rutaDiscojpg))
-                                                {
-                                                    <div class="card-header" id="One">
-                                                        <h2 class="mb-0">
-                                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                                                Disco
-                                                            </button>
-                                                        </h2>
-                                                    </div>
-                                                    <div id="collapseOne" class="collapse" aria-labelledby="One" data-parent="#accordionExample">
-                                                        <div class="card-body">
-                                                            <img src="@rutaDiscojpg" alt="Alternate Text"/>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                else if (File.Exists(rutaDiscopng))
-                                                {
-                                                    <div class="card-header" id="One">
-                                                        <h2 class="mb-0">
-                                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                                                Disco
-                                                            </button>
-                                                        </h2>
-                                                    </div>
-                                                    <div id="collapseOne" class="collapse" aria-labelledby="One" data-parent="#accordionExample">
-                                                        <div class="card-body">
-                                                            <img src="@rutaDiscopng" alt="Alternate Text"/>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                //aca iria el siguiente if, todo adentro de la llave de @{} :)
-
-
-                                                if (File.Exists(rutaToberajpg))
-                                                {
-                                                    <div class="card-header" id="Two">
-                                                        <h2 class="mb-0">
-                                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                                                Tobera
-                                                            </button>
-                                                        </h2>
-                                                    </div>
-
-                                                    <div id="collapseTwo" class="collapse" aria-labelledby="Two" data-parent="#accordionExample">
-                                                        <div class="card-body">
-                                                            <img src="@rutaToberajpg" alt="Alternate Text"/>
-
-                                                        </div>
-                                                    </div>
-                                                }
-                                                else if (File.Exists(rutaToberapng))
-                                                {
-                                                    <div class="card-header" id="Two">
-                                                        <h2 class="mb-0">
-                                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                                                Tobera
-                                                            </button>
-                                                        </h2>
-                                                    </div>
-
-                                                    <div id="collapseTwo" class="collapse" aria-labelledby="Two" data-parent="#accordionExample">
-                                                        <div class="card-body">
-                                                            <img src="@rutaToberapng" alt="Alternate Text"/>
-
-                                                        </div>
-                                                    </div>
-                                                }
-                                                if (File.Exists(rutaResortejpg))
-                                                {
-                                                    <div class="card-header" id="Three">
-                                                        <h2 class="mb-0">
-                                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                                Resorte
-                                                            </button>
-                                                        </h2>
-                                                    </div>
-
-                                                    <div id="collapseThree" class="collapse" aria-labelledby="Three" data-parent="#accordionExample">
-                                                        <div class="card-body">
-                                                            <img src="@rutaResortejpg" alt="Alternate Text"/>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                else if (File.Exists(rutaResortepng))
-                                                {
-                                                    <div class="card-header" id="Three">
-                                                        <h2 class="mb-0">
-                                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                                Resorte
-                                                            </button>
-                                                        </h2>
-                                                    </div>
-
-                                                    <div id="collapseThree" class="collapse" aria-labelledby="Three" data-parent="#accordionExample">
-                                                        <div class="card-body">
-                                                            <img src="@rutaResortepng" alt="Alternate Text"/>
-                                                        </div>
-                                                    </div>
-
-                                                }
-                                                if (File.Exists(rutaRecepcionjpg))
-                                                {
-                                                    <div class="card-header" id="Four">
-                                                        <h2 class="mb-0">
-                                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                                                Recepción
-                                                            </button>
-                                                        </h2>
-                                                    </div>
-
-                                                    <div id="collapseFour" class="collapse" aria-labelledby="Four" data-parent="#accordionExample">
-                                                        <div class="card-body">
-                                                            <img src="@rutaRecepcionjpg" alt="Alternate Text"/>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                else if (File.Exists(rutaRecepcionpng))
-                                                {
-                                                    <div class="card-header" id="Two">
-                                                        <h2 class="mb-0">
-                                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                                                Tobera
-                                                            </button>
-                                                        </h2>
-                                                    </div>
-
-                                                    <div id="collapseTwo" class="collapse" aria-labelledby="Two" data-parent="#accordionExample">
-                                                        <div class="card-body">
-                                                            <img src="@rutaRecepcionpng" alt="Alternate Text"/>
-
-                                                        </div>
-                                                    </div>
-                                                }
-                                                if (File.Exists(rutaDespachojpg))
-                                                {
-                                                    <div class="card-header" id="Five">
-                                                        <h2 class="mb-0">
-                                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                                                Despacho
-                                                            </button>
-                                                        </h2>
-                                                    </div>
-
-                                                    <div id="collapseFive" class="collapse" aria-labelledby="Five" data-parent="#accordionExample">
-                                                        <div class="card-body">
-                                                            <img src="@rutaDespachojpg" alt="Alternate Text"/>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                else if (File.Exists(rutaDespachopng))
-                                                {
-                                                    <div class="card-header" id="Two">
-                                                        <h2 class="mb-0">
-                                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                                                Tobera
-                                                            </button>
-                                                        </h2>
-                                                    </div>
-
-                                                    <div id="collapseTwo" class="collapse" aria-labelledby="Two" data-parent="#accordionExample">
-                                                        <div class="card-body">
-                                                            <img src="@rutaDespachopng" alt="Alternate Text"/>
-
-                                                        </div>
-                                                    </div>
-                                                }
-                                            }
-
-
-
-
-                                        </div>
-                                    }
-
-                                </div>
-
-                            }
-                        }
-                    }
-                    </div>
-
-
-                    </div>
+                    //                </div>
+
+                    //                <div class="form-group col-md-4">
+                    //                    <label>Fecha:</label>
+                    //                    <SfDatePicker ID="FECHA" @bind-Value="@(servicio.FECHA)" Enabled="@Disabled" Placeholder="Fecha"></SfDatePicker>
+
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Cliente:</label>
+                    //                    <SfTextBox ID="CLIENTE" @bind-Value="@(servicio.CLIENTE)" Enabled="@Disabled"></SfTextBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Planta:</label>
+                    //                    <SfTextBox ID="PLANTA" @bind-Value="@(servicio.PLANTA)"></SfTextBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Orden de Compra:</label>
+                    //                    <SfTextBox ID="OCOMPRA" @bind-Value="@(servicio.OCOMPRA)" Enabled="@Disabled"></SfTextBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Remito Recepcion:</label>
+                    //                    <SfTextBox ID="REMITOREC" @bind-Value="@(servicio.REMITOREC)"></SfTextBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Descripción artículo:</label>
+                    //                    <SfTextBox ID="DESCARTICULO" @bind-Value="@(servicio.DESCARTICULO)" Enabled="@Disabled"></SfTextBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Pedido anterior:</label>
+                    //                    <SfTextBox ID="PEDIDOANT" @bind-Value="@(servicio.PEDIDOANT)"></SfTextBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Fecha de mantenimiento anterior:</label>
+                    //                    <SfTextBox ID="FECMANTANT" @bind-Value="@(servicio.FECMANTANT)"></SfTextBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Remito:</label>
+                    //                    <SfTextBox ID="REMITO" @bind-Value="@(servicio.REMITO)"></SfTextBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-12">
+                    //                    <label>Observaciones:</label>
+                    //                    <SfTextBox ID="OBSERV" @bind-Value="@(servicio.OBSERV)" Enabled="@Disabled" Multiline="true"></SfTextBox>
+                    //                </div>
+                    //            </div>
+                    //        </div>
+                    //    </div>
+
+                    //    <div class="tab-pane fade" id="pills-DatosPlaca" role="tabpanel" aria-labelledby="pills-profile-tab">
+                    //        <div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>TAG:</label>
+                    //                    <SfTextBox ID="IDENTIFICACION" @bind-Value="@(servicio.IDENTIFICACION)"></SfTextBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <a href="/sc/marca/list" target="_blank">Marca:</a>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="Marca" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.MARCA)" DataSource="@marcas">
+                    //                        <ComboBoxFieldSettings Value="MARCA" Text="MARCA"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Numero de Serie:</label>
+                    //                    <SfTextBox ID="NSERIE" @bind-Value="@(servicio.NSERIE)"></SfTextBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Modelo:</label>
+                    //                    <SfTextBox ID="MODELO" @bind-Value="@(servicio.MODELO)"></SfTextBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <a href="/sc/medida/list" target="_blank">Medida:</a>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="Medida" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.MEDIDA)" DataSource="@medidas">
+                    //                        <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <a href="/sc/serie/list" target="_blank">Serie:</a>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="Serie" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.SERIE)" DataSource="@series">
+                    //                        <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <a href="/sc/orificio/list" target="_blank">Orificio:</a>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="Orificio" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.ORIFICIO)" DataSource="@orificios">
+                    //                        <ComboBoxFieldSettings Value="Codigo" Text="Codigo"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Año:</label>
+                    //                    <SfTextBox ID="AÑO" @bind-Value="@(servicio.AÑO)"></SfTextBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Area:</label>
+                    //                    <SfTextBox ID="AREA" @bind-Value="@(servicio.AREA)"></SfTextBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Fluido:</label>
+                    //                    <SfTextBox ID="FLUIDO" @bind-Value="@(servicio.FLUIDO)"></SfTextBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Sobrepresión:</label>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="Sobrepresiones" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.SOBREPRESION)" DataSource="@SobrepresionData">
+                    //                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Presión:</label>
+                    //                    <SfTextBox ID="PRESION" @bind-Value="@(servicio.PRESION)"></SfTextBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Contrapresión:</label>
+                    //                    <SfTextBox ID="CONTRAPRESION" @bind-Value="@(servicio.CONTRAPRESION)"></SfTextBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Tipo:</label>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="Tipos" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.TIPO)" DataSource="@TipoData">
+                    //                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Temperatura:</label>
+                    //                    <SfTextBox ID="TEMP" @bind-Value="@(servicio.TEMP)"></SfTextBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Resorte:</label>
+                    //                    <SfTextBox ID="RESORTE" @bind-Value="@(servicio.RESORTE)"></SfTextBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Presión en Banco:</label>
+                    //                    <SfTextBox ID="PRESIONBANCO" @bind-Value="@(servicio.PRESIONBANCO)"></SfTextBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Servicio:</label>
+                    //                    <SfTextBox ID="SERVICIO" @bind-Value="@(servicio.SERVICIO)"></SfTextBox>
+                    //                </div>
+                    //            </div>
+                    //        </div>
+                    //    </div>
+
+                    //    <div class="tab-pane fade" id="pills-EnsRecepcion" role="tabpanel" aria-labelledby="pills-contact-tab">
+                    //        <div>
+
+                    //            <div class="form-row">
+                    //                @*<div class="form-group col-md-6">
+                    //                        <label>Ensayo a la Recepcion:</label>
+                    //                        <SfTextBox ID="ENSRECEP" @bind-Value="@(servicio.ENSRECEP)"></SfTextBox>
+                    //                    </div>*@
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Ensayo a la Recepcion:</label>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.ENSRECEP)" DataSource="@SIoNOData">
+                    //                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Estado:</label>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="Estados" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.ESTADO)" DataSource="@EstadosData">
+                    //                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Presión Ensayo Recepción:</label>
+                    //                    <SfTextBox ID="PRESIONRECEP" @bind-Value="@(servicio.PRESIONRECEP)"></SfTextBox>
+                    //                </div>
+
+                    //                @*<div class="form-group col-md-6">
+                    //                        <label>Fugas:</label>
+                    //                        <SfTextBox ID="FUGAS" @bind-Value="@(servicio.FUGAS)"></SfTextBox>
+                    //                    </div>*@
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Fugas:</label>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.FUGAS)" DataSource="@SIoNOData">
+                    //                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Presión de Fuga:</label>
+                    //                    <SfTextBox ID="PRESIONFUGA" @bind-Value="@(servicio.PRESIONFUGA)"></SfTextBox>
+                    //                </div>
+
+                    //                @*<div class="form-group col-md-6">
+                    //                        <label>Cambio de Presión:</label>
+                    //                        <SfTextBox ID="CAMBIOPRESION" @bind-Value="@(servicio.CAMBIOPRESION)"></SfTextBox>
+                    //                    </div>*@
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Cambio de Presión:</label>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.CAMBIOPRESION)" DataSource="@SIoNOData">
+                    //                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Presión solicitada:</label>
+                    //                    <SfTextBox ID="PRESIONSOLIC" @bind-Value="@(servicio.PRESIONSOLIC)"></SfTextBox>
+                    //                </div>
+                    //            </div>
+                    //        </div>
+                    //    </div>
+
+                    //    <div class="tab-pane fade" id="pills-TrEfec" role="tabpanel" aria-labelledby="pills-profile-tab">
+                    //        <div>
+                    //            <div class="form-row">
+                    //                @*<div class="form-group col-md-6">
+                    //                        <label>Cambio de Repuesto:</label>
+                    //                        <SfTextBox ID="CAMBIOREPUESTO" @bind-Value="@(servicio.CAMBIOREPUESTO)"></SfTextBox>
+                    //                    </div>*@
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Cambio de Repuesto:</label>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.CAMBIOREPUESTO)" DataSource="@SIoNOData">
+                    //                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Repuestos:</label>
+                    //                    <SfTextBox ID="REPUESTOS" @bind-Value="@(servicio.REPUESTOS)"></SfTextBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Codigo de nuevo Resorte:</label>
+                    //                    <SfTextBox ID="CODRESORTE" @bind-Value="@(servicio.CODRESORTE)"></SfTextBox>
+                    //                </div>
+
+                    //                @*<div class="form-group col-md-6">
+                    //                        <label>Ensayo Contrapresion:</label>
+                    //                        <SfTextBox ID="ENSAYOCONTRAP" @bind-Value="@(servicio.ENSAYOCONTRAP)"></SfTextBox>
+                    //                    </div>*@
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Ensayo Contrapresion:</label>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.ENSAYOCONTRAP)" DataSource="@SIoNOData">
+                    //                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Trabajos efectuados:</label>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="Trabajosefec" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.TRABAJOSEFEC)" DataSource="@trabajosEfectuados">
+                    //                        <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Trabajos Accesorios:</label>
+                    //                    <SfTextBox ID="TRABAJOSACCES" @bind-Value="@(servicio.TRABAJOSACCES)"></SfTextBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-6">
+                    //                    <a href="/sc/operario/list" target="_blank">Responsable:</a>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.RESP)" DataSource="@opers">
+                    //                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <a href="/sc/operario/list" target="_blank">Controlo:</a>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.CONTROLO)" DataSource="@opers">
+                    //                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                @*<div class="form-group col-md-6">
+                    //                        <label>POP:</label>
+                    //                        <SfTextBox ID="POP" @bind-Value="@(servicio.POP)"></SfTextBox>
+                    //                    </div>*@
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>POP:</label>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.POP)" DataSource="@SIoNOData">
+                    //                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+
+                    //                <!--
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Responsable Técnico:</label>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.RESPTECNICO)" DataSource="@opers">
+                    //                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+                    //                -->
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Presencia Inspector:</label>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.PRESENCIAINSPEC)" DataSource="@SIoNOData">
+                    //                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+                    //            </div>
+
+                    //            <div class="form-row">
+                    //                @*<div class="form-group col-md-6">
+                    //                        <label>OPDS:</label>
+                    //                        <SfTextBox ID="OPDS" @bind-Value="@(servicio.OPDS)"></SfTextBox>
+                    //                    </div>*@
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>OPDS:</label>
+                    //                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                    //                                @bind-Value="@(servicio.OPDS)" DataSource="@SIoNOData">
+                    //                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    //                    </SfComboBox>
+                    //                </div>
+
+                    //                <div class="form-group col-md-6">
+                    //                    <label>Acta:</label>
+                    //                    <SfTextBox ID="ACTA" @bind-Value="@(servicio.ACTA)"></SfTextBox>
+                    //                </div>
+                    //            </div>
+
+
+                    //            <div class="form-row">
+                    //                <div class="form-group col-md-12">
+                    //                    <label>Observaciones del trabajo efectuado:</label>
+                    //                    <SfTextBox ID="OBSERVMANT" @bind-Value="@(servicio.OBSERVMANT)" Multiline="true"></SfTextBox>
+                    //                </div>
+                    //            </div>
+
+                    //        </div>
+                    //    </div>
+                    //    <div class="tab-pane fade" id="pills-file" role="tabpanel" aria-labelledby="pills-profile-tab">
+
+                    //        <VerEnsayos Accion="RUTAENSAYO" Codigo="@servicio.PEDIDO.ToString()"></VerEnsayos>
+                    //    </div>
+                    //    <div class="tab-pane fade" id="pills-img" role="tabpanel" aria-labelledby="pills-profile-tab">
+
+                    //        <div class="control-section">
+                    //            <SfFileManager TValue="FileManagerDirectoryContent" AllowDragAndDrop="true" Height="450px" View="ViewType.Details">
+                    //                <FileManagerAjaxSettings Url="/api/FilesManager/FileOperations"
+                    //                                         DownloadUrl="/api/FilesManager/Download"
+                    //                                         UploadUrl="/api/FilesManager/Upload"
+                    //                                         GetImageUrl="/api/FilesManager/GetImage">
+                    //                </FileManagerAjaxSettings>
+                    //                <FileManagerEvents TValue="FileManagerDirectoryContent"></FileManagerEvents>
+                    //                <FileManagerNavigationPaneSettings Visible=false></FileManagerNavigationPaneSettings>
+                    //            </SfFileManager>
+                    //        </div>
+                    //    </div>
+                    //    <div class="tab-pane fade" id="pills-img" role="tabpanel" aria-labelledby="pills-profile-tab">Test</div> 
+
+                    //</div>
                 }
                 </Template>
                 </GridEditSettings>
                 <GridColumns>
-                    <GridColumn Field=@nameof(Service.Id) HeaderText="Id" AllowSearching="true" Visible="false" IsPrimaryKey="true"
+                    <GridColumn Field=@nameof(Service.Id) AutoFit="true"  HeaderText="Id" AllowSearching="true" Visible="false" IsPrimaryKey="true"
                                 TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                    <GridColumn Field=@nameof(Service.SOLICITUD) HeaderText="Solicitud" AllowSearching="true"
+                    <GridColumn Field=@nameof(Service.SOLICITUD) AutoFit="true"  HeaderText="Solicitud" AllowSearching="true"
                                 TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                    <GridColumn Field=@nameof(Service.PRESUPUESTO) HeaderText="Presupuesto" AllowSearching="true"
+                    <GridColumn Field=@nameof(Service.PRESUPUESTO) AutoFit="true"  HeaderText="Presupuesto" AllowSearching="true"
                                 TextAlign="TextAlign.Left" Width="90"></GridColumn>
                     <GridColumn Field=@nameof(Service.PEDIDO) HeaderText="Pedido" AllowSearching="true"
                                 TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                    <GridColumn Field=@nameof(Service.REMITO) HeaderText="Remito" AllowSearching="true"
+                    <GridColumn Field=@nameof(Service.REMITO) AutoFit="true"  HeaderText="Remito" AllowSearching="true"
                                 TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                    <GridColumn Field=@nameof(Service.DESCARTICULO) HeaderText="Articulo" AllowSearching="true"
+                    <GridColumn Field=@nameof(Service.DESCARTICULO) AutoFit="true" HeaderText="Articulo" AllowSearching="true"
                                 TextAlign="TextAlign.Left" Width="190"></GridColumn>
                     <GridColumn Field=@nameof(Service.FECHA) AutoFit="true" HeaderText="Fecha" Format="dd/MM/yyyy"></GridColumn>
                     <GridColumn Field=@nameof(Service.CLIENTE) AutoFit="true" HeaderText="Cliente"></GridColumn>

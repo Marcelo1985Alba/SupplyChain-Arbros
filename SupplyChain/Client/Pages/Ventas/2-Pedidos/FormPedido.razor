@@ -134,11 +134,19 @@
 
                                 <GridColumn Field=@nameof(PedCli.CG_ART) AllowEditing="false" HeaderText="Producto" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
                                 <GridColumn Field=@nameof(PedCli.DES_ART) AllowEditing="false" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
-                                <GridColumn Field=@nameof(PedCli.CANTPED) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px">
+                                <GridColumn Field=@nameof(PedCli.CANTPED) HeaderText="Cantidad" Format="N0" TextAlign="TextAlign.Left" Width="100px">
                                     <EditTemplate Context="detalle">
                                         @{
                                             var value = (detalle as PedCli);
                                             <SfNumericTextBox @bind-Value="value.CANTPED" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
+                                        }
+                                    </EditTemplate>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(PedCli.ENTRPREV) HeaderText="F. Prev" Format="dd/MM/yyy" TextAlign="TextAlign.Left" Width="100px">
+                                    <EditTemplate Context="detalle">
+                                        @{
+                                            var value = (detalle as PedCli);
+                                            <Syncfusion.Blazor.Calendars.SfDatePicker @bind-Value="value.ENTRPREV" ShowTodayButton="true" ></Syncfusion.Blazor.Calendars.SfDatePicker>
                                         }
                                     </EditTemplate>
                                 </GridColumn>

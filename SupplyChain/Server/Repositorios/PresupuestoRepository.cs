@@ -60,6 +60,7 @@ namespace SupplyChain.Server.Repositorios
 
         private async Task AsignarServicio(Presupuesto entity)
         {
+            //COMO DETECTAR UN PRESUPUESTO VIEJO QUE NO EXISTE EN SERVICIO
             foreach (var item in entity.Items.Where(p => p.CG_ART.StartsWith("0012")))
             {
 

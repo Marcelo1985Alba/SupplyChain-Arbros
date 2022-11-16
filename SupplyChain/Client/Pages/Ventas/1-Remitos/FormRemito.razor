@@ -13,13 +13,13 @@
     <DialogAnimationSettings Effect="DialogEffect.FadeZoom" Duration="200"></DialogAnimationSettings>
     <DialogTemplates>
         <Header>
-            @if (Pedido.PEDIDO == 0)
+            @if (string.IsNullOrEmpty(Pedido.REMITO))
             {
                 <div class="e-dlg-header-titulo">Nuevo Remito</div>
             }
             else
             {
-                <div class="e-dlg-header-titulo">Remito:&nbsp;&nbsp;@Pedido.PEDIDO&nbsp;&nbsp;-&nbsp;&nbsp;@Pedido.DES_CLI</div>
+                <div class="e-dlg-header-titulo">Remito:&nbsp;&nbsp;@Pedido.REMITO&nbsp;&nbsp;-&nbsp;&nbsp;@Pedido.DES_CLI</div>
             }
         </Header>
         <Content>
@@ -60,14 +60,14 @@
                         <SfNumericTextBox ID="TC" @bind-Value="@(Pedido.VA_INDIC)" ShowSpinButton="false" Decimals="2" Readonly="true"></SfNumericTextBox>
                     </div>
                     @*<div class="form-group col-md-1 mt-4">
-                        <SfButton IconCss="e-icons e-repeat" CssClass="e-round e-warning"
-                                  OnClick="@(async ()=> await GetTipoCambioDolarHoy())"
-                                  HtmlAttributes="@HtmlAttributeButtonTC"></SfButton>
-                    </div>*@
+                <SfButton IconCss="e-icons e-repeat" CssClass="e-round e-warning"
+                          OnClick="@(async ()=> await GetTipoCambioDolarHoy())"
+                          HtmlAttributes="@HtmlAttributeButtonTC"></SfButton>
+            </div>*@
                     @*<div class="form-group col-md-1">
-                        <label class="">Bonificacion:</label>
-                        <SfNumericTextBox ID="Bonifc" @bind-Value="@(Pedido.BONIFIC)" ShowSpinButton="false" Decimals="2"></SfNumericTextBox>
-                    </div>*@
+                <label class="">Bonificacion:</label>
+                <SfNumericTextBox ID="Bonifc" @bind-Value="@(Pedido.BONIFIC)" ShowSpinButton="false" Decimals="2"></SfNumericTextBox>
+            </div>*@
 
                 </div>
                 <div class="form-row">
@@ -102,10 +102,18 @@
                             <DropDownListFieldSettings Value="Id" Text="DESCRIPCION"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
-                    @*<div class="form-group col-md-2">
-                        <label class="">O. Compra:</label>
-                        <SfTextBox ID="ORCO" @bind-Value="@(Pedido.ORCO)"></SfTextBox>
-                    </div>*@
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group col-md-4">
+                        <label class="">Bultos:</label>
+                        <SfTextBox CssClass="customClass" ID="Bultos" @bind-Value="@(Pedido.BULTOS)" Width="250" Readonly="false"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label class="">Monto:</label>
+                        <SfTextBox CssClass="customClass" ID="Monto" @bind-Value="@(Pedido.MONTO)" Readonly="false"></SfTextBox>
+                    </div>
 
                 </div>
 
@@ -115,7 +123,7 @@
                             <ToastPosition X="Center" Y="Top"></ToastPosition>
                         </SfToast>
 
-                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="90px"
+                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="120px"
                                 @ref="refGridItems" DataSource="@Pedido.Items" Width="100%" ID="grdItemsPresup"
                                 AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -161,15 +169,15 @@
                                 <GridColumn Field="@nameof(Pedidos.LOTE)" HeaderText="Lote" Width="170"></GridColumn>
                                 <GridColumn Field="@nameof(Pedidos.SERIE)" HeaderText="Serie" Width="150"></GridColumn>
                                 <GridColumn Field="@nameof(Pedidos.DESPACHO)" HeaderText="Presion" Width="150"></GridColumn>
-                                <GridColumn Field="@nameof(Pedidos.OBS1)" HeaderText="Bulto" Width="170"></GridColumn>
-                                <GridColumn Field="@nameof(Pedidos.OBS3)" HeaderText="Importe" Width="150"></GridColumn>
-                                <GridColumn Field="@nameof(Pedidos.OBSERITEM)" HeaderText="Observaciones" Width="150"></GridColumn>
+                                <GridColumn Field="@nameof(Pedidos.OBSERITEM)" HeaderText="Observaciones" Width="350"></GridColumn>
                             </GridColumns>
                         </SfGrid>
                     </div>
 
 
                 </div>
+
+
                 <SfSpinner @ref="@refSpinnerCli" Size="50" @bind-Visible="@SpinnerVisible"
                            Label="Buscando ..." Type="SpinnerType.Fabric">
                 </SfSpinner>
@@ -178,15 +186,6 @@
                                 OnObjectSelected="@ClienteExternoSelected" Cg_Cli="@Pedido.CG_CLI" Des_Cli="@Pedido.DES_CLI"
                                 OnCerrarDialog="@(()=> popupBuscadorVisibleCliente = false)"></ClientesDialog>
 
-                @*<SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog @ref="refPrecioDialog" PopupBuscadorVisible="@popupBuscadorVisiblePrecio"
-                    OnObjectSelected="@PrecioSelected" SoloReparaciones="@buscarSoloReparaciones"
-                    OnCerrarDialog="CerrarDialogPrecio"></SupplyChain.Client.Shared.BuscadorPrecios.PreciosDialog>*@
-
-
-                @*<ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto"
-                    OnObjectSelected="@ProductoSelected"
-                    OnCerrarDialog="CerrarDialogProducto"></ProductoDialog>*@
-
 
 
                 <ValidationSummary />
@@ -194,6 +193,8 @@
             </EditForm>
         </Content>
         <FooterTemplate>
+
+            
 
             @*<div class="container-total">
 

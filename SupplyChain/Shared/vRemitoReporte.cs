@@ -11,6 +11,7 @@ namespace SupplyChain.Shared
     public class vRemitoReporte
 	{
         public string REMITO { get; set; }
+        public DateTime FE_MOV { get; set; }
         public int PEDIDO { get; set; }
 		public DateTime FE_PED { get; set; }
 		public decimal BONIFIC { get; set; }
@@ -47,5 +48,9 @@ namespace SupplyChain.Shared
 		public string DESCRIPCION_IVA { get; set; }
 		public string TRANSPORTE { get; set; }
 		public string CALLE_TRANSPORTE { get; set; }
-	}
+		public string OBSERITEM { get; set; }
+		public string OBS1 { get; set; }
+		public string OBS3 { get; set; }
+        public string DESPACHO { get; set; }
+    }
 }

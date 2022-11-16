@@ -59,6 +59,11 @@ FROM     vRemitoReporte</CommandText>
               <Mapping SourceColumn="DESCRIPCION_IVA" DataSetColumn="DESCRIPCION_IVA" />
               <Mapping SourceColumn="TRANSPORTE" DataSetColumn="TRANSPORTE" />
               <Mapping SourceColumn="CALLE_TRANSPORTE" DataSetColumn="CALLE_TRANSPORTE" />
+              <Mapping SourceColumn="FE_MOV" DataSetColumn="FE_MOV" />
+              <Mapping SourceColumn="OBSERITEM" DataSetColumn="OBSERITEM" />
+              <Mapping SourceColumn="OBS1" DataSetColumn="OBS1" />
+              <Mapping SourceColumn="OBS3" DataSetColumn="OBS3" />
+              <Mapping SourceColumn="DESPACHO" DataSetColumn="DESPACHO" />
             </Mappings>
             <Sources>
               <DbSource ConnectionRef="marcelo-pc\sql_2017.Arbros.dbo" DbObjectName="Arbros.dbo.vPresupuestoReporte" DbObjectType="View" FillMethodModifier="Public" FillMethodName="FillBy" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetDataBy" GeneratorSourceName="FillBy" GetMethodModifier="Public" GetMethodName="GetDataBy" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="FillBy">
@@ -285,6 +290,35 @@ FROM     vRemitoReporte</CommandText>
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="FE_MOV" msprop:Generator_ColumnVarNameInTable="columnFE_MOV" msprop:Generator_ColumnPropNameInRow="FE_MOV" msprop:Generator_ColumnPropNameInTable="FE_MOVColumn" msprop:Generator_UserColumnName="FE_MOV" type="xs:dateTime" />
+              <xs:element name="OBSERITEM" msprop:Generator_ColumnVarNameInTable="columnOBSERITEM" msprop:Generator_ColumnPropNameInRow="OBSERITEM" msprop:Generator_ColumnPropNameInTable="OBSERITEMColumn" msprop:Generator_UserColumnName="OBSERITEM">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="8000" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="OBS1" msprop:Generator_ColumnVarNameInTable="columnOBS1" msprop:Generator_ColumnPropNameInRow="OBS1" msprop:Generator_ColumnPropNameInTable="OBS1Column" msprop:Generator_UserColumnName="OBS1">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="500" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="OBS3" msprop:Generator_ColumnVarNameInTable="columnOBS3" msprop:Generator_ColumnPropNameInRow="OBS3" msprop:Generator_ColumnPropNameInTable="OBS3Column" msprop:Generator_UserColumnName="OBS3">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="500" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DESPACHO" msprop:Generator_ColumnVarNameInTable="columnDESPACHO" msprop:Generator_ColumnPropNameInRow="DESPACHO" msprop:Generator_ColumnPropNameInTable="DESPACHOColumn" msprop:Generator_UserColumnName="DESPACHO">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="20" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>

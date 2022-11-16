@@ -389,6 +389,10 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 item.CG_COND_ENTREGA = Pedido.CG_COND_ENTREGA;
                 item.CG_CONDICION_PAGO = Pedido.CG_CONDICION_PAGO;
                 item.TIPOO = 1;
+                item.DIRENT = Pedido.DIRENT ?? string.Empty;
+                item.OBS1 = Pedido.BULTOS;
+                item.OBS3 = Pedido.MONTO;
+
                 item.COMPROB = "REMITO";
             }
 

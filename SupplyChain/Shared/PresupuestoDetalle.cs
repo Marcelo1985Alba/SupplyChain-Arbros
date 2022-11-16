@@ -29,6 +29,23 @@ namespace SupplyChain.Shared
         public Presupuesto Presupuesto { get; set; }
         public Solicitud Solicitud { get; set; }
 
+
+        [NotMapped]
+        public string CONTRAPRESIONFIJA { get; set; } = string.Empty;
+        [NotMapped]
+        public string CONTRAPRESIONVARIABLE { get; set; } = string.Empty;
+        [NotMapped]
+        public string PRESIONAPERTURA { get; set; } = string.Empty;
+        [NotMapped]
+        public string DESCRIPCIONFLUIDO { get; set; } = string.Empty;
+        [NotMapped]
+        public string TEMPERATURADESCARGAT { get; set; } = string.Empty;
+        [NotMapped]
+        public string CAPACIDADREQUERIDA { get; set; } = string.Empty;
+        [NotMapped]
+        public string DESCRIPCIONTAG { get; set; } = string.Empty;
+
+
         [NotMapped]
         public string DES_ART { get; set; }
 

@@ -140,7 +140,7 @@ namespace SupplyChain
             {
                 if (_context.Pedidos.Any())
                 {
-                    lContiene = await _context.Pedidos.Where(p => p.PEDIDO.ToString().Contains(Pedido) && p.DES_CLI.Contains(Cliente) && p.CG_ART.Contains(Codigo) && p.AVISO == "ALTA DE PRODUCTO FABRICADO").OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
+                    lContiene = await _context.Pedidos.Where(p =>  p.AVISO == "ALTA DE PRODUCTO FABRICADO").OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
                 }
                 if (lContiene == null)
                 {
@@ -320,11 +320,20 @@ namespace SupplyChain
                 try
                 {
                     if (liberaRemito)
-                    {
+                    { 
                         var rem = remito.ToString().PadLeft(8, '0');
                         stock.REMITO = $"0001-{rem}";
 
                         stock.Id ??= 0;
+                    }
+
+                    if(stock.TIPOO == 1)
+                    {
+                        stock.STOCKA = -1;
+                        if (stock.STOCK > 0)
+                        {
+                            stock.STOCK = -stock.STOCK;
+                        }
                     }
 
 
@@ -348,7 +357,11 @@ namespace SupplyChain
                     if (liberaRemito)
                         await generaController.LiberaByCampo("REMITO");
 
-                    await generaController.LiberaByCampo("REGSTOCK");
+                    if (stock.Id < 0)
+                    {
+                        await generaController.LiberaByCampo("REGSTOCK");
+                    }
+                    
                     if (RegistroExists(stock.Id))
                     {
                         return Conflict();
@@ -417,6 +430,13 @@ namespace SupplyChain
 
             _context.Pedidos.Add(stock);
             await _context.SaveChangesAsync();
+
+            if (stock.TIPOO == 1)
+            {
+                var update = "UPDATE PEDCLI SET CG_ESTADO = 'C' " +
+                    $"WHERE PEDIDO = {stock.PEDIDO} AND CG_ART = '{stock.CG_ART}'";
+                _context.Database.ExecuteSqlRaw(update);
+            }
 
             await CerrarOC(stock);
 

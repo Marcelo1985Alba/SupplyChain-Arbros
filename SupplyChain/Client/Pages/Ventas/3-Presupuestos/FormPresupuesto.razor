@@ -216,10 +216,17 @@
                                         }
                                     </Template>
                                 </GridColumn>
+                                <GridColumn Field="@nameof(PresupuestoDetalle.PRESIONAPERTURA)" HeaderText="Presion Apertura" Width="100" AllowEditing="false"></GridColumn>
+                                <GridColumn Field="@nameof(PresupuestoDetalle.TEMPERATURADESCARGAT)" HeaderText="Temperatura" Width="100" AllowEditing="false"></GridColumn>
+                                <GridColumn Field="@nameof(PresupuestoDetalle.DESCRIPCIONFLUIDO)" HeaderText="Fluido" Width="100" AllowEditing="false"></GridColumn>
+                                <GridColumn Field="@nameof(PresupuestoDetalle.CONTRAPRESIONVARIABLE)" HeaderText="Contrapresion Variable" Width="100" AllowEditing="false"></GridColumn>
+                                <GridColumn Field="@nameof(PresupuestoDetalle.CONTRAPRESIONFIJA)" HeaderText="Contrapresion Fija" Width="100" AllowEditing="false"></GridColumn>
+                                <GridColumn Field="@nameof(PresupuestoDetalle.CAPACIDADREQUERIDA)" HeaderText="Capacidad" Width="100" AllowEditing="false"></GridColumn>
+                                <GridColumn Field="@nameof(PresupuestoDetalle.DESCRIPCIONTAG)" HeaderText="Identificacion" Width="100" AllowEditing="false"></GridColumn>
                                 <GridColumn Field="@nameof(PresupuestoDetalle.SOLICITUDID)" HeaderText="Nº Solicitud" Width="100" AllowEditing="false"></GridColumn>
                                 <GridColumn Field="@nameof(PresupuestoDetalle.OBSERITEM)" HeaderText="Observaciones" Width="250"></GridColumn>
 
-                            </GridColumns>
+                            </GridColumns>  
                         </SfGrid>
                     </div>
 

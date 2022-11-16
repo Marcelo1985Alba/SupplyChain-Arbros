@@ -343,6 +343,16 @@ namespace SupplyChain.Server.wwwroot.Report.Pedido {
             
             private global::System.Data.DataColumn columnCAMPOCOM8;
             
+            private global::System.Data.DataColumn columnDESCRIPCION_IVA;
+            
+            private global::System.Data.DataColumn columnTRANSPORTE;
+            
+            private global::System.Data.DataColumn columnCALLE_TRANSPORTE;
+            
+            private global::System.Data.DataColumn columnCUIT_CLIENTE;
+            
+            private global::System.Data.DataColumn columnENTRPREV;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public vPedidoReporteDataTable() {
@@ -634,6 +644,46 @@ namespace SupplyChain.Server.wwwroot.Report.Pedido {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn DESCRIPCION_IVAColumn {
+                get {
+                    return this.columnDESCRIPCION_IVA;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn TRANSPORTEColumn {
+                get {
+                    return this.columnTRANSPORTE;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn CALLE_TRANSPORTEColumn {
+                get {
+                    return this.columnCALLE_TRANSPORTE;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn CUIT_CLIENTEColumn {
+                get {
+                    return this.columnCUIT_CLIENTE;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn ENTRPREVColumn {
+                get {
+                    return this.columnENTRPREV;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -701,7 +751,12 @@ namespace SupplyChain.Server.wwwroot.Report.Pedido {
                         string CAMPOCOM5, 
                         string CAMPOCOM6, 
                         string CAMPOCOM7, 
-                        string CAMPOCOM8) {
+                        string CAMPOCOM8, 
+                        string DESCRIPCION_IVA, 
+                        string TRANSPORTE, 
+                        string CALLE_TRANSPORTE, 
+                        string CUIT_CLIENTE, 
+                        System.DateTime ENTRPREV) {
                 vPedidoReporteRow rowvPedidoReporteRow = ((vPedidoReporteRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         BONIFIC,
@@ -735,7 +790,12 @@ namespace SupplyChain.Server.wwwroot.Report.Pedido {
                         CAMPOCOM5,
                         CAMPOCOM6,
                         CAMPOCOM7,
-                        CAMPOCOM8};
+                        CAMPOCOM8,
+                        DESCRIPCION_IVA,
+                        TRANSPORTE,
+                        CALLE_TRANSPORTE,
+                        CUIT_CLIENTE,
+                        ENTRPREV};
                 rowvPedidoReporteRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowvPedidoReporteRow);
                 return rowvPedidoReporteRow;
@@ -790,6 +850,11 @@ namespace SupplyChain.Server.wwwroot.Report.Pedido {
                 this.columnCAMPOCOM6 = base.Columns["CAMPOCOM6"];
                 this.columnCAMPOCOM7 = base.Columns["CAMPOCOM7"];
                 this.columnCAMPOCOM8 = base.Columns["CAMPOCOM8"];
+                this.columnDESCRIPCION_IVA = base.Columns["DESCRIPCION_IVA"];
+                this.columnTRANSPORTE = base.Columns["TRANSPORTE"];
+                this.columnCALLE_TRANSPORTE = base.Columns["CALLE_TRANSPORTE"];
+                this.columnCUIT_CLIENTE = base.Columns["CUIT_CLIENTE"];
+                this.columnENTRPREV = base.Columns["ENTRPREV"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -859,6 +924,16 @@ namespace SupplyChain.Server.wwwroot.Report.Pedido {
                 base.Columns.Add(this.columnCAMPOCOM7);
                 this.columnCAMPOCOM8 = new global::System.Data.DataColumn("CAMPOCOM8", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCAMPOCOM8);
+                this.columnDESCRIPCION_IVA = new global::System.Data.DataColumn("DESCRIPCION_IVA", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDESCRIPCION_IVA);
+                this.columnTRANSPORTE = new global::System.Data.DataColumn("TRANSPORTE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTRANSPORTE);
+                this.columnCALLE_TRANSPORTE = new global::System.Data.DataColumn("CALLE_TRANSPORTE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCALLE_TRANSPORTE);
+                this.columnCUIT_CLIENTE = new global::System.Data.DataColumn("CUIT_CLIENTE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCUIT_CLIENTE);
+                this.columnENTRPREV = new global::System.Data.DataColumn("ENTRPREV", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnENTRPREV);
                 this.columnBONIFIC.AllowDBNull = false;
                 this.columnCG_CLI.AllowDBNull = false;
                 this.columnCLIENTE.MaxLength = 100;
@@ -906,6 +981,11 @@ namespace SupplyChain.Server.wwwroot.Report.Pedido {
                 this.columnCAMPOCOM7.MaxLength = 100;
                 this.columnCAMPOCOM8.AllowDBNull = false;
                 this.columnCAMPOCOM8.MaxLength = 100;
+                this.columnDESCRIPCION_IVA.MaxLength = 50;
+                this.columnTRANSPORTE.MaxLength = 50;
+                this.columnCALLE_TRANSPORTE.MaxLength = 50;
+                this.columnCUIT_CLIENTE.ReadOnly = true;
+                this.columnCUIT_CLIENTE.MaxLength = 8000;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1453,6 +1533,87 @@ namespace SupplyChain.Server.wwwroot.Report.Pedido {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string DESCRIPCION_IVA {
+                get {
+                    try {
+                        return ((string)(this[this.tablevPedidoReporte.DESCRIPCION_IVAColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'DESCRIPCION_IVA\' de la tabla \'vPedidoReporte\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablevPedidoReporte.DESCRIPCION_IVAColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string TRANSPORTE {
+                get {
+                    try {
+                        return ((string)(this[this.tablevPedidoReporte.TRANSPORTEColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TRANSPORTE\' de la tabla \'vPedidoReporte\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablevPedidoReporte.TRANSPORTEColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string CALLE_TRANSPORTE {
+                get {
+                    try {
+                        return ((string)(this[this.tablevPedidoReporte.CALLE_TRANSPORTEColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CALLE_TRANSPORTE\' de la tabla \'vPedidoReporte\' es DBNull." +
+                                "", e);
+                    }
+                }
+                set {
+                    this[this.tablevPedidoReporte.CALLE_TRANSPORTEColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string CUIT_CLIENTE {
+                get {
+                    try {
+                        return ((string)(this[this.tablevPedidoReporte.CUIT_CLIENTEColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CUIT_CLIENTE\' de la tabla \'vPedidoReporte\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablevPedidoReporte.CUIT_CLIENTEColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public System.DateTime ENTRPREV {
+                get {
+                    try {
+                        return ((global::System.DateTime)(this[this.tablevPedidoReporte.ENTRPREVColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'ENTRPREV\' de la tabla \'vPedidoReporte\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablevPedidoReporte.ENTRPREVColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public bool IsCLIENTENull() {
                 return this.IsNull(this.tablevPedidoReporte.CLIENTEColumn);
             }
@@ -1569,6 +1730,66 @@ namespace SupplyChain.Server.wwwroot.Report.Pedido {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public void SetORCONull() {
                 this[this.tablevPedidoReporte.ORCOColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsDESCRIPCION_IVANull() {
+                return this.IsNull(this.tablevPedidoReporte.DESCRIPCION_IVAColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetDESCRIPCION_IVANull() {
+                this[this.tablevPedidoReporte.DESCRIPCION_IVAColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsTRANSPORTENull() {
+                return this.IsNull(this.tablevPedidoReporte.TRANSPORTEColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetTRANSPORTENull() {
+                this[this.tablevPedidoReporte.TRANSPORTEColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsCALLE_TRANSPORTENull() {
+                return this.IsNull(this.tablevPedidoReporte.CALLE_TRANSPORTEColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetCALLE_TRANSPORTENull() {
+                this[this.tablevPedidoReporte.CALLE_TRANSPORTEColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsCUIT_CLIENTENull() {
+                return this.IsNull(this.tablevPedidoReporte.CUIT_CLIENTEColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetCUIT_CLIENTENull() {
+                this[this.tablevPedidoReporte.CUIT_CLIENTEColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsENTRPREVNull() {
+                return this.IsNull(this.tablevPedidoReporte.ENTRPREVColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetENTRPREVNull() {
+                this[this.tablevPedidoReporte.ENTRPREVColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -1763,6 +1984,11 @@ namespace SupplyChain.Server.wwwroot.Report.Pedido.ArbrosPedDataSet6TableAdapter
             tableMapping.ColumnMappings.Add("CAMPOCOM6", "CAMPOCOM6");
             tableMapping.ColumnMappings.Add("CAMPOCOM7", "CAMPOCOM7");
             tableMapping.ColumnMappings.Add("CAMPOCOM8", "CAMPOCOM8");
+            tableMapping.ColumnMappings.Add("DESCRIPCION_IVA", "DESCRIPCION_IVA");
+            tableMapping.ColumnMappings.Add("TRANSPORTE", "TRANSPORTE");
+            tableMapping.ColumnMappings.Add("CALLE_TRANSPORTE", "CALLE_TRANSPORTE");
+            tableMapping.ColumnMappings.Add("CUIT_CLIENTE", "CUIT_CLIENTE");
+            tableMapping.ColumnMappings.Add("ENTRPREV", "ENTRPREV");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -1780,9 +2006,7 @@ namespace SupplyChain.Server.wwwroot.Report.Pedido.ArbrosPedDataSet6TableAdapter
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[2];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT PEDIDO, FE_PED, BONIFIC, CG_CLI, CLIENTE, CALLE_CLIENTE, CP_CLIENTE, DIRENT, CONDICION_PAGO, CONDICION_ENTREGA, PROVINCIA_CLIENTE, TELEFONO_CLIENTE, EMAIL_CLIENTE, NUMOCI, ORCO, CG_ART, ARTICULO, 
-                  CANTPED, PORC_DESCUENTO, PREC_UNIT, TOTAL_ITEM, MONEDA, CAMPOCOM1, CAMPOCOM2, CAMPOCOM3, CAMPOCOM4, CAMPOCOM5, CAMPOCOM6, CAMPOCOM7, CAMPOCOM8, Construccion, Marca
-FROM     vPedidoReporte";
+            this._commandCollection[0].CommandText = "SELECT *\r\nFROM     vPedidoReporte";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;

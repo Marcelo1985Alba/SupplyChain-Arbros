@@ -22,7 +22,7 @@ namespace SupplyChain.Client
         {
     
             Syncfusion.Licensing.SyncfusionLicenseProvider
-                .RegisterLicense("NzA0MTg5QDMxMzkyZTM0MmUzMEZNWW52OG1QdGtyV1lOK2grcU1KbmpJamtuUTgxWjZ6M1RiUGl3Q3hIc1U9");
+                .RegisterLicense("NzU3NDI3QDMyMzAyZTMxMmUzMElJakxHeUN5QmZQRDRYUlYydlBtRzZWaVIxZHFwTWNhajZWOXNPNVZsa009");
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -34,8 +34,10 @@ namespace SupplyChain.Client
             builder.Services.AddSingleton(typeof(ISyncfusionStringLocalizer), typeof(SyncfusionLocalizer));
 
             // Set the default culture of the application
-            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("es");
-            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("es");
+            //CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("es");
+            //CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("es");
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
             await builder.Build().RunAsync();
         }
 
@@ -80,6 +82,7 @@ namespace SupplyChain.Client
             services.AddScoped<TransporteService>();
             services.AddScoped<StockService>();
             services.AddScoped<MantCeldasService>();
+            services.AddScoped<ProcunService>();
             services.AddScoped<EstadoPedidoService>();
             services.AddScoped<ChatService>();
             services.AddScoped<PdfService>();

@@ -126,7 +126,7 @@ namespace SupplyChain.Server.Controllers
 
             var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
 
-            return File(result.MainStream, contentType: "application/pdf", $"Cotizacion_{id}.pdf");
+            return File(result.MainStream, contentType: "application/pdf", $"AR-CO-{id}.pdf");
         }
 
         [HttpGet]
@@ -148,7 +148,7 @@ namespace SupplyChain.Server.Controllers
 
             var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
 
-            return File(result.MainStream, contentType: "application/pdf", $"OCI_{numOci}.pdf");
+            return File(result.MainStream, contentType: "application/pdf", $"OCI-{numOci}.pdf");
         }
 
         [HttpGet]
@@ -170,7 +170,10 @@ namespace SupplyChain.Server.Controllers
 
             var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
 
-            return File(result.MainStream, contentType: "application/pdf", $"Remito_{remito}.pdf");
+            var ptoVenta = remito[..4].Replace("0", string.Empty);
+            var numeroRemito = remito[^8..].TrimStart('0');
+
+            return File(result.MainStream, contentType: "application/pdf", $"RTO-{ptoVenta}-{numeroRemito}.pdf");
         }
 
         [HttpGet]
