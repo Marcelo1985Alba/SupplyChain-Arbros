@@ -99,7 +99,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0" />
     <PackageReference Include="Syncfusion.Blazor.FileManager" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Blazor.FileManager.PhysicalFileProvider" Version="20.1.0.61" />
+    <PackageReference Include="Syncfusion.Blazor.FileManager.PhysicalFileProvider" Version="20.1.0.55" />
     <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="20.1.0.61" />
     <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.1.0.61" />
     <PackageReference Include="Syncfusion.Licensing" Version="20.1.0.61" />
