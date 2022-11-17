@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using SupplyChain.Client.HelperService;
+using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared.BuscadorCliente;
 using SupplyChain.Client.Shared.BuscadorPresupuesto;
 using SupplyChain.Shared;
@@ -37,6 +38,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         [Parameter] public List<vTransporte> Transportes { get; set; } = new();
         [Parameter] public EventCallback<PedCliEncabezado> OnGuardar { get; set; }
         [Parameter] public EventCallback OnCerrar { get; set; }
+        [Parameter] public bool PorPedido { get; set; } = false;
 
         protected SfGrid<PedCli> refGridItems;
         protected ClientesDialog refClienteDialog;
@@ -46,6 +48,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         protected bool popupBuscadorVisiblePresupuestos = false;
         protected bool BotonGuardarDisabled = false;
         protected bool spinerVisible = false;
+        protected bool spinerVisibleCargando = false;
         
         protected List<string> Monedas = new() { "PESOS", "DOLARES" };
         protected bool SpinnerVisible = false;
@@ -75,22 +78,49 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         protected bool agregadoPorPresupuesto = false;
         protected async override Task OnInitializedAsync()
         {
-            if (Transportes.Count == 0)
-            {
-                await GetTransportes();
-            }
-            
+            spinerVisibleCargando = true;
+            await GetTransportes();
 
             if (Pedido.PEDIDO == 0)
             {
                 ReadOnlyMoneda = false;
             }
-            if (Pedido.CG_CLI> 0 && DireccionesEntregas.Count == 0)
+            else
+            {
+
+                HttpResponseWrapper<PedCliEncabezado> response;
+                if (PorPedido)
+                {
+                    response = await PedCliService.GetPedidoEncabezadoById(Pedido.PEDIDO);
+                }
+                else
+                {
+                    response = await PedCliService.GetPedidoEncabezadoByNumOci(Pedido.NUMOCI);
+                }
+
+                if (response.Error)
+                {
+                    await ToastMensajeError();
+                }
+                else
+                {
+
+                    Pedido = response.Response;
+                    foreach (var item in Pedido.Items)
+                    {
+                        item.ESTADO = SupplyChain.Shared.Enum.EstadoItem.Modificado;
+                    }
+                    DireccionesEntregas = Pedido.DireccionesEntregas.Select(d => d.DESCRIPCION).ToList();
+                }
+
+            }
+            if (Pedido.CG_CLI> 0)
             {
                 await GetDireccionesEntregaCliente(Pedido.CG_CLI);
             }
             
             await GetTipoCambioDolarHoy();
+            spinerVisibleCargando = false;
         }
 
         public async Task GetTipoCambioDolarHoy()

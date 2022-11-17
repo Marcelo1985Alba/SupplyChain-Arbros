@@ -20,7 +20,7 @@
         </Header>
         <Content>
             <EditForm id="formServicio" Model="Servicio" OnValidSubmit="@(()=> Guardar())">
-
+                <SfSpinner @bind-Visible="@spinnerVisibleGuardar" Label="Guardando..." Type="SpinnerType.Fabric"></SfSpinner>
                 
                 
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -510,7 +510,17 @@
                     </div>
                     <div class="tab-pane fade" id="pills-img" role="tabpanel" aria-labelledby="pills-profile-tab">
                     
-
+                        <div class="control-section">
+                            <SfFileManager TValue="FileManagerDirectoryContent" Height="400px" View="ViewType.Details">
+                                <FileManagerAjaxSettings Url="/api/FilesManagerServicios/FileOperations"
+                                                         DownloadUrl="/api/FilesManagerServicios/Download"
+                                                         UploadUrl="/api/FilesManagerServicios/Upload"
+                                                         GetImageUrl="/api/FilesManagerServicios/GetImage">
+                                </FileManagerAjaxSettings>
+                                <FileManagerEvents TValue="FileManagerDirectoryContent"></FileManagerEvents>
+                                <FileManagerNavigationPaneSettings Visible=false></FileManagerNavigationPaneSettings>
+                            </SfFileManager>
+                        </div>
                     </div>
 
 

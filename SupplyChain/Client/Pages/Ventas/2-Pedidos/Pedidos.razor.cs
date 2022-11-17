@@ -33,6 +33,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         protected PedCliEncabezado PedidoSeleccionado = new();
         protected bool SpinnerVisible = false;
         protected bool popupFormVisible = false;
+        protected bool abrePorPedido = false;
 
         protected List<Object> Toolbaritems = new()
         {
@@ -147,10 +148,19 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                //TODO preguntar si abre por pedido o numoci
+                
+                PedidoSeleccionado.CG_CLI = args.Data.CG_CLI;
+                PedidoSeleccionado.DES_CLI= args.Data.DES_CLI;
+                PedidoSeleccionado.TC = Convert.ToDouble(args.Data.VA_INDIC);
+                PedidoSeleccionado.DIRENT = args.Data.DIRENT;
+                PedidoSeleccionado.MONEDA = args.Data.MONEDA;
                 PedidoSeleccionado.PEDIDO = args.Data.PEDIDO;
                 PedidoSeleccionado.NUMOCI = args.Data.NUMOCI;
+                PedidoSeleccionado.BONIFIC = args.Data.BONIFIC;
+                PedidoSeleccionado.CG_TRANS = args.Data.CG_TRANS;
+                PedidoSeleccionado.CG_COND_ENTREGA = args.Data.CG_COND_ENTREGA;
                 PedidoSeleccionado.Items.Add(args.Data);
+                //TODO preguntar si abre por pedido o numoci
                 await refConfirmacionDialog.ShowAsync();
             }
         }
@@ -159,31 +169,10 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         {
             await refConfirmacionDialog.HideAsync();
             SpinnerVisible = true;
-            HttpResponseWrapper<PedCliEncabezado> response;
-            if (abrePedido)
-            {
-                response = await PedCliService.GetPedidoEncabezadoById(PedidoSeleccionado.Items[0].Id);
-            }
-            else
-            {
-                response = await PedCliService.GetPedidoEncabezadoByNumOci(PedidoSeleccionado.NUMOCI);
-            }
-
-            if (response.Error)
-            {
-                await ToastMensajeError();
-            }
-            else
-            {
-
-                PedidoSeleccionado = response.Response;
-                foreach (var item in PedidoSeleccionado.Items)
-                {
-                    item.ESTADO = SupplyChain.Shared.Enum.EstadoItem.Modificado;
-                }
-                direccionesEntregas = PedidoSeleccionado.DireccionesEntregas.Select(d => d.DESCRIPCION).ToList();
-                popupFormVisible = true;
-            }
+            
+            abrePorPedido = abrePedido;
+            popupFormVisible = true;
+            
             SpinnerVisible = false;
         }
 

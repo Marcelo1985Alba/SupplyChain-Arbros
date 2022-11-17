@@ -32,6 +32,8 @@
             </SfToolbar>
             <EditForm id="formPedido" Model="@Pedido" OnValidSubmit="@(async()=> await Guardar())">
                 <SfSpinner @bind-Visible="@spinerVisible" Label="Guardando..." Type="SpinnerType.Fabric"></SfSpinner>
+                <SfSpinner @bind-Visible="@spinerVisibleCargando" Label="Cargando..." Type="SpinnerType.Fabric" 
+                            CssClass="e-spin-overlay" ></SfSpinner>
                 <ObjectGraphDataAnnotationsValidator />
                 <ValidationSummary />
                 <div class="form-row">
@@ -256,6 +258,7 @@
                 @{
                     var totalItems = Math.Round(Pedido.Items.Sum(i => i.TOTAL), 2);
                     var bonficacion = Math.Round(totalItems * Pedido.BONIFIC / 100, 2);
+                    Pedido.BONIFICACION_IMPORTE = bonficacion;
                     var total = Pedido.TOTAL = Math.Round(totalItems - bonficacion, 2);
                     var moneda = "$";
                     if (Pedido.MONEDA == "PESOS")
@@ -300,6 +303,9 @@
 
 
 <style>
+    .e-spin-overlay {
+        z-index: 10002 !important;
+    }
 
     #toolbar-form-pedido {
         border: 0px solid rgb(173, 255, 47) !important;

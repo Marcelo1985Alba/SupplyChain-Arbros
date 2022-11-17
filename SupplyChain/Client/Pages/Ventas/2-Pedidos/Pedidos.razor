@@ -48,7 +48,7 @@
     {
         <FormPedido @ref="@refFormPedido" Show="popupFormVisible" Pedido="@PedidoSeleccionado" CondicionesPagos="@condicionesPagos"
                     OnCerrar="@(()=> popupFormVisible = false)" CondicionesEntrega="@condicionesEntrega"
-                    DireccionesEntregas="@direccionesEntregas"
+                    DireccionesEntregas="@direccionesEntregas" PorPedido ="@abrePorPedido"
                     OnGuardar="@((p)=> OnPedidoGuardado(p))">
         </FormPedido>
     }

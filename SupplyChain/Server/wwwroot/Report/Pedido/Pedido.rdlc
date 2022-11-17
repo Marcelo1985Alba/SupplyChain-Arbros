@@ -804,14 +804,14 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value> Presion(Bar):</Value>
+                                  <Value> Presion(Bar) </Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=Fields!CAMPOCOM4.Value</Value>
+                                  <Value>=Fields!CAMPOCOM1.Value</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -2082,7 +2082,7 @@
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>0.56874in</Height>
+          <Height>0.46041in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>

@@ -66,7 +66,7 @@ namespace SupplyChain.Server.Repositorios
 
         public async Task<PedCliEncabezado> ObtenerPedidosEncabezado(int id)
         {
-            var ped = await DbSet.FindAsync(id);
+            var ped = await DbSet.FirstOrDefaultAsync(p=> p.PEDIDO == id);
             var pedEncabezado = new PedCliEncabezado();
             if (ped != null)
             {
@@ -226,6 +226,8 @@ namespace SupplyChain.Server.Repositorios
                     {
                         servicio.FECHA = DateTime.Now;
                         servicio.PEDIDO = item.PEDIDO;
+                        servicio.OBSERV = item.OBSERITEM;
+                        servicio.OCOMPRA = item.ORCO;
                         Db.Entry(servicio).State = EntityState.Modified;
                         Db.Entry(servicio).Property(p => p.PEDIDO).IsModified = true;
                         Db.Entry(servicio).Property(p => p.FECHA).IsModified = true;

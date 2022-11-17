@@ -852,7 +852,7 @@
             {
                 celdas = response.Response;
             }
-            //celdas = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
+            //celdas = await Http.GetFromJsonAsync<List<Celdas>>("api/Servicios/5");
             var responseRutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
             if (responseRutas.Error)
             {
@@ -1570,6 +1570,10 @@
                                 bool isConfirmed = await JS.InvokeAsync<bool>("confirm", "Quiere traer los datos del pedido anterior?");
                                 if (isConfirmed)
                                 {
+                                    //TODO: OBTENER SERVICIO CON EL NUMERO DE PEDIDO ANTERIOR
+                                    
+
+
                                     if (ped.FECHA.ToString().Substring(3, 1) == "/")
                                     {
                                         args.Data.FECMANTANT = ped.FECHA.ToString().Substring(0, 8);

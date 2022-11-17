@@ -248,12 +248,12 @@ namespace SupplyChain
             modelBuilder.Entity<vSolicitudes>().HasNoKey().ToView("vSolicitudes");
             modelBuilder.Entity<ClienteExterno>().HasNoKey().ToView("vClientesItris");
             modelBuilder.Entity<vPresupuestos>().HasNoKey().ToView("vPresupuestos");
-            modelBuilder.Entity<vDireccionesEntrega>().ToView("vDireccionesEntrega_Itris");
-            modelBuilder.Entity<vCondicionesPago>().ToView("vCondicionesPago");
-            modelBuilder.Entity<vCondicionesEntrega>().ToView("vCondicionesEntrega");
-            modelBuilder.Entity<vTipoCambio>().ToView("vTipoCambio");
+            modelBuilder.Entity<vDireccionesEntrega>().HasNoKey().ToView("vDireccionesEntrega_Itris");
+            modelBuilder.Entity<vCondicionesPago>().HasNoKey().ToView("vCondicionesPago");
+            modelBuilder.Entity<vCondicionesEntrega>().HasNoKey().ToView("vCondicionesEntrega");
+            modelBuilder.Entity<vTipoCambio>().HasNoKey().ToView("vTipoCambio");
             modelBuilder.Entity<vCalculoSolicitudes>().ToView("vCalculoSolicitudes");
-            modelBuilder.Entity<vTransporte>().ToView("vTransportes");
+            modelBuilder.Entity<vTransporte>().HasNoKey().ToView("vTransportes");
             modelBuilder.Entity<vPedidoAlta>().HasNoKey().ToView("vPedidosAltas");
             modelBuilder.Entity<vPresupuestoReporte>().HasNoKey().ToView("vPresupuestoReporte");
             modelBuilder.Entity<vPedidoReporte>().HasNoKey().ToView("vPedidoReporte");
