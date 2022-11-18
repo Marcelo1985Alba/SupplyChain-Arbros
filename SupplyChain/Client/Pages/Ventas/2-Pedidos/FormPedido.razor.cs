@@ -412,6 +412,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                 item.CAMPOCOM6 = item.CAMPOCOM6.Trim();
                 item.CAMPOCOM7 = item.CAMPOCOM7.Trim();
                 item.CAMPOCOM8 = item.CAMPOCOM8.Trim();
+                item.BONIFIC = Pedido.BONIFIC;
             }
 
             var response = await PedCliService.GuardarLista(Pedido.Items);

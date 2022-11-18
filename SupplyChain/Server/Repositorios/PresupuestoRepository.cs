@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
@@ -34,6 +35,26 @@ namespace SupplyChain.Server.Repositorios
                 return await Db.vPresupuestos.Where(p => p.TIENEPEDIDO).ToListAsync();
             }
             return await Db.vPresupuestos.ToListAsync();
+        }
+
+        internal async Task<bool> TienePedido(int presupuestoId)
+        {
+            return await Db.PedCli.AnyAsync(p => p.PRESUPUESTOID == presupuestoId);
+        }
+
+        internal async Task DesvincularSolicitud(Presupuesto presupuesto)
+        {
+            await presupuesto.Items.ForEachAsync(async item =>
+            {
+                var sol = await Db.Solicitudes.FirstOrDefaultAsync(s=> s.Id == item.SOLICITUDID);
+                if (sol is not null)
+                {
+                    sol.TienePresupuesto = false;
+                    Db.Entry(sol).State = EntityState.Modified;
+                    Db.Entry(sol).Property(s=> s.TienePresupuesto).IsModified = true;
+                    await Db.SaveChangesAsync();
+                }
+            });
         }
 
         public override async Task Agregar(Presupuesto entity)

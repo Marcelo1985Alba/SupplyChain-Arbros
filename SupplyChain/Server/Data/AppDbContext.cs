@@ -174,7 +174,8 @@ namespace SupplyChain
             modelBuilder.Entity<Presupuesto>(entity => {
                 entity.HasMany(c => c.Items)
                     .WithOne(p => p.Presupuesto)
-                    .HasForeignKey(c => c.PRESUPUESTOID);
+                    .HasForeignKey(c => c.PRESUPUESTOID)
+                    .OnDelete(DeleteBehavior.Cascade); 
 
             });
 
@@ -182,7 +183,7 @@ namespace SupplyChain
                 entity.HasOne(d => d.Presupuesto)
                 .WithMany(p => p.Items)
                 .HasForeignKey(d => d.PRESUPUESTOID)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_PRESUPUESTO_DETALLE_PRESUPUESTO_ENCABEZADO");
 
                 entity.HasOne(d => d.Solicitud)

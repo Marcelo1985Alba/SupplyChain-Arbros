@@ -6,6 +6,7 @@ using SupplyChain.Shared.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -36,6 +37,16 @@ namespace SupplyChain.Client.HelperService
         public async Task Imprimir(int presupuestoId)
         {
             await _js.InvokeVoidAsync("descargarPresupuestDataSheet", presupuestoId);
+        }
+
+        public async Task<HttpResponseMessage> Eliminar(int id)
+        {
+            return await http.DeleteAsync($"{API}/{id}");
+        }
+
+        public async Task<HttpResponseWrapper<bool>> TienePedido(int id)
+        {
+            return await http.GetFromJsonAsync<bool>($"{API}/TienePedido/{id}");
         }
     }
 }

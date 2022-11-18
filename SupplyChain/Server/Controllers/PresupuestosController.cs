@@ -35,6 +35,13 @@ namespace SupplyChain.Server.Controllers
             return await _presupuestoRepository.ObtenerTodosQueryable().Include(p=> p.Items).ToListAsync();
         }
 
+        // GET: api/<PresupuestosController>
+        [HttpGet("TienePedido/{id}")]
+        public async Task<bool> TienePedido(int id)
+        {
+            return await _presupuestoRepository.TienePedido(id);
+        }
+
         [HttpGet("GetPresupuestoVista/{tipoFiltro}")]
         public async Task<List<vPresupuestos>> GetPresupuestoVista(TipoFiltro tipoFiltro = TipoFiltro.Todos)
         {
@@ -124,8 +131,33 @@ namespace SupplyChain.Server.Controllers
 
         // DELETE api/<PresupuestosController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult<Presupuesto>> DeleteCompra(int id)
         {
+            try
+            {
+                var presup = await _presupuestoRepository.Obtener(p => p.Id == id).Include(p => p.Items)
+                                .FirstOrDefaultAsync();
+                if (presup == null)
+                {
+                    return NotFound();
+                }
+
+                if (await _presupuestoRepository.TienePedido(id))
+                {
+                    return Conflict("El presupuesto tiene pedido asociado.");
+                }
+
+
+                await _presupuestoRepository.Remover(id);
+
+                await _presupuestoRepository.DesvincularSolicitud(presup);
+
+                return presup;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error al eliminar Presupuesto " + ex.Message);
+            }
         }
     }
 }

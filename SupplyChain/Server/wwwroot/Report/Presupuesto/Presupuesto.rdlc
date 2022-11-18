@@ -543,6 +543,7 @@
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
+                                    <Format>0.00</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -578,6 +579,7 @@
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
+                                    <Format>0.00</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -613,6 +615,7 @@
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
+                                    <Format>0.00</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1247,8 +1250,77 @@
               </Border>
             </Style>
           </Tablix>
+          <Textbox Name="txtBonif">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=System.Math.Round(
+Sum(Fields!TOTAL_ITEM.Value, "DataSet1") * 
+First(Fields!BONIFIC.Value, "DataSet1") / 100
+, 2)</Value>
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>1.08333in</Top>
+            <Left>2.96333in</Left>
+            <Height>0.08333in</Height>
+            <Width>1.03114in</Width>
+            <ZIndex>1</ZIndex>
+            <Visibility>
+              <Hidden>true</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="txtTot">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Sum(Fields!TOTAL_ITEM.Value, "DataSet1") - 
+Sum(Fields!TOTAL_ITEM.Value, "DataSet1") * 
+First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>1.04443in</Top>
+            <Left>4.05003in</Left>
+            <Height>0.13613in</Height>
+            <Width>1.03114in</Width>
+            <ZIndex>2</ZIndex>
+            <Visibility>
+              <Hidden>true</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
-        <Height>1.13054in</Height>
+        <Height>1.20833in</Height>
         <Style />
       </Body>
       <Width>7.81016in</Width>
@@ -1886,15 +1958,17 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Round(First(Fields!TOTAL_PRESUPUESTO.Value, "DataSet1"),2)</Value>
+                      <Value>=ReportItems!txtTot.Value</Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
+                        <Format>0.00</Format>
                       </Style>
                     </TextRun>
                     <TextRun>
                       <Value xml:space="preserve"> </Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
+                        <Format>0.00</Format>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -1924,7 +1998,8 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Iif(First(Fields!MONEDA.Value, "DataSet1") = "DOLARES", "U$S", "$")</Value>
+                      <Value>=Iif(First(Fields!MONEDA.Value, "DataSet1") = "DOLARES", 
+"U$S", "$")</Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
                       </Style>
@@ -2039,11 +2114,132 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>0.81945in</Top>
+              <Top>0.80557in</Top>
               <Left>0.1555in</Left>
-              <Height>0.25in</Height>
+              <Height>0.26388in</Height>
               <Width>5.04167in</Width>
               <ZIndex>5</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="TOTAL_PRESUPUESTO2">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>SUBTOTAL: </Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=System.Math.Round(
+Sum(Fields!TOTAL_ITEM.Value, "DataSet1"), 2)</Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                        <Format>0.00</Format>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value xml:space="preserve"> </Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Left</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>TOTAL_PRESUPUESTO</rd:DefaultName>
+              <Top>0.06944in</Top>
+              <Left>0.15586in</Left>
+              <Height>0.25in</Height>
+              <Width>1.69687in</Width>
+              <ZIndex>6</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="TOTAL_PRESUPUESTO3">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>BONIFICACION(</Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Fields!BONIFIC.Value</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontSize>9pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
+                        <TextDecoration>None</TextDecoration>
+                        <Color>#000000</Color>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>%</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontSize>9pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
+                        <TextDecoration>None</TextDecoration>
+                        <Color>#000000</Color>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>): </Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=System.Math.Round( ReportItems!txtBonif.Value, 2)</Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                        <Format>0.00</Format>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value xml:space="preserve"> </Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Left</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>TOTAL_PRESUPUESTO</rd:DefaultName>
+              <Top>0.06944in</Top>
+              <Left>2.73998in</Left>
+              <Height>0.25in</Height>
+              <Width>2.34119in</Width>
+              <ZIndex>7</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>

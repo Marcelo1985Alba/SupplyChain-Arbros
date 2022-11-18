@@ -281,94 +281,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             var pedcli = new PedCli();
             foreach (var item in estadoPedidos)
             {
-                //if (string.IsNullOrEmpty(Pedido.MONEDA))
-                //{
-                //    Pedido.MONEDA = presupuestoSelected.MONEDA;
-                //}
-
-                //Pedido.VA_INDIC = (decimal?)presupuestoSelected.TC;
-                //Pedido.BONIFIC = presupuestoSelected.BONIFIC;
-                //Pedido.DIRENT = presupuestoSelected.DIRENT;
-                //if (item.CANTIDAD > 1)
-                //{
-                //    for (int i = 0; i < item.CANTIDAD; i++)
-                //    {
-
-                //        //pedcli = new PedCli()
-                //        //{
-                //        //    FE_PED = DateTime.Now,
-                //        //    Id = Pedido.Items.Count == 0 ? -1 : Pedido.Items.Count * -1 - 1,
-                //        //    PRESUPUESTOID = presupuestoSelected.Id,
-                //        //    CG_CLI = Pedido.CG_CLI,
-                //        //    DES_CLI = Pedido.DES_CLI,
-                //        //    DPP = Pedido.CG_CONDICION_PAGO,
-                //        //    BONIFIC = Pedido.BONIFIC,
-                //        //    DIRENT = Pedido.DIRENT,
-                //        //    PEDIDO = Pedido.PEDIDO,
-                //        //    CG_ART = item.CG_ART,
-                //        //    DES_ART = item.DES_ART,
-                //        //    CANTPED = 1,
-                //        //    UNID = "UNID",
-                //        //    MONEDA = presupuestoSelected.MONEDA,
-                //        //    VA_INDIC = Convert.ToDecimal(presupuestoSelected.TC),
-                //        //    PREC_UNIT = item.PREC_UNIT,
-                //        //    PREC_UNIT_X_CANTIDAD = item.PREC_UNIT_X_CANTIDAD,
-                //        //    DESCUENTO = item.DESCUENTO,
-                //        //    IMP_DESCUENTO = item.IMP_DESCUENTO,
-                //        //    TOTAL = item.TOTAL,
-                //        //    LOTE = item.Solicitud?.DescripcionTag,
-                //        //    CAMPOCOM1 = item.Solicitud?.PresionApertura,
-                //        //    CAMPOCOM3 = item.Solicitud?.DescripcionFluido,
-                //        //    CAMPOCOM5 = item.Solicitud?.ContrapresionVariable,
-                //        //    CAMPOCOM6 = item.Solicitud?.TemperaturaDescargaT,
-                //        //    CAMPOCOM7 = item.Solicitud?.ContrapresionFija,
-                //        //    CAMPOCOM8 = item.Solicitud?.CapacidadRequerida,
-                //        //    OBSERITEM = item.OBSERITEM,
-                //        //    ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA),
-                //        //    ESTADO = SupplyChain.Shared.Enum.EstadoItem.Agregado,
-
-                //        //};
-                //        //Pedido.Items.Add(pedcli);
-                //    }
-                //}
-                //else
-                //{
-                //    //pedcli = new PedCli()
-                //    //{
-                //    //    FE_PED = DateTime.Now,
-                //    //    Id = Pedido.Items.Count == 0 ? -1 : Pedido.Items.Count * -1 - 1,
-                //    //    PRESUPUESTOID = presupuestoSelected.Id,
-                //    //    CG_CLI = Pedido.CG_CLI,
-                //    //    DES_CLI = Pedido.DES_CLI,
-                //    //    DPP = Pedido.CG_CONDICION_PAGO,
-                //    //    BONIFIC = Pedido.BONIFIC,
-                //    //    DIRENT = Pedido.DIRENT,
-                //    //    PEDIDO = Pedido.PEDIDO,
-                //    //    CG_ART = item.CG_ART,
-                //    //    DES_ART = item.DES_ART,
-                //    //    CANTPED = item.CANTIDAD,
-                //    //    UNID = "UNID",
-                //    //    MONEDA = presupuestoSelected.MONEDA,
-                //    //    VA_INDIC = Convert.ToDecimal(presupuestoSelected.TC),
-                //    //    PREC_UNIT = item.PREC_UNIT,
-                //    //    PREC_UNIT_X_CANTIDAD = item.PREC_UNIT_X_CANTIDAD,
-                //    //    DESCUENTO = item.DESCUENTO,
-                //    //    IMP_DESCUENTO = item.IMP_DESCUENTO,
-                //    //    TOTAL = item.TOTAL,
-                //    //    LOTE = item.Solicitud?.DescripcionTag,
-                //    //    CAMPOCOM1 = item.Solicitud?.PresionApertura,
-                //    //    CAMPOCOM3 = item.Solicitud?.DescripcionFluido,
-                //    //    CAMPOCOM5 = item.Solicitud?.ContrapresionVariable,
-                //    //    CAMPOCOM6 = item.Solicitud?.TemperaturaDescargaT,
-                //    //    CAMPOCOM7 = item.Solicitud?.ContrapresionFija,
-                //    //    CAMPOCOM8 = item.Solicitud?.CapacidadRequerida,
-                //    //    OBSERITEM = item.OBSERITEM,
-                //    //    ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA),
-                //    //    ESTADO = SupplyChain.Shared.Enum.EstadoItem.Agregado,
-
-                //    //};
-                //    //Pedido.Items.Add(pedcli);
-                //}
+                
 
 
             }
@@ -614,6 +527,11 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
         public void BatchSaveHandler(BeforeBatchSaveArgs<Pedidos> args)
         {
             IsAdd = false;
+        }
+
+        public async Task Imprimir()
+        {
+            await StockService.Imprimir(Pedido.Items[0].REMITO);
         }
         public async Task Hide()
         {

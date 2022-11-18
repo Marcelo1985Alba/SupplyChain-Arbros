@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using SupplyChain.Client.HelperService;
+using SupplyChain.Client.Pages.Ventas._4_Solicitudes;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
@@ -50,6 +51,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected List<string> Monedas = new() { "PESOS", "DOLARES" };
 
         protected PresupuestoAnterior presupuesto = new();
+        protected ConfirmacionDialog ConfirmacionEliminarDialog;
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Presupuestos";
@@ -73,7 +75,8 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected async Task OnActionBeginHandler(ActionEventArgs<vPresupuestos> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
-                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.Delete )
             {
                 args.Cancel = true;
                 args.PreventRender = false;
@@ -105,12 +108,27 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 }
                 SpinnerVisible = false;
             }
+
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+            {
+                if (args.RowData.TIENEPEDIDO)
+                {
+                    await ToastMensajeError("El presupuesto tiene pedido.\r\nNose puede eliminar.");
+                }
+                else
+                {
+                    PresupuestoSeleccionado.Id = args.RowData.Id;
+                    await ConfirmacionEliminarDialog.ShowAsync();
+                }
+                
+            }
         }
 
         protected async Task OnActionCompleteHandler(ActionEventArgs<vPresupuestos> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
-                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.Delete )
             {
                 args.Cancel = true;
                 args.PreventRender = false;
@@ -150,6 +168,40 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 }
                 
             }
+        }
+
+        protected async Task Eliminar()
+        {
+            SpinnerVisible = true;
+            await ConfirmacionEliminarDialog.HideAsync();
+
+            var responseTp = await PresupuestoService.TienePedido(PresupuestoSeleccionado.Id);
+            if (responseTp.Error)
+            {
+                await ToastMensajeError("Error al verificar si tiene pedido asociado");
+            }
+            else if (!responseTp.Response)
+            {
+                var response = await PresupuestoService.Eliminar(PresupuestoSeleccionado.Id);
+                if (response.IsSuccessStatusCode)
+                {
+                    await ToastMensajeExito("Eliminado Correctamente!");
+                    Presupuestos = Presupuestos.Where(s => s.Id != PresupuestoSeleccionado.Id)
+                        .OrderByDescending(s => s.Id)
+                        .ToList();
+                }
+                else
+                {
+                    await ToastMensajeError();
+                }
+
+            }
+            else
+            {
+                await ToastMensajeError("El Presupuesto tiene pedido asociado.");
+            }
+
+            SpinnerVisible = false;
         }
 
         protected async Task Guardar(Presupuesto presupuesto)
@@ -215,12 +267,12 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 ShowProgressBar = true
             });
         }
-        private async Task ToastMensajeError()
+        private async Task ToastMensajeError(string content = "Ocurrio un Error.")
         {
             await ToastObj.Show(new ToastModel
             {
                 Title = "Error!",
-                Content = "Ocurrio un Error.",
+                Content = content,
                 CssClass = "e-toast-warning",
                 Icon = "e-warning toast-icons",
                 ShowCloseButton = true,
