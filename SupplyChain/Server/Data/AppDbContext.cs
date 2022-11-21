@@ -137,6 +137,7 @@ namespace SupplyChain
 
         public DbSet<Proveedores_compras> proveedores_compras { get; set; }
         public DbSet<vUsuario> vUsuarios { get; set; }
+        public DbSet<vOCompraReporte> vOCompraReporte { get; set; }
 
         #endregion
 
@@ -260,6 +261,7 @@ namespace SupplyChain
             modelBuilder.Entity<vPedidoReporte>().HasNoKey().ToView("vPedidoReporte");
             modelBuilder.Entity<vRemitoReporte>().HasNoKey().ToView("vRemitoReporte");
             modelBuilder.Entity<vUsuario>().HasNoKey().ToView("vUsuarios");
+            modelBuilder.Entity<vUsuario>().HasNoKey().ToView("vOCompraReporte");
         }
     }
 }

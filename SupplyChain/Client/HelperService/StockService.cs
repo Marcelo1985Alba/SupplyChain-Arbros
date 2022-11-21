@@ -67,9 +67,18 @@ namespace SupplyChain.Client.HelperService
             return await http.PostAsJsonAsync($"api/Pedidos/PostList", lista);
         }
 
-        internal async ValueTask Imprimir(string remito)
+        internal async ValueTask Imprimir(string remito, bool conEtiqueta)
         {
             await js.InvokeVoidAsync("descargarRemito", remito);
+            if (conEtiqueta)
+            {
+                await ImprimirEtiquetaDeRemito(remito);
+            }
+        }
+
+        internal async ValueTask ImprimirEtiquetaDeRemito(string remito)
+        {
+            await js.InvokeVoidAsync("descargarEtiquetaDeRemito", remito);
         }
     }
 }

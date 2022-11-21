@@ -322,7 +322,9 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 spinerVisible = false;
                 Show = false;
                 Pedido.Items = response.Response;
-                await StockService.Imprimir(Pedido.Items[0].REMITO);
+                await StockService.Imprimir(Pedido.Items[0].REMITO, true);
+
+
                 if (OnGuardar.HasDelegate)
                 {
                     await OnGuardar.InvokeAsync(Pedido.Items);
@@ -531,7 +533,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
 
         public async Task Imprimir()
         {
-            await StockService.Imprimir(Pedido.Items[0].REMITO);
+            await StockService.Imprimir(Pedido.Items[0].REMITO, true);
         }
         public async Task Hide()
         {
