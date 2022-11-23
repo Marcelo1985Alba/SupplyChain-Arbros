@@ -66,20 +66,6 @@ else
             IsCompras = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Compras"));
             dbMenuMaster = await Http.GetFromJsonAsync<List<Modulo>>("api/Modulo");
 
-            if (IsVentas)
-            {
-                dbMenu.Add(new Modulo
-                {
-                    Id = 2000,
-                    ParentId = 2,
-                    Descripcion = "Usuarios",
-                    IconCss = "",
-                    TieneChild = false,
-                    Url = "/ventas/usuarios"
-                });
-            }
-
-
 
             if (authState.User.Claims.Any(c=> c.Value == "Cliente"))
             {
@@ -124,6 +110,16 @@ else
                                                                           //||
                                                                           //(m.Id == 40) //Mnat celdas
                     ).ToList());
+
+                dbMenu.Add(new Modulo
+                    {
+                        Id = 2000,
+                        ParentId = 2,
+                        Descripcion = "Usuarios",
+                        IconCss = "",
+                        TieneChild = false,
+                        Url = "/ventas/usuarios"
+                    });
 
                 if (authState.User.Identity.Name.ToLower() == "planta")
                 {
@@ -171,6 +167,17 @@ else
                     dbMenu.Add(new Modulo { Id = maxId, Descripcion = "Panel de Control", IconCss = "fa fa-tachometer",
                         TieneChild = false, Url= "/panel-control/index" }
                     );
+
+
+                    dbMenu.Add(new Modulo
+                        {
+                            Id = 2000,
+                            ParentId = 2,
+                            Descripcion = "Usuarios",
+                            IconCss = "",
+                            TieneChild = false,
+                            Url = "/ventas/usuarios"
+                        });
 
                 }
             }
