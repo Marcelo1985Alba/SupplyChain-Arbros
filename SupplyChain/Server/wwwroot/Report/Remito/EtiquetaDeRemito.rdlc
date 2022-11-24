@@ -207,10 +207,10 @@
         <Height>0.11943in</Height>
         <Style />
       </Body>
-      <Width>8.08835in</Width>
+      <Width>8.20502in</Width>
       <Page>
         <PageHeader>
-          <Height>4.14667in</Height>
+          <Height>5.08834in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -404,7 +404,7 @@
               <Top>1.9161in</Top>
               <Left>0.15586in</Left>
               <Height>2.16944in</Height>
-              <Width>7.84082in</Width>
+              <Width>7.68249in</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -425,7 +425,7 @@
                       <Value>=First(Fields!ORCO.Value, "DataSet1")</Value>
                       <Style>
                         <FontFamily>TAHOMA</FontFamily>
-                        <FontSize>14pt</FontSize>
+                        <FontSize>12pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <Format>dd/MM/yyyy</Format>
                       </Style>
@@ -437,8 +437,8 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox5</rd:DefaultName>
-              <Top>0.36833in</Top>
-              <Left>6.25501in</Left>
+              <Top>0.35444in</Top>
+              <Left>6.09668in</Left>
               <Height>0.26111in</Height>
               <Width>1.74167in</Width>
               <ZIndex>1</ZIndex>
@@ -461,7 +461,7 @@
                     <TextRun>
                       <Value xml:space="preserve"> </Value>
                       <Style>
-                        <FontSize>14pt</FontSize>
+                        <FontSize>12pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
@@ -469,7 +469,7 @@
                       <Value>=Fields!REMITO.Value</Value>
                       <Style>
                         <FontFamily>TAHOma</FontFamily>
-                        <FontSize>14pt</FontSize>
+                        <FontSize>12pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
@@ -480,8 +480,8 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox5</rd:DefaultName>
-              <Top>0.65721in</Top>
-              <Left>6.25501in</Left>
+              <Top>0.64332in</Top>
+              <Left>6.09668in</Left>
               <Height>0.27917in</Height>
               <Width>1.74167in</Width>
               <ZIndex>2</ZIndex>
@@ -499,7 +499,7 @@
               <Top>1.87444in</Top>
               <Left>0.15586in</Left>
               <Height>0in</Height>
-              <Width>7.84082in</Width>
+              <Width>7.68249in</Width>
               <ZIndex>3</ZIndex>
               <Style>
                 <Border>
@@ -545,8 +545,8 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>0.36833in</Top>
-              <Left>5.22723in</Left>
+              <Top>0.35444in</Top>
+              <Left>5.0689in</Left>
               <Height>0.26111in</Height>
               <Width>1in</Width>
               <ZIndex>5</ZIndex>
@@ -581,8 +581,8 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>0.6711in</Top>
-              <Left>5.22723in</Left>
+              <Top>0.65721in</Top>
+              <Left>5.0689in</Left>
               <Height>0.26111in</Height>
               <Width>1in</Width>
               <ZIndex>6</ZIndex>
@@ -632,18 +632,20 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-          </ReportItems>
-          <Style>
-            <Border>
-              <Style>None</Style>
-            </Border>
-          </Style>
-        </PageHeader>
-        <PageFooter>
-          <Height>0.98541in</Height>
-          <PrintOnFirstPage>true</PrintOnFirstPage>
-          <PrintOnLastPage>true</PrintOnLastPage>
-          <ReportItems>
+            <Line Name="Line2">
+              <Top>4.15498in</Top>
+              <Left>0.15293in</Left>
+              <Height>0in</Height>
+              <Width>7.68542in</Width>
+              <ZIndex>8</ZIndex>
+              <Style>
+                <Border>
+                  <Color>Blue</Color>
+                  <Style>Solid</Style>
+                  <Width>3pt</Width>
+                </Border>
+              </Style>
+            </Line>
             <Textbox Name="Textbox8">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
@@ -664,10 +666,11 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox8</rd:DefaultName>
-              <Top>0.08333in</Top>
-              <Left>3.43086in</Left>
+              <Top>4.19665in</Top>
+              <Left>3.22975in</Left>
               <Height>0.25in</Height>
               <Width>1.325in</Width>
+              <ZIndex>9</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -693,11 +696,11 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox9</rd:DefaultName>
-              <Top>0.38889in</Top>
-              <Left>1.88834in</Left>
+              <Top>4.50221in</Top>
+              <Left>1.68723in</Left>
               <Height>0.25in</Height>
               <Width>4.7139in</Width>
-              <ZIndex>1</ZIndex>
+              <ZIndex>10</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -723,11 +726,11 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox9</rd:DefaultName>
-              <Top>0.68056in</Top>
-              <Left>2.21334in</Left>
+              <Top>4.79388in</Top>
+              <Left>2.01223in</Left>
               <Height>0.25in</Height>
               <Width>3.93057in</Width>
-              <ZIndex>2</ZIndex>
+              <ZIndex>11</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -738,21 +741,17 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Line Name="Line2">
-              <Top>0.05556in</Top>
-              <Left>0.15293in</Left>
-              <Height>0in</Height>
-              <Width>7.84375in</Width>
-              <ZIndex>3</ZIndex>
-              <Style>
-                <Border>
-                  <Color>Blue</Color>
-                  <Style>Solid</Style>
-                  <Width>3pt</Width>
-                </Border>
-              </Style>
-            </Line>
           </ReportItems>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </PageHeader>
+        <PageFooter>
+          <Height>0.10208in</Height>
+          <PrintOnFirstPage>true</PrintOnFirstPage>
+          <PrintOnLastPage>true</PrintOnLastPage>
           <Style />
         </PageFooter>
         <InteractiveHeight>11in</InteractiveHeight>

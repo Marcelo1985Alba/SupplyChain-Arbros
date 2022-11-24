@@ -64,4 +64,24 @@
 
     </ConfirmacionDialog>
 
+    <ConfirmacionDialog @ref="@PreguntaEliminarDialog" ContentButtonConfirm="@textbotonPorPedido" 
+                        ContentButtonConfirmTwo="@textbotonPorOCI"
+                        OnConfirm="@(()=> PreguntaEliminarPorNumOCIPedido(true))" MontrarOtroButton="true"
+                        OnConfirmTwo="@(()=> PreguntaEliminarPorNumOCIPedido(false))">
+        <HeaderTempalte><div class="text-white-50">Confirmarcion</div></HeaderTempalte>
+        <ContentTemplate>
+            Como desea Eliminar?
+        </ContentTemplate>
+
+    </ConfirmacionDialog>
+
+    <ConfirmacionDialog @ref="@ConfirmacionEliminarDialog" ContentButtonConfirm="Si"
+                        OnConfirm="@(()=> Eliminar())">
+        <HeaderTempalte><div class="text-white-50">Confirmarcion</div></HeaderTempalte>
+        <ContentTemplate>
+            Está seguro que desea Eliminar?
+        </ContentTemplate>
+
+    </ConfirmacionDialog>
+
 </div>

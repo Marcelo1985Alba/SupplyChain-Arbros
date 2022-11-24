@@ -305,7 +305,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 item.DIRENT = Pedido.DIRENT ?? string.Empty;
                 item.OBS1 = Pedido.BULTOS;
                 item.OBS3 = Pedido.MONTO;
-
+                item.ORCO = Pedido.ORCO;
                 item.COMPROB = "REMITO";
             }
 

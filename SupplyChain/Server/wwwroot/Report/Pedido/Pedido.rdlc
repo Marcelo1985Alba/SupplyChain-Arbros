@@ -1593,6 +1593,58 @@ Sum(Fields!TOTAL_ITEM.Value, "DataSet1")
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Textbox Name="txtSimboloMoneda">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value xml:space="preserve"> </Value>
+                    <Style>
+                      <FontSize>11pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Iif(First(Fields!MONEDA.Value, "DataSet1") = "DOLARES", 
+"U$S", "$")</Value>
+                    <Style>
+                      <FontSize>11pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value xml:space="preserve"> </Value>
+                    <Style>
+                      <FontSize>11pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.9861in</Top>
+            <Left>2.99952in</Left>
+            <Height>0.07223in</Height>
+            <Width>0.84763in</Width>
+            <ZIndex>3</ZIndex>
+            <Visibility>
+              <Hidden>true</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
         <Height>1.06943in</Height>
         <Style />
@@ -2276,7 +2328,7 @@ Sum(Fields!TOTAL_ITEM.Value, "DataSet1")
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>0.51391in</Height>
+          <Height>0.43891in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -2330,7 +2382,7 @@ Sum(Fields!TOTAL_ITEM.Value, "DataSet1")
               <Top>0.09722in</Top>
               <Left>0.15586in</Left>
               <Height>0.225in</Height>
-              <Width>2.38096in</Width>
+              <Width>2.26429in</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>
@@ -2402,9 +2454,9 @@ Sum(Fields!TOTAL_ITEM.Value, "DataSet1")
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
               <Top>0.09722in</Top>
-              <Left>2.67869in</Left>
+              <Left>2.4896in</Left>
               <Height>0.225in</Height>
-              <Width>2.90727in</Width>
+              <Width>2.86303in</Width>
               <ZIndex>2</ZIndex>
               <Style>
                 <Border>
@@ -2423,10 +2475,10 @@ Sum(Fields!TOTAL_ITEM.Value, "DataSet1")
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>TOTAL: </Value>
+                      <Value xml:space="preserve"> </Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
-                        <Format>0.00;0.00-</Format>
+                        <Format>0.00</Format>
                       </Style>
                     </TextRun>
                     <TextRun>
@@ -2440,7 +2492,7 @@ Sum(Fields!TOTAL_ITEM.Value, "DataSet1")
                       <Value xml:space="preserve"> </Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
-                        <Format>0.00;0.00-</Format>
+                        <Format>0.00</Format>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2450,11 +2502,80 @@ Sum(Fields!TOTAL_ITEM.Value, "DataSet1")
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>0.09722in</Top>
-              <Left>5.69905in</Left>
+              <Top>0.08334in</Top>
+              <Left>6.53121in</Left>
               <Height>0.225in</Height>
-              <Width>2.14763in</Width>
+              <Width>1.1238in</Width>
               <ZIndex>3</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox26">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>TOTAL:</Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                        <Format>0.00;0.00-</Format>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Left</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox26</rd:DefaultName>
+              <Top>0.08334in</Top>
+              <Left>5.42207in</Left>
+              <Height>0.25in</Height>
+              <Width>0.60914in</Width>
+              <ZIndex>4</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="MONEDA1">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=ReportItems!txtSimboloMoneda.Value</Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>MONEDA1</rd:DefaultName>
+              <Top>0.08334in</Top>
+              <Left>6.07287in</Left>
+              <Height>0.25in</Height>
+              <Width>0.44444in</Width>
+              <ZIndex>5</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>

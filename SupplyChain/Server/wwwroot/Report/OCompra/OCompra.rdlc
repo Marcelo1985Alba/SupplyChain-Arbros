@@ -960,14 +960,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="PRECIOTOT">
+                        <Textbox Name="totalItems">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!PRECIOTOT.Value</Value>
+                                  <Value>=Fields!SOLICITADO.Value * Fields!PRECIO.Value</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -980,7 +980,6 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>PRECIOTOT</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -1041,7 +1040,8 @@
                 <TextRuns>
                   <TextRun>
                     <Value>=System.Math.Round(
-Sum(Fields!PRECIOTOT.Value, "DataSet1") * 
+Sum(Fields!PRECIO.Value, "DataSet1") * 
+Sum(Fields!SOLICITADO.Value, "DataSet1") *
 First(Fields!BON.Value, "DataSet1") / 100
 , 2)</Value>
                     <MarkupType>HTML</MarkupType>
@@ -1093,6 +1093,38 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
             <Visibility>
               <Hidden>true</Hidden>
             </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox7">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Sum(Fields!SOLICITADO.Value * Fields!PRECIO.Value)</Value>
+                    <Style>
+                      <Format>0.00</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox7</rd:DefaultName>
+            <Top>0.51388in</Top>
+            <Left>1.66333in</Left>
+            <Height>0.11111in</Height>
+            <Width>1in</Width>
+            <ZIndex>3</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1686,21 +1718,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>SUBTOTAL: </Value>
-                      <Style>
-                        <FontWeight>Bold</FontWeight>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=System.Math.Round(
-Sum(Fields!PRECIOTOT.Value, "DataSet1"), 2)</Value>
-                      <Style>
-                        <FontWeight>Bold</FontWeight>
-                        <Format>0.00</Format>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value xml:space="preserve"> </Value>
+                      <Value>SUBTOTAL:  </Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
                       </Style>

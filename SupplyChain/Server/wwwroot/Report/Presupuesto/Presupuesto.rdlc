@@ -410,7 +410,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.225in</Height>
+                  <Height>0.20833in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1242,7 +1242,7 @@
             <DataSetName>DataSet1</DataSetName>
             <Top>0.04444in</Top>
             <Left>0.15586in</Left>
-            <Height>0.9861in</Height>
+            <Height>0.96943in</Height>
             <Width>7.49915in</Width>
             <Style>
               <Border>
@@ -1269,7 +1269,7 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100
             </Paragraphs>
             <Top>1.08333in</Top>
             <Left>2.96333in</Left>
-            <Height>0.08333in</Height>
+            <Height>0.09723in</Height>
             <Width>1.03114in</Width>
             <ZIndex>1</ZIndex>
             <Visibility>
@@ -1319,8 +1319,41 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Textbox Name="txtSimboloMoneda">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Iif(First(Fields!MONEDA.Value, "DataSet1") = "DOLARES", 
+"U$S", "$")</Value>
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>1.06944in</Top>
+            <Left>1.41451in</Left>
+            <Height>0.09723in</Height>
+            <Width>1.03114in</Width>
+            <ZIndex>3</ZIndex>
+            <Visibility>
+              <Hidden>true</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
-        <Height>1.20833in</Height>
+        <Height>1.18056in</Height>
         <Style />
       </Body>
       <Width>7.81016in</Width>
@@ -1900,7 +1933,7 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>1.16946in</Height>
+          <Height>1.11946in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1972,7 +2005,9 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
                       </Style>
                     </TextRun>
                   </TextRuns>
-                  <Style />
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox16</rd:DefaultName>
@@ -1998,8 +2033,7 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Iif(First(Fields!MONEDA.Value, "DataSet1") = "DOLARES", 
-"U$S", "$")</Value>
+                      <Value>=ReportItems!txtSimboloMoneda.Value</Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
                       </Style>
@@ -2016,9 +2050,6 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
               <Height>0.25in</Height>
               <Width>0.36111in</Width>
               <ZIndex>3</ZIndex>
-              <Visibility>
-                <Hidden>true</Hidden>
-              </Visibility>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2038,14 +2069,14 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
                     <TextRun>
                       <Value>Validez de oferta: </Value>
                       <Style>
-                        <FontSize>12pt</FontSize>
+                        <FontSize>11pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
                     <TextRun>
                       <Value>=DateAdd("d",30,Fields!FECHAS_PRESUP.Value)</Value>
                       <Style>
-                        <FontSize>12pt</FontSize>
+                        <FontSize>11pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <Format>dd/MM/yyyy</Format>
                       </Style>
@@ -2053,24 +2084,8 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
                     <TextRun>
                       <Value> Pasada dicha fecha favor de confirmar precio y plazo de entrega</Value>
                       <Style>
-                        <FontSize>12pt</FontSize>
+                        <FontSize>11pt</FontSize>
                         <FontWeight>Bold</FontWeight>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value />
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Times New Roman</FontFamily>
-                        <FontSize>12pt</FontSize>
-                        <FontWeight>Normal</FontWeight>
-                        <TextDecoration>None</TextDecoration>
-                        <Color>#000000</Color>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2103,7 +2118,7 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
                       <Value>Ver condiciones comerciales generales en hoja adjunta</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontSize>12pt</FontSize>
+                        <FontSize>11pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -2119,54 +2134,6 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
               <Height>0.26388in</Height>
               <Width>5.04167in</Width>
               <ZIndex>5</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="TOTAL_PRESUPUESTO2">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>SUBTOTAL: </Value>
-                      <Style>
-                        <FontWeight>Bold</FontWeight>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=System.Math.Round(
-Sum(Fields!TOTAL_ITEM.Value, "DataSet1"), 2)</Value>
-                      <Style>
-                        <FontWeight>Bold</FontWeight>
-                        <Format>0.00</Format>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value xml:space="preserve"> </Value>
-                      <Style>
-                        <FontWeight>Bold</FontWeight>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Left</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>TOTAL_PRESUPUESTO</rd:DefaultName>
-              <Top>0.06944in</Top>
-              <Left>0.15586in</Left>
-              <Height>0.25in</Height>
-              <Width>1.69687in</Width>
-              <ZIndex>6</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2238,7 +2205,55 @@ Sum(Fields!TOTAL_ITEM.Value, "DataSet1"), 2)</Value>
               <Top>0.06944in</Top>
               <Left>2.73998in</Left>
               <Height>0.25in</Height>
-              <Width>2.34119in</Width>
+              <Width>2.71619in</Width>
+              <ZIndex>6</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="TOTAL_PRESUPUESTO2">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>SUBTOTAL: </Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=System.Math.Round(
+Sum(Fields!TOTAL_ITEM.Value, "DataSet1"), 2)</Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                        <Format>0.00</Format>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value xml:space="preserve"> </Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Left</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>TOTAL_PRESUPUESTO</rd:DefaultName>
+              <Top>0.05556in</Top>
+              <Left>0.15586in</Left>
+              <Height>0.25in</Height>
+              <Width>1.69687in</Width>
               <ZIndex>7</ZIndex>
               <Style>
                 <Border>

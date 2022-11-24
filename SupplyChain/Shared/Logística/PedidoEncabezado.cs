@@ -28,7 +28,14 @@ namespace SupplyChain.Shared
         public string DIRENT { get; set; } = string.Empty;
         public string MONEDA { get; set; } = string.Empty;
         public int PEDIDO { get; set; } = 0;
+        /// <summary>
+        /// ORDEN DE COMPRA DE PROVEEDOR
+        /// </summary>
         public int? OCOMPRA { get; set; } = 0;
+        /// <summary>
+        /// ORDEN DE COMPRA DE CLIENTE
+        /// </summary>
+        public string ORCO { get; set; } = string.Empty;
         public int CG_ORDF { get; set; } = 0;
         [RequireRemito]
         public string REMITO { get; set; } = "0000-00000000";

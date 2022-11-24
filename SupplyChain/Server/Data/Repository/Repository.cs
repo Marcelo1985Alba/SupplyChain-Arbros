@@ -92,6 +92,18 @@ namespace SupplyChain.Server.Data.Repository
             await SaveChanges();
         }
 
+        public virtual async Task RemoverList(List<TId> lista)
+        {
+            //Db.Entry(entity: new TEntity { Id = id }).State = EntityState.Deleted;
+            foreach (var item in lista)
+            {
+                var entity = await ObtenerPorId(item);
+                Db.RemoveRange(entity);
+            }
+            
+            await SaveChanges();
+        }
+
         public async Task<int> SaveChanges()
         {
             return await Db.SaveChangesAsync();

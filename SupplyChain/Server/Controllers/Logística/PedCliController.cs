@@ -13,9 +13,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SupplyChain;
+using SupplyChain.Client.Pages.Ventas._2_Pedidos;
 using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
 using SupplyChain.Shared.Logística;
+using Syncfusion.Blazor.RichTextEditor;
 
 namespace SupplyChain
 {
@@ -129,6 +132,69 @@ namespace SupplyChain
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        // DELETE api/<PresupuestosController>/5
+        [HttpDelete("{pedido}")]
+        public async Task<ActionResult<PedCli>> DeletePedido(int pedido)
+        {
+            try
+            {
+                var pedcli = await _pedCliRepository.Obtener(p=> p.PEDIDO == pedido)
+                                .FirstOrDefaultAsync();
+                if (pedcli == null)
+                {
+                    return NotFound();
+                }
+
+                if (await _pedCliRepository.TieneRemito(pedido))
+                {
+                    return Conflict("El pedido tiene remito asociado.");
+                }
+
+
+                await _pedCliRepository.Remover(pedcli.Id);
+
+
+                return pedcli;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error al eliminar Presupuesto " + ex.Message);
+            }
+        }
+
+
+        [HttpDelete("PorOci/{oci}")]
+        public async Task<ActionResult<PedCli>> DeleteOCI(int oci)
+        {
+            try
+            {
+                var listaPedcli = await _pedCliRepository.Obtener(p => p.NUMOCI == oci)
+                                .ToListAsync();
+                if (listaPedcli == null || listaPedcli.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                foreach (var item in listaPedcli)
+                {
+                    if (await _pedCliRepository.TieneRemito(item.PEDIDO))
+                    {
+                        return Conflict($"El pedido {item.PEDIDO} tiene remito asociado.");
+                    }
+                }
+
+
+                await _pedCliRepository.RemoverList(listaPedcli.Select(p=> p.Id).ToList());
+
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error al eliminar Presupuesto " + ex.Message);
             }
         }
     }

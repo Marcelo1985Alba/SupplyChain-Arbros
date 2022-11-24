@@ -23,6 +23,12 @@ namespace SupplyChain.Server.Repositorios
             this.generaRepository = generaRepository;
         }
 
+        internal async Task<bool> TieneRemito(int pedido)
+        {
+            return await Db.Pedidos.AnyAsync(p=> (p.TIPOO == 1 && p.PEDIDO == pedido && p.REMITO != "") || 
+                (p.TIPOO == 28 && p.PEDIDO == pedido) ||
+                 (p.TIPOO == 28 && p.PEDIDO == pedido) );
+        }
         public async Task<IEnumerable<PedCli>> ByFilter(TipoFiltro tipoFiltro = TipoFiltro.Todos)
         {
             if (tipoFiltro == TipoFiltro.Pendientes)

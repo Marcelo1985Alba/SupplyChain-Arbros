@@ -80,5 +80,10 @@ namespace SupplyChain.Client.HelperService
         {
             await js.InvokeVoidAsync("descargarEtiquetaDeRemito", remito);
         }
+
+        internal async Task<HttpResponseWrapper<bool>> TieneRemitoAsociado(int pedido)
+        {
+            return await http.GetFromJsonAsync<bool>($"{API}/TieneRemito/{pedido}");
+        }
     }
 }

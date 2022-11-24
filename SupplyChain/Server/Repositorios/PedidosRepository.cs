@@ -123,6 +123,7 @@ namespace SupplyChain.Server.Repositorios
                         CG_TRANS = cabacera.CG_TRANS,
                         DIRENT = cabacera.DIRENT,
                         VA_INDIC = cabacera.VA_INDIC,
+                        ORCO = cabacera.ORCO,
                         VOUCHER = 0,
                     };
                     var id = 0;
@@ -142,7 +143,7 @@ namespace SupplyChain.Server.Repositorios
                             MONEDA = pedEncabezado.MONEDA,
                             BONIFIC = pedEncabezado.BONIFIC,
                             VA_INDIC = pedEncabezado.VA_INDIC,
-
+                            
                             CG_ART = item.CG_ART,
                             DES_ART = item.DES_ART,
                             STOCK = item.STOCK,
@@ -156,10 +157,10 @@ namespace SupplyChain.Server.Repositorios
                             IMPORTE3 = item.IMPORTE3,
                             IMPORTE4 = item.IMPORTE4,
                             IMPORTE6 = item.IMPORTE6,
-                            DESPACHO = item.DESPACHO,
+                            DESPACHO = item.CAMPOCOM1,
                             LOTE = item.LOTE,
                             SERIE = item.SERIE,
-
+                            OBSERITEM = item.OBSERITEM
                         };
 
 
