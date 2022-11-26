@@ -139,8 +139,9 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         protected async Task OnActionBeginHandler(ActionEventArgs<PedCli> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
-                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
-            {
+                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.Delete )
+            { 
                 args.Cancel = true;
                 args.PreventRender = false;
             }
