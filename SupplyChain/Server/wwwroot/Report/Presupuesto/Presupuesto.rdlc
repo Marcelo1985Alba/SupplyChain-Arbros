@@ -1933,7 +1933,7 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>1.11946in</Height>
+          <Height>1.09446in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1969,8 +1969,8 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TOTAL_PRESUPUESTO</rd:DefaultName>
-              <Top>0.06944in</Top>
-              <Left>5.64313in</Left>
+              <Top>0.04167in</Top>
+              <Left>5.18962in</Left>
               <Height>0.25in</Height>
               <Width>0.69687in</Width>
               <ZIndex>1</ZIndex>
@@ -1998,7 +1998,7 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
                       </Style>
                     </TextRun>
                     <TextRun>
-                      <Value xml:space="preserve"> </Value>
+                      <Value> +IVA </Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
                         <Format>0.00</Format>
@@ -2011,10 +2011,10 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox16</rd:DefaultName>
-              <Top>0.06944in</Top>
-              <Left>6.75666in</Left>
-              <Height>0.25in</Height>
-              <Width>0.89763in</Width>
+              <Top>0.05556in</Top>
+              <Left>6.33093in</Left>
+              <Height>0.23611in</Height>
+              <Width>1.32336in</Width>
               <ZIndex>2</ZIndex>
               <Style>
                 <Border>
@@ -2045,8 +2045,8 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>MONEDA1</rd:DefaultName>
-              <Top>0.06944in</Top>
-              <Left>6.38166in</Left>
+              <Top>0.04167in</Top>
+              <Left>5.90038in</Left>
               <Height>0.25in</Height>
               <Width>0.36111in</Width>
               <ZIndex>3</ZIndex>
@@ -2093,7 +2093,7 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox29</rd:DefaultName>
-              <Top>0.49446in</Top>
+              <Top>0.44444in</Top>
               <Left>0.1555in</Left>
               <Height>0.26944in</Height>
               <Width>7.49879in</Width>
@@ -2129,8 +2129,8 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>0.80557in</Top>
-              <Left>0.1555in</Left>
+              <Top>0.74166in</Top>
+              <Left>0.15514in</Left>
               <Height>0.26388in</Height>
               <Width>5.04167in</Width>
               <ZIndex>5</ZIndex>
@@ -2202,8 +2202,8 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TOTAL_PRESUPUESTO</rd:DefaultName>
-              <Top>0.06944in</Top>
-              <Left>2.73998in</Left>
+              <Top>0.05556in</Top>
+              <Left>2.45954in</Left>
               <Height>0.25in</Height>
               <Width>2.71619in</Width>
               <ZIndex>6</ZIndex>
@@ -2253,7 +2253,7 @@ Sum(Fields!TOTAL_ITEM.Value, "DataSet1"), 2)</Value>
               <Top>0.05556in</Top>
               <Left>0.15586in</Left>
               <Height>0.25in</Height>
-              <Width>1.69687in</Width>
+              <Width>2.28979in</Width>
               <ZIndex>7</ZIndex>
               <Style>
                 <Border>

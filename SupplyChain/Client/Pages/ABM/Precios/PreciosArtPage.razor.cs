@@ -47,7 +47,7 @@ namespace SupplyChain.Client.Pages.ABM.Precios
         "Edit",
         "Delete",
         new ItemModel { Text = "Copia", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
-        "ExcelExport"
+        new ItemModel { Text = "Exportar Excel", TooltipText = "Exportar a excel", PrefixIcon = "e-export", Id = "exportar" },
         };
         [CascadingParameter] MainLayout MainLayout { get; set; }
 
