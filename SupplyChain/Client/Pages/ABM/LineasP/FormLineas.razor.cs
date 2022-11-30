@@ -23,7 +23,7 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
         [Parameter] public EventCallback<Lineas> OnEliminar { get; set; }
         [Parameter] public EventCallback OnCerrar { get; set; }
 
-        protected SfGrid<Lineas> refGridItems;
+            protected SfGrid<Lineas> refGridItems;
         protected SfSpinner refSpinnerCli;
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
@@ -58,12 +58,12 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
         protected async Task<bool> Actualizar(Lineas linea)
         {
             var response = await LineasService.Actualizar(linea.Id, linea);
-            if (response.Error)
+                if (response.Error)
             {
                 await ToastMensajeError("Error al intentar Guardar la linea.");
                 return false;
             }
-            lineas = linea;
+            lineas = linea; 
             return true;
         }
 
@@ -102,7 +102,7 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
                 Title = "EXITO!",
                 Content = content,
                 CssClass = "e-toast-success",
-                Icon = "e-success toast-icons",
+                Icon = "e-su    ccess toast-icons",
                 ShowCloseButton = true,
                 ShowProgressBar = true
             });
@@ -121,3 +121,4 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
         }
     }
 }
+    

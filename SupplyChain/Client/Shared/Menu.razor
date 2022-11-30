@@ -15,7 +15,7 @@
         public List<CountryData> Languages { get; set; }
         public string Language { get; set; }
     }
-
+    @*PARTE DEL MENU DE NAVEGACION. Ej- Ventas, PCP, Administracion*@
     [CascadingParameter] public Task<AuthenticationState> AuthenticationStateAsync { get; set; }
     public AuthenticationState AuthState;
     protected async override Task OnInitializedAsync()
@@ -34,7 +34,7 @@
                         Text = "PCP", IconCss = "e-icons e-file",
                         Items = new List<MenuItem>
                         {
-                            new MenuItem { Text= "Carga de Máquina", Url="/cargamaquina" }
+                                new MenuItem { Text= "Carga de Máquina", Url="/cargamaquina" }
                         }
                     }
                 };
@@ -102,6 +102,7 @@
                         new MenuItem { Text= "protarea", Url="/protarea" },
                         new MenuItem { Text= "scrap", Url="/scrap" },
                         new MenuItem { Text= "tipo area", Url="/tipoarea" },
+                        //new MenuItem {Text= "ProcalMP"},
                         new MenuItem { Text= "turnos", Url="/turnos" }}}},},
 
                 new MenuItem { Text = "COSTOS", IconCss = "e-icons e-file",Items = new List<MenuItem>{

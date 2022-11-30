@@ -11,6 +11,9 @@ namespace SupplyChain
         [Key, Column("CG_LINEA")]
         new public int Id { get; set; } = 0;
         public string DES_LINEA { get; set; } = "";
+        public decimal FACTOR { get; set; } = 0;
+        public string RESP { get; set; } = "";
+
         [NotMapped]
         public bool GUARDADO { get; set; }
         [NotMapped]

@@ -64,6 +64,11 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
         {
             await refGrid.SetPersistData(vistasGrillas.Layout);
         }
+   
+        /// <summary>
+        /// //
+        /// </summary>
+        /// <returns></returns>
         protected async Task OnReiniciarGrilla()
         {
             await refGrid.ResetPersistData();
@@ -80,7 +85,7 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
             {
                 if ((await refGrid.GetSelectedRecordsAsync()).Count > 0)
                 {
-                    bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar la linea?");
+                    bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desea eliminar la linea?");
                     if (isConfirmed)
                     {
                         List<Lineas> lineasABorrar = await refGrid.GetSelectedRecordsAsync();
@@ -111,12 +116,12 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
         }
 
         private async Task CopiarLinea()
-        {
+        {   
             if (refGrid.SelectedRecords.Count == 1)
             {
                 lineaSeleccionada = new();
                 Lineas selectedRecord = refGrid.SelectedRecords[0];
-                bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar la linea?");
+                bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desea copiar la linea?");
                 if (isConfirmed)
                 {
                     lineaSeleccionada.ESNUEVO = true;
@@ -207,6 +212,8 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
                     var lineaSinModificar = lineas.Where(p => p.Id == linea.Id).FirstOrDefault();
                     lineaSinModificar.Id = linea.Id;
                     lineaSinModificar.DES_LINEA = linea.DES_LINEA;
+                    //lineaSinModificar.Factor = linea.FACTOR;
+                    //lineaSinModificar.Resp = linea.RESP;
                     lineas.OrderByDescending(p => p.Id);
                 }
                 await refGrid.RefreshHeaderAsync();

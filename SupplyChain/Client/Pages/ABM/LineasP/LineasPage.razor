@@ -38,6 +38,9 @@
                 <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
                 <GridColumn Field=@nameof(Lineas.Id) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
                 <GridColumn Field=@nameof(Lineas.DES_LINEA) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+               @*SE AGREGAN DOS COLUMNAS A LA TABLA DE LINEAS*@
+                <GridColumn Field=@nameof(Lineas.RESP) HeaderText="RESP" TextAlign="TextAlign.Left" Width="50px"></GridColumn>
+                <GridColumn Field=@nameof(Lineas.FACTOR) HeaderText="FACTOR" TextAlign="TextAlign.Left" Width="100px" ></GridColumn>    
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
         </SfGrid>
@@ -45,7 +48,7 @@
 
     @if (popupFormVisible)
 	{
-		 <FormLineas lineas="lineaSeleccionada" Show="popupFormVisible" OnEliminar="@(async(p)=>await Guardar(p))"
+		 <FormLineas lineas="lineaSeleccionada" Show="popupFormVisible" OnEliminar="@(async(p)=>await Guardar(p))"  
                      OnCerrar="OnCerrarDialog" OnGuardar="@(async(p)=>await Guardar(p))"></FormLineas>
 	}
 </div>
