@@ -14,19 +14,19 @@ using SupplyChain;
 using Syncfusion.Blazor.Spinner;
 using Syncfusion.Blazor.Notifications;
 
-namespace SupplyChain.Client.Pages.ABM.ProcalMP
+namespace SupplyChain.Client.Pages.ABM.ProcalMPP
 {
     public class FormProcalMPBase : ComponentBase
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] public ProcalMPService ProcalMPService { get; set; }
-        [Parameter] public SupplyChain.ProcalsMP procalMP { get; set; } = new();
+        [Parameter] public ProcalsMP procalMP { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;
-        [Parameter] public EventCallback<SupplyChain.ProcalsMP> onGuardar { get; set; }
-        [Parameter] public EventCallback<SupplyChain.ProcalsMP> onEliminar { get; set; }
+        [Parameter] public EventCallback<ProcalsMP> OnGuardar { get; set; }
+        [Parameter] public EventCallback<ProcalsMP> OnEliminar { get; set; }
         [Parameter] public EventCallback OnCerrar { get; set; }
 
-        protected SfGrid<SupplyChain.ProcalsMP> refGridItems;
+        protected SfGrid<ProcalsMP> refGridItems;
         protected SfSpinner refSpinnerCli;
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
@@ -37,7 +37,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcalMP
           protected bool IsAdd { get; set; }
         
 
-        protected async Task<bool> Agregar(SupplyChain.ProcalsMP procalMP)
+        protected async Task<bool> Agregar(ProcalsMP procalMP)
         {
             var response = await ProcalMPService.Existe(procalMP.Id);
             if (!response)
@@ -56,7 +56,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcalMP
             return false;
         }
 
-        protected async Task<bool> Actualizar(SupplyChain.ProcalsMP procalMP)
+        protected async Task<bool> Actualizar(ProcalsMP procalMP)
         {
             var response = await ProcalMPService.Actualizar(procalMP.Id, procalMP);
             if (response.Error)
@@ -83,7 +83,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcalMP
             {
                 Show = false;
                 procalMP.GUARDADO = guardado;
-                await onGuardar.InvokeAsync(procalMP);
+                await OnGuardar.InvokeAsync(procalMP);
             }
         }
 

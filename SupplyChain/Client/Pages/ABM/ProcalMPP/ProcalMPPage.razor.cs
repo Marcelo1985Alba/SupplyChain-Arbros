@@ -24,6 +24,10 @@ namespace SupplyChain.Client.Pages.ABM.ProcalMPP
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime jSRuntime { get; set; }
         [Inject] protected ProcalMPService ProcalMPService { get; set; }
+        #region "Vista Grilla"
+        protected const string APPNAME = "grdProcalMP";
+        protected string state;
+        #endregion
         protected List<Object> Toolbaritems = new List<object>()
         {
             "Search", "Add", "Edit", "Delete", "Print",
@@ -49,15 +53,14 @@ namespace SupplyChain.Client.Pages.ABM.ProcalMPP
             var response = await ProcalMPService.Get();
             if (!response.Error)
             { 
-                ProcalMP = response.Response;
+                procalMP = response.Response;
             }
             SpinnerVisible = false;
         }
         #region //EVENTOS VISTA DE LA GRITA
 
-        protected async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
-        {
-            await refGrid.SetPersisData(vistasGrillas.Layout);
+        protected async Task OnVistaSeleccionada(VistasGrillas vistasGrillas){
+            await refGrid.SetPersistDataAsync(vistasGrillas.Layout);
         }
    
         protected async Task OnReinciarGrilla()
@@ -76,7 +79,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcalMPP
             {
                 if ((await refGrid.GetSelectedRecordsAsync()).Count > 0)
                 {
-                    bool isConfirmed = await jSRuntime.InvokeVoidAsync<bool>("confirm", "Seguro que desea elimnar la linea?");
+                    bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desea elimnar la linea?");
                     if(isConfirmed)
                     {
                         List<ProcalsMP> procalMPABorrar = await refGrid.GetSelectedRecordsAsync();
@@ -113,7 +116,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcalMPP
             {
                 procalMPSeleccionada = new();
                 ProcalsMP selectedRecord = refGrid.SelectedRecords[0];
-                bool isConfirmed = await jSRuntime.InvokeVoidAsync<bool>("confirm", "Seguro que desea copiar la materia?");
+                bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desea copiar la materia?");
                 if (isConfirmed)
                 {
                     procalMPSeleccionada.ESNUEVO = true;
@@ -177,10 +180,9 @@ namespace SupplyChain.Client.Pages.ABM.ProcalMPP
                 refGrid.Refresh();
 
                 state = await refGrid.GetPersistData();
-                await refGrid.AutoFitColumnAsync();
-                await refGrid.RefreshColumnsAsync();
+                await refGrid.AutoFitColumnsAsync();
                 await refGrid.RefreshColumns();
-                await refGrid.RefreshHeaderAsync();
+                await refGrid.RefreshHeader();
             }
         }
 
@@ -199,32 +201,32 @@ namespace SupplyChain.Client.Pages.ABM.ProcalMPP
             popupFormVisible = false;
         }
 
-        protected async Task Guardar(ProcalsMP procalMP)
+        protected async Task Guardar(ProcalsMP procMP)
         {
-            if (procalMP.GUARDADO)
+            if (procMP.GUARDADO)
             {
                 await ToastMensajeExito();
                 popupFormVisible = false;
-                if (procalMP.ESNUEVO)
+                if (procMP.ESNUEVO)
                 {
-                    procalMP.add(procalMP);
+                    procalMP.Add(procMP);
                 }
                 else
                 {
                     //actualiza los datos sin ir a BD
-                    var procalMPSinModificar = procalMP.Where(p => p.Id == procalMP.Id).FirstOrDefualt();
-                    procalMPSinModificar.Id = procalMP.Id;
-                    procalMPSinModificar.DESCAL = procalMP.DESCAL;
-                    procalMPSinModificar.CARCAL= procalMP.CARCAL;
-                    procalMPSinModificar.UNIDADM= procalMP.UNIDADM;
-                    procalMPSinModificar.CANTMEDIDA= procalMP.CANTMEDIDA;
-                    procalMPSinModificar.TOLE1= procalMP.TOLE1;
-                    procalMPSinModificar.TOLE2 = procalMP.TOLE2;
-                    procalMPSinModificar.OBSERV = procalMP.OBSERV;
-                    procalMPSinModificar.DESCAL2 = procalMP.DESCAL2;
-                    procalMPSinModificar.CARCAL2 = procalMP.CARCAL2;
-                    procalMPSinModificar.OBSERV2 = procalMP.OBSERV2;
-                    procalMPSinModificar.PRIORIDAD = procalMP.PRIORIDAD;
+                    var procalMPSinModificar = procalMP.Where(p => p.Id == procMP.Id).FirstOrDefault();
+                    procalMPSinModificar.Id = procMP.Id;
+                    procalMPSinModificar.DESCAL = procMP.DESCAL;
+                    procalMPSinModificar.CARCAL= procMP.CARCAL;
+                    procalMPSinModificar.UNIDADM= procMP.UNIDADM;
+                    procalMPSinModificar.CANTMEDIDA= procMP.CANTMEDIDA;
+                    procalMPSinModificar.TOLE1= procMP.TOLE1;
+                    procalMPSinModificar.TOLE2 = procMP.TOLE2;
+                    procalMPSinModificar.OBSERV = procMP.OBSERV;
+                    procalMPSinModificar.DESCAL2 = procMP.DESCAL2;
+                    procalMPSinModificar.CARCAL2 = procMP.CARCAL2;
+                    procalMPSinModificar.OBSERV2 = procMP.OBSERV2;
+                    procalMPSinModificar.PRIORIDAD = procMP.PRIORIDAD;
                     procalMP.OrderByDescending(p => p.Id);
                 }
                 await refGrid.RefreshHeaderAsync();
