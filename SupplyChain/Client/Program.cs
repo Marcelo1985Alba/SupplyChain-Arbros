@@ -88,6 +88,8 @@ namespace SupplyChain.Client
             services.AddScoped<PdfService>();
             services.AddScoped<ExcelService>();
             services.AddScoped<RenovadorToken>();
+            services.AddScoped<ISOService>();
+            services.AddScoped<AspAmbService>();
 
             services.AddSingleton<ToastService>();
         }
