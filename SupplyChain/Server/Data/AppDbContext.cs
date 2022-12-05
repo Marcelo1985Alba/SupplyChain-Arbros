@@ -139,6 +139,8 @@ namespace SupplyChain
         public DbSet<vUsuario> vUsuarios { get; set; }
         public DbSet<vOCompraReporte> vOCompraReporte { get; set; }
 
+        public DbSet<ISO> ISO { get; set; }
+
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
