@@ -90,6 +90,7 @@ namespace SupplyChain.Client
             services.AddScoped<RenovadorToken>();
             services.AddScoped<ISOService>();
             services.AddScoped<AspAmbService>();
+            services.AddScoped<AspNetRolesService>();
 
             services.AddSingleton<ToastService>();
         }

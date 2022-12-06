@@ -127,6 +127,7 @@ namespace SupplyChain.Server
             services.AddTransient<ProcunRepository>();
             services.AddTransient<ISORepository>();
             services.AddTransient<AspAmbRepository>();
+            services.AddTransient<AspNetRolesRepository>();
             //services.AddTransient<MatproveRepository>();
             #endregion
 

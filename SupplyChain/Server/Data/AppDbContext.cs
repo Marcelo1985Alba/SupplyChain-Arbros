@@ -140,6 +140,8 @@ namespace SupplyChain
         public DbSet<vOCompraReporte> vOCompraReporte { get; set; }
 
         public DbSet<ISO> ISO { get; set; }
+        public DbSet<AspAmb> AspAmb { get; set; }
+        public DbSet<AspNetRoles> AspNetRoles { get; set; }
 
         #endregion
 

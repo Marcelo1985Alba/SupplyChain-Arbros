@@ -18,6 +18,8 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
         [Inject] protected HttpClient Http { get; set; }
         [Inject] public ISOService isoService { get; set; }
         [Inject] protected AspAmbService AspAmpService { get; set; }
+        [Inject] protected AspNetRolesService AspNetRolesService { get; set; }
+        [Inject] protected AspAmbService AspAmbService { get; set; }
         [Parameter] public ISO isos { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;
         [Parameter] public EventCallback<ISO> OnGuardar { get; set; }
@@ -28,13 +30,84 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
         protected SfSpinner refSpinnerCli;
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
+        protected List<AspNetRoles> roles = new();
+        protected List<AspAmb> aspAmbientales = new();
         protected Dictionary<string, object> HtmlAttributeSubmit = new()
         {
             { "type", "submit" }
         };
         protected bool IsAdd { get; set; }
+
+        protected class BaseOption
+        {
+            public string Text { get; set; }
+        }
+        protected List<BaseOption> FactorData = new List<BaseOption> {
+            new BaseOption() {Text= "Politico" },
+            new BaseOption() {Text= "Social" },
+            new BaseOption() {Text= "Economico" },
+            new BaseOption() {Text= "Tecnologico" },
+            new BaseOption() {Text= "Ambiental" },
+        };
+        protected List<BaseOption> FODAData = new List<BaseOption> {
+            new BaseOption() {Text= "Fortaleza" },
+            new BaseOption() {Text= "Debilidad" },
+            new BaseOption() {Text= "Oportunidad" },
+            new BaseOption() {Text= "Amenaza" },
+        };
+        protected List<BaseOption> ImpAmbData = new List<BaseOption> {
+            new BaseOption() {Text= "AIRE" },
+            new BaseOption() {Text= "AGUA" },
+            new BaseOption() {Text= "SUELO" },
+            new BaseOption() {Text= "RRNN" },
+            new BaseOption() {Text= "BIOTA" },
+            new BaseOption() {Text= "QVIDA" },
+        };
+        protected List<BaseOption> FrecuenciaData = new List<BaseOption> {
+            new BaseOption() {Text= "Muy baja" },
+            new BaseOption() {Text= "Baja" },
+            new BaseOption() {Text= "Media" },
+            new BaseOption() {Text= "Alta" },
+            new BaseOption() {Text= "Muy alta" },
+        };
+        protected List<BaseOption> ImpactoData = new List<BaseOption> {
+            new BaseOption() {Text= "Muy poco" },
+            new BaseOption() {Text= "Poco" },
+            new BaseOption() {Text= "Moderado" },
+            new BaseOption() {Text= "Alto" },
+            new BaseOption() {Text= "Muy alto" },
+        };
+        protected List<BaseOption> OperacionData = new List<BaseOption> {
+            new BaseOption() {Text= "Normal" },
+            new BaseOption() {Text= "Anormal" },
+            new BaseOption() {Text= "Emergencia" },
+        };
+        protected List<BaseOption> ControlData = new List<BaseOption> {
+            new BaseOption() {Text= "Directa" },
+            new BaseOption() {Text= "Indirecta" },
+        };
+        protected List<BaseOption> NatDelImpData = new List<BaseOption> {
+            new BaseOption() {Text= "Beneficioso" },
+            new BaseOption() {Text= "Adverso" },
+        };
+        protected List<BaseOption> GestionData = new List<BaseOption> {
+            new BaseOption() {Text= "Optima" },
+            new BaseOption() {Text= "Parcial" },
+            new BaseOption() {Text= "Sin gestion" },
+        };
+
         protected async override Task OnInitializedAsync()
         {
+            var response = await AspAmbService.Get();
+            if (!response.Error)
+            {
+                aspAmbientales = response.Response;
+            }
+            var response2 = await AspNetRolesService.Get();
+            if (!response2.Error)
+            {
+                roles = response2.Response;
+            }
         }
 
         protected async Task<bool> Agregar(ISO iso)

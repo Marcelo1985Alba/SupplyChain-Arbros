@@ -14,7 +14,7 @@ namespace SupplyChain
         public string Descripcion { get; set; } = "";
         public string Detalle { get; set; } = "";
         public string Factor { get; set; } = "";
-        public int Proceso { get; set; } = 0;
+        public string Proceso { get; set; } = "";
         public string FODA { get; set; } = "";
         public string ImpAmb { get; set; } = "";
         public int AspAmb { get; set; } = 0;
