@@ -38,6 +38,7 @@
                 <GridColumn Field=@nameof(PedCli.DES_ART) HeaderText="Descripcion Articulo" TextAlign="TextAlign.Left" Width="220px"></GridColumn>
                 <GridColumn Field=@nameof(PedCli.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px"></GridColumn>
                 <GridColumn Field=@nameof(PedCli.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.BONIFIC) HeaderText="Bonficacion %" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
 
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>

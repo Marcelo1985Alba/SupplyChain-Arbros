@@ -967,7 +967,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!SOLICITADO.Value * Fields!PRECIO.Value</Value>
+                                  <Value>=Fields!PRECIOTOT.Value</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -1039,13 +1039,12 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=System.Math.Round(
-Sum(Fields!PRECIO.Value, "DataSet1") * 
-Sum(Fields!SOLICITADO.Value, "DataSet1") *
-First(Fields!BON.Value, "DataSet1") / 100
-, 2)</Value>
+                    <Value>= Sum(Fields!PRECIOTOT.Value, "DataSet1") *
+First(Fields!BON.Value, "DataSet1") / 100</Value>
                     <MarkupType>HTML</MarkupType>
-                    <Style />
+                    <Style>
+                      <Format>0.00</Format>
+                    </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
@@ -1079,6 +1078,7 @@ First(Fields!BON.Value, "DataSet1") / 100
                     <Value>=Sum(Fields!PRECIOTOT.Value, "DataSet1") - 
 Sum(Fields!PRECIOTOT.Value, "DataSet1") * 
 First(Fields!BON.Value, "DataSet1") / 100</Value>
+                    <MarkupType>HTML</MarkupType>
                     <Style />
                   </TextRun>
                 </TextRuns>
@@ -1093,38 +1093,6 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
             <Visibility>
               <Hidden>true</Hidden>
             </Visibility>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox7">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Sum(Fields!SOLICITADO.Value * Fields!PRECIO.Value)</Value>
-                    <Style>
-                      <Format>0.00</Format>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox7</rd:DefaultName>
-            <Top>0.51388in</Top>
-            <Left>1.66333in</Left>
-            <Height>0.11111in</Height>
-            <Width>1in</Width>
-            <ZIndex>3</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1241,6 +1209,32 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                     </TextRun>
                     <TextRun>
                       <Value>=First(Fields!TE.Value, "DataSet1")</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontSize>9pt</FontSize>
+                        <FontWeight>Normal</FontWeight>
+                        <TextDecoration>None</TextDecoration>
+                        <Color>#000000</Color>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Nota </Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Arial Black</FontFamily>
+                        <FontSize>9pt</FontSize>
+                        <FontWeight>Normal</FontWeight>
+                        <TextDecoration>None</TextDecoration>
+                        <Color>#000000</Color>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Fields!ESPEGEN.Value</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
                         <FontSize>9pt</FontSize>
@@ -1582,7 +1576,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>0.49446in</Height>
+          <Height>0.91668in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1723,6 +1717,13 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
+                    <TextRun>
+                      <Value>=Sum(Fields!PRECIOTOT.Value, "DataSet1")</Value>
+                      <Style>
+                        <FontWeight>Bold</FontWeight>
+                        <Format>0.00</Format>
+                      </Style>
+                    </TextRun>
                   </TextRuns>
                   <Style>
                     <TextAlign>Left</TextAlign>
@@ -1782,10 +1783,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                       </Style>
                     </TextRun>
                     <TextRun>
-                      <Value>=System.Math.Round(
-Sum(Fields!PRECIOTOT.Value, "DataSet1") * 
-First(Fields!BON.Value, "DataSet1") / 100
-, 2)</Value>
+                      <Value>=ReportItems!txtBonif.Value</Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
                         <Format>0.00</Format>
@@ -1809,6 +1807,39 @@ First(Fields!BON.Value, "DataSet1") / 100
               <Height>0.25in</Height>
               <Width>2.66063in</Width>
               <ZIndex>5</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox1">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>ARBROS S.A. ha implementado un Sistema de Gestión Integral, por lo que solicitamos tenga a bien cumplimentar los requisitos ambientales del producto / servicio suministrado</Value>
+                      <Style>
+                        <FontSize>9pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox1</rd:DefaultName>
+              <Top>0.44444in</Top>
+              <Left>0.15586in</Left>
+              <Height>0.375in</Height>
+              <Width>7.70712in</Width>
+              <ZIndex>6</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>

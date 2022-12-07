@@ -119,7 +119,7 @@
 
                         <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="112px"
                                 @ref="refGridItems" DataSource="@Pedido.Items" Width="100%" ID="grdItemsPresup"
-                                AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
+                                AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both" RowHeight="30">
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                             @*<GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>*@
                             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowConfirmDialog="false"
@@ -131,7 +131,7 @@
                                 <GridColumn Field=@nameof(PedCli.Id) IsPrimaryKey="true" Width="3"></GridColumn>
                                 @if (Pedido.NUMOCI > 0)
                                 {
-                                    <GridColumn Field=@nameof(PedCli.PEDIDO) Width="70" AllowEditing="false"></GridColumn>
+                                    <GridColumn Field=@nameof(PedCli.PEDIDO) Width="70" HeaderText="Pedido" AllowEditing="false"></GridColumn>
                                 }
 
                                 <GridColumn Field=@nameof(PedCli.CG_ART) AllowEditing="false" HeaderText="Producto" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
@@ -256,7 +256,7 @@
         <FooterTemplate>
 
                 @{
-                    var totalItems = Math.Round(Pedido.Items.Sum(i => i.TOTAL), 2);
+                    var totalItems = Math.Round(Pedido.Items.Sum(i => i.PREC_UNIT_X_CANTIDAD - i.IMP_DESCUENTO), 2);
                     var bonficacion = Math.Round(totalItems * Pedido.BONIFIC / 100, 2);
                     Pedido.BONIFICACION_IMPORTE = bonficacion;
                     var total = Pedido.TOTAL = Math.Round(totalItems - bonficacion, 2);
