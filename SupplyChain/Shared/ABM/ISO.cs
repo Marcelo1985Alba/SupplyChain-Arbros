@@ -10,6 +10,7 @@ namespace SupplyChain
     {
         [Key, Column("Id")]
         new public int Id { get; set; } = 0;
+        public int Identificacion { get; set; } = 0;
         public DateTime Fecha { get; set; }
         public string Descripcion { get; set; } = "";
         public string Detalle { get; set; } = "";
@@ -25,6 +26,8 @@ namespace SupplyChain
         public string NaturalezaDelImpacto { get; set; } = "";
         public string Gestion { get; set; } = "";
         public string Comentarios { get; set; } = "";
+        public string Medidas { get; set; } = "";
+        public string USER { get; set; } = "";
         [NotMapped]
         public bool GUARDADO { get; set; }
         [NotMapped]

@@ -18,7 +18,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
         [Inject] protected HttpClient Http { get; set; }
         [Inject] public ISOService isoService { get; set; }
         [Inject] protected AspAmbService AspAmpService { get; set; }
-        [Inject] protected AspNetRolesService AspNetRolesService { get; set; }
+        [Inject] protected TipoAreaService TipoAreaService { get; set; }
         [Inject] protected AspAmbService AspAmbService { get; set; }
         [Parameter] public ISO isos { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;
@@ -30,7 +30,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
         protected SfSpinner refSpinnerCli;
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
-        protected List<AspNetRoles> roles = new();
+        protected List<TipoArea> roles = new();
         protected List<AspAmb> aspAmbientales = new();
         protected Dictionary<string, object> HtmlAttributeSubmit = new()
         {
@@ -103,7 +103,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
             {
                 aspAmbientales = response.Response;
             }
-            var response2 = await AspNetRolesService.Get();
+            var response2 = await TipoAreaService.Get();
             if (!response2.Error)
             {
                 roles = response2.Response;
