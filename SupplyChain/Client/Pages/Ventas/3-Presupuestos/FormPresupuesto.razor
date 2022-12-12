@@ -1,6 +1,7 @@
 ﻿@using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Layouts
 @using SupplyChain.Client.Shared.BuscadorCliente
 @using SupplyChain.Client.Shared.BuscadorProducto
 @using SupplyChain.Client.Shared.BuscarSolicitud
@@ -8,7 +9,7 @@
 @inherits FormPresupuestoBase
 
 
-<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
+<SfDialog @bind-Visible="Show" IsModal="true" Width="80%" Height="680px" ShowCloseIcon="true">
     <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
     <DialogAnimationSettings Effect="DialogEffect.FadeZoom" Duration="200"></DialogAnimationSettings>
     <DialogTemplates>
@@ -23,256 +24,288 @@
             }
         </Header>
         <Content>
-            <SfToolbar ID="toolbar-form-solicitud" CssClass="">
-                <ToolbarItems>
-                    <ToolbarItem Id="tiSolicitudes" CssClass="e-round e-small" Type="ItemType.Button" Text="Solicitudes" OnClick="BuscarSolicitudes" Align="ItemAlign.Right"></ToolbarItem>
-                    <ToolbarItem Id="tiProductos" CssClass="e-round" Text="Productos" OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>
-                    <ToolbarItem Id="tiReparaciones" CssClass="e-round" Text="Reparaciones" OnClick="BuscarReparaciones" Align="ItemAlign.Right"></ToolbarItem>
 
-                </ToolbarItems>
-            </SfToolbar>
+            <div class="row">
+                <div class="col-lg-9 col-sm-6">
+                    <EditForm id="formPresupuesto" Model="@Presupuesto" OnValidSubmit="@(async()=> await Guardar())">
+                        <ObjectGraphDataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="form-row">
+                            <div class="form-group col-lg-2 col-md-2">
+                                <label class="">Cod. Cliente:</label>
+                                <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Presupuesto.CG_CLI)" ShowSpinButton="false" Readonly="false"
+                                                  OnInput="@(e => Cg_cli_Changed(e))"></SfNumericTextBox>
+                            </div>
+                            <div class="form-group col-lg-4 col-md-9">
+                                <label class="">Cliente:</label>
+                                <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Presupuesto.DES_CLI)" Input="@(e => Des_cli_Changed(e))" Readonly="false"></SfTextBox>
+                            </div>
+                            <div class="form-group col-md-1 mt-4">
+                                <SfButton IconCss="fa fa-search" CssClass="e-round e-info" OnClick="@(async ()=> await BuscarClientes())"
+                                          HtmlAttributes="@HtmlAttribute"></SfButton>
+                            </div>
+                            <div class="form-group col-lg-2 col-md-3">
+                                <label class="">Moneda:</label>
+                                <SfDropDownList TValue="string" TItem="string" DataSource="Monedas" Readonly="ReadOnlyMoneda"
+                                                @bind-Value="Presupuesto.MONEDA">
+                                    <DropDownListEvents TItem="string" TValue="string" ValueChange="@CambioMoneda"></DropDownListEvents>
+                                </SfDropDownList>
+                            </div>
+                            <div class="form-group col-lg-1 col-md-2">
+                                <label class="">TC:</label>
+                                <SfNumericTextBox ID="TC" @bind-Value="@(Presupuesto.TC)" ShowSpinButton="false" Decimals="2" Readonly="true"></SfNumericTextBox>
+                            </div>
+                            <div class="form-group col-md-1 mt-4">
+                                <SfButton IconCss="e-icons e-repeat" CssClass="e-round e-warning"
+                                          OnClick="@(async ()=> await GetTipoCambioDolarHoy())"
+                                          HtmlAttributes="@HtmlAttributeButtonTC"></SfButton>
+                            </div>
+                            <div class="form-group col-lg-1 col-md-4">
+                                <label class="">Bonificacion:</label>
+                                <SfNumericTextBox ID="Bonifc" @bind-Value="@(Presupuesto.BONIFIC)" ShowSpinButton="false" Decimals="2"></SfNumericTextBox>
+                            </div>
 
-            <EditForm id="formPresupuesto" Model="@Presupuesto" OnValidSubmit="@(async()=> await Guardar())">
-                <ObjectGraphDataAnnotationsValidator />
-                <ValidationSummary />
-                <div class="form-row">
-                    @*<div class="form-group col-md-1">
-                            <label class="">Id:</label>
-                            <SfNumericTextBox ID="SolicitudId" @bind-Value="@(Presupuesto.Id)" ShowSpinButton="false" Readonly="true"></SfNumericTextBox>
-                        </div>*@
-                    <div class="form-group col-lg-2 col-md-2">
-                        <label class="">Cod. Cliente:</label>
-                        <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Presupuesto.CG_CLI)" ShowSpinButton="false" Readonly="false"
-                                          OnInput="@(e => Cg_cli_Changed(e))"></SfNumericTextBox>
-                    </div>
-                    <div class="form-group col-lg-4 col-md-9">
-                        <label class="">Cliente:</label>
-                        <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Presupuesto.DES_CLI)" Input="@(e => Des_cli_Changed(e))" Readonly="false"></SfTextBox>
-                    </div>
-                    <div class="form-group col-md-1 mt-4">
-                        <SfButton IconCss="fa fa-search" CssClass="e-round e-info" OnClick="@(async ()=> await BuscarClientes())"
-                                  HtmlAttributes="@HtmlAttribute"></SfButton>
-                    </div>
-                    <div class="form-group col-lg-2 col-md-3">
-                        <label class="">Moneda:</label>
-                        <SfDropDownList TValue="string" TItem="string" DataSource="Monedas" Readonly="ReadOnlyMoneda"
-                                        @bind-Value="Presupuesto.MONEDA">
-                            <DropDownListEvents TItem="string" TValue="string" ValueChange="@CambioMoneda"></DropDownListEvents>
-                        </SfDropDownList>
-                    </div>
-                    <div class="form-group col-lg-1 col-md-2">
-                        <label class="">TC:</label>
-                        <SfNumericTextBox ID="TC" @bind-Value="@(Presupuesto.TC)" ShowSpinButton="false" Decimals="2" Readonly="true"></SfNumericTextBox>
-                    </div>
-                    <div class="form-group col-md-1 mt-4">
-                        <SfButton IconCss="e-icons e-repeat" CssClass="e-round e-warning"
-                                  OnClick="@(async ()=> await GetTipoCambioDolarHoy())"
-                                  HtmlAttributes="@HtmlAttributeButtonTC"></SfButton>
-                    </div>
-                    <div class="form-group col-lg-1 col-md-4">
-                        <label class="">Bonificacion:</label>
-                        <SfNumericTextBox ID="Bonifc" @bind-Value="@(Presupuesto.BONIFIC)" ShowSpinButton="false" Decimals="2"></SfNumericTextBox>
-                    </div>
+                        </div>
+                        <div class="form-row">
 
+                            <div class="form-group col-lg-4 col-md-6">
+                                <label class="">Condicion de Pago:</label>
+                                <SfDropDownList TValue="int" TItem="vCondicionesPago" @bind-Value="Presupuesto.CONDICION_PAGO"
+                                                DataSource="condicionesPagos">
+                                    <DropDownListFieldSettings Text="DESCRIPCION" Value="Id"></DropDownListFieldSettings>
+                                </SfDropDownList>
+                            </div>
+                            <div class="form-group col-lg-8 col-md-6 col-sm-12">
+                                <label class="">Condicion de Entrega:</label>
+                                <SfDropDownList TValue="int" TItem="vCondicionesEntrega" @bind-Value="Presupuesto.CG_COND_ENTREGA"
+                                                DataSource="condicionesEntrega">
+                                    <DropDownListFieldSettings Text="OBSERVACIONES" Value="Id"></DropDownListFieldSettings>
+                                </SfDropDownList>
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+
+                            <div class="form-group col-lg-8 col-md-12">
+                                <label class="">Direccion de Entrega:</label>
+                                <SfDropDownList TValue="string" TItem="string" DataSource="direccionesEntregas"
+                                                @bind-Value="Presupuesto.DIRENT"></SfDropDownList>
+                            </div>
+
+                            <div class="form-group col-lg-1 col-md-4">
+                                <label class="">Proyecto:</label>
+                                <SfTextBox ID="Proy" @bind-Value="@(Presupuesto.PROYECTO)"></SfTextBox>
+                            </div>
+                            <div class="form-group col-lg-1 col-md-4">
+                                <label class="">Ingenieria:</label>
+                                <SfTextBox ID="Inge" @bind-Value="@(Presupuesto.INGENIERIA)"></SfTextBox>
+                            </div>
+                            <div class="form-group col-lg-1 col-md-4">
+                                <label class="">Revision:</label>
+                                <SfTextBox ID="Proy" @bind-Value="@(Presupuesto.REVISION)"></SfTextBox>
+                            </div>
+                            <div class="form-group col-lg-1 col-md-4">
+                                <label class="">Nro Doc.:</label>
+                                <SfTextBox ID="NroDoc" @bind-Value="@(Presupuesto.NRODOC)"></SfTextBox>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <SfToast ID="toast_default" @ref="ToastObj">
+                                    <ToastPosition X="Center" Y="Top"></ToastPosition>
+                                </SfToast>
+
+                                <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="150px"
+                                        @ref="refGridItems" DataSource="@Presupuesto.Items" Width="100%" ID="grdItemsPresup"
+                                        AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
+                                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                                    @*<GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>*@
+                                    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowConfirmDialog="false"
+                                                      Mode="@Syncfusion.Blazor.Grids.EditMode.Batch">
+                                        <GridEvents TValue="PresupuestoDetalle" OnBatchDelete="BatchDeleteHandler"
+                                                    CellSaved="CellSavedHandler" OnBatchAdd="BatchAddHandler" OnBatchSave="BatchSaveHandler"></GridEvents>
+                                    </GridEditSettings>
+                                    <GridColumns>
+                                        <GridColumn Field=@nameof(PresupuestoDetalle.Id) IsPrimaryKey="true" Width="4"></GridColumn>
+                                        <GridColumn Field=@nameof(PresupuestoDetalle.CG_ART) AllowEditing="false" HeaderText="Producto" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
+                                        <GridColumn Field=@nameof(PresupuestoDetalle.DES_ART) AllowEditing="false" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
+                                        <GridColumn Field=@nameof(PresupuestoDetalle.CANTIDAD) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px">
+                                            <EditTemplate Context="detalle">
+                                                @{
+                                                    var value = (detalle as PresupuestoDetalle);
+                                                    <SfNumericTextBox @bind-Value="value.CANTIDAD" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
+                                                }
+                                            </EditTemplate>
+                                        </GridColumn>
+                                        <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT) HeaderText="Precio Unit." TextAlign="TextAlign.Left" Width="100px"
+                                                    EditType="EditType.NumericEdit" Format="N2">
+                                            <EditTemplate Context="detalle">
+                                                @{
+                                                    var value = (detalle as PresupuestoDetalle);
+                                                    <SfNumericTextBox @bind-Value="value.PREC_UNIT" Decimals="2" ShowSpinButton="false"></SfNumericTextBox>
+                                                }
+                                            </EditTemplate>
+                                        </GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.DIAS_PLAZO_ENTREGA)" HeaderText="Dias Entrega" Width="100">
+                                            <EditTemplate Context="detalle">
+                                                @{
+                                                    var value = (detalle as PresupuestoDetalle);
+                                                    <SfNumericTextBox @bind-Value="value.DIAS_PLAZO_ENTREGA" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
+                                                }
+                                            </EditTemplate>
+                                        </GridColumn>
+                                        <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT_X_CANTIDAD) AllowEditing="false" Format="C2"
+                                                    HeaderText="Neto" TextAlign="TextAlign.Left" Width="100px">
+                                            <Template Context="detalle">
+                                                @{
+                                                    var value = (detalle as PresupuestoDetalle);
+                                                    var res = value.CANTIDAD * (decimal)value.PREC_UNIT;
+                                                    value.PREC_UNIT_X_CANTIDAD = Math.Round(value.CANTIDAD * (decimal)value.PREC_UNIT, 2);
+                                                    <span> @value.PREC_UNIT_X_CANTIDAD </span>
+                                                }
+                                            </Template>
+                                        </GridColumn>
+                                        <GridColumn Field=@nameof(PresupuestoDetalle.DESCUENTO) HeaderText="% Descuento" Format="N2" TextAlign="TextAlign.Left" Width="120px">
+                                            <Template Context="detalle">
+                                                @{
+                                                    var value = (detalle as PresupuestoDetalle);
+                                                    value.DESCUENTO = Math.Round(value.DESCUENTO, 2);
+                                                    <span>@value.DESCUENTO</span>
+
+                                                }
+                                            </Template>
+                                            <EditTemplate Context="detalle">
+                                                @{
+                                                    var value = (detalle as PresupuestoDetalle);
+                                                    <SfNumericTextBox @bind-Value="value.DESCUENTO" Decimals="2" ShowSpinButton="false"></SfNumericTextBox>
+                                                }
+                                            </EditTemplate>
+                                        </GridColumn>
+                                        <GridColumn Field=@nameof(PresupuestoDetalle.IMP_DESCUENTO) HeaderText="Descuento" Format="N2" TextAlign="TextAlign.Left" Width="120px">
+                                            <Template Context="detalle">
+                                                @{
+                                                    var value = (detalle as PresupuestoDetalle);
+                                                    if (value.DESCUENTO > 0)
+                                                    {
+                                                        var res = Math.Round(value.PREC_UNIT_X_CANTIDAD * (decimal)value.DESCUENTO / 100, 2);
+                                                        value.IMP_DESCUENTO = Math.Round(res, 2);
+                                                    }
+
+                                                    <span>@value.IMP_DESCUENTO</span>
+                                                }
+                                            </Template>
+                                        </GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.TOTAL)" Format="N2" HeaderText="Total" Width="100">
+                                            <Template Context="detalle">
+                                                @{
+                                                    var value = (detalle as PresupuestoDetalle);
+                                                    var res = Math.Round(value.PREC_UNIT_X_CANTIDAD - value.IMP_DESCUENTO, 2);
+                                                    value.TOTAL = Math.Round(res, 2);
+                                                    <span>@value.TOTAL</span>
+                                                }
+                                            </Template>
+                                        </GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.PRESIONAPERTURA)" HeaderText="Presion Apertura" Width="100" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.TEMPERATURADESCARGAT)" HeaderText="Temperatura" Width="100" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.DESCRIPCIONFLUIDO)" HeaderText="Fluido" Width="100" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.CONTRAPRESIONVARIABLE)" HeaderText="Contrapresion Variable" Width="100" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.CONTRAPRESIONFIJA)" HeaderText="Contrapresion Fija" Width="100" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.CAPACIDADREQUERIDA)" HeaderText="Capacidad" Width="100" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.DESCRIPCIONTAG)" HeaderText="Identificacion" Width="100" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.SOLICITUDID)" HeaderText="Nº Solicitud" Width="100" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.OBSERITEM)" HeaderText="Observaciones" Width="250"></GridColumn>
+
+                                    </GridColumns>
+                                </SfGrid>
+                            </div>
+
+
+                        </div>
+
+
+                        <ValidationSummary />
+
+                    </EditForm>
                 </div>
-                <div class="form-row">
+                <div class="col-lg-3 col-sm-6">
+                    <div class="h-50">
+                        <div class="form-row mt-2">
+                            <SfButton Content="Solicitudes" CssClass="e-btn e-small e-info e-block" OnClick="BuscarSolicitudes"
+                                      IconCss="e-eye e-icons e-btn-icon-left"></SfButton>
 
-                    <div class="form-group col-lg-4 col-md-6">
-                        <label class="">Condicion de Pago:</label>
-                        <SfDropDownList TValue="int" TItem="vCondicionesPago" @bind-Value="Presupuesto.CONDICION_PAGO"
-                                        DataSource="condicionesPagos">
-                            <DropDownListFieldSettings Text="DESCRIPCION" Value="Id"></DropDownListFieldSettings>
-                        </SfDropDownList>
+                        </div>
+                        <div class="form-row mt-2">
+                            <SfButton Content="Productos" CssClass="e-btn e-small e-info e-block" OnClick="BuscarProductos"
+                                      IconCss="e-eye e-icons e-btn-icon-left"></SfButton>
+                        </div>
+                        <div class="form-row mt-2">
+                            <SfButton Content="Reparaciones" CssClass="e-btn e-small e-info e-block" OnClick="BuscarReparaciones"
+                                      IconCss="e-eye e-icons e-btn-icon-left"></SfButton>
+                        </div>
                     </div>
-                    <div class="form-group col-lg-8 col-md-6 col-sm-12">
-                        <label class="">Condicion de Entrega:</label>
-                        <SfDropDownList TValue="int" TItem="vCondicionesEntrega" @bind-Value="Presupuesto.CG_COND_ENTREGA"
-                                        DataSource="condicionesEntrega">
-                            <DropDownListFieldSettings Text="OBSERVACIONES" Value="Id"></DropDownListFieldSettings>
-                        </SfDropDownList>
+                    <hr />
+@*                    <SfToolbar ID="toolbar-form-solicitud" CssClass="">
+                        <ToolbarItems>
+                            <ToolbarItem Id="tiSolicitudes" CssClass="e-round e-small" Type="ItemType.Button" Text="Solicitudes" OnClick="BuscarSolicitudes" Align="ItemAlign.Right"></ToolbarItem>
+                            <ToolbarItem Id="tiProductos" CssClass="e-round" Text="Productos" OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>
+                            <ToolbarItem Id="tiReparaciones" CssClass="e-round" Text="Reparaciones" OnClick="BuscarReparaciones" Align="ItemAlign.Right"></ToolbarItem>
+
+                        </ToolbarItems>
+                    </SfToolbar>*@
+                    <div class="h-50">
+                        @{
+                            var cantItems = Convert.ToInt32(Presupuesto.Items.Sum(i => i.CANTIDAD));
+                            var totalItems = Math.Round(Presupuesto.Items.Sum(i => i.TOTAL), 2);
+                            var bonficacion = Math.Round(totalItems * Presupuesto.BONIFIC / 100, 2);
+                            var total = Presupuesto.TOTAL = Math.Round(totalItems - bonficacion, 2);
+                            var moneda = "$";
+                            if (Presupuesto.MONEDA == "PESOS")
+                            {
+                                moneda = "$";
+                            }
+                            else
+                            {
+                                moneda = "U$S";
+                            }
+
+
+
+
+                        }
+
+                        <div class="form-row">
+                            <div class="total-price">Items : @cantItems</div>
+                        </div>
+
+                        <div class="form-row mt-2">
+                            <div class="total-price">SUBTOTAL @moneda : @totalItems</div>
+                        </div>
+
+                        <div class="form-row mt-2">
+                            <div class="total-price">BONIF. (@Presupuesto.BONIFIC %) @moneda : @bonficacion</div>
+                        </div>
+
+                        <div class="form-row mt-2">
+                            <div class="total-price">TOTAL @moneda : @total</div>
+                        </div>
                     </div>
-
-                </div>
-                <div class="form-row">
-
-                    <div class="form-group col-lg-8 col-md-12">
-                        <label class="">Direccion de Entrega:</label>
-                        <SfDropDownList TValue="string" TItem="string" DataSource="direccionesEntregas"
-                                        @bind-Value="Presupuesto.DIRENT"></SfDropDownList>
-                    </div>
-
-                    <div class="form-group col-lg-1 col-md-4">
-                        <label class="">Proyecto:</label>
-                        <SfTextBox ID="Proy" @bind-Value="@(Presupuesto.PROYECTO)"></SfTextBox>
-                    </div>
-                    <div class="form-group col-lg-1 col-md-4">
-                        <label class="">Ingenieria:</label>
-                        <SfTextBox ID="Inge" @bind-Value="@(Presupuesto.INGENIERIA)"></SfTextBox>
-                    </div>
-                    <div class="form-group col-lg-1 col-md-4">
-                        <label class="">Revision:</label>
-                        <SfTextBox ID="Proy" @bind-Value="@(Presupuesto.REVISION)"></SfTextBox>
-                    </div>
-                    <div class="form-group col-lg-1 col-md-4">
-                        <label class="">Nro Doc.:</label>
-                        <SfTextBox ID="NroDoc" @bind-Value="@(Presupuesto.NRODOC)"></SfTextBox>
-                    </div>
-
-                </div>
-
-                <div class="row">
-                    <div class="col-12">
-                        <SfToast ID="toast_default" @ref="ToastObj">
-                            <ToastPosition X="Center" Y="Top"></ToastPosition>
-                        </SfToast>
-
-                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="120px"
-                                @ref="refGridItems" DataSource="@Presupuesto.Items" Width="100%" ID="grdItemsPresup"
-                                AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
-                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-                            @*<GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>*@
-                            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowConfirmDialog="false"
-                                              Mode="@Syncfusion.Blazor.Grids.EditMode.Batch">
-                                <GridEvents TValue="PresupuestoDetalle" OnBatchDelete="BatchDeleteHandler"
-                                            CellSaved="CellSavedHandler" OnBatchAdd="BatchAddHandler" OnBatchSave="BatchSaveHandler"></GridEvents>
-                            </GridEditSettings>
-                            <GridColumns>
-                                <GridColumn Field=@nameof(PresupuestoDetalle.Id) IsPrimaryKey="true" Width="4"></GridColumn>
-                                <GridColumn Field=@nameof(PresupuestoDetalle.CG_ART) AllowEditing="false" HeaderText="Producto" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
-                                <GridColumn Field=@nameof(PresupuestoDetalle.DES_ART) AllowEditing="false" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
-                                <GridColumn Field=@nameof(PresupuestoDetalle.CANTIDAD) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px">
-                                    <EditTemplate Context="detalle">
-                                        @{
-                                            var value = (detalle as PresupuestoDetalle);
-                                            <SfNumericTextBox @bind-Value="value.CANTIDAD" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
-                                        }
-                                    </EditTemplate>
-                                </GridColumn>
-                                <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT) HeaderText="Precio Unit." TextAlign="TextAlign.Left" Width="100px"
-                                            EditType="EditType.NumericEdit" Format="N2">
-                                    <EditTemplate Context="detalle">
-                                        @{
-                                            var value = (detalle as PresupuestoDetalle);
-                                            <SfNumericTextBox @bind-Value="value.PREC_UNIT" Decimals="2" ShowSpinButton="false"></SfNumericTextBox>
-                                        }
-                                    </EditTemplate>
-                                </GridColumn>
-                                <GridColumn Field="@nameof(PresupuestoDetalle.DIAS_PLAZO_ENTREGA)" HeaderText="Dias Entrega" Width="100">
-                                    <EditTemplate Context="detalle">
-                                        @{
-                                            var value = (detalle as PresupuestoDetalle);
-                                            <SfNumericTextBox @bind-Value="value.DIAS_PLAZO_ENTREGA" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
-                                        }
-                                    </EditTemplate>
-                                </GridColumn>
-                                <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT_X_CANTIDAD) AllowEditing="false" Format="C2"
-                                            HeaderText="Neto" TextAlign="TextAlign.Left" Width="100px">
-                                    <Template Context="detalle">
-                                        @{
-                                            var value = (detalle as PresupuestoDetalle);
-                                            var res = value.CANTIDAD * (decimal)value.PREC_UNIT;
-                                            value.PREC_UNIT_X_CANTIDAD = Math.Round(value.CANTIDAD * (decimal)value.PREC_UNIT, 2);
-                                            <span> @value.PREC_UNIT_X_CANTIDAD </span>
-                                        }
-                                    </Template>
-                                </GridColumn>
-                                <GridColumn Field=@nameof(PresupuestoDetalle.DESCUENTO) HeaderText="% Descuento" Format="N2" TextAlign="TextAlign.Left" Width="120px">
-                                    <Template Context="detalle">
-                                        @{
-                                            var value = (detalle as PresupuestoDetalle);
-                                            value.DESCUENTO = Math.Round(value.DESCUENTO, 2);
-                                            <span>@value.DESCUENTO</span>
-
-                                        }
-                                    </Template>
-                                    <EditTemplate Context="detalle">
-                                        @{
-                                            var value = (detalle as PresupuestoDetalle);
-                                            <SfNumericTextBox @bind-Value="value.DESCUENTO" Decimals="2" ShowSpinButton="false"></SfNumericTextBox>
-                                        }
-                                    </EditTemplate>
-                                </GridColumn>
-                                <GridColumn Field=@nameof(PresupuestoDetalle.IMP_DESCUENTO) HeaderText="Descuento" Format="N2" TextAlign="TextAlign.Left" Width="120px">
-                                    <Template Context="detalle">
-                                        @{
-                                            var value = (detalle as PresupuestoDetalle);
-                                            if (value.DESCUENTO > 0)
-                                            {
-                                                var res = Math.Round(value.PREC_UNIT_X_CANTIDAD * (decimal)value.DESCUENTO / 100, 2);
-                                                value.IMP_DESCUENTO = Math.Round(res, 2);
-                                            }
-
-                                            <span>@value.IMP_DESCUENTO</span>
-                                        }
-                                    </Template>
-                                </GridColumn>
-                                <GridColumn Field="@nameof(PresupuestoDetalle.TOTAL)" Format="N2" HeaderText="Total" Width="100">
-                                    <Template Context="detalle">
-                                        @{
-                                            var value = (detalle as PresupuestoDetalle);
-                                            var res = Math.Round(value.PREC_UNIT_X_CANTIDAD - value.IMP_DESCUENTO, 2);
-                                            value.TOTAL = Math.Round(res, 2);
-                                            <span>@value.TOTAL</span>
-                                        }
-                                    </Template>
-                                </GridColumn>
-                                <GridColumn Field="@nameof(PresupuestoDetalle.PRESIONAPERTURA)" HeaderText="Presion Apertura" Width="100" AllowEditing="false"></GridColumn>
-                                <GridColumn Field="@nameof(PresupuestoDetalle.TEMPERATURADESCARGAT)" HeaderText="Temperatura" Width="100" AllowEditing="false"></GridColumn>
-                                <GridColumn Field="@nameof(PresupuestoDetalle.DESCRIPCIONFLUIDO)" HeaderText="Fluido" Width="100" AllowEditing="false"></GridColumn>
-                                <GridColumn Field="@nameof(PresupuestoDetalle.CONTRAPRESIONVARIABLE)" HeaderText="Contrapresion Variable" Width="100" AllowEditing="false"></GridColumn>
-                                <GridColumn Field="@nameof(PresupuestoDetalle.CONTRAPRESIONFIJA)" HeaderText="Contrapresion Fija" Width="100" AllowEditing="false"></GridColumn>
-                                <GridColumn Field="@nameof(PresupuestoDetalle.CAPACIDADREQUERIDA)" HeaderText="Capacidad" Width="100" AllowEditing="false"></GridColumn>
-                                <GridColumn Field="@nameof(PresupuestoDetalle.DESCRIPCIONTAG)" HeaderText="Identificacion" Width="100" AllowEditing="false"></GridColumn>
-                                <GridColumn Field="@nameof(PresupuestoDetalle.SOLICITUDID)" HeaderText="Nº Solicitud" Width="100" AllowEditing="false"></GridColumn>
-                                <GridColumn Field="@nameof(PresupuestoDetalle.OBSERITEM)" HeaderText="Observaciones" Width="250"></GridColumn>
-
-                            </GridColumns>  
-                        </SfGrid>
-                    </div>
-
-
+                    
                 </div>
 
+            </div>
 
-                <ValidationSummary />
-
-            </EditForm>
+            
+        
+            
         </Content>
         <FooterTemplate>
 
-            @{
-                var totalItems = Math.Round(Presupuesto.Items.Sum(i => i.TOTAL), 2);
-                var bonficacion = Math.Round(totalItems * Presupuesto.BONIFIC / 100, 2);
-                var total = Presupuesto.TOTAL = Math.Round(totalItems - bonficacion, 2);
-                var moneda = "$";
-                if (Presupuesto.MONEDA == "PESOS")
-                {
-                    moneda = "$";
-                }
-                else
-                {
-                    moneda = "U$S";
-                }
+            <hr />
+            <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
+            <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async()=>await Hide())" IconCss="fa fa-window-close-o"></SfButton>
 
-
-
-
-            }
-            <div class="row" style="text-align:left">
-                <div class="col-3">
-                    <div class="total-price">SUBTOTAL @moneda : @totalItems</div>
-                </div>
-                <div class="col-5" style="text-align:center">
-                    <div class="total-price">BONIFICACION (@Presupuesto.BONIFIC %) @moneda : @bonficacion</div>
-                </div>
-                <div class="col-4" style="text-align:right">
-                    <div class="total-price">TOTAL @moneda : @total</div>
-                </div>
-            </div>
-            <div class="mt-5">
-                <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
-                <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async()=>await Hide())" IconCss="fa fa-window-close-o"></SfButton>
-            </div>
         </FooterTemplate>
     </DialogTemplates>
 </SfDialog>
@@ -352,7 +385,7 @@
     .total-price {
         font-family: Tahoma;
         font-weight: bold;
-        font-size: 13px;
+        font-size: 11px;
     }
 
     #grdItemsPresup .e-gridheader .e-headercell, .e-grid-min-height .e-gridheader .e-detailheadercell,
@@ -361,7 +394,7 @@
         color: #ffffff !important;
         font-weight: 500 !important;
         font-size: 11px !important;
-        padding: .2rem !important;
+        padding: .1rem !important;
     }
 
     #grdItemsPresup .e-gridheader {

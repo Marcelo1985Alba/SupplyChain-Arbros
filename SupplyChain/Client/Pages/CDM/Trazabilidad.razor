@@ -227,7 +227,8 @@
                             GridLines="GridLine.Both" AllowReordering="true" AllowSorting="true"
                             DataSource="@vpedidos" AllowExcelExport="true" AllowGrouping="true" Toolbar="@Toolbaritems">
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-                        <GridEvents RowSelected="@(async()=> await OnSelectedCertificado())" 
+                        <GridEvents      
+                                    OnRecordDoubleClick="RecordDoubleClickHandler"
                                     OnToolbarClick="@ClickHandler"
                                     TValue="vTrazabilidad"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
@@ -1088,7 +1089,7 @@
             }
             catch(Exception ex)
             {
-                
+
             }
 
         }
@@ -1800,6 +1801,118 @@
         {
             throw;
         }
+    }
+
+    public async Task RecordDoubleClickHandler(RecordDoubleClickEventArgs<vTrazabilidad> args)
+    {
+        // Here, you can customize your code.
+        if (args.Column.Field == "DESPACHO")
+        {
+            
+            if (!string.IsNullOrEmpty(args.RowData.DESPACHO))
+            {
+                ShowSpinner = true;
+                if (!string.IsNullOrEmpty(args.RowData.LOTE))
+                {
+                    string ordFab = args.RowData.LOTE.Substring(3).Trim();
+
+                    // Materias Primas entregadas
+                    var responsPrograma = await Http.GetFromJsonAsync<List<Programa>>($"api/Programa/GetProgramaByOF/{Convert.ToDecimal(ordFab)}");
+                    if (responsPrograma.Error)
+                    {
+                        Console.WriteLine(responsPrograma.HttpResponseMessage.ReasonPhrase);
+                    }
+                    else
+                    {
+                        var programa = responsPrograma.Response;
+                        if (programa != null && programa.Count != 0)
+                        {
+                            var responseOrdenFabricacionMP = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionMP>>($"api/OrdenesFabricacionMP/{programa[0].CG_ORDFASOC.ToString()}");
+                            if (responseOrdenFabricacionMP.Error)
+                            {
+                                ordenFabricacionMP = new List<ModeloOrdenFabricacionMP>();
+                                Console.WriteLine(responseOrdenFabricacionMP.HttpResponseMessage.ReasonPhrase);
+                            }
+                            else
+                            {
+                                ordenFabricacionMP = responseOrdenFabricacionMP.Response;
+                            }
+                        }
+
+                    }
+
+                }
+                if (!string.IsNullOrEmpty(args.RowData.DESPACHO))
+                {
+                    NroCertificado = args.RowData.DESPACHO;
+                    var archivo = NroCertificado.Trim() + ".pdf";
+                    var responseShowCertificado = await Http.GetFromJsonAsync<bool>($"api/AdministracionArchivos/ExisteCertificado/{archivo}");
+                    if (!responseShowCertificado.Error)
+                    {
+                        ShowCertificado = responseShowCertificado.Response;
+                    }
+
+                    var responseArchivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/Certificado/{archivo}");
+                    if (responseArchivos.Error)
+                    {
+                        Console.WriteLine(responseArchivos.HttpResponseMessage.ReasonPhrase);
+                    }
+                    else
+                    {
+                        Archivos = responseArchivos.Response;
+                    }
+                }
+                ShowSpinner = false;
+                await DialogRef.Show(false);
+            }
+
+            
+        }   
+
+        if (args.Column.Field == "LOTE")
+        {
+            ShowSpinner = true;
+            ordenFabricacion = new();
+            try
+            {
+                var xOrdenFabricacion = args.RowData.LOTE.Replace("OF/", string.Empty);
+                // Titulo
+                ordenTitulo = "ORDEN DE FABRICACIÓN Nº " + xOrdenFabricacion.ToString();
+                // Datos de la orden
+                ordenFabricacion = await HttpCli.GetFromJsonAsync<ModeloOrdenFabricacion>("api/OrdenesFabricacion/" + xOrdenFabricacion.ToString());
+                //ordenFabricacionOriginal = Newtonsoft.Json.JsonConvert.DeserializeObject<ModeloOrdenFabricacion>(Newtonsoft.Json.JsonConvert.SerializeObject(ordenFabricacion));
+                // Ordenes dependientes
+                string xSQLcommand = String.Format("SELECT 0 ID, CONVERT(varchar, 0) TEXTO " +
+                    "UNION " +
+                    "SELECT DISTINCT CG_ORDF ID, CONVERT(varchar, CG_ORDF) TEXTO FROM PROGRAMA WHERE CG_ORDFASOC = {0} AND CG_ORDF != {1}",
+                                                      ordenFabricacion.CG_ORDFASOC,
+                                                      ordenFabricacion.CG_ORDF);
+                dbOrdenesDependientes = await HttpCli.GetFromJsonAsync<List<ModeloGenericoIntString>>("api/ModelosGenericosIntString/" + xSQLcommand);
+                // Celdas
+                xSQLcommand = String.Format("SELECT ltrim(rtrim(CG_CELDA)) ID, DES_CELDA TEXTO FROM CELDAS ORDER BY CG_CELDA");
+                dbCeldas = await HttpCli.GetFromJsonAsync<List<ModeloGenericoStringString>>("api/ModelosGenericosStringString/" + xSQLcommand);
+                // Procesos
+                xSQLcommand = String.Format("SELECT PROCESO ID, DESCRIP TEXTO FROM PROTAB ORDER BY PROCESO");
+                dbProcesos = await HttpCli.GetFromJsonAsync<List<ModeloGenericoStringString>>("api/ModelosGenericosStringString/" + xSQLcommand);
+
+                // Datos del encabezado del detalle
+                ordenFabricacionEncabezado = await HttpCli.GetFromJsonAsync<ModeloOrdenFabricacionEncabezado>("api/OrdenesFabricacionEncabezado/" + xOrdenFabricacion);
+                // Materias primas
+                //ordenFabricacionMP = await HttpCli.GetFromJsonAsync<List<ModeloOrdenFabricacionMP>>("api/OrdenesFabricacionMP/" + cg_ordfAsoc.ToString());
+                // Semi elaborados
+                //ordenFabricacionSE = await HttpCli.GetFromJsonAsync<List<ModeloOrdenFabricacionSE>>("api/OrdenesFabricacionSE/" + cg_ordfAsoc.ToString());
+                // Semi elaborados
+                ordenFabricacionHojaRuta = await HttpCli
+                    .GetFromJsonAsync<List<ModeloOrdenFabricacionHojaRuta>>($"api/OrdenesFabricacionHojaRuta/GetByFilter?CodigoProd={ordenFabricacion.CG_PROD}&Cantidad={ordenFabricacion.CANT.ToString()}");
+
+                isOrdenDialogVisible = true;
+                ShowSpinner = false;
+            }
+            catch(Exception ex)
+            {
+
+            }
+        } 
     }
 
 }

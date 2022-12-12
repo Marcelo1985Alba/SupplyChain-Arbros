@@ -1,6 +1,7 @@
 ﻿@using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Layouts
 @using SupplyChain.Client.Shared.BuscadorCliente
 @using SupplyChain.Client.Shared.BuscadorPedidos
 
@@ -23,13 +24,6 @@
             }
         </Header>
         <Content>
-            <!--<SfToolbar ID="toolbar-form-pedido" CssClass="">
-                <ToolbarItems>
-                    <ToolbarItem Id="tiPedidos" CssClass="e-round e-small" Type="ItemType.Button" Text="Pedidos" OnClick="BuscarPedidosPendientes" Align="ItemAlign.Right"></ToolbarItem>-->
-                    @*<ToolbarItem Id="tiProductos" CssClass="e-round" Text="Productos" OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>*@
-
-                <!--</ToolbarItems>
-            </SfToolbar>-->
             <EditForm id="formPedido" Model="@Pedido" OnValidSubmit="@(async()=> await Guardar())">
                 <SfSpinner @bind-Visible="@spinerVisible" Label="Guardando..." Type="SpinnerType.Fabric"></SfSpinner>
                 <ObjectGraphDataAnnotationsValidator />
@@ -59,16 +53,6 @@
                         <label class="">TC:</label>
                         <SfNumericTextBox ID="TC" @bind-Value="@(Pedido.VA_INDIC)" ShowSpinButton="false" Decimals="2" Readonly="true"></SfNumericTextBox>
                     </div>
-                    @*<div class="form-group col-md-1 mt-4">
-                <SfButton IconCss="e-icons e-repeat" CssClass="e-round e-warning"
-                          OnClick="@(async ()=> await GetTipoCambioDolarHoy())"
-                          HtmlAttributes="@HtmlAttributeButtonTC"></SfButton>
-            </div>*@
-                    @*<div class="form-group col-md-1">
-                <label class="">Bonificacion:</label>
-                <SfNumericTextBox ID="Bonifc" @bind-Value="@(Pedido.BONIFIC)" ShowSpinButton="false" Decimals="2"></SfNumericTextBox>
-            </div>*@
-
                 </div>
                 <div class="form-row">
 
@@ -191,33 +175,10 @@
                 <ValidationSummary />
 
             </EditForm>
+            
+            
         </Content>
         <FooterTemplate>
-
-            
-
-            @*<div class="container-total">
-
-                @{
-                    var totalItems = Math.Round(Pedido.Items.Sum(i => (decimal)i.IMPORTE4), 2);
-                    var bonficacion = Math.Round(totalItems * Pedido.BONIFIC / 100, 2);
-                    var total = Pedido.TOTAL = Math.Round(totalItems - bonficacion, 2);
-                    var moneda = "$";
-                    if (Pedido.MONEDA == "PESOS")
-                    {
-                        moneda = "$";
-                    }
-                    else
-                    {
-                        moneda = "U$S";
-                    }
-
-                    <div class="total-price">SUBTOTAL @moneda : @totalItems</div>
-                    <div class="total-price">BONIFICACION (@Pedido.BONIFIC %) @moneda : @bonficacion</div>
-                    <div class="total-price">TOTAL @moneda : @total</div>
-                }
-
-            </div>*@
             <div class="">
                 @if (!string.IsNullOrEmpty(Pedido.REMITO))
                 {
@@ -298,7 +259,7 @@
         color: #ffffff !important;
         font-weight: 500 !important;
         font-size: 11px !important;
-        padding: .2rem !important;
+        padding: .1rem !important;
     }
 
     #grdItemsPresup .e-gridheader {
