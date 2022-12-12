@@ -7,6 +7,7 @@ using SupplyChain.Shared.Logística;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -44,6 +45,16 @@ namespace SupplyChain.Client.HelperService
         internal async ValueTask ImprimirNumOci(int numOci)
         {
             await js.InvokeVoidAsync("descargarPedido", numOci);
+        }
+
+        public async Task<HttpResponseMessage> EliminarPedido(int id)
+        {
+            return await http.DeleteAsync($"{API}/{id}");
+        }
+
+        public async Task<HttpResponseMessage> EliminarOCI(int oci)
+        {
+            return await http.DeleteAsync($"{API}/PorOci/{oci}");
         }
     }
 }

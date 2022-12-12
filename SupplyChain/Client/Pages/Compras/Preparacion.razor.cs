@@ -70,6 +70,8 @@ namespace SupplyChain.Client.Pages.Preparacion
         protected bool enablepreciocant = false;
         protected bool buttondisableprove = true;
         protected bool buttondisablepreciocant = true;
+        protected bool IsVisibleform = false;
+        protected bool IsVisiblegrilla = true;
         protected List<Producto> CG_PRODlist = new();
         protected List<Producto> DES_PRODlist = new();
         protected List<Producto> Busquedalist = new();
@@ -82,6 +84,8 @@ namespace SupplyChain.Client.Pages.Preparacion
         protected SfGrid<Compra> Gridprep;
 
         protected List<Object> Toolbaritems = new List<Object>(){
+        new ItemModel { Text = "Nuevo Item", TooltipText = "Nuevo Item", PrefixIcon = "e-annotation-add", Id = "Nuevo" },
+        new ItemModel { Type = ItemType.Separator },
         new ItemModel { Text = "Abrir Preparacion", TooltipText = "Abrir Preparacion", PrefixIcon = "e-annotation-edit", Id = "Preparacion" },
         new ItemModel { Type = ItemType.Separator },
         new ItemModel { Text = "Abrir Sugerencia", TooltipText = "Abrir Sugerencia", PrefixIcon = "e-iconsets", Id = "Sugerencia" },
@@ -439,6 +443,8 @@ namespace SupplyChain.Client.Pages.Preparacion
                     xtituloboton = "Agregar";
                     await cargapreparacion();
                     xRegistrocompras = 0;
+                    IsVisibleform = false;
+                    IsVisiblegrilla = true;
                 }
             }
         }
@@ -484,7 +490,16 @@ namespace SupplyChain.Client.Pages.Preparacion
                         cambiapaso(2);
                     }
                     xtituloboton = "Actualizar";
+                    IsVisibleform = true;
+                    IsVisiblegrilla = false;
+
                 }
+            }
+            if (args.Item.Id == "Nuevo")
+            {
+                cambiapaso(0);
+                IsVisibleform = true;
+                IsVisiblegrilla = false;
             }
             if (args.Item.Id == "Preparacion")
             {
@@ -581,5 +596,10 @@ namespace SupplyChain.Client.Pages.Preparacion
             }
         }
 
+        protected void volvergrilla()
+        {
+            IsVisibleform = false;
+            IsVisiblegrilla = true;
+        }
     }
 }

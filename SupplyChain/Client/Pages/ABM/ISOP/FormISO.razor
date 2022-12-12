@@ -1,0 +1,184 @@
+﻿@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@inherits FormIsoBase
+
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+
+<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
+    <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
+    <DialogTemplates>
+        <Header>
+            @if (string.IsNullOrEmpty(isos.Id.ToString()))
+            {
+                <p>Nuevo ISO</p>
+            }
+            else
+            {
+                <p>&nbsp;&nbsp;@isos.Id&nbsp;&nbsp;-&nbsp;&nbsp;@isos.Descripcion</p>
+            }
+        </Header>
+        <Content>
+            <EditForm Model="isos" OnValidSubmit="@GuardarIso">
+                <DataAnnotationsValidator />
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales" role="tab" aria-controls="pills-home" aria-selected="true">Datos Generales</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-DatosGenerales" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Identificacion:</label>
+                                    <SfNumericTextBox ID="Identificacion" @bind-Value="@(isos.Identificacion)"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Fecha:</label>
+                                    <SfDatePicker ID="Fecha" @bind-Value="@(isos.Fecha)" ShowTodayButton="true" Format='dd/MM/yyyy'></SfDatePicker>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Descripcion:</label>
+                                    <SfTextBox ID="Descripcion" @bind-Value="@(isos.Descripcion)"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Detalle:</label>
+                                    <SfTextBox ID="Detalle" @bind-Value="@(isos.Detalle)"></SfTextBox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a>Factor:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.Factor)" DataSource="@FactorData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a>Proceso:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="TipoArea" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.Proceso)" DataSource="@roles">
+                                        <ComboBoxFieldSettings Value="DES_TIPOAREA" Text="DES_TIPOAREA"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a>FODA:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.FODA)" DataSource="@FODAData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a>Impacto Ambiental:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.ImpAmb)" DataSource="@ImpAmbData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a>Aspecto Ambiental:</a>
+                                    <SfComboBox TValue="int" CssClass="customClass" TItem="AspAmb" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.AspAmb)" DataSource="@aspAmbientales">
+                                        <ComboBoxFieldSettings Value="Id" Text="descripcion"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a>Condicion de Operacion:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.CondOperacion)" DataSource="@OperacionData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a>Frecuencia:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.Frecuencia)" DataSource="@FrecuenciaData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a>Impacto:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.Impacto)" DataSource="@ImpactoData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a>Condicion de Control:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.CondControl)" DataSource="@ControlData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a>Naturaleza del impacto:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.NaturalezaDelImpacto)" DataSource="@NatDelImpData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a>Gestion:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.Gestion)" DataSource="@GestionData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Comentarios:</label>
+                                    <SfTextBox ID="Comentarios" @bind-Value="@(isos.Comentarios)"></SfTextBox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Medidas de Control y/o Gestion:</label>
+                                    <SfTextBox ID="Medidas" @bind-Value="@(isos.Medidas)"></SfTextBox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
+            </EditForm>
+        </Content>
+    </DialogTemplates>
+</SfDialog>

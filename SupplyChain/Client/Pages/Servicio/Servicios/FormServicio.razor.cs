@@ -114,6 +114,7 @@ namespace SupplyChain.Client.Pages.Servicio.Servicios
         protected FormSolicitud refFormSolicitud;
         protected bool verDialogSolicitud = false;
         protected Solicitud solicitud = new();
+        protected bool spinnerVisibleGuardar = false;
         protected async override Task OnInitializedAsync()
         {
             if (Servicios.Count < 0)
@@ -288,66 +289,60 @@ namespace SupplyChain.Client.Pages.Servicio.Servicios
 
         protected async Task<bool> ActualizarServicio()
         {
-            var pedidoAnterior = Servicios.FirstOrDefault(s => s.PEDIDO.ToString() == Servicio.PEDIDOANT);
-            var pedant = Servicios.FirstOrDefault(s => s.Id == Servicio.Id)?.PEDIDOANT;
-            if (pedant != Servicio.PEDIDOANT && pedidoAnterior != null && !string.IsNullOrEmpty(pedidoAnterior.PEDIDOANT))
+
+            spinnerVisibleGuardar = true;
+            var responsePedAnt = await Http2.GetFromJsonAsync<Service>($"api/Servicios/GetByPedido/{Servicio.PEDIDOANT}");
+
+            if (responsePedAnt.Error)
             {
-                bool isConfirmed = await Js.InvokeAsync<bool>("confirm", "Quiere traer los datos del pedido anterior?");
-                if (isConfirmed)
-                {
-                    if (pedidoAnterior.FECHA.ToString().Substring(3, 1) == "/")
-                    {
-                        Servicio.FECMANTANT = pedidoAnterior.FECHA.ToString().Substring(0, 8);
-                    }
-                    else if (pedidoAnterior.FECHA.ToString().Substring(4, 1) == "/")
-                    {
-                        Servicio.FECMANTANT = pedidoAnterior.FECHA.ToString().Substring(0, 9);
-                    }
-                    else if (pedidoAnterior.FECHA.ToString().Substring(5, 1) == "/")
-                    {
-                        Servicio.FECMANTANT = pedidoAnterior.FECHA.ToString().Substring(0, 10);
-                    }
-                    Servicio.IDENTIFICACION = pedidoAnterior.IDENTIFICACION;
-                    Servicio.MARCA = pedidoAnterior.MARCA;
-                    Servicio.NSERIE = pedidoAnterior.NSERIE;
-                    Servicio.MODELO = pedidoAnterior.MODELO;
-                    Servicio.MEDIDA = pedidoAnterior.MEDIDA;
-                    Servicio.SERIE = pedidoAnterior.SERIE;
-                    Servicio.ORIFICIO = pedidoAnterior.ORIFICIO;
-                    Servicio.AÑO = pedidoAnterior.AÑO;
-                    Servicio.AREA = pedidoAnterior.AREA;
-                    Servicio.FLUIDO = pedidoAnterior.FLUIDO;
-                    Servicio.SOBREPRESION = pedidoAnterior.SOBREPRESION;
-                    Servicio.PRESION = pedidoAnterior.PRESION;
-                    Servicio.CONTRAPRESION = pedidoAnterior.CONTRAPRESION;
-                    Servicio.TIPO = pedidoAnterior.TIPO;
-                    Servicio.TEMP = pedidoAnterior.TEMP;
-                    Servicio.RESORTE = pedidoAnterior.RESORTE;
-                    Servicio.PRESIONBANCO = pedidoAnterior.PRESIONBANCO;
-                    Servicio.SERVICIO = pedidoAnterior.SERVICIO;
-                }
+
             }
-            //args.Data.MARCA = string.IsNullOrEmpty(args.Data.MARCA) ? "" : args.Data.MARCA;
-            //args.Data.MODELO = string.IsNullOrEmpty(args.Data.MODELO) ? "" : args.Data.MODELO;
-            //args.Data.MEDIDA = string.IsNullOrEmpty(args.Data.MEDIDA) ? "" : args.Data.MEDIDA;
-            //args.Data.SERIE = string.IsNullOrEmpty(args.Data.SERIE) ? "" : args.Data.SERIE;
-            //args.Data.ORIFICIO = string.IsNullOrEmpty(args.Data.ORIFICIO) ? "" : args.Data.ORIFICIO;
-            //args.Data.SOBREPRESION = string.IsNullOrEmpty(args.Data.SOBREPRESION) ? "" : args.Data.SOBREPRESION;
-            //args.Data.TIPO = string.IsNullOrEmpty(args.Data.TIPO) ? "" : args.Data.TIPO;
-            //args.Data.ENSRECEP = string.IsNullOrEmpty(args.Data.ENSRECEP) ? "" : args.Data.ENSRECEP;
-            //args.Data.ESTADO = string.IsNullOrEmpty(args.Data.ESTADO) ? "" : args.Data.ESTADO;
-            //args.Data.FUGAS = string.IsNullOrEmpty(args.Data.FUGAS) ? "" : args.Data.FUGAS;
-            //args.Data.CAMBIOPRESION = string.IsNullOrEmpty(args.Data.CAMBIOPRESION) ? "" : args.Data.CAMBIOPRESION;
-            //args.Data.CAMBIOREPUESTO = string.IsNullOrEmpty(args.Data.CAMBIOREPUESTO) ? "" : args.Data.CAMBIOREPUESTO;
-            //args.Data.ENSAYOCONTRAP = string.IsNullOrEmpty(args.Data.ENSAYOCONTRAP) ? "" : args.Data.ENSAYOCONTRAP;
-            //args.Data.TRABAJOSEFEC = string.IsNullOrEmpty(args.Data.TRABAJOSEFEC) ? "" : args.Data.TRABAJOSEFEC;
-            //args.Data.RESP = string.IsNullOrEmpty(args.Data.RESP) ? "" : args.Data.RESP;
-            //args.Data.CONTROLO = string.IsNullOrEmpty(args.Data.CONTROLO) ? "" : args.Data.CONTROLO;
-            //args.Data.POP = string.IsNullOrEmpty(args.Data.POP) ? "" : args.Data.POP;
-            //args.Data.RESPTECNICO = string.IsNullOrEmpty(args.Data.RESPTECNICO) ? "" : args.Data.RESPTECNICO;
-            //args.Data.OPDS = string.IsNullOrEmpty(args.Data.OPDS) ? "" : args.Data.OPDS;
-            //args.Data.PRESENCIAINSPEC = string.IsNullOrEmpty(args.Data.PRESENCIAINSPEC) ? "" : args.Data.PRESENCIAINSPEC;
-            //args.Data.MANOMETRO = string.IsNullOrEmpty(args.Data.MANOMETRO) ? "" : args.Data.MANOMETRO;
+            else
+            {
+                var pedidoAnterior = responsePedAnt.Response;
+
+                var pedant = Servicios.FirstOrDefault(s => s.Id == Servicio.Id)?.PEDIDOANT;
+                if (pedant != Servicio.PEDIDOANT && pedidoAnterior != null && !string.IsNullOrEmpty(pedidoAnterior.PEDIDOANT))
+                {
+                    bool isConfirmed = await Js.InvokeAsync<bool>("confirm", "Quiere traer los datos del pedido anterior?");
+                    if (isConfirmed)
+                    {
+                        if (pedidoAnterior.FECHA.ToString().Substring(3, 1) == "/")
+                        {
+                            Servicio.FECMANTANT = pedidoAnterior.FECHA.ToString().Substring(0, 8);
+                        }
+                        else if (pedidoAnterior.FECHA.ToString().Substring(4, 1) == "/")
+                        {
+                            Servicio.FECMANTANT = pedidoAnterior.FECHA.ToString().Substring(0, 9);
+                        }
+                        else if (pedidoAnterior.FECHA.ToString().Substring(5, 1) == "/")
+                        {
+                            Servicio.FECMANTANT = pedidoAnterior.FECHA.ToString().Substring(0, 10);
+                        }
+                        Servicio.IDENTIFICACION = pedidoAnterior.IDENTIFICACION;
+                        Servicio.MARCA = pedidoAnterior.MARCA;
+                        Servicio.NSERIE = pedidoAnterior.NSERIE;
+                        Servicio.MODELO = pedidoAnterior.MODELO;
+                        Servicio.MEDIDA = pedidoAnterior.MEDIDA;
+                        Servicio.SERIE = pedidoAnterior.SERIE;
+                        Servicio.ORIFICIO = pedidoAnterior.ORIFICIO;
+                        Servicio.AÑO = pedidoAnterior.AÑO;
+                        Servicio.AREA = pedidoAnterior.AREA;
+                        Servicio.FLUIDO = pedidoAnterior.FLUIDO;
+                        Servicio.SOBREPRESION = pedidoAnterior.SOBREPRESION;
+                        Servicio.PRESION = pedidoAnterior.PRESION;
+                        Servicio.CONTRAPRESION = pedidoAnterior.CONTRAPRESION;
+                        Servicio.TIPO = pedidoAnterior.TIPO;
+                        Servicio.TEMP = pedidoAnterior.TEMP;
+                        Servicio.RESORTE = pedidoAnterior.RESORTE;
+                        Servicio.PRESIONBANCO = pedidoAnterior.PRESIONBANCO;
+                        Servicio.SERVICIO = pedidoAnterior.SERVICIO;
+                    }
+                }
+
+            }
+
+
 
 
             var response = await Http2.PutAsJsonAsync($"api/Servicios/{Servicio.Id}", Servicio);
@@ -383,6 +378,9 @@ namespace SupplyChain.Client.Pages.Servicio.Servicios
 
                 return true;
             }
+
+
+            spinnerVisibleGuardar = false;
         }
 
 

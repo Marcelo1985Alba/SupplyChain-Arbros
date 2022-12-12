@@ -1,7 +1,7 @@
 ﻿@page "/ventas/solicitudes"
 @using Syncfusion.Blazor.Buttons
 @using SupplyChain.Client.Shared.BuscadorCliente
-@attribute [Authorize(Roles = "Administrador, Ventas")]
+@attribute [Authorize(Roles = "Administrador, Ventas, Produccion")]
 @inherits SolicitudesBase
 
 
@@ -51,6 +51,17 @@
         <FormSolicitud @ref="refFormSolicitud" Solicitud="@SolicitudSeleccionada" Show="popupFormVisible" OnCerrar="OnCerraDialog"
                        OnGuardar="@(async(s)=> await Guardar(s))" HeightDialog="@heightPopup"></FormSolicitud>
     }
+
+    <ConfirmacionDialog @ref="ConfirmacionEliminarDialog" OnConfirm="@(async () => await Eliminar())">
+    <HeaderTempalte>
+
+        <p> <strong>Eliminacion Solicitud @SolicitudSeleccionada?.Id</strong></p>
+        <hr />
+    </HeaderTempalte>
+    <ContentTemplate>
+        <p>Estas seguro que desea elimnar la Solicitud <strong>@SolicitudSeleccionada?.Id</strong> ?</p>
+    </ContentTemplate>
+</ConfirmacionDialog>
 
 
 </div>

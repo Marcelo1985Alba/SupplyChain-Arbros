@@ -137,7 +137,9 @@ namespace SupplyChain
 
         public DbSet<Proveedores_compras> proveedores_compras { get; set; }
         public DbSet<vUsuario> vUsuarios { get; set; }
-        public DbSet<ProcalsMP> ProcalsMP { get; set; }
+        public DbSet<ISO> ISO { get; set; }
+        public DbSet<AspAmb> AspAmb { get; set; }
+        public DbSet<AspNetRoles> AspNetRoles { get; set; }
 
         #endregion
 
@@ -175,7 +177,8 @@ namespace SupplyChain
             modelBuilder.Entity<Presupuesto>(entity => {
                 entity.HasMany(c => c.Items)
                     .WithOne(p => p.Presupuesto)
-                    .HasForeignKey(c => c.PRESUPUESTOID);
+                    .HasForeignKey(c => c.PRESUPUESTOID)
+                    .OnDelete(DeleteBehavior.Cascade); 
 
             });
 
@@ -183,7 +186,7 @@ namespace SupplyChain
                 entity.HasOne(d => d.Presupuesto)
                 .WithMany(p => p.Items)
                 .HasForeignKey(d => d.PRESUPUESTOID)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_PRESUPUESTO_DETALLE_PRESUPUESTO_ENCABEZADO");
 
                 entity.HasOne(d => d.Solicitud)
@@ -249,17 +252,18 @@ namespace SupplyChain
             modelBuilder.Entity<vSolicitudes>().HasNoKey().ToView("vSolicitudes");
             modelBuilder.Entity<ClienteExterno>().HasNoKey().ToView("vClientesItris");
             modelBuilder.Entity<vPresupuestos>().HasNoKey().ToView("vPresupuestos");
-            modelBuilder.Entity<vDireccionesEntrega>().ToView("vDireccionesEntrega_Itris");
-            modelBuilder.Entity<vCondicionesPago>().ToView("vCondicionesPago");
-            modelBuilder.Entity<vCondicionesEntrega>().ToView("vCondicionesEntrega");
-            modelBuilder.Entity<vTipoCambio>().ToView("vTipoCambio");
+            modelBuilder.Entity<vDireccionesEntrega>().HasNoKey().ToView("vDireccionesEntrega_Itris");
+            modelBuilder.Entity<vCondicionesPago>().HasNoKey().ToView("vCondicionesPago");
+            modelBuilder.Entity<vCondicionesEntrega>().HasNoKey().ToView("vCondicionesEntrega");
+            modelBuilder.Entity<vTipoCambio>().HasNoKey().ToView("vTipoCambio");
             modelBuilder.Entity<vCalculoSolicitudes>().ToView("vCalculoSolicitudes");
-            modelBuilder.Entity<vTransporte>().ToView("vTransportes");
+            modelBuilder.Entity<vTransporte>().HasNoKey().ToView("vTransportes");
             modelBuilder.Entity<vPedidoAlta>().HasNoKey().ToView("vPedidosAltas");
             modelBuilder.Entity<vPresupuestoReporte>().HasNoKey().ToView("vPresupuestoReporte");
             modelBuilder.Entity<vPedidoReporte>().HasNoKey().ToView("vPedidoReporte");
             modelBuilder.Entity<vRemitoReporte>().HasNoKey().ToView("vRemitoReporte");
             modelBuilder.Entity<vUsuario>().HasNoKey().ToView("vUsuarios");
+            modelBuilder.Entity<vOCompraReporte>().HasNoKey().ToView("vOCompraReporte");
         }
     }
 }

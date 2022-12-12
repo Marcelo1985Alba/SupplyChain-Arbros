@@ -343,6 +343,24 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
+        [HttpGet("TieneRemito/{pedido}")]
+        public async Task<ActionResult<bool>> Stocks(int pedido)
+        {
+            try
+            {
+                //puede tener alta u orden de armado o remito
+                var tienePedido = await _context.Pedidos
+                    .AnyAsync(p => (p.TIPOO == 1 && p.PEDIDO == pedido && p.REMITO != "") ||
+                                   (p.TIPOO == 28 && p.PEDIDO == pedido) ||
+                                    (p.TIPOO == 28 && p.PEDIDO == pedido));
+                return tienePedido;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
 
         private bool RegistroExists(decimal? registro)

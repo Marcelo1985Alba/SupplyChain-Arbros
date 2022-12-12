@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Http;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared;
@@ -12,6 +13,7 @@ using Syncfusion.Blazor.Spinner;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
@@ -19,6 +21,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
     public class PedidosBase : ComponentBase
     {
         [Inject] public PedCliService PedCliService { get; set; }
+        [Inject] public StockService StockService { get; set; }
         [Inject] public CondicionPagoService CondicionPagoService { get; set; }
         [Inject] public CondicionEntregaService CondicionEntregaService { get; set; }
         [Inject] public DireccionEntregaService DireccionEntregaService { get; set; }
@@ -33,6 +36,8 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         protected PedCliEncabezado PedidoSeleccionado = new();
         protected bool SpinnerVisible = false;
         protected bool popupFormVisible = false;
+        protected bool abrePorPedido = false;
+        protected bool eliminaPorPedido = false;
 
         protected List<Object> Toolbaritems = new()
         {
@@ -53,7 +58,10 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         protected List<vCondicionesPago> condicionesPagos = new();
         protected List<vCondicionesEntrega> condicionesEntrega = new();
         protected List<vTransporte> transportes = new();
-
+        protected ConfirmacionDialog ConfirmacionEliminarDialog;
+        protected ConfirmacionDialog PreguntaEliminarDialog;
+        protected string textbotonPorPedido = "Por Pedido";
+        protected string textbotonPorOCI = "Por OCI";
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Pedidos";
@@ -131,8 +139,9 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         protected async Task OnActionBeginHandler(ActionEventArgs<PedCli> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
-                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
-            {
+                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.Delete )
+            { 
                 args.Cancel = true;
                 args.PreventRender = false;
             }
@@ -147,43 +156,137 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                //TODO preguntar si abre por pedido o numoci
+                
+                PedidoSeleccionado.CG_CLI = args.Data.CG_CLI;
+                PedidoSeleccionado.DES_CLI= args.Data.DES_CLI;
+                PedidoSeleccionado.TC = Convert.ToDouble(args.Data.VA_INDIC);
+                PedidoSeleccionado.DIRENT = args.Data.DIRENT;
+                PedidoSeleccionado.MONEDA = args.Data.MONEDA;
                 PedidoSeleccionado.PEDIDO = args.Data.PEDIDO;
                 PedidoSeleccionado.NUMOCI = args.Data.NUMOCI;
+                PedidoSeleccionado.BONIFIC = args.Data.BONIFIC;
+                PedidoSeleccionado.CG_TRANS = args.Data.CG_TRANS;
+                PedidoSeleccionado.CG_COND_ENTREGA = args.Data.CG_COND_ENTREGA;
                 PedidoSeleccionado.Items.Add(args.Data);
+                //TODO preguntar si abre por pedido o numoci
                 await refConfirmacionDialog.ShowAsync();
             }
+
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete &&
+                (await refGrid.GetSelectedRecordsAsync()).Count > 0)
+            {
+                var pedido = (await refGrid.GetSelectedRecordsAsync()).FirstOrDefault();
+                
+                var response = await StockService.TieneRemitoAsociado(pedido.PEDIDO);
+
+                if (response.Error)
+                {
+                    await ToastMensajeError("No se pudo consultar si el pedido\n\r" +
+                        "tiene remito asociado.");
+                }
+                else
+                {
+                    bool tieneRemito = response.Response;
+                    if (tieneRemito)
+                    {
+                        await ToastMensajeError("El Pedido tiene Alta de produccion o Orden de armado o" +
+                            "Remito asociado.\r\nNose puede eliminar.");
+                    }
+                    else
+                    {
+                        PedidoSeleccionado = new PedCliEncabezado();
+                        PedidoSeleccionado.PEDIDO = args.RowData.PEDIDO;
+                        PedidoSeleccionado.NUMOCI = args.RowData.NUMOCI;
+                        textbotonPorOCI = $"Por OCI {PedidoSeleccionado.NUMOCI}";
+                        textbotonPorPedido = $"Por Pedido {PedidoSeleccionado.PEDIDO}";
+                        await PreguntaEliminarDialog.ShowAsync();
+                    }
+                }
+
+                
+
+            }
+        }
+
+        private async Task ToastMensajeError(string content = "Ocurrio un Error.")
+        {
+            await ToastObj.Show(new ToastModel
+            {
+                Title = "Error!",
+                Content = content,
+                CssClass = "e-toast-warning",
+                Icon = "e-warning toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
+
+        protected async Task PreguntaEliminarPorNumOCIPedido(bool porPedido)
+        {
+            await PreguntaEliminarDialog.HideAsync();
+
+            eliminaPorPedido = porPedido;
+
+
+            await ConfirmacionEliminarDialog.ShowAsync();
+
+        }
+
+        protected async Task Eliminar()
+        {
+            await ConfirmacionEliminarDialog.HideAsync();
+            SpinnerVisible = true;
+            HttpResponseMessage responseMessage= null;
+            if (eliminaPorPedido)
+            {
+                responseMessage = await PedCliService.EliminarPedido(PedidoSeleccionado.PEDIDO);
+            }
+            else
+            {
+                responseMessage = await PedCliService.EliminarOCI(PedidoSeleccionado.NUMOCI);
+            }
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                if (eliminaPorPedido)
+                {
+                    pedidos = pedidos.Where(p=> p.PEDIDO != PedidoSeleccionado.PEDIDO).ToList();
+                }
+                else
+                {
+                    pedidos = pedidos.Where(p => p.PEDIDO != PedidoSeleccionado.NUMOCI).ToList();
+
+                    
+                }
+            }
+            else
+            {
+                if (responseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    await ToastMensajeError("Error al buscar pedido/oci.");
+                }
+                else if (responseMessage.StatusCode == System.Net.HttpStatusCode.Conflict)
+                {
+                    await ToastMensajeError(responseMessage.ReasonPhrase);
+                }
+                else
+                {
+                    await ToastMensajeError();
+                }
+                
+            }
+
+            SpinnerVisible = false;
         }
 
         protected async Task AbrirNumOCIPedido(bool abrePedido)
         {
             await refConfirmacionDialog.HideAsync();
             SpinnerVisible = true;
-            HttpResponseWrapper<PedCliEncabezado> response;
-            if (abrePedido)
-            {
-                response = await PedCliService.GetPedidoEncabezadoById(PedidoSeleccionado.Items[0].Id);
-            }
-            else
-            {
-                response = await PedCliService.GetPedidoEncabezadoByNumOci(PedidoSeleccionado.NUMOCI);
-            }
-
-            if (response.Error)
-            {
-                await ToastMensajeError();
-            }
-            else
-            {
-
-                PedidoSeleccionado = response.Response;
-                foreach (var item in PedidoSeleccionado.Items)
-                {
-                    item.ESTADO = SupplyChain.Shared.Enum.EstadoItem.Modificado;
-                }
-                direccionesEntregas = PedidoSeleccionado.DireccionesEntregas.Select(d => d.DESCRIPCION).ToList();
-                popupFormVisible = true;
-            }
+            
+            abrePorPedido = abrePedido;
+            popupFormVisible = true;
+            
             SpinnerVisible = false;
         }
 

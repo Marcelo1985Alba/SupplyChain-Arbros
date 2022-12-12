@@ -1870,7 +1870,7 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox35">
+                        <Textbox Name="EstadoFluido">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -1892,7 +1892,7 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox13</rd:DefaultName>
+                          <rd:DefaultName>EstadoFluido</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -2956,7 +2956,7 @@
                                 </Style>
                               </TextRun>
                               <TextRun>
-                                <Value> (mm2)</Value>
+                                <Value> (cm2)</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
                                   <FontSize>11pt</FontSize>
@@ -3012,7 +3012,7 @@
                                 </Style>
                               </TextRun>
                               <TextRun>
-                                <Value> (mm2)</Value>
+                                <Value> (cm2)</Value>
                                 <Style>
                                   <FontFamily>Bahnschrift SemiBold SemiConden</FontFamily>
                                   <FontSize>11pt</FontSize>

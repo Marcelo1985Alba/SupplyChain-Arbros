@@ -46,5 +46,7 @@ namespace SupplyChain.Shared
         public string CAMPOCOM6 { get; set; } = "";
         public string CAMPOCOM7 { get; set; } = "";
         public string CAMPOCOM8 { get; set; } = "";
+        public string ORCO { get; set; } = "";
+        public string OBSERITEM { get; set; } = "";
     }
 }

@@ -181,8 +181,8 @@ namespace SupplyChain
         public string LOCALIDAD { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Código postal")]
         public string CG_POSTA { get; set; } = "";
-        //[ColumnaGridViewAtributo(Name = "Orden compra cliente")]
-        //public string ORCO { get; set; } = "";
+        [ColumnaGridViewAtributo(Name = "Orden compra cliente")]
+        public string ORCO { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Cantidad pedida")]
         public decimal? CANTPED { get; set; } = 0;
         //[ColumnaGridViewAtributo(Name = "Flag")]

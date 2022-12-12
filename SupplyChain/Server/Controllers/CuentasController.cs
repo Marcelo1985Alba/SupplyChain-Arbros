@@ -48,7 +48,15 @@ namespace SupplyChain.Server.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<List<vUsuario>>> GetUsuarios()
         {
-            return await _context.vUsuarios.ToListAsync();
+            try
+            {
+                return await _context.vUsuarios.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         [HttpGet("usuarios/byId/{id}")]

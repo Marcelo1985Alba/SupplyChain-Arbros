@@ -10,6 +10,6 @@ namespace SupplyChain.Shared
     {
         public string USUARIO { get; set; }
         public string EMAIL { get; set; }
-        public string CLIENTE { get; set; }
+        public string? CLIENTE { get; set; }
     }
 }

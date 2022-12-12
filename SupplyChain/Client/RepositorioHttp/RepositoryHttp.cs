@@ -77,7 +77,7 @@ namespace SupplyChain.Client.RepositoryHttp
         public async Task<HttpResponseMessage> DeleteAsync(string requestUri)
         {
             var response = await httpClient.DeleteAsync(requestUri);
-            httpClient.Dispose();
+            //httpClient.Dispose();
             return response;
         }
 

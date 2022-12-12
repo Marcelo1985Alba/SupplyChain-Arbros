@@ -97,7 +97,7 @@ namespace SupplyChain.Client.Pages.ABM.Prods
         private async Task<bool> PermiteGuardarNuevoInsumo()
         {
             var existe = await Http.GetFromJsonAsync<bool>($"api/Prod/Existe/{Producto.Id}");
-            if (!existe && Producto.CG_ORDEN != 1 && Producto.CG_ORDEN != 3)
+            if (!existe && Producto.CG_ORDEN != 3)
             {
                 switch (Producto.CG_ORDEN)
                 {

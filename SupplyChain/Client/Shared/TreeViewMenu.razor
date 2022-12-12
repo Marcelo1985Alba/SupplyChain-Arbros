@@ -43,6 +43,7 @@ else
     protected bool IsIngenieria = false;
     protected bool IsCompras = false;
     protected List<Modulo> dbMenu = new List<Modulo>();
+    protected List<Modulo> dbMenuMaster = new List<Modulo>();
     [Parameter] public EventCallback<bool> OnChangeToggle { get; set; }
 
     protected async override Task OnInitializedAsync()
@@ -63,22 +64,7 @@ else
             IsVentas = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Ventas"));
             IsIngenieria = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Ingenieria"));
             IsCompras = authState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Compras"));
-            dbMenu = await Http.GetFromJsonAsync<List<Modulo>>("api/Modulo");
-
-            if (IsAdmin || IsVentas)
-            {
-                var maxId = dbMenu.Max(m => m.Id) + 1;
-                dbMenu.Add(new Modulo
-                {
-                    Id = 2000,
-                    ParentId = 2,
-                    Descripcion = "Usuarios",
-                    IconCss = "",
-                    TieneChild = false,
-                    Url = "/ventas/usuarios"
-                });
-            }
-
+            dbMenuMaster = await Http.GetFromJsonAsync<List<Modulo>>("api/Modulo");
 
 
             if (authState.User.Claims.Any(c=> c.Value == "Cliente"))
@@ -88,9 +74,9 @@ else
                 dbMenu.Add(new Modulo { Id = 3, ParentId = 2, Descripcion = "Estado de Pedidos", Url = "/ventas/estado-pedidos",
                     IconCss = "icon-th icon", TieneChild = false });
             }
-            else if (!IsAdmin && IsProd)
+            if (IsProd)
             {
-                dbMenu = dbMenu.Where(m => (m.Id == 2 || m.Id == 8 || m.Id == 13) //Ventas: Logistica y servicios
+                dbMenu.AddRange(dbMenuMaster.Where(m => (m.Id == 2 || m.Id == 8 || m.Id == 13 || m.Id == 41) //Ventas: Logistica y servicios
                         ||
                         (m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
                         ||
@@ -101,7 +87,7 @@ else
                         (m.Id == 25 || m.ParentId == 25) //Ingenieria
                         ||
                         (m.Id == 40  ) //Mnat celdas
-                    ).ToList();
+                    ).ToList());
 
                 if (authState.User.Identity.Name.ToLower() == "planta")
                 {
@@ -110,9 +96,9 @@ else
                 }
 
             }
-            else if (IsVentas)
+            if (IsVentas)
             {
-                dbMenu = dbMenu.Where(m => (m.Id == 2 || m.ParentId == 2) //Ventas: Logistica y servicios
+                dbMenu.AddRange( dbMenuMaster.Where(m => (m.Id == 2 || m.ParentId == 2) //Ventas: Logistica y servicios
                                                                           //||
                                                                           //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
                                                                           //||
@@ -123,7 +109,17 @@ else
                                                                           //(m.Id == 25 || m.ParentId == 25) //Ingenieria
                                                                           //||
                                                                           //(m.Id == 40) //Mnat celdas
-                    ).ToList();
+                    ).ToList());
+
+                dbMenu.Add(new Modulo
+                    {
+                        Id = 2000,
+                        ParentId = 2,
+                        Descripcion = "Usuarios",
+                        IconCss = "",
+                        TieneChild = false,
+                        Url = "/ventas/usuarios"
+                    });
 
                 if (authState.User.Identity.Name.ToLower() == "planta")
                 {
@@ -132,9 +128,9 @@ else
                 }
 
             }
-            else if (IsIngenieria)
+            if (IsIngenieria)
             {
-                dbMenu = dbMenu.Where(m => (m.Id == 25 || m.ParentId == 25) //Ventas: Logistica y servicios
+                dbMenu.AddRange( dbMenuMaster.Where(m => (m.Id == 25 || m.ParentId == 25) //Ventas: Logistica y servicios
                                                                             //||
                                                                             //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
                                                                             //||
@@ -145,11 +141,11 @@ else
                                                                             //(m.Id == 25 || m.ParentId == 25) //Ingenieria
                                                                             //||
                                                                             //(m.Id == 40) //Mnat celdas
-                    ).ToList();
+                    ).ToList());
             }
-            else if (IsCompras)
+            if (IsCompras)
             {
-                dbMenu = dbMenu.Where(m => (m.Id == 45 || m.ParentId == 45) //Ventas: Logistica y servicios
+                dbMenu.AddRange( dbMenuMaster.Where(m => (m.Id == 45 || m.ParentId == 45) //Ventas: Logistica y servicios
                                                                             //||
                                                                             //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
                                                                             //||
@@ -160,19 +156,28 @@ else
                                                                             //(m.Id == 25 || m.ParentId == 25) //Ingenieria
                                                                             //||
                                                                             //(m.Id == 40) //Mnat celdas
-                    ).ToList();
+                    ).ToList());
             }
             else
             {
-                //dbMenu = await Http.GetFromJsonAsync<List<Modulo>>("api/Modulo");
                 if (authState.User.Identity.Name.ToUpper() == "MONICA")
                 {
+                    dbMenu = dbMenuMaster.ToList();
                     var maxId = dbMenu.Max(m => m.Id) + 1;
                     dbMenu.Add(new Modulo { Id = maxId, Descripcion = "Panel de Control", IconCss = "fa fa-tachometer",
                         TieneChild = false, Url= "/panel-control/index" }
                     );
 
 
+                    dbMenu.Add(new Modulo
+                        {
+                            Id = 2000,
+                            ParentId = 2,
+                            Descripcion = "Usuarios",
+                            IconCss = "",
+                            TieneChild = false,
+                            Url = "/ventas/usuarios"
+                        });
 
                 }
             }

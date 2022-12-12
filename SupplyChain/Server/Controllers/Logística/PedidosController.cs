@@ -431,12 +431,12 @@ namespace SupplyChain
             _context.Pedidos.Add(stock);
             await _context.SaveChangesAsync();
 
-            //if (stock.TIPOO == 1)
-            //{
-            //    var update = "UPDATE PEDCLI SET CG_ESTADO = 'C' " +
-            //        $"WHERE PEDIDO = {stock.PEDIDO} AND CG_ART = '{stock.CG_ART}'";
-            //    _context.Database.ExecuteSqlRaw(update);
-            //}
+            if (stock.TIPOO == 1)
+            {
+                var update = "UPDATE PEDCLI SET CG_ESTADO = 'C' " +
+                    $"WHERE PEDIDO = {stock.PEDIDO} AND CG_ART = '{stock.CG_ART}'";
+                _context.Database.ExecuteSqlRaw(update);
+            }
 
             await CerrarOC(stock);
 

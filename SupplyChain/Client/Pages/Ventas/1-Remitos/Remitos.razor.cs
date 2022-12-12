@@ -46,8 +46,8 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 PrefixIcon = "e-add", Id = "GenerarRemito", Type = ItemType.Button },
             //"Add",
             //"Edit",
+            new ItemModel { Text = "Imprimir", TooltipText = "Actualizar Grilla", PrefixIcon = "e-print", Id = "imprimir" },
             "Delete",
-            "Print",
             //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
             "ExcelExport",
             new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh" },
@@ -362,6 +362,13 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             {
                 await this.refGrid.ExcelExport();
             }
+            else if (args.Item.Id == "GenerarRemito")
+            {
+                SpinnerVisible = true;
+                await GenerarRemito();
+
+                SpinnerVisible = false;
+            }
             else if (args.Item.Id == "VerRemitidos")
             {
                 SpinnerVisible = true;
@@ -372,6 +379,20 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             {
                 SpinnerVisible = true;
                 await GenerarRemito();
+                
+                SpinnerVisible = false;
+            }
+            else if (args.Item.Id == "imprimir")
+            {
+                SpinnerVisible = true;
+                var remitos = await refGrid.GetSelectedRecordsAsync();
+                if (remitos.Count > 0)
+                {
+                    if (!string.IsNullOrEmpty(remitos[0].REMITO))
+                    {
+                        await StockService.Imprimir(remitos[0].REMITO, true); 
+                    }
+                }
                 
                 SpinnerVisible = false;
             }

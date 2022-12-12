@@ -22,6 +22,7 @@
     <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xsd" />
     <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xss" />
     <Content Remove="wwwroot\Report\NoConfor\ReporteEvento.rdlc" />
+    <Content Remove="wwwroot\Report\OCompra\OCompra.rdlc" />
     <Content Remove="wwwroot\Report\Pedido\PedidoV1.rdlc" />
     <Content Remove="wwwroot\Report\Presupuesto\CondicionesComerciales.rdlc" />
     <Content Remove="wwwroot\Report\Presupuesto\Presupuesto.rdlc" />
@@ -29,6 +30,7 @@
     <Content Remove="wwwroot\Report\Presupuesto\vPresupuesto.xsc" />
     <Content Remove="wwwroot\Report\Presupuesto\vPresupuesto.xsd" />
     <Content Remove="wwwroot\Report\Presupuesto\vPresupuesto.xss" />
+    <Content Remove="wwwroot\Report\Remito\EtiquetaDeRemito.rdlc" />
     <Content Remove="wwwroot\Report\Remito\Remito.rdlc" />
     <Content Remove="wwwroot\Report\Remito\RemitoV1.rdlc" />
     <Content Remove="wwwroot\Report\Report1.rdlc" />
@@ -61,6 +63,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="wwwroot\Report\EtiquetaOF\ReporteEtiquetaOF.rdlc" />
     <EmbeddedResource Include="wwwroot\Report\NoConfor\ReporteEvento.rdlc" />
+    <EmbeddedResource Include="wwwroot\Report\OCompra\OCompra.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="wwwroot\Report\Pedido\PedidoV1.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -71,6 +76,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="wwwroot\Report\Presupuesto\Presupuesto.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="wwwroot\Report\Remito\EtiquetaDeRemito.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="wwwroot\Report\Remito\Remito.rdlc">
@@ -84,8 +92,8 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.12.0" />
-    <PackageReference Include="BoldReports.Net.Core" Version="4.1.78" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.13.0" />
+    <PackageReference Include="BoldReports.Net.Core" Version="4.1.86" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0" />
@@ -98,11 +106,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0" />
-    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="20.1.0.58" />
+    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="20.1.0.61" />
     <PackageReference Include="Syncfusion.Blazor.FileManager.PhysicalFileProvider" Version="20.1.0.55" />
-    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="20.1.0.58" />
-    <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.1.0.58" />
-    <PackageReference Include="Syncfusion.Licensing" Version="20.1.0.58" />
+    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="20.1.0.61" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.1.0.61" />
+    <PackageReference Include="Syncfusion.Licensing" Version="20.1.0.61" />
     <PackageReference Include="System.CodeDom" Version="6.0.0" />
   </ItemGroup>
 
@@ -180,6 +188,15 @@
     <Content Update="wwwroot\Report\Datasheet\DataSheet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>DataSheet.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Update="wwwroot\Report\OCompra\ArbrosDataSetOCompra.Designer.cs">
+      <DependentUpon>ArbrosDataSetOCompra.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Content>
+    <Content Update="wwwroot\Report\OCompra\ArbrosDataSetOCompra.xsd">
+      <LastGenOutput>ArbrosDataSetOCompra.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
     </Content>
     <Content Update="wwwroot\Report\Pedido\ArbrosPedDataSet6.Designer.cs">
       <DesignTime>True</DesignTime>

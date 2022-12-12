@@ -23,6 +23,12 @@ namespace SupplyChain.Server.Repositorios
             this.generaRepository = generaRepository;
         }
 
+        internal async Task<bool> TieneRemito(int pedido)
+        {
+            return await Db.Pedidos.AnyAsync(p=> (p.TIPOO == 1 && p.PEDIDO == pedido && p.REMITO != "") || 
+                (p.TIPOO == 28 && p.PEDIDO == pedido) ||
+                 (p.TIPOO == 28 && p.PEDIDO == pedido) );
+        }
         public async Task<IEnumerable<PedCli>> ByFilter(TipoFiltro tipoFiltro = TipoFiltro.Todos)
         {
             if (tipoFiltro == TipoFiltro.Pendientes)
@@ -66,7 +72,7 @@ namespace SupplyChain.Server.Repositorios
 
         public async Task<PedCliEncabezado> ObtenerPedidosEncabezado(int id)
         {
-            var ped = await DbSet.FindAsync(id);
+            var ped = await DbSet.FirstOrDefaultAsync(p=> p.PEDIDO == id);
             var pedEncabezado = new PedCliEncabezado();
             if (ped != null)
             {
@@ -226,6 +232,8 @@ namespace SupplyChain.Server.Repositorios
                     {
                         servicio.FECHA = DateTime.Now;
                         servicio.PEDIDO = item.PEDIDO;
+                        servicio.OBSERV = item.OBSERITEM;
+                        servicio.OCOMPRA = item.ORCO;
                         Db.Entry(servicio).State = EntityState.Modified;
                         Db.Entry(servicio).Property(p => p.PEDIDO).IsModified = true;
                         Db.Entry(servicio).Property(p => p.FECHA).IsModified = true;

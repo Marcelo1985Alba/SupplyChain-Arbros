@@ -10,8 +10,8 @@
 
 
         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="false" AllowResizing="true"
-                @ref="refGrid" DataSource="@pedidos" Width="100%"
-                AllowExcelExport="true" AllowGrouping="true" ID="grdPedidos"
+                @ref="refGrid" DataSource="@pedidos" Width="100%" 
+                AllowExcelExport="true" AllowGrouping="true" ID="grdPedidos" 
                 AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -38,6 +38,7 @@
                 <GridColumn Field=@nameof(PedCli.DES_ART) HeaderText="Descripcion Articulo" TextAlign="TextAlign.Left" Width="220px"></GridColumn>
                 <GridColumn Field=@nameof(PedCli.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px"></GridColumn>
                 <GridColumn Field=@nameof(PedCli.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.BONIFIC) HeaderText="Bonficacion %" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
 
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
@@ -48,7 +49,7 @@
     {
         <FormPedido @ref="@refFormPedido" Show="popupFormVisible" Pedido="@PedidoSeleccionado" CondicionesPagos="@condicionesPagos"
                     OnCerrar="@(()=> popupFormVisible = false)" CondicionesEntrega="@condicionesEntrega"
-                    DireccionesEntregas="@direccionesEntregas"
+                    DireccionesEntregas="@direccionesEntregas" PorPedido ="@abrePorPedido"
                     OnGuardar="@((p)=> OnPedidoGuardado(p))">
         </FormPedido>
     }
@@ -60,6 +61,26 @@
         <HeaderTempalte><div class="text-white-50">Confirmarcion</div></HeaderTempalte>
         <ContentTemplate>
             Como desea editar?
+        </ContentTemplate>
+
+    </ConfirmacionDialog>
+
+    <ConfirmacionDialog @ref="@PreguntaEliminarDialog" ContentButtonConfirm="@textbotonPorPedido" 
+                        ContentButtonConfirmTwo="@textbotonPorOCI"
+                        OnConfirm="@(()=> PreguntaEliminarPorNumOCIPedido(true))" MontrarOtroButton="true"
+                        OnConfirmTwo="@(()=> PreguntaEliminarPorNumOCIPedido(false))">
+        <HeaderTempalte><div class="text-white-50">Confirmarcion</div></HeaderTempalte>
+        <ContentTemplate>
+            Como desea Eliminar?
+        </ContentTemplate>
+
+    </ConfirmacionDialog>
+
+    <ConfirmacionDialog @ref="@ConfirmacionEliminarDialog" ContentButtonConfirm="Si"
+                        OnConfirm="@(()=> Eliminar())">
+        <HeaderTempalte><div class="text-white-50">Confirmarcion</div></HeaderTempalte>
+        <ContentTemplate>
+            Está seguro que desea Eliminar?
         </ContentTemplate>
 
     </ConfirmacionDialog>

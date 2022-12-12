@@ -46,5 +46,16 @@
     <FormPresupuesto @ref="refFormPresupuesto" Presupuesto="@PresupuestoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
                      OnGuardar="@(async(s)=> await Guardar(s))"></FormPresupuesto>
 
+    <ConfirmacionDialog @ref="ConfirmacionEliminarDialog" OnConfirm="@(async () => await Eliminar())">
+    <HeaderTempalte>
+
+        <p> <strong>Eliminacion Presupuesto @PresupuestoSeleccionado?.Id</strong></p>
+        <hr />
+    </HeaderTempalte>
+    <ContentTemplate>
+        <p>Está seguro que desea eliminar el Presupuesto <strong>@PresupuestoSeleccionado?.Id</strong> ?</p>
+    </ContentTemplate>
+</ConfirmacionDialog>
+
 
 </div>
