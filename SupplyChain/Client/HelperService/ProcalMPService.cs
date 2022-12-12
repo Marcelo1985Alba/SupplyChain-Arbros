@@ -10,7 +10,7 @@ namespace SupplyChain.Client.HelperService
 {
     public class ProcalMPService : BaseService<ProcalsMP, int>
     {
-        private const string API = "api/ProcalMP";
+        private const string API = "api/ProMP";
 
         public ProcalMPService(IRepositoryHttp httpClient) : base(httpClient, API)
         {
@@ -39,4 +39,4 @@ namespace SupplyChain.Client.HelperService
             }
     }
 }
-
+                          

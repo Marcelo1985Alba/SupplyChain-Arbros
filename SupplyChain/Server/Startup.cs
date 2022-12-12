@@ -45,6 +45,7 @@ namespace SupplyChain.Server
             services.AddAuthentication();
             services.AddAuthorization();
 
+
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.EnableSensitiveDataLogging();
@@ -125,6 +126,8 @@ namespace SupplyChain.Server
             services.AddTransient<vTransportesRepository>();
             services.AddTransient<MantCeldasRepository>();
             services.AddTransient<ProcunRepository>();
+            services.AddTransient<ProcalMPRepository>();
+
             //services.AddTransient<MatproveRepository>();
             #endregion
 
@@ -193,7 +196,7 @@ namespace SupplyChain.Server
                 endpoints.MapFallbackToFile("index.html");
                 endpoints.MapHub<ChatHub>("/chathub");
             });
-        }
+        }   
 
         private Task HandleApiFallback(HttpContext context)
         {

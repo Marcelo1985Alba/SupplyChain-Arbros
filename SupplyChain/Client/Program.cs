@@ -90,6 +90,7 @@ namespace SupplyChain.Client
             services.AddScoped<RenovadorToken>();
 
             services.AddSingleton<ToastService>();
+            services.AddScoped<ProcalMPService>();
         }
     }
 }

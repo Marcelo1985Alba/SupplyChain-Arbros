@@ -67,7 +67,7 @@
                 new MenuItem{ Text = "INVENTARIOS",IconCss = "e-icons e-file", Items = new List<MenuItem>{
                     new MenuItem { Text= "Administración de stock", Url="/inventarios", Hidden = !IsAdmin },
                     new MenuItem { Text= "Recepcion de Insumos", Url="/inventario/5", Hidden = IsAdmin },
-                    new MenuItem { Text= "Movimientos entre Depósitos", Url="/inventario/9", Hidden = IsAdmin },
+                    new MenuItem { Text= "Pendientes de Aprobación", Url="/inventario/9", Hidden = IsAdmin },
                     new MenuItem { Separator= true },
                     new MenuItem{ Text = "Saldos de stock"}}},
 
@@ -102,7 +102,8 @@
                         new MenuItem { Text= "protarea", Url="/protarea" },
                         new MenuItem { Text= "scrap", Url="/scrap" },
                         new MenuItem { Text= "tipo area", Url="/tipoarea" },
-                        //new MenuItem {Text= "ProcalMP"},
+                        //ProcalMP
+                        new MenuItem {Text= "ProcalMP", Url="/procalMP"},
                         new MenuItem { Text= "turnos", Url="/turnos" }}}},},
 
                 new MenuItem { Text = "COSTOS", IconCss = "e-icons e-file",Items = new List<MenuItem>{
