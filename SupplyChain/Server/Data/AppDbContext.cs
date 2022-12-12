@@ -70,7 +70,7 @@ namespace SupplyChain
         public virtual DbSet<ModeloAbastecimiento> ModeloAbastecimiento { get; set; }
         public virtual DbSet<vPendienteFabricar> VPendientesFabricars { get; set; }
         public virtual DbSet<vTrazabilidad> VTrazabilidads { get; set; }
-        public virtual DbSet<Procun> Procun { get; set; }
+        public virtual DbSet<Procun> Procun { get; set; } 
         public virtual DbSet<Fabricacion> Fabricaciones { get; set; }
         public virtual DbSet<vProdMaquinaDataCore> VProdMaquinaDataCore { get; set; }
         public virtual DbSet<Moneda> Monedas { get; set; }
@@ -137,8 +137,6 @@ namespace SupplyChain
 
         public DbSet<Proveedores_compras> proveedores_compras { get; set; }
         public DbSet<vUsuario> vUsuarios { get; set; }
-        public DbSet<vOCompraReporte> vOCompraReporte { get; set; }
-
         public DbSet<ISO> ISO { get; set; }
         public DbSet<AspAmb> AspAmb { get; set; }
         public DbSet<AspNetRoles> AspNetRoles { get; set; }

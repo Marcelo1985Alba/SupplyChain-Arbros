@@ -14,92 +14,87 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Syncfusion.Blazor.LinearGauge.Internal;
+using System.Drawing.Printing;
 
-namespace SupplyChain.Client.Pages.ABM.LineasP
+namespace SupplyChain.Client.Pages.ABM.ProcalMPP
 {
-    public class LineaPageBase : ComponentBase
+    public class ProcalMPPageBase : ComponentBase
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime jSRuntime { get; set; }
-        [Inject] protected LineasService LineasService { get; set; }
+        [Inject] protected ProcalMPService ProcalMPService { get; set; }
         #region "Vista Grilla"
-        protected const string APPNAME = "grdLineasABM";
+        protected const string APPNAME = "grdProcalMP";
         protected string state;
         #endregion
-        protected List<Object> Toolbaritems = new List<Object>(){
-        "Search",
-        "Add",
-        "Edit",
-        "Delete",
-        "Print",
-        new ItemModel { Text = "Copia", TooltipText = "Copiar una linea", PrefixIcon = "e-copy", Id = "Copy" },
-        "ExcelExport"
+        protected List<Object> Toolbaritems = new List<Object>()
+        {
+            "Search", "Add", "Edit", "Delete", "Print",
+            new ItemModel {Text = "Copia", TooltipText="Copiar una materia", PrefixIcon="e-copy", Id="Copy"},
+            "ExcelExport"
         };
-        protected List<Lineas> lineas = new();
+
+        protected List<ProcalsMP> procalMP = new();
 
         protected SfToast ToastObj;
         protected SfSpinner refSpinner;
-        protected SfGrid<Lineas> refGrid;
-        protected Lineas lineaSeleccionada = new();
+        protected SfGrid<ProcalsMP> refGrid;
+        protected ProcalsMP procalMPSeleccionada = new();
         protected bool SpinnerVisible = false;
-
         protected bool popupFormVisible = false;
 
         [CascadingParameter] MainLayout MainLayout { get; set; }
         protected override async Task OnInitializedAsync()
         {
-            MainLayout.Titulo = "Lineas";
+            MainLayout.Titulo = "ProcalMP";
 
             SpinnerVisible = true;
-            var response = await LineasService.Get();
+            var response = await ProcalMPService.Get();
             if (!response.Error)
-            {
-                lineas = response.Response;
+            { 
+                procalMP = response.Response;
             }
             SpinnerVisible = false;
         }
+        #region //EVENTOS VISTA DE LA GRITA
 
-        #region "Eventos Vista Grilla"
-        protected async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
-        {
-            await refGrid.SetPersistData(vistasGrillas.Layout);
+        protected async Task OnVistaSeleccionada(VistasGrillas vistasGrillas){
+            await refGrid.SetPersistDataAsync(vistasGrillas.Layout);
         }
    
-        /// <summary>
-        /// //
-        /// </summary>
-        /// <returns></returns>
-        protected async Task OnReiniciarGrilla()
+        protected async Task OnReinciarGrilla()
         {
             await refGrid.ResetPersistData();
         }
         #endregion
 
-        protected async Task OnToolbarHandler(ClickEventArgs args)
+        protected async Task OnToolBarHandler(ClickEventArgs args)
         {
-            if (args.Item.Id == "Copy")
+            if(args.Item.Id=="Copy")
             {
-                await CopiarLinea();
+                await CopiarProcalMP();
             }
-            else if (args.Item.Id == "grdLineas_delete")
+            else if (args.Item.Id== "grdProcalMP_delete")
             {
                 if ((await refGrid.GetSelectedRecordsAsync()).Count > 0)
                 {
-                    bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desea eliminar la linea?");
-                    if (isConfirmed)
+                    bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desea elimnar la linea?");
+                    if(isConfirmed)
                     {
-                        List<Lineas> lineasABorrar = await refGrid.GetSelectedRecordsAsync();
-                        var response = LineasService.Eliminar(lineasABorrar);
-                        if (!response.IsCompletedSuccessfully)
+                        List<ProcalsMP> procalMPABorrar = await refGrid.GetSelectedRecordsAsync();
+                        var response = ProcalMPService.Eliminar(procalMPABorrar);
+                        if(!response.IsCompletedSuccessfully)
                         {
                             await this.ToastObj.Show(new ToastModel
                             {
                                 Title = "EXITO!",
-                                Content = "las lineas seleccionadas fueron eliminadas correctamente.",
+                                Content = "las materias seleccionadas fueron eliminadas correctamente.",
                                 CssClass = "e-toast-success",
-                                Icon = "e-success toast-icons",
+                                Icon= "e-success toast-icons",
                                 ShowCloseButton = true,
-                                ShowProgressBar = true
+                                ShowProgressBar = true,
+
                             });
                         }
                         else
@@ -109,23 +104,34 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
                     }
                 }
             }
-            else if (args.Item.Id == "grdLineas_excelexport")
+            else if (args.Item.Id== "grdProcalMP_excelexport")
             {
                 await refGrid.ExportToExcelAsync();
             }
         }
 
-        private async Task CopiarLinea()
-        {   
-            if (refGrid.SelectedRecords.Count == 1)
+        private async Task CopiarProcalMP()
+        {
+            if(refGrid.SelectedRecords.Count==1)
             {
-                lineaSeleccionada = new();
-                Lineas selectedRecord = refGrid.SelectedRecords[0];
-                bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desea copiar la linea?");
+                procalMPSeleccionada = new();
+                ProcalsMP selectedRecord = refGrid.SelectedRecords[0];
+                bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desea copiar la materia?");
                 if (isConfirmed)
                 {
-                    lineaSeleccionada.ESNUEVO = true;
-                    lineaSeleccionada.DES_LINEA = selectedRecord.DES_LINEA;
+                    procalMPSeleccionada.ESNUEVO = true;
+                    procalMPSeleccionada.DESCAL = selectedRecord.DESCAL;
+                    procalMPSeleccionada.CARCAL= selectedRecord.CARCAL;
+                    procalMPSeleccionada.UNIDADM = selectedRecord.UNIDADM;
+                    procalMPSeleccionada.CANTMEDIDA = selectedRecord.CANTMEDIDA;
+                    procalMPSeleccionada.MEDIDA = selectedRecord.MEDIDA;
+                    procalMPSeleccionada.TOLE1= selectedRecord.TOLE1;
+                    procalMPSeleccionada.TOLE2= selectedRecord.TOLE2;
+                    procalMPSeleccionada.OBSERV = selectedRecord.OBSERV;
+                    procalMPSeleccionada.DESCAL2= selectedRecord.DESCAL2;
+                    procalMPSeleccionada.CARCAL2= selectedRecord.CARCAL2;
+                    procalMPSeleccionada.OBSERV2 = selectedRecord.OBSERV2;
+                    procalMPSeleccionada.PRIORIDAD = selectedRecord.PRIORIDAD;
                     popupFormVisible = true;
                 }
             }
@@ -143,24 +149,23 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
             }
         }
 
-        protected async Task OnActionBeginHandler(ActionEventArgs<Lineas> args)
+        protected async Task OnActionBeginHandler(ActionEventArgs<ProcalsMP> args)
         {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
-                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            if(args.RequestType== Syncfusion.Blazor.Grids.Action.Add ||
+               args.RequestType== Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
                 args.Cancel = true;
                 args.PreventRender = false;
                 popupFormVisible = true;
-                lineaSeleccionada = new();
-                lineaSeleccionada.ESNUEVO = true;
+                procalMPSeleccionada = new();
+                procalMPSeleccionada.ESNUEVO = true;
             }
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            if(args.RequestType== Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                lineaSeleccionada = args.Data;
-                lineaSeleccionada.ESNUEVO = false;
+                procalMPSeleccionada = args.Data;
+                procalMPSeleccionada.ESNUEVO = false;
             }
-
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
+            if(args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.CollapseAllComplete
@@ -181,9 +186,9 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
             }
         }
 
-        protected async Task OnActionCompleteHandler(ActionEventArgs<Lineas> args)
+        protected async Task OnActionCompleteHandler(ActionEventArgs<ProcalsMP> args)
         {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            if(args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
                 args.Cancel = true;
                 args.PreventRender = false;
@@ -196,25 +201,33 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
             popupFormVisible = false;
         }
 
-        protected async Task Guardar(Lineas linea)
+        protected async Task Guardar(ProcalsMP procMP)
         {
-            if (linea.GUARDADO)
+            if (procMP.GUARDADO)
             {
                 await ToastMensajeExito();
                 popupFormVisible = false;
-                if (linea.ESNUEVO)
+                if (procMP.ESNUEVO)
                 {
-                    lineas.Add(linea);
+                    procalMP.Add(procMP);
                 }
                 else
                 {
-                    //actualizar datos sin ir a la base de datos
-                    var lineaSinModificar = lineas.Where(p => p.Id == linea.Id).FirstOrDefault();
-                    lineaSinModificar.Id = linea.Id;
-                    lineaSinModificar.DES_LINEA = linea.DES_LINEA;
-                    //lineaSinModificar.Factor = linea.FACTOR;
-                    //lineaSinModificar.Resp = linea.RESP;
-                    lineas.OrderByDescending(p => p.Id);
+                    //actualiza los datos sin ir a BD
+                    var procalMPSinModificar = procalMP.Where(p => p.Id == procMP.Id).FirstOrDefault();
+                    procalMPSinModificar.Id = procMP.Id;
+                    procalMPSinModificar.DESCAL = procMP.DESCAL;
+                    procalMPSinModificar.CARCAL= procMP.CARCAL;
+                    procalMPSinModificar.UNIDADM= procMP.UNIDADM;
+                    procalMPSinModificar.CANTMEDIDA= procMP.CANTMEDIDA;
+                    procalMPSinModificar.TOLE1= procMP.TOLE1;
+                    procalMPSinModificar.TOLE2 = procMP.TOLE2;
+                    procalMPSinModificar.OBSERV = procMP.OBSERV;
+                    procalMPSinModificar.DESCAL2 = procMP.DESCAL2;
+                    procalMPSinModificar.CARCAL2 = procMP.CARCAL2;
+                    procalMPSinModificar.OBSERV2 = procMP.OBSERV2;
+                    procalMPSinModificar.PRIORIDAD = procMP.PRIORIDAD;
+                    procalMP.OrderByDescending(p => p.Id);
                 }
                 await refGrid.RefreshHeaderAsync();
                 refGrid.Refresh();
@@ -238,6 +251,7 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
                 ShowProgressBar = true
             });
         }
+        
         private async Task ToastMensajeError()
         {
             await ToastObj.Show(new ToastModel

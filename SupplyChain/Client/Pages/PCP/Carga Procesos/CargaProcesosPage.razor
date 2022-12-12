@@ -1,0 +1,22 @@
+﻿@*@page "/"
+@using Syncfusion.Blazor.Gantt
+
+<div class="row">
+    <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                           OnReiniciar="(async ()=> await OnReinciarGrilla())"
+                           OnVistaSelected="(async(v) => await OnVistaSeleccionada(v))" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <SfToast ID="toast_default" @ref="ToastObj">
+            <ToastPosition X="Center" Y="Top"></ToastPosition>
+        </SfToast>
+        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true">
+            @ref="refGrid" DataSource="@cargaProcesos" w
+        </SfGrid>
+    </div>
+</div>
+*@

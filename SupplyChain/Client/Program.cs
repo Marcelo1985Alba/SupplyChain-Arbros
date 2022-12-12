@@ -93,6 +93,7 @@ namespace SupplyChain.Client
             services.AddScoped<AspNetRolesService>();
 
             services.AddSingleton<ToastService>();
+            services.AddScoped<ProcalMPService>();
         }
     }
 }
