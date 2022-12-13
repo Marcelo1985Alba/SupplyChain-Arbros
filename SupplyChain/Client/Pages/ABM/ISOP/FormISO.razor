@@ -97,6 +97,25 @@
                         <div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
+                                    <a>Probabilidad:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.Frecuencia)" DataSource="@FrecuenciaData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a>Gravedad:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.Impacto)" DataSource="@ImpactoData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
                                     <a>Aspecto Ambiental:</a>
                                     <SfComboBox TValue="int" CssClass="customClass" TItem="AspAmb" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(isos.AspAmb)" DataSource="@aspAmbientales">
@@ -107,25 +126,6 @@
                                     <a>Condicion de Operacion:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(isos.CondOperacion)" DataSource="@OperacionData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <a>Frecuencia:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(isos.Frecuencia)" DataSource="@FrecuenciaData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <a>Impacto:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(isos.Impacto)" DataSource="@ImpactoData">
                                         <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
                                     </SfComboBox>
                                 </div>
