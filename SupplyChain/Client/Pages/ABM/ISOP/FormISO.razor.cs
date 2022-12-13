@@ -62,6 +62,8 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
             new BaseOption() {Text= "RRNN" },
             new BaseOption() {Text= "BIOTA" },
             new BaseOption() {Text= "QVIDA" },
+            new BaseOption() {Text= "RIESGO" },
+            new BaseOption() {Text= "OPORTUNIDAD" },
         };
         protected List<BaseOption> FrecuenciaData = new List<BaseOption> {
             new BaseOption() {Text= "Muy baja" },
