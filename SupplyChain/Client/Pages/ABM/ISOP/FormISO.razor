@@ -46,8 +46,8 @@
                         <div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label class="e-float-text e-label-top">Descripcion:</label>
-                                    <SfTextBox ID="Descripcion" @bind-Value="@(isos.Descripcion)"></SfTextBox>
+                                    <label class="e-float-text e-label-top">Contexto:</label>
+                                    <SfTextBox ID="Contexto" @bind-Value="@(isos.Descripcion)"></SfTextBox>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-label-top">Detalle:</label>
@@ -85,7 +85,7 @@
                                     </SfComboBox>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <a>Impacto Ambiental:</a>
+                                    <a>Impacto / Riesgo-Oportunidad:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(isos.ImpAmb)" DataSource="@ImpAmbData">
                                         <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>

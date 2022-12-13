@@ -126,6 +126,10 @@ namespace SupplyChain.Server
             services.AddTransient<vTransportesRepository>();
             services.AddTransient<MantCeldasRepository>();
             services.AddTransient<ProcunRepository>();
+            services.AddTransient<ISORepository>();
+            services.AddTransient<AspNetRolesRepository>();
+            services.AddTransient<AspAmbRepository>();
+            services.AddTransient<ProcalMPRepository>();
             //services.AddTransient<MatproveRepository>();
             #endregion
 

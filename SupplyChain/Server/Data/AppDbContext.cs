@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿    using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Config;
@@ -137,6 +137,7 @@ namespace SupplyChain
 
         public DbSet<Proveedores_compras> proveedores_compras { get; set; }
         public DbSet<vUsuario> vUsuarios { get; set; }
+        public DbSet<vOCompraReporte> vOCompraReporte { get; set; }
         public DbSet<ISO> ISO { get; set; }
         public DbSet<AspAmb> AspAmb { get; set; }
         public DbSet<AspNetRoles> AspNetRoles { get; set; }
