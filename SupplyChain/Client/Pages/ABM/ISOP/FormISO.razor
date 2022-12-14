@@ -67,10 +67,12 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <a>Proceso:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="TipoArea" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(isos.Proceso)" DataSource="@roles">
-                                        <ComboBoxFieldSettings Value="DES_TIPOAREA" Text="DES_TIPOAREA"></ComboBoxFieldSettings>
-                                    </SfComboBox>
+                                    <SfTooltip ID="Tooltip" Target="#proceso" Content="@Content">
+                                        <SfComboBox ID="proceso" TValue="string" CssClass="customClass" TItem="TipoArea" PopupWidth="auto" AllowFiltering="true"
+                                                    @bind-Value="@(isos.Proceso)" DataSource="@roles">
+                                            <ComboBoxFieldSettings Value="DES_TIPOAREA" Text="DES_TIPOAREA"></ComboBoxFieldSettings>
+                                        </SfComboBox>
+                                    </SfTooltip>
                                 </div>
                             </div>
                         </div>
@@ -86,9 +88,9 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <a>Impacto / Riesgo-Oportunidad:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(isos.ImpAmb)" DataSource="@ImpAmbData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    <SfComboBox @bind-Value="@(isos.ImpAmb)" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true" DataSource="@ImpAmbData">
+                                        <ComboBoxEvents TValue="string" TItem="BaseOption" ValueChange="@OnChange" />
+                                                <ComboBoxFieldSettings Value="Text" Text="Text" />
                                     </SfComboBox>
                                 </div>
                             </div>
@@ -118,14 +120,14 @@
                                 <div class="form-group col-md-6">
                                     <a>Aspecto Ambiental:</a>
                                     <SfComboBox TValue="int" CssClass="customClass" TItem="AspAmb" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(isos.AspAmb)" DataSource="@aspAmbientales">
+                                                @bind-Value="@(isos.AspAmb)" Enabled="@edit" DataSource="@aspAmbientales">
                                         <ComboBoxFieldSettings Value="Id" Text="descripcion"></ComboBoxFieldSettings>
                                     </SfComboBox>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <a>Condicion de Operacion:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(isos.CondOperacion)" DataSource="@OperacionData">
+                                                @bind-Value="@(isos.CondOperacion)" Enabled="@edit" DataSource="@OperacionData">
                                         <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
                                     </SfComboBox>
                                 </div>
@@ -137,14 +139,14 @@
                                 <div class="form-group col-md-6">
                                     <a>Condicion de Control:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(isos.CondControl)" DataSource="@ControlData">
+                                                @bind-Value="@(isos.CondControl)" Enabled="@edit" DataSource="@ControlData">
                                         <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
                                     </SfComboBox>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <a>Naturaleza del impacto:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(isos.NaturalezaDelImpacto)" DataSource="@NatDelImpData">
+                                                @bind-Value="@(isos.NaturalezaDelImpacto)" Enabled="@edit" DataSource="@NatDelImpData">
                                         <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
                                     </SfComboBox>
                                 </div>
@@ -153,22 +155,22 @@
 
                         <div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     <a>Gestion:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(isos.Gestion)" DataSource="@GestionData">
                                         <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
                                     </SfComboBox>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label class="e-float-text e-label-top">Comentarios:</label>
-                                    <SfTextBox ID="Comentarios" @bind-Value="@(isos.Comentarios)"></SfTextBox>
-                                </div>
                             </div>
                         </div>
 
                         <div>
                             <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Comentarios:</label>
+                                    <SfTextBox ID="Comentarios" @bind-Value="@(isos.Comentarios)"></SfTextBox>
+                                </div>
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-label-top">Medidas de Control y/o Gestion:</label>
                                     <SfTextBox ID="Medidas" @bind-Value="@(isos.Medidas)"></SfTextBox>

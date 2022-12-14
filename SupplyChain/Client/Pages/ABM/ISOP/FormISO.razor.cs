@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Grids;
@@ -26,6 +27,8 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
         [Parameter] public EventCallback<ISO> OnEliminar { get; set; }
         [Parameter] public EventCallback OnCerrar { get; set; }
 
+        protected Boolean edit = true;
+        protected string Content = "Lets go green & Save Earth !!";
         protected SfGrid<ISO> refGridItems;
         protected SfSpinner refSpinnerCli;
         protected bool SpinnerVisible = false;
@@ -194,6 +197,23 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
                 ShowCloseButton = true,
                 ShowProgressBar = true
             });
+        }
+
+        protected void OnChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, BaseOption> args)
+        {
+            if (args.Value == "RIESGO" || args.Value == "OPORTUNIDAD")
+                edit = false;
+            else
+                edit = true;
+        }
+
+        protected void MouseFechaOn(MouseEventArgs args)
+        {
+
+        }
+        protected void MouseFechaOff(MouseEventArgs args)
+        {
+
         }
     }
 }
