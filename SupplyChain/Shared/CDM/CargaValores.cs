@@ -16,7 +16,7 @@ namespace SupplyChain
         new public string DESCAL { get; set; } = "";
         new public string CARCAL { get; set; } = "";
         new public string UNIDADM { get; set; } = "";
-        new public decimal CANTMEDIDA { get; set; } = 0;
+        new public int CANTMEDIDA { get; set; } = 0;
         new public string OBSERV { get; set; } = "";
         new public string AVISO { get; set; } = "";
         new public string OBSERV1 { get; set; } = "";

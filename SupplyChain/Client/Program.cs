@@ -88,7 +88,7 @@ namespace SupplyChain.Client
             services.AddScoped<PdfService>();
             services.AddScoped<ExcelService>();
             services.AddScoped<RenovadorToken>();
-
+            services.AddScoped<CargaValoresService>();
             services.AddSingleton<ToastService>();
             services.AddScoped<ProcalMPService>();
         }

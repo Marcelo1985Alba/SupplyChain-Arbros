@@ -117,28 +117,8 @@ namespace SupplyChain.Client.Pages.CDM
                 if (isConfirmed)
                 {
                     valoresSeleccionada.ESNUEVO = true;
-                    valoresSeleccionada.CERTIFIC = selectedRecord.CERTIFIC;
                     valoresSeleccionada.FE_ENSAYO = selectedRecord.FE_ENSAYO;
-                    valoresSeleccionada.CG_PROD = selectedRecord.CG_PROD;
-                    valoresSeleccionada.DESCAL= selectedRecord.DESCAL;
-                    valoresSeleccionada.CARCAL = selectedRecord.CARCAL;
-                    valoresSeleccionada.UNIDADM = selectedRecord.UNIDADM;
                     valoresSeleccionada.CANTMEDIDA = selectedRecord.CANTMEDIDA;
-                    valoresSeleccionada.OBSERV = selectedRecord.OBSERV;
-                    valoresSeleccionada.AVISO = selectedRecord.AVISO;
-                    valoresSeleccionada.OBSERV1 = selectedRecord.OBSERV1;
-                    valoresSeleccionada.CG_PROVE = selectedRecord.CG_PROVE;
-                    valoresSeleccionada.REMITO = selectedRecord.REMITO;
-                    valoresSeleccionada.VALORNC = selectedRecord.VALORNC;
-                    valoresSeleccionada.LEYENDANC = selectedRecord.LEYENDANC;
-                    valoresSeleccionada.O_COMPRA = selectedRecord.O_COMPRA;
-                    valoresSeleccionada.UNID = selectedRecord.UNID;
-                    valoresSeleccionada.EVENTO = selectedRecord.EVENTO;
-                    valoresSeleccionada.ENSAYOS = selectedRecord.ENSAYOS;
-                    valoresSeleccionada.FECHA = selectedRecord.FECHA;
-                    valoresSeleccionada.APROBADO = selectedRecord.APROBADO;
-                    valoresSeleccionada.USUARIO = selectedRecord.USUARIO;
-                    valoresSeleccionada.PRIORIDAD = selectedRecord.PRIORIDAD;
                     popupFormVisible = true;
                 }
             }
@@ -223,28 +203,8 @@ namespace SupplyChain.Client.Pages.CDM
                     //actualiza los datos sin ir a BD
                     var valoresSinModificar = valor.Where(v => v.Id == valorg.Id).FirstOrDefault();
                     valoresSinModificar.Id = valorg.Id;
-                    valoresSinModificar.CERTIFIC = valorg.CERTIFIC;
                     valoresSinModificar.FE_ENSAYO = valorg.FE_ENSAYO;
-                    valoresSinModificar.CG_PROD = valorg.CG_PROD;
-                    valoresSinModificar.DESCAL = valorg.DESCAL;
-                    valoresSinModificar.CARCAL = valorg.CARCAL;
-                    valoresSinModificar.UNIDADM = valorg.UNIDADM;
                     valoresSinModificar.CANTMEDIDA = valorg.CANTMEDIDA;
-                    valoresSinModificar.OBSERV = valorg.OBSERV;
-                    valoresSinModificar.AVISO = valorg.AVISO;
-                    valoresSinModificar.OBSERV1 = valorg.OBSERV1;
-                    valoresSinModificar.CG_PROVE = valorg.CG_PROVE;
-                    valoresSinModificar.REMITO = valorg.REMITO;
-                    valoresSinModificar.VALORNC = valorg.VALORNC;
-                    valoresSinModificar.LEYENDANC = valorg.LEYENDANC;
-                    valoresSinModificar.O_COMPRA = valorg.O_COMPRA;
-                    valoresSinModificar.UNID = valorg.UNID;
-                    valoresSinModificar.EVENTO = valorg.EVENTO;
-                    valoresSinModificar.ENSAYOS = valorg.ENSAYOS;
-                    valoresSinModificar.FECHA = valorg.FECHA;
-                    valoresSinModificar.APROBADO = valorg.APROBADO;
-                    valoresSinModificar.USUARIO = valorg.USUARIO;
-                    valoresSinModificar.PRIORIDAD = valorg.PRIORIDAD;
                     valor.OrderByDescending(v => v.Id);
                 }
                 await refGrid.RefreshHeaderAsync();
