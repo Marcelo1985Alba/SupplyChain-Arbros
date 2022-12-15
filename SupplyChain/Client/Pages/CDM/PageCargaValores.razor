@@ -1,0 +1,123 @@
+﻿@page "/control-calidad/procalMP"
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.DropDowns
+@using SupplyChain
+@using Syncfusion.Blazor.Calendars
+@using SupplyChain.Client.Shared
+@inherits PageValoresBase
+
+<div class="row">
+    <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                           OnVistaSelected="(async(v) => await OnVistaSeleccionada(v))" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <SfToast ID="toast_default" @ref="ToastObj">
+            <ToastPosition X="Center" Y="Top"></ToastPosition>
+        </SfToast>
+        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                @ref="refGrid" DataSource="@valor" Width="100%" Toolbar="Toolbaritems"
+                AllowExcelExport="true" AllowGrouping="true" ID="grdCargaValores" AllowFiltering="true"
+                AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
+            
+            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
+            <GridEvents OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolHandler"
+                        OnActionComplete="OnActionCompleteHandler" TValue="Valores"></GridEvents>
+            <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings> 
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
+                ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog">
+            </GridEditSettings>
+            <GridColumns>
+                <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+                <GridColumn Field=@nameof(Valores.Id) HeaderText="ID" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.CERTIFIC) HeaderText="CERTIFIC" TextAlign="TextAlign.Left" Width="200px"></GridColumn>   
+                <GridColumn Field=@nameof(Valores.FE_ENSAYO) HeaderText="FE_ENSAYO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.DESCAL) HeaderText="DESCAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.CARCAL) HeaderText="CARCAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.UNIDADM) HeaderText="UNIDADM" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.CANTMEDIDA) HeaderText="CANTMEDIDA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.OBSERV) HeaderText="OBSERV" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.AVISO) HeaderText="AVISO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.OBSERV1) HeaderText="OBSERV1" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.CG_PROVE) HeaderText="CG_PROVE" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.REMITO) HeaderText="REMITO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.VALORNC) HeaderText="VALORNC" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.LEYENDANC) HeaderText="LEYENDANC" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.O_COMPRA) HeaderText="O_COMPRA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.UNID) HeaderText="UNID" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.EVENTO) HeaderText="EVENTO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.ENSAYOS) HeaderText="ENSAYOS" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.FECHA) HeaderText="FECHA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.APROBADO) HeaderText="APROBADO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.USUARIO) HeaderText="USUARIO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+            </GridColumns>
+            <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner> 
+        </SfGrid>
+        </div>
+
+        @if(popupFormVisible)
+        {
+        <FormCargaValores valor="valoresSeleccionada" Show="popupFormVisible" OnEliminar="@(async(v)=> await Guardar(v))"
+                OnCerrar="OnCerrarDialog" OnGuardar="@(async(v)=> await Guardar(v))"></FormCargaValores>
+        }
+        }
+</div>
+
+<style>
+    .form-group.col-md-6 {
+        width: 200px;
+    }
+
+    label.e-float-text {
+        position: relative;
+        padding-left: 0;
+        top: 10%;
+    }
+
+    .e-input-group.e-control-wrapper.customClass {
+        color: black;
+        background-color: lightblue;
+    }
+</style>
+
+@code {
+    public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
+    public bool DblClick = true;
+    public bool CommandColumnsClick = false;
+
+    public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+    public void OnRadioChange (ChangeArgs<String>args)
+    {
+        if(args.Value== "inline")
+        {
+            this.DblClick= true;
+            this.CommandColumnsClick= false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+        }
+        else if (args.Value == "batch")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Batch;
+        }
+        else if (args.Value == "dialog")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Dialog;
+        }
+        else
+        {
+            this.CommandColumnsClick = true;
+        }
+    }
+
+}

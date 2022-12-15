@@ -1,7 +1,7 @@
 ﻿@using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Calendars
 @using Syncfusion.Blazor.DropDowns
-@using SupplyChain.Client.Pages.ABM.ProcalMP
+@using SupplyChain.Client.Pages.ABM.ProcalMPP
 @inherits FormProcalMPBase
 
 
@@ -9,7 +9,7 @@
     <ToastPosition X="center" Y="Top"></ToastPosition>
 </SfToast>
 
-<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
+<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">  
     <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
     <DialogTemplates>
         <Header>
@@ -28,7 +28,7 @@
                 <DataAnnotationsValidator/>
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                    <li class="nav-item">
-                       <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales" role="tab" aria-controls="pills-home" aria-selected="true">Datos Generales</a>
+                       <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales" role="tab" aria-controls="pills-home"     </a>
                    </li>
                 </ul>
               <div class="tab-content" id="pills-tabContent">
@@ -53,7 +53,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-float-top">CantMedida: </label>
-                                    <SfNumericTextBox ID="CantMedida" @bind-Value="@(procalMP.CANTMEDIDA)"></SfNumericTextBox>>
+                                    <SfNumericTextBox ID="CantMedida" @bind-Value="@(procalMP.CG_PROD)"></SfNumericTextBox>>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-float-top">Medida: </label>

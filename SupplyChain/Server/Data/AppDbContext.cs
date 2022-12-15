@@ -8,12 +8,14 @@ using SupplyChain.Shared.Login;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
 using System;
+using System.Collections.Generic;
 
 namespace SupplyChain
 {
 
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
+        internal IEnumerable<object> vOCompraReporte;
         #region "DbSet"
         //MODULO CARGA DE MAQUINA
         public virtual DbSet<ModeloCarga> Cargas { get; set; }

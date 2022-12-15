@@ -19,7 +19,7 @@ namespace SupplyChain
         public string DESCAL { get; set; } = "";
         public string CARCAL { get; set; } = "";
         public string UNIDADM { get; set; } = "";
-        public string CANTMEDIDA { get; set; } = "";
+        public string CG_PROD { get; set; } = "";
         public decimal MEDIDA { get; set; } = 0;
         public string TOLE1 { get; set; } = "";
         public string TOLE2 { get; set; } = "";
@@ -32,6 +32,9 @@ namespace SupplyChain
 
         [NotMapped] public bool GUARDADO { get; set; }
         [NotMapped] public bool ESNUEVO { get; set; }
+       
+
+     
     }
 
 }
