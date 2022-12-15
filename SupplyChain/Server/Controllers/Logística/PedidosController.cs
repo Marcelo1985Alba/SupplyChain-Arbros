@@ -433,7 +433,27 @@ namespace SupplyChain
 
             if (stock.TIPOO == 1)
             {
-                var update = "UPDATE PEDCLI SET CG_ESTADO = 'C' " +
+                string estadoLogistica = string.Empty;
+
+                switch (stock.CG_COND_ENTREGA)
+                {
+                    case 1:
+                        estadoLogistica = "Entregar";
+                        break;
+                    case 2:
+                        estadoLogistica = "Ret.Planta";
+                        break;
+                    case 3:
+                        estadoLogistica = "Ret.CABA";
+                        break;
+                    case 4:
+                        estadoLogistica = "Entregar";
+                        break;
+                    default:
+                        break;
+                };
+
+                var update = $"UPDATE PEDCLI SET CG_ESTADO = 'C', Estado_Logistica = '{estadoLogistica}' " +
                     $"WHERE PEDIDO = {stock.PEDIDO} AND CG_ART = '{stock.CG_ART}'";
                 _context.Database.ExecuteSqlRaw(update);
             }
@@ -586,6 +606,35 @@ namespace SupplyChain
         {
             if (stock.TIPOO == 9 || stock.TIPOO == 10 || stock.TIPOO == 28)
                 stock.STOCK = -stock.STOCK;
+
+            //actualizar estado logistica
+            if (stock.TIPOO == 1 && stock.PEDIDO > 0)
+            {
+                string estadoLogistica = string.Empty;
+
+                switch (stock.CG_COND_ENTREGA)
+                {
+                    case 1:
+                        estadoLogistica = "Entregar";
+                        break;
+                    case 2:
+                        estadoLogistica = "Ret.Planta";
+                        break;
+                    case 3:
+                        estadoLogistica = "Ret.CABA";
+                        break;
+                    case 4:
+                        estadoLogistica = "Entregar";
+                        break;
+                    default:
+                        break;
+                };
+
+                var update = $"UPDATE PEDCLI SET CG_ESTADO = 'C', Estado_Logistica = '{estadoLogistica}' " +
+                    $"WHERE PEDIDO = {stock.PEDIDO} AND CG_ART = '{stock.CG_ART}'";
+                _context.Database.ExecuteSqlRaw(update);
+            }
+
 
             _context.Entry(stock).State = EntityState.Modified;
             await _context.SaveChangesAsync();
