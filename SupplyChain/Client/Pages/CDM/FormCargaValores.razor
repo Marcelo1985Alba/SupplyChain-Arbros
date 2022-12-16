@@ -1,12 +1,7 @@
-﻿@page "/control-calidad/CargaValores"
-@using Syncfusion.Blazor.Grids
-@using Syncfusion.Blazor.Inputs
-@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Data
+﻿@using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.DropDowns
-@using SupplyChain
 @using Syncfusion.Blazor.Calendars
-@using SupplyChain.Client.Shared
+@using SupplyChain.Client.Pages.CDM
 @inherits FormCargaValoresBase
 
 <SfToast ID="toast_default" @ref="ToastObj">
@@ -44,8 +39,12 @@
                                     <SfNumericTextBox ID="VALE" @bind-Value="@(valor.Id)" Enabled="@valor.ESNUEVO"></SfNumericTextBox>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label class="e-float-text e-label-top">CANTMEDIDA</label>
-                                    <SfNumericTextBox ID="CANTMEDIDA" @bind-Value="@(valor.CANTMEDIDA)"></SfNumericTextBox>
+                                    <label class="e-float-text e-label-top">CANTMEDIDA</label>  
+                                    <SfNumericTextBox ID="CANTMEDIDA" @bind-Value="@(valor.CANTMEDIDA)" ValidateDecimalOnType="true" Step="0.01m" Format="00.00" ></SfNumericTextBox>                                   
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">FE_ENSAYO</label>
+                                    <SfDateTimePicker ID="FE_ENSAYO" @bind-Value="@(valor.FE_ENSAYO)"></SfDateTimePicker>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +53,5 @@
                 <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
             </EditForm>
         </Content>
-
     </DialogTemplates>
-
 </SfDialog>

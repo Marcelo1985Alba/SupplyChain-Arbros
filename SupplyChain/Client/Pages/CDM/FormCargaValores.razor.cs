@@ -55,7 +55,7 @@ namespace SupplyChain.Client.Pages.CDM
             if (response.Error)
             {
                 await ToastMensajeError("Error al intenar guardar el Proceso.");
-                return false;
+                return false;  
             }
             return true;
         }

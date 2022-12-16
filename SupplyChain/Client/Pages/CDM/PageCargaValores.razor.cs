@@ -11,6 +11,7 @@ using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace SupplyChain.Client.Pages.CDM
         protected List<Object> Toolbaritems = new List<Object>()
         {
                "Search", "Add", "Edit", "Delete", "Print",
-            new ItemModel {Text = "Copia", TooltipText="Copiar una materia", PrefixIcon="e-copy", Id="Copy"},
+            new ItemModel {Text = "Copia", TooltipText="Copiar un Proceso", PrefixIcon="e-copy", Id="Copy"},
             "ExcelExport"
         };
 
@@ -44,7 +45,7 @@ namespace SupplyChain.Client.Pages.CDM
         [CascadingParameter] MainLayout MainLayout { get; set; }
         protected override async Task OnInitializedAsync()
         {
-            MainLayout.Titulo = "Valores";
+            MainLayout.Titulo = "Carga Valores";
 
             SpinnerVisible = true;
             var response = await CargaValoresService.Get();
@@ -119,6 +120,27 @@ namespace SupplyChain.Client.Pages.CDM
                     valoresSeleccionada.ESNUEVO = true;
                     valoresSeleccionada.FE_ENSAYO = selectedRecord.FE_ENSAYO;
                     valoresSeleccionada.CANTMEDIDA = selectedRecord.CANTMEDIDA;
+                    valoresSeleccionada.CERTIFIC = selectedRecord.CERTIFIC;
+                    valoresSeleccionada.CG_PROD = selectedRecord.CG_PROD;
+                    valoresSeleccionada.DESCAL = selectedRecord.DESCAL;
+                    valoresSeleccionada.UNIDADM = selectedRecord.UNIDADM;
+                    valoresSeleccionada.CANTMEDIDA = selectedRecord.CANTMEDIDA;
+                    valoresSeleccionada.OBSERV = selectedRecord.OBSERV;
+                    valoresSeleccionada.AVISO = selectedRecord.AVISO;
+                    valoresSeleccionada.OBSERV1 = selectedRecord.OBSERV1;
+                    valoresSeleccionada.CG_PROVE = selectedRecord.CG_PROVE;
+                    valoresSeleccionada.REMITO = selectedRecord.REMITO;
+                    valoresSeleccionada.VALORNC = selectedRecord.VALORNC;
+                    valoresSeleccionada.LEYENDANC = selectedRecord.LEYENDANC;
+                    valoresSeleccionada.O_COMPRA = selectedRecord.O_COMPRA;
+                    valoresSeleccionada.UNID = selectedRecord.UNID;
+                    valoresSeleccionada.EVENTO = selectedRecord.EVENTO;
+                    valoresSeleccionada.ENSAYOS = selectedRecord.ENSAYOS;
+                    valoresSeleccionada.FECHA = selectedRecord.FECHA;
+                    valoresSeleccionada.APROBADO = selectedRecord.APROBADO;
+                    valoresSeleccionada.USUARIO = selectedRecord.USUARIO;
+                    valoresSeleccionada.PRIORIDAD = selectedRecord.PRIORIDAD;
+
                     popupFormVisible = true;
                 }
             }
@@ -205,6 +227,27 @@ namespace SupplyChain.Client.Pages.CDM
                     valoresSinModificar.Id = valorg.Id;
                     valoresSinModificar.FE_ENSAYO = valorg.FE_ENSAYO;
                     valoresSinModificar.CANTMEDIDA = valorg.CANTMEDIDA;
+                    valoresSinModificar.CERTIFIC = valorg.CERTIFIC;
+                    valoresSinModificar.CG_PROD = valorg.CG_PROD;
+                    valoresSinModificar.DESCAL = valorg.DESCAL;
+                    valoresSinModificar.UNIDADM = valorg.UNIDADM;
+                    valoresSinModificar.CANTMEDIDA = valorg.CANTMEDIDA;
+                    valoresSinModificar.OBSERV = valorg.OBSERV;
+                    valoresSinModificar.AVISO = valorg.AVISO;
+                    valoresSinModificar.OBSERV1 = valorg.OBSERV1;
+                    valoresSinModificar.CG_PROVE = valorg.CG_PROVE;
+                    valoresSinModificar.REMITO = valorg.REMITO;
+                    valoresSinModificar.VALORNC = valorg.VALORNC;
+                    valoresSinModificar.LEYENDANC = valorg.LEYENDANC;
+                    valoresSinModificar.O_COMPRA = valorg.O_COMPRA;
+                    valoresSinModificar.UNID = valorg.UNID;
+                    valoresSinModificar.EVENTO = valorg.EVENTO;
+                    valoresSinModificar.ENSAYOS = valorg.ENSAYOS;
+                    valoresSinModificar.FECHA = valorg.FECHA;
+                    valoresSinModificar.APROBADO = valorg.APROBADO;
+                    valoresSinModificar.USUARIO = valorg.USUARIO;
+                    valoresSinModificar.PRIORIDAD = valorg.PRIORIDAD;
+
                     valor.OrderByDescending(v => v.Id);
                 }
                 await refGrid.RefreshHeaderAsync();

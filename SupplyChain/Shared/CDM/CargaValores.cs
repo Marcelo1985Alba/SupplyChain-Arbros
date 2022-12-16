@@ -11,12 +11,12 @@ namespace SupplyChain
         [Key, Column("REGISTRO")]
         new public int Id { get; set; } = 0;
         new public string CERTIFIC { get; set; } = "";
-        new public DateTime FE_ENSAYO { get; set; }
+        new public DateTime FE_ENSAYO { get; set; } = DateTime.Now;
         new public string CG_PROD { get; set; } = "";
         new public string DESCAL { get; set; } = "";
         new public string CARCAL { get; set; } = "";
         new public string UNIDADM { get; set; } = "";
-        new public int CANTMEDIDA { get; set; } = 0;
+        new public decimal CANTMEDIDA { get; set; } = 0;
         new public string OBSERV { get; set; } = "";
         new public string AVISO { get; set; } = "";
         new public string OBSERV1 { get; set; } = "";
