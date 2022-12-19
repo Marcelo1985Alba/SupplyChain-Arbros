@@ -9,7 +9,7 @@ namespace SupplyChain
     public class Valores : EntityBase<int>
     {
         [Key, Column("REGISTRO")]
-        new public int Id { get; set; } = 0;
+        new public int Id { get; set; }
         new public string CERTIFIC { get; set; } = "";
         new public DateTime FE_ENSAYO { get; set; } = DateTime.Now;
         new public string CG_PROD { get; set; } = "";
@@ -21,7 +21,7 @@ namespace SupplyChain
         new public string AVISO { get; set; } = "";
         new public string OBSERV1 { get; set; } = "";
         new public int CG_PROVE { get; set; } = 0;
-        new public int REMITO { get; set; } = 0;
+        new public string REMITO { get; set; } = "";
         new public string VALORNC { get; set; } = "";
         new public string LEYENDANC { get; set; } = "";
         new public int O_COMPRA { get; set; } = 0;
@@ -32,7 +32,7 @@ namespace SupplyChain
         new public string APROBADO { get; set; } = "";
         new public string USUARIO { get; set; } = "";
         
-        new public int PRIORIDAD { get; set; } = 0;
+        new public int REGISTRO { get; set; } = 0;
         [NotMapped] public bool GUARDADO { get; set; }
         [NotMapped] public bool ESNUEVO { get; set; }
     }   

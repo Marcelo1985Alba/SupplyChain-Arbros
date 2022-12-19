@@ -15,6 +15,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace SupplyChain.Client.Pages.CDM
 {
@@ -139,7 +140,7 @@ namespace SupplyChain.Client.Pages.CDM
                     valoresSeleccionada.FECHA = selectedRecord.FECHA;
                     valoresSeleccionada.APROBADO = selectedRecord.APROBADO;
                     valoresSeleccionada.USUARIO = selectedRecord.USUARIO;
-                    valoresSeleccionada.PRIORIDAD = selectedRecord.PRIORIDAD;
+                    valoresSeleccionada.REGISTRO = selectedRecord.REGISTRO;
 
                     popupFormVisible = true;
                 }
@@ -152,6 +153,21 @@ namespace SupplyChain.Client.Pages.CDM
                     Content = "Solo se puede copiar un item",
                     CssClass = "e-toast-danger",
                     Icon = "e-error toast-icons",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     ShowCloseButton = true,
                     ShowProgressBar = true
                 });
@@ -246,7 +262,7 @@ namespace SupplyChain.Client.Pages.CDM
                     valoresSinModificar.FECHA = valorg.FECHA;
                     valoresSinModificar.APROBADO = valorg.APROBADO;
                     valoresSinModificar.USUARIO = valorg.USUARIO;
-                    valoresSinModificar.PRIORIDAD = valorg.PRIORIDAD;
+                    valoresSinModificar.REGISTRO = valorg.REGISTRO;
 
                     valor.OrderByDescending(v => v.Id);
                 }

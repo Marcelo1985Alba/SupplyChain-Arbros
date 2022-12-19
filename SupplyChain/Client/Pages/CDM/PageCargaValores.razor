@@ -37,7 +37,7 @@
             </GridEditSettings>
             <GridColumns>
                 <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                <GridColumn Field=@nameof(Valores.Id) HeaderText="ID" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.Id) HeaderText="VALE" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
                 <GridColumn Field=@nameof(Valores.FE_ENSAYO) HeaderText="FE_ENSAYO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                 <GridColumn Field=@nameof(Valores.CANTMEDIDA) HeaderText="CANTMEDIDA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                 <GridColumn Field=@nameof(Valores.CERTIFIC) HeaderText="CERTIFIC" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
@@ -59,7 +59,7 @@
                 <GridColumn Field=@nameof(Valores.FECHA) HeaderText="FECHA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                 <GridColumn Field=@nameof(Valores.APROBADO) HeaderText="APROBADO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                 <GridColumn Field=@nameof(Valores.USUARIO) HeaderText="USUARIO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.PRIORIDAD) HeaderText="PRIORIDAD" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Valores.REGISTRO) HeaderText="REGISTRO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
 
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner> 

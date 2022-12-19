@@ -28,7 +28,7 @@
                 <DataAnnotationsValidator/>
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                    <li class="nav-item">
-                       <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales" role="tab" aria-controls="pills-home"     </a>
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales" role="tab" aria-controls="pills-home" aria-selected="true">Datos Generales</a>
                    </li>
                 </ul>
               <div class="tab-content" id="pills-tabContent">
@@ -53,7 +53,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-float-top">CantMedida: </label>
-                                    <SfNumericTextBox ID="CantMedida" @bind-Value="@(procalMP.CG_PROD)"></SfNumericTextBox>
+                                    <SfTextBox ID="CantMedida" @bind-Value="@(procalMP.CG_PROD)"></SfTextBox>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-float-top">Medida: </label>
@@ -61,11 +61,11 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-float-top">Tole1: </label>
-                                    <SfNumericTextBox ID="Tole1" @bind-Value="@(procalMP.TOLE1)"></SfNumericTextBox>
+                                    <SfTextBox ID="Tole1" @bind-Value="@(procalMP.TOLE1)"></SfTextBox>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-float-top">Tole2: </label>
-                                    <SfNumericTextBox ID="Tole2" @bind-Value="@(procalMP.TOLE2)"></SfNumericTextBox>
+                                    <SfTextBox ID="Tole2" @bind-Value="@(procalMP.TOLE2)"></SfTextBox>
                                 </div>
                                 
                                 <div class="form-group col-md-6">

@@ -27,9 +27,10 @@
                 <DataAnnotationsValidator/>
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales" role="tab" aria-controls="pills-home"</a>
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales" role="tab" aria-controls="pills-home" aria-selected="true">Datos Generales</a>
                     </li>
                 </ul>    
+
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-DatosGenerales" role="tabpanel" aria-labelledby="pills-home-tab">
                         <div>
@@ -45,6 +46,82 @@
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-label-top">FE_ENSAYO</label>
                                     <SfDateTimePicker ID="FE_ENSAYO" @bind-Value="@(valor.FE_ENSAYO)"></SfDateTimePicker>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">CERTIFIC</label>
+                                    <SfTextBox ID="CERTIFIC" @bind-Value="@(valor.CERTIFIC)"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">CG_PROD</label>
+                                    <SfTextBox ID="CG_PROD" @bind-Value="@(valor.CG_PROD)"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">DESCAL</label>
+                                    <SfTextBox ID="DESCAL" @bind-Value="(valor.DESCAL)"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">CARCAL</label>
+                                    <SfTextBox ID="CARCAL" @bind-Value="(valor.CARCAL)"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">OBSERV</label>
+                                    <SfTextBox ID="OBSERV" @bind-Value="(valor.OBSERV)"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">AVISO</label>
+                                    <SfTextBox ID="AVISO" @bind-Value="(valor.AVISO)"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">OBSERV1</label>
+                                    <SfTextBox ID="OBSERV1" @bind-Value="(valor.OBSERV1)"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">CG_PROVE</label>
+                                    <SfNumericTextBox ID="CG_PROVE" @bind-Value="(valor.CG_PROVE)"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">REMITO</label>
+                                    <SfTextBox ID="REMITO" @bind-Value="(valor.REMITO)"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">VALORNC</label>
+                                    <SfTextBox ID="VALORNC" @bind-Value="(valor.VALORNC)"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">O_COMPRA</label>
+                                    <SfNumericTextBox ID="O_COMPRA" @bind-Value="(valor.O_COMPRA)"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">UNID</label>
+                                    <SfTextBox ID="UNID" @bind-Value="(valor.UNID)"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">UNIDADM</label>
+                                    <SfNumericTextBox ID="UNIDADM" @bind-Value="(valor.UNIDADM)"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">EVENTO</label>
+                                    <SfNumericTextBox ID="EVENTO" @bind-Value="(valor.EVENTO)"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">ENSAYOS</label>
+                                    <SfNumericTextBox ID="ENSAYOS" @bind-Value="(valor.ENSAYOS)"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">FE_ENSAYO</label>
+                                    <SfDateTimePicker ID="FE_ENSAYO" @bind-Value="@(valor.FE_ENSAYO)"></SfDateTimePicker>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">APROBADO</label>
+                                    <SfTextBox ID="APROBADO" @bind-Value="(valor.APROBADO)"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">USUARIO</label>
+                                    <SfTextBox ID="USUARIO" @bind-Value="(valor.USUARIO)"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">REGISTRO</label>
+                                    <SfNumericTextBox ID="REGISTRO" @bind-Value="(valor.REGISTRO)"></SfNumericTextBox>
                                 </div>
                             </div>
                         </div>
