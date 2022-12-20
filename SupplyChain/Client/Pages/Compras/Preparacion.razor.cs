@@ -59,8 +59,8 @@ namespace SupplyChain.Client.Pages.Preparacion
         protected decimal xPrecio = 0;
         protected decimal xDescuento = 0;
         protected decimal xCant = 0;
-        protected decimal xCant1 = 0;
-        protected decimal xCgden = 0;
+        protected decimal? xCant1 = 0;
+        protected decimal? xCgden = 0;
         protected int xDiasvige = 0;
         protected string xUnid = "";
         protected string xUnid1 = "";
@@ -118,12 +118,19 @@ namespace SupplyChain.Client.Pages.Preparacion
                 {
                     DesMat = CG_PRODlist.FirstOrDefault().DES_PROD;
                     xUnidMP = CG_PRODlist.FirstOrDefault().UNID;
+                    xespecif = CG_PRODlist.FirstOrDefault().ESPECIF;
+                    xUnid1 = CG_PRODlist.FirstOrDefault().UNIDSEG;
+                    xCgden = CG_PRODlist.FirstOrDefault().CG_DENSEG;
+
                     cambiapaso(2);
                 }
                 else
                 {
                     DesMat = "";
                     xUnidMP = "";
+                    xespecif = "";
+                    xUnid1 = "";
+                    xCgden = 0;
                     cambiapaso(1);
                 }
             }
@@ -138,12 +145,14 @@ namespace SupplyChain.Client.Pages.Preparacion
                 {
                     CgMat = CG_PRODlist.FirstOrDefault().Id;
                     xUnidMP = CG_PRODlist.FirstOrDefault().UNID;
+                    xespecif = CG_PRODlist.FirstOrDefault().ESPECIF;
                     cambiapaso(2);
                 }
                 else
                 {
                     CgMat = "";
                     xUnidMP = "";
+                    xespecif = "";
                     cambiapaso(1);
                 }
             }
@@ -180,8 +189,11 @@ namespace SupplyChain.Client.Pages.Preparacion
         public void OnSelected()
         {
             CgMat = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().Id; // return the details of selected record
-            DesMat = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().DES_PROD; 
-            xUnidMP = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().UNID; 
+            DesMat = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().DES_PROD;
+            xUnidMP = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().UNID;
+            xespecif = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().ESPECIF;
+            xUnid1 = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().UNIDSEG;
+            xCgden = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().CG_DENSEG;
             IsVisible = false;
             cambiapaso(2);
         }
@@ -230,8 +242,8 @@ namespace SupplyChain.Client.Pages.Preparacion
             xCgProve = prove.Id;
             xDesProve = prove.DES_PROVE;
             xUnid = xUnidMP;
-            xUnid1 = "";
-            xCgden = 0;
+//            xUnid1 = "";
+//            xCgden = 0;
             xMoneda = "PESOS";
             xDiasvige = 0;
             IsVisibleProveedores = false;
