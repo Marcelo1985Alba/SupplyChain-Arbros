@@ -15,7 +15,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Threading.Tasks;
 
 namespace SupplyChain.Client.Pages.CDM
 {
@@ -153,20 +152,6 @@ namespace SupplyChain.Client.Pages.CDM
                     Content = "Solo se puede copiar un item",
                     CssClass = "e-toast-danger",
                     Icon = "e-error toast-icons",
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                     ShowCloseButton = true,
                     ShowProgressBar = true

@@ -37,6 +37,8 @@ namespace SupplyChain.Server.Controllers.ABM
                 return BadRequest(ex);
             }
         }
+        //GET: api/ProcalsMP
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<ProcalsMP>>> GetProMPS()
         {
             try
@@ -48,6 +50,21 @@ namespace SupplyChain.Server.Controllers.ABM
                 return BadRequest(ex);
             }
         }
+
+        //GET: api/ProcalsMP/Existe/{id}
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>>ExisteValor(int id)
+        {
+            try
+            {
+                return await _procalMPRepository.Existe(id);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         //PUTC: api/ProcalMP/{id}
         [HttpPut("{id}")]
         

@@ -23,6 +23,8 @@ namespace SupplyChain.Server.Controllers.CDM
         {
             this._cargaValoresRepository = cargaValoresRepository;
         }
+
+        // GET: api/Valores
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Valores>>> GetCargaValores()
         {
@@ -35,17 +37,21 @@ namespace SupplyChain.Server.Controllers.CDM
                 return BadRequest(ex);
             }
         }
-        public async Task<ActionResult<IEnumerable<Valores>>> Getcargavalor()
+        //GET: api/Valores/Existe/{id}
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>> ExisteValor(int id)
         {
             try
             {
-                return await _cargaValoresRepository.ObtenerTodos();
+                return await _cargaValoresRepository.Existe(id);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex);
             }
         }
+
+        //GET: api/Valores/Existe/{id}
         [HttpPut("{id}")]
         public async Task<ActionResult> PutCargaValor(int id, Valores valor)
         {
@@ -75,6 +81,8 @@ namespace SupplyChain.Server.Controllers.CDM
             return Ok(valor);
         }
 
+
+        //POST: api/Valores
         [HttpPost]
         public async Task<ActionResult<Valores>> PostCargaValor(Valores valor)
         {
@@ -99,6 +107,8 @@ namespace SupplyChain.Server.Controllers.CDM
                 return BadRequest(ex);
             }
         }
+
+        //DELETE: api/Valores/{id}
         [HttpDelete("{id}")]
         public async Task<ActionResult<Valores>> DeleteCargaValores(int id)
         {
@@ -110,6 +120,8 @@ namespace SupplyChain.Server.Controllers.CDM
             await _cargaValoresRepository.Remover(id);
             return valor;
         }
+
+        //POST: api/Valores/PostList
         [HttpPost("PostList")]
         public async Task<ActionResult<Valores>> PostList(List<Valores> valor)
         {

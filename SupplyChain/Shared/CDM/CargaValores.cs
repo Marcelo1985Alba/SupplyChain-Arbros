@@ -10,29 +10,29 @@ namespace SupplyChain
     {
         [Key, Column("REGISTRO")]
         new public int Id { get; set; }
-        new public string CERTIFIC { get; set; } = "";
-        new public DateTime FE_ENSAYO { get; set; } = DateTime.Now;
-        new public string CG_PROD { get; set; } = "";
-        new public string DESCAL { get; set; } = "";
-        new public string CARCAL { get; set; } = "";
-        new public string UNIDADM { get; set; } = "";
-        new public decimal CANTMEDIDA { get; set; } = 0;
-        new public string OBSERV { get; set; } = "";
-        new public string AVISO { get; set; } = "";
-        new public string OBSERV1 { get; set; } = "";
-        new public int CG_PROVE { get; set; } = 0;
-        new public string REMITO { get; set; } = "";
-        new public string VALORNC { get; set; } = "";
-        new public string LEYENDANC { get; set; } = "";
-        new public int O_COMPRA { get; set; } = 0;
-        new public string UNID { get; set; } = "";
-        new public int EVENTO { get; set; } = 0;
-        new public string ENSAYOS { get; set; } = "";
-        new public DateTime FECHA { get; set; }
-        new public string APROBADO { get; set; } = "";
-        new public string USUARIO { get; set; } = "";
+        public string CERTIFIC { get; set; } = "";
+        public DateTime FE_ENSAYO { get; set; } = DateTime.Now;
+        public string CG_PROD { get; set; } = "";
+        public string DESCAL { get; set; } = "";
+        public string CARCAL { get; set; } = "";
+        public string UNIDADM { get; set; } = "";
+        public decimal CANTMEDIDA { get; set; } = 0;
+         public string OBSERV { get; set; } = "";
+         public string AVISO { get; set; } = "";
+         public string OBSERV1 { get; set; } = "";
+         public int CG_PROVE { get; set; } = 0;
+         public string REMITO { get; set; } = "";
+         public string VALORNC { get; set; } = "";
+         public string LEYENDANC { get; set; } = "";
+         public int O_COMPRA { get; set; } = 0;
+         public string UNID { get; set; } = "";
+         public int EVENTO { get; set; } = 0;
+         public string ENSAYOS { get; set; } = "";
+         public DateTime FECHA { get; set; }
+         public string APROBADO { get; set; } = "";
+         public string USUARIO { get; set; } = "";
         
-        new public int REGISTRO { get; set; } = 0;
+         public int REGISTRO { get; set; } = 0;
         [NotMapped] public bool GUARDADO { get; set; }
         [NotMapped] public bool ESNUEVO { get; set; }
     }   

@@ -45,7 +45,7 @@
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
         </SfGrid>
     </div>
-
+    
     @if (popupFormVisible)
 	{
 		 <FormLineas lineas="lineaSeleccionada" Show="popupFormVisible" OnEliminar="@(async(p)=>await Guardar(p))"  
