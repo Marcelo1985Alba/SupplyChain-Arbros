@@ -111,7 +111,6 @@ namespace SupplyChain.Server.Controllers.CDM
             return valor;
         }
         [HttpPost("PostList")]
-
         public async Task<ActionResult<Valores>> PostList(List<Valores> valor)
         {
             try
