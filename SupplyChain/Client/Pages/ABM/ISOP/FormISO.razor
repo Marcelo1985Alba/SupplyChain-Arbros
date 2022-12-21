@@ -67,12 +67,10 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <a>Proceso:</a>
-                                    <SfTooltip ID="Tooltip" Target="#proceso" Content="@Content">
-                                        <SfComboBox ID="proceso" TValue="string" CssClass="customClass" TItem="TipoArea" PopupWidth="auto" AllowFiltering="true"
-                                                    @bind-Value="@(isos.Proceso)" DataSource="@roles">
-                                            <ComboBoxFieldSettings Value="DES_TIPOAREA" Text="DES_TIPOAREA"></ComboBoxFieldSettings>
-                                        </SfComboBox>
-                                    </SfTooltip>
+                                    <SfComboBox ID="proceso" TValue="string" CssClass="customClass" TItem="TipoArea" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.Proceso)" DataSource="@roles">
+                                        <ComboBoxFieldSettings Value="DES_TIPOAREA" Text="DES_TIPOAREA"></ComboBoxFieldSettings>
+                                    </SfComboBox>
                                 </div>
                             </div>
                         </div>
@@ -88,10 +86,13 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <a>Impacto / Riesgo-Oportunidad:</a>
-                                    <SfComboBox @bind-Value="@(isos.ImpAmb)" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true" DataSource="@ImpAmbData">
-                                        <ComboBoxEvents TValue="string" TItem="BaseOption" ValueChange="@OnChange" />
-                                                <ComboBoxFieldSettings Value="Text" Text="Text" />
-                                    </SfComboBox>
+                                    
+                                    <SfTooltip Height="200px" Width="400px" Target="#impacto-RO" Content="@tooltipImpactoRO">
+                                        <SfComboBox ID="impacto-RO" @bind-Value="@(isos.ImpAmb)" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true" DataSource="@ImpAmbData">
+                                            <ComboBoxEvents TValue="string" TItem="BaseOption" ValueChange="@OnChange" />
+                                            <ComboBoxFieldSettings Value="Text" Text="Text" />
+                                        </SfComboBox>
+                                    </SfTooltip>
                                 </div>
                             </div>
                         </div>
@@ -100,17 +101,22 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <a>Probabilidad:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(isos.Frecuencia)" DataSource="@FrecuenciaData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
+                                    
+                                    <SfTooltip Height="200px" Width="400px" Target="#probabilidad" Content="@tooltipProbabilidad">
+                                        <SfComboBox ID="probabilidad" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                    @bind-Value="@(isos.Frecuencia)" DataSource="@FrecuenciaData">
+                                            <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                        </SfComboBox>
+                                    </SfTooltip>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <a>Gravedad:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(isos.Impacto)" DataSource="@ImpactoData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
+                                    <a>Impacto:</a>
+                                    <SfTooltip ID="Tooltip2" Height="200px" Width="400px" Target="#impacto" Content="@tooltipImpacto">
+                                        <SfComboBox ID="impacto" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                    @bind-Value="@(isos.Impacto)" DataSource="@ImpactoData">
+                                            <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                        </SfComboBox>
+                                    </SfTooltip>
                                 </div>
                             </div>
                         </div>
@@ -126,10 +132,13 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <a>Condicion de Operacion:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(isos.CondOperacion)" Enabled="@edit" DataSource="@OperacionData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
+                                    
+                                    <SfTooltip Height="200px" Width="400px" Target="#operacion" Content="@tooltipOperacion">
+                                        <SfComboBox ID="operacion" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                    @bind-Value="@(isos.CondOperacion)" Enabled="@edit" DataSource="@OperacionData">
+                                            <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                        </SfComboBox>
+                                    </SfTooltip>
                                 </div>
                             </div>
                         </div>
@@ -138,17 +147,23 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <a>Condicion de Control:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(isos.CondControl)" Enabled="@edit" DataSource="@ControlData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
+                                    
+                                    <SfTooltip Height="200px" Width="400px" Target="#control" Content="@tooltipControl">
+                                        <SfComboBox ID="control" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                    @bind-Value="@(isos.CondControl)" Enabled="@edit" DataSource="@ControlData">
+                                            <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                        </SfComboBox>
+                                    </SfTooltip>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <a>Naturaleza del impacto:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(isos.NaturalezaDelImpacto)" Enabled="@edit" DataSource="@NatDelImpData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
+                                    
+                                    <SfTooltip Height="200px" Width="400px" Target="#naturaleza" Content="@tooltipNaturaleza">
+                                        <SfComboBox ID="naturaleza" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                    @bind-Value="@(isos.NaturalezaDelImpacto)" Enabled="@edit" DataSource="@NatDelImpData">
+                                            <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                        </SfComboBox>
+                                    </SfTooltip>
                                 </div>
                             </div>
                         </div>
@@ -184,3 +199,91 @@
         </Content>
     </DialogTemplates>
 </SfDialog>
+
+@code{
+    protected string tooltipImpacto = "<div><b>Impacto:</b><br>" +
+    "Se analiza en función de 4 aspectos:  magnitud, extensión, reversibilidad del efecto y afectación de las partes interesadas (PPII).<br>" +
+    "Cuando se cumple más de una condición en cada nivel de impacto se considera el de mayor impacto.<br>" +
+    "<b>Muy Poco</b><br>" +
+    "- Magnitud del efecto: El efecto no es perceptible por las personas o causa una alteración mínima o despreciable.<br>" +
+    "- Extensión: La afectación es puntual.<br>" +
+    "- Reversibilidad del efecto: Es reversible en forma inmediata cuando se suspende la actividad.<br>" +
+    "- PPII: No hay evidencia de reclamos de PPII.<br>" +
+    "<b>Poco</b><br>" +
+    "- Magnitud del efecto: El efecto  es perceptible por las personas o causa  alteraciones ligeras y transitorias sobre la salud de las personas y/o los factores ambientales (aire, agua, suelo).<br>" +
+    "- Extensión: El daño se circunscribe a los límites de la planta.<br>" +
+    "- Reversibilidad del efecto: Es reversible en forma natural.<br>" +
+    "- PPII: Posibilidad de reclamos de PPII.<br>" +
+    "<b>Modearado</b><br>" +
+    "- Magnitud del efecto: El efecto puede causar efectos moderados sobre la salud de las personas y/o los factores ambientales (aire, agua, suelo).<br> " +
+    "- Extensión: El daño supera los límites de la planta.<br> " +
+    "- Reversibilidad del efecto: Es reversible con uso de tecnología.<br> " +
+    "- PPII: Evidencia de reclamos de PPII.<br> " +
+    "<b>Alto</b><br>" +
+    "- Magnitud del efecto: El efecto puede causar efectos altos sobre la salud de las personas y/o los factores ambientales (aire, agua, suelo).<br> " +
+    "- Extensión: El daño supera los límites de la planta.<br> " +
+    "- Reversibilidad del efecto: Es reversible con uso de tecnología.<br> " +
+    "- PPII: Evidencia de reclamos de PPII.<br> " +
+    "<b>Muy Alto</b><br>" +
+    "- Magnitud del efecto: El efecto puede causar efectos serios o irreversibles sobre la salud de las personas y/o los factores ambientales (aire, agua, suelo).<br> " +
+    "- Extensión: El daño tiene un efecto regional.<br> " +
+    "- Reversibilidad del efecto: El impacto no es reversible.<br> " +
+    "- PPII: Reclamos con verificación de afectación de PPII.<br> " +
+    "<div>";
+    protected string tooltipImpactoRO = "<div><b>Impacto - Riesgos/Oportunidades:</b><br>" +
+    "En este campo se consideran los Riesgos/Oportunidades e Impactos que van a dar lugar a las Matrices.<br>" +
+    "<b>RIESGO</b> es la probabilidad de que ocurra algo no deseado.<br>" +
+    "<b>OPORTUNIDAD</b> es el beneficio o las posibilidades que se presentan como consecuencia de la ocurrencia de un determinado evento.<br> " +
+    "Los posibles IMPACTOS AMBIENTALES pueden ser:<br> " +
+    "Los posibles IMPACTOS AMBIENTALES pueden ser:<br> " +
+    "Contaminación del <b>Aire</b> (AIRE):<br> " +
+    "- Contaminación a nivel local.<br> " +
+    "- Contaminación por olores.<br> " +
+    "- Contaminación por material particulado.<br> " +
+    "- Contribución al calentamiento global.<br> " +
+    "- Contribución al adelgazamiento de la capa de Ozono.<br> " +
+    "Contaminación del <b>Agua</b> (AGUA):<br> " +
+    "- Contaminación hídrica subterránea / Alteración de usos.<br> " +
+    "- Contaminación hídrica superficial / Alteración de usos.<br> " +
+    "Contaminación del <b>Suelo</b> (SUELO):<br> " +
+    "- Contaminación del suelo.<br> " +
+    "- Degradación de la capacidad productiva - usos.<br> " +
+    "Contaminación de los <b>Recursos Naturales</b> (RRNN):<br> " +
+    "- Consumo no sustentable.<br> " +
+    "- Afectación de la disponibilidad / agotamiento de los recursos.<br> " +
+    "Contaminación del <b>Biota</b> (BIOTA):<br> " +
+    "- Alteración de la cubierta vegetal / efectos sobre la vegetación.<br> " +
+    "- Efectos sobre la fauna / interferencia sobre funciones - ciclos vitales.<br> " +
+    "Contaminación de la <b>Calidad de Vida</b> (QVIDA):<br> " +
+    "- Riesgo a la salud y/o a la seguridad de las personas.<br> " +
+    "- Efectos sobre el bienestar y el orden de la comunidad.<br> " +
+    "- Mejora / deterioro de instalaciones, viviendas o infraestructura de servicios.<br> " +
+    "- Desvalorización de terrenos / viviendas.<br> " +
+    "- Aumento del nivel de empleo / desempleo.<br> " +
+    "- Incremento / descenso de las actividades o recursos económicos.<br> " +
+    "- Incremento / descenso de los ingresos.<br> " +
+    "- Alteración de la calidad del paisaje / Pérdida de elementos singulares.<br> " +
+    "<div>";
+    protected string tooltipProbabilidad = "<div><b>Probabilidad (P):</b><br> " +
+    "Probabilidad de ocurrencia. Se relaciona con la frecuencia con que ese RIESGO/OPORTUNIDAD O AA es (o podría ser) generado. Se establece en base a estadísiticas previas y/o estimación empírica.<br>" +
+    "- <b>Muy Baja</b> = No se tiene antecedentes de ocurrencia, pero podría llegar a ocurrir.<br> " +
+    "- <b>Baja</b> = Ocurrió al menos una vez desde la operación de la planta.<br> " +
+    "- <b>Media</b> = Puede ocurrir sin una periodicidad determinada.<br> " +
+    "- <b>Alta</b> = Ocurre con una periodicidad determinada (p. ej., mensual, trimestral, u otra).<br> " +
+    "- <b>Muy Alta</b> = Ocurre diariamente.<br> " +
+    "<div>";
+    protected string tooltipOperacion = "<div><b>Condición de Operación (CO) bajo la cual se genera el Aspecto Ambiental (AA):</b><br> " +
+    "- <b>NORMAL (N):</b> Condiciones rutinarias y habituales de la operación.<br> " +
+    "- <b>ANORMAL (A):</b> Condiciones no habituales, que resultan previsibles y de gestión controlada.<br> " +
+    "- <b>EMERGENCIA (E):</b> Condiciones no habituales, imprevisibles, que interrumpen el normal funcionamiento de la operación y que exigen un rápido control.<br> " +
+    "<div>";
+    protected string tooltipControl = "<div><b>Condición de Control (CC) / Responsabilidad:</b><br>" +
+    "- <b>DIRECTA (D):</b> AA derivado de una actividad, producto o servicio bajo la  responsabilidad directa de la organización, por lo que le corresponde el control sobre dicho AA.<br> " +
+    "- <b>INDIRECTA (I):</b> AA derivado de una actividad, producto o servicio bajo la responsabilidad de terceros: proveedores, contratistas u otras Partes Interesadas externas a la organización, sobre las cuales se tenga influencia para el control del AA.<br> " +
+    "<div>";
+    protected string tooltipNaturaleza = "<div><b>Naturaleza del Impacto:</b><br>" +
+    "Un AA puede derivar en efectos positivos o negativos al MA. Ello se define a través de la Naturaleza del Impacto, a saber:<br>" +
+    "- <b>Beneficioso (B):</b> La alteración considerada resulta de carácter positivo, o sea que representa un beneficio para el MA.<br> " +
+    "- <b>Adverso (A):</b> El impacto repercute negativamente en el entorno; resulta en un perjuicio para el MA.<br> " +
+    "<div>";
+}

@@ -28,7 +28,6 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
         [Parameter] public EventCallback OnCerrar { get; set; }
 
         protected Boolean edit = true;
-        protected string Content = "Lets go green & Save Earth !!";
         protected SfGrid<ISO> refGridItems;
         protected SfSpinner refSpinnerCli;
         protected bool SpinnerVisible = false;
@@ -205,15 +204,6 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
                 edit = false;
             else
                 edit = true;
-        }
-
-        protected void MouseFechaOn(MouseEventArgs args)
-        {
-
-        }
-        protected void MouseFechaOff(MouseEventArgs args)
-        {
-
         }
     }
 }
