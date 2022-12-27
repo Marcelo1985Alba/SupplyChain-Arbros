@@ -5,13 +5,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace SupplyChain
 {
-    [Table("CargaValores")]
+    [Table("Procesos2")]
     public class Valores : EntityBase<int>
     {
         [Key, Column("REGISTRO")]
         new public int Id { get; set; }
-        public string CERTIFIC { get; set; } = "";
-        public DateTime FE_ENSAYO { get; set; } = DateTime.Now;
+        public string DESPACHO { get; set; } = "";
+        public DateTime FE_REG { get; set; } = DateTime.Now;
         public string CG_PROD { get; set; } = "";
         public string DESCAL { get; set; } = "";
         public string CARCAL { get; set; } = "";
@@ -31,9 +31,13 @@ namespace SupplyChain
          public DateTime FECHA { get; set; }
          public string APROBADO { get; set; } = "";
          public string USUARIO { get; set; } = "";
+
+       [ValidateComplexType]
+        public virtual List<CargaValoresDetalles> Items { get; set; } = new();
         
          public int REGISTRO { get; set; } = 0;
         [NotMapped] public bool GUARDADO { get; set; }
         [NotMapped] public bool ESNUEVO { get; set; }
+        public string CG_ART { get; set; }
     }   
 }

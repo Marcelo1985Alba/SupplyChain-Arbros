@@ -37,19 +37,6 @@ namespace SupplyChain.Server.Controllers.ABM
                 return BadRequest(ex);
             }
         }
-        //GET: api/ProcalsMP
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProcalsMP>>> GetProMPS()
-        {
-            try
-            {
-                return await _procalMPRepository.ObtenerTodos();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
 
         //GET: api/ProcalsMP/Existe/{id}
         [HttpGet("Existe/{id}")]

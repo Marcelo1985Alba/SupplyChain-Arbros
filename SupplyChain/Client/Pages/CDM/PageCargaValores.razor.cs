@@ -22,7 +22,8 @@ namespace SupplyChain.Client.Pages.CDM
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime jSRuntime { get; set; }
-        [Inject] protected CargaValoresService CargaValoresService { get; set; }
+        //[Inject] protected CargaValoresService CargaValoresService { get; set; }
+        [Inject] protected InventarioService InventarioService { get; set; }
         #region "Vista Grilla"
         protected const string APPNAME = "grdCargaValores";
         protected string state;
@@ -34,21 +35,25 @@ namespace SupplyChain.Client.Pages.CDM
             "ExcelExport"
         };
 
-        protected List<Valores> valor = new();
+        //protected List<Valores> valor = new();
+        protected List<Pedidos> valor = new();
         protected SfToast ToastObj;
         protected SfSpinner refSpinner;
-        protected SfGrid<Valores> refGrid;
-        protected Valores valoresSeleccionada = new();
+        //protected SfGrid<Valores> refGrid;
+        protected SfGrid<Pedidos> refGrid;
+        //protected Valores valoresSeleccionada = new();
+        protected Pedidos valoresSeleccionada = new();
         protected bool SpinnerVisible = false;
         protected bool popupFormVisible = false;
 
         [CascadingParameter] MainLayout MainLayout { get; set; }
         protected override async Task OnInitializedAsync()
         {
-            MainLayout.Titulo = "Carga Valores";
+            MainLayout.Titulo = "Control de Calidad";
 
             SpinnerVisible = true;
-            var response = await CargaValoresService.Get();
+            //CAMBIAR A INVENTARIOSERVICE
+            var response = await InventarioService.Get();
             if (!response.Error)
             {
                 valor = response.Response;
@@ -81,8 +86,8 @@ namespace SupplyChain.Client.Pages.CDM
                         "Seguro que deseaa eliminar la linea?");
                     if (isConfirmed)
                     {
-                        List<Valores> valoresABorrar = await refGrid.GetSelectedRecordsAsync();
-                        var response = CargaValoresService.Eliminar(valoresABorrar);
+                        List<Pedidos> valoresABorrar = await refGrid.GetSelectedRecordsAsync();
+                        var response = InventarioService.Eliminar(valoresABorrar);
                         if (!response.IsCompletedSuccessfully)
                         {
                             await this.ToastObj.Show(new ToastModel
@@ -118,21 +123,21 @@ namespace SupplyChain.Client.Pages.CDM
                 if (isConfirmed)
                 {
                     valoresSeleccionada.ESNUEVO = true;
-                    valoresSeleccionada.FE_ENSAYO = selectedRecord.FE_ENSAYO;
+                    valoresSeleccionada.FE_REG = selectedRecord.FE_REG;
                     valoresSeleccionada.CANTMEDIDA = selectedRecord.CANTMEDIDA;
-                    valoresSeleccionada.CERTIFIC = selectedRecord.CERTIFIC;
-                    valoresSeleccionada.CG_PROD = selectedRecord.CG_PROD;
-                    valoresSeleccionada.DESCAL = selectedRecord.DESCAL;
-                    valoresSeleccionada.UNIDADM = selectedRecord.UNIDADM;
+                    valoresSeleccionada.DESPACHO = selectedRecord.DESPACHO;
+                    valoresSeleccionada.CG_ART = selectedRecord.CG_ART;
+                    //Procalmp//valoresSeleccionada.DESCAL = selectedRecord.DESCAL;
+                    //Procalmp// valoresSeleccionada.UNIDADM = selectedRecord.UNIDADM;
                     valoresSeleccionada.CANTMEDIDA = selectedRecord.CANTMEDIDA;
                     valoresSeleccionada.OBSERV = selectedRecord.OBSERV;
-                    valoresSeleccionada.AVISO = selectedRecord.AVISO;
+                    //Procalmp//valoresSeleccionada.AVISO = selectedRecord.AVISO;
                     valoresSeleccionada.OBSERV1 = selectedRecord.OBSERV1;
                     valoresSeleccionada.CG_PROVE = selectedRecord.CG_PROVE;
                     valoresSeleccionada.REMITO = selectedRecord.REMITO;
                     valoresSeleccionada.VALORNC = selectedRecord.VALORNC;
                     valoresSeleccionada.LEYENDANC = selectedRecord.LEYENDANC;
-                    valoresSeleccionada.O_COMPRA = selectedRecord.O_COMPRA;
+                    valoresSeleccionada.OCOMPRA = selectedRecord.O_COMPRA;
                     valoresSeleccionada.UNID = selectedRecord.UNID;
                     valoresSeleccionada.EVENTO = selectedRecord.EVENTO;
                     valoresSeleccionada.ENSAYOS = selectedRecord.ENSAYOS;
@@ -159,7 +164,7 @@ namespace SupplyChain.Client.Pages.CDM
             }
         }
 
-        protected async Task OnActionBeginHandler(ActionEventArgs<Valores> args)
+        protected async Task OnActionBeginHandler(ActionEventArgs<Pedidos> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
@@ -196,7 +201,7 @@ namespace SupplyChain.Client.Pages.CDM
             }
         }
 
-        protected async Task OnActionCompleteHandler(ActionEventArgs<Valores> args)
+        protected async Task OnActionCompleteHandler(ActionEventArgs<Pedidos> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
@@ -211,7 +216,7 @@ namespace SupplyChain.Client.Pages.CDM
             popupFormVisible = false;
         }
 
-        protected async Task Guardar(Valores valorg)
+        protected async Task Guardar(Pedidos valorg)
         {
             if (valorg.GUARDADO)
             {
@@ -228,8 +233,8 @@ namespace SupplyChain.Client.Pages.CDM
                     valoresSinModificar.Id = valorg.Id;
                     valoresSinModificar.FE_ENSAYO = valorg.FE_ENSAYO;
                     valoresSinModificar.CANTMEDIDA = valorg.CANTMEDIDA;
-                    valoresSinModificar.CERTIFIC = valorg.CERTIFIC;
-                    valoresSinModificar.CG_PROD = valorg.CG_PROD;
+                    valoresSinModificar.DESPACHO = valorg.DESPACHO;
+                    valoresSinModificar.CG_ART = valorg.CG_ART;
                     valoresSinModificar.DESCAL = valorg.DESCAL;
                     valoresSinModificar.UNIDADM = valorg.UNIDADM;
                     valoresSinModificar.CANTMEDIDA = valorg.CANTMEDIDA;

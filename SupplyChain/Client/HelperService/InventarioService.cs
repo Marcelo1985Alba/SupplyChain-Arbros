@@ -30,6 +30,9 @@ namespace SupplyChain.Client.HelperService
             return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/ByNumeroVale/{vale}");
         }
 
-
+        public async Task<List<Pedidos>> GetPendienteAprobacion()
+        {
+            return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/GetPendienteAprobacion/");
+        }
     }
 }

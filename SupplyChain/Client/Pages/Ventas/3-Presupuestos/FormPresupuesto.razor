@@ -136,6 +136,7 @@
                                 <GridEvents TValue="PresupuestoDetalle" OnBatchDelete="BatchDeleteHandler"
                                             CellSaved="CellSavedHandler" OnBatchAdd="BatchAddHandler" OnBatchSave="BatchSaveHandler"></GridEvents>
                             </GridEditSettings>
+
                             <GridColumns>
                                 <GridColumn Field=@nameof(PresupuestoDetalle.Id) IsPrimaryKey="true" Width="4"></GridColumn>
                                 <GridColumn Field=@nameof(PresupuestoDetalle.CG_ART) AllowEditing="false" HeaderText="Producto" TextAlign="TextAlign.Left" Width="130px"></GridColumn>

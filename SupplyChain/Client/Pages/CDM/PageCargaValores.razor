@@ -30,47 +30,32 @@
             <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolHandler"
-                        OnActionComplete="OnActionCompleteHandler" TValue="Valores"></GridEvents>
+                        OnActionComplete="OnActionCompleteHandler" TValue="Pedidos"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings> 
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
                 ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog">
             </GridEditSettings>
             <GridColumns>
                 <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                <GridColumn Field=@nameof(Valores.Id) HeaderText="VALE" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.FE_ENSAYO) HeaderText="FE_ENSAYO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.CANTMEDIDA) HeaderText="CANTMEDIDA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.CERTIFIC) HeaderText="CERTIFIC" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.CG_PROD) HeaderText="CG_PROD" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.DESCAL) HeaderText="DESCAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.UNIDADM) HeaderText="UNIDADM" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.CANTMEDIDA) HeaderText="CANTMEDIDA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.OBSERV) HeaderText="OBSERV" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.AVISO) HeaderText="AVISO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.OBSERV1) HeaderText="OBSERV1" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.CG_PROVE) HeaderText="CG_PROVE" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.REMITO) HeaderText="REMITO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.VALORNC) HeaderText="VALORNC" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.LEYENDANC) HeaderText="LEYENDANC" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.O_COMPRA) HeaderText="O_COMPRA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.UNID) HeaderText="UNID" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.EVENTO) HeaderText="EVENTO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.ENSAYOS) HeaderText="ENSAYOS" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.FECHA) HeaderText="FECHA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.APROBADO) HeaderText="APROBADO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.USUARIO) HeaderText="USUARIO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Valores.REGISTRO) HeaderText="REGISTRO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-
+                @*REEMPLAZAR CON LOS VALORES DE PEDIDOS*@
+                <GridColumn Field=@nameof(Pedidos.Id) HeaderText="VALE" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.DESPACHO) HeaderText="DESPACHO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.CG_ART) HeaderText="CG_PROD" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.CG_PROVE) HeaderText="CG_PROVE" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.REMITO) HeaderText="REMITO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.OCOMPRA) HeaderText="O_COMPRA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.UNID) HeaderText="UNID" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.FE_MOV) HeaderText="FECHA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner> 
         </SfGrid>
         </div>
 
-        @if(popupFormVisible)
+       @* @if(popupFormVisible)
         {
         <FormCargaValores valor="valoresSeleccionada" Show="popupFormVisible" OnEliminar="@(async(v)=> await Guardar(v))"
                 OnCerrar="OnCerrarDialog" OnGuardar="@(async(v)=> await Guardar(v))"></FormCargaValores>
-        }
+        }*@
         
 </div>
 

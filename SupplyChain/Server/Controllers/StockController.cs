@@ -343,7 +343,22 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
+        // GET:   
+        [HttpGet("GetPendienteAprobacion")]
+        public async Task<ActionResult<IEnumerable<Pedidos>>> GetPendienteAprobacion()
+        {
+            List<Pedidos> lStock = await _pedidosRepository
+                .Obtener(p => p.TIPOO == 5 && p.VOUCHER == 0 && p.CG_DEP == 3)
+                .ToListAsync();
 
+            if (lStock == null)
+            {
+                return NotFound();
+            }
+
+
+            return lStock;
+        }
 
         private bool RegistroExists(decimal? registro)
         {
