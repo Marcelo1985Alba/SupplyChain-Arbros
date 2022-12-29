@@ -2,73 +2,62 @@
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Calendars
 @using Syncfusion.Blazor.DropDowns
-<!--
 @using Syncfusion.Blazor.HeatMap
--->
+@using SFHeatMap = Syncfusion.Blazor.HeatMap
 @inherits GraphicIso
 
 <SfToast ID="toast_default" @ref="ToastObj">
     <ToastPosition X="Center" Y="Top"></ToastPosition>
 </SfToast>
 
-<!--
-<SfHeatMap DataSource="@HeatMapData">
-	<HeatMapTitleSettings Text="Sales Revenue per Employee (in 1000 US$)"></HeatMapTitleSettings>
-	<HeatMapCellSettings ShowLabel="true" TileType="CellType.Rect"></HeatMapCellSettings>
-</SfHeatMap>
--->
+<SfDropDownList TItem="BaseOption" TValue="string" Placeholder="RIESGO" PopupHeight="auto" DataSource="@Impactos">
+	<DropDownListEvents TItem="BaseOption" TValue="string" ValueChange="ChangeImpAmb"></DropDownListEvents>
+	<DropDownListFieldSettings Text="Text" Value="Text"></DropDownListFieldSettings>
+</SfDropDownList>
 
-<!--
-<SfHeatMap DataSource="@DataSource" Theme="@theme">
+<SfHeatMap DataSource="@HeatMapColors">
 	<HeatMapEvents TooltipRendering="@TooltipRendering"></HeatMapEvents>
-	<HeatMapTitleSettings Text="Crude Oil Production of Non-OPEC Countries (in Million barrels per day)"></HeatMapTitleSettings>
+
+	<HeatMapTitleSettings Text="Matriz Impacto/Frecuencia para x"></HeatMapTitleSettings>
 	<HeatMapXAxis Labels="@XLabels" LabelRotation="45" LabelIntersectAction="@SFHeatMap.LabelIntersectAction.None">
 	</HeatMapXAxis>
 	<HeatMapYAxis Labels="@YLabels"></HeatMapYAxis>
+	<HeatMapCellSettings ShowLabel="true" TileType="CellType.Rect">
+		<HeatMapCellBorder Width="1" Radius="8" Color="White"></HeatMapCellBorder>
+	</HeatMapCellSettings>
+	<HeatMapCellTextStyle ></HeatMapCellTextStyle>
 	<HeatMapPaletteSettings>
 		<HeatMapPalettes>
-			<HeatMapPalette Value="0" Color="#C2E7EC"></HeatMapPalette>
-			<HeatMapPalette Value="0.6" Color="#AEDFE6"></HeatMapPalette>
-			<HeatMapPalette Value="0.75" Color="#9AD7E0"></HeatMapPalette>
-			<HeatMapPalette Value="1" Color="#86CFDA"></HeatMapPalette>
-			<HeatMapPalette Value="1.5" Color="#72C7D4"></HeatMapPalette>
-			<HeatMapPalette Value="2" Color="#5EBFCE"></HeatMapPalette>
-			<HeatMapPalette Value="2.5" Color="#4AB7C8"></HeatMapPalette>
-			<HeatMapPalette Value="3" Color="#36AFC2"></HeatMapPalette>
-			<HeatMapPalette Value="3.5" Color="#309DAE"></HeatMapPalette>
-			<HeatMapPalette Value="5" Color="#2B8C9B"></HeatMapPalette>
-			<HeatMapPalette Value="5.5" Color="#257A87"></HeatMapPalette>
-			<HeatMapPalette Value="6" Color="#206974"></HeatMapPalette>
-			<HeatMapPalette Value="8" Color="#1B5761"></HeatMapPalette>
-			<HeatMapPalette Value="9" Color="#15464D"></HeatMapPalette>
-			<HeatMapPalette Value="9.5" Color="#000000"></HeatMapPalette>
+			<HeatMapPalette Value="I1F1" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I1F2" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I1F3" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I1F4" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I1F5" Color="#fec001"></HeatMapPalette>
+
+			<HeatMapPalette Value="I2F1" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I2F2" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I2F3" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I2F4" Color="#fec001"></HeatMapPalette>
+			<HeatMapPalette Value="I2F5" Color="#fec001"></HeatMapPalette>
+
+			<HeatMapPalette Value="I3F1" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I3F2" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I3F3" Color="#fec001"></HeatMapPalette>
+			<HeatMapPalette Value="I3F4" Color="#fec001"></HeatMapPalette>
+			<HeatMapPalette Value="I3F5" Color="#ff0101"></HeatMapPalette>
+
+			<HeatMapPalette Value="I4F1" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I4F2" Color="#fec001"></HeatMapPalette>
+			<HeatMapPalette Value="I4F3" Color="#fec001"></HeatMapPalette>
+			<HeatMapPalette Value="I4F4" Color="#ff0101"></HeatMapPalette>
+			<HeatMapPalette Value="I4F5" Color="#ff0101"></HeatMapPalette>
+
+			<HeatMapPalette Value="I5F1" Color="#fec001"></HeatMapPalette>
+			<HeatMapPalette Value="I5F2" Color="#fec001"></HeatMapPalette>
+			<HeatMapPalette Value="I5F3" Color="#ff0101"></HeatMapPalette>
+			<HeatMapPalette Value="I5F4" Color="#ff0101"></HeatMapPalette>
+			<HeatMapPalette Value="I5F5" Color="#ff0101"></HeatMapPalette>
 		</HeatMapPalettes>
 	</HeatMapPaletteSettings>
-	<HeatMapCellSettings Format="{value}M">
-		<HeatMapCellBorder Width="0" Color="#98BABF"></HeatMapCellBorder>
-	</HeatMapCellSettings>
-	<HeatMapTooltipSettings Fill="#265259">
-		<HeatMapTooltipBorder Width="1"></HeatMapTooltipBorder>
-		<HeatMapFont Size="12px" Color="#FFFFFF"></HeatMapFont>
-	</HeatMapTooltipSettings>
-	<HeatMapLegendSettings Visible="false"></HeatMapLegendSettings>
+	<HeatMapLegendSettings Visible="false"></HeatMapLegendSettings>	
 </SfHeatMap>
--->
-
-
-@code {
-	/*
-		* protected Theme theme { get; set; }
-	protected string[] XLabels = new string[] { "Canada", "China", "Egypt", "Mexico", "Norway", "Russia", "UK", "USA" };
-	protected string[] YLabels = new string[] { "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010" };
-	protected double[,] DataSource = HeatMapData.GetTooltipData();
-	public void TooltipRendering(TooltipEventArgs args)
-		{
-		args.Content = new string[] { "In " + args.YLabel + ", the " + args.XLabel + " produced " + args.Value + " million barrels per day" };
-	}
-	protected override void OnInitialized()
-		{
-		theme = HeatmapThemeHelper.GetCurrentHeatmapTheme(NavigationManager.Uri);
-		}
-		*/
-}

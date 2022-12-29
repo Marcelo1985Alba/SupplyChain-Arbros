@@ -53,6 +53,7 @@
                 <GridColumn Field=@nameof(ISO.Gestion) HeaderText="Gestion" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                 <GridColumn Field=@nameof(ISO.Comentarios) HeaderText="Comentarios" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                 <GridColumn Field=@nameof(ISO.Medidas) HeaderText="Medidas" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.FechaCumplido) HeaderText="Fecha de cumplido" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
         </SfGrid>

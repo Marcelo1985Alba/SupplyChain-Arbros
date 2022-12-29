@@ -141,6 +141,7 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
                     mantCeldaSeleccionada.Operador = selectedRecord.Operador;
                     mantCeldaSeleccionada.Proveedor = selectedRecord.Proveedor;
                     mantCeldaSeleccionada.Estado = selectedRecord.Estado;
+                    mantCeldaSeleccionada.FechaCumplido = selectedRecord.FechaCumplido;
                     popupFormVisible = true;
                 }
             }
@@ -240,6 +241,7 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
                     mantCeldaSinModificar.Operador = mantCelda.Operador;
                     mantCeldaSinModificar.Proveedor = mantCelda.Proveedor;
                     mantCeldaSinModificar.Estado = mantCelda.Estado;
+                    mantCeldaSinModificar.FechaCumplido = mantCelda.FechaCumplido;
                     mantCeldas.OrderByDescending(p => p.Id);
                 }
                 await refGrid.RefreshHeaderAsync();

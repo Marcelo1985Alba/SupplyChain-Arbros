@@ -12,7 +12,6 @@ namespace SupplyChain
         public new int Id { get; set; }
         public string Cg_Celda { get; set; } = "";
         public string Des_Celda { get; set; } = "";
-
         public DateTime? Fecha { get; set; }
         public string Mantenimiento { get; set; } = "";
         public string Tarea { get; set; } = "";
@@ -24,7 +23,8 @@ namespace SupplyChain
         public string Operador { get; set; } = "";
         public string Proveedor { get; set; } = "";
         public string Estado { get; set; } = "";
-        [NotMapped]
+        public DateTime FechaCumplido { get; set; }
+		[NotMapped]
         public bool GUARDADO { get; set; }
         [NotMapped]
         public bool ESNUEVO { get; set; }

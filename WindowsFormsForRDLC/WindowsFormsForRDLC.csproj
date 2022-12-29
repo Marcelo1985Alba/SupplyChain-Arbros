@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Syncfusion.Blazor.Themes.20.3.0.61\build\Syncfusion.Blazor.Themes.props" Condition="Exists('..\packages\Syncfusion.Blazor.Themes.20.3.0.61\build\Syncfusion.Blazor.Themes.props')" />
+  <Import Project="..\packages\Syncfusion.Blazor.Themes.20.1.0.61\build\Syncfusion.Blazor.Themes.props" Condition="Exists('..\packages\Syncfusion.Blazor.Themes.20.1.0.61\build\Syncfusion.Blazor.Themes.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -104,6 +104,6 @@
     <PropertyGroup>
       <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Syncfusion.Blazor.Themes.20.3.0.61\build\Syncfusion.Blazor.Themes.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Syncfusion.Blazor.Themes.20.3.0.61\build\Syncfusion.Blazor.Themes.props'))" />
+    <Error Condition="!Exists('..\packages\Syncfusion.Blazor.Themes.20.1.0.61\build\Syncfusion.Blazor.Themes.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Syncfusion.Blazor.Themes.20.1.0.61\build\Syncfusion.Blazor.Themes.props'))" />
   </Target>
 </Project>

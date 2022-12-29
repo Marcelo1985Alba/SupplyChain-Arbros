@@ -170,12 +170,16 @@
 
                         <div>
                             <div class="form-row">
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-md-6">
                                     <a>Gestion:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(isos.Gestion)" DataSource="@GestionData">
                                         <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
                                     </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Fecha de cumplido:</label>
+                                    <SfDatePicker ID="Fecha de cumplido" @bind-Value="@(isos.FechaCumplido)" ShowTodayButton="true" Format='dd/MM/yyyy'></SfDatePicker>
                                 </div>
                             </div>
                         </div>
