@@ -28,12 +28,13 @@
             </GridEditSettings>
             <GridColumns>
                 @*<GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>*@
-                <GridColumn Field=@nameof(vSolicitudes.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(vSolicitudes.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="90px"></GridColumn>
+                <GridColumn Field=@nameof(vSolicitudes.Fecha) HeaderText="Fecha" TextAlign="TextAlign.Left" Width="100px" Format="dd/MM/yyyy"></GridColumn>
                 <GridColumn Field=@nameof(vSolicitudes.Producto) HeaderText="Producto" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                 <GridColumn Field=@nameof(vSolicitudes.Descripcion) HeaderText="Descripcion Producto" TextAlign="TextAlign.Left" Width="280px"></GridColumn>
                 <GridColumn Field=@nameof(vSolicitudes.Cantidad) HeaderText="Cantidad" Format="N0" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(vSolicitudes.CG_CLI) HeaderText="Cod. Cliente" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(vSolicitudes.DES_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                <GridColumn Field=@nameof(vSolicitudes.DES_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                 <GridColumn Field=@nameof(vSolicitudes.Cuit) HeaderText="Cuit" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
                 <GridColumn Field=@nameof(vSolicitudes.CalcId) HeaderText="CalculoId" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(vSolicitudes.NumeroPlano) TextAlign="TextAlign.Left" Width="100px"></GridColumn>
