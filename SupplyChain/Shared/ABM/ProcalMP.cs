@@ -28,12 +28,13 @@ namespace SupplyChain
         public string CARCAL2 { get; set; } = "";
         public string OBSERV2 { get; set; } = "";
         public int PRIORIDAD { get; set; } = 0;
-
+        public string AVISO { get; set; } = "";
         [NotMapped] public bool GUARDADO { get; set; }
         [NotMapped] public bool ESNUEVO { get; set; }
-       
 
-     
+        [ValidateComplexType]
+        public virtual List<CargaValoresDetalles> Items { get; set; } = new();
+
     }
 
 }

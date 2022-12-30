@@ -14,7 +14,7 @@ namespace SupplyChain.Shared
     {
         [Key, Column("REGISTRO")]
         new public int Id { get; set; }
-        public string CERTIFIC { get; set; } = "";
+        public string DESPACHO { get; set; } = "";
         public DateTime FE_ENSAYO { get; set; } = DateTime.Now;
         public string CG_PROD { get; set; } = "";
         public string DESCAL { get; set; } = "";
@@ -41,4 +41,4 @@ namespace SupplyChain.Shared
         [NotMapped] public bool ESNUEVO { get; set; }
         [NotMapped] public EstadoItem Estado { get; set; }
     }
-}
+}                   

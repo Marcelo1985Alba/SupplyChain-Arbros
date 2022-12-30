@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SupplyChain
 {
     [Table("Procesos2")]
-    public class Valores : EntityBase<int>
+    public class Procesos : EntityBase<int>
     {
         [Key, Column("REGISTRO")]
         new public int Id { get; set; }
@@ -38,6 +38,6 @@ namespace SupplyChain
          public int REGISTRO { get; set; } = 0;
         [NotMapped] public bool GUARDADO { get; set; }
         [NotMapped] public bool ESNUEVO { get; set; }
-        public string CG_ART { get; set; }
+        //public string CG_ART { get; set; }
     }   
 }

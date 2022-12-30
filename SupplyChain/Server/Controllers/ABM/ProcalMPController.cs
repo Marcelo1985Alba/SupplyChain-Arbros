@@ -141,6 +141,19 @@ namespace SupplyChain.Server.Controllers.ABM
             return Ok();
         }
 
+        //GET:
+        [HttpGet("GetProcalsMP")]
+        public async Task<ActionResult<IEnumerable<ProcalsMP>>> GetProcalsMP()
+        {
+            List<ProcalsMP> lStock = await _procalMPRepository
+                 .Obtener(v => v.DESCAL && v.CARCAL && v.UNIDADM && v.AVISO)
+                 .ToListAsync();
+            if (lStock == null)
+            {
+                return NotFound();
+            }
+            return lStock;
+        }
     }
 }
        

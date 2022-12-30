@@ -360,6 +360,19 @@ namespace SupplyChain.Server.Controllers
             return lStock;
         }
 
+        ////GET:
+        //[HttpGet("GetProcalsMP")]
+        //public async Task<ActionResult<IEnumerable<ProcalsMP>>> GetProcalsMP()
+        //{
+        //    List<ProcalsMP> lStock = await _pedidosRepository
+        //         .Obtener(v => v.TIPOO == 5 && v.VOUCHER == 0 && v.CG_DEP == 3)
+        //         .ToListAsync() ;
+        //    if (lStock == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return lStock;
+        //}
         private bool RegistroExists(decimal? registro)
         {
             return _context.Pedidos.Any(e => e.Id == registro);

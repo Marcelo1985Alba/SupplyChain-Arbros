@@ -87,7 +87,7 @@ namespace SupplyChain
         [ColumnaGridViewAtributo(Name = "Observaciones")]
         public string OBSERVACIONES { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Especificaciones")]
-        public string OBSERITEM { get; set; } = "";
+        public string OBSERITEM { get; set; } =  "";
         [ColumnaGridViewAtributo(Name = "Observaciones")]
         public string OBS1 { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Observaciones")]

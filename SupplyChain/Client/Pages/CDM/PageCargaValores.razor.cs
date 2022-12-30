@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.JSInterop;
+using SupplyChain;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
 using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Kanban.Internal;
 using Syncfusion.Blazor.LinearGauge.Internal;
 using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
@@ -36,13 +38,13 @@ namespace SupplyChain.Client.Pages.CDM
         };
 
         //protected List<Valores> valor = new();
-        protected List<Pedidos> valor = new();
+        protected List<Procesos> valor = new();
         protected SfToast ToastObj;
         protected SfSpinner refSpinner;
         //protected SfGrid<Valores> refGrid;
-        protected SfGrid<Pedidos> refGrid;
+        protected SfGrid<Procesos> refGrid;
         //protected Valores valoresSeleccionada = new();
-        protected Pedidos valoresSeleccionada = new();
+        protected Procesos valoresSeleccionada = new();
         protected bool SpinnerVisible = false;
         protected bool popupFormVisible = false;
 
@@ -53,14 +55,14 @@ namespace SupplyChain.Client.Pages.CDM
 
             SpinnerVisible = true;
             //CAMBIAR A INVENTARIOSERVICE
-            var response = await InventarioService.Get();
-            if (!response.Error)
-            {
-                valor = response.Response;
-            }
+            valor = await InventarioService.GetPendienteAprobacion();
+            //if (!response.Error)
+            //{
+            //    pedidos = response.Response;
+            //}
             SpinnerVisible = false;
         }
-
+        
         protected async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
         {
             await refGrid.SetPersistDataAsync(vistasGrillas.Layout);
@@ -86,24 +88,24 @@ namespace SupplyChain.Client.Pages.CDM
                         "Seguro que deseaa eliminar la linea?");
                     if (isConfirmed)
                     {
-                        List<Pedidos> valoresABorrar = await refGrid.GetSelectedRecordsAsync();
-                        var response = InventarioService.Eliminar(valoresABorrar);
-                        if (!response.IsCompletedSuccessfully)
-                        {
-                            await this.ToastObj.Show(new ToastModel
-                            {
-                                Title = "EXITO!",
-                                Content = "los procesos seleccionados fueron eliminados correctamente.",
-                                CssClass = "e-toast-success",
-                                Icon = "e-success toast-icons",
-                                ShowCloseButton = true,
-                                ShowProgressBar = true,
-                            });
-                        }
-                        else
-                        {
-                            await ToastMensajeError();
-                        }
+                        List<Procesos> valoresABorrar = await refGrid.GetSelectedRecordsAsync();
+                        //var response = InventarioService.Eliminar(valoresABorrar);
+                        //if (!response.IsCompletedSuccessfully)
+                        //{
+                        //    await this.ToastObj.Show(new ToastModel
+                        //    {
+                        //        Title = "EXITO!",
+                        //        Content = "los procesos seleccionados fueron eliminados correctamente.",
+                        //        CssClass = "e-toast-success",
+                        //        Icon = "e-success toast-icons",
+                        //        ShowCloseButton = true,
+                        //        ShowProgressBar = true,
+                        //    });
+                        //}
+                        //else
+                        //{
+                        //    await ToastMensajeError();
+                        //}
                     }
                 }
             }
@@ -118,7 +120,7 @@ namespace SupplyChain.Client.Pages.CDM
             if (refGrid.SelectedRecords.Count == 1)
             {
                 valoresSeleccionada = new();
-                Valores selectedRecord = refGrid.SelectedRecords[0];
+                Procesos selectedRecord = refGrid.SelectedRecords[0];
                 bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desea copiar la materia?");
                 if (isConfirmed)
                 {
@@ -126,18 +128,20 @@ namespace SupplyChain.Client.Pages.CDM
                     valoresSeleccionada.FE_REG = selectedRecord.FE_REG;
                     valoresSeleccionada.CANTMEDIDA = selectedRecord.CANTMEDIDA;
                     valoresSeleccionada.DESPACHO = selectedRecord.DESPACHO;
-                    valoresSeleccionada.CG_ART = selectedRecord.CG_ART;
-                    //Procalmp//valoresSeleccionada.DESCAL = selectedRecord.DESCAL;
-                    //Procalmp// valoresSeleccionada.UNIDADM = selectedRecord.UNIDADM;
+                    valoresSeleccionada.CG_PROD = selectedRecord.CG_PROD;
+                    //ProcalMP
+                    valoresSeleccionada.DESCAL = selectedRecord.DESCAL;
+                    //Procalmp
+                    valoresSeleccionada.UNIDADM = selectedRecord.UNIDADM;
                     valoresSeleccionada.CANTMEDIDA = selectedRecord.CANTMEDIDA;
                     valoresSeleccionada.OBSERV = selectedRecord.OBSERV;
-                    //Procalmp//valoresSeleccionada.AVISO = selectedRecord.AVISO;
-                    valoresSeleccionada.OBSERV1 = selectedRecord.OBSERV1;
+                    //Procalm
+                    valoresSeleccionada.AVISO = selectedRecord.AVISO;
                     valoresSeleccionada.CG_PROVE = selectedRecord.CG_PROVE;
                     valoresSeleccionada.REMITO = selectedRecord.REMITO;
                     valoresSeleccionada.VALORNC = selectedRecord.VALORNC;
                     valoresSeleccionada.LEYENDANC = selectedRecord.LEYENDANC;
-                    valoresSeleccionada.OCOMPRA = selectedRecord.O_COMPRA;
+                    valoresSeleccionada.O_COMPRA = selectedRecord.O_COMPRA;
                     valoresSeleccionada.UNID = selectedRecord.UNID;
                     valoresSeleccionada.EVENTO = selectedRecord.EVENTO;
                     valoresSeleccionada.ENSAYOS = selectedRecord.ENSAYOS;
@@ -145,9 +149,11 @@ namespace SupplyChain.Client.Pages.CDM
                     valoresSeleccionada.APROBADO = selectedRecord.APROBADO;
                     valoresSeleccionada.USUARIO = selectedRecord.USUARIO;
                     valoresSeleccionada.REGISTRO = selectedRecord.REGISTRO;
+                    valoresSeleccionada.ESNUEVO = true;
 
-                    popupFormVisible = true;
+                    
                 }
+                popupFormVisible = true;
             }
             else
             {
@@ -163,8 +169,9 @@ namespace SupplyChain.Client.Pages.CDM
                 });
             }
         }
+        
 
-        protected async Task OnActionBeginHandler(ActionEventArgs<Pedidos> args)
+        protected async Task OnActionBeginHandler(ActionEventArgs<Procesos> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
@@ -173,12 +180,12 @@ namespace SupplyChain.Client.Pages.CDM
                 args.PreventRender = false;
                 popupFormVisible = true;
                 valoresSeleccionada = new();
-                valoresSeleccionada.ESNUEVO = true;
+                //valoresSeleccionada.ESNUEVO = true;
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
                 valoresSeleccionada = args.Data;
-                valoresSeleccionada.ESNUEVO = false;
+                //valoresSeleccionada.ESNUEVO = false;
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
@@ -201,7 +208,7 @@ namespace SupplyChain.Client.Pages.CDM
             }
         }
 
-        protected async Task OnActionCompleteHandler(ActionEventArgs<Pedidos> args)
+        protected async Task OnActionCompleteHandler(ActionEventArgs<Procesos> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
@@ -216,54 +223,124 @@ namespace SupplyChain.Client.Pages.CDM
             popupFormVisible = false;
         }
 
-        protected async Task Guardar(Pedidos valorg)
+        protected async Task Guardar(Procesos valorg)
         {
-            if (valorg.GUARDADO)
-            {
-                await ToastMensajeExito();
-                popupFormVisible = false;
-                if (valorg.ESNUEVO)
-                {
-                    valor.Add(valorg);
-                }
-                else
-                {
-                    //actualiza los datos sin ir a BD
-                    var valoresSinModificar = valor.Where(v => v.Id == valorg.Id).FirstOrDefault();
-                    valoresSinModificar.Id = valorg.Id;
-                    valoresSinModificar.FE_ENSAYO = valorg.FE_ENSAYO;
-                    valoresSinModificar.CANTMEDIDA = valorg.CANTMEDIDA;
-                    valoresSinModificar.DESPACHO = valorg.DESPACHO;
-                    valoresSinModificar.CG_ART = valorg.CG_ART;
-                    valoresSinModificar.DESCAL = valorg.DESCAL;
-                    valoresSinModificar.UNIDADM = valorg.UNIDADM;
-                    valoresSinModificar.CANTMEDIDA = valorg.CANTMEDIDA;
-                    valoresSinModificar.OBSERV = valorg.OBSERV;
-                    valoresSinModificar.AVISO = valorg.AVISO;
-                    valoresSinModificar.OBSERV1 = valorg.OBSERV1;
-                    valoresSinModificar.CG_PROVE = valorg.CG_PROVE;
-                    valoresSinModificar.REMITO = valorg.REMITO;
-                    valoresSinModificar.VALORNC = valorg.VALORNC;
-                    valoresSinModificar.LEYENDANC = valorg.LEYENDANC;
-                    valoresSinModificar.O_COMPRA = valorg.O_COMPRA;
-                    valoresSinModificar.UNID = valorg.UNID;
-                    valoresSinModificar.EVENTO = valorg.EVENTO;
-                    valoresSinModificar.ENSAYOS = valorg.ENSAYOS;
-                    valoresSinModificar.FECHA = valorg.FECHA;
-                    valoresSinModificar.APROBADO = valorg.APROBADO;
-                    valoresSinModificar.USUARIO = valorg.USUARIO;
-                    valoresSinModificar.REGISTRO = valorg.REGISTRO;
+            //if (valorg.GUARDADO)
+            //{
+            //    await ToastMensajeExito();
+            //    popupFormVisible = false;
+            //    if (valorg.ESNUEVO)
+            //    {
+            //        valor.Add(valorg);
+            //    }
+            //    else
+            //    {
+            //        //actualiza los datos sin ir a BD
+            //        var valoresSinModificar = valor.Where(v => v.Id == valorg.Id).FirstOrDefault();
+            ////valoresSinModificar.Id = valorg.Id;
+            ////valoresSinModificar.FE_ENSAYO = valorg.FE_ENSAYO;
+            ////valoresSinModificar.CANTMEDIDA = valorg.CANTMEDIDA;
+            ////valoresSinModificar.DESPACHO = valorg.DESPACHO;
+            ////valoresSinModificar.CG_ART = valorg.CG_ART;
+            ////valoresSinModificar.DESCAL = valorg.DESCAL;
+            ////valoresSinModificar.UNIDADM = valorg.UNIDADM;
+            ////valoresSinModificar.CANTMEDIDA = valorg.CANTMEDIDA;
+            ////valoresSinModificar.OBSERV = valorg.OBSERV;
+            ////valoresSinModificar.AVISO = valorg.AVISO;
+            ////valoresSinModificar.OBSERV1 = valorg.OBSERV1;
+            ////valoresSinModificar.CG_PROVE = valorg.CG_PROVE;
+            ////valoresSinModificar.REMITO = valorg.REMITO;
+            ////valoresSinModificar.VALORNC = valorg.VALORNC;
+            ////valoresSinModificar.LEYENDANC = valorg.LEYENDANC;
+            ////valoresSinModificar.O_COMPRA = valorg.O_COMPRA;
+            ////valoresSinModificar.UNID = valorg.UNID;
+            ////valoresSinModificar.EVENTO = valorg.EVENTO;
+            ////valoresSinModificar.ENSAYOS = valorg.ENSAYOS;
+            ////valoresSinModificar.FECHA = valorg.FECHA;
+            ////valoresSinModificar.APROBADO = valorg.APROBADO;
+            ////valoresSinModificar.USUARIO = valorg.USUARIO;
+            ////valoresSinModificar.REGISTRO = valorg.REGISTRO;
 
-                    valor.OrderByDescending(v => v.Id);
-                }
-                await refGrid.RefreshHeaderAsync();
-                refGrid.Refresh();
-                await refGrid.RefreshColumnsAsync();
-            }
-            else
-            {
-                await ToastMensajeError();
-            }
+
+
+            //valoresSinModificar.VALE = valorg.VALE;
+            //valoresSinModificar.FE_MOV = valorg.FE_MOV;
+            //valoresSinModificar.VOUCHER = valorg.VOUCHER;
+            //valoresSinModificar.COMPROB = valorg.COMPROB;
+            //valoresSinModificar.FACTURA = valorg.FACTURA;
+            //valoresSinModificar.LEYENDA = valorg.LEYENDA;
+            //valoresSinModificar.REMITO = valorg.REMITO;
+            //valoresSinModificar.TIPO = valorg.TIPO;
+            //valoresSinModificar.PEDIDO = valorg.PEDIDO;
+            //valoresSinModificar.NUMOCI = valorg.NUMOCI;
+            //valoresSinModificar.OCOMPRA = valorg.OCOMPRA;
+            //valoresSinModificar.CG_ORDF = valorg.CG_ORDF;
+            //valoresSinModificar.OBSERVACIONES = valorg.OBSERVACIONES;
+            //valoresSinModificar.OBSERITEM = valorg.OBSERITEM;
+            //valoresSinModificar.OBS1 = valorg.OBS1;
+            //valoresSinModificar.OBS2 = valorg.OBS2;
+            //valoresSinModificar.OBS3 = valorg.OBS3;
+            //valoresSinModificar.OBS4 = valorg.OBS4;
+            //valoresSinModificar.AVISO = valorg.AVISO;
+            //valoresSinModificar.DIRENT = valorg.DIRENT;
+            //valoresSinModificar.CG_ORDEN = valorg.CG_ORDEN;
+            //valoresSinModificar.CG_ART = valorg.CG_ART;
+            //valoresSinModificar.DES_ART = valorg.DES_ART;
+            //valoresSinModificar.TIPO = valorg.TIPO;
+            //valoresSinModificar.LOTE = valorg.LOTE;
+            //valoresSinModificar.SERIE = valorg.SERIE;
+            //valoresSinModificar.DESPACHO = valorg.DESPACHO;
+            //valoresSinModificar.UBICACION = valorg.UBICACION;
+            //valoresSinModificar.CG_DEP = valorg.CG_DEP;
+            //valoresSinModificar.CANTENT = valorg.CANTENT;
+            //valoresSinModificar.STOCK = valorg.STOCK;
+            //valoresSinModificar.UNID = valorg.UNID;
+            //valoresSinModificar.CG_DEN = valorg.CG_DEN;
+            //valoresSinModificar.STOCKA = valorg.STOCKA;
+            //valoresSinModificar.UNIDA = valorg.UNIDA;
+            //valoresSinModificar.CANTENTA = valorg.CANTENTA;
+            //valoresSinModificar.ENTRREAL = valorg.ENTRREAL;
+            //valoresSinModificar.MONEDA = valorg.MONEDA;
+            //valoresSinModificar.IMPORTE1 = valorg.IMPORTE1;
+            //valoresSinModificar.IMPORTE2 = valorg.IMPORTE2;
+            //valoresSinModificar.IMPORTE3 = valorg.IMPORTE3;
+            //valoresSinModificar.IMPORTE4 = valorg.IMPORTE4;
+            //valoresSinModificar.IMPORTE6 = valorg.IMPORTE6;
+            //valoresSinModificar.DESCUENTO = valorg.DESCUENTO;
+            //valoresSinModificar.BONIFIC = valorg.BONIFIC;
+            //valoresSinModificar.IVA = valorg.IVA;
+            //valoresSinModificar.VA_INDIC = valorg.VA_INDIC;
+            //valoresSinModificar.CG_CUENT = valorg.CG_CUENT;
+            //valoresSinModificar.CUIT = valorg.CUIT;
+            //valoresSinModificar.CG_PROVE = valorg.CG_PROVE;
+            //valoresSinModificar.CG_CLI = valorg.CG_CLI;
+            //valoresSinModificar.DIRECC = valorg.DIRECC;
+            //valoresSinModificar.LOCALIDAD = valorg.LOCALIDAD;
+            //valoresSinModificar.CG_POSTA = valorg.CG_POSTA;
+            //valoresSinModificar.CANTPED = valorg.CANTPED;
+            //valoresSinModificar.USUARIO = valorg.USUARIO;
+            //valoresSinModificar.FE_REG = valorg.FE_REG;
+            //valoresSinModificar.CG_CIA = valorg.CG_CIA;
+            //valoresSinModificar.CG_COND_ENTREGA = valorg.CG_COND_ENTREGA;
+            //valoresSinModificar.CG_CONDICION_PAGO = valorg.CG_CONDICION_PAGO;
+            //valoresSinModificar.CG_TRANS = valorg.CG_TRANS;
+            //valoresSinModificar.Control1 = valorg.Control1;
+            //valoresSinModificar.Control2 = valorg.Control2;
+            //valoresSinModificar.Control3 = valorg.Control3;
+            //valoresSinModificar.Control4 = valorg.Control4;
+            //valoresSinModificar.Control5 = valorg.Control5;
+            //valoresSinModificar.Control6 = valorg.Control6;
+
+            //valor.OrderByDescending(v => v.Id);
+            //    }
+            //    await refGrid.RefreshHeaderAsync();
+            //    refGrid.Refresh();
+            //    await refGrid.RefreshColumnsAsync();
+            //}
+            //else
+            //{
+            //    await ToastMensajeError();
+            //}
         }
 
         private async Task ToastMensajeExito()
