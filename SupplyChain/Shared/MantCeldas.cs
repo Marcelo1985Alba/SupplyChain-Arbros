@@ -23,7 +23,7 @@ namespace SupplyChain
         public string Operador { get; set; } = "";
         public string Proveedor { get; set; } = "";
         public string Estado { get; set; } = "";
-        public DateTime FechaCumplido { get; set; }
+        public DateTime? FechaCumplido { get; set; }
 		[NotMapped]
         public bool GUARDADO { get; set; }
         [NotMapped]
