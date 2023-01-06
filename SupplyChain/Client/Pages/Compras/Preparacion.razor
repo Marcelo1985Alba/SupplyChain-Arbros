@@ -38,6 +38,9 @@
                             <GridColumns>
                                 <GridColumn Field=@nameof(Producto.Id) HeaderText="Producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                                 <GridColumn Field=@nameof(Producto.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Producto.ESPECIF) HeaderText="Especificación" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Producto.UNIDSEG) HeaderText="Unidad Secundario" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Producto.CG_DENSEG) HeaderText="Conversion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                             </GridColumns>
                         </SfGrid>
                         @{
@@ -112,9 +115,20 @@
                 <div class="form-group col-lg-2 my-1">
                     <SfNumericTextBox Placeholder="Precio" @bind-Value="xPrecio" Enabled="enableprecio" FloatLabelType="@FloatLabelType.Auto"></SfNumericTextBox>
                 </div>
+                <!--
                 <div class="form-group col-lg-2 my-1">
                     <SfTextBox Placeholder="Moneda" @bind-Value="xMoneda" Enabled="false" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
                 </div>
+                -->
+                <div class="form-group col-lg-2 my-1">
+                    <SfDropDownList TValue="string" TItem="Moneda" @bind-Value="@xMoneda"
+                                    Placeholder="Moneda" FloatLabelType="@FloatLabelType.Auto">
+                        <SfDataManager Url="api/Monedas" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"
+                                       CrossDomain=false></SfDataManager>
+                        <DropDownListFieldSettings Text="MONEDA" Value="MONEDA"></DropDownListFieldSettings>
+                    </SfDropDownList>
+                </div>
+
                 <div class="form-group col-lg-2 my-1">
                     <SfNumericTextBox Placeholder="Descuento %" @bind-Value="xDescuento" Enabled="enableprecio" FloatLabelType="@FloatLabelType.Auto"></SfNumericTextBox>
                 </div>

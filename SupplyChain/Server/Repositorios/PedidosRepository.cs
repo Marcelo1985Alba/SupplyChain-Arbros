@@ -124,7 +124,7 @@ namespace SupplyChain.Server.Repositorios
                         DIRENT = cabacera.DIRENT,
                         VA_INDIC = cabacera.VA_INDIC,
                         ORCO = cabacera.ORCO,
-                        VOUCHER = 0,
+                        VOUCHER = 0
                     };
                     var id = 0;
                     foreach (var item in pedidos)

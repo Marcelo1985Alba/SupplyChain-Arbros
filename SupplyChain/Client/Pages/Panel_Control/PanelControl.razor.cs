@@ -1113,7 +1113,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
             .Select(d => new ChartData()
             {
                 XSerieName = d.MES.ToString(),
-                YSerieName = Math.Abs((d.FECHA_PREVISTA.HasValue ? d.FECHA_PREVISTA.Value - d.FECHA_DATE : DateTime.Now - d.FECHA_DATE).TotalDays)
+                YSerieName = (d.FECHA_PREVISTA.HasValue ? d.FECHA_PREVISTA.Value - d.FECHA_DATE : DateTime.Now - d.FECHA_DATE).TotalDays
             })
             .GroupBy(g => new { g.XSerieName })
             .Select(d => new ChartData()
@@ -1123,6 +1123,8 @@ namespace SupplyChain.Client.Pages.Panel_Control
             })
             .ToList();
 
+
+            //vuelvo a calcular el promedio pero con valores absolutos
 
             PromedioPedidosAltaDiasAtrasoMensual = Convert.ToInt32(PedidosAltasMensualDiasAtraso.Average(d => d.YSerieName));
 

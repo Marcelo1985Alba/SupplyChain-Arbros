@@ -2,7 +2,7 @@
 // Caution! Be sure you understand the caveats before publishing an application with
 // offline support. See https://aka.ms/blazor-offline-considerations
 
-var cacheNameVersion = 'scPWA-v0.66.0.0';
+var cacheNameVersion = 'scPWA-v0.66.3.2';
 
 self.importScripts('./service-worker-assets.js');
 self.addEventListener('install', event => event.waitUntil(onInstall(event)));

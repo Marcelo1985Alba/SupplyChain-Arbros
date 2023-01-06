@@ -1,5 +1,4 @@
-﻿@page "/prueba/proyectos"
-@using Newtonsoft.Json
+﻿@using Newtonsoft.Json
 @using Syncfusion.Blazor.Gantt
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Data
@@ -21,6 +20,21 @@
 
         return dm.RequiresCounts ? new DataResult() { Result = data, Count = data.Count() } : (object)data;
     }
+
+    /*
+    public override object InsertAsync(DataManager dm, object value, string key)
+    {
+
+        List<GanttDataDetails> addRecord = addedRecords as List<GanttDataDetails>;
+        if (addRecord != null)
+        {
+            for (var i = 0; i < addRecord.Count(); i++)
+            {
+                await http.PostAsJsonAsync( "/api/GanttDataDetails", addRecord[i] as GanttDataDetails);
+            }
+        }
+    }
+    */
 
     // Performs CRUD operation
     public override async Task<object> BatchUpdateAsync(DataManager dm, object changedRecords, object addedRecords, object deletedRecords, string keyField, string key, int? dropIndex)

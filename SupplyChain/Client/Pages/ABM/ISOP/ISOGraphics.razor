@@ -1,0 +1,63 @@
+﻿@page "/Abms/ISO/Graphics"
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.HeatMap
+@using SFHeatMap = Syncfusion.Blazor.HeatMap
+@inherits GraphicIso
+
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+
+<SfDropDownList TItem="BaseOption" TValue="string" Placeholder="RIESGO" PopupHeight="auto" DataSource="@Impactos">
+	<DropDownListEvents TItem="BaseOption" TValue="string" ValueChange="ChangeImpAmb"></DropDownListEvents>
+	<DropDownListFieldSettings Text="Text" Value="Text"></DropDownListFieldSettings>
+</SfDropDownList>
+
+<SfHeatMap DataSource="@HeatMapColors">
+	<HeatMapEvents TooltipRendering="@TooltipRendering"></HeatMapEvents>
+
+	<HeatMapTitleSettings Text="Matriz Impacto/Frecuencia para x"></HeatMapTitleSettings>
+	<HeatMapXAxis Labels="@XLabels" LabelRotation="45" LabelIntersectAction="@SFHeatMap.LabelIntersectAction.None">
+	</HeatMapXAxis>
+	<HeatMapYAxis Labels="@YLabels"></HeatMapYAxis>
+	<HeatMapCellSettings ShowLabel="true" TileType="CellType.Rect">
+		<HeatMapCellBorder Width="1" Radius="8" Color="White"></HeatMapCellBorder>
+	</HeatMapCellSettings>
+	<HeatMapCellTextStyle ></HeatMapCellTextStyle>
+	<HeatMapPaletteSettings>
+		<HeatMapPalettes>
+			<HeatMapPalette Value="I1F1" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I1F2" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I1F3" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I1F4" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I1F5" Color="#fec001"></HeatMapPalette>
+
+			<HeatMapPalette Value="I2F1" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I2F2" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I2F3" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I2F4" Color="#fec001"></HeatMapPalette>
+			<HeatMapPalette Value="I2F5" Color="#fec001"></HeatMapPalette>
+
+			<HeatMapPalette Value="I3F1" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I3F2" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I3F3" Color="#fec001"></HeatMapPalette>
+			<HeatMapPalette Value="I3F4" Color="#fec001"></HeatMapPalette>
+			<HeatMapPalette Value="I3F5" Color="#ff0101"></HeatMapPalette>
+
+			<HeatMapPalette Value="I4F1" Color="#c5f1d1"></HeatMapPalette>
+			<HeatMapPalette Value="I4F2" Color="#fec001"></HeatMapPalette>
+			<HeatMapPalette Value="I4F3" Color="#fec001"></HeatMapPalette>
+			<HeatMapPalette Value="I4F4" Color="#ff0101"></HeatMapPalette>
+			<HeatMapPalette Value="I4F5" Color="#ff0101"></HeatMapPalette>
+
+			<HeatMapPalette Value="I5F1" Color="#fec001"></HeatMapPalette>
+			<HeatMapPalette Value="I5F2" Color="#fec001"></HeatMapPalette>
+			<HeatMapPalette Value="I5F3" Color="#ff0101"></HeatMapPalette>
+			<HeatMapPalette Value="I5F4" Color="#ff0101"></HeatMapPalette>
+			<HeatMapPalette Value="I5F5" Color="#ff0101"></HeatMapPalette>
+		</HeatMapPalettes>
+	</HeatMapPaletteSettings>
+	<HeatMapLegendSettings Visible="false"></HeatMapLegendSettings>	
+</SfHeatMap>
