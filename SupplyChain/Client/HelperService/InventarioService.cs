@@ -1,4 +1,5 @@
-﻿using Syncfusion.XlsIO.Implementation;
+﻿using SupplyChain.Shared;
+using Syncfusion.XlsIO.Implementation;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -32,13 +33,17 @@ namespace SupplyChain.Client.HelperService
             return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/ByNumeroVale/{vale}");
         }
 
-        public async Task<List<Procesos>> GetPendienteAprobacion()
+        public async Task<List<Pedidos>> GetPendienteAprobacion()
         {
-            return await Http.GetFromJsonAsync<List<Procesos>>($"api/Stock/GetPendienteAprobacion/");
+            return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/GetPendienteAprobacion/");
         }
-        public async Task<List<ProcalsMP>> GetProcalsMP()
+        //public async Task<List<Procesos>> GetProcesos()
+        //{
+        //    return await Http.GetFromJsonAsync<List<Procesos>>($"api/Stock/GetProcesos/");
+        //}
+        public async Task<List<vControlCalidadPendientes>> GetControlCalidadPendientes()
         {
-            return await Http.GetFromJsonAsync<List<ProcalsMP>>($"api/Stock/GetProcalsMP/");
+            return await Http.GetFromJsonAsync<List<vControlCalidadPendientes>>($"api/Stock/GetControlCalidadPendientes/");
         }
 
         //public async Task<List<Pedidos>> GetPendienteAprobacionNuevo()

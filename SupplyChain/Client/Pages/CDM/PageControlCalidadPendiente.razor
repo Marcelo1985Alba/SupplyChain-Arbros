@@ -7,7 +7,7 @@
 @using SupplyChain
 @using Syncfusion.Blazor.Calendars
 @using SupplyChain.Client.Shared
-@inherits PageValoresBase
+@inherits PageControlCalidadPendientesBase
 
 <div class="row">
     <div class="col-12">
@@ -30,7 +30,7 @@
             <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolHandler"
-                        OnActionComplete="OnActionCompleteHandler" TValue="Procesos"></GridEvents>
+                        OnActionComplete="OnActionCompleteHandler" TValue="Pedidos"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings> 
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
                 ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog">
@@ -38,40 +38,40 @@
             <GridColumns>
                 <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
                 @*REEMPLAZAR CON LOS VALORES DE PEDIDOS*@
-                <GridColumn Field=@nameof(Procesos.Id) HeaderText="VALE" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.DESPACHO) HeaderText="DESPACHO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.CG_PROD) HeaderText="CG_PROD" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.CG_PROVE) HeaderText="CG_PROVE" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.REMITO) HeaderText="REMITO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.O_COMPRA) HeaderText="O_COMPRA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.UNID) HeaderText="UNID" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.FECHA) HeaderText="FECHA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.DESCAL) HeaderText="DESCAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.CARCAL) HeaderText="CARCAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.UNIDADM) HeaderText="UNIDADM" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.CANTMEDIDA) HeaderText="CANTMEDIDA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.OBSERV) HeaderText="OBSERV" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.AVISO) HeaderText="AVISO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.OBSERV1) HeaderText="OBSERV1" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.VALORNC) HeaderText="VALORNC" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.LEYENDANC) HeaderText="LEYENDANC" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.EVENTO) HeaderText="EVENTO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.ENSAYOS) HeaderText="ENSAYOS" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.FECHA) HeaderText="FECHA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.APROBADO) HeaderText="APROBADO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.USUARIO) HeaderText="USUARIO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procesos.REGISTRO) HeaderText="REGISTRO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.Id) HeaderText="VALE" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.DESPACHO) HeaderText="DESPACHO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.CG_ART) HeaderText="CG_PROD" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.CG_PROVE) HeaderText="CG_PROVE" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.REMITO) HeaderText="REMITO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+@*              <GridColumn Field=@nameof(Pedidos.O_COMPRA) HeaderText="O_COMPRA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>*@
+                <GridColumn Field=@nameof(Pedidos.UNID) HeaderText="UNID" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+               @*<GridColumn Field=@nameof(Pedidos.FECHA) HeaderText="FECHA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.DESCAL) HeaderText="DESCAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.CARCAL) HeaderText="CARCAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.UNIDADM) HeaderText="UNIDADM" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.CANTMEDIDA) HeaderText="CANTMEDIDA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.OBSERV) HeaderText="OBSERV" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.AVISO) HeaderText="AVISO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.OBSERV1) HeaderText="OBSERV1" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.VALORNC) HeaderText="VALORNC" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.LEYENDANC) HeaderText="LEYENDANC" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.EVENTO) HeaderText="EVENTO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.ENSAYOS) HeaderText="ENSAYOS" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.FECHA) HeaderText="FECHA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>*@
+                <GridColumn Field=@nameof(Pedidos.USUARIO) HeaderText="USUARIO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                @*<GridColumn Field=@nameof(Pedidos.APROBADO) HeaderText="APROBADO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.REGISTRO) HeaderText="REGISTRO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>*@
                 
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner> 
         </SfGrid>
         </div>
 
-       @if(popupFormVisible)
+     @*  @if(popupFormVisible)
         {
-        <FormCargaValores procesos="valoresSeleccionada" Show="popupFormVisible" OnEliminar="@(async(v)=> await Guardar(v))"
+        <FormCargaValores pedidos="valoresSeleccionada" Show="popupFormVisible" OnEliminar="@(async(v)=> await Guardar(v))"
                 OnCerrar="OnCerrarDialog" OnGuardar="@(async(v)=> await Guardar(v))"></FormCargaValores>
-        }
+        }*@
         
 </div>
 

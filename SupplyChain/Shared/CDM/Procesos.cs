@@ -17,20 +17,20 @@ namespace SupplyChain
         public string CARCAL { get; set; } = "";
         public string UNIDADM { get; set; } = "";
         public decimal CANTMEDIDA { get; set; } = 0;
-         public string OBSERV { get; set; } = "";
-         public string AVISO { get; set; } = "";
-         public string OBSERV1 { get; set; } = "";
-         public int CG_PROVE { get; set; } = 0;
-         public string REMITO { get; set; } = "";
-         public string VALORNC { get; set; } = "";
-         public string LEYENDANC { get; set; } = "";
-         public int O_COMPRA { get; set; } = 0;
-         public string UNID { get; set; } = "";
-         public int EVENTO { get; set; } = 0;
-         public string ENSAYOS { get; set; } = "";
-         public DateTime FECHA { get; set; }
-         public string APROBADO { get; set; } = "";
-         public string USUARIO { get; set; } = "";
+        public string OBSERV { get; set; } = "";
+        public string AVISO { get; set; } = "";
+        public string OBSERV1 { get; set; } = "";
+        public int CG_PROVE { get; set; } = 0;
+        public string REMITO { get; set; } = "";
+        public string VALORNC { get; set; } = "";
+        public string LEYENDANC { get; set; } = "";
+        public int O_COMPRA { get; set; } = 0;
+        public string UNID { get; set; } = "";
+        public int EVENTO { get; set; } = 0;
+        public string ENSAYOS { get; set; } = "";
+        public DateTime FECHA { get; set; }
+        public string APROBADO { get; set; } = "";
+        public string USUARIO { get; set; } = "";
 
        [ValidateComplexType]
         public virtual List<CargaValoresDetalles> Items { get; set; } = new();

@@ -127,6 +127,7 @@ namespace SupplyChain.Server
             services.AddTransient<MantCeldasRepository>();
             services.AddTransient<ProcunRepository>();
             services.AddTransient<ProcalMPRepository>();
+            services.AddTransient<ProcesoRepository>();
             //services.AddTransient<CargaValoresRepository>();
             //services.AddTransient<MatproveRepository>();
             #endregion

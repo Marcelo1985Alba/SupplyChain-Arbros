@@ -10,6 +10,7 @@ using Syncfusion.Blazor.Notifications;
 using SupplyChain.Shared;
 using Microsoft.JSInterop;
 using System.Security.Authentication.ExtendedProtection;
+using SupplyChain.Client.Shared;
 
 namespace SupplyChain.Client.Pages.CDM
 {
@@ -17,46 +18,57 @@ namespace SupplyChain.Client.Pages.CDM
     {
         [Inject] protected HttpClient Http { get; set; }
         //[Inject] public CargaValoresService CargaValoresService { get; set; }
-        [Inject] public InventarioService InventarioService { get; set; }
+        [Inject] protected InventarioService InventarioService { get; set; }
         [Inject] protected IJSRuntime jSRuntime { get; set; }
         //[Parameter] public Pedidos pedidos { get; set; } = new();
-        [Parameter] public Procesos procesos { get; set; } = new();
+        [Parameter] public Pedidos pedidos { get; set; }
+        [Parameter] public vControlCalidadPendientes controlCalidadPendientes { get; set; } = new(); 
+        //[Parameter] public Procesos procesos { get; set; } = new();
         [Parameter] public ProcalsMP procalsMP { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;
-        [Parameter] public EventCallback<Procesos> OnGuardar { get; set; }
-        [Parameter] public EventCallback<Procesos> OnEliminar { get; set; }
+        [Parameter] public EventCallback<vControlCalidadPendientes> OnGuardar { get; set; }
+        [Parameter] public EventCallback<vControlCalidadPendientes> OnEliminar { get; set; }
         [Parameter] public EventCallback OnCerrar { get; set; }
 
+        //AGREGADO NUEVO
+        protected const string APPNAME = "grdCargaProcesos";
+        [CascadingParameter] MainLayout MainLayout { get; set; }
+
         protected SfGrid<CargaValoresDetalles> refGridItems;
-        protected SfGrid<ProcalsMP> refGrid;
+
+        //protected SfGrid<Procesos> refGrid;
+        protected SfGrid<vControlCalidadPendientes> refGrid;
         protected SfSpinner refSpinnerCli;
         protected SfSpinner refSpinner;
-        protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
-        protected ProcalsMP ProcalSeleccionada = new();
-        protected List<ProcalsMP> valor = new();
+        protected vControlCalidadPendientes ControlCalidadSeleccionado= new();
+        //protected Procesos ProcesoSeleccionada = new();
+        protected List<vControlCalidadPendientes> control= new();
+        //protected List<Procesos> pro = new();
         protected List<CargaValoresDetalles> valor2 = new();
         protected bool popupFormVisible = false;
+        protected bool SpinnerVisible = false;
         protected string state;
+
 
         protected Dictionary<string, object> HtmlAttributeSubmint = new()
         {
             {"type", "submit" }
         };
-        private async Task CopiarProcalMPValores()
+        private async Task CopiarProcesoValores()
         {
             if (refGridItems.SelectedRecords.Count == 1)
             {
-                ProcalSeleccionada = new();
-                ProcalsMP selectedRecord = refGrid.SelectedRecords[0];
+                ControlCalidadSeleccionado = new();
+                vControlCalidadPendientes selectedRecord = refGrid.SelectedRecords[0];
                 bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desea copiar la materia?");
                 if (isConfirmed)
                 {
-                    ProcalSeleccionada.ESNUEVO = true;
-                    ProcalSeleccionada.DESCAL = selectedRecord.DESCAL;
-                    ProcalSeleccionada.CARCAL = selectedRecord.CARCAL;
-                    ProcalSeleccionada.UNIDADM = selectedRecord.UNIDADM;
-                    ProcalSeleccionada.AVISO = selectedRecord.AVISO;
+                    //ControlCalidadSeleccionado.ESNUEVO = true;
+                    ControlCalidadSeleccionado.DESCAL = selectedRecord.DESCAL;
+                    ControlCalidadSeleccionado.CARCAL = selectedRecord.CARCAL;
+                    ControlCalidadSeleccionado.UNIDADM = selectedRecord.UNIDADM;
+                    ControlCalidadSeleccionado.AVISO = selectedRecord.AVISO;
                 }
                 popupFormVisible = true;
             }
@@ -74,8 +86,12 @@ namespace SupplyChain.Client.Pages.CDM
                 });
             }
         }
+        //AGREGADO 5/1
+        public async Task ShowAsync(int id)
+        {
 
-        protected async Task OnActionBeginHandler(ActionEventArgs<ProcalsMP> args)
+        }
+        protected async Task OnActionBeginHandler(ActionEventArgs<vControlCalidadPendientes> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
                 args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
@@ -83,11 +99,11 @@ namespace SupplyChain.Client.Pages.CDM
                 args.Cancel = true;
                 args.PreventRender = false;
                 popupFormVisible = true;
-                ProcalSeleccionada = new();
+                ControlCalidadSeleccionado = new();
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                ProcalSeleccionada = args.Data;
+                ControlCalidadSeleccionado = args.Data;
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
@@ -108,7 +124,7 @@ namespace SupplyChain.Client.Pages.CDM
             }
         } 
 
-        protected async Task OnActionCompleteHandler(ActionEventArgs<ProcalsMP> args)
+        protected async Task OnActionCompleteHandler(ActionEventArgs<vControlCalidadPendientes> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
@@ -122,7 +138,7 @@ namespace SupplyChain.Client.Pages.CDM
         {
             popupFormVisible = false;
         }
-        protected async Task Guardar(ProcalsMP procals)
+        protected async Task Guardar(vControlCalidadPendientes controlCalidad)
         {
 
         }
@@ -158,28 +174,37 @@ namespace SupplyChain.Client.Pages.CDM
         //    }
         //    return true;
         //}
-
-        protected async Task GuardarProcalMP()
+        protected override async Task OnInitializedAsync()
         {
+            MainLayout.Titulo = "Control de Calidad";
 
+            SpinnerVisible = true;
+            //CAMBIAR A INVENTARIOSERVICE
+            control = await InventarioService.GetControlCalidadPendientes();
+            //if (!response.Error)
+            //{
+            //    pedidos = response.Response;
+            //}
+            SpinnerVisible = false;
         }
+       
         protected async Task GuardarProceso()
         {
-            //bool guardado = false;
-            //if (procesos.ESNUEVO)
-            //{
-            //    guardado = await Agregar(procesos);
-            //}
-            //else
-            //{
-            //    guardado = await Actualizar(procesos);
-            //}
-            //if (guardado)
-            //{
-            //    Show = false;
-            //    procesos.GUARDADO = guardado;
-            //    await OnGuardar.InvokeAsync(procesos);
-            //}
+            bool guardado = false;
+            if (controlCalidadPendientes.ESNUEVO)
+            {
+              //  guardado = await Agregar(procesos);
+            }
+            else
+            {
+                //guardado = await Actualizar(procesos);
+            }
+            if (guardado)
+            {
+                Show = false;
+                controlCalidadPendientes.GUARDADO = guardado;
+                await OnGuardar.InvokeAsync(controlCalidadPendientes);
+            }
         }
 
         //COMENTADO
