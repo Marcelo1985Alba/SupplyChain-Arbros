@@ -103,7 +103,7 @@
                                     <a>Probabilidad:</a>
                                     
                                     <SfTooltip Height="200px" Width="400px" Target="#probabilidad" Content="@tooltipProbabilidad">
-                                        <SfComboBox ID="probabilidad" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                        <SfComboBox ID="probabilidad" TValue="string" CssClass="customClass" TItem="FrecuenciaOpcions" PopupWidth="auto" AllowFiltering="true"
                                                     @bind-Value="@(isos.Frecuencia)" DataSource="@FrecuenciaData">
                                             <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
                                         </SfComboBox>
@@ -112,7 +112,7 @@
                                 <div class="form-group col-md-6">
                                     <a>Impacto:</a>
                                     <SfTooltip ID="Tooltip2" Height="200px" Width="400px" Target="#impacto" Content="@tooltipImpacto">
-                                        <SfComboBox ID="impacto" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                        <SfComboBox ID="impacto" TValue="string" CssClass="customClass" TItem="ImpactoOptions" PopupWidth="auto" AllowFiltering="true"
                                                     @bind-Value="@(isos.Impacto)" DataSource="@ImpactoData">
                                             <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
                                         </SfComboBox>

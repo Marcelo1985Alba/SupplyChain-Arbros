@@ -67,19 +67,27 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
             new BaseOption() {Text= "RIESGO" },
             new BaseOption() {Text= "OPORTUNIDAD" },
         };
-        protected List<BaseOption> FrecuenciaData = new List<BaseOption> {
-            new BaseOption() {Text= "Muy baja" },
-            new BaseOption() {Text= "Baja" },
-            new BaseOption() {Text= "Media" },
-            new BaseOption() {Text= "Alta" },
-            new BaseOption() {Text= "Muy alta" },
+       protected class FrecuenciaOpcions
+        {
+            public string Text { get;set; }
+        }
+        protected List<FrecuenciaOpcions> FrecuenciaData = new List<FrecuenciaOpcions> {
+            new FrecuenciaOpcions() {Text= "Muy baja" },
+            new FrecuenciaOpcions() {Text= "Baja" },
+            new FrecuenciaOpcions() {Text= "Media" },
+            new FrecuenciaOpcions() {Text= "Alta" },
+            new FrecuenciaOpcions() {Text= "Muy alta" },
         };
-        protected List<BaseOption> ImpactoData = new List<BaseOption> {
-            new BaseOption() {Text= "Muy poco" },
-            new BaseOption() {Text= "Poco" },
-            new BaseOption() {Text= "Moderado" },
-            new BaseOption() {Text= "Alto" },
-            new BaseOption() {Text= "Muy alto" },
+        protected class ImpactoOptions
+        {
+            public string Text { get;set; }
+        }   
+        protected List<ImpactoOptions> ImpactoData = new List<ImpactoOptions> {
+            new ImpactoOptions() {Text= "Muy poco" },
+            new ImpactoOptions() {Text= "Poco" },
+            new ImpactoOptions() {Text= "Moderado" },
+            new ImpactoOptions() {Text= "Alto" },
+            new ImpactoOptions() {Text= "Muy alto" },
         };
         protected List<BaseOption> OperacionData = new List<BaseOption> {
             new BaseOption() {Text= "Normal" },

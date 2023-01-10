@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SupplyChain.Client.Pages.ABM.ISOP
 {
@@ -270,6 +271,35 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
                 ShowCloseButton = true,
                 ShowProgressBar = true
             });
+        }
+        protected async Task QueryCellHandler(QueryCellInfoEventArgs<ISO> args)
+        {
+
+            if (args.Data.Frecuencia == "Muy alta" && args.Data.Impacto == "Moderado")
+            {
+                args.Cell.AddClass(new string[] { "e-grid" });
+            }
+            else if (args.Data.Frecuencia == "Muy alta" && args.Data.Impacto == "Alto")
+            {
+                args.Cell.AddClass(new string[] { "e-grid" });
+            }
+            else if(args.Data.Frecuencia == "Muy alta" && args.Data.Impacto == "Muy alto")
+            {
+                args.Cell.AddClass(new string[] { "e-grid" });
+            }
+            else if(args.Data.Frecuencia == "Alta" && args.Data.Impacto == "Alto")
+            {
+                args.Cell.AddClass(new string[] { "e-grid" });
+            }
+            else if(args.Data.Frecuencia == "Alta" && args.Data.Impacto == "Muy alto")
+            {
+                args.Cell.AddClass(new string[] { "e-grid" });
+            }
+            else if (args.Data.Frecuencia == "Moderado" && args.Data.Impacto == "Muy alto")
+            {
+                args.Cell.AddClass(new string[] { "e-grid" } );
+            }
+
         }
     }
 }
