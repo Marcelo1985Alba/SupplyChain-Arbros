@@ -19,6 +19,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
     public class GraphicIso : ComponentBase
     {
         [Inject] protected HttpClient Http { get; set; }
+        [Inject] protected NavigationManager NavigationManager { get; set; }
         [Inject] public ISOService isoService { get; set; }
 
         protected List<ISO> isos = new();
@@ -27,6 +28,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
         protected SfToast ToastObj;
 
 		protected string impAmb = "RIESGO";
+		protected int idForImpSelected = 0;
 		protected string[] XLabels = new string[] { "Muy Baja", "Baja", "Media", "Alta", "Muy Alta" };
 		protected string[] YLabels = new string[] { "Muy Poco", "Poco", "Moderado", "Alto", "Muy Alto" };
 		protected int I1F1 = 11;
@@ -57,8 +59,9 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
 		public object HeatMapColors { get; set; }
 
 		[Parameter] public bool Show { get; set; } = false;
+        [Parameter] public int pedido { get; set; } = 0;
 
-		public class BaseOption
+        public class BaseOption
 		{
 			public string Text { get; set; }
 		}
@@ -72,7 +75,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
 			new BaseOption() {Text= "RIESGO" },
 			new BaseOption() {Text= "OPORTUNIDAD" },
 		};
-
+		public List<int> idByImp;
 		protected override async Task OnInitializedAsync()
 		{
 			HeatMapColors = GetDefaultColors();
@@ -80,8 +83,10 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
 			if (!response.Error)
 			{
 				isos = response.Response;
-			}
-		}
+            }
+            idByImp = isos.Where(s => s.ImpAmb == impAmb).Select(s => s.Identificacion).OrderBy(s => s).ToList();
+            idByImp.Add(0);
+        }
 		int[,] GetDefaultColors()
 		{
 			int[,] dataSource = new int[,]
@@ -97,12 +102,23 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
 		protected void ChangeImpAmb(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, BaseOption> args)
 		{
 			impAmb = args.Value;
-		}
+            idByImp = isos.Where(s => s.ImpAmb == impAmb).Select(s => s.Identificacion).OrderBy(s => s).ToList();
+            idByImp.Add(0);
+        }
+        protected void ChangeId(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int, int> args)
+        {
+			idForImpSelected = args.Value;
+        }
 
-		protected async Task TooltipRendering(SFHeatMap.TooltipEventArgs args)
+        protected async Task TooltipRendering(SFHeatMap.TooltipEventArgs args)
 		{
-			List<ISO> registros = isos.Where(p => p.ImpAmb == impAmb && p.Frecuencia == args.XLabel && p.Impacto == args.YLabel).ToList();
-			string content = $@"Impacto: {args.YLabel}.<br>Frecuencia: {args.XLabel}.";
+			List<ISO> registros;
+            if (idForImpSelected == 0)
+                registros = isos.Where(p => p.ImpAmb == impAmb && p.Frecuencia == args.XLabel && p.Impacto == args.YLabel).ToList();
+            else
+				registros = isos.Where(p => p.ImpAmb == impAmb && p.Frecuencia == args.XLabel && p.Impacto == args.YLabel && p.Identificacion == idForImpSelected).ToList();
+            string content = $@"Impacto: {args.YLabel}.<br>Frecuencia: {args.XLabel}.";
+            //string content = "";
 			for (int i = 0; i < registros.Count; i++)
 			{
 				/*
@@ -121,5 +137,12 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
 			}
 			args.Content = new[] { content };
 		}
-	}
+
+
+
+        public void onClick()
+        {
+            NavigationManager.NavigateTo("/Abms/Iso");
+        }
+    }
 }

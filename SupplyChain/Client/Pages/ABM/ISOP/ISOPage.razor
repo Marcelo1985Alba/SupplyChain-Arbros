@@ -10,12 +10,18 @@
 @inherits IsoPageBase
 
 <div class="row">
-    <div class="col-12">
+    <div class="col-9">
         <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
                            OnReiniciar="(async ()=> await OnReiniciarGrilla())"
                            OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
     </div>
+    <div class="col-lg-2 col-md-3">
+        <SfButton Content="Ver Matriz" IsPrimary="false" CssClass="btn-sm e-info" IconCss="fa fa-eye"
+                  OnClick="onClick"></SfButton>
+    </div>
 </div>
+
+
 
 <div class="row">
     <div class="col-12">
@@ -29,7 +35,7 @@
             <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolbarHandler"
-                        OnActionComplete="OnActionCompleteHandler" TValue="ISO"></GridEvents>
+                        OnActionComplete="OnActionCompleteHandler" TValue="ISO" QueryCellInfo="CustomizeCell"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
                               ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog">
@@ -88,6 +94,33 @@
     public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
     public bool DblClick = true;
     public bool CommandColumnsClick = false;
+    public void CustomizeCell(QueryCellInfoEventArgs<ISO> args)
+    {
+        if (args.Data.Frecuencia == "Muy alta" && args.Data.Impacto == "Moderado")
+        {
+            args.Cell.AddClass(new string[] { "e-grid" });
+        }
+        else if (args.Data.Frecuencia == "Muy alta" && args.Data.Impacto == "Alto")
+        {
+            args.Cell.AddClass(new string[] { "e-grid" });
+        }
+        else if (args.Data.Frecuencia == "Muy alta" && args.Data.Impacto == "Muy alto")
+        {
+            args.Cell.AddClass(new string[] { "e-grid" });
+        }
+        else if (args.Data.Frecuencia == "Alta" && args.Data.Impacto == "Alto")
+        {
+            args.Cell.AddClass(new string[] { "e-grid" });
+        }
+        else if (args.Data.Frecuencia == "Alta" && args.Data.Impacto == "Muy alto")
+        {
+            args.Cell.AddClass(new string[] { "e-grid" });
+        }
+        else if (args.Data.Frecuencia == "Moderado" && args.Data.Impacto == "Muy alto")
+        {
+            args.Cell.AddClass(new string[] { "e-grid" });
+        }
+    }
 
     public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
     public void OnRadioChange(ChangeArgs<string> args)
@@ -116,3 +149,10 @@
         }
     }
 }
+
+<style>
+    .e-grid {
+        background-color: #FA1D1D;
+        font-weight: bold;
+    }
+</style>

@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Fecha:</label>
-                                    <SfDatePicker ID="Fecha" @bind-Value="@(mantCeldas.Fecha)" Placeholder="Fecha"></SfDatePicker>
+                                    <SfDatePicker Format="dd/MM/yyyy" ID="Fecha" @bind-Value="@(mantCeldas.Fecha)" Placeholder="Fecha"></SfDatePicker>
                                 </div>
                             </div>
                             <div class="form-row">
@@ -104,7 +104,13 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Fecha de cumplido:</label>
-                                    <SfDatePicker ID="Fecha de cumplido" @bind-Value="@(mantCeldas.FechaCumplido)" Placeholder="Fecha de cumplido"></SfDatePicker>
+                                    <SfDatePicker Format="dd/MM/yyyy" ID="Fecha de cumplido" @bind-Value="@(mantCeldas.FechaCumplido)" Placeholder="Fecha de cumplido"></SfDatePicker>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label>Observaciones:</label>
+                                    <SfTextBox ID="Observaciones" @bind-Value="@(mantCeldas.Observaciones)" Placeholder="Observaciones"></SfTextBox>
                                 </div>
                             </div>
                         </div>

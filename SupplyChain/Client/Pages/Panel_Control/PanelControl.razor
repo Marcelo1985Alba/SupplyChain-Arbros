@@ -1398,12 +1398,8 @@
                                     <ChartLegendSettings Visible="true" />
                                 </SfChart>
                             </div>
-
-
                         </div>
-
                     </div>
-
                     <div class="col-12">
                         <div class="content-wrapper">
                             <div class="row">
@@ -1432,14 +1428,47 @@
         </TabItem>
         <TabItem CssClass="tab-content">
             <ChildContent>
-                <TabHeader Text="Proyectos New">
+                <TabHeader Text="Proyectos Prueba">
                 </TabHeader>
             </ChildContent>
             <ContentTemplate>
                 <div class="col-lg-12 control-section">
                     <div class="content-wrapper">
                         <div class="row">
-
+                            <SfButton @onclick="AddRow">Add Row</SfButton>
+                            <SfButton @onclick="EditRow">Edit Row</SfButton>
+                            <SfGantt @ref="Gantt" DataSource="@DataProyectos" Height="450px" Width="900px">
+                                <GanttTaskFields Id="Id" Name="Name" StartDate="Sdate" EndDate="Edate" ParentID="ParentId" Progress="Progress" Duration="Duration"></GanttTaskFields>
+                                <GanttColumns>
+                                    <GanttColumn Field=@nameof(GanttDataDetails.Id) Width="100"></GanttColumn>
+                                    <GanttColumn Field=@nameof(GanttDataDetails.Name) Width="250"></GanttColumn>
+                                    <GanttColumn Field=@nameof(GanttDataDetails.Sdate)></GanttColumn>
+                                    <GanttColumn Field=@nameof(GanttDataDetails.Edate)></GanttColumn>
+                                    <GanttColumn Field=@nameof(GanttDataDetails.Duration)></GanttColumn>
+                                    <GanttColumn Field=@nameof(GanttDataDetails.Progress)></GanttColumn>
+                                    <GanttColumn Field=@nameof(GanttDataDetails.ParentId)></GanttColumn>
+                                </GanttColumns>
+                                <GanttEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true"></GanttEditSettings>
+                                <GanttTimelineSettings>
+                                    <GanttTopTierSettings Unit="TimelineViewMode.Week" Format="MMM dd, yyyy"></GanttTopTierSettings>
+                                    <GanttBottomTierSettings Unit="TimelineViewMode.Day"></GanttBottomTierSettings>
+                                </GanttTimelineSettings>
+                                <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@VisibleSpinner"></SfSpinner>
+                            </SfGantt>
+                        </div>
+                    </div>
+                </div>
+            </ContentTemplate>
+        </TabItem>
+        <TabItem CssClass="tab-content">
+            <ChildContent>
+                <TabHeader Text="Proyectos">
+                </TabHeader>
+            </ChildContent>
+            <ContentTemplate>
+                <div class="col-lg-12 control-section">
+                    <div class="content-wrapper">
+                        <div class="row">
                             <SfGantt ID="GanttExport" TValue="GanttDataDetails" HighlightWeekends="true" 
                                 RowHeight="55" DurationUnit="DurationUnit.Day" 
                                      Toolbar="@(new List<string>(){ "Add", "Edit", "Update", "Delete", "Cancel", "ExpandAll", "CollapseAll"})">
@@ -1469,6 +1498,199 @@
         </TabItem>
     </TabItems>
 </SfTab>
+
+
+<SfDialog @bind-Visible="ShowDialog" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
+    <DialogTemplates>
+        <Header>
+            @if (string.IsNullOrEmpty(tarea.Id.ToString()))
+            {
+                <p>Nueva Tarea</p>
+            }
+            else
+            {
+                <p>&nbsp;&nbsp;@tarea.Id&nbsp;&nbsp;-&nbsp;&nbsp;@tarea.Name</p>
+            }
+        </Header>
+        <Content>
+            <EditForm Model="tarea" OnValidSubmit="@GuardarTarea">
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Identificacion:</label>
+                                    <SfNumericTextBox ID="Identificacion" @bind-Value="@(tarea.Id)" Enabled="false"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Tarea:</label>
+                                    <SfTextBox ID="Tarea" @bind-Value="@(tarea.Name)"></SfTextBox>
+                                </div>
+                            </div>
+                        </div>
+                        <!--
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Contexto:</label>
+                                    <SfTextBox ID="Contexto" @bind-Value="@(isos.Descripcion)"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Detalle:</label>
+                                    <SfTextBox ID="Detalle" @bind-Value="@(isos.Detalle)"></SfTextBox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a>Factor:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.Factor)" DataSource="@FactorData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a>Proceso:</a>
+                                    <SfComboBox ID="proceso" TValue="string" CssClass="customClass" TItem="TipoArea" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.Proceso)" DataSource="@roles">
+                                        <ComboBoxFieldSettings Value="DES_TIPOAREA" Text="DES_TIPOAREA"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a>FODA:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.FODA)" DataSource="@FODAData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a>Impacto / Riesgo-Oportunidad:</a>
+                                    
+                                    <SfTooltip Height="200px" Width="400px" Target="#impacto-RO" Content="@tooltipImpactoRO">
+                                        <SfComboBox ID="impacto-RO" @bind-Value="@(isos.ImpAmb)" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true" DataSource="@ImpAmbData">
+                                            <ComboBoxEvents TValue="string" TItem="BaseOption" ValueChange="@OnChange" />
+                                            <ComboBoxFieldSettings Value="Text" Text="Text" />
+                                        </SfComboBox>
+                                    </SfTooltip>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a>Probabilidad:</a>
+                                    
+                                    <SfTooltip Height="200px" Width="400px" Target="#probabilidad" Content="@tooltipProbabilidad">
+                                        <SfComboBox ID="probabilidad" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                    @bind-Value="@(isos.Frecuencia)" DataSource="@FrecuenciaData">
+                                            <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                        </SfComboBox>
+                                    </SfTooltip>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a>Impacto:</a>
+                                    <SfTooltip ID="Tooltip2" Height="200px" Width="400px" Target="#impacto" Content="@tooltipImpacto">
+                                        <SfComboBox ID="impacto" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                    @bind-Value="@(isos.Impacto)" DataSource="@ImpactoData">
+                                            <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                        </SfComboBox>
+                                    </SfTooltip>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a>Aspecto Ambiental:</a>
+                                    <SfComboBox TValue="int" CssClass="customClass" TItem="AspAmb" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.AspAmb)" Enabled="@edit" DataSource="@aspAmbientales">
+                                        <ComboBoxFieldSettings Value="Id" Text="descripcion"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a>Condicion de Operacion:</a>
+                                    
+                                    <SfTooltip Height="200px" Width="400px" Target="#operacion" Content="@tooltipOperacion">
+                                        <SfComboBox ID="operacion" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                    @bind-Value="@(isos.CondOperacion)" Enabled="@edit" DataSource="@OperacionData">
+                                            <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                        </SfComboBox>
+                                    </SfTooltip>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a>Condicion de Control:</a>
+                                    
+                                    <SfTooltip Height="200px" Width="400px" Target="#control" Content="@tooltipControl">
+                                        <SfComboBox ID="control" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                    @bind-Value="@(isos.CondControl)" Enabled="@edit" DataSource="@ControlData">
+                                            <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                        </SfComboBox>
+                                    </SfTooltip>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <a>Naturaleza del impacto:</a>
+                                    
+                                    <SfTooltip Height="200px" Width="400px" Target="#naturaleza" Content="@tooltipNaturaleza">
+                                        <SfComboBox ID="naturaleza" TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                    @bind-Value="@(isos.NaturalezaDelImpacto)" Enabled="@edit" DataSource="@NatDelImpData">
+                                            <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                        </SfComboBox>
+                                    </SfTooltip>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <a>Gestion:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="BaseOption" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(isos.Gestion)" DataSource="@GestionData">
+                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Fecha de cumplido:</label>
+                                    <SfDatePicker ID="Fecha de cumplido" @bind-Value="@(isos.FechaCumplido)" ShowTodayButton="true" Format='dd/MM/yyyy'></SfDatePicker>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Comentarios:</label>
+                                    <SfTextBox ID="Comentarios" @bind-Value="@(isos.Comentarios)"></SfTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Medidas de Control y/o Gestion:</label>
+                                    <SfTextBox ID="Medidas" @bind-Value="@(isos.Medidas)"></SfTextBox>
+                                </div>
+                            </div>
+                        </div>
+    -->
+                    </div>
+                </div>
+                <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
+            </EditForm>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
 
 @*GRADIANTES*@
 <svg style="height: 0">

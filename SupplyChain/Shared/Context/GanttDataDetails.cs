@@ -24,5 +24,9 @@ namespace SupplyChain.Shared.Context
         public string ResourceId { get; set; }
         public string ProjectId { get; set; }
         public bool? IsExpand { get; set; }
+        [NotMapped]
+        public bool GUARDADO { get; set; }
+        [NotMapped]
+        public bool ESNUEVO { get; set; }
     }
 }
