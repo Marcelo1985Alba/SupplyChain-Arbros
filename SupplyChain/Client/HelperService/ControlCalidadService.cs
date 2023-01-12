@@ -1,5 +1,6 @@
 ﻿using SupplyChain.Client.HelperService.Base;
 using SupplyChain.Client.RepositoryHttp;
+using SupplyChain.Shared;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
@@ -13,14 +14,16 @@ namespace SupplyChain.Client.HelperService
     public class ControlCalidadService : BaseService<Procesos, int>
     {
         private const string API = "api/Procesos";
+        IRepositoryHttp httpClient2;
 
         public ControlCalidadService(IRepositoryHttp httpClient) : base(httpClient, API)
         {
+            httpClient2 = httpClient;
         }
 
-        public async Task<bool> Existe(int id)
+        public async Task<bool> Existe(int VALE)
         {
-            var response = await http.GetFromJsonAsync<bool>($"{API}/Existe/{id}");
+            var response = await http.GetFromJsonAsync<bool>($"{API}/Existe/{VALE}");
             if (response.Error)
             {
                 Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
@@ -39,6 +42,22 @@ namespace SupplyChain.Client.HelperService
             }
             return true;
         }
+        public async Task<HttpResponseWrapper<List<vControlCalidadPendientes>>> GetControlCalidad (int registro)
+        {
+            var response = await httpClient2.GetFromJsonAsync<List<vControlCalidadPendientes>>($"api/ControlCalidad/byRegistro/{registro}");
+            
+            return response;
+        }
 
+        public async Task<bool> Agregar(int VALE)
+        {
+            var response = await http.GetFromJsonAsync<bool>($"{API}/Existe/{VALE}");
+            if (response.Error)
+            {
+                Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+                return false;
+            }
+            return response.Response;
+        }
     }
 }

@@ -33,21 +33,25 @@ namespace SupplyChain.Client.HelperService
             return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/ByNumeroVale/{vale}");
         }
 
-        public async Task<List<Pedidos>> GetPendienteAprobacion()
+        public async Task<List<vControlCalidadPendientes>> GetPendienteAprobacion()
         {
-            return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/GetPendienteAprobacion/");
+            return await Http.GetFromJsonAsync<List<vControlCalidadPendientes>>($"api/Stock/GetPendienteAprobacion/");
         }
+
+
         //public async Task<List<Procesos>> GetProcesos()
         //{
         //    return await Http.GetFromJsonAsync<List<Procesos>>($"api/Stock/GetProcesos/");
         //}
+            
         public async Task<List<vControlCalidadPendientes>> GetControlCalidadPendientes()
         {
             return await Http.GetFromJsonAsync<List<vControlCalidadPendientes>>($"api/Stock/GetControlCalidadPendientes/");
         }
 
+
         //public async Task<List<Pedidos>> GetPendienteAprobacionNuevo()
-        //{
+        //{ 
         //    return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/GetPendienteAprobacionNuevo/");
         //}
 
@@ -65,9 +69,9 @@ namespace SupplyChain.Client.HelperService
         //    return response.Response;
         //}
 
-        //public async Task<bool> Eliminar(List<Pedidos> valores)
+        //public async Task<bool> Eliminar(List<Procesos> procesos)
         //{
-        //    var response = await http.PostAsJsonAsync<List<Pedidos>>($"{API}/PostList", valores);
+        //    var response = await http.PostAsJsonAsync<List<Pedidos>>($"{API}/PostList", procesos);
         //    if (response.Error)
         //    {
         //        Console.Write(await response.HttpResponseMessage.Content.ReadAsStringAsync());

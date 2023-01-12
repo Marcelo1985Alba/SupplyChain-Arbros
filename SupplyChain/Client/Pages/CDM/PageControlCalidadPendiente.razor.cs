@@ -25,11 +25,13 @@ namespace SupplyChain.Client.Pages.CDM
 {
     public class PageControlCalidadPendientesBase : ComponentBase
     {
+        //[Inject] public ControlCalidadService ControlCalidadService { get; set; }
+        [Inject] public InventarioService InventarioService{ get; set; }
         [Inject] public ControlCalidadService ControlCalidadService { get; set; }
+
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime jSRuntime { get; set; }
         //[Inject] protected CargaValoresService CargaValoresService { get; set; }
-        [Inject] protected InventarioService InventarioService { get; set; }
         #region "Vista Grilla"
         protected const string APPNAME = "grdCargaValores";
         protected string state;
@@ -44,13 +46,13 @@ namespace SupplyChain.Client.Pages.CDM
         //protected List<Valores> valor = new();
         //protected List<vControlCalidadPendientes> ControlCalPendientes = new();
         //protected SfGrid<vControlCalidadPendientes> refGrid;
-        protected SfGrid<Pedidos> refGrid;
-        protected List<Pedidos> valor = new();
+        protected SfGrid<vControlCalidadPendientes> refGrid;
+        protected List<vControlCalidadPendientes> valor = new();
         protected SfToast ToastObj;
         protected SfSpinner refSpinner;
         //protected SfGrid<Valores> refGrid;
         //protected Valores valoresSeleccionada = new();
-        protected Procesos controlesCalidad = new();
+        protected List<vControlCalidadPendientes> controlesCalidad = new();
         protected vControlCalidadPendientes controlCalidadSeleccionado = new();
         protected FormControlCalidadPendiente refControlCalidadSeleccionado = new();
         protected FormControlCalidadPendiente controlCalidadPendientes = new();
@@ -96,7 +98,7 @@ namespace SupplyChain.Client.Pages.CDM
                         "Seguro que deseaa eliminar la linea?");
                     if (isConfirmed)
                     {
-                        List<Pedidos> valoresABorrar = await refGrid.GetSelectedRecordsAsync();
+                        List<vControlCalidadPendientes> valoresABorrar = await refGrid.GetSelectedRecordsAsync();
                         //var response = InventarioService.Eliminar(valoresABorrar);
                         //if (!response.IsCompletedSuccessfully)
                         //{
@@ -128,37 +130,27 @@ namespace SupplyChain.Client.Pages.CDM
             if (refGrid.SelectedRecords.Count == 1)
             {
                 controlesCalidad = new();
-                Pedidos selectedRecord = refGrid.SelectedRecords[0];
+                vControlCalidadPendientes selectedRecord = refGrid.SelectedRecords[0];
                 bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desea copiar la materia?");
                 if (isConfirmed)
                 {
-                    //valoresSeleccionada.ESNUEVO = true;
-                    controlesCalidad.FE_REG = selectedRecord.FE_REG;
-                    //valoresSeleccionada.CANTMEDIDA = selectedRecord.CANTMEDIDA;
-                    controlesCalidad.DESPACHO = selectedRecord.DESPACHO;
-                    //valoresSeleccionada.CG_PROD = selectedRecord.CG_PROD;
-                    //ProcalMP
-                    //valoresSeleccionada.DESCAL = selectedRecord.DESCAL;
-                    //Procalmp
-                    //valoresSeleccionada.UNIDADM = selectedRecord.UNIDADM;
-                    //valoresSeleccionada.CANTMEDIDA = selectedRecord.CANTMEDIDA;
-                    //valoresSeleccionada.OBSERV = selectedRecord.OBSERV;
-                    //Procalm
-                    controlesCalidad.AVISO = selectedRecord.AVISO;
-                    //valoresSeleccionada.CG_PROVE = selectedRecord.CG_PROVE;
-                    controlesCalidad.REMITO = selectedRecord.REMITO;
-                    //valoresSeleccionada.VALORNC = selectedRecord.VALORNC;
-                    //valoresSeleccionada.LEYENDANC = selectedRecord.LEYENDANC;
-                    //valoresSeleccionada.O_COMPRA = selectedRecord.O_COMPRA;
-                    controlesCalidad.UNID = selectedRecord.UNID;
-                    //valoresSeleccionada.EVENTO = selectedRecord.EVENTO;
-                    //valoresSeleccionada.ENSAYOS = selectedRecord.ENSAYOS;
-                    //valoresSeleccionada.FECHA = selectedRecord.FECHA;
-                    //valoresSeleccionada.APROBADO = selectedRecord.APROBADO;
-                    controlesCalidad.USUARIO = selectedRecord.USUARIO;
-                    //valoresSeleccionada.REGISTRO = selectedRecord.REGISTRO;
+                    controlCalidadSeleccionado.VALE = selectedRecord.VALE;
+                    controlCalidadSeleccionado.REGISTRO = selectedRecord.REGISTRO;
+                    controlCalidadSeleccionado.DESPACHO = selectedRecord.DESPACHO;
+                    controlCalidadSeleccionado.CG_PROD = selectedRecord.CG_PROD;
+                    controlCalidadSeleccionado.CG_DEP = selectedRecord.CG_DEP;
+                    controlCalidadSeleccionado.CG_LINEA = selectedRecord.CG_LINEA;
+                    controlCalidadSeleccionado.DESCAL = selectedRecord.DESCAL;
+                    controlCalidadSeleccionado.CARCAL = selectedRecord.CARCAL;
+                    controlCalidadSeleccionado.UNIDADM = selectedRecord.UNIDADM;
+                    controlCalidadSeleccionado.TOLE1 = selectedRecord.TOLE1;
+                    controlCalidadSeleccionado.TOLE2 = selectedRecord.TOLE2;
+                    controlCalidadSeleccionado.AVISO = selectedRecord.AVISO;
+                    controlCalidadSeleccionado.CG_PROVE = selectedRecord.CG_PROVE;
+                    controlCalidadSeleccionado.REMITO = selectedRecord.REMITO;
+                    controlCalidadSeleccionado.OCOMPRA = selectedRecord.OCOMPRA;
 
-                    
+
                 }
                 popupFormVisible = true;
             }
@@ -211,7 +203,7 @@ namespace SupplyChain.Client.Pages.CDM
         //    }
         //}
 
-        protected async Task OnActionBeginHandler(ActionEventArgs<Pedidos> args)
+        protected async Task OnActionBeginHandler(ActionEventArgs<vControlCalidadPendientes> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
@@ -224,7 +216,17 @@ namespace SupplyChain.Client.Pages.CDM
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                //controlesCalidad = args.Data;
+                var responsecontrolcalidad = await ControlCalidadService.GetControlCalidad(args.Data.REGISTRO);
+                if (responsecontrolcalidad.Error)
+                {
+
+                }
+                else
+                {
+                    controlesCalidad = new();
+                    controlesCalidad = responsecontrolcalidad.Response;
+                }
+                
                 //valoresSeleccionada.ESNUEVO = false;
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
@@ -248,7 +250,7 @@ namespace SupplyChain.Client.Pages.CDM
             }
         }
 
-        protected async Task OnActionCompleteHandler(ActionEventArgs<Pedidos> args)
+        protected async Task OnActionCompleteHandler(ActionEventArgs<vControlCalidadPendientes> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
@@ -263,7 +265,7 @@ namespace SupplyChain.Client.Pages.CDM
             popupFormVisible = false;
         }
 
-        protected async Task Guardar(Pedidos valorg)
+        protected async Task Guardar(vControlCalidadPendientes valorg)
         {
             //if (valorg.GUARDADO)
             //{

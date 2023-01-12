@@ -187,7 +187,21 @@ namespace SupplyChain.Client.Pages.CDM
             //}
             SpinnerVisible = false;
         }
-       
+
+        //ONINITIALIZED ASYNC - ControlCalidadService
+        //protected override async Task OnInitializedAsync()
+        //{
+        //    MainLayout.Titulo = "Control de Calidad";
+
+        //    SpinnerVisible = true;
+        //    //CAMBIAR A INVENTARIOSERVICE
+        //    control = await ControlCalidadService.GetControlCalidad();
+        //    //if (!response.Error)
+        //    //{
+        //    //    pedidos = response.Response;
+        //    //}
+        //    SpinnerVisible = false;
+        //}
         protected async Task GuardarProceso()
         {
             bool guardado = false;
