@@ -15,14 +15,16 @@ using SupplyChain.Client.Shared;
 namespace SupplyChain.Client.Pages.CDM
 {
     public class FormCargaValoresBase : ComponentBase
-    {
+        {
         [Inject] protected HttpClient Http { get; set; }
         //[Inject] public CargaValoresService CargaValoresService { get; set; }
         [Inject] protected InventarioService InventarioService { get; set; }
+        [Inject] protected ControlCalidadService ControlCalidadService{ get; set; }
+
         [Inject] protected IJSRuntime jSRuntime { get; set; }
         //[Parameter] public Pedidos pedidos { get; set; } = new();
         [Parameter] public Pedidos pedidos { get; set; }
-        [Parameter] public vControlCalidadPendientes controlCalidadPendientes { get; set; } = new(); 
+        [Parameter] public List<vControlCalidadPendientes> controlCalidadPendientes { get; set; } = new(); 
         //[Parameter] public Procesos procesos { get; set; } = new();
         [Parameter] public ProcalsMP procalsMP { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;
@@ -34,7 +36,7 @@ namespace SupplyChain.Client.Pages.CDM
         protected const string APPNAME = "grdCargaProcesos";
         [CascadingParameter] MainLayout MainLayout { get; set; }
 
-        protected SfGrid<CargaValoresDetalles> refGridItems;
+        protected SfGrid<vControlCalidadPendientes> refGridItems;
 
         //protected SfGrid<Procesos> refGrid;
         protected SfGrid<vControlCalidadPendientes> refGrid;
@@ -43,7 +45,8 @@ namespace SupplyChain.Client.Pages.CDM
         protected SfToast ToastObj;
         protected vControlCalidadPendientes ControlCalidadSeleccionado= new();
         //protected Procesos ProcesoSeleccionada = new();
-        protected List<vControlCalidadPendientes> control= new();
+        protected List<vControlCalidadPendientes> control = new();
+        //protected List<ControlCalidadService> control2 = new();
         //protected List<Procesos> pro = new();
         protected List<CargaValoresDetalles> valor2 = new();
         protected bool popupFormVisible = false;
@@ -145,34 +148,34 @@ namespace SupplyChain.Client.Pages.CDM
 
         protected bool IsAdd { get; set; }
 
-        //protected async Task<bool> Agregar(Procesos procesos)
+        //protected async Task<bool> Agregar(vControlCalidadPendientes controlCalidadPendientes)
         //{
-        //    var response = await InventarioService.Existe(procesos.Id);
+        //    var response = await InventarioService.Existe(controlCalidadPendientes.VALE);
         //    if (!response)
         //    {
-        //        var response2 = await InventarioService.Agregar(procesos);
+        //        var response2 = await InventarioService.Agregar(controlCalidadPendientes);
         //        if (response2.Error)
         //        {
         //            Console.WriteLine(await response2.HttpResponseMessage.Content.ReadAsStringAsync());
         //            await ToastMensajeError("Error al intentar Guardar un Proceso.");
         //            return false;
         //        }
-        //        procesos = response2.Response;
+        //        controlCalidadPendientes = response2.Response;
         //        return true;
         //    }
-        //    await ToastMensajeError($"El proceso con codigo{procesos.Id} ya existe.\n\rO el proceso no es permitido.");
+        //    await ToastMensajeError($"El proceso con codigo{controlCalidadPendientes.VALE} ya existe.\n\rO el proceso no es permitido.");
         //    return false;
         //}
 
-        //protected async Task<bool> Actualizar(Procesos procesos)
+        //protected async Task<bool> Actualizar(vControlCalidadPendientes controlCalidadPendientes)
         //{
-        //    var response = await InventarioService.Actualizar(procesos.Id, procesos);
-        //    if (response.Error)
-        //    {
-        //        await ToastMensajeError("Error al intenar guardar el Proceso.");
-        //        return false;
-        //    }
-        //    return true;
+        //    //var response = await InventarioService.Actualizar(controlCalidadPendientes.VALE, controlCalidadPendientes);
+        //    //if (response.Error)
+        //    //{
+        //    //    await ToastMensajeError("Error al intenar guardar el Proceso.");
+        //    //    return false;
+        //    //}
+        //    //return true;
         //}
         protected override async Task OnInitializedAsync()
         {
@@ -180,49 +183,35 @@ namespace SupplyChain.Client.Pages.CDM
 
             SpinnerVisible = true;
             //CAMBIAR A INVENTARIOSERVICE
-            control = await InventarioService.GetControlCalidadPendientes();
+            //var response = await ControlCalidadService.GetControlCalidad(controlCalidadPendientes.REGISTRO);
             //if (!response.Error)
             //{
-            //    pedidos = response.Response;
+            //    control = response.Response;
             //}
             SpinnerVisible = false;
         }
 
-        //ONINITIALIZED ASYNC - ControlCalidadService
-        //protected override async Task OnInitializedAsync()
-        //{
-        //    MainLayout.Titulo = "Control de Calidad";
-
-        //    SpinnerVisible = true;
-        //    //CAMBIAR A INVENTARIOSERVICE
-        //    control = await ControlCalidadService.GetControlCalidad();
-        //    //if (!response.Error)
-        //    //{
-        //    //    pedidos = response.Response;
-        //    //}
-        //    SpinnerVisible = false;
-        //}
         protected async Task GuardarProceso()
         {
-            bool guardado = false;
-            if (controlCalidadPendientes.ESNUEVO)
-            {
-              //  guardado = await Agregar(procesos);
-            }
-            else
-            {
-                //guardado = await Actualizar(procesos);
-            }
-            if (guardado)
-            {
-                Show = false;
-                controlCalidadPendientes.GUARDADO = guardado;
-                await OnGuardar.InvokeAsync(controlCalidadPendientes);
-            }
+            //bool guardado = false;
+            //if (controlCalidadPendientes.ESNUEVO)
+            //{
+            //  //  guardado = await Agregar(procesos);
+            //}
+            //else
+            //{
+            //    //guardado = await Actualizar(procesos);
+            //}
+            //if (guardado)
+            //{
+            //    Show = false;
+            //    controlCalidadPendientes.GUARDADO = guardado;
+            //    await OnGuardar.InvokeAsync(controlCalidadPendientes);
+            //}
         }
 
         //COMENTADO
-        protected async Task GetItem(int id)
+        protected async Task GetItem(int vale)
         {
         //    var response = await InventarioService.GetById(id);
         //    if (response.Error)
@@ -239,29 +228,29 @@ namespace SupplyChain.Client.Pages.CDM
         //    }
         }
         //ANTES BeforeBatchDeleteArgs<CargaValoresDetalles>
-        protected async Task BatchDeleteHandler(BeforeBatchDeleteArgs<CargaValoresDetalles> args)
+        protected async Task BatchDeleteHandler(BeforeBatchDeleteArgs<vControlCalidadPendientes> args)
         {
-            //var item = pedidos.Items.Find(i => i.Id == args.RowData.Id);
+            //var item = controlCalidadPendientes.Items.Find(i => i.VALE == args.RowData.VALE);
             //item.Estado = SupplyChain.Shared.Enum.EstadoItem.Eliminado;
         }
         //ANTES BeforeBatchAddArgs<CargaValoresDetalles>
-        public void BatchAddHandler(BeforeBatchAddArgs<CargaValoresDetalles> args)
+        public void BatchAddHandler(BeforeBatchAddArgs<vControlCalidadPendientes> args)
         {
             IsAdd = true;
         }
         //ANTES BeforeBatchSaveArgs<CargaValoresDetalles>
-        public void BatchSaveHandler(BeforeBatchSaveArgs<CargaValoresDetalles> args)
+        public void BatchSaveHandler(BeforeBatchSaveArgs<vControlCalidadPendientes> args)
         {
             IsAdd=false;
         }
         //ANTES CellSaveArgs<CargaValoresDetalles>
-        public async Task CellSavedHandler(CellSaveArgs<CargaValoresDetalles> args)
+        public async Task CellSavedHandler(CellSaveArgs<vControlCalidadPendientes> args)
         {
-            //var index = await refGridItems.GetRowIndexByPrimaryKey(args.RowData.Id);
-            //if (args.ColumnName == "SINMON")
-            //{
+            var index = await refGridItems.GetRowIndexByPrimaryKey(args.RowData.VALE);
+            if (args.ColumnName == "SINMON")
+            {
 
-            //}
+            }
         }
             public async Task Hide()
             {

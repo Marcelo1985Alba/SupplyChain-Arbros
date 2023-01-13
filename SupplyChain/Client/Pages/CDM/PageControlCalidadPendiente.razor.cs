@@ -53,7 +53,7 @@ namespace SupplyChain.Client.Pages.CDM
         //protected SfGrid<Valores> refGrid;
         //protected Valores valoresSeleccionada = new();
         protected List<vControlCalidadPendientes> controlesCalidad = new();
-        protected vControlCalidadPendientes controlCalidadSeleccionado = new();
+        protected List<vControlCalidadPendientes> controlCalidadSeleccionado = new();
         protected FormControlCalidadPendiente refControlCalidadSeleccionado = new();
         protected FormControlCalidadPendiente controlCalidadPendientes = new();
         protected bool SpinnerVisible = false;
@@ -127,81 +127,48 @@ namespace SupplyChain.Client.Pages.CDM
 
         private async Task CopiarCargaValores()
         {
-            if (refGrid.SelectedRecords.Count == 1)
-            {
-                controlesCalidad = new();
-                vControlCalidadPendientes selectedRecord = refGrid.SelectedRecords[0];
-                bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desea copiar la materia?");
-                if (isConfirmed)
-                {
-                    controlCalidadSeleccionado.VALE = selectedRecord.VALE;
-                    controlCalidadSeleccionado.REGISTRO = selectedRecord.REGISTRO;
-                    controlCalidadSeleccionado.DESPACHO = selectedRecord.DESPACHO;
-                    controlCalidadSeleccionado.CG_PROD = selectedRecord.CG_PROD;
-                    controlCalidadSeleccionado.CG_DEP = selectedRecord.CG_DEP;
-                    controlCalidadSeleccionado.CG_LINEA = selectedRecord.CG_LINEA;
-                    controlCalidadSeleccionado.DESCAL = selectedRecord.DESCAL;
-                    controlCalidadSeleccionado.CARCAL = selectedRecord.CARCAL;
-                    controlCalidadSeleccionado.UNIDADM = selectedRecord.UNIDADM;
-                    controlCalidadSeleccionado.TOLE1 = selectedRecord.TOLE1;
-                    controlCalidadSeleccionado.TOLE2 = selectedRecord.TOLE2;
-                    controlCalidadSeleccionado.AVISO = selectedRecord.AVISO;
-                    controlCalidadSeleccionado.CG_PROVE = selectedRecord.CG_PROVE;
-                    controlCalidadSeleccionado.REMITO = selectedRecord.REMITO;
-                    controlCalidadSeleccionado.OCOMPRA = selectedRecord.OCOMPRA;
+            //if (refGrid.SelectedRecords.Count == 1)
+            //{
+            //    controlesCalidad = new();
+            //    vControlCalidadPendientes selectedRecord = refGrid.SelectedRecords[0];
+            //    bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desea copiar la materia?");
+            //    if (isConfirmed)
+            //    {
+            //        controlCalidadSeleccionado.VALE = selectedRecord.VALE;
+            //        controlCalidadSeleccionado.REGISTRO = selectedRecord.REGISTRO;
+            //        controlCalidadSeleccionado.DESPACHO = selectedRecord.DESPACHO;
+            //        controlCalidadSeleccionado.CG_PROD = selectedRecord.CG_PROD;
+            //        controlCalidadSeleccionado.CG_DEP = selectedRecord.CG_DEP;
+            //        controlCalidadSeleccionado.CG_LINEA = selectedRecord.CG_LINEA;
+            //        controlCalidadSeleccionado.DESCAL = selectedRecord.DESCAL;
+            //        controlCalidadSeleccionado.CARCAL = selectedRecord.CARCAL;
+            //        controlCalidadSeleccionado.UNIDADM = selectedRecord.UNIDADM;
+            //        controlCalidadSeleccionado.TOLE1 = selectedRecord.TOLE1;
+            //        controlCalidadSeleccionado.TOLE2 = selectedRecord.TOLE2;
+            //        controlCalidadSeleccionado.AVISO = selectedRecord.AVISO;
+            //        controlCalidadSeleccionado.CG_PROVE = selectedRecord.CG_PROVE;
+            //        controlCalidadSeleccionado.REMITO = selectedRecord.REMITO;
+            //        controlCalidadSeleccionado.OCOMPRA = selectedRecord.OCOMPRA;
 
 
-                }
-                popupFormVisible = true;
-            }
-            else
-            {
-                await this.ToastObj.Show(new ToastModel
-                {
-                    Title = "ERROR!",
-                    Content = "Solo se puede copiar un item",
-                    CssClass = "e-toast-danger",
-                    Icon = "e-error toast-icons",
+            //    }
+            //    popupFormVisible = true;
+            //}
+            //else
+            //{
+            //    await this.ToastObj.Show(new ToastModel
+            //    {
+            //        Title = "ERROR!",
+            //        Content = "Solo se puede copiar un item",
+            //        CssClass = "e-toast-danger",
+            //        Icon = "e-error toast-icons",
 
-                    ShowCloseButton = true,
-                    ShowProgressBar = true
-                });
-            }
+            //        ShowCloseButton = true,
+            //        ShowProgressBar = true
+            //    });
+            //}
         }
-        //COMENTADO UT
-        //protected async Task OnActionBeginHandler(ActionEventArgs<vControlCalidadPendientes> args)
-        //{
-        //    if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
-        //        args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
-        //    {
-        //        args.Cancel = true;
-        //        args.PreventRender = false;
-        //    }
-
-        //    if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
-        //    {
-        //        SpinnerVisible = true;
-        //        controlCalidadSeleccionado = new();
-        //        await refControlCalidadSeleccionado.ShowAsync(0);
-        //        popupFormVisible= true;
-        //        SpinnerVisible = false;
-
-        //    }
-        //    if(args.RequestType== Syncfusion.Blazor.Grids.Action.BeginEdit)
-        //    {
-        //        SpinnerVisible = true;
-        //        var response = await ControlCalidadService.GetById(args.Data.Id);
-        //        if (response.Error)
-        //        {
-        //            await ToastMensajeError();
-        //        }
-        //        else
-        //        {
-        //            controlCalidadSeleccionado = response.Response;
-        //            await refControlCalidadSeleccionado.ShowAsync(args.Data.Id);
-        //        }
-        //    }
-        //}
+     
 
         protected async Task OnActionBeginHandler(ActionEventArgs<vControlCalidadPendientes> args)
         {
@@ -214,7 +181,7 @@ namespace SupplyChain.Client.Pages.CDM
                 controlesCalidad = new();
                 ////valoresSeleccionada.ESNUEVO = true;
             }
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
             {
                 var responsecontrolcalidad = await ControlCalidadService.GetControlCalidad(args.Data.REGISTRO);
                 if (responsecontrolcalidad.Error)
@@ -223,8 +190,8 @@ namespace SupplyChain.Client.Pages.CDM
                 }
                 else
                 {
-                    controlesCalidad = new();
-                    controlesCalidad = responsecontrolcalidad.Response;
+                    controlCalidadSeleccionado = new();
+                    controlCalidadSeleccionado = responsecontrolcalidad.Response;
                 }
                 
                 //valoresSeleccionada.ESNUEVO = false;
@@ -267,42 +234,43 @@ namespace SupplyChain.Client.Pages.CDM
 
         protected async Task Guardar(vControlCalidadPendientes valorg)
         {
-            //if (valorg.GUARDADO)
-            //{
-            //    await ToastMensajeExito();
-            //    popupFormVisible = false;
-            //    if (valorg.ESNUEVO)
-            //    {
-            //        valor.Add(valorg);
-            //    }
-            //    else
-            //    {
-            //        //actualiza los datos sin ir a BD
-            //        var valoresSinModificar = valor.Where(v => v.Id == valorg.Id).FirstOrDefault();
-            ////valoresSinModificar.Id = valorg.Id;
-            ////valoresSinModificar.FE_ENSAYO = valorg.FE_ENSAYO;
-            ////valoresSinModificar.CANTMEDIDA = valorg.CANTMEDIDA;
-            ////valoresSinModificar.DESPACHO = valorg.DESPACHO;
-            ////valoresSinModificar.CG_ART = valorg.CG_ART;
-            ////valoresSinModificar.DESCAL = valorg.DESCAL;
-            ////valoresSinModificar.UNIDADM = valorg.UNIDADM;
-            ////valoresSinModificar.CANTMEDIDA = valorg.CANTMEDIDA;
-            ////valoresSinModificar.OBSERV = valorg.OBSERV;
-            ////valoresSinModificar.AVISO = valorg.AVISO;
-            ////valoresSinModificar.OBSERV1 = valorg.OBSERV1;
-            ////valoresSinModificar.CG_PROVE = valorg.CG_PROVE;
-            ////valoresSinModificar.REMITO = valorg.REMITO;
-            ////valoresSinModificar.VALORNC = valorg.VALORNC;
-            ////valoresSinModificar.LEYENDANC = valorg.LEYENDANC;
-            ////valoresSinModificar.O_COMPRA = valorg.O_COMPRA;
-            ////valoresSinModificar.UNID = valorg.UNID;
-            ////valoresSinModificar.EVENTO = valorg.EVENTO;
-            ////valoresSinModificar.ENSAYOS = valorg.ENSAYOS;
-            ////valoresSinModificar.FECHA = valorg.FECHA;
-            ////valoresSinModificar.APROBADO = valorg.APROBADO;
-            ////valoresSinModificar.USUARIO = valorg.USUARIO;
-            ////valoresSinModificar.REGISTRO = valorg.REGISTRO;
+            if (valorg.GUARDADO)
+            {
+                await ToastMensajeExito();
+                popupFormVisible = false;
+                if (valorg.ESNUEVO)
+                {
+                    valor.Add(valorg);
+                }
+                else
+                {
+                    //actualiza los datos sin ir a BD
+                    var valoresSinModificar = valor.Where(v => v.VALE == valorg.VALE).FirstOrDefault();
+                    valoresSinModificar.VALE  = valorg.VALE;
+                    valoresSinModificar.DESPACHO= valorg.DESPACHO;
+                    valoresSinModificar.CG_PROD= valorg.CG_PROD;
+                    valoresSinModificar.CG_DEP= valorg.CG_DEP;
+                    valoresSinModificar.CG_LINEA= valorg.CG_LINEA;
+                    valoresSinModificar.DESCAL= valorg.DESCAL;
+                    valoresSinModificar.CARCAL = valorg.CARCAL;
+                    valoresSinModificar.UNIDADM= valorg.UNIDADM;
+                    valoresSinModificar.TOLE1=valorg.TOLE1;
+                    valoresSinModificar.TOLE2=valorg.TOLE2;
+                    valoresSinModificar.AVISO=valorg.AVISO;
+                    valoresSinModificar.CG_PROVE= valorg.CG_PROVE;
+                    valoresSinModificar.REMITO= valorg.REMITO;
+                    valoresSinModificar.OCOMPRA=valorg.OCOMPRA;
 
+                    valor.OrderByDescending(v => v.VALE);
+                }
+                await refGrid.RefreshHeaderAsync();
+                refGrid.Refresh();
+                await refGrid.RefreshColumnsAsync();
+            }
+            else
+            {
+                await ToastMensajeError();
+            }
 
 
             //valoresSinModificar.VALE = valorg.VALE;
@@ -373,19 +341,10 @@ namespace SupplyChain.Client.Pages.CDM
             //valoresSinModificar.Control5 = valorg.Control5;
             //valoresSinModificar.Control6 = valorg.Control6;
 
-            //valor.OrderByDescending(v => v.Id);
-            //    }
-            //    await refGrid.RefreshHeaderAsync();
-            //    refGrid.Refresh();
-            //    await refGrid.RefreshColumnsAsync();
-            //}
-            //else
-            //{
-            //    await ToastMensajeError();
-            //}
+
         }
 
-        private async Task ToastMensajeExito()
+                private async Task ToastMensajeExito()
         {
             await this.ToastObj.Show(new ToastModel
             {

@@ -12,8 +12,9 @@ namespace SupplyChain.Shared
     [Table("Procesos2")]
     public class CargaValoresDetalles : EntityBase<int>
     {
-        [Key, Column("REGISTRO")]
-        new public int Id { get; set; }
+        //[Key, Column("REGISTRO")]
+        //new public int Id { get; set; }
+        new public int VALE { get; set; }
         public string DESPACHO { get; set; } = "";
         public DateTime FE_ENSAYO { get; set; } = DateTime.Now;
         public string CG_PROD { get; set; } = "";

@@ -11,6 +11,7 @@ namespace SupplyChain.Client.HelperService
 {
     public class InventarioService : IDisposable
     {
+        private const string API = "api/Controlcalidad";
         private readonly HttpClient Http;
 
         public InventarioService(HttpClient http)
@@ -60,7 +61,7 @@ namespace SupplyChain.Client.HelperService
         //ADD METODOS EXISTE Y ELIMINAR
         //public async Task<bool> Existe(int id)
         //{
-        //    var response = await http.GetFromJsonAsync<bool>($"{API}/Existe/{id}");
+        //    var response = await Http.GetFromJsonAsync<bool>($"{API}/Existe/{id}");
         //    if (response.Error)
         //    {
         //        Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
@@ -69,9 +70,9 @@ namespace SupplyChain.Client.HelperService
         //    return response.Response;
         //}
 
-        //public async Task<bool> Eliminar(List<Procesos> procesos)
+        //public async Task<bool> Eliminar(List<vControlCalidadPendientes> controlCalidadPendientes)
         //{
-        //    var response = await http.PostAsJsonAsync<List<Pedidos>>($"{API}/PostList", procesos);
+        //    var response = await Http.PostAsJsonAsync<List<vControlCalidadPendientes>>($"{API}/PostList", controlCalidadPendientes);
         //    if (response.Error)
         //    {
         //        Console.Write(await response.HttpResponseMessage.Content.ReadAsStringAsync());
