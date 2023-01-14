@@ -10,7 +10,6 @@ namespace SupplyChain.Shared
 {
     public class vControlCalidadPendientes
     {   
-
         public int VALE { get; set; }
         public int REGISTRO { get; set; }
         public string DESPACHO { get; set; }
