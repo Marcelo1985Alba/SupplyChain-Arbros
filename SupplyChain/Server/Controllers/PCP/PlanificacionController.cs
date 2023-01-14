@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using SkiaSharp;
 using SupplyChain;
 using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 
 namespace SupplyChain.Server.Controllers
@@ -106,7 +108,33 @@ namespace SupplyChain.Server.Controllers
                     item.ResumenStocks = await _context.ResumenStock
                         .Where(r => r.CG_ART == codigoInsumo && r.STOCK > 0)
                         .ToListAsync();
-                    item.StockCorregido = await _stockCorregidoRepository.Obtener(s=> s.Id == codigoInsumo).FirstOrDefaultAsync();
+
+                    var stock = await _stockCorregidoRepository.Obtener(s => s.Id == codigoInsumo).FirstOrDefaultAsync();
+                    if (stock == null)
+                        item.StockCorregido = new Shared.StockCorregido();
+                    else
+                        item.StockCorregido = stock;
+                    try
+                    {
+                        if (!string.IsNullOrWhiteSpace(item.CG_SE))
+                        {
+                            ConexionSQL xConexionSQL2 = new ConexionSQL(CadenaConexionSQL);
+                            string xSQLCommandString = "SELECT * FROM FORM2 WHERE CG_PROD ='" + codigoInsumo + "' and REVISION  = (SELECT MAX(REVISION) FROM FORM2 " +
+                                                   "WHERE CG_PROD = '" + codigoInsumo + "')";
+
+                            dbPlanificacion = xConexionSQL2.EjecutarSQL(xSQLCommandString);
+                            item.formulasSemielaborado = dbPlanificacion.AsEnumerable().Select(m => new Shared.Formula()
+                            {
+                                Cg_Mat = m.Field<string>("CG_MAT"),
+                                Cg_Prod = m.Field<string>("CG_PROD"),
+                                Cg_Se = m.Field<string>("CG_SE"),
+                            }).ToList<Formula>();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        item.formulasSemielaborado = new List<Formula>();
+                    }
                 }
 
                 return xLista;
