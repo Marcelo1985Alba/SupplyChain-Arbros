@@ -24,7 +24,7 @@ using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Grid;
 using Syncfusion.Pdf.Tables;
 using SupplyChain.Client.HelperService;
-
+using SupplyChain.Shared;
 
 namespace SupplyChain.Client.Pages.NoConf
 {
@@ -50,7 +50,23 @@ namespace SupplyChain.Client.Pages.NoConf
 
         protected NotificacionToast NotificacionObj;
         protected bool ToastVisible { get; set; } = false;
-//        protected SfSpinner SpinnerObj;
+        //        protected SfSpinner SpinnerObj;
+        #region "Vista Grilla"
+        protected const string APPNAME = "grdISOABM";
+        protected string state;
+        protected SfGrid<vEstadEventos> refGrid;
+        #endregion
+
+        #region "Eventos Vista Grilla"
+        protected async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
+        {
+            await refGrid.SetPersistData(vistasGrillas.Layout);
+        }
+        protected async Task OnReiniciarGrilla()
+        {
+            await refGrid.ResetPersistData();
+        }
+        #endregion
 
         // funciones base
         public async Task nuevoevento()

@@ -21,6 +21,14 @@
 @using Syncfusion.Pdf.Tables
 @inherits SupplyChain.Client.Pages.NoConf.NoConformidadesPageBase
 
+<div class="row">
+    <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+    </div>
+</div>
+
 @{
 
     <SfToast ID="toast_default" @ref="ToastObj">
