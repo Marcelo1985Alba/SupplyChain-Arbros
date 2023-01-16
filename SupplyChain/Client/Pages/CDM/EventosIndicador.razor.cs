@@ -12,6 +12,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Syncfusion.Blazor.Navigations;
+using Syncfusion.Blazor.Notifications;
 
 namespace SupplyChain.Client.Pages
 {
@@ -20,7 +22,11 @@ namespace SupplyChain.Client.Pages
     {
         [Inject] public HttpClient Http { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
-
+        #region "Vista Grilla"
+        protected const string APPNAME = "grdEventos";
+        protected string state;
+        #endregion
+        protected SfToast ToastObj;
         protected SfDashboardLayout dashboardObject;
         protected SfChart refChartDetalle;
         protected SfSpinner refSpinner;
@@ -43,8 +49,8 @@ namespace SupplyChain.Client.Pages
         protected string TituloGraficoEventosProveedor = "";
         protected string SerieSeleccionaEventos = "";
         protected string añoEventoSeleccionado = string.Empty;
-        ///////**********************************************////////////////////////////
         
+        ///////**********************************************////////////////////////////
 
         public class ChartData
         {

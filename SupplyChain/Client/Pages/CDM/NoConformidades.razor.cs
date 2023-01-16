@@ -48,6 +48,9 @@ namespace SupplyChain.Client.Pages.NoConf
         public bool deshabradio { get; set; } = false;
         public bool desfechacierre { get; set; } = false;
 
+
+
+
         protected NotificacionToast NotificacionObj;
         protected bool ToastVisible { get; set; } = false;
 //        protected SfSpinner SpinnerObj;
