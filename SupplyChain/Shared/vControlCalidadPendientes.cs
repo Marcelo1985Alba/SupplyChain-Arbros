@@ -14,13 +14,14 @@ namespace SupplyChain.Shared
         public int REGISTRO { get; set; }
         public string DESPACHO { get; set; }
         public string CG_PROD { get; set; }
+        public string DES_PROD { get; set; }
         public int CG_DEP { get; set; }
         public int CG_LINEA { get; set; }
         public string DESCAL { get; set; }
         public string CARCAL { get; set; }
         public string UNIDADM { get; set; }
-        public string TOLE1 { get; set; }   
-        public string TOLE2 { get; set;}
+        public decimal TOLE1 { get; set; }   
+        public decimal TOLE2 { get; set;}
         public string AVISO { get; set; }
         public int CG_PROVE { get; set; }
         public string REMITO { get; set; }
@@ -34,6 +35,9 @@ namespace SupplyChain.Shared
 
         [NotMapped]
         public bool GUARDADO { get; set; }
+
+        [NotMapped]
+        public decimal VALOR { get; set; }
 
     }
 }

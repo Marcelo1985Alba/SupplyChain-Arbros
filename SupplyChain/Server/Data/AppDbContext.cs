@@ -141,6 +141,7 @@ namespace SupplyChain
         public DbSet<vUsuario> vUsuarios { get; set; }
         public DbSet<ProcalsMP> ProcalsMP { get; set; }
         public DbSet<vControlCalidadPendientes> vcontrolCalidadPendientes { get; set; }
+        public DbSet<Procesos> Procesos { get; set; }
 
         #endregion
 

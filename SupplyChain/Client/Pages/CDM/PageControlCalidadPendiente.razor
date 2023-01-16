@@ -23,97 +23,50 @@
             <ToastPosition X="Center" Y="Top"></ToastPosition>
         </SfToast>
         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                @ref="refGrid" DataSource="@valor" Width="100%" Toolbar="Toolbaritems"
+                @ref="refGrid" DataSource="@pendientes" Width="100%" Toolbar="Toolbaritems"
                 AllowExcelExport="true" AllowGrouping="true" ID="grdControlCalidad" AllowFiltering="true"
                 AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
-            
-            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
-            <GridEvents OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolHandler"
-                        OnActionComplete="OnActionCompleteHandler" TValue="vControlCalidadPendientes"></GridEvents>
-            <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings> 
+            <GridEvents OnActionBegin="OnActionBeginHandler" RowSelected="rowSelected"
+                        OnActionComplete="OnActionCompleteHandler" TValue="Pedidos"></GridEvents>
+            <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
                 ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog">
             </GridEditSettings>
             <GridColumns>
                 <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                @*REEMPLAZAR CON LOS VALORES DE PEDIDOS*@
-                <GridColumn Field=@nameof(vControlCalidadPendientes.VALE) HeaderText="VALE" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(vControlCalidadPendientes.REGISTRO) HeaderText="REGISTRO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(vControlCalidadPendientes.DESPACHO) HeaderText="DESPACHO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(vControlCalidadPendientes.CG_PROD) HeaderText="CG_PROD" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(vControlCalidadPendientes.CG_DEP) HeaderText="CG_DEP" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(vControlCalidadPendientes.CG_LINEA) HeaderText="CG_LINEA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(vControlCalidadPendientes.DESCAL) HeaderText="DESCAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(vControlCalidadPendientes.CARCAL) HeaderText="CARCAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(vControlCalidadPendientes.UNIDADM) HeaderText="UNIDADM" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(vControlCalidadPendientes.TOLE1) HeaderText="TOLE1" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(vControlCalidadPendientes.TOLE2) HeaderText="TOLE2" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(vControlCalidadPendientes.AVISO) HeaderText="AVISO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(vControlCalidadPendientes.CG_PROVE) HeaderText="CG_PROVE" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(vControlCalidadPendientes.REMITO) HeaderText="REMITO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(vControlCalidadPendientes.OCOMPRA) HeaderText="OCOMPRA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                
+                <GridColumn Field=@nameof(Pedidos.CG_ART) HeaderText="Codigo" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.DES_ART) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.DESPACHO) HeaderText="Despacho" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.STOCK) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.VALE) HeaderText="Vale" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.FE_MOV) HeaderText="Fecha Mov." TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.REMITO) HeaderText="Remito" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.AVISO) HeaderText="Aviso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.OCOMPRA) HeaderText="Orden de Compra" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.CG_PROVE) HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(Pedidos.UNID) HeaderText="Unid" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner> 
         </SfGrid>
         </div>
-
        @if(popupFormVisible)
         {
-        <FormControlCalidadPendiente controlCalidadPendientes="controlCalidadSeleccionado" Show="popupFormVisible" OnEliminar="@(async(v)=> await Guardar(v))"
-                OnCerrar="OnCerrarDialog" OnGuardar="@(async(v)=> await Guardar(v))"></FormControlCalidadPendiente>
+            <FormControlCalidadPendiente controlCalidadPendientes="pendienteSeleccionado" Show="popupFormVisible" OnCerrar="OnCerrarDialog"></FormControlCalidadPendiente>
         }
-        
 </div>
 
 <style>
     .form-group.col-md-6 {
         width: 200px;
     }
-
     label.e-float-text {
         position: relative;
         padding-left: 0;
         top: 10%;
     }
-
     .e-input-group.e-control-wrapper.customClass {
         color: black;
         background-color: lightblue;
     }
 </style>
-
-@code {
-    public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
-    public bool DblClick = true;
-    public bool CommandColumnsClick = false;
-
-    public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
-    public void OnRadioChange (ChangeArgs<String>args)
-    {
-        if(args.Value== "inline")
-        {
-            this.DblClick= true;
-            this.CommandColumnsClick= false;
-            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
-        }
-        else if (args.Value == "batch")
-        {
-            this.DblClick = true;
-            this.CommandColumnsClick = false;
-            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Batch;
-        }
-        else if (args.Value == "dialog")
-        {
-            this.DblClick = true;
-            this.CommandColumnsClick = false;
-            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Dialog;
-        }
-        else
-        {
-            this.CommandColumnsClick = true;
-        }
-    }
-
-}

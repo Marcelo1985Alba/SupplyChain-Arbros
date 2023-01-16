@@ -9,12 +9,12 @@ using static System.Net.WebRequestMethods;
 
 namespace SupplyChain.Client.HelperService
 {
-    public class ProcesoService : IDisposable
+    public class InventarioService : IDisposable
     {
-        private const string API = "api/Proceso";
+        private const string API = "api/Controlcalidad";
         private readonly HttpClient Http;
 
-        public ProcesoService(HttpClient http)
+        public InventarioService(HttpClient http)
         {
             this.Http = http;
         }
@@ -24,10 +24,25 @@ namespace SupplyChain.Client.HelperService
             ((IDisposable)Http).Dispose();
         }
 
-        //public async Task<List<Procesos>> GetProcesos()
-        //{
-        //    return await Http.GetFromJsonAsync<List<Procesos>>($"api/Stock/GetProcesos/");
-        //}
+        public async Task<int> GetProximoVale()
+        {
+            int vale = await Http.GetFromJsonAsync<int>("api/Stock/GetMaxVale");
+            return vale;
+        }
+        public async Task<List<Pedidos>> GetVale(int vale)
+        {
+            return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/ByNumeroVale/{vale}");
+        }
+
+        public async Task<List<Pedidos>> GetPendienteAprobacion()
+        {
+            return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/GetPendienteAprobacion/");
+        }
+
+        public async Task<List<Pedidos>> GetControlCalidad()
+        {
+            return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/GetControlCalidad/");
+        }
 
         public async Task<List<vControlCalidadPendientes>> GetControlCalidadPendientes()
         {
@@ -38,17 +53,6 @@ namespace SupplyChain.Client.HelperService
         {
             return await Http.GetFromJsonAsync<List<vControlCalidadPendientes>>($"api/Stock/GetSegundaGrilla/");
         }
-
-
-
-
-        //public async Task<List<Pedidos>> GetPendienteAprobacionNuevo()
-        //{ 
-        //    return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/GetPendienteAprobacionNuevo/");
-        //}
-
-
-
         //ADD METODOS EXISTE Y ELIMINAR
         //public async Task<bool> Existe(int id)
         //{
@@ -59,17 +63,6 @@ namespace SupplyChain.Client.HelperService
         //        return false;
         //    }
         //    return response.Response;
-        //}
-
-        //public async Task<bool> Eliminar(List<vControlCalidadPendientes> controlCalidadPendientes)
-        //{
-        //    var response = await Http.PostAsJsonAsync<List<vControlCalidadPendientes>>($"{API}/PostList", controlCalidadPendientes);
-        //    if (response.Error)
-        //    {
-        //        Console.Write(await response.HttpResponseMessage.Content.ReadAsStringAsync());
-        //        return false;
-        //    }
-        //    return true;
         //}
     }
 }

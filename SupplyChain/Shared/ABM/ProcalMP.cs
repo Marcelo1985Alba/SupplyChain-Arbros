@@ -20,8 +20,8 @@ namespace SupplyChain
         public string CARCAL { get; set; } = "";
         public string UNIDADM { get; set; } = "";
         public decimal MEDIDA { get; set; } = 0;
-        public string TOLE1 { get; set; } = "";
-        public string TOLE2 { get; set; } = "";
+        public decimal TOLE1 { get; set; } = 0;
+        public decimal TOLE2 { get; set; } = 0;
         public string OBSERV { get; set; } = "";
         //public string FE_REG { get; set; } = "";
         public string DESCAL2 { get; set; } = "";

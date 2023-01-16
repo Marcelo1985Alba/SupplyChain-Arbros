@@ -5,6 +5,10 @@
     <UserSecretsId>9349a2cc-57d6-4f15-bbe7-0a5c35bf26d1</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Remove="wwwroot\Report\ArbrosDataSet.Designer.cs" />
     <Content Remove="wwwroot\Report\ArbrosDataSet.xsc" />

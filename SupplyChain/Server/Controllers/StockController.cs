@@ -103,7 +103,6 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
-
                 resumenStock.DESPACHO = resumenStock.DESPACHO == null ? "" : resumenStock.DESPACHO;
                 resumenStock.LOTE = resumenStock.LOTE == null ? "" : resumenStock.LOTE;
                 resumenStock.SERIE = resumenStock.SERIE == null ? "" : resumenStock.SERIE;
@@ -358,6 +357,47 @@ namespace SupplyChain.Server.Controllers
 
 
             return lStock;
+        }
+
+        // GET:   
+        [HttpGet("GetControlCalidad")]
+        public async Task<ActionResult<IEnumerable<Pedidos>>> GetControlCalidad()
+        {
+            List<Pedidos> lStock = await _pedidosRepository
+                .Obtener(p => p.CG_DEP == 3)
+                .ToListAsync();
+
+            if (lStock == null)
+            {
+                return NotFound();
+            }
+
+
+            return lStock;
+        }
+
+        // GET: api/Stock/GetSegundaGrilla
+        [HttpGet("GetSegundaGrilla")]
+        public async Task<List<vControlCalidadPendientes>> GetSegundaGrilla()
+        {
+            try
+            {
+                string xSQLCommandString = "SELECT P.VALE, P.REGISTRO, P.DESPACHO, P.CG_ART AS CG_PROD, P.DES_ART AS DES_PROD, P.CG_DEP, PR.CG_LINEA," +
+                "PMP.DESCAL, PMP.CARCAL, PMP.UNIDADM, PMP.TOLE1, PMP.TOLE2, PMP.AVISO, P.CG_PROVE, P.REMITO, P.OCOMPRA " +
+                "FROM   dbo.Pedidos AS P INNER JOIN " +
+                "dbo.Prod AS PR ON P.CG_ART = PR.CG_PROD INNER JOIN " +
+                "dbo.ProcalMP AS PMP ON PR.CG_LINEA = PMP.CG_LINEA " +
+                "WHERE (P.CG_DEP = 3)";
+
+
+                var xLista = await _context.vcontrolCalidadPendientes.FromSqlRaw(xSQLCommandString).ToListAsync();
+
+                return xLista;
+            }
+            catch (Exception ex)
+            {
+                return new List<vControlCalidadPendientes>();
+            }
         }
 
         ////GET:

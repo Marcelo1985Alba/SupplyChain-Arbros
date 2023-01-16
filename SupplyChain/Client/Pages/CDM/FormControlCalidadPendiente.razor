@@ -9,28 +9,26 @@
 </SfToast>
 
 <SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="500px" ShowCloseIcon="true">
-    <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
+    <DialogEvents Closed="OnCerrarDialog" Opened="openedDialog"></DialogEvents>
     <DialogTemplates>
         <Header>
-            <!--
-            @if (string.IsNullOrEmpty(controlCalidadPendientes[0].VALE.ToString()))
+            @if (segGrilla.Count == 0)
             {
-                <p>Nuevo Proceso</p>
+                <p>No hay elementos asociados</p>
             }
             else
             {
-                <p>&nbsp;&nbsp;@controlCalidadPendientes[0].VALE &nbsp;&nbsp;-&nbsp;&nbsp;@controlCalidadPendientes[0].VALE</p>
-
+                <p>@controlCalidadPendientes.CG_ART  -  @controlCalidadPendientes.DES_ART</p>
+                <p>Vale: @controlCalidadPendientes.VALE  -  Despacho: @controlCalidadPendientes.DESPACHO</p>
             }
-            -->
         </Header>
         <Content>
-
-         @*   <EditForm Model="controlCalidadPendientes" OnValidSubmit="@GuardarProceso">
+            <!--
+                <EditForm Model="controlCalidadPendientes" OnValidSubmit="@GuardarProceso">
                 <DataAnnotationsValidator/>
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales" 
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales"
                             role="tab" aria-controls="pills-home" aria-selected="true">Datos Generales</a>
                     </li>
                 </ul>
@@ -41,7 +39,7 @@
                         </SfToast>
 
                         <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="120px"
-                                @ref="refGridItems" DataSource="@controlCalidadPendientes.Items" Width="100%" ID="grdItemsProcalMP"
+            @ref="refGridItems" DataSource="@controlCalidadPendientes.Items" Width="100%" ID="grdItemsProcalMP"
                             AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
                          <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                         <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowConfirmDialog="false"
@@ -66,44 +64,60 @@
                                 <GridColumn Field=@nameof(vControlCalidadPendientes.CG_PROVE) HeaderText="CG_PROVE" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                                 <GridColumn Field=@nameof(vControlCalidadPendientes.REMITO) HeaderText="REMITO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                                 <GridColumn Field=@nameof(vControlCalidadPendientes.OCOMPRA) HeaderText="O_COMPRA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                        </GridColumns>    
-                     </SfGrid>                  
+                        </GridColumns>
+                     </SfGrid>
                     </div>
                 </div>
-              
+
                 <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
 
-            </EditForm>*@
-
-            <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="120px"
-                    @ref="refGridItems" DataSource="@controlCalidadPendientes" Width="100%" ID="grdItemsProcalMP"
-                    AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
-                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
-                <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowConfirmDialog="false"
-                                  Mode="@Syncfusion.Blazor.Grids.EditMode.Batch">
-                    <GridEvents TValue="vControlCalidadPendientes" OnBatchDelete="BatchDeleteHandler"
-                                CellSaved="CellSavedHandler" OnBatchAdd="BatchAddHandler" OnBatchSave="BatchSaveHandler"></GridEvents>
-                </GridEditSettings>
-                <GridColumns>
-                    <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                    <GridColumn Field=@nameof(vControlCalidadPendientes.VALE) HeaderText="VALE" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(vControlCalidadPendientes.REGISTRO) HeaderText="REGISTRO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(vControlCalidadPendientes.DESPACHO) HeaderText="DESPACHO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(vControlCalidadPendientes.CG_PROD) HeaderText="CG_PROD" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(vControlCalidadPendientes.CG_DEP) HeaderText="CG_DEP" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(vControlCalidadPendientes.CG_LINEA) HeaderText="CG_LINEA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(vControlCalidadPendientes.DESCAL) HeaderText="DESCAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(vControlCalidadPendientes.CARCAL) HeaderText="CARCAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(vControlCalidadPendientes.UNIDADM) HeaderText="UNIDADM" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(vControlCalidadPendientes.TOLE1) HeaderText="TOLE1" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(vControlCalidadPendientes.TOLE2) HeaderText="TOLE2" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(vControlCalidadPendientes.AVISO) HeaderText="AVISO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(vControlCalidadPendientes.CG_PROVE) HeaderText="CG_PROVE" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(vControlCalidadPendientes.REMITO) HeaderText="REMITO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(vControlCalidadPendientes.OCOMPRA) HeaderText="O_COMPRA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                </GridColumns>
-            </SfGrid>
-           
+            </EditForm>
+            -->
+            @if (segGrilla.Count != 0)
+            {
+                <EditForm Model="controlCalidadPendientes" OnValidSubmit="@(async()=> await Guardar())">
+                    <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false"
+                        @ref="refGridItems" DataSource="@segGrilla" Width="100%" ID="grdItemsProcalMP"
+                        AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
+                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowConfirmDialog="false"
+                                      Mode="@Syncfusion.Blazor.Grids.EditMode.Batch">
+                            <GridEvents TValue="vControlCalidadPendientes" OnBatchDelete="BatchDeleteHandler"
+                                    QueryCellInfo="(async(args)=> await QueryCellInfoHandler(args))"
+                                    CellSaved="CellSavedHandler" OnBatchAdd="BatchAddHandler" OnBatchSave="BatchSaveHandler"></GridEvents>
+                        </GridEditSettings>
+                        <GridColumns>
+                            <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+                            <GridColumn Field=@nameof(vControlCalidadPendientes.CARCAL) HeaderText="Propiedad" AllowEditing="false" TextAlign="TextAlign.Center" Width="265px"></GridColumn>
+                            <GridColumn Field=@nameof(vControlCalidadPendientes.UNIDADM) HeaderText="Elementos" AllowEditing="false" TextAlign="TextAlign.Center" Width="165px"></GridColumn>
+                            <GridColumn Field=@nameof(vControlCalidadPendientes.VALOR) HeaderText="Ingresar valor" TextAlign="TextAlign.Center" Width="150px"></GridColumn>
+                            <GridColumn Field=@nameof(vControlCalidadPendientes.TOLE1) HeaderText="Tol. 1" AllowEditing="false" TextAlign="TextAlign.Center" Width="55px"></GridColumn>
+                            <GridColumn Field=@nameof(vControlCalidadPendientes.TOLE2) HeaderText="Tol. 2" AllowEditing="false" TextAlign="TextAlign.Center" Width="55px"></GridColumn>
+                            <GridColumn Field=@nameof(vControlCalidadPendientes.AVISO) HeaderText="Aviso" AllowEditing="false" TextAlign="TextAlign.Left" Width="400px"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                </EditForm>
+            }
         </Content>
+        <FooterTemplate>
+            @if (segGrilla.Count != 0)
+            {
+                <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
+                <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async()=>await Hide())" IconCss="fa fa-window-close-o"></SfButton>
+            }
+        </FooterTemplate>
     </DialogTemplates>
 </SfDialog>
+
+
+<style>
+    .e-grid .e-gridcontent .e-rowcell.rojas {
+        background-color: orangered;
+    }
+    .e-grid .e-gridcontent .e-rowcell.verdes {
+        background-color: lightgreen;
+    }
+    .e-grid .e-gridcontent .e-rowcell.blancas {
+        background-color: white;
+    }
+</style>
