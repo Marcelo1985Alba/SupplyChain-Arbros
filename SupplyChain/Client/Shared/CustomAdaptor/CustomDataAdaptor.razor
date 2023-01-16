@@ -10,8 +10,6 @@
 @inherits DataAdaptor<GanttContext>
 
 @code {
-
-
     // Performs data Read operation
     public override async Task<object> ReadAsync(DataManagerRequest dm, string key = null)
 
@@ -20,12 +18,10 @@
 
         return dm.RequiresCounts ? new DataResult() { Result = data, Count = data.Count() } : (object)data;
     }
-
     /*
-    public override object InsertAsync(DataManager dm, object value, string key)
+    public override async Task<object> InsertAsync(DataManager dm, object value, string key)
     {
-
-        List<GanttDataDetails> addRecord = addedRecords as List<GanttDataDetails>;
+        List<GanttDataDetails> addRecord = value as List<GanttDataDetails>;
         if (addRecord != null)
         {
             for (var i = 0; i < addRecord.Count(); i++)
@@ -33,6 +29,7 @@
                 await http.PostAsJsonAsync( "/api/GanttDataDetails", addRecord[i] as GanttDataDetails);
             }
         }
+        return (new { addedRecords = addRecord});
     }
     */
 

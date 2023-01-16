@@ -20,6 +20,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
     public class IsoPageBase : ComponentBase
     {
         [Inject] protected HttpClient Http { get; set; }
+        [Inject] protected NavigationManager NavigationManager { get; set; }
         [Inject] protected IJSRuntime jSRuntime { get; set; }
         [Inject] protected ISOService isoService { get; set; }
         #region "Vista Grilla"
@@ -270,6 +271,11 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
                 ShowCloseButton = true,
                 ShowProgressBar = true
             });
+        }
+
+        public void onClick()
+        {
+            NavigationManager.NavigateTo("/Abms/Iso/Graphics");
         }
     }
 }

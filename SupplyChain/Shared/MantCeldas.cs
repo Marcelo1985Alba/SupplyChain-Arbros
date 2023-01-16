@@ -24,7 +24,8 @@ namespace SupplyChain
         public string Proveedor { get; set; } = "";
         public string Estado { get; set; } = "";
         public DateTime? FechaCumplido { get; set; }
-		[NotMapped]
+        public string Observaciones { get; set; } = "";
+        [NotMapped]
         public bool GUARDADO { get; set; }
         [NotMapped]
         public bool ESNUEVO { get; set; }

@@ -27,6 +27,7 @@ namespace SupplyChain.Shared.Models
         public decimal STOCK_CORREGIDO => StockCorregido.COMP_DE_ENTRADA + StockCorregido.STOCK;
 
         public List<ResumenStock> ResumenStocks { get; set; }
-        public StockCorregido StockCorregido { get; set; } = new StockCorregido();
+		public List<Formula> formulasSemielaborado { get; set; }
+		public StockCorregido StockCorregido { get; set; } = new StockCorregido();
     }
 }

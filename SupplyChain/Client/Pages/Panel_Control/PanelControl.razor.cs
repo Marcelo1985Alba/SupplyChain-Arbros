@@ -17,6 +17,9 @@ using Syncfusion.Blazor.Calendars;
 using Syncfusion.Blazor.LinearGauge;
 using Syncfusion.Blazor.Data;
 using Syncfusion.Blazor;
+using SupplyChain.Shared.Context;
+using static System.Net.WebRequestMethods;
+using Syncfusion.Blazor.Notifications;
 
 namespace SupplyChain.Client.Pages.Panel_Control
 {
@@ -146,10 +149,11 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
         /////////////**********PROYECTOS*********////////////////////
         [Inject] protected ProyectosService ProyectosService { get; set; }
-        protected DateTime ProjectStart = new DateTime(2020, 1, 11);
-        protected DateTime ProjectEnd = new DateTime(2022, 9, 28);
-        protected SfGantt<ProyectosGBPI> refGanttProyectos;
-        protected List<ProyectosGBPI> DataProyectos { get; set; } = new();
+        protected SfGantt<GanttDataDetails> Gantt;
+        protected List<GanttDataDetails> DataProyectos { get; set; } = new();
+
+        [Parameter] public bool ShowDialog { get; set; } = false;
+        [Parameter] public GanttDataDetails tarea { get; set; } = new();
         public Query Qry = new Query().AddParams("Id", 10).AddParams("TaskName", "Test2").AddParams("StartDate", DateTime.Now)
             .AddParams("EndDate", DateTime.Now.AddDays(1)).AddParams("Duration", "1 days")
             .AddParams("Progress", 0).AddParams("Predecessor", "").AddParams("Notes", "").AddParams("ParentId", 0);
@@ -200,6 +204,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
             await GetPedidos();
             await GetPedidosAltas();
             await GetPresupuestos();
+            await GetProyectos();
 
             VisibleSpinner = false;
         }
@@ -1173,8 +1178,6 @@ namespace SupplyChain.Client.Pages.Panel_Control
             
             await refChartDetallePedidosIngresadosUE.RefreshAsync();
             await refChartDetallePedidosIngresadosUE.RefreshAsync();
-            
-
         }
 
         protected async Task MostrarDetalleUEMes(Syncfusion.Blazor.Charts.PointEventArgs args)
@@ -1208,6 +1211,53 @@ namespace SupplyChain.Client.Pages.Panel_Control
 
         }
 
+
+
+        protected async Task GetProyectos()
+        {
+            this.DataProyectos = await Http.GetFromJsonAsync<List<GanttDataDetails>>("api/proyectos");
+            Gantt.PreventRender();
+        }
+        public void AddRow()
+        {
+            ShowDialog = true;
+            //this.Gantt.AddRecordAsync(record, 2, RowPosition.Below);
+        }
+        public void EditRow()
+        {
+            ShowDialog = true;
+            //this.Gantt.AddRecordAsync(record, 2, RowPosition.Below);
+        }
+        protected async Task<bool> Agregar(GanttDataDetails tarea)
+        {
+            await Http.PostAsJsonAsync("/api/GanttDataDetails", tarea as GanttDataDetails);
+            return true;
+        }
+
+        protected async Task<bool> Actualizar(GanttDataDetails tarea)
+        {
+            await Http.PutAsJsonAsync("/api/GanttDataDetails/" + tarea.Id, tarea as GanttDataDetails);
+            return true;
+        }
+        protected async Task GuardarTarea()
+        {
+            bool guardado = false;
+            if (tarea.ESNUEVO)
+            {
+                guardado = await Agregar(tarea);
+            }
+            else
+            {
+                guardado = await Actualizar(tarea);
+            }
+
+            if (guardado)
+            {
+                ShowDialog = false;
+                tarea.GUARDADO = guardado;
+                //await OnGuardar.InvokeAsync(tarea);
+            }
+        }
 
     }
 }

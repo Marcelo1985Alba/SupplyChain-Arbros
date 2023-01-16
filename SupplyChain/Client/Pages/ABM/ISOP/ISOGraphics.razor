@@ -4,17 +4,49 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.HeatMap
 @using SFHeatMap = Syncfusion.Blazor.HeatMap
+@inject IJSRuntime JsRuntime
 @inherits GraphicIso
 
 <SfToast ID="toast_default" @ref="ToastObj">
     <ToastPosition X="Center" Y="Top"></ToastPosition>
 </SfToast>
 
-<SfDropDownList TItem="BaseOption" TValue="string" Placeholder="RIESGO" PopupHeight="auto" DataSource="@Impactos">
-	<DropDownListEvents TItem="BaseOption" TValue="string" ValueChange="ChangeImpAmb"></DropDownListEvents>
-	<DropDownListFieldSettings Text="Text" Value="Text"></DropDownListFieldSettings>
-</SfDropDownList>
 
+<div class="row">
+	<div class="col-5">
+		<label class="e-float-text e-label-top">Impacto Ambiental:</label>
+	</div>
+	<div class="col-5">
+		<label class="e-float-text e-label-top">Identificacion:</label>
+	</div>
+</div>
+
+<br />
+
+<div class="row">
+	<div class="col-5">
+		<SfDropDownList TItem="BaseOption" TValue="string" Placeholder="RIESGO" PopupHeight="auto" DataSource="@Impactos" EnableVirtualization="true">
+			<DropDownListEvents TItem="BaseOption" TValue="string" ValueChange="ChangeImpAmb"></DropDownListEvents>
+			<DropDownListFieldSettings Text="Text" Value="Text"></DropDownListFieldSettings>
+		</SfDropDownList>
+	</div>
+	<div class="col-5">
+		<SfDropDownList TItem="int" TValue="int" Placeholder="Id" PopupHeight="auto" DataSource="@idByImp" EnableVirtualization="true">
+			<DropDownListEvents TItem="int" TValue="int" ValueChange="ChangeId"></DropDownListEvents>
+		</SfDropDownList>
+	</div>
+	<div class="col-lg-2 col-md-3">
+		<SfButton Content="Ver tabla" IsPrimary="false" CssClass="btn-sm e-info" IconCss="fa fa-eye"
+					  OnClick="onClick"></SfButton>
+	</div>
+</div>
+
+
+
+<!--
+	poner en heatmapevents:
+	CellRendering="@CellRenderEvent"
+-->
 <SfHeatMap DataSource="@HeatMapColors">
 	<HeatMapEvents TooltipRendering="@TooltipRendering"></HeatMapEvents>
 
@@ -61,3 +93,20 @@
 	</HeatMapPaletteSettings>
 	<HeatMapLegendSettings Visible="false"></HeatMapLegendSettings>	
 </SfHeatMap>
+
+<!--
+
+@code {
+	public void CellRenderEvent(HeatMapCellRenderEventArgs args)
+	{
+	args.CellColor = "black";
+	}
+}
+-->
+
+<style>
+	.e-grid {
+		background-color: red;
+		font-weight: bold;
+	}
+</style>
