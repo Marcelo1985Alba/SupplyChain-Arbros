@@ -39,6 +39,8 @@ namespace SupplyChain.Client.Pages.CDM
         protected string state;
 
         protected bool BotonGuardarDisabled = false;
+        
+                
 
         protected Dictionary<string, object> HtmlAttributeSubmit = new()
         {
