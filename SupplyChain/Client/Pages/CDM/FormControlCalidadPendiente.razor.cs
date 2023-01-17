@@ -12,6 +12,7 @@ using Microsoft.JSInterop;
 using System.Security.Authentication.ExtendedProtection;
 using SupplyChain.Client.Shared;
 using System.Linq;
+using System.Net.Http.Json;
 
 namespace SupplyChain.Client.Pages.CDM
 {
@@ -142,41 +143,49 @@ namespace SupplyChain.Client.Pages.CDM
                 }
             }
             await ToastMensajeError("Todos los datos fueron ingresador correctamente, guardando.");
-            //aca deberia hacer el nuevo proceso y guardarlo en la base de datos
-            Procesos toSave = new Procesos();
-            toSave.VALE = controlCalidadPendientes.VALE.ToString();
-            toSave.DESPACHO = controlCalidadPendientes.DESPACHO;
-            toSave.FE_ENSAYO = DateTime.Now;
-            toSave.CG_PROD = controlCalidadPendientes.CG_ART;
-            //toSave.CG_ORDEN = (int)controlCalidadPendientes.CG_ORDEN;
-            toSave.DESCAL = segGrilla.FirstOrDefault().DESCAL;
-            toSave.CARCAL = segGrilla.FirstOrDefault().CARCAL;
-            toSave.UNIDADM = segGrilla.FirstOrDefault().UNIDADM;
-            //toSave.CANTMEDIDA
-            //toSave.MEDIDA
-            //toSave.TOLE1
-            //toSave.TOLE2
-            //toSave.OBSERV
-            //toSave.AVISO
-            //toSave.MEDIDA1
-            //toSave.OBSERV1
-            //toSave.CG_PROVE
-            //toSave.REMITO
-            //toSave.VALORNC
-            //toSave.LEYENDANC
-            //toSave.LOTE
-            //toSave.CG_ORDF
-            //toSave.UNID
-            //toSave.NUM_PASE
-            //toSave.ENSAYOS
-            //toSave.FECHA
-            //toSave.APROBADO
-            //toSave.TIPO
-            //toSave.CG_CLI
-            //toSave.USUARIO
-            //toSave.FE_REG
-            //var response2 = await ProcesoService.Agregar(toSave);
+
+            foreach (var item in segGrilla)
+            {
+                Procesos toSave = new Procesos();
+                toSave.VALE = controlCalidadPendientes.VALE.ToString();
+                toSave.DESPACHO = controlCalidadPendientes.DESPACHO;
+                toSave.FE_ENSAYO = DateTime.Now;
+                toSave.CG_PROD = controlCalidadPendientes.CG_ART;
+                toSave.CG_ORDEN = (int)controlCalidadPendientes.CG_ORDEN;
+                toSave.DESCAL = item.DESCAL;
+                toSave.CARCAL = item.CARCAL;
+                toSave.UNIDADM = item.UNIDADM;
+                toSave.CANTMEDIDA = 0;
+                toSave.MEDIDA = item.VALOR;
+                toSave.TOLE1 = item.TOLE1;
+                toSave.TOLE2 = item.TOLE2;
+                toSave.OBSERV = controlCalidadPendientes.OBS1;
+                toSave.AVISO = item.AVISO;
+                toSave.MEDIDA1 = 0;
+                toSave.OBSERV1 = controlCalidadPendientes.OBS2;
+                toSave.CG_PROVE = (int)controlCalidadPendientes.CG_PROVE;
+                toSave.REMITO = controlCalidadPendientes.REMITO;
+                toSave.VALORNC = "";
+                toSave.LEYENDANC = "";
+                toSave.LOTE = controlCalidadPendientes.LOTE;
+                toSave.CG_ORDF = (int)controlCalidadPendientes.CG_ORDF;
+                toSave.UNID = controlCalidadPendientes.UNID;
+                toSave.NUM_PASE = 0;
+                toSave.ENSAYOS = "";
+                toSave.FECHA = DateTime.Now;
+                toSave.APROBADO = "S";
+                toSave.TIPO = "";
+                toSave.CG_CLI = 0;
+                toSave.USUARIO = "";
+                toSave.FE_REG = DateTime.Now;
+                var response2 = await ProcesoService.Agregar(toSave);
+            }
+            controlCalidadPendientes.CG_DEP = 4;
+            var response = await Http.PutAsJsonAsync($"api/Pedidos/{controlCalidadPendientes.Id}", controlCalidadPendientes);
+
             BotonGuardarDisabled = false;
+            await ToastMensajeError("Guardado");
+            Show = false;
             return true;
         }
 
