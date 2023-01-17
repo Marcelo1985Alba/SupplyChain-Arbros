@@ -75,7 +75,9 @@
             -->
             @if (segGrilla.Count != 0)
             {
-                <EditForm Model="controlCalidadPendientes" OnValidSubmit="@(async()=> await Guardar())">
+                <EditForm id="formControlCalidad" Model="controlCalidadPendientes" OnValidSubmit="@(async()=> await Guardar())">
+                    <ObjectGraphDataAnnotationsValidator />
+                    <ValidationSummary />
                     <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false"
                         @ref="refGridItems" DataSource="@segGrilla" Width="100%" ID="grdItemsProcalMP"
                         AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">

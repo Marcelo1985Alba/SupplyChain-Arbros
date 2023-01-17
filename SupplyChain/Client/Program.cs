@@ -91,6 +91,7 @@ namespace SupplyChain.Client
             services.AddSingleton<ToastService>();
             services.AddScoped<ProcalMPService>();
             services.AddScoped<ControlCalidadService>();
+            services.AddScoped<ProcesoService>();
         }
     }
 }

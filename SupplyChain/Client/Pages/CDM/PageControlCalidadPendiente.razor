@@ -27,6 +27,7 @@
                 AllowExcelExport="true" AllowGrouping="true" ID="grdControlCalidad" AllowFiltering="true"
                 AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" RowSelected="rowSelected"
                         OnActionComplete="OnActionCompleteHandler" TValue="Pedidos"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>

@@ -19,6 +19,7 @@ namespace SupplyChain.Client.Pages.CDM
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected InventarioService InventarioService { get; set; }
+        [Inject] protected ProcesoService ProcesoService { get; set; }
         [Inject] protected IJSRuntime jSRuntime { get; set; }
         [Parameter] public Pedidos controlCalidadPendientes { get; set; }
         [Parameter] public bool Show { get; set; } = false;
@@ -28,7 +29,6 @@ namespace SupplyChain.Client.Pages.CDM
 
         protected SfGrid<vControlCalidadPendientes> refGridItems;
 
-        protected SfGrid<Pedidos> refGrid;
         protected SfSpinner refSpinnerCli;
         protected SfSpinner refSpinner;
         protected SfToast ToastObj;
@@ -42,7 +42,8 @@ namespace SupplyChain.Client.Pages.CDM
 
         protected Dictionary<string, object> HtmlAttributeSubmit = new()
         {
-            { "type", "submit" }
+            { "type", "submit" },
+            { "form", "formControlCalidad" }
         };
 
         protected Dictionary<string, object> HtmlAttribute = new()
@@ -113,39 +114,66 @@ namespace SupplyChain.Client.Pages.CDM
             BotonGuardarDisabled = true;
             foreach (var item in segGrilla)
             {
-                if (true)
+                if (item.TOLE1 == 0)
                 {
-                    //aca deberia terminar
-                    await ToastMensajeError("Alguno de los elementos no cumple con la tolerancia.");
+                    if (item.VALOR > item.TOLE2)
+                    {
+                        await ToastMensajeError($"En el elemento {item.UNIDADM} se ingresó {item.VALOR} y debería estar entre los valores {item.TOLE1} y {item.TOLE2}.");
+                        BotonGuardarDisabled = false;
+                        return false;
+                    }
+                }
+                else if (item.TOLE2 == 0)
+                {
+                    if (item.TOLE1 != 0 && item.VALOR < item.TOLE1)
+                    {
+                        await ToastMensajeError($"En el elemento {item.UNIDADM} se ingresó {item.VALOR} y debería estar entre los valores {item.TOLE1} y {item.TOLE2}.");
+                        BotonGuardarDisabled = false;
+                        return false;
+                    }
+                }
+                else if (item.VALOR < item.TOLE1 || item.VALOR > item.TOLE2)
+                {
+                    await ToastMensajeError($"En el elemento {item.UNIDADM} se ingresó {item.VALOR} y debería estar entre los valores {item.TOLE1} y {item.TOLE2}.");
+                    BotonGuardarDisabled = false;
                     return false;
                 }
             }
+            await ToastMensajeError("Todos los datos fueron ingresador correctamente, guardando.");
             //aca deberia hacer el nuevo proceso y guardarlo en la base de datos
-            /*
             Procesos toSave = new Procesos();
             toSave.VALE = controlCalidadPendientes.VALE.ToString();
             toSave.DESPACHO = controlCalidadPendientes.DESPACHO;
             toSave.FE_ENSAYO = DateTime.Now;
             toSave.CG_PROD = controlCalidadPendientes.CG_ART;
-            toSave.CG_ORDEN = (int)controlCalidadPendientes.CG_ORDEN;
-
-            //aca va todo
-            var response = await InventarioService.Existe(controlCalidadPendientes.VALE);
-            if (!response)
-            {
-                var response2 = await InventarioService.Agregar(controlCalidadPendientes);
-                if (response2.Error)
-                {
-                    Console.WriteLine(await response2.HttpResponseMessage.Content.ReadAsStringAsync());
-                    await ToastMensajeError("Error al intentar Guardar un Proceso.");
-                    return false;
-                }
-                controlCalidadPendientes = response2.Response;
-                return true;
-            }
-            await ToastMensajeError($"El proceso con codigo{controlCalidadPendientes.VALE} ya existe.\n\rO el proceso no es permitido.");
-            return false;
-            */
+            //toSave.CG_ORDEN = (int)controlCalidadPendientes.CG_ORDEN;
+            toSave.DESCAL = segGrilla.FirstOrDefault().DESCAL;
+            toSave.CARCAL = segGrilla.FirstOrDefault().CARCAL;
+            toSave.UNIDADM = segGrilla.FirstOrDefault().UNIDADM;
+            //toSave.CANTMEDIDA
+            //toSave.MEDIDA
+            //toSave.TOLE1
+            //toSave.TOLE2
+            //toSave.OBSERV
+            //toSave.AVISO
+            //toSave.MEDIDA1
+            //toSave.OBSERV1
+            //toSave.CG_PROVE
+            //toSave.REMITO
+            //toSave.VALORNC
+            //toSave.LEYENDANC
+            //toSave.LOTE
+            //toSave.CG_ORDF
+            //toSave.UNID
+            //toSave.NUM_PASE
+            //toSave.ENSAYOS
+            //toSave.FECHA
+            //toSave.APROBADO
+            //toSave.TIPO
+            //toSave.CG_CLI
+            //toSave.USUARIO
+            //toSave.FE_REG
+            //var response2 = await ProcesoService.Agregar(toSave);
             BotonGuardarDisabled = false;
             return true;
         }
@@ -156,18 +184,21 @@ namespace SupplyChain.Client.Pages.CDM
         {
 
         }
-        
         public void BatchAddHandler(BeforeBatchAddArgs<vControlCalidadPendientes> args)
         {
             IsAdd = true;
         }
-        
         public void BatchSaveHandler(BeforeBatchSaveArgs<vControlCalidadPendientes> args)
         {
             IsAdd=false;
         }
-        
-        public void CellSavedHandler(CellSaveArgs<vControlCalidadPendientes> args)
+        public async void CellSavedHandler(CellSaveArgs<vControlCalidadPendientes> args)
+        {
+            segGrilla.Where(s => s.UNIDADM == args.Data.UNIDADM).FirstOrDefault().VALOR = args.Data.VALOR;
+            await refGridItems.Refresh();
+        }
+
+        protected async Task QueryCellInfoHandler(QueryCellInfoEventArgs<vControlCalidadPendientes> args)
         {
             if (args.Data.VALOR == 0)
             {
@@ -207,43 +238,6 @@ namespace SupplyChain.Client.Pages.CDM
         public async Task Hide()
         {
             Show = false;
-        }
-        //no se porque no funciona bien lo de abajo
-        protected async Task QueryCellInfoHandler(QueryCellInfoEventArgs<vControlCalidadPendientes> args)
-        {
-            if (args.Data.VALOR == 0)
-            {
-                args.Cell.AddClass(new string[] { "blancas" });
-            }
-            else if (args.Data.TOLE2 == 0)
-            {
-                if (args.Data.TOLE1 == 0 || args.Data.VALOR >= args.Data.TOLE1)
-                {
-                    args.Cell.AddClass(new string[] { "verdes" });
-                } else
-                {
-                    args.Cell.AddClass(new string[] { "rojas" });
-                }
-            }
-            else if(args.Data.TOLE1 == 0)
-            {
-                if (args.Data.VALOR <= args.Data.TOLE2)
-                {
-                    args.Cell.AddClass(new string[] { "verdes" });
-                }
-                else
-                {
-                    args.Cell.AddClass(new string[] { "rojas" });
-                }
-            }
-            else if(args.Data.VALOR >= args.Data.TOLE1 && args.Data.VALOR <= args.Data.TOLE2)
-            {
-                args.Cell.AddClass(new string[] { "verdes" });
-            }
-            else
-            {
-                args.Cell.AddClass(new string[] { "rojas" });
-            }
         }
 
         private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
