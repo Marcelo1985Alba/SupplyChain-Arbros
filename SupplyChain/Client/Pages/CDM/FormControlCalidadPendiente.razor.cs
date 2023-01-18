@@ -144,6 +144,7 @@ namespace SupplyChain.Client.Pages.CDM
             }
             await ToastMensajeError("Todos los datos fueron ingresador correctamente, guardando.");
 
+            List<Procesos> toSaveList = new List<Procesos>();
             foreach (var item in segGrilla)
             {
                 Procesos toSave = new Procesos();
@@ -178,7 +179,15 @@ namespace SupplyChain.Client.Pages.CDM
                 toSave.CG_CLI = 0;
                 toSave.USUARIO = "";
                 toSave.FE_REG = DateTime.Now;
-                var response2 = await ProcesoService.Agregar(toSave);
+                toSaveList.Add(toSave);
+                //var response2 = await ProcesoService.Agregar(toSave);
+            }
+            var response2 = await Http.PostAsJsonAsync($"api/Proceso/PostListP", toSaveList);
+            if (!response2.IsSuccessStatusCode)
+            {
+                await ToastMensajeError($"Hubo un problema al intentar guardar los datos");
+                BotonGuardarDisabled = false;
+                return false;
             }
             controlCalidadPendientes.CG_DEP = 4;
             var response = await Http.PutAsJsonAsync($"api/Pedidos/{controlCalidadPendientes.Id}", controlCalidadPendientes);
@@ -211,11 +220,7 @@ namespace SupplyChain.Client.Pages.CDM
 
         protected async Task QueryCellInfoHandler(QueryCellInfoEventArgs<vControlCalidadPendientes> args)
         {
-            if (args.Data.VALOR == 0)
-            {
-                args.Cell.AddClass(new string[] { "blancas" });
-            }
-            else if (args.Data.TOLE2 == 0)
+            if (args.Data.TOLE2 == 0)
             {
                 if (args.Data.TOLE1 == 0 || args.Data.VALOR >= args.Data.TOLE1)
                 {

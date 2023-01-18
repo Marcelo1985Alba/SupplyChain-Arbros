@@ -7,6 +7,7 @@ using Syncfusion.Blazor.RichTextEditor;
 using Syncfusion.Pdf.Lists;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -22,10 +23,12 @@ namespace SupplyChain.Server.Controllers.CDM
     [ApiController]
     public class ProcesoController : ControllerBase
     {
+        private readonly AppDbContext _context;
         private readonly ProcesoRepository _procesoRepository;
 
-        public ProcesoController(ProcesoRepository procesoRepository)
+        public ProcesoController(AppDbContext context, ProcesoRepository procesoRepository)
         {
+            _context = context;
             this._procesoRepository= procesoRepository;
         }
 
@@ -111,6 +114,25 @@ namespace SupplyChain.Server.Controllers.CDM
             {
                 return BadRequest(ex);
             }
+        }
+
+
+        [HttpPost("PostListP")]
+        public async Task<ActionResult<List<Pedidos>>> PostListP([FromBody] List<Procesos> procesos)
+        {
+            foreach (var item in procesos)
+            {
+                try
+                {
+                    _context.Procesos.Add(item);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(e);
+                }
+            }
+            return Ok(procesos);
         }
 
         //DELETE: api/Valores/{id}
