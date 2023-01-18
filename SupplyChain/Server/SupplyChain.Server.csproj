@@ -22,7 +22,6 @@
     <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xsd" />
     <Content Remove="wwwroot\Report\NoConfor\ArbrosDataSet1.xss" />
     <Content Remove="wwwroot\Report\NoConfor\ReporteEvento.rdlc" />
-    <Content Remove="wwwroot\Report\OCompra\OCompra.rdlc" />
     <Content Remove="wwwroot\Report\Pedido\PedidoV1.rdlc" />
     <Content Remove="wwwroot\Report\Presupuesto\CondicionesComerciales.rdlc" />
     <Content Remove="wwwroot\Report\Presupuesto\Presupuesto.rdlc" />
@@ -63,9 +62,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="wwwroot\Report\EtiquetaOF\ReporteEtiquetaOF.rdlc" />
     <EmbeddedResource Include="wwwroot\Report\NoConfor\ReporteEvento.rdlc" />
-    <EmbeddedResource Include="wwwroot\Report\OCompra\OCompra.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="wwwroot\Report\Pedido\PedidoV1.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
