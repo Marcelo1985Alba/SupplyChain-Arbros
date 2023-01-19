@@ -971,7 +971,7 @@
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
-                                    <Format>0.00</Format>
+                                    <Format>0.00;-0.00;'-'</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1637,7 +1637,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                       <Value>=ReportItems!txtTot.Value</Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
-                        <Format>0.00</Format>
+                        <Format>#,0.0</Format>
                       </Style>
                     </TextRun>
                     <TextRun>
@@ -1715,13 +1715,14 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                       <Value>SUBTOTAL:  </Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
+                        <Format>#,0.00;(#,0.00)</Format>
                       </Style>
                     </TextRun>
                     <TextRun>
                       <Value>=Sum(Fields!PRECIOTOT.Value, "DataSet1")</Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
-                        <Format>0.00</Format>
+                        <Format>#,0.00;(#,0.00)</Format>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -1802,7 +1803,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TOTAL_PRESUPUESTO</rd:DefaultName>
-              <Top>0.05556in</Top>
+              <Top>0.09722in</Top>
               <Left>2.36498in</Left>
               <Height>0.25in</Height>
               <Width>2.66063in</Width>
