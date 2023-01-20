@@ -123,7 +123,6 @@ namespace SupplyChain.Client.Pages.ABM.ProcalMPP
                     procalMPSeleccionada.DESCAL = selectedRecord.DESCAL;
                     procalMPSeleccionada.CARCAL= selectedRecord.CARCAL;
                     procalMPSeleccionada.UNIDADM = selectedRecord.UNIDADM;
-                    procalMPSeleccionada.CANTMEDIDA = selectedRecord.CANTMEDIDA;
                     procalMPSeleccionada.MEDIDA = selectedRecord.MEDIDA;
                     procalMPSeleccionada.TOLE1= selectedRecord.TOLE1;
                     procalMPSeleccionada.TOLE2= selectedRecord.TOLE2;
@@ -219,7 +218,6 @@ namespace SupplyChain.Client.Pages.ABM.ProcalMPP
                     procalMPSinModificar.DESCAL = procMP.DESCAL;
                     procalMPSinModificar.CARCAL= procMP.CARCAL;
                     procalMPSinModificar.UNIDADM= procMP.UNIDADM;
-                    procalMPSinModificar.CANTMEDIDA= procMP.CANTMEDIDA;
                     procalMPSinModificar.TOLE1= procMP.TOLE1;
                     procalMPSinModificar.TOLE2 = procMP.TOLE2;
                     procalMPSinModificar.OBSERV = procMP.OBSERV;
@@ -246,7 +244,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcalMPP
                 Title = "EXITO!",
                 Content = "Guardado Correctamente.",
                 CssClass = "e-toast-success",
-                Icon = "e-success toast-icons",
+                Icon = "e-succe q q ss toast-icons",
                 ShowCloseButton = true,
                 ShowProgressBar = true
             });

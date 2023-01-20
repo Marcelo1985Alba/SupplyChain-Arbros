@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
@@ -6,31 +7,48 @@ using Syncfusion.Blazor.RichTextEditor;
 using Syncfusion.Pdf.Lists;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace SupplyChain.Server.Controllers.ABM
+
+//Utiliza el model pROCESOS // 
+//public class cargaValorController llamar ProcesoController 
+//llamar al archivo Proceso
+
+namespace SupplyChain.Server.Controllers.CDM
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProMPController : ControllerBase
-    { 
-       
-        private readonly ProcalMPRepository _procalMPRepository;
+    public class ProcesoController : ControllerBase
+    {
+        private readonly ProcesoRepository _procesoRepository;
 
-        public ProMPController(ProcalMPRepository procalMPRepository)
+        public ProcesoController(ProcesoRepository procesoRepository)
         {
-            this._procalMPRepository = procalMPRepository;
+            this._procesoRepository= procesoRepository;
         }
 
-        // GET: api/ProcalsMP
+        // GET: api/Valores
         [HttpGet]
-        //cambiar nombre del Get GetProcalMP()
-        public async Task<ActionResult<IEnumerable<ProcalsMP>>> GetProcalMP()
+        public async Task<ActionResult<IEnumerable<Procesos>>> GetCargaValores()
         {
             try
             {
-                return await _procalMPRepository.ObtenerTodos();
+                return await _procesoRepository.ObtenerTodos();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+        //GET: api/Valores/Existe/{id}
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>> ExisteValor(int id)
+        {
+            try
+            {
+                return await _procesoRepository.Existe(id);
             }
             catch (Exception ex)
             {
@@ -38,37 +56,21 @@ namespace SupplyChain.Server.Controllers.ABM
             }
         }
 
-        //GET: api/ProcalsMP/Existe/{id}
-        [HttpGet("Existe/{id}")]
-        public async Task<ActionResult<bool>>ExisteValor(int id)
-        {
-            try
-            {
-                return await _procalMPRepository.Existe(id);
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        //PUTC: api/ProcalMP/{id}
+        //GET: api/Valores/Existe/{id}
         [HttpPut("{id}")]
-        
-        public async Task<ActionResult> PutProcalMP(int id, ProcalsMP procalMP)
+        public async Task<ActionResult> PutCargaValor(int id, Procesos valor)
         {
-
-            if(id !=procalMP.Id)
+            if (id != valor.Id)
             {
                 return BadRequest();
             }
             try
             {
-                await _procalMPRepository.Actualizar(procalMP);
+                await _procesoRepository.Actualizar(valor);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await _procalMPRepository.Existe(id))
+                if (!await _procesoRepository.Existe(id))
                 {
                     return NotFound();
                 }
@@ -81,22 +83,22 @@ namespace SupplyChain.Server.Controllers.ABM
             {
                 return BadRequest(ex);
             }
-            return Ok(procalMP);
+            return Ok(valor);
         }
 
-        // POST: api/ProcalsMP
-        [HttpPost]
-        public async Task<ActionResult<ProcalsMP>> PostProcalMP(ProcalsMP procalMP)
-        {
 
+        //POST: api/Valores
+        [HttpPost]
+        public async Task<ActionResult<Procesos>> PostCargaValor(Procesos valor)
+        {
             try
             {
-                await _procalMPRepository.Agregar(procalMP);
-                return CreatedAtAction("GetProcalsMP", new { id = procalMP.Id }, procalMP);
+                await _procesoRepository.Agregar(valor);
+                return CreatedAtAction("GetValor", new { id = valor.Id }, valor);
             }
             catch (DbUpdateException exx)
             {
-                if(!await _procalMPRepository.Existe(procalMP.Id))
+                if (!await _procesoRepository.Existe(valor.Id))
                 {
                     return Conflict();
                 }
@@ -110,28 +112,29 @@ namespace SupplyChain.Server.Controllers.ABM
                 return BadRequest(ex);
             }
         }
-        //DELETE :api/ProcalsMP/{id}
+
+        //DELETE: api/Valores/{id}
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ProcalsMP>> DeteleProcalsMP(int id)
+        public async Task<ActionResult<Procesos>> DeleteCargaValores(int id)
         {
-            var procalMP = await _procalMPRepository.ObtenerPorId(id);
-            if(procalMP == null)
+            var valor = await _procesoRepository.ObtenerPorId(id);
+            if (valor == null)
             {
                 return NotFound();
             }
-            await _procalMPRepository.Remover(id);
-            return procalMP;
+            await _procesoRepository.Remover(id);
+            return valor;
         }
-        //POST :api/ProcalsMP/PostList
-        [HttpPost("PostList")]
 
-        public async Task<ActionResult<ProcalsMP>> PostList(List<ProcalsMP> procalsMP)
+        //POST: api/Valores/PostList
+        [HttpPost("PostList")]
+        public async Task<ActionResult<Procesos>> PostList(List<Procesos> valor)
         {
             try
             {
-                foreach(var item in procalsMP)
+                foreach (var item in valor)
                 {
-                    await _procalMPRepository.Remover(item.Id);
+                    await _procesoRepository.Remover(item.Id);
                 }
             }
             catch (Exception ex)
@@ -140,8 +143,5 @@ namespace SupplyChain.Server.Controllers.ABM
             }
             return Ok();
         }
-
-        
     }
 }
-       

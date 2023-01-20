@@ -12,6 +12,11 @@
   </PropertyGroup>
 
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+
   <ItemGroup>
     <Compile Remove="Shared\BuscarPrecios\**" />
     <Content Remove="Shared\BuscarPrecios\**" />

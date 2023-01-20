@@ -1,8 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿    <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>9349a2cc-57d6-4f15-bbe7-0a5c35bf26d1</UserSecretsId>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>False</Optimize>
   </PropertyGroup>
 
   <ItemGroup>

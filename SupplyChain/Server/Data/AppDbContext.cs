@@ -8,12 +8,14 @@ using SupplyChain.Shared.Login;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
 using System;
+using System.Collections.Generic;
 
 namespace SupplyChain
 {
 
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
+        internal IEnumerable<object> vOCompraReporte;
         #region "DbSet"
         //MODULO CARGA DE MAQUINA
         public virtual DbSet<ModeloCarga> Cargas { get; set; }
@@ -141,6 +143,9 @@ namespace SupplyChain
         public DbSet<ISO> ISO { get; set; }
         public DbSet<AspAmb> AspAmb { get; set; }
         public DbSet<AspNetRoles> AspNetRoles { get; set; }
+        public DbSet<ProcalsMP> ProcalsMP { get; set; }
+        public DbSet<vControlCalidadPendientes> vcontrolCalidadPendientes { get; set; }
+        public DbSet<Procesos> Procesos { get; set; }
 
         #endregion
 
@@ -265,6 +270,7 @@ namespace SupplyChain
             modelBuilder.Entity<vRemitoReporte>().HasNoKey().ToView("vRemitoReporte");
             modelBuilder.Entity<vUsuario>().HasNoKey().ToView("vUsuarios");
             modelBuilder.Entity<vOCompraReporte>().HasNoKey().ToView("vOCompraReporte");
+            modelBuilder.Entity<vControlCalidadPendientes>().HasNoKey().ToView("vControlCalidadPendientes");
         }
     }
 }

@@ -130,6 +130,8 @@ namespace SupplyChain.Server
             services.AddTransient<AspNetRolesRepository>();
             services.AddTransient<AspAmbRepository>();
             services.AddTransient<ProcalMPRepository>();
+            services.AddTransient<ProcesoRepository>();
+            //services.AddTransient<CargaValoresRepository>();
             //services.AddTransient<MatproveRepository>();
             #endregion
 

@@ -1,35 +1,29 @@
-﻿using System;
+﻿using SupplyChain.Client.HelperService.Base;
+using SupplyChain.Client.RepositoryHttp;
+using SupplyChain.Shared;
+using SupplyChain.Shared.Models;
+using Syncfusion.XlsIO.Implementation;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace SupplyChain.Client.HelperService
 {
-    public class InventarioService : IDisposable
+    public class ProcesoService : BaseService<Procesos, int>
     {
+        private const string API = "api/Proceso";
         private readonly HttpClient Http;
 
-        public InventarioService(HttpClient http )
+        public ProcesoService(IRepositoryHttp httpClient) : base(httpClient, API)
         {
-            this.Http = http;
         }
 
-        public void Dispose()
+        public async Task<List<vControlCalidadPendientes>> GetSegundaGrilla()
         {
-            ((IDisposable)Http).Dispose();
+            return await Http.GetFromJsonAsync<List<vControlCalidadPendientes>>($"api/Stock/GetSegundaGrilla/");
         }
-
-        public async Task<int> GetProximoVale()
-        {
-            int vale = await Http.GetFromJsonAsync<int>("api/Stock/GetMaxVale");
-            return vale;
-        }
-        public async Task<List<Pedidos>> GetVale(int vale)
-        {
-            return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/ByNumeroVale/{vale}");
-        }
-
-
     }
 }
