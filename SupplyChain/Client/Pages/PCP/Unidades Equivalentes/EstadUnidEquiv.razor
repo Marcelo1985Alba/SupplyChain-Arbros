@@ -69,8 +69,14 @@
 
                                             @if (PromedioPedidosIngresadosMensuales > 0)
                                             {
-                                                <ChartStripline Start="398" End="400" Color="red"
-                                                                Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
+                                                <ChartStripline Start="398" End="400" Color="red" SizeType="SizeType.Pixel"
+                                                            Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
+                                                            Text="@("Objetivo 2022: 400")" ZIndex="ZIndex.Over">
+                                                    <ChartStriplineTextStyle Color="red" />
+                                                </ChartStripline>
+                                                <ChartStripline Start="498" End="500" Color="red" SizeType="SizeType.Pixel"
+                                                            Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
+                                                            Text="@("Objetivo 2023: 500")" ZIndex="ZIndex.Over">
                                                     <ChartStriplineTextStyle Color="red" />
                                                 </ChartStripline>
                                                 <ChartStripline Start="@(PromedioPedidosIngresadosMensuales - 2)"
@@ -180,7 +186,7 @@
                                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                                     </ChartPrimaryXAxis>
 
-                                    <ChartPrimaryYAxis LabelFormat="{value}" Minimum="0" Maximum="500">
+                                    <ChartPrimaryYAxis LabelFormat="{value}" Minimum="0" Maximum="700">
                                         <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
                                         <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
                                         <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
@@ -189,8 +195,14 @@
 
                                             @if (PromedioPedidosAltaMensuales > 0)
                                             {
-                                                <ChartStripline Start="397" End="400" Color="red"
-                                                                Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
+                                                <ChartStripline Start="398" End="400" Color="red" SizeType="SizeType.Pixel"
+                                                            Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
+                                                            Text="@("Objetivo 2022: 400")" ZIndex="ZIndex.Over">
+                                                    <ChartStriplineTextStyle Color="red" />
+                                                </ChartStripline>
+                                                <ChartStripline Start="498" End="500" Color="red" SizeType="SizeType.Pixel"
+                                                            Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
+                                                            Text="@("Objetivo 2023: 500")" ZIndex="ZIndex.Over">
                                                     <ChartStriplineTextStyle Color="red" />
                                                 </ChartStripline>
                                                 if (PedidosAltasMensuales.Count > 1)
