@@ -62,6 +62,22 @@
           <DataField>PROVINCIA_CLIENTE</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="DESCRIPCION_IVA">
+          <DataField>DESCRIPCION_IVA</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CUIT_CLIENTE">
+          <DataField>CUIT_CLIENTE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TRANSPORTE">
+          <DataField>TRANSPORTE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CALLE_TRANSPORTE">
+          <DataField>CALLE_TRANSPORTE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="TELEFONO_CLIENTE">
           <DataField>TELEFONO_CLIENTE</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -94,6 +110,14 @@
           <DataField>TOTAL_ITEM</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
+        <Field Name="OBSERITEM">
+          <DataField>OBSERITEM</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DIAS_PLAZO_ENTREGA">
+          <DataField>DIAS_PLAZO_ENTREGA</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
         <Field Name="MONEDA">
           <DataField>MONEDA</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -109,30 +133,6 @@
         <Field Name="Marca">
           <DataField>Marca</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DESCRIPCION_IVA">
-          <DataField>DESCRIPCION_IVA</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CUIT_CLIENTE">
-          <DataField>CUIT_CLIENTE</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="TRANSPORTE">
-          <DataField>TRANSPORTE</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CALLE_TRANSPORTE">
-          <DataField>CALLE_TRANSPORTE</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="OBSERITEM">
-          <DataField>OBSERITEM</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DIAS_PLAZO_ENTREGA">
-          <DataField>DIAS_PLAZO_ENTREGA</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>

@@ -1216,7 +1216,7 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected async Task GetProyectos()
         {
             this.DataProyectos = await Http.GetFromJsonAsync<List<GanttDataDetails>>("api/proyectos");
-            Gantt.PreventRender();
+            //Gantt.PreventRender();
         }
         public void AddRow()
         {

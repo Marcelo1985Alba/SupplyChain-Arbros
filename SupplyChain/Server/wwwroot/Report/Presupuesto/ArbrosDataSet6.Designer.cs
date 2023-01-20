@@ -24,7 +24,7 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.DataSet")]
     public partial class ArbrosDataSet6 : global::System.Data.DataSet {
         
-        private vCalculoSolicitudesDataTable tablevCalculoSolicitudes;
+        private vPresupuestoReporteDataTable tablevPresupuestoReporte;
         
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
@@ -54,8 +54,8 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
             if ((this.DetermineSchemaSerializationMode(info, context) == global::System.Data.SchemaSerializationMode.IncludeSchema)) {
                 global::System.Data.DataSet ds = new global::System.Data.DataSet();
                 ds.ReadXmlSchema(new global::System.Xml.XmlTextReader(new global::System.IO.StringReader(strSchema)));
-                if ((ds.Tables["vCalculoSolicitudes"] != null)) {
-                    base.Tables.Add(new vCalculoSolicitudesDataTable(ds.Tables["vCalculoSolicitudes"]));
+                if ((ds.Tables["vPresupuestoReporte"] != null)) {
+                    base.Tables.Add(new vPresupuestoReporteDataTable(ds.Tables["vPresupuestoReporte"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -79,9 +79,9 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         [global::System.ComponentModel.Browsable(false)]
         [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public vCalculoSolicitudesDataTable vCalculoSolicitudes {
+        public vPresupuestoReporteDataTable vPresupuestoReporte {
             get {
-                return this.tablevCalculoSolicitudes;
+                return this.tablevPresupuestoReporte;
             }
         }
         
@@ -152,8 +152,8 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
                 this.Reset();
                 global::System.Data.DataSet ds = new global::System.Data.DataSet();
                 ds.ReadXml(reader);
-                if ((ds.Tables["vCalculoSolicitudes"] != null)) {
-                    base.Tables.Add(new vCalculoSolicitudesDataTable(ds.Tables["vCalculoSolicitudes"]));
+                if ((ds.Tables["vPresupuestoReporte"] != null)) {
+                    base.Tables.Add(new vPresupuestoReporteDataTable(ds.Tables["vPresupuestoReporte"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -188,10 +188,10 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         internal void InitVars(bool initTable) {
-            this.tablevCalculoSolicitudes = ((vCalculoSolicitudesDataTable)(base.Tables["vCalculoSolicitudes"]));
+            this.tablevPresupuestoReporte = ((vPresupuestoReporteDataTable)(base.Tables["vPresupuestoReporte"]));
             if ((initTable == true)) {
-                if ((this.tablevCalculoSolicitudes != null)) {
-                    this.tablevCalculoSolicitudes.InitVars();
+                if ((this.tablevPresupuestoReporte != null)) {
+                    this.tablevPresupuestoReporte.InitVars();
                 }
             }
         }
@@ -204,13 +204,13 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
             this.Namespace = "http://tempuri.org/ArbrosDataSet1.xsd";
             this.EnforceConstraints = true;
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
-            this.tablevCalculoSolicitudes = new vCalculoSolicitudesDataTable();
-            base.Tables.Add(this.tablevCalculoSolicitudes);
+            this.tablevPresupuestoReporte = new vPresupuestoReporteDataTable();
+            base.Tables.Add(this.tablevPresupuestoReporte);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        private bool ShouldSerializevCalculoSolicitudes() {
+        private bool ShouldSerializevPresupuestoReporte() {
             return false;
         }
         
@@ -270,185 +270,77 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
         }
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        public delegate void vCalculoSolicitudesRowChangeEventHandler(object sender, vCalculoSolicitudesRowChangeEvent e);
+        public delegate void vPresupuestoReporteRowChangeEventHandler(object sender, vPresupuestoReporteRowChangeEvent e);
         
         /// <summary>
         ///Represents the strongly named DataTable class.
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class vCalculoSolicitudesDataTable : global::System.Data.TypedTableBase<vCalculoSolicitudesRow> {
+        public partial class vPresupuestoReporteDataTable : global::System.Data.TypedTableBase<vPresupuestoReporteRow> {
             
-            private global::System.Data.DataColumn columnSolicitudId;
+            private global::System.Data.DataColumn columnPRESUPUESTO;
             
-            private global::System.Data.DataColumn columnPresupuestoId;
+            private global::System.Data.DataColumn columnFECHAS_PRESUP;
             
-            private global::System.Data.DataColumn columnCodigoFinal;
+            private global::System.Data.DataColumn columnBONIFIC;
             
-            private global::System.Data.DataColumn columnModel;
+            private global::System.Data.DataColumn columnCG_CLI;
             
-            private global::System.Data.DataColumn columnDescripcionLinea;
+            private global::System.Data.DataColumn columnCLIENTE;
             
-            private global::System.Data.DataColumn columnMedida;
+            private global::System.Data.DataColumn columnCALLE_CLIENTE;
             
-            private global::System.Data.DataColumn columnDescripcionMedida;
+            private global::System.Data.DataColumn columnCP_CLIENTE;
             
-            private global::System.Data.DataColumn columnOrifico;
+            private global::System.Data.DataColumn columnDIRENT;
             
-            private global::System.Data.DataColumn columnAreaOrificio;
+            private global::System.Data.DataColumn columnCONDICION_PAGO;
             
-            private global::System.Data.DataColumn columnSerieEntrada;
+            private global::System.Data.DataColumn columnCONDICION_ENTREGA;
             
-            private global::System.Data.DataColumn columnDescripcionSerieEntrada;
+            private global::System.Data.DataColumn columnPROVINCIA_CLIENTE;
             
-            private global::System.Data.DataColumn columnTipoEntrada;
+            private global::System.Data.DataColumn columnDESCRIPCION_IVA;
             
-            private global::System.Data.DataColumn columnDescripcionTipoEntrada;
+            private global::System.Data.DataColumn columnCUIT_CLIENTE;
             
-            private global::System.Data.DataColumn columnSerieSalida;
+            private global::System.Data.DataColumn columnTRANSPORTE;
             
-            private global::System.Data.DataColumn columnDescripcionSerieSalida;
+            private global::System.Data.DataColumn columnCALLE_TRANSPORTE;
             
-            private global::System.Data.DataColumn columnTipoSalida;
+            private global::System.Data.DataColumn columnTELEFONO_CLIENTE;
             
-            private global::System.Data.DataColumn columnDescripcionTipoSalida;
+            private global::System.Data.DataColumn columnEMAIL_CLIENTE;
             
-            private global::System.Data.DataColumn columnCodigoDTT;
+            private global::System.Data.DataColumn columnCG_ART;
             
-            private global::System.Data.DataColumn columnTipoAsiento;
+            private global::System.Data.DataColumn columnARTICULO;
             
-            private global::System.Data.DataColumn columnDescripcionAsiento;
+            private global::System.Data.DataColumn columnCANTIDAD;
             
-            private global::System.Data.DataColumn columnCodigoCBR;
+            private global::System.Data.DataColumn columnPORC_DESCUENTO;
             
-            private global::System.Data.DataColumn columnCuerpo_Externo;
+            private global::System.Data.DataColumn columnPREC_UNIT;
             
-            private global::System.Data.DataColumn columnBonete_Externo;
+            private global::System.Data.DataColumn columnTOTAL_ITEM;
             
-            private global::System.Data.DataColumn columnResorte_Externo;
+            private global::System.Data.DataColumn columnOBSERITEM;
             
-            private global::System.Data.DataColumn columnCodigoDT;
+            private global::System.Data.DataColumn columnDIAS_PLAZO_ENTREGA;
             
-            private global::System.Data.DataColumn columnDisco_Interno;
+            private global::System.Data.DataColumn columnMONEDA;
             
-            private global::System.Data.DataColumn columnTobera_Interno;
+            private global::System.Data.DataColumn columnTOTAL_PRESUPUESTO;
             
-            private global::System.Data.DataColumn columnCapuchon;
+            private global::System.Data.DataColumn columnConstruccion;
             
-            private global::System.Data.DataColumn columnPalanca;
-            
-            private global::System.Data.DataColumn columnBonete;
-            
-            private global::System.Data.DataColumn columnTornillo;
-            
-            private global::System.Data.DataColumn columnTagId;
-            
-            private global::System.Data.DataColumn columnCantidad;
-            
-            private global::System.Data.DataColumn columnServicio;
-            
-            private global::System.Data.DataColumn _columnNumeroP_ID;
-            
-            private global::System.Data.DataColumn columnIndiceInstrumento;
-            
-            private global::System.Data.DataColumn columnNumeroPlanta;
-            
-            private global::System.Data.DataColumn columnNumeroPlano;
-            
-            private global::System.Data.DataColumn columnDescargaA;
-            
-            private global::System.Data.DataColumn columnLineaEntrada;
-            
-            private global::System.Data.DataColumn columnLineaSalida;
-            
-            private global::System.Data.DataColumn columnContingencia;
-            
-            private global::System.Data.DataColumn columnNumeroHoja;
-            
-            private global::System.Data.DataColumn columnPresionOperacion;
-            
-            private global::System.Data.DataColumn columnTemperaturaOperacion;
-            
-            private global::System.Data.DataColumn columnPresionDiseño;
-            
-            private global::System.Data.DataColumn columnMaximaTemperaturaDiseño;
-            
-            private global::System.Data.DataColumn columnMinimaTemperaturaDiseño;
-            
-            private global::System.Data.DataColumn columnPresionAtmosfera;
-            
-            private global::System.Data.DataColumn columnDiscoRuptura;
-            
-            private global::System.Data.DataColumn columnModelo;
-            
-            private global::System.Data.DataColumn columnNorma;
-            
-            private global::System.Data.DataColumn columnContrapresionFija;
-            
-            private global::System.Data.DataColumn columnContrapresionVariable;
-            
-            private global::System.Data.DataColumn columnValvulaSimpleMultiple;
-            
-            private global::System.Data.DataColumn columnSobrepresionAdmisible;
-            
-            private global::System.Data.DataColumn columnPresionApertura;
-            
-            private global::System.Data.DataColumn columnCodigoDiseño;
-            
-            private global::System.Data.DataColumn columnUserId;
-            
-            private global::System.Data.DataColumn columnNombre;
-            
-            private global::System.Data.DataColumn columnFaseId;
-            
-            private global::System.Data.DataColumn columnTipoFase;
-            
-            private global::System.Data.DataColumn columnNombreFase;
-            
-            private global::System.Data.DataColumn columnDescripcion;
-            
-            private global::System.Data.DataColumn columnCapacidadRequerida_V;
-            
-            private global::System.Data.DataColumn columnTemperatura_de_Descarga_T;
-            
-            private global::System.Data.DataColumn columnMasaMolecular_M;
-            
-            private global::System.Data.DataColumn columnCocienteCaloresEspecificos_k;
-            
-            private global::System.Data.DataColumn columnCoeficienteDeCompresibilidad_z;
-            
-            private global::System.Data.DataColumn columnCapacidadRequerida_W;
-            
-            private global::System.Data.DataColumn columnCapacidadRequerida_Q;
-            
-            private global::System.Data.DataColumn columnDensidadRelativa_G;
-            
-            private global::System.Data.DataColumn columnViscusidad_Mu;
-            
-            private global::System.Data.DataColumn columnTemperatura_Saturado;
-            
-            private global::System.Data.DataColumn columnAreaCalculada;
-            
-            private global::System.Data.DataColumn columnTemperatura_de_Descarga_IN;
-            
-            private global::System.Data.DataColumn columnTemperatura_de_Descarga_IN_Unit;
-            
-            private global::System.Data.DataColumn columnCapacidadRequerida_IN;
-            
-            private global::System.Data.DataColumn columnCapacidadRequerida_IN_Unit;
-            
-            private global::System.Data.DataColumn columnId;
-            
-            private global::System.Data.DataColumn columnEmail;
-            
-            private global::System.Data.DataColumn columnUserName;
-            
-            private global::System.Data.DataColumn columnCuit;
+            private global::System.Data.DataColumn columnMarca;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public vCalculoSolicitudesDataTable() {
-                this.TableName = "vCalculoSolicitudes";
+            public vPresupuestoReporteDataTable() {
+                this.TableName = "vPresupuestoReporte";
                 this.BeginInit();
                 this.InitClass();
                 this.EndInit();
@@ -456,7 +348,7 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            internal vCalculoSolicitudesDataTable(global::System.Data.DataTable table) {
+            internal vPresupuestoReporteDataTable(global::System.Data.DataTable table) {
                 this.TableName = table.TableName;
                 if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
                     this.CaseSensitive = table.CaseSensitive;
@@ -473,672 +365,240 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected vCalculoSolicitudesDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+            protected vPresupuestoReporteDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                     base(info, context) {
                 this.InitVars();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn SolicitudIdColumn {
+            public global::System.Data.DataColumn PRESUPUESTOColumn {
                 get {
-                    return this.columnSolicitudId;
+                    return this.columnPRESUPUESTO;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn PresupuestoIdColumn {
+            public global::System.Data.DataColumn FECHAS_PRESUPColumn {
                 get {
-                    return this.columnPresupuestoId;
+                    return this.columnFECHAS_PRESUP;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CodigoFinalColumn {
+            public global::System.Data.DataColumn BONIFICColumn {
                 get {
-                    return this.columnCodigoFinal;
+                    return this.columnBONIFIC;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn ModelColumn {
+            public global::System.Data.DataColumn CG_CLIColumn {
                 get {
-                    return this.columnModel;
+                    return this.columnCG_CLI;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn DescripcionLineaColumn {
+            public global::System.Data.DataColumn CLIENTEColumn {
                 get {
-                    return this.columnDescripcionLinea;
+                    return this.columnCLIENTE;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn MedidaColumn {
+            public global::System.Data.DataColumn CALLE_CLIENTEColumn {
                 get {
-                    return this.columnMedida;
+                    return this.columnCALLE_CLIENTE;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn DescripcionMedidaColumn {
+            public global::System.Data.DataColumn CP_CLIENTEColumn {
                 get {
-                    return this.columnDescripcionMedida;
+                    return this.columnCP_CLIENTE;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn OrificoColumn {
+            public global::System.Data.DataColumn DIRENTColumn {
                 get {
-                    return this.columnOrifico;
+                    return this.columnDIRENT;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn AreaOrificioColumn {
+            public global::System.Data.DataColumn CONDICION_PAGOColumn {
                 get {
-                    return this.columnAreaOrificio;
+                    return this.columnCONDICION_PAGO;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn SerieEntradaColumn {
+            public global::System.Data.DataColumn CONDICION_ENTREGAColumn {
                 get {
-                    return this.columnSerieEntrada;
+                    return this.columnCONDICION_ENTREGA;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn DescripcionSerieEntradaColumn {
+            public global::System.Data.DataColumn PROVINCIA_CLIENTEColumn {
                 get {
-                    return this.columnDescripcionSerieEntrada;
+                    return this.columnPROVINCIA_CLIENTE;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn TipoEntradaColumn {
+            public global::System.Data.DataColumn DESCRIPCION_IVAColumn {
                 get {
-                    return this.columnTipoEntrada;
+                    return this.columnDESCRIPCION_IVA;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn DescripcionTipoEntradaColumn {
+            public global::System.Data.DataColumn CUIT_CLIENTEColumn {
                 get {
-                    return this.columnDescripcionTipoEntrada;
+                    return this.columnCUIT_CLIENTE;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn SerieSalidaColumn {
+            public global::System.Data.DataColumn TRANSPORTEColumn {
                 get {
-                    return this.columnSerieSalida;
+                    return this.columnTRANSPORTE;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn DescripcionSerieSalidaColumn {
+            public global::System.Data.DataColumn CALLE_TRANSPORTEColumn {
                 get {
-                    return this.columnDescripcionSerieSalida;
+                    return this.columnCALLE_TRANSPORTE;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn TipoSalidaColumn {
+            public global::System.Data.DataColumn TELEFONO_CLIENTEColumn {
                 get {
-                    return this.columnTipoSalida;
+                    return this.columnTELEFONO_CLIENTE;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn DescripcionTipoSalidaColumn {
+            public global::System.Data.DataColumn EMAIL_CLIENTEColumn {
                 get {
-                    return this.columnDescripcionTipoSalida;
+                    return this.columnEMAIL_CLIENTE;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CodigoDTTColumn {
+            public global::System.Data.DataColumn CG_ARTColumn {
                 get {
-                    return this.columnCodigoDTT;
+                    return this.columnCG_ART;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn TipoAsientoColumn {
+            public global::System.Data.DataColumn ARTICULOColumn {
                 get {
-                    return this.columnTipoAsiento;
+                    return this.columnARTICULO;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn DescripcionAsientoColumn {
+            public global::System.Data.DataColumn CANTIDADColumn {
                 get {
-                    return this.columnDescripcionAsiento;
+                    return this.columnCANTIDAD;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CodigoCBRColumn {
+            public global::System.Data.DataColumn PORC_DESCUENTOColumn {
                 get {
-                    return this.columnCodigoCBR;
+                    return this.columnPORC_DESCUENTO;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn Cuerpo_ExternoColumn {
+            public global::System.Data.DataColumn PREC_UNITColumn {
                 get {
-                    return this.columnCuerpo_Externo;
+                    return this.columnPREC_UNIT;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn Bonete_ExternoColumn {
+            public global::System.Data.DataColumn TOTAL_ITEMColumn {
                 get {
-                    return this.columnBonete_Externo;
+                    return this.columnTOTAL_ITEM;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn Resorte_ExternoColumn {
+            public global::System.Data.DataColumn OBSERITEMColumn {
                 get {
-                    return this.columnResorte_Externo;
+                    return this.columnOBSERITEM;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CodigoDTColumn {
+            public global::System.Data.DataColumn DIAS_PLAZO_ENTREGAColumn {
                 get {
-                    return this.columnCodigoDT;
+                    return this.columnDIAS_PLAZO_ENTREGA;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn Disco_InternoColumn {
+            public global::System.Data.DataColumn MONEDAColumn {
                 get {
-                    return this.columnDisco_Interno;
+                    return this.columnMONEDA;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn Tobera_InternoColumn {
+            public global::System.Data.DataColumn TOTAL_PRESUPUESTOColumn {
                 get {
-                    return this.columnTobera_Interno;
+                    return this.columnTOTAL_PRESUPUESTO;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CapuchonColumn {
+            public global::System.Data.DataColumn ConstruccionColumn {
                 get {
-                    return this.columnCapuchon;
+                    return this.columnConstruccion;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn PalancaColumn {
+            public global::System.Data.DataColumn MarcaColumn {
                 get {
-                    return this.columnPalanca;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn BoneteColumn {
-                get {
-                    return this.columnBonete;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn TornilloColumn {
-                get {
-                    return this.columnTornillo;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn TagIdColumn {
-                get {
-                    return this.columnTagId;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CantidadColumn {
-                get {
-                    return this.columnCantidad;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn ServicioColumn {
-                get {
-                    return this.columnServicio;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn _NumeroP_IDColumn {
-                get {
-                    return this._columnNumeroP_ID;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn IndiceInstrumentoColumn {
-                get {
-                    return this.columnIndiceInstrumento;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn NumeroPlantaColumn {
-                get {
-                    return this.columnNumeroPlanta;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn NumeroPlanoColumn {
-                get {
-                    return this.columnNumeroPlano;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn DescargaAColumn {
-                get {
-                    return this.columnDescargaA;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn LineaEntradaColumn {
-                get {
-                    return this.columnLineaEntrada;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn LineaSalidaColumn {
-                get {
-                    return this.columnLineaSalida;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn ContingenciaColumn {
-                get {
-                    return this.columnContingencia;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn NumeroHojaColumn {
-                get {
-                    return this.columnNumeroHoja;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn PresionOperacionColumn {
-                get {
-                    return this.columnPresionOperacion;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn TemperaturaOperacionColumn {
-                get {
-                    return this.columnTemperaturaOperacion;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn PresionDiseñoColumn {
-                get {
-                    return this.columnPresionDiseño;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn MaximaTemperaturaDiseñoColumn {
-                get {
-                    return this.columnMaximaTemperaturaDiseño;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn MinimaTemperaturaDiseñoColumn {
-                get {
-                    return this.columnMinimaTemperaturaDiseño;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn PresionAtmosferaColumn {
-                get {
-                    return this.columnPresionAtmosfera;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn DiscoRupturaColumn {
-                get {
-                    return this.columnDiscoRuptura;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn ModeloColumn {
-                get {
-                    return this.columnModelo;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn NormaColumn {
-                get {
-                    return this.columnNorma;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn ContrapresionFijaColumn {
-                get {
-                    return this.columnContrapresionFija;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn ContrapresionVariableColumn {
-                get {
-                    return this.columnContrapresionVariable;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn ValvulaSimpleMultipleColumn {
-                get {
-                    return this.columnValvulaSimpleMultiple;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn SobrepresionAdmisibleColumn {
-                get {
-                    return this.columnSobrepresionAdmisible;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn PresionAperturaColumn {
-                get {
-                    return this.columnPresionApertura;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CodigoDiseñoColumn {
-                get {
-                    return this.columnCodigoDiseño;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn UserIdColumn {
-                get {
-                    return this.columnUserId;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn NombreColumn {
-                get {
-                    return this.columnNombre;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn FaseIdColumn {
-                get {
-                    return this.columnFaseId;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn TipoFaseColumn {
-                get {
-                    return this.columnTipoFase;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn NombreFaseColumn {
-                get {
-                    return this.columnNombreFase;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn DescripcionColumn {
-                get {
-                    return this.columnDescripcion;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CapacidadRequerida_VColumn {
-                get {
-                    return this.columnCapacidadRequerida_V;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn Temperatura_de_Descarga_TColumn {
-                get {
-                    return this.columnTemperatura_de_Descarga_T;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn MasaMolecular_MColumn {
-                get {
-                    return this.columnMasaMolecular_M;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CocienteCaloresEspecificos_kColumn {
-                get {
-                    return this.columnCocienteCaloresEspecificos_k;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CoeficienteDeCompresibilidad_zColumn {
-                get {
-                    return this.columnCoeficienteDeCompresibilidad_z;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CapacidadRequerida_WColumn {
-                get {
-                    return this.columnCapacidadRequerida_W;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CapacidadRequerida_QColumn {
-                get {
-                    return this.columnCapacidadRequerida_Q;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn DensidadRelativa_GColumn {
-                get {
-                    return this.columnDensidadRelativa_G;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn Viscusidad_MuColumn {
-                get {
-                    return this.columnViscusidad_Mu;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn Temperatura_SaturadoColumn {
-                get {
-                    return this.columnTemperatura_Saturado;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn AreaCalculadaColumn {
-                get {
-                    return this.columnAreaCalculada;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn Temperatura_de_Descarga_INColumn {
-                get {
-                    return this.columnTemperatura_de_Descarga_IN;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn Temperatura_de_Descarga_IN_UnitColumn {
-                get {
-                    return this.columnTemperatura_de_Descarga_IN_Unit;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CapacidadRequerida_INColumn {
-                get {
-                    return this.columnCapacidadRequerida_IN;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CapacidadRequerida_IN_UnitColumn {
-                get {
-                    return this.columnCapacidadRequerida_IN_Unit;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn IdColumn {
-                get {
-                    return this.columnId;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn EmailColumn {
-                get {
-                    return this.columnEmail;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn UserNameColumn {
-                get {
-                    return this.columnUserName;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CuitColumn {
-                get {
-                    return this.columnCuit;
+                    return this.columnMarca;
                 }
             }
             
@@ -1153,210 +613,109 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public vCalculoSolicitudesRow this[int index] {
+            public vPresupuestoReporteRow this[int index] {
                 get {
-                    return ((vCalculoSolicitudesRow)(this.Rows[index]));
+                    return ((vPresupuestoReporteRow)(this.Rows[index]));
                 }
             }
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event vCalculoSolicitudesRowChangeEventHandler vCalculoSolicitudesRowChanging;
+            public event vPresupuestoReporteRowChangeEventHandler vPresupuestoReporteRowChanging;
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event vCalculoSolicitudesRowChangeEventHandler vCalculoSolicitudesRowChanged;
+            public event vPresupuestoReporteRowChangeEventHandler vPresupuestoReporteRowChanged;
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event vCalculoSolicitudesRowChangeEventHandler vCalculoSolicitudesRowDeleting;
+            public event vPresupuestoReporteRowChangeEventHandler vPresupuestoReporteRowDeleting;
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event vCalculoSolicitudesRowChangeEventHandler vCalculoSolicitudesRowDeleted;
+            public event vPresupuestoReporteRowChangeEventHandler vPresupuestoReporteRowDeleted;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void AddvCalculoSolicitudesRow(vCalculoSolicitudesRow row) {
+            public void AddvPresupuestoReporteRow(vPresupuestoReporteRow row) {
                 this.Rows.Add(row);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public vCalculoSolicitudesRow AddvCalculoSolicitudesRow(
-                        int SolicitudId, 
-                        int PresupuestoId, 
-                        string CodigoFinal, 
-                        string Model, 
-                        string DescripcionLinea, 
-                        string Medida, 
-                        string DescripcionMedida, 
-                        string Orifico, 
-                        string AreaOrificio, 
-                        string SerieEntrada, 
-                        string DescripcionSerieEntrada, 
-                        string TipoEntrada, 
-                        string DescripcionTipoEntrada, 
-                        string SerieSalida, 
-                        string DescripcionSerieSalida, 
-                        string TipoSalida, 
-                        string DescripcionTipoSalida, 
-                        string CodigoDTT, 
-                        string TipoAsiento, 
-                        string DescripcionAsiento, 
-                        string CodigoCBR, 
-                        string Cuerpo_Externo, 
-                        string Bonete_Externo, 
-                        string Resorte_Externo, 
-                        string CodigoDT, 
-                        string Disco_Interno, 
-                        string Tobera_Interno, 
-                        string Capuchon, 
-                        string Palanca, 
-                        string Bonete, 
-                        string Tornillo, 
-                        int TagId, 
-                        string Cantidad, 
-                        string Servicio, 
-                        string _NumeroP_ID, 
-                        string IndiceInstrumento, 
-                        string NumeroPlanta, 
-                        string NumeroPlano, 
-                        string DescargaA, 
-                        string LineaEntrada, 
-                        string LineaSalida, 
-                        string Contingencia, 
-                        string NumeroHoja, 
-                        string PresionOperacion, 
-                        string TemperaturaOperacion, 
-                        string PresionDiseño, 
-                        string MaximaTemperaturaDiseño, 
-                        string MinimaTemperaturaDiseño, 
-                        string PresionAtmosfera, 
-                        string DiscoRuptura, 
-                        string Modelo, 
-                        string Norma, 
-                        string ContrapresionFija, 
-                        string ContrapresionVariable, 
-                        string ValvulaSimpleMultiple, 
-                        string SobrepresionAdmisible, 
-                        string PresionApertura, 
-                        string CodigoDiseño, 
-                        string UserId, 
-                        string Nombre, 
-                        int FaseId, 
-                        string TipoFase, 
-                        string NombreFase, 
-                        string Descripcion, 
-                        string CapacidadRequerida_V, 
-                        string Temperatura_de_Descarga_T, 
-                        string MasaMolecular_M, 
-                        string CocienteCaloresEspecificos_k, 
-                        string CoeficienteDeCompresibilidad_z, 
-                        string CapacidadRequerida_W, 
-                        string CapacidadRequerida_Q, 
-                        string DensidadRelativa_G, 
-                        string Viscusidad_Mu, 
-                        string Temperatura_Saturado, 
-                        decimal AreaCalculada, 
-                        string Temperatura_de_Descarga_IN, 
-                        string Temperatura_de_Descarga_IN_Unit, 
-                        string CapacidadRequerida_IN, 
-                        string CapacidadRequerida_IN_Unit, 
-                        string Id, 
-                        string Email, 
-                        string UserName, 
-                        string Cuit) {
-                vCalculoSolicitudesRow rowvCalculoSolicitudesRow = ((vCalculoSolicitudesRow)(this.NewRow()));
+            public vPresupuestoReporteRow AddvPresupuestoReporteRow(
+                        int PRESUPUESTO, 
+                        System.DateTime FECHAS_PRESUP, 
+                        decimal BONIFIC, 
+                        int CG_CLI, 
+                        string CLIENTE, 
+                        string CALLE_CLIENTE, 
+                        string CP_CLIENTE, 
+                        string DIRENT, 
+                        string CONDICION_PAGO, 
+                        string CONDICION_ENTREGA, 
+                        string PROVINCIA_CLIENTE, 
+                        string DESCRIPCION_IVA, 
+                        string CUIT_CLIENTE, 
+                        string TRANSPORTE, 
+                        string CALLE_TRANSPORTE, 
+                        string TELEFONO_CLIENTE, 
+                        string EMAIL_CLIENTE, 
+                        string CG_ART, 
+                        string ARTICULO, 
+                        decimal CANTIDAD, 
+                        decimal PORC_DESCUENTO, 
+                        decimal PREC_UNIT, 
+                        decimal TOTAL_ITEM, 
+                        string OBSERITEM, 
+                        int DIAS_PLAZO_ENTREGA, 
+                        string MONEDA, 
+                        decimal TOTAL_PRESUPUESTO, 
+                        string Construccion, 
+                        string Marca) {
+                vPresupuestoReporteRow rowvPresupuestoReporteRow = ((vPresupuestoReporteRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        SolicitudId,
-                        PresupuestoId,
-                        CodigoFinal,
-                        Model,
-                        DescripcionLinea,
-                        Medida,
-                        DescripcionMedida,
-                        Orifico,
-                        AreaOrificio,
-                        SerieEntrada,
-                        DescripcionSerieEntrada,
-                        TipoEntrada,
-                        DescripcionTipoEntrada,
-                        SerieSalida,
-                        DescripcionSerieSalida,
-                        TipoSalida,
-                        DescripcionTipoSalida,
-                        CodigoDTT,
-                        TipoAsiento,
-                        DescripcionAsiento,
-                        CodigoCBR,
-                        Cuerpo_Externo,
-                        Bonete_Externo,
-                        Resorte_Externo,
-                        CodigoDT,
-                        Disco_Interno,
-                        Tobera_Interno,
-                        Capuchon,
-                        Palanca,
-                        Bonete,
-                        Tornillo,
-                        TagId,
-                        Cantidad,
-                        Servicio,
-                        _NumeroP_ID,
-                        IndiceInstrumento,
-                        NumeroPlanta,
-                        NumeroPlano,
-                        DescargaA,
-                        LineaEntrada,
-                        LineaSalida,
-                        Contingencia,
-                        NumeroHoja,
-                        PresionOperacion,
-                        TemperaturaOperacion,
-                        PresionDiseño,
-                        MaximaTemperaturaDiseño,
-                        MinimaTemperaturaDiseño,
-                        PresionAtmosfera,
-                        DiscoRuptura,
-                        Modelo,
-                        Norma,
-                        ContrapresionFija,
-                        ContrapresionVariable,
-                        ValvulaSimpleMultiple,
-                        SobrepresionAdmisible,
-                        PresionApertura,
-                        CodigoDiseño,
-                        UserId,
-                        Nombre,
-                        FaseId,
-                        TipoFase,
-                        NombreFase,
-                        Descripcion,
-                        CapacidadRequerida_V,
-                        Temperatura_de_Descarga_T,
-                        MasaMolecular_M,
-                        CocienteCaloresEspecificos_k,
-                        CoeficienteDeCompresibilidad_z,
-                        CapacidadRequerida_W,
-                        CapacidadRequerida_Q,
-                        DensidadRelativa_G,
-                        Viscusidad_Mu,
-                        Temperatura_Saturado,
-                        AreaCalculada,
-                        Temperatura_de_Descarga_IN,
-                        Temperatura_de_Descarga_IN_Unit,
-                        CapacidadRequerida_IN,
-                        CapacidadRequerida_IN_Unit,
-                        Id,
-                        Email,
-                        UserName,
-                        Cuit};
-                rowvCalculoSolicitudesRow.ItemArray = columnValuesArray;
-                this.Rows.Add(rowvCalculoSolicitudesRow);
-                return rowvCalculoSolicitudesRow;
+                        PRESUPUESTO,
+                        FECHAS_PRESUP,
+                        BONIFIC,
+                        CG_CLI,
+                        CLIENTE,
+                        CALLE_CLIENTE,
+                        CP_CLIENTE,
+                        DIRENT,
+                        CONDICION_PAGO,
+                        CONDICION_ENTREGA,
+                        PROVINCIA_CLIENTE,
+                        DESCRIPCION_IVA,
+                        CUIT_CLIENTE,
+                        TRANSPORTE,
+                        CALLE_TRANSPORTE,
+                        TELEFONO_CLIENTE,
+                        EMAIL_CLIENTE,
+                        CG_ART,
+                        ARTICULO,
+                        CANTIDAD,
+                        PORC_DESCUENTO,
+                        PREC_UNIT,
+                        TOTAL_ITEM,
+                        OBSERITEM,
+                        DIAS_PLAZO_ENTREGA,
+                        MONEDA,
+                        TOTAL_PRESUPUESTO,
+                        Construccion,
+                        Marca};
+                rowvPresupuestoReporteRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowvPresupuestoReporteRow);
+                return rowvPresupuestoReporteRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public vPresupuestoReporteRow FindByPRESUPUESTO(int PRESUPUESTO) {
+                return ((vPresupuestoReporteRow)(this.Rows.Find(new object[] {
+                            PRESUPUESTO})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public override global::System.Data.DataTable Clone() {
-                vCalculoSolicitudesDataTable cln = ((vCalculoSolicitudesDataTable)(base.Clone()));
+                vPresupuestoReporteDataTable cln = ((vPresupuestoReporteDataTable)(base.Clone()));
                 cln.InitVars();
                 return cln;
             }
@@ -1364,403 +723,170 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             protected override global::System.Data.DataTable CreateInstance() {
-                return new vCalculoSolicitudesDataTable();
+                return new vPresupuestoReporteDataTable();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             internal void InitVars() {
-                this.columnSolicitudId = base.Columns["SolicitudId"];
-                this.columnPresupuestoId = base.Columns["PresupuestoId"];
-                this.columnCodigoFinal = base.Columns["CodigoFinal"];
-                this.columnModel = base.Columns["Model"];
-                this.columnDescripcionLinea = base.Columns["DescripcionLinea"];
-                this.columnMedida = base.Columns["Medida"];
-                this.columnDescripcionMedida = base.Columns["DescripcionMedida"];
-                this.columnOrifico = base.Columns["Orifico"];
-                this.columnAreaOrificio = base.Columns["AreaOrificio"];
-                this.columnSerieEntrada = base.Columns["SerieEntrada"];
-                this.columnDescripcionSerieEntrada = base.Columns["DescripcionSerieEntrada"];
-                this.columnTipoEntrada = base.Columns["TipoEntrada"];
-                this.columnDescripcionTipoEntrada = base.Columns["DescripcionTipoEntrada"];
-                this.columnSerieSalida = base.Columns["SerieSalida"];
-                this.columnDescripcionSerieSalida = base.Columns["DescripcionSerieSalida"];
-                this.columnTipoSalida = base.Columns["TipoSalida"];
-                this.columnDescripcionTipoSalida = base.Columns["DescripcionTipoSalida"];
-                this.columnCodigoDTT = base.Columns["CodigoDTT"];
-                this.columnTipoAsiento = base.Columns["TipoAsiento"];
-                this.columnDescripcionAsiento = base.Columns["DescripcionAsiento"];
-                this.columnCodigoCBR = base.Columns["CodigoCBR"];
-                this.columnCuerpo_Externo = base.Columns["Cuerpo_Externo"];
-                this.columnBonete_Externo = base.Columns["Bonete_Externo"];
-                this.columnResorte_Externo = base.Columns["Resorte_Externo"];
-                this.columnCodigoDT = base.Columns["CodigoDT"];
-                this.columnDisco_Interno = base.Columns["Disco_Interno"];
-                this.columnTobera_Interno = base.Columns["Tobera_Interno"];
-                this.columnCapuchon = base.Columns["Capuchon"];
-                this.columnPalanca = base.Columns["Palanca"];
-                this.columnBonete = base.Columns["Bonete"];
-                this.columnTornillo = base.Columns["Tornillo"];
-                this.columnTagId = base.Columns["TagId"];
-                this.columnCantidad = base.Columns["Cantidad"];
-                this.columnServicio = base.Columns["Servicio"];
-                this._columnNumeroP_ID = base.Columns["NumeroP&ID"];
-                this.columnIndiceInstrumento = base.Columns["IndiceInstrumento"];
-                this.columnNumeroPlanta = base.Columns["NumeroPlanta"];
-                this.columnNumeroPlano = base.Columns["NumeroPlano"];
-                this.columnDescargaA = base.Columns["DescargaA"];
-                this.columnLineaEntrada = base.Columns["LineaEntrada"];
-                this.columnLineaSalida = base.Columns["LineaSalida"];
-                this.columnContingencia = base.Columns["Contingencia"];
-                this.columnNumeroHoja = base.Columns["NumeroHoja"];
-                this.columnPresionOperacion = base.Columns["PresionOperacion"];
-                this.columnTemperaturaOperacion = base.Columns["TemperaturaOperacion"];
-                this.columnPresionDiseño = base.Columns["PresionDiseño"];
-                this.columnMaximaTemperaturaDiseño = base.Columns["MaximaTemperaturaDiseño"];
-                this.columnMinimaTemperaturaDiseño = base.Columns["MinimaTemperaturaDiseño"];
-                this.columnPresionAtmosfera = base.Columns["PresionAtmosfera"];
-                this.columnDiscoRuptura = base.Columns["DiscoRuptura"];
-                this.columnModelo = base.Columns["Modelo"];
-                this.columnNorma = base.Columns["Norma"];
-                this.columnContrapresionFija = base.Columns["ContrapresionFija"];
-                this.columnContrapresionVariable = base.Columns["ContrapresionVariable"];
-                this.columnValvulaSimpleMultiple = base.Columns["ValvulaSimpleMultiple"];
-                this.columnSobrepresionAdmisible = base.Columns["SobrepresionAdmisible"];
-                this.columnPresionApertura = base.Columns["PresionApertura"];
-                this.columnCodigoDiseño = base.Columns["CodigoDiseño"];
-                this.columnUserId = base.Columns["UserId"];
-                this.columnNombre = base.Columns["Nombre"];
-                this.columnFaseId = base.Columns["FaseId"];
-                this.columnTipoFase = base.Columns["TipoFase"];
-                this.columnNombreFase = base.Columns["NombreFase"];
-                this.columnDescripcion = base.Columns["Descripcion"];
-                this.columnCapacidadRequerida_V = base.Columns["CapacidadRequerida_V"];
-                this.columnTemperatura_de_Descarga_T = base.Columns["Temperatura_de_Descarga_T"];
-                this.columnMasaMolecular_M = base.Columns["MasaMolecular_M"];
-                this.columnCocienteCaloresEspecificos_k = base.Columns["CocienteCaloresEspecificos_k"];
-                this.columnCoeficienteDeCompresibilidad_z = base.Columns["CoeficienteDeCompresibilidad_z"];
-                this.columnCapacidadRequerida_W = base.Columns["CapacidadRequerida_W"];
-                this.columnCapacidadRequerida_Q = base.Columns["CapacidadRequerida_Q"];
-                this.columnDensidadRelativa_G = base.Columns["DensidadRelativa_G"];
-                this.columnViscusidad_Mu = base.Columns["Viscusidad_Mu"];
-                this.columnTemperatura_Saturado = base.Columns["Temperatura_Saturado"];
-                this.columnAreaCalculada = base.Columns["AreaCalculada"];
-                this.columnTemperatura_de_Descarga_IN = base.Columns["Temperatura_de_Descarga_IN"];
-                this.columnTemperatura_de_Descarga_IN_Unit = base.Columns["Temperatura_de_Descarga_IN_Unit"];
-                this.columnCapacidadRequerida_IN = base.Columns["CapacidadRequerida_IN"];
-                this.columnCapacidadRequerida_IN_Unit = base.Columns["CapacidadRequerida_IN_Unit"];
-                this.columnId = base.Columns["Id"];
-                this.columnEmail = base.Columns["Email"];
-                this.columnUserName = base.Columns["UserName"];
-                this.columnCuit = base.Columns["Cuit"];
+                this.columnPRESUPUESTO = base.Columns["PRESUPUESTO"];
+                this.columnFECHAS_PRESUP = base.Columns["FECHAS_PRESUP"];
+                this.columnBONIFIC = base.Columns["BONIFIC"];
+                this.columnCG_CLI = base.Columns["CG_CLI"];
+                this.columnCLIENTE = base.Columns["CLIENTE"];
+                this.columnCALLE_CLIENTE = base.Columns["CALLE_CLIENTE"];
+                this.columnCP_CLIENTE = base.Columns["CP_CLIENTE"];
+                this.columnDIRENT = base.Columns["DIRENT"];
+                this.columnCONDICION_PAGO = base.Columns["CONDICION_PAGO"];
+                this.columnCONDICION_ENTREGA = base.Columns["CONDICION_ENTREGA"];
+                this.columnPROVINCIA_CLIENTE = base.Columns["PROVINCIA_CLIENTE"];
+                this.columnDESCRIPCION_IVA = base.Columns["DESCRIPCION_IVA"];
+                this.columnCUIT_CLIENTE = base.Columns["CUIT_CLIENTE"];
+                this.columnTRANSPORTE = base.Columns["TRANSPORTE"];
+                this.columnCALLE_TRANSPORTE = base.Columns["CALLE_TRANSPORTE"];
+                this.columnTELEFONO_CLIENTE = base.Columns["TELEFONO_CLIENTE"];
+                this.columnEMAIL_CLIENTE = base.Columns["EMAIL_CLIENTE"];
+                this.columnCG_ART = base.Columns["CG_ART"];
+                this.columnARTICULO = base.Columns["ARTICULO"];
+                this.columnCANTIDAD = base.Columns["CANTIDAD"];
+                this.columnPORC_DESCUENTO = base.Columns["PORC_DESCUENTO"];
+                this.columnPREC_UNIT = base.Columns["PREC_UNIT"];
+                this.columnTOTAL_ITEM = base.Columns["TOTAL_ITEM"];
+                this.columnOBSERITEM = base.Columns["OBSERITEM"];
+                this.columnDIAS_PLAZO_ENTREGA = base.Columns["DIAS_PLAZO_ENTREGA"];
+                this.columnMONEDA = base.Columns["MONEDA"];
+                this.columnTOTAL_PRESUPUESTO = base.Columns["TOTAL_PRESUPUESTO"];
+                this.columnConstruccion = base.Columns["Construccion"];
+                this.columnMarca = base.Columns["Marca"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             private void InitClass() {
-                this.columnSolicitudId = new global::System.Data.DataColumn("SolicitudId", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnSolicitudId);
-                this.columnPresupuestoId = new global::System.Data.DataColumn("PresupuestoId", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPresupuestoId);
-                this.columnCodigoFinal = new global::System.Data.DataColumn("CodigoFinal", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCodigoFinal);
-                this.columnModel = new global::System.Data.DataColumn("Model", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnModel);
-                this.columnDescripcionLinea = new global::System.Data.DataColumn("DescripcionLinea", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDescripcionLinea);
-                this.columnMedida = new global::System.Data.DataColumn("Medida", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMedida);
-                this.columnDescripcionMedida = new global::System.Data.DataColumn("DescripcionMedida", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDescripcionMedida);
-                this.columnOrifico = new global::System.Data.DataColumn("Orifico", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnOrifico);
-                this.columnAreaOrificio = new global::System.Data.DataColumn("AreaOrificio", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnAreaOrificio);
-                this.columnSerieEntrada = new global::System.Data.DataColumn("SerieEntrada", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnSerieEntrada);
-                this.columnDescripcionSerieEntrada = new global::System.Data.DataColumn("DescripcionSerieEntrada", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDescripcionSerieEntrada);
-                this.columnTipoEntrada = new global::System.Data.DataColumn("TipoEntrada", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTipoEntrada);
-                this.columnDescripcionTipoEntrada = new global::System.Data.DataColumn("DescripcionTipoEntrada", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDescripcionTipoEntrada);
-                this.columnSerieSalida = new global::System.Data.DataColumn("SerieSalida", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnSerieSalida);
-                this.columnDescripcionSerieSalida = new global::System.Data.DataColumn("DescripcionSerieSalida", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDescripcionSerieSalida);
-                this.columnTipoSalida = new global::System.Data.DataColumn("TipoSalida", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTipoSalida);
-                this.columnDescripcionTipoSalida = new global::System.Data.DataColumn("DescripcionTipoSalida", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDescripcionTipoSalida);
-                this.columnCodigoDTT = new global::System.Data.DataColumn("CodigoDTT", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCodigoDTT);
-                this.columnTipoAsiento = new global::System.Data.DataColumn("TipoAsiento", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTipoAsiento);
-                this.columnDescripcionAsiento = new global::System.Data.DataColumn("DescripcionAsiento", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDescripcionAsiento);
-                this.columnCodigoCBR = new global::System.Data.DataColumn("CodigoCBR", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCodigoCBR);
-                this.columnCuerpo_Externo = new global::System.Data.DataColumn("Cuerpo_Externo", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCuerpo_Externo);
-                this.columnBonete_Externo = new global::System.Data.DataColumn("Bonete_Externo", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnBonete_Externo);
-                this.columnResorte_Externo = new global::System.Data.DataColumn("Resorte_Externo", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnResorte_Externo);
-                this.columnCodigoDT = new global::System.Data.DataColumn("CodigoDT", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCodigoDT);
-                this.columnDisco_Interno = new global::System.Data.DataColumn("Disco_Interno", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDisco_Interno);
-                this.columnTobera_Interno = new global::System.Data.DataColumn("Tobera_Interno", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTobera_Interno);
-                this.columnCapuchon = new global::System.Data.DataColumn("Capuchon", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCapuchon);
-                this.columnPalanca = new global::System.Data.DataColumn("Palanca", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPalanca);
-                this.columnBonete = new global::System.Data.DataColumn("Bonete", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnBonete);
-                this.columnTornillo = new global::System.Data.DataColumn("Tornillo", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTornillo);
-                this.columnTagId = new global::System.Data.DataColumn("TagId", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTagId);
-                this.columnCantidad = new global::System.Data.DataColumn("Cantidad", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCantidad);
-                this.columnServicio = new global::System.Data.DataColumn("Servicio", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnServicio);
-                this._columnNumeroP_ID = new global::System.Data.DataColumn("NumeroP&ID", typeof(string), null, global::System.Data.MappingType.Element);
-                this._columnNumeroP_ID.ExtendedProperties.Add("Generator_ColumnVarNameInTable", "_columnNumeroP_ID");
-                this._columnNumeroP_ID.ExtendedProperties.Add("Generator_UserColumnName", "NumeroP&ID");
-                base.Columns.Add(this._columnNumeroP_ID);
-                this.columnIndiceInstrumento = new global::System.Data.DataColumn("IndiceInstrumento", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnIndiceInstrumento);
-                this.columnNumeroPlanta = new global::System.Data.DataColumn("NumeroPlanta", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNumeroPlanta);
-                this.columnNumeroPlano = new global::System.Data.DataColumn("NumeroPlano", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNumeroPlano);
-                this.columnDescargaA = new global::System.Data.DataColumn("DescargaA", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDescargaA);
-                this.columnLineaEntrada = new global::System.Data.DataColumn("LineaEntrada", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnLineaEntrada);
-                this.columnLineaSalida = new global::System.Data.DataColumn("LineaSalida", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnLineaSalida);
-                this.columnContingencia = new global::System.Data.DataColumn("Contingencia", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnContingencia);
-                this.columnNumeroHoja = new global::System.Data.DataColumn("NumeroHoja", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNumeroHoja);
-                this.columnPresionOperacion = new global::System.Data.DataColumn("PresionOperacion", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPresionOperacion);
-                this.columnTemperaturaOperacion = new global::System.Data.DataColumn("TemperaturaOperacion", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTemperaturaOperacion);
-                this.columnPresionDiseño = new global::System.Data.DataColumn("PresionDiseño", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPresionDiseño);
-                this.columnMaximaTemperaturaDiseño = new global::System.Data.DataColumn("MaximaTemperaturaDiseño", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMaximaTemperaturaDiseño);
-                this.columnMinimaTemperaturaDiseño = new global::System.Data.DataColumn("MinimaTemperaturaDiseño", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMinimaTemperaturaDiseño);
-                this.columnPresionAtmosfera = new global::System.Data.DataColumn("PresionAtmosfera", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPresionAtmosfera);
-                this.columnDiscoRuptura = new global::System.Data.DataColumn("DiscoRuptura", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDiscoRuptura);
-                this.columnModelo = new global::System.Data.DataColumn("Modelo", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnModelo);
-                this.columnNorma = new global::System.Data.DataColumn("Norma", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNorma);
-                this.columnContrapresionFija = new global::System.Data.DataColumn("ContrapresionFija", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnContrapresionFija);
-                this.columnContrapresionVariable = new global::System.Data.DataColumn("ContrapresionVariable", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnContrapresionVariable);
-                this.columnValvulaSimpleMultiple = new global::System.Data.DataColumn("ValvulaSimpleMultiple", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnValvulaSimpleMultiple);
-                this.columnSobrepresionAdmisible = new global::System.Data.DataColumn("SobrepresionAdmisible", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnSobrepresionAdmisible);
-                this.columnPresionApertura = new global::System.Data.DataColumn("PresionApertura", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPresionApertura);
-                this.columnCodigoDiseño = new global::System.Data.DataColumn("CodigoDiseño", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCodigoDiseño);
-                this.columnUserId = new global::System.Data.DataColumn("UserId", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnUserId);
-                this.columnNombre = new global::System.Data.DataColumn("Nombre", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNombre);
-                this.columnFaseId = new global::System.Data.DataColumn("FaseId", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnFaseId);
-                this.columnTipoFase = new global::System.Data.DataColumn("TipoFase", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTipoFase);
-                this.columnNombreFase = new global::System.Data.DataColumn("NombreFase", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNombreFase);
-                this.columnDescripcion = new global::System.Data.DataColumn("Descripcion", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDescripcion);
-                this.columnCapacidadRequerida_V = new global::System.Data.DataColumn("CapacidadRequerida_V", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCapacidadRequerida_V);
-                this.columnTemperatura_de_Descarga_T = new global::System.Data.DataColumn("Temperatura_de_Descarga_T", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTemperatura_de_Descarga_T);
-                this.columnMasaMolecular_M = new global::System.Data.DataColumn("MasaMolecular_M", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMasaMolecular_M);
-                this.columnCocienteCaloresEspecificos_k = new global::System.Data.DataColumn("CocienteCaloresEspecificos_k", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCocienteCaloresEspecificos_k);
-                this.columnCoeficienteDeCompresibilidad_z = new global::System.Data.DataColumn("CoeficienteDeCompresibilidad_z", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCoeficienteDeCompresibilidad_z);
-                this.columnCapacidadRequerida_W = new global::System.Data.DataColumn("CapacidadRequerida_W", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCapacidadRequerida_W);
-                this.columnCapacidadRequerida_Q = new global::System.Data.DataColumn("CapacidadRequerida_Q", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCapacidadRequerida_Q);
-                this.columnDensidadRelativa_G = new global::System.Data.DataColumn("DensidadRelativa_G", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDensidadRelativa_G);
-                this.columnViscusidad_Mu = new global::System.Data.DataColumn("Viscusidad_Mu", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnViscusidad_Mu);
-                this.columnTemperatura_Saturado = new global::System.Data.DataColumn("Temperatura_Saturado", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTemperatura_Saturado);
-                this.columnAreaCalculada = new global::System.Data.DataColumn("AreaCalculada", typeof(decimal), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnAreaCalculada);
-                this.columnTemperatura_de_Descarga_IN = new global::System.Data.DataColumn("Temperatura_de_Descarga_IN", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTemperatura_de_Descarga_IN);
-                this.columnTemperatura_de_Descarga_IN_Unit = new global::System.Data.DataColumn("Temperatura_de_Descarga_IN_Unit", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTemperatura_de_Descarga_IN_Unit);
-                this.columnCapacidadRequerida_IN = new global::System.Data.DataColumn("CapacidadRequerida_IN", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCapacidadRequerida_IN);
-                this.columnCapacidadRequerida_IN_Unit = new global::System.Data.DataColumn("CapacidadRequerida_IN_Unit", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCapacidadRequerida_IN_Unit);
-                this.columnId = new global::System.Data.DataColumn("Id", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnId);
-                this.columnEmail = new global::System.Data.DataColumn("Email", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnEmail);
-                this.columnUserName = new global::System.Data.DataColumn("UserName", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnUserName);
-                this.columnCuit = new global::System.Data.DataColumn("Cuit", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCuit);
-                this.columnSolicitudId.AllowDBNull = false;
-                this.columnPresupuestoId.AllowDBNull = false;
-                this.columnCodigoFinal.AllowDBNull = false;
-                this.columnCodigoFinal.MaxLength = 15;
-                this.columnModel.ReadOnly = true;
-                this.columnModel.MaxLength = 2;
-                this.columnDescripcionLinea.AllowDBNull = false;
-                this.columnDescripcionLinea.MaxLength = 50;
-                this.columnMedida.ReadOnly = true;
-                this.columnMedida.MaxLength = 2;
-                this.columnDescripcionMedida.AllowDBNull = false;
-                this.columnDescripcionMedida.MaxLength = 50;
-                this.columnOrifico.ReadOnly = true;
-                this.columnOrifico.MaxLength = 1;
-                this.columnAreaOrificio.AllowDBNull = false;
-                this.columnAreaOrificio.MaxLength = 50;
-                this.columnSerieEntrada.ReadOnly = true;
-                this.columnSerieEntrada.MaxLength = 1;
-                this.columnDescripcionSerieEntrada.AllowDBNull = false;
-                this.columnDescripcionSerieEntrada.MaxLength = 50;
-                this.columnTipoEntrada.ReadOnly = true;
-                this.columnTipoEntrada.MaxLength = 1;
-                this.columnDescripcionTipoEntrada.AllowDBNull = false;
-                this.columnDescripcionTipoEntrada.MaxLength = 50;
-                this.columnSerieSalida.ReadOnly = true;
-                this.columnSerieSalida.MaxLength = 1;
-                this.columnDescripcionSerieSalida.AllowDBNull = false;
-                this.columnDescripcionSerieSalida.MaxLength = 50;
-                this.columnTipoSalida.ReadOnly = true;
-                this.columnTipoSalida.MaxLength = 1;
-                this.columnDescripcionTipoSalida.AllowDBNull = false;
-                this.columnDescripcionTipoSalida.MaxLength = 50;
-                this.columnCodigoDTT.ReadOnly = true;
-                this.columnCodigoDTT.MaxLength = 1;
-                this.columnTipoAsiento.ReadOnly = true;
-                this.columnTipoAsiento.MaxLength = 1;
-                this.columnDescripcionAsiento.ReadOnly = true;
-                this.columnDescripcionAsiento.MaxLength = 200;
-                this.columnCodigoCBR.ReadOnly = true;
-                this.columnCodigoCBR.MaxLength = 2;
-                this.columnCuerpo_Externo.ReadOnly = true;
-                this.columnCuerpo_Externo.MaxLength = 50;
-                this.columnBonete_Externo.ReadOnly = true;
-                this.columnBonete_Externo.MaxLength = 50;
-                this.columnResorte_Externo.ReadOnly = true;
-                this.columnResorte_Externo.MaxLength = 50;
-                this.columnCodigoDT.ReadOnly = true;
-                this.columnCodigoDT.MaxLength = 2;
-                this.columnDisco_Interno.ReadOnly = true;
-                this.columnDisco_Interno.MaxLength = 50;
-                this.columnTobera_Interno.ReadOnly = true;
-                this.columnTobera_Interno.MaxLength = 50;
-                this.columnCapuchon.ReadOnly = true;
-                this.columnCapuchon.MaxLength = 200;
-                this.columnPalanca.ReadOnly = true;
-                this.columnPalanca.MaxLength = 200;
-                this.columnBonete.ReadOnly = true;
-                this.columnBonete.MaxLength = 200;
-                this.columnTornillo.ReadOnly = true;
-                this.columnTornillo.MaxLength = 200;
-                this.columnCantidad.MaxLength = 50;
-                this.columnServicio.MaxLength = 200;
-                this._columnNumeroP_ID.MaxLength = 200;
-                this.columnIndiceInstrumento.MaxLength = 200;
-                this.columnNumeroPlanta.MaxLength = 200;
-                this.columnNumeroPlano.MaxLength = 200;
-                this.columnDescargaA.MaxLength = 200;
-                this.columnLineaEntrada.MaxLength = 200;
-                this.columnLineaSalida.MaxLength = 200;
-                this.columnContingencia.MaxLength = 200;
-                this.columnNumeroHoja.MaxLength = 200;
-                this.columnPresionOperacion.MaxLength = 200;
-                this.columnTemperaturaOperacion.MaxLength = 200;
-                this.columnPresionDiseño.MaxLength = 200;
-                this.columnMaximaTemperaturaDiseño.MaxLength = 200;
-                this.columnMinimaTemperaturaDiseño.MaxLength = 200;
-                this.columnPresionAtmosfera.MaxLength = 200;
-                this.columnDiscoRuptura.MaxLength = 200;
-                this.columnModelo.MaxLength = 200;
-                this.columnNorma.MaxLength = 200;
-                this.columnContrapresionFija.MaxLength = 200;
-                this.columnContrapresionVariable.MaxLength = 200;
-                this.columnValvulaSimpleMultiple.MaxLength = 200;
-                this.columnSobrepresionAdmisible.MaxLength = 200;
-                this.columnPresionApertura.MaxLength = 200;
-                this.columnCodigoDiseño.MaxLength = 200;
-                this.columnUserId.MaxLength = 128;
-                this.columnNombre.MaxLength = 255;
-                this.columnTipoFase.MaxLength = 200;
-                this.columnNombreFase.MaxLength = 200;
-                this.columnDescripcion.MaxLength = 500;
-                this.columnCapacidadRequerida_V.MaxLength = 200;
-                this.columnTemperatura_de_Descarga_T.MaxLength = 200;
-                this.columnMasaMolecular_M.MaxLength = 200;
-                this.columnCocienteCaloresEspecificos_k.MaxLength = 200;
-                this.columnCoeficienteDeCompresibilidad_z.MaxLength = 200;
-                this.columnCapacidadRequerida_W.MaxLength = 200;
-                this.columnCapacidadRequerida_Q.MaxLength = 200;
-                this.columnDensidadRelativa_G.MaxLength = 200;
-                this.columnViscusidad_Mu.MaxLength = 200;
-                this.columnTemperatura_Saturado.MaxLength = 200;
-                this.columnTemperatura_de_Descarga_IN.MaxLength = 200;
-                this.columnTemperatura_de_Descarga_IN_Unit.MaxLength = 50;
-                this.columnCapacidadRequerida_IN.MaxLength = 200;
-                this.columnCapacidadRequerida_IN_Unit.MaxLength = 50;
-                this.columnId.MaxLength = 128;
-                this.columnEmail.MaxLength = 256;
-                this.columnUserName.MaxLength = 256;
-                this.columnCuit.MaxLength = 13;
+                this.columnPRESUPUESTO = new global::System.Data.DataColumn("PRESUPUESTO", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPRESUPUESTO);
+                this.columnFECHAS_PRESUP = new global::System.Data.DataColumn("FECHAS_PRESUP", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFECHAS_PRESUP);
+                this.columnBONIFIC = new global::System.Data.DataColumn("BONIFIC", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnBONIFIC);
+                this.columnCG_CLI = new global::System.Data.DataColumn("CG_CLI", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCG_CLI);
+                this.columnCLIENTE = new global::System.Data.DataColumn("CLIENTE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCLIENTE);
+                this.columnCALLE_CLIENTE = new global::System.Data.DataColumn("CALLE_CLIENTE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCALLE_CLIENTE);
+                this.columnCP_CLIENTE = new global::System.Data.DataColumn("CP_CLIENTE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCP_CLIENTE);
+                this.columnDIRENT = new global::System.Data.DataColumn("DIRENT", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDIRENT);
+                this.columnCONDICION_PAGO = new global::System.Data.DataColumn("CONDICION_PAGO", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCONDICION_PAGO);
+                this.columnCONDICION_ENTREGA = new global::System.Data.DataColumn("CONDICION_ENTREGA", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCONDICION_ENTREGA);
+                this.columnPROVINCIA_CLIENTE = new global::System.Data.DataColumn("PROVINCIA_CLIENTE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPROVINCIA_CLIENTE);
+                this.columnDESCRIPCION_IVA = new global::System.Data.DataColumn("DESCRIPCION_IVA", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDESCRIPCION_IVA);
+                this.columnCUIT_CLIENTE = new global::System.Data.DataColumn("CUIT_CLIENTE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCUIT_CLIENTE);
+                this.columnTRANSPORTE = new global::System.Data.DataColumn("TRANSPORTE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTRANSPORTE);
+                this.columnCALLE_TRANSPORTE = new global::System.Data.DataColumn("CALLE_TRANSPORTE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCALLE_TRANSPORTE);
+                this.columnTELEFONO_CLIENTE = new global::System.Data.DataColumn("TELEFONO_CLIENTE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTELEFONO_CLIENTE);
+                this.columnEMAIL_CLIENTE = new global::System.Data.DataColumn("EMAIL_CLIENTE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnEMAIL_CLIENTE);
+                this.columnCG_ART = new global::System.Data.DataColumn("CG_ART", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCG_ART);
+                this.columnARTICULO = new global::System.Data.DataColumn("ARTICULO", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnARTICULO);
+                this.columnCANTIDAD = new global::System.Data.DataColumn("CANTIDAD", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCANTIDAD);
+                this.columnPORC_DESCUENTO = new global::System.Data.DataColumn("PORC_DESCUENTO", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPORC_DESCUENTO);
+                this.columnPREC_UNIT = new global::System.Data.DataColumn("PREC_UNIT", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPREC_UNIT);
+                this.columnTOTAL_ITEM = new global::System.Data.DataColumn("TOTAL_ITEM", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTOTAL_ITEM);
+                this.columnOBSERITEM = new global::System.Data.DataColumn("OBSERITEM", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnOBSERITEM);
+                this.columnDIAS_PLAZO_ENTREGA = new global::System.Data.DataColumn("DIAS_PLAZO_ENTREGA", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDIAS_PLAZO_ENTREGA);
+                this.columnMONEDA = new global::System.Data.DataColumn("MONEDA", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMONEDA);
+                this.columnTOTAL_PRESUPUESTO = new global::System.Data.DataColumn("TOTAL_PRESUPUESTO", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTOTAL_PRESUPUESTO);
+                this.columnConstruccion = new global::System.Data.DataColumn("Construccion", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnConstruccion);
+                this.columnMarca = new global::System.Data.DataColumn("Marca", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMarca);
+                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnPRESUPUESTO}, true));
+                this.columnPRESUPUESTO.AllowDBNull = false;
+                this.columnPRESUPUESTO.Unique = true;
+                this.columnBONIFIC.AllowDBNull = false;
+                this.columnCG_CLI.AllowDBNull = false;
+                this.columnCLIENTE.MaxLength = 100;
+                this.columnCALLE_CLIENTE.MaxLength = 200;
+                this.columnCP_CLIENTE.MaxLength = 10;
+                this.columnDIRENT.AllowDBNull = false;
+                this.columnDIRENT.MaxLength = 500;
+                this.columnCONDICION_PAGO.MaxLength = 50;
+                this.columnCONDICION_ENTREGA.MaxLength = 2147483647;
+                this.columnPROVINCIA_CLIENTE.MaxLength = 50;
+                this.columnDESCRIPCION_IVA.MaxLength = 50;
+                this.columnCUIT_CLIENTE.ReadOnly = true;
+                this.columnCUIT_CLIENTE.MaxLength = 8000;
+                this.columnTRANSPORTE.MaxLength = 50;
+                this.columnCALLE_TRANSPORTE.MaxLength = 50;
+                this.columnTELEFONO_CLIENTE.MaxLength = 30;
+                this.columnEMAIL_CLIENTE.ReadOnly = true;
+                this.columnEMAIL_CLIENTE.MaxLength = 100;
+                this.columnCG_ART.AllowDBNull = false;
+                this.columnCG_ART.MaxLength = 15;
+                this.columnARTICULO.AllowDBNull = false;
+                this.columnARTICULO.MaxLength = 500;
+                this.columnCANTIDAD.AllowDBNull = false;
+                this.columnPORC_DESCUENTO.AllowDBNull = false;
+                this.columnPREC_UNIT.AllowDBNull = false;
+                this.columnTOTAL_ITEM.ReadOnly = true;
+                this.columnOBSERITEM.AllowDBNull = false;
+                this.columnOBSERITEM.MaxLength = 8000;
+                this.columnDIAS_PLAZO_ENTREGA.AllowDBNull = false;
+                this.columnMONEDA.AllowDBNull = false;
+                this.columnMONEDA.MaxLength = 20;
+                this.columnTOTAL_PRESUPUESTO.AllowDBNull = false;
+                this.columnConstruccion.AllowDBNull = false;
+                this.columnConstruccion.MaxLength = 500;
+                this.columnMarca.AllowDBNull = false;
+                this.columnMarca.MaxLength = 500;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public vCalculoSolicitudesRow NewvCalculoSolicitudesRow() {
-                return ((vCalculoSolicitudesRow)(this.NewRow()));
+            public vPresupuestoReporteRow NewvPresupuestoReporteRow() {
+                return ((vPresupuestoReporteRow)(this.NewRow()));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
-                return new vCalculoSolicitudesRow(builder);
+                return new vPresupuestoReporteRow(builder);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             protected override global::System.Type GetRowType() {
-                return typeof(vCalculoSolicitudesRow);
+                return typeof(vPresupuestoReporteRow);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowChanged(e);
-                if ((this.vCalculoSolicitudesRowChanged != null)) {
-                    this.vCalculoSolicitudesRowChanged(this, new vCalculoSolicitudesRowChangeEvent(((vCalculoSolicitudesRow)(e.Row)), e.Action));
+                if ((this.vPresupuestoReporteRowChanged != null)) {
+                    this.vPresupuestoReporteRowChanged(this, new vPresupuestoReporteRowChangeEvent(((vPresupuestoReporteRow)(e.Row)), e.Action));
                 }
             }
             
@@ -1768,8 +894,8 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowChanging(e);
-                if ((this.vCalculoSolicitudesRowChanging != null)) {
-                    this.vCalculoSolicitudesRowChanging(this, new vCalculoSolicitudesRowChangeEvent(((vCalculoSolicitudesRow)(e.Row)), e.Action));
+                if ((this.vPresupuestoReporteRowChanging != null)) {
+                    this.vPresupuestoReporteRowChanging(this, new vPresupuestoReporteRowChangeEvent(((vPresupuestoReporteRow)(e.Row)), e.Action));
                 }
             }
             
@@ -1777,8 +903,8 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowDeleted(e);
-                if ((this.vCalculoSolicitudesRowDeleted != null)) {
-                    this.vCalculoSolicitudesRowDeleted(this, new vCalculoSolicitudesRowChangeEvent(((vCalculoSolicitudesRow)(e.Row)), e.Action));
+                if ((this.vPresupuestoReporteRowDeleted != null)) {
+                    this.vPresupuestoReporteRowDeleted(this, new vPresupuestoReporteRowChangeEvent(((vPresupuestoReporteRow)(e.Row)), e.Action));
                 }
             }
             
@@ -1786,14 +912,14 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowDeleting(e);
-                if ((this.vCalculoSolicitudesRowDeleting != null)) {
-                    this.vCalculoSolicitudesRowDeleting(this, new vCalculoSolicitudesRowChangeEvent(((vCalculoSolicitudesRow)(e.Row)), e.Action));
+                if ((this.vPresupuestoReporteRowDeleting != null)) {
+                    this.vPresupuestoReporteRowDeleting(this, new vPresupuestoReporteRowChangeEvent(((vPresupuestoReporteRow)(e.Row)), e.Action));
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void RemovevCalculoSolicitudesRow(vCalculoSolicitudesRow row) {
+            public void RemovevPresupuestoReporteRow(vPresupuestoReporteRow row) {
                 this.Rows.Remove(row);
             }
             
@@ -1820,7 +946,7 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
                 type.Attributes.Add(attribute1);
                 global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
                 attribute2.Name = "tableTypeName";
-                attribute2.FixedValue = "vCalculoSolicitudesDataTable";
+                attribute2.FixedValue = "vPresupuestoReporteDataTable";
                 type.Attributes.Add(attribute2);
                 type.Particle = sequence;
                 global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
@@ -1864,2214 +990,582 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
         /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
-        public partial class vCalculoSolicitudesRow : global::System.Data.DataRow {
+        public partial class vPresupuestoReporteRow : global::System.Data.DataRow {
             
-            private vCalculoSolicitudesDataTable tablevCalculoSolicitudes;
+            private vPresupuestoReporteDataTable tablevPresupuestoReporte;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            internal vCalculoSolicitudesRow(global::System.Data.DataRowBuilder rb) : 
+            internal vPresupuestoReporteRow(global::System.Data.DataRowBuilder rb) : 
                     base(rb) {
-                this.tablevCalculoSolicitudes = ((vCalculoSolicitudesDataTable)(this.Table));
+                this.tablevPresupuestoReporte = ((vPresupuestoReporteDataTable)(this.Table));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public int SolicitudId {
+            public int PRESUPUESTO {
                 get {
-                    return ((int)(this[this.tablevCalculoSolicitudes.SolicitudIdColumn]));
+                    return ((int)(this[this.tablevPresupuestoReporte.PRESUPUESTOColumn]));
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.SolicitudIdColumn] = value;
+                    this[this.tablevPresupuestoReporte.PRESUPUESTOColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public int PresupuestoId {
-                get {
-                    return ((int)(this[this.tablevCalculoSolicitudes.PresupuestoIdColumn]));
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.PresupuestoIdColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string CodigoFinal {
-                get {
-                    return ((string)(this[this.tablevCalculoSolicitudes.CodigoFinalColumn]));
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.CodigoFinalColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Model {
+            public System.DateTime FECHAS_PRESUP {
                 get {
                     try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.ModelColumn]));
+                        return ((global::System.DateTime)(this[this.tablevPresupuestoReporte.FECHAS_PRESUPColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Model\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.ModelColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string DescripcionLinea {
-                get {
-                    return ((string)(this[this.tablevCalculoSolicitudes.DescripcionLineaColumn]));
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.DescripcionLineaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Medida {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.MedidaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Medida\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.MedidaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string DescripcionMedida {
-                get {
-                    return ((string)(this[this.tablevCalculoSolicitudes.DescripcionMedidaColumn]));
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.DescripcionMedidaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Orifico {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.OrificoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Orifico\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.OrificoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string AreaOrificio {
-                get {
-                    return ((string)(this[this.tablevCalculoSolicitudes.AreaOrificioColumn]));
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.AreaOrificioColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string SerieEntrada {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.SerieEntradaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'SerieEntrada\' de la tabla \'vCalculoSolicitudes\' es DBNull" +
-                                ".", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.SerieEntradaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string DescripcionSerieEntrada {
-                get {
-                    return ((string)(this[this.tablevCalculoSolicitudes.DescripcionSerieEntradaColumn]));
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.DescripcionSerieEntradaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string TipoEntrada {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.TipoEntradaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TipoEntrada\' de la tabla \'vCalculoSolicitudes\' es DBNull." +
-                                "", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.TipoEntradaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string DescripcionTipoEntrada {
-                get {
-                    return ((string)(this[this.tablevCalculoSolicitudes.DescripcionTipoEntradaColumn]));
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.DescripcionTipoEntradaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string SerieSalida {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.SerieSalidaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'SerieSalida\' de la tabla \'vCalculoSolicitudes\' es DBNull." +
-                                "", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.SerieSalidaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string DescripcionSerieSalida {
-                get {
-                    return ((string)(this[this.tablevCalculoSolicitudes.DescripcionSerieSalidaColumn]));
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.DescripcionSerieSalidaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string TipoSalida {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.TipoSalidaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TipoSalida\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.TipoSalidaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string DescripcionTipoSalida {
-                get {
-                    return ((string)(this[this.tablevCalculoSolicitudes.DescripcionTipoSalidaColumn]));
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.DescripcionTipoSalidaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string CodigoDTT {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.CodigoDTTColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CodigoDTT\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.CodigoDTTColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string TipoAsiento {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.TipoAsientoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TipoAsiento\' de la tabla \'vCalculoSolicitudes\' es DBNull." +
-                                "", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.TipoAsientoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string DescripcionAsiento {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.DescripcionAsientoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'DescripcionAsiento\' de la tabla \'vCalculoSolicitudes\' es " +
-                                "DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.DescripcionAsientoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string CodigoCBR {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.CodigoCBRColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CodigoCBR\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.CodigoCBRColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Cuerpo_Externo {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.Cuerpo_ExternoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Cuerpo_Externo\' de la tabla \'vCalculoSolicitudes\' es DBNu" +
-                                "ll.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.Cuerpo_ExternoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Bonete_Externo {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.Bonete_ExternoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Bonete_Externo\' de la tabla \'vCalculoSolicitudes\' es DBNu" +
-                                "ll.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.Bonete_ExternoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Resorte_Externo {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.Resorte_ExternoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Resorte_Externo\' de la tabla \'vCalculoSolicitudes\' es DBN" +
-                                "ull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.Resorte_ExternoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string CodigoDT {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.CodigoDTColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CodigoDT\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.CodigoDTColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Disco_Interno {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.Disco_InternoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Disco_Interno\' de la tabla \'vCalculoSolicitudes\' es DBNul" +
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'FECHAS_PRESUP\' de la tabla \'vPresupuestoReporte\' es DBNul" +
                                 "l.", e);
                     }
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.Disco_InternoColumn] = value;
+                    this[this.tablevPresupuestoReporte.FECHAS_PRESUPColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Tobera_Interno {
+            public decimal BONIFIC {
+                get {
+                    return ((decimal)(this[this.tablevPresupuestoReporte.BONIFICColumn]));
+                }
+                set {
+                    this[this.tablevPresupuestoReporte.BONIFICColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public int CG_CLI {
+                get {
+                    return ((int)(this[this.tablevPresupuestoReporte.CG_CLIColumn]));
+                }
+                set {
+                    this[this.tablevPresupuestoReporte.CG_CLIColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string CLIENTE {
                 get {
                     try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.Tobera_InternoColumn]));
+                        return ((string)(this[this.tablevPresupuestoReporte.CLIENTEColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Tobera_Interno\' de la tabla \'vCalculoSolicitudes\' es DBNu" +
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CLIENTE\' de la tabla \'vPresupuestoReporte\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablevPresupuestoReporte.CLIENTEColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string CALLE_CLIENTE {
+                get {
+                    try {
+                        return ((string)(this[this.tablevPresupuestoReporte.CALLE_CLIENTEColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CALLE_CLIENTE\' de la tabla \'vPresupuestoReporte\' es DBNul" +
+                                "l.", e);
+                    }
+                }
+                set {
+                    this[this.tablevPresupuestoReporte.CALLE_CLIENTEColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string CP_CLIENTE {
+                get {
+                    try {
+                        return ((string)(this[this.tablevPresupuestoReporte.CP_CLIENTEColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CP_CLIENTE\' de la tabla \'vPresupuestoReporte\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablevPresupuestoReporte.CP_CLIENTEColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string DIRENT {
+                get {
+                    return ((string)(this[this.tablevPresupuestoReporte.DIRENTColumn]));
+                }
+                set {
+                    this[this.tablevPresupuestoReporte.DIRENTColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string CONDICION_PAGO {
+                get {
+                    try {
+                        return ((string)(this[this.tablevPresupuestoReporte.CONDICION_PAGOColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CONDICION_PAGO\' de la tabla \'vPresupuestoReporte\' es DBNu" +
                                 "ll.", e);
                     }
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.Tobera_InternoColumn] = value;
+                    this[this.tablevPresupuestoReporte.CONDICION_PAGOColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Capuchon {
+            public string CONDICION_ENTREGA {
                 get {
                     try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.CapuchonColumn]));
+                        return ((string)(this[this.tablevPresupuestoReporte.CONDICION_ENTREGAColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Capuchon\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.CapuchonColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Palanca {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.PalancaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Palanca\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.PalancaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Bonete {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.BoneteColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Bonete\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.BoneteColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Tornillo {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.TornilloColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Tornillo\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.TornilloColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public int TagId {
-                get {
-                    try {
-                        return ((int)(this[this.tablevCalculoSolicitudes.TagIdColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TagId\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.TagIdColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Cantidad {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.CantidadColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Cantidad\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.CantidadColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Servicio {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.ServicioColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Servicio\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.ServicioColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string _NumeroP_ID {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes._NumeroP_IDColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'NumeroP&ID\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes._NumeroP_IDColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string IndiceInstrumento {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.IndiceInstrumentoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'IndiceInstrumento\' de la tabla \'vCalculoSolicitudes\' es D" +
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CONDICION_ENTREGA\' de la tabla \'vPresupuestoReporte\' es D" +
                                 "BNull.", e);
                     }
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.IndiceInstrumentoColumn] = value;
+                    this[this.tablevPresupuestoReporte.CONDICION_ENTREGAColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string NumeroPlanta {
+            public string PROVINCIA_CLIENTE {
                 get {
                     try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.NumeroPlantaColumn]));
+                        return ((string)(this[this.tablevPresupuestoReporte.PROVINCIA_CLIENTEColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'NumeroPlanta\' de la tabla \'vCalculoSolicitudes\' es DBNull" +
-                                ".", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.NumeroPlantaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string NumeroPlano {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.NumeroPlanoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'NumeroPlano\' de la tabla \'vCalculoSolicitudes\' es DBNull." +
-                                "", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.NumeroPlanoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string DescargaA {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.DescargaAColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'DescargaA\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.DescargaAColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string LineaEntrada {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.LineaEntradaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'LineaEntrada\' de la tabla \'vCalculoSolicitudes\' es DBNull" +
-                                ".", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.LineaEntradaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string LineaSalida {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.LineaSalidaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'LineaSalida\' de la tabla \'vCalculoSolicitudes\' es DBNull." +
-                                "", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.LineaSalidaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Contingencia {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.ContingenciaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Contingencia\' de la tabla \'vCalculoSolicitudes\' es DBNull" +
-                                ".", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.ContingenciaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string NumeroHoja {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.NumeroHojaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'NumeroHoja\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.NumeroHojaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string PresionOperacion {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.PresionOperacionColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'PresionOperacion\' de la tabla \'vCalculoSolicitudes\' es DB" +
-                                "Null.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.PresionOperacionColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string TemperaturaOperacion {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.TemperaturaOperacionColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TemperaturaOperacion\' de la tabla \'vCalculoSolicitudes\' e" +
-                                "s DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.TemperaturaOperacionColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string PresionDiseño {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.PresionDiseñoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'PresionDiseño\' de la tabla \'vCalculoSolicitudes\' es DBNul" +
-                                "l.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.PresionDiseñoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string MaximaTemperaturaDiseño {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.MaximaTemperaturaDiseñoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'MaximaTemperaturaDiseño\' de la tabla \'vCalculoSolicitudes" +
-                                "\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.MaximaTemperaturaDiseñoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string MinimaTemperaturaDiseño {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.MinimaTemperaturaDiseñoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'MinimaTemperaturaDiseño\' de la tabla \'vCalculoSolicitudes" +
-                                "\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.MinimaTemperaturaDiseñoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string PresionAtmosfera {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.PresionAtmosferaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'PresionAtmosfera\' de la tabla \'vCalculoSolicitudes\' es DB" +
-                                "Null.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.PresionAtmosferaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string DiscoRuptura {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.DiscoRupturaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'DiscoRuptura\' de la tabla \'vCalculoSolicitudes\' es DBNull" +
-                                ".", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.DiscoRupturaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Modelo {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.ModeloColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Modelo\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.ModeloColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Norma {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.NormaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Norma\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.NormaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string ContrapresionFija {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.ContrapresionFijaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'ContrapresionFija\' de la tabla \'vCalculoSolicitudes\' es D" +
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'PROVINCIA_CLIENTE\' de la tabla \'vPresupuestoReporte\' es D" +
                                 "BNull.", e);
                     }
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.ContrapresionFijaColumn] = value;
+                    this[this.tablevPresupuestoReporte.PROVINCIA_CLIENTEColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string ContrapresionVariable {
+            public string DESCRIPCION_IVA {
                 get {
                     try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.ContrapresionVariableColumn]));
+                        return ((string)(this[this.tablevPresupuestoReporte.DESCRIPCION_IVAColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'ContrapresionVariable\' de la tabla \'vCalculoSolicitudes\' " +
-                                "es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.ContrapresionVariableColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string ValvulaSimpleMultiple {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.ValvulaSimpleMultipleColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'ValvulaSimpleMultiple\' de la tabla \'vCalculoSolicitudes\' " +
-                                "es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.ValvulaSimpleMultipleColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string SobrepresionAdmisible {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.SobrepresionAdmisibleColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'SobrepresionAdmisible\' de la tabla \'vCalculoSolicitudes\' " +
-                                "es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.SobrepresionAdmisibleColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string PresionApertura {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.PresionAperturaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'PresionApertura\' de la tabla \'vCalculoSolicitudes\' es DBN" +
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'DESCRIPCION_IVA\' de la tabla \'vPresupuestoReporte\' es DBN" +
                                 "ull.", e);
                     }
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.PresionAperturaColumn] = value;
+                    this[this.tablevPresupuestoReporte.DESCRIPCION_IVAColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string CodigoDiseño {
+            public string CUIT_CLIENTE {
                 get {
                     try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.CodigoDiseñoColumn]));
+                        return ((string)(this[this.tablevPresupuestoReporte.CUIT_CLIENTEColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CodigoDiseño\' de la tabla \'vCalculoSolicitudes\' es DBNull" +
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CUIT_CLIENTE\' de la tabla \'vPresupuestoReporte\' es DBNull" +
                                 ".", e);
                     }
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.CodigoDiseñoColumn] = value;
+                    this[this.tablevPresupuestoReporte.CUIT_CLIENTEColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string UserId {
+            public string TRANSPORTE {
                 get {
                     try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.UserIdColumn]));
+                        return ((string)(this[this.tablevPresupuestoReporte.TRANSPORTEColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'UserId\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TRANSPORTE\' de la tabla \'vPresupuestoReporte\' es DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.UserIdColumn] = value;
+                    this[this.tablevPresupuestoReporte.TRANSPORTEColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Nombre {
+            public string CALLE_TRANSPORTE {
                 get {
                     try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.NombreColumn]));
+                        return ((string)(this[this.tablevPresupuestoReporte.CALLE_TRANSPORTEColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Nombre\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CALLE_TRANSPORTE\' de la tabla \'vPresupuestoReporte\' es DB" +
+                                "Null.", e);
                     }
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.NombreColumn] = value;
+                    this[this.tablevPresupuestoReporte.CALLE_TRANSPORTEColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public int FaseId {
+            public string TELEFONO_CLIENTE {
                 get {
                     try {
-                        return ((int)(this[this.tablevCalculoSolicitudes.FaseIdColumn]));
+                        return ((string)(this[this.tablevPresupuestoReporte.TELEFONO_CLIENTEColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'FaseId\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TELEFONO_CLIENTE\' de la tabla \'vPresupuestoReporte\' es DB" +
+                                "Null.", e);
                     }
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.FaseIdColumn] = value;
+                    this[this.tablevPresupuestoReporte.TELEFONO_CLIENTEColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string TipoFase {
+            public string EMAIL_CLIENTE {
                 get {
                     try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.TipoFaseColumn]));
+                        return ((string)(this[this.tablevPresupuestoReporte.EMAIL_CLIENTEColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TipoFase\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.TipoFaseColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string NombreFase {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.NombreFaseColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'NombreFase\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.NombreFaseColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Descripcion {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.DescripcionColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Descripcion\' de la tabla \'vCalculoSolicitudes\' es DBNull." +
-                                "", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.DescripcionColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string CapacidadRequerida_V {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.CapacidadRequerida_VColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CapacidadRequerida_V\' de la tabla \'vCalculoSolicitudes\' e" +
-                                "s DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.CapacidadRequerida_VColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Temperatura_de_Descarga_T {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.Temperatura_de_Descarga_TColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Temperatura_de_Descarga_T\' de la tabla \'vCalculoSolicitud" +
-                                "es\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.Temperatura_de_Descarga_TColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string MasaMolecular_M {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.MasaMolecular_MColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'MasaMolecular_M\' de la tabla \'vCalculoSolicitudes\' es DBN" +
-                                "ull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.MasaMolecular_MColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string CocienteCaloresEspecificos_k {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.CocienteCaloresEspecificos_kColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CocienteCaloresEspecificos_k\' de la tabla \'vCalculoSolici" +
-                                "tudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.CocienteCaloresEspecificos_kColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string CoeficienteDeCompresibilidad_z {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.CoeficienteDeCompresibilidad_zColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CoeficienteDeCompresibilidad_z\' de la tabla \'vCalculoSoli" +
-                                "citudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.CoeficienteDeCompresibilidad_zColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string CapacidadRequerida_W {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.CapacidadRequerida_WColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CapacidadRequerida_W\' de la tabla \'vCalculoSolicitudes\' e" +
-                                "s DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.CapacidadRequerida_WColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string CapacidadRequerida_Q {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.CapacidadRequerida_QColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CapacidadRequerida_Q\' de la tabla \'vCalculoSolicitudes\' e" +
-                                "s DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.CapacidadRequerida_QColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string DensidadRelativa_G {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.DensidadRelativa_GColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'DensidadRelativa_G\' de la tabla \'vCalculoSolicitudes\' es " +
-                                "DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.DensidadRelativa_GColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Viscusidad_Mu {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.Viscusidad_MuColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Viscusidad_Mu\' de la tabla \'vCalculoSolicitudes\' es DBNul" +
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'EMAIL_CLIENTE\' de la tabla \'vPresupuestoReporte\' es DBNul" +
                                 "l.", e);
                     }
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.Viscusidad_MuColumn] = value;
+                    this[this.tablevPresupuestoReporte.EMAIL_CLIENTEColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Temperatura_Saturado {
+            public string CG_ART {
+                get {
+                    return ((string)(this[this.tablevPresupuestoReporte.CG_ARTColumn]));
+                }
+                set {
+                    this[this.tablevPresupuestoReporte.CG_ARTColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string ARTICULO {
+                get {
+                    return ((string)(this[this.tablevPresupuestoReporte.ARTICULOColumn]));
+                }
+                set {
+                    this[this.tablevPresupuestoReporte.ARTICULOColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public decimal CANTIDAD {
+                get {
+                    return ((decimal)(this[this.tablevPresupuestoReporte.CANTIDADColumn]));
+                }
+                set {
+                    this[this.tablevPresupuestoReporte.CANTIDADColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public decimal PORC_DESCUENTO {
+                get {
+                    return ((decimal)(this[this.tablevPresupuestoReporte.PORC_DESCUENTOColumn]));
+                }
+                set {
+                    this[this.tablevPresupuestoReporte.PORC_DESCUENTOColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public decimal PREC_UNIT {
+                get {
+                    return ((decimal)(this[this.tablevPresupuestoReporte.PREC_UNITColumn]));
+                }
+                set {
+                    this[this.tablevPresupuestoReporte.PREC_UNITColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public decimal TOTAL_ITEM {
                 get {
                     try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.Temperatura_SaturadoColumn]));
+                        return ((decimal)(this[this.tablevPresupuestoReporte.TOTAL_ITEMColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Temperatura_Saturado\' de la tabla \'vCalculoSolicitudes\' e" +
-                                "s DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TOTAL_ITEM\' de la tabla \'vPresupuestoReporte\' es DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.Temperatura_SaturadoColumn] = value;
+                    this[this.tablevPresupuestoReporte.TOTAL_ITEMColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public decimal AreaCalculada {
+            public string OBSERITEM {
                 get {
-                    try {
-                        return ((decimal)(this[this.tablevCalculoSolicitudes.AreaCalculadaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'AreaCalculada\' de la tabla \'vCalculoSolicitudes\' es DBNul" +
-                                "l.", e);
-                    }
+                    return ((string)(this[this.tablevPresupuestoReporte.OBSERITEMColumn]));
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.AreaCalculadaColumn] = value;
+                    this[this.tablevPresupuestoReporte.OBSERITEMColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Temperatura_de_Descarga_IN {
+            public int DIAS_PLAZO_ENTREGA {
                 get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.Temperatura_de_Descarga_INColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Temperatura_de_Descarga_IN\' de la tabla \'vCalculoSolicitu" +
-                                "des\' es DBNull.", e);
-                    }
+                    return ((int)(this[this.tablevPresupuestoReporte.DIAS_PLAZO_ENTREGAColumn]));
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.Temperatura_de_Descarga_INColumn] = value;
+                    this[this.tablevPresupuestoReporte.DIAS_PLAZO_ENTREGAColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Temperatura_de_Descarga_IN_Unit {
+            public string MONEDA {
                 get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.Temperatura_de_Descarga_IN_UnitColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Temperatura_de_Descarga_IN_Unit\' de la tabla \'vCalculoSol" +
-                                "icitudes\' es DBNull.", e);
-                    }
+                    return ((string)(this[this.tablevPresupuestoReporte.MONEDAColumn]));
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.Temperatura_de_Descarga_IN_UnitColumn] = value;
+                    this[this.tablevPresupuestoReporte.MONEDAColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string CapacidadRequerida_IN {
+            public decimal TOTAL_PRESUPUESTO {
                 get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.CapacidadRequerida_INColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CapacidadRequerida_IN\' de la tabla \'vCalculoSolicitudes\' " +
-                                "es DBNull.", e);
-                    }
+                    return ((decimal)(this[this.tablevPresupuestoReporte.TOTAL_PRESUPUESTOColumn]));
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.CapacidadRequerida_INColumn] = value;
+                    this[this.tablevPresupuestoReporte.TOTAL_PRESUPUESTOColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string CapacidadRequerida_IN_Unit {
+            public string Construccion {
                 get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.CapacidadRequerida_IN_UnitColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'CapacidadRequerida_IN_Unit\' de la tabla \'vCalculoSolicitu" +
-                                "des\' es DBNull.", e);
-                    }
+                    return ((string)(this[this.tablevPresupuestoReporte.ConstruccionColumn]));
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.CapacidadRequerida_IN_UnitColumn] = value;
+                    this[this.tablevPresupuestoReporte.ConstruccionColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Id {
+            public string Marca {
                 get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.IdColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Id\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
+                    return ((string)(this[this.tablevPresupuestoReporte.MarcaColumn]));
                 }
                 set {
-                    this[this.tablevCalculoSolicitudes.IdColumn] = value;
+                    this[this.tablevPresupuestoReporte.MarcaColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Email {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.EmailColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Email\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.EmailColumn] = value;
-                }
+            public bool IsFECHAS_PRESUPNull() {
+                return this.IsNull(this.tablevPresupuestoReporte.FECHAS_PRESUPColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string UserName {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.UserNameColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'UserName\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.UserNameColumn] = value;
-                }
+            public void SetFECHAS_PRESUPNull() {
+                this[this.tablevPresupuestoReporte.FECHAS_PRESUPColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Cuit {
-                get {
-                    try {
-                        return ((string)(this[this.tablevCalculoSolicitudes.CuitColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Cuit\' de la tabla \'vCalculoSolicitudes\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tablevCalculoSolicitudes.CuitColumn] = value;
-                }
+            public bool IsCLIENTENull() {
+                return this.IsNull(this.tablevPresupuestoReporte.CLIENTEColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsModelNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.ModelColumn);
+            public void SetCLIENTENull() {
+                this[this.tablevPresupuestoReporte.CLIENTEColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetModelNull() {
-                this[this.tablevCalculoSolicitudes.ModelColumn] = global::System.Convert.DBNull;
+            public bool IsCALLE_CLIENTENull() {
+                return this.IsNull(this.tablevPresupuestoReporte.CALLE_CLIENTEColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsMedidaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.MedidaColumn);
+            public void SetCALLE_CLIENTENull() {
+                this[this.tablevPresupuestoReporte.CALLE_CLIENTEColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetMedidaNull() {
-                this[this.tablevCalculoSolicitudes.MedidaColumn] = global::System.Convert.DBNull;
+            public bool IsCP_CLIENTENull() {
+                return this.IsNull(this.tablevPresupuestoReporte.CP_CLIENTEColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsOrificoNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.OrificoColumn);
+            public void SetCP_CLIENTENull() {
+                this[this.tablevPresupuestoReporte.CP_CLIENTEColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetOrificoNull() {
-                this[this.tablevCalculoSolicitudes.OrificoColumn] = global::System.Convert.DBNull;
+            public bool IsCONDICION_PAGONull() {
+                return this.IsNull(this.tablevPresupuestoReporte.CONDICION_PAGOColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsSerieEntradaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.SerieEntradaColumn);
+            public void SetCONDICION_PAGONull() {
+                this[this.tablevPresupuestoReporte.CONDICION_PAGOColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetSerieEntradaNull() {
-                this[this.tablevCalculoSolicitudes.SerieEntradaColumn] = global::System.Convert.DBNull;
+            public bool IsCONDICION_ENTREGANull() {
+                return this.IsNull(this.tablevPresupuestoReporte.CONDICION_ENTREGAColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsTipoEntradaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.TipoEntradaColumn);
+            public void SetCONDICION_ENTREGANull() {
+                this[this.tablevPresupuestoReporte.CONDICION_ENTREGAColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetTipoEntradaNull() {
-                this[this.tablevCalculoSolicitudes.TipoEntradaColumn] = global::System.Convert.DBNull;
+            public bool IsPROVINCIA_CLIENTENull() {
+                return this.IsNull(this.tablevPresupuestoReporte.PROVINCIA_CLIENTEColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsSerieSalidaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.SerieSalidaColumn);
+            public void SetPROVINCIA_CLIENTENull() {
+                this[this.tablevPresupuestoReporte.PROVINCIA_CLIENTEColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetSerieSalidaNull() {
-                this[this.tablevCalculoSolicitudes.SerieSalidaColumn] = global::System.Convert.DBNull;
+            public bool IsDESCRIPCION_IVANull() {
+                return this.IsNull(this.tablevPresupuestoReporte.DESCRIPCION_IVAColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsTipoSalidaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.TipoSalidaColumn);
+            public void SetDESCRIPCION_IVANull() {
+                this[this.tablevPresupuestoReporte.DESCRIPCION_IVAColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetTipoSalidaNull() {
-                this[this.tablevCalculoSolicitudes.TipoSalidaColumn] = global::System.Convert.DBNull;
+            public bool IsCUIT_CLIENTENull() {
+                return this.IsNull(this.tablevPresupuestoReporte.CUIT_CLIENTEColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCodigoDTTNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.CodigoDTTColumn);
+            public void SetCUIT_CLIENTENull() {
+                this[this.tablevPresupuestoReporte.CUIT_CLIENTEColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCodigoDTTNull() {
-                this[this.tablevCalculoSolicitudes.CodigoDTTColumn] = global::System.Convert.DBNull;
+            public bool IsTRANSPORTENull() {
+                return this.IsNull(this.tablevPresupuestoReporte.TRANSPORTEColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsTipoAsientoNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.TipoAsientoColumn);
+            public void SetTRANSPORTENull() {
+                this[this.tablevPresupuestoReporte.TRANSPORTEColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetTipoAsientoNull() {
-                this[this.tablevCalculoSolicitudes.TipoAsientoColumn] = global::System.Convert.DBNull;
+            public bool IsCALLE_TRANSPORTENull() {
+                return this.IsNull(this.tablevPresupuestoReporte.CALLE_TRANSPORTEColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsDescripcionAsientoNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.DescripcionAsientoColumn);
+            public void SetCALLE_TRANSPORTENull() {
+                this[this.tablevPresupuestoReporte.CALLE_TRANSPORTEColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetDescripcionAsientoNull() {
-                this[this.tablevCalculoSolicitudes.DescripcionAsientoColumn] = global::System.Convert.DBNull;
+            public bool IsTELEFONO_CLIENTENull() {
+                return this.IsNull(this.tablevPresupuestoReporte.TELEFONO_CLIENTEColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCodigoCBRNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.CodigoCBRColumn);
+            public void SetTELEFONO_CLIENTENull() {
+                this[this.tablevPresupuestoReporte.TELEFONO_CLIENTEColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCodigoCBRNull() {
-                this[this.tablevCalculoSolicitudes.CodigoCBRColumn] = global::System.Convert.DBNull;
+            public bool IsEMAIL_CLIENTENull() {
+                return this.IsNull(this.tablevPresupuestoReporte.EMAIL_CLIENTEColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCuerpo_ExternoNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.Cuerpo_ExternoColumn);
+            public void SetEMAIL_CLIENTENull() {
+                this[this.tablevPresupuestoReporte.EMAIL_CLIENTEColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCuerpo_ExternoNull() {
-                this[this.tablevCalculoSolicitudes.Cuerpo_ExternoColumn] = global::System.Convert.DBNull;
+            public bool IsTOTAL_ITEMNull() {
+                return this.IsNull(this.tablevPresupuestoReporte.TOTAL_ITEMColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsBonete_ExternoNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.Bonete_ExternoColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetBonete_ExternoNull() {
-                this[this.tablevCalculoSolicitudes.Bonete_ExternoColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsResorte_ExternoNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.Resorte_ExternoColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetResorte_ExternoNull() {
-                this[this.tablevCalculoSolicitudes.Resorte_ExternoColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCodigoDTNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.CodigoDTColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCodigoDTNull() {
-                this[this.tablevCalculoSolicitudes.CodigoDTColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsDisco_InternoNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.Disco_InternoColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetDisco_InternoNull() {
-                this[this.tablevCalculoSolicitudes.Disco_InternoColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsTobera_InternoNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.Tobera_InternoColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetTobera_InternoNull() {
-                this[this.tablevCalculoSolicitudes.Tobera_InternoColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCapuchonNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.CapuchonColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCapuchonNull() {
-                this[this.tablevCalculoSolicitudes.CapuchonColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsPalancaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.PalancaColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetPalancaNull() {
-                this[this.tablevCalculoSolicitudes.PalancaColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsBoneteNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.BoneteColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetBoneteNull() {
-                this[this.tablevCalculoSolicitudes.BoneteColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsTornilloNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.TornilloColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetTornilloNull() {
-                this[this.tablevCalculoSolicitudes.TornilloColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsTagIdNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.TagIdColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetTagIdNull() {
-                this[this.tablevCalculoSolicitudes.TagIdColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCantidadNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.CantidadColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCantidadNull() {
-                this[this.tablevCalculoSolicitudes.CantidadColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsServicioNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.ServicioColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetServicioNull() {
-                this[this.tablevCalculoSolicitudes.ServicioColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool Is_NumeroP_IDNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes._NumeroP_IDColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void Set_NumeroP_IDNull() {
-                this[this.tablevCalculoSolicitudes._NumeroP_IDColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsIndiceInstrumentoNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.IndiceInstrumentoColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetIndiceInstrumentoNull() {
-                this[this.tablevCalculoSolicitudes.IndiceInstrumentoColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsNumeroPlantaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.NumeroPlantaColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetNumeroPlantaNull() {
-                this[this.tablevCalculoSolicitudes.NumeroPlantaColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsNumeroPlanoNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.NumeroPlanoColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetNumeroPlanoNull() {
-                this[this.tablevCalculoSolicitudes.NumeroPlanoColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsDescargaANull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.DescargaAColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetDescargaANull() {
-                this[this.tablevCalculoSolicitudes.DescargaAColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsLineaEntradaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.LineaEntradaColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetLineaEntradaNull() {
-                this[this.tablevCalculoSolicitudes.LineaEntradaColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsLineaSalidaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.LineaSalidaColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetLineaSalidaNull() {
-                this[this.tablevCalculoSolicitudes.LineaSalidaColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsContingenciaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.ContingenciaColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetContingenciaNull() {
-                this[this.tablevCalculoSolicitudes.ContingenciaColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsNumeroHojaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.NumeroHojaColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetNumeroHojaNull() {
-                this[this.tablevCalculoSolicitudes.NumeroHojaColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsPresionOperacionNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.PresionOperacionColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetPresionOperacionNull() {
-                this[this.tablevCalculoSolicitudes.PresionOperacionColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsTemperaturaOperacionNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.TemperaturaOperacionColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetTemperaturaOperacionNull() {
-                this[this.tablevCalculoSolicitudes.TemperaturaOperacionColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsPresionDiseñoNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.PresionDiseñoColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetPresionDiseñoNull() {
-                this[this.tablevCalculoSolicitudes.PresionDiseñoColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsMaximaTemperaturaDiseñoNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.MaximaTemperaturaDiseñoColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetMaximaTemperaturaDiseñoNull() {
-                this[this.tablevCalculoSolicitudes.MaximaTemperaturaDiseñoColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsMinimaTemperaturaDiseñoNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.MinimaTemperaturaDiseñoColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetMinimaTemperaturaDiseñoNull() {
-                this[this.tablevCalculoSolicitudes.MinimaTemperaturaDiseñoColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsPresionAtmosferaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.PresionAtmosferaColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetPresionAtmosferaNull() {
-                this[this.tablevCalculoSolicitudes.PresionAtmosferaColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsDiscoRupturaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.DiscoRupturaColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetDiscoRupturaNull() {
-                this[this.tablevCalculoSolicitudes.DiscoRupturaColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsModeloNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.ModeloColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetModeloNull() {
-                this[this.tablevCalculoSolicitudes.ModeloColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsNormaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.NormaColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetNormaNull() {
-                this[this.tablevCalculoSolicitudes.NormaColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsContrapresionFijaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.ContrapresionFijaColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetContrapresionFijaNull() {
-                this[this.tablevCalculoSolicitudes.ContrapresionFijaColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsContrapresionVariableNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.ContrapresionVariableColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetContrapresionVariableNull() {
-                this[this.tablevCalculoSolicitudes.ContrapresionVariableColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsValvulaSimpleMultipleNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.ValvulaSimpleMultipleColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetValvulaSimpleMultipleNull() {
-                this[this.tablevCalculoSolicitudes.ValvulaSimpleMultipleColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsSobrepresionAdmisibleNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.SobrepresionAdmisibleColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetSobrepresionAdmisibleNull() {
-                this[this.tablevCalculoSolicitudes.SobrepresionAdmisibleColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsPresionAperturaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.PresionAperturaColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetPresionAperturaNull() {
-                this[this.tablevCalculoSolicitudes.PresionAperturaColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCodigoDiseñoNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.CodigoDiseñoColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCodigoDiseñoNull() {
-                this[this.tablevCalculoSolicitudes.CodigoDiseñoColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsUserIdNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.UserIdColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetUserIdNull() {
-                this[this.tablevCalculoSolicitudes.UserIdColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsNombreNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.NombreColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetNombreNull() {
-                this[this.tablevCalculoSolicitudes.NombreColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsFaseIdNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.FaseIdColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetFaseIdNull() {
-                this[this.tablevCalculoSolicitudes.FaseIdColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsTipoFaseNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.TipoFaseColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetTipoFaseNull() {
-                this[this.tablevCalculoSolicitudes.TipoFaseColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsNombreFaseNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.NombreFaseColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetNombreFaseNull() {
-                this[this.tablevCalculoSolicitudes.NombreFaseColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsDescripcionNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.DescripcionColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetDescripcionNull() {
-                this[this.tablevCalculoSolicitudes.DescripcionColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCapacidadRequerida_VNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.CapacidadRequerida_VColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCapacidadRequerida_VNull() {
-                this[this.tablevCalculoSolicitudes.CapacidadRequerida_VColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsTemperatura_de_Descarga_TNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.Temperatura_de_Descarga_TColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetTemperatura_de_Descarga_TNull() {
-                this[this.tablevCalculoSolicitudes.Temperatura_de_Descarga_TColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsMasaMolecular_MNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.MasaMolecular_MColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetMasaMolecular_MNull() {
-                this[this.tablevCalculoSolicitudes.MasaMolecular_MColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCocienteCaloresEspecificos_kNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.CocienteCaloresEspecificos_kColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCocienteCaloresEspecificos_kNull() {
-                this[this.tablevCalculoSolicitudes.CocienteCaloresEspecificos_kColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCoeficienteDeCompresibilidad_zNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.CoeficienteDeCompresibilidad_zColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCoeficienteDeCompresibilidad_zNull() {
-                this[this.tablevCalculoSolicitudes.CoeficienteDeCompresibilidad_zColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCapacidadRequerida_WNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.CapacidadRequerida_WColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCapacidadRequerida_WNull() {
-                this[this.tablevCalculoSolicitudes.CapacidadRequerida_WColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCapacidadRequerida_QNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.CapacidadRequerida_QColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCapacidadRequerida_QNull() {
-                this[this.tablevCalculoSolicitudes.CapacidadRequerida_QColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsDensidadRelativa_GNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.DensidadRelativa_GColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetDensidadRelativa_GNull() {
-                this[this.tablevCalculoSolicitudes.DensidadRelativa_GColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsViscusidad_MuNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.Viscusidad_MuColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetViscusidad_MuNull() {
-                this[this.tablevCalculoSolicitudes.Viscusidad_MuColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsTemperatura_SaturadoNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.Temperatura_SaturadoColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetTemperatura_SaturadoNull() {
-                this[this.tablevCalculoSolicitudes.Temperatura_SaturadoColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsAreaCalculadaNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.AreaCalculadaColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetAreaCalculadaNull() {
-                this[this.tablevCalculoSolicitudes.AreaCalculadaColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsTemperatura_de_Descarga_INNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.Temperatura_de_Descarga_INColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetTemperatura_de_Descarga_INNull() {
-                this[this.tablevCalculoSolicitudes.Temperatura_de_Descarga_INColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsTemperatura_de_Descarga_IN_UnitNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.Temperatura_de_Descarga_IN_UnitColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetTemperatura_de_Descarga_IN_UnitNull() {
-                this[this.tablevCalculoSolicitudes.Temperatura_de_Descarga_IN_UnitColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCapacidadRequerida_INNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.CapacidadRequerida_INColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCapacidadRequerida_INNull() {
-                this[this.tablevCalculoSolicitudes.CapacidadRequerida_INColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCapacidadRequerida_IN_UnitNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.CapacidadRequerida_IN_UnitColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCapacidadRequerida_IN_UnitNull() {
-                this[this.tablevCalculoSolicitudes.CapacidadRequerida_IN_UnitColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsIdNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.IdColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetIdNull() {
-                this[this.tablevCalculoSolicitudes.IdColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsEmailNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.EmailColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetEmailNull() {
-                this[this.tablevCalculoSolicitudes.EmailColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsUserNameNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.UserNameColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetUserNameNull() {
-                this[this.tablevCalculoSolicitudes.UserNameColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsCuitNull() {
-                return this.IsNull(this.tablevCalculoSolicitudes.CuitColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetCuitNull() {
-                this[this.tablevCalculoSolicitudes.CuitColumn] = global::System.Convert.DBNull;
+            public void SetTOTAL_ITEMNull() {
+                this[this.tablevPresupuestoReporte.TOTAL_ITEMColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -4079,22 +1573,22 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
         ///Row event argument class
         ///</summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        public class vCalculoSolicitudesRowChangeEvent : global::System.EventArgs {
+        public class vPresupuestoReporteRowChangeEvent : global::System.EventArgs {
             
-            private vCalculoSolicitudesRow eventRow;
+            private vPresupuestoReporteRow eventRow;
             
             private global::System.Data.DataRowAction eventAction;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public vCalculoSolicitudesRowChangeEvent(vCalculoSolicitudesRow row, global::System.Data.DataRowAction action) {
+            public vPresupuestoReporteRowChangeEvent(vPresupuestoReporteRow row, global::System.Data.DataRowAction action) {
                 this.eventRow = row;
                 this.eventAction = action;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public vCalculoSolicitudesRow Row {
+            public vPresupuestoReporteRow Row {
                 get {
                     return this.eventRow;
                 }
@@ -4122,7 +1616,7 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto.ArbrosDataSet6TableAdapt
     [global::System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
         ", Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-    public partial class vCalculoSolicitudesTableAdapter : global::System.ComponentModel.Component {
+    public partial class vCalculoSolicitudesTableAdapterTableAdapter : global::System.ComponentModel.Component {
         
         private global::System.Data.SqlClient.SqlDataAdapter _adapter;
         
@@ -4136,7 +1630,7 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto.ArbrosDataSet6TableAdapt
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        public vCalculoSolicitudesTableAdapter() {
+        public vCalculoSolicitudesTableAdapterTableAdapter() {
             this.ClearBeforeFill = true;
         }
         
@@ -4233,90 +1727,36 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto.ArbrosDataSet6TableAdapt
             this._adapter = new global::System.Data.SqlClient.SqlDataAdapter();
             global::System.Data.Common.DataTableMapping tableMapping = new global::System.Data.Common.DataTableMapping();
             tableMapping.SourceTable = "Table";
-            tableMapping.DataSetTable = "vCalculoSolicitudes";
-            tableMapping.ColumnMappings.Add("SolicitudId", "SolicitudId");
-            tableMapping.ColumnMappings.Add("PresupuestoId", "PresupuestoId");
-            tableMapping.ColumnMappings.Add("CodigoFinal", "CodigoFinal");
-            tableMapping.ColumnMappings.Add("Model", "Model");
-            tableMapping.ColumnMappings.Add("DescripcionLinea", "DescripcionLinea");
-            tableMapping.ColumnMappings.Add("Medida", "Medida");
-            tableMapping.ColumnMappings.Add("DescripcionMedida", "DescripcionMedida");
-            tableMapping.ColumnMappings.Add("Orifico", "Orifico");
-            tableMapping.ColumnMappings.Add("AreaOrificio", "AreaOrificio");
-            tableMapping.ColumnMappings.Add("SerieEntrada", "SerieEntrada");
-            tableMapping.ColumnMappings.Add("DescripcionSerieEntrada", "DescripcionSerieEntrada");
-            tableMapping.ColumnMappings.Add("TipoEntrada", "TipoEntrada");
-            tableMapping.ColumnMappings.Add("DescripcionTipoEntrada", "DescripcionTipoEntrada");
-            tableMapping.ColumnMappings.Add("SerieSalida", "SerieSalida");
-            tableMapping.ColumnMappings.Add("DescripcionSerieSalida", "DescripcionSerieSalida");
-            tableMapping.ColumnMappings.Add("TipoSalida", "TipoSalida");
-            tableMapping.ColumnMappings.Add("DescripcionTipoSalida", "DescripcionTipoSalida");
-            tableMapping.ColumnMappings.Add("CodigoDTT", "CodigoDTT");
-            tableMapping.ColumnMappings.Add("TipoAsiento", "TipoAsiento");
-            tableMapping.ColumnMappings.Add("DescripcionAsiento", "DescripcionAsiento");
-            tableMapping.ColumnMappings.Add("CodigoCBR", "CodigoCBR");
-            tableMapping.ColumnMappings.Add("Cuerpo_Externo", "Cuerpo_Externo");
-            tableMapping.ColumnMappings.Add("Bonete_Externo", "Bonete_Externo");
-            tableMapping.ColumnMappings.Add("Resorte_Externo", "Resorte_Externo");
-            tableMapping.ColumnMappings.Add("CodigoDT", "CodigoDT");
-            tableMapping.ColumnMappings.Add("Disco_Interno", "Disco_Interno");
-            tableMapping.ColumnMappings.Add("Tobera_Interno", "Tobera_Interno");
-            tableMapping.ColumnMappings.Add("Capuchon", "Capuchon");
-            tableMapping.ColumnMappings.Add("Palanca", "Palanca");
-            tableMapping.ColumnMappings.Add("Bonete", "Bonete");
-            tableMapping.ColumnMappings.Add("Tornillo", "Tornillo");
-            tableMapping.ColumnMappings.Add("TagId", "TagId");
-            tableMapping.ColumnMappings.Add("Cantidad", "Cantidad");
-            tableMapping.ColumnMappings.Add("Servicio", "Servicio");
-            tableMapping.ColumnMappings.Add("NumeroP&ID", "NumeroP&ID");
-            tableMapping.ColumnMappings.Add("IndiceInstrumento", "IndiceInstrumento");
-            tableMapping.ColumnMappings.Add("NumeroPlanta", "NumeroPlanta");
-            tableMapping.ColumnMappings.Add("NumeroPlano", "NumeroPlano");
-            tableMapping.ColumnMappings.Add("DescargaA", "DescargaA");
-            tableMapping.ColumnMappings.Add("LineaEntrada", "LineaEntrada");
-            tableMapping.ColumnMappings.Add("LineaSalida", "LineaSalida");
-            tableMapping.ColumnMappings.Add("Contingencia", "Contingencia");
-            tableMapping.ColumnMappings.Add("NumeroHoja", "NumeroHoja");
-            tableMapping.ColumnMappings.Add("PresionOperacion", "PresionOperacion");
-            tableMapping.ColumnMappings.Add("TemperaturaOperacion", "TemperaturaOperacion");
-            tableMapping.ColumnMappings.Add("PresionDiseño", "PresionDiseño");
-            tableMapping.ColumnMappings.Add("MaximaTemperaturaDiseño", "MaximaTemperaturaDiseño");
-            tableMapping.ColumnMappings.Add("MinimaTemperaturaDiseño", "MinimaTemperaturaDiseño");
-            tableMapping.ColumnMappings.Add("PresionAtmosfera", "PresionAtmosfera");
-            tableMapping.ColumnMappings.Add("DiscoRuptura", "DiscoRuptura");
-            tableMapping.ColumnMappings.Add("Modelo", "Modelo");
-            tableMapping.ColumnMappings.Add("Norma", "Norma");
-            tableMapping.ColumnMappings.Add("ContrapresionFija", "ContrapresionFija");
-            tableMapping.ColumnMappings.Add("ContrapresionVariable", "ContrapresionVariable");
-            tableMapping.ColumnMappings.Add("ValvulaSimpleMultiple", "ValvulaSimpleMultiple");
-            tableMapping.ColumnMappings.Add("SobrepresionAdmisible", "SobrepresionAdmisible");
-            tableMapping.ColumnMappings.Add("PresionApertura", "PresionApertura");
-            tableMapping.ColumnMappings.Add("CodigoDiseño", "CodigoDiseño");
-            tableMapping.ColumnMappings.Add("UserId", "UserId");
-            tableMapping.ColumnMappings.Add("Nombre", "Nombre");
-            tableMapping.ColumnMappings.Add("FaseId", "FaseId");
-            tableMapping.ColumnMappings.Add("TipoFase", "TipoFase");
-            tableMapping.ColumnMappings.Add("NombreFase", "NombreFase");
-            tableMapping.ColumnMappings.Add("Descripcion", "Descripcion");
-            tableMapping.ColumnMappings.Add("CapacidadRequerida_V", "CapacidadRequerida_V");
-            tableMapping.ColumnMappings.Add("Temperatura_de_Descarga_T", "Temperatura_de_Descarga_T");
-            tableMapping.ColumnMappings.Add("MasaMolecular_M", "MasaMolecular_M");
-            tableMapping.ColumnMappings.Add("CocienteCaloresEspecificos_k", "CocienteCaloresEspecificos_k");
-            tableMapping.ColumnMappings.Add("CoeficienteDeCompresibilidad_z", "CoeficienteDeCompresibilidad_z");
-            tableMapping.ColumnMappings.Add("CapacidadRequerida_W", "CapacidadRequerida_W");
-            tableMapping.ColumnMappings.Add("CapacidadRequerida_Q", "CapacidadRequerida_Q");
-            tableMapping.ColumnMappings.Add("DensidadRelativa_G", "DensidadRelativa_G");
-            tableMapping.ColumnMappings.Add("Viscusidad_Mu", "Viscusidad_Mu");
-            tableMapping.ColumnMappings.Add("Temperatura_Saturado", "Temperatura_Saturado");
-            tableMapping.ColumnMappings.Add("AreaCalculada", "AreaCalculada");
-            tableMapping.ColumnMappings.Add("Temperatura_de_Descarga_IN", "Temperatura_de_Descarga_IN");
-            tableMapping.ColumnMappings.Add("Temperatura_de_Descarga_IN_Unit", "Temperatura_de_Descarga_IN_Unit");
-            tableMapping.ColumnMappings.Add("CapacidadRequerida_IN", "CapacidadRequerida_IN");
-            tableMapping.ColumnMappings.Add("CapacidadRequerida_IN_Unit", "CapacidadRequerida_IN_Unit");
-            tableMapping.ColumnMappings.Add("Id", "Id");
-            tableMapping.ColumnMappings.Add("Email", "Email");
-            tableMapping.ColumnMappings.Add("UserName", "UserName");
-            tableMapping.ColumnMappings.Add("Cuit", "Cuit");
+            tableMapping.DataSetTable = "vPresupuestoReporte";
+            tableMapping.ColumnMappings.Add("PRESUPUESTO", "PRESUPUESTO");
+            tableMapping.ColumnMappings.Add("FECHAS_PRESUP", "FECHAS_PRESUP");
+            tableMapping.ColumnMappings.Add("BONIFIC", "BONIFIC");
+            tableMapping.ColumnMappings.Add("CG_CLI", "CG_CLI");
+            tableMapping.ColumnMappings.Add("CLIENTE", "CLIENTE");
+            tableMapping.ColumnMappings.Add("CALLE_CLIENTE", "CALLE_CLIENTE");
+            tableMapping.ColumnMappings.Add("CP_CLIENTE", "CP_CLIENTE");
+            tableMapping.ColumnMappings.Add("DIRENT", "DIRENT");
+            tableMapping.ColumnMappings.Add("CONDICION_PAGO", "CONDICION_PAGO");
+            tableMapping.ColumnMappings.Add("CONDICION_ENTREGA", "CONDICION_ENTREGA");
+            tableMapping.ColumnMappings.Add("PROVINCIA_CLIENTE", "PROVINCIA_CLIENTE");
+            tableMapping.ColumnMappings.Add("DESCRIPCION_IVA", "DESCRIPCION_IVA");
+            tableMapping.ColumnMappings.Add("CUIT_CLIENTE", "CUIT_CLIENTE");
+            tableMapping.ColumnMappings.Add("TRANSPORTE", "TRANSPORTE");
+            tableMapping.ColumnMappings.Add("CALLE_TRANSPORTE", "CALLE_TRANSPORTE");
+            tableMapping.ColumnMappings.Add("TELEFONO_CLIENTE", "TELEFONO_CLIENTE");
+            tableMapping.ColumnMappings.Add("EMAIL_CLIENTE", "EMAIL_CLIENTE");
+            tableMapping.ColumnMappings.Add("CG_ART", "CG_ART");
+            tableMapping.ColumnMappings.Add("ARTICULO", "ARTICULO");
+            tableMapping.ColumnMappings.Add("CANTIDAD", "CANTIDAD");
+            tableMapping.ColumnMappings.Add("PORC_DESCUENTO", "PORC_DESCUENTO");
+            tableMapping.ColumnMappings.Add("PREC_UNIT", "PREC_UNIT");
+            tableMapping.ColumnMappings.Add("TOTAL_ITEM", "TOTAL_ITEM");
+            tableMapping.ColumnMappings.Add("OBSERITEM", "OBSERITEM");
+            tableMapping.ColumnMappings.Add("DIAS_PLAZO_ENTREGA", "DIAS_PLAZO_ENTREGA");
+            tableMapping.ColumnMappings.Add("MONEDA", "MONEDA");
+            tableMapping.ColumnMappings.Add("TOTAL_PRESUPUESTO", "TOTAL_PRESUPUESTO");
+            tableMapping.ColumnMappings.Add("Construccion", "Construccion");
+            tableMapping.ColumnMappings.Add("Marca", "Marca");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -4334,14 +1774,10 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto.ArbrosDataSet6TableAdapt
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[2];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT SolicitudId, PresupuestoId, CodigoFinal, Model, DescripcionLinea, Medida, DescripcionMedida, Orifico, AreaOrificio, SerieEntrada, DescripcionSerieEntrada, TipoEntrada, DescripcionTipoEntrada, SerieSalida, DescripcionSerieSalida, 
-                  TipoSalida, DescripcionTipoSalida, CodigoDTT, TipoAsiento, DescripcionAsiento, CodigoCBR, Cuerpo_Externo, Bonete_Externo, Resorte_Externo, CodigoDT, Disco_Interno, Tobera_Interno, Capuchon, Palanca, Bonete, Tornillo, TagId, 
-                  Cantidad, Servicio, [NumeroP&ID], IndiceInstrumento, NumeroPlanta, NumeroPlano, DescargaA, LineaEntrada, LineaSalida, Contingencia, NumeroHoja, PresionOperacion, TemperaturaOperacion, PresionDiseño, 
-                  MaximaTemperaturaDiseño, MinimaTemperaturaDiseño, PresionAtmosfera, DiscoRuptura, Modelo, Norma, ContrapresionFija, ContrapresionVariable, ValvulaSimpleMultiple, SobrepresionAdmisible, PresionApertura, CodigoDiseño, 
-                  UserId, Nombre, FaseId, TipoFase, NombreFase, Descripcion, CapacidadRequerida_V, Temperatura_de_Descarga_T, MasaMolecular_M, CocienteCaloresEspecificos_k, CoeficienteDeCompresibilidad_z, CapacidadRequerida_W, 
-                  CapacidadRequerida_Q, DensidadRelativa_G, Viscusidad_Mu, Temperatura_Saturado, AreaCalculada, Temperatura_de_Descarga_IN, Temperatura_de_Descarga_IN_Unit, CapacidadRequerida_IN, CapacidadRequerida_IN_Unit, Id, 
-                  Email, UserName, Cuit
-FROM     vCalculoSolicitudes";
+            this._commandCollection[0].CommandText = @"SELECT PRESUPUESTO, FECHAS_PRESUP, BONIFIC, CG_CLI, CLIENTE, CALLE_CLIENTE, CP_CLIENTE, DIRENT, CONDICION_PAGO, CONDICION_ENTREGA, PROVINCIA_CLIENTE, DESCRIPCION_IVA, CUIT_CLIENTE, TRANSPORTE, 
+                  CALLE_TRANSPORTE, TELEFONO_CLIENTE, EMAIL_CLIENTE, CG_ART, ARTICULO, CANTIDAD, PORC_DESCUENTO, PREC_UNIT, TOTAL_ITEM, OBSERITEM, DIAS_PLAZO_ENTREGA, MONEDA, TOTAL_PRESUPUESTO, Construccion, 
+                  Marca
+FROM     vPresupuestoReporte";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
@@ -4353,7 +1789,7 @@ FROM     vCalculoSolicitudes";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
-        public virtual int Fill(ArbrosDataSet6.vCalculoSolicitudesDataTable dataTable) {
+        public virtual int Fill(ArbrosDataSet6.vPresupuestoReporteDataTable dataTable) {
             this.Adapter.SelectCommand = this.CommandCollection[0];
             if ((this.ClearBeforeFill == true)) {
                 dataTable.Clear();
@@ -4366,9 +1802,9 @@ FROM     vCalculoSolicitudes";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual ArbrosDataSet6.vCalculoSolicitudesDataTable GetData() {
+        public virtual ArbrosDataSet6.vPresupuestoReporteDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            ArbrosDataSet6.vCalculoSolicitudesDataTable dataTable = new ArbrosDataSet6.vCalculoSolicitudesDataTable();
+            ArbrosDataSet6.vPresupuestoReporteDataTable dataTable = new ArbrosDataSet6.vPresupuestoReporteDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -4377,7 +1813,7 @@ FROM     vCalculoSolicitudes";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, false)]
-        public virtual int FillBy(ArbrosDataSet6.vCalculoSolicitudesDataTable dataTable) {
+        public virtual int FillBy(ArbrosDataSet6.vPresupuestoReporteDataTable dataTable) {
             this.Adapter.SelectCommand = this.CommandCollection[1];
             if ((this.ClearBeforeFill == true)) {
                 dataTable.Clear();
@@ -4390,9 +1826,9 @@ FROM     vCalculoSolicitudes";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual ArbrosDataSet6.vCalculoSolicitudesDataTable GetDataBy() {
+        public virtual ArbrosDataSet6.vPresupuestoReporteDataTable GetDataBy() {
             this.Adapter.SelectCommand = this.CommandCollection[1];
-            ArbrosDataSet6.vCalculoSolicitudesDataTable dataTable = new ArbrosDataSet6.vCalculoSolicitudesDataTable();
+            ArbrosDataSet6.vPresupuestoReporteDataTable dataTable = new ArbrosDataSet6.vPresupuestoReporteDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
