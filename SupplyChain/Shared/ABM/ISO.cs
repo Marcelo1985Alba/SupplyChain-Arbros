@@ -28,10 +28,60 @@ namespace SupplyChain
         public string Comentarios { get; set; } = "";
         public string Medidas { get; set; } = "";
         public DateTime? FechaCumplido { get; set; }
-		public string USER { get; set; } = "";
+        public string USER { get; set; } = "";
+        [NotMapped]
+        public int PUNTAJE => getPuntaje();
         [NotMapped]
         public bool GUARDADO { get; set; }
         [NotMapped]
         public bool ESNUEVO { get; set; }
+
+        protected int getPuntaje()
+        {
+            int prob = 0;
+            int imp = 0;
+            int gestion = 0;
+            if(Gestion.Trim() == "Optima")
+                gestion = -10;
+            else if(Gestion.Trim() == "Sin gestion")
+                gestion = 10;
+            switch (Frecuencia.Trim())
+            {
+                case "Muy baja":
+                    prob = 1; 
+                    break;
+                case "Baja":
+                    prob = 3;
+                    break;
+                case "Media":
+                    prob = 5;
+                    break;
+                case "Alta":
+                    prob = 7;
+                    break;
+                case "Muy alta":
+                    prob = 9;
+                    break;
+            }
+            switch (Impacto.Trim())
+            {
+                case "Muy poco":
+                    imp = 1;
+                    break;
+                case "Poco":
+                    imp = 3;
+                    break;
+                case "Moderado":
+                    imp = 5;
+                    break;
+                case "Alto":
+                    imp = 7;
+                    break;
+                case "Muy alto":
+                    imp = 9;
+                    break;
+            }
+            return prob * imp + gestion;
+        }
     }
 }

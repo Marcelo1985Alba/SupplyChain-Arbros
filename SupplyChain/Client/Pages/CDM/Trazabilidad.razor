@@ -1395,60 +1395,88 @@
 
     protected void CargarValores()
     {
-        lote = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim();
+        lote = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE;
         if (lote == null)
             lote = "";
+        else
+            lote = lote.Trim();
         fecha = vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro && t.TIPOO == 28).OrderByDescending(t => t.PEDIDO).FirstOrDefault().FE_MOV.ToString();
         if (fecha == null)
             fecha = "";
         prod = prodList.Id.ToString();
         if (prod == null)
             prod = "";
-        orco = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().ORCO.Trim();
+        orco = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().ORCO;
         if (orco == null)
             orco = "";
+        else
+            orco = orco.Trim();
         if (vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().TIPOO == 1)
         {
             rem = vpedidos.Where(t => t.PEDIDO.ToString() == TrzNro && t.TIPOO == 1).OrderByDescending(t => t.PEDIDO).FirstOrDefault().REMITO;
             if (rem != "" && rem != null)
                 remito = rem;
         }
-        modelo = prodList.CAMPOCOM1.Trim();
+        modelo = prodList.CAMPOCOM1;
         if (modelo == null)
             modelo = "";
-        medida = prodList.CAMPOCOM2.Trim();
+        else
+            modelo = modelo.Trim();
+        medida = prodList.CAMPOCOM2;
         if (medida == null)
             medida = "";
-        orificio = prodList.CAMPOCOM3.Trim();
+        else
+            medida = medida.Trim();
+        orificio = prodList.CAMPOCOM3;
         if (orificio == null)
             orificio = "";
-        area = prodList.CAMPOCOM4.Trim();
+        else
+            orificio = orificio.Trim();
+        area = prodList.CAMPOCOM4;
         if (area == null)
             area = "";
-        serie = prodList.CAMPOCOM5.Trim();
+        else
+            area = area.Trim();
+        serie = prodList.CAMPOCOM5;
         if (serie == null)
             serie = "";
-        tipo = prodList.CAMPOCOM6.Trim();
+        else
+            serie = serie.Trim();
+        tipo = prodList.CAMPOCOM6;
         if (tipo == null)
             tipo = "";
-        presion = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
+        else
+            tipo = tipo.Trim();
+        presion = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1;
         if (presion == null)
             presion = "";
-        resorte = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim();
+        else
+            presion = presion.Trim();
+        resorte = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2;
         if (resorte == null)
             resorte = "";
-        fluido = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim();
+        else
+            resorte = resorte.Trim();
+        fluido = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3;
         if (fluido == null)
             fluido = "";
-        presAj = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim();
+        else
+            fluido = fluido.Trim();
+        presAj = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4;
         if (presAj == null)
             presAj = "";
-        ctpre = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim();
+        else
+            presAj = presAj.Trim();
+        ctpre = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5;
         if (ctpre == null)
             ctpre = "";
-        temp = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim();
+        else
+            ctpre = ctpre.Trim();
+        temp = PedCliList.Where(t => t.PEDIDO.ToString() == TrzNro).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6;
         if (temp == null)
             temp = "";
+        else
+            temp = temp.Trim();
     }
 
     protected async Task AgregarValores()
