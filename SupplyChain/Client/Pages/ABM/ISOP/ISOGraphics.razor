@@ -50,14 +50,13 @@
 <SfHeatMap DataSource="@HeatMapColors">
 	<HeatMapEvents TooltipRendering="@TooltipRendering"></HeatMapEvents>
 
-	<HeatMapTitleSettings Text="Matriz Impacto/Frecuencia para x"></HeatMapTitleSettings>
+	<HeatMapTitleSettings Text="Matriz Impacto/Frecuencia"></HeatMapTitleSettings>
 	<HeatMapXAxis Labels="@XLabels" LabelRotation="45" LabelIntersectAction="@SFHeatMap.LabelIntersectAction.None">
 	</HeatMapXAxis>
 	<HeatMapYAxis Labels="@YLabels"></HeatMapYAxis>
-	<HeatMapCellSettings ShowLabel="true" TileType="CellType.Rect">
-		<HeatMapCellBorder Width="1" Radius="8" Color="White"></HeatMapCellBorder>
+	<HeatMapCellSettings ShowLabel="false">
+		<HeatMapCellBorder Width="1" Radius="10" Color="white"></HeatMapCellBorder>
 	</HeatMapCellSettings>
-	<HeatMapCellTextStyle ></HeatMapCellTextStyle>
 	<HeatMapPaletteSettings>
 		<HeatMapPalettes>
 			<HeatMapPalette Value="I1F1" Color="#c5f1d1"></HeatMapPalette>
@@ -94,19 +93,10 @@
 	<HeatMapLegendSettings Visible="false"></HeatMapLegendSettings>	
 </SfHeatMap>
 
-<!--
-
-@code {
-	public void CellRenderEvent(HeatMapCellRenderEventArgs args)
-	{
-	args.CellColor = "black";
-	}
-}
--->
-
 <style>
 	.e-grid {
 		background-color: red;
 		font-weight: bold;
 	}
+
 </style>

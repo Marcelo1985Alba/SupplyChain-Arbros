@@ -117,7 +117,8 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
                 registros = isos.Where(p => p.ImpAmb == impAmb && p.Frecuencia == args.XLabel && p.Impacto == args.YLabel).ToList();
             else
 				registros = isos.Where(p => p.ImpAmb == impAmb && p.Frecuencia == args.XLabel && p.Impacto == args.YLabel && p.Identificacion == idForImpSelected).ToList();
-            string content = $@"Impacto: {args.YLabel}.<br>Frecuencia: {args.XLabel}.";
+            //string content = $@"Impacto: {args.YLabel}.<br>Frecuencia: {args.XLabel}.";
+            string content = " ";
             //string content = "";
 			for (int i = 0; i < registros.Count; i++)
 			{
@@ -135,10 +136,10 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
 				*/
 				content += $"<br>* {registros[i].Detalle}";
 			}
+			if (content == " ")
+				content = "-";
 			args.Content = new[] { content };
 		}
-
-
 
         public void onClick()
         {
