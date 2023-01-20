@@ -117,6 +117,7 @@ namespace SupplyChain.Client.Pages.Preparacion
                 if (CG_PRODlist.Count > 0)
                 {
                     DesMat = CG_PRODlist.FirstOrDefault().DES_PROD;
+                    xUnid = CG_PRODlist.FirstOrDefault().UNID;
                     xUnidMP = CG_PRODlist.FirstOrDefault().UNID;
                     xespecif = CG_PRODlist.FirstOrDefault().ESPECIF;
                     xUnid1 = CG_PRODlist.FirstOrDefault().UNIDSEG;
@@ -127,6 +128,7 @@ namespace SupplyChain.Client.Pages.Preparacion
                 else
                 {
                     DesMat = "";
+                    xUnid = "";
                     xUnidMP = "";
                     xespecif = "";
                     xUnid1 = "";
@@ -144,6 +146,7 @@ namespace SupplyChain.Client.Pages.Preparacion
                 if (CG_PRODlist.Count > 0)
                 {
                     CgMat = CG_PRODlist.FirstOrDefault().Id;
+                    xUnid = CG_PRODlist.FirstOrDefault().UNID;
                     xUnidMP = CG_PRODlist.FirstOrDefault().UNID;
                     xespecif = CG_PRODlist.FirstOrDefault().ESPECIF;
                     cambiapaso(2);
@@ -151,6 +154,7 @@ namespace SupplyChain.Client.Pages.Preparacion
                 else
                 {
                     CgMat = "";
+                    xUnid = "";
                     xUnidMP = "";
                     xespecif = "";
                     cambiapaso(1);
@@ -191,6 +195,7 @@ namespace SupplyChain.Client.Pages.Preparacion
             CgMat = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().Id; // return the details of selected record
             DesMat = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().DES_PROD;
             xUnidMP = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().UNID;
+            xUnid = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().UNID;
             xespecif = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().ESPECIF;
             xUnid1 = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().UNIDSEG;
             xCgden = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().CG_DENSEG;
