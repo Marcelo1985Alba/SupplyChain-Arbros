@@ -177,6 +177,7 @@
   <ItemGroup>
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\pdf\" />
+    <Folder Include="wwwroot\pdf\" />
   </ItemGroup>
 
   <ItemGroup>
