@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
   </PropertyGroup>
 
@@ -436,34 +436,34 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="7.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.DataAnnotations.Validation" Version="3.2.0-rc1.20223.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.17" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.0" />
-    <PackageReference Include="Syncfusion.Blazor.BarcodeGenerator" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Blazor.Buttons" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Blazor.Cards" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Blazor.DropDowns" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Blazor.Gantt" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Blazor.Grid" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Blazor.HeatMap" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Blazor.Kanban" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Blazor.LinearGauge" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Blazor.PivotTable" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Blazor.Popups" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.1.0.61" />
-    <PackageReference Include="Syncfusion.Licensing" Version="20.1.0.61" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.2" />
+    <PackageReference Include="Syncfusion.Blazor.BarcodeGenerator" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.Buttons" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.Cards" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.DropDowns" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.Gantt" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.Grid" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.HeatMap" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.Kanban" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.LinearGauge" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.PivotTable" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.Popups" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Licensing" Version="20.4.0.44" />
     
-    <PackageReference Include="Syncfusion.Pdf.Net.Core" Version="20.1.0.61" />
+    <PackageReference Include="Syncfusion.Pdf.Net.Core" Version="20.4.0.44" />
     
-    <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="20.1.0.61" />
-    <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
+    <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="20.4.0.44" />
+    <PackageReference Include="System.Net.Http.Json" Version="7.0.0" />
   </ItemGroup>
 
 
