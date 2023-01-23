@@ -1220,23 +1220,33 @@ namespace SupplyChain.Client.Pages.Panel_Control
         }
         public void AddRow()
         {
+            tarea = new();
+            tarea.ESNUEVO = true;
             ShowDialog = true;
             //this.Gantt.AddRecordAsync(record, 2, RowPosition.Below);
         }
-        public void EditRow()
+        public async Task EditRow()
         {
-            ShowDialog = true;
-            //this.Gantt.AddRecordAsync(record, 2, RowPosition.Below);
+            var seleccionado = await Gantt.GetSelectedRecordsAsync();
+            if (seleccionado.Count > 0)
+            {
+                tarea = seleccionado[0];
+                tarea.ESNUEVO = false;
+                ShowDialog = true;
+                //this.Gantt.AddRecordAsync(record, 2, RowPosition.Below);
+            }
+
+
         }
         protected async Task<bool> Agregar(GanttDataDetails tarea)
         {
-            await Http.PostAsJsonAsync("/api/GanttDataDetails", tarea as GanttDataDetails);
+            await Http.PostAsJsonAsync("/api/Proyectos", tarea as GanttDataDetails);
             return true;
         }
 
         protected async Task<bool> Actualizar(GanttDataDetails tarea)
         {
-            await Http.PutAsJsonAsync("/api/GanttDataDetails/" + tarea.Id, tarea as GanttDataDetails);
+            await Http.PutAsJsonAsync("/api/Proyectos/" + tarea.Id, tarea as GanttDataDetails);
             return true;
         }
         protected async Task GuardarTarea()
@@ -1255,7 +1265,8 @@ namespace SupplyChain.Client.Pages.Panel_Control
             {
                 ShowDialog = false;
                 tarea.GUARDADO = guardado;
-                //await OnGuardar.InvokeAsync(tarea);
+                DataProyectos.Add(tarea);
+                await Gantt.RefreshAsync();
             }
         }
 

@@ -1526,17 +1526,39 @@
             <EditForm Model="tarea" OnValidSubmit="@GuardarTarea">
                 <div class="tab-content">
                     <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="pills-home-tab">
-                        <div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label class="e-float-text e-label-top">Identificacion:</label>
+                        <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label class="">Identificacion:</label>
                                     <SfNumericTextBox ID="Identificacion" @bind-Value="@(tarea.Id)" Enabled="false"></SfNumericTextBox>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label class="e-float-text e-label-top">Tarea:</label>
+                                <div class="form-group col-md-9">
+                                    <label class="">Tarea:</label>
                                     <SfTextBox ID="Tarea" @bind-Value="@(tarea.Name)"></SfTextBox>
                                 </div>
                             </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label class="">Sdate:</label>
+                                <SfDatePicker ID="Sdate" @bind-Value="@(tarea.Sdate)"></SfDatePicker>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="">Edate:</label>
+                                <SfDatePicker ID="Edate" @bind-Value="@(tarea.Edate)"></SfDatePicker>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label class="">Id Proyecto:</label>
+                                <SfNumericTextBox ID="IdProy" @bind-Value="@(tarea.Id)"></SfNumericTextBox>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="">Nombre Proyecto:</label>
+                                <SfTextBox ID="ProjectName" @bind-Value="@(tarea.ProjectName)"></SfTextBox>
+                            </div>
+                            @*<div class="form-group col-md-4">
+                                <label class="e-float-text e-label-top">Edate:</label>
+                                <SfDatePicker ID="Edate" @bind-Value="@(tarea.Edate)"></SfDatePicker>
+                            </div>*@
                         </div>
                         <!--
 
