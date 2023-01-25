@@ -111,7 +111,7 @@ namespace SupplyChain.Client.Pages.CDM
         {
             SpinnerVisible = true;
             segGrilla = await InventarioService.GetSegundaGrilla();
-            segGrilla = segGrilla.Where(s => s.VALE == controlCalidadPendientes.VALE && s.DESPACHO == controlCalidadPendientes.DESPACHO && s.CG_LINEA == prodList.CG_LINEA && s.CG_PROD == controlCalidadPendientes.CG_ART).ToList();
+           // segGrilla = segGrilla.Where(s => s.VALE == controlCalidadPendientes.VALE && s.DESPACHO == controlCalidadPendientes.DESPACHO && s.CG_LINEA == prodList.CG_LINEA && s.CG_PROD == controlCalidadPendientes.CG_ART).ToList();
             SpinnerVisible = false;
         }
         protected async Task<bool> Guardar()
