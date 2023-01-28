@@ -134,7 +134,7 @@ namespace SupplyChain.Server.Controllers.CDM
             {
                 foreach (var item in valor)
                 {
-                    await _procesoRepository.Remover(item.Id);
+                    await _procesoRepository.Agregar(item);
                 }
             }
             catch (Exception ex)

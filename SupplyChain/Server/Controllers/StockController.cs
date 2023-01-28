@@ -381,17 +381,19 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("GetControlCalidad")]
         public async Task<ActionResult<IEnumerable<Pedidos>>> GetControlCalidad()
         {
-            List<Pedidos> lStock = await _pedidosRepository
-                .Obtener(p => p.CG_DEP == 3)
-                .ToListAsync();
+            try
+            {
+                string xSQLCommandString = "select * from pedidos as pe where tipoo = 5 and voucher = 0 and cg_dep = 3 and CG_TIRE = 0 AND NOT EXISTS " +
+                "(SELECT * FROM PEDIDOS AS P WHERE P.CG_ART = pe.CG_ART and p.DESPACHO = pe.DESPACHO and p.TIPOO != 5) order by FE_MOV desc";
 
-            if (lStock == null)
+                var xLista = await _context.Pedidos.FromSqlRaw(xSQLCommandString).ToListAsync();
+
+                return xLista;
+            }
+            catch (Exception)
             {
                 return NotFound();
             }
-
-
-            return lStock;
         }
 
         // GET: api/Stock/GetSegundaGrilla

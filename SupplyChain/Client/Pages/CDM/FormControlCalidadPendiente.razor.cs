@@ -43,8 +43,8 @@ namespace SupplyChain.Client.Pages.CDM
         protected string state;
 
         protected bool BotonGuardarDisabled = false;
-        
-                
+        protected Producto prodList = new();
+
 
         protected Dictionary<string, object> HtmlAttributeSubmit = new()
         {
@@ -111,7 +111,8 @@ namespace SupplyChain.Client.Pages.CDM
         {
             SpinnerVisible = true;
             segGrilla = await InventarioService.GetSegundaGrilla();
-           // segGrilla = segGrilla.Where(s => s.VALE == controlCalidadPendientes.VALE && s.DESPACHO == controlCalidadPendientes.DESPACHO && s.CG_LINEA == prodList.CG_LINEA && s.CG_PROD == controlCalidadPendientes.CG_ART).ToList();
+            prodList = await Http.GetFromJsonAsync<Producto>($"api/Prod/{controlCalidadPendientes.CG_ART}");
+            segGrilla = segGrilla.Where(s => s.VALE == controlCalidadPendientes.VALE && s.DESPACHO == controlCalidadPendientes.DESPACHO && s.CG_LINEA == prodList.CG_LINEA && s.CG_PROD == controlCalidadPendientes.CG_ART).ToList();
             SpinnerVisible = false;
         }
         protected async Task<bool> Guardar()
@@ -147,6 +148,8 @@ namespace SupplyChain.Client.Pages.CDM
             }
             await ToastMensajeError("Todos los datos fueron ingresador correctamente, guardando.");
 
+            List<Procesos> toSaveList = new List<Procesos>();
+
             foreach (var item in segGrilla)
             {
                 Procesos toSave = new Procesos();
@@ -159,6 +162,10 @@ namespace SupplyChain.Client.Pages.CDM
                 toSave.CARCAL = item.CARCAL;
                 toSave.UNIDADM = item.UNIDADM;
                 toSave.CANTMEDIDA = 0;
+                if (item.VALOR == null) 
+                {
+                    toSave.MEDIDA = 0;
+                }
                 toSave.MEDIDA = item.VALOR;
                 toSave.TOLE1 = item.TOLE1;
                 toSave.TOLE2 = item.TOLE2;
@@ -181,10 +188,28 @@ namespace SupplyChain.Client.Pages.CDM
                 toSave.CG_CLI = 0;
                 toSave.USUARIO = "";
                 toSave.FE_REG = DateTime.Now;
-                var response2 = await ProcesoService.Agregar(toSave);
+                toSaveList.Add(toSave);
             }
+
+            await ToastMensajeError("uno");
+
+            var response = await ProcesoService.GuardarLista(toSaveList);
+            if (!response.IsSuccessStatusCode)
+            {
+                await ToastMensajeError("Error al guardar en Procesos");
+                return false;
+            }
+
+            await ToastMensajeError("dos");
+
             controlCalidadPendientes.CG_DEP = 4;
-            var response = await Http.PutAsJsonAsync($"api/Pedidos/{controlCalidadPendientes.Id}", controlCalidadPendientes);
+            var response2 = await Http.PutAsJsonAsync($"api/Pedidos/{controlCalidadPendientes.Id}", controlCalidadPendientes);
+            if (!response2.IsSuccessStatusCode)
+            {
+                await ToastMensajeError("Error al actualizar deposito");
+                return false;
+            }
+
 
             BotonGuardarDisabled = false;
             await ToastMensajeError("Guardado");
