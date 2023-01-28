@@ -13,6 +13,9 @@ using System.Security.Authentication.ExtendedProtection;
 using SupplyChain.Client.Shared;
 using System.Linq;
 using System.Net.Http.Json;
+using SupplyChain.Shared.Models;
+using SupplyChain.Client.Pages.Ventas._2_Pedidos;
+using SupplyChain.Shared.PCP;
 
 namespace SupplyChain.Client.Pages.CDM
 {
@@ -108,7 +111,7 @@ namespace SupplyChain.Client.Pages.CDM
         {
             SpinnerVisible = true;
             segGrilla = await InventarioService.GetSegundaGrilla();
-            segGrilla = segGrilla.Where(s => s.VALE == controlCalidadPendientes.VALE && s.DESPACHO == controlCalidadPendientes.DESPACHO).ToList();
+           // segGrilla = segGrilla.Where(s => s.VALE == controlCalidadPendientes.VALE && s.DESPACHO == controlCalidadPendientes.DESPACHO && s.CG_LINEA == prodList.CG_LINEA && s.CG_PROD == controlCalidadPendientes.CG_ART).ToList();
             SpinnerVisible = false;
         }
         protected async Task<bool> Guardar()

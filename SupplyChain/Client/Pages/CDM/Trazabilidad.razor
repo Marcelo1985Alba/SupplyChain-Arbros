@@ -320,6 +320,27 @@
                                     }
                                 </ContentTemplate>
                             </TabItem>
+                            <TabItem CssClass="tabControlFQ">
+                                <HeaderTemplate>Control Fisico/Quimico</HeaderTemplate>
+                                <ContentTemplate>
+                                    <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false"
+                                            @ref="refGridItems" DataSource="@controlFQ" Width="100%" ID="grdControlFQ"
+                                            AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
+                                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                                        <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" ShowConfirmDialog="false"
+                                                Mode="@Syncfusion.Blazor.Grids.EditMode.Batch">
+                                        </GridEditSettings>
+                                        <GridColumns>
+                                            <GridColumn Field=@nameof(Procesos.CARCAL) HeaderText="Propiedad" AllowEditing="false" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="265px"></GridColumn>
+                                            <GridColumn Field=@nameof(Procesos.UNIDADM) HeaderText="Elementos" AllowEditing="false" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="165px"></GridColumn>
+                                            <GridColumn Field=@nameof(Procesos.MEDIDA) HeaderText="Medida" AllowEditing="false" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="65px"></GridColumn>
+                                            <GridColumn Field=@nameof(Procesos.TOLE1) HeaderText="Tol. 1" AllowEditing="false" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="55px"></GridColumn>
+                                            <GridColumn Field=@nameof(Procesos.TOLE2) HeaderText="Tol. 2" AllowEditing="false" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="55px"></GridColumn>
+                                            <GridColumn Field=@nameof(Procesos.AVISO) HeaderText="Aviso" AllowEditing="false" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="400px"></GridColumn>
+                                        </GridColumns>
+                                    </SfGrid>
+                                </ContentTemplate>
+                            </TabItem>
                         </TabItems>
                     </SfTab>
                 </Content>
@@ -987,6 +1008,11 @@
     public string ctpre = "";
     public string temp = "";
 
+    /*CONTROLES*/
+    [Inject] protected ProcesoService ProcesoService{ get; set; }
+    protected SfGrid<Procesos> refGridItems;
+    protected List<Procesos> controlFQ = new();
+
     protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "1100px" };
 
     SfToast ToastObj;
@@ -1031,6 +1057,14 @@
             BoxPedido = Pedido;
             await CargaPedido();
             ShowSpinner = false;
+        }
+
+        var response = await ProcesoService.Get();
+        if(response.Error){
+            Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+            controlFQ = new List<Procesos>();
+        }else{
+            controlFQ = response.Response;
         }
 
         await base.OnInitializedAsync();
@@ -1128,6 +1162,7 @@
     {
         await refSpinner.ShowAsync();
         var row = await this.Grid4.GetSelectedRecords();
+        controlFQ = controlFQ.Where(s => s.DESPACHO == row[0].DESPACHO && s.CG_PROD == row[0].CG_ART).ToList();
         if (!string.IsNullOrEmpty(row[0].DESPACHO))
         {
             if (!string.IsNullOrEmpty(row[0].LOTE))
@@ -1836,10 +1871,10 @@
         // Here, you can customize your code.
         if (args.Column.Field == "DESPACHO")
         {
-            
             if (!string.IsNullOrEmpty(args.RowData.DESPACHO))
             {
                 ShowSpinner = true;
+                controlFQ = controlFQ.Where(s => s.DESPACHO == args.RowData.DESPACHO).ToList();
                 if (!string.IsNullOrEmpty(args.RowData.LOTE))
                 {
                     string ordFab = args.RowData.LOTE.Substring(3).Trim();

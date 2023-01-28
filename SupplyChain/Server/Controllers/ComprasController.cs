@@ -275,7 +275,7 @@ namespace SupplyChain.Server.Controllers
                 var genera = _generaRepository.Obtener(g => g.Id == "NUMERO").FirstOrDefault();
                 numoc = (int)genera.VALOR1;
 
-                string sqlCommandString = string.Format("UPDATE COMPRAS SET NUMERO = " + numoc + ", " +
+                string sqlCommandString = string.Format("UPDATE COMPRAS SET PRECIOTOT = AUTORIZADO * PRECIO, NUMERO = " + numoc + ", " +
                     "ESPEGEN = '"+especif+ "', CONDVEN = '" + condven + "', BON = " + bonif + 
                     " WHERE REGISTRO IN (" + listaordenescompra.Remove(listaordenescompra.Length - 1) + ")");
                 await _generaRepository.Database.ExecuteSqlRawAsync(sqlCommandString);

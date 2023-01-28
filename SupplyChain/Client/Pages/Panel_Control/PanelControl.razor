@@ -594,7 +594,12 @@
                                             {
                                                 <ChartStripline Start="89000" End="90000" Color="red" SizeType="SizeType.Pixel" ZIndex="ZIndex.Over"
                                                                 Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
-                                                                Text="@("Objetivo: 90000")">
+                                                                Text="@("Objetivo 2022: 90000")">
+                                                    <ChartStriplineTextStyle Color="red" />
+                                                </ChartStripline>
+                                                <ChartStripline Start="120000" End="130000" Color="red" SizeType="SizeType.Pixel" ZIndex="ZIndex.Over"
+                                                                Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
+                                                                Text="@("Objetivo 2023: 130000")">
                                                     <ChartStriplineTextStyle Color="red" />
                                                 </ChartStripline>
                                                 <ChartStripline Start="@(PromedioPedidosIngresadosMensuales - 2)" SizeType="SizeType.Pixel" ZIndex="ZIndex.Over"
@@ -1370,7 +1375,12 @@
                                             {
                                                 <ChartStripline Start="398" End="400" Color="red" SizeType="SizeType.Pixel"
                                                                 Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
-                                                                Text="@("Objetivo: 400")" ZIndex="ZIndex.Over">
+                                                                Text="@("Objetivo 2022: 400")" ZIndex="ZIndex.Over">
+                                                    <ChartStriplineTextStyle Color="red" />
+                                                </ChartStripline>
+                                                <ChartStripline Start="498" End="500" Color="red" SizeType="SizeType.Pixel"
+                                                                Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
+                                                                Text="@("Objetivo 2023: 500")" ZIndex="ZIndex.Over">
                                                     <ChartStriplineTextStyle Color="red" />
                                                 </ChartStripline>
                                                 <ChartStripline Start="@(PromedioPedidosIngresadosMensualesUE - 2)" SizeType="SizeType.Pixel"
@@ -1516,17 +1526,39 @@
             <EditForm Model="tarea" OnValidSubmit="@GuardarTarea">
                 <div class="tab-content">
                     <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="pills-home-tab">
-                        <div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label class="e-float-text e-label-top">Identificacion:</label>
+                        <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label class="">Identificacion:</label>
                                     <SfNumericTextBox ID="Identificacion" @bind-Value="@(tarea.Id)" Enabled="false"></SfNumericTextBox>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label class="e-float-text e-label-top">Tarea:</label>
+                                <div class="form-group col-md-9">
+                                    <label class="">Tarea:</label>
                                     <SfTextBox ID="Tarea" @bind-Value="@(tarea.Name)"></SfTextBox>
                                 </div>
                             </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label class="">Sdate:</label>
+                                <SfDatePicker ID="Sdate" @bind-Value="@(tarea.Sdate)"></SfDatePicker>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="">Edate:</label>
+                                <SfDatePicker ID="Edate" @bind-Value="@(tarea.Edate)"></SfDatePicker>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label class="">Id Proyecto:</label>
+                                <SfNumericTextBox ID="IdProy" @bind-Value="@(tarea.Id)"></SfNumericTextBox>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="">Nombre Proyecto:</label>
+                                <SfTextBox ID="ProjectName" @bind-Value="@(tarea.ProjectName)"></SfTextBox>
+                            </div>
+                            @*<div class="form-group col-md-4">
+                                <label class="e-float-text e-label-top">Edate:</label>
+                                <SfDatePicker ID="Edate" @bind-Value="@(tarea.Edate)"></SfDatePicker>
+                            </div>*@
                         </div>
                         <!--
 
