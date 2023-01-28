@@ -191,19 +191,23 @@ namespace SupplyChain.Client.Pages.CDM
                 toSaveList.Add(toSave);
             }
 
-            await ToastMensajeError("uno");
-
             var response = await ProcesoService.GuardarLista(toSaveList);
-            if (!response.IsSuccessStatusCode)
+            if (response.Error)
             {
-                await ToastMensajeError("Error al guardar en Procesos");
+                await ToastMensajeError($"Error al guardar en Procesos\n\rDetalle:{response.HttpResponseMessage.ReasonPhrase}");
                 return false;
             }
 
-            await ToastMensajeError("dos");
-
-            controlCalidadPendientes.CG_DEP = 4;
-            var response2 = await Http.PutAsJsonAsync($"api/Pedidos/{controlCalidadPendientes.Id}", controlCalidadPendientes);
+            if (response.Response.Any(p=> p.APROBADO == "N"))
+            {
+                controlCalidadPendientes.CG_DEP = 3;
+            }
+            else
+            {
+                controlCalidadPendientes.CG_DEP = 4;
+            }
+            
+            var response2 = await Http.PutAsJsonAsync($"api/Pedidos/ActualizaDeposito/{controlCalidadPendientes.Id}", controlCalidadPendientes);
             if (!response2.IsSuccessStatusCode)
             {
                 await ToastMensajeError("Error al actualizar deposito");

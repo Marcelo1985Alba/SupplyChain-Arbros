@@ -16,9 +16,11 @@ namespace SupplyChain.Client.HelperService
     {
         private const string API = "api/Proceso";
         private readonly HttpClient Http;
+        private readonly IRepositoryHttp iHttp;
 
         public ProcesoService(IRepositoryHttp httpClient) : base(httpClient, API)
         {
+            iHttp = httpClient;
         }
 
         public async Task<List<vControlCalidadPendientes>> GetSegundaGrilla()
@@ -26,9 +28,9 @@ namespace SupplyChain.Client.HelperService
             return await Http.GetFromJsonAsync<List<vControlCalidadPendientes>>($"api/Stock/GetSegundaGrilla/");
         }
 
-        public async Task<HttpResponseMessage> GuardarLista(List<Procesos> list)
+        public async Task<HttpResponseWrapper<List<Procesos>>> GuardarLista(List<Procesos> list)
         {
-            return await Http.PostAsJsonAsync<List<Procesos>>($"{API}/PostList", list);
+            return await iHttp.PostAsJsonAsync($"{API}/PostList", list);
         }
     }
 }

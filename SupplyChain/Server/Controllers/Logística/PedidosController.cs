@@ -577,6 +577,34 @@ namespace SupplyChain
             return Ok(stock);
         }
 
+        // PUT: api/Stock/123729
+        [HttpPut("ActualizaDeposito/{registro}")]
+        public async Task<ActionResult<Pedidos>> ActualizaDeposito(decimal registro, Pedidos stock)
+        {
+            stock.USUARIO = "USER";
+            stock.CG_CIA = 1;
+            if (registro != stock.Id)
+            {
+                return BadRequest("Registro Incorrecto");
+            }
+
+
+            try
+            {
+                var update = $"UPDATE Pedidos SET CG_DEP = {stock.CG_DEP} " +
+                    $"WHERE CG_ART = '{stock.CG_ART}' AND DESPACHO = '{stock.DESPACHO}' AND VALE = {stock.VALE}";
+                await _context.Database.ExecuteSqlRawAsync(update);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+            return Ok(stock);
+        }
+
+
         [HttpPut("FromPedCli")]
         public async Task<ActionResult<Pedidos>> PutStockFromPedCli(PedCli pedCli)
         {

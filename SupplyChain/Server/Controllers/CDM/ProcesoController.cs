@@ -128,7 +128,7 @@ namespace SupplyChain.Server.Controllers.CDM
 
         //POST: api/Valores/PostList
         [HttpPost("PostList")]
-        public async Task<ActionResult<Procesos>> PostList(List<Procesos> valor)
+        public async Task<ActionResult<List<Procesos>>> PostList([FromBody]List<Procesos> valor)
         {
             try
             {
@@ -139,9 +139,9 @@ namespace SupplyChain.Server.Controllers.CDM
             }
             catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
-            return Ok();
+            return Ok(valor);
         }
     }
 }
