@@ -31,7 +31,7 @@ namespace SupplyChain.Server.Controllers.CDM
 
         // GET: api/Valores
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Procesos>>> GetCargaValores()
+        public async Task<ActionResult<IEnumerable<Procesos>>> GetCargaValores(string VALE)
         {
             try
             {
@@ -42,6 +42,21 @@ namespace SupplyChain.Server.Controllers.CDM
                 return BadRequest(ex);
             }
         }
+
+        // GET: api/Proceso/BuscarPorVALE/{VALE}
+        [HttpGet("BuscarPorVALE/{VALE}")]
+        public async Task<ActionResult<IEnumerable<Procesos>>> BuscarPorVale(string VALE)
+        {
+            try
+            {
+                return await _procesoRepository.ObtenerTodos();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         //GET: api/Valores/Existe/{id}
         [HttpGet("Existe/{id}")]
         public async Task<ActionResult<bool>> ExisteValor(int id)

@@ -43,6 +43,16 @@ namespace SupplyChain
             return await _context.Pedidos.FromSqlRaw(xSQL).ToListAsync();
         }
 
+        // GET: api/Pedidos/BuscarPorOFTzbl/{CG_ORDF}
+        [HttpGet("BuscarPorOFTzbl/{CG_ORDF}")]
+        public async Task<IEnumerable<Pedidos>> BuscarPorOFTzbl(string CG_ORDF)
+        {
+            string xSQL = string.Format("Select * From Pedidos AS P Where tipoo = 5 " +
+                $"AND EXISTS( Select CG_ART, Despacho  From Pedidos AS S where S.tipoo = 10 and S.cg_ordf = {CG_ORDF} " +
+                "AND S.CG_ART = P.CG_ART AND S.DESPACHO = P.DESPACHO)");
+            return await _context.Pedidos.FromSqlRaw(xSQL).ToListAsync();
+        }
+
         // GET: api/Pedidos/BuscarPorPedido/{Pedido}
         [HttpGet("BuscarPorPedido/{Pedido}")]
         public async Task<ActionResult<List<Pedidos>>> BuscarPorPedido(string Pedido)
@@ -587,8 +597,6 @@ namespace SupplyChain
             {
                 return BadRequest("Registro Incorrecto");
             }
-
-
             try
             {
                 var update = $"UPDATE Pedidos SET CG_DEP = {stock.CG_DEP} " +

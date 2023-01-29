@@ -1874,7 +1874,18 @@
             if (!string.IsNullOrEmpty(args.RowData.DESPACHO))
             {
                 ShowSpinner = true;
-                controlFQ = controlFQ.Where(s => s.DESPACHO == args.RowData.DESPACHO).ToList();
+                String OF = System.Text.RegularExpressions.Regex.Match(args.RowData.LOTE, @"\d+").Value;
+                var responsePedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorOFTzbl/{OF}");
+                if (responsePedidos.Error)
+                {
+                    Console.WriteLine(responsePedidos.HttpResponseMessage.ReasonPhrase);
+                }
+                else
+                {
+                    List<Pedidos> pedidos = responsePedidos.Response;
+                }
+
+                controlFQ = controlFQ.Where(s => s.DESPACHO == args.RowData.DESPACHO && s.VALE.Trim() == pedidos[0].VALE.ToString()).ToList();
                 if (!string.IsNullOrEmpty(args.RowData.LOTE))
                 {
                     string ordFab = args.RowData.LOTE.Substring(3).Trim();

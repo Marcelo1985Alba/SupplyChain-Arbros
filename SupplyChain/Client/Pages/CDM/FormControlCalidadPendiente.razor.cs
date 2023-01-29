@@ -205,6 +205,7 @@ namespace SupplyChain.Client.Pages.CDM
             else
             {
                 controlCalidadPendientes.CG_DEP = 4;
+
             }
             
             var response2 = await Http.PutAsJsonAsync($"api/Pedidos/ActualizaDeposito/{controlCalidadPendientes.Id}", controlCalidadPendientes);
