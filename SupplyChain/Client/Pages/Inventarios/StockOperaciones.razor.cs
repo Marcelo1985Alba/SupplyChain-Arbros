@@ -29,6 +29,7 @@ namespace SupplyChain.Client.Pages.Inventarios
         [Parameter] public bool FiltraComboOperaciones { get; set; } = false;
         [Parameter] public int OrdFab { get; set; } = 0;
         [Parameter] public PedidoEncabezado StockEncabezado { get; set; } = new PedidoEncabezado();
+        [Parameter] public int vale { get; set; } = 0;
 
         protected bool DisableCssClass
         {
@@ -100,7 +101,10 @@ namespace SupplyChain.Client.Pages.Inventarios
             }
             else
             {
-                await GetVale();
+                if (vale != 0)
+                    StockEncabezado.VALE = vale;
+                else
+                    await GetVale();
 
                 await SelectedTireChanged(tire);
             }

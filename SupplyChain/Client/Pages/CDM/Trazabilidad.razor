@@ -1,5 +1,6 @@
 ﻿@page "/control-calidad/Trazabilidad"
 @page "/control-calidad/Trazabilidad/{Pedido}"
+@using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.Notifications
 @using Syncfusion.Pdf;
@@ -323,6 +324,8 @@
                             <TabItem CssClass="tabControlFQ">
                                 <HeaderTemplate>Control Fisico/Quimico</HeaderTemplate>
                                 <ContentTemplate>
+		                            <SfButton Content="Ver Insumos" IsPrimary="false" CssClass="btn-sm e-info" IconCss="fa fa-eye"
+					                    OnClick="onClickVerInsumos"></SfButton>
                                     <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false"
                                             @ref="refGridItems" DataSource="@controlFQ" Width="100%" ID="grdControlFQ"
                                             AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
@@ -1012,6 +1015,7 @@
     [Inject] protected ProcesoService ProcesoService{ get; set; }
     protected SfGrid<Procesos> refGridItems;
     protected List<Procesos> controlFQ = new();
+    protected int valeSelected = 0;
 
     protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "1100px" };
 
@@ -1162,7 +1166,6 @@
     {
         await refSpinner.ShowAsync();
         var row = await this.Grid4.GetSelectedRecords();
-        controlFQ = controlFQ.Where(s => s.DESPACHO == row[0].DESPACHO && s.CG_PROD == row[0].CG_ART).ToList();
         if (!string.IsNullOrEmpty(row[0].DESPACHO))
         {
             if (!string.IsNullOrEmpty(row[0].LOTE))
@@ -1886,6 +1889,7 @@
                 }
 
                 controlFQ = controlFQ.Where(s => s.DESPACHO == args.RowData.DESPACHO && s.VALE.Trim() == pedidos[0].VALE.ToString()).ToList();
+                valeSelected = pedidos[0].VALE;
                 if (!string.IsNullOrEmpty(args.RowData.LOTE))
                 {
                     string ordFab = args.RowData.LOTE.Substring(3).Trim();
@@ -1987,6 +1991,11 @@
 
             }
         } 
+    }
+
+    public async Task onClickVerInsumos()
+    {
+        await JsRuntime.InvokeAsync<object>("open", $"inventario/{valeSelected}", "_blank");
     }
 
 }
