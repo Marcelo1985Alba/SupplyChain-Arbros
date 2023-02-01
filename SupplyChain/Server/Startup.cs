@@ -45,6 +45,8 @@ namespace SupplyChain.Server
             services.AddAuthentication();
             services.AddAuthorization();
 
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTA0Njk4NUAzMjMwMmUzNDJlMzBaRFRIcHVVaVJ2K1ZFVTd6TXA4dnRXQ01EVlRTMEpXdXpkTnFUTGdMem9rPQ==");
+
 
             services.AddDbContext<AppDbContext>(options =>
             {
