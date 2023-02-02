@@ -1889,7 +1889,11 @@
                 }
 
                 controlFQ = controlFQ.Where(s => s.DESPACHO == args.RowData.DESPACHO && s.VALE.Trim() == pedidos[0].VALE.ToString()).ToList();
-                valeSelected = pedidos[0].VALE;
+                await ToastMensajeExito($"La Of es: {OF}");
+                if(pedidos.Count == 0){
+                    await ToastMensajeExito($"El vale es: {pedidos[0].VALE}");
+                    valeSelected = pedidos[0].VALE;
+                }
                 if (!string.IsNullOrEmpty(args.RowData.LOTE))
                 {
                     string ordFab = args.RowData.LOTE.Substring(3).Trim();
@@ -1996,6 +2000,33 @@
     public async Task onClickVerInsumos()
     {
         await JsRuntime.InvokeAsync<object>("open", $"inventario/{valeSelected}", "_blank");
+    }
+
+    private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
+    {
+        await this.ToastObj.Show(new ToastModel
+            {
+                Title = "EXITO!",
+                Content = content,
+                CssClass = "e-toast-success",
+                Icon = "e-warning toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+    }
+
+    private async Task ToastMensajeError(string content = "Ocurrio un error.")
+    {
+        await ToastObj.Show(new ToastModel
+            {
+                Title = "EXITO!",
+                Content = content,
+                CssClass = "e-toast-success",
+                Icon = "e-warning toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+
     }
 
 }

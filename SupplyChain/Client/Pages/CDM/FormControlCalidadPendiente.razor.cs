@@ -109,6 +109,49 @@ namespace SupplyChain.Client.Pages.CDM
         }
         protected async Task openedDialog()
         {
+            List<Procesos> porDespacho = await Http.GetFromJsonAsync<List<Procesos>>($"api/Proceso/BuscarPorDESPACHO/{controlCalidadPendientes.DESPACHO}");
+            if (porDespacho.Count != 0)
+            {
+                bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Se han encontrado procesos guardados con el mismo despacho, desea copiarlos?");
+                if (isConfirmed)
+                {
+                    Show = false;
+                    porDespacho = porDespacho.Where(s => s.VALE == porDespacho[0].VALE).ToList();
+                    foreach(Procesos item in porDespacho)
+                    {
+                        item.FECHA = DateTime.Now;
+                        item.FE_REG = DateTime.Now;
+                        item.FE_ENSAYO = DateTime.Now;
+                        item.CG_PROD = controlCalidadPendientes.CG_ART;
+                        item.Id = 0;
+                        item.VALE = controlCalidadPendientes.VALE.ToString();
+                    }
+                    var response = await ProcesoService.GuardarLista(porDespacho);
+                    if (response.Error)
+                    {
+                        await ToastMensajeError($"Error al guardar en Procesos\n\rDetalle:{response.HttpResponseMessage.ReasonPhrase}");
+                        return;
+                    }
+
+                    if (response.Response.Any(p => p.APROBADO == "N"))
+                    {
+                        controlCalidadPendientes.CG_DEP = 3;
+                    }
+                    else
+                    {
+                        controlCalidadPendientes.CG_DEP = 4;
+                    }
+
+                    var response2 = await Http.PutAsJsonAsync($"api/Pedidos/ActualizaDeposito/{controlCalidadPendientes.Id}", controlCalidadPendientes);
+                    if (!response2.IsSuccessStatusCode)
+                    {
+                        await ToastMensajeError("Error al actualizar deposito");
+                    }
+                    await refGridItems.Refresh();
+                    return;
+                }
+            }
+
             SpinnerVisible = true;
             segGrilla = await InventarioService.GetSegundaGrilla();
             prodList = await Http.GetFromJsonAsync<Producto>($"api/Prod/{controlCalidadPendientes.CG_ART}");
@@ -146,7 +189,7 @@ namespace SupplyChain.Client.Pages.CDM
                     return false;
                 }
             }
-            await ToastMensajeError("Todos los datos fueron ingresador correctamente, guardando.");
+            await ToastMensajeExito("Todos los datos fueron ingresador correctamente, guardando.");
 
             List<Procesos> toSaveList = new List<Procesos>();
 
@@ -191,6 +234,7 @@ namespace SupplyChain.Client.Pages.CDM
                 toSaveList.Add(toSave);
             }
 
+
             var response = await ProcesoService.GuardarLista(toSaveList);
             if (response.Error)
             {
@@ -198,26 +242,24 @@ namespace SupplyChain.Client.Pages.CDM
                 return false;
             }
 
-            if (response.Response.Any(p=> p.APROBADO == "N"))
+            if (response.Response.Any(p => p.APROBADO == "N"))
             {
                 controlCalidadPendientes.CG_DEP = 3;
             }
             else
             {
                 controlCalidadPendientes.CG_DEP = 4;
-
             }
-            
+
             var response2 = await Http.PutAsJsonAsync($"api/Pedidos/ActualizaDeposito/{controlCalidadPendientes.Id}", controlCalidadPendientes);
             if (!response2.IsSuccessStatusCode)
             {
                 await ToastMensajeError("Error al actualizar deposito");
                 return false;
             }
-
-
+            await refGridItems.Refresh();
             BotonGuardarDisabled = false;
-            await ToastMensajeError("Guardado");
+            await ToastMensajeExito("Guardado");
             Show = false;
             return true;
         }

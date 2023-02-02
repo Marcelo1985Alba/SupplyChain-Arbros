@@ -7,6 +7,7 @@ using Syncfusion.Blazor.RichTextEditor;
 using Syncfusion.Pdf.Lists;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -55,6 +56,22 @@ namespace SupplyChain.Server.Controllers.CDM
             {
                 return BadRequest(ex);
             }
+        }
+
+        // GET: api/Proceso/BuscarPorDESPACHO/{DESPACHO}
+        [HttpGet("BuscarPorDESPACHO/{DESPACHO}")]
+        public async Task<ActionResult<List<Procesos>>> BuscarPorDESPACHO(string DESPACHO)
+        {
+            List<Procesos> lProcesos = new List<Procesos>();
+            if (_procesoRepository.ObtenerTodosQueryable().Any())
+            {
+                lProcesos = await _procesoRepository.Obtener(p => p.DESPACHO == DESPACHO).ToListAsync();
+            }
+            if (lProcesos == null)
+            {
+                return NotFound();
+            }
+            return lProcesos;
         }
 
         //GET: api/Valores/Existe/{id}
