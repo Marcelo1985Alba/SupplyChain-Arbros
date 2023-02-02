@@ -134,9 +134,16 @@ namespace SupplyChain
         [HttpGet("GetByFilter")]
         public async Task<ActionResult<Producto>> GetByFilter([FromQuery]FilterProd filter)
         {
-            var Prod = await _productoRepository.ObtenerPorId(filter.Codigo);
+            try
+            {
+                var Prod = await _productoRepository.ObtenerPorId(filter.Codigo);
 
-            return Prod ?? (ActionResult<Producto>)NotFound();
+                return Prod ?? (ActionResult<Producto>)NotFound();
+            }
+            catch (Exception ex) 
+            {
+                return NotFound();
+            }
         }
 
 

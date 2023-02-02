@@ -160,14 +160,11 @@ else
         </div>
     </div>
 
-    @if (PopupBuscadorStockVisible)
-    {
         <BuscadorEmergenteResumenStock @ref="BuscadorEmergenteRS" DataSource="@Items" Visible="PopupBuscadorStockVisible" 
                                        TipoSeleccion="@TipoSeleccion" VisibleSpinner="@visibleSpinnerRS" EsModal="true"
                                        Columnas="@(new string[] { "CG_ART", "STOCK", "CG_DEP", "DEPOSITO", "SERIE", "LOTE", "DESPACHO"})"
                                        OnObjetoSeleccionado="@(async(r)=> await OnResumenStockSelected(r))"
                                        OnObjetosSeleccionados="@(async(r)=> await OnResumenStockSelected(r))"/>
-    }
 
 
 }

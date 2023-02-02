@@ -101,13 +101,14 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
             listaPlanificacion = await Http.GetFromJsonAsync<List<Planificacion>>("api/Planificacion/0/1");
             //await GridPlanificacion?.AutoFitColumns();
             await base.OnInitializedAsync();
+            VisibleProperty = false;
         }
 
         public async Task DataBoundHandler()
         {
-            GridPlanificacion.PreventRender();
-            await GridPlanificacion?.AutoFitColumns();
-            VisibleProperty = false;
+            //GridPlanificacion.PreventRender();
+            //await GridPlanificacion?.AutoFitColumns();
+            //VisibleProperty = false;
         }
 
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -284,6 +285,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
 
 
                 await JsRuntime.InvokeAsync<object>("open", $"inventario/{tipoo}/true/{OrdenFabricacionSelected}", "_blank");
+                await GridPlanificacion.Refresh();
             }
             if (args.CommandColumn.Title == "Despiece")
             {

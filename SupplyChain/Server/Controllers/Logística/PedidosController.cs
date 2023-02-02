@@ -670,8 +670,6 @@ namespace SupplyChain
                     $"WHERE PEDIDO = {stock.PEDIDO} AND CG_ART = '{stock.CG_ART}'";
                 _context.Database.ExecuteSqlRaw(update);
             }
-
-
             _context.Entry(stock).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }

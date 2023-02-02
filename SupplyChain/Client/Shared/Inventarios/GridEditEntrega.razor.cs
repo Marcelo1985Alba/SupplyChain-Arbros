@@ -96,7 +96,7 @@ namespace SupplyChain.Client.Shared.Inventarios
             }
 
             PopupBuscadorStockVisible = true;
-            await BuscadorEmergenteRS.ShowAsync();
+            //await BuscadorEmergenteRS.ShowAsync();
             visibleSpinnerRS = true;
             bAgregarInsumo = true;
             Items = null;
@@ -237,7 +237,8 @@ namespace SupplyChain.Client.Shared.Inventarios
 
             Items = Items == null ? new List<vResumenStock>().ToArray() : Items;
 
-            await BuscadorEmergenteRS.ShowAsync();
+            PopupBuscadorStockVisible = true;
+            //await BuscadorEmergenteRS.ShowAsync();
             //await InvokeAsync(StateHasChanged);
         }
 
@@ -288,7 +289,8 @@ namespace SupplyChain.Client.Shared.Inventarios
 
         protected async Task OnResumenStockSelected(List<vResumenStock> lista)
         {
-            await BuscadorEmergenteRS.HideAsync();
+            PopupBuscadorStockVisible = false;
+            //await BuscadorEmergenteRS.HideAsync();
             foreach (var vresumenStock in lista)
             {
                 bAgregarInsumo = true;
@@ -300,7 +302,7 @@ namespace SupplyChain.Client.Shared.Inventarios
         protected async Task OnResumenStockSelected(vResumenStock resumenStock)
         {
             PopupBuscadorStockVisible = false;
-            await BuscadorEmergenteRS.HideAsync();
+            //await BuscadorEmergenteRS.HideAsync();
 
             await GetSeleccionResumenStock(resumenStock);
 
