@@ -13,6 +13,7 @@ using SupplyChain;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
+using SupplyChain.Shared.PCP;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -235,6 +236,24 @@ namespace SupplyChain.Server.Controllers
             }
 
             await _context.Database.ExecuteSqlRawAsync(query);
+            return Ok();
+        }
+
+
+        // GET: api/EmitirOrden/{tipo}/{cg_Art}/{cantemitir}/{fe_entrega}/{cg_form}/{cg_estadoCarga}/{semOrigen}/{pedido}
+        [HttpPost("EmitirOrden/{tipo}/{cg_Art}/{cantemitir}/{fe_entrega}/{cg_form}/{cg_estadoCarga}/{semOrigen}/{pedido}")]
+        public async Task<ActionResult<List<Planificacion>>> EmitirOrden(string tipo, string CG_ART, decimal cantEmitir, DateTime fe_Entrega, int cg_form, int cg_EstadoCarga, int semOrigen, int pedido)
+        {
+            var query = "";
+            try
+            {
+                query = "EXEC NET_PCP_EmitirOrdenes '" + tipo + "', '" + CG_ART + "', '" + cantEmitir + "', '" + fe_Entrega + "', '" + cg_form + "', '" + cg_EstadoCarga + "', '" + semOrigen + "', '" + pedido + "', 'USER'";
+                await _context.Database.ExecuteSqlRawAsync(query);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return Ok();
         }
     }

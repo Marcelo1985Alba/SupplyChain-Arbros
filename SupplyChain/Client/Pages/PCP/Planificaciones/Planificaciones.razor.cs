@@ -46,6 +46,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         protected bool IsVisible3 { get; set; } = false;
         protected bool IsVisible4 { get; set; } = false;
         protected bool IsVisible5 { get; set; } = false;
+        protected bool IsVisible6 { get; set; } = false;
         protected Planificacion Datos_paraFormula;
         protected Producto ProdSeleccionada;
         protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "500px" };
@@ -60,6 +61,10 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         protected List<Producto> DES_PRODlist = new List<Producto>();
         protected string CgString = "";
         protected string DesString = "";
+        protected string Tipo = "";
+        protected int cg_form = 0;
+        protected decimal cantEmitir = 0;
+        protected DateTime fe_Entrega = DateTime.Today;
 
         protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
@@ -213,37 +218,6 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
                 //VisibleProperty = false;
             }
         }
-
-        protected async Task OnInputCG_PROD(InputEventArgs args)
-        {
-            if (args.Value != "")
-            {
-                CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{args.Value}/Vacio/100");
-                if (CG_PRODlist.Count > 0)
-                {
-                    DesString = CG_PRODlist.FirstOrDefault().DES_PROD;
-                }
-                else
-                {
-                    DesString = "";
-                }
-            }
-        }
-        protected async Task OnInputDES_PROD(InputEventArgs args)
-        {
-            if (args.Value != "")
-            {
-                CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarPorDES_PROD/{args.Value}");
-                if (CG_PRODlist.Count > 0)
-                {
-                    CgString = CG_PRODlist.FirstOrDefault().Id;
-                }
-                else
-                {
-                    CgString = "";
-                }
-            }
-        }
         protected async Task BuscarProductoPrevision()
         {
             CantidadMostrar2 = 100;
@@ -308,8 +282,8 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         }
         public void OnSelected2()
         {
-            CgString = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().CG_PROD; // return the details of selected record
-            DesString = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().DES_PROD; // return the details of selected record
+            CgString = this.Grid5.GetSelectedRecordsAsync().Result.FirstOrDefault().Id; // return the details of selected record
+            DesString = this.Grid5.GetSelectedRecordsAsync().Result.FirstOrDefault().DES_PROD; // return the details of selected record
             CantidadMostrar2 = 0;
             IsVisible5 = false;
         }
@@ -409,6 +383,27 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
                 Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/{DesString}/{CantidadMostrar2}");
             }
         }
+
+        protected async Task EmitirOrden()
+        {
+            /*
+            CantidadMostrar2 = 100;
+            if (DesString == "")
+            {
+                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/Vacio/{CantidadMostrar2}");
+            }
+            else if (CgString == "")
+            {
+                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/Vacio/{DesString}/{CantidadMostrar2}");
+            }
+            else
+            {
+                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/{DesString}/{CantidadMostrar2}");
+            }
+            IsVisible5 = true;
+            */
+        }
+
         public async Task QueryCellInfoHandler(QueryCellInfoEventArgs<Planificacion> args)
         {
             if (args.Column.Field == "CG_ESTADOCARGA")
@@ -481,9 +476,6 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
                 }
                 
             }
-
-            
-
         }
     }
 }

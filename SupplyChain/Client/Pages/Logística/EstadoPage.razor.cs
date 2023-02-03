@@ -86,7 +86,8 @@ namespace SupplyChain.Pages.Modelos
         {
             if (args.RequestType == "cardRemove")
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync
+                    (new ToastModel
                 {
                     Title = "ADVERTENCIA!",
                     Content = $"El pedido {args.ChangedRecords.ToList()[0].PEDIDO} no se puede eliminar desde este modulo.",
@@ -105,7 +106,7 @@ namespace SupplyChain.Pages.Modelos
             if (args.RequestType == "cardRemove")
             {
                 args.Cancel = true;
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ADVERTENCIA!",
                     Content = $"El pedido {args.DeletedRecords.ToList()[0].PEDIDO} no se puede eliminar desde este modulo.",
@@ -128,7 +129,7 @@ namespace SupplyChain.Pages.Modelos
                         Pedclis = Pedclis.Where(p => p.PEDIDO != row.PEDIDO).ToList();
                     }
                     
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "EXITO!",
                         Content = $"Pedido {row.PEDIDO} Guardado Correctamente.",
@@ -145,7 +146,7 @@ namespace SupplyChain.Pages.Modelos
                     args.Cancel = true;
 
                     Console.WriteLine(response.Content.ReadAsStringAsync());
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = $"Error al guardar pedido {row.PEDIDO}",

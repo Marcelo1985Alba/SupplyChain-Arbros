@@ -665,13 +665,26 @@ namespace SupplyChain
                     default:
                         break;
                 };
-
+                /*
                 var update = $"UPDATE PEDCLI SET CG_ESTADO = 'C', Estado_Logistica = '{estadoLogistica}' " +
                     $"WHERE PEDIDO = {stock.PEDIDO} AND CG_ART = '{stock.CG_ART}'";
                 _context.Database.ExecuteSqlRaw(update);
+                */
             }
-            _context.Entry(stock).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Entry(stock).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+
+            catch (DbUpdateConcurrencyException dbEx)
+            {
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
         }
 
         [HttpDelete("{vale}")]

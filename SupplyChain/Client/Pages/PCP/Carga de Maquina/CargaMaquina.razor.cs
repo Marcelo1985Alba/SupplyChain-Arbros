@@ -231,7 +231,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
 
                 var mensajeServidor = await respuesta.Content.ReadAsStringAsync();
                 Console.WriteLine(mensajeServidor);
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = $"Ocurrrio un error.Error al intentar Guardar OF: {ordenFabricacion.CG_ORDF} ",

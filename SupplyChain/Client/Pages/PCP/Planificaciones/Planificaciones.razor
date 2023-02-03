@@ -505,10 +505,10 @@
             <div class="form-row">
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <SfTextBox Placeholder="Código de Producto" Input="OnInputCG_PROD" @bind-Value="CgString" FloatLabelType="@FloatLabelType.Never"></SfTextBox>
+                        <SfTextBox Placeholder="Código de Producto" @bind-Value="CgString" FloatLabelType="@FloatLabelType.Never"></SfTextBox>
                     </div>
                     <div class="form-group col-md-6">
-                        <SfTextBox Placeholder="Descripción de Producto" Input="OnInputDES_PROD" @bind-Value="DesString" FloatLabelType="@FloatLabelType.Never"></SfTextBox>
+                        <SfTextBox Placeholder="Descripción de Producto" @bind-Value="DesString" FloatLabelType="@FloatLabelType.Never"></SfTextBox>
                     </div>
                 </div>
                 <div class="row">
@@ -543,6 +543,37 @@
         </Content>
     </DialogTemplates>
 </SfDialog>
+
+<SfDialog Width="800px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible6">
+    <DialogTemplates>
+        <Content>
+            <div class="form-row">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <SfTextBox Placeholder="Código de Producto" @bind-Value="CgString" Enabled="false" FloatLabelType="@FloatLabelType.Never"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <SfTextBox Placeholder="Descripción de Producto" @bind-Value="DesString" Enabled="false" FloatLabelType="@FloatLabelType.Never"></SfTextBox>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <SfTextBox Placeholder="Tipo" @bind-Value="Tipo" FloatLabelType="@FloatLabelType.Never"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <SfTextBox Placeholder="Descripción de Producto" @bind-Value="DesString" FloatLabelType="@FloatLabelType.Never"></SfTextBox>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 my-1">
+                        <SfButton OnClick="@((e)=> EmitirOrden())" IconCss="fa fa-search" CssClass="btn btn-sm btn-outline-primary" IsPrimary="false">Emitir Orden</SfButton>
+                    </div>
+                </div>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
 <style>
     .form-group.col-md-6 {
         width: 200px;
