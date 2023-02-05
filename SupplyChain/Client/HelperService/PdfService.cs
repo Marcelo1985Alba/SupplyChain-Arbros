@@ -79,7 +79,13 @@ namespace SupplyChain.Client.HelperService
             string cuerpoPresionPrueba = string.Empty;
             string bonetePresionPrueba = string.Empty;
             //de 0 a 60 (CAMPOCOM4)  el Patrón es 2-54275.  de 60 a 400 el Patrón es AE4213
-            string patronUtilizado = vpedidos[0].PATRON;
+            decimal presAJ = 0;
+            Decimal.TryParse(vpedidos[0].CAMPOCOM4, out presAJ);
+            string patronUtilizado = "";
+            if (presAJ < 60)
+                patronUtilizado = "2-54275";
+            else
+                patronUtilizado = "AE4213";
             if (vpedidos.Any(p => p.DES_ART.ToLower().StartsWith("tobera")))
             {
                 tobera = vpedidos.Where(p => p.DES_ART.ToLower().StartsWith("tobera")).FirstOrDefault().NORMA;
