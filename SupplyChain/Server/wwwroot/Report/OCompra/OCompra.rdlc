@@ -1079,7 +1079,9 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
 Sum(Fields!PRECIOTOT.Value, "DataSet1") * 
 First(Fields!BON.Value, "DataSet1") / 100</Value>
                     <MarkupType>HTML</MarkupType>
-                    <Style />
+                    <Style>
+                      <Format>0.00</Format>
+                    </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
@@ -1576,7 +1578,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>0.91668in</Height>
+          <Height>1.14168in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1637,7 +1639,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                       <Value>=ReportItems!txtTot.Value</Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
-                        <Format>#,0.0</Format>
+                        <Format>0.00</Format>
                       </Style>
                     </TextRun>
                     <TextRun>
@@ -1722,7 +1724,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                       <Value>=Sum(Fields!PRECIOTOT.Value, "DataSet1")</Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
-                        <Format>#,0.00;(#,0.00)</Format>
+                        <Format>0.00;(0.00)</Format>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -1836,11 +1838,44 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox1</rd:DefaultName>
-              <Top>0.44444in</Top>
-              <Left>0.15586in</Left>
-              <Height>0.375in</Height>
+              <Top>0.64167in</Top>
+              <Left>0.15514in</Left>
+              <Height>0.43334in</Height>
               <Width>7.70712in</Width>
               <ZIndex>6</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox7">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Los valores indicados en la presente orden de compra no tienen incluido el IVA.</Value>
+                      <Style>
+                        <FontSize>9pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox1</rd:DefaultName>
+              <Top>0.41667in</Top>
+              <Left>0.12812in</Left>
+              <Height>0.18333in</Height>
+              <Width>7.70712in</Width>
+              <ZIndex>7</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
