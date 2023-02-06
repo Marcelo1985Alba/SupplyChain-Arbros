@@ -44,7 +44,7 @@ namespace SupplyChain.Server
         {
             services.AddAuthentication();
             services.AddAuthorization();
-
+            Bold.Licensing.BoldLicenseProvider.RegisterLicense("W2XPSOfZsRxe8tNwDyzLLeSXWmY4ye6r0x2hfMcYxds=");
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTA0Njk4NUAzMjMwMmUzNDJlMzBaRFRIcHVVaVJ2K1ZFVTd6TXA4dnRXQ01EVlRTMEpXdXpkTnFUTGdMem9rPQ==");
 
 
