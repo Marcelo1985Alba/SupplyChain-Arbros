@@ -63,6 +63,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         protected string DesString = "";
         protected string Tipo = "";
         protected int cg_form = 0;
+
         protected decimal cantEmitir = 0;
         protected DateTime fe_Entrega = DateTime.Today;
 
@@ -286,6 +287,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
             DesString = this.Grid5.GetSelectedRecordsAsync().Result.FirstOrDefault().DES_PROD; // return the details of selected record
             CantidadMostrar2 = 0;
             IsVisible5 = false;
+            IsVisible6 = true;
         }
         public async Task OrdCerradas()
         {
@@ -386,22 +388,10 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
 
         protected async Task EmitirOrden()
         {
-            /*
-            CantidadMostrar2 = 100;
-            if (DesString == "")
-            {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/Vacio/{CantidadMostrar2}");
-            }
-            else if (CgString == "")
-            {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/Vacio/{DesString}/{CantidadMostrar2}");
-            }
-            else
-            {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/{DesString}/{CantidadMostrar2}");
-            }
-            IsVisible5 = true;
-            */
+            var response = await Http.GetFromJsonAsync<List<Planificacion>>($"api/Planificacion/EmitirOrden/{Tipo}/{CgString}/{cantEmitir}/{fe_Entrega.ToString("MM-dd-yyyy")}/{cg_form}/0/4/0");
+            //var response = await Http.GetFromJsonAsync<List<Planificacion>>($"api/Planificacion/EmitirOrden/{Tipo}/{CgString}/{cantEmitir}/{fe_Entrega}/{cg_form}/0/4/0");
+            IsVisible4 = false;
+            IsVisible6 = false;
         }
 
         public async Task QueryCellInfoHandler(QueryCellInfoEventArgs<Planificacion> args)

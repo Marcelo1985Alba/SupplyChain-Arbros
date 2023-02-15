@@ -11,5 +11,6 @@ namespace SupplyChain.Shared
         public string Cg_Prod { get; set; }
         public string Cg_Se { get; set; }
         public string Cg_Mat { get; set; }
+        public string CANT_MAT { get; set; }
     }
 }
