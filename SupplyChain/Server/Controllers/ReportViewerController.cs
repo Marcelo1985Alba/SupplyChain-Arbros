@@ -39,7 +39,7 @@ namespace SupplyChain.Server.Controllers
         public void OnInitReportOptions(ReportViewerOptions reportOption)
         {
             string basePath = _hostingEnvironment.WebRootPath;
-            FileStream inputStream = new FileStream(basePath + @"\Report\" + reportOption.ReportModel.ReportPath + ".rdl",
+            FileStream inputStream = new FileStream(basePath + @"\Report\" + reportOption.ReportModel.ReportPath + ".rdlc",
                 FileMode.Open, FileAccess.Read);
             reportOption.ReportModel.Stream = inputStream;
         }
