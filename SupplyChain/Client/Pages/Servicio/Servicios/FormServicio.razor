@@ -342,6 +342,24 @@
                                             <label>Presión solicitada:</label>
                                             <SfTextBox ID="PRESIONSOLIC" @bind-Value="@(Servicio.PRESIONSOLIC)"></SfTextBox>
                                         </div>
+                                        <div class="form-group col-md-3">
+                                            <label>Apretada (A) (mm):</label>
+                                            <SfTextBox ID="APRETADA" @bind-Value="@(Servicio.APRETADA_A)"></SfTextBox>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <img src="./Imagenes/Apretada_A.png" alt="homepage" class="img-Serv"/>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label>Posición Anillo (B) (mm):</label>
+                                            <SfTextBox ID="POSICIONANILLO" @bind-Value="@(Servicio.POSICIONANILLO_B)"></SfTextBox>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <img src="./Imagenes/PosicionAnillo_B.png" alt="homepage" class="img-Serv" />
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </ContentTemplate>
@@ -541,3 +559,10 @@
 <FormPresupuesto @ref="@refFormPresupuesto" Presupuesto="@presupuesto" Show="@verDialogPresupuesto"
                  OnCerrar="@(()=> verDialogPresupuesto = false)"
                  OnGuardar="@((p)=> OnGuardarPresupuesto(p))"></FormPresupuesto>
+
+<style>
+    .img-Serv{
+        height: 100px;
+        width: 100px;
+    }
+</style>
