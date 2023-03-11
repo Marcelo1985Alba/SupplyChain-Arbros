@@ -2,6 +2,7 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Calendars
 @using Syncfusion.Blazor.FileManager;
+@using Syncfusion.Blazor.Navigations;
 @using SupplyChain.Client.Pages.Visor_Pdf
 @using SupplyChain.Client.Pages.Ventas._4_Solicitudes
 @using SupplyChain.Client.Pages.Ventas._3_Presupuestos
@@ -21,38 +22,15 @@
         <Content>
             <EditForm id="formServicio" Model="Servicio" OnValidSubmit="@(()=> Guardar())">
                 <SfSpinner @bind-Visible="@spinnerVisibleGuardar" Label="Guardando..." Type="SpinnerType.Fabric"></SfSpinner>
-                
-                
-                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-Generalidades" role="tab" aria-controls="pills-home" aria-selected="true">Generalidades</a>
-                    </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-DatosPlaca" role="tab" aria-controls="pills-profile" aria-selected="false">Datos de Placa</a>
-                    </li>
+                <SfTab LoadOn="ContentLoad.Dynamic">
+                    <TabItems>
+                        <TabItem>
+                             <HeaderTemplate>Generalidades</HeaderTemplate>
+                            <ContentTemplate>
+                                <div class="mt-3">
 
-                    <li class="nav-item">
-                        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-EnsRecepcion" role="tab" aria-controls="pills-contact" aria-selected="false">Ensayos a la Recepcion</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-TrEfec" role="tab" aria-controls="pills-contact" aria-selected="false">Trabajos Efectuados</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-file" role="tab" aria-controls="pills-contact" aria-selected="false">Documentación</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-img" role="tab" aria-controls="pills-contact" aria-selected="false">Fotos</a>
-                    </li>
-                </ul>
-
-                <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="pills-Generalidades" role="tabpanel" aria-labelledby="pills-home-tab">
-                        <div>
-
-                            <div class="form-row">
+                                    <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <label>Solicitud:</label>
 
@@ -155,218 +133,225 @@
                                     <SfTextBox ID="OBSERV" @bind-Value="@(Servicio.OBSERV)" Enabled="@Disabled" Multiline="true"></SfTextBox>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade" id="pills-DatosPlaca" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>TAG:</label>
-                                    <SfTextBox ID="IDENTIFICACION" @bind-Value="@(Servicio.IDENTIFICACION)"></SfTextBox>
                                 </div>
+                            </ContentTemplate>
+                        </TabItem>
+                        <TabItem>
+                             <HeaderTemplate>Datos de Placa</HeaderTemplate>
+                            <ContentTemplate>
+                                <div class="mt-3">
 
-                                <div class="form-group col-md-6">
-                                    <a href="/sc/marca/list" target="_blank">Marca:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Marca" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.MARCA)" DataSource="@marcas">
-                                        <ComboBoxFieldSettings Value="MARCA" Text="MARCA"></ComboBoxFieldSettings>
-                                    </SfComboBox>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>TAG:</label>
+                                            <SfTextBox ID="IDENTIFICACION" @bind-Value="@(Servicio.IDENTIFICACION)"></SfTextBox>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <a href="/sc/marca/list" target="_blank">Marca:</a>
+                                            <SfComboBox TValue="string" CssClass="customClass" TItem="Marca" PopupWidth="auto" AllowFiltering="true"
+                                                        @bind-Value="@(Servicio.MARCA)" DataSource="@marcas">
+                                                <ComboBoxFieldSettings Value="MARCA" Text="MARCA"></ComboBoxFieldSettings>
+                                            </SfComboBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Numero de Serie:</label>
+                                            <SfTextBox ID="NSERIE" @bind-Value="@(Servicio.NSERIE)"></SfTextBox>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label>Modelo:</label>
+                                            <SfTextBox ID="MODELO" @bind-Value="@(Servicio.MODELO)"></SfTextBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <a href="/sc/medida/list" target="_blank">Medida:</a>
+                                            <SfComboBox TValue="string" CssClass="customClass" TItem="Medida" PopupWidth="auto" AllowFiltering="true"
+                                                        @bind-Value="@(Servicio.MEDIDA)" DataSource="@medidas">
+                                                <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
+                                            </SfComboBox>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <a href="/sc/serie/list" target="_blank">Serie:</a>
+                                            <SfComboBox TValue="string" CssClass="customClass" TItem="Serie" PopupWidth="auto" AllowFiltering="true"
+                                                        @bind-Value="@(Servicio.SERIE)" DataSource="@series">
+                                                <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
+                                            </SfComboBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <a href="/sc/orificio/list" target="_blank">Orificio:</a>
+                                            <SfComboBox TValue="string" CssClass="customClass" TItem="Orificio" PopupWidth="auto" AllowFiltering="true"
+                                                        @bind-Value="@(Servicio.ORIFICIO)" DataSource="@orificios">
+                                                <ComboBoxFieldSettings Value="Codigo" Text="Codigo"></ComboBoxFieldSettings>
+                                            </SfComboBox>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label>Año:</label>
+                                            <SfTextBox ID="AÑO" @bind-Value="@(Servicio.AÑO)"></SfTextBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Area:</label>
+                                            <SfTextBox ID="AREA" @bind-Value="@(Servicio.AREA)"></SfTextBox>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label>Fluido:</label>
+                                            <SfTextBox ID="FLUIDO" @bind-Value="@(Servicio.FLUIDO)"></SfTextBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Sobrepresión:</label>
+                                            <SfComboBox TValue="string" CssClass="customClass" TItem="Sobrepresiones" PopupWidth="auto" AllowFiltering="true"
+                                                        @bind-Value="@(Servicio.SOBREPRESION)" DataSource="@SobrepresionData">
+                                                <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                            </SfComboBox>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label>Presión:</label>
+                                            <SfTextBox ID="PRESION" @bind-Value="@(Servicio.PRESION)"></SfTextBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Contrapresión:</label>
+                                            <SfTextBox ID="CONTRAPRESION" @bind-Value="@(Servicio.CONTRAPRESION)"></SfTextBox>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label>Tipo:</label>
+                                            <SfComboBox TValue="string" CssClass="customClass" TItem="Tipos" PopupWidth="auto" AllowFiltering="true"
+                                                        @bind-Value="@(Servicio.TIPO)" DataSource="@TipoData">
+                                                <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                            </SfComboBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Temperatura:</label>
+                                            <SfTextBox ID="TEMP" @bind-Value="@(Servicio.TEMP)"></SfTextBox>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label>Resorte:</label>
+                                            <SfTextBox ID="RESORTE" @bind-Value="@(Servicio.RESORTE)"></SfTextBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Presión en Banco:</label>
+                                            <SfTextBox ID="PRESIONBANCO" @bind-Value="@(Servicio.PRESIONBANCO)"></SfTextBox>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label>Servicio:</label>
+                                            <SfTextBox ID="SERVICIO" @bind-Value="@(Servicio.SERVICIO)"></SfTextBox>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </ContentTemplate>
+                        </TabItem>
+                        <TabItem>
+                             <HeaderTemplate>Ensayos a la Recepcion</HeaderTemplate>
+                            <ContentTemplate>
+                                <div class="mt-3">
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Numero de Serie:</label>
-                                    <SfTextBox ID="NSERIE" @bind-Value="@(Servicio.NSERIE)"></SfTextBox>
+                                    <div class="form-row">
+                                        @*<div class="form-group col-md-6">
+                                        <label>Ensayo a la Recepcion:</label>
+                                        <SfTextBox ID="ENSRECEP" @bind-Value="@(Servicio.ENSRECEP)"></SfTextBox>
+                                        </div>*@
+
+                                        <div class="form-group col-md-6">
+                                            <label>Ensayo a la Recepcion:</label>
+                                            <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                                        @bind-Value="@(Servicio.ENSRECEP)" DataSource="@SIoNOData">
+                                                <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                            </SfComboBox>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label>Estado:</label>
+                                            <SfComboBox TValue="string" CssClass="customClass" TItem="Estados" PopupWidth="auto" AllowFiltering="true"
+                                                        @bind-Value="@(Servicio.ESTADO)" DataSource="@EstadosData">
+                                                <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                            </SfComboBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Presión Ensayo Recepción:</label>
+                                            <SfTextBox ID="PRESIONRECEP" @bind-Value="@(Servicio.PRESIONRECEP)"></SfTextBox>
+                                        </div>
+
+                                        @*<div class="form-group col-md-6">
+                                        <label>Fugas:</label>
+                                        <SfTextBox ID="FUGAS" @bind-Value="@(Servicio.FUGAS)"></SfTextBox>
+                                        </div>*@
+
+                                        <div class="form-group col-md-6">
+                                            <label>Fugas:</label>
+                                            <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                                        @bind-Value="@(Servicio.FUGAS)" DataSource="@SIoNOData">
+                                                <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                            </SfComboBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Presión de Fuga:</label>
+                                            <SfTextBox ID="PRESIONFUGA" @bind-Value="@(Servicio.PRESIONFUGA)"></SfTextBox>
+                                        </div>
+
+                                        @*<div class="form-group col-md-6">
+                                        <label>Cambio de Presión:</label>
+                                        <SfTextBox ID="CAMBIOPRESION" @bind-Value="@(Servicio.CAMBIOPRESION)"></SfTextBox>
+                                        </div>*@
+
+                                        <div class="form-group col-md-6">
+                                            <label>Cambio de Presión:</label>
+                                            <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                                        @bind-Value="@(Servicio.CAMBIOPRESION)" DataSource="@SIoNOData">
+                                                <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                            </SfComboBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Presión solicitada:</label>
+                                            <SfTextBox ID="PRESIONSOLIC" @bind-Value="@(Servicio.PRESIONSOLIC)"></SfTextBox>
+                                        </div>
+                                    </div>
                                 </div>
+                            </ContentTemplate>
+                        </TabItem>
+                        <TabItem>
+                             <HeaderTemplate>Trabajos Efectuados</HeaderTemplate>
+                            <ContentTemplate>
+                                <div class="mt-3">
 
-                                <div class="form-group col-md-6">
-                                    <label>Modelo:</label>
-                                    <SfTextBox ID="MODELO" @bind-Value="@(Servicio.MODELO)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <a href="/sc/medida/list" target="_blank">Medida:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Medida" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.MEDIDA)" DataSource="@medidas">
-                                        <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <a href="/sc/serie/list" target="_blank">Serie:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Serie" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.SERIE)" DataSource="@series">
-                                        <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <a href="/sc/orificio/list" target="_blank">Orificio:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Orificio" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.ORIFICIO)" DataSource="@orificios">
-                                        <ComboBoxFieldSettings Value="Codigo" Text="Codigo"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Año:</label>
-                                    <SfTextBox ID="AÑO" @bind-Value="@(Servicio.AÑO)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Area:</label>
-                                    <SfTextBox ID="AREA" @bind-Value="@(Servicio.AREA)"></SfTextBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Fluido:</label>
-                                    <SfTextBox ID="FLUIDO" @bind-Value="@(Servicio.FLUIDO)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Sobrepresión:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Sobrepresiones" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.SOBREPRESION)" DataSource="@SobrepresionData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Presión:</label>
-                                    <SfTextBox ID="PRESION" @bind-Value="@(Servicio.PRESION)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Contrapresión:</label>
-                                    <SfTextBox ID="CONTRAPRESION" @bind-Value="@(Servicio.CONTRAPRESION)"></SfTextBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Tipo:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Tipos" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.TIPO)" DataSource="@TipoData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Temperatura:</label>
-                                    <SfTextBox ID="TEMP" @bind-Value="@(Servicio.TEMP)"></SfTextBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Resorte:</label>
-                                    <SfTextBox ID="RESORTE" @bind-Value="@(Servicio.RESORTE)"></SfTextBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Presión en Banco:</label>
-                                    <SfTextBox ID="PRESIONBANCO" @bind-Value="@(Servicio.PRESIONBANCO)"></SfTextBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Servicio:</label>
-                                    <SfTextBox ID="SERVICIO" @bind-Value="@(Servicio.SERVICIO)"></SfTextBox>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade" id="pills-EnsRecepcion" role="tabpanel" aria-labelledby="pills-contact-tab">
-                        <div>
-
-                            <div class="form-row">
-                                @*<div class="form-group col-md-6">
-                            <label>Ensayo a la Recepcion:</label>
-                            <SfTextBox ID="ENSRECEP" @bind-Value="@(Servicio.ENSRECEP)"></SfTextBox>
-                        </div>*@
-
-                                <div class="form-group col-md-6">
-                                    <label>Ensayo a la Recepcion:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.ENSRECEP)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>Estado:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Estados" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.ESTADO)" DataSource="@EstadosData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Presión Ensayo Recepción:</label>
-                                    <SfTextBox ID="PRESIONRECEP" @bind-Value="@(Servicio.PRESIONRECEP)"></SfTextBox>
-                                </div>
-
-                                @*<div class="form-group col-md-6">
-                            <label>Fugas:</label>
-                            <SfTextBox ID="FUGAS" @bind-Value="@(Servicio.FUGAS)"></SfTextBox>
-                        </div>*@
-
-                                <div class="form-group col-md-6">
-                                    <label>Fugas:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.FUGAS)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Presión de Fuga:</label>
-                                    <SfTextBox ID="PRESIONFUGA" @bind-Value="@(Servicio.PRESIONFUGA)"></SfTextBox>
-                                </div>
-
-                                @*<div class="form-group col-md-6">
-                            <label>Cambio de Presión:</label>
-                            <SfTextBox ID="CAMBIOPRESION" @bind-Value="@(Servicio.CAMBIOPRESION)"></SfTextBox>
-                        </div>*@
-
-                                <div class="form-group col-md-6">
-                                    <label>Cambio de Presión:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.CAMBIOPRESION)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Presión solicitada:</label>
-                                    <SfTextBox ID="PRESIONSOLIC" @bind-Value="@(Servicio.PRESIONSOLIC)"></SfTextBox>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade" id="pills-TrEfec" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <div>
-                            <div class="form-row">
+                                    <div class="form-row">
                                 @*<div class="form-group col-md-6">
                             <label>Cambio de Repuesto:</label>
                             <SfTextBox ID="CAMBIOREPUESTO" @bind-Value="@(Servicio.CAMBIOREPUESTO)"></SfTextBox>
@@ -499,32 +484,41 @@
                                     <SfTextBox ID="OBSERVMANT" @bind-Value="@(Servicio.OBSERVMANT)" Multiline="true"></SfTextBox>
                                 </div>
                             </div>
+                                </div>
+                            </ContentTemplate>
+                        </TabItem>
+                        <TabItem>
+                             <HeaderTemplate>Documentacion</HeaderTemplate>
+                            <ContentTemplate>
+                                <div class="mt-3">
+                                    <VerEnsayos Accion="RUTAENSAYO" Codigo="@Servicio.PEDIDO.ToString()">
 
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="pills-file" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                    </VerEnsayos>
+                                    
+                                </div>
+                            </ContentTemplate>
+                        </TabItem>
+                        <TabItem>
+                             <HeaderTemplate>Fotos</HeaderTemplate>
+                            <ContentTemplate>
+                                <div class="mt-3">
 
-                        <VerEnsayos Accion="RUTAENSAYO" Codigo="@Servicio.PEDIDO.ToString()">
-
-                        </VerEnsayos>
-                    </div>
-                    <div class="tab-pane fade" id="pills-img" role="tabpanel" aria-labelledby="pills-profile-tab">
-                    
-                        <div class="control-section">
-                            <SfFileManager TValue="FileManagerDirectoryContent" Height="400px" View="ViewType.Details">
-                                <FileManagerAjaxSettings Url="/api/FilesManagerServicios/FileOperations"
-                                                         DownloadUrl="/api/FilesManagerServicios/Download"
-                                                         UploadUrl="/api/FilesManagerServicios/Upload"
-                                                         GetImageUrl="/api/FilesManagerServicios/GetImage">
-                                </FileManagerAjaxSettings>
-                                <FileManagerEvents TValue="FileManagerDirectoryContent"></FileManagerEvents>
-                                <FileManagerNavigationPaneSettings Visible=false></FileManagerNavigationPaneSettings>
-                            </SfFileManager>
-                        </div>
-                    </div>
-
-
-                </div>
+                                    <div class="control-section">
+                                        <SfFileManager TValue="FileManagerDirectoryContent" Height="400px" View="ViewType.Details">
+                                            <FileManagerAjaxSettings Url="/api/FilesManagerServicios/FileOperations"
+                                                                     DownloadUrl="/api/FilesManagerServicios/Download"
+                                                                     UploadUrl="/api/FilesManagerServicios/Upload"
+                                                                     GetImageUrl="/api/FilesManagerServicios/GetImage">
+                                            </FileManagerAjaxSettings>
+                                            <FileManagerEvents TValue="FileManagerDirectoryContent"></FileManagerEvents>
+                                            <FileManagerNavigationPaneSettings Visible=false></FileManagerNavigationPaneSettings>
+                                        </SfFileManager>
+                                    </div>
+                                </div>
+                            </ContentTemplate>
+                        </TabItem>
+                    </TabItems>
+                </SfTab>
             </EditForm>
             
         </Content>
