@@ -238,6 +238,7 @@ namespace SupplyChain
             modelBuilder.Entity<Procun>().HasNoKey().ToView(null);
             modelBuilder.Entity<EstadVenta>().HasNoKey().ToView(null);
             modelBuilder.Entity<StockSP>().HasNoKey().ToView(null);
+            modelBuilder.Entity<PedCli>().ToTable(tb => tb.HasTrigger("trgPedcli"));
             modelBuilder.Entity<Pedidos>().ToTable(tb => tb.HasTrigger("trgResumenStock"));
             modelBuilder.Entity<Programa>().ToTable(tb => tb.HasTrigger("trgPrograma"));
             CreateVistasSQL(modelBuilder);
