@@ -1,62 +1,14 @@
 [
   {
-    "LastDownloadTime": "2022-11-07T20:52:03.5928467Z",
-    "LocalPath": "JSON\\Schemas\\17d32026-ec35-481b-98df-85058772a57e.json",
-    "OriginalPath": "https://json.schemastore.org/stylelintrc.json",
-    "ExpirationTime": "2022-11-14T20:52:03.8237224Z"
-  },
-  {
-    "LastDownloadTime": "2022-11-07T20:52:04.2995627Z",
-    "LocalPath": "JSON\\Schemas\\2749c1ca-27d9-4969-b045-0ca730872691.json",
-    "OriginalPath": "https://json.schemastore.org/jscpd.json",
-    "ExpirationTime": "2022-11-14T20:52:04.533619Z"
-  },
-  {
-    "LastDownloadTime": "2023-03-13T19:15:14.3181548Z",
-    "LocalPath": "JSON\\Schemas\\715c57dc-6073-49c0-8b3c-ae0302d75c99.json",
-    "OriginalPath": "http://json-schema.org/draft-04/schema",
-    "ExpirationTime": "2023-03-14T19:15:15.4544773Z"
-  },
-  {
-    "LastDownloadTime": "2022-11-07T20:52:01.9950793Z",
-    "LocalPath": "JSON\\Schemas\\74df0e1a-9515-4f98-a5f0-e304d385ce39.json",
-    "OriginalPath": "https://json.schemastore.org/package.json",
-    "ExpirationTime": "2022-11-14T20:52:02.9647664Z"
-  },
-  {
-    "LastDownloadTime": "2022-11-07T20:52:04.0682027Z",
-    "LocalPath": "JSON\\Schemas\\896ea157-84f0-4a99-ab75-8bb40e72b857.json",
-    "OriginalPath": "https://json.schemastore.org/semantic-release.json",
-    "ExpirationTime": "2022-11-14T20:52:04.2975469Z"
-  },
-  {
-    "LastDownloadTime": "2022-11-07T20:52:03.0799255Z",
-    "LocalPath": "JSON\\Schemas\\dd115ebd-86cf-4dde-9a6e-6df2d60d35f7.json",
-    "OriginalPath": "https://json.schemastore.org/eslintrc.json",
-    "ExpirationTime": "2022-11-14T20:52:03.3075714Z"
-  },
-  {
-    "LastDownloadTime": "2023-03-13T19:15:14.293605Z",
-    "LocalPath": "JSON\\Schemas\\e0b68e61-cff5-4290-b57a-bbc182357eb7.json",
+    "LastDownloadTime": "2023-03-15T19:44:43.0202934Z",
+    "LocalPath": "JSON\\Schemas\\1af54d76-8688-4f4c-8129-cc7b6a3f82a8.json",
     "OriginalPath": "https://json.schemastore.org/appsettings.json",
-    "ExpirationTime": "2023-03-20T19:15:15.4629974Z"
+    "ExpirationTime": "2023-03-22T19:44:44.0941868Z"
   },
   {
-    "LastDownloadTime": "2022-11-07T20:54:28.4255945Z",
-    "LocalPath": "JSON\\Schemas\\e3db9d99-327d-44f0-b71a-233c0e662446.json",
-    "OriginalPath": "https://json.schemastore.org/config.json",
-    "ExpirationTime": "2022-11-14T20:54:29.339111Z"
-  },
-  {
-    "LastDownloadTime": "2022-11-07T20:52:03.3286193Z",
-    "LocalPath": "JSON\\Schemas\\f25e03cf-282d-4e5b-91b3-bd257794a18f.json",
-    "OriginalPath": "https://json.schemastore.org/prettierrc.json",
-    "ExpirationTime": "2022-11-14T20:52:03.5568783Z"
-  },
-  {
-    "LastDownloadTime": "2022-11-07T20:52:03.8303397Z",
-    "LocalPath": "JSON\\Schemas\\f52f2f52-dd44-48b1-93d4-a7409d1b359e.json",
-    "OriginalPath": "https://json.schemastore.org/ava.json",
-    "ExpirationTime": "2022-11-14T20:52:04.0648873Z"
+    "LastDownloadTime": "2023-03-15T19:44:43.2549342Z",
+    "LocalPath": "JSON\\Schemas\\a75018c7-322b-4ef7-b871-f8a7d24ec1c4.json",
+    "OriginalPath": "http://json-schema.org/draft-04/schema",
+    "ExpirationTime": "2023-03-16T19:45:25.8118774Z"
   }
 ]

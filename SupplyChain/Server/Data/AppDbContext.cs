@@ -96,6 +96,7 @@ namespace SupplyChain
         public DbSet<ResumenStock> ResumenStock { get; set; }
         public DbSet<vResumenStock> vResumenStock { get; set; }
         public DbSet<Modulo> Modulos { get; set; }
+        public DbSet<ModulosUsuario> ModulosUsuarios { get; set; }
         public virtual DbSet<Genera> Genera { get; set; }
         public virtual DbSet<Planificacion> Planificaciones { get; set; }
 
