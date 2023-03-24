@@ -1,0 +1,107 @@
+﻿@page "/compras/solicitud-cotizacion"
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Lists
+@using Syncfusion.Blazor.DropDowns
+@inherits SolicitudCotizacionBase
+
+
+<div class="row e-avatar-xl">
+    <div class="col-3">
+        @*<SfTextBox Placeholder="Buscar Materia Prima..." Input="@OnInput"></SfTextBox>*@
+        <SfListBox CssClass="e-template-listbox" TValue="string" DataSource="@ListData" TItem="Compra" Height="450px" 
+                   AllowFiltering="true" FilterBarPlaceholder="Buscar Materia Prima...">
+            <ListBoxFieldSettings Text="CG_MAT"></ListBoxFieldSettings>
+            <ListBoxTemplates TItem="Compra">
+                <ItemTemplate>
+                    <div class="list-wrapper">
+                        <div class="row">
+                            <div class="col-6">
+                                <span class="text">@((context as Compra).CG_MAT.Trim())</span>
+                            </div>
+                            <div class="col-6">
+                                <span class="text">Entrega: @((context as Compra).FE_PREV.Value.ToString("dd/MM/yyyy"))</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <span class="description">@((context as Compra).DES_MAT)</span>
+                            </div>
+                            
+                        </div>
+                        <div class="row justify-content-start">
+                            <div class="col-auto p-0">
+                                <span class="text">@((context as Compra).SOLICITADO) </span>
+                            </div>
+                            <div class="col-auto p-0 m-0">
+                                <span class="text"> (@((context as Compra).UNID)) </span>
+                            </div>
+                            <div class="col-auto p-0 m-0">
+                                <span class="text">/ @((context as Compra).SOLICITADO) </span>
+                            </div>
+                            <div class="col-auto p-0 m-0">
+                                <span class="text"> (@((context as Compra).UNID1)) </span>
+                            </div>
+
+                        </div>
+                        
+                        
+                    </div>
+                </ItemTemplate>
+            </ListBoxTemplates>
+        </SfListBox>
+    </div>
+    <div class="col-6">
+        
+    </div>
+    <div class="col-3">
+    </div>
+
+</div>
+
+<style>
+    .e-template-listbox .e-list-item {
+        line-height: 1.5 !important;
+        padding: 0 16px !important;
+    }
+
+    .list-wrapper {
+        height: inherit;
+        position: relative;
+        padding: 14px 12px 14px 8px;
+    }
+
+    .e-listbox-container .e-list-item {
+        height: auto !important;
+    }
+
+    .list-wrapper .text,
+    .list-wrapper .description {
+        display: block;
+        margin: 0;
+        padding-bottom: 3px;
+        white-space: normal;
+    }
+
+    .list-wrapper .description {
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .e-listbox-container .list-wrapper .text {
+        font-weight: bold;
+        font-size: 10px;
+    }
+
+    .list-wrapper .e-avatar {
+        position: absolute;
+        left: 5px;
+        background-color: transparent;
+        font-size: 22px;
+        top: calc(50% - 35px);
+    }
+
+    /*.bootstrap4 .list-wrapper .e-avatar {
+        top: calc(50% - 28px);
+    }
+
+</style>
