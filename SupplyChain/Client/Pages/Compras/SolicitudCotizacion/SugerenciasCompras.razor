@@ -1,16 +1,12 @@
-﻿@page "/compras/solicitud-cotizacion"
+﻿@using Syncfusion.Blazor.Lists
 @using Syncfusion.Blazor.Inputs
-@using Syncfusion.Blazor.Lists
 @using Syncfusion.Blazor.DropDowns
-@inherits SolicitudCotizacionBase
+@inherits SugerenciasComprasBase
 
-
-<div class="row e-avatar-xl">
-    <div class="col-3">
-        @*<SfTextBox Placeholder="Buscar Materia Prima..." Input="@OnInput"></SfTextBox>*@
-        <SfListBox CssClass="e-template-listbox" TValue="string" DataSource="@ListData" TItem="Compra" Height="450px" 
+<SfListBox @ref="@refSfListBox" CssClass="e-template-listbox" TValue="Compra[]" DataSource="@ListData" TItem="Compra" Height="550px" 
                    AllowFiltering="true" FilterBarPlaceholder="Buscar Materia Prima...">
-            <ListBoxFieldSettings Text="CG_MAT"></ListBoxFieldSettings>
+            <ListBoxFieldSettings Text="CG_MAT" Value="CG_MAT" ></ListBoxFieldSettings>
+            <ListBoxEvents TValue="Compra[]" TItem="Compra" ValueChange="SelectedChange"></ListBoxEvents>
             <ListBoxTemplates TItem="Compra">
                 <ItemTemplate>
                     <div class="list-wrapper">
@@ -48,15 +44,8 @@
                     </div>
                 </ItemTemplate>
             </ListBoxTemplates>
+            <SfSpinner Label="Cargando..." @bind-Visible="@mostrarSpinnerSeleccionSugerencia" Type="SpinnerType.Fabric"></SfSpinner>
         </SfListBox>
-    </div>
-    <div class="col-6">
-        
-    </div>
-    <div class="col-3">
-    </div>
-
-</div>
 
 <style>
     .e-template-listbox .e-list-item {
@@ -101,7 +90,7 @@
     }
 
     /*.bootstrap4 .list-wrapper .e-avatar {
-        top: calc(50% - 28px);
-    }
+            top: calc(50% - 28px);
+        }
 
 </style>

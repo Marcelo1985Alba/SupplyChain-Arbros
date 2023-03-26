@@ -1,0 +1,29 @@
+﻿@page "/compras/solicitud-cotizacion"
+
+@using Syncfusion.Blazor.DropDowns
+@inherits SolicitudCotizacionBase
+
+
+<div class="row">
+    <SfSpinner Label="Cargando..." @bind-Visible="@mostrarSpinner" Type="SpinnerType.Fabric"></SfSpinner>
+    <div class="col-3">
+        <SugerenciasCompras OnItemsSeleccionados="OnRecibirItemsSeleccionados"></SugerenciasCompras>
+    </div>
+    <div class="col-6">
+        <div class="row">
+            <div class="col-12">
+                <ProveedoresMateriaPrima @ref="refProveedoresMateriaPrima" SoloProveedoresConEmail="true" FiltroIdsProveedor="@idsProveedores"></ProveedoresMateriaPrima>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <Proveedores @ref="refProveedores" IdsProveedoresConMp="@idsProveedores"></Proveedores>
+            </div>
+        </div>
+        
+    </div>
+    <div class="col-3">
+    </div>
+
+</div>
+

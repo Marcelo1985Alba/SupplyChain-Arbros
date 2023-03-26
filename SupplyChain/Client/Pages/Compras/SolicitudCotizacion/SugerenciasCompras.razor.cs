@@ -1,27 +1,30 @@
 ﻿using Microsoft.AspNetCore.Components;
-using static SupplyChain.Client.Pages.ChatApp.ChatBase;
-using System.Collections.Generic;
-using Syncfusion.Blazor.Inputs;
-using SupplyChain.Shared.Models;
-using static System.Net.WebRequestMethods;
-using System.Threading.Tasks;
-using System;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared;
+using SupplyChain.Shared.Models;
+using Syncfusion.Blazor.Inputs;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System;
+using Syncfusion.Blazor.DropDowns;
 
-namespace SupplyChain.Client.Pages.Compras
+namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
 {
-    public class SolicitudCotizacionBase: ComponentBase
+    public class SugerenciasComprasBase : ComponentBase
     {
         [Inject] protected IRepositoryHttp Http { get; set; }
-        [CascadingParameter] public MainLayout MainLayout { get; set; }
+        [Parameter] public EventCallback<Compra[]> OnItemsSeleccionados { get; set; }
+
+        protected SfListBox<Compra[], Compra> refSfListBox;
         protected List<Compra> ListData = new();
         protected List<Compra> DataSource = new();
 
+        protected bool mostrarSpinnerSeleccionSugerencia = false;
         protected async override Task OnInitializedAsync()
         {
-            MainLayout.Titulo = "Solicitud de Cotizacion";
+            mostrarSpinnerSeleccionSugerencia = true;
             await CargaSugerencia();
+            mostrarSpinnerSeleccionSugerencia = false;
         }
         public async Task CargaSugerencia()
         {
@@ -36,6 +39,13 @@ namespace SupplyChain.Client.Pages.Compras
             }
         }
 
+        protected async Task SelectedChange(ListBoxChangeEventArgs<Compra[],Compra> args)
+        {
+            if (OnItemsSeleccionados.HasDelegate)
+            {
+                await OnItemsSeleccionados.InvokeAsync(args.Value);
+            }
+        }
         protected void OnInput(InputEventArgs eventArgs)
         {
             if (string.IsNullOrEmpty(eventArgs.Value))
@@ -46,8 +56,7 @@ namespace SupplyChain.Client.Pages.Compras
             {
                 ListData = DataSource.FindAll(e => e.CG_MAT.ToLower().Contains(eventArgs.Value));
             }
-            
-        }
 
+        }
     }
 }

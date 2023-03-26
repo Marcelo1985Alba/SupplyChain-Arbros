@@ -146,6 +146,7 @@ namespace SupplyChain
         public DbSet<ProcalsMP> ProcalsMP { get; set; }
         public DbSet<vControlCalidadPendientes> vcontrolCalidadPendientes { get; set; }
         public DbSet<Procesos> Procesos { get; set; }
+        public DbSet<vProveedorItris> vProveedoresItris { get; set; }
 
         #endregion
 
@@ -274,6 +275,7 @@ namespace SupplyChain
             modelBuilder.Entity<vUsuario>().HasNoKey().ToView("vUsuarios");
             modelBuilder.Entity<vOCompraReporte>().HasNoKey().ToView("vOCompraReporte");
             modelBuilder.Entity<vControlCalidadPendientes>().HasNoKey().ToView("vControlCalidadPendientes");
+            modelBuilder.Entity<vProveedorItris>().HasNoKey().ToView("vProveItris");
         }
     }
 }

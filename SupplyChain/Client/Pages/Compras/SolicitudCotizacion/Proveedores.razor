@@ -1,0 +1,28 @@
+﻿@using Syncfusion.Blazor.Buttons
+
+@inherits ProveedoresBase
+
+
+
+
+<div class="row">
+    <div class="col-6">
+        <h3>Resto Proveedores</h3>
+    </div>
+    <div class="col-6">
+        <SfCheckBox @onchange="OnChange" @bind-Checked="@SoloProveedoresConEmail"
+                    Label="Solo proveedores con Email" LabelPosition="Syncfusion.Blazor.Buttons.LabelPosition.After"></SfCheckBox>
+    </div>
+</div>
+
+
+<SfGrid TValue="vProveedorItris" DataSource="@DataProveedoresFiltrado" Height="250px" EnableVirtualization="true">
+    <SfSpinner Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="mostrarSpinnerCargando"></SfSpinner>
+    <GridColumns>
+        <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+        <GridColumn Field=@nameof(vProveedorItris.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+        <GridColumn Field=@nameof(vProveedorItris.DESCRIPCION) HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+        <GridColumn Field=@nameof(vProveedorItris.NOMBRE_CONTACTO) HeaderText="Contacto" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+        <GridColumn Field=@nameof(vProveedorItris.EMAIL_CONTACTO) HeaderText="Email" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+    </GridColumns>
+</SfGrid>
