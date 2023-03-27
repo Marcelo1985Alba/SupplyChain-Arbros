@@ -49,7 +49,8 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
         {
             MainLayout.Titulo = "Estados de Pedidos";
             SpinnerVisible = true;
-            var response = await Http.GetFromJsonAsync<List<vEstadoPedido>>("api/EstadoPedidos");
+            var response = await Http.GetFromJsonAsync<List<vEstadoPedido>>
+                ("api/EstadoPedidos");
             if (response.Error)
             {
                 Console.WriteLine("E R R O R !!!");

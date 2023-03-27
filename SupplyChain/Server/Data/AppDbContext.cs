@@ -127,6 +127,7 @@ namespace SupplyChain
         public DbSet<vPedidoReporte> vPedidoReporte { get; set; }
         public DbSet<vRemitoReporte> vRemitoReporte { get; set; }
         public DbSet<vTransporte> vTransportes { get; set; }
+        public DbSet<vESTADOS_COMPRAS> vESTADOS_COMPRAS { get; set; }
         public DbSet<ChatMessage> ChatMessages { get; set; }
         //MODULO PROYECTOS
         public DbSet<ProyectosGBPI> Proyectos { get; set; }
@@ -145,6 +146,7 @@ namespace SupplyChain
         public DbSet<ProcalsMP> ProcalsMP { get; set; }
         public DbSet<vControlCalidadPendientes> vcontrolCalidadPendientes { get; set; }
         public DbSet<Procesos> Procesos { get; set; }
+     
 
         #endregion
 
@@ -153,7 +155,7 @@ namespace SupplyChain
             this.Database.SetCommandTimeout(60);
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)  
         {
             //Configure domain classes using modelBuilder here   
             modelBuilder.ApplyConfiguration(new CompraConfig());
@@ -233,6 +235,7 @@ namespace SupplyChain
                 eb.HasNoKey();
                 eb.ToView("vProdMaquinaDataCore");
             });
+            
 
             modelBuilder.Entity<ItemAbastecimiento>().HasNoKey().ToView(null);
             modelBuilder.Entity<Procun>().HasNoKey().ToView(null);
@@ -272,6 +275,8 @@ namespace SupplyChain
             modelBuilder.Entity<vUsuario>().HasNoKey().ToView("vUsuarios");
             modelBuilder.Entity<vOCompraReporte>().HasNoKey().ToView("vOCompraReporte");
             modelBuilder.Entity<vControlCalidadPendientes>().HasNoKey().ToView("vControlCalidadPendientes");
+            modelBuilder.Entity<vESTADOS_COMPRAS>().HasNoKey().ToView("vESTADOS_COMPRAS");
+
         }
     }
 }

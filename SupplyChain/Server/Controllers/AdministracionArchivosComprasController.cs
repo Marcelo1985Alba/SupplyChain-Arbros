@@ -24,22 +24,21 @@ namespace SupplyChain.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdministracionArchivosController : ControllerBase
+    public class AdministracionArchivosComprasController : ControllerBase
     {
         private IWebHostEnvironment _hostingEnvironment;
-        //Initialize the memory cache object   
         public IMemoryCache _cache;
         private string DocumentPath;
-        private readonly ILogger<AdministracionArchivosController> logger;
+        private readonly ILogger<AdministracionArchivosComprasController> logger;
         private readonly SolutionRepository _solutionRepository;
         private readonly AppDbContext _context;
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment env;
         private readonly PresupuestoRepository _presupuestoRepository;
 
-        public AdministracionArchivosController(IWebHostEnvironment hostingEnvironment, IMemoryCache cache
+        public AdministracionArchivosComprasController(IWebHostEnvironment hostingEnvironment, IMemoryCache cache
             , SolutionRepository solutionRepository, AppDbContext context, IConfiguration configuration
-            , ILogger<AdministracionArchivosController> logger, IWebHostEnvironment env
+            , ILogger<AdministracionArchivosComprasController> logger, IWebHostEnvironment env
             , PresupuestoRepository presupuestoRepository)
         {
             _hostingEnvironment = hostingEnvironment;
@@ -52,28 +51,28 @@ namespace SupplyChain.Server.Controllers
         }
 
         [HttpGet("ByParamRuta/{parametro}/{codigo}")]
-        public async Task<ActionResult<List<Archivo>>> GetDocumentosByRuta(string parametro, string codigo)
+        public async Task<ActionResult<List<Archivo>>> GetDocumentosByRutaCompras(string parametro, string codigo)
         {
             try
             {
                 var ruta = await _solutionRepository.Obtener(s => s.CAMPO == parametro).FirstOrDefaultAsync();
                 if (ruta.VALORC.Contains("blob"))
                 {
-                    string pedido = codigo.Split(',')[0];
+                    string compras = codigo.Split(',')[0];
 
                     const string FirstCharacter = "_";
-                    int Pos1 = pedido.IndexOf(FirstCharacter) + FirstCharacter.Length;
-                    pedido = pedido.Substring(Pos1);
+                    int Pos1 = compras.IndexOf(FirstCharacter) + FirstCharacter.Length;
+                    compras = compras.Substring(Pos1);
 
-                    int Pos2 = pedido.IndexOf('_') + FirstCharacter.Length;
-                    pedido = pedido.Substring(0, Pos2 - 1);
-                    return await GetEnsayosAzure(Convert.ToInt32(pedido));
+                    int Pos2 = compras.IndexOf('_') + FirstCharacter.Length;
+                    compras = compras.Substring(0, Pos2 - 1);
+                    return await GetEnsayosAzure(Convert.ToInt32(compras));
                 }
                 else
                 {
                     return await GetFileLocalServer(parametro, codigo);
                 }
-                
+
 
             }
             catch (Exception ex)
@@ -81,8 +80,6 @@ namespace SupplyChain.Server.Controllers
                 return new List<Archivo>();
             }
         }
-
-     
 
         private async Task<List<Archivo>> GetFileLocalServer(string parametro, string codigo)
         {
@@ -135,7 +132,6 @@ namespace SupplyChain.Server.Controllers
                         Contenido = parametro == "RUTACNC" ? System.IO.File.ReadAllLines(item) : null,
                         ContenidoByte = parametro == "RUTACNC" || ruta.CAMPO.Trim() == "RUTACERTIFICADOS" || ruta.CAMPO.Trim() == "RUTATRAZABILIDAD"
                                         || ruta.CAMPO.Trim() == "RUTAFACTURA" || ruta.CAMPO.Trim() == "RUTAREMITO" ? System.IO.File.ReadAllBytes(item) : null
-                        //ContenidoBase64 = "data:application/pdf;base64," + Convert.ToBase64String(System.IO.File.ReadAllBytes(item))
                     };
 
                     archivos.Add(archivo);
@@ -162,7 +158,7 @@ namespace SupplyChain.Server.Controllers
                 {
                     System.IO.File.Delete(fileName);
                 }
-                
+
                 // Create a new file
                 using (StreamWriter sw = System.IO.File.CreateText(fileName))
                 {
@@ -204,8 +200,9 @@ namespace SupplyChain.Server.Controllers
             {
                 return false;
             }
-            
+
         }
+
         [HttpGet("ExisteCertificado/{file}")]
         public async Task<bool> ExisteCertificado(string file)
         {
@@ -222,7 +219,6 @@ namespace SupplyChain.Server.Controllers
             return System.IO.File.Exists(path + "/" + file);
         }
 
-
         [HttpGet("Certificado/{file}")]
         public async Task<List<Archivo>> Certificado(string file)
         {
@@ -236,11 +232,9 @@ namespace SupplyChain.Server.Controllers
                 return archivos;
             }
             //TODO: OBTENER ARCHIVOS DE LOCALSERVER
-            
+
             return await GetFileLocalServer("RUTATRAZABILIDAD", file);
         }
-
-
         [HttpGet("GetCertificado/{file}")]
         public async Task<List<Archivo>> GetCertificadoAzure(string file)
         {
@@ -265,7 +259,6 @@ namespace SupplyChain.Server.Controllers
             }
             return archivos;
         }
-
         [HttpGet("GetPlano/{file}/Load")]
         public async Task<IActionResult> GetPlano(string file)
         {
@@ -308,17 +301,17 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
-        [HttpGet("GetEnsayos/{pedido}")]
-        public async Task<List<Archivo>> GetEnsayosAzure(int pedido)
+        [HttpGet("GetEnsayos/{compras}")]
+        public async Task<List<Archivo>> GetEnsayosAzure(int compras)
         {
-            return await GetBlobEnsayosAzure(pedido);
+            return await GetBlobEnsayosAzure(compras);
         }
 
-        private async Task<List<Archivo>> GetBlobEnsayosAzure(int pedido)
+        private async Task<List<Archivo>> GetBlobEnsayosAzure(int compras)
         {
             BlobContainerClient cliente = await GetContainer("ensayos");
             //cliente.SetAccessPolicy(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
-            var prefijo = $"ENS_{pedido}";
+            var prefijo = $"ENS_{compras}";
             var ensayos = cliente.GetBlobs(prefix: prefijo).ToList();
             List<Archivo> archivos = new();
             foreach (BlobItem blob in ensayos)
@@ -376,7 +369,7 @@ namespace SupplyChain.Server.Controllers
 
                 var mete = blob.Metadata;
 
-                
+
                 var coty = blob.Properties.ContentType;
                 var properties = blob.Properties;
                 MemoryStream memoryStream = new(blob.Properties.ContentHash);
@@ -400,7 +393,7 @@ namespace SupplyChain.Server.Controllers
                 return BadRequest("Debe asignar stream");
             }
 
-            string path = await _solutionRepository.Obtener(s=> s.CAMPO == "RUTADESPIECE").Select(s=> s.VALORC).FirstOrDefaultAsync();
+            string path = await _solutionRepository.Obtener(s => s.CAMPO == "RUTADESPIECE").Select(s => s.VALORC).FirstOrDefaultAsync();
 
 
 
@@ -438,9 +431,9 @@ namespace SupplyChain.Server.Controllers
                     string primera = contenido[0];
                     if (char.IsDigit(primera[0]))
                     {
-                        var pedido = contenido[0];
+                        var compras = contenido[0];
                         var fileName = contenido[1];
-                        var files = await GetBlobEnsayosAzure(Convert.ToInt32(pedido));
+                        var files = await GetBlobEnsayosAzure(Convert.ToInt32(compras));
                         archivo = files.Find(f => f.Nombre == fileName);
                     }
                     else
@@ -449,7 +442,7 @@ namespace SupplyChain.Server.Controllers
                         archivo = (await GetCertificadoAzure(file)).FirstOrDefault();
                     }
 
-                    
+
                     if (!string.IsNullOrEmpty(archivo.Nombre))
                     {
                         //byte[] bytes = System.IO.File.ReadAllBytes(documentPath);
@@ -717,7 +710,7 @@ namespace SupplyChain.Server.Controllers
             string path = EliminarArchivos();
 
             //Obtener pdf presupuesto
-            var presup = await _presupuestoRepository.Obtener(v => v.Id == presupuesto).Include(i=> i.Items).FirstOrDefaultAsync();
+            var presup = await _presupuestoRepository.Obtener(v => v.Id == presupuesto).Include(i => i.Items).FirstOrDefaultAsync();
             var listArchivosDescargar = new List<Archivo>();
             //obtengo pdf del reporte rdlc
             var file = "Presupuesto.rdlc";
@@ -815,7 +808,7 @@ namespace SupplyChain.Server.Controllers
                     listArchivosDescargar.Add(archivoDataSheet);
                 }
             }
-            
+
 
             //foreach (var sol in solicitudes)
             //{
@@ -850,7 +843,7 @@ namespace SupplyChain.Server.Controllers
             //    valeDS = null;
             //}
 
-            
+
 
             Stream[] streams = new Stream[listArchivosDescargar.Count];
             PdfDocument finalDoc = new PdfDocument();

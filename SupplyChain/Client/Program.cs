@@ -96,6 +96,8 @@ namespace SupplyChain.Client
             services.AddScoped<ProcalMPService>();
             services.AddScoped<ControlCalidadService>();
             services.AddScoped<ProcesoService>();
+           //services.AddScoped<EstadoComprasService>();
+
         }
     }
 }

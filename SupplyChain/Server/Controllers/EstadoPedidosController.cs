@@ -30,7 +30,7 @@ namespace SupplyChain.Server.Controllers
         }
 
         // GET: api/Genera
-        [HttpGet]
+        [HttpGet]   
         public async Task<ActionResult<IEnumerable<vEstadoPedido>>> Get()
         {
             List<Claim> roleClaims = HttpContext.User.FindAll(ClaimTypes.Role).ToList();

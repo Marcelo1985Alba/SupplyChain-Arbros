@@ -40,6 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\Client\Pages\EstadoPedidos\EstadoPedidos.razor.cs" Link="EstadoPedidos.razor.cs" />
     <Compile Include="wwwroot\Report\ArbrosDataSet.Designer.cs">
       <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -139,6 +140,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\Client\Pages\EstadoPedidos\EstadoPedidos.razor" Link="EstadoPedidos.razor" />
     <None Include="wwwroot\Report\ArbrosDataSet.xsc">
       <DependentUpon>ArbrosDataSet.xsd</DependentUpon>
     </None>
