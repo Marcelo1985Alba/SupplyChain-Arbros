@@ -146,6 +146,7 @@ namespace SupplyChain
         public DbSet<vControlCalidadPendientes> vcontrolCalidadPendientes { get; set; }
         public DbSet<Procesos> Procesos { get; set; }
 
+
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -187,6 +188,9 @@ namespace SupplyChain
 
             });
 
+
+        
+
             modelBuilder.Entity<PresupuestoDetalle>(entity=> {
                 entity.HasOne(d => d.Presupuesto)
                 .WithMany(p => p.Items)
@@ -212,6 +216,7 @@ namespace SupplyChain
                 eb.HasNoKey();
                 eb.ToView("vPendientesFabricar");
             });
+
 
             modelBuilder.Entity<vResumenStock>(
             eb =>
@@ -240,6 +245,7 @@ namespace SupplyChain
             modelBuilder.Entity<StockSP>().HasNoKey().ToView(null);
             modelBuilder.Entity<Pedidos>().ToTable(tb => tb.HasTrigger("trgResumenStock"));
             modelBuilder.Entity<Programa>().ToTable(tb => tb.HasTrigger("trgPrograma"));
+            modelBuilder.Entity<Compra>().ToTable(tb => tb.HasTrigger("tgrcompras"));
             CreateVistasSQL(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
