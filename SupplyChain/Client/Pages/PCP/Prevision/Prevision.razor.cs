@@ -90,7 +90,7 @@ namespace SupplyChain.Client.Pages.Prev
             }
 
 
-            if (args.Item.Text == "Eliminar")
+            if (args.Item.Text == "Eliminar" || args.Item.Text == "Delete")
             {
                 bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar el producto?");
                 if (isConfirmed)

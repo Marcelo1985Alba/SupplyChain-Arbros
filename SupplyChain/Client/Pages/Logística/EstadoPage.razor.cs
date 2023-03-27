@@ -66,6 +66,18 @@ namespace SupplyChain.Pages.Modelos
             {
                 PedCli Nuevo = args.Data[0];
                 response = await Http.PutAsJsonAsync($"api/Pedcli/{Nuevo.PEDIDO}", Nuevo);
+                if (!response.IsSuccessStatusCode)
+                {
+                    await this.ToastObj.ShowAsync(new ToastModel
+                    {
+                        Title = "ERROR!",
+                        Content = $"Error al actualizar pedido {Nuevo.PEDIDO}",
+                        CssClass = "e-toast-danger",
+                        Icon = "e-error toast-icons",
+                        ShowCloseButton = true,
+                        ShowProgressBar = true
+                    });
+                }
             }
         }
 

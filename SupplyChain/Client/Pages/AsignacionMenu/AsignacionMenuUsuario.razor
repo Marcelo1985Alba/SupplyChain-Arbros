@@ -1,0 +1,209 @@
+﻿@page "/administracion/asignacionMenuUsuario"
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.DropDowns
+
+@inherits AsignacionMenuUsuarioBase
+
+<div class="row">
+    <SfToast ID="toast_default" @ref="ToastObj">
+        <ToastPosition X="Center" Y="Top"></ToastPosition>
+    </SfToast>
+    <div class="col-6">
+        <SfSpinner Type="SpinnerType.Fabric" Size="50" Label="Cargando..." @bind-Visible="@SpinnerVisibleMenuMaestro"></SfSpinner>
+        <label>Menu Maestro</label>
+        @*<div class="row">
+            <div class="col-3">
+                <SfButton OnClick="CheckAll">Seleccionar Todos</SfButton>
+            </div>
+            <div class="col-3">
+                <SfButton OnClick="UncheckAll">Deseleccionar Todos</SfButton>
+            </div>
+        </div>*@
+        @*Menu Maestro*@
+        <div class="control-wrapper">
+        <div id="treeview">
+                <SfTreeView @ref="treeviewMaster" TValue="Modulo" ID="tvMenu" ShowCheckBox="true" AutoCheck="true"
+                            @bind-CheckedNodes="@CheckedNodes">
+                    <TreeViewFieldsSettings DataSource="dbMenuMaster" TValue="Modulo" Id="Id" Text="Descripcion"
+                                            ParentID="ParentId" HasChildren="TieneChild"
+                                        NavigateUrl="Url" IconCss="IconCss">
+                    </TreeViewFieldsSettings>
+                    <TreeViewEvents TValue="Modulo" NodeChecked="NodeCheckedHandler"></TreeViewEvents>
+                    <SfSpinner Type="SpinnerType.Fabric" Size="50" Label="Cargando..." @bind-Visible="@SpinnerVisibleMenuMaestro"></SfSpinner>
+            </SfTreeView>
+        </div>
+
+    </div>
+    </div>
+    <div class="col-6">
+        <div class="row">
+            <div class="col-12">
+                <SfDropDownList TItem="vUsuario" TValue="string" DataSource="@Usuarios" AllowFiltering="true" Placeholder="Seleccione Usuario..."  
+                    FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" FilterBarPlaceholder="Buscar Usuario...">
+                    <DropDownListEvents TItem="vUsuario" TValue="string" ValueChange="OnChange" />
+                    <DropDownListFieldSettings Text="USUARIO" Value="Id" />
+                </SfDropDownList>
+            </div>
+        </div>
+        @*Menu Usuario*@
+        <SfTreeView @ref="treeviewUsuario" TValue="Modulo" ID="tvMenu">
+            <TreeViewFieldsSettings DataSource="dbMenu" TValue="Modulo" Id="Id" Text="Descripcion"
+                                    ParentID="ParentId" HasChildren="TieneChild"
+                                    NavigateUrl="Url" IconCss="IconCss">
+            </TreeViewFieldsSettings>
+        </SfTreeView>
+        <SfButton CssClass="e-info" Content="Guardar" OnClick="Guardar"></SfButton>
+
+    </div>
+
+    <SfButton CssClass="e-success" title="Agregar items seleccionados" Content="Agregar" OnClick="@((a)=> AgregarItemsSeleccionados(a))" ></SfButton>
+</div>
+
+@code {
+    
+}
+<style>
+    /*To apply border and background color for treeview*/
+    /*#treeview {
+            max-width: 400px;
+            margin: auto;
+            border: 1px solid #dddddd;
+            border-radius: 3px;*/
+    /*background: #1c86c8;*/
+    /*background: #000000;
+        }*/
+
+
+    /* customize icon style: son los de FontAwesome v4.7 */
+    .e-treeview.custom-tree .e-list-icon {
+        font-family: 'FontAwesome';
+        font-size: 20px;
+        margin-top: -4px;
+        color: white;
+    }
+
+    /* icon styles */
+
+    /*   @@font-face {
+          font-family: 'FontAwesome';
+          src: url('../fonts/fontawesome-webfont.eot?v=4.7.0');
+          src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('../fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+          font-weight: normal;
+          font-style: normal;
+        }*/
+
+
+
+    /*To float the expand/collapse icon right*/
+    .e-treeview.custom-tree .e-icon-collapsible, .e-treeview .e-icon-expandable {
+        float: right;
+    }
+        /*To customize the expand collapse icon color*/
+        .e-treeview.custom-tree .e-icon-collapsible::before, .e-treeview.custom-tree .e-icon-expandable::before {
+            color: darkblue;
+        }
+
+    /*To change the text color for treeview*/
+    #tvMenu.e-treeview .e-text-content > .e-list-text {
+        color: darkblue;
+    }
+
+
+
+    .e-treeview .e-list-item {
+        /*border-bottom: 1px #e5e5e58a solid;*/
+    }
+
+    /*To float the expand/collapse icon right*/
+    #tvMenu.e-treeview.custom-tree .e-icon-collapsible, .e-treeview .e-icon-expandable {
+        float: right;
+    }
+
+    #tvMenu.e-treeview .e-list-item .e-icon-expandable::before, e-treeview .e-list-item .e-icon-collapsible:before {
+        content: '\e700';
+        font-size: 12px;
+        color: darkblue !important;
+    }
+
+    #tvMenu.e-treeview .e-text-content {
+        padding: 0 45px 0 0 !important;
+    }
+
+
+    #tvMenu.e-treeview .e-text-content, #tvMenu.e-treeview .e-fullrow {
+        border-color: transparent;
+        color: black !important;
+        padding: 0 0 0 8px;
+    }
+
+    #tvMenu.e-treeview .e-list-item.e-hover > .e-fullrow {
+        font-size: 14px;
+        background-color: transparent !important;
+        border-color: transparent !important;
+    }
+
+
+    /*.e-treeview .e-list-item.e-active {
+            background: white;
+            border-top-left-radius: 7px;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            border-bottom-left-radius: 7px;
+        }*/
+
+    #tvMenu.e-treeview .e-list-item.e-active > .e-fullrow {
+        color: #ffffff !important;
+        background-color: transparent !important;
+        border-color: transparent !important;
+        font-weight: 500 !important;
+    }
+
+    #tvMenu.e-treeview .e-list-text {
+        font-size: 14px;
+        color: darkblue !important;
+    }
+
+    #tvMenu.e-treeview .e-list-item.e-active > .e-text-content > .e-list-text {
+        color: darkblue !important;
+    }
+
+    /*    .e-treeview .e-list-item.e-hover > .e-text-content > .e-list-text {
+            color: #ffffff !important;
+        }
+    */
+    /*To customize the expand collapse icon color*/
+    #tvMenu.e-treeview .e-icon-collapsible::before, .e-treeview .e-icon-expandable::before {
+        color: darkblue;
+        float: right;
+    }
+
+    /*To customize for level*/
+    #tvMenu.custom-tree .e-level-2 > .e-text-content .e-list-text {
+        /*font-style: italic;*/
+        font-size: 12px;
+        padding-left: 0px !important;
+    }
+
+    /*    .custom-tree .e-level-2 > .e-list-item.e-active > .e-text-content > .e-list-text {
+            color: #333 !important;
+        }
+    */
+    #tvMenu.custom-tree .e-level-2 > .e-list-item.e-active {
+        background: white;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 7px;
+    }
+
+
+    #tvMenu.e-treeview .e-list-icon, .e-treeview .e-list-img {
+        display: inline-block;
+        height: 20px;
+        margin: 0 0 0 4px !important;
+        vertical-align: middle;
+        width: 18px;
+    }
+
+</style>

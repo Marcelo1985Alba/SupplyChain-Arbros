@@ -96,6 +96,7 @@ namespace SupplyChain
         public DbSet<ResumenStock> ResumenStock { get; set; }
         public DbSet<vResumenStock> vResumenStock { get; set; }
         public DbSet<Modulo> Modulos { get; set; }
+        public DbSet<ModulosUsuario> ModulosUsuarios { get; set; }
         public virtual DbSet<Genera> Genera { get; set; }
         public virtual DbSet<Planificacion> Planificaciones { get; set; }
 
@@ -145,6 +146,7 @@ namespace SupplyChain
         public DbSet<ProcalsMP> ProcalsMP { get; set; }
         public DbSet<vControlCalidadPendientes> vcontrolCalidadPendientes { get; set; }
         public DbSet<Procesos> Procesos { get; set; }
+        public DbSet<vProveedorItris> vProveedoresItris { get; set; }
 
 
         #endregion
@@ -243,6 +245,7 @@ namespace SupplyChain
             modelBuilder.Entity<Procun>().HasNoKey().ToView(null);
             modelBuilder.Entity<EstadVenta>().HasNoKey().ToView(null);
             modelBuilder.Entity<StockSP>().HasNoKey().ToView(null);
+            modelBuilder.Entity<PedCli>().ToTable(tb => tb.HasTrigger("trgPedcli"));
             modelBuilder.Entity<Pedidos>().ToTable(tb => tb.HasTrigger("trgResumenStock"));
             modelBuilder.Entity<Programa>().ToTable(tb => tb.HasTrigger("trgPrograma"));
             modelBuilder.Entity<Compra>().ToTable(tb => tb.HasTrigger("tgrcompras"));
@@ -278,6 +281,7 @@ namespace SupplyChain
             modelBuilder.Entity<vUsuario>().HasNoKey().ToView("vUsuarios");
             modelBuilder.Entity<vOCompraReporte>().HasNoKey().ToView("vOCompraReporte");
             modelBuilder.Entity<vControlCalidadPendientes>().HasNoKey().ToView("vControlCalidadPendientes");
+            modelBuilder.Entity<vProveedorItris>().HasNoKey().ToView("vProveItris");
         }
     }
 }

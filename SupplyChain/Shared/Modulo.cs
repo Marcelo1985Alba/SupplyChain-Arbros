@@ -11,10 +11,8 @@ using System.Threading.Tasks;
 namespace SupplyChain.Shared
 {
     [Table("Modulos")]
-    public class Modulo
+    public class Modulo : EntityBase<int>
     {
-        [Key]
-        public int Id { get; set; }
         public string Descripcion { get; set; }
         public int? ParentId { get; set; }
         public bool TieneChild { get; set; }

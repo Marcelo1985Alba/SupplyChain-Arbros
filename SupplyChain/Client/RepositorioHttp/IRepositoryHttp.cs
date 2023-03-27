@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Client.RepositoryHttp
 {
+    /// <summary>
+    /// Enviar solicitudes HTTP y recibir respuestas de un servidor
+    /// </summary>
     public interface IRepositoryHttp
     {
         AuthenticationHeaderValue? Authorization { get; set; }
