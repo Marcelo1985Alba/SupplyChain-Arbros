@@ -1,6 +1,7 @@
 ﻿@page "/compras/solicitud-cotizacion"
 
 @using Syncfusion.Blazor.DropDowns
+@attribute [Authorize]
 @inherits SolicitudCotizacionBase
 
 
@@ -23,6 +24,17 @@
         
     </div>
     <div class="col-3">
+        <div class="row">
+            <div class="col-12">
+                <EmailPreview></EmailPreview>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <Solicitudes></Solicitudes>
+            </div>
+        </div>
+
     </div>
 
 </div>
