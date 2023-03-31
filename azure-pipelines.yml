@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'vs2012-win2016'
+  vmImage: 'vs2022-win2016'
 
 variables:
   buildConfiguration: 'Release'
