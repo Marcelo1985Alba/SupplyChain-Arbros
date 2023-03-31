@@ -74,7 +74,6 @@
     <EmbeddedResource Include="ReporteEtiquetaOF.rdlc" />
     <EmbeddedResource Include="ReporteEvento.rdlc" />
     <EmbeddedResource Include="Report1.rdlc" />
-    <None Include="packages.config" />
     <None Include="vDataSheet.xsc">
       <DependentUpon>vDataSheet.xsd</DependentUpon>
     </None>
