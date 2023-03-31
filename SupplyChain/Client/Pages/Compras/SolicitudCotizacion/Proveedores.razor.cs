@@ -2,6 +2,7 @@
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
+using Syncfusion.Blazor.Grids;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,15 @@ namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
         [Inject] public IRepositoryHttp Http { get; set; }
         [Parameter] public int[] IdsProveedoresConMp { get; set; } = Array.Empty<int>();
         [Parameter] public bool SoloProveedoresConEmail { get; set; } = true;
+        [Parameter] public EventCallback<vProveedorItris> OnProveedorSeleccionado { get; set; }
+        [Parameter] public EventCallback<vProveedorItris> OnProveedorDeseleccionado { get; set; }
 
+        /// <summary>
+        /// Evento que se dispara cuando cambian los proveedores de las sugerencias
+        /// </summary>
         public event Action<int[]> OnIdsProveedoresChanged;
 
+        protected SfGrid<vProveedorItris> refGrid;
         protected bool mostrarSpinnerCargando = false;
         protected List<vProveedorItris> DataProveedores = new();
         protected List<vProveedorItris> DataProveedoresFiltrado = new();
@@ -55,6 +62,11 @@ namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
             }
         }
 
+
+        /// <summary>
+        /// Aplicar cambios de proveedores a mostrar
+        /// </summary>
+        /// <param name="intArray"></param>
         public void SetIntArray(int[] intArray)
         {
             mostrarSpinnerCargando = true;
@@ -62,6 +74,22 @@ namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
             FiltrarProveedores();
             OnIdsProveedoresChanged?.Invoke(IdsProveedoresConMp);
             mostrarSpinnerCargando = false;
+        }
+
+        protected async Task RowSelected(RowSelectEventArgs<vProveedorItris> Args)
+        {
+            if (OnProveedorSeleccionado.HasDelegate)
+            {
+                await OnProveedorSeleccionado.InvokeAsync(Args.Data);
+            }
+        }
+
+        protected async Task RowDeselected(RowDeselectEventArgs<vProveedorItris> Args)
+        {
+            if (OnProveedorDeseleccionado.HasDelegate)
+            {
+                await OnProveedorDeseleccionado.InvokeAsync(Args.Data);
+            }
         }
     }
 }

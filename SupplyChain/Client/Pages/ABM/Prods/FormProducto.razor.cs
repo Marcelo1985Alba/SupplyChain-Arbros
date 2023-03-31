@@ -173,6 +173,12 @@ namespace SupplyChain.Client.Pages.ABM.Prods
             
         }
 
+        public async Task Refrescar(Producto producto)
+        {
+            Producto = producto;
+            await InvokeAsync(StateHasChanged);
+        }
+
         public async Task Hide()
         {
             Show = false;

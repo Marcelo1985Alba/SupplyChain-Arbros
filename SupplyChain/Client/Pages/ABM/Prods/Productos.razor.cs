@@ -41,6 +41,7 @@ namespace SupplyChain.Client.Pages.ABM.Prods
         protected SfSpinner refSpinner;
         protected SfGrid<Producto> refGrid;
         protected Producto productoSeleccionado = new();
+        protected FormProducto refFormProducto;
         protected bool SpinnerVisible = false;
 
         protected bool popupFormVisible = false;
@@ -92,7 +93,7 @@ namespace SupplyChain.Client.Pages.ABM.Prods
                         var response = ProductoService.Eliminar(productosABorrar);
                         if (!response.IsCompletedSuccessfully)
                         {
-                            await this.ToastObj.Show(new ToastModel
+                            await this.ToastObj.ShowAsync(new ToastModel
                             {
                                 Title = "EXITO!",
                                 Content = "los productos seleccionados fueron eliminados correctamente.",
@@ -194,6 +195,7 @@ namespace SupplyChain.Client.Pages.ABM.Prods
             {
                 productoSeleccionado = args.Data;
                 productoSeleccionado.ESNUEVO = false;
+                await refFormProducto.Refrescar(productoSeleccionado);
             }
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
@@ -210,10 +212,10 @@ namespace SupplyChain.Client.Pages.ABM.Prods
                 refGrid.PreventRender();
                 refGrid.Refresh();
 
-                state = await refGrid.GetPersistData();
+                state = await refGrid.GetPersistDataAsync();
                 await refGrid.AutoFitColumnsAsync();
-                await refGrid.RefreshColumns();
-                await refGrid.RefreshHeader();
+                await refGrid.RefreshColumnsAsync();
+                await refGrid.RefreshHeaderAsync();
             }
         }
 

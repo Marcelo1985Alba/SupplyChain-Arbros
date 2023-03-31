@@ -5,14 +5,46 @@
         <h3>Email a Enviar</h3>
     </div>
     <div class="col-6">
-        <SfToolbar></SfToolbar>
+        <SfToolbar Width="100%" >
+            <ToolbarItems>
+                <ToolbarItem>
+                    <Template>
+                        <div>
+                            <button id="template" class="e-btn e-small e-info" title="Enviar Mail">
+                                <i class="fa fa-send" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </Template>
+                </ToolbarItem>
+                <ToolbarItem>
+                    <Template>
+                        <button id="template2" class="e-btn e-small e-info">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                        </button>
+                    </Template>
+                </ToolbarItem>
+            </ToolbarItems>
+        </SfToolbar>
     </div>
 </div>
 
 <div class="row">
-
+    <div class="col-12">
+        <h4>Asunto</h4>
+    </div>
+    <div class="col-12">
+        <SfTextBox ShowClearButton="true"></SfTextBox>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <h4>Mensaje del Email:</h4>
+        <SfTextBox CssClass="e-custom-height" ShowClearButton="true" Multiline="true"></SfTextBox>
+    </div>
 </div>
 
-@code {
-
-}
+<style>
+    .e-custom-height {
+        height: 100px;
+    }
+</style>

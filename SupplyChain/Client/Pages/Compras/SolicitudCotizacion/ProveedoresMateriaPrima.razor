@@ -13,6 +13,8 @@
 
 
 <SfGrid TValue="vProveedorItris" Height="150px" DataSource="@DataProveedoresFiltrado">
+    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+    <GridEvents RowSelected="RowSelected" TValue="vProveedorItris" RowDeselected="RowDeselected"></GridEvents>
     <GridColumns>
         <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
         <GridColumn Field=@nameof(vProveedorItris.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="100px"></GridColumn>

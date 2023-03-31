@@ -10,20 +10,23 @@
     <div class="col-3">
         <SugerenciasCompras OnItemsSeleccionados="OnRecibirItemsSeleccionados"></SugerenciasCompras>
     </div>
-    <div class="col-6">
+    <div class="col-5">
         <div class="row">
             <div class="col-12">
-                <ProveedoresMateriaPrima @ref="refProveedoresMateriaPrima" SoloProveedoresConEmail="true" FiltroIdsProveedor="@idsProveedores"></ProveedoresMateriaPrima>
+                <ProveedoresMateriaPrima @ref="refProveedoresMateriaPrima" SoloProveedoresConEmail="true"
+                                         OnProveedorSeleccionado="OnProveedorSeleccionado" OnProveedorDeseleccionado="OnProveedorDeseleccionado">
+                </ProveedoresMateriaPrima>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <Proveedores @ref="refProveedores" IdsProveedoresConMp="@idsProveedores"></Proveedores>
+                <Proveedores @ref="refProveedores" IdsProveedoresConMp="@idsProveedores"
+                             OnProveedorSeleccionado="OnProveedorSeleccionado" OnProveedorDeseleccionado="OnProveedorDeseleccionado"></Proveedores>
             </div>
         </div>
         
     </div>
-    <div class="col-3">
+    <div class="col-4">
         <div class="row">
             <div class="col-12">
                 <EmailPreview></EmailPreview>
@@ -31,7 +34,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <Solicitudes></Solicitudes>
+                <EmailsEnviados Data="@EmailsEnviados"></EmailsEnviados>
             </div>
         </div>
 

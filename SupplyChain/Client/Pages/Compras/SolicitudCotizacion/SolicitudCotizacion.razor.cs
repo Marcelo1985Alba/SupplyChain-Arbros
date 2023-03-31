@@ -3,7 +3,6 @@ using static SupplyChain.Client.Pages.ChatApp.ChatBase;
 using System.Collections.Generic;
 using Syncfusion.Blazor.Inputs;
 using SupplyChain.Shared.Models;
-using static System.Net.WebRequestMethods;
 using System.Threading.Tasks;
 using System;
 using SupplyChain.Client.RepositoryHttp;
@@ -24,15 +23,17 @@ namespace SupplyChain.Client.Pages.Compras
         protected ProveedoresMateriaPrima refProveedoresMateriaPrima;
         protected Proveedores refProveedores;
 
+        protected List<vProveedorItris> vProveedorItrisEnviarSolicitud = new();
+        protected List<SolCotEmail> EmailsEnviados = new();
+
         protected int[] idsProveedores = Array.Empty<int>();
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Solicitud de Cotizacion";
         }
 
-        protected async Task OnRecibirItemsSeleccionados(Compra[] sugerenciasSeleccionadas)
+        protected async Task GetProveedoresFromSugerencias(Compra[] sugerenciasSeleccionadas)
         {
-            mostrarSpinner = true;
             if (sugerenciasSeleccionadas is not null && sugerenciasSeleccionadas.Length > 0)
             {
                 List<Compra> lista = sugerenciasSeleccionadas.ToList();
@@ -47,14 +48,44 @@ namespace SupplyChain.Client.Pages.Compras
                 {
                     idsProveedores = response.Response.Select(s => s.Id).ToArray();
                     EnviarProveedoresMp();
-                } 
+                }
             }
             else
             {
                 idsProveedores = Array.Empty<int>();
                 EnviarProveedoresMp();
             }
+        }
+        protected async Task OnRecibirItemsSeleccionados(Compra[] sugerenciasSeleccionadas)
+        {
+            mostrarSpinner = true;
+            await GetProveedoresFromSugerencias(sugerenciasSeleccionadas);
+            await GetEmailsEnviadosFromSugerencias(sugerenciasSeleccionadas);
             mostrarSpinner = false;
+        }
+
+        protected async Task GetEmailsEnviadosFromSugerencias(Compra[] sugerenciasSeleccionadas)
+        {
+
+            if (sugerenciasSeleccionadas is not null && sugerenciasSeleccionadas.Length > 0)
+            {
+                List<Compra> lista = sugerenciasSeleccionadas.ToList();
+                var response = await Http.Post<List<Compra>, List<SolCotEmail>>("api/SolCotEmail/BySugerenciasCompras", lista);
+
+                if (response.Error)
+                {
+                    Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
+                }
+                else
+                {
+                    EmailsEnviados = response.Response;
+                    EnviarProveedoresMp();
+                }
+            }
+            else
+            {
+                EmailsEnviados = new();
+            }
         }
 
         protected void EnviarProveedoresMp()
@@ -63,5 +94,13 @@ namespace SupplyChain.Client.Pages.Compras
             refProveedores.SetIntArray(idsProveedores);
         }
 
+        protected void OnProveedorDeseleccionado(vProveedorItris proveedorItris)
+        {
+            vProveedorItrisEnviarSolicitud.Remove(proveedorItris);
+        }
+        protected void OnProveedorSeleccionado(vProveedorItris proveedorItris)
+        {
+            vProveedorItrisEnviarSolicitud.Add(proveedorItris);
+        }
     }
 }

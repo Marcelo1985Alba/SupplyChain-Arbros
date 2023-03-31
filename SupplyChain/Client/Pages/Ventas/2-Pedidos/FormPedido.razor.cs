@@ -301,6 +301,8 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                 }
 
                 Pedido.TC = presupuestoSelected.TC;
+                Pedido.CONDICION_PAGO = presupuestoSelected.CONDICION_PAGO;
+                Pedido.CG_COND_ENTREGA = presupuestoSelected.CG_COND_ENTREGA;
                 Pedido.BONIFIC = presupuestoSelected.BONIFIC;
                 Pedido.DIRENT = presupuestoSelected.DIRENT;
                 if (item.CANTIDAD > 1)

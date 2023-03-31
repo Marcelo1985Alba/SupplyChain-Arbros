@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
+using Syncfusion.Blazor.Grids;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
         [Inject] public IRepositoryHttp Http { get; set; }
         [Parameter] public bool SoloProveedoresConEmail { get; set; } = true;
         [Parameter] public int[] FiltroIdsProveedor { get; set; } = System.Array.Empty<int>();
+        [Parameter] public EventCallback<vProveedorItris> OnProveedorSeleccionado { get; set; }
+        [Parameter] public EventCallback<vProveedorItris> OnProveedorDeseleccionado { get; set; }
 
         protected bool mostrarSpinnerActualizando = false;
         public event Action<int[]> OnIdsProveedoresChanged;
@@ -71,6 +74,22 @@ namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
             FiltrarProveedores();
             OnIdsProveedoresChanged?.Invoke(FiltroIdsProveedor);
             mostrarSpinnerActualizando = false;
+        }
+
+        protected async Task RowSelected(RowSelectEventArgs<vProveedorItris> Args)
+        {
+            if (OnProveedorSeleccionado.HasDelegate)
+            {
+                await OnProveedorSeleccionado.InvokeAsync(Args.Data);
+            }
+        }
+
+        protected async Task RowDeselected(RowDeselectEventArgs<vProveedorItris> Args)
+        {
+            if (OnProveedorDeseleccionado.HasDelegate)
+            {
+                await OnProveedorDeseleccionado.InvokeAsync(Args.Data);
+            }
         }
     }
 }

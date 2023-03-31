@@ -148,6 +148,7 @@ namespace SupplyChain
         public DbSet<Procesos> Procesos { get; set; }
         public DbSet<vProveedorItris> vProveedoresItris { get; set; }
 
+        public DbSet<SolCotEmail> SolCotEmails { get; set; }
 
         #endregion
 

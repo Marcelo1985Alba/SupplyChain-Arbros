@@ -16,8 +16,10 @@
 </div>
 
 
-<SfGrid TValue="vProveedorItris" DataSource="@DataProveedoresFiltrado" Height="250px" EnableVirtualization="true">
+<SfGrid @ref="refGrid" TValue="vProveedorItris" DataSource="@DataProveedoresFiltrado" Height="250px" EnableVirtualization="true">
     <SfSpinner Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="mostrarSpinnerCargando"></SfSpinner>
+    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+    <GridEvents RowSelected="RowSelected" TValue="vProveedorItris" RowDeselected="RowDeselected"></GridEvents>
     <GridColumns>
         <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
         <GridColumn Field=@nameof(vProveedorItris.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
