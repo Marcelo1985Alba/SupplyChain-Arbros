@@ -10,7 +10,7 @@ namespace SupplyChain.Shared
 {
     public class SolCotEmail : EntityBase<decimal>
     {
-        [Key, Column("REGISTRO")]
+        [Key, Column("REGISTRO"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public new decimal Id { get; set; }
         public DateTime FE_SOLCOT { get; set; }
         public string USUARIO { get; set; }
@@ -28,5 +28,7 @@ namespace SupplyChain.Shared
 
         [NotMapped]
         public string Proveedor { get; set; }
+        [NotMapped]
+        public string NombreInsumo { get; set; }
     }
 }

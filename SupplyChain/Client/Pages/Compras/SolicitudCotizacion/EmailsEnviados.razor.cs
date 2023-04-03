@@ -43,7 +43,7 @@ namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
                 }
                 else
                 {
-                    return Data = response.Response;
+                    return Data = response.Response.OrderBy(s=> s.Id).ToList();
                 }
             }
             else
@@ -62,6 +62,13 @@ namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
             }
         }
 
+
+        public async Task Refrescar(List<SolCotEmail> emails)
+        {
+            Data.AddRange(emails);
+            Data = Data.OrderByDescending(s => s.Id).ToList();
+            await refGrid.Refresh();
+        }
 
 
 

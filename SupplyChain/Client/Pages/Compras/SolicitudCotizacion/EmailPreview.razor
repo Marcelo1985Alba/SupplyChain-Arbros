@@ -1,4 +1,6 @@
 ﻿@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.RichTextEditor
+@inherits EmailPreviewBase
 
 <div class="row">
     <div class="col-6">
@@ -10,7 +12,7 @@
                 <ToolbarItem>
                     <Template>
                         <div>
-                            <button id="template" class="e-btn e-small e-info" title="Enviar Mail">
+                            <button id="template" class="e-btn e-small e-info" title="Enviar Mail" @onclick="EnviarMail">
                                 <i class="fa fa-send" aria-hidden="true"></i>
                             </button>
                         </div>
@@ -18,7 +20,14 @@
                 </ToolbarItem>
                 <ToolbarItem>
                     <Template>
-                        <button id="template2" class="e-btn e-small e-info">
+                        <button id="preview" class="e-btn e-small e-info" @onclick="VistaPreviaEmail">
+                            <i class="fa fa-window-restore" aria-hidden="true"></i>
+                        </button>
+                    </Template>
+                </ToolbarItem>
+                <ToolbarItem>
+                    <Template>
+                        <button id="template2" class="e-btn e-small e-info" >
                             <i class="fa fa-cog" aria-hidden="true"></i>
                         </button>
                     </Template>
@@ -33,18 +42,88 @@
         <h4>Asunto</h4>
     </div>
     <div class="col-12">
-        <SfTextBox ShowClearButton="true"></SfTextBox>
+        <SfTextBox @bind-Value="@asunto" ShowClearButton="true" Placeholder="Ingresar Asunto..."></SfTextBox>
     </div>
 </div>
 <div class="row">
     <div class="col-12">
         <h4>Mensaje del Email:</h4>
-        <SfTextBox CssClass="e-custom-height" ShowClearButton="true" Multiline="true"></SfTextBox>
+        <SfTextBox CssClass="e-custom-height" @bind-Value="@mensaje" ShowClearButton="true" Multiline="true"></SfTextBox>
     </div>
 </div>
 
+<SfDialog Width="1000px" Target="#solicitudCotizacion-main" AllowDragging="true" IsModal="true" CloseOnEscape="true" EnableResize="true"
+          ShowCloseIcon="true" @bind-Visible="@dialogVisible" Height="600px">
+    <DialogTemplates>
+        <Header>
+            Vista Previa de Mail
+        </Header>
+        <Content>
+            <SfTab>
+                <TabItems>
+                    @foreach (SolCotEmail mailProveedor in EmailsEnviar.GroupBy(e=> e.CG_PROVE).Select(s=> s.FirstOrDefault()).ToList())
+                    {
+                        <TabItem>
+                            <ChildContent>
+                                <TabHeader Text="@mailProveedor.Proveedor"></TabHeader>
+                            </ChildContent>
+                            <ContentTemplate>
+                                <div>
+                                    <div class="input-container">
+                                        <div class="form-group">
+                                            <label for="to">To:</label>
+                                            <div class="control">
+                                                <SfTextBox Readonly="true" id="to" @bind-Value="@mailProveedor.EMAIL"></SfTextBox>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="subject">Subject:</label>
+                                            <div class="control">
+                                                <SfTextBox Readonly="true" id="subject" @bind-Value="@mailProveedor.ASUNTO_EMAIL"></SfTextBox>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="editor">
+                                        @*<SfRichTextEditor Readonly="true" @ref="@richTextEditorRef" @bind-Value="@mailProveedor.MENSAJE_EMAIL" ></SfRichTextEditor>*@
+                                        <SfTextBox CssClass="e-custom-height" @bind-Value="@mailProveedor.MENSAJE_EMAIL" ShowClearButton="true" Multiline="true" Readonly="true"></SfTextBox>
+                                    </div>
+
+                                    @*<div class="preview">
+                                        <h2>@asunto</h2>
+                                        <p><strong>To:</strong> @mailProveedor.EMAIL</p>
+                                        @((MarkupString)mailProveedor.MENSAJE_EMAIL)
+                                    </div>*@
+                                </div>
+                            </ContentTemplate>
+                        </TabItem>
+                    }
+                </TabItems>
+            </SfTab>
+            
+            
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
+
 <style>
     .e-custom-height {
-        height: 100px;
+        height: 150px;
+    }
+
+    .editor {
+        width: 100%;
+        float: left;
+        padding-right: 20px;
+    }
+
+    .preview {
+        width: 50%;
+        float: left;
+        padding-left: 20px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #333;
     }
 </style>

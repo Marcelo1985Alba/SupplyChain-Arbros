@@ -9,10 +9,13 @@
             <ListBoxEvents TValue="Compra[]" TItem="Compra" ValueChange="SelectedChange"></ListBoxEvents>
             <ListBoxTemplates TItem="Compra">
                 <ItemTemplate>
+                    @{
+                        var compra = context as Compra;
+                    }
                     <div class="list-wrapper">
                         <div class="row">
                             <div class="col-6">
-                                <span class="text">@((context as Compra).CG_MAT.Trim())</span>
+                                <span class="text">@compra.CG_MAT.Trim()</span>
                             </div>
                             <div class="col-6">
                                 <span class="text">Entrega: @((context as Compra).FE_PREV.Value.ToString("dd/MM/yyyy"))</span>
@@ -26,13 +29,16 @@
                         </div>
                         <div class="row justify-content-start">
                             <div class="col-auto p-0">
-                                <span class="text">@((context as Compra).SOLICITADO) </span>
+                            @{
+                                var total = Math.Round(compra.SOLICITADO.Value - compra.NECESARIO.Value);
+                            }
+                            <span class="text">@(total) </span>
                             </div>
                             <div class="col-auto p-0 m-0">
-                                <span class="text"> (@((context as Compra).UNID)) </span>
+                                <span class="text"> (@(compra.UNID)) </span>
                             </div>
                             <div class="col-auto p-0 m-0">
-                                <span class="text">/ @((context as Compra).AUTORIZADO) </span>
+                                <span class="text">/ @(compra.AUTORIZADO) </span>
                             </div>
                             <div class="col-auto p-0 m-0">
                                 <span class="text"> (@((context as Compra).UNID1)) </span>

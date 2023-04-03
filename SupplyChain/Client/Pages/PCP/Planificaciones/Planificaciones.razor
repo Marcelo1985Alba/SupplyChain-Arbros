@@ -549,6 +549,7 @@
     <DialogTemplates>
         <Header><p>Emitir Orden</p><hr /></Header>
         <Content>
+            <SfSpinner Label="Guardando..." Type="SpinnerType.Fabric" @bind-Visible="spinnerEmitirOrden"></SfSpinner>
             <div class="form-row">
                 <div class="row">
                     <div class="form-group col-md-6">
@@ -563,7 +564,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-row">
+            @*<div class="form-row">
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label>Tipo:</label>
@@ -576,7 +577,7 @@
                         <SfNumericTextBox Placeholder="Fórmula" @bind-Value="cg_form" FloatLabelType="@FloatLabelType.Never"></SfNumericTextBox>
                     </div>
                 </div>
-            </div>
+            </div>*@
             <div class="form-row">
                 <div class="row">
                     <div class="form-group col-md-6">

@@ -136,6 +136,7 @@ namespace SupplyChain.Server
             services.AddTransient<ModulosUsuarioRepository>();
             services.AddTransient<ModuloRepository>();
             services.AddTransient<SolCotEmailRepository>();
+            services.AddTransient<MailRepository>();
             //services.AddTransient<CargaValoresRepository>();
             //services.AddTransient<MatproveRepository>();
             #endregion

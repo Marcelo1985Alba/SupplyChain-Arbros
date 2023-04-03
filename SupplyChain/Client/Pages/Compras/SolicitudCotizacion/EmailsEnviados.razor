@@ -7,7 +7,7 @@
 </div>
 
 
-<SfGrid @ref="refGrid" TValue="SolCotEmail" DataSource="@Data" Height="250px" EnableVirtualization="true">
+<SfGrid @ref="refGrid" TValue="SolCotEmail" DataSource="@Data" Height="200px" EnableVirtualization="true" AllowSorting="true">
     <SfSpinner Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="mostrarSpinnerCargando"></SfSpinner>
     <GridColumns>
         <GridColumn Field=@nameof(SolCotEmail.Id) HeaderText="N° Solic" TextAlign="TextAlign.Left" Width="100px" Format="N0"></GridColumn>

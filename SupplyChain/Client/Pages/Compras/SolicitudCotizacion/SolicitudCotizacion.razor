@@ -5,7 +5,7 @@
 @inherits SolicitudCotizacionBase
 
 
-<div class="row">
+<div id="solicitudCotizacion-main" class="row">
     <SfSpinner Label="Cargando..." @bind-Visible="@mostrarSpinner" Type="SpinnerType.Fabric"></SfSpinner>
     <div class="col-3">
         <SugerenciasCompras OnItemsSeleccionados="OnRecibirItemsSeleccionados"></SugerenciasCompras>
@@ -29,12 +29,12 @@
     <div class="col-4">
         <div class="row">
             <div class="col-12">
-                <EmailPreview></EmailPreview>
+                <EmailPreview EmailsEnviar="@EmailsEnviar" OnMailEnviadosCorrectamente="MailsEnviadosCorrectamente"></EmailPreview>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <EmailsEnviados Data="@EmailsEnviados"></EmailsEnviados>
+                <EmailsEnviados @ref="refEmailsEnviados" Data="@EmailsEnviados"></EmailsEnviados>
             </div>
         </div>
 

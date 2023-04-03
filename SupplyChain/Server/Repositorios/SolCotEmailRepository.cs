@@ -11,9 +11,31 @@ namespace SupplyChain.Server.Repositorios
 {
     public class SolCotEmailRepository : Repository<SolCotEmail, decimal>
     {
-        public SolCotEmailRepository(AppDbContext appDb) : base(appDb)
-        {
+        private readonly MailRepository _mailRepository;
 
+        public SolCotEmailRepository(AppDbContext appDb, MailRepository mailRepository) : base(appDb)
+        {
+            _mailRepository = mailRepository;
+        }
+
+        internal async Task<List<SolCotEmail>> EnviarMail(List<SolCotEmail> mails)
+        {
+            try
+            {
+                await Db.AddRangeAsync(mails);
+                await Db.SaveChangesAsync();
+
+                foreach (var item in mails.GroupBy(m=> m.CG_PROVE).Select(s=> s.FirstOrDefault()).ToList())
+                {
+                    await _mailRepository.EnviarCorreo(item.EMAIL, item.ASUNTO_EMAIL, item.MENSAJE_EMAIL);
+                }
+
+                return mails;
+            }
+            catch (Exception ex)
+            {
+                return mails;
+            }
         }
 
         internal async Task<List<SolCotEmail>> GetWithNameProveBySugerenacias(List<Compra> sugerencias)

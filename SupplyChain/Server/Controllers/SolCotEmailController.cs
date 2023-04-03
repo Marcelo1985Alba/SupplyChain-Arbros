@@ -46,5 +46,24 @@ namespace SupplyChain.Server.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [HttpPost("EnviarMail")]
+        public async Task<ActionResult<IEnumerable<SolCotEmail>>> EnviarMail(List<SolCotEmail> mails)
+        {
+            try
+            {
+                foreach (SolCotEmail mail in mails)
+                {
+                    mail.USUARIO = HttpContext.User.Identity.Name;
+                }
+
+                await _solCotEmailRepository.EnviarMail(mails);
+                return mails;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
     }
 }
