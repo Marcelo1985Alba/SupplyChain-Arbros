@@ -428,19 +428,19 @@
                   <Width>0.82302in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.87385in</Width>
+                  <Width>0.42905in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.3369in</Width>
+                  <Width>2.92229in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.77706in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.59455in</Width>
+                  <Width>0.59455in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.85in</Width>
+                  <Width>0.70833in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.55447in</Width>
@@ -610,7 +610,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Cant.</Value>
+                                  <Value>Cant.C</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -891,7 +891,7 @@
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
-                                    <Format>dd/MM/yyyy</Format>
+                                    <Format>ddMMyyyy</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1101,10 +1101,9 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet1</DataSetName>
-            <Top>0.04444in</Top>
             <Left>0.15586in</Left>
             <Height>0.42777in</Height>
-            <Width>7.70748in</Width>
+            <Width>7.7064in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1191,7 +1190,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
       <Width>7.95054in</Width>
       <Page>
         <PageHeader>
-          <Height>3.63in</Height>
+          <Height>3.53in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1331,7 +1330,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
               <rd:DefaultName>CLIENTE</rd:DefaultName>
               <Top>2.27444in</Top>
               <Left>0.15586in</Left>
-              <Height>1.25972in</Height>
+              <Height>1.00139in</Height>
               <Width>3.81083in</Width>
               <ZIndex>1</ZIndex>
               <Style>
@@ -1592,7 +1591,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
               <rd:DefaultName>Textbox8</rd:DefaultName>
               <Top>2.30222in</Top>
               <Left>4.17167in</Left>
-              <Height>1.23194in</Height>
+              <Height>0.97361in</Height>
               <Width>3.69131in</Width>
               <ZIndex>7</ZIndex>
               <Style>
@@ -1621,7 +1620,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
               </Style>
             </Image>
             <Line Name="Line2">
-              <Top>3.58833in</Top>
+              <Top>3.43in</Top>
               <Left>0.15586in</Left>
               <Height>0in</Height>
               <Width>7.70748in</Width>
