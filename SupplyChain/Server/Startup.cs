@@ -133,6 +133,10 @@ namespace SupplyChain.Server
             services.AddTransient<AspAmbRepository>();
             services.AddTransient<ProcalMPRepository>();
             services.AddTransient<ProcesoRepository>();
+            services.AddTransient<ModulosUsuarioRepository>();
+            services.AddTransient<ModuloRepository>();
+            services.AddTransient<SolCotEmailRepository>();
+            services.AddTransient<MailRepository>();
             //services.AddTransient<CargaValoresRepository>();
             //services.AddTransient<MatproveRepository>();
             #endregion
@@ -170,11 +174,12 @@ namespace SupplyChain.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseResponseCompression();
+            
             if (env.IsDevelopment() || env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
+                //app.UseResponseCompression();
             }
             else
             {

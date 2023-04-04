@@ -1,0 +1,7 @@
+{
+  "ServidorSmtp": "smtp4.redynet.com.ar",
+  "Puerto": "2025",
+  "RequiereAutenticacion": false,
+  "NombreUsuario": "compras@aerre.com.ar",
+  "Contraseña": "Compras2341"
+}

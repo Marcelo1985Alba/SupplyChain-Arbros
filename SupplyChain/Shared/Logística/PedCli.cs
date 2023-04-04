@@ -87,5 +87,8 @@ namespace SupplyChain
                 };
             }
         }
+
+        [NotMapped]
+        public int SolicitudId { get; set; } = new();
     }
 }

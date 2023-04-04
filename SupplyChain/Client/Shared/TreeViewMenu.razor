@@ -2,6 +2,7 @@
 @using Syncfusion.Blazor.Data
 @using Syncfusion.Blazor
 @using SupplyChain.Shared
+@using System.Security.Claims;
 @inject HttpClient Http
 
 @if (!IsAdmin)
@@ -50,8 +51,20 @@ else
     {
         // To get the last item index from the db
 
-        await GetMenu();
+        await GetMenuNew();
 
+    }
+
+    protected async Task GetMenuNew()
+    {
+        authState = await authenticationState;
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            var userId = authState.User.Claims.Where(i => i.Type == ClaimTypes.NameIdentifier).FirstOrDefault();
+
+            dbMenu = await Http.GetFromJsonAsync<List<Modulo>>($"api/ModulosUsuario/GetModulosFromUserId/{userId.Value}");
+        }
+        
     }
     protected async Task GetMenu()
     {

@@ -301,10 +301,13 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                 }
 
                 Pedido.TC = presupuestoSelected.TC;
+                Pedido.CONDICION_PAGO = presupuestoSelected.CONDICION_PAGO;
+                Pedido.CG_COND_ENTREGA = presupuestoSelected.CG_COND_ENTREGA;
                 Pedido.BONIFIC = presupuestoSelected.BONIFIC;
                 Pedido.DIRENT = presupuestoSelected.DIRENT;
                 if (item.CANTIDAD > 1)
                 {
+                    //genera un pedido por cantidad
                     for (int i = 0; i < item.CANTIDAD; i++)
                     {
 
@@ -331,7 +334,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                             IMP_DESCUENTO = item.IMP_DESCUENTO,
                             TOTAL = item.TOTAL,
                             LOTE = item.Solicitud == null ? string.Empty : item.Solicitud?.DescripcionTag,
-                            CAMPOCOM1 = item.Solicitud == null ? string.Empty : item.Solicitud?.PresionApertura ,
+                            CAMPOCOM1 = item.Solicitud == null ? string.Empty : item.Solicitud?.PresionApertura,
                             CAMPOCOM3 = item.Solicitud == null ? string.Empty : item.Solicitud?.DescripcionFluido,
                             CAMPOCOM5 = item.Solicitud == null ? string.Empty : item.Solicitud?.ContrapresionVariable,
                             CAMPOCOM6 = item.Solicitud == null ? string.Empty : item.Solicitud?.TemperaturaDescargaT,
@@ -340,7 +343,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                             OBSERITEM = item.OBSERITEM,
                             ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA),
                             ESTADO = SupplyChain.Shared.Enum.EstadoItem.Agregado,
-
+                            SolicitudId = item.SOLICITUDID
                         };
                         Pedido.Items.Add(pedcli);
                     }
@@ -379,7 +382,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                         OBSERITEM = item.OBSERITEM,
                         ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA),
                         ESTADO = SupplyChain.Shared.Enum.EstadoItem.Agregado,
-
+                        SolicitudId = item.SOLICITUDID
                     };
                     Pedido.Items.Add(pedcli);
                 }

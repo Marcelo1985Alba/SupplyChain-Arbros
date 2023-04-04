@@ -524,7 +524,7 @@ namespace SupplyChain.Client.Pages.Preparacion
             }
             if (args.Item.Id == "Sugerencia")
             {
-                await cargasugerencia();
+                await Cargasugerencia();
             }
             if (args.Item.Id == "Eliminar")
             {
@@ -578,7 +578,7 @@ namespace SupplyChain.Client.Pages.Preparacion
             //datapreparacion = await Http.GetFromJsonAsync<List<Compra>>("api/Compras/GetPreparacion/");
             //RefrescaLista();
         }
-        public async Task cargasugerencia()
+        public async Task Cargasugerencia()
         {
             try
             {

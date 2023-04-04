@@ -599,7 +599,7 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         private async Task MostrarMensajeToastSuccess()
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = $"Vale {StockEncabezado.VALE} Guardado Correctamente.",

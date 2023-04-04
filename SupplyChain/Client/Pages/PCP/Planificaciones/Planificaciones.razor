@@ -15,7 +15,6 @@
 @using System.Linq
 @using SupplyChain.Client.Pages.Inventarios
 
-@inject IJSRuntime JsRuntime
 @using SupplyChain
 @using System.Net.Http.Json
 @inject NavigationManager NavManager
@@ -501,6 +500,7 @@
 @*DIALOG PARA EMITIR ORDEN DE FABRICACION DE UN PRODUCTO*@
 <SfDialog Width="500px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible4">
     <DialogTemplates>
+        <Header><p>Emitir Orden</p><hr /></Header>
         <Content>
             <div class="form-row">
                 <div class="row">
@@ -523,6 +523,7 @@
 
 <SfDialog Width="1000px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible5">
     <DialogTemplates>
+        <Header><p>Lista de Productos</p><hr /></Header>
         <Content>
             <SfGrid @ref="Grid5" DataSource="@Busquedalist">
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
@@ -544,26 +545,54 @@
     </DialogTemplates>
 </SfDialog>
 
-<SfDialog Width="800px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible6">
+<SfDialog Width="500px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible6">
     <DialogTemplates>
+        <Header><p>Emitir Orden</p><hr /></Header>
         <Content>
+            <SfSpinner Label="Guardando..." Type="SpinnerType.Fabric" @bind-Visible="spinnerEmitirOrden"></SfSpinner>
             <div class="form-row">
                 <div class="row">
                     <div class="form-group col-md-6">
+                        <label>Código:</label>
+                        <br />
                         <SfTextBox Placeholder="Código de Producto" @bind-Value="CgString" Enabled="false" FloatLabelType="@FloatLabelType.Never"></SfTextBox>
                     </div>
                     <div class="form-group col-md-6">
+                        <label>Descripción:</label>
+                        <br />
                         <SfTextBox Placeholder="Descripción de Producto" @bind-Value="DesString" Enabled="false" FloatLabelType="@FloatLabelType.Never"></SfTextBox>
                     </div>
                 </div>
+            </div>
+            @*<div class="form-row">
                 <div class="row">
                     <div class="form-group col-md-6">
+                        <label>Tipo:</label>
+                        <br />
                         <SfTextBox Placeholder="Tipo" @bind-Value="Tipo" FloatLabelType="@FloatLabelType.Never"></SfTextBox>
                     </div>
                     <div class="form-group col-md-6">
-                        <SfTextBox Placeholder="Descripción de Producto" @bind-Value="DesString" FloatLabelType="@FloatLabelType.Never"></SfTextBox>
+                        <label>Fórmula:</label>
+                        <br />
+                        <SfNumericTextBox Placeholder="Fórmula" @bind-Value="cg_form" FloatLabelType="@FloatLabelType.Never"></SfNumericTextBox>
                     </div>
                 </div>
+            </div>*@
+            <div class="form-row">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>Cantidad:</label>
+                        <br />
+                        <SfNumericTextBox Placeholder="Cantidad" @bind-Value="cantEmitir" FloatLabelType="@FloatLabelType.Never"></SfNumericTextBox>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Fecha:</label>
+                        <br />
+                        <SfDatePicker Placeholder="Fecha" @bind-Value="fe_Entrega" FloatLabelType="@FloatLabelType.Never"></SfDatePicker>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
                 <div class="row">
                     <div class="col-sm-3 my-1">
                         <SfButton OnClick="@((e)=> EmitirOrden())" IconCss="fa fa-search" CssClass="btn btn-sm btn-outline-primary" IsPrimary="false">Emitir Orden</SfButton>

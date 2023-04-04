@@ -69,5 +69,7 @@ namespace SupplyChain
         public string OBSERV { get; set; } = "";
         public string OBSERVMANT { get; set; } = "";
         public string CATALOGO { get; set; } = "";
+        public string APRETADA_A { get; set; } = "";
+        public string POSICIONANILLO_B { get; set; } = "";
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Microsoft.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
+using System.Globalization;
+using System.Collections;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -240,21 +243,78 @@ namespace SupplyChain.Server.Controllers
         }
 
 
-        // GET: api/EmitirOrden/{tipo}/{cg_Art}/{cantemitir}/{fe_entrega}/{cg_form}/{cg_estadoCarga}/{semOrigen}/{pedido}
-        [HttpPost("EmitirOrden/{tipo}/{cg_Art}/{cantemitir}/{fe_entrega}/{cg_form}/{cg_estadoCarga}/{semOrigen}/{pedido}")]
-        public async Task<ActionResult<List<Planificacion>>> EmitirOrden(string tipo, string CG_ART, decimal cantEmitir, DateTime fe_Entrega, int cg_form, int cg_EstadoCarga, int semOrigen, int pedido)
+        // GET: api/Planificacion/EmitirOrden/{tipo}/{cg_Art}/{cantemitir}/{fe_entrega}/{cg_form}/{cg_estadoCarga}/{semOrigen}/{pedido}
+        [HttpGet("EmitirOrden/{tipo}/{cgArt}/{cantEmitir}/{feEntrega}/{cgform}/{cgestadoCarga}/{semOrigen}/{pedido}")]
+        public async Task<ActionResult<List<Planificacion>>> EmitirOrden(string tipo, string cgArt, decimal cantEmitir, 
+            DateTimeOffset feEntrega, int cgform, int cgEstadoCarga, int semOrigen, int pedido)
         {
-            var query = "";
+            if (tipo.ToLower() == "vacio")
+            {
+                tipo = string.Empty;
+            }
             try
             {
-                query = "EXEC NET_PCP_EmitirOrdenes '" + tipo + "', '" + CG_ART + "', '" + cantEmitir + "', '" + fe_Entrega + "', '" + cg_form + "', '" + cg_EstadoCarga + "', '" + semOrigen + "', '" + pedido + "', 'USER'";
-                await _context.Database.ExecuteSqlRawAsync(query);
+
+
+                if (cgform == 0)
+                {
+                    cgform = 1;
+                }
+
+                string formatoFechaCorta = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
+                var usuario = HttpContext.User.Identity.Name;
+                var fechaEntrega = feEntrega.ToLocalTime().Date.ToString("yyyy-MM-dd");
+
+                var query = "EXEC NET_PCP_EmitirOrden @tipo, @cgArt, @cantEmitir, @fechaEntrega, @cgform, @cgEstadoCarga, @semOrigen, @pedido, @usuario, @idGenerado OUTPUT";
+                var tipoParam = new SqlParameter("@tipo", SqlDbType.VarChar) { Value = tipo ?? (object)DBNull.Value };
+                var cgArtParam = new SqlParameter("@cgArt", SqlDbType.VarChar) { Value = cgArt ?? (object)DBNull.Value };
+                var cantEmitirParam = new SqlParameter("@cantEmitir", SqlDbType.Decimal) { Value = cantEmitir };
+                var fechaEntregaParam = new SqlParameter("@fechaEntrega", SqlDbType.Date) { Value = fechaEntrega };
+                var cgformParam = new SqlParameter("@cgform", SqlDbType.Int) { Value = cgform };
+                var cgEstadoCargaParam = new SqlParameter("@cgEstadoCarga", SqlDbType.Int) { Value = cgEstadoCarga };
+                var semOrigenParam = new SqlParameter("@semOrigen", SqlDbType.Int) { Value = semOrigen };
+                var pedidoParam = new SqlParameter("@pedido", SqlDbType.Int) { Value = pedido };
+                var usuarioParam = new SqlParameter("@usuario", SqlDbType.VarChar) { Value = usuario };
+                var idGeneradoParam = new SqlParameter("@IdGenerado", SqlDbType.Int) { Direction = ParameterDirection.Output };
+
+                var parameters = new List<SqlParameter>
+                    {
+                        tipoParam,
+                        cgArtParam,
+                        cantEmitirParam,
+                        fechaEntregaParam,
+                        cgformParam,
+                        cgEstadoCargaParam,
+                        semOrigenParam,
+                        pedidoParam,
+                        usuarioParam,
+                        idGeneradoParam
+                    };
+
+                await _context.Database.ExecuteSqlRawAsync(query, parameters);
+
+                //OBTENER LA ORDEN MADRE GENERADA 
+                string xSQLCommandString = "SELECT A.SEM_ORIGEN, A.SEM_ABAST_PURO, A.SEM_ABAST, B.CG_ORDEN, A.CG_ORDF" +
+                ", (CASE WHEN B.CG_ORDEN=1 THEN 'Producto' ELSE (CASE WHEN B.CG_ORDEN=2 " +
+                "THEN 'Semi-Elaborado de Proceso' ELSE (CASE WHEN B.CG_ORDEN=3 THEN 'Semi-Elaborado' " +
+                "ELSE (CASE WHEN B.CG_ORDEN=4 THEN 'Materia Prima' ELSE (CASE WHEN B.CG_ORDEN=10 THEN 'Insumo No Productivo / Articulo de Reventa' ELSE (CASE WHEN B.CG_ORDEN=11 THEN 'Herramental e Insumos Inventariables' ELSE (CASE WHEN B.CG_ORDEN=12 THEN 'Repuestos' ELSE (CASE WHEN B.CG_ORDEN=13 THEN 'Servicios' ELSE '' END) END) END) END) END) END) END) END) AS CLASE" +
+                ", (CASE WHEN A.CG_R='' THEN 'Fabricación' ELSE (CASE WHEN A.CG_R='R' THEN 'Reproceso' ELSE (CASE WHEN A.CG_R='T' THEN 'Retrabajo' ELSE (CASE WHEN A.CG_R='S' THEN 'Seleccion' ELSE (CASE WHEN A.CG_R='A' THEN 'Armado' ELSE '' END) END) END) END) END) AS CG_R" +
+                ", A.CG_ESTADOCARGA, A.CG_PROD, A.DES_PROD, A.CANT, A.CANTFAB, B.UNID, A.PEDIDO" +
+                ", B.UNIDSEG, A.DIASFAB, RTRIM(LTRIM(A.CG_CELDA)) AS CG_CELDA, A.CG_FORM, A.FE_ENTREGA, A.FE_EMIT, A.FE_PLAN, " +
+                "A.FE_FIRME, A.FE_CURSO, A.FE_ANUL, A.FE_CIERRE, B.UNIDEQUI * A.CANT as UNIDEQUI" +
+                $" FROM Programa A, Prod B WHERE CG_REG>=2 AND A.CG_ORDF ={idGeneradoParam.Value} AND" +
+                " (A.Cg_Ordf = A.Cg_OrdfOrig OR A.Cg_OrdfOrig = 0) AND" +
+                " A.Cg_prod = B.Cg_prod";
+
+                var xLista = await _context.Planificaciones.FromSqlRaw(xSQLCommandString).ToListAsync();
+                return xLista;
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return Ok();
+            
+            
         }
     }
 }

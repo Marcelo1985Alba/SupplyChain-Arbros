@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using System;
 using System.Collections.Generic;
@@ -31,5 +32,20 @@ namespace SupplyChain.Server.Controllers
         {
             return await _appDbContext.Proveedores.Where(p=> p.Id == id).ToListAsync();
         }
+
+        [HttpGet("GetProveedoresItris")]
+        public async Task<ActionResult<IEnumerable<vProveedorItris>>> GetProveedoresItris()
+        {
+            try
+            {
+                return await _appDbContext.vProveedoresItris.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
     }
 }

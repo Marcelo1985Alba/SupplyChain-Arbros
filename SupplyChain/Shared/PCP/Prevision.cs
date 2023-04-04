@@ -14,5 +14,6 @@ namespace SupplyChain.Shared.Models
         public string UNID { get; set; } = "";
         public decimal CANTPED { get; set; } = 0;
         public DateTime FE_PED { get; set; }
+        public DateTime? ENTRPREV { get; set; }
     }
 }

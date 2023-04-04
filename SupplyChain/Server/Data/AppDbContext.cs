@@ -96,6 +96,7 @@ namespace SupplyChain
         public DbSet<ResumenStock> ResumenStock { get; set; }
         public DbSet<vResumenStock> vResumenStock { get; set; }
         public DbSet<Modulo> Modulos { get; set; }
+        public DbSet<ModulosUsuario> ModulosUsuarios { get; set; }
         public virtual DbSet<Genera> Genera { get; set; }
         public virtual DbSet<Planificacion> Planificaciones { get; set; }
 
@@ -147,6 +148,9 @@ namespace SupplyChain
         public DbSet<vControlCalidadPendientes> vcontrolCalidadPendientes { get; set; }
         public DbSet<Procesos> Procesos { get; set; }
      
+        public DbSet<vProveedorItris> vProveedoresItris { get; set; }
+
+        public DbSet<SolCotEmail> SolCotEmails { get; set; }
 
         #endregion
 
@@ -189,6 +193,9 @@ namespace SupplyChain
 
             });
 
+
+        
+
             modelBuilder.Entity<PresupuestoDetalle>(entity=> {
                 entity.HasOne(d => d.Presupuesto)
                 .WithMany(p => p.Items)
@@ -214,6 +221,7 @@ namespace SupplyChain
                 eb.HasNoKey();
                 eb.ToView("vPendientesFabricar");
             });
+
 
             modelBuilder.Entity<vResumenStock>(
             eb =>
@@ -241,8 +249,10 @@ namespace SupplyChain
             modelBuilder.Entity<Procun>().HasNoKey().ToView(null);
             modelBuilder.Entity<EstadVenta>().HasNoKey().ToView(null);
             modelBuilder.Entity<StockSP>().HasNoKey().ToView(null);
+            modelBuilder.Entity<PedCli>().ToTable(tb => tb.HasTrigger("trgPedcli"));
             modelBuilder.Entity<Pedidos>().ToTable(tb => tb.HasTrigger("trgResumenStock"));
             modelBuilder.Entity<Programa>().ToTable(tb => tb.HasTrigger("trgPrograma"));
+            modelBuilder.Entity<Compra>().ToTable(tb => tb.HasTrigger("tgrcompras"));
             CreateVistasSQL(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
@@ -277,6 +287,7 @@ namespace SupplyChain
             modelBuilder.Entity<vControlCalidadPendientes>().HasNoKey().ToView("vControlCalidadPendientes");
             modelBuilder.Entity<vESTADOS_COMPRAS>().HasNoKey().ToView("vESTADOS_COMPRAS");
 
+            modelBuilder.Entity<vProveedorItris>().HasNoKey().ToView("vProveItris");
         }
     }
 }

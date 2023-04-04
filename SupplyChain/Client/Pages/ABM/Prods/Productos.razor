@@ -80,7 +80,8 @@
 
     @if (popupFormVisible)
 	{
-		 <FormProducto Producto="productoSeleccionado" Show="popupFormVisible" 
-                       OnCerrar="OnCerraDialog" OnGuardar="@(async(p)=>await Guardar(p))"></FormProducto>
+		 
 	}
+    <FormProducto @ref="refFormProducto" Producto="productoSeleccionado" Show="popupFormVisible"
+                  OnCerrar="OnCerraDialog" OnGuardar="@(async(p)=>await Guardar(p))"></FormProducto>
 </div>

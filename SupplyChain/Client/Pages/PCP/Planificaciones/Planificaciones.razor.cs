@@ -63,6 +63,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         protected string DesString = "";
         protected string Tipo = "";
         protected int cg_form = 0;
+
         protected decimal cantEmitir = 0;
         protected DateTime fe_Entrega = DateTime.Today;
 
@@ -99,6 +100,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         protected string state_of_cerradas_anuladas;
         protected Planificacion PlanificacionSeleccionadaOFCerrada;
         protected bool SpinnerVisible = false;
+        protected bool spinnerEmitirOrden = false;
         protected override async Task OnInitializedAsync()
         {
 
@@ -258,14 +260,14 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
                 }
 
 
-                await JsRuntime.InvokeAsync<object>("open", $"inventario/{tipoo}/true/{OrdenFabricacionSelected}", "_blank");
+                await JsRuntime.InvokeVoidAsync("open", $"inventario/{tipoo}/true/{OrdenFabricacionSelected}", "_blank");
                 await GridPlanificacion.Refresh();
             }
             if (args.CommandColumn.Title == "Despiece")
             {
                 listaDespiece = await Http.GetFromJsonAsync<List<DespiecePlanificacion>>($"api/Planificacion/Despiece/{args.RowData.CG_PROD.Trim()}/{args.RowData.CG_FORM}/{args.RowData.CANT}");
                 //IsVisible = true;
-                await DialogDespieceRef.Show(true);
+                await DialogDespieceRef.ShowAsync(true);
             }
             if (args.CommandColumn.Title == "Activo")
             {
@@ -277,7 +279,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         public async Task OnSelected()
         {
             HttpResponseMessage response;
-            response = await Http.PutAsJsonAsync($"api/Planificacion/PutFormula/{this.Grid3.GetSelectedRecords().Result.FirstOrDefault().CG_FORM}", Datos_paraFormula);
+            response = await Http.PutAsJsonAsync($"api/Planificacion/PutFormula/{this.Grid3.GetSelectedRecordsAsync().Result.FirstOrDefault().CG_FORM}", Datos_paraFormula);
             IsVisible2 = false;
         }
         public void OnSelected2()
@@ -286,6 +288,7 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
             DesString = this.Grid5.GetSelectedRecordsAsync().Result.FirstOrDefault().DES_PROD; // return the details of selected record
             CantidadMostrar2 = 0;
             IsVisible5 = false;
+            IsVisible6 = true;
         }
         public async Task OrdCerradas()
         {
@@ -386,22 +389,24 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
 
         protected async Task EmitirOrden()
         {
-            /*
-            CantidadMostrar2 = 100;
-            if (DesString == "")
+            spinnerEmitirOrden = true;
+            if (string.IsNullOrEmpty(Tipo))
             {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/Vacio/{CantidadMostrar2}");
+                Tipo = "Vacio";
             }
-            else if (CgString == "")
-            {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/Vacio/{DesString}/{CantidadMostrar2}");
-            }
-            else
-            {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/{DesString}/{CantidadMostrar2}");
-            }
-            IsVisible5 = true;
-            */
+
+            //var url = "api/Planificacion/EmitirOrden";
+            //url += $"?tipo={Tipo}&cgArt={CgString}&cantEmitir={cantEmitir}&feEntrega={fe_Entrega.ToString("MM-dd-yyyy")}&" +
+            //    $"cgform={cg_form}&cgestadoCarga=0&semOrigen=4&pedido=0";
+
+            var fecha = fe_Entrega.ToString("yyyy-MM-ddTHH:mm:sszzz");
+            var response = await Http.GetFromJsonAsync<List<Planificacion>>($"api/Planificacion/EmitirOrden/{Tipo}/" +
+                $"{CgString}/{cantEmitir}/{fecha}/{cg_form}/0/4/0");
+            //var response = await Http.GetFromJsonAsync<List<Planificacion>>(url);
+            spinnerEmitirOrden = false;
+            listaPlanificacion.AddRange( response );
+            IsVisible4 = false;
+            IsVisible6 = false;
         }
 
         public async Task QueryCellInfoHandler(QueryCellInfoEventArgs<Planificacion> args)

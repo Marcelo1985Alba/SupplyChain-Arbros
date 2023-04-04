@@ -178,7 +178,8 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
                 }
 
 
-                await JsRuntime.InvokeAsync<object>("open", $"inventario/{tipoo}/true/{args.RowData.CG_ORDF}", "_blank");
+                //await JsRuntime.InvokeAsync<object>("open", $"inventario/{tipoo}/true/{args.RowData.CG_ORDF}", "_blank");               
+                await JsRuntime.InvokeVoidAsync("open", $"inventario/{tipoo}/true/{args.RowData.CG_ORDF}", "_blank");
             }
         }
 

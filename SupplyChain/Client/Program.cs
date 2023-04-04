@@ -98,6 +98,7 @@ namespace SupplyChain.Client
             services.AddScoped<ProcesoService>();
            //services.AddScoped<EstadoComprasService>();
 
+            services.AddScoped<ModulosUsuarioService>();
         }
     }
 }

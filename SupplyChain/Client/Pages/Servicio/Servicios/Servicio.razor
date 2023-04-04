@@ -10,6 +10,7 @@
 @using Syncfusion.Pdf.Graphics;
 @using Syncfusion.Blazor.FileManager;
 @using SupplyChain.Client.Pages.Visor_Pdf
+@using System.Reflection;
 @using TextAlign = Syncfusion.Blazor.Grids.TextAlign
 @using SelectionType = Syncfusion.Blazor.Grids.SelectionType
 @using SupplyChain.Client.Pages.Ventas._3_Presupuestos
@@ -1204,7 +1205,7 @@
             }
             else
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "EXITO!",
                     Content = $"Servico actualizado correctamente",
@@ -1225,8 +1226,8 @@
                 servAct.SERIE = serv.SERIE;
                 servAct.IDENTIFICACION = serv.IDENTIFICACION;
                 servAct.OBSERV = serv.OBSERV;
-                await Grid.RefreshHeader();
-                await Grid.RefreshColumns();
+                await Grid.RefreshHeaderAsync();
+                await Grid.RefreshColumnsAsync();
                 Grid.Refresh();
 
                 return true;
@@ -1237,18 +1238,38 @@
         {
             var servAct = servicios.Where(s => s.Id == id).FirstOrDefault();
             //servAct.PRESUPUESTO = serv.PRESUPUESTO;
-            servAct.PEDIDO = serv.PEDIDO;
-            servAct.CLIENTE = serv.CLIENTE;
-            servAct.NSERIE = serv.NSERIE;
-            servAct.MARCA = serv.MARCA;
-            servAct.MODELO = serv.MODELO;
-            servAct.MEDIDA = serv.MEDIDA;
-            servAct.SERIE = serv.SERIE;
-            servAct.IDENTIFICACION = serv.IDENTIFICACION;
-            servAct.OBSERV = serv.OBSERV;
-            await Grid.RefreshHeader();
-            await Grid.RefreshColumns();
-            Grid.Refresh();
+            //servAct.PEDIDO = serv.PEDIDO;
+            //servAct.CLIENTE = serv.CLIENTE;
+            //servAct.NSERIE = serv.NSERIE;
+            //servAct.MARCA = serv.MARCA;
+            //servAct.MODELO = serv.MODELO;
+            //servAct.MEDIDA = serv.MEDIDA;
+            //servAct.SERIE = serv.SERIE;
+            //servAct.IDENTIFICACION = serv.IDENTIFICACION;
+            //servAct.OBSERV = serv.OBSERV;
+
+            if (servAct is not null)
+            {
+                // Actualizar el objeto en la lista
+                Type tipoServicio = typeof(Service);
+                PropertyInfo[] propiedades = tipoServicio.GetProperties();
+
+                foreach (PropertyInfo propiedad in propiedades)
+                {
+                    if (propiedad.CanWrite)
+                    {
+                        PropertyInfo propiedadActualizar = tipoServicio.GetProperty(propiedad.Name);
+                        propiedadActualizar.SetValue(servAct, propiedad.GetValue(servicio));
+                    }
+                }
+
+                Grid.PreventRender();
+                await Grid.RefreshHeaderAsync();
+                await Grid.RefreshColumnsAsync();
+                Grid.Refresh();
+            }
+
+            
 
         }
 
