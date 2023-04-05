@@ -19,9 +19,9 @@ namespace SupplyChain
     public class ProyectosController : ControllerBase
     {
         private readonly ProyectosGBPIRepository _proyectosRepository;
-        private readonly GanttContext ganttContext;
+        private readonly AppDbContext ganttContext;
 
-        public ProyectosController(ProyectosGBPIRepository proyectosRepository, GanttContext ganttContext)
+        public ProyectosController(ProyectosGBPIRepository proyectosRepository, AppDbContext ganttContext)
         {
             this._proyectosRepository = proyectosRepository;
             this.ganttContext = ganttContext;

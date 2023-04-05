@@ -1,13 +1,13 @@
 ﻿@using Newtonsoft.Json
+@using SupplyChain.Shared.Context;
 @using Syncfusion.Blazor.Gantt
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Data
 @using Syncfusion.Blazor
-@using SupplyChain.Shared.Context
 @inject HttpClient http
 
 
-@inherits DataAdaptor<GanttContext>
+@inherits DataAdaptor<GanttDataDetails>
 
 @code {
     // Performs data Read operation

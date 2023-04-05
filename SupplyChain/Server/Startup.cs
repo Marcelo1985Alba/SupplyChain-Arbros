@@ -55,11 +55,11 @@ namespace SupplyChain.Server
             });
 
             //especial para el gantt
-            services.AddDbContext<GanttContext>(options =>
-            {
-                options.EnableSensitiveDataLogging();
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
+            //services.AddDbContext<GanttContext>(options =>
+            //{
+            //    options.EnableSensitiveDataLogging();
+            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            //});
             
             services.AddCors(op=> 
             {
