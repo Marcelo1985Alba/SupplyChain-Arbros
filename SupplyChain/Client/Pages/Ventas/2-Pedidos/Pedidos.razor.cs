@@ -167,6 +167,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                 PedidoSeleccionado.BONIFIC = args.Data.BONIFIC;
                 PedidoSeleccionado.CG_TRANS = args.Data.CG_TRANS;
                 PedidoSeleccionado.CG_COND_ENTREGA = args.Data.CG_COND_ENTREGA;
+                PedidoSeleccionado.CONDVEN = args.Data.CONDVEN;
                 PedidoSeleccionado.Items.Add(args.Data);
                 //TODO preguntar si abre por pedido o numoci
                 await refConfirmacionDialog.ShowAsync();
