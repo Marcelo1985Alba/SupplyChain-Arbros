@@ -169,7 +169,7 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>ArbrosPedDataSet6</rd:DataSetName>
-        <rd:SchemaPath>D:\Clientes\Arbros\Marcelo1985Alba\SupplyChain-Arbros\SupplyChain\Server\wwwroot\Report\Pedido\ArbrosPedDataSet6.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\Users\BG\Source\Repos\Marcelo1985Alba\SupplyChain-Arbros\SupplyChain\Server\wwwroot\Report\Pedido\ArbrosPedDataSet6.xsd</rd:SchemaPath>
         <rd:TableName>vPedidoReporte</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
@@ -1869,6 +1869,32 @@ Sum(Fields!TOTAL_ITEM.Value, "DataSet1")
                     </TextRun>
                     <TextRun>
                       <Value>=Fields!DIRENT.Value</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontSize>9pt</FontSize>
+                        <FontWeight>Normal</FontWeight>
+                        <TextDecoration>None</TextDecoration>
+                        <Color>#000000</Color>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Cond.Pago </Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Arial Black</FontFamily>
+                        <FontSize>9pt</FontSize>
+                        <FontWeight>Normal</FontWeight>
+                        <TextDecoration>None</TextDecoration>
+                        <Color>#000000</Color>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Fields!CONDICION_PAGO.Value</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
                         <FontSize>9pt</FontSize>

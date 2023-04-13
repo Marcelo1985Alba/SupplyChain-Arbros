@@ -58,7 +58,7 @@ namespace SupplyChain
         public string CAMPOCOM8 { get; set; } = "";
         public string REMITO { get; set; } = "";
         public DateTime ENTRPREV { get; set; }
-
+        public string CONDVEN { get; set; } = "";
         /// <summary>
         /// Estado que sirve para determinar si el item se va a actualizar o agregar en la base dedatos
         /// </summary>

@@ -33,6 +33,7 @@ namespace SupplyChain.Shared.Logística
         public int CG_TRANS { get; set; } = 0;
         public decimal BONIFICACION_IMPORTE { get; set; } = 0;
         public decimal TOTAL { get; set; } = 0;
+        public string CONDVEN { get; set; }
         public string USUARIO { get; set; }
         [ValidateComplexType]
         public List<PedCli> Items { get; set; } = new ();
