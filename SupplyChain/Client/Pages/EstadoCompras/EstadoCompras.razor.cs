@@ -20,6 +20,7 @@ using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Grid;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
 
 namespace SupplyChain.Client.Pages.EstadoCompras
 {
@@ -127,47 +128,47 @@ namespace SupplyChain.Client.Pages.EstadoCompras
         //5.Pagada
         //6.Vencida
         //7.Cerrada
-
+           
         public void QueryCellInfoHandler(QueryCellInfoEventArgs<vESTADOS_COMPRAS> args)
         {
-            if (args.Data.ESTADOS_COMPRA == "Solicitar Cotizacion") //SOLICITAR COTIZACION
+            if (args.Data.ESTADOS_COMPRA == "Pendiente Em.Sol Cotizacion") //SOLICITAR COTIZACION
             {
-                args.Cell.AddClass(new string[] { "color-estado-compra-solicitar-cotizacion" });
+                args.Cell.AddClass(new string[] { "color-estado-compra-pendiente-emitir-solcot" });
             }
-            else if (args.Data.ESTADOS_COMPRA == "Pendiente de generar compra") //PENDIENTE A COTIZACION
+            else if (args.Data.ESTADOS_COMPRA == "Pendiente Emision OC") //PENDIENTE A COTIZACION
             {
-                args.Cell.AddClass(new string[] { "color-estado-compra-pendiente-generar-compra" });
+                args.Cell.AddClass(new string[] { "color-estado-compra-pendiente-emision-oc" });
             }
-            else if(args.Data.ESTADOS_COMPRA=="A la espera de Cotizacion")
+            else if (args.Data.ESTADOS_COMPRA == "Pendiente Ent. en Fecha")
             {
-                args.Cell.AddClass(new string[] { "color-estado-compra-a-espera-cotizacion" });
+                args.Cell.AddClass(new string[] { "color-estado-compra-pendiente-entrega-fecha" });
             }
-            else if (args.Data.ESTADOS_COMPRA == "Pendiente de entrega")
+            else if (args.Data.ESTADOS_COMPRA == "Pendiente Ent.Vencida")
             {
-                args.Cell.AddClass(new string[] { "color-estado-compra-pendiente-entrega" });
+                args.Cell.AddClass(new string[] { "color-estado-compra-pendiente-entrega-vencida" });
             }
             //else if (args.Data.ESTADOS_COMPRA == "Entrega Parcial")
             //{
             //    args.Cell.AddClass(new string[] { "color-estado-entrega-parcial" });
             //}
-            else if (args.Data.ESTADOS_COMPRA == "Pagada") //PENDIENTE DE ENTREGA
+            else if (args.Data.ESTADOS_COMPRA == "Recibida Parcial-Pendiente Pago") //PENDIENTE DE ENTREGA
             {
-                args.Cell.AddClass(new string[] { "color-estado-compra-pagada" });
+                args.Cell.AddClass(new string[] { "color-estado-compra-recibida-parcial-pendiente-pago" });
             }
-            else if (args.Data.ESTADOS_COMPRA == "Vencida") //VENCIDA
+            else if (args.Data.ESTADOS_COMPRA == "Recibida Total-Pendiente Pago") //VENCIDA
             {
-                args.Cell.AddClass(new string[] { "color-estado-compra-vencida" });
+                args.Cell.AddClass(new string[] { "color-estado-compra-recibida-total-pendiente-pago" });
             }
-            else if (args.Data.ESTADOS_COMPRA == "Cerrada")//cerrada
+            else if (args.Data.ESTADOS_COMPRA == "Pagada-Recibida")//cerrada
             {
-                args.Cell.AddClass(new string[] {"color-estado-compra-cerrada" });
+                args.Cell.AddClass(new string[] { "color-estado-compra-pagada-recibida" });
             }
-            
-            //else if (args.Data.ESTADOS_COMPRA == 7) //PENDIENTE DE PAGO
-            //{
-            //    args.Cell.AddClass(new string[] { "color-estado-compra-pendiente-pago" });
-            //}
-            //else if (args.Data.ESTADOS_COMPRA == 8) //PAGADA
+
+            else if (args.Data.ESTADOS_COMPRA == "Cerrada") //PENDIENTE DE PAGO
+            {
+                args.Cell.AddClass(new string[] { "color-estado-compra-cerrada" });
+            }
+            //else if (args.Data.ESTADOS_COMPRA == 8) //PAGADA  
             //{
             //    args.Cell.AddClass(new string[] { "color-estado-compra-pagada" });
             //}
@@ -175,7 +176,7 @@ namespace SupplyChain.Client.Pages.EstadoCompras
             //{
             //    args.Cell.AddClass(new string[] { "color-estado-compra-anulada" });
             //}
-           
+
 
         }
 
@@ -193,23 +194,21 @@ namespace SupplyChain.Client.Pages.EstadoCompras
             //9.Anulada
 
             if (args.Text == "1")
-                args.Text = "Solicitar Cotizacion";
+                args.Text = "Pendiente Em.Sol Cotizacion";
             else if (args.Text == "2")
-                args.Text = "Pendiente de generar compra";
+                args.Text = "Pendiente Emision OC";
             else if (args.Text == "3")
-                args.Text = "A la espera de Cotizacion";
+                args.Text = "Pendiente Ent. en Fecha";
             else if (args.Text == "4")
-                args.Text = "Pendiente de entrega";
-            //else if (args.Text == "5")
-            //    args.Text = "Entrega Parcial";
+                args.Text = "Pendiente Ent.Vencida";
             else if (args.Text == "5")
-                args.Text = "Pagada";
+               args.Text = "Recibida Parcial-Pendiente Pago";
             else if (args.Text == "6")
-                args.Text = "Vencida";
+                args.Text = "Recibida Total-Pendiente Pago";
             else if (args.Text == "7")
+                args.Text = "Pagada-Recibida";
+            else if (args.Text == "8")
                 args.Text = "Cerrada";
-            //else if (args.Text == "9")
-            //    args.Text = "ANULADA";
             else
                 args.Text = " ";    
 
