@@ -62,7 +62,9 @@
                         <GridColumn Field=@nameof(vESTADOS_COMPRAS.FE_PREV) HeaderText="FECHA PREVISTA" Width="150" Format="dd/MM/yyyy"></GridColumn>
                         <GridColumn Field=@nameof(vESTADOS_COMPRAS.FE_EMIT) HeaderText="FECHA EMITIDA" Width="150" Format="dd/MM/yyyy"></GridColumn>
                         <GridColumn Field=@nameof(vESTADOS_COMPRAS.FE_CIERRE) HeaderText="FECHA CIERRE" Width="150" Format="dd/MM/yyyy"></GridColumn>
-                        <GridColumn Field=@nameof(vESTADOS_COMPRAS.REMITO) HeaderText="REMITO" Width="150" ></GridColumn>
+                        <GridColumn Field=@nameof(vESTADOS_COMPRAS.REMITO) HeaderText="REMITO" Width="150"></GridColumn>
+                        <GridColumn Field=@nameof(vESTADOS_COMPRAS.MONEDA) HeaderText="MONEDA" Width="150"></GridColumn>
+                        <GridColumn Field=@nameof(vESTADOS_COMPRAS.TOT_DOL) HeaderText="PRECIO U$S" Width="150"></GridColumn>
                        
                         
                     </GridColumns>
@@ -347,31 +349,31 @@
     }
     .color-estado-compra-pendiente-emitir-solcot{
         /*background-color: #f89b9b;*/
-        color: #e3165b !important;
+        color: #15D3AE !important;
     }
 
-    .color-estado-compra-emision-oc{
+    .color-estado-compra-pendiente-emision-oc{
         color:  #0000ff !important;
     }
 
     .color-estado-compra-pendiente-entrega-fecha{
-        color: #8023A2 !important;
+        color: #5715D3 !important;
     }
 
     .color-estado-compra-pendiente-entrega-vencida{
-        color: #FA249F !important;
+        color: #AB2727 !important;
     }
 
     .color-estado-compra-recibida-parcial-pendiente-pago{
-        color: #C5D315 !important;
+        color: #6B27AB !important;
     }
 
     .color-estado-compra-recibida-total-pendiente-pago{
-        color: #77FA24 !important;
+        color: #8A0B2F !important;
     }
 
     .color-estado-compra-pagada-recibida{
-        color: #1CC90E !important;
+        color: #188A0B !important;
     }
 
     .color-estado-compra-cerrada{

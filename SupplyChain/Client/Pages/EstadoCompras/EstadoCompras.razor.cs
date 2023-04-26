@@ -21,14 +21,16 @@ using Syncfusion.Pdf.Grid;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
+using SupplyChain.Shared.Enum;
 
 namespace SupplyChain.Client.Pages.EstadoCompras
 {
     public class EstadoComprasBase : ComponentBase
     {
         [Inject] protected IRepositoryHttp Http { get; set; }
-        [Inject] protected PdfService PdfService{ get; set; }
+        [Inject] protected PdfService PdfService { get; set; }
         [Inject] protected IJSRuntime JS { get; set; }
+        //[Inject] protected EstadoComprasService EstadoComprasService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
 
         protected SfToast ToastObj;
@@ -42,14 +44,15 @@ namespace SupplyChain.Client.Pages.EstadoCompras
         {
            "Search",
              new ItemModel {Text = "Excel Export", TooltipText="Excel Export", PrefixIcon="e-excelexport", Id="Excel Export"},
-         };
+             //new ItemModel{Text="Ver Pendiente", Id="PendienteGenerarCompra"},
+        };
 
         protected const string APPNAME = "grdEstadoCompras";
         protected string state;
         public async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
         {
             await refSfGrid.SetPersistData(vistasGrillas.Layout);
-        }   
+        }
         public async Task OnReiniciarGrilla()
         {
             await refSfGrid.ResetPersistData();
@@ -102,21 +105,21 @@ namespace SupplyChain.Client.Pages.EstadoCompras
 
         protected async Task OnRowSelected(RowSelectEventArgs<vESTADOS_COMPRAS> arg)
         {
-            arg.PreventRender=true;
+            arg.PreventRender = true;
         }
         protected async Task OnRowSelectedDouble_Click(RecordDoubleClickEventArgs<vESTADOS_COMPRAS> arg)
         {
-            arg.PreventRender= true;
+            arg.PreventRender = true;
             ComprasSeleccionado = arg.RowData;
-            VisibleDialog= true;
+            VisibleDialog = true;
         }
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {
-            if(args.Item.Text=="Seleccionar Columnas")
+            if (args.Item.Text == "Seleccionar Columnas")
             {
                 await refSfGrid.OpenColumnChooser(200, 50);
             }
-            if(args.Item.Text=="Exportar grilla en Excel")
+            if (args.Item.Text == "Exportar grilla en Excel")
             {
                 await this.refSfGrid.ExcelExport();
             }
@@ -128,7 +131,7 @@ namespace SupplyChain.Client.Pages.EstadoCompras
         //5.Pagada
         //6.Vencida
         //7.Cerrada
-           
+
         public void QueryCellInfoHandler(QueryCellInfoEventArgs<vESTADOS_COMPRAS> args)
         {
             if (args.Data.ESTADOS_COMPRA == "Pendiente Em.Sol Cotizacion") //SOLICITAR COTIZACION
@@ -202,7 +205,7 @@ namespace SupplyChain.Client.Pages.EstadoCompras
             else if (args.Text == "4")
                 args.Text = "Pendiente Ent.Vencida";
             else if (args.Text == "5")
-               args.Text = "Recibida Parcial-Pendiente Pago";
+                args.Text = "Recibida Parcial-Pendiente Pago";
             else if (args.Text == "6")
                 args.Text = "Recibida Total-Pendiente Pago";
             else if (args.Text == "7")
@@ -210,7 +213,7 @@ namespace SupplyChain.Client.Pages.EstadoCompras
             else if (args.Text == "8")
                 args.Text = "Cerrada";
             else
-                args.Text = " ";    
+                args.Text = " ";
 
         }
         public async Task CommandClickHandler(CommandClickEventArgs<vESTADOS_COMPRAS> args)
@@ -227,7 +230,7 @@ namespace SupplyChain.Client.Pages.EstadoCompras
 
         private async Task DescargarRemito(vESTADOS_COMPRAS compras)
         {
-            var responseFactura= await Http
+            var responseFactura = await Http
                                 .GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivosCompras/ByParamRuta/RUTAREMITO/{compras.REMITO}");
             if (responseFactura.Error)
             {
@@ -248,7 +251,7 @@ namespace SupplyChain.Client.Pages.EstadoCompras
             }
         }
 
-        private async Task DescargarFactura (vESTADOS_COMPRAS compras)
+        private async Task DescargarFactura(vESTADOS_COMPRAS compras)
         {
             var formatoFacturaBuscar = compras.LETRA_FACTURA + compras.FACTURA;
             var responseFactura = await Http
@@ -260,7 +263,7 @@ namespace SupplyChain.Client.Pages.EstadoCompras
             }
             else
             {
-                if(responseFactura.Response.Count> 0)
+                if (responseFactura.Response.Count > 0)
                 {
                     await JS.SaveAs(responseFactura.Response[0].Nombre, responseFactura.Response[0].ContenidoByte);
 
@@ -284,11 +287,24 @@ namespace SupplyChain.Client.Pages.EstadoCompras
             }
         }
 
+        //protected async Task GetCompras(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+        //{
+        //    var response = await EstadoComprasService.GetByFilter(tipoFiltro);
+        //}
+
         protected async Task OnToolBarHandler(ClickEventArgs args)
         {
-            if (args.Item.Id == "Excel Export")
             {
-                await refSfGrid.ExportToExcelAsync();
+                if (args.Item.Id == "Excel Export")
+                {
+                    await refSfGrid.ExportToExcelAsync();
+                }
+                //else if(args.Item.Id== "PendienteGenerarCompra")
+                //{
+                //    SpinnerVisible= true;
+                //    await GetCompras(TipoFiltro.PendienteGenerarCompra);
+                //    SpinnerVisible= false;
+                //}
             }
         }
     }
