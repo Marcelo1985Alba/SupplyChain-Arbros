@@ -24,7 +24,7 @@ using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Grid;
 using Syncfusion.Pdf.Tables;
 using SupplyChain.Client.HelperService;
-
+using SupplyChain.Shared.Prod;
 
 namespace SupplyChain.Client.Pages.Preparacion
 {
@@ -111,32 +111,36 @@ namespace SupplyChain.Client.Pages.Preparacion
 
         protected async Task OnInputCG_PROD(InputEventArgs args)
         {
-            if (args.Value != "")
+            if (!string.IsNullOrWhiteSpace(args.Value))
             {
-                CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarPorCG_PROD_PREP/{args.Value}");
-                if (CG_PRODlist.Count > 0)
-                {
-                    DesMat = CG_PRODlist.FirstOrDefault().DES_PROD;
-                    xUnid = CG_PRODlist.FirstOrDefault().UNID;
-                    xUnidMP = CG_PRODlist.FirstOrDefault().UNID;
-                    xespecif = CG_PRODlist.FirstOrDefault().ESPECIF;
-                    xUnid1 = CG_PRODlist.FirstOrDefault().UNIDSEG;
-                    xCgden = CG_PRODlist.FirstOrDefault().CG_DENSEG;
+                var query = $"Codigo={args.Value.Trim()}&Descripcion={DesMat}";
+                var prod = await Http.GetFromJsonAsync<Producto>($"api/Prod/GetByFilter?{query}");
 
+                if (prod != null)
+                {
+                    xUnid = prod.UNID;
+                    xUnidMP = prod.UNID;
+                    xespecif = prod.ESPECIF;
+                    xUnid1 = prod.UNIDSEG;
+                    xCgden = prod.CG_DENSEG;
+                    DesMat = prod.DES_PROD;
                     cambiapaso(2);
                 }
                 else
                 {
-                    DesMat = "";
                     xUnid = "";
                     xUnidMP = "";
                     xespecif = "";
                     xUnid1 = "";
                     xCgden = 0;
+                    DesMat = "";
                     cambiapaso(1);
                 }
             }
         }
+
+
+
 
         protected async Task OnInputDES_PROD(InputEventArgs args)
         {
