@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Shared
 {
-    public class vESTADOS_COMPRAS
+    public class vESTADOS_COMPRAS : EntityBase<int?>
     {
+
+        [NotMapped]public int Id { get; set; }
         public int NUMERO { get; set; }
         public string TILDE { get; set; }
         public string ESTADOS_COMPRA { get; set; }
@@ -36,6 +38,7 @@ namespace SupplyChain.Shared
         public string? PAGOS { get; set; }
         public string? FACTURA { get; set; } 
         public string? LETRA_FACTURA { get; set; }
+        public double TOT_DOL { get; set; }
 
     }
 }

@@ -37,7 +37,7 @@ namespace SupplyChain.Server.Controllers
             {
                 List<Claim> roleClaims = HttpContext.User.FindAll(ClaimTypes.Role).ToList();
                 if (roleClaims.Any(c => c.Value == "Cliente"))
-                {
+                {   
                     var userName = HttpContext.User.Identity.Name;
                     var user = await userManager.FindByNameAsync(userName);
                     var nrclte_usuario = user.Cg_Cli;
@@ -55,7 +55,10 @@ namespace SupplyChain.Server.Controllers
             }
             catch (Exception e)
             {
-                return new List<vESTADOS_COMPRAS>();
+                
+                Console.WriteLine($"Error:{e.Message}");
+                throw;
+                //return new List<vESTADOS_COMPRAS>();
             }
 
         } 
@@ -79,48 +82,46 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("ByEstado/{estado}")]
         public async Task<ActionResult<IEnumerable<vESTADOS_COMPRAS>>> Get(EstadoCompras estado = EstadoCompras.Todos)
         {
-            if (estado == EstadoCompras.SolicitarCotizacion)
+            if (estado == EstadoCompras.PendEmisionOC)
             {
                 return await _context.vESTADOS_COMPRAS.Where(e => e.ESTADOS_COMPRA == estado.ToString() && string.IsNullOrEmpty(e.REMITO))
                     .ToListAsync();
             }
-            else if(estado == EstadoCompras.PendienteGenerarCompra)
+            else if(estado == EstadoCompras.PendEmisionOC)
             {
                 return await _context.vESTADOS_COMPRAS.Where(e => !string.IsNullOrEmpty(e.REMITO))
                     .ToListAsync();
             }
-            else if(estado== EstadoCompras.AEsperaCotizacion)
+            else if(estado== EstadoCompras.PendEmisionOC)
             {
                 return await _context.vESTADOS_COMPRAS.Where(e => !string.IsNullOrEmpty(e.REMITO))
                     .ToListAsync();
             }
-            else if (estado != EstadoCompras.PendienteEntrega)
+            else if (estado != EstadoCompras.PendEmisionOC)
             {
                 return await _context.vESTADOS_COMPRAS.Where(e => e.ESTADOS_COMPRA == estado.ToString())
                     .ToListAsync();
             }
-            else if (estado == EstadoCompras.Pagada)
+            else if (estado !=EstadoCompras.PendEmisionOC)
             {
-                return await _context.vESTADOS_COMPRAS.Where(e => !string.IsNullOrEmpty(e.REMITO))
+                return await _context.vESTADOS_COMPRAS.Where(e => e.ESTADOS_COMPRA==estado.ToString())
                     .ToListAsync();
             }
-            else if(estado == EstadoCompras.Vencida)
-            {
-                return await _context.vESTADOS_COMPRAS.Where(e => !string.IsNullOrEmpty(e.REMITO))
-                    .ToListAsync();
-            }
-            else if(estado == EstadoCompras.Cerrada)
-            {
-                return await _context.vESTADOS_COMPRAS.Where(e => !string.IsNullOrEmpty(e.REMITO))
-                    .ToListAsync();
-            }
-
-            else if (estado != EstadoCompras.SolicitarCotizacion || estado != EstadoCompras.Todos)
+            else if (estado != EstadoCompras.PendEmisionOC)
             {
                 return await _context.vESTADOS_COMPRAS.Where(e => e.ESTADOS_COMPRA == estado.ToString())
                     .ToListAsync();
             }
-
+            else if (estado == EstadoCompras.PendEmisionOC)
+            {
+                return await _context.vESTADOS_COMPRAS.Where(e => !string.IsNullOrEmpty(e.REMITO))
+                    .ToListAsync();
+            }
+            else if(estado == EstadoCompras.PendEmisionOC)
+            {
+                return await _context.vESTADOS_COMPRAS.Where(e => !string.IsNullOrEmpty(e.REMITO))
+                    .ToListAsync();
+            }
             else
             {
                 return await _context.vESTADOS_COMPRAS.ToListAsync();

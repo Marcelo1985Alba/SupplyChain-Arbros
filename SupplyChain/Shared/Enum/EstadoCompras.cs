@@ -16,14 +16,23 @@ namespace SupplyChain.Shared.Enum
  //9.Anulada
     public enum EstadoCompras
     {
-       SolicitarCotizacion=1,
-       PendienteGenerarCompra=2,
-       AEsperaCotizacion=3,
-       PendienteEntrega=4,
-       Pagada=5,
-       Vencida=6,
-       Cerrada=7,
+       //SolicitarCotizacion=1,
+       //PendienteGenerarCompra=2,
+       //AEsperaCotizacion=3,
+       //PendienteEntrega=4,
+       //Pagada=5,
+       //Vencida=6,
+       //Cerrada=7,
        
+       PendEmSolCot=1,
+       PendEmisionOC=2,
+       PendEntFecha=3,
+       PendEntVenc=4,
+       RecParcialPendPago=5,
+       RecTotalPendPago=6,
+       PagRecibida=7,
+       Cerrada=8,
+
        Todos = 100,
     }
 }

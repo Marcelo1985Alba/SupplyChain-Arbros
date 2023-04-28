@@ -22,6 +22,7 @@ using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 using SupplyChain.Shared.Enum;
+using Syncfusion.Blazor.Data;
 
 namespace SupplyChain.Client.Pages.EstadoCompras
 {
@@ -30,7 +31,7 @@ namespace SupplyChain.Client.Pages.EstadoCompras
         [Inject] protected IRepositoryHttp Http { get; set; }
         [Inject] protected PdfService PdfService { get; set; }
         [Inject] protected IJSRuntime JS { get; set; }
-        //[Inject] protected EstadoComprasService EstadoComprasService { get; set; }
+        [Inject] protected EstadoComprasService EstadoComprasService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
 
         protected SfToast ToastObj;
@@ -44,7 +45,8 @@ namespace SupplyChain.Client.Pages.EstadoCompras
         {
            "Search",
              new ItemModel {Text = "Excel Export", TooltipText="Excel Export", PrefixIcon="e-excelexport", Id="Excel Export"},
-             //new ItemModel{Text="Ver Pendiente", Id="PendienteGenerarCompra"},
+             new ItemModel{Text="Ver Pendiente", Id="Pendiente"},
+             new ItemModel{Text="Ver PendienteEm", Id="PendienteEm"}
         };
 
         protected const string APPNAME = "grdEstadoCompras";
@@ -287,10 +289,18 @@ namespace SupplyChain.Client.Pages.EstadoCompras
             }
         }
 
-        //protected async Task GetCompras(TipoFiltro tipoFiltro = TipoFiltro.Todos)
-        //{
-        //    var response = await EstadoComprasService.GetByFilter(tipoFiltro);
-        //}
+        protected async Task GetCompras(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+        {
+            var response = await EstadoComprasService.GetByFilter(tipoFiltro);
+            if (response.Error)
+            {
+
+            }
+            else
+            {
+                DataEstadosCompras = response.Response.OrderBy(P => P.ESTADOS_COMPRA).ToList();
+            }
+        }
 
         protected async Task OnToolBarHandler(ClickEventArgs args)
         {
@@ -299,12 +309,19 @@ namespace SupplyChain.Client.Pages.EstadoCompras
                 {
                     await refSfGrid.ExportToExcelAsync();
                 }
-                //else if(args.Item.Id== "PendienteGenerarCompra")
+                else if (args.Item.Id == "Pendiente")
+                {
+                    SpinnerVisible = true;
+                    await GetCompras(TipoFiltro.PendEmisionOC);
+                    SpinnerVisible = false;
+                }
+                //else if (args.Item.Id == "PendienteEm")
                 //{
                 //    SpinnerVisible= true;
-                //    await GetCompras(TipoFiltro.PendienteGenerarCompra);
+                //    await GetCompras(TipoFiltro.PendEmisionOC);
                 //    SpinnerVisible= false;
                 //}
+
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -40,7 +41,9 @@ namespace SupplyChain.Client.RepositoryHttp
             //httpClient.Dispose();
 
 
-        }
+         }
+
+
         public async Task<HttpResponseWrapper<object>> PutAsJsonAsync<T>(string requestUri, T content)
         {
             string myContent = JsonSerializer.Serialize(content);
@@ -81,12 +84,31 @@ namespace SupplyChain.Client.RepositoryHttp
             return response;
         }
 
-        private async Task<T> DeserealizeResponse<T>(HttpResponseMessage httpResponseMessage
-            , JsonSerializerOptions jsonSerializerOptions)
+
+        private async Task<T> DeserealizeResponse<T>(HttpResponseMessage httpResponseMessage, JsonSerializerOptions jsonSerializerOptions)
         {
-            var response = await httpResponseMessage.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<T>(response, jsonSerializerOptions);
+            try
+            {
+                var response = await httpResponseMessage.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<T>(response, jsonSerializerOptions);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error en la deserialización de la respuesta HTTP: " + e.Message);
+                return default(T);
+            }
+            finally
+            {
+                httpResponseMessage.Dispose();
+            }
         }
+
+        //private async Task<T> DeserealizeResponse<T>(HttpResponseMessage httpResponseMessage
+        //    , JsonSerializerOptions jsonSerializerOptions)
+        //{
+        //    var response = await httpResponseMessage.Content.ReadAsStringAsync();
+        //    return JsonSerializer.Deserialize<T>(response, jsonSerializerOptions);
+        //}
 
         private async Task<HttpResponseWrapper<T>> CreateWrapper<T>(HttpResponseMessage responseHttp)
         {
