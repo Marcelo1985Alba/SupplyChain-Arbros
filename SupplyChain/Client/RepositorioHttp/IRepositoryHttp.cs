@@ -12,6 +12,7 @@ namespace SupplyChain.Client.RepositoryHttp
         AuthenticationHeaderValue? Authorization { get; set; }
 
         Task<HttpResponseWrapper<T>> GetFromJsonAsync<T>(string url);
+        Task<HttpResponseMessage> GetAsync(string url);
         //Task<HttpResponseWrapper<TResponse>> Get<T, TResponse>(string url);
         Task<HttpResponseWrapper<T>> PostAsJsonAsync<T>(string url, T sendContent);
         Task<HttpResponseWrapper<TResponse>> Post<T, TResponse>(string url, T enviar);

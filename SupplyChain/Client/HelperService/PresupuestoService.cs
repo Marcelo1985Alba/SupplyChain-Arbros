@@ -1,5 +1,7 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.JSInterop;
 using SupplyChain.Client.HelperService.Base;
+using SupplyChain.Client.Pages.Ventas._3_Presupuestos;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
@@ -36,7 +38,17 @@ namespace SupplyChain.Client.HelperService
 
         public async Task Imprimir(int presupuestoId)
         {
-            await _js.InvokeVoidAsync("descargarPresupuestDataSheet", presupuestoId);
+            var response = await Http.GetAsync($"api/AdministracionArchivos/PresupuestoDataSheetPdf/{presupuestoId}");
+            // Leer el contenido de la respuesta HTTP como un arreglo de bytes
+            var bytes = await response.Content.ReadAsByteArrayAsync();
+
+            // Crear un objeto FileContentsResult que contenga el archivo PDF
+            var contentType = "application/pdf";
+            var nombreArchivo = $"AR-CO-{presupuestoId}.pdf";
+            var archivo = new FileContentResult(bytes, contentType) { FileDownloadName = nombreArchivo };
+
+            // Descargar el archivo PDF en el navegador del usuario
+            await _js.InvokeAsync<object>("saveAsFile", nombreArchivo, Convert.ToBase64String(bytes));
         }
 
         public async Task<HttpResponseMessage> Eliminar(int id)

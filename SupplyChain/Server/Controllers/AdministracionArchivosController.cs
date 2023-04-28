@@ -869,7 +869,8 @@ namespace SupplyChain.Server.Controllers
             }
             string contentType = "application/pdf";
             string fileName = $"AR-CO-{presupuesto}.pdf";
-            return File(stream, contentType, fileName);
+            return new FileContentResult(stream.ToArray(), contentType) { FileDownloadName = fileName };
+            //return File(stream, contentType, fileName);
         }
 
 
