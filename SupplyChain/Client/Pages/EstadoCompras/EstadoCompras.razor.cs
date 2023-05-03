@@ -67,20 +67,7 @@ namespace SupplyChain.Client.Pages.EstadoCompras
         {
             MainLayout.Titulo = "Estado de Compras";
             SpinnerVisible = true;
-            var response = await Http.GetFromJsonAsync<List<vESTADOS_COMPRAS>>
-                ("api/EstadoCompras");
-            if (response.Error)
-            {
-                Console.WriteLine("ERROR!!");
-                Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
-            }
-            else
-            {
-                //RESPONSE TIENE QUE VENIR CON DATOS DE LA VISTA
-                //LA VARIABLE DATAESTADOCOMPRAS LA LLAMA EL DATASOURCE
-                DataEstadosCompras = response.Response;
-                refSfGrid?.PreventRender();
-            }
+            await GetCompras(SupplyChain.Shared.Enum.EstadoCompras.TodosPendientes);
             SpinnerVisible = false;
         }
         public async Task BeginHandler(ActionEventArgs<vESTADOS_COMPRAS> args)
@@ -291,9 +278,9 @@ namespace SupplyChain.Client.Pages.EstadoCompras
             }
         }
 
-        protected async Task GetCompras(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+        protected async Task GetCompras(SupplyChain.Shared.Enum.EstadoCompras estadoCompras = SupplyChain.Shared.Enum.EstadoCompras.Todos)
         {
-            var response = await EstadoComprasService.GetByFilter(tipoFiltro);
+            var response = await EstadoComprasService.ByEstado(estadoCompras);
             if (response.Error)
             {
 
@@ -314,10 +301,7 @@ namespace SupplyChain.Client.Pages.EstadoCompras
                 else if (args.Item.Id == "Pendiente")
                 {
                     SpinnerVisible = true;
-                    await GetCompras(TipoFiltro.PendEmisionOC);
-                    await GetCompras(TipoFiltro.PendEntFecha);
-                    await GetCompras(TipoFiltro.PendEntVenc);
-                    await GetCompras(TipoFiltro.PendEmSolCot);
+                    await GetCompras(SupplyChain.Shared.Enum.EstadoCompras.TodosPendientes);
 
                     SpinnerVisible = false;
                 }
@@ -327,12 +311,6 @@ namespace SupplyChain.Client.Pages.EstadoCompras
                     await GetCompras();
                     SpinnerVisible = false;
                 }
-                //else if (args.Item.Id == "PendienteEm")
-                //{
-                //    SpinnerVisible= true;
-                //    await GetCompras(TipoFiltro.PendEmisionOC);
-                //    SpinnerVisible= false;
-                //}
 
             }
         }
