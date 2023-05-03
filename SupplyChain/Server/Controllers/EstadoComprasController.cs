@@ -82,42 +82,42 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("ByEstado/{estado}")]
         public async Task<ActionResult<IEnumerable<vESTADOS_COMPRAS>>> Get(EstadoCompras estado = EstadoCompras.Todos)
         {
-            if (estado == EstadoCompras.PendEmisionOC)
+            if (estado == EstadoCompras.PendEmSolCot)
             {
                 return await _context.vESTADOS_COMPRAS.Where(e => e.ESTADOS_COMPRA == estado.ToString() && string.IsNullOrEmpty(e.REMITO))
                     .ToListAsync();
             }
-            else if(estado == EstadoCompras.PendEmisionOC)
+                else if(estado == EstadoCompras.PendEmisionOC)
             {
                 return await _context.vESTADOS_COMPRAS.Where(e => !string.IsNullOrEmpty(e.REMITO))
                     .ToListAsync();
             }
-            else if(estado== EstadoCompras.PendEmisionOC)
+            else if(estado== EstadoCompras.PendEntFecha)
             {
                 return await _context.vESTADOS_COMPRAS.Where(e => !string.IsNullOrEmpty(e.REMITO))
                     .ToListAsync();
             }
-            else if (estado != EstadoCompras.PendEmisionOC)
+            else if (estado != EstadoCompras.PendEntVenc)
             {
                 return await _context.vESTADOS_COMPRAS.Where(e => e.ESTADOS_COMPRA == estado.ToString())
                     .ToListAsync();
             }
-            else if (estado !=EstadoCompras.PendEmisionOC)
+            else if (estado !=EstadoCompras.RecParcialPendPago)
             {
                 return await _context.vESTADOS_COMPRAS.Where(e => e.ESTADOS_COMPRA==estado.ToString())
                     .ToListAsync();
             }
-            else if (estado != EstadoCompras.PendEmisionOC)
+            else if (estado != EstadoCompras.RecTotalPendPago)
             {
                 return await _context.vESTADOS_COMPRAS.Where(e => e.ESTADOS_COMPRA == estado.ToString())
                     .ToListAsync();
             }
-            else if (estado == EstadoCompras.PendEmisionOC)
+            else if (estado == EstadoCompras.PagRecibida)
             {
                 return await _context.vESTADOS_COMPRAS.Where(e => !string.IsNullOrEmpty(e.REMITO))
                     .ToListAsync();
             }
-            else if(estado == EstadoCompras.PendEmisionOC)
+            else if(estado == EstadoCompras.Cerrada)
             {
                 return await _context.vESTADOS_COMPRAS.Where(e => !string.IsNullOrEmpty(e.REMITO))
                     .ToListAsync();

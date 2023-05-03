@@ -24,6 +24,7 @@ using System.Runtime.CompilerServices;
 using SupplyChain.Shared.Enum;
 using Syncfusion.Blazor.Data;
 
+
 namespace SupplyChain.Client.Pages.EstadoCompras
 {
     public class EstadoComprasBase : ComponentBase
@@ -32,6 +33,7 @@ namespace SupplyChain.Client.Pages.EstadoCompras
         [Inject] protected PdfService PdfService { get; set; }
         [Inject] protected IJSRuntime JS { get; set; }
         [Inject] protected EstadoComprasService EstadoComprasService { get; set; }
+       // [Inject] protected EstadoComprasController EstadoComprasController { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
 
         protected SfToast ToastObj;
@@ -45,8 +47,8 @@ namespace SupplyChain.Client.Pages.EstadoCompras
         {
            "Search",
              new ItemModel {Text = "Excel Export", TooltipText="Excel Export", PrefixIcon="e-excelexport", Id="Excel Export"},
-             new ItemModel{Text="Ver Pendiente", Id="Pendiente"},
-             new ItemModel{Text="Ver PendienteEm", Id="PendienteEm"}
+                new ItemModel{Text="Ver Todos", Id="Todos"},
+             new ItemModel{Text="Ver Pendiente", Id="Pendiente"}
         };
 
         protected const string APPNAME = "grdEstadoCompras";
@@ -298,7 +300,7 @@ namespace SupplyChain.Client.Pages.EstadoCompras
             }
             else
             {
-                DataEstadosCompras = response.Response.OrderBy(P => P.ESTADOS_COMPRA).ToList();
+                DataEstadosCompras = response.Response.OrderByDescending(P => P.ESTADOS_COMPRA).ToList();
             }
         }
 
@@ -313,6 +315,16 @@ namespace SupplyChain.Client.Pages.EstadoCompras
                 {
                     SpinnerVisible = true;
                     await GetCompras(TipoFiltro.PendEmisionOC);
+                    await GetCompras(TipoFiltro.PendEntFecha);
+                    await GetCompras(TipoFiltro.PendEntVenc);
+                    await GetCompras(TipoFiltro.PendEmSolCot);
+
+                    SpinnerVisible = false;
+                }
+                else if (args.Item.Id == "Todos")
+                {
+                    SpinnerVisible = true;
+                    await GetCompras();
                     SpinnerVisible = false;
                 }
                 //else if (args.Item.Id == "PendienteEm")

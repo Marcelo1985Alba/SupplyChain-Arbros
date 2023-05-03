@@ -36,24 +36,10 @@
                     <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                     <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" ></GridEditSettings>
                     <GridColumns>
-                       @* <GridColumn HeaderText="Acciones" Width="90">
-                            <GridCommandColumns>
-                                <GridCommandColumn Type="CommandButtonType.Edit" Title="Descargar Remito" ID="btnDescargarRemito"
-                                  ButtonOption="@(new CommandButtonOptions(){IconCss="fa fa-cubes fa-1", CssClass=""})"  />
-                                <GridCommandColumn Type="CommandButtonType.Edit" Title="Descargar Factura" ID="btnDescargarFactura"
-                                  ButtonOption="@(new CommandButtonOptions(){IconCss="fa fa-usd", CssClass=""})" />
-                            </GridCommandColumns>
-                            @*<GridCommandColumns>
-                            <GridCommandColumn Type="CommandButtonType.Delete" Title="Descargar Factura" ID="btnDescargarFactura"
-                                               ButtonOption="@(new CommandButtonOptions(){IconCss="fa fa-usd", CssClass=""})"></GridCommandColumn>
-                            <GridCommandColumn Type="CommandButtonType.Edit" Title="Descagar Remito" ID="btnDescargarRemito"
-                                               ButtonOption="@(new CommandButtonOptions(){IconCss="fa fa-cubes fa-1", CssClass=""})"></GridCommandColumn>
-                            @*<GridCommandColumn Type="CommandButtonType.Edit" Title="Descagar Certificado" ID="btnDescargarCertificado"
-                                               ButtonOption="@(new CommandButtonOptions(){IconCss="fa fa-download fa-1", CssClass=""})"></GridCommandColumn>
-                           </GridCommandColumns>    
-                        </GridColumn>*@
+         
                         <GridColumn Field=@nameof(vESTADOS_COMPRAS.NUMERO) HeaderText="NUMERO" Width="150" Type="ColumnType.Number"></GridColumn>
                         <GridColumn Field=@nameof(vESTADOS_COMPRAS.ESTADOS_COMPRA) HeaderText="ESTADO COMPRA" Width="150"></GridColumn>
+                        <GridColumn Field=@nameof(vESTADOS_COMPRAS.CG_MAT) HeaderText="CODIGO" Width="150"></GridColumn>
                         <GridColumn Field=@nameof(vESTADOS_COMPRAS.DES_MAT) HeaderText="DESCRIPCION" Width="150"></GridColumn>
                         <GridColumn Field=@nameof(vESTADOS_COMPRAS.DES_PROVE) HeaderText="CLIENTE" Width="150"></GridColumn>
                         <GridColumn Field=@nameof(vESTADOS_COMPRAS.PAGOS) HeaderText="PAGOS" Width="150"></GridColumn>
@@ -83,7 +69,7 @@
         </Header>
 
         <Content>
-            <SfLinearGauge Orientation="Orientation.Horizontal" Background="transparent" Title=@($"Estado Compra - Fecha Prevista: {ComprasSeleccionado.FE_PREV.ToString("dd-MM-yyyy")}") AllowPdfExport="true" Height="300px" Width="1450px" >
+            <SfLinearGauge Orientation="Orientation.Horizontal" Background="transparent" Title=@($"Estado Compra - Fecha Prevista: {ComprasSeleccionado.FE_PREV.Value.ToString("dd-MM-yyyy")}") AllowPdfExport="true" Height="300px" Width="1450px" >
                 <LinearGaugeEvents AxisLabelRendering="AxisLabelChange" />
                 <LinearGaugeAnnotations>
                     <LinearGaugeAnnotation ZIndex="1" AxisValue="110" X="-110" Y="-35">

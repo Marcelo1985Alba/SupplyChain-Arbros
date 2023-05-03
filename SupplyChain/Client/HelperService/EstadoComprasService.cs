@@ -8,14 +8,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using static System.Net.WebRequestMethods;
 
 namespace SupplyChain.Client.HelperService
 {
-    public class EstadoComprasService : BaseService<vESTADOS_COMPRAS, int?>
+    public class EstadoComprasService : BaseService<vESTADOS_COMPRAS, int>
     {
         private const string API = "api/EstadoCompras";
         private readonly IJSRuntime js;
-        public EstadoComprasService(IRepositoryHttp httpClient) : base(httpClient, API)
+
+        public EstadoComprasService(IJSRuntime js, IRepositoryHttp httpClient) : base(httpClient, API)
         {
             this.js = js;
         }
@@ -24,7 +26,7 @@ namespace SupplyChain.Client.HelperService
         {
             return await http.GetFromJsonAsync<List<vESTADOS_COMPRAS>>($"{API}/ByEstado/{estado}");
         }
-       
+
         public async Task<HttpResponseWrapper<Compras>> GetByOCI(int oci)
         {
             return await http.GetFromJsonAsync<Compras>($"{API}/GetByOCI/{oci}");
