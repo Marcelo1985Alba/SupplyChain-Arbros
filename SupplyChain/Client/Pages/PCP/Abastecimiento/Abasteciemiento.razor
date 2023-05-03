@@ -160,13 +160,20 @@
                                                                         <div class="form-group col-md-6">
                                                                             <label class="e-float-text e-label-top">Producto:</label>
                                                                             <br />
-                                                                            <SfTextBox ID="CG_PROD" @bind-Value="@(MP.CG_MAT)" Enabled="false"></SfTextBox>
+                                                                            <SfTextBox ID="CG_PROD" @bind-Value="@(MP.CG_MAT)" Readonly="true"></SfTextBox>
                                                                         </div>
 
                                                                         <div class="form-group col-md-6">
                                                                             <label class="e-float-text e-label-top">Stock a Comprar:</label>
                                                                             <br />
-                                                                            <SfNumericTextBox ID="ACOMPRAR" Format="N2" @bind-Value="@(MP.ACOMPRAR)" Enabled="true"></SfNumericTextBox>
+                                                                            <SfNumericTextBox ID="ACOMPRAR" Format="N2" @bind-Value="@(MP.ACOMPRAR)"></SfNumericTextBox>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-6">
+                                                                            <label class="e-float-text e-label-top">Fecha Prevista:</label>
+                                                                            <br />
+                                                                            <SfDatePicker ID="FECHA_PREVISTA" @bind-Value="@(MP.ENTRPREV)" Format="dd/MM/yyyy"></SfDatePicker>
                                                                         </div>
                                                                     </div>
                                                                 </div>

@@ -223,6 +223,7 @@ namespace SupplyChain.Server.Controllers
 
             try
             {
+                //TODO: SINO EXISTE AGREGAR EN MATPROVE
                 await _compraRepository.Actualizar(Itemcompras);
             }
             catch (DbUpdateConcurrencyException dbEx)

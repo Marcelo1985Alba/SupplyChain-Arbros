@@ -24,6 +24,13 @@ namespace SupplyChain.Client.RepositoryHttp
 
         private JsonSerializerOptions OpcionesPorDefecto => new() { PropertyNameCaseInsensitive = true };
 
+
+        public async Task<HttpResponseMessage> GetAsync(string url)
+        {
+            var responseHttp = await httpClient.GetAsync(url);
+            return responseHttp;
+        }
+
         public async Task<HttpResponseWrapper<T>> GetFromJsonAsync<T>(string url)
         {
             var responseHttp = await httpClient.GetAsync(url);
@@ -122,5 +129,7 @@ namespace SupplyChain.Client.RepositoryHttp
                 return new HttpResponseWrapper<T>(default, responseHttp, true);
             }
         }
+
+        
     }
 }

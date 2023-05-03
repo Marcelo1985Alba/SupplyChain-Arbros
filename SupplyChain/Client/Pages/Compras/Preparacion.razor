@@ -152,11 +152,11 @@
                                       FloatLabelType="@FloatLabelType.Auto"></SfNumericTextBox>
                 </div>
                 <div class="form-group col-lg-2 my-1" hidden="@IsVisiblecant1">
-                    <SfNumericTextBox Placeholder="Cantidad a Proveedor" @bind-Value="xCant1" Enabled="false"
+                    <SfNumericTextBox Placeholder="Cantidad Comercial" @bind-Value="xCant1" Enabled="false"
                                       FloatLabelType="@FloatLabelType.Auto"></SfNumericTextBox>
                 </div>
                 <div class="form-group col-lg-1 my-1" hidden="@IsVisiblecant1">
-                    <SfTextBox Placeholder="Unid.Proveed." @bind-Value="xUnid1" Enabled="false"
+                    <SfTextBox Placeholder="Unidad Comercial" @bind-Value="xUnid1" Enabled="false"
                                FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
                 </div>
                 <div class="form-group col-lg-3 my-4">
@@ -176,7 +176,7 @@
                                     AllowSorting="true" AllowPaging="true" AllowFiltering="true"
                                     Toolbar="@Toolbaritems" GridLines="GridLine.Both">
                                 <GridPageSettings PageCount="10" PageSizes="true" PageSize="20"></GridPageSettings>
-                                <GridEvents OnToolbarClick="@ClickHandler" TValue="Compra"></GridEvents>
+                            <GridEvents OnToolbarClick="@ClickHandler" TValue="Compra" OnRecordDoubleClick="DoubleClickHandler"></GridEvents>
                                 <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                                 <GridColumns>
                                     <GridColumn Field=@nameof(Compra.CG_MAT) HeaderText="Código" AllowEditing="false" TextAlign="TextAlign.Left" Width="130px"></GridColumn>

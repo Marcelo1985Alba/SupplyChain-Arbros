@@ -118,11 +118,11 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             }
             if (args.Item.Text == "Print")
             {
-                await this.GridSE.Print();
+                await this.GridSE.PrintAsync();
             }
             if (args.Item.Text == "Seleccionar Columnas")
             {
-                await GridSE.OpenColumnChooser();
+                await GridSE.OpenColumnChooserAsync();
             }
         }
         public async Task ActionBeginMP(ActionEventArgs<ModeloAbastecimiento> args)
@@ -132,7 +132,7 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
                 HttpResponseMessage response;
                 response = await Http.PutAsJsonAsync($"api/Abastecimiento/PutAbMP/{args.Data.CG_MAT}", args.Data);
                 listaAbastMP = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecimientoMPX");
-                GridMP.Refresh();
+                await GridMP.Refresh();
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
             {

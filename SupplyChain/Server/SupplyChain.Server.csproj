@@ -116,7 +116,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\WindowsFormsForRDLC\WindowsFormsForRDLC.csproj" />
     <ProjectReference Include="..\Client\SupplyChain.Client.csproj" />
     <ProjectReference Include="..\Shared\SupplyChain.Shared.csproj" />
   </ItemGroup>

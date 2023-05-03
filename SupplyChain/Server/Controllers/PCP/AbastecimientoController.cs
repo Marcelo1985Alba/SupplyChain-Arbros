@@ -347,7 +347,9 @@ namespace SupplyChain.Server.Controllers
             // Reemplaza "," por "." para grabar en el SQL
             xValor = Convert.ToDouble(xValor.Replace(",", ".")).ToString();
             ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
-            string xSQLcommandString = "UPDATE NET_Temp_Abastecimiento SET ACOMPRAR = " + xValor + " WHERE Cg_mat='" + xCg_mat + "'";
+            string xSQLcommandString = "UPDATE NET_Temp_Abastecimiento SET ACOMPRAR = " + xValor + ", " +
+                $"ENTRPREV = '{Ab.ENTRPREV}' " +
+                "WHERE Cg_mat='" + xCg_mat + "'";
             xConexionSQL.EjecutarSQLNonQuery(xSQLcommandString);
 
             return NoContent();
@@ -374,8 +376,9 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
+                var userName = HttpContext.User.Identity.Name;
                 ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
-                xConexionSQL.EjecutarSQL("EXEC NET_PCP_Abastecer_MP '" + "User" + "'");
+                xConexionSQL.EjecutarSQL($"EXEC NET_PCP_Abastecer_MP '{userName}'");
                 xConexionSQL = new ConexionSQL(CadenaConexionSQL);
                 string xSQLCommandString = ("SELECT CG_MAT, DES_MAT, CALCULADO, ACOMPRAR, ACOMPRAR_INFORMADO, STOCK, UNIDMED, UNIDCOMER, STOCK_MINIMO, PEND_SIN_OC, COMP_DE_ENTRADA, COMP_DE_SALIDA" +
                                                             ", STOCK_CORREG, EN_PROCESO, REQUERIDO, ENTRPREV, * FROM NET_Temp_Abastecimiento WHERE CG_ORDEN = 4");

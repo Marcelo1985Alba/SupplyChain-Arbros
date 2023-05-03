@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Config;
 using SupplyChain.Shared;
 using SupplyChain.Shared.CDM;
+using SupplyChain.Shared.Context;
 using SupplyChain.Shared.Login;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
@@ -17,6 +18,7 @@ namespace SupplyChain
     {
         #region "DbSet"
         //MODULO CARGA DE MAQUINA
+        public DbSet<GanttDataDetails> GanttData { get; set; }
         public virtual DbSet<ModeloCarga> Cargas { get; set; }
         public virtual DbSet<CargaMaq> CargaMaq { get; set; }
         public virtual DbSet<ModeloOrdenFabricacionHojaRuta> OrdenesFabricacionHojaRuta { get; set; }

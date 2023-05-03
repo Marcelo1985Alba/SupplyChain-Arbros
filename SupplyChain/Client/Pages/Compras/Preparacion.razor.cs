@@ -25,6 +25,7 @@ using Syncfusion.Pdf.Grid;
 using Syncfusion.Pdf.Tables;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Shared.Prod;
+using SupplyChain.Shared;
 
 namespace SupplyChain.Client.Pages.Preparacion
 {
@@ -86,9 +87,9 @@ namespace SupplyChain.Client.Pages.Preparacion
         protected List<Object> Toolbaritems = new List<Object>(){
         new ItemModel { Text = "Nuevo Item", TooltipText = "Nuevo Item", PrefixIcon = "e-annotation-add", Id = "Nuevo" },
         new ItemModel { Type = ItemType.Separator },
-        new ItemModel { Text = "Abrir Preparacion", TooltipText = "Abrir Preparacion", PrefixIcon = "e-annotation-edit", Id = "Preparacion" },
+        //new ItemModel { Text = "Abrir Preparacion", TooltipText = "Abrir Preparacion", PrefixIcon = "e-annotation-edit", Id = "Preparacion" },
         new ItemModel { Type = ItemType.Separator },
-        new ItemModel { Text = "Abrir Sugerencia", TooltipText = "Abrir Sugerencia", PrefixIcon = "e-iconsets", Id = "Sugerencia" },
+        new ItemModel { Text = "Abrir Preparacion", TooltipText = "Abrir Preparacion", PrefixIcon = "e-iconsets", Id = "Sugerencia" },
         new ItemModel { Type = ItemType.Separator },
         new ItemModel { Text = "Editar", TooltipText = "Editar", PrefixIcon = "e-edit", Id = "Editar" },
         new ItemModel { Type = ItemType.Separator },
@@ -244,12 +245,12 @@ namespace SupplyChain.Client.Pages.Preparacion
             IsVisibleProveedores = true;
         }
 
-        public void OnSelectedProve(Proveedor prove)
+        public void OnSelectedProve(vProveedorItris prove)
         {
 
             //            xCgProve = this.Grid3.GetSelectedRecords().Result.FirstOrDefault().CG_PROVE; // return the details of selected record
             xCgProve = prove.Id;
-            xDesProve = prove.DES_PROVE;
+            xDesProve = prove.DESCRIPCION;
             xUnid = xUnidMP;
 //            xUnid1 = "";
 //            xCgden = 0;
@@ -322,7 +323,7 @@ namespace SupplyChain.Client.Pages.Preparacion
         {
             if ( CgMat == "")
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Debe Indicar un Insumo",
@@ -335,7 +336,7 @@ namespace SupplyChain.Client.Pages.Preparacion
             }
             if (xCant == 0)
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Debe Indicar la cantidad",
@@ -451,7 +452,7 @@ namespace SupplyChain.Client.Pages.Preparacion
             {
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "EXITO!",
                         Content = "Item Agregado a preparación Correctamente.",
@@ -470,6 +471,66 @@ namespace SupplyChain.Client.Pages.Preparacion
             }
         }
 
+
+        protected async Task Editar()
+        {
+            if (this.Gridprep.SelectedRecords.Count > 0)
+            {
+                foreach (Compra selectedRecord in this.Gridprep.SelectedRecords)
+                {
+                    xRegistrocompras = selectedRecord.Id;
+                    CgMat = selectedRecord.CG_MAT.Trim();
+                    xFeprev = selectedRecord.FE_PREV;
+                    DesMat = selectedRecord.DES_MAT;
+                    xCgProve = selectedRecord.NROCLTE;
+                    xDesProve = selectedRecord.DES_PROVE;
+                    xUnid = selectedRecord.UNID;
+                    xUnid1 = selectedRecord.UNID1;
+                    xUnidMP = selectedRecord.UNID;
+                    xMoneda = selectedRecord.MONEDA;
+                    xDiasvige = selectedRecord.DIASVIGE;
+                    xespecif = selectedRecord.ESPECIFICA;
+                    if (string.IsNullOrEmpty(xespecif))
+                    {
+                        await BuscarProductoPreparacion();
+                        IsVisible = false;
+                        if (Busquedalist is not null && Busquedalist.Count == 1)
+                        {
+                            xespecif = Busquedalist[0].ESPECIF.Trim();
+                        }
+                    }
+
+
+                    xCgden = selectedRecord.CG_DEN.GetValueOrDefault();
+                    xCant = selectedRecord.SOLICITADO.GetValueOrDefault();
+                    xFeprev = selectedRecord.FE_PREV.GetValueOrDefault();
+                    if (xCant == 0)
+                    {
+                        xCant = selectedRecord.NECESARIO.GetValueOrDefault();
+                    }
+                    xPrecio = selectedRecord.PRECIO.GetValueOrDefault();
+                    xDescuento = selectedRecord.DESCUENTO.GetValueOrDefault();
+                }
+                if (xCgProve > 0)
+                {
+                    cambiapaso(3);
+                }
+                else
+                {
+                    cambiapaso(2);
+                }
+                xtituloboton = "Actualizar";
+                IsVisibleform = true;
+                IsVisiblegrilla = false;
+
+            }
+        }
+
+        protected async Task DoubleClickHandler(RecordDoubleClickEventArgs<Compra> args)
+        {
+            await Editar();
+        }
+
         public async Task ClickHandler(ClickEventArgs args)
         {
             if (args.Item.Text == "ExcelExport")
@@ -479,42 +540,7 @@ namespace SupplyChain.Client.Pages.Preparacion
 
             if (args.Item.Text == "Editar")
             {
-                if (this.Gridprep.SelectedRecords.Count > 0)
-                {
-                    foreach (Compra selectedRecord in this.Gridprep.SelectedRecords)
-                    {
-                        xRegistrocompras = selectedRecord.Id;
-                        CgMat = selectedRecord.CG_MAT;
-                        xFeprev = selectedRecord.FE_PREV;
-                        DesMat = selectedRecord.DES_MAT;
-                        xCgProve = selectedRecord.NROCLTE;
-                        xDesProve = selectedRecord.DES_PROVE;
-                        xUnid = selectedRecord.UNID;
-                        xUnid1 = selectedRecord.UNID1;
-                        xUnidMP = selectedRecord.UNID;
-                        xMoneda = selectedRecord.MONEDA;
-                        xDiasvige = selectedRecord.DIASVIGE;
-                        xespecif = selectedRecord.ESPECIFICA;
-                        xCgden = selectedRecord.CG_DEN.GetValueOrDefault();
-                        xCant = selectedRecord.SOLICITADO.GetValueOrDefault();
-                        xFeprev = selectedRecord.FE_PREV.GetValueOrDefault();
-                        if ( xCant == 0)
-                        {
-                            xCant = selectedRecord.NECESARIO.GetValueOrDefault();
-                        }
-                        xPrecio = selectedRecord.PRECIO.GetValueOrDefault();
-                        xDescuento = selectedRecord.DESCUENTO.GetValueOrDefault();
-                    }
-                    if (xCgProve > 0){
-                        cambiapaso(3);
-                    }else {
-                        cambiapaso(2);
-                    }
-                    xtituloboton = "Actualizar";
-                    IsVisibleform = true;
-                    IsVisiblegrilla = false;
-
-                }
+                await Editar();
             }
             if (args.Item.Id == "Nuevo")
             {
@@ -522,10 +548,10 @@ namespace SupplyChain.Client.Pages.Preparacion
                 IsVisibleform = true;
                 IsVisiblegrilla = false;
             }
-            if (args.Item.Id == "Preparacion")
-            {
-                await cargapreparacion();
-            }
+            //if (args.Item.Id == "Preparacion")
+            //{
+            //    await cargapreparacion();
+            //}
             if (args.Item.Id == "Sugerencia")
             {
                 await Cargasugerencia();
@@ -587,6 +613,10 @@ namespace SupplyChain.Client.Pages.Preparacion
             try
             {
                 listapreparacion = await Http.GetFromJsonAsync<List<Compra>>("api/Compras/GetSugerencia/");
+
+                var lista_prep = await Http.GetFromJsonAsync<List<Compra>>("api/Compras/GetPreparacion/0");
+
+                listapreparacion.AddRange(lista_prep);
             }
             catch (Exception e)
             {
