@@ -14,7 +14,6 @@
 @using System.Text.Json
 @using System.Linq
 @attribute [Authorize]
-@inject IJSRuntime JsRuntime
 @using SupplyChain
 @using System.Net.Http.Json
 
@@ -22,15 +21,12 @@
 @inherits AbastecimeintoBase
 
 
-
-
 <div class="col-12 control-section mt-4">
     <div class="content-wrapper">
-
+        
         <div class="form-row">
             <div class="col-12">
                 <SfTab ID="tabPcp" LoadOn="ContentLoad.Dynamic" OverflowMode="OverflowMode.Scrollable">
-                    <TabEvents Selecting="@Selecting"></TabEvents>
                     <TabItems>
                         <TabItem Disabled="@Disabled">
                             <HeaderTemplate>Semielaborados</HeaderTemplate>
@@ -48,29 +44,18 @@
                                 <div class="col-lg-12 control-section">
                                     <div class="content-wrapper">
                                         <div class="row">
-                                            @if (listaAbastSE is null)
-                                            {
-                                                VisiblePropertySE = true;
-                                            }
-                                            else
-                                            {
-                                                VisiblePropertySE = false;
-
                                             <SfGrid TValue="ModeloAbastecimiento" AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true"
                                                     RowHeight="20" AllowResizing="true"
                                                     @ref="GridSE" AllowExcelExport="true" AllowGrouping="true"
                                                     ID="AbastecimientoSE" Height="100%" Width="100%" DataSource="listaAbastSE"
                                                     AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@ToolbaritemsSE"
                                                     GridLines="GridLine.Both">
-                                                @*<SfDataManager Url="api/Abastecimiento/AbastecimientoSyncfSE" CrossDomain="false" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>*@
                                                 <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
                                                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                                                <GridEvents OnLoad="@(async(a)=> await OnLoadGridSE(a))"
-                                                            OnDataBound="@(async(a)=>await OnDataBoundGridSE(a))"
-                                                            DataBound="@(async(a)=>await DataBoundHandler(a))"
-                                                            OnToolbarClick="@(async(a)=> await ClickHandlerSE(a))" 
-                                                            QueryCellInfo="QueryCellInfoHandler"
-                                                            OnActionBegin="(async(a)=> await ActionBeginSE(a))" 
+                                                <GridEvents 
+                                                    
+                                                            OnToolbarClick="@(async(a)=> await ClickHandlerSE(a))"
+                                                            OnActionBegin="(async(a)=> await ActionBeginSE(a))"
                                                             TValue="ModeloAbastecimiento">
                                                 </GridEvents>
                                                 <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
@@ -112,10 +97,24 @@
                                                     <GridColumn Field=@nameof(ModeloAbastecimiento.EN_PROCESO) Format="N2" HeaderText="Stock en proceso" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                                                     <GridColumn Field=@nameof(ModeloAbastecimiento.ENTRPREV) Format="d" HeaderText="Fecha de entrega" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                                                 </GridColumns>
-                                                <SfSpinner @bind-Visible="@VisiblePropertySE" Label="Cargando Semis..." Size="80">
-                                                </SfSpinner>
+                                                <GridTemplates>
+                                                    <EmptyRecordTemplate>
+                                                        @if (VisiblePropertySE)
+                                                        {
+                                                            <span>Cargando...</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            if (listaAbastMP.Count == 0)
+                                                            {
+                                                                <span>No hay registros.</span>
+                                                            }
+                                                            
+                                                        }        
+                                                    </EmptyRecordTemplate>
+                                                </GridTemplates>
+                                                <SfSpinner @bind-Visible="@VisiblePropertySE" Label="Cargando Semis..." Type="SpinnerType.Fabric"></SfSpinner>
                                             </SfGrid>
-                                            }
 
                                         </div>
                                     </div>
@@ -125,90 +124,94 @@
                         <TabItem Disabled="@Disabled">
                             <HeaderTemplate>Materia Prima</HeaderTemplate>
                             <ContentTemplate>
-                                @if (VisiblePropertyMP == false)
-                                {
-                                    <div class="col-12 control-section my-4">
-                                        <div class="content-wrapper">
-                                            <div class="row">
-                                                <div>
-                                                    <SfButton OnClick="@((e) => EmitirMP())" CssClass="emitir" IsPrimary="false"
-                                                              IconCss="fa fa-check-circle">Emitir Preparación de Compras Materias Primas</SfButton>
-                                                </div>
+                                <div class="col-12 control-section my-4">
+                                    <div class="content-wrapper">
+                                        <div class="row">
+                                            <div>
+                                                <SfButton OnClick="@((e) => EmitirMP())" CssClass="emitir" IsPrimary="false"
+                                                          IconCss="fa fa-check-circle">Emitir Preparación de Compras Materias Primas</SfButton>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12 control-section">
-                                        <div class="content-wrapper">
-                                            <div class="row">
-                                                <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true"
-                                                        AllowResizing="true" Locale="es" RowHeight="20"
-                                                        @ref="GridMP" DataSource="@listaAbastMP" AllowExcelExport="true"
-                                                        AllowGrouping="true" ID="AbastecimientoMP" Height="100%" Width="100%"
-                                                        AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@ToolbaritemsMP"
-                                                        GridLines="GridLine.Both">
-                                                    <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
-                                                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                                                    <GridEvents OnToolbarClick="@ClickHandlerMP" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBeginMP" TValue="ModeloAbastecimiento"></GridEvents>
-                                                    <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
-                                                    <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-                                                    <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
-                                                        <Template>
-                                                            @{
-                                                                var MP = (context as ModeloAbastecimiento);
-                                                                <div>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-6">
-                                                                            <label class="e-float-text e-label-top">Producto:</label>
-                                                                            <br />
-                                                                            <SfTextBox ID="CG_PROD" @bind-Value="@(MP.CG_MAT)" Readonly="true"></SfTextBox>
-                                                                        </div>
-
-                                                                        <div class="form-group col-md-6">
-                                                                            <label class="e-float-text e-label-top">Stock a Comprar:</label>
-                                                                            <br />
-                                                                            <SfNumericTextBox ID="ACOMPRAR" Format="N2" @bind-Value="@(MP.ACOMPRAR)"></SfNumericTextBox>
-                                                                        </div>
+                                </div>
+                                <div class="col-lg-12 control-section">
+                                    <div class="content-wrapper">
+                                        <div class="row">
+                                            <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true"
+                                                    AllowResizing="true" Locale="es" RowHeight="20"
+                                                    @ref="GridMP" DataSource="@listaAbastMP" AllowExcelExport="true"
+                                                    AllowGrouping="true" ID="AbastecimientoMP" Height="100%" Width="100%"
+                                                    AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@ToolbaritemsMP"
+                                                    GridLines="GridLine.Both">
+                                                <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
+                                                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                                                <GridEvents OnToolbarClick="@ClickHandlerMP" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBeginMP" TValue="ModeloAbastecimiento"></GridEvents>
+                                                <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+                                                <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+                                                <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
+                                                    <Template>
+                                                        @{
+                                                            var MP = (context as ModeloAbastecimiento);
+                                                            <div>
+                                                                <div class="form-row">
+                                                                    <div class="form-group col-md-6">
+                                                                        <label class="e-float-text e-label-top">Producto:</label>
+                                                                        <br />
+                                                                        <SfTextBox ID="CG_PROD" @bind-Value="@(MP.CG_MAT)" Readonly="true"></SfTextBox>
                                                                     </div>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-6">
-                                                                            <label class="e-float-text e-label-top">Fecha Prevista:</label>
-                                                                            <br />
-                                                                            <SfDatePicker ID="FECHA_PREVISTA" @bind-Value="@(MP.ENTRPREV)" Format="dd/MM/yyyy"></SfDatePicker>
-                                                                        </div>
+
+                                                                    <div class="form-group col-md-6">
+                                                                        <label class="e-float-text e-label-top">Stock a Comprar:</label>
+                                                                        <br />
+                                                                        <SfNumericTextBox ID="ACOMPRAR" Format="N2" @bind-Value="@(MP.ACOMPRAR)"></SfNumericTextBox>
                                                                     </div>
                                                                 </div>
-                                                            }
-                                                        </Template>
-                                                    </GridEditSettings>
-                                                    <GridColumns>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.CG_MAT) HeaderText="Codigo Insumo" IsPrimaryKey="true" TextAlign="TextAlign.Left" Width="90px"></GridColumn>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.DES_MAT) HeaderText="Descripción del insumo" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.REQUERIDO) Format="N2" HeaderText="Stock requerido" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.CALCULADO) Format="N2" HeaderText="Compra sugerida" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.ACOMPRAR) Format="N2" HeaderText="Stock a Comprar" TextAlign="TextAlign.Left" Visible="Enabled" Width="130px"></GridColumn>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.ACOMPRAR_INFORMADO) Format="N2" HeaderText="Stock a Comprar Informado" TextAlign="TextAlign.Left" Visible="Enabled" Width="200px"></GridColumn>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.STOCK) Format="N2" HeaderText="Stock físico" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.STOCK_CORREG) Format="N2" HeaderText="Stock corregido" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.UNIDMED) HeaderText="Unidades de stock" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.UNIDCOMER) HeaderText="Unidades de compra" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.STOCK_MINIMO) Format="N2" HeaderText="Stock de seguridad" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.PEND_SIN_OC) Format="N2" HeaderText="Orden de compra solicitada" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.COMP_DE_ENTRADA) Format="N2" HeaderText="Compromiso de entrada" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.COMP_DE_SALIDA) Format="N2" HeaderText="Compromiso de salida" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.EN_PROCESO) Format="N2" HeaderText="Stock en proceso" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                                                        <GridColumn Field=@nameof(ModeloAbastecimiento.ENTRPREV) Format="d" HeaderText="Fecha de entrega" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                                                    </GridColumns>
-                                                    <SfSpinner @bind-Visible="@VisiblePropertyMP">
-                                                    </SfSpinner>
-                                                </SfGrid>
-                                            </div>
+                                                                <div class="form-row">
+                                                                    <div class="form-group col-md-6">
+                                                                        <label class="e-float-text e-label-top">Fecha Prevista:</label>
+                                                                        <br />
+                                                                        <SfDatePicker ID="FECHA_PREVISTA" @bind-Value="@(MP.ENTRPREV)" Format="dd/MM/yyyy"></SfDatePicker>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </Template>
+                                                </GridEditSettings>
+                                                <GridColumns>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.CG_MAT) HeaderText="Codigo Insumo" IsPrimaryKey="true" TextAlign="TextAlign.Left" Width="90px"></GridColumn>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.DES_MAT) HeaderText="Descripción del insumo" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.REQUERIDO) Format="N2" HeaderText="Stock requerido" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.CALCULADO) Format="N2" HeaderText="Compra sugerida" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.ACOMPRAR) Format="N2" HeaderText="Stock a Comprar" TextAlign="TextAlign.Left" Visible="Enabled" Width="130px"></GridColumn>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.ACOMPRAR_INFORMADO) Format="N2" HeaderText="Stock a Comprar Informado" TextAlign="TextAlign.Left" Visible="Enabled" Width="200px"></GridColumn>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.STOCK) Format="N2" HeaderText="Stock físico" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.STOCK_CORREG) Format="N2" HeaderText="Stock corregido" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.UNIDMED) HeaderText="Unidades de stock" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.UNIDCOMER) HeaderText="Unidades de compra" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.STOCK_MINIMO) Format="N2" HeaderText="Stock de seguridad" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.PEND_SIN_OC) Format="N2" HeaderText="Orden de compra solicitada" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.COMP_DE_ENTRADA) Format="N2" HeaderText="Compromiso de entrada" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.COMP_DE_SALIDA) Format="N2" HeaderText="Compromiso de salida" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.EN_PROCESO) Format="N2" HeaderText="Stock en proceso" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                                    <GridColumn Field=@nameof(ModeloAbastecimiento.ENTRPREV) Format="d" HeaderText="Fecha de entrega" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                                </GridColumns>
+                                                <GridTemplates>
+                                                    <EmptyRecordTemplate>
+                                                        @if (VisiblePropertySE)
+                                                        {
+                                                            <span>Cargando...</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>No hay registros.</span>
+                                                        }
+                                                    </EmptyRecordTemplate>
+                                                </GridTemplates>
+                                                <SfSpinner @bind-Visible="@VisiblePropertyMP" Label="Cargando MP..." Type="SpinnerType.Fabric"></SfSpinner>
+                                            </SfGrid>
                                         </div>
                                     </div>
-                                }
-                                else
-                                {
-                                    
-                                }
+                                </div>
                             </ContentTemplate>
                         </TabItem>
                     </TabItems>
@@ -267,5 +270,3 @@
         color: #f06b6b !important;
     }
 </style>
-@code {
-}
