@@ -18,10 +18,12 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
+
 namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
 {
     public class CargaMaquinaBase : ComponentBase
     {
+        [Inject] IJSRuntime JSRuntime { get; set; }
         [Inject] protected IJSRuntime JS { get; set; }
         [Inject] public PdfService PdfService { get; set; }
         [Inject] public HttpClient Http { get; set; }
@@ -76,6 +78,15 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
         protected SfSpinner SpinnerCDM;
         protected bool Visible = false;
         protected string MensajeCargando = "Cargando...";
+
+        public void OpenExternalLink(string url)
+        {
+            if (!string.IsNullOrEmpty(url))
+            {
+                // Open the URL in a new tab or window
+                JSRuntime.InvokeAsync<object>("open", url, "_blank");
+            }
+        }
         protected override async Task OnInitializedAsync()
         {
             //await SpinnerCDM.ShowAsync();
