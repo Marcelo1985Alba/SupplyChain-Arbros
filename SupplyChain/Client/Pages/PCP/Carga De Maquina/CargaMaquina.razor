@@ -15,7 +15,7 @@
 
 @using System.IO;
 @using Syncfusion.Blazor.Gantt
-
+@inject NavigationManager NavigationManager;
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
 @attribute [Authorize(Roles = "Administrador, Produccion")]
@@ -149,6 +149,7 @@
                                     }
                                 }
                             </tr>
+                            
                         </thead>
                         <tbody>
                             @*Dibuja barras*@
@@ -161,6 +162,8 @@
                                         <a href="Abms/celdas" target="_blank" class="CargaHyperLink">
                                             @dbCarga[i].CG_CELDA
                                         </a>
+                                        <button onclick="@(() => OpenExternalLink("https://aerre.grafana.net/public-dashboards/42c12fc6b1ad4c57b9ad51817fa6d364"))">Ver Panel</button>
+
                                     </td>
                                     @*DES_CELDA*@
                                     <td class="CargaCellClass" style="min-width:200px;border-right: solid;
@@ -188,7 +191,8 @@
                                             {
                                                 <td class="CargaCellClass" style="border-left: solid;
                                                             border-left-width: thin;
-                                                            border-left-color:lightgray;" />
+                                                            border-left-color:lightgray;" />                                                
+
                                             }
                                             else
                                             {
@@ -202,6 +206,7 @@
                                             }
                                         }
                                         <td class="CargaCellClass" colspan="@dbCarga[i].COLUMNSPAN">
+                                            
                                             @{
                                                 int xOrdenFabricacion = dbCarga.ElementAt(i).CG_ORDF;
                                                 bool xExigeOA = dbCarga.ElementAt(i).EXIGEOA;
