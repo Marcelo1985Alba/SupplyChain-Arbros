@@ -41,7 +41,7 @@ namespace SupplyChain
                 Connection.Close();
                 DataAdatper.Dispose();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 //MessageBox.Show("Commit Exception Type: {0}  " + ex.GetType() + "\n Message: {0}  " + ex.Message + "\n\n" + SQLCommandString, "Información", MessageBoxButton.OK, MessageBoxImage.Information);
             }

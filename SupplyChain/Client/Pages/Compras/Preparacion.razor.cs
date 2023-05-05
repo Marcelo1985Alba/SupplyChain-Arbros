@@ -170,6 +170,7 @@ namespace SupplyChain.Client.Pages.Preparacion
 
         protected async Task BuscarProductoPreparacion()
         {
+            var url = string.Empty;
             if (string.IsNullOrEmpty(DesMat) && string.IsNullOrEmpty(CgMat))
             {
                 Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarProducto_PREP/Vacio" +
@@ -180,17 +181,22 @@ namespace SupplyChain.Client.Pages.Preparacion
             {
                 if (string.IsNullOrEmpty(DesMat))
                 {
-                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarProducto_PREP/{CgMat}" +
-                        $"/Vacio/{CantidadMostrar}");
+                    url = $"api/Prod/Buscar?CG_PROD={CgMat}&DES_PROD=VACIO&Busqueda={CantidadMostrar}";
+                    //Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarProducto_PREP/{CgMat}" +
+                    //    $"/Vacio/{CantidadMostrar}");
+
+                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>(url);
 
                 }
                 else if (string.IsNullOrEmpty(CgMat))
                 {
-                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarProducto_PREP/Vacio/{DesMat}/{CantidadMostrar}");
+                    url = $"api/Prod/Buscar?CG_PROD=VACIO&DES_PROD={DesMat}&Busqueda={CantidadMostrar}";
+                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>(url);
                 }
                 else
                 {
-                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/BuscarProducto_PREP/{CgMat}/{DesMat}/{CantidadMostrar}");
+                    url = $"api/Prod/Buscar?CG_PROD={CgMat}&DES_PROD={DesMat}&Busqueda={CantidadMostrar}";
+                    Busquedalist = await Http.GetFromJsonAsync<List<Producto>>(url);
                 }
                 IsVisible = true;
             }

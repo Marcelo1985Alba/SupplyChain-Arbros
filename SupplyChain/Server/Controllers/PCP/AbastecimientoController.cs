@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using SupplyChain.Client.HelperService;
+using SupplyChain.Shared.Login;
 using SupplyChain.Shared.Models;
 
 namespace SupplyChain.Server.Controllers
@@ -339,20 +340,32 @@ namespace SupplyChain.Server.Controllers
         }
 
         // PUT: api/Abastecimiento/PutAbMP/{id}
-        [HttpPut("PutAbMP/{id}")]
-        public async Task<ActionResult<List<ModeloAbastecimiento>>> PutAbMP(string id, ModeloAbastecimiento Ab)
+        [HttpPut("PutAbMP")]
+        public async Task<ActionResult<ModeloAbastecimiento>> PutAbMP(ModeloAbastecimiento Ab)
         {
-            string xCg_mat = Ab.CG_MAT;
-            string xValor = Ab.ACOMPRAR.ToString();
-            // Reemplaza "," por "." para grabar en el SQL
-            xValor = Convert.ToDouble(xValor.Replace(",", ".")).ToString();
-            ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
-            string xSQLcommandString = "UPDATE NET_Temp_Abastecimiento SET ACOMPRAR = " + xValor + ", " +
-                $"ENTRPREV = '{Ab.ENTRPREV}' " +
-                "WHERE Cg_mat='" + xCg_mat + "'";
-            xConexionSQL.EjecutarSQLNonQuery(xSQLcommandString);
+            //string xCg_mat = Ab.CG_MAT;
+            //string xValor = Ab.ACOMPRAR.ToString();
+            //// Reemplaza "," por "." para grabar en el SQL
+            //xValor = Convert.ToDouble(xValor.Replace(",", ".")).ToString();
+            //ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+            //string xSQLcommandString = "UPDATE NET_Temp_Abastecimiento SET ACOMPRAR = " + xValor + ", " +
+            //    $"ENTRPREV = '{Ab.ENTRPREV}' " +
+            //    "WHERE Cg_mat='" + xCg_mat + "'";
+            //xConexionSQL.EjecutarSQLNonQuery(xSQLcommandString);
 
-            return NoContent();
+            try
+            {
+                _context.ModeloAbastecimiento.Attach(Ab);
+                _context.Entry(Ab).Property(u => u.ACOMPRAR).IsModified = true;
+                _context.Entry(Ab).Property(u => u.ENTRPREV).IsModified = true;
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: api/Abastecimiento/PutAbSE/{id}

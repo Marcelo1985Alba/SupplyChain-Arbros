@@ -58,28 +58,38 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
         //protected bool ToastVisible { get; set; } = false;
         protected override async Task OnInitializedAsync()
         {
-            VisiblePropertySE = true;
-            //VisiblePropertyMP = true;
-            //HttpResponseMessage respuesta;
-            var listAbastecimiento = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento");
-            listaAbastMP = listAbastecimiento.Where(a => a.CG_ORDEN == 4).ToList();
-            listaAbastSE = listAbastecimiento.Where(a => a.CG_ORDEN == 3).ToList();
-            //listaAbastMP = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecimientoMP");
-            //listaAbastSE =  await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecimientoSE");
-            //if (respuesta.StatusCode == System.Net.HttpStatusCode.BadRequest)
-            //{
-            //    var mensServidor = await respuesta.Content.ReadAsStringAsync();
+            try
+            {
+                VisiblePropertySE = true;
+                VisiblePropertyMP = true;
+                //HttpResponseMessage respuesta;
+                var listAbastecimiento = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento");
+                listaAbastMP = listAbastecimiento.Where(a => a.CG_ORDEN == 4).ToList();
+                listaAbastSE = listAbastecimiento.Where(a => a.CG_ORDEN == 3).ToList();
+                //listaAbastMP = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecimientoMP");
+                //listaAbastSE =  await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecimientoSE");
+                //if (respuesta.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                //{
+                //    var mensServidor = await respuesta.Content.ReadAsStringAsync();
 
-            //    Console.WriteLine($"Error: {mensServidor}");
-            //    //await NotificacionObj.ShowAsyncError();
-            //}
-            //else
-            //{
-            //    listaAbastSE = await respuesta.Content.ReadFromJsonAsync<List<ModeloAbastecimiento>>();
-            //}
+                //    Console.WriteLine($"Error: {mensServidor}");
+                //    //await NotificacionObj.ShowAsyncError();
+                //}
+                //else
+                //{
+                //    listaAbastSE = await respuesta.Content.ReadFromJsonAsync<List<ModeloAbastecimiento>>();
+                //}
 
-            //await InvokeAsync(StateHasChanged);
-            VisiblePropertySE = false;
+                //await InvokeAsync(StateHasChanged);
+                GridSE.PreventRender();
+                await GridSE.AutoFitColumnsAsync();
+                VisiblePropertyMP = false;
+                VisiblePropertySE = false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
 
@@ -87,14 +97,14 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
         {
             VisiblePropertySE = true;
             GridSE.PreventRender();
-            await GridSE.AutoFitColumns();
+            await GridSE.AutoFitColumnsAsync();
             VisiblePropertySE = false;
         }
 
         public async Task DataBoundHandler(object args)
         {
             GridSE.PreventRender();
-            await GridSE.AutoFitColumns();
+            await GridSE.AutoFitColumnsAsync();
             VisiblePropertySE = false;
 
         }
@@ -114,7 +124,7 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
         {
             if (args.Item.Text == "Excel Export")
             {
-                await this.GridSE.ExcelExport();
+                await this.GridSE.ExportToExcelAsync();
             }
             if (args.Item.Text == "Print")
             {
@@ -130,7 +140,7 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
                 HttpResponseMessage response;
-                response = await Http.PutAsJsonAsync($"api/Abastecimiento/PutAbMP/{args.Data.CG_MAT}", args.Data);
+                response = await Http.PutAsJsonAsync($"api/Abastecimiento/PutAbMP", args.Data);
                 listaAbastMP = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecimientoMPX");
                 await GridMP.Refresh();
             }
@@ -144,10 +154,9 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             {
                 HttpResponseMessage response;
                 response = await Http.PutAsJsonAsync($"api/Abastecimiento/PutAbSE/{args.Data.CG_MAT}", args.Data);
-                //listaAbastSE = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecimientoSEX");
-                await GridSE.RefreshHeader();
-                await GridSE.RefreshColumns();
-                GridSE.Refresh();
+                await GridSE.RefreshHeaderAsync();
+                await GridSE.RefreshColumnsAsync();
+                await GridSE.Refresh();
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
             {
