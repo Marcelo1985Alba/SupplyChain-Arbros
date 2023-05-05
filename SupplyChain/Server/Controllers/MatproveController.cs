@@ -28,7 +28,7 @@ namespace SupplyChain.Server.Controllers
 
 
         // GET: api/Matprove/BuscarProve/{CG_MAT}
-        [HttpGet("BuscarProve/{CG_MAT}")]
+        [HttpGet("BuscarProve")]
         public async Task<ActionResult<IEnumerable<Matprove_busquedaprove>>> BuscarProve(string CG_MAT)
         {
             /*
