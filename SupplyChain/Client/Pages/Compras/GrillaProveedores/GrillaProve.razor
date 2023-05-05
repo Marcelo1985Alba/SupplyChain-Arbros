@@ -1,4 +1,4 @@
-﻿@*@page "/compras/proveedores"
+﻿@page "/compras/proveedores"
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Buttons
@@ -8,6 +8,7 @@
 @using Syncfusion.Blazor.Calendars
 @using SupplyChain.Client.Shared
 @inherits GrillaProveBase
+@attribute [Authorize]
 
 <div class="row">
     <div class="col-12">
@@ -34,7 +35,6 @@
                         <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" AllowEditOnDblClick="false"
                             ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog"></GridEditSettings>
                        <GridColumns>
-                           <GridAggregateColumn Type="ColumnType.CheckBox" Width="50"></GridAggregateColumn>
                            <GridColumn Field=@nameof(vProveedorItris.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                            <GridColumn Field=@nameof(vProveedorItris.DESCRIPCION) HeaderText="DESCRIPCION" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                            <GridColumn Field=@nameof(vProveedorItris.CUIT) HeaderText="CUIT" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
@@ -99,4 +99,4 @@
         }
     }
 
-}*@
+}
