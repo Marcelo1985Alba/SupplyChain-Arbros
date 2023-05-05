@@ -247,7 +247,7 @@ namespace SupplyChain.Server.Controllers
         }
 
         // GET: api/Compras/Ultimascompras/cgmat
-        [HttpGet("Ultimascompras/{cgmat}")]
+        [HttpGet("Ultimascompras")]
         public async Task<ActionResult<IEnumerable<Compra>>> Ultimascompras(string cgmat)
         {
             return Ok( await _compraRepository.UltimasCompras(3, cgmat));

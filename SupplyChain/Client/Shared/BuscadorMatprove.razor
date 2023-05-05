@@ -86,8 +86,10 @@
     {
         if (!string.IsNullOrEmpty(xCgMat))
         {
-            Busquedamatprove = await Http.GetFromJsonAsync<List<Matprove_busquedaprove>>($"api/Matprove/BuscarProve/{xCgMat}");
-            ultimascompras = await Http.GetFromJsonAsync<List<Compra>>($"api/Compras/Ultimascompras/{xCgMat}");
+            //Busquedamatprove = await Http.GetFromJsonAsync<List<Matprove_busquedaprove>>($"api/Matprove/BuscarProve/{xCgMat}");
+            Busquedamatprove = await Http.GetFromJsonAsync<List<Matprove_busquedaprove>>($"api/Matprove/BuscarProve?CG_MAT={xCgMat}");
+            //ultimascompras = await Http.GetFromJsonAsync<List<Compra>>($"api/Compras/Ultimascompras/{xCgMat}");
+            ultimascompras = await Http.GetFromJsonAsync<List<Compra>>($"api/Compras/Ultimascompras?cgmat={xCgMat}");
             IsVisibleMatprove = true;
         }
     }
