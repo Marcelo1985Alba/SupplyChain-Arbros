@@ -24,9 +24,10 @@ namespace SupplyChain.Server.Repositorios
         {
             
             var fromAddress = new MailAddress(_configEmailCompras.NombreUsuario, "Compras Aerre");
-            //var toAddress = new MailAddress(destinatario);
-            destinatario = _configEmailCompras.To;
             var toAddress = new MailAddress(destinatario);
+            //destinatario = _configEmailCompras.To;
+            //var toAddress = new MailAddress(destinatario);
+            var ccAddress = new MailAddress(_configEmailCompras.Copia);
             string fromPassword = _configEmailCompras.Contraseña;
             string smtpServer = _configEmailCompras.ServidorSmtp;
             int smtpPort = _configEmailCompras.Puerto;
@@ -37,15 +38,18 @@ namespace SupplyChain.Server.Repositorios
                 Port = smtpPort,
                 EnableSsl = _configEmailCompras.RequiereAutenticacion,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false, 
+                UseDefaultCredentials = false,
                 Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
             };
 
             using var message = new MailMessage(fromAddress, toAddress)
             {
                 Subject = asunto,
-                Body = cuerpo
+                Body = cuerpo, 
+                
             };
+
+            message.CC.Add(ccAddress);
 
             await smtp.SendMailAsync(message);
         }
