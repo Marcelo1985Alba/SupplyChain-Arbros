@@ -188,7 +188,13 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
-                return Ok(await _compraRepository.Obtener(c => c.NUMERO == 0 && c.NROCLTE == 0).ToListAsync());
+                var sugerencias = await _compraRepository.Obtener(c => c.NUMERO == 0 && c.NROCLTE == 0).ToListAsync();
+                await sugerencias.ForEachAsync(async c =>
+                {
+                    c.TieneSolicitudCotizacion = await _context.SolCotEmails.AnyAsync(e=> e.REGISTRO_COMPRAS == c.Id);
+                });
+
+                return Ok(sugerencias);
             }
             catch (Exception ex)
             {
