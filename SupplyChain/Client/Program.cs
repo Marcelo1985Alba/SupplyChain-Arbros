@@ -99,6 +99,7 @@ namespace SupplyChain.Client
             services.AddScoped<EstadoComprasService>();
 
             services.AddScoped<ModulosUsuarioService>();
+            services.AddScoped<ProveedoresService>();
         }
     }
 }

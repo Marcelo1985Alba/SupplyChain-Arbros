@@ -73,6 +73,7 @@ namespace SupplyChain.Client.Pages.Preparacion
         protected bool buttondisablepreciocant = true;
         protected bool IsVisibleform = false;
         protected bool IsVisiblegrilla = true;
+        protected string xCalle= "";
         protected List<Producto> CG_PRODlist = new();
         protected List<Producto> DES_PRODlist = new();
         protected List<Producto> Busquedalist = new();
@@ -263,6 +264,7 @@ namespace SupplyChain.Client.Pages.Preparacion
             xMoneda = "PESOS";
             xDiasvige = 0;
             IsVisibleProveedores = false;
+            xCalle = prove.CALLE;
             cambiapaso(3);
         }
 
@@ -289,6 +291,7 @@ namespace SupplyChain.Client.Pages.Preparacion
                 xCant1 = 0;
                 xPrecio = 0;
                 xDescuento = 0;
+                xCalle = "";
                 xFeprev = DateTime.Now.Date;
             }
             else if (flag == 1)
@@ -308,6 +311,7 @@ namespace SupplyChain.Client.Pages.Preparacion
                 xCant1 = 0;
                 xPrecio = 0;
                 xDescuento = 0;
+                xCalle = "";
             }
             else if (flag == 2)
             {

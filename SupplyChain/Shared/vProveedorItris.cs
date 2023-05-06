@@ -16,5 +16,6 @@ namespace SupplyChain.Shared
         public string CUIT { get; set; }
         public string? NOMBRE_CONTACTO { get; set; }
         public string? EMAIL_CONTACTO { get; set; }
+        public string CALLE { get; set; }    
     }
 }
