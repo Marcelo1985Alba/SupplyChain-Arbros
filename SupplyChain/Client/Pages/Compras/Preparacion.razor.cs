@@ -26,11 +26,13 @@ using Syncfusion.Pdf.Tables;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Shared.Prod;
 using SupplyChain.Shared;
+using SupplyChain.Client.RepositoryHttp;
 
 namespace SupplyChain.Client.Pages.Preparacion
 {
     public class PreparacionPageBase : ComponentBase
     {
+        [Inject] protected IRepositoryHttp HttpNew { get; set; }
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
         [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
@@ -115,17 +117,18 @@ namespace SupplyChain.Client.Pages.Preparacion
         {
             if (!string.IsNullOrWhiteSpace(args.Value))
             {
+                DesMat = string.IsNullOrEmpty(DesMat) ? string.Empty : DesMat;
                 var query = $"Codigo={args.Value.Trim()}&Descripcion={DesMat}";
-                var prod = await Http.GetFromJsonAsync<Producto>($"api/Prod/GetByFilter?{query}");
+                var respose = await HttpNew.GetFromJsonAsync<Producto>($"api/Prod/GetByFilter?{query}");
 
-                if (prod != null)
+                if (respose.Response != null)
                 {
-                    xUnid = prod.UNID;
-                    xUnidMP = prod.UNID;
-                    xespecif = prod.ESPECIF;
-                    xUnid1 = prod.UNIDSEG;
-                    xCgden = prod.CG_DENSEG;
-                    DesMat = prod.DES_PROD;
+                    xUnid = respose.Response.UNID;
+                    xUnidMP = respose.Response.UNID;
+                    xespecif = respose.Response.ESPECIF;
+                    xUnid1 = respose.Response.UNIDSEG;
+                    xCgden = respose.Response.CG_DENSEG;
+                    DesMat = respose.Response.DES_PROD;
                     cambiapaso(2);
                 }
                 else

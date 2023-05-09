@@ -350,7 +350,7 @@ namespace SupplyChain
         public async Task<ActionResult<List<Producto>>> Buscar(string CG_PROD, string DES_PROD, int Busqueda)
         {
             List<Producto> lContiene = new();
-            if ((string.IsNullOrEmpty(CG_PROD) && string.IsNullOrEmpty(DES_PROD)) || (CG_PROD == "Vacio" && DES_PROD == "Vacio"))
+            if ((string.IsNullOrEmpty(CG_PROD) && string.IsNullOrEmpty(DES_PROD)) || (CG_PROD == "VACIO" && DES_PROD == "VACIO"))
             {
                 /*
                 lContiene = (await _productoRepository.ObtenerTodos())
@@ -359,7 +359,7 @@ namespace SupplyChain
                 lContiene = await _productoRepository.Obtener(p => p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda).ToListAsync();
 
             }
-            else if (string.IsNullOrEmpty(DES_PROD) || DES_PROD == "Vacio")
+            else if (string.IsNullOrEmpty(DES_PROD) || DES_PROD == "VACIO")
             {
                 lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
                     .ToListAsync();
@@ -368,7 +368,7 @@ namespace SupplyChain
                     return NotFound();
                 }
             }
-            else if (string.IsNullOrEmpty(CG_PROD) || CG_PROD == "Vacio")
+            else if (string.IsNullOrEmpty(CG_PROD) || CG_PROD == "VACIO")
             {
                 lContiene = await _productoRepository.Obtener(p => p.DES_PROD.Contains(DES_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
                     .ToListAsync();
@@ -380,7 +380,7 @@ namespace SupplyChain
 
             }
 
-            else if (CG_PROD != "Vacio" && DES_PROD != "Vacio")
+            else if (CG_PROD != "VACIO" && DES_PROD != "VACIO")
             {
                 lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD)
                     && p.DES_PROD.Contains(DES_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda).ToListAsync();
