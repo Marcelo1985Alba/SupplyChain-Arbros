@@ -29,9 +29,8 @@ namespace SupplyChain.Client.Pages.Compras.GrillaProveedores
         protected string state;
         #endregion
         [Inject] protected ProveedoresService ProveedoresService { get; set; }
-        protected List<object> Toolbaritems = new List<object>()
-        {
-            new ItemModel{ Text="Buscar", TooltipText="Buscar Proveedor", PrefixIcon="e-search", Id="Buscar"}
+        protected List<object> Toolbaritems = new()
+        {   "Search"
         };
 
         protected List<vProveedorItris> proveedorItris = new();
