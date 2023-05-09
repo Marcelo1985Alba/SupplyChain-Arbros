@@ -7,6 +7,7 @@ using SupplyChain.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -40,6 +41,10 @@ namespace SupplyChain.Client.HelperService
                 return false;
             }
             return true;
+        }
+        public async Task<HttpResponseWrapper<List<MantCeldas>>> ByEstado(EstadoMantCeldas estado= EstadoMantCeldas.Todos)
+        {
+            return await http.GetFromJsonAsync<List<MantCeldas>>($"{API}/ByEstado/{estado}");
         }
     }
 }
