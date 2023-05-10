@@ -40,7 +40,7 @@
                           @onclick="BuscarOrden_Click">Abrir órden de fabricación</SfButton>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-2">
             <div>
                 <SfProgressButton Content="Enviar OFs a DataCore"
                                   IconCss="fa fa-share-square" CssClass="btn btn-sm btn-info"
@@ -48,7 +48,14 @@
                 </SfProgressButton>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-2">
+            @*<button class="" onclick="@(() => OpenExternalLink("https://aerre.grafana.net/public-dashboards/42c12fc6b1ad4c57b9ad51817fa6d364"))">Ver Panel</button>*@
+             <div>
+                <SfButton IconCss="" CssClass="btn btn-sm btn-info"
+                          OnClick="OpenExternalLink">Ver Panel</SfButton>
+            </div>
+        </div>
+        <div class="col-2">
             <div>
                 <SfProgressButton Content="Refrescar"
                                   IconCss="fa fa-refresh" CssClass="btn btn-sm btn-info"
@@ -162,7 +169,7 @@
                                         <a href="Abms/celdas" target="_blank" class="CargaHyperLink">
                                             @dbCarga[i].CG_CELDA
                                         </a>
-                                        <button onclick="@(() => OpenExternalLink("https://aerre.grafana.net/public-dashboards/42c12fc6b1ad4c57b9ad51817fa6d364"))">Ver Panel</button>
+                                        
 
                                     </td>
                                     @*DES_CELDA*@
