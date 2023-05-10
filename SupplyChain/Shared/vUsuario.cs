@@ -1,4 +1,7 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection.Metadata;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SupplyChain.Shared
 {
@@ -7,5 +10,8 @@ namespace SupplyChain.Shared
         public string USUARIO { get; set; }
         public string EMAIL { get; set; }
         public string? CLIENTE { get; set; }
+        [NotMapped]
+        public Blob? FOTO { get; set; }  
+        
     }
 }

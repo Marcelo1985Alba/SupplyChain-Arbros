@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Syncfusion.Blazor.Inputs;
 
 namespace SupplyChain.Client.Pages.ABM.Usuarios
 {
@@ -51,7 +52,7 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
 
         };
 
-
+        
         protected async override Task OnInitializedAsync()
         {
             SpinnerVisible = true;

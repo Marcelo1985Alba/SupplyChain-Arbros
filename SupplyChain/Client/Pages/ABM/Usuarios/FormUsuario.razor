@@ -6,6 +6,7 @@
 @using SupplyChain.Client.Shared.BuscadorProducto
 @using SupplyChain.Client.Shared.BuscadorPrecios
 @using SupplyChain.Client.Pages.ABM.Precios
+@using Syncfusion.Blazor.Inputs
 
 @inherits FormUsuarioBase
 
@@ -52,6 +53,11 @@
 
                 </div>
 
+                <SfUploader ID="UploadFiles" AutoUpload=false DirectoryUpload=true>
+                    <UploaderAsyncSettings SaveUrl="api/SampleData/Save" RemoveUrl="api/SampleData/Remove"></UploaderAsyncSettings>
+                </SfUploader>
+
+              
 
                 <div class="form-row align-items-end">
                     @if (ApplicationUser.EsNuevo)
