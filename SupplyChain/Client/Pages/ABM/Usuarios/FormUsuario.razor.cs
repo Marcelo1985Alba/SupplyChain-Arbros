@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Syncfusion.Blazor.Inputs;
+using System.Net.Http;
 
 namespace SupplyChain.Client.Pages.ABM.Usuarios
 {
@@ -184,7 +185,7 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
 
         private async Task ToastMensajeError(string content = "Ocurrio un Error.")
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = content,
@@ -193,6 +194,47 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
                 ShowCloseButton = true,
                 ShowProgressBar = true
             });
+        }
+
+
+        protected async Task OnChangeFileUpload(UploadChangeEventArgs args)
+        {
+            try
+            {
+                UploadFiles file = args.Files[0];
+                var buffers = new byte[file.Stream.Length];
+
+                file.Stream.Seek(0, System.IO.SeekOrigin.Begin);
+                await file.Stream.ReadAsync(buffers, 0, buffers.Length);
+                file.Stream.Dispose();
+
+                string imageType = file.FileInfo.MimeContentType;
+                string imgUrl = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
+
+                // Crea un objeto FormData para enviar la foto a la API
+                var formData = new MultipartFormDataContent();
+                formData.Add(new StreamContent(file.Stream), "photo", file.FileInfo.Name);
+
+                var response2 = await Http.PutAsJsonAsync<MultipartFormDataContent>($"api/AdministacionArchivos/UploadImage/{ApplicationUser.Id}", formData);
+                foreach (var archivo in args.Files)
+                {
+                    if (response2.Error)
+                    {
+                        await ToastMensajeError();
+                    }
+                    else
+                    {
+
+                        //ApplicationUser.Foto = response2.Response.UrlAzure;
+                        //await uploaderControl.RemoveAsync();
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
         public async Task Hide()
