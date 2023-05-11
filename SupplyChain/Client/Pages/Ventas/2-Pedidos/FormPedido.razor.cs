@@ -407,6 +407,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                 item.CG_COND_ENTREGA = Pedido.CG_COND_ENTREGA;
                 item.DPP = Pedido.CONDICION_PAGO;
                 item.MONEDA = Pedido.MONEDA;
+                item.DIRENT = Pedido.DIRENT;
                 item.CAMPOCOM1 = item.CAMPOCOM1.Trim();
                 item.CAMPOCOM2 = item.CAMPOCOM2.Trim();
                 item.CAMPOCOM3 = item.CAMPOCOM3.Trim();
