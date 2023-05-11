@@ -3,7 +3,8 @@
 @using Syncfusion.Blazor.DropDowns
 @inherits SugerenciasComprasBase
 
-<SfListBox @ref="@refSfListBox" CssClass="e-template-listbox" TValue="Compra[]" DataSource="@ListData" TItem="Compra" Height="550px" 
+<SfListBox @ref="@refSfListBox" CssClass="e-template-listbox" TValue="Compra[]" DataSource="@ListData" 
+            TItem="Compra" Height="550px" vir
                    AllowFiltering="true" FilterBarPlaceholder="Buscar Materia Prima...">
             <ListBoxFieldSettings Text="CG_MAT" Value="CG_MAT" ></ListBoxFieldSettings>
             <ListBoxEvents TValue="Compra[]" TItem="Compra" ValueChange="SelectedChange"></ListBoxEvents>
@@ -11,8 +12,9 @@
                 <ItemTemplate>
                     @{
                         var compra = context as Compra;
+                        var itemClass = compra.TieneSolicitudCotizacion ? "has-request" : "";
                     }
-                    <div class="list-wrapper">
+                    <div class="list-wrapper @(itemClass)">
                         <div class="row">
                             <div class="col-6">
                                 <span class="text">@compra.CG_MAT.Trim()</span>
@@ -35,10 +37,10 @@
                             <span class="text">@(total) </span>
                             </div>
                             <div class="col-auto p-0 m-0">
-                                <span class="text"> (@(compra.UNID)) </span>
+                                <span class="text"> @(compra.UNID)) </span>
                             </div>
                             <div class="col-auto p-0 m-0">
-                                <span class="text">/ @(compra.AUTORIZADO) </span>
+                                <span class="text">/ @(Math.Round(compra.AUTORIZADO.Value)) </span>
                             </div>
                             <div class="col-auto p-0 m-0">
                                 <span class="text"> (@((context as Compra).UNID1)) </span>
@@ -95,8 +97,7 @@
         top: calc(50% - 35px);
     }
 
-    /*.bootstrap4 .list-wrapper .e-avatar {
-            top: calc(50% - 28px);
-        }
-
+    .has-request {
+        color: red;
+    }
 </style>

@@ -79,8 +79,9 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
         protected bool Visible = false;
         protected string MensajeCargando = "Cargando...";
 
-        public void OpenExternalLink(string url)
+        public void OpenExternalLink()
         {
+            string url = "https://aerre.grafana.net/public-dashboards/42c12fc6b1ad4c57b9ad51817fa6d364";
             if (!string.IsNullOrEmpty(url))
             {
                 // Open the URL in a new tab or window
