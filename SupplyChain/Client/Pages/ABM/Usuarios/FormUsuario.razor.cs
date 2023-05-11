@@ -13,12 +13,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Syncfusion.Blazor.Inputs;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using Syncfusion.Blazor.Charts.Chart.Internal;
 
 namespace SupplyChain.Client.Pages.ABM.Usuarios
 {
     public class FormUsuarioBase : ComponentBase
     {
         [Inject] public RepositoryHttp.IRepositoryHttp Http { get; set; }
+        [Inject] public HttpClient Http2 { get; set; }
         [Inject] public ClienteService ClienteService { get; set; }
         /// <summary>
         /// objecto modificado el cual tambien obtiene la id nueva en caso de agregar un nuevo
@@ -32,14 +35,14 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
 
         [Parameter] public List<ClienteExterno> Clientes { get; set; } = new();
 
-        [Parameter] public string HeightDialog { get; set; } = "350px";
+        [Parameter] public string HeightDialog { get; set; } = "450px";
         protected SfMultiSelect<string[], string> refMultiSelect;
         protected SfSpinner refSpinnerCli;
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
         protected List<string> Roles = new();
-        
-        
+
+        protected MultipartFormDataContent formData = new MultipartFormDataContent();
 
         protected Dictionary<string, object> HtmlAttribute = new()
         {
@@ -101,8 +104,18 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
             SpinnerVisible = false;
             if (guardado)
             {
-                Show = false;
-                await OnGuardar.InvokeAsync(ApplicationUser);
+                var response2 = await Http2.PostAsync($"api/AdministracionArchivos/UploadImage/{ApplicationUser.Id}", formData);
+                if (!response2.IsSuccessStatusCode)
+                {
+                    await ToastMensajeError("Error al guardar imagen");
+                }
+                else
+                {
+
+                    Show = false;
+                    await OnGuardar.InvokeAsync(ApplicationUser);
+                }
+                
             }
 
 
@@ -196,7 +209,6 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
             });
         }
 
-
         protected async Task OnChangeFileUpload(UploadChangeEventArgs args)
         {
             try
@@ -209,27 +221,17 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
                 file.Stream.Dispose();
 
                 string imageType = file.FileInfo.MimeContentType;
+                ApplicationUser.Foto = buffers;
                 string imgUrl = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
 
                 // Crea un objeto FormData para enviar la foto a la API
-                var formData = new MultipartFormDataContent();
-                formData.Add(new StreamContent(file.Stream), "photo", file.FileInfo.Name);
+                formData = new MultipartFormDataContent();
+                var byteArrayContent = new ByteArrayContent(buffers);
+                byteArrayContent.Headers.ContentType = new MediaTypeHeaderValue(imageType);
 
-                var response2 = await Http.PutAsJsonAsync<MultipartFormDataContent>($"api/AdministacionArchivos/UploadImage/{ApplicationUser.Id}", formData);
-                foreach (var archivo in args.Files)
-                {
-                    if (response2.Error)
-                    {
-                        await ToastMensajeError();
-                    }
-                    else
-                    {
+                formData.Add(byteArrayContent, "photo", file.FileInfo.Name);
 
-                        //ApplicationUser.Foto = response2.Response.UrlAzure;
-                        //await uploaderControl.RemoveAsync();
-                    }
-
-                }
+                
             }
             catch (Exception e)
             {

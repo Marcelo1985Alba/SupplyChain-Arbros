@@ -10,8 +10,7 @@ namespace SupplyChain.Shared
         public string USUARIO { get; set; }
         public string EMAIL { get; set; }
         public string? CLIENTE { get; set; }
-        [NotMapped]
-        public Blob? FOTO { get; set; }  
+        public byte[] FOTO { get; set; }  
         
     }
 }

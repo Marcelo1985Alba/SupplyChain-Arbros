@@ -874,26 +874,33 @@ namespace SupplyChain.Server.Controllers
             //return File(stream, contentType, fileName);
         }
 
-        [HttpPut("UploadImage/{userId}")]
+        [HttpPost("UploadImage/{userId}")]
         public async Task<IActionResult> UploadImage(string userId, IFormFile photo)
         {
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null)
+            try
             {
-                return NotFound();
-            }
+                var user = await _context.Users.FindAsync(userId);
+                if (user == null)
+                {
+                    return NotFound();
+                }
 
-            // Actualiza los datos de la foto del usuario
-            using (var memoryStream = new MemoryStream())
+                // Actualiza los datos de la foto del usuario
+                using (var memoryStream = new MemoryStream())
+                {
+                    await photo.CopyToAsync(memoryStream);
+                    user.Foto = memoryStream.ToArray();
+                    //user.PhotoContentType = photo.ContentType;
+                }
+
+                await _context.SaveChangesAsync();
+
+                return Ok(user);
+            }
+            catch (Exception ex)
             {
-                await photo.CopyToAsync(memoryStream);
-                user.Foto = memoryStream.ToArray();
-                //user.PhotoContentType = photo.ContentType;
+                return BadRequest(ex.Message);
             }
-
-            await _context.SaveChangesAsync();
-
-            return Ok(user);
 
         }
         private string EliminarArchivos()
