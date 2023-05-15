@@ -431,7 +431,7 @@
                   <Width>0.42905in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.92229in</Width>
+                  <Width>2.92337in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.77706in</Width>
@@ -973,7 +973,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!PRECIONETO.Value</Value>
+                                  <Value>=Fields!PRECIO.Value</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -1103,7 +1103,7 @@
             <DataSetName>DataSet1</DataSetName>
             <Left>0.15586in</Left>
             <Height>0.42777in</Height>
-            <Width>7.7064in</Width>
+            <Width>7.70748in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1239,7 +1239,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                       <Value>=Fields!DES_PROVE.Value</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -1265,7 +1265,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                       <Value>=First(Fields!CUIT.Value, "DataSet1")</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -1291,7 +1291,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                       <Value>=First(Fields!TE.Value, "DataSet1")</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -1317,7 +1317,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                       <Value>=Fields!ESPEGEN.Value</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -1343,7 +1343,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                       <Value>=Fields!CALLE.Value</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -1426,7 +1426,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                       <Style>
                         <FontSize>11pt</FontSize>
                         <FontWeight>Bold</FontWeight>
-                        <Format>dd/MM/yyyy</Format>
+                        <Format>dd/MM/yy</Format>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -1542,7 +1542,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                       <Value>=First(Fields!CONDVEN.Value, "DataSet1")</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -1568,7 +1568,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                       <Value>=First(Fields!MONEDA.Value, "DataSet1")</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -1594,7 +1594,7 @@ First(Fields!BON.Value, "DataSet1") / 100</Value>
                       <Value>=Fields!BON.Value</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
