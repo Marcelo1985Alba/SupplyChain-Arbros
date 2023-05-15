@@ -11,6 +11,7 @@ namespace SupplyChain.Shared
     public class ApplicationUser : IdentityUser
     {
         public int Cg_Cli { get; set; } = 0;
+        public byte[]? Foto { get; set; }
         public virtual ICollection<ChatMessage> ChatMessagesFromUsers { get; set; }
         public virtual ICollection<ChatMessage> ChatMessagesToUsers { get; set; }
         public ApplicationUser()

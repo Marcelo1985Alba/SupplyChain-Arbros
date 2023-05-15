@@ -3,6 +3,7 @@
 @using SupplyChain.Client.Auth
 @using Microsoft.AspNetCore.SignalR.Client
 @using System.Security.Claims
+@using System.Text;
 @inject IJSRuntime JS
 @attribute [Authorize]
 @inject NavigationManager MyNavigationManager
@@ -309,7 +310,15 @@
                             <!-- ============================================================== -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <img src="img1-150x150.png" alt="user" class="profile-pic" />
+                                    @if (imageUsuario == null || imageUsuario.Length == 0)
+                                    {
+                                        <img src="img1-150x150.png" alt="user" class="profile-pic" />
+                                    }
+                                    else
+                                    {
+                                        <img src="@($"data:image/png;base64,{Convert.ToBase64String(imageUsuario)}")" alt="user" class="profile-pic" />
+                                    }
+                                    
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right animated flipInY">
                                     <ul class="dropdown-user">
@@ -359,7 +368,15 @@
                     if (authState.User.Identity.IsAuthenticated)
                     {
                         <div class="profile-img">
+                        @if (imageUsuario == null || imageUsuario.Length == 0)
+                        {
                             <img src="img1-150x150.png" alt="user" class="profile-pic" />
+                        }
+                        else
+                        {
+                            <img src="@($"data:image/png;base64,{Convert.ToBase64String(imageUsuario)}")" alt="user" class="profile-pic" />
+                        }
+
                             <div class="text text-white-50" style="width: 100%;font-size: 30px;text-align: center;">
                                 @authState.User.Identity.Name
                             </div>
@@ -485,6 +502,7 @@
     private bool SidebarToggle = false;
     private string nombreUsuario = "";
     private string emailUsuario = "";
+    private byte[]? imageUsuario;
     private string CurrentUserId { get; set; }
     public string Titulo { get; set; } = "";
     public string BreadCumParent { get; set; } = "";
@@ -502,6 +520,7 @@
             RenovadorToken.Iniciar();
             nombreUsuario = authState.User.Identity.Name;
             var user = authState.User;
+
             var claims = user.Claims.ToList();
             CurrentUserId = user.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier)
                 .Select(a => a.Value).FirstOrDefault();
@@ -509,6 +528,13 @@
             emailUsuario = user.Claims.Where(a => a.Type == ClaimTypes.Email)
                 .Select(a => a.Value).FirstOrDefault();
 
+            var image = await Js.GetFromSessionStorage("FOTO_KEY");
+
+            if (!string.IsNullOrEmpty(image))
+            {
+                var bytes = Convert.FromBase64String(image);
+                imageUsuario = bytes;
+            }
             var response = await ChatService.GetConversationNoViewAsync();
             if (response.Error)
             {

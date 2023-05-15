@@ -137,6 +137,7 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
                     CLIENTE = applicationUser.NombreCliente,
                     EMAIL = applicationUser.Email,
                     USUARIO = applicationUser.UserName,
+                    FOTO = applicationUser.Foto
                 };
 
                 Usuarios.Add(vUsuario);
@@ -148,6 +149,7 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
                 vUsuario.CLIENTE = applicationUser.NombreCliente;
                 vUsuario.EMAIL = applicationUser.Email;
                 vUsuario.USUARIO = applicationUser.UserName;
+                vUsuario.FOTO = applicationUser.Foto;
             }
 
             popupFormVisible = false;

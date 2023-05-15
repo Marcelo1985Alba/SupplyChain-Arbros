@@ -11,12 +11,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Syncfusion.Blazor.Inputs;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Syncfusion.Blazor.Charts.Chart.Internal;
 
 namespace SupplyChain.Client.Pages.ABM.Usuarios
 {
     public class FormUsuarioBase : ComponentBase
     {
         [Inject] public RepositoryHttp.IRepositoryHttp Http { get; set; }
+        [Inject] public HttpClient Http2 { get; set; }
         [Inject] public ClienteService ClienteService { get; set; }
         /// <summary>
         /// objecto modificado el cual tambien obtiene la id nueva en caso de agregar un nuevo
@@ -30,14 +35,14 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
 
         [Parameter] public List<ClienteExterno> Clientes { get; set; } = new();
 
-        [Parameter] public string HeightDialog { get; set; } = "350px";
+        [Parameter] public string HeightDialog { get; set; } = "450px";
         protected SfMultiSelect<string[], string> refMultiSelect;
         protected SfSpinner refSpinnerCli;
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
         protected List<string> Roles = new();
-        
-        
+
+        protected MultipartFormDataContent formData = new MultipartFormDataContent();
 
         protected Dictionary<string, object> HtmlAttribute = new()
         {
@@ -51,7 +56,7 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
 
         };
 
-
+        
         protected async override Task OnInitializedAsync()
         {
             SpinnerVisible = true;
@@ -99,8 +104,18 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
             SpinnerVisible = false;
             if (guardado)
             {
-                Show = false;
-                await OnGuardar.InvokeAsync(ApplicationUser);
+                var response2 = await Http2.PostAsync($"api/AdministracionArchivos/UploadImage/{ApplicationUser.Id}", formData);
+                if (!response2.IsSuccessStatusCode)
+                {
+                    await ToastMensajeError("Error al guardar imagen");
+                }
+                else
+                {
+
+                    Show = false;
+                    await OnGuardar.InvokeAsync(ApplicationUser);
+                }
+                
             }
 
 
@@ -183,7 +198,7 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
 
         private async Task ToastMensajeError(string content = "Ocurrio un Error.")
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = content,
@@ -192,6 +207,36 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
                 ShowCloseButton = true,
                 ShowProgressBar = true
             });
+        }
+
+        protected async Task OnChangeFileUpload(UploadChangeEventArgs args)
+        {
+            try
+            {
+                UploadFiles file = args.Files[0];
+                var buffers = new byte[file.Stream.Length];
+
+                file.Stream.Seek(0, System.IO.SeekOrigin.Begin);
+                await file.Stream.ReadAsync(buffers, 0, buffers.Length);
+                file.Stream.Dispose();
+
+                string imageType = file.FileInfo.MimeContentType;
+                ApplicationUser.Foto = buffers;
+                string imgUrl = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
+
+                // Crea un objeto FormData para enviar la foto a la API
+                formData = new MultipartFormDataContent();
+                var byteArrayContent = new ByteArrayContent(buffers);
+                byteArrayContent.Headers.ContentType = new MediaTypeHeaderValue(imageType);
+
+                formData.Add(byteArrayContent, "photo", file.FileInfo.Name);
+
+                
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
         public async Task Hide()

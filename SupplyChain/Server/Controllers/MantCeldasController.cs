@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 
 namespace SupplyChain
 {
@@ -16,9 +17,11 @@ namespace SupplyChain
     public class MantCeldasController : ControllerBase
     {
         private readonly MantCeldasRepository _mantCeldasRepository;
+        private readonly AppDbContext _context;
 
-        public MantCeldasController(MantCeldasRepository mantCeldasRepository)
-        {
+
+        public MantCeldasController(AppDbContext context, MantCeldasRepository mantCeldasRepository)
+        {   _context = context;
             this._mantCeldasRepository = mantCeldasRepository;
         }
 
@@ -137,6 +140,27 @@ namespace SupplyChain
             }
 
             return Ok();
+        }
+
+        [HttpGet("ByEstado/{estado}")]
+        public async Task<ActionResult<IEnumerable<MantCeldas>>>Get(EstadoMantCeldas estado = EstadoMantCeldas.Todos)
+        {
+            switch (estado)
+            {
+              
+                case EstadoMantCeldas.Programados:
+                    return await _context.MantCeldas.Where(c => c.Estado != "Realizado"
+                    && c.Estado != "Cancelado").ToListAsync();
+                case EstadoMantCeldas.Cancelado:
+                    return await _context.MantCeldas.Where(c => c.Estado != "Realizado"
+                    && c.Estado != "Programado").ToListAsync();
+                case EstadoMantCeldas.Realizado:
+                    return await _context.MantCeldas.Where(c => c.Estado != "Programado"
+                    && c.Estado != "Cancelado").ToListAsync();
+                default:
+                    return await _context.MantCeldas.ToListAsync();
+
+            }    
         }
     }
 }
