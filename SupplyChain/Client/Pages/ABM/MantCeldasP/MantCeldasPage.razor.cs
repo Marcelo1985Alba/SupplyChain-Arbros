@@ -34,7 +34,10 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
         "Delete",
         "Print",
         new ItemModel { Text = "Copia", TooltipText = "Copiar una mantCelda", PrefixIcon = "e-copy", Id = "Copy" },
-        "ExcelExport"
+        "ExcelExport",
+        new ItemModel{ Text="Cancelado", Id="Cancelados"},
+        new ItemModel{ Text="Programados", Id="Programados"},
+        new ItemModel{ Text="Realizados", Id="Realizado"}
         };
         protected List<MantCeldas> mantCeldas = new();
         protected List<Celdas> celdas = new();
@@ -115,6 +118,40 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
             else if (args.Item.Id == "grdMantCeldas_excelexport")
             {
                 await refGrid.ExportToExcelAsync();
+            }
+            else if(args.Item.Id== "Programados")
+            {
+                SpinnerVisible= true;
+                await GetMantCeldas(SupplyChain.Shared.Enum.EstadoMantCeldas.Programados);
+
+                SpinnerVisible = false;
+            }
+            else if (args.Item.Id == "Cancelados")
+            {
+                SpinnerVisible = true;
+                await GetMantCeldas(SupplyChain.Shared.Enum.EstadoMantCeldas.Cancelado);
+
+                SpinnerVisible = false;
+            }
+            else if (args.Item.Id == "Realizado")
+            {
+                SpinnerVisible = true;
+                await GetMantCeldas(SupplyChain.Shared.Enum.EstadoMantCeldas.Realizado);
+
+                SpinnerVisible = false;
+            }
+        }
+
+        protected async Task GetMantCeldas(SupplyChain.Shared.Enum.EstadoMantCeldas estadoMantCeldas= SupplyChain.Shared.Enum.EstadoMantCeldas.Todos)
+        {
+            var response = await MantCeldasService.ByEstado(estadoMantCeldas);
+            if (response.Error)
+            {
+
+            }
+            else
+            {
+                mantCeldas = response.Response.OrderByDescending(p => p.Estado).ToList();
             }
         }
 

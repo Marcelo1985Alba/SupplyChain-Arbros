@@ -2,6 +2,7 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -873,7 +874,35 @@ namespace SupplyChain.Server.Controllers
             //return File(stream, contentType, fileName);
         }
 
+        [HttpPost("UploadImage/{userId}")]
+        public async Task<IActionResult> UploadImage(string userId, IFormFile photo)
+        {
+            try
+            {
+                var user = await _context.Users.FindAsync(userId);
+                if (user == null)
+                {
+                    return NotFound();
+                }
 
+                // Actualiza los datos de la foto del usuario
+                using (var memoryStream = new MemoryStream())
+                {
+                    await photo.CopyToAsync(memoryStream);
+                    user.Foto = memoryStream.ToArray();
+                    //user.PhotoContentType = photo.ContentType;
+                }
+
+                await _context.SaveChangesAsync();
+
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
         private string EliminarArchivos()
         {
             var path = Path.Combine(env.WebRootPath, "pdf/");

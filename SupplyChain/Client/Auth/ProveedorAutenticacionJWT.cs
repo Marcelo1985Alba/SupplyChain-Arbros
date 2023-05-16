@@ -24,6 +24,7 @@ namespace SupplyChain.Client.Auth
         private readonly IRepositoryHttp Repositorio;
         public static readonly string TOKEN_KEY = "TOKEN_KEY";
         public static readonly string EXPIRATION_KEY = "EXPIRATION_KEY";
+        public static readonly string FOTO_KEY = "FOTO_KEY";
         private readonly HttpClient httpClient;
         
         public Usuarios UsuarioLogin { get; set; }
@@ -95,6 +96,8 @@ namespace SupplyChain.Client.Auth
             var nuevoToken = response.Response;
             await js.SetInSessionStorage(TOKEN_KEY, nuevoToken.Token);
             await js.SetInSessionStorage(EXPIRATION_KEY, nuevoToken.Expiration.ToString());
+            await js.SetInSessionStorage(FOTO_KEY, nuevoToken.Foto == null || nuevoToken.Foto.Length == 0 ? string.Empty 
+                                : nuevoToken.Foto.ToString());
             return nuevoToken.Token;
         }
 
@@ -132,6 +135,8 @@ namespace SupplyChain.Client.Auth
         {
             await js.RemoveSessionItem(TOKEN_KEY);
             await js.RemoveSessionItem(EXPIRATION_KEY);
+            await js.RemoveSessionItem(FOTO_KEY);
+
             httpClient.DefaultRequestHeaders.Authorization = null;
         }
 
@@ -181,6 +186,7 @@ namespace SupplyChain.Client.Auth
         {
             await js.SetInSessionStorage(TOKEN_KEY, userToken.Token);
             await js.SetInSessionStorage(EXPIRATION_KEY, userToken.Expiration.ToString());
+            await js.SetInSessionStorage(FOTO_KEY, userToken.Foto == null || userToken.Foto.Length == 0 ? string.Empty : Convert.ToBase64String(userToken.Foto));
             var authState = ConstruirAuthenticationState(userToken.Token);
             NotifyAuthenticationStateChanged(Task.FromResult(authState));
         }

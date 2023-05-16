@@ -17,6 +17,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Services.Description;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -280,7 +281,8 @@ namespace SupplyChain.Server.Controllers
             return new UserToken()
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = expiration
+                Expiration = expiration,
+                Foto = userInfo.Foto,
             };
         }
 
