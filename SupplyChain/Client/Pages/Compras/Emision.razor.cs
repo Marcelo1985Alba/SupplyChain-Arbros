@@ -25,6 +25,8 @@ using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Grid;
 using Syncfusion.Pdf.Tables;
 using SupplyChain.Client.HelperService;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 
 namespace SupplyChain.Client.Pages.Emision
@@ -34,8 +36,8 @@ namespace SupplyChain.Client.Pages.Emision
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
         [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
-
         [CascadingParameter] public MainLayout MainLayout { get; set; }
+
 
         // variables generales
         public bool IsVisibleguarda { get; set; } = false;
@@ -68,6 +70,7 @@ namespace SupplyChain.Client.Pages.Emision
         protected string TituloBuscador = "Seleccion de Orden de Compra para apertura";
         protected bool PopupBuscadorVisible = false;
 
+        protected readonly HttpClient httpClient;
 
         protected Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
         {
@@ -206,6 +209,40 @@ namespace SupplyChain.Client.Pages.Emision
         }
 
 
+
+        public async Task<ActionResult<Compra>> AnularOrdenCompra()
+        {
+            var numeroOrden = ocompra;
+            var response = await httpClient.GetAsync($"api/compras/anularoc?numero={numeroOrden}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var numeroOc = await response.Content.ReadAsStringAsync();
+                await this.ToastObj.Show(new ToastModel 
+                {
+                    Title = "EXITO!",
+                    Content = "Orden de Compra " + numeroOc + " Anulado",
+                    CssClass = "e-toast-success",
+                    Icon = "e-success toast-icons",
+                    ShowCloseButton = false,
+                    ShowProgressBar = false
+                });
+            }
+            else
+            {
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "Error",
+                    Content = "No se pudo anular la Orden de Compra",
+                    CssClass = "e-toast-x|error",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = false,
+                    ShowProgressBar = false 
+                });
+
+            }
+            return null;
+        }
 
         public async Task guardaoc()
         {

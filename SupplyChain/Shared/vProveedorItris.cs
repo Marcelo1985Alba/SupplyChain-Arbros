@@ -18,5 +18,5 @@ namespace SupplyChain.Shared
         public string? EMAIL_CONTACTO { get; set; }
         public string CALLE { get; set; }    
         public string? TE { get; set; }
-    }
+    }   
 }

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -32,6 +33,8 @@ namespace SupplyChain.Server.Controllers
             this._proveedorRepository = proveedorRepository;
             this._generaRepository = generaRepository;
         }
+
+   
 
         // GET: api/Compras
         [HttpGet]
@@ -258,6 +261,81 @@ namespace SupplyChain.Server.Controllers
         {
             return Ok( await _compraRepository.UltimasCompras(3, cgmat));
         }
+
+
+
+
+            [HttpGet("anularoc/{numeroOrden}")]
+            public async Task<ActionResult<DbContextOptions>> anularoc(string OBSERVACIONES, int NUMERO, int numeroOrden)
+            {
+                try
+                {
+
+                using (var dbContext = new AppDbContext())
+                    {
+                        var ordencompra = await dbContext.Compras.FirstOrDefaultAsync(c => c.NUMERO == numeroOrden);
+                        if (numeroOrden == null)
+                        {
+                            return NotFound();
+                        }
+                        var nuevaorden = new Compra
+                        {
+                            NUMERO = 0,
+                            OBSERVACIONES = "ANULADO",
+                            FE_EMIT = ordencompra.FE_EMIT,
+                            CG_ORDEN = ordencompra.CG_ORDEN,
+                            CG_MAT = ordencompra.CG_MAT,
+                            DES_MAT = ordencompra.DES_MAT,
+                            NECESARIO = ordencompra.NECESARIO,
+                            SOLICITADO = ordencompra.SOLICITADO,
+                            AUTORIZADO = ordencompra.AUTORIZADO,
+                            UNID = ordencompra.UNID,
+                            UNID1 = ordencompra.UNID1,
+                            CG_DEN = ordencompra.CG_DEN,
+                            PRECIO = ordencompra.PRECIO,
+                            BON = ordencompra.BON,
+                            DESCUENTO = ordencompra.DESCUENTO,
+                            PRECIONETO = ordencompra.PRECIONETO,
+                            PRECIOTOT = ordencompra.PRECIOTOT,
+                            MONEDA = ordencompra.MONEDA,
+                            DES_PROVE = ordencompra.DES_PROVE,
+                            FE_PREV = ordencompra.FE_PREV,
+                            FE_REAL = ordencompra.FE_REAL,
+                            FE_VENC = ordencompra.FE_VENC,
+                            FE_CIERRE = ordencompra.FE_CIERRE,
+                            CONDVEN = ordencompra.CONDVEN,
+                            ESPECIFICA = ordencompra.ESPECIFICA,
+                            ESPEGEN = ordencompra.ESPEGEN,
+                            ABIERTOPREPARACION = ordencompra.ABIERTOPREPARACION,
+                            FE_REQ = ordencompra.FE_REQ,
+                            FE_AUTREQ = ordencompra.FE_AUTREQ,
+                            NROCLTE = ordencompra.NROCLTE,
+                            CG_PROVEREQ = ordencompra.CG_PROVEREQ,
+                            DIASVIGE = ordencompra.DIASVIGE,
+                            MARCAREQ = ordencompra.MARCAREQ,
+                            AVANCE = ordencompra.AVANCE,
+                            TXTOBSERVADO = ordencompra.TXTOBSERVADO,
+                            TXTCORREGIDO = ordencompra.TXTCORREGIDO,
+                            USUARIO_AUT = ordencompra.USUARIO_AUT,
+                            FE_AUT = ordencompra.FE_AUT,
+                            USUREQ = ordencompra.USUREQ,
+                            USUARIO = ordencompra.USUARIO,
+                            FE_REG = ordencompra.FE_REG,
+                            CG_CIA = ordencompra.CG_CIA,
+
+                        };
+
+                        dbContext.Compras.Add(nuevaorden);
+                        await dbContext.SaveChangesAsync();
+
+                        return Ok();
+                    }
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+            }
 
         [HttpPut("actualizaoc/{listaordenescompra}/{especif}/{condven}/{bonif}")]
         //POST: api/compras/generaoc

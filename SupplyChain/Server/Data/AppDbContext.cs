@@ -73,7 +73,7 @@ namespace SupplyChain
         public virtual DbSet<ModeloAbastecimiento> ModeloAbastecimiento { get; set; }
         public virtual DbSet<vPendienteFabricar> VPendientesFabricars { get; set; }
         public virtual DbSet<vTrazabilidad> VTrazabilidads { get; set; }
-        public virtual DbSet<Procun> Procun { get; set; } 
+        public virtual DbSet<Procun> Procun { get; set; }
         public virtual DbSet<Fabricacion> Fabricaciones { get; set; }
         public virtual DbSet<vProdMaquinaDataCore> VProdMaquinaDataCore { get; set; }
         public virtual DbSet<Moneda> Monedas { get; set; }
@@ -149,7 +149,7 @@ namespace SupplyChain
         public DbSet<ProcalsMP> ProcalsMP { get; set; }
         public DbSet<vControlCalidadPendientes> vcontrolCalidadPendientes { get; set; }
         public DbSet<Procesos> Procesos { get; set; }
-     
+
         public DbSet<vProveedorItris> vProveedoresItris { get; set; }
 
         public DbSet<SolCotEmail> SolCotEmails { get; set; }
@@ -159,6 +159,11 @@ namespace SupplyChain
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             this.Database.SetCommandTimeout(60);
+        }
+
+        public AppDbContext()
+        {
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)  
