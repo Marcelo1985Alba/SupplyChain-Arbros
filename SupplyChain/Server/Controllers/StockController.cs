@@ -27,11 +27,13 @@ namespace SupplyChain.Server.Controllers
 
         private readonly AppDbContext _context;
         private readonly PedidosRepository _pedidosRepository;
+        private readonly ProgramaRepository _programaRepository;
 
-        public StockController(AppDbContext context, PedidosRepository pedidosRepository)
+        public StockController(AppDbContext context, PedidosRepository pedidosRepository, ProgramaRepository programaRepository)
         {
             _context = context;
             this._pedidosRepository = pedidosRepository;
+            this._programaRepository = programaRepository;
         }
 
         [HttpGet("GetMaxVale")]
@@ -436,6 +438,20 @@ namespace SupplyChain.Server.Controllers
         private bool RegistroExists(decimal? registro)
         {
             return _context.Pedidos.Any(e => e.Id == registro);
+        }
+
+        // GET: api/Stock/GetPlaneadas
+        [HttpGet("GetPlaneadas")]
+        private async Task<decimal> GetPlaneadas(string prod)
+        {
+            decimal toRet = 0;
+            List<Programa> programas = await _programaRepository
+                .Obtener(p => p.CG_PROD == prod && (p.CG_ESTADO == 0 || p.CG_ESTADO == 1)).ToListAsync();
+            if (programas == null)
+                return -1;
+            foreach(Programa programa in programas)
+                toRet += programa.CANTFAB;
+            return toRet;
         }
     }
 }
