@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
+using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.RichTextEditor;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
 
         protected bool dialogVisible =false;
         protected SfRichTextEditor richTextEditorRef;
+        public SfToast ToastObj;
 
         protected string asunto = "Solicitud de Cotización";
         protected string mensaje = "Estimado/a [CONTACTO],\n" +
@@ -65,15 +67,38 @@ namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
             var response = await Http.PostAsJsonAsync<List<SolCotEmail>>("api/SolCotEmail/EnviarMail", EmailsEnviar);
             if (response.Error)
             {
-
+                Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
+                await this.ToastObj.ShowAsync(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "Ocurrio un Error al enviar mails",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
             }
             else
             {
                 if (OnMailEnviadosCorrectamente.HasDelegate)
                 {
+                    await this.ToastObj.ShowAsync(new ToastModel
+                    {
+                        Title = "EXITO!",
+                        Content = "Mails Enviados Correctamente",
+                        CssClass = "e-toast-success",
+                        Icon = "e-success toast-icons",
+                        ShowCloseButton = false,
+                        ShowProgressBar = false
+                    });
                     await OnMailEnviadosCorrectamente.InvokeAsync(response.Response);
                 }
             }
+        }
+
+        public void ActualizarListaMails(List<SolCotEmail> emails)
+        {
+            EmailsEnviar = emails;
         }
     }
 }

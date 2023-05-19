@@ -22,6 +22,7 @@ namespace SupplyChain.Client.Pages.Compras
         protected bool mostrarSpinner = false;
         protected ProveedoresMateriaPrima refProveedoresMateriaPrima;
         protected Proveedores refProveedores;
+        protected EmailPreview refEmailPreview;
         protected EmailsEnviados refEmailsEnviados;
         protected List<vProveedorItris> vProveedorItrisEnviarSolicitud = new();
         protected List<SolCotEmail> EmailsEnviados = new();
@@ -61,6 +62,12 @@ namespace SupplyChain.Client.Pages.Compras
         protected async Task OnRecibirItemsSeleccionados(Compra[] sugerenciasSeleccionadas)
         {
             mostrarSpinner = true;
+
+            EmailsEnviar.Clear();
+            vProveedorItrisEnviarSolicitud.Clear();
+            EmailsEnviados.Clear();
+            this.sugerenciasSeleccionadas.Clear();
+
             this.sugerenciasSeleccionadas = sugerenciasSeleccionadas.ToList();
             await GetProveedoresFromSugerencias(sugerenciasSeleccionadas);
             await GetEmailsEnviadosFromSugerencias(sugerenciasSeleccionadas);
@@ -99,7 +106,9 @@ namespace SupplyChain.Client.Pages.Compras
 
         protected void OnProveedorDeseleccionado(vProveedorItris proveedorItris)
         {
-            vProveedorItrisEnviarSolicitud.Remove(proveedorItris);
+            //vProveedorItrisEnviarSolicitud.Remove(proveedorItris);
+            vProveedorItrisEnviarSolicitud = vProveedorItrisEnviarSolicitud.Where(p=> p.Id != proveedorItris.Id).ToList();
+            ActualizarListaEmailsAEnviar();
         }
         protected void OnProveedorSeleccionado(vProveedorItris proveedorItris)
         {
@@ -109,20 +118,30 @@ namespace SupplyChain.Client.Pages.Compras
 
         protected void ActualizarListaEmailsAEnviar()
         {
+            EmailsEnviar.Clear();
+
             foreach (var proveedor in vProveedorItrisEnviarSolicitud)
             {
                 var mensaje = string.Empty;
                 foreach (var sugerenciaCompra in sugerenciasSeleccionadas)
                 {
-                    mensaje += $"{sugerenciaCompra.CG_MAT.Trim()} - {sugerenciaCompra.DES_MAT.Trim()} {sugerenciaCompra.SOLICITADO} -" +
+                    mensaje += $"{sugerenciaCompra.CG_MAT.Trim()} - {sugerenciaCompra.DES_MAT.Trim()} " +
+                        $"{sugerenciaCompra.SOLICITADO} -" +
                         $" {sugerenciaCompra.UNID}";
+
+                    if (!string.IsNullOrEmpty(sugerenciaCompra.ESPECIFICA))
+                    {
+                        mensaje += $" Especificación técnica: {sugerenciaCompra.ESPECIFICA}";
+                    }
+
+
                     var mail = new SolCotEmail()
                     {
                         CG_CIA = 1,
                         FE_SOLCOT = DateTime.Now,
                         MENSAJE_EMAIL = mensaje,
                         CG_MAT = sugerenciaCompra.CG_MAT.Trim(),
-                        NombreInsumo = sugerenciaCompra.DES_MAT.Trim(),
+                        NombreInsumo = $"{sugerenciaCompra.DES_MAT.Trim()}",
                         CANTIDAD = sugerenciaCompra.SOLICITADO.Value,
                         CG_PROVE = proveedor.Id,
                         Proveedor = proveedor.DESCRIPCION.Trim(),
@@ -140,12 +159,14 @@ namespace SupplyChain.Client.Pages.Compras
                 }
                 
             }
+
+            refEmailPreview.ActualizarListaMails(EmailsEnviar);
         }
 
         protected void MailsEnviadosCorrectamente(List<SolCotEmail> mailsEnviados)
         {
             mailsEnviados.AddRange(mailsEnviados);
-            refEmailsEnviados.Refrescar(mailsEnviados);
+            //refEmailsEnviados.Refrescar(mailsEnviados);
         }
     }
 }
