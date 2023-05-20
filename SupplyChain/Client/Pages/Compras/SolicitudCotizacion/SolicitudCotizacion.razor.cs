@@ -138,7 +138,8 @@ namespace SupplyChain.Client.Pages.Compras
                         mensaje += $"Especificación técnica: {sugerenciaCompra.ESPECIFICA}\n";
                     }
 
-                    mensaje += "---------------------------------------------------------------";
+                    mensaje += "--------------------------------------------------------------------------" +
+                        "----------------------------------------------------";
 
                     mail = new SolCotEmail()
                     {
