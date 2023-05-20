@@ -16,7 +16,8 @@
 </div>
 
 
-<SfGrid @ref="refGrid" TValue="vProveedorItris" DataSource="@DataProveedoresFiltrado" Height="230px" EnableVirtualization="true" AllowSorting="true">
+<SfGrid @ref="refGrid" TValue="vProveedorItris" DataSource="@DataProveedoresFiltrado" Height="230px"
+        EnableVirtualization="true" AllowSorting="true" Toolbar="@(new List<string>() { "Search" })">
     <SfSpinner Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="mostrarSpinnerCargando"></SfSpinner>
     <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
     <GridEvents RowSelected="RowSelected" TValue="vProveedorItris" RowDeselected="RowDeselected"></GridEvents>

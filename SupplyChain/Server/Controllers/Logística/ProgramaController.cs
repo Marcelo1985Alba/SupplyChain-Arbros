@@ -50,7 +50,28 @@ namespace SupplyChain
                 .Obtener(p => p.Cg_Cia == 1 && p.CG_ESTADOCARGA == 1 && p.CG_ORDF == p.CG_ORDFASOC, 0 , 
                          r => r.OrderByDescending(p=> p.CG_ORDF))
                 .ToListAsync();
+        }
 
+        // GET: api/Programas/GetPlaneadasEntrega
+        [HttpGet("GetPlaneadasEntrega")]
+        public async Task<ActionResult<IEnumerable<Programa>>> GetPlaneadasEntrega()
+        {
+            //se usa en GridEditEntrega.razor.cs
+            return await _programaRepository
+                .Obtener(p => p.Cg_Cia == 1 && (p.CG_ESTADOCARGA == 1 || p.CG_ESTADOCARGA == 0) && p.PROCESO.Trim() == "MC", 0,
+                         r => r.OrderByDescending(p => p.CG_ORDF))
+                .ToListAsync();
+        }
+
+        // GET: api/Programas/GetFabricacionEntrega
+        [HttpGet("GetFabricacionEntrega")]
+        public async Task<ActionResult<IEnumerable<Programa>>> GetFabricacionEntrega()
+        {
+            //se usa en GridEditEntrega.razor.cs
+            return await _programaRepository
+                .Obtener(p => p.Cg_Cia == 1 && (p.CG_ESTADOCARGA == 2 || p.CG_ESTADOCARGA == 3) && p.PROCESO.Trim() == "MC", 0,
+                         r => r.OrderByDescending(p => p.CG_ORDF))
+                .ToListAsync();
         }
 
         // GET: api/Programas/GetAbastecimientoByOF/73411

@@ -63,11 +63,14 @@ namespace SupplyChain.Client.Shared.Inventarios
 
 
         protected List<Deposito> depositos = new();
+        protected Programa[] ordenesPlaneadas = null;
+        protected Programa[] ordenesFabricacion = null;
 
         protected override async Task OnInitializedAsync()
         {
             depositos = await Http.GetFromJsonAsync<List<Deposito>>("api/Deposito");
-
+            ordenesPlaneadas = await Http.GetFromJsonAsync<Programa[]>("api/Programa/GetPlaneadasEntrega");
+            ordenesFabricacion = await Http.GetFromJsonAsync<Programa[]>("api/Programa/GetFabricacionEntrega");
         }
 
 
@@ -106,22 +109,6 @@ namespace SupplyChain.Client.Shared.Inventarios
             visibleSpinnerRS = false;
             
 
-        }
-
-        public void RowBound(RowDataBoundEventArgs<Pedidos> args)
-        {
-            if (args.Data.STOCK <= 0)
-            {
-                args.Row.AddClass(new string[] { "row-red" });
-            }
-            //else if (args.Data.Freight < 35)
-            //{
-            //    args.Row.AddClass(new string[] { "below-35" });
-            //}
-            //else
-            //{
-            //    args.Row.AddClass(new string[] { "above-35" });
-            //}
         }
 
         public async Task BeginEditHandler(BeginEditArgs<Pedidos> args)
@@ -388,7 +375,10 @@ namespace SupplyChain.Client.Shared.Inventarios
                     args.Cell.AddClass(new string[] { "sin-stock" });
                 }
             }
-            
+            if (args.Data.STOCK == 0 && (args.Data.StockPlaneado + args.Data.StockEnFabricacion - args.Data.CANTENT >= 0))
+            {
+                args.Cell.AddClass(new string[] { "sin-stock" });
+            }
         }
     }
 }

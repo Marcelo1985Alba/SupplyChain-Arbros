@@ -134,7 +134,14 @@ else
                         </GridColumn>
                         <GridColumn Field="@nameof(Pedidos.CG_ART)" HeaderText="Cod. Producto" AutoFit="true" Width="130"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.DES_ART)" HeaderText="Desc. Producto" Width="180"></GridColumn>
-                        <GridColumn Field="@nameof(Pedidos.STOCK)" HeaderText="Cant Entrega" EditType="EditType.NumericEdit" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.STOCK)" HeaderText="Cant Entrega" EditType="EditType.NumericEdit" AutoFit="true">
+                            <Template>
+                                @{
+                                    var stock = (context as Pedidos)?.STOCK ?? 0;
+                                    <span>@stock.ToString("0")</span>
+                                }
+                            </Template>
+                        </GridColumn>
                         <GridColumn Field="@nameof(Pedidos.UNID)" HeaderText="Unidad" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.DESPACHO)" HeaderText="Despacho" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.SERIE)" HeaderText="Serie" AutoFit="true"></GridColumn>
@@ -146,12 +153,34 @@ else
                                     if (depositos.Any(c => c.CG_DEP == ped.CG_DEP))
                                     {
                                         <span>@depositos.Where(c => c.CG_DEP == ped.CG_DEP).FirstOrDefault().DES_DEP.Trim()</span>
-
                                     }
                                 }
                             </Template>
                         </GridColumn>
-                        <GridColumn Field="@nameof(Pedidos.PENDIENTEOC)" HeaderText="Stock" EditType="EditType.NumericEdit" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.PENDIENTEOC)" HeaderText="Stock" EditType="EditType.NumericEdit" AutoFit="true">
+                            <Template>
+                                @{
+                                    var stock = (context as Pedidos)?.PENDIENTEOC ?? 0;
+                                    <span>@stock.ToString("0")</span>
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.StockPlaneado)" HeaderText="Planeado" EditType="EditType.NumericEdit" AutoFit="true">
+                            <Template>
+                                @{
+                                    var ped = (context as Pedidos);
+                                    <span>@ordenesPlaneadas.Where(c => c.CG_PROD.Trim() == ped.CG_ART.Trim()).Sum(p => p.CANT).ToString("0")</span>
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.StockEnFabricacion)" HeaderText="Fabricar" EditType="EditType.NumericEdit" AutoFit="true">
+                            <Template>
+                                @{
+                                    var ped = (context as Pedidos);
+                                    <span>@ordenesFabricacion.Where(c => c.CG_PROD.Trim() == ped.CG_ART.Trim()).Sum(p => p.CANT).ToString("0")</span>
+                                }
+                            </Template>
+                        </GridColumn>
                         <GridColumn Field="@nameof(Pedidos.Id)" IsPrimaryKey="true" HeaderText="ID" Visible="false"></GridColumn>
                     </GridColumns>
 
@@ -177,6 +206,9 @@ else
     .sin-stock {
         background-color: #f87b7b !important;   
         /*color: #b93c3c !important;*/
+    }
+    .row-yellow {
+        background-color: greenyellow !important;   
     }
 
 /*    .row-red {

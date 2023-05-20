@@ -3,6 +3,7 @@
 @inherits EmailPreviewBase
 
 <div class="row">
+    <SfSpinner @ref="@refSpinner" Label="Enviando Emails...." ZIndex="2000"></SfSpinner>
     <div class="col-6">
         <h3>Email a Enviar</h3>
     </div>
@@ -35,6 +36,10 @@
             </ToolbarItems>
         </SfToolbar>
     </div>
+
+    <SfToast ID="toast_default" @ref="ToastObj">
+        <ToastPosition X="Center" Y="Top"></ToastPosition>
+    </SfToast>
 </div>
 
 <div class="row">
