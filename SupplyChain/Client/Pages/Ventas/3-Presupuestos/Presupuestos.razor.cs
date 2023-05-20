@@ -239,7 +239,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
 
                 await refGrid.RefreshHeaderAsync();
-                refGrid.Refresh();
+                await refGrid.Refresh();
                 await refGrid.RefreshColumnsAsync();
             }
             else

@@ -43,6 +43,7 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
             "Edit",
             "Delete",
             new ItemModel { Text = "Copia", TooltipText = "Copiar un item para generar una nueva solicitud", PrefixIcon = "e-copy", Id = "Copy" },
+            new ItemModel { Text = "Imprimir DataSheet", TooltipText = "Imprimir DataSheet", PrefixIcon = "e-print", Id = "Imprimir" },
             "ExcelExport",
             new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh", Type = ItemType.Button },
             new ItemModel { Text = "Ver Todos", Type = ItemType.Button, Id = "VerTodos", PrefixIcon = "e-icons e-eye" },
@@ -179,6 +180,17 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
                 SpinnerVisible = true;
                 await GetSolicitudes(TipoFiltro.Pendientes);
                 SpinnerVisible = false;
+            }
+            else if (args.Item.Id == "Imprimir")
+            {
+                
+                if (refGrid.SelectedRecords.Count > 0)
+                {
+                    SpinnerVisible = true;
+                    await SolicitudService.Imprimir(refGrid.SelectedRecords[0].Id);
+                    SpinnerVisible = false;
+                }
+                
             }
             else
             {

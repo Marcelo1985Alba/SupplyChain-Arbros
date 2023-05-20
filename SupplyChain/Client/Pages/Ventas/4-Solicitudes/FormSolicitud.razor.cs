@@ -136,6 +136,11 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
 
             if (guardado)
             {
+                if (Solicitud.CalcId > 0)
+                {
+                    await SolicitudService.Imprimir(Solicitud.Id);
+                }
+
                 BotonGuardarDisabled = false;
                 Show = false;
                 Solicitud.Guardado = guardado;
