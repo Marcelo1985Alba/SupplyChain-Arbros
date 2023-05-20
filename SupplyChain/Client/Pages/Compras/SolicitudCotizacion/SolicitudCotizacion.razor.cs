@@ -116,30 +116,34 @@ namespace SupplyChain.Client.Pages.Compras
             ActualizarListaEmailsAEnviar();
         }
 
+        /// <summary>
+        /// preparacion de los mails
+        /// </summary>
         protected void ActualizarListaEmailsAEnviar()
         {
             EmailsEnviar.Clear();
 
             foreach (var proveedor in vProveedorItrisEnviarSolicitud)
             {
+                //se debe preparar un mail por proveedor
                 var mensaje = string.Empty;
+                var mail = new SolCotEmail();
                 foreach (var sugerenciaCompra in sugerenciasSeleccionadas)
                 {
-                    mensaje += $"{sugerenciaCompra.CG_MAT.Trim()} - {sugerenciaCompra.DES_MAT.Trim()} " +
-                        $"{sugerenciaCompra.SOLICITADO} -" +
-                        $" {sugerenciaCompra.UNID}";
+                    mensaje += $"\nCódigo: {sugerenciaCompra.CG_MAT.Trim()}\nDescripción: {sugerenciaCompra.DES_MAT.Trim()}\n" +
+                        $"Cantidad: {Math.Round(sugerenciaCompra.SOLICITADO.Value, 2)} {sugerenciaCompra.UNID}\n";
 
                     if (!string.IsNullOrEmpty(sugerenciaCompra.ESPECIFICA))
                     {
-                        mensaje += $" Especificación técnica: {sugerenciaCompra.ESPECIFICA}";
+                        mensaje += $"Especificación técnica: {sugerenciaCompra.ESPECIFICA}\n";
                     }
 
+                    mensaje += "---------------------------------------------------------------";
 
-                    var mail = new SolCotEmail()
+                    mail = new SolCotEmail()
                     {
                         CG_CIA = 1,
                         FE_SOLCOT = DateTime.Now,
-                        MENSAJE_EMAIL = mensaje,
                         CG_MAT = sugerenciaCompra.CG_MAT.Trim(),
                         NombreInsumo = $"{sugerenciaCompra.DES_MAT.Trim()}",
                         CANTIDAD = sugerenciaCompra.SOLICITADO.Value,
@@ -152,21 +156,22 @@ namespace SupplyChain.Client.Pages.Compras
                         REGISTRO_COMPRAS = sugerenciaCompra.Id
                     };
 
-                    if (!EmailsEnviar.Any(e=> e.CG_PROVE == mail.CG_PROVE && e.CG_MAT == mail.CG_MAT))
-                    {
-                        EmailsEnviar.Add(mail); 
-                    }
                 }
-                
+
+                mail.MENSAJE_EMAIL = mensaje;
+                if (!EmailsEnviar.Any(e => e.CG_PROVE == mail.CG_PROVE && e.CG_MAT == mail.CG_MAT))
+                {
+                    EmailsEnviar.Add(mail);
+                }
             }
 
             refEmailPreview.ActualizarListaMails(EmailsEnviar);
         }
 
-        protected void MailsEnviadosCorrectamente(List<SolCotEmail> mailsEnviados)
+        protected async Task MailsEnviadosCorrectamente(List<SolCotEmail> mailsEnviados)
         {
-            mailsEnviados.AddRange(mailsEnviados);
-            //refEmailsEnviados.Refrescar(mailsEnviados);
+            //mailsEnviados.AddRange(mailsEnviados);
+            await refEmailsEnviados.Refrescar(mailsEnviados);
         }
     }
 }
