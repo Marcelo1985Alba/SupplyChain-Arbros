@@ -81,7 +81,8 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
 
         public void OpenExternalLink()
         {
-            string url = "https://aerre.grafana.net/public-dashboards/42c12fc6b1ad4c57b9ad51817fa6d364";
+            //string url = "https://aerre.grafana.net/public-dashboards/42c12fc6b1ad4c57b9ad51817fa6d364";
+            string url = "http://192.168.0.248:3000/";
             if (!string.IsNullOrEmpty(url))
             {
                 // Open the URL in a new tab or window
@@ -503,6 +504,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
         protected async Task ConfirmaDescargarPlano()
         {
             var file = ordenFabricacion.CG_PROD.Substring(0, 7) + ".pdf";
+            Console.WriteLine("Verificando existencia de archivo "+ file);
             if (await ExistePlano(file))
             {
 
@@ -511,7 +513,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             else
             {
                 await confirmacionDescargarPlanoDialog.HideAsync();
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "No existe plano",
@@ -539,7 +541,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             }
             else
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "No existe plano",
