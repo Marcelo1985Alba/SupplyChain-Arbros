@@ -3,6 +3,7 @@ using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SupplyChain.Server.Repositorios
@@ -21,5 +22,21 @@ namespace SupplyChain.Server.Repositorios
 
             return await DbSet.FromSqlRaw(xSQL).ToListAsync();
         }
+
+        internal async Task AgregarLista(IList<Compra> items)
+        {
+                await Db.AddRangeAsync(items);
+                await Db.SaveChangesAsync();
+        }
+
+        internal async Task AgregarNuevoRegistro()
+        {
+            string xSQL=$"INSERT INTO COMPRAS "
+        }
+
+        }
+
     }
-}
+
+
+

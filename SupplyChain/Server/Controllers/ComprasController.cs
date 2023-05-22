@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared.Models;
+
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SupplyChain.Server.Controllers
@@ -265,72 +266,76 @@ namespace SupplyChain.Server.Controllers
 
 
 
-            [HttpGet("anularoc/{numeroOrden}")]
-            public async Task<ActionResult<DbContextOptions>> anularoc(string OBSERVACIONES, int NUMERO, int numeroOrden)
+            [HttpGet("anularoc")]
+            public async Task<ActionResult<List<Compra>>> anularoc( int numeroOrden)
             {
                 try
                 {
+                    var listaAgregar = new List<Compra>();
+                var ordencompra = await _compraRepository.Obtener(c => c.NUMERO == numeroOrden).ToListAsync();
 
-                using (var dbContext = new AppDbContext())
-                    {
-                        var ordencompra = await dbContext.Compras.FirstOrDefaultAsync(c => c.NUMERO == numeroOrden);
-                        if (numeroOrden == null)
-                        {
-                            return NotFound();
-                        }
-                        var nuevaorden = new Compra
-                        {
-                            NUMERO = 0,
-                            OBSERVACIONES = "ANULADO",
-                            FE_EMIT = ordencompra.FE_EMIT,
-                            CG_ORDEN = ordencompra.CG_ORDEN,
-                            CG_MAT = ordencompra.CG_MAT,
-                            DES_MAT = ordencompra.DES_MAT,
-                            NECESARIO = ordencompra.NECESARIO,
-                            SOLICITADO = ordencompra.SOLICITADO,
-                            AUTORIZADO = ordencompra.AUTORIZADO,
-                            UNID = ordencompra.UNID,
-                            UNID1 = ordencompra.UNID1,
-                            CG_DEN = ordencompra.CG_DEN,
-                            PRECIO = ordencompra.PRECIO,
-                            BON = ordencompra.BON,
-                            DESCUENTO = ordencompra.DESCUENTO,
-                            PRECIONETO = ordencompra.PRECIONETO,
-                            PRECIOTOT = ordencompra.PRECIOTOT,
-                            MONEDA = ordencompra.MONEDA,
-                            DES_PROVE = ordencompra.DES_PROVE,
-                            FE_PREV = ordencompra.FE_PREV,
-                            FE_REAL = ordencompra.FE_REAL,
-                            FE_VENC = ordencompra.FE_VENC,
-                            FE_CIERRE = ordencompra.FE_CIERRE,
-                            CONDVEN = ordencompra.CONDVEN,
-                            ESPECIFICA = ordencompra.ESPECIFICA,
-                            ESPEGEN = ordencompra.ESPEGEN,
-                            ABIERTOPREPARACION = ordencompra.ABIERTOPREPARACION,
-                            FE_REQ = ordencompra.FE_REQ,
-                            FE_AUTREQ = ordencompra.FE_AUTREQ,
-                            NROCLTE = ordencompra.NROCLTE,
-                            CG_PROVEREQ = ordencompra.CG_PROVEREQ,
-                            DIASVIGE = ordencompra.DIASVIGE,
-                            MARCAREQ = ordencompra.MARCAREQ,
-                            AVANCE = ordencompra.AVANCE,
-                            TXTOBSERVADO = ordencompra.TXTOBSERVADO,
-                            TXTCORREGIDO = ordencompra.TXTCORREGIDO,
-                            USUARIO_AUT = ordencompra.USUARIO_AUT,
-                            FE_AUT = ordencompra.FE_AUT,
-                            USUREQ = ordencompra.USUREQ,
-                            USUARIO = ordencompra.USUARIO,
-                            FE_REG = ordencompra.FE_REG,
-                            CG_CIA = ordencompra.CG_CIA,
-
-                        };
-
-                        dbContext.Compras.Add(nuevaorden);
-                        await dbContext.SaveChangesAsync();
-
-                        return Ok();
-                    }
+                //si es null o la oc es 0, NotFound
+                if (ordencompra == null || ordencompra.Count == 0)
+                {
+                    return NotFound();
                 }
+                //sino, crea un nuevo oc y recorre cada valor del registro viejo
+                foreach (var compra in ordencompra)
+                {
+                    var nuevaorden = new Compra
+                    {
+                        NUMERO = 0,
+                        OBSERVACIONES = "ANULADO",
+                        FE_EMIT = compra.FE_EMIT,
+                        CG_ORDEN = compra.CG_ORDEN,
+                        CG_MAT = compra.CG_MAT,
+                        DES_MAT = compra.DES_MAT,
+                        NECESARIO = compra.NECESARIO,
+                        SOLICITADO = compra.SOLICITADO,
+                        AUTORIZADO = compra.AUTORIZADO,
+                        UNID = compra.UNID,
+                        UNID1 = compra.UNID1,
+                        CG_DEN = compra.CG_DEN,
+                        PRECIO = compra.PRECIO,
+                        BON = compra.BON,
+                        DESCUENTO = compra.DESCUENTO,
+                        PRECIONETO = compra.PRECIONETO,
+                        PRECIOTOT = compra.PRECIOTOT,
+                        MONEDA = compra.MONEDA,
+                        DES_PROVE = compra.DES_PROVE,
+                        FE_PREV = compra.FE_PREV,
+                        FE_REAL = compra.FE_REAL,
+                        FE_VENC = compra.FE_VENC,
+                        FE_CIERRE = compra.FE_CIERRE,
+                        CONDVEN = compra.CONDVEN,
+                        ESPECIFICA = compra.ESPECIFICA,
+                        ESPEGEN = compra.ESPEGEN,
+                        ABIERTOPREPARACION = compra.ABIERTOPREPARACION,
+                        FE_REQ = compra.FE_REQ,
+                        FE_AUTREQ = compra.FE_AUTREQ,
+                        NROCLTE = compra.NROCLTE,
+                        CG_PROVEREQ = compra.CG_PROVEREQ,
+                        DIASVIGE = compra.DIASVIGE,
+                        MARCAREQ = compra.MARCAREQ,
+                        AVANCE = compra.AVANCE,
+                        TXTOBSERVADO = compra.TXTOBSERVADO,
+                        TXTCORREGIDO = compra.TXTCORREGIDO,
+                        USUARIO_AUT = compra.USUARIO_AUT,
+                        FE_AUT = compra.FE_AUT,
+                        USUREQ = compra.USUREQ,
+                        USUARIO = compra.USUARIO,
+                        FE_REG = compra.FE_REG,
+                        CG_CIA = compra.CG_CIA,
+
+                    };
+                    //agregar la nueva lista oc a la variable nuevaorden
+                    listaAgregar.Add(nuevaorden);
+                }
+
+                //llama al metodo AgregarLista, que add la nueva lista 
+                await _compraRepository.AgregarLista(listaAgregar);
+                return Ok(listaAgregar);
+            }
                 catch (Exception e)
                 {
                     return BadRequest(e.Message);

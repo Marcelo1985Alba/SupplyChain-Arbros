@@ -27,6 +27,7 @@ using Syncfusion.Pdf.Tables;
 using SupplyChain.Client.HelperService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Syncfusion.Blazor.Kanban.Internal;
 
 
 namespace SupplyChain.Client.Pages.Emision
@@ -34,6 +35,7 @@ namespace SupplyChain.Client.Pages.Emision
     public class EmisionPageBase : ComponentBase
     {
         [Inject] protected HttpClient Http { get; set; }
+        [Inject] protected IRepositoryHttp repositorio  { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
         [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
@@ -210,18 +212,19 @@ namespace SupplyChain.Client.Pages.Emision
 
 
 
-        public async Task<ActionResult<Compra>> AnularOrdenCompra()
+        public async Task<IActionResult> AnularOrdenCompra()
         {
             var numeroOrden = ocompra;
-            var response = await httpClient.GetAsync($"api/compras/anularoc?numero={numeroOrden}");
+            var response = await repositorio.GetFromJsonAsync<int>($"api/compras/anularoc?numeroOrden={numeroOrden}");
 
-            if (response.IsSuccessStatusCode)
+
+            if (!response.Error)
             {
-                var numeroOc = await response.Content.ReadAsStringAsync();
-                await this.ToastObj.Show(new ToastModel 
+
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "EXITO!",
-                    Content = "Orden de Compra " + numeroOc + " Anulado",
+                    Content = "Orden de Compra " + numeroOrden + " Anulado",
                     CssClass = "e-toast-success",
                     Icon = "e-success toast-icons",
                     ShowCloseButton = false,
@@ -237,7 +240,7 @@ namespace SupplyChain.Client.Pages.Emision
                     CssClass = "e-toast-x|error",
                     Icon = "e-error toast-icons",
                     ShowCloseButton = false,
-                    ShowProgressBar = false 
+                    ShowProgressBar = false
                 });
 
             }
