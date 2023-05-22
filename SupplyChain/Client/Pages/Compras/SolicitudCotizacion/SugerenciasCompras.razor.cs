@@ -54,7 +54,8 @@ namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
             }
             else
             {
-                ListData = DataSource.FindAll(e => e.CG_MAT.ToLower().Contains(eventArgs.Value));
+                ListData = DataSource.FindAll(e => e.CG_MAT.ToLower().Contains(eventArgs.Value.ToLower()) 
+                    || e.DES_MAT.ToLower().Contains(eventArgs.Value.ToLower()));
             }
 
         }

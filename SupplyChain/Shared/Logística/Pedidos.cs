@@ -214,5 +214,10 @@ namespace SupplyChain
 
         [NotMapped]
         public EstadoItem ESTADO { get; set; } = EstadoItem.Agregado;
+
+        [NotMapped]
+        public int StockPlaneado { get; set; } = 0;
+        [NotMapped]
+        public int StockEnFabricacion { get; set; } = 0;
     }
 }

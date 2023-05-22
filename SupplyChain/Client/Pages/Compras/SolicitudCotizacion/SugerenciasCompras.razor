@@ -1,18 +1,31 @@
 ﻿@using Syncfusion.Blazor.Lists
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Buttons
 @inherits SugerenciasComprasBase
 
-<SfListBox @ref="@refSfListBox" CssClass="e-template-listbox" TValue="Compra[]" DataSource="@ListData" 
-            TItem="Compra" Height="550px" vir
+<div class="row">
+    <div col-6>
+
+    </div>
+    <div class="col-6">
+        <SfButton Content="Ordenar" CssClass="e-info e-small" OnClick="@(()=> ListData = ListData.OrderBy(o=> o.CG_MAT).ToList() )"></SfButton>
+    </div>
+    
+
+</div>
+<div class="row">
+    <div class="col-12">
+        <SfListBox @ref="@refSfListBox" CssClass="e-template-listbox" TValue="Compra[]" DataSource="@ListData"
+                   TItem="Compra" Height="550px"
                    AllowFiltering="true" FilterBarPlaceholder="Buscar Materia Prima...">
-            <ListBoxFieldSettings Text="CG_MAT" Value="CG_MAT" ></ListBoxFieldSettings>
+            <ListBoxFieldSettings Text="CG_MAT" Value="CG_MAT"></ListBoxFieldSettings>
             <ListBoxEvents TValue="Compra[]" TItem="Compra" ValueChange="SelectedChange"></ListBoxEvents>
             <ListBoxTemplates TItem="Compra">
                 <ItemTemplate>
                     @{
                         var compra = context as Compra;
-                        var itemClass = compra.TieneSolicitudCotizacion ? "has-request" : "";
+                        var itemClass = compra.TieneSolicitudCotizacion ? "has-request" : "no-has-request";
                     }
                     <div class="list-wrapper @(itemClass)">
                         <div class="row">
@@ -27,33 +40,37 @@
                             <div class="col-12">
                                 <span class="description">@((context as Compra).DES_MAT)</span>
                             </div>
-                            
-                        </div>
-                        <div class="row justify-content-start">
-                            <div class="col-auto p-0">
-                            @{
-                                var total = Math.Round(compra.SOLICITADO.Value, 2);
-                            }
-                            <span class="text">@(total) </span>
-                            </div>
-                            <div class="col-auto p-0 m-0">
-                                <span class="text"> @(compra.UNID)) </span>
-                            </div>
-                            <div class="col-auto p-0 m-0">
-                                <span class="text">/ @(Math.Round(compra.AUTORIZADO.Value)) </span>
-                            </div>
-                            <div class="col-auto p-0 m-0">
-                                <span class="text"> (@((context as Compra).UNID1)) </span>
-                            </div>
 
                         </div>
-                        
-                        
+
+                        <div class="row justify-content-start no-gutters">
+                            <div class="col-auto">
+                                @{
+                                    var total2 = Math.Round(compra.SOLICITADO.Value, 2);
+                                }
+                                <span class="text">@(total2)</span>
+                            </div>
+                            <div class="col-auto">
+                                <span class="text">(@compra.UNID)</span>
+                            </div>
+                            <div class="col-auto">
+                                <span class="text">/ @(Math.Round(compra.AUTORIZADO.Value, 2))</span>
+                            </div>
+                            <div class="col-auto">
+                                <span class="text">(@((context as Compra).UNID1))</span>
+                            </div>
+                        </div>
+
+
                     </div>
                 </ItemTemplate>
             </ListBoxTemplates>
             <SfSpinner Label="Cargando..." @bind-Visible="@mostrarSpinnerSeleccionSugerencia" Type="SpinnerType.Fabric"></SfSpinner>
         </SfListBox>
+    </div>
+    
+</div>
+
 
 <style>
     .e-template-listbox .e-list-item {
@@ -98,6 +115,16 @@
     }
 
     .has-request {
+        color: green;
+    }
+
+    .no-has-request {
         color: red;
+        
+    }
+
+    .no-gutters .col-3 {
+        padding-right: 0;
+        padding-left: 0;
     }
 </style>

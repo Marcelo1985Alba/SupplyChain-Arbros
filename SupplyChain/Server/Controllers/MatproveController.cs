@@ -58,7 +58,7 @@ namespace SupplyChain.Server.Controllers
                 var idsMateriaPrima = sugerencias.Select(s=> $"'{s.CG_MAT.Trim()}'").ToArray();
                 var ids = string.Join(",", idsMateriaPrima);
 
-                string xSQL = string.Format("SELECT CG_PROVE, DESCRIPCION, CUIT, NOMBRE_CONTACTO, EMAIL_CONTACTO  " +
+                string xSQL = string.Format("SELECT CG_PROVE, DESCRIPCION, CUIT, NOMBRE_CONTACTO, EMAIL_CONTACTO, CALLE  " +
                     "FROM vProveItris " +
                     $"WHERE CG_PROVE in (select NROCLTE from Matprove where cg_mat in ({ids}) GROUP BY NROCLTE)");
 

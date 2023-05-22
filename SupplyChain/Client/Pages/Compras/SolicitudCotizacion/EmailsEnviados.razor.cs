@@ -43,7 +43,7 @@ namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
                 }
                 else
                 {
-                    return Data = response.Response.OrderBy(s=> s.Id).ToList();
+                    return Data = response.Response.OrderByDescending(s=> s.Id).ToList();
                 }
             }
             else
