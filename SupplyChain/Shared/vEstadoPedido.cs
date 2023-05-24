@@ -28,6 +28,9 @@ namespace SupplyChain.Shared
         public string? REMITO { get; set; }
         public string? LETRA_FACTURA { get; set; }
         public string? FACTURA { get; set; }
+        public string? RECIBO { get; set; }
+        public string? CONDICION_PAGO { get; set; }
         public double TOT_DOL { get; set; }
+        
     }
 }
