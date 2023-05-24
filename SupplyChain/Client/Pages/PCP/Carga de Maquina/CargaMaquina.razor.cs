@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using SupplyChain.Client.HelperService;
+using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Lists;
@@ -27,6 +28,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
         [Inject] protected IJSRuntime JS { get; set; }
         [Inject] public PdfService PdfService { get; set; }
         [Inject] public HttpClient Http { get; set; }
+        [Inject] public IRepositoryHttp Http2 { get; set; }
         [Inject] public NavigationManager NavigationManager { get; set; }
         protected bool verHojaRuta = false;
         protected bool verMP = true;
@@ -528,7 +530,14 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
 
         protected async Task<bool> ExistePlano(string file)
         {
-            return await Http.GetFromJsonAsync<bool>($"api/AdministracionArchivos/ExistePlano/{file}");
+            var response = await Http2.GetFromJsonAsync<bool>($"api/AdministracionArchivos/ExistePlano/{file}");
+            if (response.Error)
+            {
+                Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
+                return false;
+            }
+
+            return response.Response;
         }
 
 

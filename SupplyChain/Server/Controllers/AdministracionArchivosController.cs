@@ -195,7 +195,7 @@ namespace SupplyChain.Server.Controllers
         }
 
         [HttpGet("ExistePlano/{file}")]
-        public async Task<bool> ExistePlano(string file)
+        public async Task<ActionResult<bool>> ExistePlano(string file)
         {
             try
             {
@@ -206,7 +206,7 @@ namespace SupplyChain.Server.Controllers
             }
             catch (Exception ex)
             {
-                return false;
+                return BadRequest(ex.Message);
             }
             
         }
