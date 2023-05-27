@@ -720,11 +720,10 @@ namespace SupplyChain.Server.Controllers
             var fileDS = "Cotizacion.rdlc";
 
             var sol = _context.Solicitudes.Find(solicitudId);
-            var dataSheets = _context.vCalculoSolicitudes.Where(c => c.SolicitudId == sol.Id).ToList();
-            var list = dataSheets.Where(d => d.SolicitudId == sol.Id).ToList();
+            var dataSheets = _context.vCalculoSolicitudes.Where(c => c.SolicitudId == sol.CalcId).ToList();
             var pathDS = configuration["ReportesRDLC:DataSheet"] + $"\\{fileDS}";
             LocalReport localReportDS = new(pathDS);
-            localReportDS.AddDataSource(dataSetName: "DataSet1", list);//debere recibir una lista
+            localReportDS.AddDataSource(dataSetName: "DataSet1", dataSheets);//debere recibir una lista
             var resultDS = localReportDS.Execute(RenderType.Pdf, 1);
             pathDS = Path.Combine(env.WebRootPath, "pdf/", $"DataSheet_{solicitudId}.pdf");
             var streamCot = new MemoryStream();
