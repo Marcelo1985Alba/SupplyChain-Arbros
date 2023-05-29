@@ -23,7 +23,7 @@
                 <SfGrid @ref="refSfGrid" AllowReordering="true" ShowColumnChooser="false" ShowColumnMenu="true" AllowResizing="true"
                         DataSource="@DataEstadosPedidos" Width="100%"
                         AllowExcelExport="true" AllowGrouping="true" ID="grdEstadosPedidos"
-                        AllowSorting="true" AllowPaging="true" AllowFiltering="true" GridLines="GridLine.Both">
+                        AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
                     <GridEvents RowDataBound="RowBound" TValue="vEstadoPedido" RowSelected="@((a)=> OnRowSelected(a))"
                                 OnRecordDoubleClick="@((a)=> OnRowSelectedDouble_Click(a))"
                                 CommandClicked="CommandClickHandler" OnToolbarClick="@(async(a)=> await ClickHandler(a))"

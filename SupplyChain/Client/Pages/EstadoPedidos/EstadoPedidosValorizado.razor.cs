@@ -28,7 +28,7 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
         [Inject] protected IRepositoryHttp Http { get; set; }
         [Inject] protected PdfService PdfService { get; set; }
         [Inject] protected IJSRuntime JS { get; set; }
-
+        [Inject] protected EstadoPedidoService EstadoPedidoService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
 
         protected SfToast ToastObj;
@@ -41,10 +41,9 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
         protected List<Object> Toolbaritems = new List<Object>()
         {
             "Search",
-            new ItemModel{ Text ="Ver Todos", TooltipText="Seleccionar Columnas", Id="VerTodo", },
-            new ItemModel { Text = "Ver Ultimos 6 Meses", TooltipText = "Seleccionar Columnas", Id = "VerUltimos6Meses" },
-            new ItemModel { Text = "Seleccionar Columnas", TooltipText = "Seleccionar Columnas", Id = "SeleccionarColumnas" }
-        };
+        new ItemModel { Text = "Ver Todos", TooltipText = "Seleccionar Columnas", Id = "VerTodos" },
+        new ItemModel { Text = "Ver Pendientes", TooltipText = "Ver Pendientes", Id = "VerPendiente" }
+          };
 
         protected const string APPNAME = "grdEstadoPedidosValorizado";
         protected string state;
@@ -53,6 +52,7 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
         {
             MainLayout.Titulo = "Estados de Pedidos Valorizado";
             SpinnerVisible = true;
+            await GetPedidos(SupplyChain.Shared.Enum.EstadoPedido.TodosPendientes);
             var response = await Http.GetFromJsonAsync<List<vEstadoPedido>>
                 ("api/EstadoPedidos");
             if (response.Error)
@@ -231,6 +231,18 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
                 await refSfGrid.RefreshHeader();
             }
         }
+        protected async Task GetPedidos(SupplyChain.Shared.Enum.EstadoPedido estadoPedido = SupplyChain.Shared.Enum.EstadoPedido.Todos)
+        {
+            var response = await EstadoPedidoService.ByEstado(estadoPedido);
+            if (response.Error)
+            {
+
+            }
+            else
+            {
+                DataEstadoPedidoValorizado = response.Response.OrderByDescending(p => p.ESTADO_PEDIDO).ToList();
+            }
+        }
 
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {
@@ -241,6 +253,17 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             if (args.Item.Text == "Exportar Grilla en Excel")
             {
                 await this.refSfGrid.ExcelExport();
+            }
+             else if(args.Item.Id == "VerTodos"){
+                SpinnerVisible = true;
+                await GetPedidos();
+                SpinnerVisible = false;
+            }
+            else if (args.Item.Id == "VerPendiente")
+            {
+                SpinnerVisible = true;
+                await GetPedidos(SupplyChain.Shared.Enum.EstadoPedido.TodosPendientes);
+                SpinnerVisible = false;
             }
         }
 
