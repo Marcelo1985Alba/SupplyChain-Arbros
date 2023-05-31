@@ -133,6 +133,7 @@ namespace SupplyChain.Server.Controllers
             return NoContent();
         }
 
+       
         // POST: api/Compras
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -218,6 +219,20 @@ namespace SupplyChain.Server.Controllers
             return Ok(Itemcompras);
         }
 
+        [HttpPost("AnularOc")]
+        public async Task<ActionResult<Compra>> PostAnularOc(Compra Itemcompras)
+        {
+            try
+            {
+                await _compraRepository.Agregar(Itemcompras);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e);
+            }
+            return Ok(Itemcompras);
+        }
+
         [HttpPut("actualizaitem/{registro}")]
         //POST: api/compras/actualizaitem/5
         public async Task<ActionResult<Compra>> PutStock(int registro, Compra Itemcompras)
@@ -258,6 +273,14 @@ namespace SupplyChain.Server.Controllers
         {
             return Ok( await _compraRepository.UltimasCompras(3, cgmat));
         }
+
+        [HttpGet("OcSeleccionado")]
+        public async Task<ActionResult<IEnumerable<Compra>>> OcSeleccionado(int numero)
+        {
+            return Ok(await _compraRepository.OcSeleccionado(1, numero));
+        }
+
+
 
         [HttpPut("actualizaoc/{listaordenescompra}/{especif}/{condven}/{bonif}")]
         //POST: api/compras/generaoc

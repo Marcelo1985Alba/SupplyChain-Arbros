@@ -40,10 +40,12 @@ namespace SupplyChain.Client.Pages.Emision
         // variables generales
         public bool IsVisibleguarda { get; set; } = false;
         public bool IsVisibleimprime { get; set; } = true;
+        public bool IsVisibleAnular { get; set; } = true;
         public bool ocagenerar { get; set; } = true;
         public bool ocabierta { get; set; } = false;
         public string proveocabierta { get; set; } = "";
-                
+
+        public int onumero { get; set; } = 0;
         public int ocompra { get; set; } = 0;
         public decimal? bonif { get; set; } = 0;
         public string listaordenescompra { get; set; } = "";
@@ -54,6 +56,7 @@ namespace SupplyChain.Client.Pages.Emision
 
         protected List<Proveedores_compras> proveedorescompras = new List<Proveedores_compras>();
         protected List<Compra> insumosproveedor = new();
+        protected List<Compra> ordenSeleccionada = new();
         protected SfGrid<Compra> GridProve;
 
         public string xespecif = "";
@@ -61,6 +64,7 @@ namespace SupplyChain.Client.Pages.Emision
 
         public string DropVal = "";
         public string xcondven = "";
+        public string Obs = "";
 
         protected BuscadorEmergente<Compra> Buscador;
         protected Compra[] ItemsABuscar = null;
@@ -92,6 +96,7 @@ namespace SupplyChain.Client.Pages.Emision
                 insumosproveedor = await Http.GetFromJsonAsync<List<Compra>>("api/Compras/GetPreparacion/"+ args.Value);
                 IsVisibleguarda = false;
                 IsVisibleimprime = true;
+                IsVisibleAnular= true;
             }
         }
         public async Task limpia()
@@ -153,8 +158,77 @@ namespace SupplyChain.Client.Pages.Emision
                 xespecif = primerreg.ESPEGEN;
             }
         }
-        public async Task imprimiroc()
+
+        //public async Task anularOc()
+        //{
+        //    if (ocompra == 0)
+        //    {
+        //        await this.ToastObj.Show(new ToastModel
+        //        {
+        //            Title = "ERROR!",
+        //            Content = "Debe seleccionar la Orden de Compra",
+        //            CssClass = "e-toast-danger",
+        //            Icon = "e-error toast-icons",
+        //            ShowCloseButton = true,
+        //            ShowProgressBar = true
+        //        });
+        //    }
+        //    else
+        //    {
+        //        ordenSeleccionada = await Http.GetFromJsonAsync<List<Compra>>("api/compras/PostAnularOc" + ocompra);
+
+        //        ocabierta= true;
+        //        Compra num = ordenSeleccionada.FirstOrDefault();
+        //        onumero = num.CG_ORDEN;
+        //        Obs = num.ESPECIFICA;
+
+        //    }
+        //}
+
+        public async Task anularOc()
         {
+            try
+            {
+                if (ocompra == 0)
+                {
+                    await this.ToastObj.Show(new ToastModel
+                    {
+                        Title = "ERROR!",
+                        Content = "Debe seleccionar la Orden de Compra",
+                        CssClass = "e-toast-danger",
+                        Icon = "e-error toast-icons",
+                        ShowCloseButton = true,
+                        ShowProgressBar = true
+                    });
+                }
+                else
+                {
+                    ordenSeleccionada = await Http.GetFromJsonAsync<List<Compra>>("api/compras/PostAnularOc" + ocompra);
+
+                    ocabierta = true;
+                    Compra num = ordenSeleccionada.FirstOrDefault();
+                    onumero = num.CG_ORDEN;
+                    Obs = num.ESPECIFICA;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al anular la Orden de Compra: " + ex.Message);
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "Error al anular la Orden de Compra",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }
+        }
+
+
+        public async Task imprimiroc()
+            {
             if (ocompra == 0)
             {
                 await this.ToastObj.Show(new ToastModel
@@ -204,7 +278,6 @@ namespace SupplyChain.Client.Pages.Emision
 
             }
         }
-
 
 
         public async Task guardaoc()

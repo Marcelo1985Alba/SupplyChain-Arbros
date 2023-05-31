@@ -21,5 +21,19 @@ namespace SupplyChain.Server.Repositorios
 
             return await DbSet.FromSqlRaw(xSQL).ToListAsync();
         }
+
+        public async Task<IEnumerable<Compra>> OcSeleccionado(int oc, int registro)
+        {
+            string xSQL = $"SELECT * FROM COMPRAS WHERE NUMERO= '{oc}'";
+            return await DbSet.FromSqlRaw(xSQL).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Compra>> AnularOc(int oc)
+        {
+            string xSQL = $"INSERT INTO COMPRAS NUMERO, FE_EMIT,PRECIO,PRECIONETO,PRECIOTOT,MONEDA,NRCLTE,DES_PROVE,FE_PREV,FE_VENC,FE_CIERRE,CONDVEN,CG_DEPOSM,PRECIOUC,PRECIOPOND,FE_PREC,DIASVIGE,ESPECIFICA," +
+                          $"FE_DISP,FE_REG,DESCUENTO VALUES (0,NULL,0,0,0,0,'',0,'',NULL,NULL,NULL,0,0,0,0,NULL,NULL,'ANULADO',NULL,NULL) WHERE NUMERO ={oc}";
+            return await DbSet.FromSqlRaw(xSQL).ToListAsync();
+        }
+
     }
 }
