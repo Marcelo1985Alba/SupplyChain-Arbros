@@ -140,7 +140,7 @@ namespace SupplyChain
 
         public DbSet<Matprove_busquedaprove> Matprove_busquedaprove { get; set; }
 
-        public DbSet<Proveedores_compras> proveedores_compras { get; set; }
+        public DbSet<Proveedores_compras> proveedores_compras { get; set; } 
         public DbSet<vUsuario> vUsuarios { get; set; }
         public DbSet<vOCompraReporte> vOCompraReporte { get; set; }
         public DbSet<ISO> ISO { get; set; }

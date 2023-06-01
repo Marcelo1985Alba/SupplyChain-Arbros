@@ -274,11 +274,11 @@ namespace SupplyChain.Server.Controllers
             return Ok( await _compraRepository.UltimasCompras(3, cgmat));
         }
 
-        [HttpGet("OcSeleccionado")]
-        public async Task<ActionResult<IEnumerable<Compra>>> OcSeleccionado(int numero)
-        {
-            return Ok(await _compraRepository.OcSeleccionado(1, numero));
-        }
+        //[HttpGet("OcSeleccionado")]
+        //public async Task<ActionResult<IEnumerable<Compra>>> OcSeleccionado(int numero)
+        //{
+        //    return Ok(await _compraRepository.OcSeleccionado(1, numero));
+        //}
 
 
 

@@ -22,11 +22,11 @@ namespace SupplyChain.Server.Repositorios
             return await DbSet.FromSqlRaw(xSQL).ToListAsync();
         }
 
-        public async Task<IEnumerable<Compra>> OcSeleccionado(int oc, int registro)
-        {
-            string xSQL = $"SELECT * FROM COMPRAS WHERE NUMERO= '{oc}'";
-            return await DbSet.FromSqlRaw(xSQL).ToListAsync();
-        }
+        //public async Task<IEnumerable<Compra>> OcSeleccionado(int oc, int registro)
+        //{
+        //    string xSQL = $"SELECT * FROM COMPRAS WHERE NUMERO= '{oc}'";
+        //    return await DbSet.FromSqlRaw(xSQL).ToListAsync();
+        //}
 
         public async Task<IEnumerable<Compra>> AnularOc(int oc)
         {

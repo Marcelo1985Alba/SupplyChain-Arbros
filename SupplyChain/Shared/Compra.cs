@@ -16,7 +16,7 @@ namespace SupplyChain.Shared.Models
         public int CG_ORDEN { get; set; }
 
         [Display(Name = "Número")]
-        public int NUMERO { get; set; }
+        public int NUMERO { get; set; } = 0;
         [Display(Name = "Fecha emisión")]
         public DateTime? FE_EMIT { get; set; }
         [Display(Name = "Código")]

@@ -34,6 +34,8 @@ namespace SupplyChain.Client.Pages.Emision
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
         [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
+        [Inject] protected IRepositoryHttp repositoryHttp2 { get; set; }
+
 
         [CascadingParameter] public MainLayout MainLayout { get; set; }
 
@@ -46,7 +48,7 @@ namespace SupplyChain.Client.Pages.Emision
         public string proveocabierta { get; set; } = "";
 
         public int onumero { get; set; } = 0;
-        public int ocompra { get; set; } = 0;
+        public Compra ocompraseleccionada { get; set; } 
         public decimal? bonif { get; set; } = 0;
         public string listaordenescompra { get; set; } = "";
 
@@ -104,7 +106,7 @@ namespace SupplyChain.Client.Pages.Emision
             ocabierta = false;
             ocagenerar = true;
             insumosproveedor = new();
-            ocompra = 0;
+            ocompraseleccionada = new();
             bonif = 0;
             xespecif = "";
             DropVal = "";
@@ -125,7 +127,7 @@ namespace SupplyChain.Client.Pages.Emision
 
         public async Task EnviarObjetoSeleccionado(Compra compra)
         {
-            ocompra = compra.NUMERO;
+            ocompraseleccionada = compra;
             PopupBuscadorVisible = false;
             await Buscador.HideAsync();
             BuscarOC();
@@ -133,9 +135,9 @@ namespace SupplyChain.Client.Pages.Emision
 
         protected async Task BuscarOC()
         {
-            if ( ocompra == 0)
+            if (ocompraseleccionada is null || ocompraseleccionada.NUMERO == 0)
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Debe Indicar la Orden de compra para abrir",
@@ -145,7 +147,7 @@ namespace SupplyChain.Client.Pages.Emision
                     ShowProgressBar = true
                 });
             }else {
-                insumosproveedor = await Http.GetFromJsonAsync<List<Compra>>("api/compras/GetCompraByNumero/" + ocompra);
+                insumosproveedor = await Http.GetFromJsonAsync<List<Compra>>("api/compras/GetCompraByNumero/" + ocompraseleccionada.NUMERO);
                 IsVisibleguarda = true;
                 IsVisibleimprime = false;
 
@@ -159,39 +161,26 @@ namespace SupplyChain.Client.Pages.Emision
             }
         }
 
-        //public async Task anularOc()
-        //{
-        //    if (ocompra == 0)
-        //    {
-        //        await this.ToastObj.Show(new ToastModel
-        //        {
-        //            Title = "ERROR!",
-        //            Content = "Debe seleccionar la Orden de Compra",
-        //            CssClass = "e-toast-danger",
-        //            Icon = "e-error toast-icons",
-        //            ShowCloseButton = true,
-        //            ShowProgressBar = true
-        //        });
-        //    }
-        //    else
-        //    {
-        //        ordenSeleccionada = await Http.GetFromJsonAsync<List<Compra>>("api/compras/PostAnularOc" + ocompra);
-
-        //        ocabierta= true;
-        //        Compra num = ordenSeleccionada.FirstOrDefault();
-        //        onumero = num.CG_ORDEN;
-        //        Obs = num.ESPECIFICA;
-
-        //    }
-        //}
-
         public async Task anularOc()
         {
-            try
+            if (ocompraseleccionada is null || ocompraseleccionada.NUMERO == 0)
             {
-                if (ocompra == 0)
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
-                    await this.ToastObj.Show(new ToastModel
+                    Title = "ERROR!",
+                    Content = "Debe seleccionar la Orden de Compra",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }
+            else
+            {
+                var responseMessage = await repositoryHttp2.PostAsJsonAsync("api/compras/PostAnularOc" , ocompraseleccionada);
+                if (responseMessage.Error)
+                {
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = "Debe seleccionar la Orden de Compra",
@@ -199,39 +188,68 @@ namespace SupplyChain.Client.Pages.Emision
                         Icon = "e-error toast-icons",
                         ShowCloseButton = true,
                         ShowProgressBar = true
-                    });
-                }
+                    });                }
                 else
                 {
-                    ordenSeleccionada = await Http.GetFromJsonAsync<List<Compra>>("api/compras/PostAnularOc" + ocompra);
 
                     ocabierta = true;
-                    Compra num = ordenSeleccionada.FirstOrDefault();
+                    Compra num = responseMessage.Response;
                     onumero = num.CG_ORDEN;
                     Obs = num.ESPECIFICA;
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error al anular la Orden de Compra: " + ex.Message);
-                await this.ToastObj.Show(new ToastModel
-                {
-                    Title = "ERROR!",
-                    Content = "Error al anular la Orden de Compra",
-                    CssClass = "e-toast-danger",
-                    Icon = "e-error toast-icons",
-                    ShowCloseButton = true,
-                    ShowProgressBar = true
-                });
+
+
+
             }
         }
+
+        //public async Task anularOc()
+        //{
+        //    try
+        //    {
+        //        if (ocompra == 0)
+        //        {
+        //            await this.ToastObj.Show(new ToastModel
+        //            {
+        //                Title = "ERROR!",
+        //                Content = "Debe seleccionar la Orden de Compra",
+        //                CssClass = "e-toast-danger",
+        //                Icon = "e-error toast-icons",
+        //                ShowCloseButton = true,
+        //                ShowProgressBar = true
+        //            });
+        //        }
+        //        else
+        //        {
+        //            ordenSeleccionada = await Http.GetFromJsonAsync<List<Compra>>("api/compras/PostAnularOc" + ocompra);
+
+        //            ocabierta = true;
+        //            Compra num = ordenSeleccionada.FirstOrDefault();
+        //            onumero = num.CG_ORDEN;
+        //            Obs = num.ESPECIFICA;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("Error al anular la Orden de Compra: " + ex.Message);
+        //        await this.ToastObj.Show(new ToastModel
+        //        {
+        //            Title = "ERROR!",
+        //            Content = "Error al anular la Orden de Compra",
+        //            CssClass = "e-toast-danger",
+        //            Icon = "e-error toast-icons",
+        //            ShowCloseButton = true,
+        //            ShowProgressBar = true
+        //        });
+        //    }
+        //}
 
 
         public async Task imprimiroc()
             {
-            if (ocompra == 0)
+            if (ocompraseleccionada is null || ocompraseleccionada.NUMERO== 0)
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Debe Indicar la Orden de compra para abrir",
@@ -248,7 +266,7 @@ namespace SupplyChain.Client.Pages.Emision
                 PdfPage page = document.Pages.Add();
                 PdfGraphics graphics = page.Graphics;
                 PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
-                graphics.DrawString("Orden de Compra: " + ocompra.ToString(), font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+                graphics.DrawString("Orden de Compra: " + ocompraseleccionada.NUMERO.ToString(), font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
                 /*
                 PdfGrid pdfGrid = new PdfGrid();
@@ -274,7 +292,7 @@ namespace SupplyChain.Client.Pages.Emision
                 document.Save(xx);
                 document.Close(true);
 
-                await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportOC?numero={ocompra}", "_blank" });
+                await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportOC?numero={ocompraseleccionada.NUMERO}", "_blank" });
 
             }
         }
