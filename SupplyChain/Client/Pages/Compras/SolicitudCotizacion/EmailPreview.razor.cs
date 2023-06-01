@@ -24,6 +24,7 @@ namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
         protected SfToast ToastObj;
         protected SfSpinner refSpinner;
 
+        protected bool mailPreparado = false;
 
         protected string asunto = "Solicitud de Cotización";
         protected string mensaje = "Estimado/a [CONTACTO],\n" +
@@ -35,20 +36,28 @@ namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
         protected void VistaPreviaEmail(MouseEventArgs args)
         {
             ActualizarDatosEmailsAEnviar();
+            
+                
+
             dialogVisible = true;
         }
         protected void ActualizarDatosEmailsAEnviar()
         {
-            foreach (var mail in EmailsEnviar)
+            if (!mailPreparado)
             {
-                
-                mail.ASUNTO_EMAIL = asunto;
-                mail.MENSAJE_EMAIL = mensaje.Replace("[CONTACTO]", mail.CONTACTO.Trim())
-                    .Replace("[CODIGO PROVEEDOR]", mail.CG_PROVE.ToString())
-                    .Replace("[PROVEEDOR]", mail.Proveedor.Trim())
-                    .Replace("[INSUMOS]", mail.MENSAJE_EMAIL);
+                foreach (var mail in EmailsEnviar)
+                {
 
+                    mail.ASUNTO_EMAIL = asunto;
+                    mail.MENSAJE_EMAIL = mensaje.Replace("[CONTACTO]", mail.CONTACTO.Trim())
+                        .Replace("[CODIGO PROVEEDOR]", mail.CG_PROVE.ToString())
+                        .Replace("[PROVEEDOR]", mail.Proveedor.Trim())
+                        .Replace("[INSUMOS]", mail.MENSAJE_EMAIL);
+
+                }
+                mailPreparado = true;
             }
+            
 
             ////Obtengo las mp no repetidas para generar el mensaje de email
             //foreach (var mail in EmailsEnviar.GroupBy(g=> g.CG_MAT).Select(s=> s.FirstOrDefault()).ToList())

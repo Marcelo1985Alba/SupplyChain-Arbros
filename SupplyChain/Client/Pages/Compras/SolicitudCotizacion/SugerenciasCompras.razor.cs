@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using Syncfusion.Blazor.DropDowns;
+using System.Linq;
 
 namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
 {
@@ -56,6 +57,16 @@ namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
             {
                 ListData = DataSource.FindAll(e => e.CG_MAT.ToLower().Contains(eventArgs.Value.ToLower()) 
                     || e.DES_MAT.ToLower().Contains(eventArgs.Value.ToLower()));
+            }
+
+        }
+
+        public void ActualizarItems(List<Compra> sugerenciasActualizadas)
+        {
+            var sugerencias = ListData.Where(l => sugerenciasActualizadas.Contains(l)).ToList();
+            foreach (var item in sugerencias)
+            {
+                item.TieneSolicitudCotizacion = true;
             }
 
         }

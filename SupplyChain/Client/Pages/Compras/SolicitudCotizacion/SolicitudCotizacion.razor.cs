@@ -20,6 +20,7 @@ namespace SupplyChain.Client.Pages.Compras
         [CascadingParameter] public MainLayout MainLayout { get; set; }
 
         protected bool mostrarSpinner = false;
+        protected SugerenciasCompras refSugerenciasCompras;
         protected ProveedoresMateriaPrima refProveedoresMateriaPrima;
         protected Proveedores refProveedores;
         protected EmailPreview refEmailPreview;
@@ -131,7 +132,8 @@ namespace SupplyChain.Client.Pages.Compras
                 foreach (var sugerenciaCompra in sugerenciasSeleccionadas)
                 {
                     mensaje += $"\nCódigo: {sugerenciaCompra.CG_MAT.Trim()}\nDescripción: {sugerenciaCompra.DES_MAT.Trim()}\n" +
-                        $"Cantidad: {Math.Round(sugerenciaCompra.SOLICITADO.Value, 2)} {sugerenciaCompra.UNID}\n";
+                        $"Cantidad: {Math.Round(sugerenciaCompra.SOLICITADO.Value, 2)} {sugerenciaCompra.UNID}\n" +
+                        $"Fecha Prevista: {sugerenciaCompra.FE_PREV.Value.ToString("dd/MM/yyyy")}\n";
 
                     if (!string.IsNullOrEmpty(sugerenciaCompra.ESPECIFICA))
                     {
@@ -139,7 +141,7 @@ namespace SupplyChain.Client.Pages.Compras
                     }
 
                     mensaje += "--------------------------------------------------------------------------";
-                        //"----------------------------------------------------";
+                    //"----------------------------------------------------";
 
                     mail = new SolCotEmail()
                     {
@@ -152,18 +154,24 @@ namespace SupplyChain.Client.Pages.Compras
                         Proveedor = proveedor.DESCRIPCION.Trim(),
                         EMAIL = proveedor.EMAIL_CONTACTO,
                         CONTACTO = proveedor.NOMBRE_CONTACTO,
-                        UNIDAD = sugerenciaCompra.UNID, 
-                        FE_PREV = sugerenciaCompra.FE_PREV.Value, 
-                        REGISTRO_COMPRAS = sugerenciaCompra.Id
+                        UNIDAD = sugerenciaCompra.UNID,
+                        FE_PREV = sugerenciaCompra.FE_PREV.Value,
+                        REGISTRO_COMPRAS = sugerenciaCompra.Id,
+                        ASUNTO_EMAIL = string.Empty,
+                        MENSAJE_EMAIL = string.Empty,
+                        USUARIO = string.Empty
                     };
 
-                }
-
-                mail.MENSAJE_EMAIL = mensaje;
-                if (!EmailsEnviar.Any(e => e.CG_PROVE == mail.CG_PROVE && e.CG_MAT == mail.CG_MAT))
-                {
                     EmailsEnviar.Add(mail);
                 }
+
+
+                //corrige el mensaje para todos los items
+                foreach (var item in EmailsEnviar)
+                {
+                    item.MENSAJE_EMAIL = mensaje;
+                }
+                
             }
 
             refEmailPreview.ActualizarListaMails(EmailsEnviar);
@@ -172,6 +180,11 @@ namespace SupplyChain.Client.Pages.Compras
         protected async Task MailsEnviadosCorrectamente(List<SolCotEmail> mailsEnviados)
         {
             //mailsEnviados.AddRange(mailsEnviados);
+
+            //refSugerenciasCompras.ActualizarItems(sugerenciasSeleccionadas);
+
+
+
             await refEmailsEnviados.Refrescar(mailsEnviados);
         }
     }

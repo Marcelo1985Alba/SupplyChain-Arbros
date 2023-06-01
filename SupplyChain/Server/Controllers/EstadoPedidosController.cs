@@ -49,26 +49,38 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("ByEstado/{estado}")]
         public async Task<ActionResult<IEnumerable<vEstadoPedido>>> Get(EstadoPedido estado = EstadoPedido.Todos)
         {
-            if (estado == EstadoPedido.PendienteRemitir)
+
+            switch (estado)
             {
-                return await _context.vEstadoPedidos.Where(e => e.ESTADO_PEDIDO == (int)estado && string.IsNullOrEmpty(e.REMITO))
-                .ToListAsync();
+                case EstadoPedido.TodosPendientes:
+                    return await _context.vEstadoPedidos.Where(c => c.ESTADO_PEDIDO !=9 
+                    && c.ESTADO_PEDIDO !=10).ToListAsync();
+                case EstadoPedido.Todos:
+                    return await _context.vEstadoPedidos.ToListAsync();
+                default:
+                    return await _context.vEstadoPedidos.ToListAsync();
+                    
             }
-            else if (estado == EstadoPedido.Entregado)
-            {
-                return await _context.vEstadoPedidos.Where(e => !string.IsNullOrEmpty(e.REMITO))
-                .ToListAsync();
-            }
-            else if(estado != EstadoPedido.PendienteRemitir || estado != EstadoPedido.Todos)
-            {
-                return await _context.vEstadoPedidos.Where(e => e.ESTADO_PEDIDO == (int)estado)
-                .ToListAsync();
-            }
-            else
-            {
-                return await _context.vEstadoPedidos.ToListAsync();
-            }
+            //if (estado == EstadoPedido.PendienteRemitir)
+            //{
+            //    return await _context.vEstadoPedidos.Where(e => e.ESTADO_PEDIDO == (int)estado && string.IsNullOrEmpty(e.REMITO))
+            //    .ToListAsync();
+            //}
+            //else if (estado == EstadoPedido.Entregado)
+            //{
+            //    return await _context.vEstadoPedidos.Where(e => !string.IsNullOrEmpty(e.REMITO))
+            //    .ToListAsync();
+            //}
+            //else if(estado != EstadoPedido.PendienteRemitir || estado != EstadoPedido.Todos)
+            //{
+            //    return await _context.vEstadoPedidos.Where(e => e.ESTADO_PEDIDO == (int)estado)
+            //    .ToListAsync();
+            //}
+            //            {
+               // return await _context.vEstadoPedidos.ToListAsync();
+            //}
             
+            //else
 
         }
 

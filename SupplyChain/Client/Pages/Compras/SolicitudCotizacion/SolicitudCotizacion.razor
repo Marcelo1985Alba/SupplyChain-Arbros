@@ -8,7 +8,7 @@
 <div id="solicitudCotizacion-main" class="row">
     <SfSpinner Label="Cargando..." @bind-Visible="@mostrarSpinner" Type="SpinnerType.Fabric"></SfSpinner>
     <div class="col-lg-3 col-sm-12">
-        <SugerenciasCompras OnItemsSeleccionados="OnRecibirItemsSeleccionados"></SugerenciasCompras>
+        <SugerenciasCompras @ref="@refSugerenciasCompras" OnItemsSeleccionados="OnRecibirItemsSeleccionados"></SugerenciasCompras>
     </div>
     <div class="col-lg-5 col-sm-12">
         <div class="row">
