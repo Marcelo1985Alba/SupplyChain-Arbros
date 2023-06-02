@@ -12,7 +12,9 @@ using Syncfusion.Blazor.Spinner;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+
 
 namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 {
@@ -29,10 +31,12 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected Presupuesto PresupuestoSeleccionado = new();
         protected List<vPresupuestos> Presupuestos = new();
 
+
         protected bool SpinnerVisible = true;
         protected bool SpinnerVisiblePresupuesto = false;
 
         protected bool popupFormVisible = false;
+        public const string PASTE = "e-btn-icons e-paste";
         protected List<Object> Toolbaritems = new()
         {
             "Search",
@@ -279,6 +283,8 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 ShowProgressBar = true
             });
         }
+
+
 
     }
 }

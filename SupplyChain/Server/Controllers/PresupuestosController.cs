@@ -159,5 +159,11 @@ namespace SupplyChain.Server.Controllers
                 return BadRequest("Error al eliminar Presupuesto " + ex.Message);
             }
         }
+
+        //[HttpGet]
+        //public async Task<ActionResult<vPresupuestos>> ObtenerPresupuesto()
+        //{
+
+        //}
     }
 }
