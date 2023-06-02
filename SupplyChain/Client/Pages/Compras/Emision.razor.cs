@@ -48,7 +48,7 @@ namespace SupplyChain.Client.Pages.Emision
         public string proveocabierta { get; set; } = "";
 
         public int onumero { get; set; } = 0;
-        public Compra ocompraseleccionada { get; set; } 
+        public Compra ocompraseleccionada { get; set; } = new Compra();
         public decimal? bonif { get; set; } = 0;
         public string listaordenescompra { get; set; } = "";
 

@@ -49,8 +49,8 @@
                 <div class="form-row">
 
                     <div class="col-8">
-                        <SfNumericTextBox Readonly="true" @bind-Value="@ocompraseleccionada.NUMERO" ShowClearButton="true" TValue="int" Format="n0"
-                                          Decimals="0"></SfNumericTextBox>
+                        <SfNumericTextBox Readonly="true" @bind-Value="@ocompraseleccionada.NUMERO" ShowClearButton="true" TValue="int" 
+                                          ></SfNumericTextBox>
                     </div>
                     <div class="col-4 mb-1">
                         <SfButton OnClick="@(async (e)=> await BuscarOCompras())"
@@ -113,10 +113,10 @@
     </div>
     </div>
 
-@*<BuscadorEmergente Height="600px" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
+<BuscadorEmergente Height="600px" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
                    Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async(v)=>await Cerrar(v))"
                    OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
-*@
+
 
 @*<BuscadorEmergente Height="600px" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
                    Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async(v)=>await Cerrar(v))"
