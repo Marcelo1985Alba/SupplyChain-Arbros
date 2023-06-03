@@ -14,6 +14,6 @@ namespace SupplyChain.Shared
         public string NombreUsuario { get; set; }
         public string Contraseña { get; set; }
         public string To { get; set; }
-        public string Copia { get; set; }
+        public List<string> Copia { get; set; }
     }
 }
