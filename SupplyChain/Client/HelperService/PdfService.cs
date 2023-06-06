@@ -599,7 +599,7 @@ namespace SupplyChain.Client.HelperService
 
             graphics.DrawString($"{pedidos.CG_ART.Trim()}                  OC {pedidos.OCOMPRA}\r\n{pedidos.DES_ART.Trim()}\r\n" +
                 $"Despacho {pedidos.DESPACHO} Lote {pedidos.LOTE} VALE {pedidos.VALE}\n" +
-                $"{pedidos.Proveedor?.DES_PROVE.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(30, 10));
+                $"{pedidos.Proveedor?.DESCRIPCION.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(30, 10));
 
             //document1.PageSettings.Margins.Left = margin;
             //document1.PageSettings.Margins.Right = margin;

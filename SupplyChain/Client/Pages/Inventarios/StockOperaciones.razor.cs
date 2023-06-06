@@ -251,7 +251,7 @@ namespace SupplyChain.Client.Pages.Inventarios
             if (StockEncabezado.TIPOO == 5)
             {
                 Cg_CLI_Cg_PROVE = StockEncabezado.Items[0].CG_CLI == 0 ? StockEncabezado.Items[0].CG_PROVE : StockEncabezado.Items[0].CG_CLI;
-                DescripcionPro = StockEncabezado.Items[0].CG_CLI == 0 ? StockEncabezado.Items[0].Proveedor.DES_PROVE.Trim() : "Cliente";
+                DescripcionPro = StockEncabezado.Items[0].CG_CLI == 0 ? StockEncabezado.Items[0].Proveedor.DESCRIPCION.Trim() : "Cliente";
                 StockEncabezado.REMITO = StockEncabezado.Items[0].REMITO;
 
                 //Cargando datos para controlar si exige lote etc: para controlar validaciones en la edicion.
@@ -392,7 +392,7 @@ namespace SupplyChain.Client.Pages.Inventarios
             else
             {
                 Console.WriteLine(httpResponse.Content.ReadAsStringAsync());
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Error al obtener datos",
@@ -420,9 +420,12 @@ namespace SupplyChain.Client.Pages.Inventarios
                 {
                     registronegativo--;
 
+                    //obtener pendiente y datos de proveedor
+                    var compra = await Http.GetFromJsonAsync<Compra>($"api/Compras/{item.Id}");
+
                     Pedidos pedido = new();
                     pedido.TIPOO = StockEncabezado.TIPOO;
-                    pedido.Proveedor = lcompraSel[0].ProveedorNavigation;
+                    pedido.Proveedor = compra.ProveedorNavigation;
                     pedido.OCOMPRA = item.NUMERO;
                     pedido.CG_PROVE = item.NROCLTE;
                     Cg_CLI_Cg_PROVE = item.NROCLTE;
@@ -434,7 +437,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                     pedido.CG_DEP = 4;
                     pedido.CG_DEN = item.CG_DEN;
                     //Calcular stockA
-                    pedido.PENDIENTEOC = item.PENDIENTE;
+                    pedido.PENDIENTEOC = compra.PENDIENTE;
                     pedido.UNIDA = item.UNID1;
                     pedido.STOCKA = item.AUTORIZADO;
                     pedido.STOCK = item.PENDIENTE;

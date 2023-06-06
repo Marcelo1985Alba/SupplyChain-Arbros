@@ -57,7 +57,7 @@
             if (string.IsNullOrEmpty(Remito) || Remito.Trim() == "﻿0000-00000000" || Remito.Length > 13)
             {
                 Console.WriteLine(Remito);
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "AVISO!",
                     Content = "Ingrese Remito",
@@ -71,7 +71,7 @@
             if (Remito.Trim() == "﻿0000-00000000")
             {
                 Console.WriteLine(Remito);
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "AVISO!",
                     Content = "Ingrese Remito",

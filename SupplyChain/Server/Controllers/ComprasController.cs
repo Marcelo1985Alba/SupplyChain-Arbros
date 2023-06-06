@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 
 namespace SupplyChain.Server.Controllers
@@ -41,13 +42,17 @@ namespace SupplyChain.Server.Controllers
             try
             {
                 var compras = await _compraRepository
-                    .Obtener(c => c.CG_CIA == cg_cia_usuario && c.FE_CIERRE == null && c.NUMERO > 0).ToListAsync();
+                    .Obtener(c => c.CG_CIA == cg_cia_usuario && c.FE_CIERRE == null && c.NUMERO > 0
+                    && c.FE_EMIT.Value.Year > 2021).ToListAsync();
 
-                await compras.ForEachAsync( async c =>
-                {
-                    c.PENDIENTE = c.SOLICITADO - await _pedidosRepository.ObtenerRecepSumByOcMp(c.NUMERO, c.CG_MAT);
-                    c.ProveedorNavigation = await _proveedorRepository.ObtenerPorId(c.NROCLTE);
-                });
+                //await compras.ForEachAsync( async c =>
+                //{
+                //    c.PENDIENTE = c.SOLICITADO - await _pedidosRepository.ObtenerRecepSumByOcMp(c.NUMERO, c.CG_MAT);
+                //    if (await _context.vProveedoresItris.AnyAsync(p=> p.Id == c.NROCLTE))
+                //    {
+                //        c.ProveedorNavigation = await _context.vProveedoresItris.FirstOrDefaultAsync(v=> v.Id == c.NROCLTE); 
+                //    }
+                //});
 
                 return compras.OrderByDescending(c=> c.NUMERO).ToList();
             }
@@ -84,6 +89,12 @@ namespace SupplyChain.Server.Controllers
             if (compra == null)
             {
                 return NotFound();
+            }
+
+            compra.PENDIENTE = compra.SOLICITADO - await _pedidosRepository.ObtenerRecepSumByOcMp(compra.NUMERO, compra.CG_MAT);
+            if (await _context.vProveedoresItris.AnyAsync(p => p.Id == compra.NROCLTE))
+            {
+                compra.ProveedorNavigation = await _context.vProveedoresItris.FirstOrDefaultAsync(v => v.Id == compra.NROCLTE);
             }
 
             return Ok(compra);

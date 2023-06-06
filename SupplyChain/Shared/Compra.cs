@@ -118,7 +118,7 @@ namespace SupplyChain.Shared.Models
         [NotMapped]
         public decimal? PENDIENTE { get; set; } = 0;
         [NotMapped]
-        public virtual Proveedor ProveedorNavigation { get; set; }
+        public virtual vProveedorItris? ProveedorNavigation { get; set; }
 
         [NotMapped]
         public bool TieneSolicitudCotizacion { get; set; } = false;
