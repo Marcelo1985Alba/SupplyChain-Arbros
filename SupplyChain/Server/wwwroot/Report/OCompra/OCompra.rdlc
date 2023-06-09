@@ -773,7 +773,6 @@
                                 <TextRun>
                                   <Value>=Fields!CG_MAT.Value</Value>
                                   <Style>
-                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -806,7 +805,6 @@
                                 <TextRun>
                                   <Value>=Fields!SOLICITADO.Value</Value>
                                   <Style>
-                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <Format>0;(0)</Format>
                                   </Style>
@@ -822,7 +820,6 @@
                                 <TextRun>
                                   <Value>=Fields!UNID.Value</Value>
                                   <Style>
-                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <Format>0;(0)</Format>
                                   </Style>
@@ -856,7 +853,6 @@
                                 <TextRun>
                                   <Value>=Fields!ESPECIFICA.Value</Value>
                                   <Style>
-                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -889,9 +885,8 @@
                                 <TextRun>
                                   <Value>=Fields!FE_PREV.Value</Value>
                                   <Style>
-                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
-                                    <Format>ddMMyyyy</Format>
+                                    <Format>dd/MM/yy</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -923,7 +918,6 @@
                                 <TextRun>
                                   <Value>=Fields!AUTORIZADO.Value</Value>
                                   <Style>
-                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <Format>0.00</Format>
                                   </Style>
@@ -939,7 +933,6 @@
                                 <TextRun>
                                   <Value>=Fields!UNID1.Value</Value>
                                   <Style>
-                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <Format>0;(0)</Format>
                                   </Style>
@@ -975,7 +968,6 @@
                                 <TextRun>
                                   <Value>=Fields!PRECIO.Value</Value>
                                   <Style>
-                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <Format>0.00</Format>
                                   </Style>
@@ -1011,7 +1003,6 @@
                                 <TextRun>
                                   <Value>=Fields!DESCUENTO.Value</Value>
                                   <Style>
-                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <Format>0.00</Format>
                                   </Style>
@@ -1047,7 +1038,6 @@
                                 <TextRun>
                                   <Value>=Fields!PRECIOTOT.Value</Value>
                                   <Style>
-                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <Format>0.00;-0.00;'-'</Format>
                                   </Style>
