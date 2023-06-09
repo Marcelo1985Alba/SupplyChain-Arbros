@@ -856,11 +856,11 @@
                     string fugas = "";
                     if (selectedRecord.FUGAS.Trim() == "SI")
                     {
-                        fugas = "x";
+                        fugas = "X";
                     }
                     else
                     {
-                        fugas = "     x";
+                        fugas = "     X";
                     }
                     string espaciosfugas = "";
                     for (int i = 0; i < (24 - fugas.Length); i++)
@@ -922,69 +922,86 @@
                         $"\r\n" +
                         $"\r\n" +
                         $"\r\n" +
-                        $"         Nro. Serie Rep.: {selectedRecord.PEDIDO}                           Fecha: {DateTime.Now.Day}/{DateTime.Now.Month}/{DateTime.Now.Year}\r\n" +
                         $"\r\n" +
-                        $"" +
-                        $"                 {selectedRecord.CLIENTE.Trim()}\r\n" +
+                        $"       Nro. Serie Rep.: {selectedRecord.PEDIDO}                           Fecha: {DateTime.Now.Day}/{DateTime.Now.Month}/{DateTime.Now.Year}\r\n" +
                         $"\r\n" +
-                        $"                 {ClienteList.FirstOrDefault().DIRECC.Trim()}\r\n" +//15
-                        $"                                                         {ClienteList.FirstOrDefault().CG_POST}\r\n" +//no va
-                        $"                      {ClienteList.FirstOrDefault().LOCALIDAD.Trim()}\r\n" +
-                        $"                      {espaciosEmail}{email}\r\n" +
-                            $"                {ClienteList.FirstOrDefault().DES_PROV.Trim()}\r\n" +
+                        $"\r\n" +
+                        $"                   {selectedRecord.CLIENTE.Trim()}\r\n" +
+                        $"\r\n" +
+                        $"              {ClienteList.FirstOrDefault().DIRECC.Trim()}\r\n" +//15
+                        $"\r\n" +
+                        $"                {ClienteList.FirstOrDefault().LOCALIDAD.Trim()}                                         {ClienteList.FirstOrDefault().CG_POST}\r" +//no va
+                        $"                  {ClienteList.FirstOrDefault().DES_PROV.Trim()}                    {email}\r\n" +   ///YA ESTA BIEN 
+                            $"\r\n" +
                             $"\r\n" +
                             $"\r\n" +//20
+                            $"\r\n" +//20
                             $"                   ARBROS S.A.\r\n" +
-                            $"                                    08/11\r\n" +
-                            $"\r\n" +
-                            $"                                                  188\r\n" +
-                            $"\r\n" +//25
-                            $"\r\n" +//25
+                            $"\r\n" +//20
+                            $"                                          08/11\r\n" +
+                            $"                                                     188\r\n" +
                             $"        {selectedRecord.IDENTIFICACION.Trim()}             \r\n" +
-                            $"\r\n" +//25
-                            $"               {selectedRecord.MARCA.Trim()}    {espaciosSerie}Med ExS:{selectedRecord.MEDIDA.Trim()} \r\n" +
-                            $"                                                             Cnx ExS:{selectedRecord.SERIE.Trim()}\r\n" +
-                            $"              {selectedRecord.MODELO.Trim()}{espaciosFluido}{selectedRecord.FLUIDO.Trim()}\r\n" +//30
                             $"\r\n" +
-                            $"                                                                  {selectedRecord.TEMP.Trim()}°C\r\n"+
-                            $"\r\n" +//25
-                            $"              {selectedRecord.AÑO.Trim()}{espaciosTemperatura}\r\n" +
-                            $"                                                      {selectedRecord.CONTRAPRESION.Trim()} {selectedRecord.TIPO.Trim()}\r\n" +//DescargaTeorica
                             $"\r\n" +
-                            $"\r\n" +//35
+                            $"                                                              Med ExS:{selectedRecord.MEDIDA.Trim()} \r\n" +
+                            $"\r\n" + //ESPACIO ENTRE MED Y CNX
+                            $"               {selectedRecord.MARCA.Trim()}                                         Cnx ExS:{selectedRecord.SERIE.Trim()}\r\n" +
+                            //$"\r\n" +
+                            $"              {selectedRecord.MODELO.Trim()}                                              {selectedRecord.FLUIDO.Trim()}\r\n" +
+                            //$"\r\n" + recien
+                            $"              {selectedRecord.AÑO.Trim()}                                         {selectedRecord.TEMP.Trim()}°C\r\n" +
                             $"\r\n" +
-                            $"                                      {fugas}{espaciosfugas}{selectedRecord.PRESIONFUGA.Trim()} {presionfuga}\r\n" +
-                            $"                          {selectedRecord.PRESION.Trim()} {presionA}\r\n" +
+                            //$"                                                             {selectedRecord.TEMP.Trim()}°C\r\n" +
+                            //$"                                                             {selectedRecord.FLUIDO.Trim()}\r\n" +
+                            $"                                                             {selectedRecord.CONTRAPRESION.Trim()} {selectedRecord.TIPO.Trim()}\r\n" +//DescargaTeorica
+                            $"\r\n" +
+                            $"\r\n" +
+                            //$"\r\n" +
+                            //$"\r\n" +                     6                               |              |     
+                            $"                                   {fugas}     {espaciosfugas}{selectedRecord.PRESIONFUGA.Trim()} {presionfuga}\r\n" +
+                            $"\r\n" +
+                            $"                       {selectedRecord.PRESION.Trim()} {presionA}\r\n" +
                             $"\r\n" +
                             $"\r\n" +//40
                             $"\r\n" +
+                            //$"\r\n" +
+                            //$"\r\n" +
+                            $"\r\n" +
+                            $"                  X           Lapidado                X          Helicoidal\r\n" +
+                            $"" +
+                            $"                  X           Lapidado\r\n" +//45
+                            $"\r\n" +
+                            //$"\r\n" +
                             $"\r\n" +
                             $"\r\n" +
-                            $"                       x        Lapidado                     x          Helicoidal\r\n" +
-                            $"                       x        Lapidado\r\n" +//45
-                            $"\r\n" +
-                            $"\r\n" +
-                            $"\r\n" +
-                            $"\r\n" +
-                            $"                         {DateTime.Today.Day}  {DateTime.Today.Month}  {DateTime.Today.Year}\r\n" +
+                            $"                         {DateTime.Today.Day}    {DateTime.Today.Month}    {DateTime.Today.Year}\r\n" +
                             $"" +//50
+                            $"\r\n" +//50
+                            $"          X \r\n" +
+                            //$"\r\n" + recien
+                            //$"\r\n" +
+                            $"                         {selectedRecord.PRESIONSOLIC.Trim()} {presionSolic}\r\n" +
+                            //$"\r\n" +
                             $"\r\n" +
-                            $"                      x\r\n" +
-                            $"                      {selectedRecord.PRESIONSOLIC.Trim()} {presionSolic}\r\n" +
-                            $"                                   {DateTime.Today.Day}    {DateTime.Today.Month}    {DateTime.Today.AddYears(1).Year}\r\n" +
+                            $"                                      {DateTime.Today.Day}    {DateTime.Today.Month}    {DateTime.Today.AddYears(1).Year}\r\n" +
                             $"\r\n" +
                             $"\r\n" +
                             $"\r\n" +
                             $"\r\n" +
-                            $"                     {TrEfec}\r\n" +
+                            //$"\r\n" +
+                            //$"\r\n" +
+                            $"\r\n" +
+                            $"\r\n" +
+                            $"                 {TrEfec}\r\n" +
                             $"          {TrEfec2}\r\n" +
                             $"\r\n" +//60
                             $"\r\n" +
                             $"\r\n" +
+
                             $"\r\n" +
-                            $"\r\n" +//65
-                            $"\r\n" +
-                            $"\r\n" +
+                            //$"\r\n" +//65
+                            //$"\r\n" +
+                            //$"\r\n" +
                             $"                     p. ARBROS S.A.                 Ing. Iris Mónica Rabboni\r\n" +//70
                             $"                  Ing. Gustavo A. Mutz          N° Insc. en OPDS s/res 1126: 188\r\n" +
                             $"             TALLER HABILITADO OPDS N°08/11             Matricula: 47642\r\n", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
