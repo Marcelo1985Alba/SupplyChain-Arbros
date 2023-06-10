@@ -25,7 +25,7 @@ using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Grid;
 using Syncfusion.Pdf.Tables;
 using SupplyChain.Client.HelperService;
-
+using SupplyChain.Shared;
 
 namespace SupplyChain.Client.Pages.Emision
 {
@@ -56,6 +56,7 @@ namespace SupplyChain.Client.Pages.Emision
         protected NotificacionToast NotificacionObj;
         protected bool ToastVisible { get; set; } = false;
 
+        protected List<vCondicionesPago> condiconespago = new List<vCondicionesPago>();
         protected List<Proveedores_compras> proveedorescompras = new List<Proveedores_compras>();
         protected List<Compra> insumosproveedor = new();
         protected List<Compra> ordenSeleccionada = new();
@@ -85,6 +86,9 @@ namespace SupplyChain.Client.Pages.Emision
         {
             MainLayout.Titulo = "Emisión de Ordenes de Compras";
 
+            condiconespago = await Http.GetFromJsonAsync<List<vCondicionesPago>>("api/Condven/Itris");
+
+
             proveedorescompras = await Http.GetFromJsonAsync<List<Proveedores_compras>>("api/compras/GetProveedorescompras/");
 
         }
@@ -99,6 +103,11 @@ namespace SupplyChain.Client.Pages.Emision
                 IsVisibleguarda = false;
                 IsVisibleimprime = true;
                 IsVisibleAnular= true;
+                if (insumosproveedor.Count > 0)
+                {
+                    DropVal = insumosproveedor[0].CONDVEN;
+                }
+                
             }
         }
         public async Task limpia()
