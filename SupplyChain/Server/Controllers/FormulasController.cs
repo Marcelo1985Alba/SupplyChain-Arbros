@@ -1,11 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SupplyChain.Server.Repositorios;
-using SupplyChain.Shared.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared;
+using SupplyChain.Shared.Models;
+using System.IO;
+using Microsoft.Extensions.Configuration;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -13,6 +18,7 @@ namespace SupplyChain.Server.Controllers
     [ApiController]
     public class FormulasController : ControllerBase
     {
+        private readonly AppDbContext _context;
         private readonly FormulaRepository _formulaRepository;
 
         public FormulasController(FormulaRepository formulaRepository)
@@ -27,6 +33,34 @@ namespace SupplyChain.Server.Controllers
             return ExisteEnFormula;
         }
 
+        [HttpGet]
+        public async Task<IEnumerable<Formula>> Get()
+        {
+            try
+            {
+                return await _formulaRepository.ObtenerTodos();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        
+        // GET: api/Formulas/BuscarPorCgProd/{CG_PROD}
+        [HttpGet("BuscarPorCgProd/{CG_PROD}")]
+        public async Task<IEnumerable<Formula>> BuscarPorCgProd(string CG_PROD)
+        {
+            string xSQL = string.Format($"Select * From Form2 where CG_PROD = '{CG_PROD}'");
+            try
+            {
+                return await _context.Formulas.FromSqlRaw(xSQL).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return new List<Formula>();
+            }
+        }
+
         [HttpGet("VerificaFormula")]
         public async Task<ActionResult<bool>> ExisteEnFormula([FromQuery] List<string> insumos)
         {
@@ -34,6 +68,49 @@ namespace SupplyChain.Server.Controllers
             var ExisteEnFormula = await _formulaRepository.InsumoEnFormula(insumos);
 
             return ExisteEnFormula;
+        }
+
+        // POST: api/Formulas
+        [HttpPost]
+        public async Task<ActionResult<Formula>> PostFormula(Formula form) {
+            try
+            {
+                await _formulaRepository.Agregar(form);
+                return CreatedAtAction("Get", new { id = form.Id }, form);
+            }
+            catch (DbUpdateException exx)
+            {
+                if (!await _formulaRepository.Existe(form.Id))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        //POST: api/Formulas/PostList
+        [HttpPost("PostList")]
+        public async Task<ActionResult<List<Formula>>> PostList([FromBody] List<Formula> lista)
+        {
+            try
+            {
+                foreach (var item in lista)
+                {
+                    await _formulaRepository.Agregar(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok(lista);
         }
     }
 }

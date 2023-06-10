@@ -126,7 +126,7 @@ namespace SupplyChain.Server.Controllers.CDM
             try
             {
                 await _procesoRepository.Agregar(valor);
-                return CreatedAtAction("GetValor", new { id = valor.Id }, valor);
+                return CreatedAtAction("GetCargaValores", new { id = valor.Id }, valor);
             }
             catch (DbUpdateException exx)
             {

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Identity;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
@@ -7,13 +9,16 @@ using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Popups;
+using Syncfusion.Blazor.RichTextEditor;
 using Syncfusion.Blazor.Spinner;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Threading;
 using System.Threading.Tasks;
+using SupplyChain.Client.RepositoryHttp;
 
 namespace SupplyChain.Client.Pages.Ingenieria
 {
@@ -26,6 +31,12 @@ namespace SupplyChain.Client.Pages.Ingenieria
         protected SfSpinner refSpinner;
         protected bool VisibleSpinner = false;
 
+        protected SfDialog EditFormulas { get; set; }
+        protected Boolean dialogVisibleCopiar = false;
+        protected Boolean dialogVisibleEditar = false;
+        protected decimal valorDolar = 0;
+        protected vIngenieriaProductosFormulas Selected { get; set; }
+
         protected SfToast ToastObj;
 
         protected List<Object> Toolbaritems = new() { "ExcelExport",
@@ -36,8 +47,10 @@ namespace SupplyChain.Client.Pages.Ingenieria
         protected SfDialog DialogDespieceRef;
         protected SfGrid<DespiecePlanificacion> GridDespiece;
         protected SfGrid<vIngenieriaProductosFormulas> GridProdForm;
+        protected SfGrid<vIngenieriaProductosFormulas> DetailedGridProdForm;
         protected List<DespiecePlanificacion> listaDespiece = new();
         protected List<vIngenieriaProductosFormulas> DataOrdeProductosFormulas { get; set; } = new List<vIngenieriaProductosFormulas>();
+        protected List<vIngenieriaProductosFormulas> DataDetailedProductosFormulas { get; set; } = new List<vIngenieriaProductosFormulas>();
         protected vIngenieriaProductosFormulas ProdSelected = new();
 
         public class TabData
@@ -50,19 +63,31 @@ namespace SupplyChain.Client.Pages.Ingenieria
 
         protected string tituloTabFormulas = string.Empty;
         protected bool mostrarCerrarTab = false;
+        protected Compra[] insumosproveedor;
+        protected Cotizaciones[] cotizaciones;
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Consulta de Fórmulas";
             VisibleSpinner = true;
             DataOrdeProductosFormulas = await Http.GetFromJsonAsync<List<vIngenieriaProductosFormulas>>("api/Ingenieria/GetProductoFormulas");
+            insumosproveedor = await Http.GetFromJsonAsync<Compra[]>("api/Compras/todas");
+            cotizaciones = await Http.GetFromJsonAsync<Cotizaciones[]>("api/Cotizacion");
             VisibleSpinner = false;
         }
 
-
         protected async Task CommandClickHandler(CommandClickEventArgs<vIngenieriaProductosFormulas> args)
         {
-
-            if (args.CommandColumn.Title == "Despiece")
+            if (args.CommandColumn.Title == "Editar")
+            {
+                Selected = args.RowData;
+                DataDetailedProductosFormulas = (await Http.GetFromJsonAsync<List<vIngenieriaProductosFormulas>>("api/Ingenieria/GetProductoFormulas")).Where(s => s.TIENE_FORM && s.FORM_ACTIVA && s.CG_PROD == args.RowData.CG_PROD).ToList();
+                dialogVisibleEditar = true;
+            } else if (args.CommandColumn.Title == "Copiar")
+            {
+                Selected = args.RowData;
+                DataDetailedProductosFormulas = (await Http.GetFromJsonAsync<List<vIngenieriaProductosFormulas>>("api/Ingenieria/GetProductoFormulas")).Where(s => s.TIENE_FORM && s.FORM_ACTIVA).ToList();
+                dialogVisibleCopiar = true;
+            } else if (args.CommandColumn.Title == "Despiece")
             {
                 VisibleSpinner = true;
                 ProdSelected = args.RowData;
@@ -125,8 +150,8 @@ namespace SupplyChain.Client.Pages.Ingenieria
                 //await refSfTab.Select(TabItems.Count);
                 VisibleSpinner = false;
             }
-
         }
+
 
         protected async Task ToolbarProdFormClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {
@@ -216,7 +241,6 @@ namespace SupplyChain.Client.Pages.Ingenieria
             
         }
 
-
         protected async Task TabEliminado(RemoveEventArgs removeEventArgs)
         {
             if (refSfTab.Items.Count == 1)
@@ -224,6 +248,112 @@ namespace SupplyChain.Client.Pages.Ingenieria
                 mostrarCerrarTab = false;
                 tituloTabFormulas = string.Empty;
             }
+        }
+        protected async Task<decimal?> ObtenerCoste(string cg_mat, string cg_se, decimal? cant)
+        {
+            if (cg_mat != null && cg_mat != "")
+            {
+                Compra aux = insumosproveedor.Where(s => s.CG_MAT.Trim() == cg_mat.Trim()).MaxBy(s => s.FE_EMIT);
+                if (aux != null)
+                {
+                    if (aux.MONEDA.Trim().ToLower() == "dolares")
+                    {
+                        return (aux.PRECIOTOT / aux.SOLICITADO) * cant; 
+                    } else if (aux.MONEDA.Trim().ToLower() == "pesos") {
+                        double cot = cotizaciones.Where(s => s.FEC_ULT_ACT <= aux.FE_EMIT).MaxBy(s => s.FEC_ULT_ACT).COTIZACION;
+                        return ((aux.PRECIOTOT / aux.SOLICITADO) / (decimal) cot) * cant;
+                    } else
+                        return 0;
+                }
+            }
+            if(cg_se!=null)
+            {
+                List<DespiecePlanificacion> list = await Http.GetFromJsonAsync<List<DespiecePlanificacion>>("api/Planificacion/Despiece/" +
+                    $"{cg_se}/1/1");
+                
+                decimal? toRet = 0;
+                
+                //voy a esperar 3 segundos a que la lista deje de ser null
+                SpinWait.SpinUntil(() => list != null, 3000); //si no pongo esto no funciona
+
+                foreach (DespiecePlanificacion desp in list)
+                {
+                    if (desp.CG_MAT!=null)
+                    {
+                        Compra aux = insumosproveedor.Where(s => s.CG_MAT.Trim() == desp.CG_MAT.Trim()).MaxBy(s => s.FE_EMIT);
+                        if (aux != null)
+                        {
+                            if (aux.MONEDA.Trim().ToLower() == "dolares")
+                            {
+                                toRet += (aux.PRECIOTOT / aux.SOLICITADO) * cant;
+                            } else if (aux.MONEDA.Trim().ToLower() == "pesos") {
+                                double cot = cotizaciones.Where(s => s.FEC_ULT_ACT <= aux.FE_EMIT).MaxBy(s => s.FEC_ULT_ACT).COTIZACION;
+                                toRet += ((aux.PRECIOTOT / aux.SOLICITADO) / (decimal) cot) * desp.CANT_MAT;
+                            }
+                        }
+                    }
+                }
+                return toRet;
+            }
+            return 0;
+        }
+
+        protected async Task CopiarFormula(MouseEventArgs args)
+        {
+            if (DetailedGridProdForm.SelectedRecords.Count != 0)
+            {
+                if (Selected != null)
+                {
+                    vIngenieriaProductosFormulas SelectedFormula2 =
+                        DetailedGridProdForm.SelectedRecords.FirstOrDefault() as vIngenieriaProductosFormulas;
+                    if (SelectedFormula2 != null)
+                    {
+                        //List<Formula> formulas = await Http.GetFromJsonAsync<List<Formula>>("api/Formulas");
+
+                        HttpResponseMessage httpResponse =
+                            await Http.GetAsync($"api/Formulas/BuscarPorCgProd/{SelectedFormula2.CG_PROD}");
+                        List<Formula> responseContent = await httpResponse.Content.ReadFromJsonAsync<List<Formula>>();
+                        bool isError = !httpResponse.IsSuccessStatusCode;
+                        HttpResponseWrapper<List<Formula>> responseFormulas =
+                            new HttpResponseWrapper<List<Formula>>(responseContent, httpResponse, isError);
+                        if (responseFormulas.Error)
+                        {
+                            var errorReason = responseFormulas.HttpResponseMessage?.ReasonPhrase;
+                            Console.WriteLine(errorReason);
+                        }
+                        else
+                        {
+                            List<Formula> formulas = responseFormulas.Response;
+                            List<Formula> aGuardar = new List<Formula>();
+                            foreach (Formula form in formulas)
+                            {
+                                Formula aux = form;
+                                aux.Cg_Prod = Selected.CG_PROD;
+                                aux.CG_FORM = 1;
+                                aux.USUARIO = "USER";
+                                aGuardar.Add(aux);
+                            }
+
+                            await Http.PostAsJsonAsync<List<Formula>>($"api/Formulas/PostList", aGuardar);
+                        }
+                    }
+                }
+            }
+
+            dialogVisibleCopiar = false;
+        }
+
+        private async Task ToastMensajeError(string content = "Ocurrio un Error.")
+        {
+            await ToastObj.Show(new ToastModel
+            {
+                Title = "Error!",
+                Content = content,
+                CssClass = "e-toast-warning",
+                Icon = "e-warning toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
         }
     }
 }

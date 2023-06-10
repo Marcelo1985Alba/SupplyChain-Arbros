@@ -130,6 +130,7 @@ namespace SupplyChain.Server.Controllers
                             item.formulasSemielaborado = dbPlanificacion.AsEnumerable().Select(m => new Shared.Formula()
                             {
                                 Cg_Mat = m.Field<string>("CG_MAT"),
+                                CANT_MAT = m.Field<decimal>("CANT_MAT"),
                                 Cg_Prod = m.Field<string>("CG_PROD"),
                                 Cg_Se = m.Field<string>("CG_SE"),
                             }).ToList<Formula>();

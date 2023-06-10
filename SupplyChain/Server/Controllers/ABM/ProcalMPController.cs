@@ -92,7 +92,7 @@ namespace SupplyChain.Server.Controllers.ABM
             try
             {
                 await _procalMPRepository.Agregar(procalMP);
-                return CreatedAtAction("GetProcalsMP", new { id = procalMP.Id }, procalMP);
+                return CreatedAtAction("GetProcalMP", new { id = procalMP.Id }, procalMP);
             }
             catch (DbUpdateException exx)
             {

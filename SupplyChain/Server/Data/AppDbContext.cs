@@ -95,6 +95,7 @@ namespace SupplyChain
         public DbSet<MovimientoStockSP> MovimientosStock { get; set; }
         public DbSet<StockSP> StocksSP { get; set; }
         public DbSet<Compra> Compras { get; set; }
+        public DbSet<Cotizaciones> Cotizaciones { get; set; }
         public DbSet<ResumenStock> ResumenStock { get; set; }
         public DbSet<vResumenStock> vResumenStock { get; set; }
         public DbSet<Modulo> Modulos { get; set; }

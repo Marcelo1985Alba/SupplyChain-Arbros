@@ -95,7 +95,7 @@ namespace SupplyChain
                 }
             }
 
-            return CreatedAtAction("GetUnidad", new { id = tipomat.TIPO }, tipomat);
+            return CreatedAtAction("GetTipoMat", new { id = tipomat.TIPO }, tipomat);
         }
 
         // DELETE: api/TipoMat/5

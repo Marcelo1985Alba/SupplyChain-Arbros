@@ -102,7 +102,7 @@ namespace SupplyChain
                 }
             }
 
-            return CreatedAtAction("GetUnidad", new { id = moneda.MONEDA }, moneda);
+            return CreatedAtAction("GetMoneda", new { id = moneda.MONEDA }, moneda);
         }
 
         // DELETE: api/Unidades/5

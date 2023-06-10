@@ -105,6 +105,7 @@ namespace SupplyChain.Server
             services.AddTransient<ProveedorRepository>();
             services.AddTransient<PedidosRepository>();
             services.AddTransient<FormulaRepository>();
+            services.AddTransient<CotizacionRepository>();
             services.AddTransient<SolutionRepository>();
             services.AddTransient<StockCorregidoRepository>();
             services.AddTransient<SolicitudRepository>();
