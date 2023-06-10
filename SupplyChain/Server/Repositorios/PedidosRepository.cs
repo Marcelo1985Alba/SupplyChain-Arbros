@@ -55,7 +55,7 @@ namespace SupplyChain.Server.Repositorios
 
                     s.PENDIENTEOC = solicitado - recibido;
 
-                    s.Proveedor = await Db.Proveedores.FirstOrDefaultAsync(p=> p.Id == s.CG_PROVE);
+                    s.Proveedor = await Db.vProveedoresItris.FirstOrDefaultAsync(p=> p.Id == s.CG_PROVE);
                 });
 
 

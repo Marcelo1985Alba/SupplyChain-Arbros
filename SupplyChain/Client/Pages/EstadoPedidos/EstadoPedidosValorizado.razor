@@ -1,12 +1,11 @@
-﻿@page "/ventas/estado-pedidos"
+﻿@page "/ventas/estado-pedidos-valorizado"
 @using Syncfusion.Blazor.LinearGauge
-@inherits EstadoPedidosBase
+@inherits EstadoPedidosValorizadoBase
 @attribute [Authorize]
 
 <SfToast ID="toast_default" @ref="ToastObj">
     <ToastPosition X="Center" Y="Top"></ToastPosition>
 </SfToast>
-
 <div class="row mt-3">
     <div class="col-12">
         <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
@@ -21,8 +20,8 @@
         <div class="row">
             <div class="col-12">
                 <SfGrid @ref="refSfGrid" AllowReordering="true" ShowColumnChooser="false" ShowColumnMenu="true" AllowResizing="true"
-                        DataSource="@DataEstadosPedidos" Width="100%"
-                        AllowExcelExport="true" AllowGrouping="true" ID="grdEstadosPedidos"
+                        DataSource="@DataEstadoPedidoValorizado" Width="100%"
+                        AllowExcelExport="true" AllowGrouping="true" ID="grdEstadoPedidosValorizado"
                         AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
                     <GridEvents RowDataBound="RowBound" TValue="vEstadoPedido" RowSelected="@((a)=> OnRowSelected(a))"
                                 OnRecordDoubleClick="@((a)=> OnRowSelectedDouble_Click(a))"
@@ -31,6 +30,30 @@
                                 QueryCellInfo="@((a)=> QueryCellInfoHandler(a))"></GridEvents>
                     <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                     <GridPageSettings PageSize="12" PageSizes="true"></GridPageSettings>
+                    <GridAggregates>
+                        <GridAggregate>
+                            <GridAggregateColumns>
+                                <GridAggregateColumn Field=@nameof(vEstadoPedido.TOT_DOL) Type="AggregateType.Sum" Format="C2">
+                                    <GroupFooterTemplate>
+                                        @{
+                                            var aggregate = (context as AggregateTemplateContext);
+                                            <div>
+                                                <p>TOTAL P/ESTADO: @aggregate.Sum</p>
+                                            </div>
+                                        }
+                                    </GroupFooterTemplate>
+                                    <FooterTemplate>
+                                        @{
+                                            var aggregate = (context as AggregateTemplateContext);
+                                            <div>
+                                                <p>TOTAL: @aggregate.Sum </p>
+                                            </div>
+                                        }
+                                    </FooterTemplate>
+                                </GridAggregateColumn>
+                            </GridAggregateColumns>
+                        </GridAggregate>
+                    </GridAggregates>
                     <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                     <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false"></GridEditSettings>
                     <GridColumns>
@@ -53,6 +76,8 @@
                         <GridColumn Field=@nameof(vEstadoPedido.REMITO) HeaderText="REMITO" Width="120"></GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.FACTURA) HeaderText="FACTURA" Width="120"></GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.RECIBO) HeaderText="RECIBO" Width="120"></GridColumn>
+                        <GridColumn Field=@nameof(vEstadoPedido.CONDICION_PAGO) HeaderText="CONDICION PAGO" Width="180"></GridColumn>
+
                         <GridColumn Field=@nameof(vEstadoPedido.DESCRIPCION_ESTADO_PEDIDO) HeaderText="ESTADO PEDIDO" Width="180">
                         </GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.CG_CLI) HeaderText="CODIGO CLIENTE" Width="150"></GridColumn>
@@ -65,6 +90,8 @@
                         <GridColumn Field=@nameof(vEstadoPedido.NUM_OCI) HeaderText="OC INTERNA" Width="120"></GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.FE_PREV) HeaderText="FECHA PREVISTA" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.OBSERITEM) HeaderText="OBSERVACIONES" Width="220"></GridColumn>
+                        <GridColumn Field=@nameof(vEstadoPedido.TOT_DOL) HeaderText="PRECIO $USD" Width="120"></GridColumn>
+
                     </GridColumns>
                     <SfSpinner Type="SpinnerType.Fabric" Size="50" Label="Cargando..." @bind-Visible="@SpinnerVisible"></SfSpinner>
                 </SfGrid>
@@ -77,10 +104,10 @@
           IsModal="true" EnableResize="false">
     <DialogTemplates>
         <Header>
-            Detalle Pedido @PedidoSeleccionado.PEDIDO - @PedidoSeleccionado.DES_ART.ToUpper()
+            Detalle Pedido @PedidoSeleccionadoValorizado.PEDIDO - @PedidoSeleccionadoValorizado.DES_ART.ToUpper()
         </Header>
         <Content>
-            <SfLinearGauge Orientation="Orientation.Horizontal" Background="transparent" Title=@($"Estado Pedido - Fecha prevista: {PedidoSeleccionado.FE_PREV.ToString("dd-MM-yyyy")}") AllowPdfExport="true"
+            <SfLinearGauge Orientation="Orientation.Horizontal" Background="transparent" Title=@($"Estado Pedido - Fecha prevista: {PedidoSeleccionadoValorizado.FE_PREV.ToString("dd-MM-yyyy")}") AllowPdfExport="true"
                            Height="250px">
                 <LinearGaugeEvents AxisLabelRendering="AxisLabelChange" />
                 <LinearGaugeAnnotations>
@@ -100,7 +127,7 @@
                             <LinearGaugeAxisLabelFont FontFamily="inherit" Size="12px" FontWeight="100" />
                         </LinearGaugeAxisLabelStyle>
                         <LinearGaugePointers>
-                            @if (PedidoSeleccionado.ESTADO_PEDIDO == 1 || PedidoSeleccionado.ESTADO_PEDIDO == 2)
+                            @if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 1 || PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 2)
                             {
                                 <LinearGaugePointer PointerValue="2" Height="25" Width="25"
                                                     Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
@@ -115,7 +142,7 @@
                                 <LinearGaugePointer PointerValue="7" Height="25" Width="15"
                                                     Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                             }
-                            @if (PedidoSeleccionado.ESTADO_PEDIDO == 3)
+                            @if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 3)
                             {
                                 <LinearGaugePointer PointerValue="2" Height="25" Width="25"
                                                     Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
@@ -130,7 +157,7 @@
                                 <LinearGaugePointer PointerValue="7" Height="25" Width="15"
                                                     Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                             }
-                            @if (PedidoSeleccionado.ESTADO_PEDIDO == 5)
+                            @if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 5)
                             {
                                 <LinearGaugePointer PointerValue="2" Height="25" Width="25"
                                                     Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
@@ -145,7 +172,7 @@
                                 <LinearGaugePointer PointerValue="7" Height="25" Width="15"
                                                     Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                             }
-                            @if (PedidoSeleccionado.ESTADO_PEDIDO == 6)
+                            @if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 6)
                             {
                                 <LinearGaugePointer PointerValue="2" Height="25" Width="25"
                                                     Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
@@ -160,7 +187,7 @@
                                 <LinearGaugePointer PointerValue="7" Height="25" Width="15"
                                                     Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                             }
-                            @if (PedidoSeleccionado.ESTADO_PEDIDO == 7)
+                            @if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 7)
                             {
                                 <LinearGaugePointer PointerValue="2" Height="25" Width="25"
                                                     Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
@@ -175,7 +202,7 @@
                                 <LinearGaugePointer PointerValue="7" Height="25" Width="15"
                                                     Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                             }
-                            @if (PedidoSeleccionado.ESTADO_PEDIDO == 8 || PedidoSeleccionado.ESTADO_PEDIDO == 9)
+                            @if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 8 || PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 9)
                             {
                                 <LinearGaugePointer PointerValue="2" Height="25" Width="25"
                                                     Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
@@ -192,8 +219,7 @@
                             }
                         </LinearGaugePointers>
                         <LinearGaugeRanges>
-                            @*<LinearGaugeRange Start="1" End="2" StartWidth="1" EndWidth="1" Color="#1FAC8A" />*@
-                            @if (PedidoSeleccionado.ESTADO_PEDIDO == 1 || PedidoSeleccionado.ESTADO_PEDIDO == 2)
+                            @if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 1 || PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 2)
                             {
                                 <LinearGaugeRange Start="2" End="3" StartWidth="5" EndWidth="5" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="3" End="4" StartWidth="5" EndWidth="5" Color="#D1D9DD" />
@@ -201,7 +227,7 @@
                                 <LinearGaugeRange Start="5" End="6" StartWidth="5" EndWidth="5" Color="#D1D9DD" />
                                 <LinearGaugeRange Start="6" End="7" StartWidth="5" EndWidth="5" Color="#D1D9DD" />
                             }
-                            else if (PedidoSeleccionado.ESTADO_PEDIDO == 3)
+                            else if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 3)
                             {
                                 <LinearGaugeRange Start="2" End="3" StartWidth="5" EndWidth="5" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="3" End="4" StartWidth="5" EndWidth="5" Color="#D1D9DD" />
@@ -209,7 +235,7 @@
                                 <LinearGaugeRange Start="5" End="6" StartWidth="5" EndWidth="5" Color="#D1D9DD" />
                                 <LinearGaugeRange Start="6" End="7" StartWidth="5" EndWidth="5" Color="#D1D9DD" />
                             }
-                            else if (PedidoSeleccionado.ESTADO_PEDIDO == 5)
+                            else if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 5)
                             {
                                 <LinearGaugeRange Start="2" End="3" StartWidth="5" EndWidth="5" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="3" End="4" StartWidth="5" EndWidth="5" Color="#1FAC8A" />
@@ -217,7 +243,7 @@
                                 <LinearGaugeRange Start="5" End="6" StartWidth="5" EndWidth="5" Color="#D1D9DD" />
                                 <LinearGaugeRange Start="6" End="7" StartWidth="5" EndWidth="5" Color="#D1D9DD" />
                             }
-                            else if (PedidoSeleccionado.ESTADO_PEDIDO == 6)
+                            else if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 6)
                             {
                                 <LinearGaugeRange Start="2" End="3" StartWidth="5" EndWidth="5" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="3" End="4" StartWidth="5" EndWidth="5" Color="#1FAC8A" />
@@ -225,7 +251,7 @@
                                 <LinearGaugeRange Start="5" End="6" StartWidth="5" EndWidth="5" Color="#D1D9DD" />
                                 <LinearGaugeRange Start="6" End="7" StartWidth="5" EndWidth="5" Color="#D1D9DD" />
                             }
-                            else if (PedidoSeleccionado.ESTADO_PEDIDO == 7)
+                            else if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 7)
                             {
                                 <LinearGaugeRange Start="2" End="3" StartWidth="5" EndWidth="5" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="3" End="4" StartWidth="5" EndWidth="5" Color="#1FAC8A" />
@@ -233,7 +259,7 @@
                                 <LinearGaugeRange Start="5" End="6" StartWidth="5" EndWidth="5" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="6" End="7" StartWidth="5" EndWidth="5" Color="#D1D9DD" />
                             }
-                            else if (PedidoSeleccionado.ESTADO_PEDIDO == 8 || PedidoSeleccionado.ESTADO_PEDIDO == 9)
+                            else if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 8 || PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 9)
                             {
                                 <LinearGaugeRange Start="2" End="3" StartWidth="5" EndWidth="5" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="3" End="4" StartWidth="5" EndWidth="5" Color="#1FAC8A" />
@@ -258,7 +284,7 @@
 
 <style>
     /*to remove the edit button alone*/
-    .e-removeEditcommand     .e-unboundcell .e-unboundcelldiv button.e-Editbutton {
+    .e-removeEditcommand .e-unboundcell .e-unboundcelldiv button.e-Editbutton {
         display: none;
     }
 
@@ -308,9 +334,9 @@
     }
 
     /*    .e-btn .e-btn-icon, .e-css.e-btn .e-btn-icon {
-        font-size: 9px;
-        color: blue;
-    }*/
+            font-size: 9px;
+            color: blue;
+        }*/
 
     .e-Editbutton, .e-Editbutton .e-btn-icon {
         font-size: 9px;

@@ -49,12 +49,12 @@
                 <div class="form-row">
 
                     <div class="col-8">
-                        <SfNumericTextBox Readonly="true" @bind-Value="@ocompra" ShowClearButton="true" TValue="int" Format="n0"
-                                          Decimals="0"></SfNumericTextBox>
+                        <SfNumericTextBox Readonly="true" @bind-Value="@ocompraseleccionada.NUMERO" ShowClearButton="true" TValue="int" 
+                                          ></SfNumericTextBox>
                     </div>
                     <div class="col-4 mb-1">
                         <SfButton OnClick="@(async (e)=> await BuscarOCompras())"
-                                  CssClass="e-smal e-round e-info" IsPrimary="false"
+                                  CssClass="e-round e-info" IsPrimary="false"
                                   IconCss="fa fa-search" HtmlAttributes="@HtmlAttribute"></SfButton>
 
                     </div>
@@ -63,30 +63,32 @@
 
 
             <div hidden="@IsVisibleguarda" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
-                <SfButton style="height: 50px;" IsPrimary="true" @onclick="guardaoc">Generar OC</SfButton>
+                <SfButton style="height: 50px;" CssClass="e-info" IsPrimary="true" @onclick="guardaoc">Generar OC</SfButton>
             </div>
             <div hidden="@IsVisibleimprime" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
-                <SfButton style="height: 50px;" IsPrimary="true" @onclick="imprimiroc">Imprimir OC</SfButton>
+                <SfButton style="height: 50px;" CssClass="e-info" IsPrimary="true" @onclick="imprimiroc">Imprimir OC</SfButton>
+            </div>
+            <div  style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
+                <SfButton style="height: 50px;" CssClass="e-info" IsPrimary="true" @onclick="anularOc">Anular OC</SfButton>
             </div>
             <div hidden="@ocagenerar" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
-                <SfButton style="height: 50px;" IsPrimary="true" @onclick="limpia">Limpia</SfButton>
+                <SfButton style="height: 50px" CssClass="e-info" IsPrimary="true" @onclick="limpia">Limpia</SfButton>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-lg-7 my-1">
-                <SfTextBox Placeholder="Especificación" @bind-Value="xespecif"
-                           FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                <SfTextBox Placeholder="Especificación" @bind-Value="xespecif"></SfTextBox>
             </div>
             <div class="form-group col-lg-3 my-1">
-                <SfDropDownList TValue="string" TItem="Condven" @bind-Value="DropVal" 
-                    Placeholder="Condición de Pago"  FloatLabelType="@FloatLabelType.Auto">
-                    <SfDataManager Url="api/Condven" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"
-                                   CrossDomain=false></SfDataManager>
-                    <DropDownListFieldSettings Text="CG_CONDV" Value="CG_CONDV"></DropDownListFieldSettings>
+                <SfDropDownList TValue="string" TItem="vCondicionesPago" @bind-Value="DropVal" DataSource="@condiconespago"
+                    Placeholder="Condición de Pago">
+                    @*<SfDataManager Url="api/Itris/Condven" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"
+                                   CrossDomain=false></SfDataManager>*@
+                    <DropDownListFieldSettings Text="DESCRIPCION" Value="DESCRIPCION"></DropDownListFieldSettings>
                 </SfDropDownList>
             </div>
             <div class="form-group col-lg-2 my-1">
-                <SfNumericTextBox Placeholder="Bonificación %" FloatLabelType="@FloatLabelType.Auto"
+                <SfNumericTextBox Placeholder="Bonificación %"
                                   @bind-Value="@bonif" ShowClearButton="true" TValue="decimal?" Format="n0"
                                   Decimals="2"></SfNumericTextBox>
             </div>
@@ -115,11 +117,3 @@
                    OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
 
 
-<BuscadorEmergente Height="600px" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
-                   Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async(v)=>await Cerrar(v))"
-                   OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
-
-
-@code {
-
-}

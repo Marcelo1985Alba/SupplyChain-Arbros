@@ -9,7 +9,8 @@ using System.Text;
 
 namespace SupplyChain.Shared.Models
 {
-	public class Proveedores_compras
+    [Table("Proveedores_compras")]
+    public class Proveedores_compras 
 	{
 		[Key]
 		public int NROCLTE { get; set; }

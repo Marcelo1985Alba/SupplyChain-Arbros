@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using SupplyChain.Shared;
 
 namespace SupplyChain
 {
@@ -25,6 +25,13 @@ namespace SupplyChain
         public async Task<ActionResult<IEnumerable<Condven>>> GetCondven()
         {
             return await _context.Condven.ToListAsync();
+        }
+
+        // GET: api/Condven
+        [HttpGet("Itris")]
+        public async Task<ActionResult<IEnumerable<vCondicionesPago>>> GetCondvenItris()
+        {
+            return await _context.vCondicionesPago.ToListAsync();
         }
 
         // GET: api/Condven/5

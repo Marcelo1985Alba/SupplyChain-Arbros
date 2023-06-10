@@ -21,22 +21,16 @@ namespace SupplyChain.Server.Repositorios
 
         internal async Task<List<SolCotEmail>> EnviarMail(List<SolCotEmail> mails)
         {
-            try
-            {
-                await Db.AddRangeAsync(mails);
-                await Db.SaveChangesAsync();
+            
+            await Db.AddRangeAsync(mails);
+            await Db.SaveChangesAsync();
 
-                foreach (var item in mails.GroupBy(m=> m.CG_PROVE).Select(s=> s.FirstOrDefault()).ToList())
-                {
-                    await _mailRepository.EnviarCorreo(item.EMAIL, item.ASUNTO_EMAIL, item.MENSAJE_EMAIL);
-                }
-
-                return mails;
-            }
-            catch (Exception ex)
+            foreach (var item in mails.GroupBy(m=> m.CG_PROVE).Select(s=> s.FirstOrDefault()).ToList())
             {
-                return mails;
+                await _mailRepository.EnviarCorreo(item.EMAIL, item.ASUNTO_EMAIL, item.MENSAJE_EMAIL);
             }
+
+            return mails;
         }
 
         internal async Task<List<SolCotEmail>> GetWithNameProveBySugerenacias(List<Compra> sugerencias)

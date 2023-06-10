@@ -32,7 +32,7 @@ namespace SupplyChain.Server.Repositorios
             var toAddress = new MailAddress(destinatario);
             //destinatario = _configEmailCompras.To;
             //var toAddress = new MailAddress(destinatario);
-            var ccAddress = new MailAddress(_configEmailCompras.Copia);
+            
             if (_webHostEnvironment.IsDevelopment())
             {
                 toAddress = new MailAddress("m.albarracin@live.com.ar");
@@ -58,8 +58,14 @@ namespace SupplyChain.Server.Repositorios
                 
             };
 
-            message.CC.Add(ccAddress);
+            foreach (var item in _configEmailCompras.Copia) 
+            {
+                var ccAddress = new MailAddress(item);
+                message.CC.Add(ccAddress);
+            }
 
+            
+            
             await smtp.SendMailAsync(message);
         }
     }

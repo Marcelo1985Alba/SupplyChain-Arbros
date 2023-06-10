@@ -122,7 +122,7 @@ namespace SupplyChain.Client.Shared
         {
             Visible = true;
             visibliSpinner = true;
-            await InvokeAsync(StateHasChanged);
+            //await InvokeAsync(StateHasChanged);
         }
 
         public async Task HideAsync()
