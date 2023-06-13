@@ -10,6 +10,7 @@ namespace SupplyChain.Server.Data.Repository
     public interface IRepository<TEntity, TId> : IDisposable where TEntity : EntityBase<TId>
     {
         Task Agregar(TEntity entity);
+        Task<bool> AgregarList(IEnumerable<TEntity> entity);
         Task<TEntity> ObtenerPorId(TId id);
         Task<List<TEntity>> ObtenerTodos();
         Task Actualizar(TEntity entity);

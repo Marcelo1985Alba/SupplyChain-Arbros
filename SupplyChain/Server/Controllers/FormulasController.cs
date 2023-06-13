@@ -53,7 +53,7 @@ namespace SupplyChain.Server.Controllers
             string xSQL = string.Format($"Select * From Form2 where CG_PROD = '{CG_PROD}'");
             try
             {
-                return await _context.Formulas.FromSqlRaw(xSQL).ToListAsync();
+                return await _formulaRepository.Obtener(f=> f.Cg_Prod == CG_PROD).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -101,16 +101,21 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
-                foreach (var item in lista)
+                var exito = await _formulaRepository.AgregarList(lista);
+                if (exito)
                 {
-                    await _formulaRepository.Agregar(item);
+                    return Ok(lista); 
+                }
+                else
+                {
+                    return BadRequest("Error al guardar formulas");
                 }
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return Ok(lista);
+            
         }
     }
 }

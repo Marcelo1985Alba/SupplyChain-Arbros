@@ -183,7 +183,7 @@
         <Content>
             <SfGrid @ref="@DetailedGridProdForm" DataSource="@DataDetailedProductosFormulas" AllowPaging="true" AllowFiltering="true" AllowSorting="true" ID="DetailedProdForm"
                     GridLines="GridLine.Both">
-                <GridPageSettings PageSizes="true"></GridPageSettings>
+                <GridPageSettings PageSizes="true" PageSize="5"></GridPageSettings>
                 <GridColumns>
                     <GridColumn Field=@nameof(vIngenieriaProductosFormulas.CG_PROD) HeaderText="Producto" Width="120"></GridColumn>
                     <GridColumn Field=@nameof(vIngenieriaProductosFormulas.DES_PROD) HeaderText="Descripcion" Width="150"></GridColumn>

@@ -141,5 +141,26 @@ namespace SupplyChain.Server.Data.Repository
             Db?.Dispose();
         }
 
+        public async Task<bool> AgregarList(IEnumerable<TEntity> entity)
+        {
+            using (var transaction = Database.BeginTransaction())
+            {
+                try
+                {
+                    await Db.AddRangeAsync(entity);
+                    await Db.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+
+                    return true;
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+            }
+            
+        }
     }
 }
