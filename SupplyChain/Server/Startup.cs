@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using SupplyChain.Server.Data;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Server.Hubs;
 using SupplyChain.Server.Repositorios;
@@ -54,13 +55,19 @@ namespace SupplyChain.Server
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddDbContext<ItrisDbContext>(options =>
+            {
+                options.EnableSensitiveDataLogging();
+                options.UseSqlServer(Configuration.GetConnectionString("ItrisConnection"));
+            });
+
             //especial para el gantt
             //services.AddDbContext<GanttContext>(options =>
             //{
             //    options.EnableSensitiveDataLogging();
             //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             //});
-            
+
             services.AddCors(op=> 
             {
                 op.AddDefaultPolicy(builder =>
