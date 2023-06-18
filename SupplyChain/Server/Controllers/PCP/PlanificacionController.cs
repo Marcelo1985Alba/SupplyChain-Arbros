@@ -17,6 +17,8 @@ using SupplyChain.Shared.Models;
 using SupplyChain.Shared.PCP;
 using System.Globalization;
 using System.Collections;
+using System.Net;
+using Microsoft.AspNetCore.Http.Metadata;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -85,6 +87,18 @@ namespace SupplyChain.Server.Controllers
                 dbPlanificacion = xConexionSQL
                     .EjecutarSQL(String.Format("EXEC NET_PCP_Despiece_Producto '{0}', {1}, {2}", cg_prod, formula, cantidad));
 
+                Compra[] insumosproveedor = await _context.Compras.ToArrayAsync();
+                        
+                ConexionSQL xConexionSQL2 = new ConexionSQL(CadenaConexionSQL);
+                string xSQL = "SELECT id, COTIZACION, FEC_ULT_ACT FROM ARBROS.dbo.ERP_COTIZACIONES";
+                DataTable dbCotizaciones = xConexionSQL.EjecutarSQL(xSQL);
+                List<Cotizaciones> cotizaciones = dbCotizaciones.AsEnumerable().Select(m => new Cotizaciones()
+                {
+                    Id = m.Field<int>("ID"),
+                    COTIZACION = m.Field<double>("COTIZACION"),
+                    FEC_ULT_ACT = m.Field<DateTime?>("FEC_ULT_ACT"),
+                }).ToList<Cotizaciones>();
+                
                 List<DespiecePlanificacion> xLista = dbPlanificacion.AsEnumerable().Select(m => new DespiecePlanificacion()
                 {
                     CG_PROD = m.Field<string>("CG_PROD"),
@@ -100,9 +114,8 @@ namespace SupplyChain.Server.Controllers
                     SALDO_PLANEADAS = m.Field<decimal>("SALDO_PLANEADAS"),
                     CANT_TOTAL = m.Field<decimal>("CANT_TOTAL"),
                     SALDO_TOTAL = m.Field<decimal>("SALDO_TOTAL"),
+                    COSTO = 0,
                 }).ToList();
-
-
                 
                 foreach (DespiecePlanificacion item in xLista)
                 {
@@ -122,18 +135,56 @@ namespace SupplyChain.Server.Controllers
                     {
                         if (!string.IsNullOrWhiteSpace(item.CG_SE))
                         {
-                            ConexionSQL xConexionSQL2 = new ConexionSQL(CadenaConexionSQL);
-                            string xSQLCommandString = "SELECT * FROM FORM2 WHERE CG_PROD ='" + codigoInsumo + "' and REVISION  = (SELECT MAX(REVISION) FROM FORM2 " +
+                            ConexionSQL xConexionSQL3 = new ConexionSQL(CadenaConexionSQL);
+                            string xSQLCommandString2 = "SELECT * FROM FORM2 WHERE CG_PROD ='" + codigoInsumo + "' and REVISION  = (SELECT MAX(REVISION) FROM FORM2 " +
                                                    "WHERE CG_PROD = '" + codigoInsumo + "')";
 
-                            dbPlanificacion = xConexionSQL2.EjecutarSQL(xSQLCommandString);
+                            dbPlanificacion = xConexionSQL3.EjecutarSQL(xSQLCommandString2);
                             item.formulasSemielaborado = dbPlanificacion.AsEnumerable().Select(m => new Shared.Formula()
                             {
                                 Cg_Mat = m.Field<string>("CG_MAT"),
                                 CANT_MAT = m.Field<decimal>("CANT_MAT"),
                                 Cg_Prod = m.Field<string>("CG_PROD"),
                                 Cg_Se = m.Field<string>("CG_SE"),
+                                COSTO = 0,
                             }).ToList<Formula>();
+                            
+                            foreach (Formula mat in item.formulasSemielaborado)
+                            {
+                                if(!string.IsNullOrWhiteSpace(mat.Cg_Mat))
+                                {
+                                    Compra aux = insumosproveedor.Where(s => s.CG_MAT.Trim() == mat.Cg_Mat.Trim()).MaxBy(s => s.FE_EMIT);
+                                    if (aux != null)
+                                    {
+                                        if (aux.MONEDA.Trim().ToLower() == "dolares")
+                                        {
+                                            mat.COSTO = (aux.PRECIOTOT / aux.SOLICITADO);
+                                            item.COSTO += mat.COSTO * mat.CANT_MAT;
+                                        } else if (aux.MONEDA.Trim().ToLower() == "pesos") {
+                                            double cot = cotizaciones.Where(s => s.FEC_ULT_ACT <= aux.FE_EMIT).MaxBy(s => s.FEC_ULT_ACT).COTIZACION;
+                                            mat.COSTO = ((aux.PRECIOTOT / aux.SOLICITADO) / (decimal) cot);
+                                            item.COSTO += mat.COSTO * mat.CANT_MAT;
+                                        } else
+                                            mat.COSTO = 0;
+                                    } else
+                                        mat.COSTO = 0;
+                                }
+                            }   
+                        }
+                        else if(!string.IsNullOrWhiteSpace(item.CG_MAT))
+                        {
+                            Compra aux = insumosproveedor.Where(s => s.CG_MAT.Trim() == item.CG_MAT.Trim()).MaxBy(s => s.FE_EMIT);
+                            if (aux != null)
+                            {
+                                if (aux.MONEDA.Trim().ToLower() == "dolares")
+                                {
+                                    item.COSTO = (aux.PRECIOTOT / aux.SOLICITADO) * item.CANT_MAT; 
+                                } else if (aux.MONEDA.Trim().ToLower() == "pesos") {
+                                    double cot = cotizaciones.Where(s => s.FEC_ULT_ACT <= aux.FE_EMIT).MaxBy(s => s.FEC_ULT_ACT).COTIZACION;
+                                    item.COSTO = ((aux.PRECIOTOT / aux.SOLICITADO) / (decimal) cot) * item.CANT_MAT;
+                                } else
+                                    item.COSTO = 0;
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -141,7 +192,6 @@ namespace SupplyChain.Server.Controllers
                         item.formulasSemielaborado = new List<Formula>();
                     }
                 }
-
                 return xLista;
             }
             catch (Exception ex)

@@ -45,5 +45,6 @@ namespace SupplyChain.Shared
         public string NOMBREFOTO { get; set; }
         public string FOTO { get; set; }
         public string AUTORIZA { get; set; }
+        [NotMapped] public decimal? COSTO { get; set; } = 0;
     }
 }

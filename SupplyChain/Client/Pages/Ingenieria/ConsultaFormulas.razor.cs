@@ -63,15 +63,11 @@ namespace SupplyChain.Client.Pages.Ingenieria
 
         protected string tituloTabFormulas = string.Empty;
         protected bool mostrarCerrarTab = false;
-        protected Compra[] insumosproveedor;
-        protected Cotizaciones[] cotizaciones;
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Consulta de Fórmulas";
             VisibleSpinner = true;
             DataOrdeProductosFormulas = await Http.GetFromJsonAsync<List<vIngenieriaProductosFormulas>>("api/Ingenieria/GetProductoFormulas");
-            insumosproveedor = await Http.GetFromJsonAsync<Compra[]>("api/Compras/todas");
-            cotizaciones = await Http.GetFromJsonAsync<Cotizaciones[]>("api/Cotizacion");
             VisibleSpinner = false;
         }
 
@@ -93,7 +89,9 @@ namespace SupplyChain.Client.Pages.Ingenieria
                 ProdSelected = args.RowData;
                 listaDespiece = await Http.GetFromJsonAsync<List<DespiecePlanificacion>>("api/Planificacion/Despiece/" +
                     $"{args.RowData.CG_PROD.Trim()}/1/1");
-
+                
+                
+                
                 VisibleSpinner = false;
                 await DialogDespieceRef.Show();
             }
@@ -155,7 +153,6 @@ namespace SupplyChain.Client.Pages.Ingenieria
 
         protected async Task ToolbarProdFormClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {
-
             if (args.Item.Id == "ProdForm_excelexport") //Id is combination of Grid's ID and itemname
             {
                 VisibleSpinner = true;
@@ -166,7 +163,6 @@ namespace SupplyChain.Client.Pages.Ingenieria
 
         protected async Task ToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {
-            
             if (args.Item.Id == "Despiece_excelexport") //Id is combination of Grid's ID and itemname
             {
                 VisibleSpinner = true;
@@ -212,33 +208,16 @@ namespace SupplyChain.Client.Pages.Ingenieria
         protected async Task QueryCellInfoHandler(QueryCellInfoEventArgs<vIngenieriaProductosFormulas> args)
         {
             if (!args.Data.TIENE_FORM)
-            {
                 args.Cell.AddClass(new string[] { "rojas" });
-            }
-
             if (args.Data.TIENE_FORM && !args.Data.FORM_ACTIVA)
-            {
                 args.Cell.AddClass(new string[] { "amarillas" });
-            }
         }
 
         protected async Task TabEliminando(RemoveEventArgs removeEventArgs)
         {
             var tab = refSfTab.Items[removeEventArgs.RemovedIndex];
-            //if (string.IsNullOrEmpty(tab.Header.Text) || tab.Header.Text == "Formulas")
-            //{
-            //    removeEventArgs.Cancel = true;
-            //}
             if (removeEventArgs.RemovedIndex == 0)
-            {
                 removeEventArgs.Cancel = true;
-            }
-            //if (refSfTab.Items.Count == 1)
-            //{
-            //    mostrarCerrarTab = false;
-            //}
-
-            
         }
 
         protected async Task TabEliminado(RemoveEventArgs removeEventArgs)
@@ -249,55 +228,6 @@ namespace SupplyChain.Client.Pages.Ingenieria
                 tituloTabFormulas = string.Empty;
             }
         }
-        protected async Task<decimal?> ObtenerCoste(string cg_mat, string cg_se, decimal? cant)
-        {
-            if (cg_mat != null && cg_mat != "")
-            {
-                Compra aux = insumosproveedor.Where(s => s.CG_MAT.Trim() == cg_mat.Trim()).MaxBy(s => s.FE_EMIT);
-                if (aux != null)
-                {
-                    if (aux.MONEDA.Trim().ToLower() == "dolares")
-                    {
-                        return (aux.PRECIOTOT / aux.SOLICITADO) * cant; 
-                    } else if (aux.MONEDA.Trim().ToLower() == "pesos") {
-                        double cot = cotizaciones.Where(s => s.FEC_ULT_ACT <= aux.FE_EMIT).MaxBy(s => s.FEC_ULT_ACT).COTIZACION;
-                        return ((aux.PRECIOTOT / aux.SOLICITADO) / (decimal) cot) * cant;
-                    } else
-                        return 0;
-                }
-            }
-            if(cg_se!=null)
-            {
-                List<DespiecePlanificacion> list = await Http.GetFromJsonAsync<List<DespiecePlanificacion>>("api/Planificacion/Despiece/" +
-                    $"{cg_se}/1/1");
-                
-                decimal? toRet = 0;
-                
-                //voy a esperar 3 segundos a que la lista deje de ser null
-                SpinWait.SpinUntil(() => list != null, 3000); //si no pongo esto no funciona
-
-                foreach (DespiecePlanificacion desp in list)
-                {
-                    if (desp.CG_MAT!=null)
-                    {
-                        Compra aux = insumosproveedor.Where(s => s.CG_MAT.Trim() == desp.CG_MAT.Trim()).MaxBy(s => s.FE_EMIT);
-                        if (aux != null)
-                        {
-                            if (aux.MONEDA.Trim().ToLower() == "dolares")
-                            {
-                                toRet += (aux.PRECIOTOT / aux.SOLICITADO) * cant;
-                            } else if (aux.MONEDA.Trim().ToLower() == "pesos") {
-                                double cot = cotizaciones.Where(s => s.FEC_ULT_ACT <= aux.FE_EMIT).MaxBy(s => s.FEC_ULT_ACT).COTIZACION;
-                                toRet += ((aux.PRECIOTOT / aux.SOLICITADO) / (decimal) cot) * desp.CANT_MAT;
-                            }
-                        }
-                    }
-                }
-                return toRet;
-            }
-            return 0;
-        }
-
         protected async Task CopiarFormula(MouseEventArgs args)
         {
             if (DetailedGridProdForm.SelectedRecords.Count != 0)
