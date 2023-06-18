@@ -20,6 +20,8 @@ using Syncfusion.Blazor;
 using SupplyChain.Shared.Context;
 using static System.Net.WebRequestMethods;
 using Syncfusion.Blazor.Notifications;
+using SupplyChain.Shared.Itris;
+using Syncfusion.Blazor.PivotView;
 
 namespace SupplyChain.Client.Pages.Panel_Control
 {
@@ -33,6 +35,11 @@ namespace SupplyChain.Client.Pages.Panel_Control
         protected SfChart refChartDetalle;
         protected SfSpinner refSpinner;
         protected bool VisibleSpinner = false;
+
+        ///////***********************MAYOR*************////////////////////////////
+        protected List<vMayorItris> DataSourceMayor = new List<vMayorItris>();
+        protected List<vMayorItris> DataSourceMayorFiltrado = new List<vMayorItris>();
+        protected SfPivotView<vMayorItris> refPivot;
 
         ///////*****************FACTURACION*************////////////////////////////
         protected SfGrid<vEstadFacturacion> grdFacturacionDetalle;
@@ -197,7 +204,6 @@ namespace SupplyChain.Client.Pages.Panel_Control
         {
             MainLayout.Titulo = "Panel de Control";
             VisibleSpinner = true;
-
             await GetFacturacion();
             await GetCompras();
             await GetEventos();

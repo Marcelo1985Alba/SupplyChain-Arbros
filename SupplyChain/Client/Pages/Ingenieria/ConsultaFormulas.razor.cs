@@ -258,6 +258,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
                             foreach (Formula form in formulas)
                             {
                                 Formula aux = form;
+                                aux.Id = 0;
                                 aux.Cg_Prod = Selected.CG_PROD;
                                 aux.CG_FORM = 1;
                                 aux.USUARIO = "USER";
