@@ -20,7 +20,7 @@
 
 
 
-<SfTab HeaderPlacement="HeaderPosition.Top" CssClass="tab-pane">
+<SfTab HeaderPlacement="HeaderPosition.Top" CssClass="tab-pane" OverflowMode="OverflowMode.Scrollable" LoadOn="ContentLoad.Demand">
     <TabItems>
         
         <TabItem CssClass="tab-content tabcontent-border">
@@ -1444,49 +1444,25 @@
                 <TabHeader Text="ER"></TabHeader>
             </ChildContent>
             <ContentTemplate>
-                @*<div class="row">
-                    <div class="col-12">
-                        <div class="card card1 mt-3">
-                            <div class="card-header">Filtro Fechas</div>
-                            <div class="card-body text-info">
-                                <div class="row">
-                                    <div class="col-lg-3 col-sm-12">
-                                        <SfDateRangePicker ID="fechaVentas" TValue="DateTime" Placeholder="Seleccionar..." Format="dd/MM/yyyy"
-                                                           WeekNumber="true" ShowTodayButton="true" CssClass=""
-                                                           @bind-StartDate="@FacturacionMinDate" @bind-EndDate="@FacturacionMaxDate">
-                                            <DateRangePickerEvents TValue="DateTime" ValueChange="ValueChangeFechasFacturacion"></DateRangePickerEvents>
-                                        </SfDateRangePicker>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-12">
-                                        <SfButton Content="Restablecer Filtros" CssClass="btn-card1"
-                                                  IconCss="e-icons e-refresh" OnClick="RestablecerGraficosFacturacion"></SfButton>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>*@
                 <div class="row">
                     <div class="col-lg-12 col-sm-12">
                         <div class="card">
                             <div class="pane card-body card1">
-                                <SfPivotView TValue="vMayorItris" @ref="refPivot" Height="350" Width="100%" EnableVirtualization="true"
+                                <SfPivotView TValue="vMayorItris" @ref="refPivot" Height="350" Width="100%" 
+                                             EnableVirtualization="true" ShowFieldList="true" 
                                              ShowGroupingBar=true EnableValueSorting=true ShowTooltip=false 
                                              ShowToolbar=true>
                                     <PivotViewDataSourceSettings TValue="vMayorItris" ShowGrandTotals=true
                                              ExpandAll=false EnableSorting=true AllowValueFilter=true AllowMemberFilter=false>
                                         <SfDataManager Url="api/Mayor" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>
                                         <PivotViewColumns>
-                                            <PivotViewColumn Name="Anio"></PivotViewColumn>
-                                            <PivotViewColumn Name="Mes"></PivotViewColumn>
+                                            <PivotViewColumn Name="ANIO" Caption="AÑO"></PivotViewColumn>
+                                            <PivotViewColumn Name="MES"></PivotViewColumn>
                                         </PivotViewColumns>
                                         <PivotViewRows>
                                             <PivotViewRow Name="TIPO_INGRESO"></PivotViewRow>
                                             <PivotViewRow Name="DESCRIPCION"></PivotViewRow>
                                             <PivotViewRow Name="CONCEPTO"></PivotViewRow>
-                                            @*
-                                            <PivotViewRow Name="TIPO"></PivotViewRow>*@
                                         </PivotViewRows>
                                         <PivotViewValues>
                                             <PivotViewValue Name="IMP_DEB_CO" Caption="DEBE U$S"></PivotViewValue>
@@ -1494,7 +1470,7 @@
                                             <PivotViewValue Name="SALDO_CO" Caption="SALDO U$S"></PivotViewValue>
                                         </PivotViewValues>
                                         <PivotViewFilters>
-                                            <PivotViewFilter Name="TIPO_INGRESO" Caption="TIPO INGRESO"></PivotViewFilter>
+                                            <PivotViewFilter Name="ANIO" Caption="AÑO"></PivotViewFilter>
                                         </PivotViewFilters>
                                         <PivotViewFormatSettings>
                                             <PivotViewFormatSetting Name="IMP_DEB_CO" Format="C2" UseGrouping=true></PivotViewFormatSetting>

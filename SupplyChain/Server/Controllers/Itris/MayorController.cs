@@ -32,17 +32,17 @@ namespace SupplyChain.Server.Controllers.Itris
         {
             try
             {
-                var compras = _context.vMayorItris
+                var mayor = _context.vMayorItris
                     .Where(f => !f.CONCEPTO.ToUpper().StartsWith("ASIENTO")
-                                && !f.CONCEPTO.ToUpper().StartsWith("CMV") && f.ID_1.ToString().StartsWith("4")
-                                || f.ID_1.ToString().StartsWith("5"))
+                                && !f.CONCEPTO.ToUpper().StartsWith("CMV") && (f.ID_1.ToString().StartsWith("4")
+                                || f.ID_1.ToString().StartsWith("5")))
                     .ToList();
 
 
                 var result = new
                 {
-                    Items = compras,
-                    Count = compras.Count
+                    Items = mayor,
+                    Count = mayor.Count
                 };
 
                 return Ok(result);
