@@ -14,7 +14,7 @@ namespace SupplyChain.Shared.Itris
         public double COTIZACION { get; set; }
         public int ID { get; set; }
         public DateTime FEC_ASI { get; set; }
-        public DateTime FEC_VAL { get; set; }
+        //public DateTime FEC_VAL { get; set; }
         public string TIPO { get; set; }
         public decimal ID_1 { get; set; }
         public string DESCRIPCION { get; set; }
@@ -38,8 +38,8 @@ namespace SupplyChain.Shared.Itris
         //public int FK_ERP_EJERCICIOS { get; set; }
         //public int? FK_ERP_TIP_CEN { get; set; }
 
-        public int ANIO { get; set;}
-        public int MES { get;set;}
-        public string TIPO_INGRESO{ get;set; }
+        public string ANIO { get; set;}
+        public string MES { get;set;}
+        public string TIPO_INGRESO { get;set; }
     }
 }

@@ -1453,7 +1453,7 @@
                                              ShowGroupingBar=true EnableValueSorting=true ShowTooltip=false 
                                              ShowToolbar=true>
                                     <PivotViewDataSourceSettings TValue="vMayorItris" ShowGrandTotals=true
-                                             ExpandAll=false EnableSorting=true AllowValueFilter=true AllowMemberFilter=false>
+                                             ExpandAll=false EnableSorting=true AllowValueFilter=true AllowMemberFilter=true>
                                         <SfDataManager Url="api/Mayor" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>
                                         <PivotViewColumns>
                                             <PivotViewColumn Name="ANIO" Caption="AÑO"></PivotViewColumn>
@@ -1469,9 +1469,6 @@
                                             <PivotViewValue Name="IMP_HAB_CO" Caption="HABER U$S"></PivotViewValue>
                                             <PivotViewValue Name="SALDO_CO" Caption="SALDO U$S"></PivotViewValue>
                                         </PivotViewValues>
-                                        <PivotViewFilters>
-                                            <PivotViewFilter Name="ANIO" Caption="AÑO"></PivotViewFilter>
-                                        </PivotViewFilters>
                                         <PivotViewFormatSettings>
                                             <PivotViewFormatSetting Name="IMP_DEB_CO" Format="C2" UseGrouping=true></PivotViewFormatSetting>
                                             <PivotViewFormatSetting Name="IMP_HAB_CO" Format="C2" UseGrouping=true></PivotViewFormatSetting>
