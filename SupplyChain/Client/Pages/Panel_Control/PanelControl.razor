@@ -1449,11 +1449,10 @@
                         <div class="card">
                             <div class="pane card-body card1">
                                 <SfPivotView TValue="vMayorItris" @ref="refPivot" Height="350" Width="100%" 
-                                             EnableVirtualization="true" ShowFieldList="true" 
-                                             ShowGroupingBar=true EnableValueSorting=true ShowTooltip=false 
-                                             ShowToolbar=true>
+                                             EnableVirtualization="true"
+                                             ShowGroupingBar=true EnableValueSorting=true >
                                     <PivotViewDataSourceSettings TValue="vMayorItris" ShowGrandTotals=true
-                                             ExpandAll=false EnableSorting=true AllowValueFilter=true AllowMemberFilter=true>
+                                             ExpandAll=false EnableSorting=true>
                                         <SfDataManager Url="api/Mayor" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>
                                         <PivotViewColumns>
                                             <PivotViewColumn Name="ANIO" Caption="AÑO"></PivotViewColumn>

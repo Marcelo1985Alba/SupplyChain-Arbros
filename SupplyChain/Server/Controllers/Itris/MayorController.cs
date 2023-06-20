@@ -33,9 +33,9 @@ namespace SupplyChain.Server.Controllers.Itris
             try
             {
                 var mayor = _context.vMayorItris
-                    .Where(f => !f.CONCEPTO.ToUpper().StartsWith("ASIENTO")
-                                && !f.CONCEPTO.ToUpper().StartsWith("CMV") && (f.ID_1.ToString().StartsWith("4")
-                                || f.ID_1.ToString().StartsWith("5")))
+                    .Where(f => !f.CONCEPTO.ToUpper().StartsWith("ASIENTO") && !f.CONCEPTO.ToUpper().StartsWith("CMV") 
+                                && 
+                                (f.ID_1.ToString().StartsWith("4") || f.ID_1.ToString().StartsWith("5")) || f.ID_1.ToString().StartsWith("114"))
                     .ToList();
 
 
