@@ -21,5 +21,9 @@ namespace SupplyChain.Shared
         public string MONEDA { get; set; }
         public decimal TOTAL { get; set; } = 0;
         public bool TIENEPEDIDO { get; set; }
+        public string COLOR { get; set; }
+
+        
+        public virtual List<vPresupuestos> Items { get; set; } = new();
     }
 }

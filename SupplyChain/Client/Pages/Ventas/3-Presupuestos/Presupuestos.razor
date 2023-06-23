@@ -1,8 +1,8 @@
-﻿
-@page "/ventas/presupuestos"
+﻿@page "/ventas/presupuestos"
 @attribute [Authorize(Roles = "Administrador, Ventas")]
 @inherits PresupuestosBase
-
+@using Syncfusion.Blazor.Grids;
+@using Syncfusion.Blazor.DropDowns;
 
 <div class="row">
     <div class="col-12">
@@ -23,8 +23,7 @@
                         TValue="vPresupuestos"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" NewRowPosition="NewRowPosition.Top"
-                              Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
-            </GridEditSettings>
+                              Mode="EditMode.Batch"></GridEditSettings>
             <GridColumns>
                 @*<GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>*@
                 <GridColumn Field=@nameof(vPresupuestos.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
@@ -34,6 +33,38 @@
                 <GridColumn Field=@nameof(vPresupuestos.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.TOTAL) HeaderText="Total" TextAlign="TextAlign.Left" Width="150px" Format="N2"></GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.USUARIO) HeaderText="Usuario" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+               <GridColumn Field=@nameof(vPresupuestos.COLOR) HeaderText="Semaforo" EditType="EditType.DropDownEdit" AllowEditing="true" Width="120px">
+                    <EditTemplate>
+                        
+                        <SfDropDownList TValue="string" TItem="Semaforo" DataSource="colores" @bind-Value="Semaforo.Color">
+                            <DropDownListFieldSettings TValue="string" Value="Valores"></DropDownListFieldSettings>
+                            @*DESDE EL CONTROLLADOR DE PRESUPUESTO TENGO QUE HACER LA FUNCION QUE ACTUALICE EN LA BD
+                        </SfDropDownList>
+
+                        @* <SfDropDownList ID="Color" Placeholder="Seleccionar Semaforo"
+                                        TItem="Semaforo"
+                                        TValue="string" @bind-Value="@semaforo.Valor"
+                                        DataSource="Valores">
+
+                          <DropDownListFieldSettings Text="SEMAFORO" Value="Id" ></DropDownListFieldSettings>*@
+                        </SfDropDownList>
+                    </EditTemplate>
+                </GridColumn>
+                
+                @* <GridColumn Field=@nameof(vPresupuestos.SEMAFORO) HeaderText="SEMAFORO" EditType="EditType.DropDownEdit" Width="120px">
+                <EditTemplate>
+                <SfDropDownList ID="IdSemaforo" Placeholder="Seleccione un color" TItem="string" TValue="String"
+                @bind-Value="@((context as vPresupuestos).SEMAFORO)" DataSource="@Valor">
+                <DropDownListEvents TValue="string" TItem="string" ></DropDownListEvents>
+                <DropDownListFieldSettings Text="Semaforo" Value="SEMAFORO"></DropDownListFieldSettings>
+                </SfDropDownList>
+                </EditTemplate>
+                </GridColumn>*@
+                @*<GridColumn Field=@nameof(vPresupuestos.COMENTARIO) HeaderText="Comentario" Format="d" Type="ColumnType.String" TextAlign="TextAlign.Left" Width="120px">
+                <EditTemplate>
+                <SfTextBox ID="IdComentario" Type="InputType.Text" @oninput="InputEvent" Value="@"></SfTextBox>
+                </EditTemplate>
+                </GridColumn>*@
 
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
@@ -43,19 +74,19 @@
     <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" Label="Generando Presupuesto..."
                @bind-Visible="@SpinnerVisiblePresupuesto"></SfSpinner>
 
-    <FormPresupuesto @ref="refFormPresupuesto" Presupuesto="@PresupuestoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
-                     OnGuardar="@(async(s)=> await Guardar(s))"></FormPresupuesto>
+   @* <FormPresupuesto @ref="refFormPresupuesto" Presupuesto="@PresupuestoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
+                     OnGuardar="@(async(s)=> await Guardar(s))"></FormPresupuesto>*@
 
     <ConfirmacionDialog @ref="ConfirmacionEliminarDialog" OnConfirm="@(async () => await Eliminar())">
-    <HeaderTempalte>
+        <HeaderTempalte>
 
-        <p> <strong>Eliminacion Presupuesto @PresupuestoSeleccionado?.Id</strong></p>
-        <hr />
-    </HeaderTempalte>
-    <ContentTemplate>
-        <p>Está seguro que desea eliminar el Presupuesto <strong>@PresupuestoSeleccionado?.Id</strong> ?</p>
-    </ContentTemplate>
-</ConfirmacionDialog>
+            <p> <strong>Eliminacion Presupuesto @PresupuestoSeleccionado?.Id</strong></p>
+            <hr />
+        </HeaderTempalte>
+        <ContentTemplate>
+            <p>Está seguro que desea eliminar el Presupuesto <strong>@PresupuestoSeleccionado?.Id</strong> ?</p>
+        </ContentTemplate>
+    </ConfirmacionDialog>
 
 
 </div>
