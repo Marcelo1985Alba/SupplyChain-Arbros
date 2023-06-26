@@ -8,8 +8,10 @@
 @using Syncfusion.Blazor
 @using Syncfusion.Blazor.Calendars
 @using Syncfusion.Blazor.LinearGauge
+@using Syncfusion.Blazor.PivotView
 @using SupplyChain.Client.Shared.CustomAdaptor
 @using SupplyChain.Shared.Context 
+@using SupplyChain.Shared.Itris 
 
 @attribute [Authorize(Roles = "Administrador")]
 @page "/panel-control/index"
@@ -18,8 +20,9 @@
 
 
 
-<SfTab HeaderPlacement="HeaderPosition.Top" CssClass="tab-pane">
+<SfTab HeaderPlacement="HeaderPosition.Top" CssClass="tab-pane" OverflowMode="OverflowMode.Scrollable" LoadOn="ContentLoad.Demand">
     <TabItems>
+        
         <TabItem CssClass="tab-content tabcontent-border">
             <ChildContent>
                 <TabHeader Text="Ventas"></TabHeader>
@@ -1432,6 +1435,49 @@
                             </div>
                         </div>
 
+                    </div>
+                </div>
+            </ContentTemplate>
+        </TabItem>
+        <TabItem CssClass="tab-content tabcontent-border">
+            <ChildContent>
+                <TabHeader Text="ER"></TabHeader>
+            </ChildContent>
+            <ContentTemplate>
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="card">
+                            <div class="pane card-body card1">
+                                <SfPivotView TValue="vMayorItris" @ref="refPivot" Height="350" Width="100%" 
+                                             EnableVirtualization="true" ShowFieldList=true
+                                             ShowGroupingBar=true EnableValueSorting=true >
+                                    <PivotViewDataSourceSettings TValue="vMayorItris" ShowGrandTotals=true
+                                             ExpandAll=false EnableSorting=true>
+                                        <SfDataManager Url="api/Mayor" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>
+                                        <PivotViewColumns>
+                                            <PivotViewColumn Name="ANIO" Caption="AÑO"></PivotViewColumn>
+                                            <PivotViewColumn Name="MES"></PivotViewColumn>
+                                        </PivotViewColumns>
+                                        <PivotViewRows>
+                                            <PivotViewRow Name="TIPO_INGRESO"></PivotViewRow>
+                                            <PivotViewRow Name="DESCRIPCION"></PivotViewRow>
+                                            <PivotViewRow Name="CONCEPTO"></PivotViewRow>
+                                        </PivotViewRows>
+                                        <PivotViewValues>
+                                            <PivotViewValue Name="IMP_DEB_CO" Caption="DEBE U$S"></PivotViewValue>
+                                            <PivotViewValue Name="IMP_HAB_CO" Caption="HABER U$S"></PivotViewValue>
+                                            <PivotViewValue Name="SALDO_CO" Caption="SALDO U$S"></PivotViewValue>
+                                        </PivotViewValues>
+                                        <PivotViewFormatSettings>
+                                            <PivotViewFormatSetting Name="IMP_DEB_CO" Format="C2" UseGrouping=true></PivotViewFormatSetting>
+                                            <PivotViewFormatSetting Name="IMP_HAB_CO" Format="C2" UseGrouping=true></PivotViewFormatSetting>
+                                            <PivotViewFormatSetting Name="SALDO_CO" Format="C2" UseGrouping=true></PivotViewFormatSetting>
+                                        </PivotViewFormatSettings>
+                                    </PivotViewDataSourceSettings>
+                                    <PivotViewGridSettings ColumnWidth="130"></PivotViewGridSettings>
+                                </SfPivotView>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </ContentTemplate>

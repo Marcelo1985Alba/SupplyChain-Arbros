@@ -257,7 +257,14 @@ else
 
 
     /* customize icon style: son los de FontAwesome v4.7 */
-    .e-treeview.custom-tree .e-list-icon {
+/*    .e-treeview.custom-tree .e-list-icon {
+        font-family: 'FontAwesome';
+        font-size: 20px;
+        margin-top: -4px;
+        color: white;
+    }*/
+
+    .custom-tree .e-list-icon {
         font-family: 'FontAwesome';
         font-size: 20px;
         margin-top: -4px;
@@ -277,46 +284,76 @@ else
     
 
     /*To float the expand/collapse icon right*/
-    .e-treeview.custom-tree .e-icon-collapsible, .e-treeview .e-icon-expandable {
+    .custom-tree .e-icon-collapsible, .e-treeview .e-icon-expandable {
         float: right;
     }
-        /*To customize the expand collapse icon color*/
-        .e-treeview.custom-tree .e-icon-collapsible::before, .e-treeview.custom-tree .e-icon-expandable::before {
-            color: white;
-        }
+    /*To customize the expand collapse icon color*/
+    .custom-tree .e-icon-collapsible::before, .e-treeview.custom-tree .e-icon-expandable::before {
+        color: white;
+    }
 
     /*To change the text color for treeview*/
-    .e-treeview .e-text-content > .e-list-text {
+    .custom-tree .e-text-content > .e-list-text {
+        color: white;
+    }
+
+
+    /*To float the expand/collapse icon right*/
+    .custom-tree .e-icon-collapsible, .e-treeview .e-icon-expandable {
+        float: right;
+    }
+    
+    /*To customize the expand collapse icon color*/
+   /* .e-treeview.custom-tree .e-icon-collapsible::before, .e-treeview.custom-tree .e-icon-expandable::before {
+        color: white;
+    }*/
+
+    /*To customize the expand collapse icon color*/
+    .custom-tree .e-icon-collapsible::before, .e-treeview.custom-tree .e-icon-expandable::before {
+       color: white;
+    }
+
+
+    /*To customize the expand collapse icon color*/
+    .custom-tree .e-icon-collapsible::before, .e-treeview.custom-tree .e-icon-expandable::before {
+        color: white;
+    }
+
+
+    /*To change the text color for treeview*/
+    .custom-tree .e-text-content > .e-list-text {
         color: white;
     }
 
 
 
-    .e-treeview .e-list-item {
+    .custom-tree .e-list-item {
        /*border-bottom: 1px #e5e5e58a solid;*/
     }
 
     /*To float the expand/collapse icon right*/
-    .e-treeview.custom-tree .e-icon-collapsible, .e-treeview .e-icon-expandable {
+    .custom-tree .e-icon-collapsible, .e-treeview .e-icon-expandable {
         float: right;
     }
-    .e-treeview .e-list-item .e-icon-expandable::before, e-treeview .e-list-item .e-icon-collapsible:before {
+
+    .custom-tree .e-list-item .e-icon-expandable::before, e-treeview .e-list-item .e-icon-collapsible:before {
         content: '\e700';
         font-size: 12px;
         color: white !important;
     }
-    .e-treeview .e-text-content {
+
+    .custom-tree .e-text-content {
         padding: 0 45px 0 0 !important;
     }
 
 
-    .e-treeview .e-text-content, .e-treeview .e-fullrow {
+    .custom-tree .e-text-content, .e-treeview .e-fullrow {
         border-color: transparent;
         color: white;
         padding: 0 0 0 8px;
     }
 
-    .e-treeview .e-list-item.e-hover > .e-fullrow {
+    .custom-tree .e-list-item.e-hover > .e-fullrow {
         font-size: 14px;
         background-color: transparent !important;
         border-color: transparent !important;
@@ -331,19 +368,26 @@ else
         border-bottom-left-radius: 7px;
     }*/
 
-    .e-treeview .e-list-item.e-active > .e-fullrow {
+    .custom-tree .e-list-item.e-active > .e-fullrow {
         color: #ffffff !important;
         background-color: transparent !important;
         border-color: transparent !important;
         font-weight: 500 !important;
     }
 
-    .e-treeview .e-list-text {
+   
+/*    .e-treeview .e-list-text {
+        font-size: 14px;
+        color: #fafafa !important;
+    }*/
+    
+    .custom-tree .e-list-text {
         font-size: 14px;
         color: #fafafa !important;
     }
 
-    .e-treeview .e-list-item.e-active > .e-text-content > .e-list-text {
+
+    .custom-tree .e-list-item.e-active > .e-text-content > .e-list-text {
         color: #fafafa !important;
         
     }
@@ -353,7 +397,7 @@ else
     }
 */
     /*To customize the expand collapse icon color*/
-    .e-treeview .e-icon-collapsible::before, .e-treeview .e-icon-expandable::before {
+    .custom-tree .e-icon-collapsible::before, .e-treeview .e-icon-expandable::before {
         color: white;
         float:right;
     }
@@ -378,7 +422,7 @@ else
     }
 
 
-    .e-treeview .e-list-icon, .e-treeview .e-list-img {
+    .custom-tree .e-list-icon, .e-treeview .e-list-img {
         display: inline-block;
         height: 20px;
         margin: 0 0 0 4px !important;

@@ -119,17 +119,11 @@
                                             <SfGrid ID="grdDespieceStockPrev" Width="870px" TValue="Formula"
                                                     AllowPaging="true" AllowResizing="true" AllowReordering="true"
                                                     DataSource="@insumo.formulasSemielaborado">
-                                                <!--
-
-                                                <GridPageSettings PageSize="4"></GridPageSettings>
-                                                -->
                                                 <GridColumns>
-                                                    <!--
-                                                    <GridColumn Field=@nameof(Formula.Id) HeaderText="ID" Width="150"> </GridColumn>
-                                                    -->
                                                     <GridColumn Field=@nameof(Formula.CANT_MAT) HeaderText="CANTIDAD" Width="110"></GridColumn>
                                                     <GridColumn Field=@nameof(Formula.Cg_Mat) HeaderText="CG_MAT" Width="110"></GridColumn>
                                                     <GridColumn Field=@nameof(Formula.Cg_Se) HeaderText="CG_SE" Width="150"></GridColumn>
+                                                    <GridColumn Field=@nameof(Formula.COSTO) Format="N2" HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                                 </GridColumns>
                                             </SfGrid>
                                         </div>
@@ -140,30 +134,33 @@
                                     <GridColumn Field=@nameof(DespiecePlanificacion.CG_MAT) HeaderText="Materia prima" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                     <GridColumn Field=@nameof(DespiecePlanificacion.CANT_MAT) HeaderText="Cant" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                                     <GridColumn Field=@nameof(DespiecePlanificacion.DES_PROD) HeaderText="Descripción" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                    <GridColumn HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px">
-                                        <Template>
-                                            @{
-                                                var despiece = context as DespiecePlanificacion;
-                                                decimal? costo;
-                                                if (despiece != null)
-                                                    costo = ObtenerCoste(despiece.CG_MAT.Trim(), despiece.CG_SE.Trim(), despiece.CANT_MAT).Result;
-                                                else
-                                                    costo = 0.0m;
-                                            }
-                                            <span>@costo</span>
-                                        </Template>
-                                    </GridColumn>
+                                    <GridColumn Field=@nameof(DespiecePlanificacion.COSTO) Format="N2" HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                     <GridColumn Field=@nameof(DespiecePlanificacion.STOCK) Format="N2" HeaderText="Stock" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                     <GridColumn Field=@nameof(DespiecePlanificacion.CANT_MAT) Format="N2" HeaderText="Cantidad Necesaria de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                     <GridColumn Field=@nameof(DespiecePlanificacion.COMP_DE_ENTRADA) Format="N2" HeaderText="Comprometido Entrada" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                     <GridColumn Field=@nameof(DespiecePlanificacion.STOCK_CORREGIDO) Format="N2" HeaderText="Stock Corregido" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-
                                     <GridColumn Field=@nameof(DespiecePlanificacion.SALDO) Format="N2" HeaderText="Saldo de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                     <GridColumn Field=@nameof(DespiecePlanificacion.CANT_PLANEADAS) Format="N2" HeaderText="Cantidad Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                     <GridColumn Field=@nameof(DespiecePlanificacion.SALDO_PLANEADAS) Format="N2" HeaderText="Saldo Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                     <GridColumn Field=@nameof(DespiecePlanificacion.CANT_TOTAL) Format="N2" HeaderText="Cantidad Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                     <GridColumn Field=@nameof(DespiecePlanificacion.SALDO_TOTAL) Format="N2" HeaderText="Saldo Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                 </GridColumns>
+                                <GridAggregates>
+                                        <GridAggregate>
+                                            <GridAggregateColumns>
+                                                <GridAggregateColumn Field=@nameof(DespiecePlanificacion.COSTO) Type="AggregateType.Sum" Format="C2">
+                                                    <FooterTemplate>
+                                                        @{
+                                                            var aggregate = (context as AggregateTemplateContext);
+                                                            <div>
+                                                                <p>Costo total de producto: @aggregate.Sum</p>
+                                                            </div>
+                                                        }
+                                                    </FooterTemplate>
+                                                </GridAggregateColumn>
+                                            </GridAggregateColumns>
+                                    </GridAggregate>
+                                </GridAggregates>
                             </SfGrid>
                         </div>
                     </div>
