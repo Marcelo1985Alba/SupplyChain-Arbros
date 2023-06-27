@@ -36,6 +36,37 @@ namespace SupplyChain
             }
         }
 
+        // GET: api/Prod
+        [HttpGet("ByTipo/{conMP}/{conSE}/{conPT}")]
+        public async Task<ActionResult<IEnumerable<Producto>>> Get(bool conMP, bool conSE, bool conPT)
+        {
+            List<int> cg_0rdenValues = new List<int>();
+            var query = _productoRepository.ObtenerTodosQueryable();
+            try
+            {
+                if (conMP)
+                {
+                    cg_0rdenValues.Add(4);
+                }
+
+                if (conSE)
+                {
+                    cg_0rdenValues.Add(2);
+                }
+
+                if (conPT)
+                {
+                    cg_0rdenValues.Add(1);
+                }
+
+                return await query.Where(p=> cg_0rdenValues.Contains(p.CG_ORDEN)).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         // GET: api/Productos/BuscarProducto/{CG_PROD}/{DES_PROD}
         [HttpGet("BuscarProducto/{CG_PROD}/{DES_PROD}/{Busqueda}")]
         public async Task<ActionResult<List<Producto>>> BuscarProducto(string CG_PROD, string DES_PROD, int Busqueda)

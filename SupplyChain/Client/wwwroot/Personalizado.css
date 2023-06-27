@@ -380,6 +380,11 @@ e-grid .e-gridheader {
     font-family: Tahoma;
 }
 
+.e-dialog .e-dlg-header-content {
+    border-bottom: none;
+    padding: 20px 23px 1px;
+}
+
 .e-dialog.e-control.e-popup, .e-dialog.e-control.e-popup .e-dlg-header-content {
     background-color: #61a4fd;
 }

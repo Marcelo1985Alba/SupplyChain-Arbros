@@ -97,7 +97,7 @@
         }
 
         @*DIALOG PARA DESPIECE*@
-        <SfDialog @ref="DialogDespieceRef" Width="80%" Height="550px" IsModal="true" ShowCloseIcon="true" Visible="false">
+        <SfDialog @ref="DialogDespieceRef" Width="80%" Height="550px" IsModal="true" ShowCloseIcon="true" Visible="false" CssClass="custom-dialog">
             <DialogTemplates>
                 <Header>
                     <p class="card-header badge badge-info text-white">DESPIECE DEL PRODUCTO: @ProdSelected.CG_PROD.Trim() - @ProdSelected.DES_PROD </p><hr/>
@@ -209,11 +209,76 @@
     </DialogTemplates>
 </SfDialog>
 
+<SfDialog ID="dlgEditar" Width="80%" Height="92%" IsModal="true" ShowCloseIcon="true" Visible="@dialogVisibleEditar">
+    <DialogTemplates>
+        <Header>
+            <p class="text-white">Editar Formula</p>
+        </Header>
+        <Content>
+            <div class="">
+                <div class="">
+                    <div class="e-card">
+                        <SfGrid DataSource="@DataEditarProductosFormulas" AllowPaging="true" AllowSorting="true" 
+                                ID="DetailedProdForm" Toolbar="@ToolbaritemsEditarFormula" Height="100%" Width="100%"
+                                GridLines="GridLine.Both">
+                            <GridEvents TValue="Formula"
+                                        OnToolbarClick="ToolbarEditFormClickHandler">
+                            </GridEvents>
+                            <GridPageSettings PageSizes="true" PageSize="10"></GridPageSettings>
+                            <GridEditSettings AllowAdding=true AllowDeleting=true AllowEditing=true
+                                              Mode="EditMode.Batch"></GridEditSettings>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(Formula.Cg_Prod) HeaderText="Producto" Width="90" AllowEditing=false></GridColumn>
+                                <GridColumn Field=@nameof(Formula.Cg_Se) HeaderText="Semielaborado" Width="80" AllowEditing=false></GridColumn>
+                                <GridColumn Field=@nameof(Formula.Cg_Mat) HeaderText="Materia Prima" Width="90" AllowEditing=false></GridColumn>
+                                <GridColumn Field=@nameof(Formula.CANT_MAT) HeaderText="Cantidad" Width="90"></GridColumn>
+                                <GridColumn HeaderText="Acciones" Width="50">
+                                    <GridCommandColumns>
+                                        @*<GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat"  })"></GridCommandColumn>*@
+                                        <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete e-custom", CssClass = "e-flat custom-btn" })"></GridCommandColumn>
+                                        <GridCommandColumn Type="CommandButtonType.Save" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-update", CssClass = "e-flat custom-btn" })"></GridCommandColumn>
+                                        <GridCommandColumn Type="CommandButtonType.Cancel" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-cancel-icon", CssClass = "e-flat custom-btn" })"></GridCommandColumn>
+                                    </GridCommandColumns>
+                                </GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
+<BuscadorEmergente Height="650px" Width="820px" TItem="Producto" Titulo="Listado de Insumos" Target="#dlgEditar"
+                   Visible="@PopupBuscadorProdVisible" 
+                   DataSource="@Insumos"
+                   Columnas="@(new string[] { "ID", "DES_PROD", "CG_ORDEN" })"
+                   OnObjetoSeleccionado="OnInsumoSeleccionado" />
+
+
 <style>
     .e-grid .e-gridcontent .e-rowcell.rojas {
         background-color: #fd8787;
     }
     .e-grid .e-gridcontent .e-rowcell.amarillas {
         background-color: #c3ab29;
+    }
+
+    .e-btn.e-flat, .e-css.e-btn.e-flat {
+        background-color: transparent;
+    }
+
+    .e-btn .e-btn-icon .e-custom, .e-css.e-btn .e-btn-icon {
+        color: blue;
+    }
+
+    .custom-dialog .e-dlg-content {
+         padding: 0px 0px 0px; 
+    }
+
+    .e-custom {
+        color: blue;
     }
 </style>

@@ -19,6 +19,7 @@ using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using SupplyChain.Client.RepositoryHttp;
+using SupplyChain.Shared.PCP;
 
 namespace SupplyChain.Client.Pages.Ingenieria
 {
@@ -44,6 +45,16 @@ namespace SupplyChain.Client.Pages.Ingenieria
             new ItemModel() { Text = "Guardar Excel", Type = ItemType.Button, CssClass = "", ShowTextOn = DisplayMode.Both,
                 TooltipText = "Guardar el despiece en formato excel", PrefixIcon = "e-update e-icons", Id = "GuardarExcel" } };
 
+        protected bool PopupBuscadorProdVisible = false;
+        protected List<Object> ToolbaritemsEditarFormula = new() {
+            new ItemModel() { Text = "Agregar Insumo", Type = ItemType.Button, CssClass = "", ShowTextOn = DisplayMode.Both,
+                TooltipText = "Buscar insumos", PrefixIcon = "e-search e-icons", Id = "BuscarInsumo" },
+            new ItemModel() { Text = "Guardar", Type = ItemType.Button, CssClass = "", ShowTextOn = DisplayMode.Both,
+                TooltipText = "Guardar el despiece en la base de datos", PrefixIcon = "e-update e-icons", Id = "GuardarDB" } };
+
+        protected List<Producto> Insumos = new List<Producto>();
+        protected Producto insumoSeleccionado = new();
+
         protected SfDialog DialogDespieceRef;
         protected SfGrid<DespiecePlanificacion> GridDespiece;
         protected SfGrid<vIngenieriaProductosFormulas> GridProdForm;
@@ -51,6 +62,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
         protected List<DespiecePlanificacion> listaDespiece = new();
         protected List<vIngenieriaProductosFormulas> DataOrdeProductosFormulas { get; set; } = new List<vIngenieriaProductosFormulas>();
         protected List<vIngenieriaProductosFormulas> DataDetailedProductosFormulas { get; set; } = new List<vIngenieriaProductosFormulas>();
+        protected List<Formula> DataEditarProductosFormulas { get; set; } = new List<Formula>();
         protected vIngenieriaProductosFormulas ProdSelected = new();
 
         public class TabData
@@ -76,7 +88,8 @@ namespace SupplyChain.Client.Pages.Ingenieria
             if (args.CommandColumn.Title == "Editar")
             {
                 Selected = args.RowData;
-                DataDetailedProductosFormulas = (await Http.GetFromJsonAsync<List<vIngenieriaProductosFormulas>>("api/Ingenieria/GetProductoFormulas")).Where(s => s.TIENE_FORM && s.FORM_ACTIVA && s.CG_PROD == args.RowData.CG_PROD).ToList();
+                DataEditarProductosFormulas = await Http.GetFromJsonAsync<List<Formula>>("api/Formulas/BuscarPorCgProd/" +
+                    $"{args.RowData.CG_PROD.Trim()}");
                 dialogVisibleEditar = true;
             } else if (args.CommandColumn.Title == "Copiar")
             {
@@ -158,6 +171,43 @@ namespace SupplyChain.Client.Pages.Ingenieria
                 VisibleSpinner = true;
                 await this.GridProdForm.ExcelExport();
                 VisibleSpinner = false;
+            }
+        }
+
+
+        protected async Task ToolbarEditFormClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+        {
+            if (args.Item.Id == "BuscarInsumo")
+            {
+                VisibleSpinner = true;
+                await BuscarInsumo();
+                VisibleSpinner = false;
+            }
+        }
+
+
+        protected async Task BuscarInsumo()
+        {
+            PopupBuscadorProdVisible = true;
+            Insumos = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/ByTipo/{true}/{true}/{false}");
+        }
+
+        protected void OnInsumoSeleccionado(Producto insumoSeleccionado)
+        {
+            PopupBuscadorProdVisible = false;
+            if (insumoSeleccionado != null)
+            {
+                var nuevoInsumoFormula = new Formula()
+                {
+                    ACTIVO = "S",
+                    CG_ORDEN = insumoSeleccionado.CG_ORDEN,
+                    Cg_Mat = insumoSeleccionado.CG_ORDEN == 4 ? insumoSeleccionado.Id : string.Empty,
+                    Cg_Se = insumoSeleccionado.CG_ORDEN == 2 ? insumoSeleccionado.Id : string.Empty,
+                    CANTIDAD = 0M,
+                    Cg_Prod = DataEditarProductosFormulas[0].Cg_Prod
+                };
+
+                DataEditarProductosFormulas.Add(nuevoInsumoFormula);
             }
         }
 

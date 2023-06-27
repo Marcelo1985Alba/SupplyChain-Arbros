@@ -1671,6 +1671,10 @@
                     document1.Close(true);
                     await JsRuntime.SaveAs("EtiquetaProd" + CodNro.Trim() + ".pdf", xx.ToArray());
                 }
+                else
+                {
+                    await DescargarTxtParaImpresoraQR(PedCliList[0].PEDIDO, "Bridada");
+                }
                 //else
                 //{
 
@@ -1868,6 +1872,55 @@
         //}
 
 
+    }
+
+    protected async Task DescargarTxtParaImpresoraQR(int pedido, string filename)
+    {
+        var fileName = filename + ".txt";
+        if (await GeneraCsv(pedido))
+        {
+            var fileArray = await HttpCli.GetByteArrayAsync($"api/AdministracionArchivos/GetTxt/{fileName}");
+
+            await Js.SaveAs(fileName, fileArray);
+        }
+
+    }
+
+    protected async Task<bool> GeneraCsv(int pedido)
+    {
+        var creado = true;
+        var response = await Http.GetAsync($"api/Programa/GeneraCsvImpresoraQR/{pedido}");
+        if (response.StatusCode == System.Net.HttpStatusCode.BadRequest ||
+            response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+        {
+            creado = false;
+            await this.ToastObj.ShowAsync(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "No se pudo generar Archivo.",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+
+
+        }
+        else
+        {
+            creado = true;
+            await this.ToastObj.ShowAsync(new ToastModel
+                {
+                    Title = "EXITO!",
+                    Content = "Archivo generado con éxito",
+                    CssClass = "e-toast-success",
+                    Icon = "e-success toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+        }
+
+        return creado;
     }
 
     protected async Task Ensayos()

@@ -33,5 +33,20 @@ namespace SupplyChain.Server.Controllers.Ingenieria
                 return BadRequest(ex);
             }
         }
+
+        [HttpGet("ByCodigoProducto/{cg_prod}")]
+        public async Task<ActionResult<IEnumerable<vIngenieriaProductosFormulas>>> GetProductoFormulas(string cg_prod)
+        {
+            try
+            {
+                return await _context.vIngenieriaProductosFormulas
+                    .Where(s => s.TIENE_FORM && s.FORM_ACTIVA && s.CG_PROD == cg_prod)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
     }
 }
