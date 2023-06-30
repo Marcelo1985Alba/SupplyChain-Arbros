@@ -34,6 +34,9 @@ namespace SupplyChain
         //public virtual DbSet<Prod> Prod { get; set; }
         public virtual DbSet<Cliente> Cliente { get; set; }
         public virtual DbSet<ClienteExterno> ClientesExternos { get; set; }
+        //MODULO VENTA
+        public DbSet<Semaforo>Semaforo { get; set; }
+
         //MODULO LOGÍSTICA
         public DbSet<PedCli> PedCli { get; set; }
         public DbSet<Pedidos> Pedidos { get; set; }
@@ -162,7 +165,7 @@ namespace SupplyChain
             this.Database.SetCommandTimeout(60);
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)  
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Configure domain classes using modelBuilder here   
             modelBuilder.ApplyConfiguration(new CompraConfig());
@@ -187,17 +190,15 @@ namespace SupplyChain
                     .WithOne(p => p.Solicitud);
             });
 
-
+       
             modelBuilder.Entity<Presupuesto>(entity => {
                 entity.HasMany(c => c.Items)
                     .WithOne(p => p.Presupuesto)
                     .HasForeignKey(c => c.PRESUPUESTOID)
-                    .OnDelete(DeleteBehavior.Cascade); 
+                    .OnDelete(DeleteBehavior.Cascade);
 
             });
 
-
-        
 
             modelBuilder.Entity<PresupuestoDetalle>(entity=> {
                 entity.HasOne(d => d.Presupuesto)
@@ -291,6 +292,8 @@ namespace SupplyChain
             modelBuilder.Entity<vESTADOS_COMPRAS>().HasNoKey().ToView("vESTADOS_COMPRAS");
 
             modelBuilder.Entity<vProveedorItris>().HasNoKey().ToView("vProveItris");
+
+
         }
     }
 }

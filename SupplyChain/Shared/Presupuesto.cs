@@ -35,6 +35,8 @@ namespace SupplyChain.Shared
         public string INGENIERIA { get; set; } = "";
         public string REVISION { get; set; } = "";
         public string NRODOC { get; set; } = "";
+        public string COMENTARIO { get; set; }
+        public string COLOR { get; set; }
 
         [ValidateComplexType]
         public virtual List<PresupuestoDetalle> Items { get; set; } = new();

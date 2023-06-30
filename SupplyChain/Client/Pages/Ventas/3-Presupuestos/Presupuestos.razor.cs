@@ -19,8 +19,11 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
     public class PresupuestosBase : ComponentBase
     {
         [Inject] public PresupuestoService PresupuestoService { get; set; }
+        [Inject] public SemaforoService SemaforoService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
         [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
+        [Parameter] public Semaforo Semaforo { get; set; } = new();
+        [Parameter] public Presupuesto Presupuesto { get; set; } = new();
         public AuthenticationState authState;
         protected SfGrid<vPresupuestos> refGrid;
         protected SfSpinner refSpinner;
@@ -28,6 +31,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected FormPresupuesto refFormPresupuesto;
         protected Presupuesto PresupuestoSeleccionado = new();
         protected List<vPresupuestos> Presupuestos = new();
+        protected List<Semaforo> datasemaforo = new();
 
         protected bool SpinnerVisible = true;
         protected bool SpinnerVisiblePresupuesto = false;
@@ -69,6 +73,19 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             else
             {
                 Presupuestos = response.Response.OrderByDescending(s => s.Id).ToList();
+            }
+        }
+
+        protected async Task GetSemaforo()
+        {
+            var response = await SemaforoService.Get();
+            if (response.Error)
+            {
+                await ToastMensajeError("Erro al obtener un color.");
+            }
+            else
+            {
+                datasemaforo = response.Response;
             }
         }
 
@@ -221,6 +238,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                         Fecha = presupuesto.FECHA,
                         MONEDA = presupuesto.MONEDA,
                         TOTAL = presupuesto.TOTAL,
+                        COMENTARIO = presupuesto.COMENTARIO,
                         USUARIO = auth.User.Identity.Name
                     };
                     Presupuestos.Add(nuevoPresup);
@@ -235,6 +253,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                     presupActualizado.DES_CLI = presupuesto.DES_CLI;
                     presupActualizado.TOTAL = presupuesto.TOTAL;
                     presupActualizado.USUARIO = presupuesto.USUARIO;
+                    presupActualizado.COMENTARIO = presupuesto.COMENTARIO;
                 }
 
 

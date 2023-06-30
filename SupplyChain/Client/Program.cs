@@ -100,6 +100,7 @@ namespace SupplyChain.Client
 
             services.AddScoped<ModulosUsuarioService>();
             services.AddScoped<ProveedoresService>();
+            services.AddScoped<SemaforoService>();
         }
     }
 }
