@@ -14,7 +14,7 @@ namespace SupplyChain.Shared
     {
         public int PRESUPUESTOID { get; set; }
         public int SOLICITUDID { get; set; } = 0;
-        [StringLength(maximumLength: 15, MinimumLength = 5)]
+        [StringLength(maximumLength: 15, MinimumLength = 4)]
         public string CG_ART { get; set; }
         [Range(minimum: 1, maximum: 100, ErrorMessage = "La cantidad es requerida")]
         public decimal CANTIDAD { get; set; }
