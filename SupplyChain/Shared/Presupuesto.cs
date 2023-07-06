@@ -11,6 +11,7 @@ namespace SupplyChain.Shared
     [Table("PRESUPUESTO_ENCABEZADO")]
     public class Presupuesto : EntityBase<int>
     {
+        
         public DateTime FECHA { get; set; } = DateTime.Now;
         [Required(ErrorMessage ="* La Moneda es requerida")]
         public string MONEDA { get; set; } = "DOLARES";

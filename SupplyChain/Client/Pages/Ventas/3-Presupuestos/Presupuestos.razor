@@ -14,71 +14,43 @@
         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="false" AllowResizing="true"
                 @ref="refGrid" DataSource="@Presupuestos" Width="100%"
                 AllowExcelExport="true" AllowGrouping="true" ID="grdPresupuesto"
-                AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
+                AllowSorting="true" AllowPaging="true" AllowSelection="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"
                         OnToolbarClick="OnToolbarHandler"
+                        RowSelected="RowSelectHandler"
                         TValue="vPresupuestos"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
-            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" NewRowPosition="NewRowPosition.Top"
-                              Mode="EditMode.Batch"></GridEditSettings>
+            @*<GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" NewRowPosition="NewRowPosition.Top"
+                 Mode="EditMode.Dialog"></GridEditSettings>*@
+                <GridEditSettings Mode="EditMode.Dialog"></GridEditSettings>
             <GridColumns>
                 @*<GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>*@
-                <GridColumn Field=@nameof(vPresupuestos.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.Fecha) HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.TOTAL) HeaderText="Total" TextAlign="TextAlign.Left" Width="150px" Format="N2"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.USUARIO) HeaderText="Usuario" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="100px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.Fecha) HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="120px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" AllowEditing="false" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.TOTAL) HeaderText="Total" TextAlign="TextAlign.Left" Width="150px" Format="N2" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.USUARIO) HeaderText="Usuario" TextAlign="TextAlign.Left" Width="120px" AllowEditing="false"></GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.COMENTARIO) HeaderText="Comentario" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.COLOR) HeaderText="Semaforo" EditType="EditType.DropDownEdit" AllowEditing="true" Width="120px">
-                <EditTemplate>
+                <GridColumn Field=@nameof(vPresupuestos.COLOR) HeaderText="Semaforo" EditType="EditType.DropDownEdit" Width="120px">
+                    <EditTemplate>
+                          @{
+                              var presup = context as vPresupuestos;
+                           }
 
-                <SfDropDownList TValue="string" TItem="Semaforo" DataSource="datasemaforo" @bind-Value="Semaforo.COLOR">
-                  <DropDownListEvents TItem="Semaforo" TValue="string"></DropDownListEvents>
-                  <DropDownListFieldSettings Text="COLOR" Value="COLOR"></DropDownListFieldSettings>
-
-                @*DESDE EL CONTROLLADOR DE PRESUPUESTO TENGO QUE HACER LA FUNCION QUE ACTUALICE EN LA BD*@
-                </SfDropDownList>
+                        <SfDropDownList TValue="string" TItem="Semaforo" DataSource="@datasemaforo" @bind-Value="presup.COLOR">
+                            <DropDownListFieldSettings Text="COLOR" Value="COLOR"></DropDownListFieldSettings>
+                            <DropDownListEvents TItem="Semaforo" TValue="string" ValueChange="Actualizar"></DropDownListEvents>
+                        </SfDropDownList>
                            
-                @*<SfDropDownList ID="Color" Placeholder="Seleccionar Semaforo"
-                TItem="Semaforo"
-                TValue="string" @bind-Value="@semaforo.Valor"
-                DataSource="Valores">
-
-                <DropDownListFieldSettings Text="SEMAFORO" Value="Id" ></DropDownListFieldSettings>
-                        </SfDropDownList>*@
-                </EditTemplate>
+                    </EditTemplate>
                 </GridColumn>
                 
-               @*-----------VER BIEN DLEL DROPDONW LIST  YA TIENE LA BASE CONFIGURADA, FATALN CONTROLLER, SERVICE SEMAFOROR*@
-               @*-----------VER BIEN DLEL DROPDONW LIST  YA TIENE LA BASE CONFIGURADA, FATALN CONTROLLER, SERVICE SEMAFOROR*@
-                @*-----------VER BIEN DLEL DROPDONW LIST  YA TIENE LA BASE CONFIGURADA, FATALN CONTROLLER, SERVICE SEMAFOROR*@
-                @*-----------VER BIEN DLEL DROPDONW LIST  YA TIENE LA BASE CONFIGURADA, FATALN CONTROLLER, SERVICE SEMAFOROR*@
-
-
-             @*   <GridColumn Field=@nameof(vPresupuestos.SEMAFORO) HeaderText="SEMAFORO" EditType="EditType.DropDownEdit" Width="120px">
-                <EditTemplate>
-                <SfDropDownList ID="IdSemaforo" Placeholder="Seleccione un color" TItem="string" TValue="String"
-                @bind-Value="@((context as vPresupuestos).SEMAFORO)" DataSource="@Valor">
-                <DropDownListEvents TValue="string" TItem="string" ></DropDownListEvents>
-                <DropDownListFieldSettings Text="Semaforo" Value="SEMAFORO"></DropDownListFieldSettings>
-                </SfDropDownList>
-                </EditTemplate>
-                </GridColumn>*@
-                @*<GridColumn Field=@nameof(vPresupuestos.COMENTARIO) HeaderText="Comentario" Format="d" Type="ColumnType.String" TextAlign="TextAlign.Left" Width="120px">
-                <EditTemplate>
-                <SfTextBox ID="IdComentario" Type="InputType.Text" @oninput="InputEvent" Value="@"></SfTextBox>
-                </EditTemplate>
-                </GridColumn>*@
-                @*  <GridColumn Field=@nameof(vPresupuestos.COMENTARIO) HeaderText="Comentario" TextAlign="TextAlign.Left" Width="120px">
-                <Template>
-                <SfTextBox Placeholder="Comentario"></SfTextBox>
-                </Template>
-                </GridColumn>*@
+            
             </GridColumns>
 
 
@@ -89,8 +61,8 @@
     <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" Label="Generando Presupuesto..."
                @bind-Visible="@SpinnerVisiblePresupuesto"></SfSpinner>
 
-    @* <FormPresupuesto @ref="refFormPresupuesto" Presupuesto="@PresupuestoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
-    OnGuardar="@(async(s)=> await Guardar(s))"></FormPresupuesto>*@
+     <FormPresupuesto @ref="refFormPresupuesto" Presupuesto="@PresupuestoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
+    OnGuardar="@(async(s)=> await Guardar(s))"></FormPresupuesto>
 
     <ConfirmacionDialog @ref="ConfirmacionEliminarDialog" OnConfirm="@(async () => await Eliminar())">
         <HeaderTempalte>

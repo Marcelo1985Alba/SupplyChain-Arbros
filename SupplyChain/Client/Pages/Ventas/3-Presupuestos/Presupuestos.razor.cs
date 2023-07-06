@@ -1,18 +1,25 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.EntityFrameworkCore;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Pages.Ventas._4_Solicitudes;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
+using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
+using Syncfusion.XlsIO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
+
 
 namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 {
@@ -24,15 +31,19 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
         [Parameter] public Semaforo Semaforo { get; set; } = new();
         [Parameter] public Presupuesto Presupuesto { get; set; } = new();
+        [Parameter] public EventCallback<Semaforo> OnSelectedChanged { get; set; }
+
         public AuthenticationState authState;
         protected SfGrid<vPresupuestos> refGrid;
+        protected SfGrid<Presupuestos> refGridPre;
         protected SfSpinner refSpinner;
         protected SfToast ToastObj;
         protected FormPresupuesto refFormPresupuesto;
         protected Presupuesto PresupuestoSeleccionado = new();
+        protected vPresupuestos presup = new();
         protected List<vPresupuestos> Presupuestos = new();
-        protected List<Semaforo> datasemaforo = new();
-
+        protected List<Semaforo> datasemaforo = new List<Semaforo>();
+        protected List<Presupuesto> datapresupuesto = new List<Presupuesto>();
         protected bool SpinnerVisible = true;
         protected bool SpinnerVisiblePresupuesto = false;
 
@@ -51,7 +62,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             new ItemModel { Text = "Ver Todos", Type = ItemType.Button, Id = "VerTodos", PrefixIcon = "e-icons e-eye" },
             new ItemModel { Text = "Ver Pendientes", Type = ItemType.Button, Id = "VerPendientes" },
         };
-
+    
         protected List<string> Monedas = new() { "PESOS", "DOLARES" };
 
         protected PresupuestoAnterior presupuesto = new();
@@ -59,8 +70,22 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Presupuestos";
+            await GetSemaforo();
             await GetPresupuestos(TipoFiltro.Pendientes);
             SpinnerVisible = false;
+
+        }
+
+        public async Task Actualizar(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, Semaforo> args)
+        {
+            var presupuesto = await PresupuestoService.ActualizarColor(presup.Id, args.Value);
+            
+        
+        }
+
+        public void RowSelectHandler(RowSelectEventArgs<vPresupuestos> args)
+        {
+            presup = args.Data;
         }
 
         protected async Task GetPresupuestos(TipoFiltro tipoFiltro = TipoFiltro.Todos )
@@ -150,7 +175,6 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 args.Cancel = true;
                 args.PreventRender = false;
             }
-
 
         }
 

@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +18,7 @@ namespace SupplyChain.Server.Controllers
     [ApiController]
     public class PresupuestosController : ControllerBase
     {
+        private string CadenaConexionSQL = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build().GetConnectionString("DefaultConnection");
         private readonly PresupuestoAnteriorRepository _presupuestoAnteriorRepository;
         private readonly PresupuestoRepository _presupuestoRepository;
         private readonly GeneraRepository _generaRepository;
@@ -96,7 +99,7 @@ namespace SupplyChain.Server.Controllers
 
             return CreatedAtAction("GetPresupuesto", new { id = presupuesto.Id }, presupuesto);
         }
-
+        
         [HttpPost("PostFromSolicitud")]
         public async Task<ActionResult<Presupuesto>> PostFromSolicitud(Presupuesto presupuesto)
         {
@@ -124,6 +127,20 @@ namespace SupplyChain.Server.Controllers
                 return Ok(presupuesto);
             }
             catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("ActualizarColor/{id}/{color}")]
+        public async Task<ActionResult<Presupuesto>>ActualizarColor( int id, string color)
+        {
+            try
+            {
+                var lista = await _presupuestoRepository.ActualizarColor(id, color);
+                return Ok(lista);
+            } 
+            catch(Exception ex)
             {
                 return BadRequest(ex);
             }
@@ -159,5 +176,8 @@ namespace SupplyChain.Server.Controllers
                 return BadRequest("Error al eliminar Presupuesto " + ex.Message);
             }
         }
+
+       
+
     }
 }

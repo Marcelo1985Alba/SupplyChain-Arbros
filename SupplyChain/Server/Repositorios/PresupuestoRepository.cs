@@ -121,6 +121,15 @@ namespace SupplyChain.Server.Repositorios
 
         }
 
+
+        public async Task<IEnumerable<Presupuesto>> ActualizarColor(int id, string color)
+        { 
+            string xSQL= $"UPDATE PRESUPUESTO_ENCABEZADO SET COLOR ='{color}' WHERE ID = {id}";
+            await base.Database.ExecuteSqlRawAsync(xSQL);
+
+            return await DbSet.Where(p=> p.Id == id).ToListAsync();
+        }
+
         private async Task CerrarSolicitud(Presupuesto entity)
         {
             foreach (var item in entity.Items)

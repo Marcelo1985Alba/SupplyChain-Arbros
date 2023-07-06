@@ -11,9 +11,9 @@ namespace SupplyChain.Client.HelperService
     {
         private readonly IRepositoryHttp Http;
         private readonly IJSRuntime _js;
-        private const string API = "api/Semaforo";
+        private const string api = "api/Semaforo";
 
-        public SemaforoService(IRepositoryHttp Http, IJSRuntime js) : base( Http, API)
+        public SemaforoService(IRepositoryHttp Http, IJSRuntime js) : base( Http, api)
         {
             this.Http = Http;
             this._js= js;

@@ -11,7 +11,7 @@ namespace SupplyChain.Shared
     [Table("Semaforo")]
     public class Semaforo : EntityBase<int>
     {
-        public int ID { get; set; }
+        //public int ID { get; set; }
         public string COLOR { get; set; }
     }
 
