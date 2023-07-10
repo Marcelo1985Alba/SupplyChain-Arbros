@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Pages.Ventas._4_Solicitudes;
 using SupplyChain.Client.Shared;
@@ -25,6 +27,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 {
     public class PresupuestosBase : ComponentBase
     {
+        [Inject] public IJSRuntime Js { get; set; }
         [Inject] public PresupuestoService PresupuestoService { get; set; }
         [Inject] public SemaforoService SemaforoService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
@@ -35,6 +38,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         public AuthenticationState authState;
         protected SfGrid<vPresupuestos> refGrid;
+        protected SfGrid<FormPresupuesto> refGridForm;
         protected SfGrid<Presupuestos> refGridPre;
         protected SfSpinner refSpinner;
         protected SfToast ToastObj;
@@ -61,9 +65,11 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh", Type = ItemType.Button},
             new ItemModel { Text = "Ver Todos", Type = ItemType.Button, Id = "VerTodos", PrefixIcon = "e-icons e-eye" },
             new ItemModel { Text = "Ver Pendientes", Type = ItemType.Button, Id = "VerPendientes" },
+            new ItemModel { Text = "Editar", Type = ItemType.Button, Id ="Editar"},
         };
     
         protected List<string> Monedas = new() { "PESOS", "DOLARES" };
+
 
         protected PresupuestoAnterior presupuesto = new();
         protected ConfirmacionDialog ConfirmacionEliminarDialog;
@@ -80,9 +86,29 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         {
             var presupuesto = await PresupuestoService.ActualizarColor(presup.Id, args.Value);
             
-        
         }
 
+        //protected async void KeyPressed(KeyboardEventArgs args)
+        //{
+        //    if (args.Key == "Enter")
+        //    {
+        //        var presupuesto = await PresupuestoService.EnviarComentario(presup.Id, args.Value);
+        //    }
+        //}
+        public async void KeyPressHandler(KeyboardEventArgs args)
+        {
+           if(args.Key == "Enter")
+            {
+                var comentario = await PresupuestoService.EnviarComentario(presup.Id, args.Key);
+                
+            }
+        }
+       
+        public async Task GuardarComentario(int id, string comentario)
+        {
+            var com = await PresupuestoService.EnviarComentario(id, comentario);
+
+        }
         public void RowSelectHandler(RowSelectEventArgs<vPresupuestos> args)
         {
             presup = args.Data;
@@ -148,7 +174,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                     await refFormPresupuesto.ShowAsync(args.Data.Id);
                     popupFormVisible = true;
                 }
-                SpinnerVisible = false;
+                SpinnerVisible = true;
             }
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
@@ -166,6 +192,17 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             }
         }
 
+        protected async Task CellSelectHandler(CellSelectEventArgs<vPresupuestos> args)
+        {
+            var CellValue = await refGrid.GetSelectedRowCellIndexesAsync();
+
+            var CurrentEditRow = CellValue[0].Item1;
+            var CurrentEditCell = (int)CellValue[0].Item2;
+
+            var fields = await refGrid.GetColumnFieldNames();
+            await refGrid.EditCellAsync(CurrentEditRow, fields[CurrentEditCell]);
+
+        }
         protected async Task OnActionCompleteHandler(ActionEventArgs<vPresupuestos> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
@@ -209,8 +246,34 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 }
                 
             }
+
+            else if (args.Item.Id == "Editar")
+            {
+                SpinnerVisible = true;
+                var seleccionado = await refGrid.GetSelectedRecordsAsync();
+               if(seleccionado.Count > 0)
+                {
+                    var response = await PresupuestoService.GetById(seleccionado[0].Id);
+
+                    if (response.Error)
+                    {
+                        await ToastMensajeError();
+                    }
+                    else
+                    {
+                        PresupuestoSeleccionado = response.Response;
+                        await refFormPresupuesto.ShowAsync(seleccionado[0].Id);
+                        popupFormVisible = true;
+                    }
+                    SpinnerVisible = true;
+
+                }
+
+            }
+
         }
 
+   
         protected async Task Eliminar()
         {
             SpinnerVisible = true;

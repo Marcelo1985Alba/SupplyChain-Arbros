@@ -30,6 +30,12 @@ namespace SupplyChain.Client.HelperService
         {
             return await Http.GetFromJsonAsync<List<Presupuesto>>($"api/Presupuestos/ActualizarColor/{numpreupuesto}/{color}");
         }
+
+        public async Task<HttpResponseWrapper<List<Presupuesto>>> EnviarComentario(int numpreupuesto, string comentario)
+        {
+            return await Http.GetFromJsonAsync<List<Presupuesto>>($"api/Presupuestos/EnviarComentario/{numpreupuesto}/{comentario}");
+        }
+
         protected async Task<HttpResponseWrapper<List<PresupuestoAnterior>>> GetPresupuestosAnteriores()
         {
             return await Http.GetFromJsonAsync<List<PresupuestoAnterior>>("api/PresupuestosAnterior");

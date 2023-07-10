@@ -16,33 +16,51 @@
                 AllowExcelExport="true" AllowGrouping="true" ID="grdPresupuesto"
                 AllowSorting="true" AllowPaging="true" AllowSelection="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
-            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" Mode="Syncfusion.Blazor.Grids.SelectionMode.Both"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"
                         OnToolbarClick="OnToolbarHandler"
-                        RowSelected="RowSelectHandler"
+                        RowSelected="RowSelectHandler" 
+                        CellSelected="CellSelectHandler"
                         TValue="vPresupuestos"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
-            @*<GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" NewRowPosition="NewRowPosition.Top"
-                 Mode="EditMode.Dialog"></GridEditSettings>*@
-                <GridEditSettings Mode="EditMode.Dialog"></GridEditSettings>
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" NewRowPosition="NewRowPosition.Top"
+                 Mode="EditMode.Batch"></GridEditSettings>
+
             <GridColumns>
                 @*<GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>*@
                 <GridColumn Field=@nameof(vPresupuestos.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="100px" AllowEditing="false"></GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.Fecha) HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="120px" AllowEditing="false"></GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px" AllowEditing="false"></GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px" AllowEditing="false"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" AllowEditing="false" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px" AllowEditing="false"></GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.TOTAL) HeaderText="Total" TextAlign="TextAlign.Left" Width="150px" Format="N2" AllowEditing="false"></GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.USUARIO) HeaderText="Usuario" TextAlign="TextAlign.Left" Width="120px" AllowEditing="false"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.COMENTARIO) HeaderText="Comentario" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.COMENTARIO) HeaderText="Comentario" TextAlign="TextAlign.Left" Width="200px">
+                    <Template>
+
+                        @{
+                           var presup = context as vPresupuestos;
+                          }
+                        <p>
+                            @presup.COMENTARIO
+                        </p>
+
+                        
+                    </Template>
+                    <EditTemplate>
+                        <SfTextBox Placeholder="Comentario" Width="100px">@presup.COMENTARIO</SfTextBox>
+                        <Syncfusion.Blazor.Buttons.SfButton Content="Guardar" @onclick="@(()=> GuardarComentario(presup.Id, presup.COMENTARIO))">GUARDAR</Syncfusion.Blazor.Buttons.SfButton>
+                    </EditTemplate>
+                    
+                </GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.COLOR) HeaderText="Semaforo" EditType="EditType.DropDownEdit" Width="120px">
                     <EditTemplate>
                           @{
                               var presup = context as vPresupuestos;
                            }
 
-                        <SfDropDownList TValue="string" TItem="Semaforo" DataSource="@datasemaforo" @bind-Value="presup.COLOR">
+                        <SfDropDownList TValue="string" TItem="Semaforo" DataSource="@datasemaforo" @bind-Value="presup.COLOR" AllowFiltering="true">
                             <DropDownListFieldSettings Text="COLOR" Value="COLOR"></DropDownListFieldSettings>
                             <DropDownListEvents TItem="Semaforo" TValue="string" ValueChange="Actualizar"></DropDownListEvents>
                         </SfDropDownList>

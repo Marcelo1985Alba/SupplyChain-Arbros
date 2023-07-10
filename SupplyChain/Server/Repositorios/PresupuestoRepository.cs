@@ -130,6 +130,14 @@ namespace SupplyChain.Server.Repositorios
             return await DbSet.Where(p=> p.Id == id).ToListAsync();
         }
 
+        public async Task<IEnumerable<Presupuesto>> EnviarComentario(int id, string comentario)
+        {
+            string xSql = $"UPDATE PRESUPUESTO_ENCABEZADO SET COMENTARIO = '{comentario}' WHERE ID ={id}";
+            await base.Database.ExecuteSqlRawAsync(xSql);
+
+            return await DbSet.Where(p=> p.Id == id).ToListAsync();
+        }
+
         private async Task CerrarSolicitud(Presupuesto entity)
         {
             foreach (var item in entity.Items)

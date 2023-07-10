@@ -146,6 +146,20 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
+        [HttpGet("EnviarComentario/{id}/{comentario}")]
+        public async Task<ActionResult<Presupuesto>>EnviarComentario(int id, string comentario)
+        {
+            try
+            {
+                var lista = await _presupuestoRepository.EnviarComentario(id, comentario);
+                return Ok(lista);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         // DELETE api/<PresupuestosController>/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Presupuesto>> DeleteCompra(int id)
