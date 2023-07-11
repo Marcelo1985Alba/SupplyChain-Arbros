@@ -269,6 +269,10 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             {
                 args.Cell.AddClass(new string[] { "color-estado-pedido-anulado" });
             }
+            else if (args.Data.ESTADO_PEDIDO == 11) /*ANULADO*/
+            {
+                args.Cell.AddClass(new string[] { "color-estado-pedido-cobrado" });
+            }
         }
 
         protected async Task OnRowSelected(RowSelectEventArgs<vEstadoPedido> arg)
