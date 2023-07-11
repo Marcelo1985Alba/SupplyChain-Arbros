@@ -18,7 +18,7 @@
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" Mode="Syncfusion.Blazor.Grids.SelectionMode.Both"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
-            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"
+            <GridEvents OnActionComplete="OnActionCompleteHandler"
                         OnToolbarClick="OnToolbarHandler"
                         RowSelected="RowSelectHandler" 
                         CellSelected="CellSelectHandler"
@@ -26,7 +26,7 @@
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" NewRowPosition="NewRowPosition.Top"
                  Mode="EditMode.Batch"></GridEditSettings>
-
+            
             <GridColumns>
                 @*<GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>*@
                 <GridColumn Field=@nameof(vPresupuestos.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="100px" AllowEditing="false"></GridColumn>
@@ -36,7 +36,7 @@
                 <GridColumn Field=@nameof(vPresupuestos.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px" AllowEditing="false"></GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.TOTAL) HeaderText="Total" TextAlign="TextAlign.Left" Width="150px" Format="N2" AllowEditing="false"></GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.USUARIO) HeaderText="Usuario" TextAlign="TextAlign.Left" Width="120px" AllowEditing="false"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.COMENTARIO) HeaderText="Comentario" TextAlign="TextAlign.Left" Width="200px">
+                <GridColumn Field=@nameof(vPresupuestos.COMENTARIO) HeaderText="Comentario" TextAlign="TextAlign.Left" Width="190px">
                     <Template>
 
                         @{
@@ -49,7 +49,14 @@
                         
                     </Template>
                     <EditTemplate>
-                        <SfTextBox Placeholder="Comentario" Width="100px">@presup.COMENTARIO</SfTextBox>
+                       @{
+                            var presup = context as vPresupuestos;
+                        }
+                        @*<p>
+                            @presup.COMENTARIO
+                        </p>*@
+                        <SfTextBox Placeholder="Comentario" Width="100px" @bind-Value="presup.COMENTARIO">@presup.COMENTARIO</SfTextBox>
+                        
                         <Syncfusion.Blazor.Buttons.SfButton Content="Guardar" @onclick="@(()=> GuardarComentario(presup.Id, presup.COMENTARIO))">GUARDAR</Syncfusion.Blazor.Buttons.SfButton>
                     </EditTemplate>
                     

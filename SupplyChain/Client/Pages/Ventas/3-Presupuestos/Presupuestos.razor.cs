@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 using SupplyChain.Client.HelperService;
@@ -54,18 +55,16 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected bool popupFormVisible = false;
         protected List<Object> Toolbaritems = new()
         {
-            "Search",
-            //new ItemModel { Text = "Add", TooltipText = "Agregar un nuevo Presupuesto", PrefixIcon = "e-add", Id = "Add" },
-            "Add",
-            "Edit",
-            "Delete",
+
+            new ItemModel { Text = "Agregar", Type = ItemType.Button, Id ="Agregar"},
+            new ItemModel { Text = "Editar", Type = ItemType.Button, Id ="Editar"},
+            new ItemModel { Text = "Eliminar", Type = ItemType.Button, Id ="Eliminar"},
             new ItemModel { Text = "Imprimir", TooltipText = "Imprimir presupuesto, codiciones comerciales y datasheet", PrefixIcon = "e-print", Id = "Imprimir", Type = ItemType.Button },
             //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
             "ExcelExport",
             new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh", Type = ItemType.Button},
             new ItemModel { Text = "Ver Todos", Type = ItemType.Button, Id = "VerTodos", PrefixIcon = "e-icons e-eye" },
             new ItemModel { Text = "Ver Pendientes", Type = ItemType.Button, Id = "VerPendientes" },
-            new ItemModel { Text = "Editar", Type = ItemType.Button, Id ="Editar"},
         };
     
         protected List<string> Monedas = new() { "PESOS", "DOLARES" };
@@ -88,26 +87,17 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             
         }
 
-        //protected async void KeyPressed(KeyboardEventArgs args)
-        //{
-        //    if (args.Key == "Enter")
-        //    {
-        //        var presupuesto = await PresupuestoService.EnviarComentario(presup.Id, args.Value);
-        //    }
-        //}
-        public async void KeyPressHandler(KeyboardEventArgs args)
-        {
-           if(args.Key == "Enter")
-            {
-                var comentario = await PresupuestoService.EnviarComentario(presup.Id, args.Key);
-                
-            }
-        }
-       
         public async Task GuardarComentario(int id, string comentario)
         {
-            var com = await PresupuestoService.EnviarComentario(id, comentario);
+            try
+            {
+                var presup = await PresupuestoService.EnviarComentario(id, comentario);
 
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
         public void RowSelectHandler(RowSelectEventArgs<vPresupuestos> args)
         {
@@ -140,57 +130,57 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             }
         }
 
-        protected async Task OnActionBeginHandler(ActionEventArgs<vPresupuestos> args)
-        {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
-                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit ||
-                args.RequestType == Syncfusion.Blazor.Grids.Action.Delete )
-            {
-                args.Cancel = true;
-                args.PreventRender = false;
-            }
+        //protected async Task OnActionBeginHandler(ActionEventArgs<vPresupuestos> args)
+        //{
+        //    if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
+        //        //args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit ||
+        //        args.RequestType == Syncfusion.Blazor.Grids.Action.Delete )
+        //    {
+        //        args.Cancel = true;
+        //        args.PreventRender = false;
+        //    }
 
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
-            {
-                SpinnerVisible = true;
-                PresupuestoSeleccionado = new();
-                PresupuestoSeleccionado.DIRENT = "";
-                await refFormPresupuesto.ShowAsync(0);
-                popupFormVisible = true;
-                SpinnerVisible = false;
-            }
+        //    if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
+        //    {
+        //        SpinnerVisible = true;
+        //        PresupuestoSeleccionado = new();
+        //        PresupuestoSeleccionado.DIRENT = "";
+        //        await refFormPresupuesto.ShowAsync(0);
+        //        popupFormVisible = true;
+        //        SpinnerVisible = false;
+        //    }
 
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
-            {
-                SpinnerVisible = true;
-                var response = await PresupuestoService.GetById(args.Data.Id);
-                if (response.Error)
-                {
-                    await ToastMensajeError();
-                }
-                else
-                {
-                    PresupuestoSeleccionado = response.Response;
-                    await refFormPresupuesto.ShowAsync(args.Data.Id);
-                    popupFormVisible = true;
-                }
-                SpinnerVisible = true;
-            }
+        //if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+        //{
+        //    SpinnerVisible = true;
+        //    var response = await PresupuestoService.GetById(args.Data.Id);
+        //    if (response.Error)
+        //    {
+        //        await ToastMensajeError();
+        //    }
+        //    else
+        //    {
+        //        PresupuestoSeleccionado = response.Response;
+        //        await refFormPresupuesto.ShowAsync(args.Data.Id);
+        //        popupFormVisible = true;
+        //    }
+        //    SpinnerVisible = true;
+        //}
 
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
-            {
-                if (args.RowData.TIENEPEDIDO)
-                {
-                    await ToastMensajeError("El presupuesto tiene pedido.\r\nNose puede eliminar.");
-                }
-                else
-                {
-                    PresupuestoSeleccionado.Id = args.RowData.Id;
-                    await ConfirmacionEliminarDialog.ShowAsync();
-                }
-                
-            }
-        }
+        //    if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+        //    {
+        //        if (args.RowData.TIENEPEDIDO)
+        //        {
+        //            await ToastMensajeError("El presupuesto tiene pedido.\r\nNose puede eliminar.");
+        //        }
+        //        else
+        //        {
+        //            PresupuestoSeleccionado.Id = args.RowData.Id;
+        //            await ConfirmacionEliminarDialog.ShowAsync();
+        //        }
+
+        //    }
+        //}
 
         protected async Task CellSelectHandler(CellSelectEventArgs<vPresupuestos> args)
         {
@@ -206,7 +196,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected async Task OnActionCompleteHandler(ActionEventArgs<vPresupuestos> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
-                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit ||
+                //args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit ||
                 args.RequestType == Syncfusion.Blazor.Grids.Action.Delete )
             {
                 args.Cancel = true;
@@ -215,7 +205,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         }
 
-        protected async Task OnToolbarHandler(ClickEventArgs args)
+        protected async Task OnToolbarHandler(ClickEventArgs  args)
         {
             if (args.Item.Id == "refresh")
             {
@@ -246,7 +236,6 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 }
                 
             }
-
             else if (args.Item.Id == "Editar")
             {
                 SpinnerVisible = true;
@@ -268,7 +257,30 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                     SpinnerVisible = true;
 
                 }
+            }
+            else if (args.Item.Id == "Agregar")
+            {
+                SpinnerVisible = true;
+                PresupuestoSeleccionado = new();
+                PresupuestoSeleccionado.DIRENT = "";
+                await refFormPresupuesto.ShowAsync(0);
+                popupFormVisible = true;
+                SpinnerVisible = false;
 
+            }
+            else if (args.Item.Id == "Eliminar")
+            {
+              var seleccionado = await PresupuestoService.TienePedido(PresupuestoSeleccionado.Id);
+                   
+                if (PresupuestoSeleccionado.TienePedido)
+                {
+                   await ToastMensajeError("El presupuesto tiene pedido.\r\nNose puede eliminar.");
+                }
+                else
+                {
+                  PresupuestoSeleccionado.Id = presup.Id;
+                  await ConfirmacionEliminarDialog.ShowAsync();
+                }
             }
 
         }

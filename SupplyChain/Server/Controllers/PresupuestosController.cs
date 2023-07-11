@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using SupplyChain.Client.Pages.Ventas._3_Presupuestos;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
@@ -147,7 +149,7 @@ namespace SupplyChain.Server.Controllers
         }
 
         [HttpGet("EnviarComentario/{id}/{comentario}")]
-        public async Task<ActionResult<Presupuesto>>EnviarComentario(int id, string comentario)
+        public async Task<ActionResult<IEnumerable<Presupuesto>>>EnviarComentario(int id, string comentario)
         {
             try
             {
