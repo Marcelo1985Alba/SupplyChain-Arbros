@@ -8,13 +8,11 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Shared
 {
-    [Table("Semaforo")]
-    public class Semaforo : EntityBase<int>
+    [Table("PRESUPUESTO_MOTIVOS")]
+    public class MotivosPresupuesto : EntityBase<int>
     {
-        //public int ID { get; set; }
-        public string COLOR { get; set; }
-        public int? ASIGNA { get; set; } = 0;
+        //public int Id { get; set; }
+        public string Motivo { get; set; } 
+
     }
-
-
 }

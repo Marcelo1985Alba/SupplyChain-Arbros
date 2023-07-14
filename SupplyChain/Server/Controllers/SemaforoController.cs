@@ -37,7 +37,7 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("{color}")]
         public async Task<Semaforo> GetSemaforo(string color)
         {
-            var sem = await _semaforoRepository.Obtener( s=> s.COLOR == color ).FirstOrDefaultAsync();
+            var sem = await _semaforoRepository.Obtener( s=> s.COLOR == color).FirstOrDefaultAsync();
             
             return sem;
         }

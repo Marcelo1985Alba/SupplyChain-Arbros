@@ -31,11 +31,14 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         [Inject] public IJSRuntime Js { get; set; }
         [Inject] public PresupuestoService PresupuestoService { get; set; }
         [Inject] public SemaforoService SemaforoService { get; set; }
+        [Inject] public MotivosPresupuestoService  MotivosPresupuestoService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
         [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
         [Parameter] public Semaforo Semaforo { get; set; } = new();
         [Parameter] public Presupuesto Presupuesto { get; set; } = new();
+        [Parameter] public MotivosPresupuesto MotivosPresupuesto{ get; set; } = new();
         [Parameter] public EventCallback<Semaforo> OnSelectedChanged { get; set; }
+        [Parameter] public EventCallback<MotivosPresupuesto> OnSelectedMotivos { get; set; }
 
         public AuthenticationState authState;
         protected SfGrid<vPresupuestos> refGrid;
@@ -49,6 +52,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected List<vPresupuestos> Presupuestos = new();
         protected List<Semaforo> datasemaforo = new List<Semaforo>();
         protected List<Presupuesto> datapresupuesto = new List<Presupuesto>();
+        protected List<MotivosPresupuesto> datamotivospresupuesto = new List<MotivosPresupuesto>();
         protected bool SpinnerVisible = true;
         protected bool SpinnerVisiblePresupuesto = false;
 
@@ -59,7 +63,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             new ItemModel { Text = "Agregar", Type = ItemType.Button, Id ="Agregar"},
             new ItemModel { Text = "Editar", Type = ItemType.Button, Id ="Editar"},
             new ItemModel { Text = "Eliminar", Type = ItemType.Button, Id ="Eliminar"},
-            new ItemModel { Text = "Imprimir", TooltipText = "Imprimir presupuesto, codiciones comerciales y datasheet", PrefixIcon = "e-print", Id = "Imprimir", Type = ItemType.Button },
+            new ItemModel { Text = "Imprimir", TooltipText = "Imprimir presupuesto, condiciones comerciales y datasheet", PrefixIcon = "e-print", Id = "Imprimir", Type = ItemType.Button },
             //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
             "ExcelExport",
             new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh", Type = ItemType.Button},
@@ -76,6 +80,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         {
             MainLayout.Titulo = "Presupuestos";
             await GetSemaforo();
+            await GetMotivos();
             await GetPresupuestos(TipoFiltro.Pendientes);
             SpinnerVisible = false;
 
@@ -87,6 +92,10 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             
         }
 
+        public async Task Motivos(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string,MotivosPresupuesto> args)
+        {
+            var motivos = await PresupuestoService.EnviarMotivos(presup.Id, args.Value);
+        }
         public async Task GuardarComentario(int id, string comentario)
         {
             try
@@ -122,13 +131,31 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             var response = await SemaforoService.Get();
             if (response.Error)
             {
-                await ToastMensajeError("Erro al obtener un color.");
+                await ToastMensajeError("Error al obtener un color.");
             }
             else
             {
                 datasemaforo = response.Response;
             }
         }
+
+        protected async Task GetMotivos()
+        {
+            
+            {
+                var response = await MotivosPresupuestoService.Get();
+                if (response.Error)
+                {
+                    await ToastMensajeError("Error al obtener un motivo.");
+                }
+                else
+                {
+                    datamotivospresupuesto = response.Response;
+                }
+            }
+            
+        }
+
 
         //protected async Task OnActionBeginHandler(ActionEventArgs<vPresupuestos> args)
         //{

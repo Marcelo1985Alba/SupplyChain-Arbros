@@ -26,14 +26,19 @@ namespace SupplyChain.Client.HelperService
         }
 
         
-        public async Task<HttpResponseWrapper<List<Presupuesto>>> ActualizarColor(int numpreupuesto, string color)
+        public async Task<HttpResponseWrapper<List<Presupuesto>>> ActualizarColor(int numpresupuesto, string color)
         {
-            return await Http.GetFromJsonAsync<List<Presupuesto>>($"api/Presupuestos/ActualizarColor/{numpreupuesto}/{color}");
+            return await Http.GetFromJsonAsync<List<Presupuesto>>($"api/Presupuestos/ActualizarColor/{numpresupuesto}/{color}");
         }
 
-        public async Task<HttpResponseWrapper<List<Presupuesto>>> EnviarComentario(int numpreupuesto, string comentario)
+        public async Task<HttpResponseWrapper<List<Presupuesto>>> EnviarComentario(int numpresupuesto, string comentario)
         {
-            return await Http.GetFromJsonAsync<List<Presupuesto>>($"api/Presupuestos/EnviarComentario/{numpreupuesto}/{comentario}");
+            return await Http.GetFromJsonAsync<List<Presupuesto>>($"api/Presupuestos/EnviarComentario/{numpresupuesto}/{comentario}");
+        }
+
+        public async Task<HttpResponseWrapper<List<Presupuesto>>> EnviarMotivos(int numpresupuesto, string motivo)
+        {
+            return await Http.GetFromJsonAsync<List<Presupuesto>>($"api/Presupuestos/EnviarMotivos/{numpresupuesto}/{motivo}");
         }
 
         protected async Task<HttpResponseWrapper<List<PresupuestoAnterior>>> GetPresupuestosAnteriores()

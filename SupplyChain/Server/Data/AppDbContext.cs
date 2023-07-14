@@ -36,6 +36,7 @@ namespace SupplyChain
         public virtual DbSet<ClienteExterno> ClientesExternos { get; set; }
         //MODULO VENTA
         public DbSet<Semaforo>Semaforo { get; set; }
+        public DbSet<MotivosPresupuesto>MotivosPresupuestos{ get; set; }
 
         //MODULO LOGÍSTICA
         public DbSet<PedCli> PedCli { get; set; }

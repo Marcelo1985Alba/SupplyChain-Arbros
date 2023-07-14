@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace SupplyChain.Server.Controllers
-{
+{ 
     [Route("api/[controller]")]
     [ApiController]
     public class PresupuestosController : ControllerBase
@@ -148,15 +148,30 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
+        
+        [HttpGet("EnviarMotivos/{id}/{motivo}")]
+        public async Task<ActionResult<Presupuesto>>EnviarMotivos(int id, string motivo)
+        {
+            try
+            {
+                var lista = await _presupuestoRepository.EnviarMotivos(id, motivo);
+                return Ok(lista);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         [HttpGet("EnviarComentario/{id}/{comentario}")]
-        public async Task<ActionResult<IEnumerable<Presupuesto>>>EnviarComentario(int id, string comentario)
+        public async Task<ActionResult<IEnumerable<Presupuesto>>> EnviarComentario(int id, string comentario)
         {
             try
             {
                 var lista = await _presupuestoRepository.EnviarComentario(id, comentario);
                 return Ok(lista);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex);
             }
