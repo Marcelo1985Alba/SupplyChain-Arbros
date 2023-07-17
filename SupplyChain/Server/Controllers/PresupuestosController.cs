@@ -1,21 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using SupplyChain.Client.Pages.Ventas._3_Presupuestos;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace SupplyChain.Server.Controllers
-{
+{ 
     [Route("api/[controller]")]
     [ApiController]
     public class PresupuestosController : ControllerBase
     {
+        private string CadenaConexionSQL = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build().GetConnectionString("DefaultConnection");
         private readonly PresupuestoAnteriorRepository _presupuestoAnteriorRepository;
         private readonly PresupuestoRepository _presupuestoRepository;
         private readonly GeneraRepository _generaRepository;
@@ -96,7 +101,7 @@ namespace SupplyChain.Server.Controllers
 
             return CreatedAtAction("GetPresupuesto", new { id = presupuesto.Id }, presupuesto);
         }
-
+        
         [HttpPost("PostFromSolicitud")]
         public async Task<ActionResult<Presupuesto>> PostFromSolicitud(Presupuesto presupuesto)
         {
@@ -122,6 +127,49 @@ namespace SupplyChain.Server.Controllers
                 await _presupuestoRepository.AgregarEliminarActualizarDetalles(presupuesto.Items);
                 await _presupuestoRepository.ActualizarCalculoConPresupuestoByIdCalculo(presupuesto.Id);
                 return Ok(presupuesto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("ActualizarColor/{id}/{color}")]
+        public async Task<ActionResult<Presupuesto>>ActualizarColor( int id, string color)
+        {
+            try
+            {
+                var lista = await _presupuestoRepository.ActualizarColor(id, color);
+                return Ok(lista);
+            } 
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        
+        [HttpGet("EnviarMotivos/{id}/{motivo}")]
+        public async Task<ActionResult<Presupuesto>>EnviarMotivos(int id, string motivo)
+        {
+            try
+            {
+                var lista = await _presupuestoRepository.EnviarMotivos(id, motivo);
+                return Ok(lista);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("EnviarComentario/{id}/{comentario}")]
+        public async Task<ActionResult<IEnumerable<Presupuesto>>> EnviarComentario(int id, string comentario)
+        {
+            try
+            {
+                var lista = await _presupuestoRepository.EnviarComentario(id, comentario);
+                return Ok(lista);
             }
             catch (Exception ex)
             {
@@ -159,5 +207,8 @@ namespace SupplyChain.Server.Controllers
                 return BadRequest("Error al eliminar Presupuesto " + ex.Message);
             }
         }
+
+       
+
     }
 }

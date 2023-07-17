@@ -14,15 +14,31 @@ using System.Timers;
 
 namespace SupplyChain.Client.HelperService
 {
-    public class PresupuestoService : BaseService<Presupuesto,int>
+    public class PresupuestoService : BaseService<Presupuesto, int>
     {
         private readonly IRepositoryHttp Http;
         private readonly IJSRuntime _js;
         private const string API = "api/Presupuestos";
-        public PresupuestoService(IRepositoryHttp Http, IJSRuntime js):base(Http, API)
+        public PresupuestoService(IRepositoryHttp Http, IJSRuntime js) : base(Http, API)
         {
             this.Http = Http;
             this._js = js;
+        }
+
+        
+        public async Task<HttpResponseWrapper<List<Presupuesto>>> ActualizarColor(int numpresupuesto, string color)
+        {
+            return await Http.GetFromJsonAsync<List<Presupuesto>>($"api/Presupuestos/ActualizarColor/{numpresupuesto}/{color}");
+        }
+
+        public async Task<HttpResponseWrapper<List<Presupuesto>>> EnviarComentario(int numpresupuesto, string comentario)
+        {
+            return await Http.GetFromJsonAsync<List<Presupuesto>>($"api/Presupuestos/EnviarComentario/{numpresupuesto}/{comentario}");
+        }
+
+        public async Task<HttpResponseWrapper<List<Presupuesto>>> EnviarMotivos(int numpresupuesto, string motivo)
+        {
+            return await Http.GetFromJsonAsync<List<Presupuesto>>($"api/Presupuestos/EnviarMotivos/{numpresupuesto}/{motivo}");
         }
 
         protected async Task<HttpResponseWrapper<List<PresupuestoAnterior>>> GetPresupuestosAnteriores()

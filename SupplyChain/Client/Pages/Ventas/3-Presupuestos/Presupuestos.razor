@@ -1,8 +1,8 @@
-﻿
-@page "/ventas/presupuestos"
+﻿@page "/ventas/presupuestos"
 @attribute [Authorize(Roles = "Administrador, Ventas")]
 @inherits PresupuestosBase
-
+@using Syncfusion.Blazor.Grids;
+@using Syncfusion.Blazor.DropDowns;
 
 <div class="row">
     <div class="col-12">
@@ -14,28 +14,99 @@
         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="false" AllowResizing="true"
                 @ref="refGrid" DataSource="@Presupuestos" Width="100%"
                 AllowExcelExport="true" AllowGrouping="true" ID="grdPresupuesto"
-                AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
+                AllowSorting="true" AllowPaging="true" AllowSelection="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
-            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" Mode="Syncfusion.Blazor.Grids.SelectionMode.Both"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
-            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"
+            <GridEvents OnActionComplete="OnActionCompleteHandler"
                         OnToolbarClick="OnToolbarHandler"
+                        RowSelected="RowSelectHandler" 
+                        CellSelected="CellSelectHandler"
                         TValue="vPresupuestos"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" NewRowPosition="NewRowPosition.Top"
-                              Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
-            </GridEditSettings>
+                 Mode="EditMode.Batch"></GridEditSettings>
+            
             <GridColumns>
                 @*<GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>*@
-                <GridColumn Field=@nameof(vPresupuestos.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.Fecha) HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.TOTAL) HeaderText="Total" TextAlign="TextAlign.Left" Width="150px" Format="N2"></GridColumn>
-                <GridColumn Field=@nameof(vPresupuestos.USUARIO) HeaderText="Usuario" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="100px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.Fecha) HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="120px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.TOTAL) HeaderText="Total" TextAlign="TextAlign.Left" Width="150px" Format="N2" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.USUARIO) HeaderText="Usuario" TextAlign="TextAlign.Left" Width="120px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.COMENTARIO) HeaderText="Comentario" TextAlign="TextAlign.Left" Width="190px">
+                    <Template>
 
+                        @{
+                           var presup = context as vPresupuestos;
+                          }
+                        <p>
+                            @presup.COMENTARIO
+                        </p>
+
+                        
+                    </Template>
+                    <EditTemplate>
+                       @{
+                            var presup = context as vPresupuestos;
+                        }
+                        @*<p>
+                            @presup.COMENTARIO
+                        </p>*@
+                        <SfTextBox Placeholder="Comentario" Width="100px" @bind-Value="presup.COMENTARIO">@presup.COMENTARIO</SfTextBox>
+                        
+                        <Syncfusion.Blazor.Buttons.SfButton Content="Guardar" @onclick="@(()=> GuardarComentario(presup.Id, presup.COMENTARIO))">GUARDAR</Syncfusion.Blazor.Buttons.SfButton>
+                    </EditTemplate>
+                    
+                </GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.COLOR) HeaderText="Semaforo" EditType="EditType.DropDownEdit" Width="120px">
+                    <EditTemplate>
+                        @{
+                            var presup = context as vPresupuestos;
+                            //Semaforo Value = (context as Semaforo);
+                            //if(Value.ASIGNA == 1)
+                            //{
+                            //    <span class="dotlightred"></span>
+                            //}
+                            //else if(Value.ASIGNA == 2)
+                            //{
+                            //    <span class="dotlightyellow"></span>
+
+                            //}
+                            //else if(Value.ASIGNA == 3)
+                            //{
+                            //    <span class="dotlightgreen"></span>
+
+                            //}
+                        }
+
+                        <SfDropDownList TValue="string" TItem="Semaforo" DataSource="@datasemaforo" @bind-Value="presup.COLOR">
+                            <DropDownListFieldSettings Text="COLOR" Value="COLOR"></DropDownListFieldSettings>
+                            <DropDownListEvents TItem="Semaforo" TValue="string" ValueChange="Actualizar"></DropDownListEvents>
+                        </SfDropDownList>
+                           
+                    </EditTemplate>
+                </GridColumn>
+                
+                <GridColumn Field=@nameof(vPresupuestos.MOTIVO) HeaderText="Motivo" EditType="EditType.DropDownEdit" Width="160px">
+                    <EditTemplate>
+                        @{
+                            var presup = context as vPresupuestos;
+                        }
+
+                        <SfDropDownList TValue="string" TItem="MotivosPresupuesto" DataSource="@datamotivospresupuesto" @bind-Value="presup.MOTIVO">
+                            <DropDownListFieldSettings Text="Motivo" Value="Motivo"></DropDownListFieldSettings>
+                            <DropDownListEvents TItem="MotivosPresupuesto" TValue="string" ValueChange="Motivos"></DropDownListEvents>
+                        </SfDropDownList>
+
+                    </EditTemplate>
+                </GridColumn>
+            
             </GridColumns>
+
+
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
         </SfGrid>
     </div>
@@ -43,19 +114,59 @@
     <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" Label="Generando Presupuesto..."
                @bind-Visible="@SpinnerVisiblePresupuesto"></SfSpinner>
 
-    <FormPresupuesto @ref="refFormPresupuesto" Presupuesto="@PresupuestoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
-                     OnGuardar="@(async(s)=> await Guardar(s))"></FormPresupuesto>
+     <FormPresupuesto @ref="refFormPresupuesto" Presupuesto="@PresupuestoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
+    OnGuardar="@(async(s)=> await Guardar(s))"></FormPresupuesto>
 
     <ConfirmacionDialog @ref="ConfirmacionEliminarDialog" OnConfirm="@(async () => await Eliminar())">
-    <HeaderTempalte>
+        <HeaderTempalte>
 
-        <p> <strong>Eliminacion Presupuesto @PresupuestoSeleccionado?.Id</strong></p>
-        <hr />
-    </HeaderTempalte>
-    <ContentTemplate>
-        <p>Está seguro que desea eliminar el Presupuesto <strong>@PresupuestoSeleccionado?.Id</strong> ?</p>
-    </ContentTemplate>
-</ConfirmacionDialog>
+            <p> <strong>Eliminacion Presupuesto @PresupuestoSeleccionado?.Id</strong></p>
+            <hr />
+        </HeaderTempalte>
+        <ContentTemplate>
+            <p>Está seguro que desea eliminar el Presupuesto <strong>@PresupuestoSeleccionado?.Id</strong> ?</p>
+        </ContentTemplate>
+    </ConfirmacionDialog>
 
 
 </div>
+
+<style>
+    .dotlithgreen {
+        background-color: lightgreen;
+        border-width: 2px;
+        border-style: solid;
+        border-color: darkgreen;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        display: flex;
+        margin: auto;
+    }
+
+     .dotlithyellow {
+        background-color: yellow;
+        border-width: 2px;
+        border-style: solid;
+        border-color: yellowgreen;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        display: flex;
+        margin: auto;
+    }
+
+    .dotlithred {
+        background-color: red;
+        border-width: 2px;
+        border-style: solid;
+        border-color: darkred;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        display: flex;
+        margin: auto;
+    }
+
+   
+</style>

@@ -11,6 +11,7 @@ namespace SupplyChain.Shared
     [Table("PRESUPUESTO_ENCABEZADO")]
     public class Presupuesto : EntityBase<int>
     {
+        
         public DateTime FECHA { get; set; } = DateTime.Now;
         [Required(ErrorMessage ="* La Moneda es requerida")]
         public string MONEDA { get; set; } = "DOLARES";
@@ -35,6 +36,10 @@ namespace SupplyChain.Shared
         public string INGENIERIA { get; set; } = "";
         public string REVISION { get; set; } = "";
         public string NRODOC { get; set; } = "";
+        public string COMENTARIO { get; set; }
+        public string COLOR { get; set; }
+        public int? ASIGNA { get; set; } = 0;
+        public string Motivo { get; set; }
 
         [ValidateComplexType]
         public virtual List<PresupuestoDetalle> Items { get; set; } = new();

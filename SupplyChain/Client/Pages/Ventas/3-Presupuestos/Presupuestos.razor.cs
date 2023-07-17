@@ -1,62 +1,116 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Pages.Ventas._4_Solicitudes;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
+using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
+using Syncfusion.XlsIO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
+
 
 namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 {
     public class PresupuestosBase : ComponentBase
     {
+        [Inject] public IJSRuntime Js { get; set; }
         [Inject] public PresupuestoService PresupuestoService { get; set; }
+        [Inject] public SemaforoService SemaforoService { get; set; }
+        [Inject] public MotivosPresupuestoService  MotivosPresupuestoService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
         [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
+        [Parameter] public Semaforo Semaforo { get; set; } = new();
+        [Parameter] public Presupuesto Presupuesto { get; set; } = new();
+        [Parameter] public MotivosPresupuesto MotivosPresupuesto{ get; set; } = new();
+        [Parameter] public EventCallback<Semaforo> OnSelectedChanged { get; set; }
+        [Parameter] public EventCallback<MotivosPresupuesto> OnSelectedMotivos { get; set; }
+
         public AuthenticationState authState;
         protected SfGrid<vPresupuestos> refGrid;
+        protected SfGrid<FormPresupuesto> refGridForm;
+        protected SfGrid<Presupuestos> refGridPre;
         protected SfSpinner refSpinner;
         protected SfToast ToastObj;
         protected FormPresupuesto refFormPresupuesto;
         protected Presupuesto PresupuestoSeleccionado = new();
+        protected vPresupuestos presup = new();
         protected List<vPresupuestos> Presupuestos = new();
-
+        protected List<Semaforo> datasemaforo = new List<Semaforo>();
+        protected List<Presupuesto> datapresupuesto = new List<Presupuesto>();
+        protected List<MotivosPresupuesto> datamotivospresupuesto = new List<MotivosPresupuesto>();
         protected bool SpinnerVisible = true;
         protected bool SpinnerVisiblePresupuesto = false;
 
         protected bool popupFormVisible = false;
         protected List<Object> Toolbaritems = new()
         {
-            "Search",
-            //new ItemModel { Text = "Add", TooltipText = "Agregar un nuevo Presupuesto", PrefixIcon = "e-add", Id = "Add" },
-            "Add",
-            "Edit",
-            "Delete",
-            new ItemModel { Text = "Imprimir", TooltipText = "Imprimir presupuesto, codiciones comerciales y datasheet", PrefixIcon = "e-print", Id = "Imprimir", Type = ItemType.Button },
+
+            new ItemModel { Text = "Agregar", Type = ItemType.Button, Id ="Agregar"},
+            new ItemModel { Text = "Editar", Type = ItemType.Button, Id ="Editar"},
+            new ItemModel { Text = "Eliminar", Type = ItemType.Button, Id ="Eliminar"},
+            new ItemModel { Text = "Imprimir", TooltipText = "Imprimir presupuesto, condiciones comerciales y datasheet", PrefixIcon = "e-print", Id = "Imprimir", Type = ItemType.Button },
             //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
             "ExcelExport",
             new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh", Type = ItemType.Button},
             new ItemModel { Text = "Ver Todos", Type = ItemType.Button, Id = "VerTodos", PrefixIcon = "e-icons e-eye" },
             new ItemModel { Text = "Ver Pendientes", Type = ItemType.Button, Id = "VerPendientes" },
         };
-
+    
         protected List<string> Monedas = new() { "PESOS", "DOLARES" };
+
 
         protected PresupuestoAnterior presupuesto = new();
         protected ConfirmacionDialog ConfirmacionEliminarDialog;
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Presupuestos";
+            await GetSemaforo();
+            await GetMotivos();
             await GetPresupuestos(TipoFiltro.Pendientes);
             SpinnerVisible = false;
+
+        }
+
+        public async Task Actualizar(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, Semaforo> args)
+        {
+            var presupuesto = await PresupuestoService.ActualizarColor(presup.Id, args.Value);
+            
+        }
+
+        public async Task Motivos(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string,MotivosPresupuesto> args)
+        {
+            var motivos = await PresupuestoService.EnviarMotivos(presup.Id, args.Value);
+        }
+        public async Task GuardarComentario(int id, string comentario)
+        {
+            try
+            {
+                var presup = await PresupuestoService.EnviarComentario(id, comentario);
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+        public void RowSelectHandler(RowSelectEventArgs<vPresupuestos> args)
+        {
+            presup = args.Data;
         }
 
         protected async Task GetPresupuestos(TipoFiltro tipoFiltro = TipoFiltro.Todos )
@@ -72,72 +126,113 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             }
         }
 
-        protected async Task OnActionBeginHandler(ActionEventArgs<vPresupuestos> args)
+        protected async Task GetSemaforo()
         {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
-                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit ||
-                args.RequestType == Syncfusion.Blazor.Grids.Action.Delete )
+            var response = await SemaforoService.Get();
+            if (response.Error)
             {
-                args.Cancel = true;
-                args.PreventRender = false;
+                await ToastMensajeError("Error al obtener un color.");
             }
-
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
+            else
             {
-                SpinnerVisible = true;
-                PresupuestoSeleccionado = new();
-                PresupuestoSeleccionado.DIRENT = "";
-                await refFormPresupuesto.ShowAsync(0);
-                popupFormVisible = true;
-                SpinnerVisible = false;
-            }
-
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
-            {
-                SpinnerVisible = true;
-                var response = await PresupuestoService.GetById(args.Data.Id);
-                if (response.Error)
-                {
-                    await ToastMensajeError();
-                }
-                else
-                {
-                    PresupuestoSeleccionado = response.Response;
-                    await refFormPresupuesto.ShowAsync(args.Data.Id);
-                    popupFormVisible = true;
-                }
-                SpinnerVisible = false;
-            }
-
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
-            {
-                if (args.RowData.TIENEPEDIDO)
-                {
-                    await ToastMensajeError("El presupuesto tiene pedido.\r\nNose puede eliminar.");
-                }
-                else
-                {
-                    PresupuestoSeleccionado.Id = args.RowData.Id;
-                    await ConfirmacionEliminarDialog.ShowAsync();
-                }
-                
+                datasemaforo = response.Response;
             }
         }
 
+        protected async Task GetMotivos()
+        {
+            
+            {
+                var response = await MotivosPresupuestoService.Get();
+                if (response.Error)
+                {
+                    await ToastMensajeError("Error al obtener un motivo.");
+                }
+                else
+                {
+                    datamotivospresupuesto = response.Response;
+                }
+            }
+            
+        }
+
+
+        //protected async Task OnActionBeginHandler(ActionEventArgs<vPresupuestos> args)
+        //{
+        //    if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
+        //        //args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit ||
+        //        args.RequestType == Syncfusion.Blazor.Grids.Action.Delete )
+        //    {
+        //        args.Cancel = true;
+        //        args.PreventRender = false;
+        //    }
+
+        //    if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
+        //    {
+        //        SpinnerVisible = true;
+        //        PresupuestoSeleccionado = new();
+        //        PresupuestoSeleccionado.DIRENT = "";
+        //        await refFormPresupuesto.ShowAsync(0);
+        //        popupFormVisible = true;
+        //        SpinnerVisible = false;
+        //    }
+
+        //if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+        //{
+        //    SpinnerVisible = true;
+        //    var response = await PresupuestoService.GetById(args.Data.Id);
+        //    if (response.Error)
+        //    {
+        //        await ToastMensajeError();
+        //    }
+        //    else
+        //    {
+        //        PresupuestoSeleccionado = response.Response;
+        //        await refFormPresupuesto.ShowAsync(args.Data.Id);
+        //        popupFormVisible = true;
+        //    }
+        //    SpinnerVisible = true;
+        //}
+
+        //    if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+        //    {
+        //        if (args.RowData.TIENEPEDIDO)
+        //        {
+        //            await ToastMensajeError("El presupuesto tiene pedido.\r\nNose puede eliminar.");
+        //        }
+        //        else
+        //        {
+        //            PresupuestoSeleccionado.Id = args.RowData.Id;
+        //            await ConfirmacionEliminarDialog.ShowAsync();
+        //        }
+
+        //    }
+        //}
+
+        protected async Task CellSelectHandler(CellSelectEventArgs<vPresupuestos> args)
+        {
+            var CellValue = await refGrid.GetSelectedRowCellIndexesAsync();
+
+            var CurrentEditRow = CellValue[0].Item1;
+            var CurrentEditCell = (int)CellValue[0].Item2;
+
+            var fields = await refGrid.GetColumnFieldNames();
+            await refGrid.EditCellAsync(CurrentEditRow, fields[CurrentEditCell]);
+
+        }
         protected async Task OnActionCompleteHandler(ActionEventArgs<vPresupuestos> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
-                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit ||
+                //args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit ||
                 args.RequestType == Syncfusion.Blazor.Grids.Action.Delete )
             {
                 args.Cancel = true;
                 args.PreventRender = false;
             }
 
-
         }
 
-        protected async Task OnToolbarHandler(ClickEventArgs args)
+        protected async Task OnToolbarHandler(ClickEventArgs  args)
         {
             if (args.Item.Id == "refresh")
             {
@@ -168,8 +263,56 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 }
                 
             }
+            else if (args.Item.Id == "Editar")
+            {
+                SpinnerVisible = true;
+                var seleccionado = await refGrid.GetSelectedRecordsAsync();
+               if(seleccionado.Count > 0)
+                {
+                    var response = await PresupuestoService.GetById(seleccionado[0].Id);
+
+                    if (response.Error)
+                    {
+                        await ToastMensajeError();
+                    }
+                    else
+                    {
+                        PresupuestoSeleccionado = response.Response;
+                        await refFormPresupuesto.ShowAsync(seleccionado[0].Id);
+                        popupFormVisible = true;
+                    }
+                    SpinnerVisible = true;
+
+                }
+            }
+            else if (args.Item.Id == "Agregar")
+            {
+                SpinnerVisible = true;
+                PresupuestoSeleccionado = new();
+                PresupuestoSeleccionado.DIRENT = "";
+                await refFormPresupuesto.ShowAsync(0);
+                popupFormVisible = true;
+                SpinnerVisible = false;
+
+            }
+            else if (args.Item.Id == "Eliminar")
+            {
+              var seleccionado = await PresupuestoService.TienePedido(PresupuestoSeleccionado.Id);
+                   
+                if (PresupuestoSeleccionado.TienePedido)
+                {
+                   await ToastMensajeError("El presupuesto tiene pedido.\r\nNose puede eliminar.");
+                }
+                else
+                {
+                  PresupuestoSeleccionado.Id = presup.Id;
+                  await ConfirmacionEliminarDialog.ShowAsync();
+                }
+            }
+
         }
 
+   
         protected async Task Eliminar()
         {
             SpinnerVisible = true;
@@ -221,6 +364,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                         Fecha = presupuesto.FECHA,
                         MONEDA = presupuesto.MONEDA,
                         TOTAL = presupuesto.TOTAL,
+                        COMENTARIO = presupuesto.COMENTARIO,
                         USUARIO = auth.User.Identity.Name
                     };
                     Presupuestos.Add(nuevoPresup);
@@ -235,6 +379,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                     presupActualizado.DES_CLI = presupuesto.DES_CLI;
                     presupActualizado.TOTAL = presupuesto.TOTAL;
                     presupActualizado.USUARIO = presupuesto.USUARIO;
+                    presupActualizado.COMENTARIO = presupuesto.COMENTARIO;
                 }
 
 
