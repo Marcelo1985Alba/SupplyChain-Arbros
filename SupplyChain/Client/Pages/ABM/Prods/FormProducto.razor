@@ -32,7 +32,8 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label>Codigo:</label>
-                                        <SfTextBox ID="Codigo" @bind-Value="@(Producto.Id)" Enabled="@Producto.ESNUEVO" Placeholder="Codigo"></SfTextBox>
+                                        <SfTextBox ID="Codigo" @bind-Value="@(Producto.Id)" Placeholder="Codigo"
+                                        Readonly=@(!Producto.ESNUEVO)></SfTextBox>
                                         <ValidationMessage For="@(()=> Producto.Id)"></ValidationMessage>
                                     </div>
                                     <div class="form-group col-md-6">
@@ -69,7 +70,8 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label>Factor de conversion:</label>
-                                        <SfNumericTextBox ID="Factor de conversion" @bind-Value="@(Producto.CG_DENSEG)" Placeholder="Factor de conversion"></SfNumericTextBox>
+                                        <SfNumericTextBox ID="Factor de conversion" @bind-Value="@(Producto.CG_DENSEG)" Format="N8"
+                                                          Placeholder="Factor de conversion"></SfNumericTextBox>
                                     </div>
                                 </div>
 

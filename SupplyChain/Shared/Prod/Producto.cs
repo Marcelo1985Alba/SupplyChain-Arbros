@@ -19,6 +19,7 @@ namespace SupplyChain.Shared.Models
         [ColumnaGridViewAtributo(Name = "Unidad stock"), Required(ErrorMessage = "La unidad es requerida")]
         public string UNID { get; set; }
         [ColumnaGridViewAtributo(Name = "Factor de conversión")]
+        [Column(TypeName = "decimal(18, 8)")]
         public decimal? CG_DENSEG { get; set; }
         [ColumnaGridViewAtributo(Name = "Unidad comercial")]
         public string UNIDSEG { get; set; } = "";
