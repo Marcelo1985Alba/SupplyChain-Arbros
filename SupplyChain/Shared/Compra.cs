@@ -34,6 +34,7 @@ namespace SupplyChain.Shared.Models
         [Display(Name = "Unidad compra")]
         public string UNID1 { get; set; }
         [Display(Name = "Factor conversión")]
+        [Column(TypeName = "decimal(18, 8)")]
         public decimal? CG_DEN { get; set; }
         [Display(Name = "Precio unidad compra")]
         public decimal? PRECIO { get; set; }
