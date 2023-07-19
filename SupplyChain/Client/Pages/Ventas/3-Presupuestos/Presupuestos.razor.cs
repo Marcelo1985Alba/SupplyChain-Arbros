@@ -59,7 +59,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected bool popupFormVisible = false;
         protected List<Object> Toolbaritems = new()
         {
-
+            "Search",
             new ItemModel { Text = "Agregar", Type = ItemType.Button, Id ="Agregar"},
             new ItemModel { Text = "Editar", Type = ItemType.Button, Id ="Editar"},
             new ItemModel { Text = "Eliminar", Type = ItemType.Button, Id ="Eliminar"},
