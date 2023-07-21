@@ -87,7 +87,7 @@ namespace SupplyChain.Server.Controllers
                 dbPlanificacion = xConexionSQL
                     .EjecutarSQL(String.Format("EXEC NET_PCP_Despiece_Producto '{0}', {1}, {2}", cg_prod, formula, cantidad));
 
-                Compra[] insumosproveedor = await _context.Compras.ToArrayAsync();
+                
                         
                 ConexionSQL xConexionSQL2 = new ConexionSQL(CadenaConexionSQL);
                 string xSQL = "SELECT id, COTIZACION, FEC_ULT_ACT FROM ARBROS.dbo.ERP_COTIZACIONES";
@@ -98,8 +98,10 @@ namespace SupplyChain.Server.Controllers
                     COTIZACION = m.Field<double>("COTIZACION"),
                     FEC_ULT_ACT = m.Field<DateTime?>("FEC_ULT_ACT"),
                 }).ToList<Cotizaciones>();
-                
-                List<DespiecePlanificacion> xLista = dbPlanificacion.AsEnumerable().Select(m => new DespiecePlanificacion()
+
+
+                List<DespiecePlanificacion> xLista = dbPlanificacion.AsEnumerable()
+                    .Select(m => new DespiecePlanificacion()
                 {
                     CG_PROD = m.Field<string>("CG_PROD"),
                     CG_SE = m.Field<string>("CG_SE"),
@@ -153,7 +155,10 @@ namespace SupplyChain.Server.Controllers
                             {
                                 if(!string.IsNullOrWhiteSpace(mat.Cg_Mat))
                                 {
-                                    Compra aux = insumosproveedor.Where(s => s.CG_MAT.Trim() == mat.Cg_Mat.Trim()).MaxBy(s => s.FE_EMIT);
+                                    //solo ordenes de compra
+                                    Compra aux = await _context.Compras.Where(s => s.CG_MAT.Trim() == mat.Cg_Mat.Trim() && s.NUMERO > 0)
+                                        .OrderByDescending(s => s.FE_EMIT).FirstOrDefaultAsync()
+                                        ;
                                     if (aux != null)
                                     {
                                         if (aux.MONEDA.Trim().ToLower() == "dolares")
@@ -173,7 +178,8 @@ namespace SupplyChain.Server.Controllers
                         }
                         else if(!string.IsNullOrWhiteSpace(item.CG_MAT))
                         {
-                            Compra aux = insumosproveedor.Where(s => s.CG_MAT.Trim() == item.CG_MAT.Trim()).MaxBy(s => s.FE_EMIT);
+                            Compra aux = await _context.Compras.Where(s => s.CG_MAT.Trim() == item.CG_MAT.Trim() && s.NUMERO > 0)
+                                .OrderByDescending(s => s.FE_EMIT).FirstOrDefaultAsync();
                             if (aux != null)
                             {
                                 if (aux.MONEDA.Trim().ToLower() == "dolares")
@@ -209,7 +215,8 @@ namespace SupplyChain.Server.Controllers
                 string xSQLCommandString = "SELECT CG_FORM, IIF(ACTIVO != 'N',STR(CG_FORM) + ' - ACTIVA',STR(CG_FORM)) AS DES_FORM, ACTIVO, MAX(REVISION) AS REVISION " +
                                        "FROM FORM2 WHERE CG_PROD = '" + cg_prod.Trim() + "' GROUP BY CG_FORM, ACTIVO";
                 dbPlanificacion = xConexionSQL.EjecutarSQL(xSQLCommandString);
-                List<FormulaPlanificacion> xLista = dbPlanificacion.AsEnumerable().Select(m => new FormulaPlanificacion()
+                List<FormulaPlanificacion> xLista = dbPlanificacion.AsEnumerable()
+                    .Select(m => new FormulaPlanificacion()
                 {
                     CG_FORM = m.Field<int>("CG_FORM"),
                     DES_FORM = m.Field<string>("DES_FORM"),
