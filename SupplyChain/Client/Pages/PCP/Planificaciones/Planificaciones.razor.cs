@@ -294,17 +294,15 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
         {
             VisibleProperty = true;
             listaCerradasAnuladas = await Http.GetFromJsonAsync<List<Planificacion>>($"api/Planificacion/OrdenesCerradasYAnuladas/{CantidadMostrar}");
-            IsVisible3 = true;
             VisibleProperty = false;
-            await refDialogCerradasAnuladas.Show(true);
+            if (Grid4 is not null)
+            {
+                await Grid4?.AutoFitColumnsAsync();
+            }
+            
+            await refDialogCerradasAnuladas.ShowAsync(true);
         }
 
-        public async Task DataBoundHandlerOFCerradas()
-        {
-            Grid4.PreventRender();
-            await Grid4?.AutoFitColumns();
-            VisibleProperty = false;
-        }
 
         public async Task ActionBeginOFCerradas(ActionEventArgs<Planificacion> args)
         {
@@ -459,12 +457,11 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
             await Grid4.ResetPersistData();
         }
 
-        protected async Task OnChangeEstadoCarga(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int,EstadosCargaMaquina> args)
+        protected async Task OnChangeEstadoCarga(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int,EstadosCargaMaquina> args, Planificacion planificacion)
         {
-            int ValorAnterior = 4;
             if (args.ItemData.CG_ESTADO < 4)
             {
-                var response = await Http.PutAsJsonAsync($"api/Planificacion/PutPlanif/{ValorAnterior}", PlanificacionSeleccionadaOFCerrada);
+                var response = await Http.PutAsJsonAsync($"api/Planificacion/RehabilitarOrden", planificacion);
                 if (response.IsSuccessStatusCode)
                 {
                     listaCerradasAnuladas = listaCerradasAnuladas.Where(p => p.CG_ESTADOCARGA > 3)

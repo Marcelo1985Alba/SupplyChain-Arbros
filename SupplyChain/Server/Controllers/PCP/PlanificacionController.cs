@@ -265,6 +265,35 @@ namespace SupplyChain.Server.Controllers
                 return new List<Planificacion>();
             }
         }
+
+
+        [HttpPut("RehabilitarOrden")]
+        public async Task<ActionResult<Planificacion>> RehabilitarOrden(Planificacion pl)
+        {
+            var ordfab = await _context.Programa.Where(p => p.CG_ORDF == pl.CG_ORDF).FirstOrDefaultAsync();
+            if (ordfab is not null)
+            {
+                ordfab.CG_ESTADO = ordfab.CG_ESTADOCARGA;
+                ordfab.CG_ESTADOCARGA = pl.CG_ESTADOCARGA;
+                if (pl.CG_ESTADOCARGA < 4)
+                {
+                    ordfab.FE_CIERRE = null;
+                }
+                
+                
+                _context.Entry(ordfab).State = EntityState.Modified;
+                _context.Entry(ordfab).Property(p=> p.CG_ESTADOCARGA).IsModified = true;
+                _context.Entry(ordfab).Property(p=> p.CG_ESTADO).IsModified = true;
+                _context.Entry(ordfab).Property(p=> p.FE_CIERRE).IsModified = true;
+
+                
+
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok(pl);
+        }
+
         // PUT: api/Planificacion/PutPlanif/{ValorAnterior}
         [HttpPut("PutPlanif/{ValorAnterior}")]
         public async Task<ActionResult<List<Planificacion>>> PutPlanif(int ValorAnterior, Planificacion pl)
@@ -276,19 +305,19 @@ namespace SupplyChain.Server.Controllers
             if (pl.CG_ESTADOCARGA == 0)
             {
                 query = "UPDATE Programa SET CG_ESTADOCARGA = " + pl.CG_ESTADOCARGA +
-                    ",Fe_emit = GETDATE(), CG_ESTADO = " + ValorAnterior + " WHERE (Cg_ordf =" + pl.CG_ORDF +
+                    ",Fe_emit = GETDATE(), CG_ESTADO = " + ValorAnterior + ", CANT = "+ pl.CANT+ " WHERE (Cg_ordf =" + pl.CG_ORDF +
                     " OR Cg_ordfAsoc = " + pl.CG_ORDF + ")";
             }
             else if (pl.CG_ESTADOCARGA == 1)
             {
                 query = "UPDATE Programa SET CG_ESTADOCARGA = " + pl.CG_ESTADOCARGA + 
-                    ",Fe_plan = GETDATE(), CG_ESTADO = " + ValorAnterior + " WHERE (Cg_ordf =" + pl.CG_ORDF +
+                    ",Fe_plan = GETDATE(), CG_ESTADO = " + ValorAnterior + ", CANT = " + pl.CANT + " WHERE (Cg_ordf =" + pl.CG_ORDF +
                  " OR Cg_ordfAsoc = " + pl.CG_ORDF + ")";
             }
             else if (pl.CG_ESTADOCARGA == 2)
             {
                 query = "UPDATE Programa SET CG_ESTADOCARGA = " + pl.CG_ESTADOCARGA +
-                    ",Fe_Firme = GETDATE(), CG_ESTADO = " + ValorAnterior + " WHERE (Cg_ordf =" + pl.CG_ORDF +
+                    ",Fe_Firme = GETDATE(), CG_ESTADO = " + ValorAnterior + ", CANT = " + pl.CANT + " WHERE (Cg_ordf =" + pl.CG_ORDF +
                  " OR Cg_ordfAsoc = " + pl.CG_ORDF + ")";
             }
             else if (pl.CG_ESTADOCARGA == 5)

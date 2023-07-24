@@ -87,7 +87,7 @@
                                             <div class="form-group col-md-6">
                                                 <label>Orden:</label>
                                                 <br />
-                                                <SfNumericTextBox ID="CG_ORDEN" Format="N0" @bind-Value="@(planif.CG_ORDF)" Enabled="false"></SfNumericTextBox>
+                                                <SfNumericTextBox ID="CG_ORDEN" Format="N0" @bind-Value="@(planif.CG_ORDF)" Readonly="true"></SfNumericTextBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
@@ -103,7 +103,7 @@
                                             <div class="form-group col-md-6">
                                                 <label>Fecha de entrega:</label>
                                                 <br />
-                                                <SfDatePicker ID="FE_ENTREGA" @bind-Value="@(planif.FE_ENTREGA)" Enabled="true" Placeholder="Fecha de entrega"></SfDatePicker>
+                                                <SfDatePicker ID="FE_ENTREGA" @bind-Value="@(planif.FE_ENTREGA)" Format="dd/MM/yyyy" Placeholder="Fecha de entrega"></SfDatePicker>
                                             </div>
 
                                             <div class="form-group col-md-6">
@@ -261,7 +261,7 @@
                             <GridColumn Field=@nameof(Planificacion.CANT) Format="N0" HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.CANTFAB) Format="N0" HeaderText="Cantidad fabricada" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.UNID) HeaderText="Unidad" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(Planificacion.FE_ENTREGA) HeaderText="Fecha de Entrega" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.FE_ENTREGA) HeaderText="Fecha de Entrega" TextAlign="TextAlign.Left" Width="110px" Format="dd/MM/yyyy"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.DIASFAB) HeaderText="Días de fabricación" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.CG_FORM) Format="N0" HeaderText="Fórmula" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
 
@@ -275,10 +275,10 @@
                                                            })" />
                                 </GridCommandColumns>
                             </GridColumn>
-                            <GridColumn Field=@nameof(Planificacion.FE_EMIT) HeaderText="Fecha de emisión" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(Planificacion.FE_PLAN) HeaderText="fecha planificada" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(Planificacion.FE_FIRME) HeaderText="Fecha en firme" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(Planificacion.FE_CURSO) HeaderText="Fecha en curso" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.FE_EMIT) HeaderText="Fecha de emisión" TextAlign="TextAlign.Left" Width="110px" Format="dd/MM/yyyy"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.FE_PLAN) HeaderText="fecha planificada" TextAlign="TextAlign.Left" Width="110px" Format="dd/MM/yyyy"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.FE_FIRME) HeaderText="Fecha en firme" TextAlign="TextAlign.Left" Width="110px" Format="dd/MM/yyyy"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.FE_CURSO) HeaderText="Fecha en curso" TextAlign="TextAlign.Left" Width="110px" Format="dd/MM/yyyy"></GridColumn>
                             <GridColumn Field=@nameof(Planificacion.UNIDEQUI) HeaderText="Unid Equi." TextAlign="TextAlign.Left" Width="90px" Format="N2"></GridColumn>
                         </GridColumns>
                         <SfSpinner Type="SpinnerType.Bootstrap" Label="Cargando...." @bind-Visible="@SpinnerVisible"></SfSpinner>
@@ -406,8 +406,7 @@
 </SfDialog>
 
 @*DIALOG PARA ORDENES CERRADAS Y ANULADAS*@
-<SfDialog @ref="refDialogCerradasAnuladas" Width="250px" ShowCloseIcon="true" Visible="false" IsModal="true" 
-          CssClass="dialog" Target="@APPNAME" >
+<SfDialog @ref="refDialogCerradasAnuladas" Width="250px" ShowCloseIcon="true" Visible="false" IsModal="true">
     <DialogTemplates>
         <Header><p>ORDENES CERRADAS Y ANULADAS</p><hr /></Header>
         <Content>
@@ -426,30 +425,29 @@
                 <div class="content-wrapper">
                     <div class="row">
                         <SfGrid @ref="Grid4" DataSource="@listaCerradasAnuladas"
-                                AllowFiltering="true" Width="100%" AllowGrouping="true" AllowSorting="true" EnableVirtualization="true"
+                                AllowFiltering="true" Width="100%" AllowGrouping="true" AllowSorting="true" AllowPaging="true"
                                 ID="OFCerradasAnuladas" GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true"
                                 ShowColumnChooser="true"
                                 Toolbar="@Toolbaritems" ShowColumnMenu="true" RowHeight="20" Height="250">
-                            <GridEvents DataBound="(async ()=> await DataBoundHandlerOFCerradas())"
+                            <GridEvents
                                         OnToolbarClick="(async (a)=> await ClickHandlerOFCerradas(a))"
                                         OnActionBegin="(async (a)=> await ActionBeginOFCerradas(a))" TValue="Planificacion"></GridEvents>
                             <GridEditSettings AllowEditing="true" Mode="EditMode.Normal"></GridEditSettings>
                             <GridColumns>
                                 <GridColumn Field=@nameof(Planificacion.UNIDEQUI) HeaderText="Unid Equi." TextAlign="TextAlign.Left" Width="90px" Format="N2"></GridColumn>
-                                <GridColumn Field=@nameof(Planificacion.CG_ORDF) IsPrimaryKey ="true" HeaderText="Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Planificacion.CG_ORDF) HeaderText="Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                 <GridColumn Field=@nameof(Planificacion.CLASE) HeaderText="Clase" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                 <GridColumn Field=@nameof(Planificacion.CG_R) HeaderText="Tipo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                 <GridColumn Field=@nameof(Planificacion.CG_ESTADOCARGA) Format="N0" HeaderText="Estado" EditType="EditType.DropDownEdit" Width="200px">
                                     <Template>
                                         @{
-                                            PlanificacionSeleccionadaOFCerrada = (context as Planificacion);
-                                            var plani = PlanificacionSeleccionadaOFCerrada;
+                                            var plani = (context as Planificacion);
                                             <SfDropDownList TItem="EstadosCargaMaquina" 
-                                                            @bind-Value="@(PlanificacionSeleccionadaOFCerrada.CG_ESTADOCARGA)"
-                                                            TValue="int" ID="CG_ESTADO" DataSource="@EstadosCargaMaquinas">
+                                                            @bind-Value="@(plani.CG_ESTADOCARGA)"
+                                                            TValue="int" ID="CBO_ESTADO" DataSource="@EstadosCargaMaquinas">
                                                 <DropDownListFieldSettings Text="ESTADO" Value="CG_ESTADO"></DropDownListFieldSettings>
                                                 <DropDownListEvents TItem="EstadosCargaMaquina" TValue="int"
-                                                                    ValueChange="@(async (a)=>await OnChangeEstadoCarga(a))"></DropDownListEvents>
+                                                                    ValueChange="@(async (a)=>await OnChangeEstadoCarga(a, plani))"></DropDownListEvents>
                                             </SfDropDownList>
                                         }
                                     </Template>
