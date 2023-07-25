@@ -111,7 +111,7 @@ namespace SupplyChain.Server.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex);
-            }
+                }
         }
 
         // PUT: api/Compras/5
@@ -230,41 +230,7 @@ namespace SupplyChain.Server.Controllers
             return Ok(Itemcompras);
         }
 
-        //[HttpPost("AnularOc")]
-        //public async Task<ActionResult<Compra>> PostAnularOc(Compra Itemcompras)
-        //{
-        //    try
-        //    {
-        //        await _compraRepository.Agregar(Itemcompras);
-        //    }
-        //    catch(Exception e)
-        //    {
-        //        return BadRequest(e);
-        //    }
-        //    return Ok(Itemcompras);
-        //}
 
-        //[HttpPost("numero")]
-        //public async Task<ActionResult<Compra>> numero(Compra Itemcompras , int numero)
-        //{
-        //    try
-        //    {
-        //        var ocompraseleccionada = numero;
-        //        string sqlCommandString = string.Format($"UPDATE COMPRAS SET FE_EMIT='', PRECIO=0, " +
-        //            "PRECIONETO=0,PRECIOTOT=0,MONEDA=0,NROCLTE=0,DES_PROVE='',ENTREGA=0,FE_PREV='', " +
-        //            "FE_REAL='',FE_VENC='',FE_CIERRE='',CONDVEN='' ," +
-        //            "PRECIOUC=0,PRECIOPOND=0" +
-        //            "WHERE NUMERO = '" + ocompraseleccionada+ "'");
-
-        //        await _compraRepository.Database.ExecuteSqlRawAsync(sqlCommandString);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex);
-        //    }
-        //    return Ok(numero);
-
-        //}
 
         [HttpPut("actualizaitem/{registro}")]
         //POST: api/compras/actualizaitem/5
@@ -287,6 +253,28 @@ namespace SupplyChain.Server.Controllers
             catch (Exception e)
             {
                 return BadRequest(e);
+            }
+            return Ok(Itemcompras);
+        }
+
+        [HttpPut("insertitem/{registro}")]
+        public async Task<ActionResult<Compra>> PutInsert(int registro, Compra Itemcompras)
+        {
+            if(registro != Itemcompras.Id)
+            {
+                return BadRequest("Registro Incorrecto!");
+            }
+            try
+            {
+                await _compraRepository.Actualizar(Itemcompras);
+            }
+            catch(DbUpdateConcurrencyException dbEx)
+            {
+                BadRequest(dbEx);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
             }
             return Ok(Itemcompras);
         }
@@ -351,19 +339,23 @@ namespace SupplyChain.Server.Controllers
 
 
         [HttpPut("anulacion/{numero}")]
-        public async Task<ActionResult<Compra>> anulacion(int numero, Compra item)
+        public async Task<ActionResult<IEnumerable<Compra>>> anulacion(int numero, Compra compra)
         {
             try
             {
-                await _compraRepository.AnularOC(item);
-                return Ok(item);
+                //await _compraRepository.Obtener(c => c.NUMERO == numero).ToListAsync();
+                await _compraRepository.AnularOC(compra);
+                return Ok(compra);
+                
             }
             catch (Exception ex)
             {
                 return BadRequest(ex);
             }
-            return Ok(numero);
+
         }
+
+       
 
     }
 }
