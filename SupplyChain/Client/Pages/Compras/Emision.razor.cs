@@ -341,57 +341,57 @@ namespace SupplyChain.Client.Pages.Emision
         }
 
 
-        public async Task imprimiroc()
-            {
-            if (item is null || item.NUMERO== 0)
-            {
-                await this.ToastObj.ShowAsync(new ToastModel
-                {
-                    Title = "ERROR!",
-                    Content = "Debe Indicar la Orden de compra para abrir",
-                    CssClass = "e-toast-danger",
-                    Icon = "e-error toast-icons",
-                    ShowCloseButton = true,
-                    ShowProgressBar = true
-                });
-            }
-            else
-            {
+        //public async Task imprimiroc()
+        //    {
+        //    if (item is null || item.NUMERO== 0)
+        //    {
+        //        await this.ToastObj.ShowAsync(new ToastModel
+        //        {
+        //            Title = "ERROR!",
+        //            Content = "Debe Indicar la Orden de compra para abrir",
+        //            CssClass = "e-toast-danger",
+        //            Icon = "e-error toast-icons",
+        //            ShowCloseButton = true,
+        //            ShowProgressBar = true
+        //        });
+        //    }
+        //    else
+        //    {
 
-                PdfDocument document = new PdfDocument();
-                PdfPage page = document.Pages.Add();
-                PdfGraphics graphics = page.Graphics;
-                PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
-                graphics.DrawString("Orden de Compra: " + item.NUMERO.ToString(), font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+        //        PdfDocument document = new PdfDocument();
+        //        PdfPage page = document.Pages.Add();
+        //        PdfGraphics graphics = page.Graphics;
+        //        PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+        //        graphics.DrawString("Orden de Compra: " + item.NUMERO.ToString(), font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
-                /*
-                PdfGrid pdfGrid = new PdfGrid();
-                pdfGrid.DataSource = insumosproveedor;
-                //Create string format for PdfGrid
-                PdfStringFormat format = new PdfStringFormat();
-                format.Alignment = PdfTextAlignment.Center;
-                format.LineAlignment = PdfVerticalAlignment.Bottom;
-                //Assign string format for each column in PdfGrid
-                foreach (PdfGridColumn column in pdfGrid.Columns)
-                    column.Format = format;
-                //Apply a built-in style
-                pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent6);
-                //Set properties to paginate the grid
-                PdfGridLayoutFormat layoutFormat = new PdfGridLayoutFormat();
-                layoutFormat.Break = PdfLayoutBreakType.FitPage;
-                layoutFormat.Layout = PdfLayoutType.Paginate;
-                pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, 200), layoutFormat);
-                //Save the document.
-               // document.Save("Output.pdf");
-                */
-                MemoryStream xx = new MemoryStream();
-                document.Save(xx);
-                document.Close(true);
+        //        /*
+        //        PdfGrid pdfGrid = new PdfGrid();
+        //        pdfGrid.DataSource = insumosproveedor;
+        //        //Create string format for PdfGrid
+        //        PdfStringFormat format = new PdfStringFormat();
+        //        format.Alignment = PdfTextAlignment.Center;
+        //        format.LineAlignment = PdfVerticalAlignment.Bottom;
+        //        //Assign string format for each column in PdfGrid
+        //        foreach (PdfGridColumn column in pdfGrid.Columns)
+        //            column.Format = format;
+        //        //Apply a built-in style
+        //        pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent6);
+        //        //Set properties to paginate the grid
+        //        PdfGridLayoutFormat layoutFormat = new PdfGridLayoutFormat();
+        //        layoutFormat.Break = PdfLayoutBreakType.FitPage;
+        //        layoutFormat.Layout = PdfLayoutType.Paginate;
+        //        pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, 200), layoutFormat);
+        //        //Save the document.
+        //       // document.Save("Output.pdf");
+        //        */
+        //        MemoryStream xx = new MemoryStream();
+        //        document.Save(xx);
+        //        document.Close(true);
 
-                await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportOC?numero={item.NUMERO}", "_blank" });
+        //        await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportOC?numero={item.NUMERO}", "_blank" });
 
-            }
-        }
+        //    }
+        //}
 
 
         public async Task guardaoc()
@@ -461,6 +461,33 @@ namespace SupplyChain.Client.Pages.Emision
                 proveedorescompras = await Http.GetFromJsonAsync<List<Proveedores_compras>>("api/compras/GetProveedorescompras/");
 
                 limpia();
+            }
+            if(item is null || item.NUMERO == 0)
+            {
+                await this.ToastObj.ShowAsync(new ToastModel
+                {
+                    Title="ERROR!",
+                    Content="Debe Indicar la Orden de Compra para subir",
+                    CssClass="e-toast-danger",
+                    Icon="e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }
+            else
+            {
+                PdfDocument document = new PdfDocument();
+                PdfPage page = document.Pages.Add();
+                PdfGraphics graphics = page.Graphics;
+                PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+                graphics.DrawString("Orden de Compra: " + item.NUMERO.ToString(), font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+                
+                MemoryStream xx = new MemoryStream();
+                document.Save(xx);
+                document.Close(true);
+
+                await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportOC?numero={item.NUMERO}", "_blanck"});
+
             }
         }
     }
