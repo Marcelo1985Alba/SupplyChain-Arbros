@@ -13,6 +13,7 @@ using Microsoft.Extensions.Primitives;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Shared.Login;
 using SupplyChain.Shared.Models;
+using Syncfusion.DocIO.DLS;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -353,12 +354,28 @@ namespace SupplyChain.Server.Controllers
             //    "WHERE Cg_mat='" + xCg_mat + "'";
             //xConexionSQL.EjecutarSQLNonQuery(xSQLcommandString);
 
+            //string xSQLcommandString = "UPDATE NET_Temp_Abastecimiento SET ACOMPRAR = " + Ab.ACOMPRAR + " WHERE Cg_mat='" + Ab.CG_MAT+ "'";
+
             try
             {
-                _context.ModeloAbastecimiento.Attach(Ab);
-                _context.Entry(Ab).Property(u => u.ACOMPRAR).IsModified = true;
-                _context.Entry(Ab).Property(u => u.ENTRPREV).IsModified = true;
-                await _context.SaveChangesAsync();
+                //_context.ModeloAbastecimiento.FromSqlRaw(xSQLcommandString);
+                //_context.Database.SqlQueryRaw(xSQLcommandString);
+                //_context.Entry(Ab).State = EntityState.Modified;
+                //_context.ModeloAbastecimiento.Attach(Ab);
+                //_context.Entry(Ab).Property(u => u.ACOMPRAR).IsModified = true;
+                //_context.Entry(Ab).Property(u => u.ENTRPREV).IsModified = true;
+                //await _context.SaveChangesAsync();
+
+                string xCg_mat = Ab.CG_MAT;
+                string xValor = Ab.ACOMPRAR.ToString();
+                // Reemplaza "," por "." para grabar en el SQL
+                xValor = Convert.ToDouble(xValor.Replace(",", ".")).ToString();
+                ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+                string xSQLcommandString = "UPDATE NET_Temp_Abastecimiento SET ACOMPRAR = " + xValor + ", " +
+                    $"ENTRPREV = '{Ab.ENTRPREV}' " +
+                    "WHERE Cg_mat='" + xCg_mat + "'";
+                xConexionSQL.EjecutarSQLNonQuery(xSQLcommandString);
+
 
                 return NoContent();
             }

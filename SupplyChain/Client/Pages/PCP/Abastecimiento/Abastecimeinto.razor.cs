@@ -180,7 +180,7 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
 
         protected async Task EmitirMP()
         {
-            int xCuantas = listaAbastSE.Where(s => s.CALCULADO != 0).Count();
+            int xCuantas = listaAbastMP.Where(s => s.CALCULADO != 0).Count();
             if (xCuantas != 0)
             {
                 bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Hay Semi-Elaborados con Fabricación sugerida. \n\n¿Desea continuar?", "Abastecimiento de Materias Primas");
