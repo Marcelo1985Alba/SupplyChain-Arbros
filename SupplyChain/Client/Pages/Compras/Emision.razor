@@ -15,6 +15,7 @@
 @using Syncfusion.Blazor.Buttons
 @using System.Text.Json
 @using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.SplitButtons
 @inject IJSRuntime JsRuntime
 @inject Microsoft.JSInterop.IJSRuntime JS
 @inject HttpClient Http
@@ -63,16 +64,26 @@
 
 
             <div hidden="@IsVisibleguarda" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
-                <SfButton style="height: 50px;" CssClass="e-info" IsPrimary="true" @onclick="guardaoc">Generar OC</SfButton>
+                <SfButton style="height: 35px;" CssClass="e-info" IsPrimary="true" @onclick="guardaoc">Generar OC</SfButton>
             </div>
-            @*<div hidden="@IsVisibleimprime" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
-                <SfButton style="height: 50px;" CssClass="e-info" IsPrimary="true" @onclick="imprimiroc">Imprimir OC</SfButton>
-            </div>*@
-            <div  style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
-                <SfButton style="height: 50px;" CssClass="e-info" IsPrimary="true" @onclick="anularoc">Anular OC</SfButton>
+            <div hidden="@IsVisibleimprime" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
+                <SfButton style="height: 35px;" CssClass="e-info" IsPrimary="true" @onclick="imprimiroc">Imprimir OC</SfButton>
             </div>
-            <div hidden="@ocagenerar" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
-                <SfButton style="height: 50px" CssClass="e-info" IsPrimary="true" @onclick="limpia">Limpia</SfButton>
+            <div style="margin-top:20px;right:6%;" class="form-group col-lg-2 col-md-4 col-sm-6">
+               @* <SfButton style="height: 35px;" CssClass="e-info" IsPrimary="true" @onclick="anularoc">Anular OC</SfButton>*@
+               <SfButtonGroup>               
+                   <SfDropDownButton Content="Anular por" CssClass="e-info" style="height:35px;right:50px;" >
+                 <DropDownButtonEvents ItemSelected="itemseleccionado"></DropDownButtonEvents>
+                       <DropDownMenuItems>
+                        <DropDownMenuItem IconCss="e-icons e-edit" @onclick="anularoc" Text="Anular OC"></DropDownMenuItem>
+                        <DropDownMenuItem IconCss="e-icons e-edit" @onclick="anularpp" Text="Anular PP"></DropDownMenuItem>
+                  </DropDownMenuItems>
+                </SfDropDownButton>
+                </SfButtonGroup>
+
+            </div>
+            <div hidden="@ocagenerar" style="margin-right:80%;" class="form-group col-lg-2 col-md-4 col-sm-6">
+                <SfButton style="height: 35px" CssClass="e-info" IsPrimary="true" @onclick="limpia">Limpia</SfButton>
             </div>
         </div>
         <div class="form-row">
