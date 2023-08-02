@@ -46,7 +46,7 @@
     @if (popupFormVisible)
     {
         <FormRemito Show="@popupFormVisible" Pedido="@PedidoSeleccionado" CondicionesEntrega="@condicionesEntrega"
-                    CondicionesPagos="@condicionesPagos" Transportes="@transportes"
+                    CondicionesPagos="@condicionesPagos" Transportes="@transportes" DireccionesEntregas="@direccionesEntregas"
                     OnGuardar="@((p)=> OnRemitoGuardado(p))"
                     OnCerrar="@(()=> popupFormVisible = false)"></FormRemito>
     }

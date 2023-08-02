@@ -179,16 +179,22 @@
             
         </Content>
         <FooterTemplate>
-            <div class="">
-                @if (!string.IsNullOrEmpty(Pedido.REMITO))
-                {
-                    <SfButton Content="Imprimir" HtmlAttributes="@HtmlAttribute" CssClass="e-success" 
-                        OnClick="@(async()=>await Imprimir())" IconCss="fa fa-print"></SfButton>
-                }
-                
-                <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
-                <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async()=>await Hide())" IconCss="fa fa-window-close-o"></SfButton>
+            <div class="row">
+                <div class="col-3 text-left">
+                    <span class="text-muted font-weight-bold">Cantidad: @Pedido.Items.Count()</span>
+                </div>
+                <div class="col-9 text-right">
+                    @if (!string.IsNullOrEmpty(Pedido.REMITO))
+                    {
+                        <SfButton Content="Imprimir" HtmlAttributes="@HtmlAttribute" CssClass="e-success"
+                                  OnClick="@(async()=>await Imprimir())" IconCss="fa fa-print"></SfButton>
+                    }
+
+                    <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
+                    <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async()=>await Hide())" IconCss="fa fa-window-close-o"></SfButton>
+                </div>
             </div>
+            
         </FooterTemplate>
     </DialogTemplates>
 </SfDialog>

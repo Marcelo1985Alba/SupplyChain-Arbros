@@ -231,7 +231,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
         }
         public async Task GetDireccionesEntregaCliente(int idCliente)
         {
-            if (idCliente > 0)
+            if (idCliente > 0 && (DireccionesEntregas is not null && DireccionesEntregas.Count == 0))
             {
                 var response = await DireccionEntregaService.GetByNumeroCliente(idCliente);
                 if (response.Error)
