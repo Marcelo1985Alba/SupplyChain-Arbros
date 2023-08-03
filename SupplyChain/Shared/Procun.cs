@@ -5,20 +5,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SupplyChain.Shared
 {
 	[Table("Procun")]
-	public class Procun : EntityBase<decimal>
+	public class Procun : EntityBase<int>
 	{
 		[Key, Column("REGISTRO")]
-		public new decimal Id { get; set; } = 0;
+		//public new decimal Id { get; set; } = 0;
+		public new int Id { get; set; } = 0;
 		public int ORDEN { get; set; }
 		public string CG_PROD { get; set; }
 		public int CG_FORM { get; set; }
 		public int CG_AREA { get; set; }
 		public int CG_LINEA { get; set; }
 		public string CG_CELDA { get; set; }
-		public string PROCESO { get; set; }
-		public string DESCRIP { get; set; }
-		public string OBSERV { get; set; }
-		public string DESPROC { get; set; }
+		public string PROCESO { get; set; }	
+		public string? DESCRIP { get; set; }
+		public string? OBSERV {		get; set; }
+		public string? DESPROC { get; set; }
 		public decimal TIEMPO1 { get; set; }
 		public decimal TS1 { get; set; }
 		public int FRECU { get; set; }
@@ -38,13 +39,13 @@ namespace SupplyChain.Shared
 		public int CG_CALI6 { get; set; }
 		public int CG_CALI7 { get; set; }
 		public int CG_OPER { get; set; }
-		public DateTime FECHA { get; set; }
+		public DateTime? FECHA { get; set; }
 		public decimal COSTO { get; set; }
 		public decimal VALOR4 { get; set; }
 		public decimal COSTOCOMB { get; set; }
 		public decimal COSTOENERG { get; set; }
 		public decimal PLANTEL { get; set; }
-		public string CG_CATEOP { get; set; }
+		public string? CG_CATEOP { get; set; }
 		public decimal COSTAC { get; set; }
 		public decimal OCUPACION { get; set; }
 		public decimal COEFI { get; set; }

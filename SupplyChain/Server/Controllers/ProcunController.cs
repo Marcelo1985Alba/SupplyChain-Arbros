@@ -37,7 +37,7 @@ namespace SupplyChain
         }
 
         [HttpGet("Existe/{id}")]
-        public async Task<ActionResult<bool>> ExisteProcun(decimal id)
+        public async Task<ActionResult<bool>> ExisteProcun(int id)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace SupplyChain
 
         // PUT: api/Procun/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProcun(decimal id, Procun Proc)
+        public async Task<IActionResult> PutProcun(int id, Procun Proc)
         {
             if (id != Proc.Id)
             {
@@ -74,7 +74,7 @@ namespace SupplyChain
                 }
             }
             catch (Exception ex)
-            {
+            {   
                 return BadRequest(ex);
             }
             return Ok(Proc);
@@ -86,6 +86,9 @@ namespace SupplyChain
         {
             try
             {
+                var username = HttpContext.User.Identity.Name;
+                Proc.USUARIO=username;
+                Proc.AUTORIZA=username;
                 await _procunRepository.Agregar(Proc);
                 return CreatedAtAction("GetProcun", new { id = Proc.Id }, Proc);
             }
@@ -108,7 +111,7 @@ namespace SupplyChain
 
         // DELETE: api/Procun/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Procun>> DeleteProcun(decimal id)
+        public async Task<ActionResult<Procun>> DeleteProcun(int id)
         {
             var Proc = await _procunRepository.ObtenerPorId(id);
             if (Proc == null)

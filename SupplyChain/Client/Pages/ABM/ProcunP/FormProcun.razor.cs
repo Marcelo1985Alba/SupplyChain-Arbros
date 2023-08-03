@@ -28,19 +28,22 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         [Parameter] public EventCallback<Procun> OnEliminar { get; set; }
         [Parameter] public EventCallback OnCerrar { get; set; }
 
+
         protected SfGrid<Procun> refGridItems;
         protected SfSpinner refSpinnerCli;
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
         protected Dictionary<string, object> HtmlAttributeSubmit = new()
         {
-            { "type", "submit" }
+            { "type", "submit" },
+            { "form","form-procun"}
         };
         protected bool IsAdd { get; set; }
         protected List<Producto> productos = new();
         protected List<Areas> areas = new();
         protected List<Lineas> lineas = new();
         protected List<Celdas> celdas = new();
+
         protected async override Task OnInitializedAsync()
         {
             var response = await ProductoService.Get();
@@ -89,19 +92,21 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             var response = await ProcunService.Actualizar(proc.Id, proc);
             if (response.Error)
             {
-                await ToastMensajeError("Error al intentar Guardar el procun.");
-                return false;
+               await ToastMensajeError("Error al intentar Guardar el procun.");
+               return false;
             }
             procuns = proc;
             return true;
+
         }
 
         protected async Task GuardarProc()
         {
-            bool guardado = false;
+            bool guardado;
             if (procuns.ESNUEVO)
             {
                 guardado = await Agregar(procuns);
+                procuns.ESNUEVO = true;
             }
             else
             {
@@ -115,6 +120,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 await OnGuardar.InvokeAsync(procuns);
             }
         }
+
 
         public async Task Hide()
         {

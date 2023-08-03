@@ -33,10 +33,11 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         "Delete",
         "Print",
         new ItemModel { Text = "Copia", TooltipText = "Copiar una celda", PrefixIcon = "e-copy", Id = "Copy" },
-        "ExcelExport"
+        new ItemModel{Text="Excel Export", Id="ExcelExport"}
         };
-        protected List<Procun> procuns = new();
 
+        protected FormProcun refFormProcun;
+        protected List<Procun> procuns = new();
         protected SfToast ToastObj;
         protected SfSpinner refSpinner;
         protected SfGrid<Procun> refGrid;
@@ -71,7 +72,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         #endregion
 
         protected async Task OnToolbarHandler(ClickEventArgs args)
-        {
+        {   
             if (args.Item.Id == "Copy")
             {
                 await CopiarProcun();
@@ -104,11 +105,11 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     }
                 }
             }
-            else if (args.Item.Id == "grdProcun_excelexport")
+            else if (args.Item.Id == "ExcelExport")
             {
                 await refGrid.ExportToExcelAsync();
             }
-        }
+            }
 
         private async Task CopiarProcun()
         {
@@ -130,6 +131,10 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     procSeleccionado.TIEMPO1 = selectedRecord.TIEMPO1;
                     procSeleccionado.TS1 = selectedRecord.TS1;
                     procSeleccionado.PROPORC = selectedRecord.PROPORC;
+                    procSeleccionado.AUTORIZA = selectedRecord.AUTORIZA;
+                    procSeleccionado.USUARIO= selectedRecord.USUARIO;
+                    procSeleccionado.CG_CATEOP=selectedRecord.CG_CATEOP;
+                    procSeleccionado.TAREAPROC= selectedRecord.TAREAPROC;
                     popupFormVisible = true;
                 }
             }

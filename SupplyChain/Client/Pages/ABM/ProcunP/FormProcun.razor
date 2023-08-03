@@ -1,4 +1,5 @@
-﻿@using Syncfusion.Blazor.Buttons
+﻿
+@using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Calendars
 @using Syncfusion.Blazor.DropDowns
 @inherits FormProcunBase
@@ -22,19 +23,19 @@
         </Header>
         <Content>
             <EditForm Model="procuns" OnValidSubmit="@GuardarProc">
-                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+               @* <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales" role="tab" aria-controls="pills-home" aria-selected="true">Datos Generales</a>
                     </li>
-                </ul>
+                </ul>*@
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-DatosGenerales" role="tabpanel" aria-labelledby="pills-home-tab">
                         <div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                               @* <div class="form-group col-md-6">
                                     <label>Registro:</label>
-                                    <SfNumericTextBox ID="Registro" @bind-Value="@((procuns.Id))" Enabled="@procuns.ESNUEVO" Placeholder="Registro"></SfNumericTextBox>
-                                </div>
+                                    <SfNumericTextBox ID="Registro" @bind-Value="@((procuns.Id))"  Enabled="@procuns.ESNUEVO" Placeholder="Registro"></SfNumericTextBox>
+                                </div>*@
                                 <div class="form-group col-md-6">
                                     <label>Orden:</label>
                                     <SfNumericTextBox ID="Orden" @bind-Value="@(procuns.ORDEN)" Placeholder="Orden"></SfNumericTextBox>
@@ -50,9 +51,9 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <a href="/Abms/areas" target="_blank">Area:</a>
-                                    <SfComboBox TValue="int" CssClass="customClass" TItem="Areas" PopupWidth="auto" AllowFiltering="true"
+                                    <SfComboBox TValue="int" CssClass="customClass" TItem="Areas" PopupWidth="50%" AllowFiltering="true"
                                                 @bind-Value="@(procuns.CG_AREA)" DataSource="@areas">
-                                        <ComboBoxFieldSettings Value="Id" Text="CG_AREA"></ComboBoxFieldSettings>
+                                        <ComboBoxFieldSettings Value="DES_AREA" Text="DES_AREA"></ComboBoxFieldSettings>
                                     </SfComboBox>
                                 </div>
                             </div>
@@ -61,14 +62,14 @@
                                     <a href="/Abms/lineas" target="_blank">Linea:</a>
                                     <SfComboBox TValue="int" CssClass="customClass" TItem="Lineas" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(procuns.CG_LINEA)" DataSource="@lineas">
-                                        <ComboBoxFieldSettings Value="Id" Text="CG_LINEA"></ComboBoxFieldSettings>
+                                        <ComboBoxFieldSettings Value="DES_LINEA" Text="DES_LINEA"></ComboBoxFieldSettings>
                                     </SfComboBox>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <a href="/Abms/celdas" target="_blank">Celda:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Celdas" PopupWidth="auto" AllowFiltering="true"
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Celdas" PopupWidth="%40" AllowFiltering="true"
                                                 @bind-Value="@(procuns.CG_CELDA)" DataSource="@celdas">
-                                        <ComboBoxFieldSettings Value="Id" Text="CG_CELDA"></ComboBoxFieldSettings>
+                                        <ComboBoxFieldSettings Value="DES_CELDA" Text="DES_CELDA"></ComboBoxFieldSettings>
                                     </SfComboBox>
                                 </div>
                             </div>
@@ -95,8 +96,10 @@
                         </div>
                     </div>
                 </div>
+               
+                @*<SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" Show="popupFormVisible" HtmlAttributes="@HtmlAttributeSubmit"></SfButton> *@
                 <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
             </EditForm>
         </Content>
     </DialogTemplates>
-</SfDialog>
+</SfDialog> 
