@@ -59,8 +59,7 @@ namespace SupplyChain.Server.Controllers
                     return await _context.vEstadoPedidos.Where(e => !string.IsNullOrEmpty(e.REMITO))
                             .ToListAsync();
                 case EstadoPedido.TodosPendientes:
-                    return await _context.vEstadoPedidos.Where(c => c.ESTADO_PEDIDO !=9 
-                    && c.ESTADO_PEDIDO !=10).ToListAsync();
+                    return await _context.vEstadoPedidos.Where(c => c.ESTADO_PEDIDO < 10).ToListAsync();
                 case EstadoPedido.Todos:
                     return await _context.vEstadoPedidos.ToListAsync();
                 default:

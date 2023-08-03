@@ -135,6 +135,7 @@
                                                     @bind-Value="@(Producto.CG_AREA)" DataSource="@area">
                                             <ComboBoxFieldSettings Value="Id" Text="DES_AREA"></ComboBoxFieldSettings>
                                         </SfComboBox>
+                                        <ValidationMessage For="@(()=> Producto.CG_AREA)"></ValidationMessage>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <a href="/Abms/lineas" target="_blank">Linea/Posición:</a>
