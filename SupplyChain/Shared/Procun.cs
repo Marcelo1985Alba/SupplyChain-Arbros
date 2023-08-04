@@ -16,6 +16,7 @@ namespace SupplyChain.Shared
 		public int CG_AREA { get; set; }
 		public int CG_LINEA { get; set; }
 		public string CG_CELDA { get; set; }
+		public string DES_AREA { get; set; }
 		public string PROCESO { get; set; }	
 		public string? DESCRIP { get; set; }
 		public string? OBSERV {		get; set; }
