@@ -18,6 +18,7 @@ namespace SupplyChain.Server.Controllers
     [ApiController]
     public class FormulasController : ControllerBase
     {
+        
         private readonly AppDbContext _context;
         private readonly FormulaRepository _formulaRepository;
 

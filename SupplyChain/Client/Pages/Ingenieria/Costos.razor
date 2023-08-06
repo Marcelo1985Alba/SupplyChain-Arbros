@@ -1,0 +1,129 @@
+﻿@using Syncfusion.Blazor.Calendars
+
+@page "/ingenieria/costos"
+@inherits BaseCostos
+
+<SfSpinner @ref="@refSpinner" @bind-Visible="@SpinnerVisible" Label="Procesando..." Size="80" Type="SpinnerType.Bootstrap">
+</SfSpinner>
+
+<div class="col-12 control-section">
+    <SfToast ID="toast_default" @ref="ToastObj">
+        <ToastPosition X="Center" Y="Top"></ToastPosition>
+    </SfToast>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-material">
+                <fieldset class="scheduler-border">
+                    <legend class="scheduler-border">Costos</legend>
+                    <div class="form-row">
+                        <div class="form-group col-lg-6 col-md-6 col-sm-12 col-12">
+                            <label class="col-form-label text-info">Rango de Fechas</label>
+                            <div class="d-flex">
+                                <SfDateRangePicker ID="fechaCostos" TValue="DateTime" Placeholder="Seleccionar..." Format="dd/MM/yyyy"
+                                                   WeekNumber="true" ShowTodayButton="true" CssClass=""
+                                                   @bind-StartDate="@selectedStartDate" @bind-EndDate="@selectedEndDate">
+                                    <DateRangePickerEvents TValue="DateTime" ValueChange="ValueChangeFechaCostos"></DateRangePickerEvents>
+                                </SfDateRangePicker>
+                                <div class="ml-2">
+                                    <button type="submit" class="e-control e-btn e-lib e-smal e-round e-info e-icon-btn" @onclick="@CalculateCost">
+                                        <span class="fa fa-search e-btn-icon"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @if (showResults)
+                    {
+                        <div class="form-row">
+                            <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
+                                <label class="col-form-label text-info">Egresos</label>
+                                <input type="text" class="form-control" value="@Math.Floor(costos.egresos)" disabled="true"/>
+                            </div>
+                            <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
+                                <label class="col-form-label text-info">Unidades Equivalentes</label>
+                                <input type="text" class="form-control" value="@Math.Floor(costos.unidades_equivalentes)" disabled="true"/>
+                            </div>
+                            <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
+                                <label class="col-form-label text-info">Coeficiente</label>
+                                <input type="text" class="form-control" value="@Math.Floor(costos.coeficiente)" disabled="true"/>
+                            </div>
+                        </div>
+                        <legend class="scheduler-border">Costo por Producto</legend>
+                        <div class="form-row">
+                            <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
+                                <label class="col-form-label text-info">Código</label>
+                                <SfTextBox Placeholder="" Input="OnInputCG_PROD" @bind-Value="@Codigo"></SfTextBox>
+                            </div>
+                            <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
+                                <label class="col-form-label text-info">Descripción</label>
+                                <SfTextBox Placeholder="" Input="OnInputDES_PROD" @bind-Value="@Descripcion"></SfTextBox>
+                            </div>
+                            <div class="form-group col-lg-2 col-md-2 col-sm-12 col-12 my-4">
+                                <button type="submit" class="e-control e-btn e-lib e-smal e-round e-info e-icon-btn" @onclick="@BuscarProducto">
+                                    <span class="fa fa-search"></span>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    @if (showCostResults)
+                    {
+                        <div class="form-row">
+                            <div class="form-group col-lg-3 col-md-3 col-sm-12 col-12">
+                                <label class="col-form-label text-info">Costo Materia Prima</label>
+                                <input type="text" class="form-control" value="@Math.Floor(costoProd)" disabled="true"/>
+                            </div>
+                            <div class="form-group col-lg-3 col-md-3 col-sm-12 col-12">
+                                <label class="col-form-label text-info">Costos Generales de Fab</label>
+                                <input type="text" class="form-control" value="@Math.Floor(costoGen * (decimal)costos.coeficiente)" disabled="true"/>
+                            </div>
+                            <div class="form-group col-lg-3 col-md-3 col-sm-12 col-12">
+                                <label class="col-form-label text-info">Precio</label>
+                                <input type="text" class="form-control" value="@Math.Floor(precio)" disabled="true"/>
+                            </div>
+                            <div class="form-group col-lg-3 col-md-3 col-sm-12 col-12">
+                                <label class="col-form-label text-info">Utilidad</label>
+                                <input type="text" class="form-control" value="@($"{Math.Floor(precio - costoProd - costoGen * (decimal)costos.coeficiente)} ({(((precio - costoProd - costoGen * (decimal)costos.coeficiente) / precio) * 100):0.00}%)")" disabled="true"/>
+                            </div>
+                        </div>
+                    }
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+
+<SfDialog Width="1000px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible" Target="">
+    <DialogTemplates>
+        <Content>
+            <div class="col-lg-12 control-section">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4 class="mb-3">Elija el Producto</h4>
+                        </div>
+                        <SfGrid @ref="gridCostos" DataSource="@Busquedalist" Height="100%" Width="100%">
+                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                            <GridEvents RowSelected="OnSelected" TValue="Producto"></GridEvents>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(Producto.Id) HeaderText="Producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                <GridColumn Field=@nameof(Producto.DES_PROD) HeaderText="Descripción" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                        @{
+                            if (Busquedalist.Count == CantidadMostrar)
+                            {
+                                <div class="col-sm-3 my-1">
+                                    <button class="btn btn-primary" @onclick="@AgregarValores">Buscar más</button>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
+<style>
+</style>

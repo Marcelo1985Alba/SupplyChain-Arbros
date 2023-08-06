@@ -422,8 +422,20 @@ namespace SupplyChain
                 }
             }
             return lContiene;
-
-
+        }
+        
+        // GET: api/Productos/GetCG_DENSEG/{CG_PROD}
+        [HttpGet("GetCG_DENSEG/{CG_PROD}")]
+        public async Task<decimal> GetCG_DENSEG(string CG_PROD)
+        {
+            decimal? CG_DENSEG = 0;
+            if (await _productoRepository.Existe(CG_PROD))
+            {
+                var resultCgDenseg = _productoRepository.Obtener(p => p.Id == CG_PROD).FirstOrDefaultAsync().Result.CG_DENSEG;
+                if (resultCgDenseg != null)
+                    CG_DENSEG = resultCgDenseg;
+            }
+            return (decimal)(CG_DENSEG);
         }
 
     }
