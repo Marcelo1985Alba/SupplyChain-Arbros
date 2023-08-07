@@ -30,6 +30,8 @@ namespace SupplyChain.Client.Pages.Inventarios
         [Parameter] public int OrdFab { get; set; } = 0;
         [Parameter] public PedidoEncabezado StockEncabezado { get; set; } = new PedidoEncabezado();
         [Parameter] public int vale { get; set; } = 0;
+        [Parameter] public string cg_mat { get; set; } = string.Empty;
+        [Parameter] public string despacho { get; set; } = string.Empty;
 
         protected bool DisableCssClass
         {
@@ -712,7 +714,7 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         private async Task MensajeToastError()
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "ERROR!",
                 Content = "Error al guardar",
