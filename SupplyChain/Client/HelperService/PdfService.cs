@@ -612,7 +612,8 @@ namespace SupplyChain.Client.HelperService
             // Set dimension for each block
             qrBarcode.Size = new Syncfusion.Drawing.SizeF(70, 90);//110
             qrBarcode.XDimension = 2;
-            qrBarcode.Text = $"http://arweb.aerre.com.ar:9999/inventario/movimiento-entre-depositos/{pedidos.DESPACHO}/{pedidos.CG_ART}";
+            var baseUrl = Http.BaseAddress;
+            qrBarcode.Text = $"{baseUrl}inventario/movimiento-entre-depositos/{pedidos.CG_ART}/{pedidos.DESPACHO}";
             // Draw the QR barcode
             qrBarcode.Draw(page, new PointF(235, 15));
 

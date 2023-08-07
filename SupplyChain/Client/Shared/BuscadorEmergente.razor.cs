@@ -39,7 +39,13 @@ namespace SupplyChain.Client.Shared
         [Parameter] public EventCallback<List<TItem>> OnObjetosSeleccionados { get; set; }
         [Parameter] public EventCallback OnBuscarMas { get; set; }
         [Parameter] public EventCallback<bool> OnCerrarDialog { get; set; }
-        
+
+        /// <summary>
+        /// contiene el valor para filtrar la columna CG_ART
+        /// </summary>
+        [Parameter] public string filterCG_ART { get; set; } = string.Empty;
+        [Parameter] public string filterDESPACHO { get; set; } = string.Empty;
+
         protected SfSpinner sfSpinner;
         protected SfGrid<TItem> Grid;
         protected bool visibliSpinner = false;

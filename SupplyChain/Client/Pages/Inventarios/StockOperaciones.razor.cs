@@ -2,6 +2,7 @@
 using Microsoft.JSInterop;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Shared;
+using SupplyChain.Client.Shared.Inventarios;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.Prod;
@@ -41,6 +42,7 @@ namespace SupplyChain.Client.Pages.Inventarios
         protected SfToast ToastObj;
         protected ConfirmacionDialog ConfirmacionEliminarDialog;
         protected ConfirmacionDialog ConfirmacionGuardarDialog;
+        protected GridEditEntrega refGridEditEntrega;
         protected bool SpinnerVisible { get; set; } = false;
         private bool puedeBuscarStock = false;
         protected SupplyChain.Client.Shared.BuscadorEmergenteResumenStock BuscadorEmergenteResumenStock;
@@ -52,6 +54,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                 {"type", "button" }
         };
 
+        protected bool AbrirBuscadorResumenStockAutomaticamente = false;
 
         protected bool PermiteAgregarItem { get; set; } = false;
         protected bool PermiteEditarItem { get; set; } = false;
@@ -100,6 +103,11 @@ namespace SupplyChain.Client.Pages.Inventarios
                 var programa = await Http.GetFromJsonAsync<List<Programa>>($"api/Programa/GetProgramaByOF/{OrdFab}");
 
                 await OnProgramaSelected(programa[0]);
+            }
+            else if (OperacionId == 9 && (!string.IsNullOrEmpty(cg_mat)) )
+            {
+                await GetVale();
+                AbrirBuscadorResumenStockAutomaticamente = true;
             }
             else
             {

@@ -215,8 +215,10 @@
                                 }
                                 else
                                 {
-                                    <GridEditEntrega DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
+                                    <GridEditEntrega @ref="refGridEditEntrega" DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
                                                      PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
+                                                     filtro_CG_ART="@cg_mat" filtro_DESPACHO="@despacho"
+                                                     AbrirBuscadorResumenStock="@AbrirBuscadorResumenStockAutomaticamente"
                                                      OnGuardar="@(async(s)=> await SetearCamposParaGuardar(s))" />
                                 }
                             </CascadingValue>

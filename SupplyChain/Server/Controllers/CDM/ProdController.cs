@@ -219,6 +219,21 @@ namespace SupplyChain
         {
             try
             {
+                if (Prod.CG_ORDEN == 1)
+                {
+                    Prod.EXIGESERIE = true;
+                    Prod.EXIGEOA = true;
+                }
+                else if (Prod.CG_ORDEN == 3)
+                {
+                    Prod.EXIGELOTE = true;
+                }
+                else if (Prod.CG_ORDEN == 4)
+                {
+                    Prod.EXIGELOTE = true;
+                }
+
+
                 await _productoRepository.Agregar(Prod);
                 return CreatedAtAction("GetProd", new { id = Prod.Id }, Prod);
             }
