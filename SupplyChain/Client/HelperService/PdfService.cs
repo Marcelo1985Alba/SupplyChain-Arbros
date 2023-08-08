@@ -6,6 +6,7 @@ using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Grid;
 using Syncfusion.Pdf.Tables;
+using Syncfusion.Pdf.Barcode;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -582,7 +583,7 @@ namespace SupplyChain.Client.HelperService
 
             PdfDocument document1 = new();
             document1.PageSettings.Margins.All = 0;
-            document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(227, 70);//110
+            document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(320, 100);//110
 
             //document1.PageSettings.Margins.Left = -2;
             //document1.PageSettings.Margins.Right = -15;
@@ -600,6 +601,21 @@ namespace SupplyChain.Client.HelperService
             graphics.DrawString($"{pedidos.CG_ART.Trim()}                  OC {pedidos.OCOMPRA}\r\n{pedidos.DES_ART.Trim()}\r\n" +
                 $"Despacho {pedidos.DESPACHO} Lote {pedidos.LOTE} VALE {pedidos.VALE}\n" +
                 $"{pedidos.Proveedor?.DESCRIPCION.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(30, 10));
+
+            PdfQRBarcode qrBarcode = new PdfQRBarcode();
+            // Sets the Input mode to Binary mode
+            qrBarcode.InputMode = InputMode.BinaryMode;
+            // Automatically select the Version
+            qrBarcode.Version = QRCodeVersion.Auto;
+            // Set the Error correction level to high
+            qrBarcode.ErrorCorrectionLevel = PdfErrorCorrectionLevel.High;
+            // Set dimension for each block
+            qrBarcode.Size = new Syncfusion.Drawing.SizeF(70, 90);//110
+            qrBarcode.XDimension = 2;
+            var baseUrl = Http.BaseAddress;
+            qrBarcode.Text = $"{baseUrl}inventario/movimiento-entre-depositos/{pedidos.CG_ART}/{pedidos.DESPACHO}";
+            // Draw the QR barcode
+            qrBarcode.Draw(page, new PointF(235, 15));
 
             //document1.PageSettings.Margins.Left = margin;
             //document1.PageSettings.Margins.Right = margin;

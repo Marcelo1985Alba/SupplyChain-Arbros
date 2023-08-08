@@ -192,6 +192,7 @@ else
         <BuscadorEmergenteResumenStock @ref="BuscadorEmergenteRS" DataSource="@Items" Visible="PopupBuscadorStockVisible" 
                                        TipoSeleccion="@TipoSeleccion" VisibleSpinner="@visibleSpinnerRS" EsModal="true"
                                        Columnas="@(new string[] { "CG_ART", "STOCK", "CG_DEP", "DEPOSITO", "SERIE", "LOTE", "DESPACHO"})"
+                                       filterCG_ART= "@filtro_CG_ART"  filterDESPACHO="@filtro_DESPACHO"
                                        OnObjetoSeleccionado="@(async(r)=> await OnResumenStockSelected(r))"
                                        OnObjetosSeleccionados="@(async(r)=> await OnResumenStockSelected(r))"/>
 

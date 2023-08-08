@@ -1,4 +1,10 @@
 ﻿@page "/inventario/movimiento-entre-depositos"
+@page "/inventario/movimiento-entre-depositos/{cg_mat}/{despacho}"
+@attribute [Authorize(Roles = "Administrador, Produccion")]
 
+<StockOperaciones EsEntrega="false" OperacionId="9" OrdFab="0" FiltraComboOperaciones="true" cg_mat="@cg_mat" despacho="@despacho"></StockOperaciones>
 
-<StockOperaciones EsEntrega="false" OperacionId="9" OrdFab="0" FiltraComboOperaciones="true"></StockOperaciones>
+@code{
+    [Parameter] public string despacho { get; set; } = string.Empty;
+    [Parameter] public string cg_mat { get; set; } = string.Empty;
+}
