@@ -8,6 +8,7 @@ using System.Net.Http.Json;
 using System.Runtime.InteropServices.JavaScript;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.JSInterop;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Grids;
@@ -21,6 +22,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
     {
         [Inject] public HttpClient Http { get; set; }
         [Inject] protected IRepositoryHttp HttpNew { get; set; }
+        [Inject] protected IJSRuntime JsRuntime { get; set; }
         
         protected SfSpinner refSpinner;
         protected bool SpinnerVisible { get; set; } = false;
@@ -132,10 +134,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
                 costoProd = response;
             else
             {
-                await ToastMensajeError($"Hubo un error al obtener el costo del producto {Codigo.Trim()}, \n tal vez no posee fórmula.");
-                showCostResults = false;
-                SpinnerVisible = false;
-                StateHasChanged();
+                await errorOnResponse($"Hubo un error al obtener el costo del producto {Codigo.Trim()}, \n tal vez no posee fórmula.");
                 return;
             }
             
@@ -145,10 +144,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
                 costoGen = response2;
             else
             {
-                await ToastMensajeError($"Hubo un error al obtener el factor de conversion del producto {Codigo.Trim()}.");
-                showCostResults = false;
-                SpinnerVisible = false;
-                StateHasChanged();
+                await errorOnResponse($"Hubo un error al obtener el factor de conversion del producto {Codigo.Trim()}.");
                 return;
             }
 
@@ -158,10 +154,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
                 precio = response3;
             else
             {
-                await ToastMensajeError($"Hubo un error al obtener el precio del producto {Codigo.Trim()} o el precio es 0.");
-                showCostResults = false;
-                SpinnerVisible = false;
-                StateHasChanged();
+                await errorOnResponse($"Hubo un error al obtener el precio del producto {Codigo.Trim()} o el precio es 0.");
                 return;
             }
 
@@ -169,10 +162,23 @@ namespace SupplyChain.Client.Pages.Ingenieria
             showCostResults = true;
             StateHasChanged();
         }
+        private async Task errorOnResponse(String response)
+        {
+            await ToastMensajeError(response);
+            showCostResults = false;
+            SpinnerVisible = false;
+            Descripcion = "";
+            StateHasChanged();
+        }
         protected async Task AgregarValores()
         {
             CantidadMostrar *= 2;
             await BuscarProducto();
+        }
+
+        protected async Task AbrirTrazabilidad()
+        {
+            await JsRuntime.InvokeVoidAsync("open", new object[2] { $"/ingenieria/consulta-formulas/{Codigo.Trim()}", "_blank" });
         }
         private async Task ToastMensajeExito(string content = "Guardado con exito!")
         {

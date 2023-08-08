@@ -3,6 +3,7 @@
 @using SupplyChain.Client.Pages.Visor_Pdf
 @using SupplyChain.Client.Pages.CDM
 @page "/ingenieria/consulta-formulas"
+@page "/ingenieria/consulta-formulas/{extern_codigo}"
 @inherits BaseConsultaFormulas
 
 <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>

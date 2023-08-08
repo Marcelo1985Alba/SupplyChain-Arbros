@@ -65,7 +65,7 @@ namespace SupplyChain
                     var codigoInsumo = string.IsNullOrWhiteSpace(item.CG_SE) ? item.CG_MAT.Trim() : item.CG_SE.Trim();
                     try
                     {
-                        if (!string.IsNullOrWhiteSpace(item.CG_SE))
+                        if (!string.IsNullOrWhiteSpace(item.CG_SE)  && !item.CG_SE.Trim().StartsWith("ICALR"))
                         {
                             ConexionSQL xConexionSQL3 = new ConexionSQL(CadenaConexionSQL);
                             string xSQLCommandString2 = "SELECT * FROM FORM2 WHERE CG_PROD ='" + codigoInsumo + "' and REVISION  = (SELECT MAX(REVISION) FROM FORM2 " +
@@ -83,7 +83,7 @@ namespace SupplyChain
                             
                             foreach (Formula mat in item.formulasSemielaborado)
                             {
-                                if(!string.IsNullOrWhiteSpace(mat.Cg_Mat))
+                                if(!string.IsNullOrWhiteSpace(mat.Cg_Mat) && !mat.Cg_Mat.Trim().StartsWith("ICALR"))
                                 {
                                     //solo ordenes de compra
                                     Compra aux = await _context.Compras.Where(s => s.CG_MAT.Trim() == mat.Cg_Mat.Trim() && s.NUMERO > 0)
@@ -105,7 +105,7 @@ namespace SupplyChain
                                 }
                             }   
                         }
-                        else if(!string.IsNullOrWhiteSpace(item.CG_MAT))
+                        else if(!string.IsNullOrWhiteSpace(item.CG_MAT) && !item.CG_MAT.Trim().StartsWith("ICALR"))
                         {
                             Compra aux = await _context.Compras.Where(s => s.CG_MAT.Trim() == item.CG_MAT.Trim() && s.NUMERO > 0)
                                 .OrderByDescending(s => s.FE_EMIT).FirstOrDefaultAsync();

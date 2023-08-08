@@ -35,26 +35,6 @@ namespace SupplyChain.Server.Controllers.Ingenieria
             //OC ABIERTAS
             try
             {
-                ConexionSQL xConexionSQL = new(CadenaConexionSQL);
-                dbIngenieria = xConexionSQL
-                    .EjecutarSQL(String.Format("SELECT * FROM vIngenieria_Productos_Formulas"));
-
-                List<vIngenieriaProductosFormulas> xLista = dbIngenieria.AsEnumerable()
-                    .Select(m => new vIngenieriaProductosFormulas()
-                    {
-                        CG_PROD = m.Field<string>("CG_PROD"),
-                        DES_PROD = m.Field<string>("DES_PROD"),
-                        TIENE_FORM = m.Field<bool>("TIENE_FORM"),
-                        FORM_ACTIVA = m.Field<bool>("FORM_ACTIVA"),
-                        PRECIO = m.Field<decimal>("PRECIO"),
-                    }).ToList();
-
-                foreach (vIngenieriaProductosFormulas item in xLista)
-                {
-                    CostoService _costoService = new CostoService(_context, CadenaConexionSQL);
-                    item.CMP = await _costoService.CalcularCostoPorProd(item.CG_PROD, 1, 1);
-                }
-
                 return await _context.vIngenieriaProductosFormulas.ToListAsync();
             }
             catch (Exception ex)

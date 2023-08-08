@@ -28,6 +28,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
         [Inject] public HttpClient Http { get; set; }
         [Inject] public ExcelService ExcelService { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
+        [Parameter] public string extern_codigo { get; set; }
         protected SfTab refSfTab;
         protected SfSpinner refSpinner;
         protected bool VisibleSpinner = false;
@@ -80,6 +81,12 @@ namespace SupplyChain.Client.Pages.Ingenieria
             MainLayout.Titulo = "Consulta de Fórmulas";
             VisibleSpinner = true;
             DataOrdeProductosFormulas = await Http.GetFromJsonAsync<List<vIngenieriaProductosFormulas>>("api/Ingenieria/GetProductoFormulas");
+            if (extern_codigo != null)
+            {
+                ProdSelected = DataOrdeProductosFormulas.FirstOrDefault(s => s.CG_PROD.Trim() == extern_codigo.Trim());
+                listaDespiece = await Http.GetFromJsonAsync<List<DespiecePlanificacion>>($"api/Planificacion/Despiece/{extern_codigo.Trim()}/1/1");
+                await DialogDespieceRef.Show();
+            }
             VisibleSpinner = false;
         }
 
