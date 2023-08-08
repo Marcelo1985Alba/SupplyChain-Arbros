@@ -45,18 +45,26 @@
                                 <div class="form-group col-md-6">
                                     <a href="/Abms/productos" target="_blank">Producto:</a>
                                     <SfTextBox ID="DES_PROD" @bind-Value="@(procuns.CG_PROD)"></SfTextBox>
-                                    @*<SfComboBox TValue="string" CssClass="customClass" TItem="Producto" PopupWidth="auto" AllowFiltering="true"
+                                   @* <SfComboBox TValue="string" CssClass="customClass" TItem="Producto" PopupWidth="auto" AllowFiltering="true"
                                                 @bind-Value="@(procuns.CG_PROD)" DataSource="@productos">
                                         <ComboBoxFieldSettings Value="DES_PROD" Text="DES_PROD"></ComboBoxFieldSettings>
                                     </SfComboBox>*@
                                 </div>
-                                <div class="form-group col-md-6">
+                               @* <div class="form-group col-md-6">
                                     <a href="/Abms/areas" target="_blank">Area:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="Areas" PopupWidth="50%" AllowFiltering="true"
                                                 @bind-Value="@(procuns.DES_AREA)" DataSource="@areas">
-                                        <ComboBoxFieldSettings Value="areas.DES_AREA" Text="areas.DES_AREA"></ComboBoxFieldSettings>
+                                        <ComboBoxFieldSettings Value="DES_AREA" Text="DES_AREA"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>*@
+                                <div class="form-group col-md-6">
+                                    <a href="/Abms/celdas" target="_blank">Celda:</a>
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Celdas" PopupWidth="auto" AllowFiltering="true"
+                                    @bind-Value="@(procuns.CG_CELDA)" DataSource="@celdas">
+                                        <ComboBoxFieldSettings Value="Id" Text="DES_CELDA"></ComboBoxFieldSettings>
                                     </SfComboBox>
                                 </div>
+
                             </div>
                             <div class="form-row">
                                 @*<div class="form-group col-md-6">
@@ -66,13 +74,7 @@
                                         <ComboBoxFieldSettings Value="DES_LINEA" Text="DES_LINEA"></ComboBoxFieldSettings>
                                     </SfComboBox>
                                 </div>*@
-                                <div class="form-group col-md-6">
-                                    <a href="/Abms/celdas" target="_blank">Celda:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Celdas" PopupWidth="%40" AllowFiltering="true"
-                                                @bind-Value="@(procuns.CG_CELDA)" DataSource="@celdas">
-                                        <ComboBoxFieldSettings Value="Celdas.DES_CELDA" Text="Celdas.DES_CELDA"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
+                               
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">

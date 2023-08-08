@@ -50,7 +50,7 @@ namespace SupplyChain.Shared
 		public decimal COSTAC { get; set; }
 		public decimal OCUPACION { get; set; }
 		public decimal COEFI { get; set; }
-		public string TAREAPROC { get; set; }
+		public string? TAREAPROC { get; set; }
 		public bool ESTANDAR { get; set; }
 		public int RELEVAN { get; set; }
 		public decimal REVISION { get; set; }

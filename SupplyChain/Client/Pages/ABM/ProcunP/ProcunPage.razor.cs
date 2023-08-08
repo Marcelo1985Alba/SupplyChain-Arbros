@@ -31,7 +31,6 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         "Add",
         "Edit",
         "Delete",
-        "Print",
         new ItemModel { Text = "Copia", TooltipText = "Copiar una celda", PrefixIcon = "e-copy", Id = "Copy" },
         new ItemModel{Text="Excel Export", Id="ExcelExport"}
         };
@@ -45,6 +44,8 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         protected bool SpinnerVisible = false;
 
         protected bool popupFormVisible = false;
+        protected ConfirmacionDialog ConfirmacionEliminarDialog;
+
 
         [CascadingParameter] MainLayout MainLayout { get; set; }
         protected override async Task OnInitializedAsync()
@@ -71,6 +72,8 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         }
         #endregion
 
+
+
         protected async Task OnToolbarHandler(ClickEventArgs args)
         {   
             if (args.Item.Id == "Copy")
@@ -79,23 +82,22 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             }
             else if (args.Item.Id == "grdProcun_delete")
             {
-                if ((await refGrid.GetSelectedRecordsAsync()).Count > 0)
+                if((await refGrid.GetSelectedRecordsAsync()).Count > 0)
                 {
-                    bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar el procun?");
+                    bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desela eliminar el proceso?");
                     if (isConfirmed)
                     {
-                        List<Procun> procunsABorrar = await refGrid.GetSelectedRecordsAsync();
+                        List<Procun> procunsABorrar= await refGrid.GetSelectedRecordsAsync();
                         var response = ProcunService.Eliminar(procunsABorrar);
                         if (!response.IsCompletedSuccessfully)
                         {
-                            await this.ToastObj.Show(new ToastModel
+                            await this.ToastObj.ShowAsync(new ToastModel
                             {
-                                Title = "EXITO!",
-                                Content = "los procun seleccionados fueron eliminadas correctamente.",
-                                CssClass = "e-toast-success",
-                                Icon = "e-success toast-icons",
-                                ShowCloseButton = true,
-                                ShowProgressBar = true
+                                Title="EXITO!",
+                                Content="Los procesos eliminados fueron eliminados correctamente.",
+                                Icon="e-success toast-icons",
+                                ShowCloseButton=true,
+                                ShowProgressBar=true
                             });
                         }
                         else
@@ -109,7 +111,9 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             {
                 await refGrid.ExportToExcelAsync();
             }
-            }
+        }
+
+      
 
         private async Task CopiarProcun()
         {
@@ -168,7 +172,6 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 procSeleccionado = args.Data;
                 procSeleccionado.ESNUEVO = false;
             }
-
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.ClearFiltering
@@ -188,6 +191,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 await refGrid.RefreshColumns();
                 await refGrid.RefreshHeader();
             }
+          
         }
 
         protected async Task OnActionCompleteHandler(ActionEventArgs<Procun> args)
