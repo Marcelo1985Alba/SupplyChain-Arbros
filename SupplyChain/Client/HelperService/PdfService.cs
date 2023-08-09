@@ -583,7 +583,7 @@ namespace SupplyChain.Client.HelperService
 
             PdfDocument document1 = new();
             document1.PageSettings.Margins.All = 0;
-            document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(320, 100);//110
+            document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(227, 70);//110
 
             //document1.PageSettings.Margins.Left = -2;
             //document1.PageSettings.Margins.Right = -15;
@@ -593,14 +593,14 @@ namespace SupplyChain.Client.HelperService
             PdfGrid pdfGrid1 = new PdfGrid();
             PdfPage page = document1.Pages.Add();
             PdfGraphics graphics = page.Graphics;
-            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
+            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 8);
             PdfLightTable pdfTable = new();
             //page.Graphics.RotateTransform(-90);
 
 
             graphics.DrawString($"{pedidos.CG_ART.Trim()}                  OC {pedidos.OCOMPRA}\r\n{pedidos.DES_ART.Trim()}\r\n" +
                 $"Despacho {pedidos.DESPACHO} Lote {pedidos.LOTE} VALE {pedidos.VALE}\n" +
-                $"{pedidos.Proveedor?.DESCRIPCION.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(30, 10));
+                $"{pedidos.Proveedor?.DESCRIPCION.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(10, 10));
 
             PdfQRBarcode qrBarcode = new PdfQRBarcode();
             // Sets the Input mode to Binary mode
@@ -610,12 +610,12 @@ namespace SupplyChain.Client.HelperService
             // Set the Error correction level to high
             qrBarcode.ErrorCorrectionLevel = PdfErrorCorrectionLevel.High;
             // Set dimension for each block
-            qrBarcode.Size = new Syncfusion.Drawing.SizeF(70, 90);//110
+            qrBarcode.Size = new Syncfusion.Drawing.SizeF(50, 70);//110
             qrBarcode.XDimension = 2;
             var baseUrl = Http.BaseAddress;
             qrBarcode.Text = $"{baseUrl}inventario/movimiento-entre-depositos/{pedidos.CG_ART}/{pedidos.DESPACHO}";
             // Draw the QR barcode
-            qrBarcode.Draw(page, new PointF(235, 15));
+            qrBarcode.Draw(page, new PointF(166, 10));
 
             //document1.PageSettings.Margins.Left = margin;
             //document1.PageSettings.Margins.Right = margin;
