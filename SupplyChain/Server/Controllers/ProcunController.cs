@@ -89,6 +89,13 @@ namespace SupplyChain
                 var username = HttpContext.User.Identity.Name;
                 Proc.USUARIO=username;
                 Proc.AUTORIZA=username;
+                Proc.FECHA = DateTime.Today;
+                Proc.DESCRIP = " ";
+                Proc.OBSERV = " ";
+                Proc.DESPROC = " ";
+                Proc.TAREAPROC = "1";
+                Proc.CG_CATEOP = " ";
+                Proc.CG_FORM = 1;
                 await _procunRepository.Agregar(Proc);
                 return CreatedAtAction("GetProcun", new { id = Proc.Id }, Proc);
             }

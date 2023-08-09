@@ -68,7 +68,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         }
         protected async Task OnReiniciarGrilla()
         {
-            await refGrid.ResetPersistData();
+            await refGrid.ResetPersistDataAsync();
         }
         #endregion
 
@@ -104,6 +104,10 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                         {
                             await ToastMensajeError();
                         }
+
+                        //await refGrid.Refresh();
+                         
+                        // novaawait refGrid.RefreshColumnsAsync();    
                     }
                 }
             }
@@ -111,9 +115,9 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             {
                 await refGrid.ExportToExcelAsync();
             }
+         
         }
 
-      
 
         private async Task CopiarProcun()
         {
