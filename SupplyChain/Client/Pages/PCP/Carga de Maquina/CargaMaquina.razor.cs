@@ -84,7 +84,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
         public void OpenExternalLink()
         {
             //string url = "https://aerre.grafana.net/public-dashboards/42c12fc6b1ad4c57b9ad51817fa6d364";
-            string url = "http://192.168.0.248:3005/";
+            string url = "http://192.168.0.247:8080/aerre/index.html";
             if (!string.IsNullOrEmpty(url))
             {
                 // Open the URL in a new tab or window
