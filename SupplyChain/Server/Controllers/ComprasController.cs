@@ -326,6 +326,8 @@ namespace SupplyChain.Server.Controllers
 
                 await _generaRepository.Libera("NUMERO");
 
+                //var compra= await _compraRepository.Obtener(c => c.NUMERO == numoc).FirstOrDefaultAsync();
+
                 return Ok(numoc);
 
             }
@@ -334,7 +336,7 @@ namespace SupplyChain.Server.Controllers
                 await _generaRepository.Libera("NUMERO");
                 return BadRequest(e);
             }
-            return Ok(numoc);
+          //  return Ok(numoc);
         }
 
 

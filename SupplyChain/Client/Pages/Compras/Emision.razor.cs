@@ -29,6 +29,7 @@ using SupplyChain.Shared;
 using Syncfusion.Blazor.Kanban.Internal;
 using System.Drawing;
 using Syncfusion.Blazor.SplitButtons;
+using System.Text.Json;
 
 namespace SupplyChain.Client.Pages.Emision
 {
@@ -568,14 +569,12 @@ namespace SupplyChain.Client.Pages.Emision
             //                  string sqlCommandString = string.Format("UPDATE COMPRAS SET NUMERO = 9999 WHERE REGISTRO IN ("+ listaordenescompra + ")");
             response = await Http.PutAsJsonAsync("api/compras/actualizaoc/" + listaordenescompra+ '/'+xespecif2 + '/' + xcondven + '/' + bonif, listaordenescompra);
 
-            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
-                || response.StatusCode == System.Net.HttpStatusCode.NotFound
-                || response.StatusCode == System.Net.HttpStatusCode.Conflict)
+            if (!response.IsSuccessStatusCode)
             {
                 var mensServidor = await response.Content.ReadAsStringAsync();
 
                 Console.WriteLine($"Error: {mensServidor}");
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Error al actualizar OC",
@@ -588,22 +587,39 @@ namespace SupplyChain.Client.Pages.Emision
             else
             {
 
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                if (response.IsSuccessStatusCode)
                 {
                     String responseString = await response.Content.ReadAsStringAsync();
-                    await this.ToastObj.Show(new ToastModel
+                    //var comprasJSON = await responseCompras.HttpResponseMessage.Content.ReadAsStringAsync();
+                    //var jsonSerializerOptions= new JsonSerializerOptions() { PropertyNameCaseInsensitive = true } ;
+                    //item = System.Text.Json.JsonSerializer.Deserialize<Compra>(comprasJSON, jsonSerializerOptions);
+                    item.NUMERO= Convert.ToInt32(responseString);
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "EXITO!",
-                        Content = "Orden de Compra " + responseString + " Generada",
+                        Content = "Orden de Compra " + item.NUMERO + " Generada",
                         CssClass = "e-toast-success",
                         Icon = "e-success toast-icons",
                         ShowCloseButton = false,
                         ShowProgressBar = false
                     });
-                }
-                proveedorescompras = await Http.GetFromJsonAsync<List<Proveedores_compras>>("api/compras/GetProveedorescompras/");
 
-                limpia();
+                }
+                listaordenescompra = listaordenescompra;
+
+                //proveedorescompras = await Http.GetFromJsonAsync<List<Proveedores_compras>>("api/compras/GetProveedorescompras/");
+                //PdfDocument document= new PdfDocument();
+                //PdfPage page = document.Pages.Add();
+                //PdfGraphics graphics= page.Graphics;
+                //PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+                //graphics.DrawString("Orden de Compra "+ responseCompras,  font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+                //MemoryStream xx = new MemoryStream();
+                //document.Save(xx);
+                //document.Close(true);
+
+                //await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportOC?numero={listaordenescompra}", "_blank" });
+                await imprimiroc();
+                await limpia();
             
             }
            
