@@ -1,0 +1,30 @@
+﻿@page "/llamar-python"
+
+@inject BlazorPythonService PythonApi
+
+<input @bind="nombreArchivo" placeholder="Nombre de archivo" /><br />
+<input @bind="puerto" placeholder="Puerto" /><br />
+<select @bind="accion">
+    <option value="enviar">Enviar</option>
+    <option value="recibir">Recibir</option>
+</select><br />
+<button @onclick="EjecutarFuncionEnPython">Llamar a la función en Python</button>
+<p>@resultado</p>
+
+@code {
+    private string nombreArchivo;
+    private string puerto;
+    private string accion = "enviar";
+    private string resultado;
+
+    private async Task EjecutarFuncionEnPython()
+    {
+        var data = new
+        {
+            NombreArchivo = nombreArchivo,
+            Puerto = puerto,
+            Accion = accion
+        };
+        resultado = await PythonApi.EjecutarFuncionEnPythonAsync(data);
+    }
+}

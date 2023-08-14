@@ -102,6 +102,8 @@ namespace SupplyChain.Client
             services.AddScoped<ProveedoresService>();
             services.AddScoped<SemaforoService>();
             services.AddScoped<MotivosPresupuestoService>();
+
+            services.AddScoped<BlazorPythonService>();
         }
     }
 }
