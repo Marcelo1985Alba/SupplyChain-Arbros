@@ -58,11 +58,11 @@ namespace SupplyChain.Server.Repositorios
                 
             };
 
-            foreach (var item in _configEmailCompras.Copia) 
-            {
-                var ccAddress = new MailAddress(item);
-                message.CC.Add(ccAddress);
-            }
+            //foreach (var item in _configEmailCompras.Copia) 
+            //{
+            //    var ccAddress = new MailAddress(item);
+            //    message.CC.Add(ccAddress);
+            //}
 
             
             
