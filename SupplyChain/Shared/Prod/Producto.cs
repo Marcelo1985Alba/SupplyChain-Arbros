@@ -45,7 +45,7 @@ namespace SupplyChain.Shared.Models
         public decimal? LOPTIMO { get; set; } = 0;
         [ColumnaGridViewAtributo(Name = "Area fabricación")]
         public int? CG_AREA { get; set; } = 0;
-        [ColumnaGridViewAtributo(Name = "Línea fabricación"), Required(ErrorMessage = "El tipo es requerido")]
+        [ColumnaGridViewAtributo(Name = "Línea fabricación"), Required(ErrorMessage = "La linea es requerida")]
         public int? CG_LINEA { get; set; }
         [ColumnaGridViewAtributo(Name = "Tiempo fabricación")]
         public decimal? TIEMPOFAB { get; set; } = 15;

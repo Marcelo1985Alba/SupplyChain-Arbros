@@ -19,6 +19,7 @@ using System.Globalization;
 using System.Collections;
 using System.Net;
 using Microsoft.AspNetCore.Http.Metadata;
+using Syncfusion.XlsIO.Implementation.Security;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -416,31 +417,64 @@ namespace SupplyChain.Server.Controllers
             //ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
 
             var query = "";
-            
-            if (pl.CG_ESTADOCARGA == 0)
-            {
-                query = "UPDATE Programa SET CG_ESTADOCARGA = " + pl.CG_ESTADOCARGA +
-                    ",Fe_emit = GETDATE(), CG_ESTADO = " + ValorAnterior + ", CANT = "+ pl.CANT+ " WHERE (Cg_ordf =" + pl.CG_ORDF +
-                    " OR Cg_ordfAsoc = " + pl.CG_ORDF + ")";
-            }
-            else if (pl.CG_ESTADOCARGA == 1)
-            {
-                query = "UPDATE Programa SET CG_ESTADOCARGA = " + pl.CG_ESTADOCARGA + 
-                    ",Fe_plan = GETDATE(), CG_ESTADO = " + ValorAnterior + ", CANT = " + pl.CANT + " WHERE (Cg_ordf =" + pl.CG_ORDF +
-                 " OR Cg_ordfAsoc = " + pl.CG_ORDF + ")";
-            }
-            else if (pl.CG_ESTADOCARGA == 2)
-            {
-                query = "UPDATE Programa SET CG_ESTADOCARGA = " + pl.CG_ESTADOCARGA +
-                    ",Fe_Firme = GETDATE(), CG_ESTADO = " + ValorAnterior + ", CANT = " + pl.CANT + " WHERE (Cg_ordf =" + pl.CG_ORDF +
-                 " OR Cg_ordfAsoc = " + pl.CG_ORDF + ")";
-            }
-            else if (pl.CG_ESTADOCARGA == 5)
-            {
-                query = "EXEC NET_PCP_Anular_OrdenFabricacion " + pl.CG_ORDF + ", 'User'";
-            }
 
-            await _context.Database.ExecuteSqlRawAsync(query);
+            try
+            {
+                //if (pl.CG_ESTADOCARGA == 0)
+                //{
+                //    query = "UPDATE Programa SET CG_ESTADOCARGA = " + pl.CG_ESTADOCARGA +
+                //        ",Fe_emit = GETDATE(), CG_ESTADO = " + ValorAnterior + ", CANT = " + pl.CANT + " WHERE (Cg_ordf =" + pl.CG_ORDF +
+                //        " OR Cg_ordfAsoc = " + pl.CG_ORDF + ")";
+                //}
+                //else if (pl.CG_ESTADOCARGA == 1)
+                //{
+                //    query = "UPDATE Programa SET CG_ESTADOCARGA = " + pl.CG_ESTADOCARGA +
+                //        ",Fe_plan = GETDATE(), CG_ESTADO = " + ValorAnterior + ", CANT = " + pl.CANT + " WHERE (Cg_ordf =" + pl.CG_ORDF +
+                //     " OR Cg_ordfAsoc = " + pl.CG_ORDF + ")";
+                //}
+                //else if (pl.CG_ESTADOCARGA == 2)
+                //{
+                //    query = "UPDATE Programa SET CG_ESTADOCARGA = " + pl.CG_ESTADOCARGA +
+                //        ",Fe_Firme = GETDATE(), CG_ESTADO = " + ValorAnterior + ", CANT = " + pl.CANT + " WHERE (Cg_ordf =" + pl.CG_ORDF +
+                //     " OR Cg_ordfAsoc = " + pl.CG_ORDF + ")";
+                //}
+                if (pl.CG_ESTADOCARGA == 0 || pl.CG_ESTADOCARGA == 1 || pl.CG_ESTADOCARGA == 2 )
+                {
+                    var programas = _context.Programa
+                    .Where(p => p.CG_ORDF == pl.CG_ORDF || p.CG_ORDFASOC == pl.CG_ORDF).ToList();
+
+                    foreach (var item in programas)
+                    {
+                        item.CG_ESTADOCARGA = pl.CG_ESTADOCARGA;
+                        item.CG_ESTADO = ValorAnterior;
+                        item.CANT = pl.CANT;
+
+                        if (pl.CG_ESTADOCARGA == 0)
+                            item.FE_EMIT = DateTime.Now;
+
+                        if (pl.CG_ESTADOCARGA == 1)
+                            item.FE_PLAN = DateTime.Now;
+
+                        if (pl.CG_ESTADOCARGA == 2)
+                            item.FE_FIRME = DateTime.Now;
+
+                        
+                    }
+
+                    _context.UpdateRange(programas);
+                    await _context.SaveChangesAsync();
+                }
+                else if (pl.CG_ESTADOCARGA == 5)
+                {
+                    query = "EXEC NET_PCP_Anular_OrdenFabricacion " + pl.CG_ORDF + ", 'User'";
+                }
+
+                //await _context.Database.ExecuteSqlRawAsync(query);
+            }
+            catch (Exception ex)
+            {
+
+            }
             return Ok();
         }
         

@@ -601,7 +601,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             ordenFabricacion.Presion = presion;
             if (String.IsNullOrEmpty(ordenFabricacion.DES_OPER))
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "AVISO!",
                     Content = "Antes de generar el archivo debe asignar un operario",
