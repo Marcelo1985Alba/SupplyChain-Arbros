@@ -541,29 +541,50 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
         }
 
 
-        protected async Task VerPlano(string cg_prod)
+        protected async Task VerPlano()
         {
-            var file = ordenFabricacion.CG_PROD.Substring(0, 7) + ".pdf";
-            if (await ExistePlano(file))
+
+            var response = await Http2.GetFromJsonAsync<Producto>($"api/Prod/{ordenFabricacion.CG_PROD.Trim()}");
+
+            if (response.Error)
             {
-                await JS.InvokeAsync<object>("open", $"Pdf/{cg_prod.Trim()}/RUTAOF", "_blank");
+
             }
             else
             {
-                await this.ToastObj.ShowAsync(new ToastModel
+                var cg_prod = response.Response.Id;
+                if (response.Response.CG_ORDEN == 1)
                 {
-                    Title = "ERROR!",
-                    Content = "No existe plano",
-                    CssClass = "e-toast-danger",
-                    Icon = "e-success toast-icons",
-                    ShowCloseButton = true,
-                    ShowProgressBar = true
-                });
-            }
-            //NavigationManager.NavigateTo($"Pdf/{cg_prod}/RUTAOF");
-            //await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{cg_prod}/RUTAOF", $"_blank" });
+                    cg_prod = response.Response.Id;
+                }
 
-            //NavigationManager.NavigateTo($"/VerPdf/{cg_prod}/RUTAOF");
+                if (response.Response.CG_ORDEN == 3)
+                {
+                    cg_prod = response.Response.Id.Substring(0, 7);
+                }
+
+                var file = cg_prod + ".pdf";
+                if (await ExistePlano(file))
+                {
+                    await JS.InvokeVoidAsync("open", $"Pdf/{cg_prod.Trim()}/RUTAOF", "_blank");
+                }
+                else
+                {
+                    await this.ToastObj.ShowAsync(new ToastModel
+                    {
+                        Title = "ERROR!",
+                        Content = "No existe plano",
+                        CssClass = "e-toast-danger",
+                        Icon = "e-success toast-icons",
+                        ShowCloseButton = true,
+                        ShowProgressBar = true
+                    });
+                }
+            }
+            
+
+
+            
         }
 
         protected async Task IrAServicio(string pedido)

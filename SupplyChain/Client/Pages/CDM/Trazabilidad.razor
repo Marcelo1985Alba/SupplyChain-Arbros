@@ -72,7 +72,7 @@
                             <button type="submit" class="btn btn-primary btn-sm" @onclick="@Ensayos">Ver ensayos</button>
                         </div>
                         <div class="col-md-4 col-sm-6 my-1">
-                            <button type="submit" class="btn btn-primary btn-sm" @onclick="@VerPlano">Ver Plano</button>
+                            <button type="submit" class="btn btn-sm" @onclick="@VerPlano">Ver Plano</button>
                         </div>
                     }
                 }
@@ -1989,11 +1989,12 @@
 
             if (await ExistePlano(file))
             {
-                await confirmacionDescargarPlanoDialog.ShowAsync();
+                // await confirmacionDescargarPlanoDialog.ShowAsync();
+                await Js.InvokeVoidAsync("open", $"Pdf/{prod.Trim()}/RUTAOF", "_blank");
             }
             else
             {
-                await confirmacionDescargarPlanoDialog.HideAsync();
+                // await confirmacionDescargarPlanoDialog.HideAsync();
                 await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
