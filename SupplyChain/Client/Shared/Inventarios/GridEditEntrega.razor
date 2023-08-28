@@ -169,7 +169,15 @@ else
                             <Template>
                                 @{
                                     var ped = (context as Pedidos);
-                                    <span>@ordenesPlaneadas.Where(c => c.CG_PROD.Trim() == ped.CG_ART.Trim()).Sum(p => p.CANT).ToString("0")</span>
+                                    if (ped.CG_ORDEN == 3)
+                                    {
+                                        <span>@ordenesPlaneadas.Where(c => c.CG_PROD.Trim() == ped.CG_ART.Trim()).Sum(p => p.CANT).ToString("0")</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    
                                 }
                             </Template>
                         </GridColumn>
@@ -177,7 +185,15 @@ else
                             <Template>
                                 @{
                                     var ped = (context as Pedidos);
-                                    <span>@ordenesFabricacion.Where(c => c.CG_PROD.Trim() == ped.CG_ART.Trim()).Sum(p => p.CANT).ToString("0")</span>
+                                    if (ped.CG_ORDEN == 3)
+                                    {
+                                        <span>@ordenesFabricacion.Where(c => c.CG_PROD.Trim() == ped.CG_ART.Trim()).Sum(p => p.CANT).ToString("0")</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    
                                 }
                             </Template>
                         </GridColumn>
