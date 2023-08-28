@@ -49,7 +49,9 @@ namespace SupplyChain.Server.Controllers
                 {
                     query = query.Where(r => r.CG_DEP != 1);
                 }
-                return await query.ToListAsync();
+
+                var lista = await query.ToListAsync();
+                return lista;
             }
             catch (Exception ex)
             {

@@ -31,6 +31,7 @@ namespace SupplyChain.Client.Pages.Inventarios
         [Parameter] public int OrdFab { get; set; } = 0;
         [Parameter] public PedidoEncabezado StockEncabezado { get; set; } = new PedidoEncabezado();
         [Parameter] public int vale { get; set; } = 0;
+        [Parameter] public bool AplicarFiltro { get; set; } = false;
         [Parameter] public string cg_mat { get; set; } = string.Empty;
         [Parameter] public string despacho { get; set; } = string.Empty;
 
@@ -107,6 +108,9 @@ namespace SupplyChain.Client.Pages.Inventarios
             else if (OperacionId == 9 && (!string.IsNullOrEmpty(cg_mat)) )
             {
                 await GetVale();
+
+                AplicarFiltro = true;
+
                 AbrirBuscadorResumenStockAutomaticamente = true;
             }
             else

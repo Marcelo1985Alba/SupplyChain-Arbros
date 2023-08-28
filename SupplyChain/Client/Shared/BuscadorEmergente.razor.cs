@@ -43,6 +43,7 @@ namespace SupplyChain.Client.Shared
         /// <summary>
         /// contiene el valor para filtrar la columna CG_ART
         /// </summary>
+        [Parameter] public bool AplicarFiltro { get; set; } = false;
         [Parameter] public string filterCG_ART { get; set; } = string.Empty;
         [Parameter] public string filterDESPACHO { get; set; } = string.Empty;
 

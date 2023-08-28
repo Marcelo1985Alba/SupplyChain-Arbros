@@ -45,17 +45,21 @@
                                         Operators="@(new Operator[] { Operator.Contains })"
                                         Mode="FilterBarMode.Immediate"></GridFilterSettings>*@<GridFilterSettings>
                                             <GridFilterColumns>
-                                                @if (Columnas.AsQueryable().Any(col => col == "CG_ART"))
+                                                @if (AplicarFiltro)
                                                 {
-                                                <GridFilterColumn Field="CG_ART" MatchCase=false
-                                                                  Operator="Syncfusion.Blazor.Operator.Contains" Predicate="and" Value="@filterCG_ART"></GridFilterColumn>
-                                            }
-                                                
-                                                @if (Columnas.AsQueryable().Any(col => col == "DESPACHO"))
-                                                {
-                                                    <GridFilterColumn Field="DESPACHO" MatchCase=false
-                                                                    Operator="Syncfusion.Blazor.Operator.Contains" Predicate="and" Value="@filterDESPACHO"></GridFilterColumn>
-                                                }                    
+                                                    if (Columnas.AsQueryable().Any(col => col == "CG_ART"))
+                                                    {
+                                                        <GridFilterColumn Field="CG_ART" MatchCase=false
+                                                                          Operator="Syncfusion.Blazor.Operator.Contains" Predicate="and" Value="@filterCG_ART"></GridFilterColumn>
+                                                    }
+
+                                                    if (Columnas.AsQueryable().Any(col => col == "DESPACHO"))
+                                                    {
+                                                        <GridFilterColumn Field="DESPACHO" MatchCase=false
+                                                                          Operator="Syncfusion.Blazor.Operator.Contains" Predicate="and" Value="@filterDESPACHO"></GridFilterColumn>
+                                                    }
+                                                }
+                                                                   
                                                                   
                                             </GridFilterColumns>
                                         </GridFilterSettings>
