@@ -194,9 +194,8 @@ namespace SupplyChain.Client.Pages.PCP.Planificaciones
                         listaPlanificacion = await Http.GetFromJsonAsync<List<Planificacion>>("api/Planificacion/1/0");
                     }
                 }
-                await GridPlanificacion.RefreshColumnsAsync();
-                GridPlanificacion.Refresh();
-                await GridPlanificacion.RefreshHeaderAsync();
+                
+                await GridPlanificacion.Refresh();
 
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping ||

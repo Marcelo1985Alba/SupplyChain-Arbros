@@ -4,14 +4,17 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SupplyChain;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Controllers;
+using SupplyChain.Shared;
 
 namespace SupplyChain
 {
@@ -21,11 +24,13 @@ namespace SupplyChain
     {
         private readonly AppDbContext _context;
         private readonly GeneraController generaController;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public PedidosController(AppDbContext context, GeneraController generaController)
+        public PedidosController(AppDbContext context, GeneraController generaController, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             this.generaController = generaController;
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -110,13 +115,30 @@ namespace SupplyChain
         [HttpGet("BuscarTrazabilidad/{Pedido}/{Cliente}/{Codigo}/{Busqueda}")]
         public async Task<ActionResult<List<Pedidos>>> BuscarTrazabilidad(string Pedido, string Cliente, string Codigo, int Busqueda)
         {
+
+            List<Claim> roleClaims = HttpContext.User.FindAll(ClaimTypes.Role).ToList();
+            var cg_cli_usuario = 0;
+            if (roleClaims.Any(c => c.Value == "Cliente"))
+            {
+                var userName = HttpContext.User.Identity.Name;
+                var user = await userManager.FindByNameAsync(userName);
+                cg_cli_usuario = user.Cg_Cli;
+            }
+
             List<Pedidos> lContiene = new();
             if (Pedido != "Vacio")
             {
                 if (_context.Pedidos.Any())
                 {
-                    lContiene = await _context.Pedidos.Where(p => p.PEDIDO.ToString().Contains(Pedido) 
-                    && p.AVISO == "ALTA DE PRODUCTO FABRICADO").OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
+                    var query = _context.Pedidos.Where(p => p.PEDIDO.ToString().Contains(Pedido)
+                    && p.AVISO == "ALTA DE PRODUCTO FABRICADO");
+
+                    if (roleClaims.Any(c => c.Value == "Cliente"))
+                    {
+                        query = query.Where(p => p.CG_CLI == cg_cli_usuario);
+                    }
+
+                    lContiene = await query.OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
                 }
                 if (lContiene == null)
                 {
@@ -127,8 +149,14 @@ namespace SupplyChain
             {
                 if (_context.Pedidos.Any())
                 {
-                    lContiene = await _context.Pedidos.Where(p => p.DES_CLI.Contains(Cliente) && p.AVISO == "ALTA DE PRODUCTO FABRICADO")
-                        .OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
+                    var query = _context.Pedidos.Where(p => p.DES_CLI.Contains(Cliente) && p.AVISO == "ALTA DE PRODUCTO FABRICADO");
+
+                    if (roleClaims.Any(c => c.Value == "Cliente"))
+                    {
+                        query = query.Where(p => p.CG_CLI == cg_cli_usuario);
+                    }
+
+                    lContiene = await query.OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
                 }
                 if (lContiene == null)
                 {
@@ -139,7 +167,15 @@ namespace SupplyChain
             {
                 if (_context.Pedidos.Any())
                 {
-                    lContiene = await _context.Pedidos.Where(p => p.CG_ART.Contains(Codigo) && p.AVISO == "ALTA DE PRODUCTO FABRICADO").OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
+                    var query = _context.Pedidos.Where(p => p.CG_ART.Contains(Codigo) && p.AVISO == "ALTA DE PRODUCTO FABRICADO");
+
+                    if (roleClaims.Any(c => c.Value == "Cliente"))
+                    {
+                        query = query.Where(p => p.CG_CLI == cg_cli_usuario);
+                    }
+
+
+                    lContiene = await query.OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
                 }
                 if (lContiene == null)
                 {
@@ -150,7 +186,14 @@ namespace SupplyChain
             {
                 if (_context.Pedidos.Any())
                 {
-                    lContiene = await _context.Pedidos.Where(p =>  p.AVISO == "ALTA DE PRODUCTO FABRICADO").OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
+                    var query = _context.Pedidos.Where(p => p.AVISO == "ALTA DE PRODUCTO FABRICADO");
+
+                    if (roleClaims.Any(c => c.Value == "Cliente"))
+                    {
+                        query = query.Where(p => p.CG_CLI == cg_cli_usuario);
+                    }
+
+                    lContiene = await query.OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
                 }
                 if (lContiene == null)
                 {

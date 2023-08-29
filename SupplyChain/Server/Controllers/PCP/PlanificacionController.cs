@@ -467,13 +467,14 @@ namespace SupplyChain.Server.Controllers
                 else if (pl.CG_ESTADOCARGA == 5)
                 {
                     query = "EXEC NET_PCP_Anular_OrdenFabricacion " + pl.CG_ORDF + ", 'User'";
+                    await _context.Database.ExecuteSqlRawAsync(query);
                 }
 
-                //await _context.Database.ExecuteSqlRawAsync(query);
+
             }
             catch (Exception ex)
             {
-
+                return BadRequest(ex.Message);
             }
             return Ok();
         }
