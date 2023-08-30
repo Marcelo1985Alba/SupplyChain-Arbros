@@ -7,6 +7,7 @@ using Syncfusion.Blazor.Inputs;
 using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
+using Syncfusion.XlsIO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,11 +47,12 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         protected List<Lineas> lineas = new();
         protected List<Celdas> celdas = new();
 
-        SfTreeView<Producto> tree;
-        List<Producto> ListaDataProducto = new List<Producto>();
-        List<Producto> Temp = new List<Producto>();
-        public bool isFiltered = false;
-        List<Producto> DataSource = new List<Producto>();
+        protected SfSpinner refSpinner;
+        protected SfTreeView<Producto>? treeViewMaster;
+        protected SfTreeView<Producto>? treeViewProducto;
+        public string[] CheckedNodes = new string[] { };
+        protected bool SpinnerVisibleProdMaestro = false;
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -77,44 +79,9 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             {
                 celdas = response4.Response;
             }
-            //ListaDataProducto = GetData();
         }
 
-        //protected async List<Producto>GetData(){
-
-        //    List<Producto> TempDataSource = new List<Producto>();
-        //    return TempDataSource;
-        //}
-
-        //protected async void OnInput(InputEventArgs eventArgs)
-        //{
-        //    if (eventArgs.Value == "")
-        //    {
-        //        ListaDataProducto = GetData();
-        //        isFiltered = false;
-        //    }
-        //    else
-        //    {
-        //        DataSource = GetData();
-        //        List<Producto> filteredValues = DataSource.FindAll(e => e.Id.ToString().StartsWith(eventArgs.Value));
-        //        List<Producto> filteredDataProducto = new List<Producto>();
-        //        Producto data = new Producto();
-        //        for (string i = 0; i < filteredValues.Count; i++)
-        //        {
-        //            data = filteredValues[i];
-        //            if (data.Id == null)
-        //            {
-        //                data.Id= false;
-        //                filteredDataProducto.Add(data);
-        //                break;
-        //            }
-        //            while(data.Id != null)
-        //            {
-        //                if(fi)
-        //            }
-        //        }
-        //    }
-        //}
+        
 
         protected async Task<bool> Agregar(Procun proc)
         {

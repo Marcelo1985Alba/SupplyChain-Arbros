@@ -45,16 +45,23 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <a href="/Abms/productos" target="_blank">Producto:</a>
-                                    <SfTextBox ID="DES_PROD" @bind-Value="@(procuns.CG_PROD)" ></SfTextBox>
-                                  @*  <SfTreeView @ref="" ID="" TValue="">
-                                        <TreeViewEvents TValue="" DataBound=""></TreeViewEvents>
-                                        <TreeViewFieldsSettings DataSource="" TValue="" Id="" IconCss="" ParentID="" Text="" HasChildren="" Expanded=""></TreeViewFieldsSettings>
-                                    </SfTreeView>*@
-                                   @* <SfComboBox TValue="string" CssClass="customClass" TItem="Producto" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(procuns.CG_PROD)" DataSource="@productos">
-                                        <ComboBoxFieldSettings Value="DES_PROD" Text="DES_PROD"></ComboBoxFieldSettings>
-                                    </SfComboBox>*@
+                                   <SfDropDownList TItem="Producto" TValue="string"@* DataSource=""*@ AllowFiltering="true" Placeholder="Selecione un Producto"
+                                       FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" FilterBarPlaceholder="Buscar Producto..">
+                                       <DropDownListEvents TItem="Producto" TValue="string" @*ValueChange=""*@ />
+                                       <DropDownListFieldSettings Text="PRODUCTO" Value="Id" />
+                                   </SfDropDownList>    
+                                </div>
+                                <div class="control-wrapper">
+                                    <div id="treeview">
+                                        <SfTreeView @*@ref=""*@ TValue="Producto" ID="tvMenu" ShowCheckBox="true" AutoCheck="true"
+                                                    @*@bind-CheckedNodes="" *@>
+                                            <TreeViewFieldsSettings @*DataSource=""*@ TValue="Producto" Id="Id" Text="Producto"
+                                                                    ParentID="ParentId" HasChildren="TieneChild" NavigateUrl="Url" IconCss="IconCss">
+                                            </TreeViewFieldsSettings>
+                                            <TreeViewEvents TValue="Producto"@* NodeChecked=""*@></TreeViewEvents>
+                                            <SfSpinner Type="SpinnerType.Fabric" Size="25" Label="Cargando..." @*@bind-Visible=""*@></SfSpinner>
+                                        </SfTreeView>
+                                    </div>
                                 </div>
                                 
                                @* <div class="form-group col-md-6">
