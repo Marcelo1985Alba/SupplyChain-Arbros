@@ -43,6 +43,26 @@ namespace SupplyChain.Server.Controllers.Ingenieria
             }
         }
         
+        // GET: api/Ingenieria/GetProductoFormulasWithCost
+        [HttpGet("GetProductoFormulasWithCost")]
+        public async Task<ActionResult<IEnumerable<vIngenieriaProductosFormulas>>> GetProductoFormulasWithCost(DateTime? startDate, DateTime? endDate)
+        {
+            try
+            {
+                List<vIngenieriaProductosFormulas> toRet = await _context.vIngenieriaProductosFormulas.ToListAsync();
+                CostoService _costoService = new CostoService(_context, CadenaConexionSQL);
+                foreach (vIngenieriaProductosFormulas item in toRet)
+                {
+                    item.COSTO = await _costoService.CalcularCostoPorProd(item.CG_PROD, 1, 1);
+                }
+                return toRet;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+        
         // GET: api/Ingenieria/GetCostoByProd
         [HttpGet("GetCostoByProd/{cg_prod}/{formula}/{cant}")]
         public async Task<decimal> GetCostoByProd(string cg_prod, int formula, decimal cant)

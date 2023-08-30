@@ -6,93 +6,151 @@
 <SfSpinner @ref="@refSpinner" @bind-Visible="@SpinnerVisible" Label="Procesando..." Size="80" Type="SpinnerType.Bootstrap">
 </SfSpinner>
 
+
 <div class="col-12 control-section">
     <SfToast ID="toast_default" @ref="ToastObj">
         <ToastPosition X="Center" Y="Top"></ToastPosition>
     </SfToast>
-
     <div class="row">
         <div class="col-lg-12">
             <div class="form-material">
                 <fieldset class="scheduler-border">
-                    <legend class="scheduler-border">Costos</legend>
-                    <div class="form-row">
-                        <div class="form-group col-lg-6 col-md-6 col-sm-12 col-12">
-                            <label class="col-form-label text-info">Rango de Fechas</label>
-                            <div class="d-flex">
-                                <SfDateRangePicker ID="fechaCostos" TValue="DateTime" Placeholder="Seleccionar..." Format="dd/MM/yyyy"
-                                                   WeekNumber="true" ShowTodayButton="true" CssClass=""
-                                                   @bind-StartDate="@selectedStartDate" @bind-EndDate="@selectedEndDate">
-                                    <DateRangePickerEvents TValue="DateTime" ValueChange="ValueChangeFechaCostos"></DateRangePickerEvents>
-                                </SfDateRangePicker>
-                                <div class="ml-2">
-                                    <button type="submit" class="e-control e-btn e-lib e-smal e-round e-info e-icon-btn" @onclick="@CalculateCost">
-                                        <span class="fa fa-search e-btn-icon"></span>
-                                    </button>
+                    <legend class="scheduler-border">
+                        <div class="d-flex align-items-center">
+                            <span class="mr-2">Costos</span>
+                            <button type="submit" class="e-control e-btn e-lib e-smal e-round e-info e-icon-btn" @onclick="@OnSelectedViewChange">
+                                <span class="@classValue"></span>
+                            </button>
+                        </div>
+                    </legend>
+                    @if (classValue == "fa fa-table e-btn-icon")
+                    {
+                        <div class="form-row">
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12 col-12">
+                                <label class="col-form-label text-info">Rango de Fechas</label>
+                                <div class="d-flex">
+                                    <SfDateRangePicker ID="fechaCostos" TValue="DateTime" Placeholder="Seleccionar..." Format="dd/MM/yyyy"
+                                                       WeekNumber="true" ShowTodayButton="true" CssClass=""
+                                                       @bind-StartDate="@selectedStartDate" @bind-EndDate="@selectedEndDate">
+                                        <DateRangePickerEvents TValue="DateTime" ValueChange="ValueChangeFechaCostos"></DateRangePickerEvents>
+                                    </SfDateRangePicker>
+                                    <div class="ml-2">
+                                        <button type="submit" class="e-control e-btn e-lib e-smal e-round e-info e-icon-btn" @onclick="@CalculateCost">
+                                            <span class="fa fa-search e-btn-icon"></span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    @if (showResults)
-                    {
-                        <div class="form-row">
-                            <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
-                                <label class="col-form-label text-info">Egresos</label>
-                                <input type="text" class="form-control" value="@Math.Floor(costos.egresos)" disabled="true"/>
+                        @if (showResults)
+                        {
+                            <div class="form-row">
+                                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
+                                    <label class="col-form-label text-info">Egresos</label>
+                                    <input type="text" class="form-control" value="@Math.Floor(costos.egresos)" disabled="true"/>
+                                </div>
+                                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
+                                    <label class="col-form-label text-info">Unidades Equivalentes</label>
+                                    <input type="text" class="form-control" value="@Math.Floor(costos.unidades_equivalentes)" disabled="true"/>
+                                </div>
+                                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
+                                    <label class="col-form-label text-info">Coeficiente</label>
+                                    <input type="text" class="form-control" value="@Math.Floor(costos.coeficiente)" disabled="true"/>
+                                </div>
                             </div>
-                            <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
-                                <label class="col-form-label text-info">Unidades Equivalentes</label>
-                                <input type="text" class="form-control" value="@Math.Floor(costos.unidades_equivalentes)" disabled="true"/>
+                            <legend class="scheduler-border">Costo por Producto</legend>
+                            <div class="form-row">
+                                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
+                                    <label class="col-form-label text-info">Código</label>
+                                    <SfTextBox Placeholder="" Input="OnInputCG_PROD" @bind-Value="@Codigo"></SfTextBox>
+                                </div>
+                                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
+                                    <label class="col-form-label text-info">Descripción</label>
+                                    <SfTextBox Placeholder="" Input="OnInputDES_PROD" @bind-Value="@Descripcion"></SfTextBox>
+                                </div>
+                                <div class="form-group col-lg-2 col-md-2 col-sm-12 col-12 my-4">
+                                    <button type="submit" class="e-control e-btn e-lib e-smal e-round e-info e-icon-btn" @onclick="@BuscarProducto">
+                                        <span class="fa fa-search"></span>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
-                                <label class="col-form-label text-info">Coeficiente</label>
-                                <input type="text" class="form-control" value="@Math.Floor(costos.coeficiente)" disabled="true"/>
+                        }
+                        @if (showCostResults)
+                        {
+                            <div class="form-row">
+                                <div class="form-group col-lg-3 col-md-3 col-sm-12 col-12">
+                                    <label class="col-form-label text-info">Costo Materia Prima</label>
+                                    <input type="text" class="form-control" value="@Math.Floor(costoProd)" disabled="true"/>
+                                </div>
+                                <div class="form-group col-lg-3 col-md-3 col-sm-12 col-12">
+                                    <label class="col-form-label text-info">Costos Generales de Fab</label>
+                                    <input type="text" class="form-control" value="@Math.Floor(costoGen * (decimal)costos.coeficiente)" disabled="true"/>
+                                </div>
+                                <div class="form-group col-lg-2 col-md-2 col-sm-12 col-12">
+                                    <label class="col-form-label text-info">Precio</label>
+                                    <input type="text" class="form-control" value="@Math.Floor(precio)" disabled="true"/>
+                                </div>
+                                <div class="form-group col-lg-2 col-md-2 col-sm-12 col-12">
+                                    <label class="col-form-label text-info">Utilidad</label>
+                                    <input type="text" class="form-control" value="@($"{Math.Floor(precio - costoProd - costoGen * (decimal)costos.coeficiente)} ({(((precio - costoProd - costoGen * (decimal)costos.coeficiente) / precio) * 100):0.00}%)")" disabled="true"/>
+                                </div>
+                                <div class="form-group col-lg-2 col-md-2 col-sm-12 col-12">
+                                    <label class="col-form-label text-info">Despiece.</label>
+                                    <br/>
+                                    <button type="submit" class="e-control e-btn e-lib e-smal e-round e-info e-icon-btn" @onclick="@AbrirTrazabilidad">
+                                        <span class="fa fa-list-ul black"></span>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <legend class="scheduler-border">Costo por Producto</legend>
-                        <div class="form-row">
-                            <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
-                                <label class="col-form-label text-info">Código</label>
-                                <SfTextBox Placeholder="" Input="OnInputCG_PROD" @bind-Value="@Codigo"></SfTextBox>
-                            </div>
-                            <div class="form-group col-lg-4 col-md-4 col-sm-12 col-12">
-                                <label class="col-form-label text-info">Descripción</label>
-                                <SfTextBox Placeholder="" Input="OnInputDES_PROD" @bind-Value="@Descripcion"></SfTextBox>
-                            </div>
-                            <div class="form-group col-lg-2 col-md-2 col-sm-12 col-12 my-4">
-                                <button type="submit" class="e-control e-btn e-lib e-smal e-round e-info e-icon-btn" @onclick="@BuscarProducto">
-                                    <span class="fa fa-search"></span>
-                                </button>
-                            </div>
-                        </div>
+                        }
                     }
-                    @if (showCostResults)
+                    else if (classValue == "fa fa-line-chart e-btn-icon")
                     {
                         <div class="form-row">
-                            <div class="form-group col-lg-3 col-md-3 col-sm-12 col-12">
-                                <label class="col-form-label text-info">Costo Materia Prima</label>
-                                <input type="text" class="form-control" value="@Math.Floor(costoProd)" disabled="true"/>
-                            </div>
-                            <div class="form-group col-lg-3 col-md-3 col-sm-12 col-12">
-                                <label class="col-form-label text-info">Costos Generales de Fab</label>
-                                <input type="text" class="form-control" value="@Math.Floor(costoGen * (decimal)costos.coeficiente)" disabled="true"/>
-                            </div>
-                            <div class="form-group col-lg-2 col-md-2 col-sm-12 col-12">
-                                <label class="col-form-label text-info">Precio</label>
-                                <input type="text" class="form-control" value="@Math.Floor(precio)" disabled="true"/>
-                            </div>
-                            <div class="form-group col-lg-2 col-md-2 col-sm-12 col-12">
-                                <label class="col-form-label text-info">Utilidad</label>
-                                <input type="text" class="form-control" value="@($"{Math.Floor(precio - costoProd - costoGen * (decimal)costos.coeficiente)} ({(((precio - costoProd - costoGen * (decimal)costos.coeficiente) / precio) * 100):0.00}%)")" disabled="true"/>
-                            </div>
-                            <div class="form-group col-lg-2 col-md-2 col-sm-12 col-12">
-                                <label class="col-form-label text-info">Despiece.</label>
-                                <br/>
-                                <button type="submit" class="e-control e-btn e-lib e-smal e-round e-info e-icon-btn" @onclick="@AbrirTrazabilidad">
-                                    <span class="fa fa-list-ul black"></span>
-                                </button>
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12 col-12">
+                                <label class="col-form-label text-info">Rango de Fechas</label>
+                                <div class="d-flex">
+                                    <SfDateRangePicker ID="fechaCostos" TValue="DateTime" Placeholder="Seleccionar..." Format="dd/MM/yyyy"
+                                                       WeekNumber="true" ShowTodayButton="true" CssClass=""
+                                                       @bind-StartDate="@selectedStartDateForGrid" @bind-EndDate="@selectedEndDateForGrid">
+                                        <DateRangePickerEvents TValue="DateTime" ValueChange="ValueChangeFechaForGrid"></DateRangePickerEvents>
+                                    </SfDateRangePicker>
+                                    <div class="ml-2">
+                                        <button type="submit" class="e-control e-btn e-lib e-smal e-round e-info e-icon-btn" @onclick="@SearchForGrid">
+                                            <span class="fa fa-search e-btn-icon"></span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        @if (showResults)
+                        {
+                        }
+                        <SfGrid @ref="@GridProdForm" DataSource="@DataOrdeProductosFormulas" AllowPaging="true" AllowFiltering="true" AllowSorting="true" ID="ProdForm"
+                                GridLines="GridLine.Both" Toolbar="@(new List<string>() { "ExcelExport" })" AllowExcelExport="true">
+                            <GridPageSettings PageSizes="true"></GridPageSettings>
+                            <GridEvents TValue="vIngenieriaProductosFormulas"
+                                        QueryCellInfo="(async (args) => await QueryCellInfoHandler(args))"
+                                        CommandClicked="(async (args) => await CommandClickHandler(args))">
+                            </GridEvents>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(vIngenieriaProductosFormulas.CG_PROD) HeaderText="Producto" Width="120"></GridColumn>
+                                <GridColumn Field=@nameof(vIngenieriaProductosFormulas.DES_PROD) HeaderText="Descripcion" Width="150"></GridColumn>
+                                <GridColumn Field=@nameof(vIngenieriaProductosFormulas.COSTO) HeaderText="Costo" Width="150"></GridColumn>
+                                <GridColumn Field=@nameof(vIngenieriaProductosFormulas.TIENE_FORM) HeaderText="Tiene Formula" TextAlign="TextAlign.Right"
+                                            Width="50" DisplayAsCheckBox="true">
+                                </GridColumn>
+                                <GridColumn Field=@nameof(vIngenieriaProductosFormulas.FORM_ACTIVA) HeaderText="Formula Activa" TextAlign="TextAlign.Right"
+                                            Width="50" DisplayAsCheckBox="true">
+                                </GridColumn>
+                                <GridColumn HeaderText="Despiece" Width="30px">
+                                    <GridCommandColumns>
+                                        <GridCommandColumn Type="CommandButtonType.None" Title="Despiece"
+                                                           ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-list-ul black", Content = "", CssClass = "botonGrilla" })"/>
+                                    </GridCommandColumns>
+                                </GridColumn>
+                            </GridColumns>
+                        </SfGrid>
                     }
                 </fieldset>
             </div>
@@ -131,6 +189,78 @@
         </Content>
     </DialogTemplates>
 </SfDialog>
+
+<SfDialog @ref="DialogDespieceRef" Width="80%" Height="550px" IsModal="true" ShowCloseIcon="true" Visible="false" CssClass="custom-dialog">
+    <DialogTemplates>
+        <Header>
+            <p class="text-white">DESPIECE DEL PRODUCTO: @ProdSelected.CG_PROD.Trim() - @ProdSelected.DES_PROD </p>
+        </Header>
+        <Content>
+            <div class="col-lg-12 control-section mt-2">
+                <div class="form-row">
+                    <SfGrid @ref="GridDespiece" DataSource="@listaDespiece" ID="Despiece"
+                            GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true"
+                            Height="100%" Width="100%" Toolbar="@Toolbaritems" AllowExcelExport="true">
+                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                        <GridTemplates>
+                            <DetailTemplate>
+                                @{
+                                    var insumo = context as DespiecePlanificacion;
+                                }
+                                <div>
+                                    <SfGrid ID="grdDespieceStockPrev" Width="870px" TValue="Formula"
+                                            AllowPaging="true" AllowResizing="true" AllowReordering="true"
+                                            DataSource="@insumo.formulasSemielaborado">
+                                        <GridColumns>
+                                            <GridColumn Field=@nameof(Formula.CANT_MAT) HeaderText="CANTIDAD" Width="110"></GridColumn>
+                                            <GridColumn Field=@nameof(Formula.Cg_Mat) HeaderText="CG_MAT" Width="110"></GridColumn>
+                                            <GridColumn Field=@nameof(Formula.Cg_Se) HeaderText="CG_SE" Width="150"></GridColumn>
+                                            <GridColumn Field=@nameof(Formula.COSTO) Format="N2" HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                        </GridColumns>
+                                    </SfGrid>
+                                </div>
+                            </DetailTemplate>
+                        </GridTemplates>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(DespiecePlanificacion.CG_SE) HeaderText="Semi Elaborado" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(DespiecePlanificacion.CG_MAT) HeaderText="Materia prima" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field=@nameof(DespiecePlanificacion.CANT_MAT) HeaderText="Cant" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(DespiecePlanificacion.DES_PROD) HeaderText="Descripción" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field=@nameof(DespiecePlanificacion.COSTO) Format="N2" HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field=@nameof(DespiecePlanificacion.STOCK) Format="N2" HeaderText="Stock" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field=@nameof(DespiecePlanificacion.CANT_MAT) Format="N2" HeaderText="Cantidad Necesaria de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field=@nameof(DespiecePlanificacion.COMP_DE_ENTRADA) Format="N2" HeaderText="Comprometido Entrada" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field=@nameof(DespiecePlanificacion.STOCK_CORREGIDO) Format="N2" HeaderText="Stock Corregido" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field=@nameof(DespiecePlanificacion.SALDO) Format="N2" HeaderText="Saldo de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field=@nameof(DespiecePlanificacion.CANT_PLANEADAS) Format="N2" HeaderText="Cantidad Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field=@nameof(DespiecePlanificacion.SALDO_PLANEADAS) Format="N2" HeaderText="Saldo Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field=@nameof(DespiecePlanificacion.CANT_TOTAL) Format="N2" HeaderText="Cantidad Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field=@nameof(DespiecePlanificacion.SALDO_TOTAL) Format="N2" HeaderText="Saldo Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                        </GridColumns>
+                        <GridAggregates>
+                            <GridAggregate>
+                                <GridAggregateColumns>
+                                    <GridAggregateColumn Field=@nameof(DespiecePlanificacion.COSTO) Type="AggregateType.Sum" Format="C2">
+                                        <FooterTemplate>
+                                            @{
+                                                var aggregate = (context as AggregateTemplateContext);
+                                                <div>
+                                                    <p>Costo total de producto: @aggregate.Sum</p>
+                                                </div>
+                                            }
+                                        </FooterTemplate>
+                                    </GridAggregateColumn>
+                                </GridAggregateColumns>
+                            </GridAggregate>
+                        </GridAggregates>
+                    </SfGrid>
+                </div>
+            </div>
+
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
 
 <style>
 </style>

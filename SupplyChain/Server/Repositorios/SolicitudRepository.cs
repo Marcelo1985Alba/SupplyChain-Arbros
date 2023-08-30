@@ -85,7 +85,7 @@ namespace SupplyChain.Server.Repositorios
             await base.Agregar(entity);
 
 
-            if (entity.Producto.StartsWith("0012")) //SI ES REPARACION
+            if (entity.Producto.StartsWith("0012") || entity.Producto.StartsWith("00100")) //SI ES REPARACION
             {
                 //TODO: ENVIAR A SERVICIO
                 var servicio = new Service()

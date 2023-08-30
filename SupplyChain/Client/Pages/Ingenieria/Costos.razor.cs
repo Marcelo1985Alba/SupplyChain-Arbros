@@ -10,10 +10,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.JSInterop;
 using SupplyChain.Client.RepositoryHttp;
+using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Inputs;
+using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
+using Syncfusion.Blazor.Popups;
 using Syncfusion.Blazor.Spinner;
 
 namespace SupplyChain.Client.Pages.Ingenieria
@@ -29,6 +32,8 @@ namespace SupplyChain.Client.Pages.Ingenieria
         protected SfToast ToastObj;
         protected DateTime selectedStartDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-7);
         protected DateTime selectedEndDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1).AddDays(-1);
+        protected DateTime selectedStartDateForGrid = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-7);
+        protected DateTime selectedEndDateForGrid = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1).AddDays(-1);
         protected bool showResults = false;
         protected bool showCostResults = false;
         protected SupplyChain.Shared.Costos costos;
@@ -42,6 +47,20 @@ namespace SupplyChain.Client.Pages.Ingenieria
         protected decimal costoGen = 0;
         protected decimal precio = 0;
         public bool IsVisible { get; set; } = false;
+        
+        protected SfGrid<Pedidos> Grid;
+        protected SfGrid<vIngenieriaProductosFormulas> GridProdForm;
+        protected List<vIngenieriaProductosFormulas> DataOrdeProductosFormulas { get; set; } = new List<vIngenieriaProductosFormulas>();
+        protected SfDialog DialogDespieceRef;
+        protected SfGrid<DespiecePlanificacion> GridDespiece;
+        protected List<DespiecePlanificacion> listaDespiece = new();
+        protected vIngenieriaProductosFormulas ProdSelected = new();
+        public List<Pedidos> DataSource { get; set; } = null!;
+        protected List<Object> Toolbaritems = new List<Object>(){"Search",};
+        protected List<Deposito> depositos = new();
+        protected Programa[] ordenesPlaneadas = null;
+        protected Programa[] ordenesFabricacion = null;
+        protected string classValue = "fa fa-table e-btn-icon";
         
         protected async Task CalculateCost()
         {
@@ -68,11 +87,39 @@ namespace SupplyChain.Client.Pages.Ingenieria
             showResults = true;
             SpinnerVisible = false;
         }
-        
-        public async Task ValueChangeFechaCostos(RangePickerEventArgs<DateTime> args)
+
+        protected async Task SearchForGrid()
+        {
+            SpinnerVisible = true;
+            DataOrdeProductosFormulas = await Http.GetFromJsonAsync<List<vIngenieriaProductosFormulas>>($"api/Ingenieria/" +
+                $"GetProductoFormulasWithCost?startDate={selectedStartDateForGrid.ToString()}&endDate={selectedEndDateForGrid.ToString()}");
+            SpinnerVisible = false;
+        }
+
+        protected async Task OnSelectedViewChange()
+        {
+            if (classValue == "fa fa-table e-btn-icon")
+            {
+                SpinnerVisible = true;
+                classValue = "fa fa-line-chart e-btn-icon";
+                SpinnerVisible = false;
+            }
+            else if(classValue == "fa fa-line-chart e-btn-icon")
+            {
+                SpinnerVisible = true;
+                classValue = "fa fa-table e-btn-icon";
+                SpinnerVisible = false;
+            }
+        }
+        public void ValueChangeFechaCostos(RangePickerEventArgs<DateTime> args)
         {
             selectedStartDate = args.StartDate;
             selectedEndDate = args.EndDate;
+        }
+        public void ValueChangeFechaForGrid(RangePickerEventArgs<DateTime> args)
+        {
+            selectedStartDateForGrid = args.StartDate;
+            selectedEndDateForGrid = args.EndDate;
         }
         
         protected async Task OnInputCG_PROD(InputEventArgs args)
@@ -179,6 +226,25 @@ namespace SupplyChain.Client.Pages.Ingenieria
         protected async Task AbrirTrazabilidad()
         {
             await JsRuntime.InvokeVoidAsync("open", new object[2] { $"/ingenieria/consulta-formulas/{Codigo.Trim()}", "_blank" });
+        }
+        protected async Task QueryCellInfoHandler(QueryCellInfoEventArgs<vIngenieriaProductosFormulas> args)
+        {
+            if (!args.Data.TIENE_FORM)
+                args.Cell.AddClass(new string[] { "rojas" });
+            if (args.Data.TIENE_FORM && !args.Data.FORM_ACTIVA)
+                args.Cell.AddClass(new string[] { "amarillas" });
+        }
+        protected async Task CommandClickHandler(CommandClickEventArgs<vIngenieriaProductosFormulas> args)
+        {
+            if (args.CommandColumn.Title == "Despiece")
+            {
+                SpinnerVisible = true;
+                ProdSelected = args.RowData;
+                listaDespiece = await Http.GetFromJsonAsync<List<DespiecePlanificacion>>("api/Planificacion/Despiece/" +
+                    $"{args.RowData.CG_PROD.Trim()}/1/1");
+                SpinnerVisible = false;
+                await DialogDespieceRef.Show();
+            }
         }
         private async Task ToastMensajeExito(string content = "Guardado con exito!")
         {
