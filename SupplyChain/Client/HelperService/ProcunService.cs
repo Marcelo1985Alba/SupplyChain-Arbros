@@ -12,7 +12,7 @@ using System.Timers;
 
 namespace SupplyChain.Client.HelperService
 {
-    public class ProcunService : BaseService<Procun, int>
+    public class ProcunService : BaseService<Procun, decimal>
     {
         private const string API = "api/Procun";
 
@@ -20,7 +20,7 @@ namespace SupplyChain.Client.HelperService
         {
         }
 
-        public async Task<bool> Existe(int id)
+        public async Task<bool> Existe(decimal id)
         {
             var response = await http.GetFromJsonAsync<bool>($"{API}/Existe/{id}");
             if (response.Error)

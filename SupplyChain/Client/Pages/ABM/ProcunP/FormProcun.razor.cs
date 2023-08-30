@@ -3,6 +3,8 @@ using SupplyChain.Client.HelperService;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Inputs;
+using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
 using System;
@@ -44,6 +46,15 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         protected List<Lineas> lineas = new();
         protected List<Celdas> celdas = new();
 
+        SfTreeView<Producto> tree;
+        List<Producto> ListaDataProducto = new List<Producto>();
+        List<Producto> Temp = new List<Producto>();
+        public bool isFiltered = false;
+        List<Producto> DataSource = new List<Producto>();
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+        }
         protected async override Task OnInitializedAsync()
         {
             var response = await ProductoService.Get();
@@ -66,7 +77,44 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             {
                 celdas = response4.Response;
             }
+            //ListaDataProducto = GetData();
         }
+
+        //protected async List<Producto>GetData(){
+
+        //    List<Producto> TempDataSource = new List<Producto>();
+        //    return TempDataSource;
+        //}
+
+        //protected async void OnInput(InputEventArgs eventArgs)
+        //{
+        //    if (eventArgs.Value == "")
+        //    {
+        //        ListaDataProducto = GetData();
+        //        isFiltered = false;
+        //    }
+        //    else
+        //    {
+        //        DataSource = GetData();
+        //        List<Producto> filteredValues = DataSource.FindAll(e => e.Id.ToString().StartsWith(eventArgs.Value));
+        //        List<Producto> filteredDataProducto = new List<Producto>();
+        //        Producto data = new Producto();
+        //        for (string i = 0; i < filteredValues.Count; i++)
+        //        {
+        //            data = filteredValues[i];
+        //            if (data.Id == null)
+        //            {
+        //                data.Id= false;
+        //                filteredDataProducto.Add(data);
+        //                break;
+        //            }
+        //            while(data.Id != null)
+        //            {
+        //                if(fi)
+        //            }
+        //        }
+        //    }
+        //}
 
         protected async Task<bool> Agregar(Procun proc)
         {
@@ -154,5 +202,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 ShowProgressBar = true
             });
         }
+
+
     }
 }

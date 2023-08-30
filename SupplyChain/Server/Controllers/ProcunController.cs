@@ -27,9 +27,9 @@ namespace SupplyChain
         public async Task<ActionResult<IEnumerable<Procun>>> GetProcun()
         {
             try
-            {
+            {   //var listaprocun= await _procunRepository.ObtenerTodos();
                 return await _procunRepository.ObtenerTodos();
-            }
+            }                                                               
             catch (Exception ex)
             {
                 return BadRequest(ex);
@@ -37,7 +37,7 @@ namespace SupplyChain
         }
 
         [HttpGet("Existe/{id}")]
-        public async Task<ActionResult<bool>> ExisteProcun(int id)
+        public async Task<ActionResult<bool>> ExisteProcun(decimal id)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace SupplyChain
 
         // PUT: api/Procun/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProcun(int id, Procun Proc)
+        public async Task<IActionResult> PutProcun(decimal id, Procun Proc)
         {
             if (id != Proc.Id)
             {
@@ -118,7 +118,7 @@ namespace SupplyChain
 
         // DELETE: api/Procun/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Procun>> DeleteProcun(int id)
+        public async Task<ActionResult<Procun>> DeleteProcun(decimal id)
         {
             var Proc = await _procunRepository.ObtenerPorId(id);
             if (Proc == null)

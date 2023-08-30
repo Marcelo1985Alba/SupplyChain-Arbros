@@ -5,18 +5,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SupplyChain.Shared
 {
 	[Table("Procun")]
-	public class Procun : EntityBase<int>
+	public class Procun : EntityBase<decimal>
 	{
 		[Key, Column("REGISTRO")]
 		//public new decimal Id { get; set; } = 0;
-		public new int Id { get; set; } = 0;
+		public new decimal Id { get; set; } = 0;
 		public int ORDEN { get; set; }
 		public string CG_PROD { get; set; }
 		public int CG_FORM { get; set; }
 		public int CG_AREA { get; set; }
 		public int CG_LINEA { get; set; }
 		public string CG_CELDA { get; set; }
-		public string DES_AREA { get; set; }
+		//public string DES_AREA { get; set; }
 		public string PROCESO { get; set; }	
 		public string? DESCRIP { get; set; }
 		public string? OBSERV {		get; set; }
