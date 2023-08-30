@@ -43,7 +43,7 @@ namespace SupplyChain.Shared.Models
         public decimal? STOCKMIN { get; set; } = 0;
         [ColumnaGridViewAtributo(Name = "Lote óptimo compra")]
         public decimal? LOPTIMO { get; set; } = 0;
-        [ColumnaGridViewAtributo(Name = "Area fabricación")]
+        [ColumnaGridViewAtributo(Name = "Area fabricación"), Required(ErrorMessage = "El Area es requerida")]
         public int? CG_AREA { get; set; } = 0;
         [ColumnaGridViewAtributo(Name = "Línea fabricación"), Required(ErrorMessage = "La linea es requerida")]
         public int? CG_LINEA { get; set; }
@@ -57,7 +57,7 @@ namespace SupplyChain.Shared.Models
         public string MONEDA { get; set; } = "Dolares";
         [ColumnaGridViewAtributo(Name = "Celda fabricación"), Required(ErrorMessage = "La celda es requerida")]
         public string CG_CELDA { get; set; } = "";
-        [ColumnaGridViewAtributo(Name = "Tipo área fabricación")]
+        [ColumnaGridViewAtributo(Name = "Tipo área fabricación"), Required(ErrorMessage = "El Tipo de Area es requerida")]
         public int? CG_TIPOAREA { get; set; } = 0;
         public int? CG_CLAS { get; set; } = 0;
         [ColumnaGridViewAtributo(Name = "CAMPOCOM1")]

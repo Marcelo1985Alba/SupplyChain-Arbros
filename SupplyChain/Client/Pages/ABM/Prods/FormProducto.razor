@@ -125,6 +125,8 @@
                                                     @bind-Value="@(Producto.CG_CELDA)" DataSource="@celda">
                                             <ComboBoxFieldSettings Value="Id" Text="Id"></ComboBoxFieldSettings>
                                         </SfComboBox>
+                                        <ValidationMessage For="@(()=> Producto.CG_CELDA)"></ValidationMessage>
+
                                     </div>
                                 </div>
 
@@ -154,6 +156,8 @@
                                                     @bind-Value="@(Producto.CG_TIPOAREA)" DataSource="@tipoarea">
                                             <ComboBoxFieldSettings Value="Id" Text="DES_TIPOAREA"></ComboBoxFieldSettings>
                                         </SfComboBox>
+                                        <ValidationMessage For="@(()=> Producto.CG_LINEA)"></ValidationMessage>
+
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label>Clase:</label>

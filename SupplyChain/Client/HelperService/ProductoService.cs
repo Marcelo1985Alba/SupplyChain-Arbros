@@ -1,5 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using SupplyChain.Client.HelperService.Base;
+using SupplyChain.Client.Pages.ABM.Prods;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
@@ -16,7 +17,7 @@ namespace SupplyChain.Client.HelperService
     {
         private const string API = "api/Prod";
 
-        public ProductoService(IRepositoryHttp httpClient): base(httpClient, API)
+        public ProductoService(IRepositoryHttp httpClient) : base(httpClient, API)
         {
         }
 
@@ -35,6 +36,12 @@ namespace SupplyChain.Client.HelperService
             }
 
             return true;
+        }
+
+        public async Task<HttpResponseWrapper<object>> Actualizar(Producto producto)
+        {
+            var response = await http.PutAsJsonAsync<Producto>($"{API}", producto);
+            return response;
         }
 
     }

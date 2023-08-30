@@ -181,13 +181,13 @@ namespace SupplyChain
         // PUT: api/Prod/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProd(string id, Producto Prod)
+        [HttpPut]
+        public async Task<IActionResult> PutProd( Producto Prod)
         {
-            if (id != Prod.Id)
-            {
-                return BadRequest();
-            }
+            //if (id != Prod.Id)
+            //{
+            //    return BadRequest();
+            //}
 
             try
             {
@@ -195,7 +195,7 @@ namespace SupplyChain
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await _productoRepository.Existe(id))
+                if (!await _productoRepository.Existe(Prod.Id))
                 {
                     return NotFound();
                 }
