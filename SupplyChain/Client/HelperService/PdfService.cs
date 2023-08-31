@@ -610,12 +610,13 @@ namespace SupplyChain.Client.HelperService
             // Set the Error correction level to high
             qrBarcode.ErrorCorrectionLevel = PdfErrorCorrectionLevel.High;
             // Set dimension for each block
-            qrBarcode.Size = new Syncfusion.Drawing.SizeF(50, 70);//110
+            qrBarcode.Size = new Syncfusion.Drawing.SizeF(60, 80);//110
             qrBarcode.XDimension = 2;
             var baseUrl = Http.BaseAddress;
-            qrBarcode.Text = $"{baseUrl}inventario/movimiento-entre-depositos/{pedidos.CG_ART}/{pedidos.DESPACHO}";
+            //qrBarcode.Text = $"{baseUrl}inventario/movimiento-entre-depositos/{pedidos.CG_ART.Trim()}/{pedidos.DESPACHO.Trim()}";            
+            qrBarcode.Text = $"{baseUrl}inventario/movimiento-entre-depositos?cg_mat={pedidos.CG_ART.Trim()}&despacho={pedidos.DESPACHO.Trim()}";
             // Draw the QR barcode
-            qrBarcode.Draw(page, new PointF(166, 10));
+            qrBarcode.Draw(page, new PointF(165, 10));
 
             //document1.PageSettings.Margins.Left = margin;
             //document1.PageSettings.Margins.Right = margin;

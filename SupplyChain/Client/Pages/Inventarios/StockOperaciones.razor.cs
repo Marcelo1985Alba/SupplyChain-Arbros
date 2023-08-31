@@ -375,6 +375,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                 {
                     registronegativo--;
                     Pedidos pedido = new();
+                    pedido.CG_ORDEN = item.CG_ORDEN;
                     pedido.CG_ORDF = programaSel.CG_ORDF;
                     pedido.TIPOO = StockEncabezado.TIPOO;
                     pedido.CG_PROVE = 0;

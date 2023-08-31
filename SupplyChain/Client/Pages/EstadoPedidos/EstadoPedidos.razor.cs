@@ -368,7 +368,7 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             if (args.Text == "1")
                 args.Text = "PEDIDO A CONFIRMAR";
             else if (args.Text == "2")
-                args.Text = "PEDIDO CONFIRMADO";
+                args.Text = $" {PedidoSeleccionado.FE_PED.ToString("dd/MM/yyyy")}\r\n PEDIDO CONFIRMADO ";
             else if (args.Text == "3")
                 args.Text = "EN PROCESO";
             //else if (args.Text == "4")
@@ -381,10 +381,12 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
                 args.Text = "A ENTREGAR";
             else if (args.Text == "7")
                 args.Text = "ENTREGADO";
-            //else if (args.Text == "9")
-            //    args.Text = "FACTURADO";
+            else if (args.Text == "8")
+                args.Text = "FACTURADO";
+            else if (args.Text == "9")
+                args.Text = "COBRADO";
             else
-                args.Text = " ";
+                args.Text = "";
         }
     }
 }
