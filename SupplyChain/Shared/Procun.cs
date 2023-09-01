@@ -60,5 +60,8 @@ namespace SupplyChain.Shared
 		public bool GUARDADO { get; set; }
 		[NotMapped]
 		public bool ESNUEVO { get; set; }
+		[NotMapped]
+		public string Des_prod { get; set; }
+		
 	}
 }

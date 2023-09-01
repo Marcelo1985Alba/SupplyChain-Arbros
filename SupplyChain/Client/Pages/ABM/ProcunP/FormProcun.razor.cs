@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SupplyChain.Client.HelperService;
+using SupplyChain.Client.Shared.BuscadorProducto;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Grids;
@@ -30,7 +31,9 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         [Parameter] public EventCallback<Procun> OnGuardar { get; set; }
         [Parameter] public EventCallback<Procun> OnEliminar { get; set; }
         [Parameter] public EventCallback OnCerrar { get; set; }
-
+        [Parameter] public Producto Producto { get; set; }= new Producto();
+        protected bool popupBuscadorVisibleProducto { get; set; } = false;
+        protected ProductoDialog refProductoDialog;
 
         protected SfGrid<Procun> refGridItems;
         protected SfSpinner refSpinnerCli;
@@ -48,11 +51,8 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         protected List<Celdas> celdas = new();
 
         protected SfSpinner refSpinner;
-        protected SfTreeView<Producto>? treeViewMaster;
-        protected SfTreeView<Producto>? treeViewProducto;
-        public string[] CheckedNodes = new string[] { };
-        protected bool SpinnerVisibleProdMaestro = false;
-
+        
+        
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -81,8 +81,93 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             }
         }
 
-        
+        protected async Task BuscarProd()
+        {
+            SpinnerVisible = true;
+            await refProductoDialog.Show();
+            SpinnerVisible = false;
+            popupBuscadorVisibleProducto = true;
+        }
 
+        protected async Task ProductoExternoSelected(Producto productoSelected)
+        {
+            await refSpinnerCli.ShowAsync();
+            popupBuscadorVisibleProducto = false;
+            procuns.CG_PROD = productoSelected.Id;
+            //procuns.DES_PROD = productoSelected.DES_PROD.Trim();
+            await refSpinnerCli.HideAsync();
+        }
+        protected async Task Des_prod_Changed(InputEventArgs args)
+        {
+            string Des_Producto = args.Value;
+            Producto.DES_PROD = Des_Producto;
+
+            var response = await ProductoService.Search(Producto.Id, Producto.DES_PROD);
+            if (!response.Error)
+            {
+                await ToastMensajeError("Al obtener producto");
+            }
+            else
+            {
+                if (response.Response != null)
+                {
+                    if (response.Response.Count == 1)
+                    {
+                        Producto.Id = response.Response[0].Id;
+                        Producto.Des_producto = response.Response[0].DES_PROD;
+                    }
+
+                    else
+                    {
+                        Producto.Des_producto = string.Empty;
+                    }
+                }
+            }
+        }
+
+        protected async Task Cg_Prod_Changed(ChangedEventArgs args)
+        {
+            string idProd = args.Value.ToString();
+            if (!string.IsNullOrEmpty(idProd))
+            {
+                if(Producto.Id == "")
+                {
+                    var response = await ProductoService.Search(Producto.Id, Producto.DES_PROD);
+                    if (response.Error)
+                    {
+                        await ToastMensajeError("Al obtener producto");
+                    }
+                    else
+                    {
+                        if(response.Response != null)
+                        {
+                            if(response.Response.Count == 1)
+                            {
+                                Producto.Id= string.Format(response.Response[0].Id);
+                                Producto.DES_PROD = response.Response[0].DES_PROD;
+                            }
+                            else
+                            {
+                                Producto.Id = "";
+                                Producto.DES_PROD = string.Empty;
+                            }
+                        }
+                        else
+                        {
+                            Producto.Id = "";
+                            Producto.DES_PROD = string.Empty;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Producto.Id = "";
+                Producto.DES_PROD = string.Empty;
+            }
+               
+        }
+    
         protected async Task<bool> Agregar(Procun proc)
         {
             var response = await ProcunService.Existe(proc.Id);
@@ -169,7 +254,11 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 ShowProgressBar = true
             });
         }
-
+    
+        protected async Task CerrarDialogProducto()
+        {
+            popupBuscadorVisibleProducto = false;
+        }
 
     }
 }

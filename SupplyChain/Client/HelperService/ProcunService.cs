@@ -43,5 +43,11 @@ namespace SupplyChain.Client.HelperService
 
             return true;
         }
+
+        public async Task<HttpResponseWrapper<List<Procun>>> ActualizaCelda(decimal numeroprocun,string cg_celda)
+        {
+            return await http.GetFromJsonAsync<List<Procun>>($"api/Procun/ActualizaCelda/{numeroprocun}/{cg_celda}");
+        }
+
     }
 }

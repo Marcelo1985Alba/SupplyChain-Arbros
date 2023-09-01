@@ -15,5 +15,6 @@ namespace SupplyChain.Server.Repositorios
         {
 
         }
+
     }
 }

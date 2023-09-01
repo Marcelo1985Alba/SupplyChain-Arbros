@@ -4,6 +4,8 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.Inputs
+@using SupplyChain.Client.Shared.BuscadorProducto
+
 @inherits FormProcunBase
 
 <SfToast ID="toast_default" @ref="ToastObj">
@@ -45,32 +47,16 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                   <SfDropDownList TItem="Producto" TValue="string"@* DataSource=""*@ AllowFiltering="true" Placeholder="Selecione un Producto"
-                                       FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" FilterBarPlaceholder="Buscar Producto..">
-                                       <DropDownListEvents TItem="Producto" TValue="string" @*ValueChange=""*@ />
-                                       <DropDownListFieldSettings Text="PRODUCTO" Value="Id" />
-                                   </SfDropDownList>    
+                                    <label class="">Producto:</label>
+                                    @*<SfTextBox ID="Proceso" @bind-Value="@(procuns.CG_PROD)" Placeholder="Producto"></SfTextBox>*@
+                                    <SfTextBox CssClass="customClass" ID="Des_prod" @bind-Value="@(procuns.CG_PROD)" Readonly="false"
+                                        ></SfTextBox>
                                 </div>
-                                <div class="control-wrapper">
-                                    <div id="treeview">
-                                        <SfTreeView @*@ref=""*@ TValue="Producto" ID="tvMenu" ShowCheckBox="true" AutoCheck="true"
-                                                    @*@bind-CheckedNodes="" *@>
-                                            <TreeViewFieldsSettings @*DataSource=""*@ TValue="Producto" Id="Id" Text="Producto"
-                                                                    ParentID="ParentId" HasChildren="TieneChild" NavigateUrl="Url" IconCss="IconCss">
-                                            </TreeViewFieldsSettings>
-                                            <TreeViewEvents TValue="Producto"@* NodeChecked=""*@></TreeViewEvents>
-                                            <SfSpinner Type="SpinnerType.Fabric" Size="25" Label="Cargando..." @*@bind-Visible=""*@></SfSpinner>
-                                        </SfTreeView>
-                                    </div>
+                                <div class="form-group col-md-1 mt-4">
+                                    <SfButton IconCss="fa fa-search" CssClass="e-smal e-round e-info" OnClick="@(async() => await BuscarProd())"
+                                              HtmlAttributes="@HtmlAttributeSubmit"></SfButton>
                                 </div>
-                                
-                               @* <div class="form-group col-md-6">
-                                    <a href="/Abms/areas" target="_blank">Area:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Areas" PopupWidth="50%" AllowFiltering="true"
-                                                @bind-Value="@(procuns.DES_AREA)" DataSource="@areas">
-                                        <ComboBoxFieldSettings Value="DES_AREA" Text="DES_AREA"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>*@
+
                                 <div class="form-group col-md-6">
                                     <a href="/Abms/celdas" target="_blank">Celda:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="Celdas" PopupWidth="auto" AllowFiltering="true"
@@ -79,8 +65,12 @@
                                     </SfComboBox>
                                 </div>
 
+                                
+                            
                             </div>
+    
                             <div class="form-row">
+                                
                                 @*<div class="form-group col-md-6">
                                     <a href="/Abms/lineas" target="_blank">Linea:</a>
                                     <SfComboBox TValue="int " CssClass="customClass" TItem="Lineas" PopupWidth="auto" AllowFiltering="true"
@@ -88,6 +78,7 @@
                                         <ComboBoxFieldSettings Value="DES_LINEA" Text="DES_LINEA"></ComboBoxFieldSettings>
                                     </SfComboBox>
                                 </div>*@
+                              
                                 <div class="form-group col-md-6">
                                     <label>Linea:</label>
                                     <SfNumericTextBox ID="Linea" @bind-Value="@(procuns.CG_LINEA)" Placeholder="Linea"></SfNumericTextBox>
@@ -120,7 +111,12 @@
                         </div>
                     </div>
                 </div>
-               
+                <SfSpinner @ref="@refSpinnerCli" Size="50" @bind-Visible="@SpinnerVisible"
+                           Label="Buscando ..." Type="SpinnerType.Fabric">
+                </SfSpinner>
+                <ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto" conMP=false conSE=true conPT=true
+                                OnObjectSelected="@ProductoExternoSelected" Cg_Prod="@Producto.Id" Des_Producto="@Producto.Des_producto"
+                                OnCerrarDialog="CerrarDialogProducto"></ProductoDialog>
                 @*<SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" Show="popupFormVisible" HtmlAttributes="@HtmlAttributeSubmit"></SfButton> *@
                 <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
             </EditForm>

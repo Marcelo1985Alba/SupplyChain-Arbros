@@ -148,5 +148,21 @@ namespace SupplyChain
 
             return Ok();
         }
+
+        [HttpGet("ActualizaCelda/{id}/{cg_celda}")]
+        public async Task<ActionResult<Procun>> ActualizaCelda(decimal id, string cg_celda)
+        {
+            try
+            {
+                var lista = await _procunRepository.ActualizaCelda(id, cg_celda);
+                return Ok(lista);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+      
     }
 }

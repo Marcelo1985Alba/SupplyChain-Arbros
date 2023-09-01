@@ -37,5 +37,26 @@ namespace SupplyChain.Client.HelperService
             return true;
         }
 
+        public async Task<HttpResponseWrapper<List<Producto>>> Search( string idProd, string Des_producto)
+        {
+            Des_producto = string.IsNullOrEmpty(Des_producto) ? "VACIO" : Des_producto;
+            return await http.GetFromJsonAsync<List<Producto>>($"api/Prod/Search/{idProd}/{Des_producto}");
+            //if (string.IsNullOrEmpty(idProd))
+            //{
+            //    idProd = null;
+            //}
+            //if(string.IsNullOrEmpty(des_prod))
+            //{
+            //    des_prod = null;
+            //}
+            //return await http.GetFromJsonAsync<List<Producto>>($"{API}/Search/{idProd}/{des_prod}");
+        }
+
+        public async Task<HttpResponseWrapper<List<Producto>>> Get(bool conMP=true, bool conSE = true, bool conPT = true)
+        {
+            return await http.GetFromJsonAsync<List<Producto>>($"api/Prod/ByTipo/{conMP}/{conSE}/{conPT}");
+
+        }
+
     }
 }
