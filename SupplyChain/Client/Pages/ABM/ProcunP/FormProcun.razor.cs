@@ -27,6 +27,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         [Inject] public LineasService LineasService { get; set; }
         [Inject] public CeldasService CeldasService { get; set; }
         [Parameter] public Procun procuns { get; set; } = new();
+        [Parameter] public Producto prod { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;
         [Parameter] public EventCallback<Procun> OnGuardar { get; set; }
         [Parameter] public EventCallback<Procun> OnEliminar { get; set; }
@@ -94,18 +95,20 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             await refSpinnerCli.ShowAsync();
             popupBuscadorVisibleProducto = false;
             procuns.CG_PROD = productoSelected.Id;
+            procuns.Des_Prod = productoSelected.DES_PROD;
             //procuns.DES_PROD = productoSelected.DES_PROD.Trim();
             await refSpinnerCli.HideAsync();
         }
         protected async Task Des_prod_Changed(InputEventArgs args)
         {
-            string Des_Producto = args.Value;
-            Producto.DES_PROD = Des_Producto;
+            string Des_Prod = args.Value;
 
-            var response = await ProductoService.Search(Producto.Id, Producto.DES_PROD);
-            if (!response.Error)
+            procuns.Des_Prod= Des_Prod;
+
+            var response = await ProductoService.Search(procuns.CG_PROD, procuns.Des_Prod);
+            if (response.Error)
             {
-                await ToastMensajeError("Al obtener producto");
+                await ToastMensajeError("Al obtener Producto");
             }
             else
             {
@@ -113,61 +116,100 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 {
                     if (response.Response.Count == 1)
                     {
-                        Producto.Id = response.Response[0].Id;
-                        Producto.Des_producto = response.Response[0].DES_PROD;
+                        procuns.CG_PROD= response.Response[0].Id;
+                        procuns.Des_Prod= response.Response[0].DES_PROD;
                     }
-
                     else
-                    {
-                        Producto.Des_producto = string.Empty;
+                    {   
+                        procuns.CG_PROD = string.Empty;
                     }
                 }
             }
-        }
+         }
 
-        protected async Task Cg_Prod_Changed(ChangedEventArgs args)
+        //protected async Task Codigo_Prod(InputEventArgs args)
+        //{
+        //    string idProd = args.Value;
+        //    prod.Id= idProd;
+
+        //    var response = await ProductoService.Search(idProd, prod.DES_PROD);
+        //    if (response.Error)
+        //    {
+        //        await ToastMensajeError("Al obtener Precio de articulo");
+        //    }
+        //    else
+        //    {
+        //        if(response.Response != null)
+        //        {
+        //            if (response.Response.Count == 1)
+        //            {
+        //                prod.Id= response.Response[0].Id;
+        //                prod.DES_PROD = response.Response[0].DES_PROD;
+        //            }
+        //            else
+        //            {
+        //                prod.DES_PROD= string.Empty;
+        //            }
+        //        }
+        //    }
+        //}
+  
+        //protected async Task Descripcion_prod(InputEventArgs args)
+        //{
+        //    string des_prod = args.Value;
+
+        //    prod.DES_PROD = des_prod;
+        //    var response = await ProductoService.Search(prod.Id, prod.DES_PROD);
+        //    if(response.Error)
+        //    {
+        //        await ToastMensajeError("Al obtener Precio de articulo");
+        //    }
+        //    else
+        //    {
+        //        if(response.Response!= null)
+        //        {
+        //            if (response.Response.Count == 1)
+        //            {
+        //                prod.Id = response.Response[0].Id;
+        //                prod.DES_PROD = response.Response[0].DES_PROD;
+        //            }
+        //            else
+        //            {
+        //                prod.Id= string.Empty;
+        //            }
+        //        }
+        //    }
+        //}
+        protected async Task Cg_Prod_Changed(InputEventArgs args)
         {
-            string idProd = args.Value.ToString();
-            if (!string.IsNullOrEmpty(idProd))
+            string idProd = args.Value;
+            procuns.CG_PROD = idProd;
+
+            var response = await ProductoService.Search(idProd, procuns.Des_Prod);
+            if (response.Error)
             {
-                if(Producto.Id == "")
-                {
-                    var response = await ProductoService.Search(Producto.Id, Producto.DES_PROD);
-                    if (response.Error)
-                    {
-                        await ToastMensajeError("Al obtener producto");
-                    }
-                    else
-                    {
-                        if(response.Response != null)
-                        {
-                            if(response.Response.Count == 1)
-                            {
-                                Producto.Id= string.Format(response.Response[0].Id);
-                                Producto.DES_PROD = response.Response[0].DES_PROD;
-                            }
-                            else
-                            {
-                                Producto.Id = "";
-                                Producto.DES_PROD = string.Empty;
-                            }
-                        }
-                        else
-                        {
-                            Producto.Id = "";
-                            Producto.DES_PROD = string.Empty;
-                        }
-                    }
-                }
+
+                await ToastMensajeError("Al obtener Precio de articulo");
             }
             else
             {
-                Producto.Id = "";
-                Producto.DES_PROD = string.Empty;
+                if (response.Response != null)
+                {
+                    if (response.Response.Count == 1)
+                    {
+                        procuns.CG_PROD= response.Response[0].Id;
+                        procuns.Des_Prod = response.Response[0].DES_PROD;
+                    }
+                    else
+                    {
+                        procuns.Des_Prod= string.Empty;
+                    }
+                }
+
             }
-               
         }
-    
+
+
         protected async Task<bool> Agregar(Procun proc)
         {
             var response = await ProcunService.Existe(proc.Id);
@@ -177,7 +219,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 if (response_2.Error)
                 {
                     Console.WriteLine(await response_2.HttpResponseMessage.Content.ReadAsStringAsync());
-                    await ToastMensajeError("Error al intentar Guardar la celda.");
+                    await ToastMensajeError("Error al intentar Guardar el proceso.");
                     return false;
                 }
                 procuns = response_2.Response;
@@ -202,23 +244,30 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
 
         protected async Task GuardarProc()
         {
-            bool guardado;
-            if (procuns.ESNUEVO)
+            try
             {
-                guardado = await Agregar(procuns);
-                procuns.ESNUEVO = true;
-            }
-            else
-            {
-                guardado = await Actualizar(procuns);
-            }
+                bool guardado;
+                if (procuns.ESNUEVO)
+                {
+                    guardado = await Agregar(procuns);
+                    procuns.ESNUEVO = true;
+                }
+                else
+                {
+                    guardado = await Actualizar(procuns);
+                }
 
-            if (guardado)
+                if (guardado)
+                {
+                    Show = false;
+                    procuns.GUARDADO = guardado;
+                    await OnGuardar.InvokeAsync(procuns);
+                }
+            }catch (Exception ex)
             {
-                Show = false;
-                procuns.GUARDADO = guardado;
-                await OnGuardar.InvokeAsync(procuns);
+               Console.WriteLine(ex.Message);
             }
+            
         }
 
 

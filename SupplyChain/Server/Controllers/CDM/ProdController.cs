@@ -379,25 +379,38 @@ namespace SupplyChain
         [HttpGet("Search/{idProd}/{Des_producto}")]
         public async Task<ActionResult<List<Producto>>> Search(string idProd, string Des_producto)
         {
-            //IQueryable<Producto> query = _productoRepository.ObtenerTodosQueryable();
-            //if(idProd is null)
-            //{
-            //    query = query.Where(p =>p.Id== idProd.ToString());
-            //}
-            //if(Des_producto != "VACIO")
-            //{
-            //    query = query.Where(p => p.DES_PROD.Contains(Des_producto));
-            //}
-            //var prod = await query.ToListAsync();
-            //return prod;
-
-            List<Producto> lContiene = new();
-            if((string.IsNullOrEmpty(idProd) && string.IsNullOrEmpty(Des_producto)) || (idProd=="VACIO" && Des_producto == "VACIO"))
+            try
             {
-                lContiene = await _productoRepository.Obtener(p => p.Id == idProd).ToListAsync();
+                return Ok(await _productoRepository.Search(idProd, Des_producto));
             }
-            return lContiene;
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
+
+        //[HttpGet("Search/{idProd}/{Des_Prod}")]
+        //public async Task<ActionResult<List<Producto>>> Search(string idProd, string Des_Prod)
+        //{
+        //    //IQueryable<Producto> query = _productoRepository.ObtenerTodosQueryable();
+        //    //if(idProd is null)
+        //    //{
+        //    //    query = query.Where(p =>p.Id== idProd.ToString());
+        //    //}
+        //    //if(Des_producto != "VACIO")
+        //    //{
+        //    //    query = query.Where(p => p.DES_PROD.Contains(Des_producto));
+        //    //}
+        //    //var prod = await query.ToListAsync();
+        //    //return prod;
+
+        //    List<Producto> lContiene = new();
+        //    if ((string.IsNullOrEmpty(idProd) && string.IsNullOrEmpty(Des_Prod)) || (idProd == "VACIO" && Des_Prod == "VACIO"))
+        //    {
+        //        lContiene = await _productoRepository.Obtener(p => p.Id == idProd).ToListAsync();
+        //    }
+        //    return lContiene;
+        //}
 
         // GET: api/Productos/BuscarProducto_PREP/{CG_PROD}/{DES_PROD}
         [HttpGet("Buscar")]

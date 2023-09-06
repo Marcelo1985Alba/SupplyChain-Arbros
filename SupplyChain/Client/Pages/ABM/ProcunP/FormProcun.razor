@@ -43,18 +43,40 @@
                                 <div class="form-group col-md-6">
                                     <label>Orden:</label>
                                     <SfNumericTextBox ID="Orden" @bind-Value="@(procuns.ORDEN)" Placeholder="Orden"></SfNumericTextBox>
+                                    <ValidationMessage For="@(()=> procuns.ORDEN)"></ValidationMessage>
+
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-3">
                                     <label class="">Producto:</label>
-                                    @*<SfTextBox ID="Proceso" @bind-Value="@(procuns.CG_PROD)" Placeholder="Producto"></SfTextBox>*@
-                                    <SfTextBox CssClass="customClass" ID="Des_prod" @bind-Value="@(procuns.CG_PROD)" Readonly="false"
-                                        ></SfTextBox>
+                                    <SfTextBox CssClass="customClass" ID="Producto" @bind-Value="@(procuns.CG_PROD)" Readonly="false"
+                                       Input="@(e=>Cg_Prod_Changed(e))" ></SfTextBox>
+                                    <ValidationMessage For="@(()=> procuns.CG_PROD)"></ValidationMessage>
+
                                 </div>
-                                <div class="form-group col-md-1 mt-4">
+                                <div class="form-group col-md-3">
+                                    <label class="">Descripcion Producto:</label>
+                                    <SfTextBox CssClass="customClass" ID="Descripcion Producto" @bind-Value="@(procuns.Des_Prod)" Readonly="false"
+                                      Input="@(e=> Des_prod_Changed(e))" ></SfTextBox>
+                                </div>
+
+                                <div class="form-group col-md-1">
                                     <SfButton IconCss="fa fa-search" CssClass="e-smal e-round e-info" OnClick="@(async() => await BuscarProd())"
                                               HtmlAttributes="@HtmlAttributeSubmit"></SfButton>
+                                </div>
+
+                                                              
+                            
+                            </div>
+    
+                            <div class="form-row">
+                                
+                                <div class="form-group col-md-6">
+                                    <label>Linea:</label>
+                                    <SfNumericTextBox ID="Linea" @bind-Value="@(procuns.CG_LINEA)" Placeholder="Linea"></SfNumericTextBox>
+                                    <ValidationMessage For="@(()=> procuns.CG_LINEA)"></ValidationMessage>
+
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -63,49 +85,46 @@
                                     @bind-Value="@(procuns.CG_CELDA)" DataSource="@celdas">
                                         <ComboBoxFieldSettings Value="Id" Text="DES_CELDA"></ComboBoxFieldSettings>
                                     </SfComboBox>
-                                </div>
+                                    <ValidationMessage For="@(()=> procuns.CG_CELDA)"></ValidationMessage>
 
-                                
-                            
+
+                                </div>
+                                                                                               
                             </div>
-    
+
                             <div class="form-row">
-                                
-                                @*<div class="form-group col-md-6">
-                                    <a href="/Abms/lineas" target="_blank">Linea:</a>
-                                    <SfComboBox TValue="int " CssClass="customClass" TItem="Lineas" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(procuns.CG_LINEA)" DataSource="@lineas">
-                                        <ComboBoxFieldSettings Value="DES_LINEA" Text="DES_LINEA"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>*@
-                              
+                                                                                                   
                                 <div class="form-group col-md-6">
-                                    <label>Linea:</label>
-                                    <SfNumericTextBox ID="Linea" @bind-Value="@(procuns.CG_LINEA)" Placeholder="Linea"></SfNumericTextBox>
+                                    <label>Proceso:</label>
+                                    <SfTextBox ID="Proceso" @bind-Value="@(procuns.PROCESO)" Placeholder="Proceso"></SfTextBox>
+                                    <ValidationMessage For="@(()=> procuns.PROCESO)"></ValidationMessage>
+
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Area:</label>
                                     <SfNumericTextBox ID="Area" @bind-Value="@(procuns.CG_AREA)" Placeholder="Area"></SfNumericTextBox>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Proceso:</label>
-                                    <SfTextBox ID="Proceso" @bind-Value="@(procuns.PROCESO)" Placeholder="Proceso"></SfTextBox>
+                                    <ValidationMessage For="@(()=> procuns.CG_AREA)"></ValidationMessage>
+
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Tiempo:</label>
                                     <SfNumericTextBox ID="Tiempo" @bind-Value="@(procuns.TIEMPO1)" Placeholder="Tiempo"></SfNumericTextBox>
+                                    <ValidationMessage For="@(()=> procuns.TIEMPO1)"></ValidationMessage>
+
                                 </div>
-                            </div>
-                            <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label>TS1:</label>
                                     <SfNumericTextBox ID="TS1" @bind-Value="@(procuns.TS1)" Placeholder="TS1"></SfNumericTextBox>
+                                    <ValidationMessage For="@(()=> procuns.TS1)"></ValidationMessage>
                                 </div>
+
+                            </div>
+                            <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label>Proporcion:</label>
                                     <SfTextBox ID="Proporcion" @bind-Value="@(procuns.PROPORC)" Placeholder="Proporcion"></SfTextBox>
+                                    <ValidationMessage For="@(()=> procuns.PROPORC)"></ValidationMessage>
+
                                 </div>
                             </div>
                         </div>
@@ -115,7 +134,7 @@
                            Label="Buscando ..." Type="SpinnerType.Fabric">
                 </SfSpinner>
                 <ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto" conMP=false conSE=true conPT=true
-                                OnObjectSelected="@ProductoExternoSelected" Cg_Prod="@Producto.Id" Des_Producto="@Producto.Des_producto"
+                                OnObjectSelected="@ProductoExternoSelected" Cg_Prod="@procuns.CG_PROD" Des_Producto="@procuns.Des_Prod"
                                 OnCerrarDialog="CerrarDialogProducto"></ProductoDialog>
                 @*<SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" Show="popupFormVisible" HtmlAttributes="@HtmlAttributeSubmit"></SfButton> *@
                 <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>

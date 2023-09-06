@@ -28,7 +28,18 @@ namespace SupplyChain.Client.Shared.BuscadorProducto
         {
          
             refSpinner?.ShowAsync();
-            var response = await ProductoService.Get(conMP,conSE,conPT);
+            if (string.IsNullOrEmpty(Cg_Prod))
+            {
+                Cg_Prod = "VACIO";
+            }
+
+            if (string.IsNullOrEmpty(Des_Producto))
+            {
+                Des_Producto = "VACIO";
+            }
+
+            var response = await ProductoService.Search(Cg_Prod, Des_Producto);
+
             if (response.Error)
             {
                 refSpinner?.HideAsync();

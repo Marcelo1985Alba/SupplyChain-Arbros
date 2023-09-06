@@ -23,5 +23,19 @@ namespace SupplyChain.Server.Repositorios
 
             return await DbSet.Where(p=>p.Id == id).ToListAsync();
         }
+
+        internal async Task<IEnumerable<Procun>> Search(string idProd, string Des_Prod)
+        {
+            IQueryable<Procun> query = DbSet.AsQueryable();
+            if(idProd != "VACIO")
+            {
+                query = query.Where(p => p.CG_PROD.Contains(idProd));
+            }
+            if(Des_Prod != "VACIO")
+            {
+                query = query.Where(p=>p.Des_Prod.Contains(Des_Prod));
+            }
+            return await query.ToListAsync();
+        }
     }
 }

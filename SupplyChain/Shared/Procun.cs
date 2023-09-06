@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SupplyChain.Shared.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,26 +8,36 @@ namespace SupplyChain.Shared
 	[Table("Procun")]
 	public class Procun : EntityBase<decimal>
 	{
-		[Key, Column("REGISTRO")]
-		//public new decimal Id { get; set; } = 0;
+		[Key, Column("REGISTRO"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public new decimal Id { get; set; } = 0;
-		public int ORDEN { get; set; }
-		public string CG_PROD { get; set; }
-		public int CG_FORM { get; set; }
-		public int CG_AREA { get; set; }
-		public int CG_LINEA { get; set; }
-		public string CG_CELDA { get; set; }
-		//public string DES_AREA { get; set; }
-		public string PROCESO { get; set; }	
-		public string? DESCRIP { get; set; }
+		//public new decimal Id { get; set; } = 0;
+        //[ColumnaGridViewAtributo(Name = "Orden proceso"),Range(1, 13, ErrorMessage = "El Orden requerido")]
+        public int ORDEN { get; set; }
+        [ColumnaGridViewAtributo(Name = "Código producto"), Required(ErrorMessage = "El producto es requerido")]
+        public string CG_PROD { get; set; }
+        //[ColumnaGridViewAtributo(Name = "Form"), Range(1, 13, ErrorMessage = "El Form es requerido")]
+        public int CG_FORM { get; set; }
+        [ColumnaGridViewAtributo(Name = "Área"), Range(1, 13, ErrorMessage = "El tipo de Área es requerido")]
+        public int CG_AREA { get; set; }
+        [ColumnaGridViewAtributo(Name = "Línea"), Range(1, 13, ErrorMessage = "El tipo de Línea es requerido")]
+        public int CG_LINEA { get; set; }
+		[ColumnaGridViewAtributo(Name	= "Celda"), Required(ErrorMessage = "El tipo de Celda es requerido")]
+        public string CG_CELDA { get; set; }
+        //public string DES_AREA { get; set; }
+		[ColumnaGridViewAtributo(Name = "Proceso"), Required(ErrorMessage = "El proceso es requerido")]
+        public string PROCESO { get; set; }
+        public string? DESCRIP { get; set; }
 		public string? OBSERV {		get; set; }
 		public string? DESPROC { get; set; }
+		//[ColumnaGridViewAtributo(Name = "Tiempo"), Required(ErrorMessage = "El tiempo es requerido")]
 		public decimal TIEMPO1 { get; set; }
-		public decimal TS1 { get; set; }
-		public int FRECU { get; set; }
+		//[ColumnaGridViewAtributo(Name = "TS1"), Required(ErrorMessage = "El ts1 es requerido")]
+        public decimal TS1 { get; set; }
+        public int FRECU { get; set; }
 		public int CG_CALI1 { get; set; }
+		[ColumnaGridViewAtributo(Name = "Proporc"), Required(ErrorMessage = "La proporción es requerido")]
 		public string PROPORC { get; set; }
-		public decimal TOLE1 { get; set; }
+        public decimal TOLE1 { get; set; }
 		public int CG_CALI2 { get; set; }
 		public decimal VALOR1 { get; set; }
 		public decimal TOLE2 { get; set; }
@@ -55,13 +66,13 @@ namespace SupplyChain.Shared
 		public int RELEVAN { get; set; }
 		public decimal REVISION { get; set; }
 		public string USUARIO { get; set; }
-		public string AUTORIZA { get; set; }
+		public string? AUTORIZA { get; set; }
 		[NotMapped]
 		public bool GUARDADO { get; set; }
 		[NotMapped]
 		public bool ESNUEVO { get; set; }
 		[NotMapped]
-		public string Des_prod { get; set; }
+		public string Des_Prod { get; set; }
 		
 	}
 }

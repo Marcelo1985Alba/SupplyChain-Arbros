@@ -16,6 +16,7 @@ namespace SupplyChain
     public class ProcunController : ControllerBase
     {
         private readonly ProcunRepository _procunRepository;
+        private readonly ProductoRepository _productoRepository;
 
         public ProcunController(ProcunRepository procunRepository)
         {
@@ -87,6 +88,7 @@ namespace SupplyChain
             try
             {
                 var username = HttpContext.User.Identity.Name;
+
                 Proc.USUARIO=username;
                 Proc.AUTORIZA=username;
                 Proc.FECHA = DateTime.Today;
@@ -163,6 +165,19 @@ namespace SupplyChain
             }
         }
 
+        [HttpGet("Search/{idProd}/{Des_Prod}")]
+        public async Task<ActionResult<IEnumerable<Procun>>> Search(string idProd, string Des_Prod)
+        {
+            try
+            {
+                return Ok(await _procunRepository.Search(idProd, Des_Prod));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+        
       
     }
 }
