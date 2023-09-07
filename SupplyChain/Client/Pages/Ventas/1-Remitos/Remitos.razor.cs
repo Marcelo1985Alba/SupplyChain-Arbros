@@ -77,6 +77,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             }
             else
             {
+                await GetDireccionesEntrega();
                 await GetCondicionesPago();
                 await GetCondicionesEntrega();
                 await GetTransportes();
@@ -134,6 +135,19 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             else
             {
                 transportes = response.Response;
+            }
+        }
+
+        protected async Task GetDireccionesEntrega()
+        {
+            var response = await DireccionEntregaService.Get();
+            if (response.Error)
+            {
+                await ToastMensajeError("Error al obtener Direcciones de Entrega.");
+            }
+            else
+            {
+                direccionesEntregas = response.Response.Select(s=> s.DESCRIPCION).ToList();
             }
         }
 
@@ -375,13 +389,6 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 await GetRemitidos();
                 SpinnerVisible = false;
             }
-            else if (args.Item.Id == "GenerarRemito")
-            {
-                SpinnerVisible = true;
-                await GenerarRemito();
-                
-                SpinnerVisible = false;
-            }
             else if (args.Item.Id == "imprimir")
             {
                 SpinnerVisible = true;
@@ -424,7 +431,6 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             else
             {
                 var pedidoSeleccionados = string.Join(',', selecciones.Select(s => s.PEDIDO.ToString()).ToArray());
-                Console.WriteLine("Pedidos Seleccionados " + pedidoSeleccionados);
                 var response = await StockService.GetPedidoEncabezadoByLista(selecciones.Select(s=> s.PEDIDO).ToList());
                 if (response.Error)
                 {

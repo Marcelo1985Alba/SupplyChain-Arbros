@@ -34,6 +34,10 @@ namespace SupplyChain.Client.Shared.Inventarios
         [Parameter] public EventCallback<Pedidos> OnGuardar { get; set; }
         [Parameter] public EventCallback<List<Pedidos>> OnItemsDataSource { get; set; }
         [Parameter] public SelectionType TipoSeleccion { get; set; } = SelectionType.Single;
+        [Parameter] public bool AbrirBuscadorResumenStock { get; set; } = false;
+        [Parameter] public bool AplicarFiltro { get; set; } = false;
+        [Parameter] public string filtro_CG_ART { get; set; } = string.Empty;
+        [Parameter] public string filtro_DESPACHO { get; set; } = string.Empty;
         [CascadingParameter] public PedidoEncabezado RegistroGenerado { get; set; }
         protected Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
         {
@@ -71,8 +75,16 @@ namespace SupplyChain.Client.Shared.Inventarios
             depositos = await Http.GetFromJsonAsync<List<Deposito>>("api/Deposito");
             ordenesPlaneadas = await Http.GetFromJsonAsync<Programa[]>("api/Programa/GetPlaneadasEntrega");
             ordenesFabricacion = await Http.GetFromJsonAsync<Programa[]>("api/Programa/GetFabricacionEntrega");
+
         }
 
+        protected async override Task OnParametersSetAsync()
+        {
+            if (AbrirBuscadorResumenStock)
+            {
+                await AgregarInsumo();
+            }
+        }
 
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {
@@ -103,7 +115,8 @@ namespace SupplyChain.Client.Shared.Inventarios
             visibleSpinnerRS = true;
             bAgregarInsumo = true;
             Items = null;
-            Items = await Http.GetFromJsonAsync<vResumenStock[]>("api/ResumenStock/GetResumenStockPositivo");
+            var url = "api/ResumenStock/GetResumenStockPositivo?sinDepositoVentas=true";
+            Items = await Http.GetFromJsonAsync<vResumenStock[]>(url);
             tituloBuscador = "Listado de Insumos en Stock";
             ColumnasBuscador = new string[] { "CG_ART", "DEPOSITO", "DESPACHO", "SERIE", "LOTE", "STOCK" };
             visibleSpinnerRS = false;
@@ -144,9 +157,9 @@ namespace SupplyChain.Client.Shared.Inventarios
             Args.PreventRender = false;
             if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
-                await Grid.RefreshColumns();
+                await Grid.RefreshColumnsAsync();
                 Grid.Refresh();
-                await Grid.RefreshHeader();
+                await Grid.RefreshHeaderAsync();
             }
 
         }
@@ -161,12 +174,13 @@ namespace SupplyChain.Client.Shared.Inventarios
         protected string tituloBuscador { get; set; } = "";
         protected bool visibleSpinnerRS = false;
         private bool popupBuscadorVisible = false;
+        
         protected bool PopupBuscadorStockVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
         protected bool PopupBuscadorProdVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
         protected string[] ColumnasBuscador = new string[] { "CG_MAT" };
         protected vResumenStock[] Items;
 
-        protected async Task Buscar()
+        public async Task Buscar()
         {
 
             if (RegistroGenerado.TIPOO == 21) //Ajuste

@@ -30,34 +30,34 @@
 
     <div id="principal" class="col-lg-12 control-section">
         <div class="content-wrapper">
-            @if(role.ToUpper() != "CLIENTE")
-            {
-                <div class="row">
-                    <div class="col-md-4  col-sm-6">
-                        <SfTextBox ID="txtTrazPedido" Placeholder="Número de Pedido"
-                           Input="OnInputPedido" @bind-Value="BoxPedido" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <SfTextBox ID="txtTrazCliente" Placeholder="Nombre de Cliente"
-                           Input="OnInputCliente" @bind-Value="BoxCliente" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
-                    </div>
-                    <div class=" col-md-4 col-sm-12">
-                        <SfTextBox ID="txtTrazCg_Prod" Placeholder="Codigo de Producto"
-                           Input="OnInputCodigo" @bind-Value="BoxCodigo" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
-                    </div>
-                </div>
-            }
-            
+
             <div class="row">
+                <div class="col-md-4  col-sm-6">
+                    <SfTextBox ID="txtTrazPedido" Placeholder="Número de Pedido"
+                               Input="OnInputPedido" @bind-Value="BoxPedido" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                </div>
                 @if(role.ToUpper() != "CLIENTE")
                 {
                     <div class="col-md-4 col-sm-6">
-                        <button type="button" class="btn btn-success btn-sm" @onclick="@BuscarTrazabilidad">Buscar Pedido</button>
+                        <SfTextBox ID="txtTrazCliente" Placeholder="Nombre de Cliente"
+                                   Input="OnInputCliente" @bind-Value="BoxCliente" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
                     </div>
-                    <div class="col-md-4 col-sm-6 my-1">
-                        <button type="button" class="btn btn-info btn-sm" @onclick="@MostrarTrazabilidad">Mostrar Trazabilidad</button>
+                    <div class=" col-md-4 col-sm-12">
+                        <SfTextBox ID="txtTrazCg_Prod" Placeholder="Codigo de Producto"
+                                   Input="OnInputCodigo" @bind-Value="BoxCodigo" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
                     </div>
                 }
+                
+            </div>
+            
+            
+            <div class="row">
+                <div class="col-md-4 col-sm-6">
+                    <button type="button" class="btn btn-success btn-sm" @onclick="@BuscarTrazabilidad">Buscar Pedido</button>
+                </div>
+                <div class="col-md-4 col-sm-6 my-1">
+                    <button type="button" class="btn btn-info btn-sm" @onclick="@MostrarTrazabilidad">Mostrar Trazabilidad</button>
+                </div>
                 
                 @{
                     if (Showgrid)
@@ -70,6 +70,9 @@
                         </div>
                         <div class="col-md-4 col-sm-6 my-1">
                             <button type="submit" class="btn btn-primary btn-sm" @onclick="@Ensayos">Ver ensayos</button>
+                        </div>
+                        <div class="col-md-4 col-sm-6 my-1">
+                            <button type="submit" class="btn  btn-dark btn-sm" @onclick="@VerPlano">Ver Plano</button>
                         </div>
                     }
                 }
@@ -925,8 +928,13 @@
             </DialogButtons>
         </SfDialog>
     </div>
-}
+   
 
+}
+<ConfirmacionDialog @ref="@confirmacionDescargarPlanoDialog" OnConfirm="@(async ()=> await DescrgarPlano())">
+    <HeaderTempalte><p>Plano Pdf</p> <hr /></HeaderTempalte>
+    <ContentTemplate>Confirma Descargar Plano?</ContentTemplate>
+</ConfirmacionDialog>
 <style>
     .e-input-group.e-corner {
         border-radius: 4px;
@@ -980,6 +988,27 @@
     protected List<ModeloOrdenFabricacionHojaRuta> ordenFabricacionHojaRuta = new List<ModeloOrdenFabricacionHojaRuta>();
     protected List<ModeloCarga> dbCarga = new List<ModeloCarga>();
     /***********************************************************************/
+    /*************VER PLANO**************************************/
+    protected string tituloTabFormulas = string.Empty;
+    protected bool mostrarCerrarTab = false;
+    protected List<TabData> TabItems = new();
+    public class TabData
+    {
+        public string Header { get; set; }
+        public string CodigoInsumo { get; set; }
+        public RenderFragment Content { get; set; }
+    }
+    protected bool VisibleSpinner = false;
+
+    protected ConfirmacionDialog confirmacionDescargarPlanoDialog;
+    [Inject] public IRepositoryHttp Http2 { get; set; }
+    
+    protected int ordenNumero = 0;
+
+
+    /**********************************************************/
+
+
     protected List<Pedidos> pedidos = new List<Pedidos>();
     protected List<vTrazabilidad> vpedidos = new List<vTrazabilidad>();
     protected List<Pedidos> Pedidoslist = new List<Pedidos>();
@@ -1417,7 +1446,7 @@
         {
 
         }
-        else
+        else if (responsePedCliList.Response.Count > 0)
         {
             PedCliList = responsePedCliList.Response;
             var responseprodList = await Http.GetFromJsonAsync<Producto>($"api/Prod/{PedCliList.FirstOrDefault().CG_ART.Trim()}");
@@ -1921,6 +1950,70 @@
         }
 
         return creado;
+    }
+
+    protected async Task DescrgarPlano()
+    {
+
+        var file = prod.Trim()+ ".pdf";
+        await confirmacionDescargarPlanoDialog.HideAsync();
+        var fileArray = await HttpCli.GetByteArrayAsync($"api/AdministracionArchivos/GetPlano/{file}/Load");
+
+        await Task.Run(() =>
+        {
+            Js.SaveAs(prod.Trim()+ ".pdf", fileArray);
+        });
+
+    }
+
+    protected async Task<bool> ExistePlano(string file)
+    {
+        var response = await Http2.GetFromJsonAsync<bool>($"api/AdministracionArchivos/ExistePlano/{file}");
+        if (response.Error)
+        {
+            Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
+            return false;
+        }
+
+        return response.Response;
+    }
+    protected async Task VerPlano()
+    {
+        try{
+           // ordenFabricacion = await Http2.GetFromJsonAsync<ModeloOrdenFabricacion>("api/OrdenesFabricacion/" + ordenFabricacion.ToString());
+            
+            //var ordenFabricaciones =await Http2.PutAsJsonAsync("api/OrdenesFabricacion/" + prod, ordenFabricacion);
+            var file = prod.Trim() + ".pdf";
+
+            Console.WriteLine("Verificando existencia de archivo" + file);
+
+            if (await ExistePlano(file))
+            {
+                // await confirmacionDescargarPlanoDialog.ShowAsync();
+                await Js.InvokeVoidAsync("open", $"Pdf/{prod.Trim()}/RUTAOF", "_blank");
+            }
+            else
+            {
+                // await confirmacionDescargarPlanoDialog.HideAsync();
+                await this.ToastObj.ShowAsync(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "No existe plano",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-success toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }
+            
+        }
+        catch(Exception ex)
+        {
+           Console.WriteLine(ex.Message);
+        }
+
+        //NavigationManager.NavigateTo($"Pdf/{prodList}ENSAYOS");
+        //await JsRuntime.InvokeVoidAsync("open", new object[2] { $"Pdf/{TrzNro}/ENSAYOS", $"Pdf/{TrzNro}/ENSAYOS" });
     }
 
     protected async Task Ensayos()

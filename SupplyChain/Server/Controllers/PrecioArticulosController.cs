@@ -22,7 +22,7 @@ namespace SupplyChain.Server.Controllers
             _precioArticulosRepository = precioArticulosRepository;
         }
 
-        // GET: api/Compras
+        // GET: api/PrecioArticulos
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PreciosArticulos>>> Gets()
         {
@@ -36,7 +36,7 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
-        // GET: api/Compras
+        // GET: api/PrecioArticulos/Reparaciones
         [HttpGet("Reparaciones")]
         public async Task<ActionResult<IEnumerable<PreciosArticulos>>> Reparaciones()
         {
@@ -50,6 +50,7 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
+        // GET: api/PrecioArticulos/Search/codigo/descripcion
         [HttpGet("Search/{codigo}/{descripcion}")]
         public async Task<ActionResult<IEnumerable<PreciosArticulos>>> Search(string codigo, string descripcion)
         {
@@ -63,7 +64,7 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
-        // GET: api/Compras/5
+        // GET: api/PrecioArticulos/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Solicitud>> Get(string id)
         {
@@ -77,7 +78,7 @@ namespace SupplyChain.Server.Controllers
             return Ok(precioArt);
         }
 
-        // GET: api/Compras/5
+        // GET: api/PrecioArticulos/id
         [HttpGet("Existe/{id}")]
         public async Task<ActionResult<bool>> Existe(string id)
         {
@@ -86,7 +87,7 @@ namespace SupplyChain.Server.Controllers
             return Ok(existe);
         }
 
-        // PUT: api/Compras/5
+        // PUT: api/PrecioArticulos/id
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
@@ -116,7 +117,7 @@ namespace SupplyChain.Server.Controllers
             return Ok(precioArt);
         }
 
-        // POST: api/Compras
+        // POST: api/PrecioArticulos
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
@@ -133,7 +134,7 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
-        // DELETE: api/Compras/5
+        // DELETE: api/PrecioArticulos/id
         [HttpDelete("{id}")]
         public async Task<ActionResult<PreciosArticulos>> DeleteCompra(string id)
         {
@@ -146,6 +147,16 @@ namespace SupplyChain.Server.Controllers
             await _precioArticulosRepository.Remover(id);
 
             return solicitud;
+        }
+        
+        // GET: api/PrecioArticulos/GetPrecio/id
+        [HttpGet("GetPrecio/{id}")]
+        public async Task<decimal> GetPrecio(string id)
+        {
+            decimal? precio = 0;
+            if (await _precioArticulosRepository.Existe(id))
+                precio = _precioArticulosRepository.Obtener(p => p.Id == id).FirstOrDefaultAsync().Result.Precio;
+            return (decimal)precio;
         }
     }
 }

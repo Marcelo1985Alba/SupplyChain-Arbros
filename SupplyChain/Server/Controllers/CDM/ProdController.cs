@@ -181,13 +181,13 @@ namespace SupplyChain
         // PUT: api/Prod/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProd(string id, Producto Prod)
+        [HttpPut]
+        public async Task<IActionResult> PutProd( Producto Prod)
         {
-            if (id != Prod.Id)
-            {
-                return BadRequest();
-            }
+            //if (id != Prod.Id)
+            //{
+            //    return BadRequest();
+            //}
 
             try
             {
@@ -195,7 +195,7 @@ namespace SupplyChain
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await _productoRepository.Existe(id))
+                if (!await _productoRepository.Existe(Prod.Id))
                 {
                     return NotFound();
                 }
@@ -219,6 +219,21 @@ namespace SupplyChain
         {
             try
             {
+                if (Prod.CG_ORDEN == 1)
+                {
+                    Prod.EXIGESERIE = true;
+                    Prod.EXIGEOA = true;
+                }
+                else if (Prod.CG_ORDEN == 3)
+                {
+                    Prod.EXIGELOTE = true;
+                }
+                else if (Prod.CG_ORDEN == 4)
+                {
+                    Prod.EXIGELOTE = true;
+                }
+
+
                 await _productoRepository.Agregar(Prod);
                 return CreatedAtAction("GetProd", new { id = Prod.Id }, Prod);
             }
@@ -458,8 +473,20 @@ namespace SupplyChain
                 }
             }
             return lContiene;
-
-
+        }
+        
+        // GET: api/Productos/GetCG_DENSEG/{CG_PROD}
+        [HttpGet("GetCG_DENSEG/{CG_PROD}")]
+        public async Task<decimal> GetCG_DENSEG(string CG_PROD)
+        {
+            decimal? CG_DENSEG = 0;
+            if (await _productoRepository.Existe(CG_PROD))
+            {
+                var resultCgDenseg = _productoRepository.Obtener(p => p.Id == CG_PROD).FirstOrDefaultAsync().Result.CG_DENSEG;
+                if (resultCgDenseg != null)
+                    CG_DENSEG = resultCgDenseg;
+            }
+            return (decimal)(CG_DENSEG);
         }
 
     }

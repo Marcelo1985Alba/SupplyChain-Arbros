@@ -34,9 +34,6 @@ else
         }
         else
         {
-            //var api_url_pdf = $"api/AdministracionArchivos/GetPlano/{codigo.Substring(0, 7) + ".pdf"}/Load";
-            //paso nombre del doc y la accion para despues del lado del servidor saber cual es la ubicacion que debe tomar
-            codigo = codigo.Substring(0, 7) + ".pdf," + accion;
 
             <div class="col-lg-12 control-section">
                 <div class="content-wrapper">
@@ -184,19 +181,19 @@ else
         //MainLayout.Titulo = $"Codigo";
         VisibleSpinner = true;
 
-        rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+        // rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 
         if (accion == "RUTAOF")
         {
             Layout.Titulo = $"Plano {codigo}";
-            codigoLimpio = codigo.Substring(0, 7) + ".pdf," + accion;
+            codigoLimpio = codigo + ".pdf," + accion;
             //DocumentPath = await Http.GetFromJsonAsync<string>($"api/AdministracionArchivos/GetPdfNube/{codigoLimpio}/RUTAOF");
             //archivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/ByParamRuta/{accion}/{codigo.Substring(0, 7) + ".pdf"}");
 
-            var file = await Http.GetByteArrayAsync($"api/AdministracionArchivos/GetPlano/{codigo.Substring(0, 7) + ".pdf"}/Load");
-            string base64String = Convert.ToBase64String(file);
-            DocumentPath = "data:application/pdf;base64," + base64String;
-            await sfPdfViewerObj.Load(DocumentPath, null);
+            // var file = await Http.GetByteArrayAsync($"api/AdministracionArchivos/GetPlano/{codigo.Substring(0, 7) + ".pdf"}/Load");
+            // string base64String = Convert.ToBase64String(file);
+            // DocumentPath = "data:application/pdf;base64," + base64String;
+            // await sfPdfViewerObj.Load(DocumentPath, null);
 
 
 

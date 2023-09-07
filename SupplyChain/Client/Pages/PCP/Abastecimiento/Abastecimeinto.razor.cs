@@ -203,9 +203,9 @@ namespace SupplyChain.Client.Pages.PCP.Abastecimiento
             {
                 listaAbastSE = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecerSE");
                 listaAbastSE = await Http.GetFromJsonAsync<List<ModeloAbastecimiento>>("api/Abastecimiento/AbastecimientoSEX");
-                await GridSE.RefreshHeader();
-                await GridSE.RefreshColumns();
-                GridSE.Refresh();
+                await GridSE.RefreshHeaderAsync();
+                await GridSE.RefreshColumnsAsync();
+                await GridSE.Refresh();
             }
         }
         public void QueryCellInfoHandler(QueryCellInfoEventArgs<ModeloAbastecimiento> args)

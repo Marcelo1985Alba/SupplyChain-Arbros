@@ -254,7 +254,7 @@
                                                                                 </label>
                                                                                 <br />
                                                                                 <label class="label" style="font-size:16px">
-                                                                                    <a class="font-weight-bold">OF Alta: </a>@OrdenDeFabAlta
+                                                                                <a class="font-weight-bold">OF Alta: </a>@dbCarga.Where(t => t.CG_ORDFASOC == xCarga.CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF
                                                                                 </label>
                                                                                 <br />
                                                                                 <label class="label" style="font-size:16px">
@@ -527,8 +527,8 @@
                             @*BOTONES PARA OBTENER DATOS*@
                             <div class="form-row">
                                 <div class="form-group col">
-                                    <SfButton Content="Descargar Plano" IsPrimary="true" IconCss="fa fa-download fa fa-file-pdf-o"
-                                              @onclick="@(async ()=> await ConfirmaDescargarPlano())"></SfButton>
+                                    <SfButton Content="Ver Plano" IsPrimary="true" IconCss="fa fa-file-pdf-o"
+                                              @onclick="@(async ()=> await VerPlano())"></SfButton>
                                 </div>
                                 @*<div class="form-group col">
                                         <SfButton Content="Ver Plano" IsPrimary="true" IconCss="fa fa-file-pdf-o"

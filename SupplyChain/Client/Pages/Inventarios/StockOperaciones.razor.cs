@@ -2,6 +2,7 @@
 using Microsoft.JSInterop;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Shared;
+using SupplyChain.Client.Shared.Inventarios;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.Prod;
@@ -30,6 +31,9 @@ namespace SupplyChain.Client.Pages.Inventarios
         [Parameter] public int OrdFab { get; set; } = 0;
         [Parameter] public PedidoEncabezado StockEncabezado { get; set; } = new PedidoEncabezado();
         [Parameter] public int vale { get; set; } = 0;
+        [Parameter] public bool AplicarFiltro { get; set; } = false;
+        [Parameter] public string cg_mat { get; set; } = string.Empty;
+        [Parameter] public string despacho { get; set; } = string.Empty;
 
         protected bool DisableCssClass
         {
@@ -39,6 +43,7 @@ namespace SupplyChain.Client.Pages.Inventarios
         protected SfToast ToastObj;
         protected ConfirmacionDialog ConfirmacionEliminarDialog;
         protected ConfirmacionDialog ConfirmacionGuardarDialog;
+        protected GridEditEntrega refGridEditEntrega;
         protected bool SpinnerVisible { get; set; } = false;
         private bool puedeBuscarStock = false;
         protected SupplyChain.Client.Shared.BuscadorEmergenteResumenStock BuscadorEmergenteResumenStock;
@@ -50,6 +55,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                 {"type", "button" }
         };
 
+        protected bool AbrirBuscadorResumenStockAutomaticamente = false;
 
         protected bool PermiteAgregarItem { get; set; } = false;
         protected bool PermiteEditarItem { get; set; } = false;
@@ -98,6 +104,14 @@ namespace SupplyChain.Client.Pages.Inventarios
                 var programa = await Http.GetFromJsonAsync<List<Programa>>($"api/Programa/GetProgramaByOF/{OrdFab}");
 
                 await OnProgramaSelected(programa[0]);
+            }
+            else if (OperacionId == 9 && (!string.IsNullOrEmpty(cg_mat)) )
+            {
+                await GetVale();
+
+                AplicarFiltro = true;
+
+                AbrirBuscadorResumenStockAutomaticamente = true;
             }
             else
             {
@@ -361,6 +375,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                 {
                     registronegativo--;
                     Pedidos pedido = new();
+                    pedido.CG_ORDEN = item.CG_ORDEN;
                     pedido.CG_ORDF = programaSel.CG_ORDF;
                     pedido.TIPOO = StockEncabezado.TIPOO;
                     pedido.CG_PROVE = 0;
@@ -712,7 +727,7 @@ namespace SupplyChain.Client.Pages.Inventarios
 
         private async Task MensajeToastError()
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "ERROR!",
                 Content = "Error al guardar",

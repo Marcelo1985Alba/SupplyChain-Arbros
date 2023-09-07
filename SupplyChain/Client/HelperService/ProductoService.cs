@@ -1,5 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using SupplyChain.Client.HelperService.Base;
+using SupplyChain.Client.Pages.ABM.Prods;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
@@ -16,7 +17,7 @@ namespace SupplyChain.Client.HelperService
     {
         private const string API = "api/Prod";
 
-        public ProductoService(IRepositoryHttp httpClient): base(httpClient, API)
+        public ProductoService(IRepositoryHttp httpClient) : base(httpClient, API)
         {
         }
 
@@ -52,10 +53,12 @@ namespace SupplyChain.Client.HelperService
             }
             return await http.GetFromJsonAsync<List<Producto>>($"{API}/Search/{idProd}/{Des_producto}");
         }
-        //
+
         
 
-        public async Task<HttpResponseWrapper<List<Producto>>> Get(bool conMP=true, bool conSE = true, bool conPT = true)
+
+
+        public async Task<HttpResponseWrapper<List<Producto>>> Get(bool conMP = true, bool conSE = true, bool conPT = true)
         {
             return await http.GetFromJsonAsync<List<Producto>>($"api/Prod/ByTipo/{conMP}/{conSE}/{conPT}");
 

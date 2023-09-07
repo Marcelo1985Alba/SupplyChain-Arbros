@@ -16,7 +16,7 @@
 @attribute [Authorize(Roles = "Administrador, Produccion")]
 
 
-<SfSpinner @ref="@refSpinner" @bind-Visible="@SpinnerVisible" Label="Procesando..." Size="80" Type="SpinnerType.Bootstrap">
+<SfSpinner @ref="@refSpinner" @bind-Visible="@SpinnerVisible" Label="Procesando..." Size="80" Type="SpinnerType.Fabric">
 </SfSpinner>
 
 <div class="col-12 control-section">
@@ -215,8 +215,10 @@
                                 }
                                 else
                                 {
-                                    <GridEditEntrega DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
+                                    <GridEditEntrega @ref="refGridEditEntrega" DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
                                                      PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
+                                                     AplicarFiltro="@AplicarFiltro" filtro_CG_ART="@cg_mat" filtro_DESPACHO="@despacho"
+                                                     AbrirBuscadorResumenStock="@AbrirBuscadorResumenStockAutomaticamente"
                                                      OnGuardar="@(async(s)=> await SetearCamposParaGuardar(s))" />
                                 }
                             </CascadingValue>

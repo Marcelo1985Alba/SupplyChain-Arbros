@@ -3,6 +3,7 @@
 <div class="dialogContent">
     <BuscadorEmergente @ref="@Buscador" TItem="vResumenStock" DataSource="@DataSource" TipoSeleccion="@TipoSeleccion"
                        Columnas="@Columnas" Visible="@Visible" Height="600px" Width="75%" HabilitarPaginacion="true"
+                       AplicarFiltro="@AplicarFiltro" filterCG_ART="@filterCG_ART" filterDESPACHO="@filterDESPACHO"
                        OnObjetosSeleccionados="@(async(l)=> await OnSeleccionados(l))" HeightGrid="210px" 
                        Target="@Target" SpinnerVisible="@VisibleSpinner" IsModal="@EsModal"
                        Titulo="@Titulo" OnObjetoSeleccionado="@(async(o)=> await OnSeleccionado(o))"
@@ -23,6 +24,9 @@
     [Parameter] public EventCallback<List<vResumenStock>> OnObjetosSeleccionados { get; set; }
     [Parameter] public SelectionType TipoSeleccion { get; set; } = SelectionType.Single;
     [Parameter] public string Target { get; set; } = "";
+    [Parameter] public bool AplicarFiltro { get; set; } = false;
+    [Parameter] public string filterCG_ART { get; set; } = "";
+    [Parameter] public string filterDESPACHO { get; set; } = "";
     [Parameter] public EventCallback OnCerrar { get; set; }
 
     public vResumenStock Selected { get; set; }

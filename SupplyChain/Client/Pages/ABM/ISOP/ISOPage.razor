@@ -38,6 +38,7 @@
         <SfToast ID="toast_default" @ref="ToastObj">
             <ToastPosition X="Center" Y="Top"></ToastPosition>
         </SfToast>
+        
         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="false" AllowResizing="true"
                 @ref="refGrid" DataSource="@isos" Width="100%"
                 AllowExcelExport="true" AllowGrouping="true" ID="grdPresupuesto"
@@ -62,7 +63,8 @@
                 <GridColumn Field=@nameof(ISO.Proceso) HeaderText="Proceso" TextAlign="TextAlign.Left" Width="175px"></GridColumn>
                 <GridColumn Field=@nameof(ISO.FODA) HeaderText="FODA" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(ISO.ImpAmb) HeaderText="Impacto / Riesgo-Oportunidad" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(ISO.AspAmb) HeaderText="Aspecto Ambiental" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                @*<GridColumn Field=@nameof(ISO.AspAmb) HeaderText="Aspecto Ambiental" TextAlign="TextAlign.Left" Width="200px"></GridColumn>*@
+                <GridColumn Field=@nameof(ISO.Descripcion) HeaderText="Aspecto Ambiental" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                 <GridColumn Field=@nameof(ISO.Frecuencia) HeaderText="Frecuencia" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                 <GridColumn Field=@nameof(ISO.Impacto) HeaderText="Impacto" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(ISO.CondOperacion) HeaderText="Condicion de Operacion" TextAlign="TextAlign.Left" Width="175px"></GridColumn>

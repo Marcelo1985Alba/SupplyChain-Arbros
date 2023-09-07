@@ -1,4 +1,30 @@
 ﻿@page "/inventario/movimiento-entre-depositos"
+@inject NavigationManager Navigation
+@attribute [Authorize(Roles = "Administrador, Produccion")]
+
+<StockOperaciones EsEntrega="false" OperacionId="9" OrdFab="0" FiltraComboOperaciones="true" cg_mat="@cg_mat" despacho="@despacho"></StockOperaciones>
+
+@code{
+    [Parameter] public string cg_mat { get; set; } = string.Empty;
+    [Parameter] public string despacho { get; set; } = string.Empty;
+
+    protected override Task OnInitializedAsync()
+    {
+
+        var uri = new Uri(Navigation.Uri);
+        var queryParams = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+
+        if (queryParams.TryGetValue("cg_mat", out var cgMatValue))
+        {
+            cg_mat = cgMatValue;
+        }
+
+        if (queryParams.TryGetValue("despacho", out var despachoValue))
+        {
+            despacho = despachoValue;
+        }
 
 
-<StockOperaciones EsEntrega="false" OperacionId="9" OrdFab="0" FiltraComboOperaciones="true"></StockOperaciones>
+        return base.OnInitializedAsync();
+    }
+}

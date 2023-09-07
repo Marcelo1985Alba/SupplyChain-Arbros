@@ -5,10 +5,12 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,11 +30,12 @@ namespace SupplyChain
     public class PedCliController : ControllerBase
     {
         private readonly PedCliRepository _pedCliRepository;
+        private readonly UserManager<ApplicationUser> userManager;
 
-
-        public PedCliController(PedCliRepository pedCliRpository)
+        public PedCliController(PedCliRepository pedCliRpository, UserManager<ApplicationUser> userManager)
         {
             this._pedCliRepository = pedCliRpository;
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -63,6 +66,17 @@ namespace SupplyChain
         [HttpGet("ByPedido/{pedido}")]
         public async Task<IEnumerable<PedCli>> GetByPedido(int pedido)
         {
+
+            List<Claim> roleClaims = HttpContext.User.FindAll(ClaimTypes.Role).ToList();
+            if (roleClaims.Any(c => c.Value == "Cliente"))
+            {
+                var userName = HttpContext.User.Identity.Name;
+                var user = await userManager.FindByNameAsync(userName);
+                var cg_cli_usuario = user.Cg_Cli;
+                return await _pedCliRepository.Obtener(p => p.CG_CLI == cg_cli_usuario && p.PEDIDO == pedido).ToListAsync();
+            }
+
+
             return await _pedCliRepository.Obtener(p=> p.PEDIDO == pedido).ToListAsync();
         }
 
