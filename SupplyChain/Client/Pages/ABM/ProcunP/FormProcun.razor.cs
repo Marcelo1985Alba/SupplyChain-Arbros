@@ -208,7 +208,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
 
             }
         }
-
+        //
 
         protected async Task<bool> Agregar(Procun proc)
         {
