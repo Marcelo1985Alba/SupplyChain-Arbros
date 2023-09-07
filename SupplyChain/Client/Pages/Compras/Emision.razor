@@ -1,5 +1,5 @@
-﻿@page "/compras/emision"
-
+﻿﻿@*@page"/compras/emision"*@
+@page "/compras/emision"
 
 @using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.Notifications
@@ -15,6 +15,7 @@
 @using Syncfusion.Blazor.Buttons
 @using System.Text.Json
 @using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.SplitButtons
 @inject IJSRuntime JsRuntime
 @inject Microsoft.JSInterop.IJSRuntime JS
 @inject HttpClient Http
@@ -49,7 +50,7 @@
                 <div class="form-row">
 
                     <div class="col-8">
-                        <SfNumericTextBox Readonly="true" @bind-Value="@ocompraseleccionada.NUMERO" ShowClearButton="true" TValue="int" 
+                        <SfNumericTextBox Readonly="true" @bind-Value="@item.NUMERO" ShowClearButton="true" TValue="int" 
                                           ></SfNumericTextBox>
                     </div>
                     <div class="col-4 mb-1">
@@ -63,16 +64,26 @@
 
 
             <div hidden="@IsVisibleguarda" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
-                <SfButton style="height: 50px;" CssClass="e-info" IsPrimary="true" @onclick="guardaoc">Generar OC</SfButton>
+                <SfButton style="height: 35px;" CssClass="e-info" IsPrimary="true" @onclick="guardaoc">Generar OC</SfButton>
             </div>
             <div hidden="@IsVisibleimprime" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
-                <SfButton style="height: 50px;" CssClass="e-info" IsPrimary="true" @onclick="imprimiroc">Imprimir OC</SfButton>
+                <SfButton style="height: 35px;" CssClass="e-info" IsPrimary="true" @onclick="imprimiroc">Imprimir OC</SfButton>
             </div>
-            <div  style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
-                <SfButton style="height: 50px;" CssClass="e-info" IsPrimary="true" @onclick="anularOc">Anular OC</SfButton>
+            <div style="margin-top:20px;right:6%;" class="form-group col-lg-2 col-md-4 col-sm-6">
+               @* <SfButton style="height: 35px;" CssClass="e-info" IsPrimary="true" @onclick="anularoc">Anular OC</SfButton>*@
+               <SfButtonGroup>               
+                   <SfDropDownButton Content="Anular por" CssClass="e-info" style="height:35px;right:50px;" >
+                 <DropDownButtonEvents ItemSelected="itemseleccionado"></DropDownButtonEvents>
+                       <DropDownMenuItems>
+                        <DropDownMenuItem IconCss="e-icons e-edit" @onclick="anularoc" Text="Anular OC"></DropDownMenuItem>
+                        <DropDownMenuItem IconCss="e-icons e-edit" @onclick="anularpp" Text="Anular PP"></DropDownMenuItem>
+                  </DropDownMenuItems>
+                </SfDropDownButton>
+                </SfButtonGroup>
+
             </div>
-            <div hidden="@ocagenerar" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
-                <SfButton style="height: 50px" CssClass="e-info" IsPrimary="true" @onclick="limpia">Limpia</SfButton>
+            <div hidden="@ocagenerar" style="margin-right:80%;" class="form-group col-lg-2 col-md-4 col-sm-6">
+                <SfButton style="height: 35px" CssClass="e-info" IsPrimary="true" @onclick="limpia">Limpia</SfButton>
             </div>
         </div>
         <div class="form-row">
@@ -115,5 +126,3 @@
 <BuscadorEmergente Height="600px" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
                    Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async(v)=>await Cerrar(v))"
                    OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
-
-

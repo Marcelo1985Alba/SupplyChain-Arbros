@@ -28,11 +28,34 @@ namespace SupplyChain.Server.Repositorios
         //    return await DbSet.FromSqlRaw(xSQL).ToListAsync();
         //}
 
-        public async Task<IEnumerable<Compra>> AnularOc(int oc)
+        //public async Task<IEnumerable<Compra>> AnularOc(int oc)
+        //{
+        //    string xSQL = $"INSERT INTO COMPRAS NUMERO, FE_EMIT,PRECIO,PRECIONETO,PRECIOTOT,MONEDA,NRCLTE,DES_PROVE,FE_PREV,FE_VENC,FE_CIERRE,CONDVEN,CG_DEPOSM,PRECIOUC,PRECIOPOND,FE_PREC,DIASVIGE,ESPECIFICA," +
+        //                  $"FE_DISP,FE_REG,DESCUENTO VALUES (0,NULL,0,0,0,0,'',0,'',NULL,NULL,NULL,0,0,0,0,NULL,NULL,'ANULADO',NULL,NULL) WHERE NUMERO ={oc}";
+        //    return await DbSet.FromSqlRaw(xSQL).ToListAsync();
+        //}
+
+        public async Task AnularPP(Compra compra)
         {
-            string xSQL = $"INSERT INTO COMPRAS NUMERO, FE_EMIT,PRECIO,PRECIONETO,PRECIOTOT,MONEDA,NRCLTE,DES_PROVE,FE_PREV,FE_VENC,FE_CIERRE,CONDVEN,CG_DEPOSM,PRECIOUC,PRECIOPOND,FE_PREC,DIASVIGE,ESPECIFICA," +
-                          $"FE_DISP,FE_REG,DESCUENTO VALUES (0,NULL,0,0,0,0,'',0,'',NULL,NULL,NULL,0,0,0,0,NULL,NULL,'ANULADO',NULL,NULL) WHERE NUMERO ={oc}";
-            return await DbSet.FromSqlRaw(xSQL).ToListAsync();
+            if (compra.NUMERO > 0)
+            {
+
+                await Db.Database.ExecuteSqlRawAsync($"UPDATE COMPRAS SET NUMERO=0, " +
+                $"MONEDA='',ENTREGA= 0,CONDVEN='',PRECIO=0, PRECIOTOT=0, NROCLTE=0, DES_PROVE=''," +
+                $"OBSERVACIONES='ANULADO' " +
+                $"WHERE NUMERO = {compra.NUMERO}");
+
+            }
+
+        }
+
+        public async Task AnularOC(Compra compra)
+        {
+            if (compra.NUMERO > 0)
+            {
+
+                await Db.Database.ExecuteSqlRawAsync($"UPDATE COMPRAS SET NUMERO =0 ,ESPEGEN ='',CONDVEN='',OBSERVACIONES='ANULADO' WHERE NUMERO ={compra.NUMERO}");
+            }
         }
 
     }

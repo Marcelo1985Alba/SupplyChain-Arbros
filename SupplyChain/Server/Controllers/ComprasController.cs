@@ -171,7 +171,6 @@ namespace SupplyChain.Server.Controllers
             return compra;
         }
 
-
         /**/
         // GET: api/Compras/GetPreparacion
         [HttpGet("GetPreparacion/{cgprove}")]
@@ -332,6 +331,37 @@ namespace SupplyChain.Server.Controllers
                 return BadRequest(e);
             }
             return Ok(numoc);
+        }
+
+        [HttpPut("anulacionpp/{numero}")]
+        public async Task<ActionResult<IEnumerable<Compra>>> anularpp(int numero, Compra compra)
+        {
+            try
+            {
+                //await _compraRepository.Obtener(c => c.NUMERO == numero).ToListAsync();
+                await _compraRepository.AnularPP(compra);
+                return Ok(compra);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+        }
+
+        [HttpPut("anulacionoc/{numero}")]
+        public async Task<ActionResult<IEnumerable<Compra>>> anularoc(int numero, Compra compra)
+        {
+            try
+            {
+                await _compraRepository.AnularOC(compra);
+                return Ok(compra);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
     }

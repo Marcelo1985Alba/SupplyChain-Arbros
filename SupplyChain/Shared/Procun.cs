@@ -19,7 +19,7 @@ namespace SupplyChain.Shared
         public int CG_FORM { get; set; }
         [ColumnaGridViewAtributo(Name = "Área"), Range(1, 13, ErrorMessage = "El tipo de Área es requerido")]
         public int CG_AREA { get; set; }
-        [ColumnaGridViewAtributo(Name = "Línea"), Range(1, 13, ErrorMessage = "El tipo de Línea es requerido")]
+        [ColumnaGridViewAtributo(Name = "Línea"), Range(1, 220, ErrorMessage = "El tipo de Línea es requerido")]
         public int CG_LINEA { get; set; }
 		[ColumnaGridViewAtributo(Name	= "Celda"), Required(ErrorMessage = "El tipo de Celda es requerido")]
         public string CG_CELDA { get; set; }
@@ -29,9 +29,9 @@ namespace SupplyChain.Shared
         public string? DESCRIP { get; set; }
 		public string? OBSERV {		get; set; }
 		public string? DESPROC { get; set; }
-		//[ColumnaGridViewAtributo(Name = "Tiempo"), Required(ErrorMessage = "El tiempo es requerido")]
+		[ColumnaGridViewAtributo(Name = "Tiempo"), Range(1,20000, ErrorMessage = "El tiempo es requerido")]
 		public decimal TIEMPO1 { get; set; }
-		//[ColumnaGridViewAtributo(Name = "TS1"), Required(ErrorMessage = "El ts1 es requerido")]
+		[ColumnaGridViewAtributo(Name = "TS1"), Range(1,20000, ErrorMessage = "El ts1 es requerido")]
         public decimal TS1 { get; set; }
         public int FRECU { get; set; }
 		public int CG_CALI1 { get; set; }

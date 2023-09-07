@@ -132,6 +132,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     procSeleccionado.ESNUEVO = true;
                     procSeleccionado.ORDEN = selectedRecord.ORDEN;
                     procSeleccionado.CG_PROD = selectedRecord.CG_PROD;
+                    procSeleccionado.Des_Prod = selectedRecord.Des_Prod;
                     procSeleccionado.CG_AREA = selectedRecord.CG_AREA;
                     procSeleccionado.CG_LINEA = selectedRecord.CG_LINEA;
                     procSeleccionado.CG_CELDA = selectedRecord.CG_CELDA;
