@@ -52,7 +52,7 @@ namespace SupplyChain.Client.HelperService
             }
             return await http.GetFromJsonAsync<List<Producto>>($"{API}/Search/{idProd}/{Des_producto}");
         }
-
+        //
         
 
         public async Task<HttpResponseWrapper<List<Producto>>> Get(bool conMP=true, bool conSE = true, bool conPT = true)
