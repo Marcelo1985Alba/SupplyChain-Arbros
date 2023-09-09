@@ -1,33 +1,25 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace SupplyChain
+namespace SupplyChain;
+
+[Route("api/[controller]")]
+[ApiController]
+public class SQLgenericCommandStringController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class SQLgenericCommandStringController : ControllerBase
+    private readonly AppDbContext _context;
+
+    public SQLgenericCommandStringController(AppDbContext context)
     {
-        private readonly AppDbContext _context;
+        _context = context;
+    }
 
-        public SQLgenericCommandStringController(AppDbContext context)
-        {
-            _context = context;
-        }
+    [HttpPut("{SQLcommandString}")]
+    public async Task<IActionResult> Put(string SQLcommandString, object indistintoNOseUsa)
+    {
+        await _context.Database.ExecuteSqlRawAsync(SQLcommandString);
 
-        [HttpPut("{SQLcommandString}")]
-        public async Task<IActionResult> Put(string SQLcommandString, object indistintoNOseUsa )
-        {
-            try
-            {
-                await _context.Database.ExecuteSqlRawAsync(SQLcommandString);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-            return NoContent();
-        }
+        return NoContent();
     }
 }

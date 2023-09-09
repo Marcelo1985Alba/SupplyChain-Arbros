@@ -1,30 +1,30 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using SupplyChain;
-using Syncfusion.Blazor.Grids;
-using Syncfusion.Blazor.Navigations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Navigations;
+using Action = Syncfusion.Blazor.Grids.Action;
 
-namespace SupplyChain.Pages.Series
+namespace SupplyChain.Pages.Series;
+
+public class SeriePageBase : ComponentBase
 {
-    public class SeriePageBase : ComponentBase
+    public bool Disabled = false;
+
+    public bool Enabled = true;
+    protected SfGrid<Serie> Grid;
+
+    protected List<Serie> series = new();
+
+    protected List<object> Toolbaritems = new()
     {
-        [Inject] protected HttpClient Http { get; set; }
-        [Inject] protected IJSRuntime JsRuntime { get; set; }
-        protected SfGrid<Serie> Grid;
-
-        public bool Enabled = true;
-        public bool Disabled = false;
-
-        protected List<Serie> series = new List<Serie>();
-
-        protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
         "Add",
         "Edit",
@@ -34,121 +34,108 @@ namespace SupplyChain.Pages.Series
         "ExcelExport"
     };
 
-        protected override async Task OnInitializedAsync()
-        {
-            series = await Http.GetFromJsonAsync<List<Serie>>("api/Serie");
+    [Inject] protected HttpClient Http { get; set; }
+    [Inject] protected IJSRuntime JsRuntime { get; set; }
 
-            await base.OnInitializedAsync();
-        }
+    protected override async Task OnInitializedAsync()
+    {
+        series = await Http.GetFromJsonAsync<List<Serie>>("api/Serie");
 
-        public void ActionBeginHandler(ActionEventArgs<Serie> args)
+        await base.OnInitializedAsync();
+    }
+
+    public void ActionBeginHandler(ActionEventArgs<Serie> args)
+    {
+        if (args.RequestType == Action.BeginEdit)
+            Enabled = false;
+        else
+            Enabled = true;
+    }
+
+    public async Task ActionBegin(ActionEventArgs<Serie> args)
+    {
+        if (args.RequestType == Action.Save)
         {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            HttpResponseMessage response;
+            var found = series.Any(o => o.Id == args.Data.Id);
+            var ur = new Serie();
+
+            if (!found)
             {
-                this.Enabled = false;
+                args.Data.Id = series.Max(s => s.Id) + 1;
+                args.Data.CG_ORDEN = 1;
+                response = await Http.PostAsJsonAsync("api/Series", args.Data);
             }
             else
             {
-                this.Enabled = true;
-            }
-        }
-        public async Task ActionBegin(ActionEventArgs<Serie> args)
-        {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
-            {
-                HttpResponseMessage response;
-                bool found = series.Any(o => o.Id == args.Data.Id);
-                Serie ur = new Serie();
-
-                if (!found)
-                {
-                    args.Data.Id = series.Max(s => s.Id) + 1;
-                    args.Data.CG_ORDEN = 1;
-                    response = await Http.PostAsJsonAsync("api/Series", args.Data);
-                }
-                else
-                {
-                    response = await Http.PutAsJsonAsync($"api/Series/{args.Data.Id}", args.Data);
-                }
-
-                if (response.StatusCode == System.Net.HttpStatusCode.Created)
-                {
-
-                }
+                response = await Http.PutAsJsonAsync($"api/Series/{args.Data.Id}", args.Data);
             }
 
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+            if (response.StatusCode == HttpStatusCode.Created)
             {
-                await EliminarServicio(args);
             }
         }
 
-        private async Task EliminarServicio(ActionEventArgs<Serie> args)
+        if (args.RequestType == Action.Delete) await EliminarServicio(args);
+    }
+
+    private async Task EliminarServicio(ActionEventArgs<Serie> args)
+    {
+        try
         {
-            try
+            if (args.Data != null)
             {
-                if (args.Data != null)
+                var isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm",
+                    "Seguro de que desea eliminar el serie / la reparacion?");
+                if (isConfirmed)
+                    //servicios.Remove(servicios.Find(m => m.PEDIDO == args.Data.PEDIDO));
+                    await Http.DeleteAsync($"api/Serie/{args.Data.Id}");
+            }
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    public async Task ClickHandler(ClickEventArgs args)
+    {
+        if (args.Item.Text == "Copy")
+            if (Grid.SelectedRecords.Count > 0)
+                foreach (var selectedRecord in Grid.SelectedRecords)
                 {
-                    bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar el serie / la reparacion?");
+                    var isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm",
+                        "Seguro de que desea copiar el Serie / la reparacion?");
                     if (isConfirmed)
                     {
-                        //servicios.Remove(servicios.Find(m => m.PEDIDO == args.Data.PEDIDO));
-                        await Http.DeleteAsync($"api/Serie/{args.Data.Id}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
+                        var Nuevo = new Serie();
 
-            }
-        }
+                        Nuevo.Id = series.Max(s => s.Id) + 1;
+                        Nuevo.Codigo = selectedRecord.Codigo;
+                        Nuevo.Descripcion = selectedRecord.Descripcion;
+                        Nuevo.CG_ORDEN = selectedRecord.CG_ORDEN;
 
-        public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
-        {
-            if (args.Item.Text == "Copy")
-            {
-                if (this.Grid.SelectedRecords.Count > 0)
-                {
-                    foreach (Serie selectedRecord in this.Grid.SelectedRecords)
-                    {
-                        bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar el Serie / la reparacion?");
-                        if (isConfirmed)
+                        var response = await Http.PostAsJsonAsync("api/Codigo", Nuevo);
+
+                        if (response.StatusCode == HttpStatusCode.Created)
                         {
-                            Serie Nuevo = new Serie();
-
-                            Nuevo.Id = series.Max(s => s.Id) + 1;
-                            Nuevo.Codigo = selectedRecord.Codigo;
-                            Nuevo.Descripcion = selectedRecord.Descripcion;
-                            Nuevo.CG_ORDEN = selectedRecord.CG_ORDEN;
-
-                            var response = await Http.PostAsJsonAsync("api/Codigo", Nuevo);
-
-                            if (response.StatusCode == System.Net.HttpStatusCode.Created)
-                            {
-                                Grid.Refresh();
-                                var serie = await response.Content.ReadFromJsonAsync<Serie>();
-                                await InvokeAsync(StateHasChanged);
-                                Nuevo.Id = serie.Id;
-                                series.Add(Nuevo);
-                                var itemsJson = JsonSerializer.Serialize(serie);
-                                Console.WriteLine(itemsJson);
-                                //toastService.ShowToast($"Registrado Correctemente.Vale {StockGuardado.VALE}", TipoAlerta.Success);
-                                series.OrderByDescending(o => o.Id);
-                            }
+                            Grid.Refresh();
+                            var serie = await response.Content.ReadFromJsonAsync<Serie>();
+                            await InvokeAsync(StateHasChanged);
+                            Nuevo.Id = serie.Id;
+                            series.Add(Nuevo);
+                            var itemsJson = JsonSerializer.Serialize(serie);
+                            Console.WriteLine(itemsJson);
+                            //toastService.ShowToast($"Registrado Correctemente.Vale {StockGuardado.VALE}", TipoAlerta.Success);
+                            series.OrderByDescending(o => o.Id);
                         }
                     }
                 }
-            }
-            if (args.Item.Text == "Excel Export")
-            {
-                await this.Grid.ExcelExport();
-            }
-        }
 
-        public void Refresh()
-        {
-            Grid.Refresh();
+        if (args.Item.Text == "Excel Export") await Grid.ExcelExport();
+    }
 
-        }
+    public void Refresh()
+    {
+        Grid.Refresh();
     }
 }

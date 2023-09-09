@@ -1,13 +1,10 @@
 ﻿using SupplyChain.Server.Data.Repository;
-using Syncfusion.Pdf.Lists;
 
-namespace SupplyChain.Server.Repositorios
+namespace SupplyChain.Server.Repositorios;
+
+public class ProcesoRepository : Repository<Procesos, int>
 {
-    public class ProcesoRepository: Repository<Procesos, int>
+    public ProcesoRepository(AppDbContext appDb) : base(appDb)
     {
-        public ProcesoRepository(AppDbContext appDb) : base(appDb)
-        {
-
-        }
     }
 }

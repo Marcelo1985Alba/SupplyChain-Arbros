@@ -1,56 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
-using SupplyChain.Shared.Models;
 
-namespace SupplyChain.Server.Controllers
+namespace SupplyChain.Server.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class CondicionesPagoController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CondicionesPagoController : ControllerBase
+    private readonly vCondicionesPagoRepository _vCondicionesPagoRepository;
+    private readonly int cg_cia_usuario = 1; /*CAMBIAR POR LA DEL USUARIO*/
+
+    public CondicionesPagoController(vCondicionesPagoRepository vCondicionesPagoRepository)
     {
-        private readonly int cg_cia_usuario = 1; /*CAMBIAR POR LA DEL USUARIO*/
-        private readonly vCondicionesPagoRepository _vCondicionesPagoRepository;
+        _vCondicionesPagoRepository = vCondicionesPagoRepository;
+    }
 
-        public CondicionesPagoController(vCondicionesPagoRepository vCondicionesPagoRepository)
+    // GET: api/Compras
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<vCondicionesPago>>> GetCompras()
+    {
+        try
         {
-            _vCondicionesPagoRepository = vCondicionesPagoRepository;
+            return await _vCondicionesPagoRepository.ObtenerTodos();
         }
-
-        // GET: api/Compras
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<vCondicionesPago>>> GetCompras()
+        catch (Exception ex)
         {
-            try
-            {
-                return await _vCondicionesPagoRepository.ObtenerTodos();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(ex);
         }
+    }
 
-        // GET: api/Compras/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<vDireccionesEntrega>> GetCompra(int id)
-        {
-            var cond = await _vCondicionesPagoRepository.ObtenerPorId(id);
+    // GET: api/Compras/5
+    [HttpGet("{id}")]
+    public async Task<ActionResult<vDireccionesEntrega>> GetCompra(int id)
+    {
+        var cond = await _vCondicionesPagoRepository.ObtenerPorId(id);
 
-            if (cond == null)
-            {
-                return NotFound();
-            }
+        if (cond == null) return NotFound();
 
-            return Ok(cond);
-        }
-        
+        return Ok(cond);
     }
 }

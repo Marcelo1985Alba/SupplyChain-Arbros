@@ -1,23 +1,22 @@
-﻿
-@using Syncfusion.Blazor.Buttons
+﻿@using Syncfusion.Blazor.Buttons
 @inherits BuscadorResumenStockBase
 
 <div class="form-row">
     <div class="col-6">
         @if (MostraBotonBusqueda)
         {
-            <SfButton HtmlAttributes="@HtmlAtrr" OnClick="@(async (e)=> await BuscarStock())" CssClass="btn btn-sm btn-info"
+            <SfButton HtmlAttributes="@HtmlAtrr" OnClick="@(async e => await BuscarStock())" CssClass="btn btn-sm btn-info"
                       IsPrimary="false"
-                      IconCss="fa fa-search" Disabled="@HabilitaBotonBusqueda">@TextoButon</SfButton>
-                }
+                      IconCss="fa fa-search" Disabled="@HabilitaBotonBusqueda">
+                @TextoButon
+            </SfButton>
+        }
     </div>
 
 </div>
 @if (PopupBuscadorVisible)
 {
-    <BuscadorEmergente @ref="Buscador" TItem="vResumenStock" DataSource="ItemsABuscar" Columnas="ColumnasBuscador" 
+    <BuscadorEmergente @ref="Buscador" TItem="vResumenStock" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
                        Titulo="@TituloBuscador" TipoSeleccion="@TipoSeleccion"
-                       Visible="@PopupBuscadorVisible" OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+                       Visible="@PopupBuscadorVisible" OnObjetoSeleccionado="@(async o => await EnviarObjetoSeleccionado(o))"/>
 }
-
-

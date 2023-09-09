@@ -1,20 +1,5 @@
 ﻿@page "/sc/Depositos/list"
-@using Syncfusion.Blazor.Grids
-@using Syncfusion.Blazor.Data
-@using Syncfusion.Blazor.Calendars
-@using Syncfusion.Blazor.DropDowns
-@using Syncfusion.Blazor.Inputs
-@using System.Configuration;
-@using System.Data.SqlClient;
-@using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.Popups
-@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.BarcodeGenerator
-@using System.Text.Json
-@using System.Linq
 @inject IJSRuntime JsRuntime
-@using SupplyChain
-@using System.Net.Http.Json
 @inject HttpClient Http
 @inject NavigationManager NavManager
 @inherits SupplyChain.Pages.ABM.Depositos.DepositosPageBase.DepositosPageBase
@@ -26,14 +11,14 @@
                     @ref="Grid" DataSource="@deposito" ID="depositoGrid"
                     AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true"
                     AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
-                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                <GridSelectionSettings Type="SelectionType.Multiple"></GridSelectionSettings>
                 <GridEvents OnToolbarClick="@ClickHandler" OnActionBegin="ActionBegin" TValue="Deposito"></GridEvents>
-                <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+                <GridFilterSettings Type="@FilterType.CheckBox"></GridFilterSettings>
                 <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                 <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@EditMode.Dialog">
                     <Template>
                         @{
-                            var deposito = (context as Deposito);
+                            var deposito = context as Deposito;
                             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-Generalidades" role="tab" aria-controls="pills-home" aria-selected="true">Modelos</a>
@@ -67,31 +52,31 @@
 
                                             </div>
                                         </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-md-6">
-                                                    <label class="e-float-text e-label-top">Codigo CLIENTE:</label>
-                                                    <SfNumericTextBox ID="CG_CLI" @bind-Value="@(deposito.CG_CLI)"></SfNumericTextBox>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Codigo CLIENTE:</label>
+                                                <SfNumericTextBox ID="CG_CLI" @bind-Value="@(deposito.CG_CLI)"></SfNumericTextBox>
 
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label class="e-float-text e-label-top">Codigo proveedor:</label>
-                                                    <SfNumericTextBox ID="CG_PROVE" @bind-Value="@(deposito.CG_PROVE)"></SfNumericTextBox>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Codigo proveedor:</label>
+                                                <SfNumericTextBox ID="CG_PROVE" @bind-Value="@(deposito.CG_PROVE)"></SfNumericTextBox>
 
-                                                </div>
                                             </div>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         }
                     </Template>
                 </GridEditSettings>
                 <GridColumns>
-                    <GridColumn Field=@nameof(Deposito.CG_DEP) HeaderText="Codigo" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Deposito.DES_DEP) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Deposito.TIPO_DEP) HeaderText="Tipo Deposito" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Deposito.CG_CIA) HeaderText="cia" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Deposito.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Deposito.CG_PROVE) HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field="@nameof(Deposito.CG_DEP)" HeaderText="Codigo" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
+                    <GridColumn Field="@nameof(Deposito.DES_DEP)" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field="@nameof(Deposito.TIPO_DEP)" HeaderText="Tipo Deposito" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field="@nameof(Deposito.CG_CIA)" HeaderText="cia" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field="@nameof(Deposito.CG_CLI)" HeaderText="Cliente" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field="@nameof(Deposito.CG_PROVE)" HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                 </GridColumns>
             </SfGrid>
         </div>
@@ -148,5 +133,6 @@
         height: 500px;
     }
 </style>
+
 @code {
 }

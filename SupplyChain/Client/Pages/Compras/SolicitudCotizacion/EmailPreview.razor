@@ -1,5 +1,4 @@
 ﻿@using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.RichTextEditor
 @inherits EmailPreviewBase
 
 <div class="row">
@@ -8,7 +7,7 @@
         <h3>Email a Enviar</h3>
     </div>
     <div class="col-6">
-        <SfToolbar Width="100%" >
+        <SfToolbar Width="100%">
             <ToolbarItems>
                 <ToolbarItem>
                     <Template>
@@ -28,7 +27,7 @@
                 </ToolbarItem>
                 <ToolbarItem>
                     <Template>
-                        <button id="template2" class="e-btn e-small e-info" >
+                        <button id="template2" class="e-btn e-small e-info">
                             <i class="fa fa-cog" aria-hidden="true"></i>
                         </button>
                     </Template>
@@ -66,7 +65,7 @@
         <Content>
             <SfTab>
                 <TabItems>
-                    @foreach (SolCotEmail mailProveedor in EmailsEnviar.GroupBy(e=> e.CG_PROVE).Select(s=> s.FirstOrDefault()).ToList())
+                    @foreach (var mailProveedor in EmailsEnviar.GroupBy(e => e.CG_PROVE).Select(s => s.FirstOrDefault()).ToList())
                     {
                         <TabItem>
                             <ChildContent>
@@ -105,8 +104,8 @@
                     }
                 </TabItems>
             </SfTab>
-            
-            
+
+
         </Content>
     </DialogTemplates>
 </SfDialog>

@@ -12,39 +12,37 @@
                 AllowExcelExport="true" AllowGrouping="true" ID="grdUsuarios" Toolbar="@Toolbaritems"
                 AllowSorting="true" AllowPaging="true" AllowFiltering="true" GridLines="GridLine.Both">
             <GridEvents TValue="vUsuario"
-                        CommandClicked="CommandClickHandler" OnToolbarClick="@(async(a)=> await ClickHandler(a))"
-                        OnActionBegin="@((a)=> OnActionBeginHandler(a))" OnActionComplete="OnActionCompleteHandler"></GridEvents>
-            <GridSelectionSettings CheckboxOnly="false" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                        CommandClicked="CommandClickHandler" OnToolbarClick="@(async a => await ClickHandler(a))"
+                        OnActionBegin="@(a => OnActionBeginHandler(a))" OnActionComplete="OnActionCompleteHandler">
+            </GridEvents>
+            <GridSelectionSettings CheckboxOnly="false" Type="SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="12" PageSizes="true"></GridPageSettings>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog"></GridEditSettings>
             <GridColumns>
-                <GridColumn Field=@nameof(vUsuario.FOTO) HeaderText="FOTO" Width="150">
+                <GridColumn Field="@nameof(vUsuario.FOTO)" HeaderText="FOTO" Width="150">
                     <Template>
                         @{
                             var user = context as vUsuario;
                             if (user.FOTO is null || user.FOTO.Length == 0)
                             {
                                 <div class="profile-img">
-                                    <img src="img1-150x150.png" class="profile-pic" alt="Image" />
+                                    <img src="img1-150x150.png" class="profile-pic" alt="Image"/>
                                 </div>
-                                
-
                             }
                             else
                             {
                                 <div class="profile-img">
-                                    <img class="profile-pic" src="@($"data:image/png;base64,{Convert.ToBase64String(user.FOTO)}")" alt="Image" />
+                                    <img class="profile-pic" src="@($"data:image/png;base64,{Convert.ToBase64String(user.FOTO)}")" alt="Image"/>
                                 </div>
-                                
                             }
                         }
                     </Template>
                 </GridColumn>
-                <GridColumn Field=@nameof(vUsuario.USUARIO) HeaderText="USUARIO" Width="150" Type="ColumnType.DateTime"></GridColumn>
-                <GridColumn Field=@nameof(vUsuario.EMAIL) HeaderText="EMAIL" Width="150"></GridColumn>
-                <GridColumn Field=@nameof(vUsuario.CLIENTE) HeaderText="CLIENTE ASOCIADO" Width="150"></GridColumn>
-                
+                <GridColumn Field="@nameof(vUsuario.USUARIO)" HeaderText="USUARIO" Width="150" Type="ColumnType.DateTime"></GridColumn>
+                <GridColumn Field="@nameof(vUsuario.EMAIL)" HeaderText="EMAIL" Width="150"></GridColumn>
+                <GridColumn Field="@nameof(vUsuario.CLIENTE)" HeaderText="CLIENTE ASOCIADO" Width="150"></GridColumn>
+
             </GridColumns>
             <SfSpinner Type="SpinnerType.Fabric" Size="50" Label="Cargando..." @bind-Visible="@SpinnerVisible"></SfSpinner>
         </SfGrid>
@@ -52,9 +50,10 @@
 
     @if (popupFormVisible)
     {
-        <FormUsuario ApplicationUser="@UsuarioSeleccionado" Show="@popupFormVisible" 
-                     OnCerrar="@(() => popupFormVisible = false)" OnGuardar="@(async(a)=> await OnGuardar(a))"
-                     RolesSeleccionados="@UsuarioSeleccionado.Roles.ToArray()" Clientes="@Clientes"></FormUsuario>
+        <FormUsuario ApplicationUser="@UsuarioSeleccionado" Show="@popupFormVisible"
+                     OnCerrar="@(() => popupFormVisible = false)" OnGuardar="@(async a => await OnGuardar(a))"
+                     RolesSeleccionados="@UsuarioSeleccionado.Roles.ToArray()" Clientes="@Clientes">
+        </FormUsuario>
     }
 
 

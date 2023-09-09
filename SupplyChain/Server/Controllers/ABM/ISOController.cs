@@ -1,142 +1,121 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
 
-namespace SupplyChain
+namespace SupplyChain;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ISOController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ISOController : ControllerBase
+    private readonly ISORepository _isoRepository;
+
+    public ISOController(ISORepository isoRepository)
     {
-        private readonly ISORepository _isoRepository;
+        _isoRepository = isoRepository;
+    }
 
-        public ISOController(ISORepository isoRepository)
+    // GET: api/ISO
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<ISO>>> GetISO()
+    {
+        try
         {
-            this._isoRepository = isoRepository;
+            return await _isoRepository.ObtenerTodos();
         }
-
-        // GET: api/ISO
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ISO>>> GetISO()
+        catch (Exception ex)
         {
-            try
-            {
-                return await _isoRepository.ObtenerTodos();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(ex);
         }
+    }
 
-        // GET: api/ISO/Existe/{id}
-        [HttpGet("Existe/{id}")]
-        public async Task<ActionResult<bool>> ExisteISO(int id)
+    // GET: api/ISO/Existe/{id}
+    [HttpGet("Existe/{id}")]
+    public async Task<ActionResult<bool>> ExisteISO(int id)
+    {
+        try
         {
-            try
-            {
-                return await _isoRepository.Existe(id);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return await _isoRepository.Existe(id);
         }
-
-        // PUT: api/ISO/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutISO(int id, ISO iso)
+        catch (Exception ex)
         {
-            if (id != iso.Id)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                await _isoRepository.Actualizar(iso);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _isoRepository.Existe(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-            return Ok(iso);
+            return BadRequest(ex);
         }
+    }
 
-        // POST: api/ISO
-        [HttpPost]
-        public async Task<ActionResult<ISO>> PostISO(ISO iso)
+    // PUT: api/ISO/{id}
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutISO(int id, ISO iso)
+    {
+        if (id != iso.Id) return BadRequest();
+
+        try
         {
-            try
-            {
-                await _isoRepository.Agregar(iso);
-                return CreatedAtAction("GetISO", new { id = iso.Id }, iso);
-            }
-            catch (DbUpdateException exx)
-            {
-                if (!await _isoRepository.Existe(iso.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            await _isoRepository.Actualizar(iso);
         }
-
-        // DELETE: api/ISO/{id}
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<ISO>> DeleteISO(int id)
+        catch (DbUpdateConcurrencyException)
         {
-            var iso = await _isoRepository.ObtenerPorId(id);
-            if (iso == null)
-            {
+            if (!await _isoRepository.Existe(id))
                 return NotFound();
-            }
-
-            await _isoRepository.Remover(id);
-
-            return iso;
+            return BadRequest();
         }
-
-        // POST: api/ISO/PostList
-        [HttpPost("PostList")]
-        public async Task<ActionResult<ISO>> PostList(List<ISO> iso)
+        catch (Exception ex)
         {
-            try
-            {
-                foreach (var item in iso)
-                {
-                    await _isoRepository.Remover(item.Id);
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest();
-            }
-
-            return Ok();
+            return BadRequest(ex);
         }
+
+        return Ok(iso);
+    }
+
+    // POST: api/ISO
+    [HttpPost]
+    public async Task<ActionResult<ISO>> PostISO(ISO iso)
+    {
+        try
+        {
+            await _isoRepository.Agregar(iso);
+            return CreatedAtAction("GetISO", new { id = iso.Id }, iso);
+        }
+        catch (DbUpdateException exx)
+        {
+            if (!await _isoRepository.Existe(iso.Id))
+                return Conflict();
+            return BadRequest();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
+    }
+
+    // DELETE: api/ISO/{id}
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<ISO>> DeleteISO(int id)
+    {
+        var iso = await _isoRepository.ObtenerPorId(id);
+        if (iso == null) return NotFound();
+
+        await _isoRepository.Remover(id);
+
+        return iso;
+    }
+
+    // POST: api/ISO/PostList
+    [HttpPost("PostList")]
+    public async Task<ActionResult<ISO>> PostList(List<ISO> iso)
+    {
+        try
+        {
+            foreach (var item in iso) await _isoRepository.Remover(item.Id);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest();
+        }
+
+        return Ok();
     }
 }

@@ -1,10 +1,10 @@
 ﻿@page "/chat-app/{ContactId}"
 @page "/chat-app"
-@using Syncfusion.Blazor.Inputs
+@attribute [Authorize(Roles = "Administrador, Produccion")]
+@using FilterType = Syncfusion.Blazor.DropDowns.FilterType
+@using SelectionMode = Syncfusion.Blazor.DropDowns.SelectionMode
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Lists
-@using System.Collections.ObjectModel
-@attribute [Authorize(Roles = "Administrador, Produccion")]
 @inherits ChatBase
 
 <div>
@@ -12,15 +12,15 @@
         <div class="col-lg-3 col-md-6 col-sm-12 e-card">
             <h3>#Contactos</h3>
             <SfListBox @bind-Value="@ContactId" TValue="string" TItem="Usuario" DataSource="@ChatUsers" AllowFiltering="true"
-                       FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains">
+                       FilterType="FilterType.Contains">
                 <ListBoxFieldSettings Text="Nombre" Value="Id"></ListBoxFieldSettings>
-                <ListBoxSelectionSettings Mode="Syncfusion.Blazor.DropDowns.SelectionMode.Single"></ListBoxSelectionSettings>
+                <ListBoxSelectionSettings Mode="SelectionMode.Single"></ListBoxSelectionSettings>
                 <ListBoxEvents TValue="string" TItem="Usuario" ValueChange="@change"></ListBoxEvents>
                 <ListBoxTemplates TItem="Usuario">
                     <ItemTemplate>
                         <div class="list-wrapper">
                             <span class="pic03 e-avatar e-avatar-xlarge e-avatar-circle"></span>
-                            <span class="text">@((context as Usuario).Nombre)</span><span class="description">@((context as Usuario).Email)</span>
+                            <span class="text">@context.Nombre</span><span class="description">@context.Email</span>
                         </div>
                     </ItemTemplate>
                 </ListBoxTemplates>
@@ -36,7 +36,7 @@
                 <ListViewTemplates TValue="ChatMessage">
                     <Template>
                         @{
-                            ChatMessage currentData = context as ChatMessage;
+                            var currentData = context;
 
                             <div class="content__container">
                                 <div class="flex flex__1 vertical__center flex__center @(currentData.FromUserId == ContactId ? "flex__order__2" : "")">
@@ -63,7 +63,8 @@
             <div class="flex">
                 <div class="flex__8 padding">
                     <SfTextBox Placeholder="Ingrese su Mensaje..." @bind-Value="@CurrentMessage"
-                               @ref="@SfTextBox"></SfTextBox>
+                               @ref="@SfTextBox">
+                    </SfTextBox>
                 </div>
                 <div class="flex__1">
                     <button class="e-btn" @onclick="@EnviarMensaje">Enviar</button>
@@ -118,7 +119,6 @@
             </div>*@
     </div>
 </div>
-
 
 
 <style>

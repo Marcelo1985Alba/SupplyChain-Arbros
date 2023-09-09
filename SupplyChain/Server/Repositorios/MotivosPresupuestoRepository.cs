@@ -1,36 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SupplyChain.Client.HelperService;
+﻿using System.Threading.Tasks;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared;
-using SupplyChain.Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace SupplyChain.Server.Repositorios
+namespace SupplyChain.Server.Repositorios;
+
+public class MotivosPresupuestoRepository : Repository<MotivosPresupuesto, int>
 {
-    public class MotivosPresupuestoRepository : Repository<MotivosPresupuesto, int>
+    public MotivosPresupuestoRepository(AppDbContext appDbContext) : base(appDbContext)
     {
-        public MotivosPresupuestoRepository(AppDbContext appDbContext) : base(appDbContext)
-        {
-        } 
+    }
 
-        public override async Task Agregar(MotivosPresupuesto entity)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(entity.Motivo))
-                {
-                    entity.Motivo = string.Empty;
-                }
-                await base.Agregar(entity);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+    public override async Task Agregar(MotivosPresupuesto entity)
+    {
+        if (string.IsNullOrEmpty(entity.Motivo)) entity.Motivo = string.Empty;
+        await base.Agregar(entity);
     }
 }

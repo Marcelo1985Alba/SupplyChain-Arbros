@@ -1,19 +1,20 @@
 ﻿@page "/proyectos-prueba"
 @using Syncfusion.Blazor.Gantt
-@using Syncfusion.Blazor.Data
+@using GridLine = Syncfusion.Blazor.Gantt.GridLine
 @using Syncfusion.Blazor
+@using Syncfusion.Blazor.Data
 <div class="row">
     <p>test</p>
     <div class="col-12">
-        <SfGantt TValue="ProyectosGBPI" Height="450px" Width="100%" AllowSelection="true" 
-                 GridLines="Syncfusion.Blazor.Gantt.GridLine.Both">
-            <SfDataManager Url="api/Proyectos/Proyectos" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true" ></SfDataManager>
-            <GanttTaskFields Id="id" Name="taskName" StartDate="startDate" ParentID="parentId" EndDate="endDate" 
+        <SfGantt TValue="ProyectosGBPI" Height="450px" Width="100%" AllowSelection="true"
+                 GridLines="GridLine.Both">
+            <SfDataManager Url="api/Proyectos/Proyectos" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
+            <GanttTaskFields Id="id" Name="taskName" StartDate="startDate" ParentID="parentId" EndDate="endDate"
                              Duration="duration" Progress="progress" Dependency="predecessor" Notes="notes">
             </GanttTaskFields>
             <GanttColumns>
                 <GanttColumn Field="Id" HeaderText="Task Id" Visible="false"></GanttColumn>
-                <GanttColumn Field="TaskName" HeaderText="Task Name" Width="250" ClipMode="Syncfusion.Blazor.Grids.ClipMode.EllipsisWithTooltip"></GanttColumn>
+                <GanttColumn Field="TaskName" HeaderText="Task Name" Width="250" ClipMode="ClipMode.EllipsisWithTooltip"></GanttColumn>
                 <GanttColumn Field="StartDate"></GanttColumn>
                 <GanttColumn Field="Duration"></GanttColumn>
             </GanttColumns>
@@ -29,7 +30,10 @@
 
 
 @code{
-    [Inject] public ProyectosService ProyectosService { get; set; }
+
+    [Inject]
+    public ProyectosService ProyectosService { get; set; }
+
     protected SfGantt<ProyectosGBPI> refGanttProyectos;
     private List<ProyectosGBPI> TaskCollection { get; set; }
     protected bool cargarndo = true;
@@ -62,11 +66,13 @@
 
     public static List<ProyectosGBPI> GetTaskCollection()
     {
-        List<ProyectosGBPI> Tasks = new List<ProyectosGBPI>() {
-            new ProyectosGBPI() { Id = 1, TaskName = "Project initiation", StartDate = new DateTime(2022, 04, 05), EndDate = new DateTime(2022, 04, 21), },
-            new ProyectosGBPI() { Id = 2, TaskName = "Identify Site location", StartDate = new DateTime(2022, 04, 05), Duration = "4", Progress = 50, ParentId = 1 },
-            new ProyectosGBPI() { Id = 3, TaskName = "Perform soil test", StartDate = new DateTime(2022, 04, 05), Duration = "4", Progress = 50, ParentId = 1 }
+        var Tasks = new List<ProyectosGBPI>
+        {
+            new() { Id = 1, TaskName = "Project initiation", StartDate = new DateTime(2022, 04, 05), EndDate = new DateTime(2022, 04, 21) },
+            new() { Id = 2, TaskName = "Identify Site location", StartDate = new DateTime(2022, 04, 05), Duration = "4", Progress = 50, ParentId = 1 },
+            new() { Id = 3, TaskName = "Perform soil test", StartDate = new DateTime(2022, 04, 05), Duration = "4", Progress = 50, ParentId = 1 }
         };
         return Tasks;
     }
+
 }

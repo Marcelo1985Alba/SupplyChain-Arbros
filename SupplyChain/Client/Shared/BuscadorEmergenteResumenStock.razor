@@ -4,30 +4,59 @@
     <BuscadorEmergente @ref="@Buscador" TItem="vResumenStock" DataSource="@DataSource" TipoSeleccion="@TipoSeleccion"
                        Columnas="@Columnas" Visible="@Visible" Height="600px" Width="75%" HabilitarPaginacion="true"
                        AplicarFiltro="@AplicarFiltro" filterCG_ART="@filterCG_ART" filterDESPACHO="@filterDESPACHO"
-                       OnObjetosSeleccionados="@(async(l)=> await OnSeleccionados(l))" HeightGrid="210px" 
+                       OnObjetosSeleccionados="@(async l => await OnSeleccionados(l))" HeightGrid="210px"
                        Target="@Target" SpinnerVisible="@VisibleSpinner" IsModal="@EsModal"
-                       Titulo="@Titulo" OnObjetoSeleccionado="@(async(o)=> await OnSeleccionado(o))"
-                       OnCerrarDialog="@(async(b)=>await Cerrar(b))">
+                       Titulo="@Titulo" OnObjetoSeleccionado="@(async o => await OnSeleccionado(o))"
+                       OnCerrarDialog="@(async b => await Cerrar(b))">
     </BuscadorEmergente>
 
 </div>
+
 @code {
     protected BuscadorEmergente<vResumenStock> Buscador;
     SfGrid<vResumenStock> Grid;
-    [Parameter] public bool VisibleSpinner { get; set; } = false;
-    [Parameter] public vResumenStock[] DataSource { get; set; } = null!;
-    [Parameter] public string Titulo { get; set; } = "Listado: INSUMOS EN STOCK";
-    [Parameter] public bool Visible { get; set; } = false;
-    [Parameter] public bool EsModal { get; set; } = false;
-    [Parameter] public string[] Columnas { get; set; } = null!;
-    [Parameter] public EventCallback<vResumenStock> OnObjetoSeleccionado { get; set; }
-    [Parameter] public EventCallback<List<vResumenStock>> OnObjetosSeleccionados { get; set; }
-    [Parameter] public SelectionType TipoSeleccion { get; set; } = SelectionType.Single;
-    [Parameter] public string Target { get; set; } = "";
-    [Parameter] public bool AplicarFiltro { get; set; } = false;
-    [Parameter] public string filterCG_ART { get; set; } = "";
-    [Parameter] public string filterDESPACHO { get; set; } = "";
-    [Parameter] public EventCallback OnCerrar { get; set; }
+
+    [Parameter]
+    public bool VisibleSpinner { get; set; } = false;
+
+    [Parameter]
+    public vResumenStock[] DataSource { get; set; } = null!;
+
+    [Parameter]
+    public string Titulo { get; set; } = "Listado: INSUMOS EN STOCK";
+
+    [Parameter]
+    public bool Visible { get; set; } = false;
+
+    [Parameter]
+    public bool EsModal { get; set; } = false;
+
+    [Parameter]
+    public string[] Columnas { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<vResumenStock> OnObjetoSeleccionado { get; set; }
+
+    [Parameter]
+    public EventCallback<List<vResumenStock>> OnObjetosSeleccionados { get; set; }
+
+    [Parameter]
+    public SelectionType TipoSeleccion { get; set; } = SelectionType.Single;
+
+    [Parameter]
+    public string Target { get; set; } = "";
+
+    [Parameter]
+    public bool AplicarFiltro { get; set; } = false;
+
+    [Parameter]
+    public string filterCG_ART { get; set; } = "";
+
+    [Parameter]
+    public string filterDESPACHO { get; set; } = "";
+
+    [Parameter]
+    public EventCallback OnCerrar { get; set; }
 
     public vResumenStock Selected { get; set; }
 
@@ -53,6 +82,7 @@
         Visible = true;
         await Buscador.ShowAsync();
     }
+
     public async Task HideAsync()
     {
         Visible = false;
@@ -85,7 +115,7 @@
     public async Task GetSelectedRecords(RowSelectEventArgs<vResumenStock> args)
     {
         args.PreventRender = true; //without this, you may see noticable delay in selection with 75 rows in grid
-        //ListaSeleccionada = await this.Grid.GetSelectedRecords();
+    //ListaSeleccionada = await this.Grid.GetSelectedRecords();
         Selected = args.Data;
         await InvokeAsync(StateHasChanged);
     }
@@ -94,4 +124,5 @@
     {
         Visible = visible;
     }
+
 }

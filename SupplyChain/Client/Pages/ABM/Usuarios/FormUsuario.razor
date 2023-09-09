@@ -1,13 +1,6 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using Syncfusion.Blazor.Buttons
+﻿@using FilterType = Syncfusion.Blazor.DropDowns.FilterType
 @using Syncfusion.Blazor.DropDowns
-@using Syncfusion.Blazor.Data
-@using SupplyChain.Client.Shared.BuscadorCliente
-@using SupplyChain.Client.Shared.BuscadorProducto
-@using SupplyChain.Client.Shared.BuscadorPrecios
-@using SupplyChain.Client.Pages.ABM.Precios
-@using Syncfusion.Blazor.Inputs
-
+@using Syncfusion.Blazor.Buttons
 @inherits FormUsuarioBase
 
 <SfToast ID="toast_default" @ref="ToastObj">
@@ -29,22 +22,21 @@
             }
         </Header>
         <Content>
-            <EditForm id="form-usuario" Model="@ApplicationUser" OnValidSubmit="@(async()=> await Guardar())">
-                <DataAnnotationsValidator />
+            <EditForm id="form-usuario" Model="@ApplicationUser" OnValidSubmit="@(async () => await Guardar())">
+                <DataAnnotationsValidator/>
                 <div class="container">
                     <div class="row">
                         <div class="col-md-4">
                             @if (ApplicationUser.Foto != null && ApplicationUser.Foto.Length > 0)
                             {
-
                                 <div class="profile-img">
-                                    <img class="profile-pic" src="@($"data:image/png;base64,{Convert.ToBase64String(ApplicationUser.Foto)}")" alt="Image" />
+                                    <img class="profile-pic" src="@($"data:image/png;base64,{Convert.ToBase64String(ApplicationUser.Foto)}")" alt="Image"/>
                                 </div>
                             }
                             else
                             {
                                 <div class="profile-img">
-                                    <img src="img1-150x150.png" alt="user" class="profile-pic" />
+                                    <img src="img1-150x150.png" alt="user" class="profile-pic"/>
                                 </div>
                             }
 
@@ -63,7 +55,8 @@
                                 <div class="col-sm-8">
                                     <label class="">Email:</label>
                                     <SfTextBox CssClass="customClass" ID="Email" @bind-Value="@(ApplicationUser.Email)" Readonly="false"
-                                               Type="InputType.Email" ShowClearButton="true"></SfTextBox>
+                                               Type="InputType.Email" ShowClearButton="true">
+                                    </SfTextBox>
                                 </div>
                             </div>
                             <div class="row">
@@ -71,8 +64,8 @@
                                     <label class="">Cod. Cliente:</label>
                                     <SfDropDownList TValue="string" TItem="ClienteExterno" Placeholder="Seleccione Cliente..." AllowFiltering="true" EnableVirtualization="true"
                                                     Readonly="false" DataSource="@Clientes" @bind-Value="@CodigoClienteSeleccionado" FilterBarPlaceholder="Buscar Cliente..."
-                                                    FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains">
-                                        <DropDownListEvents TItem="ClienteExterno" TValue="string" ValueChange="@(async(d)=> await SelectedClienteChanged(d))"></DropDownListEvents>
+                                                    FilterType="FilterType.Contains">
+                                        <DropDownListEvents TItem="ClienteExterno" TValue="string" ValueChange="@(async d => await SelectedClienteChanged(d))"></DropDownListEvents>
                                         <DropDownListFieldSettings Text="DESCRIPCION" Value="CG_CLI"></DropDownListFieldSettings>
                                     </SfDropDownList>
                                 </div>
@@ -80,13 +73,14 @@
                             @if (ApplicationUser.EsNuevo)
                             {
                                 <div class="row">
-                                
-                                        <div class="col-sm-12">
-                                            <label class="">Contraseña:</label>
-                                            <SfTextBox CssClass="customClass" ID="Contra" @bind-Value="@(ApplicationUser.PasswordHash)" Readonly="false" Type="InputType.Password"
-                                                   ShowClearButton="true"></SfTextBox>
-                                        </div>
-                                
+
+                                    <div class="col-sm-12">
+                                        <label class="">Contraseña:</label>
+                                        <SfTextBox CssClass="customClass" ID="Contra" @bind-Value="@(ApplicationUser.PasswordHash)" Readonly="false" Type="InputType.Password"
+                                                   ShowClearButton="true">
+                                        </SfTextBox>
+                                    </div>
+
                                 </div>
                             }
                             <div class="row">
@@ -107,8 +101,7 @@
                 </SfSpinner>
 
 
-
-                <ValidationSummary />
+                <ValidationSummary/>
 
             </EditForm>
 

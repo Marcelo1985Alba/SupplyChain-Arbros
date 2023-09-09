@@ -1,95 +1,79 @@
-﻿using Microsoft.AspNetCore.Components;
-using SupplyChain.Client.RepositoryHttp;
-using SupplyChain.Shared;
-using Syncfusion.Blazor.Grids;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
+using SupplyChain.Client.RepositoryHttp;
+using SupplyChain.Shared;
+using Syncfusion.Blazor.Grids;
 
-namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
+namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion;
+
+public class ProveedoresMateriaPrimaBase : ComponentBase
 {
-    public class ProveedoresMateriaPrimaBase: ComponentBase
+    protected List<vProveedorItris> DataProveedores = new();
+    protected List<vProveedorItris> DataProveedoresFiltrado = new();
+
+    protected bool mostrarSpinnerActualizando;
+    [Inject] public IRepositoryHttp Http { get; set; }
+    [Parameter] public bool SoloProveedoresConEmail { get; set; } = true;
+    [Parameter] public int[] FiltroIdsProveedor { get; set; } = Array.Empty<int>();
+    [Parameter] public EventCallback<vProveedorItris> OnProveedorSeleccionado { get; set; }
+    [Parameter] public EventCallback<vProveedorItris> OnProveedorDeseleccionado { get; set; }
+    public event Action<int[]> OnIdsProveedoresChanged;
+
+    protected override async Task OnInitializedAsync()
     {
-        [Inject] public IRepositoryHttp Http { get; set; }
-        [Parameter] public bool SoloProveedoresConEmail { get; set; } = true;
-        [Parameter] public int[] FiltroIdsProveedor { get; set; } = System.Array.Empty<int>();
-        [Parameter] public EventCallback<vProveedorItris> OnProveedorSeleccionado { get; set; }
-        [Parameter] public EventCallback<vProveedorItris> OnProveedorDeseleccionado { get; set; }
+        await GetProveedoresMP();
+    }
 
-        protected bool mostrarSpinnerActualizando = false;
-        public event Action<int[]> OnIdsProveedoresChanged;
+    protected async Task GetProveedoresMP()
+    {
+        var apiProveedores = "api/Proveedores/GetProveedoresItris";
+        if (FiltroIdsProveedor is not null && FiltroIdsProveedor.Length > 0)
+            apiProveedores += $"?valores={JsonSerializer.Serialize(FiltroIdsProveedor)}";
 
-        protected List<vProveedorItris> DataProveedores = new();
-        protected List<vProveedorItris> DataProveedoresFiltrado = new();
-
-        protected async override Task OnInitializedAsync()
+        var response = await Http.GetFromJsonAsync<List<vProveedorItris>>(apiProveedores);
+        if (response.Error)
         {
-            await GetProveedoresMP();
+            Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
+            return;
         }
 
-        protected async Task GetProveedoresMP()
-        {
-            string apiProveedores = "api/Proveedores/GetProveedoresItris";
-            if (FiltroIdsProveedor is not null && FiltroIdsProveedor.Length > 0)
-            {
-                apiProveedores += $"?valores={JsonSerializer.Serialize(FiltroIdsProveedor)}";
-            }
+        DataProveedores = response.Response.ToList();
+    }
 
-            var response = await Http.GetFromJsonAsync<List<vProveedorItris>>(apiProveedores);
-            if (response.Error)
-            {
-                Console.WriteLine(response.HttpResponseMessage.ReasonPhrase); return;
-            }
-            else
-            {
-                DataProveedores = response.Response.ToList();
+    protected void OnChange(ChangeEventArgs args)
+    {
+        FiltrarProveedores();
+    }
 
-            }
-        }
+    protected void FiltrarProveedores()
+    {
+        var data = DataProveedores.Where(d => FiltroIdsProveedor.Contains(d.Id)).ToList();
+        if (SoloProveedoresConEmail)
+            DataProveedoresFiltrado = data.Where(p => !string.IsNullOrEmpty(p.EMAIL_CONTACTO)).ToList();
+        else
+            DataProveedoresFiltrado = data.ToList();
+    }
 
-        protected void OnChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
-        {
-            FiltrarProveedores();
-        }
+    public void SetIntArray(int[] intArray)
+    {
+        mostrarSpinnerActualizando = true;
+        FiltroIdsProveedor = intArray;
+        FiltrarProveedores();
+        OnIdsProveedoresChanged?.Invoke(FiltroIdsProveedor);
+        mostrarSpinnerActualizando = false;
+    }
 
-        protected void FiltrarProveedores()
-        {
-            var data = DataProveedores.Where(d=> FiltroIdsProveedor.Contains(d.Id)).ToList();
-            if (SoloProveedoresConEmail)
-            {
-                DataProveedoresFiltrado = data.Where(p => !string.IsNullOrEmpty(p.EMAIL_CONTACTO)).ToList();
-            }
-            else
-            {
-                DataProveedoresFiltrado = data.ToList();
-            }
-        }
+    protected async Task RowSelected(RowSelectEventArgs<vProveedorItris> Args)
+    {
+        if (OnProveedorSeleccionado.HasDelegate) await OnProveedorSeleccionado.InvokeAsync(Args.Data);
+    }
 
-        public void SetIntArray(int[] intArray)
-        {
-            mostrarSpinnerActualizando = true;
-            FiltroIdsProveedor = intArray;
-            FiltrarProveedores();
-            OnIdsProveedoresChanged?.Invoke(FiltroIdsProveedor);
-            mostrarSpinnerActualizando = false;
-        }
-
-        protected async Task RowSelected(RowSelectEventArgs<vProveedorItris> Args)
-        {
-            if (OnProveedorSeleccionado.HasDelegate)
-            {
-                await OnProveedorSeleccionado.InvokeAsync(Args.Data);
-            }
-        }
-
-        protected async Task RowDeselected(RowDeselectEventArgs<vProveedorItris> Args)
-        {
-            if (OnProveedorDeseleccionado.HasDelegate)
-            {
-                await OnProveedorDeseleccionado.InvokeAsync(Args.Data);
-            }
-        }
+    protected async Task RowDeselected(RowDeselectEventArgs<vProveedorItris> Args)
+    {
+        if (OnProveedorDeseleccionado.HasDelegate) await OnProveedorDeseleccionado.InvokeAsync(Args.Data);
     }
 }

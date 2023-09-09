@@ -1,142 +1,121 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
 
-namespace SupplyChain
+namespace SupplyChain;
+
+[Route("api/[controller]")]
+[ApiController]
+public class UnidadesController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UnidadesController : ControllerBase
+    private readonly UnidadesRepository _unidadesRepository;
+
+    public UnidadesController(UnidadesRepository unidadesRepository)
     {
-        private readonly UnidadesRepository _unidadesRepository;
+        _unidadesRepository = unidadesRepository;
+    }
 
-        public UnidadesController(UnidadesRepository unidadesRepository)
+    // GET: api/Unidades
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Unidades>>> GetUnidades()
+    {
+        try
         {
-            this._unidadesRepository = unidadesRepository;
+            return await _unidadesRepository.ObtenerTodos();
         }
-
-        // GET: api/Unidades
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Unidades>>> GetUnidades()
+        catch (Exception ex)
         {
-            try
-            {
-                return await _unidadesRepository.ObtenerTodos();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(ex);
         }
+    }
 
-        // GET: api/Unidades/Existe/{id}
-        [HttpGet("Existe/{id}")]
-        public async Task<ActionResult<bool>> ExisteUnidad(string id)
+    // GET: api/Unidades/Existe/{id}
+    [HttpGet("Existe/{id}")]
+    public async Task<ActionResult<bool>> ExisteUnidad(string id)
+    {
+        try
         {
-            try
-            {
-                return await _unidadesRepository.Existe(id);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return await _unidadesRepository.Existe(id);
         }
-
-        // PUT: api/Unidades/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUnidades(string id, Unidades Unidad)
+        catch (Exception ex)
         {
-            if (id != Unidad.Id)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                await _unidadesRepository.Actualizar(Unidad);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _unidadesRepository.Existe(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-            return Ok(Unidad);
+            return BadRequest(ex);
         }
+    }
 
-        // POST: api/Unidades
-        [HttpPost]
-        public async Task<ActionResult<Unidades>> PostUnidades(Unidades Unidad)
+    // PUT: api/Unidades/{id}
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutUnidades(string id, Unidades Unidad)
+    {
+        if (id != Unidad.Id) return BadRequest();
+
+        try
         {
-            try
-            {
-                await _unidadesRepository.Agregar(Unidad);
-                return CreatedAtAction("GetUnidades", new { id = Unidad.Id }, Unidad);
-            }
-            catch (DbUpdateException exx)
-            {
-                if (!await _unidadesRepository.Existe(Unidad.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            await _unidadesRepository.Actualizar(Unidad);
         }
-
-        // DELETE: api/Unidades/{id}
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Unidades>> DeleteUnidades(string id)
+        catch (DbUpdateConcurrencyException)
         {
-            var Unidad = await _unidadesRepository.ObtenerPorId(id);
-            if (Unidad == null)
-            {
+            if (!await _unidadesRepository.Existe(id))
                 return NotFound();
-            }
-
-            await _unidadesRepository.Remover(id);
-
-            return Unidad;
+            return BadRequest();
         }
-
-        // POST: api/Unidades/PostList
-        [HttpPost("PostList")]
-        public async Task<ActionResult<Unidades>> PostList(List<Unidades> unidades)
+        catch (Exception ex)
         {
-            try
-            {
-                foreach (var item in unidades)
-                {
-                    await _unidadesRepository.Remover(item.Id);
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest();
-            }
-
-            return Ok();
+            return BadRequest(ex);
         }
+
+        return Ok(Unidad);
+    }
+
+    // POST: api/Unidades
+    [HttpPost]
+    public async Task<ActionResult<Unidades>> PostUnidades(Unidades Unidad)
+    {
+        try
+        {
+            await _unidadesRepository.Agregar(Unidad);
+            return CreatedAtAction("GetUnidades", new { id = Unidad.Id }, Unidad);
+        }
+        catch (DbUpdateException exx)
+        {
+            if (!await _unidadesRepository.Existe(Unidad.Id))
+                return Conflict();
+            return BadRequest();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
+    }
+
+    // DELETE: api/Unidades/{id}
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unidades>> DeleteUnidades(string id)
+    {
+        var Unidad = await _unidadesRepository.ObtenerPorId(id);
+        if (Unidad == null) return NotFound();
+
+        await _unidadesRepository.Remover(id);
+
+        return Unidad;
+    }
+
+    // POST: api/Unidades/PostList
+    [HttpPost("PostList")]
+    public async Task<ActionResult<Unidades>> PostList(List<Unidades> unidades)
+    {
+        try
+        {
+            foreach (var item in unidades) await _unidadesRepository.Remover(item.Id);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest();
+        }
+
+        return Ok();
     }
 }

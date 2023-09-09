@@ -19,13 +19,12 @@
                     }
                     else
                     {
-
                         <SfGrid @ref="@Grid" DataSource="@DataSource" AllowPaging="true" AllowFiltering="true" TValue="Programa"
-                                AllowResizing="true" GridLines="GridLine.Both" ID="NuscadorgridOFplaneadas" 
+                                AllowResizing="true" GridLines="GridLine.Both" ID="NuscadorgridOFplaneadas"
                                 AllowSelection="true" AllowSorting="true" AllowTextWrap="true" EnableHover="true"
                                 ShowColumnMenu="true" Height="320">
-                            <GridPageSettings PageSizes="@(new int[] { 5,7,10,20 })" PageSize="7" PageCount="7"></GridPageSettings>
-                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                            <GridPageSettings PageSizes="@new[] { 5, 7, 10, 20 }" PageSize="7" PageCount="7"></GridPageSettings>
+                            <GridSelectionSettings Type="SelectionType.Single"></GridSelectionSettings>
                             <GridEvents RowSelected="GetSelectedRecords" TValue="Programa"></GridEvents>
                             <GridColumns>
                                 <GridColumn Field="@nameof(ResumenStock.CG_ART)" Width="120px"></GridColumn>
@@ -37,8 +36,6 @@
 
                             </GridColumns>
                         </SfGrid>
-
-
                     }
                 }
             </div>
@@ -54,15 +51,23 @@
 @code {
     SfGrid<Programa> Grid;
 
-    [Parameter] public string Titulo { get; set; } = null!;
-    [Parameter] public bool Visible { get; set; } = false;
+    [Parameter]
+    public string Titulo { get; set; } = null!;
+
+    [Parameter]
+    public bool Visible { get; set; }
+
     Programa[] DataSource { get; set; } = null!;
-    [Parameter] public string[] Columnas { get; set; } = null!;
-    [Parameter] public EventCallback<Programa> onObjetoSeleccionado { get; set; }
+
+    [Parameter]
+    public string[] Columnas { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<Programa> onObjetoSeleccionado { get; set; }
 
     public Programa Selected { get; set; }
 
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         DataSource = await Http.GetFromJsonAsync<Programa[]>("api/Programa");
 
@@ -71,12 +76,12 @@
 
     public void Show()
     {
-        this.Visible = true;
+        Visible = true;
     }
 
     public void Hide()
     {
-        this.Visible = false;
+        Visible = false;
     }
 
     public void EnviarObjetoSeleccionado()
@@ -88,8 +93,9 @@
     public async Task GetSelectedRecords(RowSelectEventArgs<Programa> args)
     {
         args.PreventRender = true; //without this, you may see noticable delay in selection with 75 rows in grid
-                                   //ListaSeleccionada = await this.Grid.GetSelectedRecords();
+    //ListaSeleccionada = await this.Grid.GetSelectedRecords();
         Selected = args.Data;
         await InvokeAsync(StateHasChanged);
     }
+
 }

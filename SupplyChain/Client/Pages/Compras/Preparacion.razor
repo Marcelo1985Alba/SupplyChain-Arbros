@@ -1,25 +1,15 @@
 ﻿@page "/compras/preparacion"
 
-
-@using Syncfusion.Blazor.Popups
-@using Syncfusion.Blazor.Notifications
-@using Syncfusion.Pdf;
-@using Syncfusion.Pdf.Grid;
-@using System.Drawing;
-@using System.IO;
-@using Syncfusion.Blazor.Inputs
-@using Syncfusion.Blazor.Calendars
-@using Syncfusion.Blazor.DropDowns
-@using Syncfusion.Blazor.Data
-@using Syncfusion.Blazor.BarcodeGenerator
-@using Syncfusion.Blazor.Buttons
-@using System.Text.Json
-@using Syncfusion.Blazor.Grids
 @inject IJSRuntime JsRuntime
-@inject Microsoft.JSInterop.IJSRuntime JS
+@inject IJSRuntime JS
 @inject HttpClient Http
-@using Syncfusion.Blazor.PdfViewer
-@using Syncfusion.Pdf.Tables
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.DropDowns
+@using FilterType = Syncfusion.Blazor.Grids.FilterType
+@using SelectionType = Syncfusion.Blazor.Grids.SelectionType
 @inherits SupplyChain.Client.Pages.Preparacion.PreparacionPageBase
 
 <SfToast ID="toast_default" @ref="ToastObj">
@@ -33,14 +23,14 @@
                 <div class="content-wrapper">
                     <div class="row">
                         <SfGrid @ref="Grid2" DataSource="@Busquedalist" Height="100%" Width="100%">
-                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                            <GridSelectionSettings Type="SelectionType.Multiple"></GridSelectionSettings>
                             <GridEvents RowSelected="OnSelected" TValue="Producto"></GridEvents>
                             <GridColumns>
-                                <GridColumn Field=@nameof(Producto.Id) HeaderText="Producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                                <GridColumn Field=@nameof(Producto.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                <GridColumn Field=@nameof(Producto.ESPECIF) HeaderText="Especificación" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                <GridColumn Field=@nameof(Producto.UNIDSEG) HeaderText="Unidad Secundario" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                <GridColumn Field=@nameof(Producto.CG_DENSEG) HeaderText="Conversion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field="@nameof(Producto.Id)" HeaderText="Producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                <GridColumn Field="@nameof(Producto.DES_PROD)" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field="@nameof(Producto.ESPECIF)" HeaderText="Especificación" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field="@nameof(Producto.UNIDSEG)" HeaderText="Unidad Secundario" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field="@nameof(Producto.CG_DENSEG)" HeaderText="Conversion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                             </GridColumns>
                         </SfGrid>
                         @{
@@ -64,53 +54,62 @@
             <div class="form-row">
                 <div class="form-group col-lg-2 my-1">
                     <SfTextBox Placeholder="Código de Producto" Input="OnInputCG_PROD" @bind-Value="CgMat"
-                               FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                               FloatLabelType="@FloatLabelType.Auto">
+                    </SfTextBox>
                 </div>
                 <div class="form-group col-lg-3 my-1">
                     <SfTextBox Placeholder="Descripción de Producto" Input="OnInputDES_PROD" @bind-Value="DesMat"
-                               FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                               FloatLabelType="@FloatLabelType.Auto">
+                    </SfTextBox>
                 </div>
 
                 <div class="form-group col-lg-1 my-4">
-                    <SfButton OnClick="@((e)=> BuscarProductoPreparacion())" IconCss="fa fa-search" CssClass="btn btn-sm btn-outline-primary"
-                              IsPrimary="false">Buscar</SfButton>
+                    <SfButton OnClick="@(e => BuscarProductoPreparacion())" IconCss="fa fa-search" CssClass="btn btn-sm btn-outline-primary"
+                              IsPrimary="false">
+                        Buscar
+                    </SfButton>
                 </div>
 
                 <div class="form-group col-lg-2 my-1">
                     <SfDatePicker Placeholder="Fecha Prevista" TValue="DateTime?" @bind-Value="@xFeprev"
                                   Enabled="enablepreciocant" FloatLabelType="@FloatLabelType.Auto"
-                                  Format='dd/MM/yyyy'></SfDatePicker>
+                                  Format="dd/MM/yyyy">
+                    </SfDatePicker>
                 </div>
                 <div class="form-group col-lg-2">
                     <SfNumericTextBox Placeholder="Lead Time" @bind-Value="xDiasvige"
-                                      Enabled="enableprecio" FloatLabelType="@FloatLabelType.Auto"></SfNumericTextBox>
+                                      Enabled="enableprecio" FloatLabelType="@FloatLabelType.Auto">
+                    </SfNumericTextBox>
                 </div>
                 <div class="form-group col-lg-2" style="padding-left: 100px;">
-                    <SfButton OnClick="@((e)=> volvergrilla())" IconCss="fa fa-close" CssClass="btn btn-sm btn-outline-primary"
-                              IsPrimary="false"></SfButton>
-                        </div>
+                    <SfButton OnClick="@(e => volvergrilla())" IconCss="fa fa-close" CssClass="btn btn-sm btn-outline-primary"
+                              IsPrimary="false">
+                    </SfButton>
+                </div>
             </div>
             <div style="margin-top:30px;" class="form-row">
                 <div class="form-group col-lg-10 my-1">
                     <SfTextBox Placeholder="Especificación" @bind-Value="xespecif" Enabled="enablepreciocant"
-                               FloatLabelType="@FloatLabelType.Never"></SfTextBox>
+                               FloatLabelType="@FloatLabelType.Never">
+                    </SfTextBox>
                 </div>
             </div>
 
 
-            <hr />
-            <hr style="border:0px;" />
-            <hr style="border:0px;" />
+            <hr/>
+            <hr style="border:0px;"/>
+            <hr style="border:0px;"/>
             <div style="margin-top:40px;" class="form-row">
                 <!--
-            <div class="form-group col-lg-2 my-1">
-                <SfNumericTextBox Placeholder="Proveedor" @bind-Value="xCgProve" Enabled="false"
-                                  FloatLabelType="@FloatLabelType.Auto"></SfNumericTextBox>
-            </div>
+                <div class="form-group col-lg-2 my-1">
+                    <SfNumericTextBox Placeholder="Proveedor" @bind-Value="xCgProve" Enabled="false"
+                                      FloatLabelType="@FloatLabelType.Auto"></SfNumericTextBox>
+                </div>
                 -->
                 <div class="form-group col-lg-3 my-1">
                     <SfTextBox Placeholder="Razon Social" @bind-Value="xDesProve" Enabled="false"
-                               FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                               FloatLabelType="@FloatLabelType.Auto">
+                    </SfTextBox>
                 </div>
                 <div class="form-group col-lg-2 my-1">
                     <SfNumericTextBox Placeholder="Precio" @bind-Value="xPrecio" Enabled="enableprecio" FloatLabelType="@FloatLabelType.Auto"></SfNumericTextBox>
@@ -123,8 +122,9 @@
                 <div class="form-group col-lg-2 my-1">
                     <SfDropDownList TValue="string" TItem="Moneda" @bind-Value="@xMoneda"
                                     Placeholder="Moneda" FloatLabelType="@FloatLabelType.Auto">
-                        <SfDataManager Url="api/Monedas" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"
-                                       CrossDomain=false></SfDataManager>
+                        <SfDataManager Url="api/Monedas" Adaptor="Adaptors.WebApiAdaptor"
+                                       CrossDomain="false">
+                        </SfDataManager>
                         <DropDownListFieldSettings Text="MONEDA" Value="MONEDA"></DropDownListFieldSettings>
                     </SfDropDownList>
                 </div>
@@ -134,69 +134,76 @@
                 </div>
 
                 <div class="form-group col-lg-2 my-4" style="margin-top: 10px !important;">
-                    <BuscadorMatprove IsVisibleMatprove="IsVisibleMatprove" xCgmat="@CgMat" xFeprev="@xFeprev" buttondisableprove="buttondisableprove" OnMatproveSeleccionada="OnSelectedMatproveProve" />
-                    <BuscadorProveedores IsVisibleProveedores="IsVisibleProveedores" buttondisableprove="buttondisableprove" OnProveSeleccionado="OnSelectedProve" />
+                    <BuscadorMatprove IsVisibleMatprove="IsVisibleMatprove" xCgmat="@CgMat" xFeprev="@xFeprev" buttondisableprove="buttondisableprove" OnMatproveSeleccionada="OnSelectedMatproveProve"/>
+                    <BuscadorProveedores IsVisibleProveedores="IsVisibleProveedores" buttondisableprove="buttondisableprove" OnProveSeleccionado="OnSelectedProve"/>
                 </div>
             </div>
             <div style="margin-top:20px;" class="form-row">
                 <div class="form-group col-lg-2 my-1">
                     <SfNumericTextBox Placeholder="Solicitado" @bind-Value="xCant" Enabled="enablepreciocant"
-                                      @onchange="calculacant1" FloatLabelType="@FloatLabelType.Auto"></SfNumericTextBox>
+                                      @onchange="calculacant1" FloatLabelType="@FloatLabelType.Auto">
+                    </SfNumericTextBox>
                 </div>
                 <div class="form-group col-lg-2 my-1">
-                    <SfTextBox Placeholder="Unid.Int." @bind-Value="xUnid" Readonly="true" 
-                               FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                    <SfTextBox Placeholder="Unid.Int." @bind-Value="xUnid" Readonly="true"
+                               FloatLabelType="@FloatLabelType.Auto">
+                    </SfTextBox>
                 </div>
                 <div class="form-group col-lg-2 my-1" hidden="@IsVisiblecant1">
                     <SfNumericTextBox Placeholder="Conversión" @bind-Value="xCgden" Readonly="true" Format="N8"
-                                      FloatLabelType="@FloatLabelType.Auto"></SfNumericTextBox>
+                                      FloatLabelType="@FloatLabelType.Auto">
+                    </SfNumericTextBox>
                 </div>
                 <div class="form-group col-lg-2 my-1" hidden="@IsVisiblecant1">
                     <SfNumericTextBox Placeholder="Cantidad Comercial" @bind-Value="xCant1" Readonly="true"
-                                      FloatLabelType="@FloatLabelType.Auto"></SfNumericTextBox>
+                                      FloatLabelType="@FloatLabelType.Auto">
+                    </SfNumericTextBox>
                 </div>
                 <div class="form-group col-lg-1 my-1" hidden="@IsVisiblecant1">
                     <SfTextBox Placeholder="Unidad Comercial" @bind-Value="xUnid1" Enabled="false"
-                               FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                               FloatLabelType="@FloatLabelType.Auto">
+                    </SfTextBox>
                 </div>
                 <div class="form-group col-lg-3 my-4">
-                    <SfButton OnClick="@((e)=> Agregaritem())" Disabled="buttondisablepreciocant" IconCss="fa fa-plus" CssClass="btn btn-sm btn-outline-primary"
-                              IsPrimary="false">@xtituloboton</SfButton>
+                    <SfButton OnClick="@(e => Agregaritem())" Disabled="buttondisablepreciocant" IconCss="fa fa-plus" CssClass="btn btn-sm btn-outline-primary"
+                              IsPrimary="false">
+                        @xtituloboton
+                    </SfButton>
                 </div>
             </div>
         </div>
         <div class="form-group" hidden="@IsVisibleform">
-<!--        <div style="margin-top:20px;" class="form-row">-->
-                <div class="col-lg-12 control-section">
-                    <div class="content-wrapper">
-                        <div class="row" id="gridPreparaciones">
-                            <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                                    @ref="Gridprep" DataSource="@listapreparacion" AllowExcelExport="true" AllowGrouping="true" ID="Preparacion"
-                                    RowHeight="20" Width="100%"
-                                    AllowSorting="true" AllowPaging="true" AllowFiltering="true"
-                                    Toolbar="@Toolbaritems" GridLines="GridLine.Both">
-                                <GridPageSettings PageCount="10" PageSizes="true" PageSize="20"></GridPageSettings>
+            <!--        <div style="margin-top:20px;" class="form-row">-->
+            <div class="col-lg-12 control-section">
+                <div class="content-wrapper">
+                    <div class="row" id="gridPreparaciones">
+                        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                                @ref="Gridprep" DataSource="@listapreparacion" AllowExcelExport="true" AllowGrouping="true" ID="Preparacion"
+                                RowHeight="20" Width="100%"
+                                AllowSorting="true" AllowPaging="true" AllowFiltering="true"
+                                Toolbar="@Toolbaritems" GridLines="GridLine.Both">
+                            <GridPageSettings PageCount="10" PageSizes="true" PageSize="20"></GridPageSettings>
                             <GridEvents OnToolbarClick="@ClickHandler" TValue="Compra" OnRecordDoubleClick="DoubleClickHandler"></GridEvents>
-                                <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
-                                <GridColumns>
-                                    <GridColumn Field=@nameof(Compra.CG_MAT) HeaderText="Código" AllowEditing="false" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
-                                    <GridColumn Field=@nameof(Compra.DES_MAT) HeaderText="Descripcion" AllowEditing="false" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                    <GridColumn Field=@nameof(Compra.DES_PROVE) HeaderText="Proveedor" AllowEditing="false" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                    <GridColumn Field=@nameof(Compra.NECESARIO) HeaderText="Necesario" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                    <GridColumn Field=@nameof(Compra.SOLICITADO) HeaderText="Solicitado" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                    <GridColumn Field=@nameof(Compra.AUTORIZADO) HeaderText="Autorizado" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                    <GridColumn Field=@nameof(Compra.PRECIO) HeaderText="Precio" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                    <GridColumn Field=@nameof(Compra.MONEDA) HeaderText="Moneda" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                    <GridColumn Field=@nameof(Compra.FE_PREV) HeaderText="Fecha Entrega" Format="dd/MM/yyyy" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                                </GridColumns>
-                            </SfGrid>
-                        </div>
+                            <GridFilterSettings Type="@FilterType.CheckBox"></GridFilterSettings>
+                            <GridColumns>
+                                <GridColumn Field="@nameof(Compra.CG_MAT)" HeaderText="Código" AllowEditing="false" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
+                                <GridColumn Field="@nameof(Compra.DES_MAT)" HeaderText="Descripcion" AllowEditing="false" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field="@nameof(Compra.DES_PROVE)" HeaderText="Proveedor" AllowEditing="false" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field="@nameof(Compra.NECESARIO)" HeaderText="Necesario" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                                <GridColumn Field="@nameof(Compra.SOLICITADO)" HeaderText="Solicitado" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                                <GridColumn Field="@nameof(Compra.AUTORIZADO)" HeaderText="Autorizado" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                                <GridColumn Field="@nameof(Compra.PRECIO)" HeaderText="Precio" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                                <GridColumn Field="@nameof(Compra.MONEDA)" HeaderText="Moneda" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                                <GridColumn Field="@nameof(Compra.FE_PREV)" HeaderText="Fecha Entrega" Format="dd/MM/yyyy" AllowEditing="false" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </div>
 
-        @code {
+@code {
 
-        }
+}

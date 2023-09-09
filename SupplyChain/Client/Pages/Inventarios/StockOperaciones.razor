@@ -4,14 +4,10 @@
 
 @page "/inventario/{vale:int}"
 
-@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
-@using System.Text.Json
+@inject NavigationManager navigationManager
+@using SupplyChain.Client.Shared.Inventarios
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Calendars
-
-@using SupplyChain.Client.Shared.Inventarios
-@using SupplyChain.Shared.Prod;
-@using System.IO;
 @inherits StockOperacionesBase
 @attribute [Authorize(Roles = "Administrador, Produccion")]
 
@@ -25,31 +21,31 @@
     </SfToast>
 
 
-
     <!-- Row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="">
                 <div class="form-material">
                     <EditForm Model="@StockEncabezado" OnValidSubmit="@(async () => await AbrirConfirmacionGuardarVale())">
-                        <DataAnnotationsValidator />
+                        <DataAnnotationsValidator/>
                         <ToolbarMenu OnNuevoClick="@(async () => await NuevoVale())"
                                      DisabledEliminar="!abrioVale" OnEliminarClick="@(async () => await AbrirConfirmacionEliminarVale())"
                                      DisabledGuardar="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"
                                      DisabledImprimir="@(!abrioVale)"
-                                     OnImprimirClick="@(async () => await ImprimirEtiqueta())"></ToolbarMenu>
-                        <hr />
+                                     OnImprimirClick="@(async () => await ImprimirEtiqueta())">
+                        </ToolbarMenu>
+                        <hr/>
                         @*<h3 class="card-title">Vale</h3>*@
 
                         <fieldset class="scheduler-border">
                             <legend class="scheduler-border"> Vale</legend>
-                            <ObjectGraphDataAnnotationsValidator />
+                            <ObjectGraphDataAnnotationsValidator/>
                             <div class="form-row">
                                 <div class="form-group col-lg-7 col-md-5 col-sm-12 col-12">
                                     <label class="col-form-label text-info">Op. de Stock</label>
-                                        <ComboTipoo TipoOperacionIdUnico="@OperacionId" TipooSeleccionado="@OperacionId" Filtra="@FiltraComboOperaciones"
-                                                    OnSelectedTireChanged="@(async(t)=>await SelectedTireChanged(t))" />
-                                    
+                                    <ComboTipoo TipoOperacionIdUnico="@OperacionId" TipooSeleccionado="@OperacionId" Filtra="@FiltraComboOperaciones"
+                                                OnSelectedTireChanged="@(async t => await SelectedTireChanged(t))"/>
+
                                 </div>
                                 <div class="form-group col-lg-3 col-md-4 col-sm-8">
                                     <label class="col-form-label text-info">Vale</label>
@@ -58,13 +54,13 @@
                                                     HtmlAttr="@HtmlAttribute"
                                                     TipoOperacion="@StockEncabezado.TIPOO"
                                                     HabilitaBotonBusqueda="@DisableCssClass"
-                                                    OnOCSeleccionada="@(async(p)=> await OnObjectSelected(p))" />
+                                                    OnOCSeleccionada="@(async p => await OnObjectSelected(p))"/>
 
 
                                 </div>
                                 <div class="form-group col-lg-2 col-md-3 col-sm-4">
                                     <label class="col-form-label text-info">Fecha</label>
-                                    <SfDatePicker TValue="DateTime" Value='@StockEncabezado.FE_MOV' Format='dd/MM/yyyy'></SfDatePicker>
+                                    <SfDatePicker TValue="DateTime" Value="@StockEncabezado.FE_MOV" Format="dd/MM/yyyy"></SfDatePicker>
                                 </div>
 
 
@@ -78,10 +74,8 @@
                                         <BuscadorOFab EsSoloLectura="@OFSoloLectura" DeshabilitaBotonBusqueda="@DeshabilitaBotonOF"
                                                       MostraBotonBusqueda="@MostrarBotorOF" MostrarSpin="false"
                                                       HtmlAttribute="@HtmlAttribute"
-                                                      Valor="@StockEncabezado.CG_ORDF" OnOFSeleccionada="OnProgramaSelected" />
+                                                      Valor="@StockEncabezado.CG_ORDF" OnOFSeleccionada="OnProgramaSelected"/>
                                     </div>
-
-
                                 }
 
                                 @if (StockEncabezado.TIPOO == 5)
@@ -93,7 +87,7 @@
                                                          Remito="@StockEncabezado.REMITO" HtmlAttribute="@HtmlAttribute"
                                                          Tipoo="StockEncabezado.TIPOO"
                                                          Valor="@((int)StockEncabezado.OCOMPRA)"
-                                                         OnOCSeleccionada="@(async(c)=>await OnCompraSelected(c))" />
+                                                         OnOCSeleccionada="@(async c => await OnCompraSelected(c))"/>
                                     </div>
 
                                     <div class="form-group col-lg-2 col-md-6 col-sm-4">
@@ -123,17 +117,17 @@
 
 
                                 @if ((StockEncabezado.TIPOO == 1 || StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28)
-                                  && StockEncabezado.PEDIDO > 0)
+                                     && StockEncabezado.PEDIDO > 0)
                                 {
                                     <div class="form-group col-lg-3 col-md-4 col-sm-6">
                                         <label class="col-form-label text-info">Pedido</label>
                                         <BuscadorPedido Valor="@StockEncabezado.PEDIDO" MostrarSpin="false" EsSoloLectura="true"
-                                                        HabilitaBotonBusqueda="false" MostraBotonBusqueda="false" />
+                                                        HabilitaBotonBusqueda="false" MostraBotonBusqueda="false"/>
                                     </div>
                                 }
                                 @if ((StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28) &&
-                                    StockEncabezado.ModeloOrdenFabricacionEncabezado != null
-                                       && StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ORDEN == 1)
+                                     StockEncabezado.ModeloOrdenFabricacionEncabezado != null
+                                     && StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ORDEN == 1)
                                 {
                                     <div class="form-group col-lg-3 col-md-4 col-sm-12">
                                         <label class="col-form-label text-info">Producto</label>
@@ -211,7 +205,7 @@
                                 {
                                     <GridEditStock DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
                                                    PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
-                                                   onGuardar="@(async(s)=> await SetearCamposParaGuardar(s))" />
+                                                   onGuardar="@(async s => await SetearCamposParaGuardar(s))"/>
                                 }
                                 else
                                 {
@@ -219,15 +213,16 @@
                                                      PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
                                                      AplicarFiltro="@AplicarFiltro" filtro_CG_ART="@cg_mat" filtro_DESPACHO="@despacho"
                                                      AbrirBuscadorResumenStock="@AbrirBuscadorResumenStockAutomaticamente"
-                                                     OnGuardar="@(async(s)=> await SetearCamposParaGuardar(s))" />
+                                                     OnGuardar="@(async s => await SetearCamposParaGuardar(s))"/>
                                 }
                             </CascadingValue>
                         </CascadingValue>
-                        <ValidationSummary />
+                        <ValidationSummary/>
 
                         @*Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"*@
                         <SfButton Content="Guardar" IsPrimary="false" IconCss="fa fa-save"
-                                  CssClass="btn btn-block e-info"></SfButton>
+                                  CssClass="btn btn-block e-info">
+                        </SfButton>
 
                     </EditForm>
                 </div>
@@ -240,8 +235,10 @@
 <ConfirmacionDialog @ref="ConfirmacionEliminarDialog" OnConfirm="@(async () => await EliminarVale())">
     <HeaderTempalte>
 
-        <p> <strong>Eliminacion Vale</strong></p>
-        <hr />
+        <p>
+            <strong>Eliminacion Vale</strong>
+        </p>
+        <hr/>
     </HeaderTempalte>
     <ContentTemplate>
         <p>Estas seguro que desea elimnar el vale <strong>@StockEncabezado?.VALE</strong> ?</p>
@@ -250,8 +247,10 @@
 
 <ConfirmacionDialog @ref="ConfirmacionGuardarDialog" OnConfirm="@(async () => await Guardar())">
     <HeaderTempalte>
-        <p> <strong>Guardar Vale </strong></p>
-        <hr />
+        <p>
+            <strong>Guardar Vale </strong>
+        </p>
+        <hr/>
     </HeaderTempalte>
     <ContentTemplate>
         <p>Esta seguro que desea guardar el vale <strong>@StockEncabezado?.VALE</strong> ?</p>
@@ -259,9 +258,9 @@
 </ConfirmacionDialog>
 
 
-<BuscadorEmergente Height="520px" TItem="Pedidos" Titulo=@tituloBuscador Visible="@PopupBuscadorVisible"
+<BuscadorEmergente Height="520px" TItem="Pedidos" Titulo="@tituloBuscador" Visible="@PopupBuscadorVisible"
                    DataSource="@ItemsABuscar"
-                   Columnas="@ColumnasBuscador" OnObjetoSeleccionado="OnObjectSelected" OnBuscarMas="@(async()=> await BuscarVales())" />
+                   Columnas="@ColumnasBuscador" OnObjetoSeleccionado="OnObjectSelected" OnBuscarMas="@(async () => await BuscarVales())"/>
 
 
 <style>

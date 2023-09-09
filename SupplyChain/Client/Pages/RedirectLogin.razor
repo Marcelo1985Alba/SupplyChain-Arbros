@@ -1,49 +1,55 @@
-﻿
+﻿@using System.Timers
+@using Timer = System.Threading.Timer
 @implements IDisposable
 
 
-    <p>No Autorizado</p>
-    @if (!auth.User.Identity.IsAuthenticated)
-	{
-		 <div>Redireccionando...</div>
-	}
+<p>No Autorizado</p>
+@if (!auth.User.Identity.IsAuthenticated)
+{
+    <div>Redireccionando...</div>
+}
 
-    @code {
+@code {
 
-        [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
-        [Inject] public NavigationManager NavigationManager { get; set; }
-        private AuthenticationState auth;
-        private static System.Threading.Timer timer; // NOTE: THIS LINE OF CODE ADDED
+    [CascadingParameter]
+    public Task<AuthenticationState> authenticationState { get; set; }
 
-        protected async override Task OnInitializedAsync()
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    private AuthenticationState auth;
+    private static Timer timer; // NOTE: THIS LINE OF CODE ADDED
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        auth = await authenticationState;
+        if (!auth.User.Identity.IsAuthenticated)
         {
-            await base.OnInitializedAsync();
-            auth = await authenticationState;
-            if (!auth.User.Identity.IsAuthenticated)
-            {
-                StartTimer();
-            }
+            StartTimer();
         }
-
-
-        private static System.Timers.Timer aTimer;
-        public void StartTimer()
-        {
-            aTimer = new System.Timers.Timer(3000);
-            aTimer.Elapsed += UpdateConnections;
-            aTimer.Enabled = true;
-        }
-
-        private async void UpdateConnections(object source, System.Timers.ElapsedEventArgs e)
-        {
-            NavigationManager.NavigateTo($"/login-identity?returnrUrl={NavigationManager.ToBaseRelativePath(NavigationManager.Uri)}");
-            aTimer.Enabled = false;
-            await InvokeAsync(StateHasChanged);
-        }
-
-        public void Dispose()
-        {
-            aTimer?.Dispose();
-        }
-
     }
+
+
+    private static System.Timers.Timer aTimer;
+
+    public void StartTimer()
+    {
+        aTimer = new System.Timers.Timer(3000);
+        aTimer.Elapsed += UpdateConnections;
+        aTimer.Enabled = true;
+    }
+
+    private async void UpdateConnections(object source, ElapsedEventArgs e)
+    {
+        NavigationManager.NavigateTo($"/login-identity?returnrUrl={NavigationManager.ToBaseRelativePath(NavigationManager.Uri)}");
+        aTimer.Enabled = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        aTimer?.Dispose();
+    }
+
+}

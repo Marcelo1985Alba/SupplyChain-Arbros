@@ -1,12 +1,11 @@
 ﻿@page "/pdf-ensayos/{Codigo}/{Accion}"
-@using Syncfusion.Blazor.PdfViewer;
-@using SupplyChain.Shared;
+@using Syncfusion.Blazor.PdfViewer
 @using Syncfusion.Blazor.Navigations
-@attribute [Authorize(Roles ="Administrador, Produccion, Cliente")]
+@attribute [Authorize(Roles = "Administrador, Produccion, Cliente")]
 @inject HttpClient Http
 
 
-<SfSpinner Size="80" Label="Cargando..." Type="SpinnerType.Bootstrap4" @bind-Visible="@VisibleSpinner"  ></SfSpinner>
+<SfSpinner Size="80" Label="Cargando..." Type="SpinnerType.Bootstrap4" @bind-Visible="@VisibleSpinner"></SfSpinner>
 @if (archivos is null)
 {
     <p>Cargando..</p>
@@ -23,14 +22,12 @@ else
         {
             <p>Sin Planos</p>
         }
-        
     }
     else
     {
-
         <SfAccordion ID="accordionPdfEnsayos">
             <AccordionItems>
-                @foreach (Archivo item in archivos)
+                @foreach (var item in archivos)
                 {
                     var idPdf = $"pdfEns{item.Id}";
                     var pdf_ruta = $"{item.Nombre}," + Accion;
@@ -40,17 +37,19 @@ else
                             <div>@(item.Nombre)</div>
                         </HeaderTemplate>
                         <ContentTemplate>
-                            @if(item.IsAzure)
+                            @if (item.IsAzure)
                             {
                                 <SfPdfViewer @ref="@refPdfViewer" ID="@idPdf" ServiceUrl="api/AdministracionArchivos" DocumentPath="@pedido_filename"
-                                         Height="1200px" Width="100%"></SfPdfViewer>
+                                             Height="1200px" Width="100%">
+                                </SfPdfViewer>
                             }
                             else
                             {
                                 <SfPdfViewer ID="@idPdf" ServiceUrl="/api/Values" DocumentPath="@pdf_ruta"
-                                        Height="1200px" Width="100%"></SfPdfViewer>
+                                             Height="1200px" Width="100%">
+                                </SfPdfViewer>
                             }
-                            
+
 
 
                         </ContentTemplate>
@@ -64,15 +63,20 @@ else
 
 @code {
 
-    [Parameter] public string Codigo { get; set; } = "";
-    [Parameter] public string Accion { get; set; } = "";
+    [Parameter]
+    public string Codigo { get; set; } = "";
+
+    [Parameter]
+    public string Accion { get; set; } = "";
+
     protected SfPdfViewer refPdfViewer;
     protected bool VisibleSpinner { get; set; } = false;
     protected List<Archivo> archivos;
-    protected async override Task OnInitializedAsync()
+
+    protected override async Task OnInitializedAsync()
     {
         VisibleSpinner = true;
-        //Accion = "RUTAENSAYO";
+    //Accion = "RUTAENSAYO";
 
         var CodigoAccion = "";
         if (Accion == "RUTAENSAYO")

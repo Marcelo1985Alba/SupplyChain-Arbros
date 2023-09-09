@@ -1,8 +1,8 @@
-﻿@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.DropDowns
+﻿@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.FileManager
+@using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Calendars
-@using Syncfusion.Blazor.FileManager;
-@using Syncfusion.Blazor.Navigations;
+@using Syncfusion.Blazor.DropDowns
 @using SupplyChain.Client.Pages.Visor_Pdf
 @using SupplyChain.Client.Pages.Ventas._4_Solicitudes
 @using SupplyChain.Client.Pages.Ventas._3_Presupuestos
@@ -13,552 +13,556 @@
 </SfToast>
 
 <SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
-    <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
-    <DialogAnimationSettings Effect="DialogEffect.FadeZoom" Duration="200"></DialogAnimationSettings>
-    <DialogTemplates>
-        <Header>
-            <div class="e-dlg-header-titulo">Detalle Servicio</div>
-        </Header>
-        <Content>
-            <EditForm id="formServicio" Model="Servicio" OnValidSubmit="@(()=> Guardar())">
-                <SfSpinner @bind-Visible="@spinnerVisibleGuardar" Label="Guardando..." Type="SpinnerType.Fabric"></SfSpinner>
+<DialogEvents Closed="OnCerrarDialog"></DialogEvents>
+<DialogAnimationSettings Effect="DialogEffect.FadeZoom" Duration="200"></DialogAnimationSettings>
+<DialogTemplates>
+<Header>
+    <div class="e-dlg-header-titulo">Detalle Servicio</div>
+</Header>
+<Content>
+<EditForm id="formServicio" Model="Servicio" OnValidSubmit="@(() => Guardar())">
+<SfSpinner @bind-Visible="@spinnerVisibleGuardar" Label="Guardando..." Type="SpinnerType.Fabric"></SfSpinner>
 
-                <SfTab LoadOn="ContentLoad.Dynamic">
-                    <TabItems>
-                        <TabItem>
-                             <HeaderTemplate>Generalidades</HeaderTemplate>
-                            <ContentTemplate>
-                                <div class="mt-3">
+<SfTab LoadOn="ContentLoad.Dynamic">
+<TabItems>
+<TabItem>
+    <HeaderTemplate>Generalidades</HeaderTemplate>
+    <ContentTemplate>
+        <div class="mt-3">
 
-                                    <div class="form-row">
-                                <div class="form-group col-md-3">
-                                    <label>Solicitud:</label>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Solicitud:</label>
 
-                                    <div class="form-row">
-                                        <div class="col-10">
-                                            <SfNumericTextBox ID="SOLICITUD" @bind-Value="@(Servicio.SOLICITUD)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
-                                        </div>
-                                        <div class="col-2">
-                                            <SfButton CssClass="e-smal e-round e-success" IconCss="e-icons e-save"
-                                                      HtmlAttributes="@presupuestoButton" OnClick="@(async()=> await MostrarSolicitud())"></SfButton>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Presupuesto:</label>
-                                    <div class="form-row">
-                                        <div class="col-10">
-                                            <SfNumericTextBox ID="PRESUPUESTO" @bind-Value="@(Servicio.PRESUPUESTO)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
-                                        </div>
-                                        <div class="col-2">
-                                    <SfButton CssClass="e-smal e-round e-info" IconCss="e-icons e-save"
-                                              HtmlAttributes="@presupuestoButton" OnClick="@(async()=> await MostrarPresupuesto())"></SfButton>
-                                </div>
-                                    </div>
+                    <div class="form-row">
+                        <div class="col-10">
+                            <SfNumericTextBox ID="SOLICITUD" @bind-Value="@(Servicio.SOLICITUD)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
+                        </div>
+                        <div class="col-2">
+                            <SfButton CssClass="e-smal e-round e-success" IconCss="e-icons e-save"
+                                      HtmlAttributes="@presupuestoButton" OnClick="@(async () => await MostrarSolicitud())">
+                            </SfButton>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Presupuesto:</label>
+                    <div class="form-row">
+                        <div class="col-10">
+                            <SfNumericTextBox ID="PRESUPUESTO" @bind-Value="@(Servicio.PRESUPUESTO)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
+                        </div>
+                        <div class="col-2">
+                            <SfButton CssClass="e-smal e-round e-info" IconCss="e-icons e-save"
+                                      HtmlAttributes="@presupuestoButton" OnClick="@(async () => await MostrarPresupuesto())">
+                            </SfButton>
+                        </div>
+                    </div>
 
 
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label>Pedido:</label>
-                                    <div class="form-row">
-                                        <div class="col-9">
-                                            <SfNumericTextBox ID="PEDIDO" @bind-Value="@(Servicio.PEDIDO)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
-                                        </div>
-                                        @*<div class="col-2">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Pedido:</label>
+                    <div class="form-row">
+                        <div class="col-9">
+                            <SfNumericTextBox ID="PEDIDO" @bind-Value="@(Servicio.PEDIDO)" Readonly="true" Placeholder="Pedido" ShowSpinButton="false"></SfNumericTextBox>
+                        </div>
+                        @*<div class="col-2">
                                             <SfButton CssClass="e-smal e-round e-warning" IconCss="e-icons e-upload"
                                                       HtmlAttributes="@pedidoButton"></SfButton>
                                         </div>*@
-                                    </div>
+                    </div>
 
-                                </div>
+                </div>
 
-                                <div class="form-group col-md-4">
-                                    <label>Fecha:</label>
-                                    <SfDatePicker ID="FECHA" @bind-Value="@(Servicio.FECHA)" Enabled="@Disabled" Placeholder="Fecha"></SfDatePicker>
+                <div class="form-group col-md-4">
+                    <label>Fecha:</label>
+                    <SfDatePicker ID="FECHA" @bind-Value="@(Servicio.FECHA)" Enabled="@Disabled" Placeholder="Fecha"></SfDatePicker>
 
-                                </div>
-                            </div>
+                </div>
+            </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Cliente:</label>
-                                    <SfTextBox ID="CLIENTE" @bind-Value="@(Servicio.CLIENTE)" Enabled="@Disabled"></SfTextBox>
-                                </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Cliente:</label>
+                    <SfTextBox ID="CLIENTE" @bind-Value="@(Servicio.CLIENTE)" Enabled="@Disabled"></SfTextBox>
+                </div>
 
-                                <div class="form-group col-md-6">
-                                    <label>Planta:</label>
-                                    <SfTextBox ID="PLANTA" @bind-Value="@(Servicio.PLANTA)"></SfTextBox>
-                                </div>
-                            </div>
+                <div class="form-group col-md-6">
+                    <label>Planta:</label>
+                    <SfTextBox ID="PLANTA" @bind-Value="@(Servicio.PLANTA)"></SfTextBox>
+                </div>
+            </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Orden de Compra:</label>
-                                    <SfTextBox ID="OCOMPRA" @bind-Value="@(Servicio.OCOMPRA)" Enabled="@Disabled"></SfTextBox>
-                                </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Orden de Compra:</label>
+                    <SfTextBox ID="OCOMPRA" @bind-Value="@(Servicio.OCOMPRA)" Enabled="@Disabled"></SfTextBox>
+                </div>
 
-                                <div class="form-group col-md-6">
-                                    <label>Remito Recepcion:</label>
-                                    <SfTextBox ID="REMITOREC" @bind-Value="@(Servicio.REMITOREC)"></SfTextBox>
-                                </div>
-                            </div>
+                <div class="form-group col-md-6">
+                    <label>Remito Recepcion:</label>
+                    <SfTextBox ID="REMITOREC" @bind-Value="@(Servicio.REMITOREC)"></SfTextBox>
+                </div>
+            </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Descripción artículo:</label>
-                                    <SfTextBox ID="DESCARTICULO" @bind-Value="@(Servicio.DESCARTICULO)" Enabled="@Disabled"></SfTextBox>
-                                </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Descripción artículo:</label>
+                    <SfTextBox ID="DESCARTICULO" @bind-Value="@(Servicio.DESCARTICULO)" Enabled="@Disabled"></SfTextBox>
+                </div>
 
-                                <div class="form-group col-md-6">
-                                    <label>Pedido anterior:</label>
-                                    <SfTextBox ID="PEDIDOANT" @bind-Value="@(Servicio.PEDIDOANT)"></SfTextBox>
-                                </div>
-                            </div>
+                <div class="form-group col-md-6">
+                    <label>Pedido anterior:</label>
+                    <SfTextBox ID="PEDIDOANT" @bind-Value="@(Servicio.PEDIDOANT)"></SfTextBox>
+                </div>
+            </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Fecha de mantenimiento anterior:</label>
-                                    <SfTextBox ID="FECMANTANT" @bind-Value="@(Servicio.FECMANTANT)"></SfTextBox>
-                                </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Fecha de mantenimiento anterior:</label>
+                    <SfTextBox ID="FECMANTANT" @bind-Value="@(Servicio.FECMANTANT)"></SfTextBox>
+                </div>
 
-                                <div class="form-group col-md-6">
-                                    <label>Remito:</label>
-                                    <SfTextBox ID="REMITO" @bind-Value="@(Servicio.REMITO)"></SfTextBox>
-                                </div>
-                            </div>
+                <div class="form-group col-md-6">
+                    <label>Remito:</label>
+                    <SfTextBox ID="REMITO" @bind-Value="@(Servicio.REMITO)"></SfTextBox>
+                </div>
+            </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label>Observaciones:</label>
-                                    <SfTextBox ID="OBSERV" @bind-Value="@(Servicio.OBSERV)" Enabled="@Disabled" Multiline="true"></SfTextBox>
-                                </div>
-                            </div>
-                                </div>
-                            </ContentTemplate>
-                        </TabItem>
-                        <TabItem>
-                             <HeaderTemplate>Datos de Placa</HeaderTemplate>
-                            <ContentTemplate>
-                                <div class="mt-3">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label>Observaciones:</label>
+                    <SfTextBox ID="OBSERV" @bind-Value="@(Servicio.OBSERV)" Enabled="@Disabled" Multiline="true"></SfTextBox>
+                </div>
+            </div>
+        </div>
+    </ContentTemplate>
+</TabItem>
+<TabItem>
+    <HeaderTemplate>Datos de Placa</HeaderTemplate>
+    <ContentTemplate>
+        <div class="mt-3">
 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label>TAG:</label>
-                                            <SfTextBox ID="IDENTIFICACION" @bind-Value="@(Servicio.IDENTIFICACION)"></SfTextBox>
-                                        </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>TAG:</label>
+                    <SfTextBox ID="IDENTIFICACION" @bind-Value="@(Servicio.IDENTIFICACION)"></SfTextBox>
+                </div>
 
-                                        <div class="form-group col-md-6">
-                                            <a href="/sc/marca/list" target="_blank">Marca:</a>
-                                            <SfComboBox TValue="string" CssClass="customClass" TItem="Marca" PopupWidth="auto" AllowFiltering="true"
-                                                        @bind-Value="@(Servicio.MARCA)" DataSource="@marcas">
-                                                <ComboBoxFieldSettings Value="MARCA" Text="MARCA"></ComboBoxFieldSettings>
-                                            </SfComboBox>
-                                        </div>
-                                    </div>
+                <div class="form-group col-md-6">
+                    <a href="/sc/marca/list" target="_blank">Marca:</a>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="Marca" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.MARCA)" DataSource="@marcas">
+                        <ComboBoxFieldSettings Value="MARCA" Text="MARCA"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
+            </div>
 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label>Numero de Serie:</label>
-                                            <SfTextBox ID="NSERIE" @bind-Value="@(Servicio.NSERIE)"></SfTextBox>
-                                        </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Numero de Serie:</label>
+                    <SfTextBox ID="NSERIE" @bind-Value="@(Servicio.NSERIE)"></SfTextBox>
+                </div>
 
-                                        <div class="form-group col-md-6">
-                                            <label>Modelo:</label>
-                                            <SfTextBox ID="MODELO" @bind-Value="@(Servicio.MODELO)"></SfTextBox>
-                                        </div>
-                                    </div>
+                <div class="form-group col-md-6">
+                    <label>Modelo:</label>
+                    <SfTextBox ID="MODELO" @bind-Value="@(Servicio.MODELO)"></SfTextBox>
+                </div>
+            </div>
 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <a href="/sc/medida/list" target="_blank">Medida:</a>
-                                            <SfComboBox TValue="string" CssClass="customClass" TItem="Medida" PopupWidth="auto" AllowFiltering="true"
-                                                        @bind-Value="@(Servicio.MEDIDA)" DataSource="@medidas">
-                                                <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
-                                            </SfComboBox>
-                                        </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <a href="/sc/medida/list" target="_blank">Medida:</a>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="Medida" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.MEDIDA)" DataSource="@medidas">
+                        <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
 
-                                        <div class="form-group col-md-6">
-                                            <a href="/sc/serie/list" target="_blank">Serie:</a>
-                                            <SfComboBox TValue="string" CssClass="customClass" TItem="Serie" PopupWidth="auto" AllowFiltering="true"
-                                                        @bind-Value="@(Servicio.SERIE)" DataSource="@series">
-                                                <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
-                                            </SfComboBox>
-                                        </div>
-                                    </div>
+                <div class="form-group col-md-6">
+                    <a href="/sc/serie/list" target="_blank">Serie:</a>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="Serie" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.SERIE)" DataSource="@series">
+                        <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
+            </div>
 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <a href="/sc/orificio/list" target="_blank">Orificio:</a>
-                                            <SfComboBox TValue="string" CssClass="customClass" TItem="Orificio" PopupWidth="auto" AllowFiltering="true"
-                                                        @bind-Value="@(Servicio.ORIFICIO)" DataSource="@orificios">
-                                                <ComboBoxFieldSettings Value="Codigo" Text="Codigo"></ComboBoxFieldSettings>
-                                            </SfComboBox>
-                                        </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <a href="/sc/orificio/list" target="_blank">Orificio:</a>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="Orificio" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.ORIFICIO)" DataSource="@orificios">
+                        <ComboBoxFieldSettings Value="Codigo" Text="Codigo"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
 
-                                        <div class="form-group col-md-6">
-                                            <label>Año:</label>
-                                            <SfTextBox ID="AÑO" @bind-Value="@(Servicio.AÑO)"></SfTextBox>
-                                        </div>
-                                    </div>
+                <div class="form-group col-md-6">
+                    <label>Año:</label>
+                    <SfTextBox ID="AÑO" @bind-Value="@(Servicio.AÑO)"></SfTextBox>
+                </div>
+            </div>
 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label>Area:</label>
-                                            <SfTextBox ID="AREA" @bind-Value="@(Servicio.AREA)"></SfTextBox>
-                                        </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Area:</label>
+                    <SfTextBox ID="AREA" @bind-Value="@(Servicio.AREA)"></SfTextBox>
+                </div>
 
-                                        <div class="form-group col-md-6">
-                                            <label>Fluido:</label>
-                                            <SfTextBox ID="FLUIDO" @bind-Value="@(Servicio.FLUIDO)"></SfTextBox>
-                                        </div>
-                                    </div>
+                <div class="form-group col-md-6">
+                    <label>Fluido:</label>
+                    <SfTextBox ID="FLUIDO" @bind-Value="@(Servicio.FLUIDO)"></SfTextBox>
+                </div>
+            </div>
 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label>Sobrepresión:</label>
-                                            <SfComboBox TValue="string" CssClass="customClass" TItem="Sobrepresiones" PopupWidth="auto" AllowFiltering="true"
-                                                        @bind-Value="@(Servicio.SOBREPRESION)" DataSource="@SobrepresionData">
-                                                <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                            </SfComboBox>
-                                        </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Sobrepresión:</label>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="Sobrepresiones" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.SOBREPRESION)" DataSource="@SobrepresionData">
+                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
 
-                                        <div class="form-group col-md-6">
-                                            <label>Presión:</label>
-                                            <SfTextBox ID="PRESION" @bind-Value="@(Servicio.PRESION)"></SfTextBox>
-                                        </div>
-                                    </div>
+                <div class="form-group col-md-6">
+                    <label>Presión:</label>
+                    <SfTextBox ID="PRESION" @bind-Value="@(Servicio.PRESION)"></SfTextBox>
+                </div>
+            </div>
 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label>Contrapresión:</label>
-                                            <SfTextBox ID="CONTRAPRESION" @bind-Value="@(Servicio.CONTRAPRESION)"></SfTextBox>
-                                        </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Contrapresión:</label>
+                    <SfTextBox ID="CONTRAPRESION" @bind-Value="@(Servicio.CONTRAPRESION)"></SfTextBox>
+                </div>
 
-                                        <div class="form-group col-md-6">
-                                            <label>Tipo:</label>
-                                            <SfComboBox TValue="string" CssClass="customClass" TItem="Tipos" PopupWidth="auto" AllowFiltering="true"
-                                                        @bind-Value="@(Servicio.TIPO)" DataSource="@TipoData">
-                                                <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                            </SfComboBox>
-                                        </div>
-                                    </div>
+                <div class="form-group col-md-6">
+                    <label>Tipo:</label>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="Tipos" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.TIPO)" DataSource="@TipoData">
+                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
+            </div>
 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label>Temperatura:</label>
-                                            <SfTextBox ID="TEMP" @bind-Value="@(Servicio.TEMP)"></SfTextBox>
-                                        </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Temperatura:</label>
+                    <SfTextBox ID="TEMP" @bind-Value="@(Servicio.TEMP)"></SfTextBox>
+                </div>
 
-                                        <div class="form-group col-md-6">
-                                            <label>Resorte:</label>
-                                            <SfTextBox ID="RESORTE" @bind-Value="@(Servicio.RESORTE)"></SfTextBox>
-                                        </div>
-                                    </div>
+                <div class="form-group col-md-6">
+                    <label>Resorte:</label>
+                    <SfTextBox ID="RESORTE" @bind-Value="@(Servicio.RESORTE)"></SfTextBox>
+                </div>
+            </div>
 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label>Presión en Banco:</label>
-                                            <SfTextBox ID="PRESIONBANCO" @bind-Value="@(Servicio.PRESIONBANCO)"></SfTextBox>
-                                        </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Presión en Banco:</label>
+                    <SfTextBox ID="PRESIONBANCO" @bind-Value="@(Servicio.PRESIONBANCO)"></SfTextBox>
+                </div>
 
-                                        <div class="form-group col-md-6">
-                                            <label>Servicio:</label>
-                                            <SfTextBox ID="SERVICIO" @bind-Value="@(Servicio.SERVICIO)"></SfTextBox>
-                                        </div>
-                                    </div>
-                                </div>
-                            </ContentTemplate>
-                        </TabItem>
-                        <TabItem>
-                             <HeaderTemplate>Ensayos a la Recepcion</HeaderTemplate>
-                            <ContentTemplate>
-                                <div class="mt-3">
+                <div class="form-group col-md-6">
+                    <label>Servicio:</label>
+                    <SfTextBox ID="SERVICIO" @bind-Value="@(Servicio.SERVICIO)"></SfTextBox>
+                </div>
+            </div>
+        </div>
+    </ContentTemplate>
+</TabItem>
+<TabItem>
+    <HeaderTemplate>Ensayos a la Recepcion</HeaderTemplate>
+    <ContentTemplate>
+        <div class="mt-3">
 
-                                    <div class="form-row">
-                                        @*<div class="form-group col-md-6">
+            <div class="form-row">
+                @*<div class="form-group col-md-6">
                                         <label>Ensayo a la Recepcion:</label>
                                         <SfTextBox ID="ENSRECEP" @bind-Value="@(Servicio.ENSRECEP)"></SfTextBox>
                                         </div>*@
 
-                                        <div class="form-group col-md-6">
-                                            <label>Ensayo a la Recepcion:</label>
-                                            <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                        @bind-Value="@(Servicio.ENSRECEP)" DataSource="@SIoNOData">
-                                                <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                            </SfComboBox>
-                                        </div>
+                <div class="form-group col-md-6">
+                    <label>Ensayo a la Recepcion:</label>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.ENSRECEP)" DataSource="@SIoNOData">
+                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
 
-                                        <div class="form-group col-md-6">
-                                            <label>Estado:</label>
-                                            <SfComboBox TValue="string" CssClass="customClass" TItem="Estados" PopupWidth="auto" AllowFiltering="true"
-                                                        @bind-Value="@(Servicio.ESTADO)" DataSource="@EstadosData">
-                                                <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                            </SfComboBox>
-                                        </div>
-                                    </div>
+                <div class="form-group col-md-6">
+                    <label>Estado:</label>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="Estados" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.ESTADO)" DataSource="@EstadosData">
+                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
+            </div>
 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label>Presión Ensayo Recepción:</label>
-                                            <SfTextBox ID="PRESIONRECEP" @bind-Value="@(Servicio.PRESIONRECEP)"></SfTextBox>
-                                        </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Presión Ensayo Recepción:</label>
+                    <SfTextBox ID="PRESIONRECEP" @bind-Value="@(Servicio.PRESIONRECEP)"></SfTextBox>
+                </div>
 
-                                        @*<div class="form-group col-md-6">
+                @*<div class="form-group col-md-6">
                                         <label>Fugas:</label>
                                         <SfTextBox ID="FUGAS" @bind-Value="@(Servicio.FUGAS)"></SfTextBox>
                                         </div>*@
 
-                                        <div class="form-group col-md-6">
-                                            <label>Fugas:</label>
-                                            <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                        @bind-Value="@(Servicio.FUGAS)" DataSource="@SIoNOData">
-                                                <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                            </SfComboBox>
-                                        </div>
-                                    </div>
+                <div class="form-group col-md-6">
+                    <label>Fugas:</label>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.FUGAS)" DataSource="@SIoNOData">
+                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
+            </div>
 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label>Presión de Fuga:</label>
-                                            <SfTextBox ID="PRESIONFUGA" @bind-Value="@(Servicio.PRESIONFUGA)"></SfTextBox>
-                                        </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Presión de Fuga:</label>
+                    <SfTextBox ID="PRESIONFUGA" @bind-Value="@(Servicio.PRESIONFUGA)"></SfTextBox>
+                </div>
 
-                                        @*<div class="form-group col-md-6">
+                @*<div class="form-group col-md-6">
                                         <label>Cambio de Presión:</label>
                                         <SfTextBox ID="CAMBIOPRESION" @bind-Value="@(Servicio.CAMBIOPRESION)"></SfTextBox>
                                         </div>*@
 
-                                        <div class="form-group col-md-6">
-                                            <label>Cambio de Presión:</label>
-                                            <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                        @bind-Value="@(Servicio.CAMBIOPRESION)" DataSource="@SIoNOData">
-                                                <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                            </SfComboBox>
-                                        </div>
-                                    </div>
+                <div class="form-group col-md-6">
+                    <label>Cambio de Presión:</label>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.CAMBIOPRESION)" DataSource="@SIoNOData">
+                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
+            </div>
 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label>Presión solicitada:</label>
-                                            <SfTextBox ID="PRESIONSOLIC" @bind-Value="@(Servicio.PRESIONSOLIC)"></SfTextBox>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label>Apretada (A) (mm):</label>
-                                            <SfTextBox ID="APRETADA" @bind-Value="@(Servicio.APRETADA_A)"></SfTextBox>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <img src="./Imagenes/Apretada_A.png" alt="homepage" class="img-Serv"/>
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-3">
-                                            <label>Posición Anillo (B) (mm):</label>
-                                            <SfTextBox ID="POSICIONANILLO" @bind-Value="@(Servicio.POSICIONANILLO_B)"></SfTextBox>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <img src="./Imagenes/PosicionAnillo_B.png" alt="homepage" class="img-Serv" />
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                            </ContentTemplate>
-                        </TabItem>
-                        <TabItem>
-                             <HeaderTemplate>Trabajos Efectuados</HeaderTemplate>
-                            <ContentTemplate>
-                                <div class="mt-3">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Presión solicitada:</label>
+                    <SfTextBox ID="PRESIONSOLIC" @bind-Value="@(Servicio.PRESIONSOLIC)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Apretada (A) (mm):</label>
+                    <SfTextBox ID="APRETADA" @bind-Value="@(Servicio.APRETADA_A)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-3">
+                    <img src="./Imagenes/Apretada_A.png" alt="homepage" class="img-Serv"/>
+                </div>
 
-                                    <div class="form-row">
-                                @*<div class="form-group col-md-6">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Posición Anillo (B) (mm):</label>
+                    <SfTextBox ID="POSICIONANILLO" @bind-Value="@(Servicio.POSICIONANILLO_B)"></SfTextBox>
+                </div>
+                <div class="form-group col-md-3">
+                    <img src="./Imagenes/PosicionAnillo_B.png" alt="homepage" class="img-Serv"/>
+                </div>
+
+            </div>
+        </div>
+    </ContentTemplate>
+</TabItem>
+<TabItem>
+    <HeaderTemplate>Trabajos Efectuados</HeaderTemplate>
+    <ContentTemplate>
+        <div class="mt-3">
+
+            <div class="form-row">
+                @*<div class="form-group col-md-6">
                             <label>Cambio de Repuesto:</label>
                             <SfTextBox ID="CAMBIOREPUESTO" @bind-Value="@(Servicio.CAMBIOREPUESTO)"></SfTextBox>
                         </div>*@
 
-                                <div class="form-group col-md-6">
-                                    <label>Cambio de Repuesto:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.CAMBIOREPUESTO)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
+                <div class="form-group col-md-6">
+                    <label>Cambio de Repuesto:</label>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.CAMBIOREPUESTO)" DataSource="@SIoNOData">
+                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
 
-                                <div class="form-group col-md-6">
-                                    <label>Repuestos:</label>
-                                    <SfTextBox ID="REPUESTOS" @bind-Value="@(Servicio.REPUESTOS)"></SfTextBox>
-                                </div>
-                            </div>
+                <div class="form-group col-md-6">
+                    <label>Repuestos:</label>
+                    <SfTextBox ID="REPUESTOS" @bind-Value="@(Servicio.REPUESTOS)"></SfTextBox>
+                </div>
+            </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Codigo de nuevo Resorte:</label>
-                                    <SfTextBox ID="CODRESORTE" @bind-Value="@(Servicio.CODRESORTE)"></SfTextBox>
-                                </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Codigo de nuevo Resorte:</label>
+                    <SfTextBox ID="CODRESORTE" @bind-Value="@(Servicio.CODRESORTE)"></SfTextBox>
+                </div>
 
-                                @*<div class="form-group col-md-6">
+                @*<div class="form-group col-md-6">
                             <label>Ensayo Contrapresion:</label>
                             <SfTextBox ID="ENSAYOCONTRAP" @bind-Value="@(Servicio.ENSAYOCONTRAP)"></SfTextBox>
                         </div>*@
 
-                                <div class="form-group col-md-6">
-                                    <label>Ensayo Contrapresion:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.ENSAYOCONTRAP)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
+                <div class="form-group col-md-6">
+                    <label>Ensayo Contrapresion:</label>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.ENSAYOCONTRAP)" DataSource="@SIoNOData">
+                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
+            </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label>Trabajos efectuados:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Trabajosefec" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.TRABAJOSEFEC)" DataSource="@trabajosEfectuados">
-                                        <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Trabajos efectuados:</label>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="Trabajosefec" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.TRABAJOSEFEC)" DataSource="@trabajosEfectuados">
+                        <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
 
-                                <div class="form-group col-md-6">
-                                    <label>Trabajos Accesorios:</label>
-                                    <SfTextBox ID="TRABAJOSACCES" @bind-Value="@(Servicio.TRABAJOSACCES)"></SfTextBox>
-                                </div>
-                            </div>
+                <div class="form-group col-md-6">
+                    <label>Trabajos Accesorios:</label>
+                    <SfTextBox ID="TRABAJOSACCES" @bind-Value="@(Servicio.TRABAJOSACCES)"></SfTextBox>
+                </div>
+            </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <a href="/sc/operario/list" target="_blank">Responsable:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.RESP)" DataSource="@opers">
-                                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <a href="/sc/operario/list" target="_blank">Responsable:</a>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.RESP)" DataSource="@opers">
+                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
 
-                                <div class="form-group col-md-6">
-                                    <a href="/sc/operario/list" target="_blank">Controlo:</a>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.CONTROLO)" DataSource="@opers">
-                                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
+                <div class="form-group col-md-6">
+                    <a href="/sc/operario/list" target="_blank">Controlo:</a>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.CONTROLO)" DataSource="@opers">
+                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
+            </div>
 
-                            <div class="form-row">
-                                @*<div class="form-group col-md-6">
+            <div class="form-row">
+                @*<div class="form-group col-md-6">
                             <label>POP:</label>
                             <SfTextBox ID="POP" @bind-Value="@(Servicio.POP)"></SfTextBox>
                         </div>*@
 
-                                <div class="form-group col-md-6">
-                                    <label>POP:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.POP)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
+                <div class="form-group col-md-6">
+                    <label>POP:</label>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.POP)" DataSource="@SIoNOData">
+                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
 
-                                <!--
-                    <div class="form-group col-md-6">
-                        <label>Responsable Técnico:</label>
-                        <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
-                                    @bind-Value="@(Servicio.RESPTECNICO)" DataSource="@opers">
-                            <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
-                        </SfComboBox>
-                    </div>
-                    -->
+                <!--
+                <div class="form-group col-md-6">
+                    <label>Responsable Técnico:</label>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.RESPTECNICO)" DataSource="@opers">
+                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
+                -->
 
-                                <div class="form-group col-md-6">
-                                    <label>Presencia Inspector:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.PRESENCIAINSPEC)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
-                            </div>
+                <div class="form-group col-md-6">
+                    <label>Presencia Inspector:</label>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.PRESENCIAINSPEC)" DataSource="@SIoNOData">
+                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
+            </div>
 
-                            <div class="form-row">
-                                @*<div class="form-group col-md-6">
+            <div class="form-row">
+                @*<div class="form-group col-md-6">
                             <label>OPDS:</label>
                             <SfTextBox ID="OPDS" @bind-Value="@(Servicio.OPDS)"></SfTextBox>
                         </div>*@
 
-                                <div class="form-group col-md-6">
-                                    <label>OPDS:</label>
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(Servicio.OPDS)" DataSource="@SIoNOData">
-                                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                    </SfComboBox>
-                                </div>
+                <div class="form-group col-md-6">
+                    <label>OPDS:</label>
+                    <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                @bind-Value="@(Servicio.OPDS)" DataSource="@SIoNOData">
+                        <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                </div>
 
-                                <div class="form-group col-md-6">
-                                    <label>Acta:</label>
-                                    <SfTextBox ID="ACTA" @bind-Value="@(Servicio.ACTA)"></SfTextBox>
-                                </div>
-                            </div>
-
-
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label>Observaciones del trabajo efectuado:</label>
-                                    <SfTextBox ID="OBSERVMANT" @bind-Value="@(Servicio.OBSERVMANT)" Multiline="true"></SfTextBox>
-                                </div>
-                            </div>
-                                </div>
-                            </ContentTemplate>
-                        </TabItem>
-                        <TabItem>
-                             <HeaderTemplate>Documentacion</HeaderTemplate>
-                            <ContentTemplate>
-                                <div class="mt-3">
-                                    <VerEnsayos Accion="RUTAENSAYO" Codigo="@Servicio.PEDIDO.ToString()">
-
-                                    </VerEnsayos>
-                                    
-                                </div>
-                            </ContentTemplate>
-                        </TabItem>
-                        <TabItem>
-                             <HeaderTemplate>Fotos</HeaderTemplate>
-                            <ContentTemplate>
-                                <div class="mt-3">
-
-                                    <div class="control-section">
-                                        <SfFileManager TValue="FileManagerDirectoryContent" Height="400px" View="ViewType.Details">
-                                            <FileManagerAjaxSettings Url="/api/FilesManagerServicios/FileOperations"
-                                                                     DownloadUrl="/api/FilesManagerServicios/Download"
-                                                                     UploadUrl="/api/FilesManagerServicios/Upload"
-                                                                     GetImageUrl="/api/FilesManagerServicios/GetImage">
-                                            </FileManagerAjaxSettings>
-                                            <FileManagerEvents TValue="FileManagerDirectoryContent"></FileManagerEvents>
-                                            <FileManagerNavigationPaneSettings Visible=false></FileManagerNavigationPaneSettings>
-                                        </SfFileManager>
-                                    </div>
-                                </div>
-                            </ContentTemplate>
-                        </TabItem>
-                    </TabItems>
-                </SfTab>
-            </EditForm>
-            
-        </Content>
-        <FooterTemplate>
-
-            <div class=" mt-5">
-                <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit"></SfButton>
-                <SfButton Content="Cancel" OnClick="@(async()=>await OnCerrarDialog())" IconCss="fa fa-window-close-o"></SfButton>
+                <div class="form-group col-md-6">
+                    <label>Acta:</label>
+                    <SfTextBox ID="ACTA" @bind-Value="@(Servicio.ACTA)"></SfTextBox>
+                </div>
             </div>
-        </FooterTemplate>
-    </DialogTemplates>
+
+
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label>Observaciones del trabajo efectuado:</label>
+                    <SfTextBox ID="OBSERVMANT" @bind-Value="@(Servicio.OBSERVMANT)" Multiline="true"></SfTextBox>
+                </div>
+            </div>
+        </div>
+    </ContentTemplate>
+</TabItem>
+<TabItem>
+    <HeaderTemplate>Documentacion</HeaderTemplate>
+    <ContentTemplate>
+        <div class="mt-3">
+            <VerEnsayos Accion="RUTAENSAYO" Codigo="@Servicio.PEDIDO.ToString()">
+
+            </VerEnsayos>
+
+        </div>
+    </ContentTemplate>
+</TabItem>
+<TabItem>
+    <HeaderTemplate>Fotos</HeaderTemplate>
+    <ContentTemplate>
+        <div class="mt-3">
+
+            <div class="control-section">
+                <SfFileManager TValue="FileManagerDirectoryContent" Height="400px" View="ViewType.Details">
+                    <FileManagerAjaxSettings Url="/api/FilesManagerServicios/FileOperations"
+                                             DownloadUrl="/api/FilesManagerServicios/Download"
+                                             UploadUrl="/api/FilesManagerServicios/Upload"
+                                             GetImageUrl="/api/FilesManagerServicios/GetImage">
+                    </FileManagerAjaxSettings>
+                    <FileManagerEvents TValue="FileManagerDirectoryContent"></FileManagerEvents>
+                    <FileManagerNavigationPaneSettings Visible="false"></FileManagerNavigationPaneSettings>
+                </SfFileManager>
+            </div>
+        </div>
+    </ContentTemplate>
+</TabItem>
+</TabItems>
+</SfTab>
+</EditForm>
+
+</Content>
+<FooterTemplate>
+
+    <div class=" mt-5">
+        <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit"></SfButton>
+        <SfButton Content="Cancel" OnClick="@(async () => await OnCerrarDialog())" IconCss="fa fa-window-close-o"></SfButton>
+    </div>
+</FooterTemplate>
+</DialogTemplates>
 </SfDialog>
 
 @if (verDialogSolicitud)
 {
     <FormSolicitud @ref="refFormSolicitud" Solicitud="@solicitud" Show="verDialogSolicitud" HeightDialog="350px"
-                   OnCerrar="@(()=> verDialogSolicitud = false)"></FormSolicitud>
+                   OnCerrar="@(() => verDialogSolicitud = false)">
+    </FormSolicitud>
 }
 
 <FormPresupuesto @ref="@refFormPresupuesto" Presupuesto="@presupuesto" Show="@verDialogPresupuesto"
-                 OnCerrar="@(()=> verDialogPresupuesto = false)"
-                 OnGuardar="@((p)=> OnGuardarPresupuesto(p))"></FormPresupuesto>
+                 OnCerrar="@(() => verDialogPresupuesto = false)"
+                 OnGuardar="@(p => OnGuardarPresupuesto(p))">
+</FormPresupuesto>
 
 <style>
     .img-Serv{

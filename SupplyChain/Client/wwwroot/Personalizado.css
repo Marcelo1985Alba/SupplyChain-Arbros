@@ -5,21 +5,21 @@
     background: #fff;
 }
 
-    .topbar .top-navbar .navbar-header .navbar-brand .light-logo {
-        display: none;
-    }
+.topbar .top-navbar .navbar-header .navbar-brand .light-logo {
+    display: none;
+}
 
-    .topbar .top-navbar .navbar-nav > .nav-item > span {
-        color: #398bf7;
-    }
+.topbar .top-navbar .navbar-nav > .nav-item > span {
+    color: #398bf7;
+}
 
-    .topbar .navbar-light .navbar-nav .nav-item > a.nav-link {
-        color: #a6b7bf;
-    }
+.topbar .navbar-light .navbar-nav .nav-item > a.nav-link {
+    color: #a6b7bf;
+}
 
-        .topbar .navbar-light .navbar-nav .nav-item > a.nav-link:hover, .topbar .navbar-light .navbar-nav .nav-item > a.nav-link:focus {
-            color: #242a33 !important;
-        }
+.topbar .navbar-light .navbar-nav .nav-item > a.nav-link:hover, .topbar .navbar-light .navbar-nav .nav-item > a.nav-link:focus {
+    color: #242a33 !important;
+}
 
 .logo-center .topbar .navbar-header {
     text-align: center;
@@ -38,8 +38,6 @@
 }
 
 
-
-
 .titulo {
     font-weight: bold;
     color: #31b0d5;
@@ -54,8 +52,8 @@
 .listview {
     border-top: 1px solid #dddddd;
     border-bottom: 1px solid #dddddd;
-    border-left:none;
-    border-right:none;
+    border-left: none;
+    border-right: none;
     border-radius: 3px;
 }
 
@@ -67,9 +65,9 @@ e-grid .e-gridheader {
     background-color: #fff;
     border-bottom-color: #e0e0e0;
     border-top-color: #e0e0e0;
-    color: rgba(0,0,0,0.54);
+    color: rgba(0, 0, 0, 0.54);
     font-size: 20px !important;
-    font-weight:bold !important;
+    font-weight: bold !important;
 }
 
 #toast_types button {
@@ -144,12 +142,10 @@ e-grid .e-gridheader {
 }
 
 
-
 .e-grid .e-groupdroparea {
     background-color: #398bf7;
     color: #ffffff;
 }
-
 
 
 .e-grid .e-gridheader .e-icons:not(.e-icon-hide):not(.e-check):not(.e-stop) {
@@ -173,7 +169,7 @@ e-grid .e-gridheader {
     /*padding: .5rem !important;*/
 }
 
-.e-grid .e-row { 
+.e-grid .e-row {
     font-weight: bold;
 }
 
@@ -193,7 +189,7 @@ e-grid .e-gridheader {
 
 @media only screen and (max-width: 600px) {
     .login-box {
-        width: 200px!important;
+        width: 200px !important;
         margin: 0 auto;
     }
 }
@@ -215,158 +211,160 @@ e-grid .e-gridheader {
     min-width: 34px !important;*/
     background: #549bf9;
 }
-    .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:focus {
-        background: #2f86f9;
-    }
-    .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:hover {
-        background: #3582e8;
-    }
+
+.e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:focus {
+    background: #2f86f9;
+}
+
+.e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:hover {
+    background: #3582e8;
+}
 
 /*.e-toolbar-item button[aria-label="Add"] {
     background: #04cb93;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Add"]:focus {
     background: #0cc08d;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Add"]:hover {
     background: #1cb78b;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Edit"] {
     background: #fce87a;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Edit"]:focus {
     background: #e1c31e;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Edit"]:hover {
     background: #ffd800;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Eliminar"] {
     background: #ff886f;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Eliminar"]:focus {
     background: #ff6140;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Eliminar"]:hover {
     background: #ff694a;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 
 .e-toolbar-item button[aria-label="Imprimir"] {
     background: #ab7d4c;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
     .e-toolbar-item button[aria-label="Imprimir"]:focus {
         background: #c19669;*/
-        /*border-radius: 10%;*/
-        /*border: 1px solid #5a70cc;*/
-    /*}
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
+/*}
 
-    .e-toolbar-item button[aria-label="Imprimir"]:hover {
-        background: #7e5932;*/
-        /*border-radius: 10%;*/
-        /*border: 1px solid #5a70cc;*/
-    /*}
+.e-toolbar-item button[aria-label="Imprimir"]:hover {
+    background: #7e5932;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
+/*}
 
 
 .e-toolbar-item button[aria-label="Exportar Excel"] {
-    background: #87c96b;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+background: #87c96b;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Exportar Excel"]:focus {
     background: #56a434;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Exportar Excel"]:hover {
     background: #74bc55;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Seleccionar Columnas"] {
     background: #a584c4;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Seleccionar Columnas"]:focus {
     background: #8151ae;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Seleccionar Columnas"]:hover {
     background: #966abe;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}*/
 
 
 /*.e-toolbar-item button[aria-label="Copia"] {
     background: #549bf9;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Copia"]:focus {
     background: #2f86f9;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Copia"]:hover {
     background: #3582e8;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}*/
 
 /*.e-toolbar-item button[aria-label="Actualizar Grilla"] {
     background: #f88d42;
     font-size: 9px;*/
-    /*border: 1px solid #5a70cc;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Actualizar Grilla"]:focus {
     background: #fa7213;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}
 
 .e-toolbar-item button[aria-label="Actualizar Grilla"]:hover {
     background: #fa7213;*/
-    /*border-radius: 10%;*/
-    /*border: 1px solid #5a70cc;*/
+/*border-radius: 10%;*/
+/*border: 1px solid #5a70cc;*/
 /*}*/
 
 
@@ -426,15 +424,15 @@ form label {
     z-index: 9999;
 }
 
-    .ribbon span {
-        border: 1px solid #faa;
-        color: #fff;
-        display: block;
-        font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        margin: 1px 0;
-        padding: 10px 50px;
-        text-align: center;
-        text-decoration: none;
-        /* shadow */
-        text-shadow: 0 0 5px #444;
-    }
+.ribbon span {
+    border: 1px solid #faa;
+    color: #fff;
+    display: block;
+    font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 1px 0;
+    padding: 10px 50px;
+    text-align: center;
+    text-decoration: none;
+    /* shadow */
+    text-shadow: 0 0 5px #444;
+}

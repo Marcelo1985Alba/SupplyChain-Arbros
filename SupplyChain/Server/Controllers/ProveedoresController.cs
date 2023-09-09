@@ -1,51 +1,47 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace SupplyChain.Server.Controllers
+namespace SupplyChain.Server.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ProveedoresController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProveedoresController : ControllerBase
+    private readonly AppDbContext _appDbContext;
+
+    public ProveedoresController(AppDbContext appDbContext)
     {
-        private readonly AppDbContext _appDbContext;
+        _appDbContext = appDbContext;
+    }
 
-        public ProveedoresController(AppDbContext appDbContext)
+    [HttpGet]
+    public async Task<IEnumerable<Proveedor>> Get()
+    {
+        return await _appDbContext.Proveedores.ToListAsync();
+    }
+
+    [HttpGet("id")]
+    public async Task<IEnumerable<Proveedor>> ById(int id)
+    {
+        return await _appDbContext.Proveedores.Where(p => p.Id == id).ToListAsync();
+    }
+
+    [HttpGet("GetProveedoresItris")]
+    public async Task<ActionResult<IEnumerable<vProveedorItris>>> GetProveedoresItris()
+    {
+        try
         {
-            this._appDbContext = appDbContext;
+            return await _appDbContext.vProveedoresItris.ToListAsync();
         }
-
-        [HttpGet]
-        public async Task<IEnumerable<Proveedor>> Get()
+        catch (Exception ex)
         {
-            return await _appDbContext.Proveedores.ToListAsync();
+            return BadRequest(ex.Message);
         }
-
-        [HttpGet("id")]
-        public async Task<IEnumerable<Proveedor>> ById(int id)
-        {
-            return await _appDbContext.Proveedores.Where(p=> p.Id == id).ToListAsync();
-        }
-
-        [HttpGet("GetProveedoresItris")]
-        public async Task<ActionResult<IEnumerable<vProveedorItris>>> GetProveedoresItris()
-        {
-            try
-            {
-                return await _appDbContext.vProveedoresItris.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-
     }
 }

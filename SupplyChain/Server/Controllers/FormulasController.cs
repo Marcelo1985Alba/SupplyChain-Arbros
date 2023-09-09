@@ -1,122 +1,104 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
-using SupplyChain.Shared.Models;
-using System.IO;
-using Microsoft.Extensions.Configuration;
 
-namespace SupplyChain.Server.Controllers
+namespace SupplyChain.Server.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class FormulasController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class FormulasController : ControllerBase
+    private readonly AppDbContext _context;
+    private readonly FormulaRepository _formulaRepository;
+
+    public FormulasController(FormulaRepository formulaRepository)
     {
-        
-        private readonly AppDbContext _context;
-        private readonly FormulaRepository _formulaRepository;
+        _formulaRepository = formulaRepository;
+    }
 
-        public FormulasController(FormulaRepository formulaRepository)
+    [HttpGet("EnFormula/{codigo}")]
+    public async Task<ActionResult<bool>> ExisteEnFormula(string codigo)
+    {
+        var ExisteEnFormula = await _formulaRepository.InsumoEnFormula(codigo);
+        return ExisteEnFormula;
+    }
+
+    [HttpGet]
+    public async Task<IEnumerable<Formula>> Get()
+    {
+        try
         {
-            this._formulaRepository = formulaRepository;
+            return await _formulaRepository.ObtenerTodos();
         }
-
-        [HttpGet("EnFormula/{codigo}")]
-        public async Task<ActionResult<bool>> ExisteEnFormula(string codigo)
+        catch (Exception ex)
         {
-            var ExisteEnFormula = await _formulaRepository.InsumoEnFormula(codigo);
-            return ExisteEnFormula;
+            return null;
         }
+    }
 
-        [HttpGet]
-        public async Task<IEnumerable<Formula>> Get()
+    // GET: api/Formulas/BuscarPorCgProd/{CG_PROD}
+    [HttpGet("BuscarPorCgProd/{CG_PROD}")]
+    public async Task<IEnumerable<Formula>> BuscarPorCgProd(string CG_PROD)
+    {
+        var xSQL = string.Format($"Select * From Form2 where CG_PROD = '{CG_PROD}'");
+        try
         {
-            try
-            {
-                return await _formulaRepository.ObtenerTodos();
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            return await _formulaRepository.Obtener(f => f.Cg_Prod == CG_PROD).ToListAsync();
         }
-        
-        // GET: api/Formulas/BuscarPorCgProd/{CG_PROD}
-        [HttpGet("BuscarPorCgProd/{CG_PROD}")]
-        public async Task<IEnumerable<Formula>> BuscarPorCgProd(string CG_PROD)
+        catch (Exception ex)
         {
-            string xSQL = string.Format($"Select * From Form2 where CG_PROD = '{CG_PROD}'");
-            try
-            {
-                return await _formulaRepository.Obtener(f=> f.Cg_Prod == CG_PROD).ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                return new List<Formula>();
-            }
+            return new List<Formula>();
         }
+    }
 
-        [HttpGet("VerificaFormula")]
-        public async Task<ActionResult<bool>> ExisteEnFormula([FromQuery] List<string> insumos)
+    [HttpGet("VerificaFormula")]
+    public async Task<ActionResult<bool>> ExisteEnFormula([FromQuery] List<string> insumos)
+    {
+        if (insumos.Count == 0) return true;
+        var ExisteEnFormula = await _formulaRepository.InsumoEnFormula(insumos);
+
+        return ExisteEnFormula;
+    }
+
+    // POST: api/Formulas
+    [HttpPost]
+    public async Task<ActionResult<Formula>> PostFormula(Formula form)
+    {
+        try
         {
-            if (insumos.Count == 0) return true;
-            var ExisteEnFormula = await _formulaRepository.InsumoEnFormula(insumos);
-
-            return ExisteEnFormula;
+            await _formulaRepository.Agregar(form);
+            return CreatedAtAction("Get", new { id = form.Id }, form);
         }
-
-        // POST: api/Formulas
-        [HttpPost]
-        public async Task<ActionResult<Formula>> PostFormula(Formula form) {
-            try
-            {
-                await _formulaRepository.Agregar(form);
-                return CreatedAtAction("Get", new { id = form.Id }, form);
-            }
-            catch (DbUpdateException exx)
-            {
-                if (!await _formulaRepository.Existe(form.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        //POST: api/Formulas/PostList
-        [HttpPost("PostList")]
-        public async Task<ActionResult<List<Formula>>> PostList([FromBody] List<Formula> lista)
+        catch (DbUpdateException exx)
         {
-            try
-            {
-                var exito = await _formulaRepository.AgregarList(lista);
-                if (exito)
-                {
-                    return Ok(lista); 
-                }
-                else
-                {
-                    return BadRequest("Error al guardar formulas");
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            
+            if (!await _formulaRepository.Existe(form.Id))
+                return Conflict();
+            return BadRequest();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
+    }
+
+    //POST: api/Formulas/PostList
+    [HttpPost("PostList")]
+    public async Task<ActionResult<List<Formula>>> PostList([FromBody] List<Formula> lista)
+    {
+        try
+        {
+            var exito = await _formulaRepository.AgregarList(lista);
+            if (exito)
+                return Ok(lista);
+            return BadRequest("Error al guardar formulas");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 }

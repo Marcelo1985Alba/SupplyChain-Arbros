@@ -1,144 +1,121 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
-using SupplyChain.Shared.Models;
-using SupplyChain.Shared;
 
-namespace SupplyChain
+namespace SupplyChain;
+
+[Route("api/[controller]")]
+[ApiController]
+public class AreasController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AreasController : ControllerBase
+    private readonly AreasRepository _areasRepository;
+
+    public AreasController(AreasRepository areasRepository)
     {
-        private readonly AreasRepository _areasRepository;
+        _areasRepository = areasRepository;
+    }
 
-        public AreasController(AreasRepository areasRepository)
+    // GET: api/Areas
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Areas>>> GetAreas()
+    {
+        try
         {
-            this._areasRepository = areasRepository;
+            return await _areasRepository.ObtenerTodos();
         }
-
-        // GET: api/Areas
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Areas>>> GetAreas()
+        catch (Exception ex)
         {
-            try
-            {
-                return await _areasRepository.ObtenerTodos();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(ex);
         }
+    }
 
-        // GET: api/Areas/Existe/{id}
-        [HttpGet("Existe/{id}")]
-        public async Task<ActionResult<bool>> ExisteArea(int id)
+    // GET: api/Areas/Existe/{id}
+    [HttpGet("Existe/{id}")]
+    public async Task<ActionResult<bool>> ExisteArea(int id)
+    {
+        try
         {
-            try
-            {
-                return await _areasRepository.Existe(id);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return await _areasRepository.Existe(id);
         }
-
-        // PUT: api/Areas/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAreas(int id, Areas Area)
+        catch (Exception ex)
         {
-            if (id != Area.Id)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                await _areasRepository.Actualizar(Area);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _areasRepository.Existe(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-            return Ok(Area);
+            return BadRequest(ex);
         }
+    }
 
-        // POST: api/Areas
-        [HttpPost]
-        public async Task<ActionResult<Areas>> PostAreas(Areas Area)
+    // PUT: api/Areas/{id}
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutAreas(int id, Areas Area)
+    {
+        if (id != Area.Id) return BadRequest();
+
+        try
         {
-            try
-            {
-                await _areasRepository.Agregar(Area);
-                return CreatedAtAction("GetAreas", new { id = Area.Id }, Area);
-            }
-            catch (DbUpdateException exx)
-            {
-                if (!await _areasRepository.Existe(Area.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            await _areasRepository.Actualizar(Area);
         }
-
-        // DELETE: api/Areas/{id}
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Areas>> DeleteAreas(int id)
+        catch (DbUpdateConcurrencyException)
         {
-            var Area = await _areasRepository.ObtenerPorId(id);
-            if (Area == null)
-            {
+            if (!await _areasRepository.Existe(id))
                 return NotFound();
-            }
-
-            await _areasRepository.Remover(id);
-
-            return Area;
+            return BadRequest();
         }
-
-        // POST: api/Areas/PostList
-        [HttpPost("PostList")]
-        public async Task<ActionResult<Areas>> PostList(List<Areas> areas)
+        catch (Exception ex)
         {
-            try
-            {
-                foreach (var item in areas)
-                {
-                    await _areasRepository.Remover(item.Id);
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest();
-            }
-
-            return Ok();
+            return BadRequest(ex);
         }
+
+        return Ok(Area);
+    }
+
+    // POST: api/Areas
+    [HttpPost]
+    public async Task<ActionResult<Areas>> PostAreas(Areas Area)
+    {
+        try
+        {
+            await _areasRepository.Agregar(Area);
+            return CreatedAtAction("GetAreas", new { id = Area.Id }, Area);
+        }
+        catch (DbUpdateException exx)
+        {
+            if (!await _areasRepository.Existe(Area.Id))
+                return Conflict();
+            return BadRequest();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
+    }
+
+    // DELETE: api/Areas/{id}
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Areas>> DeleteAreas(int id)
+    {
+        var Area = await _areasRepository.ObtenerPorId(id);
+        if (Area == null) return NotFound();
+
+        await _areasRepository.Remover(id);
+
+        return Area;
+    }
+
+    // POST: api/Areas/PostList
+    [HttpPost("PostList")]
+    public async Task<ActionResult<Areas>> PostList(List<Areas> areas)
+    {
+        try
+        {
+            foreach (var item in areas) await _areasRepository.Remover(item.Id);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest();
+        }
+
+        return Ok();
     }
 }

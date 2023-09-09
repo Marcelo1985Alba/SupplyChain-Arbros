@@ -1,30 +1,20 @@
 ﻿@page "/Pdf/{codigo}/{accion}"
-@using Microsoft.AspNetCore.Components;
-@using Microsoft.JSInterop;
-@using SupplyChain;
-@using Syncfusion.Blazor.Navigations;
-@using Syncfusion.Blazor.Buttons;
-@using System;
-@using System.Collections.Generic;
-@using System.Linq;
-@using System.Net.Http;
-@using System.Net.Http.Json;
-@using System.Text.Json;
-@using System.Threading.Tasks;
-@using System.Web;
-@using System.IO;
-@using Syncfusion.Blazor.PdfViewer;
-@using SupplyChain.Shared;
+@using Syncfusion.Blazor.PdfViewer
+@using System.IO
+@using System.Text
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Navigations
 @*@using Syncfusion.Blazor.PdfViewerServer;*@
 
 @if (accion == null)
 {
-    <p><em>Loading...</em></p>
-
+    <p>
+        <em>Loading...</em>
+    </p>
 }
 else
 {
-
     if (accion == "RUTAOF")
     {
         if (codigo.Length < 6)
@@ -34,33 +24,31 @@ else
         }
         else
         {
-
             <div class="col-lg-12 control-section">
                 <div class="content-wrapper">
                     <div class="row">
-            <SfPdfViewer @ref="sfPdfViewerObj" ID="pdfViewerPlano" ServiceUrl="/api/Values" DocumentPath="@codigoLimpio.Trim()" 
-                         EnableErrorDialog="true" 
-                         Height="1250px" Width="100%"></SfPdfViewer>
-            @*<SfPdfViewer @ref="sfPdfViewerObj" ID="pdfViewerPlano" DocumentPath="@DocumentPath"
+                        <SfPdfViewer @ref="sfPdfViewerObj" ID="pdfViewerPlano" ServiceUrl="/api/Values" DocumentPath="@codigoLimpio.Trim()"
+                                     EnableErrorDialog="true"
+                                     Height="1250px" Width="100%">
+                        </SfPdfViewer>
+                        @*<SfPdfViewer @ref="sfPdfViewerObj" ID="pdfViewerPlano" DocumentPath="@DocumentPath"
                                          EnableErrorDialog="true" ServiceUrl="@api_url_pdf"
                                          Height="1250px" Width="100%"></SfPdfViewer>*@
 
 
                     </div>
                 </div>
-             </div>
+            </div>
         }
-
     }
 
     if (accion == "RUTACNC")
     {
-
         // Only get files that begin with the letter "c".
         //var ruta = rutas.Where(s => s.CAMPO == accion).FirstOrDefault();
         //string[] dirs = Directory.GetFiles(@$"{ruta.VALORC}", $"{codigo.Substring(0, 7)}*");
 
-        if (archivos is null)
+        if (archivosWithDataList is null)
         {
             <pem>Cargando..</pem>
         }
@@ -68,32 +56,51 @@ else
         {
             if (docsCargados)
             {
-
-                foreach (Archivo item in archivos)
+                foreach (var item in archivosWithDataList)
                 {
                     <div class="accordion" id="accordionExample">
                         <div class="card">
-                            <div class="card-header" id="@item.Id">
+                            <div class="card-header" id="@item.archivo.Id">
                                 <h2 class="mb-0">
-                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(item.Id)"
-                                            aria-expanded="false" aria-controls="collapse@(item.Id)">@item.Nombre
-
-                                    </button>
-                                    <SfButton IsPrimary="true" IconCss="fa fa-download"
-                                              OnClick="@(() => DescargarTxt(item.Nombre, item.ContenidoByte))" 
-                                              Content="Descargar"></SfButton>
+                                    <div class="row">
+                                        <div class="col-lg-5">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(item.archivo.Id)"
+                                                    aria-expanded="false" aria-controls="collapse@(item.archivo.Id)">
+                                                @item.archivo.Nombre
+                                            </button>
+                                            <SfButton IsPrimary="true" IconCss="fa fa-download"
+                                                      OnClick="@() => DescargarTxt(item.archivo.Nombre, item.archivo.ContenidoByte)"
+                                                      Content="Descargar">
+                                            </SfButton>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <SfDropDownList TItem="string" TValue="string" Placeholder="Seleccione operacion" @bind-Value="@item.operacion" DataSource="@Operacion">
+                                            </SfDropDownList>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <SfDropDownList TItem="Celdas" TValue="string" Placeholder="Seleccione la celda" @bind-Value="@item.celda" DataSource="@celdas">
+                                                <DropDownListFieldSettings Text="DES_CELDA" Value="DES_CELDA"/>
+                                            </SfDropDownList>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <SfButton IsPrimary="true" IconCss="fa fa-send"
+                                                      OnClick="@() => EnviarPrograma(item.archivo.Nombre, item.operacion, item.celda)"
+                                                      Content="Enviar">
+                                            </SfButton>
+                                        </div>
+                                    </div>
                                 </h2>
                             </div>
-                            <div id="collapse@(item.Id)" class="collapse" aria-labelledby="" data-parent="#accordionExample">
+                            <div id="collapse@(item.archivo.Id)" class="collapse" aria-labelledby="" data-parent="#accordionExample">
                                 <div class="card-body">
                                     @{
 
-                                        @foreach (string dataLine in item.Contenido)
+                                        @foreach (var dataLine in item.archivo.Contenido)
                                         {
-                                            @foreach (string dataItem in dataLine.Split(delimiterChar))
+                                            @foreach (var dataItem in dataLine.Split(delimiterChar))
                                             {
                                                 <label>@dataItem</label>
-                                                <br />
+                                                <br/>
                                             }
                                         }
                                     }
@@ -101,34 +108,31 @@ else
                             </div>
                         </div>
                     </div>
-                                                        }
-
+                }
             }
         }
-
-
-
-
     }
 
     if (accion == "RUTAENSAYO")
     {
-        if (archivos is null )
+        if (archivos is null)
         {
             VisibleSpinner = true;
         }
-        else if(archivos.Count == 0)
+        else if (archivos.Count == 0)
         {
             VisibleSpinner = false;
             <label>No existen registros de ensayos para el pedido numero @(codigo)</label>
         }
         else
         {
-            if(docsCargados) { }
+            if (docsCargados)
+            {
+            }
             VisibleSpinner = false;
             <SfAccordion ID="accordionPdfEnsayos">
                 <AccordionItems>
-                    @foreach (Archivo item in archivos)
+                    @foreach (var item in archivos)
                     {
                         var idPdf = $"pdfEns{item.Id}";
                         var doc_ubica = $"ENS_{codigo}_{item.Id}.pdf," + accion;
@@ -139,14 +143,13 @@ else
                             <ContentTemplate>
                                 <SfPdfViewer @ref="sfPdfViewerObj" ID="@idPdf"
                                              ServiceUrl="/api/Values" DocumentPath="@doc_ubica"
-                                             Height="1250px" Width="100%"></SfPdfViewer>
+                                             Height="1250px" Width="100%">
+                                </SfPdfViewer>
                             </ContentTemplate>
                         </AccordionItem>
                     }
                 </AccordionItems>
             </SfAccordion>
-            
-            
         }
     }
 }
@@ -156,9 +159,13 @@ else
     private string DocumentPath { get; set; } = "data:application/pdf;base64,";
     bool VisibleSpinner = false;
 
-    [Inject] protected HttpClient Http { get; set; }
+    [Inject]
+    protected HttpClient Http { get; set; }
 
-    [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
+    [Inject]
+    protected IJSRuntime JS { get; set; }
+
+    protected SfToast ToastObj;
 
     protected List<Solution> rutas;
     protected Solution Solution;
@@ -170,58 +177,93 @@ else
     string[] dirs;
     List<Archivo> archivos;
     bool docsCargados = false;
-    [Parameter] public string codigo { get; set; } = "";
-    [Parameter] public string accion { get; set; } = "";
-    [CascadingParameter] public MainLayout Layout { get; set; }
+
+    [Parameter]
+    public string codigo { get; set; } = "";
+
+    [Parameter]
+    public string accion { get; set; } = "";
+
+    [CascadingParameter]
+    public MainLayout Layout { get; set; }
+
+    private List<Celdas> celdas = new();
+    public string celda = "";
+    public string operacion = "";
+
+    public class fileWithData
+    {
+        public Archivo archivo { get; set; }
+        public string celda { get; set; }
+        public string operacion { get; set; }
+    }
+
+    List<fileWithData> archivosWithDataList = new();
+
+
+    [Inject]
+    protected CeldasService CeldasService { get; set; }
+
     SfPdfViewer sfPdfViewerObj;
     string codigoLimpio = "";
     protected bool existePdf = false;
+
+    public List<string> Operacion = new()
+    {
+        "receive",
+        "send"
+    };
+
     protected override async Task OnInitializedAsync()
     {
-        //MainLayout.Titulo = $"Codigo";
+    //MainLayout.Titulo = $"Codigo";
         VisibleSpinner = true;
 
-        // rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+    // rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 
         if (accion == "RUTAOF")
         {
             Layout.Titulo = $"Plano {codigo}";
             codigoLimpio = codigo + ".pdf," + accion;
-            //DocumentPath = await Http.GetFromJsonAsync<string>($"api/AdministracionArchivos/GetPdfNube/{codigoLimpio}/RUTAOF");
-            //archivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/ByParamRuta/{accion}/{codigo.Substring(0, 7) + ".pdf"}");
+    //DocumentPath = await Http.GetFromJsonAsync<string>($"api/AdministracionArchivos/GetPdfNube/{codigoLimpio}/RUTAOF");
+    //archivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/ByParamRuta/{accion}/{codigo.Substring(0, 7) + ".pdf"}");
 
-            // var file = await Http.GetByteArrayAsync($"api/AdministracionArchivos/GetPlano/{codigo.Substring(0, 7) + ".pdf"}/Load");
-            // string base64String = Convert.ToBase64String(file);
-            // DocumentPath = "data:application/pdf;base64," + base64String;
-            // await sfPdfViewerObj.Load(DocumentPath, null);
-
-
-
+    // var file = await Http.GetByteArrayAsync($"api/AdministracionArchivos/GetPlano/{codigo.Substring(0, 7) + ".pdf"}/Load");
+    // string base64String = Convert.ToBase64String(file);
+    // DocumentPath = "data:application/pdf;base64," + base64String;
+    // await sfPdfViewerObj.Load(DocumentPath, null);
         }
 
         if (accion == "RUTACNC" || accion == "RUTAENSAYO")
         {
-
             if (accion == "RUTACNC")
             {
                 Layout.Titulo = $"Listado Archivos {codigo}";
                 codigoLimpio = codigo.Substring(0, 7);
+                var response_2 = await CeldasService.Get();
+                if (!response_2.Error)
+                {
+                    celdas = response_2.Response;
+                }
             }
-
             if (accion == "RUTAENSAYO")
             {
                 Layout.Titulo = $"Ensayos Pedido {codigo}";
                 codigoLimpio = $"ENS_{codigo}_1.pdf";
             }
-
             archivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/ByParamRuta/{accion}/{codigoLimpio}");
-
-
-            //sfPdfViewerObj.lo();
+            foreach (var archivo in archivos)
+            {
+                archivosWithDataList.Add(new fileWithData
+                {
+                    archivo = archivo,
+                    celda = "",
+                    operacion = ""
+                });
+            }
+    //sfPdfViewerObj.lo();
             docsCargados = true;
         }
-
-
         VisibleSpinner = false;
     }
 
@@ -233,13 +275,13 @@ else
     private void DownloadText(string Nombre)
     {
         File.OpenRead(Nombre);
-        //JS.InvokeVoidAsync("BlazorDownloadFile", $"{Nombre}.txt", "text/plain", Nombre);
+    //JS.InvokeVoidAsync("BlazorDownloadFile", $"{Nombre}.txt", "text/plain", Nombre);
     }
 
-    private void Descargar(string fileName, string extension,byte[] fileBytes)
+    private void Descargar(string fileName, string extension, byte[] fileBytes)
     {
-        //byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
-        //File(filePath, "application/force-download", "file1.xlsx");
+    //byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+    //File(filePath, "application/force-download", "file1.xlsx");
 
         JS.SaveAs(fileName + extension, fileBytes);
     }
@@ -252,6 +294,56 @@ else
     private void DescargarTxt(string fileName, byte[] fileBytes)
     {
         Descargar(fileName, ".txt", fileBytes);
-
     }
+
+    private async Task EnviarPrograma(string fileName, string cel, string oper)
+    {
+        try
+        {
+            var baseUrl = "https://192.168.0.131:8080/autentio";
+            var url = $"{baseUrl}/upload.php";
+            var datosAEnviar = $"{cel.Trim()}, {oper.Trim()}, {fileName.Trim()}";
+            var contenido = new StringContent(datosAEnviar, Encoding.UTF8, "text/plain");
+            var response = await Http.PostAsync(url, contenido);
+            if (response.IsSuccessStatusCode)
+            {
+                await ToastMensajeExito("Archivo enviado correctamente");
+            }
+            else
+            {
+                await ToastMensajeError($"ERROR. Se intentó envíar {cel}, {operacion}, {fileName} y se obtuvo el siguiente error: {response.StatusCode}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+    }
+
+    private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
+    {
+        await ToastObj.ShowAsync(new ToastModel
+        {
+            Title = "EXITO!",
+            Content = content,
+            CssClass = "e-toast-success",
+            Icon = "e-success toast-icons",
+            ShowCloseButton = true,
+            ShowProgressBar = true
+        });
+    }
+
+    private async Task ToastMensajeError(string content = "Ocurrio un Error.")
+    {
+        await ToastObj.ShowAsync(new ToastModel
+        {
+            Title = "Error!",
+            Content = content,
+            CssClass = "e-toast-warning",
+            Icon = "e-warning toast-icons",
+            ShowCloseButton = true,
+            ShowProgressBar = true
+        });
+    }
+
 }

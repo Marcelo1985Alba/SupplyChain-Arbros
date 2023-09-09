@@ -1,58 +1,58 @@
 ﻿@page "/proyectos"
-@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.Grids
+@using EditMode = Syncfusion.Blazor.Gantt.EditMode
 @using Syncfusion.Blazor.Gantt
 @inject HttpClient Http
+
 @code {
     private string UserName { get; set; } = "";
     private string Password { get; set; } = "";
-    private Boolean DisableTab { get; set; } = true;
-    private Boolean Disabled { get; set; } = false;
-    private int SelectedTab { get; set; } = 0;
+    private bool DisableTab { get; set; } = true;
+    private bool Disabled { get; set; }
+    private int SelectedTab { get; set; }
 
-    protected List<Pedidos> pedidos = new List<Pedidos>();
+    protected List<Pedidos> pedidos = new();
 
     [CascadingParameter]
     public MainLayout Layout { get; set; }
+
     public List<TaskData> TaskCollection { get; set; }
     public string NumberFormat = "C";
 
     protected override async Task OnInitializedAsync()
     {
         Layout.Titulo = "Proyectos";
-        this.TaskCollection = GetTaskCollection();
-        pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos");
-
+        TaskCollection = GetTaskCollection();
+        pedidos = await Http.GetFromJsonAsync<List<Pedidos>>("api/Pedidos");
     }
 
     private void OnClicked()
     {
-        if (this.UserName == "" && this.Password == "")
+        if (UserName == "" && Password == "")
         {
             Console.WriteLine("clicked");
         }
-        else if (this.UserName == "")
+        else if (UserName == "")
         {
             Console.WriteLine("Enter the username");
         }
-        else if (this.Password == "")
+        else if (Password == "")
         {
             Console.WriteLine("Enter the password");
         }
-        else if (this.UserName.Length < 4)
+        else if (UserName.Length < 4)
         {
             Console.WriteLine("Username must be minimum 4 characters");
         }
         else
         {
-            this.UserName = "";
-            this.Password = "";
-            this.DisableTab = false;
-            this.Disabled = true;
-            this.SelectedTab = 1;
+            UserName = "";
+            Password = "";
+            DisableTab = false;
+            Disabled = true;
+            SelectedTab = 1;
         }
     }
+
     public class TaskData
     {
         public int TaskId { get; set; }
@@ -66,39 +66,45 @@
 
     public static List<TaskData> GetTaskCollection()
     {
-        List<TaskData> Tasks = new List<TaskData>() {
-    new TaskData() {
-        TaskId = 1,
-        TaskName = "Project initiation",
-        StartDate = new DateTime(2019, 04, 02),
-        EndDate = new DateTime(2019, 04, 21),
-        SubTasks = (new List <TaskData> () {
-            new TaskData() {
-                TaskId = 2,
-                TaskName = "Identify Site location",
+        var Tasks = new List<TaskData>
+        {
+            new()
+            {
+                TaskId = 1,
+                TaskName = "Project initiation",
                 StartDate = new DateTime(2019, 04, 02),
-                Duration = "4",
-                Progress = 50,
-            },
-            new TaskData() {
-                TaskId = 3,
-                TaskName = "Perform soil test",
-                StartDate = new DateTime(2019, 04, 02),
-                Duration = "4",
-                Progress = 50,
+                EndDate = new DateTime(2019, 04, 21),
+                SubTasks = new List<TaskData>
+                {
+                    new()
+                    {
+                        TaskId = 2,
+                        TaskName = "Identify Site location",
+                        StartDate = new DateTime(2019, 04, 02),
+                        Duration = "4",
+                        Progress = 50
+                    },
+                    new()
+                    {
+                        TaskId = 3,
+                        TaskName = "Perform soil test",
+                        StartDate = new DateTime(2019, 04, 02),
+                        Duration = "4",
+                        Progress = 50
+                    }
+                }
             }
-        })
-    }
-};
+        };
 
         return Tasks;
     }
 
 }
+
 <SfGantt DataSource="@TaskCollection" Height="450px" Width="700px" AllowFiltering="true" AllowSorting="true">
     <GanttTaskFields Id="TaskId" Name="TaskName" StartDate="StartDate" EndDate="EndDate" Duration="Duration" Progress="Progress" Child="SubTasks">
     </GanttTaskFields>
-    <GanttEditSettings AllowEditing="true" Mode="Syncfusion.Blazor.Gantt.EditMode.Auto" AllowTaskbarEditing="true"></GanttEditSettings>
+    <GanttEditSettings AllowEditing="true" Mode="EditMode.Auto" AllowTaskbarEditing="true"></GanttEditSettings>
     <GanttColumns>
         <GanttColumn Field="TaskId" HeaderText="Task ID" TextAlign="TextAlign.Right" Width="100"></GanttColumn>
         <GanttColumn Field="TaskName" HeaderText="Task Name" Width="250"></GanttColumn>
@@ -110,10 +116,10 @@
 <SfGantt DataSource="@pedidos" Height="450px" Width="700px" AllowFiltering="true" AllowSorting="true">
     <GanttTaskFields Id="TaskId" Name="TaskName" StartDate="StartDate" EndDate="EndDate" Duration="Duration" Progress="Progress" Child="SubTasks">
     </GanttTaskFields>
-    <GanttEditSettings AllowEditing="true" Mode="Syncfusion.Blazor.Gantt.EditMode.Auto" AllowTaskbarEditing="true"></GanttEditSettings>
+    <GanttEditSettings AllowEditing="true" Mode="EditMode.Auto" AllowTaskbarEditing="true"></GanttEditSettings>
     <GanttColumns>
-        <GanttColumn Field=@nameof(Pedidos.CG_ART) HeaderText="Codigo" TextAlign="TextAlign.Right" Width="100"></GanttColumn>
-        <GanttColumn Field=@nameof(Pedidos.DES_ART) HeaderText="Descrip" Width="250"></GanttColumn>
+        <GanttColumn Field="@nameof(Pedidos.CG_ART)" HeaderText="Codigo" TextAlign="TextAlign.Right" Width="100"></GanttColumn>
+        <GanttColumn Field="@nameof(Pedidos.DES_ART)" HeaderText="Descrip" Width="250"></GanttColumn>
         @*<GanttColumn Field="Progress" HeaderText="Progress" Format="@NumberFormat" Width="250"></GanttColumn>*@
     </GanttColumns>
 </SfGantt>

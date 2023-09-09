@@ -1,8 +1,8 @@
 ﻿@page "/tiempos-productivos"
-@inherits TiemposProductivosBase
-@using Syncfusion.Blazor.PivotView
+@using ValueType = Syncfusion.Blazor.Charts.ValueType
 @using Syncfusion.Blazor.Charts
-@using Syncfusion.Blazor.DropDowns
+@using LabelPosition = Syncfusion.Blazor.Charts.LabelPosition
+@inherits TiemposProductivosBase
 
 
 <SfSpinner @ref="SpinnerObj" Label="Cargando..." Type="SpinnerType.Bootstrap" Size="100" @bind-Visible="@SpinnerVisible"/>
@@ -12,8 +12,10 @@
         <div class="card">
             <div class="card-body">
                 <SfChart Title="Tiempos Productivos" Width="100%">
-                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                    <ChartArea>
+                        <ChartAreaBorder Width="0"></ChartAreaBorder>
+                    </ChartArea>
+                    <ChartPrimaryXAxis ValueType="ValueType.Category"
                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                     </ChartPrimaryXAxis>
 
@@ -24,49 +26,49 @@
                         <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
                     </ChartPrimaryYAxis>
                     <ChartSeriesCollection>
-                        <ChartSeries DataSource="@vProdMaquinaCM1" XName="XSerieName" YName="YSerieName" Name="CM1" 
-                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                        <ChartSeries DataSource="@vProdMaquinaCM1" XName="XSerieName" YName="YSerieName" Name="CM1"
+                                     Type="ChartSeriesType.Column">
                             <ChartMarker>
-                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                <ChartDataLabel Visible="false" Position="LabelPosition.Top">
                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                 </ChartDataLabel>
                             </ChartMarker>
                         </ChartSeries>
                         <ChartSeries DataSource="@vProdMaquinaCN1" XName="XSerieName" YName="YSerieName" Name="CN1"
-                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                     Type="ChartSeriesType.Column">
                             <ChartMarker>
-                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                <ChartDataLabel Visible="false" Position="LabelPosition.Top">
                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                 </ChartDataLabel>
                             </ChartMarker>
                         </ChartSeries>
                         <ChartSeries DataSource="@vProdMaquinaCN2" XName="XSerieName" YName="YSerieName" Name="CN2"
-                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                     Type="ChartSeriesType.Column">
                             <ChartMarker>
-                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                <ChartDataLabel Visible="false" Position="LabelPosition.Top">
                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                 </ChartDataLabel>
                             </ChartMarker>
                         </ChartSeries>
                         <ChartSeries DataSource="@vProdMaquinaCN3" XName="XSerieName" YName="YSerieName" Name="CN3"
-                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                     Type="ChartSeriesType.Column">
                             <ChartMarker>
-                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                <ChartDataLabel Visible="false" Position="LabelPosition.Top">
                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                 </ChartDataLabel>
                             </ChartMarker>
                         </ChartSeries>
                         <ChartSeries DataSource="@vProdMaquinaCN4" XName="XSerieName" YName="YSerieName" Name="CN4"
-                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                     Type="ChartSeriesType.Column">
                             <ChartMarker>
-                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                <ChartDataLabel Visible="false" Position="LabelPosition.Top">
                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                 </ChartDataLabel>
                             </ChartMarker>
                         </ChartSeries>
                     </ChartSeriesCollection>
                     <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
-                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetalle(a))"></ChartEvents>
+                    <ChartEvents OnPointClick="@(async a => await MostrarDetalle(a))"></ChartEvents>
                 </SfChart>
             </div>
 
@@ -79,8 +81,10 @@
         <div class="card">
             <div class="card-body">
                 <SfChart @ref="refChartDetalle" Title="@TituloGraficoMensual" Width="100%">
-                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                    <ChartArea>
+                        <ChartAreaBorder Width="0"></ChartAreaBorder>
+                    </ChartArea>
+                    <ChartPrimaryXAxis ValueType="ValueType.Category"
                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                     </ChartPrimaryXAxis>
 
@@ -92,17 +96,17 @@
                     </ChartPrimaryYAxis>
                     <ChartSeriesCollection>
                         <ChartSeries DataSource="@vProdMaquinaMes" XName="XSerieName" YName="YSerieName" Name="Prod"
-                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                     Type="ChartSeriesType.Column">
                             <ChartMarker>
-                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                <ChartDataLabel Visible="false" Position="LabelPosition.Top">
                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                 </ChartDataLabel>
                             </ChartMarker>
                         </ChartSeries>
                         <ChartSeries DataSource="@vProdMaquinaMesSetup" XName="XSerieName" YName="YSerieName" Name="Setup"
-                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                     Type="ChartSeriesType.Column">
                             <ChartMarker>
-                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                <ChartDataLabel Visible="false" Position="LabelPosition.Top">
                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                 </ChartDataLabel>
                             </ChartMarker>
@@ -110,7 +114,7 @@
                     </ChartSeriesCollection>
                     <ChartTooltipSettings Enable="true">
                     </ChartTooltipSettings>
-                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetalleMes(a))"></ChartEvents>
+                    <ChartEvents OnPointClick="@(async a => await MostrarDetalleMes(a))"></ChartEvents>
                 </SfChart>
             </div>
 
@@ -123,12 +127,11 @@
         <div class="card">
             <div class="card-body">
                 <SfGrid DataSource="@vProdMaquinaDetalle" GridLines="GridLine.Both" AllowResizing="true"
-                        AllowPaging="true" AllowSorting="true" EnableAutoFill="true"  Height="450"> </SfGrid>
+                        AllowPaging="true" AllowSorting="true" EnableAutoFill="true" Height="450">
+                </SfGrid>
             </div>
         </div>
 
     </div>
 
 </div>
-
-    

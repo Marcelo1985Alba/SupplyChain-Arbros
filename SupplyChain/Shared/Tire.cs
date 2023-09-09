@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace SupplyChain.Shared.Models
+namespace SupplyChain.Shared.Models;
+
+public class Tire
 {
-    public class Tire
-    {
-        public int Tipoo { get; set; } = 0;
-        [Required(ErrorMessage = "Ingresar Tipo de Operacion")]
-        public string Descrip { get; set; } = "";
-    }
+    public int Tipoo { get; set; } = 0;
+
+    [Required(ErrorMessage = "Ingresar Tipo de Operacion")]
+    public string Descrip { get; set; } = "";
 }

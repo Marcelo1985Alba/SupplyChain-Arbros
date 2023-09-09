@@ -1,34 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
-namespace SupplyChain
+namespace SupplyChain;
+
+[Route("api/[controller]")]
+[ApiController]
+public class OrdenesFabricacionEncabezadoController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class OrdenesFabricacionEncabezadoController : ControllerBase
+    private readonly AppDbContext _context;
+
+    public OrdenesFabricacionEncabezadoController(AppDbContext context)
     {
-        private readonly AppDbContext _context;
+        _context = context;
+    }
 
-        public OrdenesFabricacionEncabezadoController(AppDbContext context)
+    [HttpGet("{idOrden}")]
+    public async Task<ActionResult<ModeloOrdenFabricacionEncabezado>> Get(int idOrden)
+    {
+        try
         {
-            _context = context;
-        }
-
-        [HttpGet("{idOrden}")]
-        public async Task<ActionResult<ModeloOrdenFabricacionEncabezado>> Get(int idOrden)
-        {
-            try
-            {
-                string xSQL = String.Format(@"SELECT C.CG_ORDF, 
+            var xSQL = string.Format(@"SELECT C.CG_ORDF, 
                 CASE WHEN C.FECHA_PREVISTA_FABRICACION IS NULL THEN GETDATE() ELSE C.FECHA_PREVISTA_FABRICACION END FECHA_PREVISTA_FABRICACION,
                 C.DIASFAB, C.HORASFAB, C.CG_PROD, C.DES_PROD, C.CANT, convert(numeric(6, 2), (C.CANTFAB * 100 / C.CANT)) AS AVANCE,
                 CASE WHEN A.PEDIDO IS NULL THEN 0 ELSE A.PEDIDO END PEDIDO,
@@ -56,20 +49,19 @@ namespace SupplyChain
                 CASE WHEN B.DES_TRANS IS NULL THEN rtrim(B.DES_TRANS) END AS DES_TRANS, 
                 CASE WHEN B.DIRTRANS IS NULL THEN rtrim(B.DIRTRANS) END AS DIRTRANS,
                 P.CG_ORDEN  " +
-                "FROM PROGRAMA C " +
-                "LEFT JOIN PROD P ON C.CG_PROD = P.CG_PROD " +
-                "LEFT JOIN PEDCLI A ON A.PEDIDO = C.PEDIDO " +
-                "LEFT JOIN TRANSP B ON A.CG_TRANS = B.CG_TRANS " +
-                "WHERE C.CG_ORDF = {0}"
+                                     "FROM PROGRAMA C " +
+                                     "LEFT JOIN PROD P ON C.CG_PROD = P.CG_PROD " +
+                                     "LEFT JOIN PEDCLI A ON A.PEDIDO = C.PEDIDO " +
+                                     "LEFT JOIN TRANSP B ON A.CG_TRANS = B.CG_TRANS " +
+                                     "WHERE C.CG_ORDF = {0}"
                 , idOrden);
 
-                return await _context.OrdenesFabricacionEncabezado.FromSqlRaw(xSQL).FirstOrDefaultAsync();
-            }
-            catch(Exception ex)
-            {
-                //return BadRequest(ex.Message);
-                return new ModeloOrdenFabricacionEncabezado();
-            }
+            return await _context.OrdenesFabricacionEncabezado.FromSqlRaw(xSQL).FirstOrDefaultAsync();
+        }
+        catch (Exception ex)
+        {
+            //return BadRequest(ex.Message);
+            return new ModeloOrdenFabricacionEncabezado();
         }
     }
 }

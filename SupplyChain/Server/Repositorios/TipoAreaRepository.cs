@@ -1,19 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SupplyChain.Server.Data.Repository;
-using SupplyChain.Shared;
-using SupplyChain.Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using SupplyChain.Server.Data.Repository;
 
-namespace SupplyChain.Server.Repositorios
+namespace SupplyChain.Server.Repositorios;
+
+public class TipoAreaRepository : Repository<TipoArea, int>
 {
-    public class TipoAreaRepository : Repository<TipoArea, int>
+    public TipoAreaRepository(AppDbContext appDb) : base(appDb)
     {
-        public TipoAreaRepository(AppDbContext appDb) : base(appDb)
-        {
-
-        }
     }
 }

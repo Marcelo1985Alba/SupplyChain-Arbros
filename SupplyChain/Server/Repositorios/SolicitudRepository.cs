@@ -1,110 +1,96 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SupplyChain.Server.Data.Repository;
-using SupplyChain.Shared;
-using SupplyChain.Shared.Enum;
-using SupplyChain.Shared.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Data.Repository;
+using SupplyChain.Shared;
+using SupplyChain.Shared.Enum;
 
-namespace SupplyChain.Server.Repositorios
+namespace SupplyChain.Server.Repositorios;
+
+public class SolicitudRepository : Repository<Solicitud, int>
 {
-    public class SolicitudRepository : Repository<Solicitud, int>
+    private readonly ClienteExternoRepository _clienteExternoRepository;
+    private readonly PrecioArticulosRepository _precioArticulosRepository;
+
+    public SolicitudRepository(AppDbContext appDbContext, PrecioArticulosRepository precioArticulosRepository,
+        ClienteExternoRepository clienteExternoRepository) : base(appDbContext)
     {
-        private readonly PrecioArticulosRepository _precioArticulosRepository;
-        private readonly ClienteExternoRepository _clienteExternoRepository;
+        _precioArticulosRepository = precioArticulosRepository;
+        _clienteExternoRepository = clienteExternoRepository;
+    }
 
-        public SolicitudRepository(AppDbContext appDbContext, PrecioArticulosRepository precioArticulosRepository,
-            ClienteExternoRepository clienteExternoRepository) : base (appDbContext)
+    public override async Task<Solicitud> ObtenerPorId(int Id)
+    {
+        var solicitud = await DbSet.FindAsync(Id);
+        if (solicitud != null)
         {
-            this._precioArticulosRepository = precioArticulosRepository;
-            this._clienteExternoRepository = clienteExternoRepository;
-        }
-
-        public override async Task<Solicitud> ObtenerPorId(int Id)
-        {
-            var solicitud = await DbSet.FindAsync(Id);
-            if (solicitud != null)
+            var precioArticulo = await _precioArticulosRepository.ObtenerPorId(solicitud.Producto);
+            if (precioArticulo != null)
             {
-                var precioArticulo = await _precioArticulosRepository.ObtenerPorId(solicitud.Producto);
-                if (precioArticulo != null)
-                {
-                    solicitud.PrecioArticulo = precioArticulo;
-                    solicitud.Des_Prod = precioArticulo.Descripcion;
-                }
-
-
-                if (solicitud.CG_CLI > 0)
-                {
-                    var cliente = await _clienteExternoRepository.ObtenerTodosQueryable()
-                        .Where(c => c.CG_CLI == solicitud.CG_CLI.ToString()).FirstOrDefaultAsync();
-                    if (cliente != null)
-                    {
-                        solicitud.Des_Cli = cliente.DESCRIPCION;
-                    } 
-                }
+                solicitud.PrecioArticulo = precioArticulo;
+                solicitud.Des_Prod = precioArticulo.Descripcion;
             }
 
-            return solicitud;
-        }
 
-        public async Task<List<vSolicitudes>> ObtenerVista(TipoFiltro tipoFiltro = TipoFiltro.Todos)
-        {
-            if (tipoFiltro == TipoFiltro.Todos)
+            if (solicitud.CG_CLI > 0)
             {
-                return await Db.vSolicitudes.ToListAsync();
-            }
-
-            if (tipoFiltro == TipoFiltro.Pendientes)
-            {
-                return await Db.vSolicitudes.Where(s => !s.TienePresupuesto).ToListAsync();
-            }
-            return await Db.vSolicitudes.Where(s => s.TienePresupuesto).ToListAsync();
-        }
-
-        public async Task AsignarClientByCuit(string cuit, Solicitud solicitud)
-        {
-            //cuit = cuit.Insert(2, "-");
-            //cuit = cuit.Insert(cuit.Length - 1, "-");
-            var cliente = await Db.ClientesExternos.FirstOrDefaultAsync(c=> c.CUIT.Trim() == cuit);
-            if (cliente != null)
-            {
-                solicitud.CG_CLI = Convert.ToInt32(cliente.CG_CLI);
+                var cliente = await _clienteExternoRepository.ObtenerTodosQueryable()
+                    .Where(c => c.CG_CLI == solicitud.CG_CLI.ToString()).FirstOrDefaultAsync();
+                if (cliente != null) solicitud.Des_Cli = cliente.DESCRIPCION;
             }
         }
 
+        return solicitud;
+    }
 
-        /// <summary>
-        /// guarda en servicio en caso de ser una reparacion
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public async override Task Agregar(Solicitud entity)
+    public async Task<List<vSolicitudes>> ObtenerVista(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+    {
+        if (tipoFiltro == TipoFiltro.Todos) return await Db.vSolicitudes.ToListAsync();
+
+        if (tipoFiltro == TipoFiltro.Pendientes)
+            return await Db.vSolicitudes.Where(s => !s.TienePresupuesto).ToListAsync();
+        return await Db.vSolicitudes.Where(s => s.TienePresupuesto).ToListAsync();
+    }
+
+    public async Task AsignarClientByCuit(string cuit, Solicitud solicitud)
+    {
+        //cuit = cuit.Insert(2, "-");
+        //cuit = cuit.Insert(cuit.Length - 1, "-");
+        var cliente = await Db.ClientesExternos.FirstOrDefaultAsync(c => c.CUIT.Trim() == cuit);
+        if (cliente != null) solicitud.CG_CLI = Convert.ToInt32(cliente.CG_CLI);
+    }
+
+
+    /// <summary>
+    ///     guarda en servicio en caso de ser una reparacion
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    public override async Task Agregar(Solicitud entity)
+    {
+        await base.Agregar(entity);
+
+
+        if (entity.Producto.StartsWith("0012") || entity.Producto.StartsWith("00100")) //SI ES REPARACION
         {
-            await base.Agregar(entity);
-
-
-            if (entity.Producto.StartsWith("0012") || entity.Producto.StartsWith("00100")) //SI ES REPARACION
+            //TODO: ENVIAR A SERVICIO
+            var servicio = new Service
             {
-                //TODO: ENVIAR A SERVICIO
-                var servicio = new Service()
-                {
-                    SOLICITUD = entity.Id,
-                    CG_CLI = entity.CG_CLI,
-                    CLIENTE = entity.Des_Cli,
-                    DESCARTICULO = entity.Des_Prod
-                };
+                SOLICITUD = entity.Id,
+                CG_CLI = entity.CG_CLI,
+                CLIENTE = entity.Des_Cli,
+                DESCARTICULO = entity.Des_Prod
+            };
 
-                Db.Servicios.Add(servicio);
-                await Db.SaveChangesAsync();
-            }
-
+            Db.Servicios.Add(servicio);
+            await Db.SaveChangesAsync();
         }
+    }
 
-        internal async Task<vSolicitudes> GetVSolicitudById(int id)
-        {
-            return await Db.vSolicitudes.FirstOrDefaultAsync(s=> s.Id == id);
-        }
+    internal async Task<vSolicitudes> GetVSolicitudById(int id)
+    {
+        return await Db.vSolicitudes.FirstOrDefaultAsync(s => s.Id == id);
     }
 }

@@ -12,32 +12,33 @@
                 AllowExcelExport="true" AllowGrouping="true" ID="grdEstadosPedidos" Toolbar="@Toolbaritems"
                 AllowSorting="true" AllowPaging="true" AllowFiltering="true" GridLines="GridLine.Both">
             <GridEvents RowDataBound="RowBound" TValue="vEstadoPedido"
-                        CommandClicked="CommandClickHandler" OnToolbarClick="@(async(a)=> await ClickHandler(a))"
-                        OnActionBegin="@((a)=> OnActionBeginHandler(a))" OnActionComplete="OnActionCompleteHandler"
-                        QueryCellInfo="@((a)=> QueryCellInfoHandler(a))"></GridEvents>
-            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                        CommandClicked="CommandClickHandler" OnToolbarClick="@(async a => await ClickHandler(a))"
+                        OnActionBegin="@(a => OnActionBeginHandler(a))" OnActionComplete="OnActionCompleteHandler"
+                        QueryCellInfo="@(a => QueryCellInfoHandler(a))">
+            </GridEvents>
+            <GridSelectionSettings CheckboxOnly="true" Type="SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="12" PageSizes="true"></GridPageSettings>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="false" Mode="EditMode.Dialog"></GridEditSettings>
             <GridColumns>
                 <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                <GridColumn Field=@nameof(vEstadoPedido.FE_PED) HeaderText="FECHA PEDIDO" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
-                <GridColumn Field=@nameof(vEstadoPedido.PEDIDO) HeaderText="PEDIDO" Width="120"></GridColumn>
-                <GridColumn Field=@nameof(vEstadoPedido.NUM_OCI) HeaderText="OC INTERNA" Width="150"></GridColumn>
-                <GridColumn Field=@nameof(vEstadoPedido.REMITO) HeaderText="REMITO" Width="120"></GridColumn>
-                <GridColumn Field=@nameof(vEstadoPedido.FACTURA) HeaderText="FACTURA" Width="120"></GridColumn>
-                <GridColumn Field=@nameof(vEstadoPedido.DESCRIPCION_ESTADO_PEDIDO) HeaderText="ESTADO PEDIDO" Width="180">
+                <GridColumn Field="@nameof(vEstadoPedido.FE_PED)" HeaderText="FECHA PEDIDO" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
+                <GridColumn Field="@nameof(vEstadoPedido.PEDIDO)" HeaderText="PEDIDO" Width="120"></GridColumn>
+                <GridColumn Field="@nameof(vEstadoPedido.NUM_OCI)" HeaderText="OC INTERNA" Width="150"></GridColumn>
+                <GridColumn Field="@nameof(vEstadoPedido.REMITO)" HeaderText="REMITO" Width="120"></GridColumn>
+                <GridColumn Field="@nameof(vEstadoPedido.FACTURA)" HeaderText="FACTURA" Width="120"></GridColumn>
+                <GridColumn Field="@nameof(vEstadoPedido.DESCRIPCION_ESTADO_PEDIDO)" HeaderText="ESTADO PEDIDO" Width="180">
                 </GridColumn>
-                <GridColumn Field=@nameof(vEstadoPedido.CG_CLI) HeaderText="CODIGO CLIENTE" Width="150"></GridColumn>
-                <GridColumn Field=@nameof(vEstadoPedido.DES_CLI) HeaderText="DESCRIPCION CLIENTE" Width="230"></GridColumn>
-                <GridColumn Field=@nameof(vEstadoPedido.CG_ART) HeaderText="CODIGO PRODUCTO" Width="180"></GridColumn>
-                <GridColumn Field=@nameof(vEstadoPedido.DES_ART) HeaderText="PRODUCTO" Width="250"></GridColumn>
-                <GridColumn Field=@nameof(vEstadoPedido.CANTPED) HeaderText="CANTIDAD" Width="150"></GridColumn>
-                <GridColumn Field=@nameof(vEstadoPedido.UNID) HeaderText="UNIDAD" Width="120"></GridColumn>
-                <GridColumn Field=@nameof(vEstadoPedido.ORCO) HeaderText="ORDEN DE COMPRA" Width="120"></GridColumn>
+                <GridColumn Field="@nameof(vEstadoPedido.CG_CLI)" HeaderText="CODIGO CLIENTE" Width="150"></GridColumn>
+                <GridColumn Field="@nameof(vEstadoPedido.DES_CLI)" HeaderText="DESCRIPCION CLIENTE" Width="230"></GridColumn>
+                <GridColumn Field="@nameof(vEstadoPedido.CG_ART)" HeaderText="CODIGO PRODUCTO" Width="180"></GridColumn>
+                <GridColumn Field="@nameof(vEstadoPedido.DES_ART)" HeaderText="PRODUCTO" Width="250"></GridColumn>
+                <GridColumn Field="@nameof(vEstadoPedido.CANTPED)" HeaderText="CANTIDAD" Width="150"></GridColumn>
+                <GridColumn Field="@nameof(vEstadoPedido.UNID)" HeaderText="UNIDAD" Width="120"></GridColumn>
+                <GridColumn Field="@nameof(vEstadoPedido.ORCO)" HeaderText="ORDEN DE COMPRA" Width="120"></GridColumn>
 
-                <GridColumn Field=@nameof(vEstadoPedido.FE_PREV) HeaderText="FECHA PREVISTA" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
-                <GridColumn Field=@nameof(vEstadoPedido.OBSERITEM) HeaderText="OBSERVACIONES" Width="220"></GridColumn>
+                <GridColumn Field="@nameof(vEstadoPedido.FE_PREV)" HeaderText="FECHA PREVISTA" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
+                <GridColumn Field="@nameof(vEstadoPedido.OBSERITEM)" HeaderText="OBSERVACIONES" Width="220"></GridColumn>
             </GridColumns>
             <SfSpinner Type="SpinnerType.Fabric" Size="50" Label="Cargando..." @bind-Visible="@SpinnerVisible"></SfSpinner>
         </SfGrid>
@@ -47,8 +48,9 @@
     {
         <FormRemito Show="@popupFormVisible" Pedido="@PedidoSeleccionado" CondicionesEntrega="@condicionesEntrega"
                     CondicionesPagos="@condicionesPagos" Transportes="@transportes" DireccionesEntregas="@direccionesEntregas"
-                    OnGuardar="@((p)=> OnRemitoGuardado(p))"
-                    OnCerrar="@(()=> popupFormVisible = false)"></FormRemito>
+                    OnGuardar="@(p => OnRemitoGuardado(p))"
+                    OnCerrar="@(() => popupFormVisible = false)">
+        </FormRemito>
     }
 
 

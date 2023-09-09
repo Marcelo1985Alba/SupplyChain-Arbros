@@ -1,24 +1,9 @@
 ﻿@page "/fabricacion"
-@using Syncfusion.Blazor.Grids
-@using Syncfusion.Blazor.Data
-@using Syncfusion.Blazor.Calendars
-@using Syncfusion.Blazor.DropDowns
-@using Syncfusion.Blazor.Inputs
-@using System.Configuration;
-@using System.Data.SqlClient;
-@using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.Popups
-@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.BarcodeGenerator
-@using Syncfusion.Blazor.Spinner
-@using System.Text.Json
-@using System.Linq
-@using Syncfusion.Blazor.SplitButtons
 @attribute [Authorize]
 @inject IJSRuntime JsRuntime
-@using SupplyChain
-@using System.Net.Http.Json
 @inject NavigationManager NavManager
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Calendars
 @inherits SupplyChain.Pages.Fab.FabricPageBase
 
 <SfSpinner @ref="refSpinner" @bind-Visible="@VisibleProperty" Type="SpinnerType.Bootstrap4" ZIndex="5000">
@@ -28,8 +13,8 @@
 <div class="row mt-3">
     <div class="col-12">
         <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
-                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
-                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+                           OnReiniciar="async () => await OnReiniciarGrilla()"
+                           OnVistaSelected="async v => await OnVistaSeleccionada(v)"/>
     </div>
 
 </div>
@@ -53,11 +38,12 @@
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems"
                             GridLines="GridLine.Both">
                         <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
-                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                        <GridSelectionSettings Type="SelectionType.Multiple"></GridSelectionSettings>
                         <GridEvents OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler"
-                                    OnActionBegin="@(async(a)=> await Begin(a))"
-                                    DataBound="@(async()=> await DataBoundHandler())"
-                                    OnActionComplete="@(async(a)=> await ActionComplete(a))" TValue="Fabricacion"></GridEvents>
+                                    OnActionBegin="@(async a => await Begin(a))"
+                                    DataBound="@(async () => await DataBoundHandler())"
+                                    OnActionComplete="@(async a => await ActionComplete(a))" TValue="Fabricacion">
+                        </GridEvents>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                         <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
                             <HeaderTemplate>
@@ -67,19 +53,20 @@
                             </HeaderTemplate>
                             <Template>
                                 @{
-                                    var f = (context as Fabricacion);
+                                    var f = context as Fabricacion;
                                     <div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="">Orden de Fabricacion:</label>
-                                                <br />
+                                                <br/>
                                                 <SfNumericTextBox ID="CG_ORDF"
-                                                                  Format="N0" @bind-Value="@(f.CG_ORDF)" Enabled="false"></SfNumericTextBox>
+                                                                  Format="N0" @bind-Value="@(f.CG_ORDF)" Enabled="false">
+                                                </SfNumericTextBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
                                                 <label class="">Estado:</label>
-                                                <br />
+                                                <br/>
 
                                                 <SfDropDownList TItem="EstadosCargaMaquina" @bind-Value="@(f.CG_ESTADOCARGA)"
                                                                 TValue="int" ID="CG_ESTADO" DataSource="@listaEstadosCargaMaquina">
@@ -92,28 +79,29 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="">Cantidad:</label>
-                                                <br />
+                                                <br/>
                                                 <SfNumericTextBox ID="CANT" Format="N" @bind-Value="@(f.CANT)" Enabled="false"></SfNumericTextBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
                                                 <label>Fecha de Planificada:</label>
-                                                <br />
+                                                <br/>
                                                 <SfDatePicker ID="FE_PLAN" @bind-Value="@(f.FE_PLAN)"
-                                                              Enabled="true" Placeholder="Fecha de entrega"></SfDatePicker>
+                                                              Enabled="true" Placeholder="Fecha de entrega">
+                                                </SfDatePicker>
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="">Fecha de Curso:</label>
-                                                <br />
+                                                <br/>
                                                 <SfDatePicker ID="FE_CURSO" @bind-Value="@(f.FE_CURSO)" Enabled="true"></SfDatePicker>
                                                 @*<ValidationMessage For="@(()=> f.FE_CURSO)"></ValidationMessage>*@
                                             </div>
 
                                             <div class="form-group col-md-6">
                                                 <label class="e-label-top">Celda:</label>
-                                                <br />
+                                                <br/>
 
                                                 <SfDropDownList TItem="Celdas" @bind-Value="f.CG_CELDA"
                                                                 TValue="string" ID="CG_CELDA" DataSource="@listaCelda">
@@ -127,12 +115,12 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="">Prioridad:</label>
-                                                <br />
+                                                <br/>
                                                 <SfNumericTextBox ID="ORDEN" Format="N" @bind-Value="@(f.ORDEN)" Enabled="true"></SfNumericTextBox>
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label class="">Dias Fab:</label>
-                                                <br />
+                                                <br/>
                                                 <SfNumericTextBox ID="diasFab" Format="N4" @bind-Value="@(f.DIASFAB)" Enabled="true"></SfNumericTextBox>
                                             </div>
                                         </div>
@@ -152,11 +140,10 @@
                             <GridColumn Field=@nameof(Fabricacion.CG_ESTADOCARGA) Format="N2" HeaderText="Estado" TextAlign="TextAlign.Left" Width="240px">
                                 <Template>
                                     @{
-                                        var ordfab = (context as Fabricacion);
+                                        var ordfab = context as Fabricacion;
                                         if (listaEstadosCargaMaquina.Any(c => c.CG_ESTADO == ordfab.CG_ESTADOCARGA))
                                         {
                                             <span>@listaEstadosCargaMaquina.Where(c => c.CG_ESTADO == ordfab.CG_ESTADOCARGA).FirstOrDefault().ESTADO.Trim()</span>
-
                                         }
                                     }
                                 </Template>
@@ -172,13 +159,12 @@
                                         TextAlign="TextAlign.Left" AllowEditing="true" Width="340px">
                                 <Template>
                                     @{
-                                        var ordfab = (context as Fabricacion);
+                                        var ordfab = context as Fabricacion;
                                         if (!string.IsNullOrEmpty(ordfab.CG_CELDA))
                                         {
                                             if (listaCelda.Any(c => c.Id.Trim() == ordfab.CG_CELDA.Trim()))
                                             {
                                                 <span>@listaCelda.Where(c => c.Id.Trim() == ordfab.CG_CELDA.Trim()).FirstOrDefault().DES_CELDA</span>
-
                                             }
                                         }
                                     }
@@ -242,5 +228,6 @@
         background-color: none;
     }
 </style>
+
 @code {
 }

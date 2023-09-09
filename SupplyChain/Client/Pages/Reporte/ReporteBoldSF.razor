@@ -1,13 +1,11 @@
 ﻿@page "/reporting"
-@using Microsoft.JSInterop
-@using Microsoft.AspNetCore.Components
 @inject IJSRuntime JSRuntime
 @*@using BlazorReportingTools.Data;*@
-<div id="reportViewerControl" style="width: 100%;height:800px" />
+<div id="reportViewerControl" style="width: 100%;height:800px"/>
 
 @code {
 
-    private string reportPathInput = "Report1";
+    private readonly string reportPathInput = "Report1";
     // ReportViewer options
     //BoldReportViewerOptions viewerOptions = new BoldReportViewerOptions();
 
@@ -19,10 +17,10 @@
 
     /// https://docs.microsoft.com/en-us/aspnet/core/blazor-reporting/components?view=aspnetcore-3.0
     /// https://github.com/aspnet/AspNetCore.Docs/tree/master/aspnetcore/blazor-reporting/common/samp   les/3.x/BlazorSample
-
     protected override void OnAfterRender(bool firstRender)
     {
-        // If you want to load in intialization you can make use of this.
+    // If you want to load in intialization you can make use of this.
         RenderReport();
     }
+
 }

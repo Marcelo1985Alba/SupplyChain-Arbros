@@ -3,32 +3,32 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace SupplyChain
+namespace SupplyChain;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ModelosGenericosIntStringController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ModelosGenericosIntStringController : ControllerBase
+    private readonly AppDbContext _context;
+
+    public ModelosGenericosIntStringController(AppDbContext context)
     {
-        private readonly AppDbContext _context;
+        _context = context;
+    }
 
-        public ModelosGenericosIntStringController(AppDbContext context)
+    [HttpGet("{SQLcommandString}")]
+    public async Task<IEnumerable<ModeloGenericoIntString>> Get(string SQLcommandString)
+    {
+        try
         {
-            _context = context;
+            var xResultado = await _context.ModelosGenericosIntString
+                .FromSqlRaw(SQLcommandString)
+                .ToListAsync();
+            return xResultado;
         }
-
-        [HttpGet("{SQLcommandString}")]
-        public async Task<IEnumerable<ModeloGenericoIntString>> Get(string SQLcommandString)
+        catch
         {
-            try
-            {
-                List<ModeloGenericoIntString> xResultado = await _context.ModelosGenericosIntString.FromSqlRaw(SQLcommandString)
-                    .ToListAsync();
-                return xResultado;
-            }
-            catch
-            {
-                return new List<ModeloGenericoIntString>();
-            }
+            return new List<ModeloGenericoIntString>();
         }
     }
 }

@@ -1,6 +1,5 @@
-﻿@using Syncfusion.Blazor.Calendars
-
-@page "/ingenieria/costos"
+﻿@page "/ingenieria/costos"
+@using Syncfusion.Blazor.Calendars
 @inherits BaseCostos
 
 <SfSpinner @ref="@refSpinner" @bind-Visible="@SpinnerVisible" Label="Procesando..." Size="80" Type="SpinnerType.Bootstrap">
@@ -92,7 +91,7 @@
                                 </div>
                                 <div class="form-group col-lg-2 col-md-2 col-sm-12 col-12">
                                     <label class="col-form-label text-info">Utilidad</label>
-                                    <input type="text" class="form-control" value="@($"{Math.Floor(precio - costoProd - costoGen * (decimal)costos.coeficiente)} ({(((precio - costoProd - costoGen * (decimal)costos.coeficiente) / precio) * 100):0.00}%)")" disabled="true"/>
+                                    <input type="text" class="form-control" value="@($"{Math.Floor(precio - costoProd - costoGen * (decimal)costos.coeficiente)} ({(precio - costoProd - costoGen * (decimal)costos.coeficiente) / precio * 100:0.00}%)")" disabled="true"/>
                                 </div>
                                 <div class="form-group col-lg-2 col-md-2 col-sm-12 col-12">
                                     <label class="col-form-label text-info">Despiece.</label>
@@ -127,11 +126,11 @@
                         {
                         }
                         <SfGrid @ref="@GridProdForm" DataSource="@DataOrdeProductosFormulas" AllowPaging="true" AllowFiltering="true" AllowSorting="true" ID="ProdForm"
-                                GridLines="GridLine.Both" Toolbar="@(new List<string>() { "ExcelExport" })" AllowExcelExport="true">
+                                GridLines="GridLine.Both" Toolbar="@(new List<string> { "ExcelExport" })" AllowExcelExport="true">
                             <GridPageSettings PageSizes="true"></GridPageSettings>
                             <GridEvents TValue="vIngenieriaProductosFormulas"
-                                        QueryCellInfo="(async (args) => await QueryCellInfoHandler(args))"
-                                        CommandClicked="(async (args) => await CommandClickHandler(args))">
+                                        QueryCellInfo="async args => await QueryCellInfoHandler(args)"
+                                        CommandClicked="async args => await CommandClickHandler(args)">
                             </GridEvents>
                             <GridColumns>
                                 <GridColumn Field=@nameof(vIngenieriaProductosFormulas.CG_PROD) HeaderText="Producto" Width="120"></GridColumn>
@@ -146,7 +145,7 @@
                                 <GridColumn HeaderText="Despiece" Width="30px">
                                     <GridCommandColumns>
                                         <GridCommandColumn Type="CommandButtonType.None" Title="Despiece"
-                                                           ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-list-ul black", Content = "", CssClass = "botonGrilla" })"/>
+                                                           ButtonOption="@new CommandButtonOptions { IconCss = "fa fa-list-ul black", Content = "", CssClass = "botonGrilla" }"/>
                                     </GridCommandColumns>
                                 </GridColumn>
                             </GridColumns>
@@ -168,11 +167,11 @@
                             <h4 class="mb-3">Elija el Producto</h4>
                         </div>
                         <SfGrid @ref="gridCostos" DataSource="@Busquedalist" Height="100%" Width="100%">
-                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                            <GridSelectionSettings Type="SelectionType.Multiple"></GridSelectionSettings>
                             <GridEvents RowSelected="OnSelected" TValue="Producto"></GridEvents>
                             <GridColumns>
-                                <GridColumn Field=@nameof(Producto.Id) HeaderText="Producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                                <GridColumn Field=@nameof(Producto.DES_PROD) HeaderText="Descripción" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field="@nameof(Producto.Id)" HeaderText="Producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                <GridColumn Field="@nameof(Producto.DES_PROD)" HeaderText="Descripción" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                             </GridColumns>
                         </SfGrid>
                         @{
@@ -201,7 +200,7 @@
                     <SfGrid @ref="GridDespiece" DataSource="@listaDespiece" ID="Despiece"
                             GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true"
                             Height="100%" Width="100%" Toolbar="@Toolbaritems" AllowExcelExport="true">
-                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                        <GridSelectionSettings Type="SelectionType.Single"></GridSelectionSettings>
                         <GridTemplates>
                             <DetailTemplate>
                                 @{
@@ -212,38 +211,38 @@
                                             AllowPaging="true" AllowResizing="true" AllowReordering="true"
                                             DataSource="@insumo.formulasSemielaborado">
                                         <GridColumns>
-                                            <GridColumn Field=@nameof(Formula.CANT_MAT) HeaderText="CANTIDAD" Width="110"></GridColumn>
-                                            <GridColumn Field=@nameof(Formula.Cg_Mat) HeaderText="CG_MAT" Width="110"></GridColumn>
-                                            <GridColumn Field=@nameof(Formula.Cg_Se) HeaderText="CG_SE" Width="150"></GridColumn>
-                                            <GridColumn Field=@nameof(Formula.COSTO) Format="N2" HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                            <GridColumn Field="@nameof(Formula.CANT_MAT)" HeaderText="CANTIDAD" Width="110"></GridColumn>
+                                            <GridColumn Field="@nameof(Formula.Cg_Mat)" HeaderText="CG_MAT" Width="110"></GridColumn>
+                                            <GridColumn Field="@nameof(Formula.Cg_Se)" HeaderText="CG_SE" Width="150"></GridColumn>
+                                            <GridColumn Field="@nameof(Formula.COSTO)" Format="N2" HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                                         </GridColumns>
                                     </SfGrid>
                                 </div>
                             </DetailTemplate>
                         </GridTemplates>
                         <GridColumns>
-                            <GridColumn Field=@nameof(DespiecePlanificacion.CG_SE) HeaderText="Semi Elaborado" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(DespiecePlanificacion.CG_MAT) HeaderText="Materia prima" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                            <GridColumn Field=@nameof(DespiecePlanificacion.CANT_MAT) HeaderText="Cant" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(DespiecePlanificacion.DES_PROD) HeaderText="Descripción" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                            <GridColumn Field=@nameof(DespiecePlanificacion.COSTO) Format="N2" HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                            <GridColumn Field=@nameof(DespiecePlanificacion.STOCK) Format="N2" HeaderText="Stock" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                            <GridColumn Field=@nameof(DespiecePlanificacion.CANT_MAT) Format="N2" HeaderText="Cantidad Necesaria de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                            <GridColumn Field=@nameof(DespiecePlanificacion.COMP_DE_ENTRADA) Format="N2" HeaderText="Comprometido Entrada" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                            <GridColumn Field=@nameof(DespiecePlanificacion.STOCK_CORREGIDO) Format="N2" HeaderText="Stock Corregido" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                            <GridColumn Field=@nameof(DespiecePlanificacion.SALDO) Format="N2" HeaderText="Saldo de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                            <GridColumn Field=@nameof(DespiecePlanificacion.CANT_PLANEADAS) Format="N2" HeaderText="Cantidad Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                            <GridColumn Field=@nameof(DespiecePlanificacion.SALDO_PLANEADAS) Format="N2" HeaderText="Saldo Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                            <GridColumn Field=@nameof(DespiecePlanificacion.CANT_TOTAL) Format="N2" HeaderText="Cantidad Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                            <GridColumn Field=@nameof(DespiecePlanificacion.SALDO_TOTAL) Format="N2" HeaderText="Saldo Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field="@nameof(DespiecePlanificacion.CG_SE)" HeaderText="Semi Elaborado" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field="@nameof(DespiecePlanificacion.CG_MAT)" HeaderText="Materia prima" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field="@nameof(DespiecePlanificacion.CANT_MAT)" HeaderText="Cant" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field="@nameof(DespiecePlanificacion.DES_PROD)" HeaderText="Descripción" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field="@nameof(DespiecePlanificacion.COSTO)" Format="N2" HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field="@nameof(DespiecePlanificacion.STOCK)" Format="N2" HeaderText="Stock" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field="@nameof(DespiecePlanificacion.CANT_MAT)" Format="N2" HeaderText="Cantidad Necesaria de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field="@nameof(DespiecePlanificacion.COMP_DE_ENTRADA)" Format="N2" HeaderText="Comprometido Entrada" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field="@nameof(DespiecePlanificacion.STOCK_CORREGIDO)" Format="N2" HeaderText="Stock Corregido" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field="@nameof(DespiecePlanificacion.SALDO)" Format="N2" HeaderText="Saldo de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field="@nameof(DespiecePlanificacion.CANT_PLANEADAS)" Format="N2" HeaderText="Cantidad Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field="@nameof(DespiecePlanificacion.SALDO_PLANEADAS)" Format="N2" HeaderText="Saldo Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field="@nameof(DespiecePlanificacion.CANT_TOTAL)" Format="N2" HeaderText="Cantidad Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            <GridColumn Field="@nameof(DespiecePlanificacion.SALDO_TOTAL)" Format="N2" HeaderText="Saldo Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                         </GridColumns>
                         <GridAggregates>
                             <GridAggregate>
                                 <GridAggregateColumns>
-                                    <GridAggregateColumn Field=@nameof(DespiecePlanificacion.COSTO) Type="AggregateType.Sum" Format="C2">
+                                    <GridAggregateColumn Field="@nameof(DespiecePlanificacion.COSTO)" Type="AggregateType.Sum" Format="C2">
                                         <FooterTemplate>
                                             @{
-                                                var aggregate = (context as AggregateTemplateContext);
+                                                var aggregate = context as AggregateTemplateContext;
                                                 <div>
                                                     <p>Costo total de producto: @aggregate.Sum</p>
                                                 </div>

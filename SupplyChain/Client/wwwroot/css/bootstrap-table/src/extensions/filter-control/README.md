@@ -1,6 +1,7 @@
 # Table Filter Control
 
-Use Plugin: [bootstrap-table-filter-control](https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/filter-control)
+Use
+Plugin: [bootstrap-table-filter-control](https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/filter-control)
 
 ## Usage
 

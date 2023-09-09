@@ -8,7 +8,6 @@
 </SfToast>
 <BuscadorEmergente Height="620px" TItem="vEstadoPedido" Titulo="Listado de Pedidos" Visible="@PopupBuscadorVisible"
                    DataSource="@pedidosEstados" IsModal="true" Width="90%" HeightGrid="270px" TipoSeleccion="SelectionType.Single"
-                   Columnas="@(new string[] { "FE_PED", "PEDIDO", "CG_CLI", "DES_CLI", "NUM_OCI", "CG_ART", "DES_ART", 
-                               "CANTPED", "DESCRIPCION_ESTADO_PEDIDO"})"
+                   Columnas="@(new[] { "FE_PED", "PEDIDO", "CG_CLI", "DES_CLI", "NUM_OCI", "CG_ART", "DES_ART", "CANTPED", "DESCRIPCION_ESTADO_PEDIDO" })"
                    OnObjetoSeleccionado="SendObjectSelected"
-                   OnCerrarDialog="CerrarDialog" />
+                   OnCerrarDialog="CerrarDialog"/>

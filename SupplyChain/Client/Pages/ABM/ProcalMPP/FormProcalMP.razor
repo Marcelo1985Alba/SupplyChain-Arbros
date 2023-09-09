@@ -1,15 +1,11 @@
-﻿@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Calendars
-@using Syncfusion.Blazor.DropDowns
-@using SupplyChain.Client.Pages.ABM.ProcalMPP
-@inherits FormProcalMPBase
+﻿@inherits FormProcalMPBase
 
 
 <SfToast ID="toast_default" @ref="ToastObj">
     <ToastPosition X="center" Y="Top"></ToastPosition>
 </SfToast>
 
-<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">  
+<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
     <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
     <DialogTemplates>
         <Header>
@@ -27,22 +23,22 @@
             <EditForm Model="procalMP" OnValidSubmit="@GuardarProducto">
                 <DataAnnotationsValidator/>
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                   <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales" role="tab" aria-controls="pills-home" aria-selected="true">Datos Generales</a>
-                   </li>
+                    </li>
                 </ul>
-              <div class="tab-content" id="pills-tabContent">
-                  <div class="tab-pane fade show active" id="pills-DatosGenerales" role="tabpanel" aria-labelledby="pills-home-tab">
-                      <div>
-                          <div class="form-row">
-                              <div class="form-group col-md-6">
-                                  <label class="e-float-text e-label-top">Codigo: </label>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-DatosGenerales" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Codigo: </label>
                                     <SfNumericTextBox ID="Codigo" @bind-Value="@(procalMP.Id)" Enabled="@procalMP.ESNUEVO"></SfNumericTextBox>
-                              </div>
-                              <div class="form-group col-md-6">
-                                  <label class="e-float-text e-float-top">Descal: </label>
-                                  <SfTextBox ID="Descal" @bind-Value="@(procalMP.DESCAL)"></SfTextBox>
-                              </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-float-top">Descal: </label>
+                                    <SfTextBox ID="Descal" @bind-Value="@(procalMP.DESCAL)"></SfTextBox>
+                                </div>
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-float-top">Carcal: </label>
                                     <SfTextBox ID="Carcal" @bind-Value="@(procalMP.CARCAL)"></SfTextBox>
@@ -67,7 +63,7 @@
                                     <label class="e-float-text e-float-top">Tole2: </label>
                                     <SfNumericTextBox ID="Tole2" @bind-Value="@(procalMP.TOLE2)"></SfNumericTextBox>
                                 </div>
-                                
+
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-float-top">Observ: </label>
                                     <SfTextBox ID="Observ" @bind-Value="@(procalMP.OBSERV)"></SfTextBox>
@@ -84,17 +80,17 @@
                                     <label class="e-float-text e-float-top">Observ2: </label>
                                     <SfTextBox ID="Observ2" @bind-Value="@(procalMP.OBSERV2)"></SfTextBox>
                                 </div>
-                                
-                              <div class="form-group col-md-6">
+
+                                <div class="form-group col-md-6">
                                     <label class="e-float-text e-float-top">Prioridad: </label>
                                     <SfNumericTextBox ID="Prioridad" @bind-Value="@(procalMP.PRIORIDAD)"></SfNumericTextBox>
                                 </div>
 
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
             </EditForm>
         </Content>
     </DialogTemplates>

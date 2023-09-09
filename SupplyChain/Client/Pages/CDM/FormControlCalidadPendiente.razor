@@ -1,7 +1,5 @@
 ﻿@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.DropDowns
-@using Syncfusion.Blazor.Calendars
-@using SupplyChain.Client.Pages.CDM
+@using SelectionType = Syncfusion.Blazor.Grids.SelectionType
 @inherits FormCargaValoresBase
 
 <SfToast ID="toast_default" @ref="ToastObj">
@@ -18,25 +16,26 @@
             }
             else
             {
-                <p>@controlCalidadPendientes.CG_ART  -  @controlCalidadPendientes.DES_ART</p>
-                <p>Vale: @controlCalidadPendientes.VALE  -  Despacho: @controlCalidadPendientes.DESPACHO</p>
+                <p>@controlCalidadPendientes.CG_ART - @controlCalidadPendientes.DES_ART</p>
+                <p>Vale: @controlCalidadPendientes.VALE - Despacho: @controlCalidadPendientes.DESPACHO</p>
             }
         </Header>
         <Content>
             @if (segGrilla.Count != 0)
             {
-                <EditForm id="formControlCalidad" Model="controlCalidadPendientes" OnValidSubmit="@(async()=> await Guardar())">
-                    <ObjectGraphDataAnnotationsValidator />
-                    <ValidationSummary />
+                <EditForm id="formControlCalidad" Model="controlCalidadPendientes" OnValidSubmit="@(async () => await Guardar())">
+                    <ObjectGraphDataAnnotationsValidator/>
+                    <ValidationSummary/>
                     <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false"
-                        @ref="refGridItems" DataSource="@segGrilla" Width="100%" ID="grdItemsProcalMP"
-                        AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
-                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                            @ref="refGridItems" DataSource="@segGrilla" Width="100%" ID="grdItemsProcalMP"
+                            AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
+                        <GridSelectionSettings Type="SelectionType.Single"></GridSelectionSettings>
                         <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowConfirmDialog="false"
-                                      Mode="@Syncfusion.Blazor.Grids.EditMode.Batch">
+                                          Mode="@EditMode.Batch">
                             <GridEvents TValue="vControlCalidadPendientes" OnBatchDelete="BatchDeleteHandler"
-                                    QueryCellInfo="(async(args)=> await QueryCellInfoHandler(args))"
-                                    CellSaved="CellSavedHandler" OnBatchAdd="BatchAddHandler" OnBatchSave="BatchSaveHandler"></GridEvents>
+                                        QueryCellInfo="async args => await QueryCellInfoHandler(args)"
+                                        CellSaved="CellSavedHandler" OnBatchAdd="BatchAddHandler" OnBatchSave="BatchSaveHandler">
+                            </GridEvents>
                         </GridEditSettings>
                         <GridColumns>
                             <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
@@ -55,7 +54,7 @@
             @if (segGrilla.Count != 0)
             {
                 <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
-                <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async()=>await Hide())" IconCss="fa fa-window-close-o"></SfButton>
+                <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async () => await Hide())" IconCss="fa fa-window-close-o"></SfButton>
             }
         </FooterTemplate>
     </DialogTemplates>

@@ -1,19 +1,11 @@
 ﻿@page "/control-calidad/ControlCalidad"
-@using Syncfusion.Blazor.Grids
-@using Syncfusion.Blazor.Inputs
-@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Data
-@using Syncfusion.Blazor.DropDowns
-@using SupplyChain
-@using Syncfusion.Blazor.Calendars
-@using SupplyChain.Client.Shared
 @inherits PageControlCalidadPendientesBase
 
 <div class="row">
     <div class="col-12">
         <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
-                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
-                           OnVistaSelected="(async(v) => await OnVistaSeleccionada(v))" />
+                           OnReiniciar="async () => await OnReiniciarGrilla()"
+                           OnVistaSelected="async v => await OnVistaSeleccionada(v)"/>
     </div>
 </div>
 
@@ -27,34 +19,35 @@
                 AllowExcelExport="true" AllowGrouping="true" ID="grdControlCalidad" AllowFiltering="true"
                 AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
-            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+            <GridSelectionSettings Type="SelectionType.Single"></GridSelectionSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" RowSelected="rowSelected"
-                        OnActionComplete="OnActionCompleteHandler" TValue="Pedidos"></GridEvents>
+                        OnActionComplete="OnActionCompleteHandler" TValue="Pedidos">
+            </GridEvents>
             <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
-                ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog">
+                              ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog">
             </GridEditSettings>
             <GridColumns>
                 <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.CG_ART) HeaderText="Codigo" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.DES_ART) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.DESPACHO) HeaderText="Despacho" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.STOCK) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.VALE) HeaderText="Vale" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.FE_MOV) HeaderText="Fecha Mov." TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.REMITO) HeaderText="Remito" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.AVISO) HeaderText="Aviso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.OCOMPRA) HeaderText="Orden de Compra" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.CG_PROVE) HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(Pedidos.UNID) HeaderText="Unid" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field="@nameof(Pedidos.CG_ART)" HeaderText="Codigo" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="150px"></GridColumn>
+                <GridColumn Field="@nameof(Pedidos.DES_ART)" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field="@nameof(Pedidos.DESPACHO)" HeaderText="Despacho" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field="@nameof(Pedidos.STOCK)" HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field="@nameof(Pedidos.VALE)" HeaderText="Vale" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field="@nameof(Pedidos.FE_MOV)" HeaderText="Fecha Mov." TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field="@nameof(Pedidos.REMITO)" HeaderText="Remito" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field="@nameof(Pedidos.AVISO)" HeaderText="Aviso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field="@nameof(Pedidos.OCOMPRA)" HeaderText="Orden de Compra" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field="@nameof(Pedidos.CG_PROVE)" HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field="@nameof(Pedidos.UNID)" HeaderText="Unid" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
             </GridColumns>
-            <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner> 
-            </SfGrid>
-        </div>
-       @if(popupFormVisible)
-        {
-            <FormControlCalidadPendiente controlCalidadPendientes="pendienteSeleccionado" Show="popupFormVisible" OnCerrar="OnCerrarDialog"></FormControlCalidadPendiente>
-        }
+            <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
+        </SfGrid>
+    </div>
+    @if (popupFormVisible)
+    {
+        <FormControlCalidadPendiente controlCalidadPendientes="pendienteSeleccionado" Show="popupFormVisible" OnCerrar="OnCerrarDialog"></FormControlCalidadPendiente>
+    }
 </div>
 
 <style>

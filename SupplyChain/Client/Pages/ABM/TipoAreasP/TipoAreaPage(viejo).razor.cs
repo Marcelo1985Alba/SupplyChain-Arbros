@@ -1,32 +1,45 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using SupplyChain.Shared.Models;
-using Syncfusion.Blazor.Grids;
-using Syncfusion.Blazor.Navigations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Navigations;
+using Action = Syncfusion.Blazor.Grids.Action;
 
-namespace SupplyChain
+namespace SupplyChain;
+
+public class TipoAreaPageBase : ComponentBase
 {
-    public class TipoAreaPageBase : ComponentBase
+    protected List<EstaActivo> ActivoData = new()
     {
-        [Inject] protected HttpClient Http { get; set; }
-        [Inject] protected IJSRuntime JsRuntime { get; set; }
-        protected SfGrid<TipoArea> Grid;
+        new EstaActivo() { BActivo = true, Text = "SI" },
+        new EstaActivo() { BActivo = false, Text = "NO" }
+    };
 
-        public bool Enabled = true;
-        public bool Disabled = false;
+    public bool Disabled = false;
+
+    public bool Enabled = true;
+    protected SfGrid<TipoArea> Grid;
+
+    private List<Moneda> MonedaData = new()
+    {
+        new Moneda() { ID = "Mon1", Text = "Peso Argentino" },
+        new Moneda() { ID = "Mon2", Text = "Dolar" },
+        new Moneda() { ID = "Mon3", Text = "Euro" }
+    };
 
 
-        protected List<TipoArea> tipoareas = new List<TipoArea>();
+    protected List<TipoArea> tipoareas = new();
 
 
-        protected List<Object> Toolbaritems = new List<Object>(){
+    protected List<object> Toolbaritems = new()
+    {
         "Search",
         "Add",
         "Edit",
@@ -36,142 +49,114 @@ namespace SupplyChain
         "ExcelExport"
     };
 
-        protected override async Task OnInitializedAsync()
-        {
-            tipoareas = await Http.GetFromJsonAsync<List<TipoArea>>("api/TipoArea");
-       
+    [Inject] protected HttpClient Http { get; set; }
+    [Inject] protected IJSRuntime JsRuntime { get; set; }
 
-            await base.OnInitializedAsync();
-        }
+    protected override async Task OnInitializedAsync()
+    {
+        tipoareas = await Http.GetFromJsonAsync<List<TipoArea>>("api/TipoArea");
 
-        public void ActionBeginHandler(ActionEventArgs<TipoArea> args)
+
+        await base.OnInitializedAsync();
+    }
+
+    public void ActionBeginHandler(ActionEventArgs<TipoArea> args)
+    {
+        if (args.RequestType == Action.BeginEdit)
+            Enabled = false;
+        else
+            Enabled = true;
+    }
+
+    public async Task ActionBegin(ActionEventArgs<TipoArea> args)
+    {
+        if (args.RequestType == Action.Save)
         {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
-            {
-                this.Enabled = false;
-            }
+            HttpResponseMessage response;
+            var found = tipoareas.Any(p => p.Id == args.Data.Id);
+            var ur = new TipoArea();
+
+            if (!found)
+                response = await Http.PostAsJsonAsync("api/TipoArea", args.Data);
             else
+                response = await Http.PutAsJsonAsync($"api/TipoArea/{args.Data.Id}", args.Data);
+
+            if (response.StatusCode == HttpStatusCode.Created)
             {
-                this.Enabled = true;
-            }
-        }
-        public class Moneda
-        {
-            public string ID { get; set; }
-            public string Text { get; set; }
-        }
-        List<Moneda> MonedaData = new List<Moneda> {
-            new Moneda() { ID= "Mon1", Text= "Peso Argentino"},
-            new Moneda() { ID= "Mon2", Text= "Dolar"},
-            new Moneda() { ID= "Mon3", Text= "Euro"}
-        };
-
-        public class EstaActivo
-        {
-            public bool BActivo { get; set; }
-            public string Text { get; set; }
-        }
-        protected List<EstaActivo> ActivoData = new List<EstaActivo> {
-            new EstaActivo() { BActivo= true, Text= "SI"},
-            new EstaActivo() { BActivo= false, Text= "NO"}};
-
-        public async Task ActionBegin(ActionEventArgs<TipoArea> args)
-        {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
-            {
-                HttpResponseMessage response;
-                bool found = tipoareas.Any(p => p.Id == args.Data.Id);
-                TipoArea ur = new TipoArea();
-
-                if (!found)
-                {
-                    response = await Http.PostAsJsonAsync("api/TipoArea", args.Data);
-
-                }
-                else
-                {
-
-                    response = await Http.PutAsJsonAsync($"api/TipoArea/{args.Data.Id}", args.Data);
-                }
-
-                if (response.StatusCode == System.Net.HttpStatusCode.Created)
-                {
-
-                }
-            }
-
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
-            {
-                await EliminarOperario(args);
             }
         }
 
-        private async Task EliminarOperario(ActionEventArgs<TipoArea> args)
+        if (args.RequestType == Action.Delete) await EliminarOperario(args);
+    }
+
+    private async Task EliminarOperario(ActionEventArgs<TipoArea> args)
+    {
+        try
         {
-            try
+            if (args.Data != null)
             {
-                if (args.Data != null)
+                var isConfirmed =
+                    await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar el Operario?");
+                if (isConfirmed)
+                    //operarios.Remove(operarios.Find(m => m.CG_OPER == args.Data.CG_OPER));
+                    await Http.DeleteAsync($"api/TipoArea/{args.Data.Id}");
+            }
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    public async Task ClickHandler(ClickEventArgs args)
+    {
+        if (args.Item.Text == "Copy")
+            if (Grid.SelectedRecords.Count > 0)
+                foreach (var selectedRecord in Grid.SelectedRecords)
                 {
-                    bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar el Operario?");
+                    var isConfirmed =
+                        await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar el Operario?");
                     if (isConfirmed)
                     {
-                        //operarios.Remove(operarios.Find(m => m.CG_OPER == args.Data.CG_OPER));
-                        await Http.DeleteAsync($"api/TipoArea/{args.Data.Id}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
+                        var Nuevo = new TipoArea();
 
-            }
-        }
+                        //Nuevo.CG_OPER = operarios.Max(s => s.CG_OPER) + 1;
+                        Nuevo.DES_TIPOAREA = selectedRecord.DES_TIPOAREA;
 
-        public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
-        {
-            if (args.Item.Text == "Copy")
-            {
-                if (this.Grid.SelectedRecords.Count > 0)
-                {
-                    foreach (TipoArea selectedRecord in this.Grid.SelectedRecords)
-                    {
-                        bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar el Operario?");
-                        if (isConfirmed)
+
+                        var response = await Http.PostAsJsonAsync("api/TipoArea", Nuevo);
+
+                        if (response.StatusCode == HttpStatusCode.Created)
                         {
-                            TipoArea Nuevo = new TipoArea();
-
-                            //Nuevo.CG_OPER = operarios.Max(s => s.CG_OPER) + 1;
-                            Nuevo.DES_TIPOAREA = selectedRecord.DES_TIPOAREA;
-                   
-
-                            var response = await Http.PostAsJsonAsync("api/TipoArea", Nuevo);
-
-                            if (response.StatusCode == System.Net.HttpStatusCode.Created)
-                            {
-                                Grid.Refresh();
-                                var tipoarea = await response.Content.ReadFromJsonAsync<TipoArea>();
-                                await InvokeAsync(StateHasChanged);
-                                Nuevo.Id = tipoarea.Id;
-                                tipoareas.Add(Nuevo);
-                                var itemsJson = JsonSerializer.Serialize(tipoarea);
-                                Console.WriteLine(itemsJson);
-                                //toastService.ShowToast($"Registrado Correctemente.Vale {StockGuardado.VALE}", TipoAlerta.Success);
-                                tipoareas.OrderByDescending(p => p.Id);
-                            }
-
+                            Grid.Refresh();
+                            var tipoarea = await response.Content.ReadFromJsonAsync<TipoArea>();
+                            await InvokeAsync(StateHasChanged);
+                            Nuevo.Id = tipoarea.Id;
+                            tipoareas.Add(Nuevo);
+                            var itemsJson = JsonSerializer.Serialize(tipoarea);
+                            Console.WriteLine(itemsJson);
+                            //toastService.ShowToast($"Registrado Correctemente.Vale {StockGuardado.VALE}", TipoAlerta.Success);
+                            tipoareas.OrderByDescending(p => p.Id);
                         }
                     }
                 }
-            }
-            if (args.Item.Text == "Excel Export")
-            {
-                await this.Grid.ExcelExport();
-            }
-        }
 
-        public void Refresh()
-        {
-            Grid.Refresh();
+        if (args.Item.Text == "Excel Export") await Grid.ExcelExport();
+    }
 
-        }
+    public void Refresh()
+    {
+        Grid.Refresh();
+    }
+
+    public class Moneda
+    {
+        public string ID { get; set; }
+        public string Text { get; set; }
+    }
+
+    public class EstaActivo
+    {
+        public bool BActivo { get; set; }
+        public string Text { get; set; }
     }
 }

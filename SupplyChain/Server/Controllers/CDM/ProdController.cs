@@ -2,456 +2,409 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared.Models;
 using SupplyChain.Shared.Prod;
 
-namespace SupplyChain
+namespace SupplyChain;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ProdController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProdController : ControllerBase
+    private readonly ProductoRepository _productoRepository;
+
+    public ProdController(ProductoRepository productoRepository)
     {
-        private readonly ProductoRepository _productoRepository;
+        _productoRepository = productoRepository;
+    }
 
-        public ProdController(ProductoRepository productoRepository)
+    // GET: api/Prod
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Producto>>> GetProd()
+    {
+        try
         {
-            this._productoRepository = productoRepository;
+            return await _productoRepository.ObtenerTodos();
         }
-
-        // GET: api/Prod
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Producto>>> GetProd()
+        catch (Exception ex)
         {
-            try
-            {
-                return await _productoRepository.ObtenerTodos();
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(ex);
         }
+    }
 
-        // GET: api/Prod
-        [HttpGet("ByTipo/{conMP}/{conSE}/{conPT}")]
-        public async Task<ActionResult<IEnumerable<Producto>>> Get(bool conMP, bool conSE, bool conPT)
+    // GET: api/Prod
+    [HttpGet("ByTipo/{conMP}/{conSE}/{conPT}")]
+    public async Task<ActionResult<IEnumerable<Producto>>> Get(bool conMP, bool conSE, bool conPT)
+    {
+        var cg_0rdenValues = new List<int>();
+        var query = _productoRepository.ObtenerTodosQueryable();
+        try
         {
-            List<int> cg_0rdenValues = new List<int>();
-            var query = _productoRepository.ObtenerTodosQueryable();
-            try
-            {
-                if (conMP)
-                {
-                    cg_0rdenValues.Add(4);
-                }
+            if (conMP) cg_0rdenValues.Add(4);
 
-                if (conSE)
-                {
-                    cg_0rdenValues.Add(2);
-                }
+            if (conSE) cg_0rdenValues.Add(2);
 
-                if (conPT)
-                {
-                    cg_0rdenValues.Add(1);
-                }
+            if (conPT) cg_0rdenValues.Add(1);
 
-                return await query.Where(p=> cg_0rdenValues.Contains(p.CG_ORDEN)).ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return await query.Where(p => cg_0rdenValues.Contains(p.CG_ORDEN)).ToListAsync();
         }
-
-        // GET: api/Productos/BuscarProducto/{CG_PROD}/{DES_PROD}
-        [HttpGet("BuscarProducto/{CG_PROD}/{DES_PROD}/{Busqueda}")]
-        public async Task<ActionResult<List<Producto>>> BuscarProducto(string CG_PROD, string DES_PROD, int Busqueda)
+        catch (Exception ex)
         {
-            List<Producto> lContiene = new();
-            if ((string.IsNullOrEmpty(CG_PROD) && string.IsNullOrEmpty(DES_PROD)) || (CG_PROD == "Vacio" && DES_PROD == "Vacio"))
-            {
-                lContiene = (await _productoRepository.ObtenerTodos())
-                    .Take(Busqueda).ToList();
-            }
-            else if (string.IsNullOrEmpty(DES_PROD) || DES_PROD == "Vacio")
-            {
-                lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD), Busqueda)
-                    .ToListAsync();
-                if (lContiene == null)
-                {
-                    return NotFound();
-                }
-
-
-
-            }
-            else if (string.IsNullOrEmpty(CG_PROD) || CG_PROD == "Vacio")
-            {
-                lContiene = await _productoRepository.Obtener(p => p.DES_PROD.Contains(DES_PROD), Busqueda)
-                    .ToListAsync();
-
-                if (lContiene == null)
-                {
-                    return NotFound();
-                }
-
-            }
-
-
-            else if (CG_PROD != "Vacio" && DES_PROD != "Vacio")
-            {
-                lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD)
-                    && p.DES_PROD.Contains(DES_PROD), Busqueda).ToListAsync();
-
-                if (lContiene == null)
-                {
-                    return NotFound();
-                }
-            }
-            return lContiene;
+            return BadRequest(ex);
         }
+    }
 
-        [HttpGet("Existe/{id}")]
-        public async Task<ActionResult<bool>> GetProd(string id)
+    // GET: api/Productos/BuscarProducto/{CG_PROD}/{DES_PROD}
+    [HttpGet("BuscarProducto/{CG_PROD}/{DES_PROD}/{Busqueda}")]
+    public async Task<ActionResult<List<Producto>>> BuscarProducto(string CG_PROD, string DES_PROD, int Busqueda)
+    {
+        List<Producto> lContiene = new();
+        if ((string.IsNullOrEmpty(CG_PROD) && string.IsNullOrEmpty(DES_PROD)) ||
+            (CG_PROD == "Vacio" && DES_PROD == "Vacio"))
         {
-            try
-            {
-                return await _productoRepository.Existe(id);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            lContiene = (await _productoRepository.ObtenerTodos())
+                .Take(Busqueda).ToList();
+        }
+        else if (string.IsNullOrEmpty(DES_PROD) || DES_PROD == "Vacio")
+        {
+            lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD), Busqueda)
+                .ToListAsync();
+            if (lContiene == null) return NotFound();
+        }
+        else if (string.IsNullOrEmpty(CG_PROD) || CG_PROD == "Vacio")
+        {
+            lContiene = await _productoRepository.Obtener(p => p.DES_PROD.Contains(DES_PROD), Busqueda)
+                .ToListAsync();
+
+            if (lContiene == null) return NotFound();
         }
 
 
-        [HttpGet("GetProdAndReparaciones")]
-        public async Task<ActionResult<IEnumerable<Producto>>> GetProdAndReparaciones()
+        else if (CG_PROD != "Vacio" && DES_PROD != "Vacio")
         {
-            try
-            {
-                return await _productoRepository
-                    .Obtener(p=> p.CG_ORDEN == 1 || p.CG_ORDEN == 13).ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-        // GET: api/Prod/5
-        [HttpGet("ExisteProducto/{id}")]
-        public async Task<ActionResult<bool>> ExisteProducto(string id)
-        {
-            var existe = await _productoRepository.Existe(id);
+            lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD)
+                                                               && p.DES_PROD.Contains(DES_PROD), Busqueda)
+                .ToListAsync();
 
-            return existe;
+            if (lContiene == null) return NotFound();
         }
 
+        return lContiene;
+    }
 
-        // GET: api/Prod/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Producto>> Get(string id)
+    [HttpGet("Existe/{id}")]
+    public async Task<ActionResult<bool>> GetProd(string id)
+    {
+        try
         {
-            var Prod = await _productoRepository.ObtenerPorId(id);
+            return await _productoRepository.Existe(id);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
+    }
+
+
+    [HttpGet("GetProdAndReparaciones")]
+    public async Task<ActionResult<IEnumerable<Producto>>> GetProdAndReparaciones()
+    {
+        try
+        {
+            return await _productoRepository
+                .Obtener(p => p.CG_ORDEN == 1 || p.CG_ORDEN == 13).ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
+    }
+
+    // GET: api/Prod/5
+    [HttpGet("ExisteProducto/{id}")]
+    public async Task<ActionResult<bool>> ExisteProducto(string id)
+    {
+        var existe = await _productoRepository.Existe(id);
+
+        return existe;
+    }
+
+
+    // GET: api/Prod/5
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Producto>> Get(string id)
+    {
+        var Prod = await _productoRepository.ObtenerPorId(id);
+
+        return Prod ?? (ActionResult<Producto>)NotFound();
+    }
+
+    // GET: api/Prod/5
+    [HttpGet("GetByFilter")]
+    public async Task<ActionResult<Producto>> GetByFilter([FromQuery] FilterProd filter)
+    {
+        try
+        {
+            var Prod = await _productoRepository.ObtenerPorId(filter.Codigo);
 
             return Prod ?? (ActionResult<Producto>)NotFound();
         }
-
-        // GET: api/Prod/5
-        [HttpGet("GetByFilter")]
-        public async Task<ActionResult<Producto>> GetByFilter([FromQuery]FilterProd filter)
+        catch (Exception ex)
         {
-            try
-            {
-                var Prod = await _productoRepository.ObtenerPorId(filter.Codigo);
+            return NotFound();
+        }
+    }
 
-                return Prod ?? (ActionResult<Producto>)NotFound();
-            }
-            catch (Exception ex) 
-            {
+
+    // PUT: api/Prod/5
+    // To protect from overposting attacks, enable the specific properties you want to bind to, for
+    // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+    [HttpPut]
+    public async Task<IActionResult> PutProd(Producto Prod)
+    {
+        //if (id != Prod.Id)
+        //{
+        //    return BadRequest();
+        //}
+
+        try
+        {
+            await _productoRepository.Actualizar(Prod);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await _productoRepository.Existe(Prod.Id))
                 return NotFound();
-            }
+            return BadRequest();
         }
-
-
-        // PUT: api/Prod/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut]
-        public async Task<IActionResult> PutProd( Producto Prod)
+        catch (Exception ex)
         {
-            //if (id != Prod.Id)
-            //{
-            //    return BadRequest();
-            //}
-
-            try
-            {
-                await _productoRepository.Actualizar(Prod);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _productoRepository.Existe(Prod.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex);
-            }
-            return Ok(Prod);
+            return BadRequest(ex);
         }
 
-        // POST: api/Prod
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<Producto>> PostProd(Producto Prod)
+        return Ok(Prod);
+    }
+
+    // POST: api/Prod
+    // To protect from overposting attacks, enable the specific properties you want to bind to, for
+    // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+    [HttpPost]
+    public async Task<ActionResult<Producto>> PostProd(Producto Prod)
+    {
+        try
         {
-            try
+            if (Prod.CG_ORDEN == 1)
             {
-                if (Prod.CG_ORDEN == 1)
-                {
-                    Prod.EXIGESERIE = true;
-                    Prod.EXIGEOA = true;
-                }
-                else if (Prod.CG_ORDEN == 3)
-                {
-                    Prod.EXIGELOTE = true;
-                }
-                else if (Prod.CG_ORDEN == 4)
-                {
-                    Prod.EXIGELOTE = true;
-                }
+                Prod.EXIGESERIE = true;
+                Prod.EXIGEOA = true;
+            }
+            else if (Prod.CG_ORDEN == 3)
+            {
+                Prod.EXIGELOTE = true;
+            }
+            else if (Prod.CG_ORDEN == 4)
+            {
+                Prod.EXIGELOTE = true;
+            }
 
 
-                await _productoRepository.Agregar(Prod);
-                return CreatedAtAction("GetProd", new { id = Prod.Id }, Prod);
-            }
-            catch (DbUpdateException exx) 
-            {
-                if (!await _productoRepository.Existe(Prod.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            await _productoRepository.Agregar(Prod);
+            return CreatedAtAction("GetProd", new { id = Prod.Id }, Prod);
         }
-
-        [HttpPost("PostList")]
-        public async Task<ActionResult<Producto>> PostList(List<Producto> productos)
+        catch (DbUpdateException exx)
         {
-            try
-            {
-                foreach (var item in productos)
-                {
-                    await _productoRepository.Remover(item.Id.Trim());
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest();
-            }
-
-            return Ok();
+            if (!await _productoRepository.Existe(Prod.Id))
+                return Conflict();
+            return BadRequest();
         }
-
-
-        // DELETE: api/Prod/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Producto>> DeleteProd(string id)
+        catch (Exception ex)
         {
-            var Prod = await _productoRepository.ObtenerPorId(id);
-            if (Prod == null)
-            {
-                return NotFound();
-            }
-
-            await _productoRepository.Remover(id);
-
-            return Prod;
+            return BadRequest(ex);
         }
+    }
 
-
-        // GET: api/Prod/BuscarPorCG_PROD/{CG_PROD}
-        [HttpGet("BuscarPorCG_PROD/{CG_PROD}")]
-        public async Task<ActionResult<List<Producto>>> BuscarPorCG_PROD(string CG_PROD)
+    [HttpPost("PostList")]
+    public async Task<ActionResult<Producto>> PostList(List<Producto> productos)
+    {
+        try
         {
-            List<Producto> lDesProd = new List<Producto>();
-            if (await _productoRepository.Existe(CG_PROD))
-            {
-                lDesProd = await _productoRepository.Obtener(p => p.Id == CG_PROD).ToListAsync();
-            }
-            return lDesProd == null ? NotFound() : lDesProd;
+            foreach (var item in productos) await _productoRepository.Remover(item.Id.Trim());
         }
-
-        // GET: api/Prod/BuscarPorDES_PROD/{DES_PROD}
-        [HttpGet("BuscarPorDES_PROD/{DES_PROD}")]
-        public async Task<ActionResult<List<Producto>>> BuscarPorDES_PROD(string DES_PROD)
+        catch (Exception ex)
         {
-            List<Producto> lDesProd = new List<Producto>();
-            lDesProd = await _productoRepository.Obtener(p => p.DES_PROD == DES_PROD).ToListAsync();
-            if (lDesProd == null)
-            {
-                return NotFound();
-            }
-            return lDesProd;
+            return BadRequest();
         }
 
+        return Ok();
+    }
 
-        // GET: api/Prod/BuscarPorCG_PROD_PREP/{CG_PROD}
-        [HttpGet("BuscarPorCG_PROD_PREP/{CG_PROD}")]
-        public async Task<ActionResult<List<Producto>>> BuscarPorCG_PROD_PREP(string CG_PROD)
+
+    // DELETE: api/Prod/5
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Producto>> DeleteProd(string id)
+    {
+        var Prod = await _productoRepository.ObtenerPorId(id);
+        if (Prod == null) return NotFound();
+
+        await _productoRepository.Remover(id);
+
+        return Prod;
+    }
+
+
+    // GET: api/Prod/BuscarPorCG_PROD/{CG_PROD}
+    [HttpGet("BuscarPorCG_PROD/{CG_PROD}")]
+    public async Task<ActionResult<List<Producto>>> BuscarPorCG_PROD(string CG_PROD)
+    {
+        var lDesProd = new List<Producto>();
+        if (await _productoRepository.Existe(CG_PROD))
+            lDesProd = await _productoRepository.Obtener(p => p.Id == CG_PROD).ToListAsync();
+
+        return lDesProd == null ? NotFound() : lDesProd;
+    }
+
+    // GET: api/Prod/BuscarPorDES_PROD/{DES_PROD}
+    [HttpGet("BuscarPorDES_PROD/{DES_PROD}")]
+    public async Task<ActionResult<List<Producto>>> BuscarPorDES_PROD(string DES_PROD)
+    {
+        var lDesProd = new List<Producto>();
+        lDesProd = await _productoRepository.Obtener(p => p.DES_PROD == DES_PROD).ToListAsync();
+        if (lDesProd == null) return NotFound();
+
+        return lDesProd;
+    }
+
+
+    // GET: api/Prod/BuscarPorCG_PROD_PREP/{CG_PROD}
+    [HttpGet("BuscarPorCG_PROD_PREP/{CG_PROD}")]
+    public async Task<ActionResult<List<Producto>>> BuscarPorCG_PROD_PREP(string CG_PROD)
+    {
+        var lDesProd = new List<Producto>();
+        if (await _productoRepository.Existe(CG_PROD))
+            lDesProd = await _productoRepository.Obtener(p => p.Id == CG_PROD && p.CG_ORDEN != 1 && p.CG_ORDEN != 3)
+                .ToListAsync();
+
+        return lDesProd == null ? NotFound() : lDesProd;
+    }
+
+    // GET: api/Prod/BuscarPorDES_PROD_PREP/{DES_PROD}
+    [HttpGet("BuscarPorDES_PROD_PREP/{DES_PROD}")]
+    public async Task<ActionResult<List<Producto>>> BuscarPorDES_PROD_PREP(string DES_PROD)
+    {
+        var lDesProd = new List<Producto>();
+        lDesProd = await _productoRepository
+            .Obtener(p => p.DES_PROD == DES_PROD && p.CG_ORDEN != 1 && p.CG_ORDEN != 3).ToListAsync();
+        if (lDesProd == null) return NotFound();
+
+        return lDesProd;
+    }
+
+
+    // GET: api/Productos/BuscarProducto_PREP/{CG_PROD}/{DES_PROD}
+    [HttpGet("BuscarProducto_PREP/{CG_PROD}/{DES_PROD}/{Busqueda}")]
+    public async Task<ActionResult<List<Producto>>> BuscarProducto_PREP(string CG_PROD, string DES_PROD,
+        int Busqueda)
+    {
+        List<Producto> lContiene = new();
+        if ((string.IsNullOrEmpty(CG_PROD) && string.IsNullOrEmpty(DES_PROD)) ||
+            (CG_PROD == "Vacio" && DES_PROD == "Vacio"))
         {
-            List<Producto> lDesProd = new List<Producto>();
-            if (await _productoRepository.Existe(CG_PROD))
-            {
-                lDesProd = await _productoRepository.Obtener(p => p.Id == CG_PROD && p.CG_ORDEN != 1 && p.CG_ORDEN != 3).ToListAsync();
-            }
-            return lDesProd == null ? NotFound() : lDesProd;
+            /*
+            lContiene = (await _productoRepository.ObtenerTodos())
+                .Take(Busqueda).ToList();
+            */
+            lContiene = await _productoRepository.Obtener(p => p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
+                .ToListAsync();
         }
-
-        // GET: api/Prod/BuscarPorDES_PROD_PREP/{DES_PROD}
-        [HttpGet("BuscarPorDES_PROD_PREP/{DES_PROD}")]
-        public async Task<ActionResult<List<Producto>>> BuscarPorDES_PROD_PREP(string DES_PROD)
+        else if (string.IsNullOrEmpty(DES_PROD) || DES_PROD == "Vacio")
         {
-            List<Producto> lDesProd = new List<Producto>();
-            lDesProd = await _productoRepository.Obtener(p => p.DES_PROD == DES_PROD && p.CG_ORDEN != 1 && p.CG_ORDEN != 3).ToListAsync();
-            if (lDesProd == null)
-            {
-                return NotFound();
-            }
-            return lDesProd;
+            lContiene = await _productoRepository
+                .Obtener(p => p.Id.Contains(CG_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
+                .ToListAsync();
+            if (lContiene == null) return NotFound();
         }
-
-
-        // GET: api/Productos/BuscarProducto_PREP/{CG_PROD}/{DES_PROD}
-        [HttpGet("BuscarProducto_PREP/{CG_PROD}/{DES_PROD}/{Busqueda}")]
-        public async Task<ActionResult<List<Producto>>> BuscarProducto_PREP(string CG_PROD, string DES_PROD, int Busqueda)
+        else if (string.IsNullOrEmpty(CG_PROD) || CG_PROD == "Vacio")
         {
-            List<Producto> lContiene = new();
-            if ((string.IsNullOrEmpty(CG_PROD) && string.IsNullOrEmpty(DES_PROD)) || (CG_PROD == "Vacio" && DES_PROD == "Vacio"))
-            {
-                /*
-                lContiene = (await _productoRepository.ObtenerTodos())
-                    .Take(Busqueda).ToList();
-                */
-                lContiene = await _productoRepository.Obtener(p => p.CG_ORDEN != 1 && p.CG_ORDEN != 3,Busqueda).ToListAsync();
+            lContiene = await _productoRepository
+                .Obtener(p => p.DES_PROD.Contains(DES_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
+                .ToListAsync();
 
-            }
-            else if (string.IsNullOrEmpty(DES_PROD) || DES_PROD == "Vacio")
-            {
-                lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
-                    .ToListAsync();
-                if (lContiene == null)
-                {
-                    return NotFound();
-                }
-            }
-            else if (string.IsNullOrEmpty(CG_PROD) || CG_PROD == "Vacio")
-            {
-                lContiene = await _productoRepository.Obtener(p => p.DES_PROD.Contains(DES_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
-                    .ToListAsync();
-
-                if (lContiene == null)
-                {
-                    return NotFound();
-                }
-
-            }
-
-            else if (CG_PROD != "Vacio" && DES_PROD != "Vacio")
-            {
-                lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD)
-                    && p.DES_PROD.Contains(DES_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda).ToListAsync();
-
-                if (lContiene == null)
-                {
-                    return NotFound();
-                }
-            }
-            return lContiene;
-
-
+            if (lContiene == null) return NotFound();
         }
 
-        // GET: api/Productos/BuscarProducto_PREP/{CG_PROD}/{DES_PROD}
-        [HttpGet("Buscar")]
-        public async Task<ActionResult<List<Producto>>> Buscar(string CG_PROD, string DES_PROD, int Busqueda)
+        else if (CG_PROD != "Vacio" && DES_PROD != "Vacio")
         {
-            List<Producto> lContiene = new();
-            if ((string.IsNullOrEmpty(CG_PROD) && string.IsNullOrEmpty(DES_PROD)) || (CG_PROD == "VACIO" && DES_PROD == "VACIO"))
-            {
-                /*
-                lContiene = (await _productoRepository.ObtenerTodos())
-                    .Take(Busqueda).ToList();
-                */
-                lContiene = await _productoRepository.Obtener(p => p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda).ToListAsync();
+            lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD)
+                                                               && p.DES_PROD.Contains(DES_PROD) &&
+                                                               p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
+                .ToListAsync();
 
-            }
-            else if (string.IsNullOrEmpty(DES_PROD) || DES_PROD == "VACIO")
-            {
-                lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
-                    .ToListAsync();
-                if (lContiene == null)
-                {
-                    return NotFound();
-                }
-            }
-            else if (string.IsNullOrEmpty(CG_PROD) || CG_PROD == "VACIO")
-            {
-                lContiene = await _productoRepository.Obtener(p => p.DES_PROD.Contains(DES_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
-                    .ToListAsync();
-
-                if (lContiene == null)
-                {
-                    return NotFound();
-                }
-
-            }
-
-            else if (CG_PROD != "VACIO" && DES_PROD != "VACIO")
-            {
-                lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD)
-                    && p.DES_PROD.Contains(DES_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda).ToListAsync();
-
-                if (lContiene == null)
-                {
-                    return NotFound();
-                }
-            }
-            return lContiene;
+            if (lContiene == null) return NotFound();
         }
-        
-        // GET: api/Productos/GetCG_DENSEG/{CG_PROD}
-        [HttpGet("GetCG_DENSEG/{CG_PROD}")]
-        public async Task<decimal> GetCG_DENSEG(string CG_PROD)
+
+        return lContiene;
+    }
+
+    // GET: api/Productos/BuscarProducto_PREP/{CG_PROD}/{DES_PROD}
+    [HttpGet("Buscar")]
+    public async Task<ActionResult<List<Producto>>> Buscar(string CG_PROD, string DES_PROD, int Busqueda)
+    {
+        List<Producto> lContiene = new();
+        if ((string.IsNullOrEmpty(CG_PROD) && string.IsNullOrEmpty(DES_PROD)) ||
+            (CG_PROD == "VACIO" && DES_PROD == "VACIO"))
         {
-            decimal? CG_DENSEG = 0;
-            if (await _productoRepository.Existe(CG_PROD))
-            {
-                var resultCgDenseg = _productoRepository.Obtener(p => p.Id == CG_PROD).FirstOrDefaultAsync().Result.CG_DENSEG;
-                if (resultCgDenseg != null)
-                    CG_DENSEG = resultCgDenseg;
-            }
-            return (decimal)(CG_DENSEG);
+            /*
+            lContiene = (await _productoRepository.ObtenerTodos())
+                .Take(Busqueda).ToList();
+            */
+            lContiene = await _productoRepository.Obtener(p => p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
+                .ToListAsync();
+        }
+        else if (string.IsNullOrEmpty(DES_PROD) || DES_PROD == "VACIO")
+        {
+            lContiene = await _productoRepository
+                .Obtener(p => p.Id.Contains(CG_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
+                .ToListAsync();
+            if (lContiene == null) return NotFound();
+        }
+        else if (string.IsNullOrEmpty(CG_PROD) || CG_PROD == "VACIO")
+        {
+            lContiene = await _productoRepository
+                .Obtener(p => p.DES_PROD.Contains(DES_PROD) && p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
+                .ToListAsync();
+
+            if (lContiene == null) return NotFound();
         }
 
+        else if (CG_PROD != "VACIO" && DES_PROD != "VACIO")
+        {
+            lContiene = await _productoRepository.Obtener(p => p.Id.Contains(CG_PROD)
+                                                               && p.DES_PROD.Contains(DES_PROD) &&
+                                                               p.CG_ORDEN != 1 && p.CG_ORDEN != 3, Busqueda)
+                .ToListAsync();
+
+            if (lContiene == null) return NotFound();
+        }
+
+        return lContiene;
+    }
+
+    // GET: api/Productos/GetCG_DENSEG/{CG_PROD}
+    [HttpGet("GetCG_DENSEG/{CG_PROD}")]
+    public async Task<decimal> GetCG_DENSEG(string CG_PROD)
+    {
+        decimal? CG_DENSEG = 0;
+        if (await _productoRepository.Existe(CG_PROD))
+        {
+            var resultCgDenseg = _productoRepository.Obtener(p => p.Id == CG_PROD).FirstOrDefaultAsync().Result
+                .CG_DENSEG;
+            if (resultCgDenseg != null)
+                CG_DENSEG = resultCgDenseg;
+        }
+
+        return (decimal)CG_DENSEG;
     }
 }

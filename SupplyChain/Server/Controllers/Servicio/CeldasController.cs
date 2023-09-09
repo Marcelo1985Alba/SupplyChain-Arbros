@@ -1,142 +1,120 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared.Models;
-using SupplyChain.Shared;
 
-namespace SupplyChain
+namespace SupplyChain;
+
+[Route("api/[controller]")]
+[ApiController]
+public class CeldasController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CeldasController : ControllerBase
+    private readonly CeldasRepository _celdasRepository;
+
+    public CeldasController(CeldasRepository celdasRepository)
     {
-        private readonly CeldasRepository _celdasRepository;
+        _celdasRepository = celdasRepository;
+    }
 
-        public CeldasController(CeldasRepository celdasRepository)
+    // GET: api/Celdas
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Celdas>>> GetCeldas()
+    {
+        try
         {
-            this._celdasRepository = celdasRepository;
+            return await _celdasRepository.ObtenerTodos();
         }
-
-        // GET: api/Celdas
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Celdas>>> GetCeldas()
+        catch (Exception ex)
         {
-            try
-            {
-                return await _celdasRepository.ObtenerTodos();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(ex);
         }
+    }
 
-        [HttpGet("Existe/{id}")]
-        public async Task<ActionResult<bool>> ExisteCelda(string id)
+    [HttpGet("Existe/{id}")]
+    public async Task<ActionResult<bool>> ExisteCelda(string id)
+    {
+        try
         {
-            try
-            {
-                return await _celdasRepository.Existe(id);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return await _celdasRepository.Existe(id);
         }
-
-        // PUT: api/Celdas/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCeldas(string id, Celdas Celda)
+        catch (Exception ex)
         {
-            if (id != Celda.Id)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                await _celdasRepository.Actualizar(Celda);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _celdasRepository.Existe(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-            return Ok(Celda);
+            return BadRequest(ex);
         }
+    }
 
-        // POST: api/Celdas
-        [HttpPost]
-        public async Task<ActionResult<Celdas>> PostCeldas(Celdas Celda)
+    // PUT: api/Celdas/5
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutCeldas(string id, Celdas Celda)
+    {
+        if (id != Celda.Id) return BadRequest();
+
+        try
         {
-            try
-            {
-                await _celdasRepository.Agregar(Celda);
-                return CreatedAtAction("GetCeldas", new { id = Celda.Id }, Celda);
-            }
-            catch (DbUpdateException exx)
-            {
-                if (!await _celdasRepository.Existe(Celda.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            await _celdasRepository.Actualizar(Celda);
         }
-
-        // DELETE: api/Celdas/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Celdas>> DeleteCeldas(string id)
+        catch (DbUpdateConcurrencyException)
         {
-            var Celda = await _celdasRepository.ObtenerPorId(id);
-            if (Celda == null)
-            {
+            if (!await _celdasRepository.Existe(id))
                 return NotFound();
-            }
-
-            await _celdasRepository.Remover(id);
-
-            return Celda;
+            return BadRequest();
         }
-
-        [HttpPost("PostList")]
-        public async Task<ActionResult<Celdas>> PostList(List<Celdas> celdas)
+        catch (Exception ex)
         {
-            try
-            {
-                foreach (var item in celdas)
-                {
-                    await _celdasRepository.Remover(item.Id.Trim());
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest();
-            }
-
-            return Ok();
+            return BadRequest(ex);
         }
+
+        return Ok(Celda);
+    }
+
+    // POST: api/Celdas
+    [HttpPost]
+    public async Task<ActionResult<Celdas>> PostCeldas(Celdas Celda)
+    {
+        try
+        {
+            await _celdasRepository.Agregar(Celda);
+            return CreatedAtAction("GetCeldas", new { id = Celda.Id }, Celda);
+        }
+        catch (DbUpdateException exx)
+        {
+            if (!await _celdasRepository.Existe(Celda.Id))
+                return Conflict();
+            return BadRequest();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
+    }
+
+    // DELETE: api/Celdas/5
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Celdas>> DeleteCeldas(string id)
+    {
+        var Celda = await _celdasRepository.ObtenerPorId(id);
+        if (Celda == null) return NotFound();
+
+        await _celdasRepository.Remover(id);
+
+        return Celda;
+    }
+
+    [HttpPost("PostList")]
+    public async Task<ActionResult<Celdas>> PostList(List<Celdas> celdas)
+    {
+        try
+        {
+            foreach (var item in celdas) await _celdasRepository.Remover(item.Id.Trim());
+        }
+        catch (Exception ex)
+        {
+            return BadRequest();
+        }
+
+        return Ok();
     }
 }

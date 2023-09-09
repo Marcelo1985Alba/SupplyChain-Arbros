@@ -1,17 +1,15 @@
-﻿using SupplyChain.Shared;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SupplyChain.Shared;
 
-namespace SupplyChain
+namespace SupplyChain;
+
+[Table("aspnetroles")]
+public class AspNetRoles : EntityBase<string>
 {
-    [Table("aspnetroles")]
-    public class AspNetRoles : EntityBase<String>
-    {
-        [Key, Column("Id")]
-        new public String Id { get; set; } = "";
-        public string Name { get; set; } = "";
-        public string NormalizedName { get; set; } = "";
-        public string ConcurrencyStamp { get; set; } = "";
-    }
+    [Key] [Column("Id")] public new string Id { get; set; } = "";
+
+    public string Name { get; set; } = "";
+    public string NormalizedName { get; set; } = "";
+    public string ConcurrencyStamp { get; set; } = "";
 }

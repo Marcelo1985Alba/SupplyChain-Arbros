@@ -1,19 +1,14 @@
 ﻿@page "/Abms/procun"
-@using Syncfusion.Blazor.Grids
-@using Syncfusion.Blazor.Inputs
+@using EditMode = Syncfusion.Blazor.PivotView.EditMode
+@using SelectionType = Syncfusion.Blazor.Grids.SelectionType
 @using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Data
-@using Syncfusion.Blazor.DropDowns
-@using SupplyChain
-@using Syncfusion.Blazor.Calendars
-@using SupplyChain.Client.Shared
 @inherits ProcunPageBase
 
 <div class="row">
     <div class="col-12">
         <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
-                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
-                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+                           OnReiniciar="async () => await OnReiniciarGrilla()"
+                           OnVistaSelected="async v => await OnVistaSeleccionada(v)"/>
     </div>
 </div>
 
@@ -26,36 +21,38 @@
                 @ref="refGrid" DataSource="@procuns" Width="100%" Toolbar="Toolbaritems"
                 AllowExcelExport="true" AllowGrouping="true" ID="grdProcun" AllowFiltering="true"
                 AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
-            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridSelectionSettings CheckboxOnly="true" Type="SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolbarHandler"
-                        OnActionComplete="OnActionCompleteHandler" TValue="Procun"></GridEvents>
+                        OnActionComplete="OnActionCompleteHandler" TValue="Procun">
+            </GridEvents>
             <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
                               ShowDeleteConfirmDialog="false" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
             </GridEditSettings>
             <GridColumns>
                 <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                <GridColumn Field=@nameof(Procun.Id) HeaderText="Registro" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procun.ORDEN) HeaderText="Orden" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procun.CG_PROD) HeaderText="Codigo Producto" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(Procun.Id)" HeaderText="Registro" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(Procun.ORDEN)" HeaderText="Orden" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(Procun.CG_PROD)" HeaderText="Codigo Producto" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                 @*<GridColumn Field=@nameof(Procun.CG_AREA) HeaderText="Codigo Area" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                 <GridColumn Field=@nameof(Procun.CG_LINEA) HeaderText="Codigo Linea" TextAlign="TextAlign.Left" Width="200px"></GridColumn>*@
-                <GridColumn Field=@nameof(Procun.CG_CELDA) HeaderText="Codigo Celda" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procun.PROCESO) HeaderText="Proceso" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procun.TIEMPO1) HeaderText="Tiempo" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procun.TS1) HeaderText="TS1" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(Procun.PROPORC) HeaderText="Proporcion" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(Procun.CG_CELDA)" HeaderText="Codigo Celda" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(Procun.PROCESO)" HeaderText="Proceso" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(Procun.TIEMPO1)" HeaderText="Tiempo" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(Procun.TS1)" HeaderText="TS1" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(Procun.PROPORC)" HeaderText="Proporcion" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
         </SfGrid>
     </div>
 
     @if (popupFormVisible)
-	{
-		 <FormProcun procuns="procSeleccionado" Show="popupFormVisible" OnEliminar="@(async(p)=>await Guardar(p))"
-                     OnCerrar="OnCerrarDialog" OnGuardar="@(async(p)=>await Guardar(p))"></FormProcun>
-	}
+    {
+        <FormProcun procuns="procSeleccionado" Show="popupFormVisible" OnEliminar="@(async p => await Guardar(p))"
+                    OnCerrar="OnCerrarDialog" OnGuardar="@(async p => await Guardar(p))">
+        </FormProcun>
+    }
 </div>
 
 <style>
@@ -77,34 +74,36 @@
 
 @code {
 
-    public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
+    public string edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
     public bool DblClick = true;
-    public bool CommandColumnsClick = false;
+    public bool CommandColumnsClick;
 
-    public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+    public EditMode SelectedMode = EditMode.Normal;
+
     public void OnRadioChange(ChangeArgs<string> args)
     {
         if (args.Value == "inline")
         {
-            this.DblClick = true;
-            this.CommandColumnsClick = false;
-            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+            DblClick = true;
+            CommandColumnsClick = false;
+            SelectedMode = EditMode.Normal;
         }
         else if (args.Value == "batch")
         {
-            this.DblClick = true;
-            this.CommandColumnsClick = false;
-            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Batch;
+            DblClick = true;
+            CommandColumnsClick = false;
+            SelectedMode = EditMode.Batch;
         }
         else if (args.Value == "dialog")
         {
-            this.DblClick = true;
-            this.CommandColumnsClick = false;
-            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Dialog;
+            DblClick = true;
+            CommandColumnsClick = false;
+            SelectedMode = EditMode.Dialog;
         }
         else
         {
-            this.CommandColumnsClick = true;
+            CommandColumnsClick = true;
         }
     }
+
 }

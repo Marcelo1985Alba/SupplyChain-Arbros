@@ -1,11 +1,10 @@
 ﻿using SupplyChain.Server.Data.Repository;
 
-namespace SupplyChain.Server.Repositorios
+namespace SupplyChain.Server.Repositorios;
+
+public class SolutionRepository : Repository<Solution, string>
 {
-    public class SolutionRepository : Repository<Solution, string>
+    public SolutionRepository(AppDbContext db) : base(db)
     {
-        public SolutionRepository(AppDbContext db) : base(db)
-        {
-        }
     }
 }

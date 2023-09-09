@@ -2,165 +2,142 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
-using SupplyChain.Shared.Models;
-using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
 
-namespace SupplyChain
+namespace SupplyChain;
+
+[Route("api/[controller]")]
+[ApiController]
+public class MantCeldasController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MantCeldasController : ControllerBase
+    private readonly AppDbContext _context;
+    private readonly MantCeldasRepository _mantCeldasRepository;
+
+
+    public MantCeldasController(AppDbContext context, MantCeldasRepository mantCeldasRepository)
     {
-        private readonly MantCeldasRepository _mantCeldasRepository;
-        private readonly AppDbContext _context;
+        _context = context;
+        _mantCeldasRepository = mantCeldasRepository;
+    }
 
-
-        public MantCeldasController(AppDbContext context, MantCeldasRepository mantCeldasRepository)
-        {   _context = context;
-            this._mantCeldasRepository = mantCeldasRepository;
-        }
-
-        // GET: api/MantCeldas
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<MantCeldas>>> GetMantCeldas()
+    // GET: api/MantCeldas
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<MantCeldas>>> GetMantCeldas()
+    {
+        try
         {
-            try
-            {
-                return await _mantCeldasRepository.ObtenerTodos();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return await _mantCeldasRepository.ObtenerTodos();
         }
-
-        [HttpGet("Existe/{id}")]
-        public async Task<ActionResult<bool>> ExisteMantCelda(int id)
+        catch (Exception ex)
         {
-            try
-            {
-                return await _mantCeldasRepository.Existe(id);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(ex);
         }
+    }
 
-        // PUT: api/MantCeldas/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMantCeldas(int id, MantCeldas MantCelda)
+    [HttpGet("Existe/{id}")]
+    public async Task<ActionResult<bool>> ExisteMantCelda(int id)
+    {
+        try
         {
-            if (id != MantCelda.Id)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                await _mantCeldasRepository.Actualizar(MantCelda);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _mantCeldasRepository.Existe(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-            return Ok(MantCelda);
+            return await _mantCeldasRepository.Existe(id);
         }
-
-        // POST: api/MantCeldas
-        [HttpPost]
-        public async Task<ActionResult<MantCeldas>> PostMantCeldas(MantCeldas MantCelda)
+        catch (Exception ex)
         {
-            try
-            {
-                await _mantCeldasRepository.Agregar(MantCelda);
-                return CreatedAtAction("GetMantCeldas", new { id = MantCelda.Id }, MantCelda);
-            }
-            catch (DbUpdateException exx)
-            {
-                if (!await _mantCeldasRepository.Existe(MantCelda.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return BadRequest(ex);
         }
+    }
 
-        // DELETE: api/MantCeldas/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<MantCeldas>> DeleteMantCeldas(int id)
+    // PUT: api/MantCeldas/5
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutMantCeldas(int id, MantCeldas MantCelda)
+    {
+        if (id != MantCelda.Id) return BadRequest();
+
+        try
         {
-            var MantCelda = await _mantCeldasRepository.ObtenerPorId(id);
-            if (MantCelda == null)
-            {
+            await _mantCeldasRepository.Actualizar(MantCelda);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await _mantCeldasRepository.Existe(id))
                 return NotFound();
-            }
-
-            await _mantCeldasRepository.Remover(id);
-
-            return MantCelda;
+            return BadRequest();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
         }
 
-        [HttpPost("PostList")]
-        public async Task<ActionResult<MantCeldas>> PostList(List<MantCeldas> mantCeldas)
-        {
-            try
-            {
-                foreach (var item in mantCeldas)
-                {
-                    await _mantCeldasRepository.Remover(item.Id);
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest();
-            }
+        return Ok(MantCelda);
+    }
 
-            return Ok();
+    // POST: api/MantCeldas
+    [HttpPost]
+    public async Task<ActionResult<MantCeldas>> PostMantCeldas(MantCeldas MantCelda)
+    {
+        try
+        {
+            await _mantCeldasRepository.Agregar(MantCelda);
+            return CreatedAtAction("GetMantCeldas", new { id = MantCelda.Id }, MantCelda);
+        }
+        catch (DbUpdateException exx)
+        {
+            if (!await _mantCeldasRepository.Existe(MantCelda.Id))
+                return Conflict();
+            return BadRequest();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
+    }
+
+    // DELETE: api/MantCeldas/5
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<MantCeldas>> DeleteMantCeldas(int id)
+    {
+        var MantCelda = await _mantCeldasRepository.ObtenerPorId(id);
+        if (MantCelda == null) return NotFound();
+
+        await _mantCeldasRepository.Remover(id);
+
+        return MantCelda;
+    }
+
+    [HttpPost("PostList")]
+    public async Task<ActionResult<MantCeldas>> PostList(List<MantCeldas> mantCeldas)
+    {
+        try
+        {
+            foreach (var item in mantCeldas) await _mantCeldasRepository.Remover(item.Id);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest();
         }
 
-        [HttpGet("ByEstado/{estado}")]
-        public async Task<ActionResult<IEnumerable<MantCeldas>>>Get(EstadoMantCeldas estado = EstadoMantCeldas.Todos)
-        {
-            switch (estado)
-            {
-              
-                case EstadoMantCeldas.Programados:
-                    return await _context.MantCeldas.Where(c => c.Estado != "Realizado"
-                    && c.Estado != "Cancelado").ToListAsync();
-                case EstadoMantCeldas.Cancelado:
-                    return await _context.MantCeldas.Where(c => c.Estado != "Realizado"
-                    && c.Estado != "Programado").ToListAsync();
-                case EstadoMantCeldas.Realizado:
-                    return await _context.MantCeldas.Where(c => c.Estado != "Programado"
-                    && c.Estado != "Cancelado").ToListAsync();
-                default:
-                    return await _context.MantCeldas.ToListAsync();
+        return Ok();
+    }
 
-            }    
+    [HttpGet("ByEstado/{estado}")]
+    public async Task<ActionResult<IEnumerable<MantCeldas>>> Get(EstadoMantCeldas estado = EstadoMantCeldas.Todos)
+    {
+        switch (estado)
+        {
+            case EstadoMantCeldas.Programados:
+                return await _context.MantCeldas.Where(c => c.Estado != "Realizado"
+                                                            && c.Estado != "Cancelado").ToListAsync();
+            case EstadoMantCeldas.Cancelado:
+                return await _context.MantCeldas.Where(c => c.Estado != "Realizado"
+                                                            && c.Estado != "Programado").ToListAsync();
+            case EstadoMantCeldas.Realizado:
+                return await _context.MantCeldas.Where(c => c.Estado != "Programado"
+                                                            && c.Estado != "Cancelado").ToListAsync();
+            default:
+                return await _context.MantCeldas.ToListAsync();
         }
     }
 }

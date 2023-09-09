@@ -1,15 +1,11 @@
-﻿using SupplyChain.Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using SupplyChain.Shared.Models;
 
-namespace SupplyChain.Client.HelperService
+namespace SupplyChain.Client.HelperService;
+
+public interface ILoginService
 {
-    public interface ILoginService
-    {
-        public Usuarios UsuarioLogin { get; set; }
-        Task Login(Usuarios Usuario);
-        Task Logout();
-    }
+    public Usuarios UsuarioLogin { get; set; }
+    Task Login(Usuarios Usuario);
+    Task Logout();
 }

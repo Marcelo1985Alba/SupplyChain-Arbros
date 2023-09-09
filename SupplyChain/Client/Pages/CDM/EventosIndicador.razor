@@ -1,12 +1,9 @@
-﻿@using Syncfusion.Blazor.Charts
-@using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.Cards
-@using Syncfusion.Blazor.Layouts
-@using Syncfusion.Blazor.Gantt
-@using Syncfusion.Blazor.Data
-@using Syncfusion.Blazor
-@page "/eventos/indicador"
+﻿@page "/eventos/indicador"
 
+@using Syncfusion.Blazor.Navigations
+@using LabelPosition = Syncfusion.Blazor.Charts.LabelPosition
+@using ValueType = Syncfusion.Blazor.Charts.ValueType
+@using Syncfusion.Blazor.Charts
 @inherits EventosIndicadorCopia
 
 <SfTab HeaderPlacement="HeaderPosition.Top" CssClass="tab-pane">
@@ -17,15 +14,17 @@
             </ChildContent>
             <ContentTemplate>
                 <div class="row">
-                 <div class="col-12">
-                 </div>
+                    <div class="col-12">
+                    </div>
                     <div class="col-6">
-                        
+
                         <div class="card">
                             <div class="pane card-body card5">
                                 <SfChart Title="" Width="100%">
-                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                    <ChartArea>
+                                        <ChartAreaBorder Width="0"></ChartAreaBorder>
+                                    </ChartArea>
+                                    <ChartPrimaryXAxis ValueType="ValueType.Category"
                                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                                     </ChartPrimaryXAxis>
                                     <ChartPrimaryYAxis Title="Cantidad de Eventos Anuales" LabelFormat="{value}">
@@ -37,9 +36,9 @@
                                     <ChartSeriesCollection>
                                         <ChartSeries DataSource="@EventosAnual" XName="XSerieName" YName="YSerieName"
                                                      Name="Año" Fill="url(#card5-gradient-chart)"
-                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                                     Type="ChartSeriesType.Column">
                                             <ChartMarker>
-                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                <ChartDataLabel Visible="false" Position="LabelPosition.Top">
                                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                                 </ChartDataLabel>
                                             </ChartMarker>
@@ -47,7 +46,7 @@
                                         </ChartSeries>
                                     </ChartSeriesCollection>
                                     <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
-                                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetalleEventos(a))"></ChartEvents>
+                                    <ChartEvents OnPointClick="@(async a => await MostrarDetalleEventos(a))"></ChartEvents>
                                 </SfChart>
                             </div>
                         </div>
@@ -56,8 +55,10 @@
                         <div class="card">
                             <div class="pane card-body card5">
                                 <SfChart @ref="refChartDetalleEventos" Title="" Width="100%">
-                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                    <ChartArea>
+                                        <ChartAreaBorder Width="0"></ChartAreaBorder>
+                                    </ChartArea>
+                                    <ChartPrimaryXAxis ValueType="ValueType.Category"
                                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift">
                                     </ChartPrimaryXAxis>
                                     <ChartPrimaryYAxis LabelFormat="{value}" Title="@TituloGraficoEventosMensual" Minimum="0" Maximum="20">
@@ -69,9 +70,9 @@
                                     <ChartSeriesCollection>
                                         <ChartSeries DataSource="@EventosMensual" XName="XSerieName" YName="YSerieName"
                                                      Name="Mes" Fill="url(#card5-gradient-chart)"
-                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                                     Type="ChartSeriesType.Column">
                                             <ChartMarker>
-                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                <ChartDataLabel Visible="false" Position="LabelPosition.Top">
                                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                                 </ChartDataLabel>
                                             </ChartMarker>
@@ -80,7 +81,7 @@
                                     </ChartSeriesCollection>
                                     <ChartTooltipSettings Enable="true">
                                     </ChartTooltipSettings>
-                                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetalleEventosMesTipo(a))"></ChartEvents>
+                                    <ChartEvents OnPointClick="@(async a => await MostrarDetalleEventosMesTipo(a))"></ChartEvents>
                                 </SfChart>
                             </div>
                         </div>
@@ -89,8 +90,10 @@
                         <div class="card">
                             <div class="pane card-body card5">
                                 <SfChart @ref="refChartDetalleEventosMesTipo" Title="" Width="100%">
-                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                    <ChartArea>
+                                        <ChartAreaBorder Width="0"></ChartAreaBorder>
+                                    </ChartArea>
+                                    <ChartPrimaryXAxis ValueType="ValueType.Category"
                                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift" LabelFormat="{value}">
                                     </ChartPrimaryXAxis>
                                     <ChartPrimaryYAxis LabelFormat="{value}" Title="@TituloGraficoEventosTipo" Minimum="0" Maximum="20">
@@ -102,9 +105,9 @@
                                     <ChartSeriesCollection>
                                         <ChartSeries DataSource="@EventosMensualTipo" XName="XSerieName" YName="YSerieName"
                                                      Name="Mes" Fill="url(#card5-gradient-chart)"
-                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                                     Type="ChartSeriesType.Column">
                                             <ChartMarker>
-                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                <ChartDataLabel Visible="false" Position="LabelPosition.Top">
                                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                                 </ChartDataLabel>
                                             </ChartMarker>
@@ -121,8 +124,10 @@
                         <div class="card">
                             <div class="pane card-body card5">
                                 <SfChart @ref="refChartDetalleEventosProveedor" Title="" Width="100%">
-                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
+                                    <ChartArea>
+                                        <ChartAreaBorder Width="0"></ChartAreaBorder>
+                                    </ChartArea>
+                                    <ChartPrimaryXAxis ValueType="ValueType.Category"
                                                        EdgeLabelPlacement="EdgeLabelPlacement.Shift" LabelFormat="{value}">
                                     </ChartPrimaryXAxis>
                                     <ChartPrimaryYAxis LabelFormat="{value}" Title="@TituloGraficoEventosProveedor" Minimum="0" Maximum="10">
@@ -134,9 +139,9 @@
                                     <ChartSeriesCollection>
                                         <ChartSeries DataSource="@EventosProveedor" XName="XSerieName" YName="YSerieName"
                                                      Name="Mes" Fill="url(#card5-gradient-chart)"
-                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
+                                                     Type="ChartSeriesType.Column">
                                             <ChartMarker>
-                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                                                <ChartDataLabel Visible="false" Position="LabelPosition.Top">
                                                     <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
                                                 </ChartDataLabel>
                                             </ChartMarker>
@@ -152,7 +157,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="pane card-body card5">
-                                <SfGrid @ref="gridDetalleEventos" DataSource="@DataEventosDetalle" GridLines="Syncfusion.Blazor.Grids.GridLine.Both" AllowResizing="true"
+                                <SfGrid @ref="gridDetalleEventos" DataSource="@DataEventosDetalle" GridLines="GridLine.Both" AllowResizing="true"
                                         AllowReordering="true" AllowSorting="true"
                                         AllowPaging="true" Height="450">
                                     <GridColumns>
@@ -175,52 +180,52 @@
 <svg style="height: 0">
     <defs>
         <linearGradient id="card1-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(33, 64, 220); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(0, 191, 213); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(33, 64, 220); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(0, 191, 213); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card2-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(4, 171, 17); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(125, 214, 29); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(4, 171, 17); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(125, 214, 29); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card3-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(242, 59, 59); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(239, 144, 39); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(242, 59, 59); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(239, 144, 39); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card4-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(41, 37, 166); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(178, 80, 209); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(41, 37, 166); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(178, 80, 209); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card5-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(239, 144, 39); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(238 166 86); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(239, 144, 39); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(238 166 86); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card6-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(255 0 110); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(244 139 184); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(255 0 110); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(244 139 184); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card7-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(166 107 37); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(254 237 3); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(166 107 37); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(254 237 3); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card8-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(249 220 2); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(254 237 3); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(249 220 2); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(254 237 3); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card9-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(0, 191, 213); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(88 114 247); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(0, 191, 213); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(88 114 247); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card10-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(228 24 24); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(233 119 119); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(228 24 24); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(233 119 119); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card11-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(33, 64, 220); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(69 64 236); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(33, 64, 220); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(69 64 236); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card12-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(125, 214, 29); stop-opacity: 1 " />
-            <stop offset="100%" style="stop-color: rgb(33 116 39); stop-opacity: 1" />
+            <stop offset="0%" style="stop-color: rgb(125, 214, 29); stop-opacity: 1 "/>
+            <stop offset="100%" style="stop-color: rgb(33 116 39); stop-opacity: 1"/>
         </linearGradient>
     </defs>
 </svg>

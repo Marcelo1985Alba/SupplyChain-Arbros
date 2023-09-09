@@ -1,30 +1,30 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using SupplyChain;
-using Syncfusion.Blazor.Grids;
-using Syncfusion.Blazor.Navigations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Navigations;
+using Action = Syncfusion.Blazor.Grids.Action;
 
-namespace SupplyChain.Pages.TiposNoConfx
+namespace SupplyChain.Pages.TiposNoConfx;
+
+public class TiposNoConfxPageBase : ComponentBase
 {
-    public class TiposNoConfxPageBase : ComponentBase
+    public bool Disabled = false;
+
+    public bool Enabled = true;
+    protected SfGrid<TiposNoConf> Grid;
+
+    protected List<TiposNoConf> tipos = new();
+
+    protected List<object> Toolbaritems = new()
     {
-        [Inject] protected HttpClient Http { get; set; }
-        [Inject] protected IJSRuntime JsRuntime { get; set; }
-        protected SfGrid<TiposNoConf> Grid;
-
-        public bool Enabled = true;
-        public bool Disabled = false;
-
-        protected List<TiposNoConf> tipos = new List<TiposNoConf>();
-
-        protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
         "Add",
         "Edit",
@@ -34,121 +34,107 @@ namespace SupplyChain.Pages.TiposNoConfx
         "ExcelExport"
     };
 
-        protected override async Task OnInitializedAsync()
-        {
-            tipos = await Http.GetFromJsonAsync<List<TiposNoConf>>("api/TiposNoConf");
+    [Inject] protected HttpClient Http { get; set; }
+    [Inject] protected IJSRuntime JsRuntime { get; set; }
 
-            await base.OnInitializedAsync();
-        }
+    protected override async Task OnInitializedAsync()
+    {
+        tipos = await Http.GetFromJsonAsync<List<TiposNoConf>>("api/TiposNoConf");
 
-        public void ActionBeginHandler(ActionEventArgs<TiposNoConf> args)
+        await base.OnInitializedAsync();
+    }
+
+    public void ActionBeginHandler(ActionEventArgs<TiposNoConf> args)
+    {
+        if (args.RequestType == Action.BeginEdit)
+            Enabled = false;
+        else
+            Enabled = true;
+    }
+
+    public async Task ActionBegin(ActionEventArgs<TiposNoConf> args)
+    {
+        if (args.RequestType == Action.Save)
         {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            HttpResponseMessage response;
+            var found = tipos.Any(o => o.Cg_TipoNc == args.Data.Cg_TipoNc);
+            var ur = new Orificio();
+
+            if (!found)
             {
-                this.Enabled = false;
+                args.Data.Cg_TipoNc = tipos.Max(s => s.Cg_TipoNc) + 1;
+                response = await Http.PostAsJsonAsync("api/TiposNoConf", args.Data);
             }
             else
             {
-                this.Enabled = true;
-            }
-        }
-        public async Task ActionBegin(ActionEventArgs<TiposNoConf> args)
-        {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
-            {
-                HttpResponseMessage response;
-                bool found = tipos.Any(o => o.Cg_TipoNc == args.Data.Cg_TipoNc);
-                Orificio ur = new Orificio();
-
-                if (!found)
-                {
-                    args.Data.Cg_TipoNc = tipos.Max(s => s.Cg_TipoNc) + 1;
-                    response = await Http.PostAsJsonAsync("api/TiposNoConf", args.Data);
-                }
-                else
-                {
-                    response = await Http.PutAsJsonAsync($"api/TiposNoConf/{args.Data.Cg_TipoNc}", args.Data);
-                }
-
-                if (response.StatusCode == System.Net.HttpStatusCode.Created)
-                {
-
-                }
+                response = await Http.PutAsJsonAsync($"api/TiposNoConf/{args.Data.Cg_TipoNc}", args.Data);
             }
 
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+            if (response.StatusCode == HttpStatusCode.Created)
             {
-                await EliminarCeldas(args);
             }
         }
 
-        private async Task EliminarCeldas(ActionEventArgs<TiposNoConf> args)
+        if (args.RequestType == Action.Delete) await EliminarCeldas(args);
+    }
+
+    private async Task EliminarCeldas(ActionEventArgs<TiposNoConf> args)
+    {
+        try
         {
-            try
+            if (args.Data != null)
             {
-                if (args.Data != null)
+                var isConfirmed =
+                    await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar la Areas?");
+                if (isConfirmed)
+                    //servicios.Remove(servicios.Find(m => m.PEDIDO == args.Data.PEDIDO));
+                    await Http.DeleteAsync($"api/TiposNoConf/{args.Data.Cg_TipoNc}");
+            }
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    public async Task ClickHandler(ClickEventArgs args)
+    {
+        if (args.Item.Text == "Copy")
+            if (Grid.SelectedRecords.Count > 0)
+                foreach (var selectedRecord in Grid.SelectedRecords)
                 {
-                    bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar la Areas?");
+                    var isConfirmed =
+                        await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar el area?");
                     if (isConfirmed)
                     {
-                        //servicios.Remove(servicios.Find(m => m.PEDIDO == args.Data.PEDIDO));
-                        await Http.DeleteAsync($"api/TiposNoConf/{args.Data.Cg_TipoNc}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
+                        var Nuevo = new TiposNoConf();
 
-            }
-        }
+                        Nuevo.Cg_TipoNc = tipos.Max(s => s.Cg_TipoNc) + 1;
+                        Nuevo.Des_TipoNc = selectedRecord.Des_TipoNc;
 
-        public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
-        {
-            if (args.Item.Text == "Copy")
-            {
-                if (this.Grid.SelectedRecords.Count > 0)
-                {
-                    foreach (TiposNoConf selectedRecord in this.Grid.SelectedRecords)
-                    {
-                        bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar el area?");
-                        if (isConfirmed)
+                        Nuevo.CG_CIA = selectedRecord.CG_CIA;
+
+
+                        var response = await Http.PostAsJsonAsync("api/TiposNoConf", Nuevo);
+
+                        if (response.StatusCode == HttpStatusCode.Created)
                         {
-                            TiposNoConf Nuevo = new TiposNoConf();
-
-                            Nuevo.Cg_TipoNc = tipos.Max(s => s.Cg_TipoNc) + 1;
-                            Nuevo.Des_TipoNc = selectedRecord.Des_TipoNc;
-
-                            Nuevo.CG_CIA = selectedRecord.CG_CIA;
-                         
-               
-
-                            var response = await Http.PostAsJsonAsync("api/TiposNoConf", Nuevo);
-
-                            if (response.StatusCode == System.Net.HttpStatusCode.Created)
-                            {
-                                Grid.Refresh();
-                                var tipo = await response.Content.ReadFromJsonAsync<TiposNoConf>();
-                                await InvokeAsync(StateHasChanged);
-                                Nuevo.Cg_TipoNc = tipo.Cg_TipoNc;
-                                tipos.Add(Nuevo);
-                                var itemsJson = JsonSerializer.Serialize(tipo);
-                                Console.WriteLine(itemsJson);
-                                tipos.OrderByDescending(o => o.Cg_TipoNc);
-                            }
-
+                            Grid.Refresh();
+                            var tipo = await response.Content.ReadFromJsonAsync<TiposNoConf>();
+                            await InvokeAsync(StateHasChanged);
+                            Nuevo.Cg_TipoNc = tipo.Cg_TipoNc;
+                            tipos.Add(Nuevo);
+                            var itemsJson = JsonSerializer.Serialize(tipo);
+                            Console.WriteLine(itemsJson);
+                            tipos.OrderByDescending(o => o.Cg_TipoNc);
                         }
                     }
                 }
-            }
-            if (args.Item.Text == "Excel Export")
-            {
-                await this.Grid.ExcelExport();
-            }
-        }
 
-        public void Refresh()
-        {
-            Grid.Refresh();
-        }
+        if (args.Item.Text == "Excel Export") await Grid.ExcelExport();
+    }
+
+    public void Refresh()
+    {
+        Grid.Refresh();
     }
 }

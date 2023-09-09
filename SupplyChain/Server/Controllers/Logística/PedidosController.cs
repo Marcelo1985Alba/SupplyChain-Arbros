@@ -1,461 +1,218 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using SupplyChain;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Controllers;
 using SupplyChain.Shared;
 
-namespace SupplyChain
+namespace SupplyChain;
+
+[Route("api/[controller]")]
+[ApiController]
+public class PedidosController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PedidosController : ControllerBase
+    private readonly AppDbContext _context;
+    private readonly GeneraController generaController;
+    private readonly UserManager<ApplicationUser> userManager;
+
+    public PedidosController(AppDbContext context, GeneraController generaController,
+        UserManager<ApplicationUser> userManager)
     {
-        private readonly AppDbContext _context;
-        private readonly GeneraController generaController;
-        private readonly UserManager<ApplicationUser> userManager;
+        _context = context;
+        this.generaController = generaController;
+        this.userManager = userManager;
+    }
 
-        public PedidosController(AppDbContext context, GeneraController generaController, UserManager<ApplicationUser> userManager)
+    [HttpGet]
+    public async Task<IEnumerable<Pedidos>> Get(string PEDIDO)
+    {
+        var xSQL = string.Format("" +
+                                 "SELECT Pedidos.* " +
+                                 "FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
+                                 "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) " +
+                                 "where(pedidos.FLAG = 0 AND Programa.CG_ESTADO = 3 AND Pedidos.CG_ORDF != 0 AND(Pedidos.TIPOO = 1)) " +
+                                 "UNION SELECT Pedidos.* " +
+                                 "FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
+                                 "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) " +
+                                 "where Pedcli.PEDIDO NOT IN(select PEDIDO from Pedidos where TIPOO = 1) AND Programa.CG_ESTADO = 3  AND Pedcli.CANTPED > 0 AND Pedidos.TIPOO != 28");
+        return await _context.Pedidos.FromSqlRaw(xSQL).ToListAsync();
+    }
+
+    // GET: api/Pedidos/BuscarPorOFTzbl/{CG_ORDF}
+    [HttpGet("BuscarPorOFTzbl/{CG_ORDF}")]
+    public async Task<IEnumerable<Pedidos>> BuscarPorOFTzbl(string CG_ORDF)
+    {
+        var xSQL = string.Format("Select * From Pedidos AS P Where tipoo = 5 " +
+                                 $"AND EXISTS( Select CG_ART, Despacho  From Pedidos AS S where S.tipoo = 10 and S.cg_ordf = {CG_ORDF} " +
+                                 "AND S.CG_ART = P.CG_ART AND S.DESPACHO = P.DESPACHO)");
+        return await _context.Pedidos.FromSqlRaw(xSQL).ToListAsync();
+    }
+
+    // GET: api/Pedidos/BuscarPorPedido/{Pedido}
+    [HttpGet("BuscarPorPedido/{Pedido}")]
+    public async Task<ActionResult<List<Pedidos>>> BuscarPorPedido(string Pedido)
+    {
+        List<Pedidos> lPedidos = new();
+        if (_context.Pedidos.Any())
+            lPedidos = await _context.Pedidos.Where(p => p.PEDIDO.ToString() == Pedido).ToListAsync();
+
+        return
+            lPedidos == null ? NotFound() : lPedidos;
+    }
+
+    // GET: api/Pedidos/BuscarPorCliente/{Cliente}
+    [HttpGet("BuscarPorCliente/{Cliente}")]
+    public async Task<ActionResult<List<Pedidos>>> BuscarPorCliente(string Cliente)
+    {
+        List<Pedidos> lPedidos = new();
+        if (_context.Pedidos.Any()) lPedidos = await _context.Pedidos.Where(p => p.DES_CLI == Cliente).ToListAsync();
+
+        return lPedidos == null ? NotFound() : lPedidos;
+    }
+
+    // GET: api/Pedidos/BuscarPorCodigo/{Codigo}
+    [HttpGet("BuscarPorCodigo/{Codigo}")]
+    public async Task<ActionResult<List<Pedidos>>> BuscarPorCodigo(string Codigo)
+    {
+        List<Pedidos> lPedidos = new();
+        if (_context.Pedidos.Any()) lPedidos = await _context.Pedidos.Where(p => p.CG_ART == Codigo).ToListAsync();
+
+        return lPedidos == null ? NotFound() : lPedidos;
+    }
+
+    // GET: api/Pedidos/BuscarPorOF/{OF}
+    [HttpGet("BuscarPorOF/{OF}")]
+    public async Task<ActionResult<List<Pedidos>>> BuscarPorOF(string OF)
+    {
+        List<Pedidos> lPedidos = new();
+        if (_context.Pedidos.Any())
+            lPedidos = await _context.Pedidos.Where(p => p.CG_ORDF.ToString() == OF).ToListAsync();
+
+        if (lPedidos == null) return NotFound();
+
+        return lPedidos;
+    }
+
+    // GET:
+    [HttpGet("BuscarTrazabilidad/{Pedido}/{Cliente}/{Codigo}/{Busqueda}")]
+    public async Task<ActionResult<List<Pedidos>>> BuscarTrazabilidad(string Pedido, string Cliente, string Codigo,
+        int Busqueda)
+    {
+        var roleClaims = HttpContext.User.FindAll(ClaimTypes.Role).ToList();
+        var cg_cli_usuario = 0;
+        if (roleClaims.Any(c => c.Value == "Cliente"))
         {
-            _context = context;
-            this.generaController = generaController;
-            this.userManager = userManager;
+            var userName = HttpContext.User.Identity.Name;
+            var user = await userManager.FindByNameAsync(userName);
+            cg_cli_usuario = user.Cg_Cli;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<Pedidos>> Get(string PEDIDO)
+        List<Pedidos> lContiene = new();
+        if (Pedido != "Vacio")
         {
-            string xSQL = string.Format("" +
-                "SELECT Pedidos.* " +
-                "FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
-                "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) " +
-                "where(pedidos.FLAG = 0 AND Programa.CG_ESTADO = 3 AND Pedidos.CG_ORDF != 0 AND(Pedidos.TIPOO = 1)) " +
-                "UNION SELECT Pedidos.* " +
-                "FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
-                "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) " +
-                "where Pedcli.PEDIDO NOT IN(select PEDIDO from Pedidos where TIPOO = 1) AND Programa.CG_ESTADO = 3  AND Pedcli.CANTPED > 0 AND Pedidos.TIPOO != 28");
-            return await _context.Pedidos.FromSqlRaw(xSQL).ToListAsync();
+            if (_context.Pedidos.Any())
+            {
+                var query = _context.Pedidos.Where(p => p.PEDIDO.ToString().Contains(Pedido)
+                                                        && p.AVISO == "ALTA DE PRODUCTO FABRICADO");
+
+                if (roleClaims.Any(c => c.Value == "Cliente")) query = query.Where(p => p.CG_CLI == cg_cli_usuario);
+
+                lContiene = await query.OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
+            }
+
+            if (lContiene == null) return NotFound();
+        }
+        else if (Cliente != "Vacio")
+        {
+            if (_context.Pedidos.Any())
+            {
+                var query = _context.Pedidos.Where(p =>
+                    p.DES_CLI.Contains(Cliente) && p.AVISO == "ALTA DE PRODUCTO FABRICADO");
+
+                if (roleClaims.Any(c => c.Value == "Cliente")) query = query.Where(p => p.CG_CLI == cg_cli_usuario);
+
+                lContiene = await query.OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
+            }
+
+            if (lContiene == null) return NotFound();
+        }
+        else if (Codigo != "Vacio")
+        {
+            if (_context.Pedidos.Any())
+            {
+                var query = _context.Pedidos.Where(p =>
+                    p.CG_ART.Contains(Codigo) && p.AVISO == "ALTA DE PRODUCTO FABRICADO");
+
+                if (roleClaims.Any(c => c.Value == "Cliente")) query = query.Where(p => p.CG_CLI == cg_cli_usuario);
+
+
+                lContiene = await query.OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
+            }
+
+            if (lContiene == null) return NotFound();
+        }
+        else
+        {
+            if (_context.Pedidos.Any())
+            {
+                var query = _context.Pedidos.Where(p => p.AVISO == "ALTA DE PRODUCTO FABRICADO");
+
+                if (roleClaims.Any(c => c.Value == "Cliente")) query = query.Where(p => p.CG_CLI == cg_cli_usuario);
+
+                lContiene = await query.OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
+            }
+
+            if (lContiene == null) return NotFound();
         }
 
-        // GET: api/Pedidos/BuscarPorOFTzbl/{CG_ORDF}
-        [HttpGet("BuscarPorOFTzbl/{CG_ORDF}")]
-        public async Task<IEnumerable<Pedidos>> BuscarPorOFTzbl(string CG_ORDF)
-        {
-            string xSQL = string.Format("Select * From Pedidos AS P Where tipoo = 5 " +
-                $"AND EXISTS( Select CG_ART, Despacho  From Pedidos AS S where S.tipoo = 10 and S.cg_ordf = {CG_ORDF} " +
-                "AND S.CG_ART = P.CG_ART AND S.DESPACHO = P.DESPACHO)");
-            return await _context.Pedidos.FromSqlRaw(xSQL).ToListAsync();
-        }
+        return lContiene;
+    }
 
-        // GET: api/Pedidos/BuscarPorPedido/{Pedido}
-        [HttpGet("BuscarPorPedido/{Pedido}")]
-        public async Task<ActionResult<List<Pedidos>>> BuscarPorPedido(string Pedido)
+    // GET: api/Pedidos/MostrarTrazabilidad/{Pedido}
+    [HttpGet("MostrarTrazabilidad/{Pedido}")]
+    public async Task<ActionResult<List<Pedidos>>> MostrarTrazabilidad(string Pedido)
+    {
+        try
         {
             List<Pedidos> lPedidos = new();
             if (_context.Pedidos.Any())
-            {
                 lPedidos = await _context.Pedidos.Where(p => p.PEDIDO.ToString() == Pedido).ToListAsync();
-            }
-            return
-                lPedidos == null ? NotFound() : lPedidos;
-        }
 
-        // GET: api/Pedidos/BuscarPorCliente/{Cliente}
-        [HttpGet("BuscarPorCliente/{Cliente}")]
-        public async Task<ActionResult<List<Pedidos>>> BuscarPorCliente(string Cliente)
-        {
-            List<Pedidos> lPedidos = new();
-            if (_context.Pedidos.Any())
-            {
-                lPedidos = await _context.Pedidos.Where(p => p.DES_CLI == Cliente).ToListAsync();
-            }
             return lPedidos == null ? NotFound() : lPedidos;
         }
-
-        // GET: api/Pedidos/BuscarPorCodigo/{Codigo}
-        [HttpGet("BuscarPorCodigo/{Codigo}")]
-        public async Task<ActionResult<List<Pedidos>>> BuscarPorCodigo(string Codigo)
+        catch (Exception ex)
         {
-            List<Pedidos> lPedidos = new();
-            if (_context.Pedidos.Any())
-            {
-                lPedidos = await _context.Pedidos.Where(p => p.CG_ART == Codigo).ToListAsync();
-            }
-            return lPedidos == null ? NotFound() : lPedidos;
+            return BadRequest(ex);
         }
+    }
 
-        // GET: api/Pedidos/BuscarPorOF/{OF}
-        [HttpGet("BuscarPorOF/{OF}")]
-        public async Task<ActionResult<List<Pedidos>>> BuscarPorOF(string OF)
+    // GET: api/Pedidos/BusquedaParaFE_MOV/{PEDIDO}
+    [HttpGet("BusquedaParaFE_MOV/{PEDIDO}")]
+    public async Task<ActionResult<List<Pedidos>>> BuscarPorCG_PROD(string PEDIDO)
+    {
+        List<Pedidos> lpedidos = new();
+        if (_context.Pedidos.Any())
+            lpedidos = await _context.Pedidos.Where(p => p.PEDIDO.ToString() == PEDIDO && p.CG_ORDEN == 1)
+                .ToListAsync();
+
+        if (lpedidos == null) return NotFound();
+
+        return lpedidos;
+    }
+
+    //POST: api/Stock
+    //To protect from overposting attacks, enable the specific properties you want to bind to, for
+    // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+    [HttpPost]
+    public async Task<ActionResult<Pedidos>> PostStock([FromBody] Pedidos stock)
+    {
+        try
         {
-            List<Pedidos> lPedidos = new();
-            if (_context.Pedidos.Any())
-            {
-                lPedidos = await _context.Pedidos.Where(p => p.CG_ORDF.ToString() == OF).ToListAsync();
-            }
-            if (lPedidos == null)
-            {
-                return NotFound();
-            }
-            return lPedidos;
-        }
-
-        // GET:
-        [HttpGet("BuscarTrazabilidad/{Pedido}/{Cliente}/{Codigo}/{Busqueda}")]
-        public async Task<ActionResult<List<Pedidos>>> BuscarTrazabilidad(string Pedido, string Cliente, string Codigo, int Busqueda)
-        {
-
-            List<Claim> roleClaims = HttpContext.User.FindAll(ClaimTypes.Role).ToList();
-            var cg_cli_usuario = 0;
-            if (roleClaims.Any(c => c.Value == "Cliente"))
-            {
-                var userName = HttpContext.User.Identity.Name;
-                var user = await userManager.FindByNameAsync(userName);
-                cg_cli_usuario = user.Cg_Cli;
-            }
-
-            List<Pedidos> lContiene = new();
-            if (Pedido != "Vacio")
-            {
-                if (_context.Pedidos.Any())
-                {
-                    var query = _context.Pedidos.Where(p => p.PEDIDO.ToString().Contains(Pedido)
-                    && p.AVISO == "ALTA DE PRODUCTO FABRICADO");
-
-                    if (roleClaims.Any(c => c.Value == "Cliente"))
-                    {
-                        query = query.Where(p => p.CG_CLI == cg_cli_usuario);
-                    }
-
-                    lContiene = await query.OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
-                }
-                if (lContiene == null)
-                {
-                    return NotFound();
-                }
-            }
-            else if (Cliente != "Vacio")
-            {
-                if (_context.Pedidos.Any())
-                {
-                    var query = _context.Pedidos.Where(p => p.DES_CLI.Contains(Cliente) && p.AVISO == "ALTA DE PRODUCTO FABRICADO");
-
-                    if (roleClaims.Any(c => c.Value == "Cliente"))
-                    {
-                        query = query.Where(p => p.CG_CLI == cg_cli_usuario);
-                    }
-
-                    lContiene = await query.OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
-                }
-                if (lContiene == null)
-                {
-                    return NotFound();
-                }
-            }
-            else if (Codigo != "Vacio")
-            {
-                if (_context.Pedidos.Any())
-                {
-                    var query = _context.Pedidos.Where(p => p.CG_ART.Contains(Codigo) && p.AVISO == "ALTA DE PRODUCTO FABRICADO");
-
-                    if (roleClaims.Any(c => c.Value == "Cliente"))
-                    {
-                        query = query.Where(p => p.CG_CLI == cg_cli_usuario);
-                    }
-
-
-                    lContiene = await query.OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
-                }
-                if (lContiene == null)
-                {
-                    return NotFound();
-                }
-            }
-            else
-            {
-                if (_context.Pedidos.Any())
-                {
-                    var query = _context.Pedidos.Where(p => p.AVISO == "ALTA DE PRODUCTO FABRICADO");
-
-                    if (roleClaims.Any(c => c.Value == "Cliente"))
-                    {
-                        query = query.Where(p => p.CG_CLI == cg_cli_usuario);
-                    }
-
-                    lContiene = await query.OrderByDescending(s => s.PEDIDO).Take(Busqueda).ToListAsync();
-                }
-                if (lContiene == null)
-                {
-                    return NotFound();
-                }
-            }
-            return lContiene;
-        }
-
-        // GET: api/Pedidos/MostrarTrazabilidad/{Pedido}
-        [HttpGet("MostrarTrazabilidad/{Pedido}")]
-        public async Task<ActionResult<List<Pedidos>>> MostrarTrazabilidad(string Pedido)
-        {
-            try
-            {
-                List<Pedidos> lPedidos = new();
-                if (_context.Pedidos.Any())
-                {
-                    lPedidos = await _context.Pedidos.Where(p => p.PEDIDO.ToString() == Pedido).ToListAsync();
-                }
-                return lPedidos == null ? NotFound() : lPedidos;
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        // GET: api/Pedidos/BusquedaParaFE_MOV/{PEDIDO}
-        [HttpGet("BusquedaParaFE_MOV/{PEDIDO}")]
-        public async Task<ActionResult<List<Pedidos>>> BuscarPorCG_PROD(string PEDIDO)
-        {
-            List<Pedidos> lpedidos = new();
-            if (_context.Pedidos.Any())
-            {
-                lpedidos = await _context.Pedidos.Where(p => p.PEDIDO.ToString() == PEDIDO && p.CG_ORDEN == 1).ToListAsync();
-            }
-            if (lpedidos == null)
-            {
-                return NotFound();
-            }
-            return lpedidos;
-        }
-
-        //POST: api/Stock
-        //To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<Pedidos>> PostStock([FromBody] Pedidos stock)
-        {
-            try
-            {
-                stock.CG_CIA = 1;
-                //RESERVA REGISTRO: El vale hay que hacerlo del lado del cliente porque debe reservar un solo vale
-                //y aqui se ejecuta por item.
-                await generaController.ReservaByCampo("REGSTOCK");
-                var genera = await _context.Genera.Where(g => g.Id == "REGSTOCK").FirstOrDefaultAsync();
-                stock.Id = (int)genera.VALOR1;
-                stock.FE_REG = DateTime.Now;
-                stock.USUARIO = "USER";
-
-                if (stock.TIPOO == 9 || stock.TIPOO == 10)
-                {
-                    stock.CG_ORDEN = _context.Prod.Where(p => p.Id.Trim() == stock.CG_ART.Trim()).FirstOrDefault().CG_ORDEN;
-                    stock.STOCK = -stock.STOCK;
-                }
-
-                if (stock.TIPOO == 5)
-                    stock.CUIT = stock.Proveedor?.CUIT.Trim();
-
-                stock.Cliente = null;
-                stock.Proveedor = null;
-                _context.Pedidos.Add(stock);
-                await _context.SaveChangesAsync();
-
-                await CerrarOC(stock);
-                await FirmeOF(stock);
-                await generaController.LiberaByCampo("REGSTOCK");
-            }
-            catch (DbUpdateException ex)
-            {
-                await generaController.LiberaByCampo("REGSTOCK");
-                if (RegistroExists(stock.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    return BadRequest(ex);
-                }
-            }
-            catch(Exception e)
-            {
-                await generaController.LiberaByCampo("REGSTOCK");
-                return BadRequest(e);
-            }
-
-            if (stock.TIPOO == 6) //devol a prove: cargo los datos de resumen stock para el item para luego verificar si tiene stock cuando se vuelva a editar
-            {
-                stock.ResumenStock = await _context.vResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
-                && r.CG_ART.ToUpper() == stock.CG_ART.ToUpper()
-                && r.LOTE.ToUpper() == stock.LOTE.ToUpper()
-                && r.DESPACHO.ToUpper() == stock.DESPACHO.ToUpper()
-                && r.SERIE.ToUpper() == stock.SERIE.ToUpper()).FirstAsync();
-            }
-
-            //MOVIM ENTRE DEP: GENERAR SEGUNDO REGISTROS: 
-            if (stock?.TIPOO == 9)
-            {
-                stock.Id = null;
-                stock.USUARIO = "USER";
-                stock.CG_CIA = 1;
-                stock.STOCK = -stock.STOCK;
-                stock.CG_DEP = stock.CG_DEP_ALT;
-
-                _context.Pedidos.Add(stock);
-
-                try
-                {
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateException ex)
-                {
-                    if (RegistroExists(stock.Id))
-                    {
-                        return Conflict();
-                    }
-                    else
-                    {
-                        return BadRequest(ex);
-                    }
-                }
-
-                if (stock.TIPOO == 6) //devol a prove: cargo los datos de resumen stock para el item para luego verificar si tiene stock cuando se vuelva a editar
-                {
-                    stock.ResumenStock = await _context.vResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
-                    && r.CG_ART.ToUpper() == stock.CG_ART.ToUpper()
-                    && r.LOTE.ToUpper() == stock.LOTE.ToUpper()
-                    && r.DESPACHO.ToUpper() == stock.DESPACHO.ToUpper()
-                    && r.SERIE.ToUpper() == stock.SERIE.ToUpper()).FirstAsync();
-                }
-
-            }
-
-            return Ok(stock);
-        }
-
-        [HttpPost("PostList")]
-        public async Task<ActionResult<List<Pedidos>>> PostListStock([FromBody] List<Pedidos> lstock)
-        {
-            int vale = lstock[0].VALE;
-            int remito = 0;
-            bool liberaVale = false;
-            bool liberaRemito = false;
-            //vales
-            if (lstock.Count > 0 && !lstock.Any(s=> s.Id > 0) && lstock.All(s=> s.TIPOO != 1))
-            {
-                await generaController.ReservaByCampo("VALE");
-                var generaVale = await _context.Genera.Where(g => g.Id == "VALE").FirstOrDefaultAsync();
-                vale = (int)generaVale.VALOR1;
-                liberaVale = true;
-            }
-
-            //remitos
-            if (lstock.Any(s => s.TIPOO == 1 && s.Id < 0))
-            {
-                await generaController.ReservaByCampo("REMITO");
-                var generaVale = await _context.Genera.Where(g => g.Id == "REMITO").FirstOrDefaultAsync();
-                remito = (int)generaVale.VALOR1;
-                liberaRemito = true;
-
-            }
-
-            
-            foreach (var stock in lstock)
-            {
-                try
-                {
-                    if (liberaRemito)
-                    { 
-                        var rem = remito.ToString().PadLeft(8, '0');
-                        stock.REMITO = $"0001-{rem}";
-
-                        stock.Id ??= 0;
-                    }
-
-                    if(stock.TIPOO == 1)
-                    {
-                        stock.STOCKA = -1;
-                        if (stock.STOCK > 0)
-                        {
-                            stock.STOCK = -stock.STOCK;
-                        }
-                    }
-
-
-                    if (stock.Id < 0) 
-                        await AddDb(vale, stock);
-                    else
-                        await ActualizaDb(stock);
-
-                    if (stock.TIPOO == 5)
-                    {
-                        stock.Proveedor = _context.vProveedoresItris.AsNoTracking()
-                            .Where(p => p.Id == stock.CG_PROVE).FirstOrDefault();
-                    }
-
-                }
-                catch (DbUpdateException ex)
-                {
-                    if (liberaVale)
-                        await generaController.LiberaByCampo("VALE");
-
-                    if (liberaRemito)
-                        await generaController.LiberaByCampo("REMITO");
-
-                    if (stock.Id < 0)
-                    {
-                        await generaController.LiberaByCampo("REGSTOCK");
-                    }
-                    
-                    if (RegistroExists(stock.Id))
-                    {
-                        return Conflict();
-                    }
-                    else
-                    {
-                        return BadRequest(ex);
-                    }
-                }
-                catch (Exception e)
-                {
-                    if (liberaVale)
-                        await generaController.LiberaByCampo("VALE");
-
-                    if (liberaRemito)
-                        await generaController.LiberaByCampo("REMITO");
-
-                    await generaController.LiberaByCampo("REGSTOCK");
-                    return BadRequest(e);
-                }
-
-            }
-
-            
-            await FirmeOF(lstock[0]);
-
-            if(liberaVale)
-                await generaController.LiberaByCampo("VALE");
-
-            if (liberaRemito)
-                await generaController.LiberaByCampo("REMITO");
-
-
-            return Ok(lstock);
-        }
-
-        private async Task AddDb(int vale, Pedidos stock)
-        {
-            
-
-            stock.VALE = vale;//el vale se analiza
             stock.CG_CIA = 1;
             //RESERVA REGISTRO: El vale hay que hacerlo del lado del cliente porque debe reservar un solo vale
             //y aqui se ejecuta por item.
@@ -463,307 +220,467 @@ namespace SupplyChain
             var genera = await _context.Genera.Where(g => g.Id == "REGSTOCK").FirstOrDefaultAsync();
             stock.Id = (int)genera.VALOR1;
             stock.FE_REG = DateTime.Now;
-            stock.USUARIO = HttpContext.User.Identity.Name ?? "USER";
+            stock.USUARIO = "USER";
 
-            if (stock.TIPOO == 9 || stock.TIPOO == 10 || stock.TIPOO == 28)
+            if (stock.TIPOO == 9 || stock.TIPOO == 10)
             {
-                stock.CG_ORDEN = _context.Prod.Where(p => p.Id.Trim() == stock.CG_ART.Trim()).FirstOrDefault().CG_ORDEN;
+                stock.CG_ORDEN = _context.Prod.Where(p => p.Id.Trim() == stock.CG_ART.Trim()).FirstOrDefault()
+                    .CG_ORDEN;
                 stock.STOCK = -stock.STOCK;
             }
 
             if (stock.TIPOO == 5)
                 stock.CUIT = stock.Proveedor?.CUIT.Trim();
 
-
             stock.Cliente = null;
             stock.Proveedor = null;
-            stock.ResumenStock = null;
-
-            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTrackingWithIdentityResolution;
-
             _context.Pedidos.Add(stock);
             await _context.SaveChangesAsync();
 
-            if (stock.TIPOO == 1)
-            {
-                string estadoLogistica = string.Empty;
-
-                switch (stock.CG_COND_ENTREGA)
-                {
-                    case 1:
-                        estadoLogistica = "Entregar";
-                        break;
-                    case 2:
-                        estadoLogistica = "Ret.Planta";
-                        break;
-                    case 3:
-                        estadoLogistica = "Ret.CABA";
-                        break;
-                    case 4:
-                        estadoLogistica = "Entregar";
-                        break;
-                    default:
-                        break;
-                };
-
-                var update = $"UPDATE PEDCLI SET CG_ESTADO = 'C', Estado_Logistica = '{estadoLogistica}' " +
-                    $"WHERE PEDIDO = {stock.PEDIDO} AND CG_ART = '{stock.CG_ART}'";
-                _context.Database.ExecuteSqlRaw(update);
-            }
-
             await CerrarOC(stock);
-
+            await FirmeOF(stock);
             await generaController.LiberaByCampo("REGSTOCK");
-
-
-            if (stock.TIPOO == 9)
-            {
-                await generaController.ReservaByCampo("REGSTOCK");
-                genera = await _context.Genera.Where(g => g.Id == "REGSTOCK").FirstOrDefaultAsync();
-                stock.Id = (int?)genera.VALOR1;
-                stock.USUARIO = "USER";
-                stock.CG_CIA = 1;
-                stock.STOCK = -stock.STOCK;
-                stock.CG_DEP = stock.CG_DEP_ALT;
-                _context.Pedidos.Add(stock);
-                await _context.SaveChangesAsync();
-                await generaController.LiberaByCampo("REGSTOCK");
-            }
-
-
+        }
+        catch (DbUpdateException ex)
+        {
+            await generaController.LiberaByCampo("REGSTOCK");
+            if (RegistroExists(stock.Id))
+                return Conflict();
+            return BadRequest(ex);
+        }
+        catch (Exception e)
+        {
+            await generaController.LiberaByCampo("REGSTOCK");
+            return BadRequest(e);
         }
 
-        private async Task CerrarOC(Pedidos stock)
+        if (stock.TIPOO ==
+            6) //devol a prove: cargo los datos de resumen stock para el item para luego verificar si tiene stock cuando se vuelva a editar
+            stock.ResumenStock = await _context.vResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
+                                                                         && r.CG_ART.ToUpper() ==
+                                                                         stock.CG_ART.ToUpper()
+                                                                         && r.LOTE.ToUpper() == stock.LOTE.ToUpper()
+                                                                         && r.DESPACHO.ToUpper() ==
+                                                                         stock.DESPACHO.ToUpper()
+                                                                         && r.SERIE.ToUpper() ==
+                                                                         stock.SERIE.ToUpper()).FirstAsync();
+
+        //MOVIM ENTRE DEP: GENERAR SEGUNDO REGISTROS: 
+        if (stock?.TIPOO == 9)
         {
-            if (stock.TIPOO ==5)
-            {
-                var recibido =_context.Pedidos
-                    .Where(p => p.TIPOO == 5 && p.OCOMPRA == stock.OCOMPRA && p.CG_ART == stock.CG_ART)
-                    .Sum(p => p.STOCK);
-
-                var cantOC = _context.Compras
-                    .Where(c => c.NUMERO == stock.OCOMPRA && c.CG_MAT == stock.CG_ART)
-                    .Sum(c => c.SOLICITADO);
-
-                var completado = cantOC - recibido <= 0;
-
-                if (stock.CERRAROC || completado)
-                {
-                    var compra = await _context.Compras
-                        .Where(c => c.CG_MAT == stock.CG_ART && c.NUMERO == stock.OCOMPRA).FirstOrDefaultAsync();
-
-                    compra.FE_CIERRE = DateTime.Now;
-                    _context.Entry(compra).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                }
-            }
-            
-        }
-        private async Task FirmeOF(Pedidos stock)
-        {
-            if (stock.TIPOO == 28)
-            {
-                var programa = await _context.Programa.AsNoTracking()
-                               .FirstOrDefaultAsync(c => c.CG_ORDF == stock.CG_ORDF || c.CG_ORDFASOC == stock.CG_ORDF);
-
-                programa.CG_ESTADO = 1;
-                programa.CG_ESTADOCARGA = 2;
-                programa.FE_FIRME = DateTime.Now;
-                _context.Entry(programa).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-            }
-
-
-            if (stock.TIPOO == 10)
-            {
-                var programa = await _context.Programa.AsNoTracking()
-                                .Where(c => c.CG_ORDF == stock.CG_ORDF || c.CG_ORDFASOC == stock.CG_ORDF).ToListAsync();
-
-                if (programa.Count > 0 && programa.Any(p => p.CG_ESTADOCARGA != 2))
-                {
-                    await programa.ForEachAsync(async p =>
-                    {
-                        p.CG_ESTADO = 1;
-                        p.CG_ESTADOCARGA = 2;
-                        p.FE_FIRME = DateTime.Now;
-                        _context.Entry(p).State = EntityState.Modified;
-                        await _context.SaveChangesAsync();
-                    });
-                }
-            }
-            
-        }
-
-        // PUT: api/Stock/123729
-        [HttpPut("{registro}")]
-        public async Task<ActionResult<Pedidos>> PutStock(decimal registro, Pedidos stock)
-        {
+            stock.Id = null;
             stock.USUARIO = "USER";
             stock.CG_CIA = 1;
-            if (registro != stock.Id)
-            {
-                return BadRequest("Registro Incorrecto");
-            }
+            stock.STOCK = -stock.STOCK;
+            stock.CG_DEP = stock.CG_DEP_ALT;
 
+            _context.Pedidos.Add(stock);
 
             try
             {
-                 await ActualizaDb(stock);
-                
+                await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException dbEx)
+            catch (DbUpdateException ex)
             {
-                if (!RegistroExists(registro))
+                if (RegistroExists(stock.Id))
+                    return Conflict();
+                return BadRequest(ex);
+            }
+
+            if (stock.TIPOO ==
+                6) //devol a prove: cargo los datos de resumen stock para el item para luego verificar si tiene stock cuando se vuelva a editar
+                stock.ResumenStock = await _context.vResumenStock.Where(r => r.CG_DEP == stock.CG_DEP
+                                                                             && r.CG_ART.ToUpper() ==
+                                                                             stock.CG_ART.ToUpper()
+                                                                             && r.LOTE.ToUpper() == stock.LOTE.ToUpper()
+                                                                             && r.DESPACHO.ToUpper() ==
+                                                                             stock.DESPACHO.ToUpper()
+                                                                             && r.SERIE.ToUpper() ==
+                                                                             stock.SERIE.ToUpper()).FirstAsync();
+        }
+
+        return Ok(stock);
+    }
+
+    [HttpPost("PostList")]
+    public async Task<ActionResult<List<Pedidos>>> PostListStock([FromBody] List<Pedidos> lstock)
+    {
+        var vale = lstock[0].VALE;
+        var remito = 0;
+        var liberaVale = false;
+        var liberaRemito = false;
+        //vales
+        if (lstock.Count > 0 && !lstock.Any(s => s.Id > 0) && lstock.All(s => s.TIPOO != 1))
+        {
+            await generaController.ReservaByCampo("VALE");
+            var generaVale = await _context.Genera.Where(g => g.Id == "VALE").FirstOrDefaultAsync();
+            vale = (int)generaVale.VALOR1;
+            liberaVale = true;
+        }
+
+        //remitos
+        if (lstock.Any(s => s.TIPOO == 1 && s.Id < 0))
+        {
+            await generaController.ReservaByCampo("REMITO");
+            var generaVale = await _context.Genera.Where(g => g.Id == "REMITO").FirstOrDefaultAsync();
+            remito = (int)generaVale.VALOR1;
+            liberaRemito = true;
+        }
+
+
+        foreach (var stock in lstock)
+            try
+            {
+                if (liberaRemito)
                 {
-                    return NotFound();
+                    var rem = remito.ToString().PadLeft(8, '0');
+                    stock.REMITO = $"0001-{rem}";
+
+                    stock.Id ??= 0;
                 }
+
+                if (stock.TIPOO == 1)
+                {
+                    stock.STOCKA = -1;
+                    if (stock.STOCK > 0) stock.STOCK = -stock.STOCK;
+                }
+
+
+                if (stock.Id < 0)
+                    await AddDb(vale, stock);
                 else
-                {
-                    BadRequest(dbEx);
-                }
+                    await ActualizaDb(stock);
+
+                if (stock.TIPOO == 5)
+                    stock.Proveedor = _context.vProveedoresItris.AsNoTracking()
+                        .Where(p => p.Id == stock.CG_PROVE).FirstOrDefault();
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
+                if (liberaVale)
+                    await generaController.LiberaByCampo("VALE");
+
+                if (liberaRemito)
+                    await generaController.LiberaByCampo("REMITO");
+
+                if (stock.Id < 0) await generaController.LiberaByCampo("REGSTOCK");
+
+                if (RegistroExists(stock.Id))
+                    return Conflict();
                 return BadRequest(ex);
             }
+            catch (Exception e)
+            {
+                if (liberaVale)
+                    await generaController.LiberaByCampo("VALE");
 
-            return Ok(stock);
+                if (liberaRemito)
+                    await generaController.LiberaByCampo("REMITO");
+
+                await generaController.LiberaByCampo("REGSTOCK");
+                return BadRequest(e);
+            }
+
+
+        await FirmeOF(lstock[0]);
+
+        if (liberaVale)
+            await generaController.LiberaByCampo("VALE");
+
+        if (liberaRemito)
+            await generaController.LiberaByCampo("REMITO");
+
+
+        return Ok(lstock);
+    }
+
+    private async Task AddDb(int vale, Pedidos stock)
+    {
+        stock.VALE = vale; //el vale se analiza
+        stock.CG_CIA = 1;
+        //RESERVA REGISTRO: El vale hay que hacerlo del lado del cliente porque debe reservar un solo vale
+        //y aqui se ejecuta por item.
+        await generaController.ReservaByCampo("REGSTOCK");
+        var genera = await _context.Genera.Where(g => g.Id == "REGSTOCK").FirstOrDefaultAsync();
+        stock.Id = (int)genera.VALOR1;
+        stock.FE_REG = DateTime.Now;
+        stock.USUARIO = HttpContext.User.Identity.Name ?? "USER";
+
+        if (stock.TIPOO == 9 || stock.TIPOO == 10 || stock.TIPOO == 28)
+        {
+            stock.CG_ORDEN = _context.Prod.Where(p => p.Id.Trim() == stock.CG_ART.Trim()).FirstOrDefault().CG_ORDEN;
+            stock.STOCK = -stock.STOCK;
         }
 
-        // PUT: api/Stock/123729
-        [HttpPut("ActualizaDeposito/{registro}")]
-        public async Task<ActionResult<Pedidos>> ActualizaDeposito(decimal registro, Pedidos stock)
+        if (stock.TIPOO == 5)
+            stock.CUIT = stock.Proveedor?.CUIT.Trim();
+
+
+        stock.Cliente = null;
+        stock.Proveedor = null;
+        stock.ResumenStock = null;
+
+        _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTrackingWithIdentityResolution;
+
+        _context.Pedidos.Add(stock);
+        await _context.SaveChangesAsync();
+
+        if (stock.TIPOO == 1)
         {
+            var estadoLogistica = string.Empty;
+
+            switch (stock.CG_COND_ENTREGA)
+            {
+                case 1:
+                    estadoLogistica = "Entregar";
+                    break;
+                case 2:
+                    estadoLogistica = "Ret.Planta";
+                    break;
+                case 3:
+                    estadoLogistica = "Ret.CABA";
+                    break;
+                case 4:
+                    estadoLogistica = "Entregar";
+                    break;
+            }
+
+            ;
+
+            var update = $"UPDATE PEDCLI SET CG_ESTADO = 'C', Estado_Logistica = '{estadoLogistica}' " +
+                         $"WHERE PEDIDO = {stock.PEDIDO} AND CG_ART = '{stock.CG_ART}'";
+            _context.Database.ExecuteSqlRaw(update);
+        }
+
+        await CerrarOC(stock);
+
+        await generaController.LiberaByCampo("REGSTOCK");
+
+
+        if (stock.TIPOO == 9)
+        {
+            await generaController.ReservaByCampo("REGSTOCK");
+            genera = await _context.Genera.Where(g => g.Id == "REGSTOCK").FirstOrDefaultAsync();
+            stock.Id = (int?)genera.VALOR1;
             stock.USUARIO = "USER";
             stock.CG_CIA = 1;
-            if (registro != stock.Id)
-            {
-                return BadRequest("Registro Incorrecto");
-            }
-            try
-            {
-                var update = $"UPDATE Pedidos SET CG_DEP = {stock.CG_DEP} " +
-                    $"WHERE CG_ART = '{stock.CG_ART}' AND DESPACHO = '{stock.DESPACHO}' AND VALE = {stock.VALE}";
-                await _context.Database.ExecuteSqlRawAsync(update);
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-
-            return Ok(stock);
+            stock.STOCK = -stock.STOCK;
+            stock.CG_DEP = stock.CG_DEP_ALT;
+            _context.Pedidos.Add(stock);
+            await _context.SaveChangesAsync();
+            await generaController.LiberaByCampo("REGSTOCK");
         }
+    }
 
-
-        [HttpPut("FromPedCli")]
-        public async Task<ActionResult<Pedidos>> PutStockFromPedCli(PedCli pedCli)
+    private async Task CerrarOC(Pedidos stock)
+    {
+        if (stock.TIPOO == 5)
         {
-            List<Pedidos> lStocks = new();
-            try
-            {
-                lStocks = await _context.Pedidos.Where(p => p.PEDIDO == pedCli.PEDIDO && p.TIPOO == 1).ToListAsync();
-                foreach (var stock in lStocks)
-                {
-                    stock.CONFIRMADO = pedCli.CONFIRMADO ? 1: 0;
-                    await ActualizaDb(stock);
-                }
-            }
-            catch (DbUpdateConcurrencyException dbEx)
-            {
-                return BadRequest(dbEx);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            var recibido = _context.Pedidos
+                .Where(p => p.TIPOO == 5 && p.OCOMPRA == stock.OCOMPRA && p.CG_ART == stock.CG_ART)
+                .Sum(p => p.STOCK);
 
-            return Ok(lStocks);
-        }
+            var cantOC = _context.Compras
+                .Where(c => c.NUMERO == stock.OCOMPRA && c.CG_MAT == stock.CG_ART)
+                .Sum(c => c.SOLICITADO);
 
-        private async Task ActualizaDb(Pedidos stock)
-        {
-            if (stock.TIPOO == 9 || stock.TIPOO == 10 || stock.TIPOO == 28)
-                stock.STOCK = -stock.STOCK;
+            var completado = cantOC - recibido <= 0;
 
-            //actualizar estado logistica
-            if (stock.TIPOO == 1 && stock.PEDIDO > 0)
+            if (stock.CERRAROC || completado)
             {
-                string estadoLogistica = string.Empty;
+                var compra = await _context.Compras
+                    .Where(c => c.CG_MAT == stock.CG_ART && c.NUMERO == stock.OCOMPRA).FirstOrDefaultAsync();
 
-                switch (stock.CG_COND_ENTREGA)
-                {
-                    case 1:
-                        estadoLogistica = "Entregar";
-                        break;
-                    case 2:
-                        estadoLogistica = "Ret.Planta";
-                        break;
-                    case 3:
-                        estadoLogistica = "Ret.CABA";
-                        break;
-                    case 4:
-                        estadoLogistica = "Entregar";
-                        break;
-                    default:
-                        break;
-                };
-                /*
-                var update = $"UPDATE PEDCLI SET CG_ESTADO = 'C', Estado_Logistica = '{estadoLogistica}' " +
-                    $"WHERE PEDIDO = {stock.PEDIDO} AND CG_ART = '{stock.CG_ART}'";
-                _context.Database.ExecuteSqlRaw(update);
-                */
-            }
-            try
-            {
-                _context.Entry(stock).State = EntityState.Modified;
+                compra.FE_CIERRE = DateTime.Now;
+                _context.Entry(compra).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
+        }
+    }
 
-            catch (DbUpdateConcurrencyException dbEx)
-            {
-                return;
-            }
-            catch (Exception ex)
-            {
-                return;
-            }
+    private async Task FirmeOF(Pedidos stock)
+    {
+        if (stock.TIPOO == 28)
+        {
+            var programa = await _context.Programa.AsNoTracking()
+                .FirstOrDefaultAsync(c => c.CG_ORDF == stock.CG_ORDF || c.CG_ORDFASOC == stock.CG_ORDF);
+
+            programa.CG_ESTADO = 1;
+            programa.CG_ESTADOCARGA = 2;
+            programa.FE_FIRME = DateTime.Now;
+            _context.Entry(programa).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
 
-        [HttpDelete("{vale}")]
-        public async Task<IActionResult> DeleteByVale(int vale)
+
+        if (stock.TIPOO == 10)
         {
-            var pedidos = await _context.Pedidos.Where(p => p.VALE == vale).ToListAsync();
-            if (pedidos is null || pedidos.Count == 0)
-            {
+            var programa = await _context.Programa.AsNoTracking()
+                .Where(c => c.CG_ORDF == stock.CG_ORDF || c.CG_ORDFASOC == stock.CG_ORDF).ToListAsync();
+
+            if (programa.Count > 0 && programa.Any(p => p.CG_ESTADOCARGA != 2))
+                await programa.ForEachAsync(async p =>
+                {
+                    p.CG_ESTADO = 1;
+                    p.CG_ESTADOCARGA = 2;
+                    p.FE_FIRME = DateTime.Now;
+                    _context.Entry(p).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                });
+        }
+    }
+
+    // PUT: api/Stock/123729
+    [HttpPut("{registro}")]
+    public async Task<ActionResult<Pedidos>> PutStock(decimal registro, Pedidos stock)
+    {
+        stock.USUARIO = "USER";
+        stock.CG_CIA = 1;
+        if (registro != stock.Id) return BadRequest("Registro Incorrecto");
+
+
+        try
+        {
+            await ActualizaDb(stock);
+        }
+        catch (DbUpdateConcurrencyException dbEx)
+        {
+            if (!RegistroExists(registro))
                 return NotFound();
-            }
-
-            foreach (var item in pedidos)
-            {
-                item.STOCK = 0;
-                item.PEDIDO = 0;
-                item.CG_ORDF = 0;
-                item.AVISO = "VALE ANULADO";
-                _context.Entry(item).State = EntityState.Modified;
-            }
-
-            try
-            {
-                await _context.SaveChangesAsync();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            BadRequest(dbEx);
         }
-
-        private bool RegistroExists(decimal? registro)
+        catch (Exception ex)
         {
-            return _context.Pedidos.Any(e => e.Id == registro);
+            return BadRequest(ex);
         }
 
-        
+        return Ok(stock);
+    }
+
+    // PUT: api/Stock/123729
+    [HttpPut("ActualizaDeposito/{registro}")]
+    public async Task<ActionResult<Pedidos>> ActualizaDeposito(decimal registro, Pedidos stock)
+    {
+        stock.USUARIO = "USER";
+        stock.CG_CIA = 1;
+        if (registro != stock.Id) return BadRequest("Registro Incorrecto");
+
+        try
+        {
+            var update = $"UPDATE Pedidos SET CG_DEP = {stock.CG_DEP} " +
+                         $"WHERE CG_ART = '{stock.CG_ART}' AND DESPACHO = '{stock.DESPACHO}' AND VALE = {stock.VALE}";
+            await _context.Database.ExecuteSqlRawAsync(update);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
+
+        return Ok(stock);
+    }
+
+
+    [HttpPut("FromPedCli")]
+    public async Task<ActionResult<Pedidos>> PutStockFromPedCli(PedCli pedCli)
+    {
+        List<Pedidos> lStocks = new();
+        try
+        {
+            lStocks = await _context.Pedidos.Where(p => p.PEDIDO == pedCli.PEDIDO && p.TIPOO == 1).ToListAsync();
+            foreach (var stock in lStocks)
+            {
+                stock.CONFIRMADO = pedCli.CONFIRMADO ? 1 : 0;
+                await ActualizaDb(stock);
+            }
+        }
+        catch (DbUpdateConcurrencyException dbEx)
+        {
+            return BadRequest(dbEx);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
+
+        return Ok(lStocks);
+    }
+
+    private async Task ActualizaDb(Pedidos stock)
+    {
+        if (stock.TIPOO == 9 || stock.TIPOO == 10 || stock.TIPOO == 28)
+            stock.STOCK = -stock.STOCK;
+
+        //actualizar estado logistica
+        if (stock.TIPOO == 1 && stock.PEDIDO > 0)
+        {
+            var estadoLogistica = string.Empty;
+
+            switch (stock.CG_COND_ENTREGA)
+            {
+                case 1:
+                    estadoLogistica = "Entregar";
+                    break;
+                case 2:
+                    estadoLogistica = "Ret.Planta";
+                    break;
+                case 3:
+                    estadoLogistica = "Ret.CABA";
+                    break;
+                case 4:
+                    estadoLogistica = "Entregar";
+                    break;
+            }
+
+            ;
+            /*
+            var update = $"UPDATE PEDCLI SET CG_ESTADO = 'C', Estado_Logistica = '{estadoLogistica}' " +
+                $"WHERE PEDIDO = {stock.PEDIDO} AND CG_ART = '{stock.CG_ART}'";
+            _context.Database.ExecuteSqlRaw(update);
+            */
+        }
+
+        try
+        {
+            _context.Entry(stock).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        catch (DbUpdateConcurrencyException dbEx)
+        {
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    [HttpDelete("{vale}")]
+    public async Task<IActionResult> DeleteByVale(int vale)
+    {
+        var pedidos = await _context.Pedidos.Where(p => p.VALE == vale).ToListAsync();
+        if (pedidos is null || pedidos.Count == 0) return NotFound();
+
+        foreach (var item in pedidos)
+        {
+            item.STOCK = 0;
+            item.PEDIDO = 0;
+            item.CG_ORDF = 0;
+            item.AVISO = "VALE ANULADO";
+            _context.Entry(item).State = EntityState.Modified;
+        }
+
+        try
+        {
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
+    }
+
+    private bool RegistroExists(decimal? registro)
+    {
+        return _context.Pedidos.Any(e => e.Id == registro);
     }
 }

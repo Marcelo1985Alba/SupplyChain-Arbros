@@ -1,8 +1,8 @@
-﻿
+﻿@using Syncfusion.Blazor.DropDowns
 @typeparam TItem
 
-<Syncfusion.Blazor.DropDowns.SfDropDownList TItem="TItem" TValue="int" PopupHeight="230px" 
-                                            Placeholder="@PlaceHolder"  Enabled="@Habilitado"
+<Syncfusion.Blazor.DropDowns.SfDropDownList TItem="TItem" TValue="int" PopupHeight="230px"
+                                            Placeholder="@PlaceHolder" Enabled="@Habilitado"
                                             @bind-Value="@oSeleccionado" DataSource="@DataSource">
     <Syncfusion.Blazor.DropDowns.DropDownListEvents TItem="@TItem" TValue="int" ValueChange="OnChange"></Syncfusion.Blazor.DropDowns.DropDownListEvents>
     <Syncfusion.Blazor.DropDowns.DropDownListFieldSettings Text="@ValueText" Value="@ValueId"></Syncfusion.Blazor.DropDowns.DropDownListFieldSettings>
@@ -13,20 +13,31 @@
     int oSeleccionado { get; set; }
 
     //[Parameter] public Type TipoValor { get; set; } = typeof(string);
-    [Parameter] public IEnumerable<TItem> DataSource { get; set; } = new List<TItem>();
-    [Parameter] public string PlaceHolder { get; set; }
-    [Parameter] public EventCallback<TItem> OnSelectedChanged { get; set; }
-    [Parameter] public string ValueId { get; set; }
-    [Parameter] public bool Habilitado { get; set; } = true;
+    [Parameter]
+    public IEnumerable<TItem> DataSource { get; set; } = new List<TItem>();
+
+    [Parameter]
+    public string PlaceHolder { get; set; }
+
+    [Parameter]
+    public EventCallback<TItem> OnSelectedChanged { get; set; }
+
+    [Parameter]
+    public string ValueId { get; set; }
+
+    [Parameter]
+    public bool Habilitado { get; set; } = true;
+
     /// <summary>
-    /// Field show
+    ///     Field show
     /// </summary>
-    [Parameter] public string ValueText { get; set; }
+    [Parameter]
+    public string ValueText { get; set; }
 
-    private void OnChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int, TItem> args)
+    private void OnChange(ChangeEventArgs<int, TItem> args)
     {
-
         OnSelectedChanged.InvokeAsync(args.ItemData);
         InvokeAsync(StateHasChanged);
     }
+
 }

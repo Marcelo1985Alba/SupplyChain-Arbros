@@ -2,22 +2,18 @@
 using SupplyChain.Client.HelperService.Base;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace SupplyChain.Client.HelperService
+namespace SupplyChain.Client.HelperService;
+
+public class SemaforoService : BaseService<Semaforo, int>
 {
-    public class SemaforoService : BaseService<Semaforo, int>
+    private const string api = "api/Semaforo";
+    private readonly IJSRuntime _js;
+    private readonly IRepositoryHttp Http;
+
+    public SemaforoService(IRepositoryHttp Http, IJSRuntime js) : base(Http, api)
     {
-        private readonly IRepositoryHttp Http;
-        private readonly IJSRuntime _js;
-        private const string api = "api/Semaforo";
-
-        public SemaforoService(IRepositoryHttp Http, IJSRuntime js) : base( Http, api)
-        {
-            this.Http = Http;
-            this._js= js;
-        }
-
+        this.Http = Http;
+        _js = js;
     }
 }

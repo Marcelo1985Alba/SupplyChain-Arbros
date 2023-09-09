@@ -1,19 +1,14 @@
 ﻿@page "/Abms/mantceldas"
-@using Syncfusion.Blazor.Grids
-@using Syncfusion.Blazor.Inputs
+@using EditMode = Syncfusion.Blazor.PivotView.EditMode
+@using SelectionType = Syncfusion.Blazor.Grids.SelectionType
 @using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Data
-@using Syncfusion.Blazor.DropDowns
-@using SupplyChain
-@using Syncfusion.Blazor.Calendars
-@using SupplyChain.Client.Shared
 @inherits MantCeldaPageBase
 
 <div class="row">
     <div class="col-12">
         <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
-                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
-                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+                           OnReiniciar="async () => await OnReiniciarGrilla()"
+                           OnVistaSelected="async v => await OnVistaSeleccionada(v)"/>
     </div>
 </div>
 
@@ -26,43 +21,45 @@
                 @ref="refGrid" DataSource="@mantCeldas" Width="100%" Toolbar="Toolbaritems"
                 AllowExcelExport="true" AllowGrouping="true" ID="grdCeldas" AllowFiltering="true"
                 AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
-            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridSelectionSettings CheckboxOnly="true" Type="SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolbarHandler"
-                        QueryCellInfo="(async(args)=> await QueryCellInfoHandler(args))"
-                        OnActionComplete="OnActionCompleteHandler" TValue="MantCeldas"></GridEvents>
+                        QueryCellInfo="async args => await QueryCellInfoHandler(args)"
+                        OnActionComplete="OnActionCompleteHandler" TValue="MantCeldas">
+            </GridEvents>
             <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
                               ShowDeleteConfirmDialog="false" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
             </GridEditSettings>
             <GridColumns>
                 <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.Id) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.Cg_Celda) HeaderText="Codigo Celda" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.Des_Celda) HeaderText="Desc Celda" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.Mantenimiento) HeaderText="Mantenimiento" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.Fecha) HeaderText="Fecha" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.Tarea) HeaderText="Tarea" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.Causa) HeaderText="Causa" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.TiempoParada) HeaderText="Tiempo de Parada" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.Repuesto) HeaderText="Repuesto" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.Costo) HeaderText="Costo" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.Operario) HeaderText="Operario" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.Operador) HeaderText="Operador" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.Proveedor) HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.Estado) HeaderText="Estado" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.FechaCumplido) HeaderText="Fecha de cumplido" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field=@nameof(MantCeldas.Observaciones) HeaderText="Observaciones" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.Id)" HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.Cg_Celda)" HeaderText="Codigo Celda" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.Des_Celda)" HeaderText="Desc Celda" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.Mantenimiento)" HeaderText="Mantenimiento" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.Fecha)" HeaderText="Fecha" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.Tarea)" HeaderText="Tarea" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.Causa)" HeaderText="Causa" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.TiempoParada)" HeaderText="Tiempo de Parada" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.Repuesto)" HeaderText="Repuesto" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.Costo)" HeaderText="Costo" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.Operario)" HeaderText="Operario" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.Operador)" HeaderText="Operador" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.Proveedor)" HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.Estado)" HeaderText="Estado" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.FechaCumplido)" HeaderText="Fecha de cumplido" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(MantCeldas.Observaciones)" HeaderText="Observaciones" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
         </SfGrid>
     </div>
 
     @if (popupFormVisible)
-	{
-		 <FormMantCeldas mantCeldas="mantCeldaSeleccionada" Show="popupFormVisible" OnEliminar="@(async(p)=>await Guardar(p))"
-                     OnCerrar="OnCerrarDialog" OnGuardar="@(async(p)=>await Guardar(p))"></FormMantCeldas>
-	}
+    {
+        <FormMantCeldas mantCeldas="mantCeldaSeleccionada" Show="popupFormVisible" OnEliminar="@(async p => await Guardar(p))"
+                        OnCerrar="OnCerrarDialog" OnGuardar="@(async p => await Guardar(p))">
+        </FormMantCeldas>
+    }
 </div>
 
 <style>
@@ -84,36 +81,38 @@
 
 @code {
 
-    public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
+    public string edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
     public bool DblClick = true;
-    public bool CommandColumnsClick = false;
+    public bool CommandColumnsClick;
 
-    public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+    public EditMode SelectedMode = EditMode.Normal;
+
     public void OnRadioChange(ChangeArgs<string> args)
     {
         if (args.Value == "inline")
         {
-            this.DblClick = true;
-            this.CommandColumnsClick = false;
-            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+            DblClick = true;
+            CommandColumnsClick = false;
+            SelectedMode = EditMode.Normal;
         }
         else if (args.Value == "batch")
         {
-            this.DblClick = true;
-            this.CommandColumnsClick = false;
-            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Batch;
+            DblClick = true;
+            CommandColumnsClick = false;
+            SelectedMode = EditMode.Batch;
         }
         else if (args.Value == "dialog")
         {
-            this.DblClick = true;
-            this.CommandColumnsClick = false;
-            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Dialog;
+            DblClick = true;
+            CommandColumnsClick = false;
+            SelectedMode = EditMode.Dialog;
         }
         else
         {
-            this.CommandColumnsClick = true;
+            CommandColumnsClick = true;
         }
     }
+
 }
 
 <style>

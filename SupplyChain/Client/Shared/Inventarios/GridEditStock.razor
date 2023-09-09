@@ -1,15 +1,12 @@
-﻿@using System.ComponentModel.DataAnnotations;
-@using System.ComponentModel.DataAnnotations.Schema;
+﻿@using System.ComponentModel.DataAnnotations
+@using Syncfusion.Blazor.Navigations
+@using Action = Syncfusion.Blazor.Grids.Action
+@using Syncfusion.Blazor.DropDowns
 @inject HttpClient Http
 @inject IJSRuntime JS
-@using System.Text.Json
-@using Syncfusion.Blazor.DropDowns
-@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Navigations
 
 @if (DataSource == null)
 {
-
 }
 else
 {
@@ -21,158 +18,164 @@ else
                         AllowResizing="true" AllowSelection="true" AllowSorting="true" AllowTextWrap="false"
                         AllowReordering="true" RowHeight="20">
                     @*<GridPageSettings PageCount="4" PageSize="4"></GridPageSettings>*@
-                    <GridEvents OnActionBegin="@(async(p)=> await OnActionBeginHandler(p))" 
-                                CommandClicked="@(async (p)=> await CommandClickHandler(p))"
-                                OnBeginEdit="@(async (ped)=> await BeginEditHandler(ped))" 
-                                QueryCellInfo="@(async(e)=> await QueryCellInfoHandler(e))"
+                    <GridEvents OnActionBegin="@(async p => await OnActionBeginHandler(p))"
+                                CommandClicked="@(async p => await CommandClickHandler(p))"
+                                OnBeginEdit="@(async ped => await BeginEditHandler(ped))"
+                                QueryCellInfo="@(async e => await QueryCellInfoHandler(e))"
                                 OnActionComplete="OnActionComplete" OnToolbarClick="ClickHandler"
-                                TValue="Pedidos"></GridEvents>
+                                TValue="Pedidos">
+                    </GridEvents>
                     <GridEditSettings AllowAdding="PermiteAgregar" AllowEditing="PermiteEditar" AllowDeleting="PermiteEliminar"
                                       Mode="EditMode.Dialog">
 
                         <HeaderTemplate>
                             <span class="text-active">Detalle de Producto</span>
-                            <hr />
+                            <hr/>
                         </HeaderTemplate>
                         <Template>
                             @{
+                                stock = context as Pedidos;
+                                <div id="dialogo">
 
-                                stock = (context as Pedidos);
-                                                        <div id="dialogo">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-2">
+                                            <label class="col-form-label">Codigo Producto</label>
+                                            <SfTextBox @bind-Value="@stock.CG_ART" Readonly="true"></SfTextBox>
+                                            <ValidationMessage For="@(() => stock.CG_ART)"></ValidationMessage>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="col-form-label">Descripcion Producto</label>
+                                            <SfTextBox @bind-Value="@stock.DES_ART" Readonly="true"></SfTextBox>
+                                            <ValidationMessage For="@(() => stock.DES_ART)"></ValidationMessage>
+                                        </div>
 
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-2">
-                                                                    <label class="col-form-label">Codigo Producto</label>
-                                                                    <SfTextBox @bind-Value="@stock.CG_ART" Readonly="true"></SfTextBox>
-                                                                    <ValidationMessage For="@(() => stock.CG_ART)"></ValidationMessage>
-                                                                </div>
-                                                                <div class="form-group col-md-4">
-                                                                    <label class="col-form-label">Descripcion Producto</label>
-                                                                    <SfTextBox @bind-Value="@stock.DES_ART" Readonly="true"></SfTextBox>
-                                                                    <ValidationMessage For="@(() => stock.DES_ART)"></ValidationMessage>
-                                                                </div>
-
-                                                                @*<div class="form-group col-md-1 mt-4">
+                                        @*<div class="form-group col-md-1 mt-4">
                                                                     <SfButton HtmlAttributes="@HtmlAttribute" OnClick="@(async ()=> await BuscarItem())"
                                                                               Disabled="@(stock.CG_ART != "")"
                                                                               Content="" IconCss="fa fa-search" />
                                                                 </div>*@
-                                                                <div class="form-group col-md-6">
-                                                                    <label class="col-form-label">Déposito Ingreso</label>
-                                                                    <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP"
-                                                                                    TValue="int" ID="CG_DEP" DataSource="@depositos">
-                                                                        <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP">
+                                        <div class="form-group col-md-6">
+                                            <label class="col-form-label">Déposito Ingreso</label>
+                                            <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP"
+                                                            TValue="int" ID="CG_DEP" DataSource="@depositos">
+                                                <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP">
 
-                                                                        </DropDownListFieldSettings>
-                                                                    </SfDropDownList>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-2">
-                                                                    <label class="col-form-label">Cantidad</label>
-                                                                    <SfNumericTextBox @bind-Value="@stock.STOCK" Decimals="2"></SfNumericTextBox>
-                                                                    <ValidationMessage For="@(() => stock.STOCK)"></ValidationMessage>
-                                                                </div>
-                                                                <div class="form-group col-md-1">
-                                                                    <label class="col-form-label">Unidad</label>
-                                                                    <SfTextBox @bind-Value="@stock.UNID" Readonly="true"></SfTextBox>
-                                                                    <ValidationMessage For="@(() => stock.UNID)"></ValidationMessage>
-                                                                </div>
-                                                                @if (RegistroGenerado.TIPOO != 5)
-                                                                {
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="col-form-label">Serie</label>
-                                                                        <SfTextBox @bind-Value="@stock.SERIE"></SfTextBox>
-                                                                        <ValidationMessage For="@(() => stock.SERIE)"></ValidationMessage>
-                                                                    </div>
-                                                                }
-                                                                @if (RegistroGenerado.TIPOO == 5)
-                                                                {
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="col-form-label">Depacho</label>
-                                                                        <SfTextBox @bind-Value="@stock.DESPACHO"></SfTextBox>
-                                                                        <ValidationMessage For="@(() => stock.DESPACHO)"></ValidationMessage>
-                                                                    </div>
-                                                                }
+                                                </DropDownListFieldSettings>
+                                            </SfDropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-2">
+                                            <label class="col-form-label">Cantidad</label>
+                                            <SfNumericTextBox @bind-Value="@stock.STOCK" Decimals="2"></SfNumericTextBox>
+                                            <ValidationMessage For="@(() => stock.STOCK)"></ValidationMessage>
+                                        </div>
+                                        <div class="form-group col-md-1">
+                                            <label class="col-form-label">Unidad</label>
+                                            <SfTextBox @bind-Value="@stock.UNID" Readonly="true"></SfTextBox>
+                                            <ValidationMessage For="@(() => stock.UNID)"></ValidationMessage>
+                                        </div>
+                                        @if (RegistroGenerado.TIPOO != 5)
+                                        {
+                                            <div class="form-group col-md-2">
+                                                <label class="col-form-label">Serie</label>
+                                                <SfTextBox @bind-Value="@stock.SERIE"></SfTextBox>
+                                                <ValidationMessage For="@(() => stock.SERIE)"></ValidationMessage>
+                                            </div>
+                                        }
+                                        @if (RegistroGenerado.TIPOO == 5)
+                                        {
+                                            <div class="form-group col-md-2">
+                                                <label class="col-form-label">Depacho</label>
+                                                <SfTextBox @bind-Value="@stock.DESPACHO"></SfTextBox>
+                                                <ValidationMessage For="@(() => stock.DESPACHO)"></ValidationMessage>
+                                            </div>
+                                        }
 
-                                                                @if (RegistroGenerado.TIPOO == 5)
-                                                                {
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="col-form-label">Lote</label>
-                                                                        <SfTextBox @bind-Value="@stock.LOTE"></SfTextBox>
-                                                                        <ValidationMessage For="@(() => stock.LOTE)"></ValidationMessage>
-                                                                    </div>
-                                                                }
+                                        @if (RegistroGenerado.TIPOO == 5)
+                                        {
+                                            <div class="form-group col-md-2">
+                                                <label class="col-form-label">Lote</label>
+                                                <SfTextBox @bind-Value="@stock.LOTE"></SfTextBox>
+                                                <ValidationMessage For="@(() => stock.LOTE)"></ValidationMessage>
+                                            </div>
+                                        }
 
-                                                                @if (RegistroGenerado.TIPOO == 5)
-                                                                {
-                                                                    <div class="form-group col-md-2 mt-5">
-                                                                        <Syncfusion.Blazor.Buttons.SfCheckBox Label="Cierra Item en OC"
-                                                                                                              @bind-Checked="@stock.CERRAROC" />
-                                                                    </div>
-                                                                }
+                                        @if (RegistroGenerado.TIPOO == 5)
+                                        {
+                                            <div class="form-group col-md-2 mt-5">
+                                                <Syncfusion.Blazor.Buttons.SfCheckBox Label="Cierra Item en OC"
+                                                                                      @bind-Checked="@stock.CERRAROC"/>
+                                            </div>
+                                        }
 
-                                                            </div>
+                                    </div>
 
-                                                            @if (RegistroGenerado.TIPOO == 5)
-                                                            {
-                                                                <hr />
-                                                                <div class="form-row">
-                                                                    <div class="form-group col-md-2 checkbox checkbox-success">
-                                                                        <Syncfusion.Blazor.Buttons.SfCheckBox Label="Dimension" CssClass="e-info checkbox checkbox-success"
-                                                                                                              @bind-Checked="@stock.Control1"  />
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <Syncfusion.Blazor.Buttons.SfCheckBox Label="Identificacion" CssClass="e-info"
-                                                                                                              @bind-Checked="@stock.Control2" />
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <Syncfusion.Blazor.Buttons.SfCheckBox Label="Ensayo Fisico" CssClass="e-info"
-                                                                                                              @bind-Checked="@stock.Control3" />
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <Syncfusion.Blazor.Buttons.SfCheckBox Label="Ensayo Quimico" CssClass="e-info"
-                                                                                                              @bind-Checked="@stock.Control4" />
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <Syncfusion.Blazor.Buttons.SfCheckBox Label="T. T." CssClass="e-info"
-                                                                                                              @bind-Checked="@stock.Control5" />
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <Syncfusion.Blazor.Buttons.SfCheckBox Label="Control Visual" CssClass="e-info"
-                                                                                                              @bind-Checked="@stock.Control6" />
-                                                                    </div>
-                                                                </div>
-                                                            }
-                                                            <hr />
-                                                        </div>
+                                    @if (RegistroGenerado.TIPOO == 5)
+                                    {
+                                        <hr/>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2 checkbox checkbox-success">
+                                                <Syncfusion.Blazor.Buttons.SfCheckBox Label="Dimension" CssClass="e-info checkbox checkbox-success"
+                                                                                      @bind-Checked="@stock.Control1"/>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <Syncfusion.Blazor.Buttons.SfCheckBox Label="Identificacion" CssClass="e-info"
+                                                                                      @bind-Checked="@stock.Control2"/>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <Syncfusion.Blazor.Buttons.SfCheckBox Label="Ensayo Fisico" CssClass="e-info"
+                                                                                      @bind-Checked="@stock.Control3"/>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <Syncfusion.Blazor.Buttons.SfCheckBox Label="Ensayo Quimico" CssClass="e-info"
+                                                                                      @bind-Checked="@stock.Control4"/>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <Syncfusion.Blazor.Buttons.SfCheckBox Label="T. T." CssClass="e-info"
+                                                                                      @bind-Checked="@stock.Control5"/>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <Syncfusion.Blazor.Buttons.SfCheckBox Label="Control Visual" CssClass="e-info"
+                                                                                      @bind-Checked="@stock.Control6"/>
+                                            </div>
+                                        </div>
+                                    }
+                                    <hr/>
+                                </div>
 
 
                             }
                         </Template>
                     </GridEditSettings>
 
-                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                    <GridSelectionSettings Type="SelectionType.Single"></GridSelectionSettings>
                     <GridColumns>
                         <GridColumn HeaderText="" Width="190">
-                            <GridCommandColumns><GridCommandColumn Type="CommandButtonType.None" Title="Especificacion"
-                                                       ButtonOption="@(new CommandButtonOptions() {
-                                                                       IconCss = "fa fa-file-pdf-o",
-                                                                       CssClass = "e-flat" })"></GridCommandColumn>
+                            <GridCommandColumns>
+                                <GridCommandColumn Type="CommandButtonType.None" Title="Especificacion"
+                                                   ButtonOption="@new CommandButtonOptions { IconCss = "fa fa-file-pdf-o",
+    CssClass = "e-flat"
+}"></GridCommandColumn>
 
-                                    <GridCommandColumn Type="CommandButtonType.None" Title="Copiar"
-                                                       ButtonOption="@(new CommandButtonOptions() {
-                                                                       IconCss = "e-icons e-copy",
-                                                                       CssClass = "e-flat" })"></GridCommandColumn>
+                                <GridCommandColumn Type="CommandButtonType.None" Title="Copiar"
+                                                   ButtonOption="@new CommandButtonOptions { IconCss = "e-icons e-copy",
+    CssClass = "e-flat"
+}">
+                                </GridCommandColumn>
 
                                 <GridCommandColumn Type="CommandButtonType.Edit"
-                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
+                                                   ButtonOption="@new CommandButtonOptions { IconCss = "e-icons e-edit", CssClass = "e-flat" }">
+                                </GridCommandColumn>
                                 <GridCommandColumn Type="CommandButtonType.Delete"
-                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
+                                                   ButtonOption="@new CommandButtonOptions { IconCss = "e-icons e-delete", CssClass = "e-flat" }">
+                                </GridCommandColumn>
                                 <GridCommandColumn Type="CommandButtonType.Save"
-                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-update", CssClass = "e-flat" })"></GridCommandColumn>
+                                                   ButtonOption="@new CommandButtonOptions { IconCss = "e-icons e-update", CssClass = "e-flat" }">
+                                </GridCommandColumn>
                                 <GridCommandColumn Type="CommandButtonType.Cancel"
-                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-cancel-icon", CssClass = "e-flat" })"></GridCommandColumn>
+                                                   ButtonOption="@new CommandButtonOptions { IconCss = "e-icons e-cancel-icon", CssClass = "e-flat" }">
+                                </GridCommandColumn>
                             </GridCommandColumns>
                         </GridColumn>
                         <GridColumn Field="@nameof(Pedidos.CG_ART)" HeaderText="Cod. Producto" AutoFit="true" Width="130"></GridColumn>
@@ -180,18 +183,18 @@ else
                         <GridColumn Field="@nameof(Pedidos.STOCK)" HeaderText="Cantidad" EditType="EditType.NumericEdit" Format="N2" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.UNID)" HeaderText="Unidad" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.CERRAROC)" HeaderText="Cierra OC" DisplayAsCheckBox="true"
-                                    AutoFit="true"></GridColumn>
+                                    AutoFit="true">
+                        </GridColumn>
                         <GridColumn Field="@nameof(Pedidos.DESPACHO)" HeaderText="Despacho" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.SERIE)" HeaderText="Serie" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.LOTE)" HeaderText="Lote" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.CG_DEP)" HeaderText="Deposito" AutoFit="true">
                             <Template>
                                 @{
-                                    var ped = (context as Pedidos);
+                                    var ped = context as Pedidos;
                                     if (depositos.Any(c => c.CG_DEP == ped.CG_DEP))
                                     {
                                         <span>@depositos.Where(c => c.CG_DEP == ped.CG_DEP).FirstOrDefault().DES_DEP.Trim()</span>
-
                                     }
                                 }
                             </Template>
@@ -202,7 +205,6 @@ else
                         <GridColumn Field="@nameof(Pedidos.IMPORTE1)" HeaderText="Precio Unit." AutoFit="true"></GridColumn>
 
 
-
                         <GridColumn Field="@nameof(Pedidos.Id)" IsPrimaryKey="true" Visible="false"></GridColumn>
                     </GridColumns>
                 </SfGrid>
@@ -211,46 +213,60 @@ else
     </div>
 
 
-
-
-
-    @*<BuscadorEmergente TItem="Pedidos" @ref="BuscadorProducto" Titulo=@tituloBuscador
+@*<BuscadorEmergente TItem="Pedidos" @ref="BuscadorProducto" Titulo=@tituloBuscador
         DataSource="@DataSource" Columnas="@(new string[] { "CG_ART", "DES_ART"})" Height="85%"
                        OnObjetoSeleccionado="@(async(p)=> await OnSelectedItem(p))"  />*@
 
- 
-        <ConfirmacionDialog @ref="@ConfirmacionDialog" OnConfirm="@(async()=> await ConfirmacionCopy())">
-            <HeaderTempalte>
-                <p class="text-primary">Copiar Insumo @stockCopiado?.CG_ART</p>
-            </HeaderTempalte>
-            <ContentTemplate>
-                <p>Desea Copiar el insumo @stockCopiado?.DES_ART.Trim()</p>
-            </ContentTemplate>
-        </ConfirmacionDialog>
 
+    <ConfirmacionDialog @ref="@ConfirmacionDialog" OnConfirm="@(async () => await ConfirmacionCopy())">
+        <HeaderTempalte>
+            <p class="text-primary">Copiar Insumo @stockCopiado?.CG_ART</p>
+        </HeaderTempalte>
+        <ContentTemplate>
+            <p>Desea Copiar el insumo @stockCopiado?.DES_ART.Trim()</p>
+        </ContentTemplate>
+    </ConfirmacionDialog>
 }
 
 @code {
-    [Inject] public IJSRuntime JsRuntime { get; set; }
+
+    [Inject]
+    public IJSRuntime JsRuntime { get; set; }
+
     protected ConfirmacionDialog ConfirmacionDialog;
     protected BuscadorEmergente<Pedidos> BuscadorProducto;
     protected Pedidos stock;
     protected Pedidos stockCopiado;
     protected bool confirmaCopy = false;
     Producto[] DataSourceProductos;
-    [Parameter] public string Titulo { get; set; } = null!;
-    [Parameter] public List<Pedidos> DataSource { get; set; } = null!;
-    [Parameter] public bool PermiteAgregar { get; set; } = false;
-    [Parameter] public bool PermiteEditar { get; set; } = false;
-    [Parameter] public bool PermiteEliminar { get; set; } = false;
-    [Parameter] public EventCallback<Pedidos> onEnviarDepos { get; set; }
 
-    [Parameter] public EventCallback<Pedidos> onGuardar { get; set; }
-    [CascadingParameter] public PedidoEncabezado RegistroGenerado { get; set; }
+    [Parameter]
+    public string Titulo { get; set; } = null!;
 
-    private Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
+    [Parameter]
+    public List<Pedidos> DataSource { get; set; } = null!;
+
+    [Parameter]
+    public bool PermiteAgregar { get; set; } = false;
+
+    [Parameter]
+    public bool PermiteEditar { get; set; } = false;
+
+    [Parameter]
+    public bool PermiteEliminar { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<Pedidos> onEnviarDepos { get; set; }
+
+    [Parameter]
+    public EventCallback<Pedidos> onGuardar { get; set; }
+
+    [CascadingParameter]
+    public PedidoEncabezado RegistroGenerado { get; set; }
+
+    private Dictionary<string, object> HtmlAttribute = new()
     {
-         {"type", "button" }
+        { "type", "button" }
     };
 
     //protected List<ItemModel> Toolbaritems = new List<ItemModel>(){
@@ -261,14 +277,11 @@ else
     protected SfGrid<Pedidos> Grid;
 
     private bool deshabilitaBotonBuscar = false;
+
     bool DeshabilitaBotonBuscar
     {
-        get { return deshabilitaBotonBuscar; }
-        set
-        {
-            deshabilitaBotonBuscar = DataSource.Any(s => s.TIPOO == 9);
-
-        }
+        get => deshabilitaBotonBuscar;
+        set { deshabilitaBotonBuscar = DataSource.Any(s => s.TIPOO == 9); }
     }
 
     class TipoInsumo
@@ -278,20 +291,21 @@ else
     }
 
     int TipoInsumoCodigo = 1;
-    TipoInsumo[] TiposInsumo = new[] {
-      new TipoInsumo { Codigo = 1, Descrip = "Productos" },
-      new TipoInsumo { Codigo = 2, Descrip = "Semi Elaborados" },
-      new TipoInsumo { Codigo = 4, Descrip = "Materias Primas" },
-      new TipoInsumo { Codigo = 10, Descrip = "Articulo de Reventa" },
-      new TipoInsumo { Codigo = 11, Descrip = "Herramental/Inventariables" },
-      new TipoInsumo { Codigo = 12, Descrip = "Repuestos" },
-      new TipoInsumo { Codigo = 13, Descrip = "Servicios" }
+
+    TipoInsumo[] TiposInsumo =
+    {
+        new() { Codigo = 1, Descrip = "Productos" },
+        new() { Codigo = 2, Descrip = "Semi Elaborados" },
+        new() { Codigo = 4, Descrip = "Materias Primas" },
+        new() { Codigo = 10, Descrip = "Articulo de Reventa" },
+        new() { Codigo = 11, Descrip = "Herramental/Inventariables" },
+        new() { Codigo = 12, Descrip = "Repuestos" },
+        new() { Codigo = 13, Descrip = "Servicios" }
     };
 
 
     public class ControlCantAttribute : ValidationAttribute
     {
-
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var stock = (Pedidos)validationContext.ObjectInstance;
@@ -300,25 +314,25 @@ else
                 return ValidationResult.Success;
 
 
-            decimal? cant = (decimal?)value;
-            return ((stock.TIPOO == 6 || stock.TIPOO == 9) && stock.STOCK > stock.ResumenStock?.STOCK)
+            var cant = (decimal?)value;
+            return (stock.TIPOO == 6 || stock.TIPOO == 9) && stock.STOCK > stock.ResumenStock?.STOCK
                 ? new ValidationResult($"La cantidad ingresada no puede ser mayor a la del stock ({stock.ResumenStock?.STOCK})")
                 : ValidationResult.Success;
 
-            //return cant == default || cant == 0
-            //? new ValidationResult("Ingresar cantidad")
-            //: ValidationResult.Success;
+    //return cant == default || cant == 0
+    //? new ValidationResult("Ingresar cantidad")
+    //: ValidationResult.Success;
         }
     }
 
 
-    protected List<Deposito> depositos = new List<Deposito>();
+    protected List<Deposito> depositos = new();
 
     protected override async Task OnInitializedAsync()
     {
         depositos = await Http.GetFromJsonAsync<List<Deposito>>("api/Deposito");
 
-        //await InvokeAsync(StateHasChanged);
+    //await InvokeAsync(StateHasChanged);
     }
 
 
@@ -326,10 +340,9 @@ else
     {
         if (args.CommandColumn.Title == "Copiar")
         {
-
             await ConfirmacionDialog.ShowAsync();
 
-            stockCopiado = new();
+            stockCopiado = new Pedidos();
             stockCopiado.Id = DataSource.Min(p => p.Id) - 1;
             stockCopiado.Id = stockCopiado.Id > 0 ? -1 : stockCopiado.Id;
             stockCopiado.IMPORTE1 = args.RowData.IMPORTE1;
@@ -345,43 +358,41 @@ else
             stockCopiado.SERIE = "";
             stockCopiado.LOTE = "";
             stockCopiado.Proveedor = args.RowData.Proveedor;
-
         }
 
         if (args.CommandColumn.Title == "Especificacion")
         {
-            //TODO: redireccionar
+    //TODO: redireccionar
             await JS.InvokeAsync<object>("open", $"pdf-especificacion/{args.RowData.CG_ART.Trim()}/RUTAESP", "_blank");
-
         }
     }
 
-    public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    public async Task ClickHandler(ClickEventArgs args)
     {
         if (args.Item.Id == "copy")
         {
-            if (this.Grid.SelectedRecords.Count > 0)
+            if (Grid.SelectedRecords.Count > 0)
             {
-                //bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar el area?");
+    //bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar el area?");
 
-                //if (isConfirmed)
-                //{
-                //Pedidos nuevo = new();
-                //nuevo.REGISTRO = DataSource.Min(p => p.REGISTRO) - 1;
-                //nuevo.IMPORTE1 = item.IMPORTE1;
-                //nuevo.CG_ART = item.CG_ART;
-                //nuevo.DES_ART = item.DES_ART;
-                //nuevo.STOCK = item.STOCK;
-                //nuevo.CG_DEP = item.CG_DEP;
-                //nuevo.DESPACHO = "";
+    //if (isConfirmed)
+    //{
+    //Pedidos nuevo = new();
+    //nuevo.REGISTRO = DataSource.Min(p => p.REGISTRO) - 1;
+    //nuevo.IMPORTE1 = item.IMPORTE1;
+    //nuevo.CG_ART = item.CG_ART;
+    //nuevo.DES_ART = item.DES_ART;
+    //nuevo.STOCK = item.STOCK;
+    //nuevo.CG_DEP = item.CG_DEP;
+    //nuevo.DESPACHO = "";
 
-                //DataSource.Add(nuevo);
-                //Grid.Refresh();
-                //}
+    //DataSource.Add(nuevo);
+    //Grid.Refresh();
+    //}
 
-                foreach (Pedidos item in Grid.SelectedRecords)
+                foreach (var item in Grid.SelectedRecords)
                 {
-                    stockCopiado = new();
+                    stockCopiado = new Pedidos();
                     stockCopiado.Id = DataSource.Min(p => p.Id) - 1;
                     stockCopiado.Id = stockCopiado.Id > 0 ? -1 : stockCopiado.Id;
                     stockCopiado.IMPORTE1 = item.IMPORTE1;
@@ -395,14 +406,9 @@ else
                     stockCopiado.DESPACHO = "";
                     stockCopiado.Proveedor = item.Proveedor;
                     await ConfirmacionDialog.ShowAsync();
-
                 }
-
-
             }
         }
-
-
     }
 
     protected async Task OnActionBeginHandler(ActionEventArgs<Pedidos> args)
@@ -411,21 +417,17 @@ else
         {
             args.Cancel = true;
             stock = args.Data;
-
-
-
         }
     }
 
     protected async Task ConfirmacionCopy()
     {
-
         confirmaCopy = true;
         DataSource.Add(stockCopiado);
 
-        //await Grid.RefreshColumns();
+    //await Grid.RefreshColumns();
         Grid.Refresh();
-        //await Grid.RefreshHeader();
+    //await Grid.RefreshHeader();
 
         await ConfirmacionDialog.HideAsync();
     }
@@ -434,16 +436,16 @@ else
     {
         if (args.Data.Id < 0)
         {
-            args.Row.AddClass(new string[] { "row-red" });
+            args.Row.AddClass(new[] { "row-red" });
         }
-        //else if (args.Data.Freight < 35)
-        //{
-        //    args.Row.AddClass(new string[] { "below-35" });
-        //}
-        //else
-        //{
-        //    args.Row.AddClass(new string[] { "above-35" });
-        //}
+    //else if (args.Data.Freight < 35)
+    //{
+    //    args.Row.AddClass(new string[] { "below-35" });
+    //}
+    //else
+    //{
+    //    args.Row.AddClass(new string[] { "above-35" });
+    //}
     }
 
     public async Task BeginEditHandler(BeginEditArgs<Pedidos> args)
@@ -451,8 +453,7 @@ else
         var pedido = args.RowData;
 
 
-
-        //ir al servidor y cargar el stock del item
+    //ir al servidor y cargar el stock del item
         if (pedido.TIPOO == 6 || pedido.TIPOO == 9) //DEVolucion y Momvim entre deposito
         {
             if (pedido == null) return;
@@ -471,7 +472,6 @@ else
 
                 pedido.ResumenStock = resumen;
             }
-
         }
         stock = pedido;
     }
@@ -479,18 +479,14 @@ else
 
     public async Task OnActionComplete(ActionEventArgs<Pedidos> Args)
     {
-
-        if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
+        if (Args.RequestType == Action.Save)
         {
             var pedido = DataSource.Where(p => p.Id == Args.Data.Id).FirstOrDefault();
             pedido.STOCKA = Args.Data.STOCK / Args.Data.CG_DEN > 0 ? Args.Data.CG_DEN : 1;
             await Grid.RefreshColumns();
             Grid.Refresh();
             await Grid.RefreshHeader();
-
-
         }
-
     }
 
 
@@ -502,9 +498,28 @@ else
 
     string tituloBuscador { get; set; } = "";
     private bool popupBuscadorVisible = false;
-    bool PopupBuscadorStockVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
-    bool PopupBuscadorProdVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
-    string[] ColumnasBuscador = new string[] { "CG_MAT"};
+
+    bool PopupBuscadorStockVisible
+    {
+        get => popupBuscadorVisible;
+        set
+        {
+            popupBuscadorVisible = value;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    bool PopupBuscadorProdVisible
+    {
+        get => popupBuscadorVisible;
+        set
+        {
+            popupBuscadorVisible = value;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    string[] ColumnasBuscador = { "CG_MAT" };
     ResumenStock[] Items;
 
     protected async Task Buscar()
@@ -512,7 +527,6 @@ else
         if (RegistroGenerado.TIPOO == 5) //Recep
         {
             await BuscarProductos();
-
         }
 
         if (RegistroGenerado.TIPOO == 21) //Ajuste
@@ -522,11 +536,8 @@ else
 
         if (RegistroGenerado.TIPOO == 9 || RegistroGenerado.TIPOO == 6) //Devol y Movim
         {
-
             await BuscarProductosStockEnPositivo();
         }
-
-
     }
 
     protected async Task BuscarProductos()
@@ -536,8 +547,8 @@ else
         Items = null;
         tituloBuscador = "Listado de Productos";
         PopupBuscadorProdVisible = true;
-        ColumnasBuscador = new string[] { "CG_PROD", "DES_PROD", "UNID" };
-        int cg_orden = TipoInsumoCodigo;
+        ColumnasBuscador = new[] { "CG_PROD", "DES_PROD", "UNID" };
+        var cg_orden = TipoInsumoCodigo;
         DataSourceProductos = await Http.GetFromJsonAsync<Producto[]>($"api/Productos/GetProductos/{cg_orden}");
 
 
@@ -551,8 +562,8 @@ else
         Items = null;
         tituloBuscador = "Listado de Productos en Stock";
         PopupBuscadorStockVisible = true;
-        ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE", "STOCK" };
-        int cg_orden = TipoInsumoCodigo;
+        ColumnasBuscador = new[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE", "STOCK" };
+        var cg_orden = TipoInsumoCodigo;
         Items = await Http.GetFromJsonAsync<ResumenStock[]>("api/ResumenStocks");
 
         await InvokeAsync(StateHasChanged);
@@ -565,8 +576,8 @@ else
         Items = null;
         tituloBuscador = "Listado de Productos en Stock";
         PopupBuscadorStockVisible = true;
-        ColumnasBuscador = new string[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE", "STOCK" };
-        int cg_orden = TipoInsumoCodigo;
+        ColumnasBuscador = new[] { "CG_ART", "CG_DEP", "DESPACHO", "SERIE", "LOTE", "STOCK" };
+        var cg_orden = TipoInsumoCodigo;
         Items = await Http.GetFromJsonAsync<ResumenStock[]>("api/ResumenStocks/GetResumenStockPositivo");
 
         await InvokeAsync(StateHasChanged);
@@ -579,17 +590,15 @@ else
         var tipoEntidad = obj.GetType().Name;
         if (tipoEntidad == "Stock")
         {
-            var pedido = (Pedidos)obj;
-            //Get items del vale
+            var pedido = obj;
+    //Get items del vale
             var vale = pedido.VALE;
             DataSource = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriVale/{pedido.VALE}");
 
-            //NumeroVale = ItemsVale[0].VALE;
-            //Fecha = ItemsVale[0].FE_MOV;
+    //NumeroVale = ItemsVale[0].VALE;
+    //Fecha = ItemsVale[0].FE_MOV;
         }
-
     }
-
 
 
     private async Task BuscarItem()
@@ -620,12 +629,11 @@ else
 
     private async Task onResumenStockSelected(vResumenStock obj)
     {
-
         PopupBuscadorStockVisible = false;
 
-        var resumenStock = (vResumenStock)obj;
+        var resumenStock = obj;
 
-        //buscar registro mas reciente con las caracteristicas de resumen stock
+    //buscar registro mas reciente con las caracteristicas de resumen stock
         var cg_art = resumenStock.CG_ART;
         var cg_dep = resumenStock.CG_DEP;
         var despacho = resumenStock.DESPACHO == null ? "" : resumenStock.DESPACHO;
@@ -635,7 +643,7 @@ else
         var registroCompleto = await Http
             .GetFromJsonAsync<Pedidos>($"api/Stock/GetByResumenStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
 
-        registroCompleto.Id = DataSource.Count > 0 ? -1 : DataSource.Count * -1;//indica que es un nuevo registro
+        registroCompleto.Id = DataSource.Count > 0 ? -1 : DataSource.Count * -1; //indica que es un nuevo registro
         registroCompleto.TIPOO = RegistroGenerado.TIPOO;
         registroCompleto.STOCK = 0;
         registroCompleto.ResumenStock = resumenStock;
@@ -645,15 +653,16 @@ else
 
     public async Task QueryCellInfoHandler(QueryCellInfoEventArgs<Pedidos> args)
     {
-        args.Data.STOCKA = Math.Round( (decimal)(args.Data.STOCK / args.Data.CG_DEN), 4);
-        //InvokeAsync(StateHasChanged);
+        args.Data.STOCKA = Math.Round((decimal)(args.Data.STOCK / args.Data.CG_DEN), 4);
+    //InvokeAsync(StateHasChanged);
         if (args.Data.STOCK > args.Data.PENDIENTEOC && RegistroGenerado.TIPOO == 5)
         {
-            args.Cell.AddClass(new string[] { "rojo" });
-            
+            args.Cell.AddClass(new[] { "rojo" });
         }
     }
+
 }
+
 <style>
     /*    #dialogo {
         min-height: 400px;

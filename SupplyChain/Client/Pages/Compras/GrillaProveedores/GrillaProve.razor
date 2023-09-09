@@ -1,20 +1,15 @@
 ﻿@page "/compras/proveedores"
-@using Syncfusion.Blazor.Grids
-@using Syncfusion.Blazor.Inputs
+@using EditMode = Syncfusion.Blazor.PivotView.EditMode
+@using SelectionType = Syncfusion.Blazor.Grids.SelectionType
 @using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Data
-@using Syncfusion.Blazor.DropDowns
-@using SupplyChain
-@using Syncfusion.Blazor.Calendars
-@using SupplyChain.Client.Shared
 @inherits GrillaProveBase
 @attribute [Authorize]
 
 <div class="row">
     <div class="col-12">
         <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
-                           OnReiniciar="(async ()=> await OnReinciarGrilla())"
-                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+                           OnReiniciar="async () => await OnReinciarGrilla()"
+                           OnVistaSelected="asyncv => await OnVistaSeleccionada(v)"/>
     </div>
 </div>
 
@@ -27,26 +22,27 @@
                 @ref="refGrid" DataSource="@proveedorItris" Width="%100" Toolbar="Toolbaritems"
                 AllowExcelExport="false" AllowGrouping="true" ID="grdProveedores" AllowFiltering="true"
                 AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
-            
-        <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>   
+
+            <GridSelectionSettings CheckboxOnly="true" Type="SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="12" PageSizes="true"></GridPageSettings>
-                <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete=OnActionCompleteHandler TValue="vProveedorItris"></GridEvents>
-                    <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-                        <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" AllowEditOnDblClick="false"
-                            ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog"></GridEditSettings>
-                       <GridColumns>
-                           <GridColumn Field=@nameof(vProveedorItris.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                           <GridColumn Field=@nameof(vProveedorItris.DESCRIPCION) HeaderText="DESCRIPCION" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                           <GridColumn Field=@nameof(vProveedorItris.CUIT) HeaderText="CUIT" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                           <GridColumn Field=@nameof(vProveedorItris.NOMBRE_CONTACTO) HeaderText="NOMBRE" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                           <GridColumn Field=@nameof(vProveedorItris.EMAIL_CONTACTO) HeaderText="EMAIL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                           <GridColumn Field=@nameof(vProveedorItris.TE) HeaderText="TELÉFONO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                           <GridColumn Field=@nameof(vProveedorItris.CALLE) HeaderText="DIRECCIÓN" TextAlign="TextAlign.Left" Width="200px"></GridColumn> 
-                       </GridColumns>
-                       <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible=@SpinnerVisible></SfSpinner>
+            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler" TValue="vProveedorItris"></GridEvents>
+            <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+            <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" AllowEditOnDblClick="false"
+                              ShowDeleteConfirmDialog="false" Mode="Syncfusion.Blazor.Grids.EditMode.Dialog">
+            </GridEditSettings>
+            <GridColumns>
+                <GridColumn Field="@nameof(vProveedorItris.Id)" HeaderText="Id" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(vProveedorItris.DESCRIPCION)" HeaderText="DESCRIPCION" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(vProveedorItris.CUIT)" HeaderText="CUIT" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(vProveedorItris.NOMBRE_CONTACTO)" HeaderText="NOMBRE" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(vProveedorItris.EMAIL_CONTACTO)" HeaderText="EMAIL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(vProveedorItris.TE)" HeaderText="TELÉFONO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field="@nameof(vProveedorItris.CALLE)" HeaderText="DIRECCIÓN" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+            </GridColumns>
+            <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
         </SfGrid>
     </div>
-    
+
 </div>
 
 
@@ -69,34 +65,35 @@
 </style>
 
 @code {
-    public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
+    public string edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
     public bool DblClick = true;
-    public bool CommandColumnsClick = false;
+    public bool CommandColumnsClick;
 
-    public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
-    public void OnRadioChange(ChangeArgs<String> args)
+    public EditMode SelectedMode = EditMode.Normal;
+
+    public void OnRadioChange(ChangeArgs<string> args)
     {
         if (args.Value == "inline")
         {
-            this.DblClick = true;
-            this.CommandColumnsClick = false;
-            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+            DblClick = true;
+            CommandColumnsClick = false;
+            SelectedMode = EditMode.Normal;
         }
         else if (args.Value == "batch")
         {
-            this.DblClick = true;
-            this.CommandColumnsClick = false;
-            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Batch;
+            DblClick = true;
+            CommandColumnsClick = false;
+            SelectedMode = EditMode.Batch;
         }
         else if (args.Value == "dialog")
         {
-            this.DblClick = true;
-            this.CommandColumnsClick = false;
-            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Dialog;
+            DblClick = true;
+            CommandColumnsClick = false;
+            SelectedMode = EditMode.Dialog;
         }
         else
         {
-            this.CommandColumnsClick = true;
+            CommandColumnsClick = true;
         }
     }
 

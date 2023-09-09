@@ -3,18 +3,17 @@ using SupplyChain.Client.HelperService.Base;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
 
-namespace SupplyChain.Client.HelperService
-{
-    public class MotivosPresupuestoService : BaseService<MotivosPresupuesto, int>
-    {
-        private readonly IRepositoryHttp Http;
-        private readonly IJSRuntime _js;
-        private const string api = "api/MotivosPresupuesto";
+namespace SupplyChain.Client.HelperService;
 
-        public MotivosPresupuestoService(IRepositoryHttp Http, IJSRuntime js) : base(Http, api)
-        {
-            this.Http = Http;
-            this._js = js;
-        }
+public class MotivosPresupuestoService : BaseService<MotivosPresupuesto, int>
+{
+    private const string api = "api/MotivosPresupuesto";
+    private readonly IJSRuntime _js;
+    private readonly IRepositoryHttp Http;
+
+    public MotivosPresupuestoService(IRepositoryHttp Http, IJSRuntime js) : base(Http, api)
+    {
+        this.Http = Http;
+        _js = js;
     }
 }

@@ -1,6 +1,4 @@
-﻿@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Calendars
-@using Syncfusion.Blazor.DropDowns
+﻿@using Syncfusion.Blazor.DropDowns
 @inherits FormProcunBase
 
 <SfToast ID="toast_default" @ref="ToastObj">
@@ -33,7 +31,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label>Registro:</label>
-                                    <SfNumericTextBox ID="Registro" @bind-Value="@((procuns.Id))" Enabled="@procuns.ESNUEVO" Placeholder="Registro"></SfNumericTextBox>
+                                    <SfNumericTextBox ID="Registro" @bind-Value="@(procuns.Id)" Enabled="@procuns.ESNUEVO" Placeholder="Registro"></SfNumericTextBox>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Orden:</label>

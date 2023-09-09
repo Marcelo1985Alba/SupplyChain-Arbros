@@ -1,325 +1,336 @@
-﻿@using Syncfusion.Blazor.Data
-@using Syncfusion.Blazor.Charts
-@using Syncfusion.Blazor
+﻿@page "/pcp/indicadores/unidades-equivalentes"
 @using Syncfusion.Blazor.Navigations
-@page "/pcp/indicadores/unidades-equivalentes"
+@using LabelPosition = Syncfusion.Blazor.Charts.LabelPosition
+@using ValueType = Syncfusion.Blazor.Charts.ValueType
+@using Syncfusion.Blazor.Charts
 @inherits BaseEstadUnidEquiv
 
 <SfTab HeaderPlacement="HeaderPosition.Top" CssClass="tab-pane">
-    <TabItems>
-        <TabItem CssClass="tab-content">
-            <ChildContent>
-                <TabHeader Text="Pedidos Ingresados"></TabHeader>
-            </ChildContent>
-            <ContentTemplate>
-                <div class="row">
-                    <div class="col-6">
-                        <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
-                        <div class="card">
-                            <div class="card-body">
-                                <SfChart Title="" Width="100%">
-                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category">
-                                    </ChartPrimaryXAxis>
+<TabItems>
+<TabItem CssClass="tab-content">
+    <ChildContent>
+        <TabHeader Text="Pedidos Ingresados"></TabHeader>
+    </ChildContent>
+    <ContentTemplate>
+        <div class="row">
+            <div class="col-6">
+                <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
+                <div class="card">
+                    <div class="card-body">
+                        <SfChart Title="" Width="100%">
+                            <ChartArea>
+                                <ChartAreaBorder Width="0"></ChartAreaBorder>
+                            </ChartArea>
+                            <ChartPrimaryXAxis ValueType="ValueType.Category">
+                            </ChartPrimaryXAxis>
 
-                                    <ChartPrimaryYAxis Title="Unidades Equivalentes Anuales" LabelFormat="{value}">
-                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
-                                        <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
-                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
-                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                            <ChartPrimaryYAxis Title="Unidades Equivalentes Anuales" LabelFormat="{value}">
+                                <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
+                                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
 
-                                    </ChartPrimaryYAxis>
-                                    <ChartSeriesCollection>
-                                        <ChartSeries DataSource="@PedidosIngresadosAnuales" XName="XSerieName" YName="YSerieName"
-                                                     Name="Año" Fill="url(#card1-gradient-chart)"
-                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
-                                            <ChartMarker>
-                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
-                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
-                                                </ChartDataLabel>
-                                            </ChartMarker>
-                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
-                                        </ChartSeries>
-                                    </ChartSeriesCollection>
-                                    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
-                                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetalle(a))"></ChartEvents>
-                                </SfChart>
-                            </div>
-
-
-                        </div>
-
+                            </ChartPrimaryYAxis>
+                            <ChartSeriesCollection>
+                                <ChartSeries DataSource="@PedidosIngresadosAnuales" XName="XSerieName" YName="YSerieName"
+                                             Name="Año" Fill="url(#card1-gradient-chart)"
+                                             Type="ChartSeriesType.Column">
+                                    <ChartMarker>
+                                        <ChartDataLabel Visible="false" Position="LabelPosition.Top">
+                                            <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                        </ChartDataLabel>
+                                    </ChartMarker>
+                                    <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                </ChartSeries>
+                            </ChartSeriesCollection>
+                            <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+                            <ChartEvents OnPointClick="@(async a => await MostrarDetalle(a))"></ChartEvents>
+                        </SfChart>
                     </div>
 
-                    <div class="col-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <SfChart @ref="refChartDetalle" Width="100%">
-                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
-                                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift">
-                                    </ChartPrimaryXAxis>
 
-                                    <ChartPrimaryYAxis Title="@TituloGraficoMensual" LabelFormat="{value}" Minimum="0" Maximum="2000">
-                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
-                                        <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
-                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
-                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
-                                        <ChartStriplines>
+                </div>
 
-                                            @if (PromedioPedidosIngresadosMensuales > 0)
-                                            {
-                                                <ChartStripline Start="398" End="400" Color="red" SizeType="SizeType.Pixel"
-                                                            Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
-                                                            Text="@("Objetivo 2022: 400")" ZIndex="ZIndex.Over">
-                                                    <ChartStriplineTextStyle Color="red" />
-                                                </ChartStripline>
-                                                <ChartStripline Start="498" End="500" Color="red" SizeType="SizeType.Pixel"
-                                                            Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
-                                                            Text="@("Objetivo 2023: 500")" ZIndex="ZIndex.Over">
-                                                    <ChartStriplineTextStyle Color="red" />
-                                                </ChartStripline>
-                                                <ChartStripline Start="@(PromedioPedidosIngresadosMensuales - 2)"
-                                                                Text="@("Promedio: " + PromedioPedidosIngresadosMensuales )" ZIndex="ZIndex.Over"
-                                                                End="PromedioPedidosIngresadosMensuales" Color="blue" />
-                                            }
+            </div>
 
-                                        </ChartStriplines>
-                                    </ChartPrimaryYAxis>
-                                    <ChartSeriesCollection>
-                                        <ChartSeries DataSource="@PedidosIngresadosMensuales" XName="XSerieName" YName="YSerieName"
-                                                     Name="Mes" Fill="url(#card1-gradient-chart)"
-                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
-                                            <ChartMarker>
-                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
-                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
-                                                </ChartDataLabel>
-                                            </ChartMarker>
-                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
-                                        </ChartSeries>
-                                    </ChartSeriesCollection>
-                                    <ChartTooltipSettings Enable="true">
-                                    </ChartTooltipSettings>
-                                    <ChartLegendSettings Visible="true" />
-                                </SfChart>
-                            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <SfChart @ref="refChartDetalle" Width="100%">
+                            <ChartArea>
+                                <ChartAreaBorder Width="0"></ChartAreaBorder>
+                            </ChartArea>
+                            <ChartPrimaryXAxis ValueType="ValueType.Category"
+                                               EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                            </ChartPrimaryXAxis>
 
+                            <ChartPrimaryYAxis Title="@TituloGraficoMensual" LabelFormat="{value}" Minimum="0" Maximum="2000">
+                                <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
+                                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                <ChartStriplines>
 
-                        </div>
+                                    @if (PromedioPedidosIngresadosMensuales > 0)
+                                    {
+                                        <ChartStripline Start="398" End="400" Color="red" SizeType="SizeType.Pixel"
+                                                        Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
+                                                        Text="@("Objetivo 2022: 400")" ZIndex="ZIndex.Over">
+                                            <ChartStriplineTextStyle Color="red"/>
+                                        </ChartStripline>
+                                        <ChartStripline Start="498" End="500" Color="red" SizeType="SizeType.Pixel"
+                                                        Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
+                                                        Text="@("Objetivo 2023: 500")" ZIndex="ZIndex.Over">
+                                            <ChartStriplineTextStyle Color="red"/>
+                                        </ChartStripline>
+                                        <ChartStripline Start="@(PromedioPedidosIngresadosMensuales - 2)"
+                                                        Text="@("Promedio: " + PromedioPedidosIngresadosMensuales)" ZIndex="ZIndex.Over"
+                                                        End="PromedioPedidosIngresadosMensuales" Color="blue"/>
+                                    }
 
+                                </ChartStriplines>
+                            </ChartPrimaryYAxis>
+                            <ChartSeriesCollection>
+                                <ChartSeries DataSource="@PedidosIngresadosMensuales" XName="XSerieName" YName="YSerieName"
+                                             Name="Mes" Fill="url(#card1-gradient-chart)"
+                                             Type="ChartSeriesType.Column">
+                                    <ChartMarker>
+                                        <ChartDataLabel Visible="false" Position="LabelPosition.Top">
+                                            <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                        </ChartDataLabel>
+                                    </ChartMarker>
+                                    <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                </ChartSeries>
+                            </ChartSeriesCollection>
+                            <ChartTooltipSettings Enable="true">
+                            </ChartTooltipSettings>
+                            <ChartLegendSettings Visible="true"/>
+                        </SfChart>
                     </div>
 
-                    <div class="col-12">
-                        <div class="content-wrapper">
-                            <div class="row">
-                                <SfGrid @ref="grdPedIngresados" DataSource="@(PedidosIngresadosAnualesDetalle)" GridLines="GridLine.Both"
-                                        AllowResizing="true" AllowReordering="true" AllowMultiSorting="true" AllowSorting="true"
-                                        AllowPaging="true" Height="450" Width="100%" >
-                                    <GridColumns>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.PEDIDO) HeaderText="PEDIDO" Width="70px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.FECHA) HeaderText="FECHA" Format="dd/MM/yyyy" Width="85px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.CG_ART) HeaderText="PRODUCTO" Width="140px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.DES_ART) HeaderText="DESCRIPCION" Width="250px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.CANTPED) HeaderText="CANTIDAD" Width="100px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.UNIDEQUI) HeaderText="UNID EQUIV" Width="100px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.MES) HeaderText="MES" Width="70px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.ANIO) HeaderText="AÑO" Width="70px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.ESTADO) HeaderText="ESTADO" Width="80px" DisplayAsCheckBox="true"></GridColumn>
-                                    </GridColumns>
-                                </SfGrid>
-                            </div>
-                        </div>
 
+                </div>
+
+            </div>
+
+            <div class="col-12">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <SfGrid @ref="grdPedIngresados" DataSource="@(PedidosIngresadosAnualesDetalle)" GridLines="GridLine.Both"
+                                AllowResizing="true" AllowReordering="true" AllowMultiSorting="true" AllowSorting="true"
+                                AllowPaging="true" Height="450" Width="100%">
+                            <GridColumns>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.PEDIDO)" HeaderText="PEDIDO" Width="70px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.FECHA)" HeaderText="FECHA" Format="dd/MM/yyyy" Width="85px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.CG_ART)" HeaderText="PRODUCTO" Width="140px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.DES_ART)" HeaderText="DESCRIPCION" Width="250px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.CANTPED)" HeaderText="CANTIDAD" Width="100px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.UNIDEQUI)" HeaderText="UNID EQUIV" Width="100px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.MES)" HeaderText="MES" Width="70px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.ANIO)" HeaderText="AÑO" Width="70px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.ESTADO)" HeaderText="ESTADO" Width="80px" DisplayAsCheckBox="true"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
                     </div>
                 </div>
-            </ContentTemplate>
-        </TabItem>
-        <TabItem>
-            <ChildContent>
-                <TabHeader Text="Pedidos dados de Alta"></TabHeader>
-            </ChildContent>
-            <ContentTemplate>
-                <div class="row">
-                    <div class="col-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <SfChart Title="Unidades Equivalentes de Pedidos Alta Anuales" Width="100%">
-                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
-                                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift">
-                                    </ChartPrimaryXAxis>
 
-                                    <ChartPrimaryYAxis LabelFormat="{value}">
-                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
-                                        <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
-                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
-                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
-                                    </ChartPrimaryYAxis>
-                                    <ChartSeriesCollection>
-                                        <ChartSeries DataSource="@PedidosAltasAnuales" XName="XSerieName" YName="YSerieName"
-                                                     Name="Año" Fill="url(#card2-gradient-chart)"
-                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
-                                            <ChartMarker>
-                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
-                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
-                                                </ChartDataLabel>
-                                            </ChartMarker>
-                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
-                                        </ChartSeries>
-                                    </ChartSeriesCollection>
-                                    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
-                                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetallePedidosAlta(a))"></ChartEvents>
-                                </SfChart>
-                            </div>
+            </div>
+        </div>
+    </ContentTemplate>
+</TabItem>
+<TabItem>
+    <ChildContent>
+        <TabHeader Text="Pedidos dados de Alta"></TabHeader>
+    </ChildContent>
+    <ContentTemplate>
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <SfChart Title="Unidades Equivalentes de Pedidos Alta Anuales" Width="100%">
+                            <ChartArea>
+                                <ChartAreaBorder Width="0"></ChartAreaBorder>
+                            </ChartArea>
+                            <ChartPrimaryXAxis ValueType="ValueType.Category"
+                                               EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                            </ChartPrimaryXAxis>
 
-
-                        </div>
-
+                            <ChartPrimaryYAxis LabelFormat="{value}">
+                                <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
+                                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                            </ChartPrimaryYAxis>
+                            <ChartSeriesCollection>
+                                <ChartSeries DataSource="@PedidosAltasAnuales" XName="XSerieName" YName="YSerieName"
+                                             Name="Año" Fill="url(#card2-gradient-chart)"
+                                             Type="ChartSeriesType.Column">
+                                    <ChartMarker>
+                                        <ChartDataLabel Visible="false" Position="LabelPosition.Top">
+                                            <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                        </ChartDataLabel>
+                                    </ChartMarker>
+                                    <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                </ChartSeries>
+                            </ChartSeriesCollection>
+                            <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+                            <ChartEvents OnPointClick="@(async a => await MostrarDetallePedidosAlta(a))"></ChartEvents>
+                        </SfChart>
                     </div>
 
-                    <div class="col-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <SfChart @ref="refChartDetallePedidosAlta" Title="@TituloGraficoMensualPedidosAlta" Width="100%">
-                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
-                                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift">
-                                    </ChartPrimaryXAxis>
 
-                                    <ChartPrimaryYAxis LabelFormat="{value}" Minimum="0" Maximum="1000">
-                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
-                                        <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
-                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
-                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
-                                        <ChartStriplines>
+                </div>
 
-                                            @if (PromedioPedidosAltaMensuales > 0)
-                                            {
-                                                <ChartStripline Start="398" End="400" Color="red" SizeType="SizeType.Pixel"
-                                                            Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
-                                                            Text="@("Objetivo 2022: 400")" ZIndex="ZIndex.Over">
-                                                    <ChartStriplineTextStyle Color="red" />
-                                                </ChartStripline>
-                                                <ChartStripline Start="498" End="500" Color="red" SizeType="SizeType.Pixel"
-                                                            Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
-                                                            Text="@("Objetivo 2023: 500")" ZIndex="ZIndex.Over">
-                                                    <ChartStriplineTextStyle Color="red" />
-                                                </ChartStripline>
-                                                if (PedidosAltasMensuales.Count > 1)
-                                                {
-                                                    <ChartStripline Start="@(PromedioPedidosAltaMensuales - 3)"
-                                                                    Text="@("Promedio: " + PromedioPedidosAltaMensuales )" ZIndex="ZIndex.Over"
-                                                                    End="PromedioPedidosAltaMensuales" Color="blue" />
-                                                }
+            </div>
 
-                                            }
-                                        </ChartStriplines>
-                                    </ChartPrimaryYAxis>
-                                    <ChartSeriesCollection>
-                                        <ChartSeries DataSource="@PedidosAltasMensuales" XName="XSerieName" YName="YSerieName"
-                                                     Name="Mes" Fill="url(#card2-gradient-chart)"
-                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
-                                            <ChartMarker>
-                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
-                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
-                                                </ChartDataLabel>
-                                            </ChartMarker>
-                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
-                                        </ChartSeries>
-                                    </ChartSeriesCollection>
-                                    <ChartTooltipSettings Enable="true">
-                                    </ChartTooltipSettings>
-                                </SfChart>
-                            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <SfChart @ref="refChartDetallePedidosAlta" Title="@TituloGraficoMensualPedidosAlta" Width="100%">
+                            <ChartArea>
+                                <ChartAreaBorder Width="0"></ChartAreaBorder>
+                            </ChartArea>
+                            <ChartPrimaryXAxis ValueType="ValueType.Category"
+                                               EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                            </ChartPrimaryXAxis>
 
+                            <ChartPrimaryYAxis LabelFormat="{value}" Minimum="0" Maximum="1000">
+                                <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
+                                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                <ChartStriplines>
 
-                        </div>
-
+                                    @if (PromedioPedidosAltaMensuales > 0)
+                                    {
+                                        <ChartStripline Start="398" End="400" Color="red" SizeType="SizeType.Pixel"
+                                                        Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
+                                                        Text="@("Objetivo 2022: 400")" ZIndex="ZIndex.Over">
+                                            <ChartStriplineTextStyle Color="red"/>
+                                        </ChartStripline>
+                                        <ChartStripline Start="498" End="500" Color="red" SizeType="SizeType.Pixel"
+                                                        Size="1" DashArray="5,5" HorizontalAlignment="Anchor.End" VerticalAlignment="Anchor.End"
+                                                        Text="@("Objetivo 2023: 500")" ZIndex="ZIndex.Over">
+                                            <ChartStriplineTextStyle Color="red"/>
+                                        </ChartStripline>
+                                        if (PedidosAltasMensuales.Count > 1)
+                                        {
+                                            <ChartStripline Start="@(PromedioPedidosAltaMensuales - 3)"
+                                                            Text="@("Promedio: " + PromedioPedidosAltaMensuales)" ZIndex="ZIndex.Over"
+                                                            End="PromedioPedidosAltaMensuales" Color="blue"/>
+                                        }
+                                    }
+                                </ChartStriplines>
+                            </ChartPrimaryYAxis>
+                            <ChartSeriesCollection>
+                                <ChartSeries DataSource="@PedidosAltasMensuales" XName="XSerieName" YName="YSerieName"
+                                             Name="Mes" Fill="url(#card2-gradient-chart)"
+                                             Type="ChartSeriesType.Column">
+                                    <ChartMarker>
+                                        <ChartDataLabel Visible="false" Position="LabelPosition.Top">
+                                            <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                        </ChartDataLabel>
+                                    </ChartMarker>
+                                    <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                </ChartSeries>
+                            </ChartSeriesCollection>
+                            <ChartTooltipSettings Enable="true">
+                            </ChartTooltipSettings>
+                        </SfChart>
                     </div>
 
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <SfGrid DataSource="@PedidosAltaAnualesDetalle" GridLines="GridLine.Both" AllowResizing="true"
-                                        AllowReordering="true" AllowSorting="true"
-                                        AllowPaging="true" Height="450" Width="100%" >
-                                    <GridColumns>
-                                        <GridColumn Field=@nameof(vEstadPedidosAlta.PEDIDO) HeaderText="PEDIDO" Width="80px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosAlta.FECHA) HeaderText="FECHA ALTA" Format="dd/MM/yyyy" Width="90px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosAlta.CG_ART) HeaderText="PRODUCTO" Width="140px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosAlta.DES_ART) HeaderText="DESCRIPCION" Width="250px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosAlta.STOCK) HeaderText="CANTIDAD" Width="100px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosAlta.UNIDEQUI) HeaderText="UNID EQUIV" Width="100px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosAlta.MES) HeaderText="MES" Width="70px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosAlta.ANIO) HeaderText="AÑO" Width="70px"></GridColumn>
-                                    </GridColumns>
-                                </SfGrid>
-                            </div>
-                        </div>
 
+                </div>
+
+            </div>
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <SfGrid DataSource="@PedidosAltaAnualesDetalle" GridLines="GridLine.Both" AllowResizing="true"
+                                AllowReordering="true" AllowSorting="true"
+                                AllowPaging="true" Height="450" Width="100%">
+                            <GridColumns>
+                                <GridColumn Field="@nameof(vEstadPedidosAlta.PEDIDO)" HeaderText="PEDIDO" Width="80px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosAlta.FECHA)" HeaderText="FECHA ALTA" Format="dd/MM/yyyy" Width="90px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosAlta.CG_ART)" HeaderText="PRODUCTO" Width="140px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosAlta.DES_ART)" HeaderText="DESCRIPCION" Width="250px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosAlta.STOCK)" HeaderText="CANTIDAD" Width="100px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosAlta.UNIDEQUI)" HeaderText="UNID EQUIV" Width="100px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosAlta.MES)" HeaderText="MES" Width="70px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosAlta.ANIO)" HeaderText="AÑO" Width="70px"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
                     </div>
                 </div>
-            </ContentTemplate>
-        </TabItem>
-        <TabItem>
-            <ChildContent>
-                <TabHeader Text="Pedidos Pendientes por Fecha Prevista"></TabHeader>
-            </ChildContent>
-            <ContentTemplate>
-                <div class="row">
-                    <div class="col-6">
-                        <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
-                        <div class="card">
-                            <div class="card-body">
-                                <SfChart Title="" Width="100%">
-                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category">
-                                    </ChartPrimaryXAxis>
 
-                                    <ChartPrimaryYAxis Title="Unidades Equivalentes por Fecha Prevista" LabelFormat="{value}">
-                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
-                                        <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
-                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
-                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+            </div>
+        </div>
+    </ContentTemplate>
+</TabItem>
+<TabItem>
+    <ChildContent>
+        <TabHeader Text="Pedidos Pendientes por Fecha Prevista"></TabHeader>
+    </ChildContent>
+    <ContentTemplate>
+        <div class="row">
+            <div class="col-6">
+                <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
+                <div class="card">
+                    <div class="card-body">
+                        <SfChart Title="" Width="100%">
+                            <ChartArea>
+                                <ChartAreaBorder Width="0"></ChartAreaBorder>
+                            </ChartArea>
+                            <ChartPrimaryXAxis ValueType="ValueType.Category">
+                            </ChartPrimaryXAxis>
 
-                                    </ChartPrimaryYAxis>
-                                    <ChartSeriesCollection>
-                                        <ChartSeries DataSource="@PedidosPendientesPrevMensuales" XName="XSerieName" YName="YSerieName"
-                                                     Name="Mes" Fill="url(#card3-gradient-chart)"
-                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
-                                            <ChartMarker>
-                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
-                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
-                                                </ChartDataLabel>
-                                            </ChartMarker>
-                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
-                                        </ChartSeries>
-                                    </ChartSeriesCollection>
-                                    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
-                                    <ChartEvents OnPointClick="@(async (a)=> await MostrarDetallePrev(a))"></ChartEvents>
-                                </SfChart>
-                            </div>
+                            <ChartPrimaryYAxis Title="Unidades Equivalentes por Fecha Prevista" LabelFormat="{value}">
+                                <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
+                                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
 
-
-                        </div>
-
+                            </ChartPrimaryYAxis>
+                            <ChartSeriesCollection>
+                                <ChartSeries DataSource="@PedidosPendientesPrevMensuales" XName="XSerieName" YName="YSerieName"
+                                             Name="Mes" Fill="url(#card3-gradient-chart)"
+                                             Type="ChartSeriesType.Column">
+                                    <ChartMarker>
+                                        <ChartDataLabel Visible="false" Position="LabelPosition.Top">
+                                            <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                        </ChartDataLabel>
+                                    </ChartMarker>
+                                    <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                </ChartSeries>
+                            </ChartSeriesCollection>
+                            <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+                            <ChartEvents OnPointClick="@(async a => await MostrarDetallePrev(a))"></ChartEvents>
+                        </SfChart>
                     </div>
 
-                    <div class="col-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <SfChart @ref="refChartDetallePedidosIngresadosPrev" Width="100%">
-                                    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-                                    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"
-                                                       EdgeLabelPlacement="EdgeLabelPlacement.Shift">
-                                    </ChartPrimaryXAxis>
 
-                                    <ChartPrimaryYAxis Title="@TituloGraficoMensualPedidosingresadosPrev" LabelFormat="{value}" Minimum="0" Maximum="500">
-                                        <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
-                                        <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
-                                        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
-                                        <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
-                                        @*<ChartStriplines>
+                </div>
+
+            </div>
+
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <SfChart @ref="refChartDetallePedidosIngresadosPrev" Width="100%">
+                            <ChartArea>
+                                <ChartAreaBorder Width="0"></ChartAreaBorder>
+                            </ChartArea>
+                            <ChartPrimaryXAxis ValueType="ValueType.Category"
+                                               EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                            </ChartPrimaryXAxis>
+
+                            <ChartPrimaryYAxis Title="@TituloGraficoMensualPedidosingresadosPrev" LabelFormat="{value}" Minimum="0" Maximum="500">
+                                <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                                <ChartAxisLabelStyle Color="black"></ChartAxisLabelStyle>
+                                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                                <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                                @*<ChartStriplines>
 
                                                 @if (PromedioPedidosIngresadosMensuales > 0)
                                                 {
@@ -333,108 +344,108 @@
                                                 }
 
                                             </ChartStriplines>*@
-                                    </ChartPrimaryYAxis>
-                                    <ChartSeriesCollection>
-                                        <ChartSeries DataSource="@PedidosIngresadosPrevSemanales" XName="XSerieName" YName="YSerieName"
-                                                     Name="Semana" Fill="url(#card3-gradient-chart)"
-                                                     Type="Syncfusion.Blazor.Charts.ChartSeriesType.Column">
-                                            <ChartMarker>
-                                                <ChartDataLabel Visible="false" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
-                                                    <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
-                                                </ChartDataLabel>
-                                            </ChartMarker>
-                                            <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
-                                        </ChartSeries>
-                                    </ChartSeriesCollection>
-                                    <ChartTooltipSettings Enable="true">
-                                    </ChartTooltipSettings>
-                                    <ChartLegendSettings Visible="true" />
-                                </SfChart>
-                            </div>
-
-
-                        </div>
-
+                            </ChartPrimaryYAxis>
+                            <ChartSeriesCollection>
+                                <ChartSeries DataSource="@PedidosIngresadosPrevSemanales" XName="XSerieName" YName="YSerieName"
+                                             Name="Semana" Fill="url(#card3-gradient-chart)"
+                                             Type="ChartSeriesType.Column">
+                                    <ChartMarker>
+                                        <ChartDataLabel Visible="false" Position="LabelPosition.Top">
+                                            <ChartDataLabelFont FontWeight="600" Color="#ffffff"></ChartDataLabelFont>
+                                        </ChartDataLabel>
+                                    </ChartMarker>
+                                    <ChartCornerRadius TopLeft="10" TopRight="10"></ChartCornerRadius>
+                                </ChartSeries>
+                            </ChartSeriesCollection>
+                            <ChartTooltipSettings Enable="true">
+                            </ChartTooltipSettings>
+                            <ChartLegendSettings Visible="true"/>
+                        </SfChart>
                     </div>
 
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <SfGrid DataSource="@(PedidosIngresadosPrevDetalle)" GridLines="GridLine.Both"
-                                        AllowResizing="true" AllowReordering="true" AllowMultiSorting="true" AllowSorting="true"
-                                        AllowPaging="true" Height="450" Width="100%">
-                                    <GridColumns>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.PEDIDO) HeaderText="PEDIDO" Width="80px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.FECHA) HeaderText="FECHA" Format="dd/MM/yyyy" Width="90px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.FECHA_PREV) HeaderText="FECHA PREV" Format="dd/MM/yyyy" Width="90px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.CG_ART) HeaderText="PRODUCTO" Width="140px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.DES_ART) HeaderText="DESCRIPCION" Width="250px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.CANTPED) HeaderText="CANTIDAD" Width="100px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.UNIDEQUI) HeaderText="UNID EQUIV" Width="100px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.MES_PREV) HeaderText="MES" Width="70px"></GridColumn>
-                                        <GridColumn Field=@nameof(vEstadPedidosIngresados.ANIO_PREV) HeaderText="AÑO" Width="70px"></GridColumn>
-                                    </GridColumns>
-                                </SfGrid>
-                            </div>
-                        </div>
 
+                </div>
+
+            </div>
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <SfGrid DataSource="@(PedidosIngresadosPrevDetalle)" GridLines="GridLine.Both"
+                                AllowResizing="true" AllowReordering="true" AllowMultiSorting="true" AllowSorting="true"
+                                AllowPaging="true" Height="450" Width="100%">
+                            <GridColumns>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.PEDIDO)" HeaderText="PEDIDO" Width="80px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.FECHA)" HeaderText="FECHA" Format="dd/MM/yyyy" Width="90px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.FECHA_PREV)" HeaderText="FECHA PREV" Format="dd/MM/yyyy" Width="90px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.CG_ART)" HeaderText="PRODUCTO" Width="140px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.DES_ART)" HeaderText="DESCRIPCION" Width="250px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.CANTPED)" HeaderText="CANTIDAD" Width="100px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.UNIDEQUI)" HeaderText="UNID EQUIV" Width="100px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.MES_PREV)" HeaderText="MES" Width="70px"></GridColumn>
+                                <GridColumn Field="@nameof(vEstadPedidosIngresados.ANIO_PREV)" HeaderText="AÑO" Width="70px"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
                     </div>
                 </div>
-            </ContentTemplate>
-        </TabItem>
-    </TabItems>
+
+            </div>
+        </div>
+    </ContentTemplate>
+</TabItem>
+</TabItems>
 </SfTab>
 
 @*GRADIANTES*@
 <svg style="height: 0">
     <defs>
         <linearGradient id="card1-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(33, 64, 220); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(0, 191, 213); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(33, 64, 220); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(0, 191, 213); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card2-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(4, 171, 17); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(125, 214, 29); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(4, 171, 17); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(125, 214, 29); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card3-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(242, 59, 59); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(239, 144, 39); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(242, 59, 59); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(239, 144, 39); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card4-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(41, 37, 166); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(178, 80, 209); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(41, 37, 166); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(178, 80, 209); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card5-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(239, 144, 39); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(238 166 86); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(239, 144, 39); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(238 166 86); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card6-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(255 0 110); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(244 139 184); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(255 0 110); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(244 139 184); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card7-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(166 107 37); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(254 237 3); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(166 107 37); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(254 237 3); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card8-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(249 220 2); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(254 237 3); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(249 220 2); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(254 237 3); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card9-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(0, 191, 213); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(88 114 247); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(0, 191, 213); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(88 114 247); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card10-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(228 24 24); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(233 119 119); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(228 24 24); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(233 119 119); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card11-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(33, 64, 220); stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: rgb(69 64 236); stop-opacity: 1 " />
+            <stop offset="0%" style="stop-color: rgb(33, 64, 220); stop-opacity: 1"/>
+            <stop offset="100%" style="stop-color: rgb(69 64 236); stop-opacity: 1 "/>
         </linearGradient>
         <linearGradient id="card12-gradient-chart" x1="0%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" style="stop-color: rgb(125, 214, 29); stop-opacity: 1 " />
-            <stop offset="100%" style="stop-color: rgb(33 116 39); stop-opacity: 1" />
+            <stop offset="0%" style="stop-color: rgb(125, 214, 29); stop-opacity: 1 "/>
+            <stop offset="100%" style="stop-color: rgb(33 116 39); stop-opacity: 1"/>
         </linearGradient>
     </defs>
 </svg>

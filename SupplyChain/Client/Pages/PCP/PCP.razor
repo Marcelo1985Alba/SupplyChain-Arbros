@@ -1,7 +1,5 @@
 ﻿@page "/programacion-control-produccion"
-@using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.Grids
 
 <SfTab LoadOn="ContentLoad.Dynamic" @bind-SelectedItem="@SelectedTab" OverflowMode="OverflowMode.Scrollable">
     <TabItems>
@@ -66,9 +64,9 @@
 @code {
     private string UserName { get; set; } = "";
     private string Password { get; set; } = "";
-    private Boolean DisableTab { get; set; } = true;
-    private Boolean Disabled { get; set; } = false;
-    private int SelectedTab { get; set; } = 0;
+    private bool DisableTab { get; set; } = true;
+    private bool Disabled { get; set; }
+    private int SelectedTab { get; set; }
 
     [CascadingParameter]
     public MainLayout Layout { get; set; }
@@ -76,9 +74,9 @@
     [CascadingParameter]
     public Task<AuthenticationState> AuthenticationState { get; set; }
 
-    protected bool restringido = false;
+    protected bool restringido;
 
-    protected async override void OnInitialized()
+    protected override async void OnInitialized()
     {
         Layout.Titulo = "Programacion y Control de la Produccion";
 
@@ -92,34 +90,33 @@
                 restringido = true;
             }
         }
-
     }
 
     private void OnClicked()
     {
-        if (this.UserName == "" && this.Password == "")
+        if (UserName == "" && Password == "")
         {
             Console.WriteLine("clicked");
         }
-        else if (this.UserName == "")
+        else if (UserName == "")
         {
             Console.WriteLine("Enter the username");
         }
-        else if (this.Password == "")
+        else if (Password == "")
         {
             Console.WriteLine("Enter the password");
         }
-        else if (this.UserName.Length < 4)
+        else if (UserName.Length < 4)
         {
             Console.WriteLine("Username must be minimum 4 characters");
         }
         else
         {
-            this.UserName = "";
-            this.Password = "";
-            this.DisableTab = false;
-            this.Disabled = true;
-            this.SelectedTab = 1;
+            UserName = "";
+            Password = "";
+            DisableTab = false;
+            Disabled = true;
+            SelectedTab = 1;
         }
     }
 

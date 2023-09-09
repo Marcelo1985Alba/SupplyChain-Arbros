@@ -1,267 +1,261 @@
-﻿using AspNetCore.Reporting;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AspNetCore.Reporting;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SupplyChain.Server.Controllers
+namespace SupplyChain.Server.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ReportRDLCController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ReportRDLCController : ControllerBase
+    private readonly AppDbContext _context;
+    private readonly CargasController cargasController;
+    private readonly IConfiguration configuration;
+    private readonly OrdenesFabricacionController ordenesFabricacionController;
+    private readonly IWebHostEnvironment webHostEnvoirement;
+
+    public ReportRDLCController(AppDbContext appDbContext, IWebHostEnvironment webHostEnvoirement,
+        IConfiguration configuration,
+        OrdenesFabricacionController ordenesFabricacionController,
+        CargasController cargasController)
     {
-        private readonly AppDbContext _context;
-        private readonly IWebHostEnvironment webHostEnvoirement;
-        private readonly IConfiguration configuration;
-        private readonly OrdenesFabricacionController ordenesFabricacionController;
-        private readonly CargasController cargasController;
+        _context = appDbContext;
+        this.webHostEnvoirement = webHostEnvoirement;
+        this.configuration = configuration;
+        this.ordenesFabricacionController = ordenesFabricacionController;
+        this.cargasController = cargasController;
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+    }
 
-        public ReportRDLCController(AppDbContext appDbContext, IWebHostEnvironment webHostEnvoirement, IConfiguration configuration,
-            OrdenesFabricacionController ordenesFabricacionController, 
-            CargasController cargasController)
-        {
-            this._context = appDbContext;
-            this.webHostEnvoirement = webHostEnvoirement;
-            this.configuration = configuration;
-            this.ordenesFabricacionController = ordenesFabricacionController;
-            this.cargasController = cargasController;
-            System.Text.Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        }
-
-        [HttpGet]
-        [Route(template: "GetReport")]
-        public IActionResult GetReport(int numeroVale)
-        {
-            var vale =_context.Pedidos.Where(p => p.VALE == numeroVale).ToList();
-            var path = string.Empty;
-            if (webHostEnvoirement.IsProduction())
-            {
-                path = configuration["ReportesRDLC:Reporte"];
-            }
-            else
-            {
-                path = $"{webHostEnvoirement.WebRootPath}\\Report\\Report1.rdlc";
-            }
+    [HttpGet]
+    [Route("GetReport")]
+    public IActionResult GetReport(int numeroVale)
+    {
+        var vale = _context.Pedidos.Where(p => p.VALE == numeroVale).ToList();
+        var path = string.Empty;
+        if (webHostEnvoirement.IsProduction())
+            path = configuration["ReportesRDLC:Reporte"];
+        else
+            path = $"{webHostEnvoirement.WebRootPath}\\Report\\Report1.rdlc";
 
 
-            Dictionary<string, string> parameter = new();
-            parameter.Add("param", "Primer Reporte");
+        Dictionary<string, string> parameter = new();
+        parameter.Add("param", "Primer Reporte");
 
-            LocalReport localReport = new(path);
-            
-            localReport.AddDataSource(dataSetName: "dsPedidos", vale);
+        LocalReport localReport = new(path);
 
-            var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
+        localReport.AddDataSource("dsPedidos", vale);
 
-            return File(result.MainStream, contentType: "application/pdf");
-        }
+        var result = localReport.Execute(RenderType.Pdf, 1, parameter);
 
-        [HttpGet]
-        [Route(template: "GetReportEvento")]
-        public IActionResult GetReportEvento(int noConf)
-        {
-            var file = "ReporteEvento.rdlc";
-            var vale = _context.vEventos.Where(p => p.Cg_NoConf == noConf).ToList();
-            var path = string.Empty;
-            path = configuration["ReportesRDLC:Reporte"] + $"\\{file}";
+        return File(result.MainStream, "application/pdf");
+    }
 
-
-            Dictionary<string, string> parameter = new();
-            parameter.Add("param", "Primer Reporte");
-
-            LocalReport localReport = new(path);
-
-            localReport.AddDataSource(dataSetName: "dsEventos", vale);
-
-            var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
-
-            return File(result.MainStream, contentType: "application/pdf", $"Evento_{noConf}.pdf");
-        }
-
-        [HttpGet]
-        [Route(template: "GetReportDataSheet")]
-        public IActionResult GetReportDataSheet(int id)
-        {
-            var file = "Cotizacion.rdlc";
-            var vale = _context.vCalculoSolicitudes.Where(c => c.SolicitudId  == id).ToList();
-            var path = string.Empty;
-            path = configuration["ReportesRDLC:DataSheet"] + $"\\{file}";
+    [HttpGet]
+    [Route("GetReportEvento")]
+    public IActionResult GetReportEvento(int noConf)
+    {
+        var file = "ReporteEvento.rdlc";
+        var vale = _context.vEventos.Where(p => p.Cg_NoConf == noConf).ToList();
+        var path = string.Empty;
+        path = configuration["ReportesRDLC:Reporte"] + $"\\{file}";
 
 
-            //Dictionary<string, string> parameter = new();
-            //parameter.Add("param", "Primer Reporte");
+        Dictionary<string, string> parameter = new();
+        parameter.Add("param", "Primer Reporte");
 
-            LocalReport localReport = new(path);
+        LocalReport localReport = new(path);
 
-            localReport.AddDataSource(dataSetName: "DataSet2", vale);
-            
-            var result = localReport.Execute(RenderType.Pdf, 1);
+        localReport.AddDataSource("dsEventos", vale);
 
-            return File(result.MainStream, contentType: "application/pdf", $"DataSheet.pdf");
-        }
+        var result = localReport.Execute(RenderType.Pdf, 1, parameter);
 
-        [HttpGet]
-        [Route(template: "GetReportPresupuesto")]
-        public IActionResult GetReportPresupuesto(int id)
-        {
-            var file = "Presupuesto.rdlc";
-            var vale = _context.vPresupuestosReporte.Where(c => c.PRESUPUESTO == id).ToList();
-            var path = string.Empty;
-            path = configuration["ReportesRDLC:Presupuesto"] + $"\\{file}";
+        return File(result.MainStream, "application/pdf", $"Evento_{noConf}.pdf");
+    }
 
-
-            Dictionary<string, string> parameter = new();
-            parameter.Add("param", "Primer Reporte");
-
-            LocalReport localReport = new(path);
-
-            localReport.AddDataSource(dataSetName: "DataSet1", vale);
-
-            var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
-
-            return File(result.MainStream, contentType: "application/pdf", $"AR-CO-{id}.pdf");
-        }
-
-        [HttpGet]
-        [Route(template: "GetReportPedido")]
-        public IActionResult GetReportPedido(int numOci)
-        {
-            var file = "Pedido.rdlc";
-            var pedido = _context.vPedidoReporte.Where(c => c.NUMOCI == numOci).ToList();
-            var path = string.Empty;
-            path = configuration["ReportesRDLC:Pedido"] + $"\\{file}";
+    [HttpGet]
+    [Route("GetReportDataSheet")]
+    public IActionResult GetReportDataSheet(int id)
+    {
+        var file = "Cotizacion.rdlc";
+        var vale = _context.vCalculoSolicitudes.Where(c => c.SolicitudId == id).ToList();
+        var path = string.Empty;
+        path = configuration["ReportesRDLC:DataSheet"] + $"\\{file}";
 
 
-            Dictionary<string, string> parameter = new();
-            parameter.Add("param", "Primer Reporte");
+        //Dictionary<string, string> parameter = new();
+        //parameter.Add("param", "Primer Reporte");
 
-            LocalReport localReport = new(path);
-            //DataSet1: debe ser igual al nombre que esta en el conjunto de datos del reporte
-            localReport.AddDataSource(dataSetName: "DataSet1", pedido);
+        LocalReport localReport = new(path);
 
-            var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
+        localReport.AddDataSource("DataSet2", vale);
 
-            return File(result.MainStream, contentType: "application/pdf", $"OCI-{numOci}.pdf");
-        }
+        var result = localReport.Execute(RenderType.Pdf);
 
-        [HttpGet]
-        [Route(template: "GetReportRemito")]
-        public IActionResult GetReportRemito(string remito)
-        {
-            var file = "Remito.rdlc";
-            var pedido = _context.vRemitoReporte.Where(c => c.REMITO == remito).ToList();
-            var path = string.Empty;
-            path = configuration["ReportesRDLC:Remito"] + $"\\{file}";
+        return File(result.MainStream, "application/pdf", "DataSheet.pdf");
+    }
 
-
-            Dictionary<string, string> parameter = new();
-            parameter.Add("param", "Primer Reporte");
-
-            LocalReport localReport = new(path);
-            //DataSet1: debe ser igual al nombre que esta en el conjunto de datos del reporte
-            localReport.AddDataSource(dataSetName: "DataSet1", pedido);
-
-            var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
-
-            var ptoVenta = remito[..4].Replace("0", string.Empty);
-            var numeroRemito = remito[^8..].TrimStart('0');
-
-            return File(result.MainStream, contentType: "application/pdf", $"RTO-{ptoVenta}-{numeroRemito}.pdf");
-        }
-
-        [HttpGet]
-        [Route(template: "GetReportEtiquetaDeRemito")]
-        public IActionResult GetReportEtiquetaDeRemito(string remito)
-        {
-            var file = "EtiquetaDeRemito.rdlc";
-            var pedido = _context.vRemitoReporte.Where(c => c.REMITO == remito).ToList();
-            var path = string.Empty;
-            path = configuration["ReportesRDLC:Remito"] + $"\\{file}";
+    [HttpGet]
+    [Route("GetReportPresupuesto")]
+    public IActionResult GetReportPresupuesto(int id)
+    {
+        var file = "Presupuesto.rdlc";
+        var vale = _context.vPresupuestosReporte.Where(c => c.PRESUPUESTO == id).ToList();
+        var path = string.Empty;
+        path = configuration["ReportesRDLC:Presupuesto"] + $"\\{file}";
 
 
-            Dictionary<string, string> parameter = new();
-            parameter.Add("param", "Primer Reporte");
+        Dictionary<string, string> parameter = new();
+        parameter.Add("param", "Primer Reporte");
 
-            LocalReport localReport = new(path);
-            //DataSet1: debe ser igual al nombre que esta en el conjunto de datos del reporte
-            localReport.AddDataSource(dataSetName: "DataSet1", pedido);
+        LocalReport localReport = new(path);
 
-            var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
+        localReport.AddDataSource("DataSet1", vale);
 
-            var ptoVenta = remito[..4].Replace("0", string.Empty);
-            var numeroRemito = remito[^8..].TrimStart('0');
+        var result = localReport.Execute(RenderType.Pdf, 1, parameter);
 
-            return File(result.MainStream, contentType: "application/pdf", $"EtiquetaRTO-{ptoVenta}-{numeroRemito}.pdf");
-        }
+        return File(result.MainStream, "application/pdf", $"AR-CO-{id}.pdf");
+    }
 
-        [HttpGet]
-        [Route(template: "GetReportOC")]
-        public IActionResult GetReportOC(int numero)
-        {
-            var file = "OCompra.rdlc";
-            var pedido = _context.vOCompraReporte.Where(c => c.NUMERO == numero).ToList();
-            var path = string.Empty;
-            path = configuration["ReportesRDLC:OCompra"] + $"\\{file}";
+    [HttpGet]
+    [Route("GetReportPedido")]
+    public IActionResult GetReportPedido(int numOci)
+    {
+        var file = "Pedido.rdlc";
+        var pedido = _context.vPedidoReporte.Where(c => c.NUMOCI == numOci).ToList();
+        var path = string.Empty;
+        path = configuration["ReportesRDLC:Pedido"] + $"\\{file}";
 
 
-            Dictionary<string, string> parameter = new();
-            parameter.Add("param", "Primer Reporte");
+        Dictionary<string, string> parameter = new();
+        parameter.Add("param", "Primer Reporte");
 
-            LocalReport localReport = new(path);
-            //DataSet1: debe ser igual al nombre que esta en el conjunto de datos del reporte
-            localReport.AddDataSource(dataSetName: "DataSet1", pedido);
+        LocalReport localReport = new(path);
+        //DataSet1: debe ser igual al nombre que esta en el conjunto de datos del reporte
+        localReport.AddDataSource("DataSet1", pedido);
 
-            var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
+        var result = localReport.Execute(RenderType.Pdf, 1, parameter);
+
+        return File(result.MainStream, "application/pdf", $"OCI-{numOci}.pdf");
+    }
+
+    [HttpGet]
+    [Route("GetReportRemito")]
+    public IActionResult GetReportRemito(string remito)
+    {
+        var file = "Remito.rdlc";
+        var pedido = _context.vRemitoReporte.Where(c => c.REMITO == remito).ToList();
+        var path = string.Empty;
+        path = configuration["ReportesRDLC:Remito"] + $"\\{file}";
 
 
-            return File(result.MainStream, contentType: "application/pdf", $"OC{numero}.pdf");
-        }
+        Dictionary<string, string> parameter = new();
+        parameter.Add("param", "Primer Reporte");
+
+        LocalReport localReport = new(path);
+        //DataSet1: debe ser igual al nombre que esta en el conjunto de datos del reporte
+        localReport.AddDataSource("DataSet1", pedido);
+
+        var result = localReport.Execute(RenderType.Pdf, 1, parameter);
+
+        var ptoVenta = remito[..4].Replace("0", string.Empty);
+        var numeroRemito = remito[^8..].TrimStart('0');
+
+        return File(result.MainStream, "application/pdf", $"RTO-{ptoVenta}-{numeroRemito}.pdf");
+    }
+
+    [HttpGet]
+    [Route("GetReportEtiquetaDeRemito")]
+    public IActionResult GetReportEtiquetaDeRemito(string remito)
+    {
+        var file = "EtiquetaDeRemito.rdlc";
+        var pedido = _context.vRemitoReporte.Where(c => c.REMITO == remito).ToList();
+        var path = string.Empty;
+        path = configuration["ReportesRDLC:Remito"] + $"\\{file}";
 
 
-        [HttpGet]
-        [Route(template: "GetReportEtiquetaOF")]
-        public async Task<IActionResult> GetReportEtiquetaOF(int cg_ordf)
-        {
-            // Llena tabla de carga
+        Dictionary<string, string> parameter = new();
+        parameter.Add("param", "Primer Reporte");
 
-            var orden_fab = await _context.CargaMaq.Where(c => c.CG_ORDFASOC == cg_ordf)
-                .OrderByDescending(c=> c.CG_ORDF)
-                .FirstOrDefaultAsync();
+        LocalReport localReport = new(path);
+        //DataSet1: debe ser igual al nombre que esta en el conjunto de datos del reporte
+        localReport.AddDataSource("DataSet1", pedido);
 
-            string xSQL = "SELECT A.CG_ORDF, A.FE_ENTREGA, A.CG_PROD, A.DES_PROD, A.CG_FORM, " +
-                "(rtrim(ltrim(A.PROCESO))) AS PROCESO, rtrim(ltrim(A.CG_CELDA)) CG_CELDA, CG_ORDFORIG, " +
-                "(select max(cg_ordf) from programa where  CG_ORDFASOC = A.CG_ORDFASOC) ULTIMAORDENASOCIADA, A.CG_ORDFASOC, " +
-                "A.CANT, A.CG_ESTADOCARGA, A.CANTFAB, convert(numeric(6, 2), (A.CANTFAB * 100 / A.CANT)) AS AVANCE, A.DIASFAB, " +
-                "(A.DIASFAB * isnull((Select Top 1 ValorN From Solution Where Campo = 'HORASDIA'), 1)) AS HORASFAB, B.EXIGEOA, A.PEDIDO, " +
-                "FECHA_PREVISTA_FABRICACION, " +
-                "CASE WHEN A.FECHA_INICIO_REAL_FABRICACION is not null THEN A.FECHA_INICIO_REAL_FABRICACION ELSE GETDATE() END FECHA_INICIO_REAL_FABRICACION, " +
-                "CASE WHEN A.FE_CIERRE is not null THEN A.FE_CIERRE ELSE GETDATE() END FE_CIERRE, " +
-                "A.CG_OPER, A.DES_OPER " +
-                "FROM Prod B, Programa A " +
-                "LEFT JOIN ProTab ON ProTab.PROCESO = A.PROCESO " +
-                "LEFT JOIN Celdas ON Celdas.CG_CELDA = A.CG_CELDA " +
-                "WHERE A.CG_PROD = B.CG_PROD AND A.CG_ORDF = " + orden_fab.CG_ORDF;
-            var dbOF = await _context.OrdenesFabricacion.FromSqlRaw(xSQL).ToListAsync();
-            var path = $"{webHostEnvoirement.WebRootPath}\\Report\\EtiquetaOF\\ReporteEtiquetaOF.rdlc";
+        var result = localReport.Execute(RenderType.Pdf, 1, parameter);
 
-            
-            Dictionary<string, string> parameter = new();
-            parameter.Add("param", "Primer Reporte");
+        var ptoVenta = remito[..4].Replace("0", string.Empty);
+        var numeroRemito = remito[^8..].TrimStart('0');
 
-            LocalReport localReport = new(path);
-            
-            localReport.AddDataSource(dataSetName: "dsEtiquetaOF", dbOF);
+        return File(result.MainStream, "application/pdf", $"EtiquetaRTO-{ptoVenta}-{numeroRemito}.pdf");
+    }
 
-            var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
+    [HttpGet]
+    [Route("GetReportOC")]
+    public IActionResult GetReportOC(int numero)
+    {
+        var file = "OCompra.rdlc";
+        var pedido = _context.vOCompraReporte.Where(c => c.NUMERO == numero).ToList();
+        var path = string.Empty;
+        path = configuration["ReportesRDLC:OCompra"] + $"\\{file}";
 
-            return File(result.MainStream, contentType: "application/pdf");
-        }
+
+        Dictionary<string, string> parameter = new();
+        parameter.Add("param", "Primer Reporte");
+
+        LocalReport localReport = new(path);
+        //DataSet1: debe ser igual al nombre que esta en el conjunto de datos del reporte
+        localReport.AddDataSource("DataSet1", pedido);
+
+        var result = localReport.Execute(RenderType.Pdf, 1, parameter);
+
+
+        return File(result.MainStream, "application/pdf", $"OC{numero}.pdf");
+    }
+
+
+    [HttpGet]
+    [Route("GetReportEtiquetaOF")]
+    public async Task<IActionResult> GetReportEtiquetaOF(int cg_ordf)
+    {
+        // Llena tabla de carga
+
+        var orden_fab = await _context.CargaMaq.Where(c => c.CG_ORDFASOC == cg_ordf)
+            .OrderByDescending(c => c.CG_ORDF)
+            .FirstOrDefaultAsync();
+
+        var xSQL = "SELECT A.CG_ORDF, A.FE_ENTREGA, A.CG_PROD, A.DES_PROD, A.CG_FORM, " +
+                   "(rtrim(ltrim(A.PROCESO))) AS PROCESO, rtrim(ltrim(A.CG_CELDA)) CG_CELDA, CG_ORDFORIG, " +
+                   "(select max(cg_ordf) from programa where  CG_ORDFASOC = A.CG_ORDFASOC) ULTIMAORDENASOCIADA, A.CG_ORDFASOC, " +
+                   "A.CANT, A.CG_ESTADOCARGA, A.CANTFAB, convert(numeric(6, 2), (A.CANTFAB * 100 / A.CANT)) AS AVANCE, A.DIASFAB, " +
+                   "(A.DIASFAB * isnull((Select Top 1 ValorN From Solution Where Campo = 'HORASDIA'), 1)) AS HORASFAB, B.EXIGEOA, A.PEDIDO, " +
+                   "FECHA_PREVISTA_FABRICACION, " +
+                   "CASE WHEN A.FECHA_INICIO_REAL_FABRICACION is not null THEN A.FECHA_INICIO_REAL_FABRICACION ELSE GETDATE() END FECHA_INICIO_REAL_FABRICACION, " +
+                   "CASE WHEN A.FE_CIERRE is not null THEN A.FE_CIERRE ELSE GETDATE() END FE_CIERRE, " +
+                   "A.CG_OPER, A.DES_OPER " +
+                   "FROM Prod B, Programa A " +
+                   "LEFT JOIN ProTab ON ProTab.PROCESO = A.PROCESO " +
+                   "LEFT JOIN Celdas ON Celdas.CG_CELDA = A.CG_CELDA " +
+                   "WHERE A.CG_PROD = B.CG_PROD AND A.CG_ORDF = " + orden_fab.CG_ORDF;
+        var dbOF = await _context.OrdenesFabricacion.FromSqlRaw(xSQL).ToListAsync();
+        var path = $"{webHostEnvoirement.WebRootPath}\\Report\\EtiquetaOF\\ReporteEtiquetaOF.rdlc";
+
+
+        Dictionary<string, string> parameter = new();
+        parameter.Add("param", "Primer Reporte");
+
+        LocalReport localReport = new(path);
+
+        localReport.AddDataSource("dsEtiquetaOF", dbOF);
+
+        var result = localReport.Execute(RenderType.Pdf, 1, parameter);
+
+        return File(result.MainStream, "application/pdf");
     }
 }

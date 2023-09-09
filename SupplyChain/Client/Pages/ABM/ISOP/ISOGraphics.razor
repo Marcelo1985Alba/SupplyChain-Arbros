@@ -1,9 +1,7 @@
 ﻿@page "/Abms/ISO/Graphics"
-@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Calendars
-@using Syncfusion.Blazor.DropDowns
-@using Syncfusion.Blazor.HeatMap
 @using SFHeatMap = Syncfusion.Blazor.HeatMap
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Buttons
 @inject IJSRuntime JsRuntime
 @inherits GraphicIso
 
@@ -13,78 +11,79 @@
 
 
 <div class="row">
-	<div class="col-5">
-		<label class="e-float-text e-label-top">Impacto Ambiental:</label>
-	</div>
-	<div class="col-5">
-		<label class="e-float-text e-label-top">Identificacion:</label>
-	</div>
+    <div class="col-5">
+        <label class="e-float-text e-label-top">Impacto Ambiental:</label>
+    </div>
+    <div class="col-5">
+        <label class="e-float-text e-label-top">Identificacion:</label>
+    </div>
 </div>
 
-<br />
+<br/>
 
 <div class="row">
-	<div class="col-5">
-		<SfDropDownList TItem="BaseOption" TValue="string" Placeholder="RIESGO" PopupHeight="auto" DataSource="@Impactos" EnableVirtualization="true">
-			<DropDownListEvents TItem="BaseOption" TValue="string" ValueChange="ChangeImpAmb"></DropDownListEvents>
-			<DropDownListFieldSettings Text="Text" Value="Text"></DropDownListFieldSettings>
-		</SfDropDownList>
-	</div>
-	<div class="col-5">
-		<SfDropDownList TItem="int" TValue="int" Placeholder="Id" PopupHeight="auto" DataSource="@idByImp" EnableVirtualization="true">
-			<DropDownListEvents TItem="int" TValue="int" ValueChange="ChangeId"></DropDownListEvents>
-		</SfDropDownList>
-	</div>
-	<div class="col-lg-2 col-md-3">
-		<SfButton Content="Ver tabla" IsPrimary="false" CssClass="btn-sm e-info" IconCss="fa fa-eye"
-					  OnClick="onClick"></SfButton>
-	</div>
+    <div class="col-5">
+        <SfDropDownList TItem="BaseOption" TValue="string" Placeholder="RIESGO" PopupHeight="auto" DataSource="@Impactos" EnableVirtualization="true">
+            <DropDownListEvents TItem="BaseOption" TValue="string" ValueChange="ChangeImpAmb"></DropDownListEvents>
+            <DropDownListFieldSettings Text="Text" Value="Text"></DropDownListFieldSettings>
+        </SfDropDownList>
+    </div>
+    <div class="col-5">
+        <SfDropDownList TItem="int" TValue="int" Placeholder="Id" PopupHeight="auto" DataSource="@idByImp" EnableVirtualization="true">
+            <DropDownListEvents TItem="int" TValue="int" ValueChange="ChangeId"></DropDownListEvents>
+        </SfDropDownList>
+    </div>
+    <div class="col-lg-2 col-md-3">
+        <SfButton Content="Ver tabla" IsPrimary="false" CssClass="btn-sm e-info" IconCss="fa fa-eye"
+                  OnClick="onClick">
+        </SfButton>
+    </div>
 </div>
 
 <SfHeatMap DataSource="@HeatMapColors">
-	<HeatMapEvents TooltipRendering="@TooltipRendering"></HeatMapEvents>
+    <HeatMapEvents TooltipRendering="@TooltipRendering"></HeatMapEvents>
 
-	<HeatMapTitleSettings Text="Matriz Impacto/Frecuencia"></HeatMapTitleSettings>
-	<HeatMapXAxis Labels="@XLabels" LabelRotation="45" LabelIntersectAction="@SFHeatMap.LabelIntersectAction.None">
-	</HeatMapXAxis>
-	<HeatMapYAxis Labels="@YLabels"></HeatMapYAxis>
-	<HeatMapCellSettings ShowLabel="false">
-		<HeatMapCellBorder Width="1" Radius="10" Color="white"></HeatMapCellBorder>
-	</HeatMapCellSettings>
-	<HeatMapPaletteSettings>
-		<HeatMapPalettes>
-			<HeatMapPalette Value="I1F1" Color="#c5f1d1"></HeatMapPalette>
-			<HeatMapPalette Value="I1F2" Color="#c5f1d1"></HeatMapPalette>
-			<HeatMapPalette Value="I1F3" Color="#c5f1d1"></HeatMapPalette>
-			<HeatMapPalette Value="I1F4" Color="#c5f1d1"></HeatMapPalette>
-			<HeatMapPalette Value="I1F5" Color="#fec001"></HeatMapPalette>
+    <HeatMapTitleSettings Text="Matriz Impacto/Frecuencia"></HeatMapTitleSettings>
+    <HeatMapXAxis Labels="@XLabels" LabelRotation="45" LabelIntersectAction="@SFHeatMap.LabelIntersectAction.None">
+    </HeatMapXAxis>
+    <HeatMapYAxis Labels="@YLabels"></HeatMapYAxis>
+    <HeatMapCellSettings ShowLabel="false">
+        <HeatMapCellBorder Width="1" Radius="10" Color="white"></HeatMapCellBorder>
+    </HeatMapCellSettings>
+    <HeatMapPaletteSettings>
+        <HeatMapPalettes>
+            <HeatMapPalette Value="I1F1" Color="#c5f1d1"></HeatMapPalette>
+            <HeatMapPalette Value="I1F2" Color="#c5f1d1"></HeatMapPalette>
+            <HeatMapPalette Value="I1F3" Color="#c5f1d1"></HeatMapPalette>
+            <HeatMapPalette Value="I1F4" Color="#c5f1d1"></HeatMapPalette>
+            <HeatMapPalette Value="I1F5" Color="#fec001"></HeatMapPalette>
 
-			<HeatMapPalette Value="I2F1" Color="#c5f1d1"></HeatMapPalette>
-			<HeatMapPalette Value="I2F2" Color="#c5f1d1"></HeatMapPalette>
-			<HeatMapPalette Value="I2F3" Color="#c5f1d1"></HeatMapPalette>
-			<HeatMapPalette Value="I2F4" Color="#fec001"></HeatMapPalette>
-			<HeatMapPalette Value="I2F5" Color="#fec001"></HeatMapPalette>
+            <HeatMapPalette Value="I2F1" Color="#c5f1d1"></HeatMapPalette>
+            <HeatMapPalette Value="I2F2" Color="#c5f1d1"></HeatMapPalette>
+            <HeatMapPalette Value="I2F3" Color="#c5f1d1"></HeatMapPalette>
+            <HeatMapPalette Value="I2F4" Color="#fec001"></HeatMapPalette>
+            <HeatMapPalette Value="I2F5" Color="#fec001"></HeatMapPalette>
 
-			<HeatMapPalette Value="I3F1" Color="#c5f1d1"></HeatMapPalette>
-			<HeatMapPalette Value="I3F2" Color="#c5f1d1"></HeatMapPalette>
-			<HeatMapPalette Value="I3F3" Color="#fec001"></HeatMapPalette>
-			<HeatMapPalette Value="I3F4" Color="#fec001"></HeatMapPalette>
-			<HeatMapPalette Value="I3F5" Color="#ff0101"></HeatMapPalette>
+            <HeatMapPalette Value="I3F1" Color="#c5f1d1"></HeatMapPalette>
+            <HeatMapPalette Value="I3F2" Color="#c5f1d1"></HeatMapPalette>
+            <HeatMapPalette Value="I3F3" Color="#fec001"></HeatMapPalette>
+            <HeatMapPalette Value="I3F4" Color="#fec001"></HeatMapPalette>
+            <HeatMapPalette Value="I3F5" Color="#ff0101"></HeatMapPalette>
 
-			<HeatMapPalette Value="I4F1" Color="#c5f1d1"></HeatMapPalette>
-			<HeatMapPalette Value="I4F2" Color="#fec001"></HeatMapPalette>
-			<HeatMapPalette Value="I4F3" Color="#fec001"></HeatMapPalette>
-			<HeatMapPalette Value="I4F4" Color="#ff0101"></HeatMapPalette>
-			<HeatMapPalette Value="I4F5" Color="#ff0101"></HeatMapPalette>
+            <HeatMapPalette Value="I4F1" Color="#c5f1d1"></HeatMapPalette>
+            <HeatMapPalette Value="I4F2" Color="#fec001"></HeatMapPalette>
+            <HeatMapPalette Value="I4F3" Color="#fec001"></HeatMapPalette>
+            <HeatMapPalette Value="I4F4" Color="#ff0101"></HeatMapPalette>
+            <HeatMapPalette Value="I4F5" Color="#ff0101"></HeatMapPalette>
 
-			<HeatMapPalette Value="I5F1" Color="#fec001"></HeatMapPalette>
-			<HeatMapPalette Value="I5F2" Color="#fec001"></HeatMapPalette>
-			<HeatMapPalette Value="I5F3" Color="#ff0101"></HeatMapPalette>
-			<HeatMapPalette Value="I5F4" Color="#ff0101"></HeatMapPalette>
-			<HeatMapPalette Value="I5F5" Color="#ff0101"></HeatMapPalette>
-		</HeatMapPalettes>
-	</HeatMapPaletteSettings>
-	<HeatMapLegendSettings Visible="false"></HeatMapLegendSettings>	
+            <HeatMapPalette Value="I5F1" Color="#fec001"></HeatMapPalette>
+            <HeatMapPalette Value="I5F2" Color="#fec001"></HeatMapPalette>
+            <HeatMapPalette Value="I5F3" Color="#ff0101"></HeatMapPalette>
+            <HeatMapPalette Value="I5F4" Color="#ff0101"></HeatMapPalette>
+            <HeatMapPalette Value="I5F5" Color="#ff0101"></HeatMapPalette>
+        </HeatMapPalettes>
+    </HeatMapPaletteSettings>
+    <HeatMapLegendSettings Visible="false"></HeatMapLegendSettings>
 </SfHeatMap>
 
 <style>

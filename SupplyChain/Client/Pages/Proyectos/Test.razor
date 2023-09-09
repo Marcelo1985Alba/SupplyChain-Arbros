@@ -1,11 +1,9 @@
-﻿@using Syncfusion.Blazor.Charts
-@using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.Cards
-@using Syncfusion.Blazor.Layouts
+﻿@page "/panel-control/index/Test"
 @using Syncfusion.Blazor.Gantt
-@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Navigations
+@using GridLine = Syncfusion.Blazor.Gantt.GridLine
 @using Syncfusion.Blazor
-@page "/panel-control/index/Test"
+@using Syncfusion.Blazor.Data
 <SfTab>
     <TabItems>
         <TabItem CssClass="tab-content">
@@ -17,16 +15,17 @@
                     <div class="content-wrapper">
                         <div class="row">
                             <SfGantt TValue="ProyectosGBPI" Height="450px" Width="100%" HighlightWeekends="true"
-                                     Toolbar="@(new List<string>(){ "Add", "Edit", "Update", "Delete", "Cancel", "ExpandAll", "CollapseAll","Indent","Outdent"})"
-                                     AllowSelection="true" GridLines="Syncfusion.Blazor.Gantt.GridLine.Both" TreeColumnIndex="1"
+                                     Toolbar="@new List<string> { "Add", "Edit", "Update", "Delete", "Cancel", "ExpandAll", "CollapseAll", "Indent", "Outdent" }"
+                                     AllowSelection="true" GridLines="GridLine.Both" TreeColumnIndex="1"
                                      ProjectStartDate="@ProjectStart" ProjectEndDate="@ProjectEnd" @ref="refGanttProyectos">
                                 <SfDataManager Url="/api/Proyectos/Proyectos" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></SfDataManager>
                                 <GanttTaskFields Id="Id" Name="TaskName" StartDate="StartDate" EndDate="EndDate" Duration="Duration" Progress="Progress"
-                                                 Dependency="Predecessor" ParentID="ParentId" Notes="Notes"></GanttTaskFields>
+                                                 Dependency="Predecessor" ParentID="ParentId" Notes="Notes">
+                                </GanttTaskFields>
                                 <GanttEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" AllowTaskbarEditing="true" ShowDeleteConfirmDialog="true"></GanttEditSettings>
                                 <GanttColumns>
                                     <GanttColumn Field="Id" Width="100"></GanttColumn>
-                                    <GanttColumn Field="TaskName" HeaderText="Job Name" Width="250" ClipMode="Syncfusion.Blazor.Grids.ClipMode.EllipsisWithTooltip"></GanttColumn>
+                                    <GanttColumn Field="TaskName" HeaderText="Job Name" Width="250" ClipMode="ClipMode.EllipsisWithTooltip"></GanttColumn>
                                     <GanttColumn Field="StartDate" HeaderText="Start Date"></GanttColumn>
                                     <GanttColumn Field="EndDate" HeaderText="End Date"></GanttColumn>
                                     <GanttColumn Field="Duration" HeaderText="Duration"></GanttColumn>
@@ -46,12 +45,16 @@
 </SfTab>
 
 @code{
-    [Inject] public HttpClient Http { get; set; }
-    protected DateTime ProjectStart = new DateTime(2021, 3, 25);
-    protected DateTime ProjectEnd = new DateTime(2023, 7, 28);
+
+    [Inject]
+    public HttpClient Http { get; set; }
+
+    protected DateTime ProjectStart = new(2021, 3, 25);
+    protected DateTime ProjectEnd = new(2023, 7, 28);
     protected SfGantt<ProyectosGBPI> refGanttProyectos;
 
     protected override async Task OnInitializedAsync()
     {
     }
+
 }
