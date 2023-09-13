@@ -1,25 +1,11 @@
 ﻿@page "/compras/emision"
 
-
-@using Syncfusion.Blazor.Popups
-@using Syncfusion.Blazor.Notifications
-@using Syncfusion.Pdf;
-@using Syncfusion.Pdf.Grid;
-@using System.Drawing;
-@using System.IO;
-@using Syncfusion.Blazor.Inputs
-@using Syncfusion.Blazor.Calendars
-@using Syncfusion.Blazor.DropDowns
-@using Syncfusion.Blazor.Data
-@using Syncfusion.Blazor.BarcodeGenerator
-@using Syncfusion.Blazor.Buttons
-@using System.Text.Json
-@using Syncfusion.Blazor.Grids
 @inject IJSRuntime JsRuntime
-@inject Microsoft.JSInterop.IJSRuntime JS
+@inject IJSRuntime JS
 @inject HttpClient Http
-@using Syncfusion.Blazor.PdfViewer
-@using Syncfusion.Pdf.Tables
+@using Syncfusion.Blazor.DropDowns
+@using SelectionType = Syncfusion.Blazor.Grids.SelectionType
+@using Syncfusion.Blazor.Buttons
 @inherits SupplyChain.Client.Pages.Emision.EmisionPageBase
 
 <SfToast ID="toast_default" @ref="ToastObj">
@@ -39,7 +25,7 @@
             </div>
             <div hidden="@ocagenerar" class="form-group col-md-5">
                 <label class="col-form-label">Proveedor</label>
-                <SfTextBox Multiline=true ID="comentarios" ShowClearButton="true"
+                <SfTextBox Multiline="true" ID="comentarios" ShowClearButton="true"
                            @bind-Value="@proveocabierta" Readonly="true">
                 </SfTextBox>
             </div>
@@ -49,13 +35,13 @@
                 <div class="form-row">
 
                     <div class="col-8">
-                        <SfNumericTextBox Readonly="true" @bind-Value="@item.NUMERO" ShowClearButton="true" TValue="int" 
-                                          ></SfNumericTextBox>
+                        <SfNumericTextBox Readonly="true" @bind-Value="@ocompraseleccionada.NUMERO" ShowClearButton="true" TValue="int"></SfNumericTextBox>
                     </div>
                     <div class="col-4 mb-1">
-                        <SfButton OnClick="@(async (e)=> await BuscarOCompras())"
+                        <SfButton OnClick="@(async e => await BuscarOCompras())"
                                   CssClass="e-round e-info" IsPrimary="false"
-                                  IconCss="fa fa-search" HtmlAttributes="@HtmlAttribute"></SfButton>
+                                  IconCss="fa fa-search" HtmlAttributes="@HtmlAttribute">
+                        </SfButton>
 
                     </div>
                 </div>
@@ -68,8 +54,8 @@
             <div hidden="@IsVisibleimprime" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
                 <SfButton style="height: 50px;" CssClass="e-info" IsPrimary="true" @onclick="imprimiroc">Imprimir OC</SfButton>
             </div>
-            <div  style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
-                <SfButton style="height: 50px;" CssClass="e-info" IsPrimary="true" @onclick="anularoc">Anular OC</SfButton>
+            <div style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
+                <SfButton style="height: 50px;" CssClass="e-info" IsPrimary="true" @onclick="anularOc">Anular OC</SfButton>
             </div>
             <div hidden="@ocagenerar" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
                 <SfButton style="height: 50px" CssClass="e-info" IsPrimary="true" @onclick="limpia">Limpia</SfButton>
@@ -81,7 +67,7 @@
             </div>
             <div class="form-group col-lg-3 my-1">
                 <SfDropDownList TValue="string" TItem="vCondicionesPago" @bind-Value="DropVal" DataSource="@condiconespago"
-                    Placeholder="Condición de Pago">
+                                Placeholder="Condición de Pago">
                     @*<SfDataManager Url="api/Itris/Condven" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"
                                    CrossDomain=false></SfDataManager>*@
                     <DropDownListFieldSettings Text="DESCRIPCION" Value="DESCRIPCION"></DropDownListFieldSettings>
@@ -90,30 +76,29 @@
             <div class="form-group col-lg-2 my-1">
                 <SfNumericTextBox Placeholder="Bonificación %"
                                   @bind-Value="@bonif" ShowClearButton="true" TValue="decimal?" Format="n0"
-                                  Decimals="2"></SfNumericTextBox>
+                                  Decimals="2">
+                </SfNumericTextBox>
             </div>
         </div>
-        <hr />
+        <hr/>
 
-        <hr style="border:0px;" />
+        <hr style="border:0px;"/>
         <SfGrid @ref="GridProve" DataSource="@insumosproveedor" Height="100%" Width="100%" AllowSelection="true" AllowPaging="true">
-            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple" CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+            <GridSelectionSettings Type="SelectionType.Multiple" CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
             <GridColumns>
-                <GridColumn Field=@nameof(Compra.Id) Type="ColumnType.CheckBox" Width="50px"></GridColumn>
-                <GridColumn Field=@nameof(Compra.CG_MAT) HeaderText="Insumo" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                <GridColumn Field=@nameof(Compra.DES_MAT) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(Compra.AUTORIZADO) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                <GridColumn Field=@nameof(Compra.UNID1) HeaderText="Unidad" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field=@nameof(Compra.PRECIONETO) HeaderText="Precio" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                <GridColumn Field=@nameof(Compra.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field="@nameof(Compra.Id)" Type="ColumnType.CheckBox" Width="50px"></GridColumn>
+                <GridColumn Field="@nameof(Compra.CG_MAT)" HeaderText="Insumo" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                <GridColumn Field="@nameof(Compra.DES_MAT)" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field="@nameof(Compra.AUTORIZADO)" HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field="@nameof(Compra.UNID1)" HeaderText="Unidad" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field="@nameof(Compra.PRECIONETO)" HeaderText="Precio" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field="@nameof(Compra.MONEDA)" HeaderText="Moneda" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
             </GridColumns>
         </SfGrid>
 
     </div>
-    </div>
+</div>
 
 <BuscadorEmergente Height="600px" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
-                   Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async(v)=>await Cerrar(v))"
-                   OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
-
-
+                   Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async v => await Cerrar(v))"
+                   OnObjetoSeleccionado="@(async o => await EnviarObjetoSeleccionado(o))"/>
