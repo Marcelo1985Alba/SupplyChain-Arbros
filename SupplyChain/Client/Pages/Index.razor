@@ -1,10 +1,12 @@
-﻿@page "/index"
+﻿@using Syncfusion.Blazor.Layouts
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using Microsoft.AspNetCore.SignalR.Client
+@page "/index"
 
 <h5>Hola, @CurrentUserEmail</h5>
 
 Bienvenido a la nueva aplicación.
-<br/>
+<br />
 @*<strong>Nuevas Caracteristicas: impresion de evento</strong>*@
 @*<a href="https://localhost:44379/api/ReportRDLC/GetReport?numeroVale=35071" target="_blank">Vale Pdf</a>
     <a href="https://localhost:44379/api/ReportRDLC/GetReportEvento?noConf=136" target="_blank">No Conf PDF</a>
@@ -44,67 +46,44 @@ Bienvenido a la nueva aplicación.
 
 
 @code{
+    [Inject] public NavigationManager NavigationManager { get; set; }
+    [Inject] public IRepositoryHttp Http { get; set; }
+    [Inject] public IJSRuntime JS { get; set; }
+    [Inject] public ILoginServiceJWT LoginService { get; set; }
+    [CascadingParameter] public MainLayout Layout { get; set; }
+    [CascadingParameter] public HubConnection? hubConnection { get; set; }
+    [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
 
-    [Inject]
-    public NavigationManager NavigationManager { get; set; }
-
-    [Inject]
-    public IRepositoryHttp Http { get; set; }
-
-    [Inject]
-    public IJSRuntime JS { get; set; }
-
-    [Inject]
-    public ILoginServiceJWT LoginService { get; set; }
-
-    [CascadingParameter]
-    public MainLayout Layout { get; set; }
-
-    [CascadingParameter]
-    public HubConnection? hubConnection { get; set; }
-
-    [CascadingParameter]
-    public Task<AuthenticationState> authenticationState { get; set; }
-
-    [Parameter]
-    public string ContactEmail { get; set; }
-
-    [Parameter]
-    public string ContactId { get; set; }
-
-    [Parameter]
-    public string CurrentMessage { get; set; }
-
-    [Parameter]
-    public string CurrentUserId { get; set; }
-
-    [Parameter]
-    public string CurrentUserEmail { get; set; }
-
-    private List<ChatMessage> messages = new();
+    [Parameter] public string ContactEmail { get; set; }
+    [Parameter] public string ContactId { get; set; }
+    [Parameter] public string CurrentMessage { get; set; }
+    [Parameter] public string CurrentUserId { get; set; }
+    [Parameter] public string CurrentUserEmail { get; set; }
+    private List<ChatMessage> messages = new List<ChatMessage>();
 
     private AuthenticationState authState;
     protected string user = string.Empty;
     protected string MensajeRecibido = string.Empty;
     protected string MensajeEnviar = string.Empty;
 
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
         Layout.Titulo = "Inicio";
+
     }
 
     protected void RegistrarHub()
     {
         hubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
-            .Build();
+        .WithUrl(NavigationManager.ToAbsoluteUri("/chathub") )
+        .Build();
 
-    //hubConnection = new HubConnectionBuilder()
-    //.WithUrl(NavigationManager.ToAbsoluteUri("/chathub"), options=>
-    //{
-    //    options.AccessTokenProvider = () => Task.FromResult(token);
-    //})
-    //.Build();
+        //hubConnection = new HubConnectionBuilder()
+        //.WithUrl(NavigationManager.ToAbsoluteUri("/chathub"), options=>
+        //{
+        //    options.AccessTokenProvider = () => Task.FromResult(token);
+        //})
+        //.Build();
     }
 
 
@@ -112,6 +91,7 @@ Bienvenido a la nueva aplicación.
     {
         _ = hubConnection.On<string, string>("ReceiveMessage", (userSender, message) =>
         {
+
             MensajeRecibido = message;
             StateHasChanged();
         });
@@ -122,17 +102,19 @@ Bienvenido a la nueva aplicación.
     {
         if (!string.IsNullOrEmpty(CurrentMessage) && !string.IsNullOrEmpty(ContactId))
         {
-    //Save Message to DB
-            var chatHistory = new ChatMessage
+            //Save Message to DB
+            var chatHistory = new ChatMessage()
             {
                 Message = CurrentMessage,
                 ToUserId = ContactId,
                 CreatedDate = DateTime.Now
+
             };
             var response = await Http.PostAsJsonAsync("api/Chats", chatHistory);
             if (response.Error)
             {
                 Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+
             }
 
             chatHistory.FromUserId = CurrentUserId;
@@ -144,16 +126,18 @@ Bienvenido a la nueva aplicación.
             CurrentMessage = string.Empty;
         }
 
-    //var resumen = await Http
-    //                .GetFromJsonAsync<vResumenStock>($"api/ResumenStock/GetByStock?CG_ART={cg_art}" +
-    //                $"&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
+        //var resumen = await Http
+        //                .GetFromJsonAsync<vResumenStock>($"api/ResumenStock/GetByStock?CG_ART={cg_art}" +
+        //                $"&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
     }
 
 
     protected async Task SubscribeToNotificacions(NotificacionSubscripcion notificacionSubscripcion)
     {
-        var response = await Http.PutAsJsonAsync("api/Notificaciones", notificacionSubscripcion);
+        var response = await Http.PutAsJsonAsync<NotificacionSubscripcion>("api/Notificaciones", notificacionSubscripcion);
         response.HttpResponseMessage.EnsureSuccessStatusCode();
+
+
     }
 
     [JSInvokable]
@@ -168,9 +152,9 @@ Bienvenido a la nueva aplicación.
             }
             catch (Exception ex)
             {
+
                 Console.WriteLine(ex);
             }
         }
     }
-
 }

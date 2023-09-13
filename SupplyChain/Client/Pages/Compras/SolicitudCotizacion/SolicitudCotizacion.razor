@@ -1,4 +1,6 @@
 ﻿@page "/compras/solicitud-cotizacion"
+
+@using Syncfusion.Blazor.DropDowns
 @attribute [Authorize]
 @inherits SolicitudCotizacionBase
 
@@ -19,11 +21,10 @@
         <div class="row">
             <div class="col-12">
                 <Proveedores @ref="refProveedores" IdsProveedoresConMp="@idsProveedores"
-                             OnProveedorSeleccionado="OnProveedorSeleccionado" OnProveedorDeseleccionado="OnProveedorDeseleccionado">
-                </Proveedores>
+                             OnProveedorSeleccionado="OnProveedorSeleccionado" OnProveedorDeseleccionado="OnProveedorDeseleccionado"></Proveedores>
             </div>
         </div>
-
+        
     </div>
     <div class="col-lg-4 col-sm-12">
         <div class="row">
@@ -40,3 +41,4 @@
     </div>
 
 </div>
+

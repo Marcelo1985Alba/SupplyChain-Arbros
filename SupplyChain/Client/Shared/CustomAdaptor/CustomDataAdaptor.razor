@@ -1,21 +1,23 @@
-﻿@inject HttpClient http
-
-
-@using Syncfusion.Blazor
+﻿@using Newtonsoft.Json
+@using SupplyChain.Shared.Context;
+@using Syncfusion.Blazor.Gantt
+@using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Data
-@using SupplyChain.Shared.Context
-@inherits DataAdaptor<SupplyChain.Shared.Context.GanttDataDetails>
+@using Syncfusion.Blazor
+@inject HttpClient http
+
+
+@inherits DataAdaptor<GanttDataDetails>
 
 @code {
     // Performs data Read operation
     public override async Task<object> ReadAsync(DataManagerRequest dm, string key = null)
 
     {
-        IEnumerable<object> data = await http.GetFromJsonAsync<IEnumerable<GanttDataDetails>>("api/Proyectos");
+        IEnumerable<object> data = await http.GetFromJsonAsync<IEnumerable<GanttDataDetails>>("api/Proyectos") as IEnumerable<object>;
 
-        return dm.RequiresCounts ? new DataResult { Result = data, Count = data.Count() } : data;
+        return dm.RequiresCounts ? new DataResult() { Result = data, Count = data.Count() } : (object)data;
     }
-
     /*
     public override async Task<object> InsertAsync(DataManager dm, object value, string key)
     {
@@ -35,15 +37,18 @@
     public override async Task<object> BatchUpdateAsync(DataManager dm, object changedRecords, object addedRecords, object deletedRecords, string keyField, string key, int? dropIndex)
 
     {
-        var addRecord = addedRecords as List<GanttDataDetails>;
-        var changed = changedRecords as List<GanttDataDetails>;
-        var deleteRecord = deletedRecords as List<GanttDataDetails>;
+
+        List<GanttDataDetails> addRecord = addedRecords as List<GanttDataDetails>;
+        List<GanttDataDetails> changed = changedRecords as List<GanttDataDetails>;
+        List<GanttDataDetails> deleteRecord = deletedRecords as List<GanttDataDetails>;
         if (changed != null)
         {
             for (var i = 0; i < changed.Count(); i++)
             {
+
                 var value = changed[i];
-                await http.PutAsJsonAsync("/api/GanttDataDetails/" + changed[i].Id, changed[i]);
+                await http.PutAsJsonAsync("/api/GanttDataDetails/" + changed[i].Id, changed[i] as GanttDataDetails);
+
             }
         }
         if (deleteRecord != null)
@@ -55,12 +60,13 @@
         }
         if (addRecord != null)
         {
+
+
             for (var i = 0; i < addRecord.Count(); i++)
             {
-                await http.PostAsJsonAsync("/api/GanttDataDetails", addRecord[i]);
+                await http.PostAsJsonAsync( "/api/GanttDataDetails", addRecord[i] as GanttDataDetails);
             }
         }
-        return new { addedRecords = addRecord, changedRecords = changed, deletedRecords = deleteRecord };
+        return (new { addedRecords = addRecord, changedRecords = changed, deletedRecords = deleteRecord });
     }
-
 }

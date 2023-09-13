@@ -1,7 +1,6 @@
 # Table Natural Sorting
 
-Use
-Plugin: [bootstrap-table-natural-sorting](https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/natural-sorting)
+Use Plugin: [bootstrap-table-natural-sorting](https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/natural-sorting)
 
 ## Usage
 

@@ -49,7 +49,11 @@
                 <div class="form-row">
 
                     <div class="col-8">
+<<<<<<< HEAD
                         <SfNumericTextBox Readonly="true" @bind-Value="@item.NUMERO" ShowClearButton="true" TValue="int" 
+=======
+                        <SfNumericTextBox Readonly="true" @bind-Value="@ocompraseleccionada.NUMERO" ShowClearButton="true" TValue="int" 
+>>>>>>> parent of 1c4fe0e (08092023 - agregue celdas y operaciones con boton de enviar al archivo php)
                                           ></SfNumericTextBox>
                     </div>
                     <div class="col-4 mb-1">
@@ -69,7 +73,11 @@
                 <SfButton style="height: 50px;" CssClass="e-info" IsPrimary="true" @onclick="imprimiroc">Imprimir OC</SfButton>
             </div>
             <div  style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
+<<<<<<< HEAD
                 <SfButton style="height: 50px;" CssClass="e-info" IsPrimary="true" @onclick="anularoc">Anular OC</SfButton>
+=======
+                <SfButton style="height: 50px;" CssClass="e-info" IsPrimary="true" @onclick="anularOc">Anular OC</SfButton>
+>>>>>>> parent of 1c4fe0e (08092023 - agregue celdas y operaciones con boton de enviar al archivo php)
             </div>
             <div hidden="@ocagenerar" style="margin-top: 20px;" class="form-group col-lg-2 col-md-4 col-sm-6">
                 <SfButton style="height: 50px" CssClass="e-info" IsPrimary="true" @onclick="limpia">Limpia</SfButton>

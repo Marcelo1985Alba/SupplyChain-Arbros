@@ -1,7 +1,6 @@
 # Table Multiple Sort
 
-Use
-Plugin: [bootstrap-table-multiple-sort](https://github.com/dimbslmh/bootstrap-table/tree/master/src/extensions/multiple-sort)
+Use Plugin: [bootstrap-table-multiple-sort](https://github.com/dimbslmh/bootstrap-table/tree/master/src/extensions/multiple-sort)
 
 ## Usage
 
@@ -20,12 +19,10 @@ Plugin: [bootstrap-table-multiple-sort](https://github.com/dimbslmh/bootstrap-ta
 ### sortPriority
 
 * type: Object
-* description: Set one or multiple sort priority.
-  Example: '[{"sortName": "forks_count","sortOrder":"desc"},{"sortName":"stargazers_count","sortOrder":"desc"}]'
+* description: Set one or multiple sort priority. Example: '[{"sortName": "forks_count","sortOrder":"desc"},{"sortName":"stargazers_count","sortOrder":"desc"}]'
 * default: null
 
 ### Icons
-
 * sort: `glyphicon-sort`
 * plus: `glyphicon-plus`
 * minus: `glyphicon-minus`

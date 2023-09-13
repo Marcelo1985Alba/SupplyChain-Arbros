@@ -1,5 +1,4 @@
 [List of All Locales and Their Short Codes](http://stackoverflow.com/questions/3191664/list-of-all-locales-and-their-short-codes)
-
 ```
 af-ZA
 am-ET

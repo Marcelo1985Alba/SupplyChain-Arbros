@@ -1,128 +1,127 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using SupplyChain.Client.HelperService;
+using SupplyChain.Shared;
+using Syncfusion.Blazor.Notifications;
+using Syncfusion.Blazor.Spinner;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
-using SupplyChain.Client.HelperService;
-using SupplyChain.Shared;
-using SupplyChain.Shared.Enum;
-using Syncfusion.Blazor.Notifications;
-using Syncfusion.Blazor.Spinner;
 
-namespace SupplyChain.Client.Shared.BuscadorPedidos;
-
-public class PedidosEstadosBase : ComponentBase
+namespace SupplyChain.Client.Shared.BuscadorPedidos
 {
-    protected List<vEstadoPedido> pedidosEstados = new();
-    protected SfSpinner refSpinner;
-    protected SfToast ToastObj;
-    [Inject] public EstadoPedidoService EstadoPedidoService { get; set; }
-    [Inject] public PedCliService PedCliService { get; set; }
-    [Parameter] public bool PopupBuscadorVisible { get; set; }
-    [Parameter] public EventCallback<List<vEstadoPedido>> OnObjectSelected { get; set; }
-    [Parameter] public EventCallback OnCerrarDialog { get; set; }
-
-    /// <summary>
-    ///     Verifica la existencia del precio al seleccionar solicitud
-    /// </summary>
-    [Parameter]
-    public bool ConPrecio { get; set; }
-
-    [Parameter] public bool CompararCliente { get; set; }
-    [Parameter] public int Cg_Cli_Comparar { get; set; }
-
-    public async Task Show()
+    public class PedidosEstadosBase : ComponentBase
     {
-        refSpinner?.ShowAsync();
-        var response = await EstadoPedidoService.ByEstado(EstadoPedido.PendienteRemitir);
-        if (response.Error)
-        {
-            refSpinner?.HideAsync();
-            Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
-        }
-        else
-        {
-            pedidosEstados = response.Response.OrderBy(s => s.Id).ToList();
-            if (Cg_Cli_Comparar > 0)
-                pedidosEstados = pedidosEstados.Where(c => c.CG_CLI == Cg_Cli_Comparar).OrderByDescending(p => p.Id)
-                    .ToList();
-            refSpinner?.HideAsync();
-            PopupBuscadorVisible = true;
-        }
-    }
+        [Inject] public EstadoPedidoService EstadoPedidoService { get; set; }
+        [Inject] public PedCliService PedCliService { get; set; }
+        [Parameter] public bool PopupBuscadorVisible { get; set; } = false;
+        [Parameter] public EventCallback<List<vEstadoPedido>> OnObjectSelected { get; set; }
+        [Parameter] public EventCallback OnCerrarDialog { get; set; }
+        /// <summary>
+        /// Verifica la existencia del precio al seleccionar solicitud
+        /// </summary>
+        [Parameter] public bool ConPrecio { get; set; } = false;
+        [Parameter] public bool CompararCliente { get; set; } = false;
+        [Parameter] public int Cg_Cli_Comparar { get; set; } = 0;
 
-    public async Task Hide()
-    {
-        PopupBuscadorVisible = false;
-    }
-
-    protected async Task SendObjectSelected(vEstadoPedido obj)
-    {
-        if (obj != null)
+        protected List<vEstadoPedido> pedidosEstados = new();
+        protected SfSpinner refSpinner;
+        protected SfToast ToastObj;
+        public async Task Show()
         {
-            var pedidos = pedidosEstados.Where(e => e.NUM_OCI == obj.NUM_OCI).ToList();
-            if (pedidos.Count == 0)
+            refSpinner?.ShowAsync();
+            var response = await EstadoPedidoService.ByEstado(SupplyChain.Shared.Enum.EstadoPedido.PendienteRemitir);
+            if (response.Error)
             {
-                await ToastMensajeError("Error al obtener pedidos");
+                refSpinner?.HideAsync();
+                Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
             }
             else
             {
-                //var presupuesto = response.Response;
-
-                if (CompararCliente)
+                pedidosEstados = response.Response.OrderBy(s => s.Id).ToList();
+                if (Cg_Cli_Comparar > 0)
                 {
-                    if (pedidos.Any(p => p.CG_CLI != Cg_Cli_Comparar))
-                    {
-                        await ToastMensajeError("No se puede agrega Presupuesto.\nEl Cliente es distinto");
-                    }
-                    else
-                    {
-                        await OnObjectSelected.InvokeAsync(pedidos);
-                        await Hide();
-                    }
+                    pedidosEstados = pedidosEstados.Where(c => c.CG_CLI == Cg_Cli_Comparar).OrderByDescending(p => p.Id).ToList();
+                }
+                refSpinner?.HideAsync();
+                PopupBuscadorVisible = true;
+            }
+        }
+        public async Task Hide()
+        {
+            PopupBuscadorVisible = false;
+        }
+        protected async Task SendObjectSelected(vEstadoPedido obj)
+        {
+            if (obj != null)
+            {
+                var pedidos = pedidosEstados.Where(e => e.NUM_OCI == obj.NUM_OCI).ToList();
+                if (pedidos.Count == 0)
+                {
+                    await ToastMensajeError("Error al obtener pedidos");
                 }
                 else
                 {
-                    if (pedidos != null)
+                    //var presupuesto = response.Response;
+
+                    if (CompararCliente)
                     {
-                        await OnObjectSelected.InvokeAsync(pedidos);
-                        await Hide();
+                        if (pedidos.Any(p => p.CG_CLI != Cg_Cli_Comparar))
+                        {
+                            await ToastMensajeError("No se puede agrega Presupuesto.\nEl Cliente es distinto");
+                        }
+                        else
+                        {
+                            await OnObjectSelected.InvokeAsync(pedidos);
+                            await Hide();
+                        }
                     }
+                    else
+                    {
+                        if (pedidos != null)
+                        {
+                            await OnObjectSelected.InvokeAsync(pedidos);
+                            await Hide();
+                        }
+
+                    }
+
                 }
             }
+
+
         }
-    }
 
-    protected async Task CerrarDialog()
-    {
-        await Hide();
-        await OnCerrarDialog.InvokeAsync();
-    }
-
-
-    private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
-    {
-        await ToastObj.Show(new ToastModel
+        protected async Task CerrarDialog()
         {
-            Title = "EXITO!",
-            Content = content,
-            CssClass = "e-toast-success",
-            Icon = "e-success toast-icons",
-            ShowCloseButton = true,
-            ShowProgressBar = true
-        });
-    }
+            await Hide();
+            await OnCerrarDialog.InvokeAsync();
+        }
 
-    private async Task ToastMensajeError(string content = "Ocurrio un Error.")
-    {
-        await ToastObj.Show(new ToastModel
+
+        private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
         {
-            Title = "Error!",
-            Content = content,
-            CssClass = "e-toast-warning",
-            Icon = "e-warning toast-icons",
-            ShowCloseButton = true,
-            ShowProgressBar = true
-        });
+            await this.ToastObj.Show(new ToastModel
+            {
+                Title = "EXITO!",
+                Content = content,
+                CssClass = "e-toast-success",
+                Icon = "e-success toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
+        private async Task ToastMensajeError(string content = "Ocurrio un Error.")
+        {
+            await ToastObj.Show(new ToastModel
+            {
+                Title = "Error!",
+                Content = content,
+                CssClass = "e-toast-warning",
+                Icon = "e-warning toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
     }
 }

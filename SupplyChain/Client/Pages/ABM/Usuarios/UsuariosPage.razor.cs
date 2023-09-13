@@ -1,193 +1,199 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using SupplyChain.Client.HelperService;
-using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared;
 using SupplyChain.Shared;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
-using Action = Syncfusion.Blazor.Grids.Action;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace SupplyChain.Client.Pages.ABM.Usuarios;
-
-public class UsuariosPageBase : ComponentBase
+namespace SupplyChain.Client.Pages.ABM.Usuarios
 {
-    protected List<ClienteExterno> Clientes = new();
-    protected bool popupFormVisible;
-    protected SfGrid<vUsuario> refGrid;
-    protected SfSpinner refSpinner;
-
-    protected bool SpinnerVisible;
-    protected SfToast ToastObj;
-
-    protected List<object> Toolbaritems = new()
+    public class UsuariosPageBase : ComponentBase
     {
-        "Search",
-        //new ItemModel { Text = "Add", TooltipText = "Agregar un nuevo Usuario", PrefixIcon = "e-add", Id = "Add" },
-        "Add",
-        "Edit",
-        "Delete",
-        //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
-        "ExcelExport",
-        new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh" }
-    };
+        [Inject] RepositoryHttp.IRepositoryHttp Http { get; set; }
+        [Inject] public IJSRuntime JS { get; set; }
+        [Inject] public ClienteService ClienteService { get; set; }
+        [CascadingParameter] public MainLayout MainLayout { get; set; }
+        protected SfGrid<vUsuario> refGrid;
+        protected SfSpinner refSpinner;
+        protected SfToast ToastObj;
 
-    protected List<vUsuario> Usuarios = new();
-    protected ApplicationUser UsuarioSeleccionado = new();
-    protected vUsuario vUsuarioSeleccionado = new();
-    [Inject] private IRepositoryHttp Http { get; set; }
-    [Inject] public IJSRuntime JS { get; set; }
-    [Inject] public ClienteService ClienteService { get; set; }
-    [CascadingParameter] public MainLayout MainLayout { get; set; }
-
-
-    protected override async Task OnInitializedAsync()
-    {
-        SpinnerVisible = true;
-        await GetUsuarios();
-        await GetClientes();
-        SpinnerVisible = false;
-    }
-
-    protected async Task<List<vUsuario>> GetUsuarios()
-    {
-        var response = await Http.GetFromJsonAsync<List<vUsuario>>("api/Cuentas/Usuarios");
-        if (response.Error)
+        protected bool SpinnerVisible = false;
+        protected bool popupFormVisible = false;
+        protected List<ClienteExterno> Clientes = new();
+        protected List<vUsuario> Usuarios = new();
+        protected List<Object> Toolbaritems = new()
         {
-            Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
-            return new List<vUsuario>();
-        }
+            "Search",
+            //new ItemModel { Text = "Add", TooltipText = "Agregar un nuevo Usuario", PrefixIcon = "e-add", Id = "Add" },
+            "Add",
+            "Edit",
+            "Delete",
+            //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
+            "ExcelExport",
+            new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh" }
+        };
+        protected vUsuario vUsuarioSeleccionado = new();
+        protected ApplicationUser UsuarioSeleccionado = new();
 
-        return Usuarios = response.Response;
-    }
 
-    protected async Task GetClientes()
-    {
-        var response = await ClienteService.GetClientesExterno();
-        if (response.Error)
-        {
-        }
-        else
-        {
-            Clientes = response.Response;
-        }
-    }
-
-    protected async Task OnActionBeginHandler(ActionEventArgs<vUsuario> args)
-    {
-        if (args.RequestType == Action.Add ||
-            args.RequestType == Action.BeginEdit)
-        {
-            args.Cancel = true;
-            args.PreventRender = false;
-        }
-
-        if (args.RequestType == Action.Add)
+        protected async override Task OnInitializedAsync()
         {
             SpinnerVisible = true;
-            UsuarioSeleccionado = new ApplicationUser();
-            UsuarioSeleccionado.EsNuevo = true;
-            popupFormVisible = true;
+            await GetUsuarios();
+            await GetClientes();
             SpinnerVisible = false;
         }
 
-        if (args.RequestType == Action.BeginEdit)
+        protected async Task<List<vUsuario>> GetUsuarios()
         {
-            SpinnerVisible = true;
-            var response = await Http.GetFromJsonAsync<ApplicationUser>($"api/Cuentas/usuarios/byId/{args.RowData.Id}");
+            var response = await Http.GetFromJsonAsync<List<vUsuario>>("api/Cuentas/Usuarios");
             if (response.Error)
             {
-                //await ToastMensajeError();
+                Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
+                return new List<vUsuario>();
             }
             else
             {
-                UsuarioSeleccionado = response.Response;
-                //direccionesEntregas = PedidoSeleccionado.DireccionesEntregas.Select(d => d.DESCRIPCION).ToList();
-                popupFormVisible = true;
+                return Usuarios = response.Response;
+            }
+        }
+
+        protected async Task GetClientes()
+        {
+            var response = await ClienteService.GetClientesExterno();
+            if (response.Error)
+            {
+
+            }
+            else
+            {
+                Clientes = response.Response;
+            }
+        }
+
+        protected async Task OnActionBeginHandler(ActionEventArgs<vUsuario> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                args.Cancel = true;
+                args.PreventRender = false;
             }
 
-            SpinnerVisible = false;
-        }
-    }
-
-    protected async Task OnActionCompleteHandler(ActionEventArgs<vUsuario> args)
-    {
-        if (args.RequestType == Action.Add ||
-            args.RequestType == Action.BeginEdit)
-        {
-            args.Cancel = true;
-            args.PreventRender = false;
-        }
-    }
-
-    protected async Task OnGuardar(ApplicationUser applicationUser)
-    {
-        await ToastMensajeExito();
-        if (applicationUser.EsNuevo)
-        {
-            var vUsuario = new vUsuario
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
             {
-                Id = applicationUser.Id,
-                CLIENTE = applicationUser.NombreCliente,
-                EMAIL = applicationUser.Email,
-                USUARIO = applicationUser.UserName,
-                FOTO = applicationUser.Foto
-            };
+                SpinnerVisible = true;
+                UsuarioSeleccionado = new();
+                UsuarioSeleccionado.EsNuevo = true;
+                popupFormVisible = true;
+                SpinnerVisible = false;
+            }
 
-            Usuarios.Add(vUsuario);
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                SpinnerVisible = true;
+                var response = await Http.GetFromJsonAsync<ApplicationUser>($"api/Cuentas/usuarios/byId/{args.RowData.Id}");
+                if (response.Error)
+                {
+                    //await ToastMensajeError();
+                }
+                else
+                {
+                    UsuarioSeleccionado = response.Response;
+                    //direccionesEntregas = PedidoSeleccionado.DireccionesEntregas.Select(d => d.DESCRIPCION).ToList();
+                    popupFormVisible = true;
+                }
+                SpinnerVisible = false;
+            }
         }
-        else
+        protected async Task OnActionCompleteHandler(ActionEventArgs<vUsuario> args)
         {
-            var vUsuario = Usuarios.FirstOrDefault(u => u.Id == applicationUser.Id);
-            vUsuario.CLIENTE = applicationUser.NombreCliente;
-            vUsuario.EMAIL = applicationUser.Email;
-            vUsuario.USUARIO = applicationUser.UserName;
-            vUsuario.FOTO = applicationUser.Foto;
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                args.Cancel = true;
+                args.PreventRender = false;
+            }
+
+
         }
 
-        popupFormVisible = false;
-        refGrid.Refresh();
-    }
-
-
-    private async Task ToastMensajeExito()
-    {
-        await ToastObj.Show(new ToastModel
+        protected async Task OnGuardar(ApplicationUser applicationUser)
         {
-            Title = "EXITO!",
-            Content = "Guardado Correctamente.",
-            CssClass = "e-toast-success",
-            Icon = "e-success toast-icons",
-            ShowCloseButton = true,
-            ShowProgressBar = true
-        });
-    }
 
+            await ToastMensajeExito();
+            if (applicationUser.EsNuevo)
+            {
+                var vUsuario = new vUsuario()
+                {
+                    Id = applicationUser.Id,
+                    CLIENTE = applicationUser.NombreCliente,
+                    EMAIL = applicationUser.Email,
+                    USUARIO = applicationUser.UserName,
+                    FOTO = applicationUser.Foto
+                };
 
-    public async Task CommandClickHandler(CommandClickEventArgs<vUsuario> args)
-    {
-    }
+                Usuarios.Add(vUsuario);
+                
+            }
+            else
+            {
+                var vUsuario = Usuarios.FirstOrDefault(u => u.Id == applicationUser.Id);
+                vUsuario.CLIENTE = applicationUser.NombreCliente;
+                vUsuario.EMAIL = applicationUser.Email;
+                vUsuario.USUARIO = applicationUser.UserName;
+                vUsuario.FOTO = applicationUser.Foto;
+            }
 
-    public async Task ClickHandler(ClickEventArgs args)
-    {
-        if (args.Item.Text == "Seleccionar Columnas")
-        {
-            await refGrid.OpenColumnChooser(200, 50);
+            popupFormVisible = false;
+            refGrid.Refresh();
         }
-        else if (args.Item.Text == "Exportar grilla en Excel")
+
+
+        private async Task ToastMensajeExito()
         {
-            await refGrid.ExcelExport();
+            await this.ToastObj.Show(new ToastModel
+            {
+                Title = "EXITO!",
+                Content = "Guardado Correctamente.",
+                CssClass = "e-toast-success",
+                Icon = "e-success toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
         }
-        else if (args.Item.Id == "refresh")
+
+
+        public async Task CommandClickHandler(CommandClickEventArgs<vUsuario> args)
         {
-            await GetUsuarios();
+            
         }
-        //await GetPedidoPendientesRemitir();
+
+        public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+        {
+            if (args.Item.Text == "Seleccionar Columnas")
+            {
+                await refGrid.OpenColumnChooser(200, 50);
+            }
+            else if (args.Item.Text == "Exportar grilla en Excel")
+            {
+                await this.refGrid.ExcelExport();
+            }
+            else if (args.Item.Id == "refresh")
+            {
+                await GetUsuarios();
+            }
+            else
+            {
+                //await GetPedidoPendientesRemitir();
+            }
+        }
     }
 }

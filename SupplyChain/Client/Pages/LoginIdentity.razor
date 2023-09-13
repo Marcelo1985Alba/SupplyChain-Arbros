@@ -3,9 +3,9 @@
 @page "/login-identity"
 @page "/login-identity/{returnUrl}"
 
-@inject IRepositoryHttp Http
+@inject SupplyChain.Client.RepositoryHttp.IRepositoryHttp Http
 @inject IJSRuntime JsRuntime
-@inject NavigationManager navigationManager
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 
 
 <SfToast ID="toast_default" @ref="ToastObj">
@@ -15,18 +15,18 @@
 <section id="wrapper" class="login-register login-sidebar" style="background-image:url(./Imagenes/login-register.jpg);">
     <div class="login-box card">
         <div class="card-body">
-            <EditForm Model="@usuarioLogin" OnValidSubmit="@(async () => await LoginDialogOk())">
+            <EditForm Model="@usuarioLogin" OnValidSubmit="@(async() => await LoginDialogOk())">
                 <a class="text-center db">
-                    <img src="./logo_aerre.jpg" class="img-thumbnail" alt="Home"/><br/>
+                    <img src="./logo_aerre.jpg" class="img-thumbnail" alt="Home" /><br />
                 </a>
-                <DataAnnotationsValidator/>
+                <DataAnnotationsValidator />
                 <div class="form-group m-t-40">
                     <div class="col-xs-12">
                         <label>Usuario</label>
                         <SfTextBox ShowClearButton="true" Placeholder="Ingresar Usuario"
                                    @bind-Value="@usuarioLogin.UserName" ID="txtUsuarioLogin"
-                                   FloatLabelType="FloatLabelType.Never" Type="InputType.Text"/>
-                        <ValidationMessage For="@(() => usuarioLogin.UserName)"/>
+                                   FloatLabelType="FloatLabelType.Never" Type="InputType.Text" />
+                        <ValidationMessage For="@(()=>usuarioLogin.UserName)" />
                     </div>
                 </div>
                 <SfSpinner @bind-Visible="SpinnerVisible" Label="Iniciando Sesion..." Size="100" Type="SpinnerType.Bootstrap"></SfSpinner>
@@ -35,7 +35,7 @@
                         <label>Contraseña</label>
                         <div class="e-input-group">
                             <div class="e-input-in-wrap">
-                                <input class="e-input" type="@type" placeholder="Ingresar Password" @bind-value="@usuarioLogin.Password"/>
+                                <input class="e-input" type="@type" placeholder="Ingresar Password" @bind-value="@usuarioLogin.Password" />
                             </div>
                             <span class="e-input-group-icon @cssIconEye" @onclick="ShowPassword"></span>
                         </div>
@@ -44,7 +44,7 @@
                             FloatLabelType="FloatLabelType.Never" Type="InputType.Password" />*@
                         @*<input class='e-input' type="password" placeholder='Enter Password' @bind-value="@usuarioLogin.Contras" />*@
                         @*<SfTextBox @ref="txtbox2" CssClass="e-input" Type="@TxtType" Placeholder="Enter Password" Created="onCreateTextBox"></SfTextBox>*@
-                        <ValidationMessage For="@(() => usuarioLogin.Password)"/>
+                        <ValidationMessage For="@(()=>usuarioLogin.Password)" />
                     </div>
                 </div>
 
@@ -74,13 +74,8 @@
     }*@
 
 @code {
-
-    [Inject]
-    public ILoginServiceJWT loginServiceJWT { get; set; }
-
-    [Parameter]
-    public string returnUrl { get; set; }
-
+    [Inject] public ILoginServiceJWT loginServiceJWT { get; set; }
+    [Parameter] public string returnUrl { get; set; }
     public string type { get; set; } = "password";
     public InputType TxtType = InputType.Password;
     protected string cssIconEye = "fa fa-eye";
@@ -90,26 +85,27 @@
     protected string contras = "";
     protected bool IsDialogLoginVisible { get; set; } = true;
     protected SfToast ToastObj;
-    private bool SpinnerVisible;
-    readonly UserInfo usuarioLogin = new();
+    private bool SpinnerVisible = false;
+    SupplyChain.Shared.Login.UserInfo usuarioLogin = new();
 
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
-    // Recoge usuario
+        // Recoge usuario
         returnUrl = returnUrl;
         Token = await JsRuntime.InvokeAsync<string>("sessionStorage.getItem", "TOKEN_KEY");
         StateHasChanged();
     }
 
-    private async Task LoginDialogOk( /*Object args*/)
+    private async Task LoginDialogOk(/*Object args*/)
     {
+
         SpinnerVisible = true;
-        var httpResponse = await Http.Post<UserInfo, UserToken>("api/Cuentas/login", usuarioLogin);
+        var httpResponse = await Http.Post<UserInfo, UserToken>($"api/Cuentas/login", usuarioLogin);
         if (!httpResponse.Error)
         {
             var xUser = httpResponse.Response;
 
-            await ToastObj.ShowAsync(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = $"Bienvenido {usuarioLogin.UserName}!",
                 Content = "Usuario y contraseña correcta.",
@@ -124,26 +120,28 @@
             if (url.Length <= 1)
             {
                 navigationManager.NavigateTo("/index");
-    //if (string.IsNullOrEmpty(url[0]))
-    //{
-    //    navigationManager.NavigateTo("/index");
-    //}
-    //else
-    //{
-    //    navigationManager.NavigateTo(url[1]);
-    //}
+                //if (string.IsNullOrEmpty(url[0]))
+                //{
+                //    navigationManager.NavigateTo("/index");
+                //}
+                //else
+                //{
+                //    navigationManager.NavigateTo(url[1]);
+                //}
             }
             else
             {
                 navigationManager.NavigateTo(url[1]);
             }
+
+
         }
         else
         {
             MensajeServidor = await httpResponse.HttpResponseMessage.Content.ReadAsStringAsync();
-
+            
             Console.WriteLine(await httpResponse.HttpResponseMessage.Content.ReadAsStringAsync());
-            await ToastObj.Show(new ToastModel
+            await this.ToastObj.Show(new ToastModel
             {
                 Title = "Error!",
                 Content = "Usuario o contraseña incorrecta.",
@@ -153,6 +151,7 @@
         }
 
         SpinnerVisible = false;
+
     }
 
     public void ShowPassword()

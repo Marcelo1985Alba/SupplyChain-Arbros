@@ -1,5 +1,6 @@
 ﻿@page  "/control-calidad/Documentacion"
-@using Syncfusion.Blazor.FileManager
+@using Syncfusion.Blazor;
+@using Syncfusion.Blazor.FileManager;
 @inject IJSRuntime JsRuntime;
 
 <div class="control-section">
@@ -10,14 +11,13 @@
                                  GetImageUrl="/api/FilesManager/GetImage">
         </FileManagerAjaxSettings>
         <FileManagerEvents TValue="FileManagerDirectoryContent"></FileManagerEvents>
-        <FileManagerNavigationPaneSettings Visible="false"></FileManagerNavigationPaneSettings>
+        <FileManagerNavigationPaneSettings Visible=false></FileManagerNavigationPaneSettings>
     </SfFileManager>
 </div>
 
 @code {
 
-    [CascadingParameter]
-    public MainLayout Layout { get; set; }
+    [CascadingParameter] public MainLayout Layout { get; set; }
 
     protected override Task OnInitializedAsync()
     {

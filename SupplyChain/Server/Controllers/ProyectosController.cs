@@ -1,78 +1,85 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using SupplyChain.Server.Controllers;
+using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared;
+using SupplyChain.Shared.Context;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SupplyChain.Server.Repositorios;
-using SupplyChain.Shared.Context;
 
-namespace SupplyChain;
-
-[Route("api/[controller]")]
-[ApiController]
-public class ProyectosController : ControllerBase
+namespace SupplyChain
 {
-    private readonly ProyectosGBPIRepository _proyectosRepository;
-    private readonly AppDbContext ganttContext;
 
-    public ProyectosController(ProyectosGBPIRepository proyectosRepository, AppDbContext ganttContext)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProyectosController : ControllerBase
     {
-        _proyectosRepository = proyectosRepository;
-        this.ganttContext = ganttContext;
-    }
+        private readonly ProyectosGBPIRepository _proyectosRepository;
+        private readonly AppDbContext ganttContext;
 
-    //GET: api/Proyectos
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<GanttDataDetails>>> GetProyectos()
-    {
-        try
+        public ProyectosController(ProyectosGBPIRepository proyectosRepository, AppDbContext ganttContext)
         {
-            var proyectos = await ganttContext.GanttData.ToListAsync();
-            return proyectos;
-            //return await _proyectosRepository.ObtenerTodos();
+            this._proyectosRepository = proyectosRepository;
+            this.ganttContext = ganttContext;
         }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-    }
 
-    [HttpGet("id")]
-    public async Task<ActionResult<GanttDataDetails>> GetProyecto(int id)
-    {
-        try
+        //GET: api/Proyectos
+       [HttpGet]
+        public async Task<ActionResult<IEnumerable<GanttDataDetails>>> GetProyectos()
         {
-            return await ganttContext.GanttData.FindAsync(id);
-            //return await _proyectosRepository.ObtenerTodos();
+            try
+            {
+                var proyectos = await ganttContext.GanttData.ToListAsync();
+                return proyectos;
+                //return await _proyectosRepository.ObtenerTodos();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-    }
 
-    // POST: api/Proyectos
-    [HttpPost]
-    public async Task<ActionResult<GanttDataDetails>> PostProyectos(GanttDataDetails proyecto)
-    {
-        try
+        [HttpGet("id")]
+        public async Task<ActionResult<GanttDataDetails>> GetProyecto(int id)
         {
-            ganttContext.GanttData.Add(proyecto);
-            await ganttContext.SaveChangesAsync();
-            return CreatedAtAction("GetProyecto", new { id = proyecto.Id }, proyecto);
+            try
+            {
+                return await ganttContext.GanttData.FindAsync(id);
+                //return await _proyectosRepository.ObtenerTodos();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-    }
 
-    // GET: api/Proyectos/Proyectos
-    [HttpGet("Proyectos")]
-    public object GetProyectosQueryable()
-    {
-        var data = _proyectosRepository.ObtenerTodosQueryable();
-        return new { Items = data, Count = data.Count() };
+        // POST: api/Proyectos
+        [HttpPost]
+        public async Task<ActionResult<GanttDataDetails>> PostProyectos(GanttDataDetails proyecto)
+        {
+            try
+            {
+                ganttContext.GanttData.Add(proyecto);
+                await ganttContext.SaveChangesAsync();
+                return CreatedAtAction("GetProyecto", new { id = proyecto.Id }, proyecto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        // GET: api/Proyectos/Proyectos
+        [HttpGet("Proyectos")]
+        public object GetProyectosQueryable()
+        {
+            IQueryable<ProyectosGBPI> data = _proyectosRepository.ObtenerTodosQueryable();
+            return new { Items = data, Count = data.Count() };
+        }
+
     }
 }

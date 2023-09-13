@@ -1,10 +1,18 @@
-﻿namespace SupplyChain.Shared.Enum;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public enum EstadoMantCeldas
+namespace SupplyChain.Shared.Enum
 {
-    Realizado = 1,
-    Programado = 2,
-    Cancelado = 3,
-    Todos = 100,
-    Programados = 4
+    public enum EstadoMantCeldas
+    {
+        Realizado= 1,
+        Programado=2,
+        Cancelado=3,
+        Todos=100,
+        Programados=4,
+
+    }
 }

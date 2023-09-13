@@ -1,33 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Timers;
+using System.Threading.Tasks;
 
-namespace SupplyChain.Client.Auth;
-
-public class RenovadorToken : IDisposable
+namespace SupplyChain.Client.Auth
 {
-    private readonly ILoginServiceJWT loginServiceJWT;
-    private Timer timer;
-
-    public RenovadorToken(ILoginServiceJWT loginServiceJWT)
+    public class RenovadorToken : IDisposable
     {
-        this.loginServiceJWT = loginServiceJWT;
-    }
+        Timer timer;
+        private readonly ILoginServiceJWT loginServiceJWT;
 
-    public void Dispose()
-    {
-        timer?.Dispose();
-    }
+        public RenovadorToken(ILoginServiceJWT loginServiceJWT)
+        {
+            this.loginServiceJWT = loginServiceJWT;
+        }
 
-    public void Iniciar()
-    {
-        timer = new Timer();
-        timer.Interval = 1000 * 60 * 40; //40 minutos
-        timer.Elapsed += Timer_Elapsed;
-        timer.Start();
-    }
+        public void Iniciar()
+        {
+            timer = new Timer();
+            timer.Interval = 1000 * 60 * 40;//40 minutos
+            timer.Elapsed += Timer_Elapsed;
+            timer.Start();
+        }
 
-    private void Timer_Elapsed(object sender, ElapsedEventArgs e)
-    {
-        loginServiceJWT.ManejarRenovacionToken();
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            loginServiceJWT.ManejarRenovacionToken();
+        }
+
+        public void Dispose()
+        {
+            timer?.Dispose();
+        }
     }
 }

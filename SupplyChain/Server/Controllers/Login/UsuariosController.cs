@@ -1,60 +1,66 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared.Login;
 using SupplyChain.Shared.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace SupplyChain.Server.Controllers;
-
-[Route("api/[controller]")]
-[ApiController]
-public class UsuariosController : ControllerBase
+namespace SupplyChain.Server.Controllers
 {
-    private readonly UsuariosRepository _usuariosRepository;
-
-    public UsuariosController(UsuariosRepository usuariosRepository)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UsuariosController : ControllerBase
     {
-        _usuariosRepository = usuariosRepository;
-    }
+        private readonly UsuariosRepository _usuariosRepository;
 
-    [HttpGet("{usuario}")]
-    public async Task<ActionResult<Usuarios>> GetUsuario(string usuario)
-    {
-        try
+        public UsuariosController(UsuariosRepository usuariosRepository)
         {
-            var user = await _usuariosRepository.GetByUserName(usuario);
-            return user == null ? NotFound() : user;
+            _usuariosRepository = usuariosRepository;
         }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
 
-    [HttpGet("{usuario}/{contras}")]
-    public async Task<ActionResult<Usuarios>> Get(string usuario, string contras)
-    {
-        try
+        [HttpGet("{usuario}")]
+        public async Task<ActionResult<Usuarios>> GetUsuario(string usuario)
         {
-            return await _usuariosRepository.GetByUsernamePass(usuario, contras);
+            try
+            {
+                var user = await _usuariosRepository.GetByUserName(usuario);
+                return user == null ? NotFound() : user;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
 
-    [HttpPost]
-    public async Task<ActionResult<Usuarios>> Post([FromBody] Usuarios usuario)
-    {
-        try
+        [HttpGet("{usuario}/{contras}")]
+        public async Task<ActionResult<Usuarios>> Get(string usuario, string contras)
         {
-            var user = await _usuariosRepository.GetByUsernamePass(usuario.Usuario, usuario.Contras);
-            return user == null ? NotFound() : user;
+            try
+            {
+                return await _usuariosRepository.GetByUsernamePass(usuario, contras);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-        catch (Exception ex)
+
+        [HttpPost]
+        public async Task<ActionResult<Usuarios>> Post([FromBody] Usuarios usuario)
         {
-            return BadRequest(ex.Message);
+            try
+            {
+                var user = await _usuariosRepository.GetByUsernamePass(usuario.Usuario, usuario.Contras);
+                return user == null ? NotFound() : user;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

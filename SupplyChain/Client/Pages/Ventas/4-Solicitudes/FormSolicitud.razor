@@ -1,7 +1,9 @@
 ﻿@using Syncfusion.Blazor.Buttons
 @using SupplyChain.Client.Shared.BuscadorCliente
-@using SupplyChain.Client.Shared.BuscadorPrecios
-@using SupplyChain.Client.Pages.ABM.Precios
+@using SupplyChain.Client.Shared.BuscadorProducto
+@using SupplyChain.Client.Shared.BuscadorPrecios 
+@using SupplyChain.Client.Pages.ABM.Precios  
+
 @inherits FormSolicitudBase
 
 <SfToast ID="toast_default" @ref="ToastObj">
@@ -23,8 +25,8 @@
             }
         </Header>
         <Content>
-            <EditForm id="form-solicitud" Model="@Solicitud" OnValidSubmit="@(async () => await Guardar())">
-                <DataAnnotationsValidator/>
+            <EditForm id="form-solicitud" Model="@Solicitud" OnValidSubmit="@(async()=> await Guardar())">
+                <DataAnnotationsValidator />
                 <div class="form-row">
                     @*<div class="form-group col-md-1">
                 <label class="">Id:</label>
@@ -41,17 +43,15 @@
                     <div class="form-group col-md-2">
                         <label class="">Cod. Cliente:</label>
                         <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Solicitud.CG_CLI)" ShowSpinButton="false" Readonly="false"
-                                          OnInput="@(e => Cg_cli_Changed(e))">
-                        </SfNumericTextBox>
+                                          OnInput="@(e => Cg_cli_Changed(e))"></SfNumericTextBox>
                     </div>
                     <div class="form-group col-md-6">
                         <label class="">Cliente:</label>
                         <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Solicitud.Des_Cli)" Readonly="false"></SfTextBox>
                     </div>
                     <div class="form-group col-md-1 mt-4">
-                        <SfButton IconCss="fa fa-search" CssClass="e-smal e-round e-info" OnClick="@(async () => await BuscarClientes())"
-                                  HtmlAttributes="@HtmlAttribute">
-                        </SfButton>
+                        <SfButton IconCss="fa fa-search" CssClass="e-smal e-round e-info" OnClick="@(async ()=> await BuscarClientes())"
+                                  HtmlAttributes="@HtmlAttribute"></SfButton>
                     </div>
 
                 </div>
@@ -104,29 +104,27 @@
                     <div class="form-group col-md-3">
                         <label class="">
                             Producto:
-                            <a style="cursor:pointer" @onclick="@(async () => await AbrirFormPrecio())">
+                            <a style="cursor:pointer" @onclick="@(async()=> await AbrirFormPrecio())">
                                 <SfIcon Name="IconName.Link"></SfIcon>
                             </a>
                         </label>
                         <SfTextBox CssClass="customClass" ID="Producto" @bind-Value="@(Solicitud.Producto)" Readonly="false"
-                                   Input="@(e => Cg_Prod_Changed(e))">
-                        </SfTextBox>
+                                   Input="@(e => Cg_Prod_Changed(e))"></SfTextBox>
                     </div>
                     <div class="form-group col-md-5">
                         <label class="">Descripcion Producto:</label>
                         <SfTextBox CssClass="customClass" ID="DES_Prod" @bind-Value="@(Solicitud.Des_Prod)" Readonly="false"
-                                   Input="@(e => Des_Prod_Changed(e))">
-                        </SfTextBox>
+                                   Input="@(e => Des_Prod_Changed(e))"></SfTextBox>
                     </div>
                     <div class="form-group col-md-1 mt-4">
-                        <SfButton IconCss="fa fa-search" CssClass="e-smal e-round e-info" OnClick="@(async () => await BuscarPreciosArticulos())"
-                                  HtmlAttributes="@HtmlAttribute">
-                        </SfButton>
+                        <SfButton IconCss="fa fa-search" CssClass="e-smal e-round e-info" OnClick="@(async ()=> await BuscarPreciosArticulos())"
+                                  HtmlAttributes="@HtmlAttribute"></SfButton>
                     </div>
                     <div class="form-group col-md-1">
                         <label class="">Cantidad:</label>
                         <SfNumericTextBox ID="CANT" @bind-Value="@(Solicitud.Cantidad)" ShowSpinButton="false" Readonly="false"></SfNumericTextBox>
                     </div>
+
 
 
                 </div>
@@ -162,7 +160,7 @@
                     </div>
                     <div class="form-group col-md-2 checkbox checkbox-success">
                         <SfCheckBox Label="Con Presupuesto" CssClass="e-info checkbox checkbox-success"
-                                    @bind-Checked="@Solicitud.TienePresupuesto" Disabled="true"/>
+                                    @bind-Checked="@Solicitud.TienePresupuesto" Disabled="true" />
                     </div>
                 </div>
 
@@ -171,8 +169,7 @@
                         <div class="form-group col-md-12">
                             <label class="">Observaciones:</label>
                             <SfTextBox CssClass="customClass" ID="Observaciones" @bind-Value="@(Solicitud.Observaciones)" Readonly="false"
-                                       Multiline="true">
-                            </SfTextBox>
+                                       Multiline="true"></SfTextBox>
                         </div>
                     </div>
                 </div>
@@ -182,8 +179,7 @@
 
                 <ClientesDialog @ref="refClienteDialog" PopupBuscadorVisible="@popupBuscadorVisibleCliente"
                                 OnObjectSelected="@ClienteExternoSelected" Cg_Cli="@Solicitud.CG_CLI" Des_Cli="@Solicitud.Des_Cli"
-                                OnCerrarDialog="CerrarDialogCliente">
-                </ClientesDialog>
+                                OnCerrarDialog="CerrarDialogCliente"></ClientesDialog>
 
 
                 @*<ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto"
@@ -192,29 +188,29 @@
 
                 <PreciosDialog @ref="refPreciosDialog" PopupBuscadorVisible="@popupBuscadorVisiblePrecio" SoloReparaciones="false"
                                Codigo="@Solicitud.Producto" Descripcion="@Solicitud.Des_Prod"
-                               OnCerrarDialog="CerrarDialogPrecio" OnObjectSelected="@PrecioSelected">
-                </PreciosDialog>
+                               OnCerrarDialog="CerrarDialogPrecio" OnObjectSelected="@PrecioSelected"></PreciosDialog>
 
                 @if (popupBuscadorVisibleFormPrecio)
-                {
+	            {
                     <FormPrecio PrecioArticulo="@PreciosArticulos" Show="@popupBuscadorVisibleFormPrecio"
-                                OnGuardar="@(async p => await OnPrecioGuardado(p))"
-                                OnCerrar="@(() => popupBuscadorVisibleFormPrecio = false)">
+                                OnGuardar="@(async(p)=> await OnPrecioGuardado(p))"
+                                OnCerrar="@(()=> popupBuscadorVisibleFormPrecio = false)">
 
                     </FormPrecio>
-                }
+	            }
+                
 
-
-                <ValidationSummary/>
+                <ValidationSummary />
 
             </EditForm>
 
-
+            
         </Content>
         <FooterTemplate>
             <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
             <SfButton Content="Cancel" IconCss="fa fa-window-close-o" OnClick="Hide"></SfButton>
         </FooterTemplate>
     </DialogTemplates>
-
+    
 </SfDialog>
+

@@ -1,9 +1,8 @@
 ﻿@page "/ventas/presupuestos"
 @attribute [Authorize(Roles = "Administrador, Ventas")]
-@using Syncfusion.Blazor.DropDowns
-@using FilterType = Syncfusion.Blazor.Grids.FilterType
-@using SelectionMode = Syncfusion.Blazor.Grids.SelectionMode
 @inherits PresupuestosBase
+@using Syncfusion.Blazor.Grids;
+@using Syncfusion.Blazor.DropDowns;
 
 <div class="row">
     <div class="col-12">
@@ -16,55 +15,53 @@
                 @ref="refGrid" DataSource="@Presupuestos" Width="100%"
                 AllowExcelExport="true" AllowGrouping="true" ID="grdPresupuesto"
                 AllowSorting="true" AllowPaging="true" AllowSelection="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
-            <GridFilterSettings Type="FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
-            <GridSelectionSettings Type="SelectionType.Single" Mode="SelectionMode.Both"></GridSelectionSettings>
+            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" Mode="Syncfusion.Blazor.Grids.SelectionMode.Both"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionComplete="OnActionCompleteHandler"
                         OnToolbarClick="OnToolbarHandler"
-                        RowSelected="RowSelectHandler"
+                        RowSelected="RowSelectHandler" 
                         CellSelected="CellSelectHandler"
-                        TValue="vPresupuestos">
-            </GridEvents>
+                        TValue="vPresupuestos"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" NewRowPosition="NewRowPosition.Top"
-                              Mode="EditMode.Batch">
-            </GridEditSettings>
-
+                 Mode="EditMode.Batch"></GridEditSettings>
+            
             <GridColumns>
                 @*<GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>*@
-                <GridColumn Field="@nameof(vPresupuestos.Id)" HeaderText="Id" TextAlign="TextAlign.Left" Width="100px" AllowEditing="false"></GridColumn>
-                <GridColumn Field="@nameof(vPresupuestos.Fecha)" HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="120px" AllowEditing="false"></GridColumn>
-                <GridColumn Field="@nameof(vPresupuestos.CG_CLI)" HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px" AllowEditing="false"></GridColumn>
-                <GridColumn Field="@nameof(vPresupuestos.DES_CLI)" HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px" AllowEditing="false"></GridColumn>
-                <GridColumn Field="@nameof(vPresupuestos.MONEDA)" HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px" AllowEditing="false"></GridColumn>
-                <GridColumn Field="@nameof(vPresupuestos.TOTAL)" HeaderText="Total" TextAlign="TextAlign.Left" Width="150px" Format="N2" AllowEditing="false"></GridColumn>
-                <GridColumn Field="@nameof(vPresupuestos.USUARIO)" HeaderText="Usuario" TextAlign="TextAlign.Left" Width="120px" AllowEditing="false"></GridColumn>
-                <GridColumn Field="@nameof(vPresupuestos.COMENTARIO)" HeaderText="Comentario" TextAlign="TextAlign.Left" Width="190px">
+                <GridColumn Field=@nameof(vPresupuestos.Id) HeaderText="Id" TextAlign="TextAlign.Left" Width="100px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.Fecha) HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="120px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.TOTAL) HeaderText="Total" TextAlign="TextAlign.Left" Width="150px" Format="N2" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.USUARIO) HeaderText="Usuario" TextAlign="TextAlign.Left" Width="120px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.COMENTARIO) HeaderText="Comentario" TextAlign="TextAlign.Left" Width="190px">
                     <Template>
 
                         @{
-                            var presup = context as vPresupuestos;
-                        }
+                           var presup = context as vPresupuestos;
+                          }
                         <p>
                             @presup.COMENTARIO
                         </p>
 
-
+                        
                     </Template>
                     <EditTemplate>
-                        @{
+                       @{
                             var presup = context as vPresupuestos;
                         }
                         @*<p>
                             @presup.COMENTARIO
                         </p>*@
                         <SfTextBox Placeholder="Comentario" Width="100px" @bind-Value="presup.COMENTARIO">@presup.COMENTARIO</SfTextBox>
-
-                        <Syncfusion.Blazor.Buttons.SfButton Content="Guardar" @onclick="@(() => GuardarComentario(presup.Id, presup.COMENTARIO))">GUARDAR</Syncfusion.Blazor.Buttons.SfButton>
+                        
+                        <Syncfusion.Blazor.Buttons.SfButton Content="Guardar" @onclick="@(()=> GuardarComentario(presup.Id, presup.COMENTARIO))">GUARDAR</Syncfusion.Blazor.Buttons.SfButton>
                     </EditTemplate>
-
+                    
                 </GridColumn>
-                <GridColumn Field="@nameof(vPresupuestos.COLOR)" HeaderText="Semaforo" EditType="EditType.DropDownEdit" Width="120px">
+                <GridColumn Field=@nameof(vPresupuestos.COLOR) HeaderText="Semaforo" EditType="EditType.DropDownEdit" Width="120px">
                     <EditTemplate>
                         @{
                             var presup = context as vPresupuestos;
@@ -89,11 +86,11 @@
                             <DropDownListFieldSettings Text="COLOR" Value="COLOR"></DropDownListFieldSettings>
                             <DropDownListEvents TItem="Semaforo" TValue="string" ValueChange="Actualizar"></DropDownListEvents>
                         </SfDropDownList>
-
+                           
                     </EditTemplate>
                 </GridColumn>
-
-                <GridColumn Field="@nameof(vPresupuestos.MOTIVO)" HeaderText="Motivo" EditType="EditType.DropDownEdit" Width="160px">
+                
+                <GridColumn Field=@nameof(vPresupuestos.MOTIVO) HeaderText="Motivo" EditType="EditType.DropDownEdit" Width="160px">
                     <EditTemplate>
                         @{
                             var presup = context as vPresupuestos;
@@ -106,7 +103,7 @@
 
                     </EditTemplate>
                 </GridColumn>
-
+            
             </GridColumns>
 
 
@@ -115,20 +112,16 @@
     </div>
 
     <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" Label="Generando Presupuesto..."
-               @bind-Visible="@SpinnerVisiblePresupuesto">
-    </SfSpinner>
+               @bind-Visible="@SpinnerVisiblePresupuesto"></SfSpinner>
 
-    <FormPresupuesto @ref="refFormPresupuesto" Presupuesto="@PresupuestoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
-                     OnGuardar="@(async s => await Guardar(s))">
-    </FormPresupuesto>
+     <FormPresupuesto @ref="refFormPresupuesto" Presupuesto="@PresupuestoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
+    OnGuardar="@(async(s)=> await Guardar(s))"></FormPresupuesto>
 
     <ConfirmacionDialog @ref="ConfirmacionEliminarDialog" OnConfirm="@(async () => await Eliminar())">
         <HeaderTempalte>
 
-            <p>
-                <strong>Eliminacion Presupuesto @PresupuestoSeleccionado?.Id</strong>
-            </p>
-            <hr/>
+            <p> <strong>Eliminacion Presupuesto @PresupuestoSeleccionado?.Id</strong></p>
+            <hr />
         </HeaderTempalte>
         <ContentTemplate>
             <p>Está seguro que desea eliminar el Presupuesto <strong>@PresupuestoSeleccionado?.Id</strong> ?</p>

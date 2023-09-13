@@ -1,28 +1,31 @@
 ﻿@using Syncfusion.Blazor.Navigations
-@using System.Security.Claims
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor
+@using SupplyChain.Shared
+@using System.Security.Claims;
 @inject HttpClient Http
 
 @if (!IsAdmin)
 {
-    <div id="treeview">
-        <SfTreeView TValue="Modulo" ID="treeviewMenuManual" CssClass="custom-tree" AllowTextWrap="true">
-            <TreeViewFieldsSettings DataSource="dbMenu" Id="Id" Text="Descripcion" ParentID="ParentId" HasChildren="TieneChild"
-                                    NavigateUrl="Url" IconCss="IconCss">
-            </TreeViewFieldsSettings>
-            <TreeViewEvents TValue="Modulo" NodeSelected="@(async a => await NodeClicked(a))"></TreeViewEvents>
-        </SfTreeView>
-    </div>
+<div id="treeview">
+    <SfTreeView TValue="Modulo" ID="treeviewMenuManual" CssClass="custom-tree" AllowTextWrap="true">
+        <TreeViewFieldsSettings DataSource="dbMenu" Id="Id" Text="Descripcion" ParentID="ParentId" HasChildren="TieneChild"
+                                NavigateUrl="Url" IconCss="IconCss">
+        </TreeViewFieldsSettings>
+        <TreeViewEvents TValue="Modulo" NodeSelected="@(async(a)=> await NodeClicked(a))"></TreeViewEvents>
+    </SfTreeView>
+</div>
 }
 else
 {
     <div class="control-wrapper">
         <div id="treeview">
             <SfTreeView TValue="Modulo" ID="treeviewMenuDB" CssClass="custom-tree">
-                <TreeViewFieldsSettings DataSource="dbMenu" TValue="Modulo" Id="Id" Text="Descripcion"
+                <TreeViewFieldsSettings DataSource="dbMenu" TValue="Modulo" Id="Id" Text="Descripcion" 
                                         ParentID="ParentId" HasChildren="TieneChild"
                                         NavigateUrl="Url" IconCss="IconCss">
                 </TreeViewFieldsSettings>
-                <TreeViewEvents TValue="Modulo" NodeSelected="@(async a => await NodeClicked(a))"></TreeViewEvents>
+                <TreeViewEvents TValue="Modulo" NodeSelected="@(async(a)=> await NodeClicked(a))"></TreeViewEvents>
             </SfTreeView>
         </div>
 
@@ -31,13 +34,8 @@ else
 
 
 @code{
-
-    [CascadingParameter]
-    public MainLayout Layout { get; set; }
-
-    [CascadingParameter]
-    public Task<AuthenticationState> authenticationState { get; set; }
-
+    [CascadingParameter] public MainLayout Layout { get; set; }
+    [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
     private AuthenticationState authState;
     protected ExpandAction Expand = ExpandAction.Click;
     protected bool IsAdmin = false;
@@ -45,17 +43,16 @@ else
     protected bool IsProd = false;
     protected bool IsIngenieria = false;
     protected bool IsCompras = false;
-    protected List<Modulo> dbMenu = new();
-    protected List<Modulo> dbMenuMaster = new();
+    protected List<Modulo> dbMenu = new List<Modulo>();
+    protected List<Modulo> dbMenuMaster = new List<Modulo>();
+    [Parameter] public EventCallback<bool> OnChangeToggle { get; set; }
 
-    [Parameter]
-    public EventCallback<bool> OnChangeToggle { get; set; }
-
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
-    // To get the last item index from the db
+        // To get the last item index from the db
 
         await GetMenuNew();
+
     }
 
     protected async Task GetMenuNew()
@@ -67,10 +64,11 @@ else
 
             dbMenu = await Http.GetFromJsonAsync<List<Modulo>>($"api/ModulosUsuario/GetModulosFromUserId/{userId.Value}");
         }
+        
     }
-
     protected async Task GetMenu()
     {
+
         authState = await authenticationState;
         if (authState.User.Identity.IsAuthenticated)
         {
@@ -82,108 +80,51 @@ else
             dbMenuMaster = await Http.GetFromJsonAsync<List<Modulo>>("api/Modulo");
 
 
-            if (authState.User.Claims.Any(c => c.Value == "Cliente"))
+            if (authState.User.Claims.Any(c=> c.Value == "Cliente"))
             {
                 dbMenu.Clear();
                 dbMenu.Add(new Modulo { Id = 2, Descripcion = "VENTAS", IconCss = "icon-th icon", TieneChild = true });
-                dbMenu.Add(new Modulo
-                {
-                    Id = 3, ParentId = 2, Descripcion = "Estado de Pedidos", Url = "/ventas/estado-pedidos",
-                    IconCss = "icon-th icon", TieneChild = false
-                });
+                dbMenu.Add(new Modulo { Id = 3, ParentId = 2, Descripcion = "Estado de Pedidos", Url = "/ventas/estado-pedidos",
+                    IconCss = "icon-th icon", TieneChild = false });
             }
             if (IsProd)
             {
-                dbMenu.AddRange(dbMenuMaster.Where(m => m.Id == 2 || m.Id == 8 || m.Id == 13 || m.Id == 41 || //Ventas: Logistica y servicios
-                                                        m.Id == 3 || m.ParentId == 3 || m.ParentId == 19 || //Inventarios
-                                                        m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18 || //PCP: carga de 
-                                                        m.Id == 5 || m.Id == 14 || m.Id == 16 || //Control Calidad: trazabilidad
-                                                        m.Id == 25 || m.ParentId == 25 || //Ingenieria
-                                                        m.Id == 40 //Mnat celdas
+                dbMenu.AddRange(dbMenuMaster.Where(m => (m.Id == 2 || m.Id == 8 || m.Id == 13 || m.Id == 41) //Ventas: Logistica y servicios
+                        ||
+                        (m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
+                        ||
+                        (m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
+                        ||
+                        (m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
+                        ||
+                        (m.Id == 25 || m.ParentId == 25) //Ingenieria
+                        ||
+                        (m.Id == 40  ) //Mnat celdas
                     ).ToList());
 
                 if (authState.User.Identity.Name.ToLower() == "planta")
                 {
-                    int[] exclusiones = { 2, 18, 25, 40 }; //quito los menus
+                    int[] exclusiones = new int[] { 2, 18, 25, 40 }; //quito los menus
                     dbMenu = dbMenu.Where(m => !exclusiones.Contains(m.Id)).ToList();
                 }
+
             }
             if (IsVentas)
             {
-                dbMenu.AddRange(dbMenuMaster.Where(m => m.Id == 2 || m.ParentId == 2 //Ventas: Logistica y servicios
-    //||
-    //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
-    //||
-    //(m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
-    //||
-    //(m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
-    //||
-    //(m.Id == 25 || m.ParentId == 25) //Ingenieria
-    //||
-    //(m.Id == 40) //Mnat celdas
+                dbMenu.AddRange( dbMenuMaster.Where(m => (m.Id == 2 || m.ParentId == 2) //Ventas: Logistica y servicios
+                                                                          //||
+                                                                          //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
+                                                                          //||
+                                                                          //(m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
+                                                                          //||
+                                                                          //(m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
+                                                                          //||
+                                                                          //(m.Id == 25 || m.ParentId == 25) //Ingenieria
+                                                                          //||
+                                                                          //(m.Id == 40) //Mnat celdas
                     ).ToList());
 
                 dbMenu.Add(new Modulo
-                {
-                    Id = 2000,
-                    ParentId = 2,
-                    Descripcion = "Usuarios",
-                    IconCss = "",
-                    TieneChild = false,
-                    Url = "/ventas/usuarios"
-                });
-
-                if (authState.User.Identity.Name.ToLower() == "planta")
-                {
-                    int[] exclusiones = { 2, 18, 25, 40 }; //quito los menus
-                    dbMenu = dbMenu.Where(m => !exclusiones.Contains(m.Id)).ToList();
-                }
-            }
-            if (IsIngenieria)
-            {
-                dbMenu.AddRange(dbMenuMaster.Where(m => m.Id == 25 || m.ParentId == 25 //Ventas: Logistica y servicios
-    //||
-    //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
-    //||
-    //(m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
-    //||
-    //(m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
-    //||
-    //(m.Id == 25 || m.ParentId == 25) //Ingenieria
-    //||
-    //(m.Id == 40) //Mnat celdas
-                    ).ToList());
-            }
-            if (IsCompras)
-            {
-                dbMenu.AddRange(dbMenuMaster.Where(m => m.Id == 45 || m.ParentId == 45 //Ventas: Logistica y servicios
-    //||
-    //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
-    //||
-    //(m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
-    //||
-    //(m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
-    //||
-    //(m.Id == 25 || m.ParentId == 25) //Ingenieria
-    //||
-    //(m.Id == 40) //Mnat celdas
-                    ).ToList());
-            }
-            else
-            {
-                if (authState.User.Identity.Name.ToUpper() == "MONICA")
-                {
-                    dbMenu = dbMenuMaster.ToList();
-                    var maxId = dbMenu.Max(m => m.Id) + 1;
-                    dbMenu.Add(new Modulo
-                    {
-                        Id = maxId, Descripcion = "Panel de Control", IconCss = "fa fa-tachometer",
-                        TieneChild = false, Url = "/panel-control/index"
-                    }
-                        );
-
-
-                    dbMenu.Add(new Modulo
                     {
                         Id = 2000,
                         ParentId = 2,
@@ -192,9 +133,70 @@ else
                         TieneChild = false,
                         Url = "/ventas/usuarios"
                     });
+
+                if (authState.User.Identity.Name.ToLower() == "planta")
+                {
+                    int[] exclusiones = new int[] { 2, 18, 25, 40 }; //quito los menus
+                    dbMenu = dbMenu.Where(m => !exclusiones.Contains(m.Id)).ToList();
+                }
+
+            }
+            if (IsIngenieria)
+            {
+                dbMenu.AddRange( dbMenuMaster.Where(m => (m.Id == 25 || m.ParentId == 25) //Ventas: Logistica y servicios
+                                                                            //||
+                                                                            //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
+                                                                            //||
+                                                                            //(m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
+                                                                            //||
+                                                                            //(m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
+                                                                            //||
+                                                                            //(m.Id == 25 || m.ParentId == 25) //Ingenieria
+                                                                            //||
+                                                                            //(m.Id == 40) //Mnat celdas
+                    ).ToList());
+            }
+            if (IsCompras)
+            {
+                dbMenu.AddRange( dbMenuMaster.Where(m => (m.Id == 45 || m.ParentId == 45) //Ventas: Logistica y servicios
+                                                                            //||
+                                                                            //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
+                                                                            //||
+                                                                            //(m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
+                                                                            //||
+                                                                            //(m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
+                                                                            //||
+                                                                            //(m.Id == 25 || m.ParentId == 25) //Ingenieria
+                                                                            //||
+                                                                            //(m.Id == 40) //Mnat celdas
+                    ).ToList());
+            }
+            else
+            {
+                if (authState.User.Identity.Name.ToUpper() == "MONICA")
+                {
+                    dbMenu = dbMenuMaster.ToList();
+                    var maxId = dbMenu.Max(m => m.Id) + 1;
+                    dbMenu.Add(new Modulo { Id = maxId, Descripcion = "Panel de Control", IconCss = "fa fa-tachometer",
+                        TieneChild = false, Url= "/panel-control/index" }
+                    );
+
+
+                    dbMenu.Add(new Modulo
+                        {
+                            Id = 2000,
+                            ParentId = 2,
+                            Descripcion = "Usuarios",
+                            IconCss = "",
+                            TieneChild = false,
+                            Url = "/ventas/usuarios"
+                        });
+
                 }
             }
         }
+
+
     }
 
     protected async Task NodeClicked(NodeSelectEventArgs args)
@@ -203,12 +205,13 @@ else
         {
             var parentId = args.NodeData.ParentID;
             var modulo = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
-    //var moduloParent = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
+            //var moduloParent = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
             Layout.BreadCumParent = modulo.Descripcion;
             await OnChangeToggle.InvokeAsync(false);
 
-    //await InvokeAsync(StateHasChanged);
+            //await InvokeAsync(StateHasChanged);
         }
+
     }
 
     //protected override void OnInitialized()
@@ -238,7 +241,7 @@ else
     //dbMenu.Add(new TreeData { nodeId = "09", nodeText = "FAQ", iconCss = "icon-help-circled icon" });
     //dbMenu.Add(new TreeData { nodeId = "10", nodeText = "License", iconCss = "icon-doc-text icon" });
 
-        @*}*@
+    @*}*@
 }
 
 <style>

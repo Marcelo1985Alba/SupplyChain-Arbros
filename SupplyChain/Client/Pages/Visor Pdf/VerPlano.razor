@@ -1,17 +1,15 @@
 ﻿@page "/ver-plano"
-@using Syncfusion.Blazor.PdfViewer
+@using Syncfusion.Blazor.PdfViewer;
 
 
-@if (!DocLoad)
-{
+@if (!DocLoad) { 
 }
 else
 {
     <p>@DocumentPath</p>
-    <SfPdfViewer ID="idPdf"
-                 ServiceUrl="/api/Values" DocumentPath="@DocumentPath"
-                 Height="1200px" Width="100%">
-    </SfPdfViewer>
+<SfPdfViewer ID="idPdf"
+    ServiceUrl="/api/Values" DocumentPath="@DocumentPath"
+    Height="1200px" Width="100%"></SfPdfViewer>
 }
 
 
@@ -19,15 +17,12 @@ else
 
 @code {
 
-    [Inject]
-    public HttpClient Http { get; set; }
-
-    protected bool DocLoad;
+    [Inject] public HttpClient Http { get; set; }
+    protected bool DocLoad = false;
     public string DocumentPath { get; set; }
-
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
-        DocumentPath = await Http.GetFromJsonAsync<string>("api/AdministracionArchivos/GetPdfNube/D-13953.pdf/RUTAOF");
+        DocumentPath = await Http.GetFromJsonAsync<string>($"api/AdministracionArchivos/GetPdfNube/D-13953.pdf/RUTAOF");
         DocLoad = true;
     }
 

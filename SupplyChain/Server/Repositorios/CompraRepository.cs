@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using System;
+=======
+﻿using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Data.Repository;
+using SupplyChain.Shared;
+using SupplyChain.Shared.Models;
+>>>>>>> parent of 1c4fe0e (08092023 - agregue celdas y operaciones con boton de enviar al archivo php)
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,7 +23,11 @@ namespace SupplyChain.Server.Repositorios
 
         }
 
+<<<<<<< HEAD
         public async Task<IEnumerable<Compra>> UltimasCompras(int cant, string cg_mat)
+=======
+        public async Task<IEnumerable<Compra>> UltimasCompras (int cant, string cg_mat)
+>>>>>>> parent of 1c4fe0e (08092023 - agregue celdas y operaciones con boton de enviar al archivo php)
         {
             string xSQL = $"SELECT TOP {cant} * " +
             $"FROM COMPRAS WHERE CG_MAT = '{cg_mat}' AND NUMERO > 0 ORDER BY FE_EMIT DESC";
@@ -30,6 +41,7 @@ namespace SupplyChain.Server.Repositorios
         //    return await DbSet.FromSqlRaw(xSQL).ToListAsync();
         //}
 
+<<<<<<< HEAD
         //public async Task AnularOc(Compras compras)
         //{
         //        string xSql = $"UPDATE COMPRAS SET FE_EMIT='', CG_PREP='', CG_ORDEN='', CG_MAT='',DES_MAT='',TIPO='',TILDE='',NECESARIO=0,SOLICITADO=0,UNID1='', PRECIO=0 " +
@@ -56,3 +68,14 @@ namespace SupplyChain.Server.Repositorios
     }
 
 }
+=======
+        public async Task<IEnumerable<Compra>> AnularOc(int oc)
+        {
+            string xSQL = $"INSERT INTO COMPRAS NUMERO, FE_EMIT,PRECIO,PRECIONETO,PRECIOTOT,MONEDA,NRCLTE,DES_PROVE,FE_PREV,FE_VENC,FE_CIERRE,CONDVEN,CG_DEPOSM,PRECIOUC,PRECIOPOND,FE_PREC,DIASVIGE,ESPECIFICA," +
+                          $"FE_DISP,FE_REG,DESCUENTO VALUES (0,NULL,0,0,0,0,'',0,'',NULL,NULL,NULL,0,0,0,0,NULL,NULL,'ANULADO',NULL,NULL) WHERE NUMERO ={oc}";
+            return await DbSet.FromSqlRaw(xSQL).ToListAsync();
+        }
+
+    }
+}
+>>>>>>> parent of 1c4fe0e (08092023 - agregue celdas y operaciones con boton de enviar al archivo php)

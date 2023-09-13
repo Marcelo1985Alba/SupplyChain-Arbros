@@ -1,46 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Models;
 
-namespace SupplyChain.Server.Controllers;
-
-[Route("api/[controller]")]
-[ApiController]
-public class TransportesController : ControllerBase
+namespace SupplyChain.Server.Controllers
 {
-    private readonly vTransportesRepository _vTransportesRepository;
-    private readonly int cg_cia_usuario = 1; /*CAMBIAR POR LA DEL USUARIO*/
-
-    public TransportesController(vTransportesRepository vTransportesRepository)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class TransportesController : ControllerBase
     {
-        _vTransportesRepository = vTransportesRepository;
-    }
+        private readonly int cg_cia_usuario = 1; /*CAMBIAR POR LA DEL USUARIO*/
+        private readonly vTransportesRepository _vTransportesRepository;
 
-    // GET: api/Compras
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<vTransporte>>> GetCompras()
-    {
-        try
+        public TransportesController(vTransportesRepository vTransportesRepository)
         {
-            return await _vTransportesRepository.ObtenerTodos();
+            this._vTransportesRepository = vTransportesRepository;
         }
-        catch (Exception ex)
+
+        // GET: api/Compras
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<vTransporte>>> GetCompras()
         {
-            return BadRequest(ex);
+            try
+            {
+                return await _vTransportesRepository.ObtenerTodos();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
-    }
 
-    // GET: api/Compras/5
-    [HttpGet("{id}")]
-    public async Task<ActionResult<vTransporte>> GetCompra(int id)
-    {
-        var cond = await _vTransportesRepository.ObtenerPorId(id);
+        // GET: api/Compras/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<vTransporte>> GetCompra(int id)
+        {
+            var cond = await _vTransportesRepository.ObtenerPorId(id);
 
-        if (cond == null) return NotFound();
+            if (cond == null)
+            {
+                return NotFound();
+            }
 
-        return Ok(cond);
+            return Ok(cond);
+        }
+        
     }
 }

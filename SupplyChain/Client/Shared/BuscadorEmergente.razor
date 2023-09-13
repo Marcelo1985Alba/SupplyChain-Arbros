@@ -1,6 +1,10 @@
-﻿@typeparam TItem
-@using Syncfusion.Blazor
+﻿@using Syncfusion.Blazor.Navigations 
+@using Syncfusion.Blazor.Buttons
+
+@typeparam TItem
 @inherits BuscadorEmergenteBase<TItem>
+
+
 
 
 <SfDialog Height="@Height" Width="@Width" Target="@Target" ShowCloseIcon="true" @bind-Visible="@Visible"
@@ -15,9 +19,10 @@
         <Content>
             @if (DataSource is null)
             {
-                if (Visible)
+                if (Visible == true)
                 {
                     visibliSpinner = true;
+
                 }
             }
             else if (DataSource.Count() == 0)
@@ -38,29 +43,26 @@
                                         ShowColumnMenu="true" EnableVirtualization="false">
                                     @*<GridFilterSettings ShowFilterBarStatus="true" Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"
                                         Operators="@(new Operator[] { Operator.Contains })"
-                                        Mode="FilterBarMode.Immediate"></GridFilterSettings>*@
-                                    <GridFilterSettings>
-                                        <GridFilterColumns>
-                                            @if (AplicarFiltro)
-                                            {
-                                                if (Columnas.AsQueryable().Any(col => col == "CG_ART"))
+                                        Mode="FilterBarMode.Immediate"></GridFilterSettings>*@<GridFilterSettings>
+                                            <GridFilterColumns>
+                                                @if (AplicarFiltro)
                                                 {
-                                                    <GridFilterColumn Field="CG_ART" MatchCase=false
-                                                                      Operator="Operator.Contains" Predicate="and" Value="@filterCG_ART">
-                                                    </GridFilterColumn>
+                                                    if (Columnas.AsQueryable().Any(col => col == "CG_ART"))
+                                                    {
+                                                        <GridFilterColumn Field="CG_ART" MatchCase=false
+                                                                          Operator="Syncfusion.Blazor.Operator.Contains" Predicate="and" Value="@filterCG_ART"></GridFilterColumn>
+                                                    }
+
+                                                    if (Columnas.AsQueryable().Any(col => col == "DESPACHO"))
+                                                    {
+                                                        <GridFilterColumn Field="DESPACHO" MatchCase=false
+                                                                          Operator="Syncfusion.Blazor.Operator.Contains" Predicate="and" Value="@filterDESPACHO"></GridFilterColumn>
+                                                    }
                                                 }
-
-                                                if (Columnas.AsQueryable().Any(col => col == "DESPACHO"))
-                                                {
-                                                    <GridFilterColumn Field="DESPACHO" MatchCase=false
-                                                                      Operator="Operator.Contains" Predicate="and" Value="@filterDESPACHO">
-                                                    </GridFilterColumn>
-                                                }
-                                            }
-
-
-                                        </GridFilterColumns>
-                                    </GridFilterSettings>
+                                                                   
+                                                                  
+                                            </GridFilterColumns>
+                                        </GridFilterSettings>
                                     @*@if (Columnas.AsQueryable().Any(col => col == "DESPACHO"))
                                     {
                                         <GridFilterSettings>
@@ -72,10 +74,10 @@
                                     }*@
                                     <GridPageSettings PageCount="20" PageSize="10" PageSizes="true"></GridPageSettings>
                                     <GridSelectionSettings Type="@TipoSeleccion"></GridSelectionSettings>
-                                    <GridEvents TValue="TItem" OnLoad="@(async a => await OnLoadGrid(a))"
-                                                OnToolbarClick="@(a => ToolbarClick(a))"
-                                                OnDataBound="@(async a => await OnDataBoundGrid(a))"
-                                                DataBound="@(async () => await DataBoundGrid())"
+                                    <GridEvents TValue="TItem" OnLoad="@(async(a)=>await OnLoadGrid(a))"
+                                                OnToolbarClick="@((a)=> ToolbarClick(a))"
+                                                OnDataBound="@(async(a)=>await OnDataBoundGrid(a))"
+                                                DataBound="@(async()=>await DataBoundGrid())"
                                                 RowSelected="GetSelectedRecords"
                                                 OnRecordDoubleClick="EnviarObjetoSeleccionado">
 
@@ -83,16 +85,16 @@
                                     <GridColumns>
                                         @{
                                             object itemfinal = DataSource.FirstOrDefault();
-                                            var propiedades = itemfinal.GetType().GetProperties();
+                                            System.Reflection.PropertyInfo[] propiedades = itemfinal.GetType().GetProperties();
 
-                                            foreach (var col in Columnas)
+                                            foreach (string col in Columnas)
                                             {
                                                 if (propiedades.Any(p => p.Name.ToUpper() == col.ToUpper()))
                                                 {
                                                     var propiedad = propiedades.Where(p => p.Name.ToUpper() == col.ToUpper()).FirstOrDefault();
 
                                                     //obtener el atributo para mostrar el nombre de columna
-                                                    var nameColumn = propiedad.Name;
+                                                    string nameColumn = propiedad.Name;
                                                     var tipoDate = propiedad.PropertyType == typeof(DateTime) ? propiedad.GetValue(itemfinal, null) : null;
                                                     var attr = propiedad.GetCustomAttributesData().FirstOrDefault(a => a.AttributeType.Name.Equals("ColumnaGridViewAtributo"));
                                                     nameColumn = attr?.NamedArguments.FirstOrDefault(a => a.MemberName.Equals("Name")).TypedValue.Value.ToString();
@@ -100,7 +102,7 @@
                                                     {
                                                         <GridColumn Field="@propiedad.Name" HeaderText="@nameColumn" Type="ColumnType.Date"
                                                                     Format="dd/MM/yyyy" Width="120px"
-                                                                    FilterSettings="@(new FilterSettings { Operator = Operator.Contains })">
+                                                                    FilterSettings="@(new FilterSettings { Operator = Syncfusion.Blazor.Operator.Contains })">
                                                         </GridColumn>
                                                     }
                                                     else
@@ -108,22 +110,21 @@
                                                         if (col.ToUpper() == "CG_ART")
                                                         {
                                                             <GridColumn Field="@propiedad.Name" Width="220px"
-                                                                        FilterSettings="@(new FilterSettings { Operator = Operator.Contains })">
-                                                            </GridColumn>
+                                                                        FilterSettings="@(new FilterSettings { Operator = Syncfusion.Blazor.Operator.Contains })"></GridColumn>
                                                         }
                                                         else if (col.ToUpper() == "DES_ART")
                                                         {
                                                             <GridColumn Field="@propiedad.Name" Width="220px"
-                                                                        FilterSettings="@(new FilterSettings { Operator = Operator.Contains })">
-                                                            </GridColumn>
+                                                                        FilterSettings="@(new FilterSettings { Operator = Syncfusion.Blazor.Operator.Contains })"></GridColumn>
                                                         }
                                                         else
                                                         {
+
                                                             <GridColumn Field="@propiedad.Name" Width="150px"
-                                                                        FilterSettings="@(new FilterSettings { Operator = Operator.Contains })">
-                                                            </GridColumn>
+                                                                        FilterSettings="@(new FilterSettings { Operator = Syncfusion.Blazor.Operator.Contains })"></GridColumn>
                                                         }
                                                     }
+
                                                 }
                                             }
                                         }
@@ -144,10 +145,10 @@
 
         </Content>
         <FooterTemplate>
-            <hr/>
+            <hr />
             @if (MostrarVerMas)
             {
-                <button id="verButton" @onclick="@(async () => await Buscar())"
+                <button id="verButton" @onclick="@(async()=> await Buscar())"
                         class="e-control e-btn e-info" data-ripple="true">
                     Ver +
                 </button>
@@ -159,3 +160,5 @@
     </DialogTemplates>
     @*<DialogEvents OnOpen="@BeforeDialogOpen" Closed="@DialogClosed"></DialogEvents>*@
 </SfDialog>
+
+

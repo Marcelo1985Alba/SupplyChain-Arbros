@@ -1,19 +1,17 @@
-﻿@using Syncfusion.Blazor.Buttons
-@inject HttpClient Http
+﻿@inject HttpClient Http
 @inject ToastService toastService
+@using Syncfusion.Blazor.Buttons
 <div class="form-row">
     <div class="col-8">
         <SfNumericTextBox @bind-Value="@Valor" ShowClearButton="true" TValue="int" Format="n0"
-                          Decimals="0" ShowSpinButton="@MostrarSpin" Readonly="@EsSoloLectura">
-        </SfNumericTextBox>
+                          Decimals="0" ShowSpinButton="@MostrarSpin" Readonly="@EsSoloLectura"></SfNumericTextBox>
     </div>
     <div class="col-4 mb-1">
         @if (MostraBotonBusqueda)
         {
-            <SfButton OnClick="@(async e => await BuscarOCompras())"
+            <SfButton OnClick="@(async (e)=> await BuscarOCompras())"
                       CssClass="e-smal e-round e-info" IsPrimary="false"
-                      IconCss="fa fa-search" Disabled="@DeshabilitaBotonBusqueda" HtmlAttributes="@HtmlAttribute">
-            </SfButton>
+                      IconCss="fa fa-search" Disabled="@DeshabilitaBotonBusqueda" HtmlAttributes="@HtmlAttribute"></SfButton>
         }
 
     </div>
@@ -24,60 +22,42 @@
     <ToastPosition X="Center" Y="Top"></ToastPosition>
 </SfToast>
 <BuscadorEmergente Height="600px" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
-                   Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async v => await Cerrar(v))" HeightGrid="250px"
-                   OnObjetoSeleccionado="@(async o => await EnviarObjetoSeleccionado(o))"/>
+                       Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async(v)=>await Cerrar(v))" HeightGrid="250px"
+                       OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
 
 
 @code {
 
-    [Parameter]
-    public int Valor { get; set; } = 0;
-
-    [Parameter]
-    public bool EsSoloLectura { get; set; } = false;
-
-    [Parameter]
-    public bool MostraBotonBusqueda { get; set; } = false;
-
-    [Parameter]
-    public bool DeshabilitaBotonBusqueda { get; set; } = true;
-
-    [Parameter]
-    public bool MostrarSpin { get; set; } = true;
-
-    [Parameter]
-    public EventCallback<List<Compra>> OnOCSeleccionada { get; set; }
-
-    [Parameter]
-    public int? CodigoDeposito { get; set; }
-
-    [Parameter]
-    public string Remito { get; set; } = "0000-00000000";
-
-    [Parameter]
-    public int? Tipoo { get; set; }
-
+    [Parameter] public int Valor { get; set; } = 0;
+    [Parameter] public bool EsSoloLectura { get; set; } = false;
+    [Parameter] public bool MostraBotonBusqueda { get; set; } = false;
+    [Parameter] public bool DeshabilitaBotonBusqueda { get; set; } = true;
+    [Parameter] public bool MostrarSpin { get; set; } = true;
+    [Parameter] public EventCallback<List<Compra>> OnOCSeleccionada { get; set; }
+    [Parameter] public int? CodigoDeposito { get; set; }
+    [Parameter] public string Remito { get; set; } = "0000-00000000";
+    [Parameter] public int? Tipoo { get; set; }
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object> HtmlAttribute { get; set; } =
-        new() { { "type", "button" } };
+        new Dictionary<string, object>() { { "type", "button" } };
 
 
     BuscadorEmergente<Compra> Buscador;
     SfToast ToastObj;
     private Compra[] ItemsABuscar = null;
-    private string[] ColumnasBuscador = { "NUMERO", "FE_EMIT", "CG_MAT", "SOLICITADO", "UNID", "DES_PROVE" };
+    private string[] ColumnasBuscador = new string[] { "NUMERO", "FE_EMIT", "CG_MAT", "SOLICITADO", "UNID", "DES_PROVE" };
     private string TituloBuscador = "Listado de Ordenes de Compra Abierta";
     private bool PopupBuscadorVisible = false;
 
     private async Task BuscarOCompras()
     {
-    //Avisar con un cartel que se debe seleccionar deposito
+        //Avisar con un cartel que se debe seleccionar deposito
         if (Tipoo == 5 || Tipoo == 6)
         {
             if (string.IsNullOrEmpty(Remito) || Remito.Trim() == "﻿0000-00000000" || Remito.Length > 13)
             {
                 Console.WriteLine(Remito);
-                await ToastObj.ShowAsync(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "AVISO!",
                     Content = "Ingrese Remito",
@@ -91,7 +71,7 @@
             if (Remito.Trim() == "﻿0000-00000000")
             {
                 Console.WriteLine(Remito);
-                await ToastObj.ShowAsync(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "AVISO!",
                     Content = "Ingrese Remito",
@@ -108,16 +88,18 @@
             await InvokeAsync(StateHasChanged);
         }
 
-    //if (Tipoo == 6)//devol a provee
-    //{
-    //    await Buscador.ShowAsync();
-    //    ItemsABuscar = await Http.GetFromJsonAsync<Compra[]>("api/Compras");
-    //    await InvokeAsync(StateHasChanged);
-    //}
+        //if (Tipoo == 6)//devol a provee
+        //{
+        //    await Buscador.ShowAsync();
+        //    ItemsABuscar = await Http.GetFromJsonAsync<Compra[]>("api/Compras");
+        //    await InvokeAsync(StateHasChanged);
+        //}
+
     }
 
     public async Task EnviarObjetoSeleccionado(Compra compra)
     {
+
         var compras = ItemsABuscar.Where(c => c.NUMERO == compra.NUMERO).ToList();
         PopupBuscadorVisible = false;
         await Buscador.HideAsync();

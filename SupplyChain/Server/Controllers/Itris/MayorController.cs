@@ -1,46 +1,56 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Data;
+using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared;
+using SupplyChain.Shared.Itris;
+using SupplyChain.Shared.Models;
+using Syncfusion.Blazor.RichTextEditor;
 
-namespace SupplyChain.Server.Controllers.Itris;
-
-[Route("api/[controller]")]
-[ApiController]
-public class MayorController : ControllerBase
+namespace SupplyChain.Server.Controllers.Itris
 {
-    private readonly ItrisDbContext _context;
-
-    public MayorController(ItrisDbContext context)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class MayorController : ControllerBase
     {
-        _context = context;
-    }
+        private readonly ItrisDbContext _context;
 
-    // GET: api/Compras
-    [HttpGet]
-    public IActionResult GetCompras()
-    {
-        try
+        public MayorController(ItrisDbContext context)
         {
-            var mayor = _context.vMayorItris
-                .Where(f => (!f.CONCEPTO.ToUpper().StartsWith("ASIENTO") && !f.CONCEPTO.ToUpper().StartsWith("CMV")
-                                                                         &&
-                                                                         (f.ID_1.ToString().StartsWith("4") ||
-                                                                          f.ID_1.ToString().StartsWith("5"))) ||
-                            f.ID_1.ToString().StartsWith("114"))
-                .ToList();
-
-
-            var result = new
-            {
-                Items = mayor, mayor.Count
-            };
-
-            return Ok(result);
+            this._context = context;
         }
-        catch (Exception ex)
+
+        // GET: api/Compras
+        [HttpGet]
+        public IActionResult GetCompras()
         {
-            return BadRequest(ex);
+            try
+            {
+                var mayor = _context.vMayorItris
+                    .Where(f => !f.CONCEPTO.ToUpper().StartsWith("ASIENTO") && !f.CONCEPTO.ToUpper().StartsWith("CMV") 
+                                && 
+                                (f.ID_1.ToString().StartsWith("4") || f.ID_1.ToString().StartsWith("5")) || f.ID_1.ToString().StartsWith("114"))
+                    .ToList();
+
+
+                var result = new
+                {
+                    Items = mayor,
+                    Count = mayor.Count
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }

@@ -8,6 +8,6 @@
 </SfToast>
 <BuscadorEmergente Height="620px" TItem="vPresupuestos" Titulo="Listado de Presupuestos" Visible="@PopupBuscadorVisible"
                    DataSource="@presupuestos" IsModal="true" Width="90%" HeightGrid="270px" TipoSeleccion="SelectionType.Single"
-                   Columnas="@new[] { "ID", "DES_CLI", "MONEDA", "TOTAL" }"
+                   Columnas="@(new string[] { "ID", "DES_CLI", "MONEDA", "TOTAL"})"
                    OnObjetoSeleccionado="SendObjectSelected"
-                   OnCerrarDialog="CerrarDialog"/>
+                   OnCerrarDialog="CerrarDialog" />

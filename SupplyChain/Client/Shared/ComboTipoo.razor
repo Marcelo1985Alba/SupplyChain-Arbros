@@ -1,77 +1,71 @@
-﻿@using Syncfusion.Blazor.DropDowns
-@inject HttpClient Http
+﻿@inject HttpClient Http
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Data
 
 <SfDropDownList TValue="int" TItem="Tire" DataSource="@TiposOperacion" @bind-Value="TipooSeleccionado"
                 Placeholder="Seleccione tipo de operacion...">
-    <DropDownListEvents TItem="Tire" TValue="int" ValueChange="@(async a => await SelectedTipooChanged(a))"></DropDownListEvents>
+    <DropDownListEvents TItem="Tire" TValue="int" ValueChange="@(async(a)=>await SelectedTipooChanged(a))"></DropDownListEvents>
     <DropDownListFieldSettings Text="Descrip" Value="Tipoo"></DropDownListFieldSettings>
 </SfDropDownList>
 
 
 @code {
-
-    public List<Tire> TiposOperacion = new()
-    {
-        new() { Tipoo = 21, Descrip = "Ajuste de Inventario" },
-        new() { Tipoo = 10, Descrip = "Entrega de insumos a una orden de fabricación" },
-        new() { Tipoo = 11, Descrip = "Devolución de insumos de una orden de fabricación" },
-        new() { Tipoo = 27, Descrip = "Entrega a Planta sin OF" },
-    //new Tire() { Tipoo = 28, Descrip = "Entrega de un insumo a una orden de armado planeada" },/*tipo 28 = order de armado y tipo 10  10 OF*/
-    //new Tire() { Tipoo = 10, Descrip = "Entrega de insumos a una orden de fabricación firme o en curso" },
-        new() { Tipoo = 28, Descrip = "Entrega de un insumo a una orden de armado firme o en curso" },
-    //new Tire() { Tipoo = 2, Descrip = "Entrega de consumibles" }, /**/
-        new() { Tipoo = 5, Descrip = "Recepción de insumos de un proveedor" }, /*Tipo 5 Recepcion y tipo 6 devolucion: */
-        new() { Tipoo = 6, Descrip = "Devolución de insumos a un proveedor" },
-    //new Tire() { Tipoo = 14, Descrip = "Envío de un insumo o producto a scrap" }, /*TIPO 14 ENTREGA A SCRAP TIPO 15 DESTRUCCION DE SCRAP(NO PROGRAMADO) TIPO 16 DEVOLUCION DE SCRAP*/
-    //new Tire() { Tipoo = 15, Descrip = "Recuperación de un insumo o producto de scrap" },
-        new() { Tipoo = 9, Descrip = "Movimientos entre depósitos" }, /*TIPO 9*/
-        new() { Tipoo = 1, Descrip = "Remito a un cliente con y sin pedido" } /*TIPO 1*/
-    //new Tire() { Tipoo = 1, Descrip = "Devolución de un cliente con y sin pedido" }
+    public List<Tire> TiposOperacion = new List<Tire>() {
+        new Tire() { Tipoo = 21, Descrip = "Ajuste de Inventario" },
+        new Tire() { Tipoo = 10, Descrip = "Entrega de insumos a una orden de fabricación" },
+        new Tire() { Tipoo = 11, Descrip = "Devolución de insumos de una orden de fabricación" },
+        new Tire() { Tipoo = 27, Descrip = "Entrega a Planta sin OF" },
+        //new Tire() { Tipoo = 28, Descrip = "Entrega de un insumo a una orden de armado planeada" },/*tipo 28 = order de armado y tipo 10  10 OF*/
+        //new Tire() { Tipoo = 10, Descrip = "Entrega de insumos a una orden de fabricación firme o en curso" },
+        new Tire() { Tipoo = 28, Descrip = "Entrega de un insumo a una orden de armado firme o en curso" },
+        //new Tire() { Tipoo = 2, Descrip = "Entrega de consumibles" }, /**/
+        new Tire() { Tipoo = 5, Descrip = "Recepción de insumos de un proveedor" }, /*Tipo 5 Recepcion y tipo 6 devolucion: */
+        new Tire() { Tipoo = 6, Descrip = "Devolución de insumos a un proveedor" },
+        //new Tire() { Tipoo = 14, Descrip = "Envío de un insumo o producto a scrap" }, /*TIPO 14 ENTREGA A SCRAP TIPO 15 DESTRUCCION DE SCRAP(NO PROGRAMADO) TIPO 16 DEVOLUCION DE SCRAP*/
+        //new Tire() { Tipoo = 15, Descrip = "Recuperación de un insumo o producto de scrap" },
+        new Tire() { Tipoo = 9, Descrip = "Movimientos entre depósitos" }, /*TIPO 9*/
+        new Tire() { Tipoo = 1, Descrip = "Remito a un cliente con y sin pedido" } /*TIPO 1*/
+        //new Tire() { Tipoo = 1, Descrip = "Devolución de un cliente con y sin pedido" }
     };
 
-    [Parameter]
-    public int TipooSeleccionado { get; set; }
-
-    [Parameter]
-    public EventCallback<Tire> OnSelectedTireChanged { get; set; }
-
-    [Parameter]
-    public int TipoOperacionIdUnico { get; set; } = 0;
-
-    [Parameter]
-    public bool Filtra { get; set; } = false;
+    [Parameter] public int TipooSeleccionado { get; set; }
+    [Parameter] public EventCallback<Tire> OnSelectedTireChanged { get; set; }
+    [Parameter] public int TipoOperacionIdUnico { get; set; } = 0;
+    [Parameter] public bool Filtra { get; set; } = false;
 
 
     protected void CargarTiposOperacion()
     {
-        TiposOperacion = new List<Tire>
-        {
-            new() { Tipoo = 21, Descrip = "Ajuste de Inventario" },
-            new() { Tipoo = 10, Descrip = "Entrega de insumos a una orden de fabricación" },
-            new() { Tipoo = 10, Descrip = "Devolución de insumos de una orden de fabricación" },
-            new() { Tipoo = 27, Descrip = "Uso de Bienes Consumibles" },
-    //new Tire() { Tipoo = 28, Descrip = "Entrega de un insumo a una orden de armado planeada" },/*tipo 28 = order de armado y tipo 10  10 OF*/
-    //new Tire() { Tipoo = 10, Descrip = "Entrega de insumos a una orden de fabricación" },
-            new() { Tipoo = 28, Descrip = "Entrega de insumos a una orden de armado firme o en curso" },
-    //new Tire() { Tipoo = 2, Descrip = "Entrega de consumibles" }, /**/
-            new() { Tipoo = 5, Descrip = "Recepción de insumos de un proveedor" }, /*Tipo 5 Recepcion y tipo 6 devolucion: */
-            new() { Tipoo = 6, Descrip = "Devolución de insumos a un proveedor" },
-    //new Tire() { Tipoo = 14, Descrip = "Envío de un insumo o producto a scrap" }, /*TIPO 14 ENTREGA A SCRAP TIPO 15 DESTRUCCION DE SCRAP(NO PROGRAMADO) TIPO 16 DEVOLUCION DE SCRAP*/
-    //new Tire() { Tipoo = 15, Descrip = "Recuperación de un insumo o producto de scrap" },
-            new() { Tipoo = 9, Descrip = "Movimientos entre depósitos" }, /*TIPO 9*/
-            new() { Tipoo = 1, Descrip = "Remito a un cliente con y sin pedido" } /*TIPO 1*/
-    //new Tire() { Tipoo = 1, Descrip = "Devolución de un cliente con y sin pedido" }
-        };
+        TiposOperacion = new List<Tire>() {
+        new Tire() { Tipoo = 21, Descrip = "Ajuste de Inventario" },
+        new Tire() { Tipoo = 10, Descrip = "Entrega de insumos a una orden de fabricación" },
+        new Tire() { Tipoo = 10, Descrip = "Devolución de insumos de una orden de fabricación" },
+        new Tire() { Tipoo = 27, Descrip = "Uso de Bienes Consumibles" },
+        //new Tire() { Tipoo = 28, Descrip = "Entrega de un insumo a una orden de armado planeada" },/*tipo 28 = order de armado y tipo 10  10 OF*/
+        //new Tire() { Tipoo = 10, Descrip = "Entrega de insumos a una orden de fabricación" },
+        new Tire() { Tipoo = 28, Descrip = "Entrega de insumos a una orden de armado firme o en curso" },
+        //new Tire() { Tipoo = 2, Descrip = "Entrega de consumibles" }, /**/
+        new Tire() { Tipoo = 5, Descrip = "Recepción de insumos de un proveedor" }, /*Tipo 5 Recepcion y tipo 6 devolucion: */
+        new Tire() { Tipoo = 6, Descrip = "Devolución de insumos a un proveedor" },
+        //new Tire() { Tipoo = 14, Descrip = "Envío de un insumo o producto a scrap" }, /*TIPO 14 ENTREGA A SCRAP TIPO 15 DESTRUCCION DE SCRAP(NO PROGRAMADO) TIPO 16 DEVOLUCION DE SCRAP*/
+        //new Tire() { Tipoo = 15, Descrip = "Recuperación de un insumo o producto de scrap" },
+        new Tire() { Tipoo = 9, Descrip = "Movimientos entre depósitos" }, /*TIPO 9*/
+        new Tire() { Tipoo = 1, Descrip = "Remito a un cliente con y sin pedido" } /*TIPO 1*/
+        //new Tire() { Tipoo = 1, Descrip = "Devolución de un cliente con y sin pedido" }
+    };
+
     }
 
     protected override async Task OnInitializedAsync()
     {
+
         if (TipoOperacionIdUnico > 0 && Filtra)
         {
             TiposOperacion = TiposOperacion.Where(o => o.Tipoo == TipoOperacionIdUnico).ToList();
         }
 
         await base.OnInitializedAsync();
+
     }
 
     protected override Task OnParametersSetAsync()
@@ -84,9 +78,9 @@
     }
 
 
-    private async Task SelectedTipooChanged(ChangeEventArgs<int, Tire> args)
+    private async Task SelectedTipooChanged(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int, Tire> args)
     {
-        if (args.Value == default)
+        if (args.Value == (int)default)
         {
             return;
         }

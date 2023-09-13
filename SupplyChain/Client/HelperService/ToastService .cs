@@ -1,54 +1,56 @@
-﻿using System;
+﻿using SupplyChain.Shared.Enum;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Timers;
-using SupplyChain.Shared.Enum;
 
-namespace SupplyChain.Client.HelperService;
-
-public class ToastService : IDisposable
+namespace SupplyChain.Client.HelperService
 {
-    private Timer Countdown;
-
-    public void Dispose()
+    public class ToastService : IDisposable
     {
-        Countdown?.Dispose();
-    }
+        public event Action<string, TipoAlerta> OnShow;
+        public event Action OnHide;
+        private Timer Countdown;
 
-    public event Action<string, TipoAlerta> OnShow;
-    public event Action OnHide;
-
-    public void ShowToast(string message, TipoAlerta level)
-    {
-        OnShow?.Invoke(message, level);
-        StartCountdown();
-    }
-
-    private void StartCountdown()
-    {
-        SetCountdown();
-
-        if (Countdown.Enabled)
+        public void ShowToast(string message, TipoAlerta level)
         {
-            Countdown.Stop();
-            Countdown.Start();
+            OnShow?.Invoke(message, level);
+            StartCountdown();
         }
-        else
-        {
-            Countdown.Start();
-        }
-    }
 
-    private void SetCountdown()
-    {
-        if (Countdown == null)
+        private void StartCountdown()
         {
-            Countdown = new Timer(2500);
-            Countdown.Elapsed += HideToast;
-            Countdown.AutoReset = false;
-        }
-    }
+            SetCountdown();
 
-    private void HideToast(object source, ElapsedEventArgs args)
-    {
-        OnHide?.Invoke();
+            if (Countdown.Enabled)
+            {
+                Countdown.Stop();
+                Countdown.Start();
+            }
+            else
+            {
+                Countdown.Start();
+            }
+        }
+
+        private void SetCountdown()
+        {
+            if (Countdown == null)
+            {
+                Countdown = new Timer(2500);
+                Countdown.Elapsed += HideToast;
+                Countdown.AutoReset = false;
+            }
+        }
+
+        private void HideToast(object source, ElapsedEventArgs args)
+        {
+            OnHide?.Invoke();
+        }
+
+        public void Dispose()
+        {
+            Countdown?.Dispose();
+        }
     }
 }

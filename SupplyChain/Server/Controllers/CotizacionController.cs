@@ -1,53 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
+using SupplyChain.Shared.Models;
+using System.IO;
+using Microsoft.Extensions.Configuration;
 
-namespace SupplyChain.Server.Controllers;
-
-[Route("api/[controller]")]
-[ApiController]
-public class CotizacionController : ControllerBase
+namespace SupplyChain.Server.Controllers
 {
-    private readonly AppDbContext _context;
-    private readonly CotizacionRepository _cotizacionRepository;
-
-    private readonly string CadenaConexionSQL = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json").Build().GetConnectionString("DefaultConnection");
-
-    public CotizacionController(CotizacionRepository cotizacionRepository)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CotizacionController : ControllerBase
     {
-        _cotizacionRepository = cotizacionRepository;
-    }
+        private readonly AppDbContext _context;
+        private string CadenaConexionSQL = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build().GetConnectionString("DefaultConnection");
+        private readonly CotizacionRepository _cotizacionRepository;
 
-    // GET: api/Cotizacion
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Cotizaciones>>> GetCotizaciones()
-    {
-        try
+        public CotizacionController(CotizacionRepository cotizacionRepository)
         {
-            var xConexionSQL = new ConexionSQL(CadenaConexionSQL);
-            var xSQL = "SELECT id, COTIZACION, FEC_ULT_ACT FROM ARBROS.dbo.ERP_COTIZACIONES";
-            var dbCotizaciones = xConexionSQL.EjecutarSQL(xSQL);
-
-            var xLista = dbCotizaciones.AsEnumerable().Select(m => new Cotizaciones
-            {
-                Id = m.Field<int>("ID"),
-                COTIZACION = m.Field<double>("COTIZACION"),
-                FEC_ULT_ACT = m.Field<DateTime?>("FEC_ULT_ACT")
-            }).ToList();
-
-            return xLista;
+            this._cotizacionRepository = cotizacionRepository;
         }
-        catch (Exception ex)
+        
+        // GET: api/Cotizacion
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Cotizaciones>>> GetCotizaciones()
         {
-            return BadRequest(ex);
+            try
+            {
+                ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+                string xSQL = "SELECT id, COTIZACION, FEC_ULT_ACT FROM ARBROS.dbo.ERP_COTIZACIONES";
+                DataTable dbCotizaciones = xConexionSQL.EjecutarSQL(xSQL);
+
+                List<Cotizaciones> xLista = dbCotizaciones.AsEnumerable().Select(m => new Cotizaciones()
+                {
+                    Id = m.Field<int>("ID"),
+                    COTIZACION = m.Field<double>("COTIZACION"),
+                    FEC_ULT_ACT = m.Field<DateTime?>("FEC_ULT_ACT"),
+                }).ToList<Cotizaciones>();
+
+                return xLista;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }

@@ -1,9 +1,20 @@
-﻿@inject IJSRuntime JsRuntime
-@inject NavigationManager NavManager
-@using Syncfusion.Blazor.Navigations
-@using SelectionType = Syncfusion.Blazor.Grids.SelectionType
-@using Syncfusion.Blazor.Buttons
+﻿@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Data
 @using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using System.Configuration;
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.BarcodeGenerator
+@using Syncfusion.Blazor.Spinner
+@using System.Text.Json
+@using System.Linq
+@inject IJSRuntime JsRuntime
+@using SupplyChain
+@using System.Net.Http.Json
+@inject NavigationManager NavManager
 @inherits SupplyChain.Client.Pages.Prev.PrevisionesPageBase
 
 <NotificacionToast @ref="NotificacionObj" Content="Guardado Correctamente!" Visible="ToastVisible"></NotificacionToast>
@@ -16,11 +27,11 @@
                 <div class="content-wrapper">
                     <div class="row">
                         <SfGrid @ref="Grid2" DataSource="@Busquedalist" Height="100%" Width="100%">
-                            <GridSelectionSettings Type="SelectionType.Multiple"></GridSelectionSettings>
+                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                             <GridEvents RowSelected="OnSelected" TValue="Producto"></GridEvents>
                             <GridColumns>
-                                <GridColumn Field="@nameof(Producto.Id)" HeaderText="Producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                                <GridColumn Field="@nameof(Producto.DES_PROD)" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(Producto.Id) HeaderText="Producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                <GridColumn Field=@nameof(Producto.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                             </GridColumns>
                         </SfGrid>
                         @{
@@ -43,34 +54,29 @@
         <div class="form-row">
             <div class="form-group col-lg-3 my-1">
                 <SfTextBox Placeholder="Código de Producto" Input="OnInputCG_PROD" @bind-Value="CgString"
-                           FloatLabelType="@FloatLabelType.Auto">
-                </SfTextBox>
+                           FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
             </div>
             <div class="form-group col-lg-3 my-1">
                 <SfTextBox Placeholder="Descripción de Producto" Input="OnInputDES_PROD" @bind-Value="DesString"
-                           FloatLabelType="@FloatLabelType.Auto">
-                </SfTextBox>
+                           FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
             </div>
 
             <div class="form-group col-lg-3 my-4">
-                <SfButton OnClick="@(e => BuscarProductoPrevision())" IconCss="fa fa-search" CssClass="btn btn-sm btn-outline-primary"
-                          IsPrimary="false">
-                    Buscar
-                </SfButton>
+                <SfButton OnClick="@((e)=> BuscarProductoPrevision())" IconCss="fa fa-search" CssClass="btn btn-sm btn-outline-primary"
+                          IsPrimary="false">Buscar</SfButton>
             </div>
             <div class="form-group col-lg-3 my-4">
-                <SfButton OnClick="@(e => AgregarProductoPrevision())" IconCss="fa fa-plus" CssClass="btn btn-sm btn-outline-secondary"
-                          IsPrimary="false">
-                    Agregar
-                </SfButton>
+                <SfButton OnClick="@((e)=> AgregarProductoPrevision())" IconCss="fa fa-plus" CssClass="btn btn-sm btn-outline-secondary"
+                          IsPrimary="false">Agregar</SfButton>
             </div>
         </div>
     </div>
 </div>
 
 @{
-    if (Showgrid)
+    if (Showgrid == true)
     {
+
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row" id="gridPrevisiones">
@@ -84,24 +90,23 @@
                 RowHeight="20" AllowSorting="true" AllowPaging="true" AllowFiltering="true"
                 Toolbar="@Toolbaritems" GridLines="GridLine.Both">
             <GridEvents OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin"
-                        TValue="PresAnual" CommandClicked="@CommandClickHandler">
-            </GridEvents>
+                        TValue="PresAnual" CommandClicked="@CommandClickHandler"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
             <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
                 <Template>
                     @{
-                        var prev = context as PresAnual;
+                        var prev = (context as PresAnual);
                         <div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-label-top">Producto:</label>
-                                    <br/>
+                                    <br />
                                     <SfTextBox ID="CG_ART" @bind-Value="@(prev.CG_ART)" Enabled="false"></SfTextBox>
                                 </div>
 
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-label-top">Descripcion del Producto:</label>
-                                    <br/>
+                                    <br />
                                     <SfTextBox ID="DES_ART" @bind-Value="@(prev.DES_ART)" Enabled="false"></SfTextBox>
                                 </div>
                             </div>
@@ -109,13 +114,13 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-label-top">Unidad:</label>
-                                    <br/>
+                                    <br />
                                     <SfTextBox ID="CG_ART" @bind-Value="@(prev.UNID)" Enabled="false"></SfTextBox>
                                 </div>
 
                                 <div class="form-group col-md-6">
                                     <label class="e-float-text e-label-top">Cantidad Pedida:</label>
-                                    <br/>
+                                    <br />
                                     <SfNumericTextBox ID="Codigo" Format="N" @bind-Value="@(prev.CANTPED)" Enabled="true"></SfNumericTextBox>
                                 </div>
                             </div>
@@ -123,7 +128,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label>Fecha Prevista:</label>
-                                    <br/>
+                                    <br />
                                     <SfDatePicker ID="ENTRPREV" @bind-Value="@(prev.ENTRPREV)" Enabled="true" Placeholder="Fecha Prevista"></SfDatePicker>
                                 </div>
                             </div>
@@ -135,8 +140,10 @@
                 <GridColumn HeaderText="Despiece" Width="30px">
                     <GridCommandColumns>
                         <GridCommandColumn Type="CommandButtonType.None" Title="Despiece"
-                                           ButtonOption="@new CommandButtonOptions { IconCss = "fa fa-list-ul black", Content = "", CssClass = "botonGrilla"
-                                            }"/>
+                                           ButtonOption="@(new CommandButtonOptions()
+                                                           {
+                                                               IconCss = "fa fa-list-ul black", Content="", CssClass="botonGrilla"
+                                                           })" />
                     </GridCommandColumns>
                 </GridColumn>
                 <GridColumn Field=@nameof(PresAnual.CG_ART) HeaderText="Producto" TextAlign="TextAlign.Left" Width="30px"></GridColumn>
@@ -152,9 +159,7 @@
 @*DIALOG PARA DESPIECE*@
 <SfDialog @ref="DialogDespieceRef" Width="80%" Height="450px" IsModal="true" ShowCloseIcon="true" Visible="false">
     <DialogTemplates>
-        <Header>
-            <p class="card-header badge badge-info text-white">DESPIECE DEL PRODUCTO </p><hr/>
-        </Header>
+        <Header><p class="card-header badge badge-info text-white">DESPIECE DEL PRODUCTO </p><hr /></Header>
         <Content>
             <div class="col-lg-12 control-section mt-2">
                 <hr class="separator">
@@ -163,7 +168,7 @@
                         <SfGrid @ref="GridDespiece" DataSource="@listaDespiece" ID="Despiece"
                                 GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true"
                                 Height="250px" Width="100%">
-                            <GridSelectionSettings Type="SelectionType.Single"></GridSelectionSettings>
+                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                             <GridEvents TValue="DespiecePlanificacion"></GridEvents>
                             <GridTemplates>
                                 <DetailTemplate>
@@ -184,12 +189,12 @@
                                                                 DataSource="@insumo.ResumenStocks">
                                                             <GridPageSettings PageSize="6"></GridPageSettings>
                                                             <GridColumns>
-                                                                <GridColumn Field="@nameof(ResumenStock.CG_ART)" HeaderText="Insumo" Width="150"> </GridColumn>
-                                                                <GridColumn Field="@nameof(ResumenStock.STOCK)" HeaderText="Stock" Width="110"></GridColumn>
-                                                                <GridColumn Field="@nameof(ResumenStock.CG_DEP)" HeaderText="Deposito" Width="110"></GridColumn>
-                                                                <GridColumn Field="@nameof(ResumenStock.SERIE)" HeaderText="Serie" Width="150"></GridColumn>
-                                                                <GridColumn Field="@nameof(ResumenStock.LOTE)" HeaderText="Lote" Width="150"></GridColumn>
-                                                                <GridColumn Field="@nameof(ResumenStock.DESPACHO)" HeaderText="Despacho"></GridColumn>
+                                                                <GridColumn Field=@nameof(ResumenStock.CG_ART) HeaderText="Insumo" Width="150"> </GridColumn>
+                                                                <GridColumn Field=@nameof(ResumenStock.STOCK) HeaderText="Stock" Width="110"></GridColumn>
+                                                                <GridColumn Field=@nameof(ResumenStock.CG_DEP) HeaderText="Deposito" Width="110"></GridColumn>
+                                                                <GridColumn Field=@nameof(ResumenStock.SERIE) HeaderText="Serie" Width="150"></GridColumn>
+                                                                <GridColumn Field=@nameof(ResumenStock.LOTE) HeaderText="Lote" Width="150"></GridColumn>
+                                                                <GridColumn Field=@nameof(ResumenStock.DESPACHO) HeaderText="Despacho"></GridColumn>
                                                             </GridColumns>
                                                         </SfGrid>
                                                     </div>
@@ -200,16 +205,16 @@
                                 </DetailTemplate>
                             </GridTemplates>
                             <GridColumns>
-                                <GridColumn Field="@nameof(DespiecePlanificacion.CG_SE)" HeaderText="Semi Elaborado" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                                <GridColumn Field="@nameof(DespiecePlanificacion.CG_MAT)" HeaderText="Materia prima" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                <GridColumn Field="@nameof(DespiecePlanificacion.DES_PROD)" HeaderText="Descripción" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                <GridColumn Field="@nameof(DespiecePlanificacion.STOCK)" Format="N2" HeaderText="Stock" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                <GridColumn Field="@nameof(DespiecePlanificacion.CANT_MAT)" Format="N2" HeaderText="Cantidad Necesaria de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                <GridColumn Field="@nameof(DespiecePlanificacion.SALDO)" Format="N2" HeaderText="Saldo de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                <GridColumn Field="@nameof(DespiecePlanificacion.CANT_PLANEADAS)" Format="N2" HeaderText="Cantidad Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                <GridColumn Field="@nameof(DespiecePlanificacion.SALDO_PLANEADAS)" Format="N2" HeaderText="Saldo Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                <GridColumn Field="@nameof(DespiecePlanificacion.CANT_TOTAL)" Format="N2" HeaderText="Cantidad Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                                <GridColumn Field="@nameof(DespiecePlanificacion.SALDO_TOTAL)" Format="N2" HeaderText="Saldo Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(DespiecePlanificacion.CG_SE) HeaderText="Semi Elaborado" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                <GridColumn Field=@nameof(DespiecePlanificacion.CG_MAT) HeaderText="Materia prima" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(DespiecePlanificacion.DES_PROD) HeaderText="Descripción" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(DespiecePlanificacion.STOCK) Format="N2" HeaderText="Stock" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(DespiecePlanificacion.CANT_MAT) Format="N2" HeaderText="Cantidad Necesaria de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(DespiecePlanificacion.SALDO) Format="N2" HeaderText="Saldo de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(DespiecePlanificacion.CANT_PLANEADAS) Format="N2" HeaderText="Cantidad Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(DespiecePlanificacion.SALDO_PLANEADAS) Format="N2" HeaderText="Saldo Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(DespiecePlanificacion.CANT_TOTAL) Format="N2" HeaderText="Cantidad Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(DespiecePlanificacion.SALDO_TOTAL) Format="N2" HeaderText="Saldo Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                             </GridColumns>
                         </SfGrid>
                     </div>

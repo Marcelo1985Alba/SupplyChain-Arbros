@@ -1,64 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Grids;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
-namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion;
-
-public class EmailEnviadosBase : ComponentBase
+namespace SupplyChain.Client.Pages.Compras.SolicitudCotizacion
 {
-    protected bool mostrarSpinnerCargando = false;
-    protected SfGrid<SolCotEmail> refGrid;
-    [Inject] public IRepositoryHttp Http { get; set; }
-    [Parameter] public bool CargarDatosInternamente { get; set; }
-    [Parameter] public List<SolCotEmail> Data { get; set; } = new();
-
-
-    protected override async Task OnInitializedAsync()
+    public class EmailEnviadosBase : ComponentBase
     {
-        if (CargarDatosInternamente) await GetEmailEnviados(null);
-    }
+        [Inject] public IRepositoryHttp Http { get; set; }
+        [Parameter] public bool CargarDatosInternamente { get; set; } = false;
+        [Parameter] public List<SolCotEmail> Data { get; set; } = new();
+        protected SfGrid<SolCotEmail> refGrid;
+        protected bool mostrarSpinnerCargando = false;
 
-    public async Task<List<SolCotEmail>> GetEmailEnviados(Compra[] sugerenciasSeleccionadas)
-    {
-        if (sugerenciasSeleccionadas is not null && sugerenciasSeleccionadas.Length > 0)
+
+        protected async override Task OnInitializedAsync()
         {
-            var lista = sugerenciasSeleccionadas.ToList();
-            var response =
-                await Http.Post<List<Compra>, List<SolCotEmail>>("api/SolCotEmail/BySugerenciasCompras", lista);
-
-            if (response.Error)
+            if (CargarDatosInternamente)
             {
-                Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
-                return Data = new List<SolCotEmail>();
+                await GetEmailEnviados(null);
             }
-
-            return Data = response.Response.OrderByDescending(s => s.Id).ToList();
         }
-        else
+
+        public async Task<List<SolCotEmail>> GetEmailEnviados(Compra[] sugerenciasSeleccionadas)
         {
-            var response = await Http.GetFromJsonAsync<List<SolCotEmail>>("api/SolCotEmail");
-
-            if (response.Error)
+            if (sugerenciasSeleccionadas is not null && sugerenciasSeleccionadas.Length > 0)
             {
-                Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
-                return Data = new List<SolCotEmail>();
+                List<Compra> lista = sugerenciasSeleccionadas.ToList();
+                var response = await Http.Post<List<Compra>, List<SolCotEmail>>("api/SolCotEmail/BySugerenciasCompras", lista);
+
+                if (response.Error)
+                {
+                    Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
+                    return Data = new();
+                }
+                else
+                {
+                    return Data = response.Response.OrderByDescending(s=> s.Id).ToList();
+                }
             }
+            else
+            {
+                var response = await Http.GetFromJsonAsync<List<SolCotEmail>>("api/SolCotEmail");
 
-            return Data = response.Response;
+                if (response.Error)
+                {
+                    Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
+                    return Data = new();
+                }
+                else
+                {
+                    return Data = response.Response;
+                }
+            }
         }
-    }
 
 
-    public async Task Refrescar(List<SolCotEmail> emails)
-    {
-        Data.AddRange(emails);
-        Data = Data.OrderByDescending(s => s.Id).ToList();
-        await refGrid.Refresh();
+        public async Task Refrescar(List<SolCotEmail> emails)
+        {
+            Data.AddRange(emails);
+            Data = Data.OrderByDescending(s => s.Id).ToList();
+            await refGrid.Refresh();
+        }
+
+
+
     }
 }

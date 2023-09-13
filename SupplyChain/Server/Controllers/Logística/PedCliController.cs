@@ -1,187 +1,215 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using SupplyChain;
+using SupplyChain.Client.Pages.Ventas._2_Pedidos;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
 using SupplyChain.Shared.Logística;
+using Syncfusion.Blazor.RichTextEditor;
 
-namespace SupplyChain;
-
-[Route("api/[controller]")]
-[ApiController]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class PedCliController : ControllerBase
+namespace SupplyChain
 {
-    private readonly PedCliRepository _pedCliRepository;
-    private readonly UserManager<ApplicationUser> userManager;
-
-    public PedCliController(PedCliRepository pedCliRpository, UserManager<ApplicationUser> userManager)
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public class PedCliController : ControllerBase
     {
-        _pedCliRepository = pedCliRpository;
-        this.userManager = userManager;
-    }
+        private readonly PedCliRepository _pedCliRepository;
+        private readonly UserManager<ApplicationUser> userManager;
 
-    [HttpGet]
-    public async Task<IEnumerable<PedCli>> Gets()
-    {
-        return await _pedCliRepository.ObtenerTodos();
-    }
-
-    [HttpGet("ByFilter/{tipoFiltro}")]
-    public async Task<IEnumerable<PedCli>> GetByFilter(TipoFiltro tipoFiltro = TipoFiltro.Todos)
-    {
-        return await _pedCliRepository.ByFilter(tipoFiltro);
-    }
-
-    [HttpGet("ObtenerPedCliPedidos")]
-    public async Task<IEnumerable<PedCli>> Get()
-    {
-        return await _pedCliRepository.ObtenerPedCliPedidos();
-    }
-
-    [HttpGet("{id}")]
-    public async Task<PedCli> Get(int id)
-    {
-        return await _pedCliRepository.Obtener(p => p.Id == id).FirstOrDefaultAsync();
-    }
-
-
-    [HttpGet("ByPedido/{pedido}")]
-    public async Task<IEnumerable<PedCli>> GetByPedido(int pedido)
-    {
-        var roleClaims = HttpContext.User.FindAll(ClaimTypes.Role).ToList();
-        if (roleClaims.Any(c => c.Value == "Cliente"))
+        public PedCliController(PedCliRepository pedCliRpository, UserManager<ApplicationUser> userManager)
         {
-            var userName = HttpContext.User.Identity.Name;
-            var user = await userManager.FindByNameAsync(userName);
-            var cg_cli_usuario = user.Cg_Cli;
-            return await _pedCliRepository.Obtener(p => p.CG_CLI == cg_cli_usuario && p.PEDIDO == pedido)
-                .ToListAsync();
+            this._pedCliRepository = pedCliRpository;
+            this.userManager = userManager;
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<PedCli>> Gets()
+        {
+            return await _pedCliRepository.ObtenerTodos();
+        }
+
+        [HttpGet("ByFilter/{tipoFiltro}")]
+        public async Task<IEnumerable<PedCli>> GetByFilter(TipoFiltro tipoFiltro = TipoFiltro.Todos)
+        {
+            return await _pedCliRepository.ByFilter(tipoFiltro);
+        }
+
+        [HttpGet("ObtenerPedCliPedidos")]
+        public async Task<IEnumerable<PedCli>> Get()
+        {
+            return await _pedCliRepository.ObtenerPedCliPedidos();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<PedCli> Get(int id)
+        {
+            return await _pedCliRepository.Obtener(p=> p.Id == id).FirstOrDefaultAsync();
         }
 
 
-        return await _pedCliRepository.Obtener(p => p.PEDIDO == pedido).ToListAsync();
-    }
-
-    [HttpGet("ByNumOci/{numOci}")]
-    public async Task<IEnumerable<PedCli>> ByNumOci(int numOci)
-    {
-        return await _pedCliRepository.Obtener(p => p.NUMOCI == numOci).ToListAsync();
-    }
-
-    // PUT: api/Servicios/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to, for
-    // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutPedCli(int id, PedCli Pedclis)
-    {
-        if (id != Pedclis.PEDIDO) return BadRequest();
-
-
-        try
+        [HttpGet("ByPedido/{pedido}")]
+        public async Task<IEnumerable<PedCli>> GetByPedido(int pedido)
         {
-            await _pedCliRepository.Actualizar(Pedclis);
-        }
-        catch (Exception ex)
-        {
-            if (!await _pedCliRepository.Existe(id))
-                return NotFound(ex);
-            return BadRequest(ex);
+
+            List<Claim> roleClaims = HttpContext.User.FindAll(ClaimTypes.Role).ToList();
+            if (roleClaims.Any(c => c.Value == "Cliente"))
+            {
+                var userName = HttpContext.User.Identity.Name;
+                var user = await userManager.FindByNameAsync(userName);
+                var cg_cli_usuario = user.Cg_Cli;
+                return await _pedCliRepository.Obtener(p => p.CG_CLI == cg_cli_usuario && p.PEDIDO == pedido).ToListAsync();
+            }
+
+
+            return await _pedCliRepository.Obtener(p=> p.PEDIDO == pedido).ToListAsync();
         }
 
-        return NoContent();
-    }
-
-
-    // GET: api/pedcli/BuscarPorPedido/{PEDIDO}
-    [HttpGet("BuscarPorPedido/{PEDIDO}")]
-    public async Task<ActionResult<List<PedCli>>> BuscarPorPedido(string PEDIDO)
-    {
-        var lpedcli = await _pedCliRepository.Obtener(p => p.PEDIDO.ToString() == PEDIDO).ToListAsync();
-        return lpedcli == null ? NotFound() : lpedcli;
-    }
-
-    [HttpGet("GetPedidoEncabezadoById/{id}")]
-    public async Task<PedCliEncabezado> GetPedidoEncabezadoById(int id)
-    {
-        return await _pedCliRepository.ObtenerPedidosEncabezado(id);
-    }
-
-    [HttpGet("GetPedidoEncabezadoByNumOci/{numOci}")]
-    public async Task<PedCliEncabezado> GetPedidoEncabezadoByNumOci(int numOci)
-    {
-        return await _pedCliRepository.ObtenerPedidosEncabezadoByNumOci(numOci);
-    }
-
-    [HttpPost("PostList")]
-    public async Task<ActionResult<List<PedCli>>> PostList(List<PedCli> lista)
-    {
-        try
+        [HttpGet("ByNumOci/{numOci}")]
+        public async Task<IEnumerable<PedCli>> ByNumOci(int numOci)
         {
-            await _pedCliRepository.GuardarList(lista);
-            return lista;
+            return await _pedCliRepository.Obtener(p => p.NUMOCI == numOci).ToListAsync();
         }
-        catch (Exception ex)
+
+        // PUT: api/Servicios/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutPedCli(int id, PedCli Pedclis)
         {
-            return BadRequest(ex.Message);
+            if (id != Pedclis.PEDIDO) return BadRequest();
+
+
+            try
+            {
+                await _pedCliRepository.Actualizar(Pedclis);
+            }
+            catch (Exception ex)
+            {
+                if (!await _pedCliRepository.Existe(id))
+                {
+                    return NotFound(ex);
+                }
+                else
+                {
+                    return BadRequest(ex);
+                }
+            }
+
+            return NoContent();
         }
-    }
+        
 
-    // DELETE api/<PresupuestosController>/5
-    [HttpDelete("{pedido}")]
-    public async Task<ActionResult<PedCli>> DeletePedido(int pedido)
-    {
-        try
+        // GET: api/pedcli/BuscarPorPedido/{PEDIDO}
+        [HttpGet("BuscarPorPedido/{PEDIDO}")]
+        public async Task<ActionResult<List<PedCli>>> BuscarPorPedido(string PEDIDO)
         {
-            var pedcli = await _pedCliRepository.Obtener(p => p.PEDIDO == pedido)
-                .FirstOrDefaultAsync();
-            if (pedcli == null) return NotFound();
-
-            if (await _pedCliRepository.TieneRemito(pedido)) return Conflict("El pedido tiene remito asociado.");
-
-
-            await _pedCliRepository.Remover(pedcli.Id);
-
-
-            return pedcli;
+            List<PedCli> lpedcli = await _pedCliRepository.Obtener(p => p.PEDIDO.ToString() == PEDIDO).ToListAsync();
+            return lpedcli == null ? NotFound() : lpedcli;
         }
-        catch (Exception ex)
+
+        [HttpGet("GetPedidoEncabezadoById/{id}")]
+        public async Task<PedCliEncabezado> GetPedidoEncabezadoById(int id)
         {
-            return BadRequest("Error al eliminar Presupuesto " + ex.Message);
+            return await _pedCliRepository.ObtenerPedidosEncabezado(id);
         }
-    }
 
-
-    [HttpDelete("PorOci/{oci}")]
-    public async Task<ActionResult<PedCli>> DeleteOCI(int oci)
-    {
-        try
+        [HttpGet("GetPedidoEncabezadoByNumOci/{numOci}")]
+        public async Task<PedCliEncabezado> GetPedidoEncabezadoByNumOci(int numOci)
         {
-            var listaPedcli = await _pedCliRepository.Obtener(p => p.NUMOCI == oci)
-                .ToListAsync();
-            if (listaPedcli == null || listaPedcli.Count == 0) return NotFound();
-
-            foreach (var item in listaPedcli)
-                if (await _pedCliRepository.TieneRemito(item.PEDIDO))
-                    return Conflict($"El pedido {item.PEDIDO} tiene remito asociado.");
-
-
-            await _pedCliRepository.RemoverList(listaPedcli.Select(p => p.Id).ToList());
-
-
-            return Ok();
+            return await _pedCliRepository.ObtenerPedidosEncabezadoByNumOci(numOci);
         }
-        catch (Exception ex)
+
+        [HttpPost("PostList")]
+        public async Task<ActionResult<List<PedCli>>> PostList(List<PedCli> lista)
         {
-            return BadRequest("Error al eliminar Presupuesto " + ex.Message);
+            try
+            {
+                await _pedCliRepository.GuardarList(lista);
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // DELETE api/<PresupuestosController>/5
+        [HttpDelete("{pedido}")]
+        public async Task<ActionResult<PedCli>> DeletePedido(int pedido)
+        {
+            try
+            {
+                var pedcli = await _pedCliRepository.Obtener(p=> p.PEDIDO == pedido)
+                                .FirstOrDefaultAsync();
+                if (pedcli == null)
+                {
+                    return NotFound();
+                }
+
+                if (await _pedCliRepository.TieneRemito(pedido))
+                {
+                    return Conflict("El pedido tiene remito asociado.");
+                }
+
+
+                await _pedCliRepository.Remover(pedcli.Id);
+
+
+                return pedcli;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error al eliminar Presupuesto " + ex.Message);
+            }
+        }
+
+
+        [HttpDelete("PorOci/{oci}")]
+        public async Task<ActionResult<PedCli>> DeleteOCI(int oci)
+        {
+            try
+            {
+                var listaPedcli = await _pedCliRepository.Obtener(p => p.NUMOCI == oci)
+                                .ToListAsync();
+                if (listaPedcli == null || listaPedcli.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                foreach (var item in listaPedcli)
+                {
+                    if (await _pedCliRepository.TieneRemito(item.PEDIDO))
+                    {
+                        return Conflict($"El pedido {item.PEDIDO} tiene remito asociado.");
+                    }
+                }
+
+
+                await _pedCliRepository.RemoverList(listaPedcli.Select(p=> p.Id).ToList());
+
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error al eliminar Presupuesto " + ex.Message);
+            }
         }
     }
 }

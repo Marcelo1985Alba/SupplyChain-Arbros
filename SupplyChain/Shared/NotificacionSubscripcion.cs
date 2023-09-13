@@ -1,9 +1,16 @@
-﻿namespace SupplyChain.Shared;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class NotificacionSubscripcion : EntityBase<int>
+namespace SupplyChain.Shared
 {
-    public string UserId { get; set; }
-    public string Url { get; set; }
-    public string P256dh { get; set; }
-    public string Auth { get; set; }
+    public class NotificacionSubscripcion : EntityBase<int>
+    {
+        public string UserId { get; set; }
+        public string Url { get; set; }
+        public string P256dh { get; set; }
+        public string Auth { get; set; }
+    }
 }

@@ -1,10 +1,18 @@
-﻿namespace SupplyChain.Shared.Prod;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-/// <summary>
-///     Esto es porque a insumos que tienen el caracter /
-/// </summary>
-public class FilterProd
+namespace SupplyChain.Shared.Prod
 {
-    public string Codigo { get; set; } = "";
-    public string Descripcion { get; set; } = "";
+    /// <summary>
+    /// Esto es porque a insumos que tienen el caracter /
+    /// </summary>
+    public class FilterProd
+    {
+        public string Codigo { get; set; } = "";
+        public string Descripcion { get; set; } = "";
+
+    }
 }

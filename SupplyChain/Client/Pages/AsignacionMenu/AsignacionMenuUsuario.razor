@@ -1,9 +1,8 @@
 ﻿@page "/administracion/asignacionMenuUsuario"
-
-@using FilterType = Syncfusion.Blazor.DropDowns.FilterType
+@using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.DropDowns
-@using Syncfusion.Blazor.Buttons
+
 @inherits AsignacionMenuUsuarioBase
 
 <div class="row">
@@ -23,27 +22,27 @@
         </div>*@
         @*Menu Maestro*@
         <div class="control-wrapper">
-            <div id="treeview">
+        <div id="treeview">
                 <SfTreeView @ref="treeviewMaster" TValue="Modulo" ID="tvMenu" ShowCheckBox="true" AutoCheck="true"
                             @bind-CheckedNodes="@CheckedNodes">
                     <TreeViewFieldsSettings DataSource="dbMenuMaster" TValue="Modulo" Id="Id" Text="Descripcion"
                                             ParentID="ParentId" HasChildren="TieneChild"
-                                            NavigateUrl="Url" IconCss="IconCss">
+                                        NavigateUrl="Url" IconCss="IconCss">
                     </TreeViewFieldsSettings>
                     <TreeViewEvents TValue="Modulo" NodeChecked="NodeCheckedHandler"></TreeViewEvents>
                     <SfSpinner Type="SpinnerType.Fabric" Size="50" Label="Cargando..." @bind-Visible="@SpinnerVisibleMenuMaestro"></SfSpinner>
-                </SfTreeView>
-            </div>
-
+            </SfTreeView>
         </div>
+
+    </div>
     </div>
     <div class="col-6">
         <div class="row">
             <div class="col-12">
-                <SfDropDownList TItem="vUsuario" TValue="string" DataSource="@Usuarios" AllowFiltering="true" Placeholder="Seleccione Usuario..."
-                                FilterType="FilterType.Contains" FilterBarPlaceholder="Buscar Usuario...">
-                    <DropDownListEvents TItem="vUsuario" TValue="string" ValueChange="OnChange"/>
-                    <DropDownListFieldSettings Text="USUARIO" Value="Id"/>
+                <SfDropDownList TItem="vUsuario" TValue="string" DataSource="@Usuarios" AllowFiltering="true" Placeholder="Seleccione Usuario..."  
+                    FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" FilterBarPlaceholder="Buscar Usuario...">
+                    <DropDownListEvents TItem="vUsuario" TValue="string" ValueChange="OnChange" />
+                    <DropDownListFieldSettings Text="USUARIO" Value="Id" />
                 </SfDropDownList>
             </div>
         </div>
@@ -58,13 +57,12 @@
 
     </div>
 
-    <SfButton CssClass="e-success" title="Agregar items seleccionados" Content="Agregar" OnClick="@(a => AgregarItemsSeleccionados(a))"></SfButton>
+    <SfButton CssClass="e-success" title="Agregar items seleccionados" Content="Agregar" OnClick="@((a)=> AgregarItemsSeleccionados(a))" ></SfButton>
 </div>
 
 @code {
-
+    
 }
-
 <style>
     /*To apply border and background color for treeview*/
     /*#treeview {

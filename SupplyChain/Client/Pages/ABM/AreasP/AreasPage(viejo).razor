@@ -1,10 +1,22 @@
 ﻿@page "/sc/areas2/list"
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using System.Configuration;
+@using System.Data.SqlClient;
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.BarcodeGenerator
+@using System.Text.Json
+@using System.Linq
 @inject IJSRuntime JsRuntime
+@using SupplyChain
+@using System.Net.Http.Json
 @inject HttpClient Http
 @inject NavigationManager NavManager
-@using EditMode = Syncfusion.Blazor.PivotView.EditMode
-@using SelectionType = Syncfusion.Blazor.Grids.SelectionType
-@using Syncfusion.Blazor.Buttons
 @inherits SupplyChain.Pages.Area.AreaPageBase
 
 <SfToast ID="toast_default" @ref="ToastObj">
@@ -20,8 +32,7 @@
                         @ref="Grid" AllowExcelExport="true" AllowGrouping="true"
                         AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
                     <GridSelectionSettings CheckboxOnly="true"
-                                           Type="SelectionType.Multiple">
-                    </GridSelectionSettings>
+                                           Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                     <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
                     <GridEvents OnToolbarClick="@ClickHandler" TValue="Areas"></GridEvents>
                     <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
@@ -29,8 +40,8 @@
                     </GridEditSettings>
                     <GridColumns>
                         <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                        <GridColumn Field="@nameof(Areas.Id)" HeaderText="Codigo" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                        <GridColumn Field="@nameof(Areas.DES_AREA)" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Areas.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                        <GridColumn Field=@nameof(Areas.DES_AREA) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                     </GridColumns>
                     <SfSpinner @ref="refSpinner" Type="SpinnerType.Bootstrap" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
                 </SfGrid>
@@ -44,7 +55,7 @@
     <DialogTemplates>
         <Content>
             <EditForm Model="areas" OnValidSubmit="@guardarArea">
-                <DataAnnotationsValidator/>
+                <DataAnnotationsValidator />
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-Areas" role="tab" aria-controls="pills-home" aria-selected="true">Areas</a>
@@ -91,36 +102,34 @@
 
 @code {
 
-    public string edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
+    public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
     public bool DblClick = true;
-    public bool CommandColumnsClick;
+    public bool CommandColumnsClick = false;
 
-    public EditMode SelectedMode = EditMode.Normal;
-
+    public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
     public void OnRadioChange(ChangeArgs<string> args)
     {
         if (args.Value == "inline")
         {
-            DblClick = true;
-            CommandColumnsClick = false;
-            SelectedMode = EditMode.Normal;
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
         }
         else if (args.Value == "batch")
         {
-            DblClick = true;
-            CommandColumnsClick = false;
-            SelectedMode = EditMode.Batch;
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Batch;
         }
         else if (args.Value == "dialog")
         {
-            DblClick = true;
-            CommandColumnsClick = false;
-            SelectedMode = EditMode.Dialog;
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Dialog;
         }
         else
         {
-            CommandColumnsClick = true;
+            this.CommandColumnsClick = true;
         }
     }
-
 }

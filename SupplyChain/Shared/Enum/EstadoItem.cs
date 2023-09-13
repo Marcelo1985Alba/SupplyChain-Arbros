@@ -1,11 +1,18 @@
-﻿namespace SupplyChain.Shared.Enum;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-/// <summary>
-///     determinar el estado de un item para saber que hara contra la base de datos
-/// </summary>
-public enum EstadoItem
+namespace SupplyChain.Shared.Enum
 {
-    Agregado = 1,
-    Modificado = 2,
-    Eliminado = 3
+    /// <summary>
+    /// determinar el estado de un item para saber que hara contra la base de datos
+    /// </summary>
+    public enum EstadoItem
+    {
+        Agregado = 1,
+        Modificado = 2,
+        Eliminado = 3
+    }
 }

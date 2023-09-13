@@ -1,31 +1,35 @@
 ﻿@page "/Abms/ISO"
-@using EditMode = Syncfusion.Blazor.PivotView.EditMode
-@using SelectionType = Syncfusion.Blazor.Grids.SelectionType
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.DropDowns
+@using SupplyChain
+@using Syncfusion.Blazor.Calendars
+@using SupplyChain.Client.Shared
 @inherits IsoPageBase
 
 <div class="row">
     <div class="col-4">
-        <SfTextBox CssClass="e-rojas" Placeholder="Nivel Signficativo, mayor a 50 puntos." Enabled="false"></SfTextBox>
+        <SfTextBox CssClass="e-rojas" Placeholder='Nivel Signficativo, mayor a 50 puntos.' Enabled="false"></SfTextBox>
     </div>
     <div class="col-4">
-        <SfTextBox CssClass="e-naranjas" Placeholder="Nivel Modearado, entre 25 y 50 puntos." Enabled="false"></SfTextBox>
+        <SfTextBox CssClass="e-naranjas" Placeholder='Nivel Modearado, entre 25 y 50 puntos.' Enabled="false"></SfTextBox>
     </div>
     <div class="col-4">
-        <SfTextBox CssClass="e-blancas" Placeholder="Nivel No Significativo, menor a 25 puntos." Enabled="false"></SfTextBox>
+        <SfTextBox CssClass="e-blancas" Placeholder='Nivel No Significativo, menor a 25 puntos.' Enabled="false"></SfTextBox>
     </div>
 </div>
 
 <div class="row">
     <div class="col-9">
         <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
-                           OnReiniciar="async () => await OnReiniciarGrilla()"
-                           OnVistaSelected="asyncv => await OnVistaSeleccionada(v)"/>
+                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
     </div>
     <div class="col-lg-2 col-md-3">
         <SfButton Content="Ver Matriz" IsPrimary="false" CssClass="btn-sm e-info" IconCss="fa fa-eye"
-                  OnClick="onClick">
-        </SfButton>
+                  OnClick="onClick"></SfButton>
     </div>
 </div>
 
@@ -34,54 +38,52 @@
         <SfToast ID="toast_default" @ref="ToastObj">
             <ToastPosition X="Center" Y="Top"></ToastPosition>
         </SfToast>
-
+        
         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="false" AllowResizing="true"
                 @ref="refGrid" DataSource="@isos" Width="100%"
                 AllowExcelExport="true" AllowGrouping="true" ID="grdPresupuesto"
                 AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="Toolbaritems" GridLines="GridLine.Both">
-            <GridSelectionSettings CheckboxOnly="true" Type="SelectionType.Multiple"></GridSelectionSettings>
-            <GridFilterSettings Type="FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
+            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolbarHandler"
-                        OnActionComplete="OnActionCompleteHandler" TValue="ISO" QueryCellInfo="CustomizeCell">
-            </GridEvents>
+                        OnActionComplete="OnActionCompleteHandler" TValue="ISO" QueryCellInfo="CustomizeCell"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
-                              ShowDeleteConfirmDialog="false" Mode="Syncfusion.Blazor.Grids.EditMode.Dialog">
+                              ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog">
             </GridEditSettings>
             <GridColumns>
                 <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                <GridColumn Field="@nameof(ISO.Identificacion)" HeaderText="Identificacion" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.PUNTAJE)" HeaderText="Nivel" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.Fecha)" Format="dd/MM/yyyy" HeaderText="Fecha" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.Descripcion)" HeaderText="Contexto" TextAlign="TextAlign.Left" Width="300px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.Detalle)" HeaderText="Detalle" TextAlign="TextAlign.Left" Width="300px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.Factor)" HeaderText="Factor" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.Proceso)" HeaderText="Proceso" TextAlign="TextAlign.Left" Width="175px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.FODA)" HeaderText="FODA" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.ImpAmb)" HeaderText="Impacto / Riesgo-Oportunidad" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.Identificacion) HeaderText="Identificacion" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.PUNTAJE) HeaderText="Nivel" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.Fecha) Format="dd/MM/yyyy" HeaderText="Fecha" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.Descripcion) HeaderText="Contexto" TextAlign="TextAlign.Left" Width="300px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.Detalle) HeaderText="Detalle" TextAlign="TextAlign.Left" Width="300px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.Factor) HeaderText="Factor" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.Proceso) HeaderText="Proceso" TextAlign="TextAlign.Left" Width="175px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.FODA) HeaderText="FODA" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.ImpAmb) HeaderText="Impacto / Riesgo-Oportunidad" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                 @*<GridColumn Field=@nameof(ISO.AspAmb) HeaderText="Aspecto Ambiental" TextAlign="TextAlign.Left" Width="200px"></GridColumn>*@
-                <GridColumn Field="@nameof(ISO.Descripcion)" HeaderText="Aspecto Ambiental" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.Frecuencia)" HeaderText="Frecuencia" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.Impacto)" HeaderText="Impacto" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.CondOperacion)" HeaderText="Condicion de Operacion" TextAlign="TextAlign.Left" Width="175px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.CondControl)" HeaderText="Condicion de Control" TextAlign="TextAlign.Left" Width="175px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.NaturalezaDelImpacto)" HeaderText="Naturaleza del impacto" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.Gestion)" HeaderText="Gestion" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.Comentarios)" HeaderText="Comentarios" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.Medidas)" HeaderText="Medidas" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field="@nameof(ISO.FechaCumplido)" HeaderText="Fecha de cumplido" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.Descripcion) HeaderText="Aspecto Ambiental" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.Frecuencia) HeaderText="Frecuencia" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.Impacto) HeaderText="Impacto" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.CondOperacion) HeaderText="Condicion de Operacion" TextAlign="TextAlign.Left" Width="175px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.CondControl) HeaderText="Condicion de Control" TextAlign="TextAlign.Left" Width="175px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.NaturalezaDelImpacto) HeaderText="Naturaleza del impacto" TextAlign="TextAlign.Left" Width="190px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.Gestion) HeaderText="Gestion" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.Comentarios) HeaderText="Comentarios" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.Medidas) HeaderText="Medidas" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.FechaCumplido) HeaderText="Fecha de cumplido" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
         </SfGrid>
     </div>
 
     @if (popupFormVisible)
-    {
-        <FormISO isos="isoSeleccionado" Show="popupFormVisible" OnEliminar="@(asyncp => await Guardar(p))"
-                 OnCerrar="OnCerrarDialog" OnGuardar="@(asyncp => await Guardar(p))">
-        </FormISO>
-    }
+	{
+		 <FormISO isos="isoSeleccionado" Show="popupFormVisible" OnEliminar="@(async(p)=>await Guardar(p))"
+                     OnCerrar="OnCerrarDialog" OnGuardar="@(async(p)=>await Guardar(p))"></FormISO>
+	}
 </div>
 
 <style>
@@ -103,46 +105,44 @@
 
 @code {
 
-    public string edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
+    public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
     public bool DblClick = true;
-    public bool CommandColumnsClick;
-
+    public bool CommandColumnsClick = false;
     public void CustomizeCell(QueryCellInfoEventArgs<ISO> args)
     {
-        if (args.Data.PUNTAJE >= 50)
-            args.Cell.AddClass(new[] { "rojas" });
+        if(args.Data.PUNTAJE >= 50)
+            args.Cell.AddClass(new String[] { "rojas" });
         else if (args.Data.PUNTAJE >= 25)
-            args.Cell.AddClass(new[] { "naranjas" });
+            args.Cell.AddClass(new String[] { "naranjas" });
+
     }
 
-    public EditMode SelectedMode = EditMode.Normal;
-
+    public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
     public void OnRadioChange(ChangeArgs<string> args)
     {
         if (args.Value == "inline")
         {
-            DblClick = true;
-            CommandColumnsClick = false;
-            SelectedMode = EditMode.Normal;
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
         }
         else if (args.Value == "batch")
         {
-            DblClick = true;
-            CommandColumnsClick = false;
-            SelectedMode = EditMode.Batch;
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Batch;
         }
         else if (args.Value == "dialog")
         {
-            DblClick = true;
-            CommandColumnsClick = false;
-            SelectedMode = EditMode.Dialog;
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Dialog;
         }
         else
         {
-            CommandColumnsClick = true;
+            this.CommandColumnsClick = true;
         }
     }
-
 }
 
 <style>

@@ -1,66 +1,69 @@
-﻿using System;
+﻿using SupplyChain.Client.RepositoryHttp;
+using SupplyChain.Shared;
+using Syncfusion.XlsIO.Implementation;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using SupplyChain.Shared;
+using static System.Net.WebRequestMethods;
 
-namespace SupplyChain.Client.HelperService;
-
-public class InventarioService : IDisposable
+namespace SupplyChain.Client.HelperService
 {
-    private const string API = "api/Controlcalidad";
-    private readonly HttpClient Http;
-
-    public InventarioService(HttpClient http)
+    public class InventarioService : IDisposable
     {
-        Http = http;
-    }
+        private const string API = "api/Controlcalidad";
+        private readonly HttpClient Http;
 
-    public void Dispose()
-    {
-        ((IDisposable)Http).Dispose();
-    }
+        public InventarioService(HttpClient http)
+        {
+            this.Http = http;
+        }
 
-    public async Task<int> GetProximoVale()
-    {
-        var vale = await Http.GetFromJsonAsync<int>("api/Stock/GetMaxVale");
-        return vale;
-    }
+        public void Dispose()
+        {
+            ((IDisposable)Http).Dispose();
+        }
 
-    public async Task<List<Pedidos>> GetVale(int vale)
-    {
-        return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/ByNumeroVale/{vale}");
-    }
+        public async Task<int> GetProximoVale()
+        {
+            int vale = await Http.GetFromJsonAsync<int>("api/Stock/GetMaxVale");
+            return vale;
+        }
+        public async Task<List<Pedidos>> GetVale(int vale)
+        {
+            return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/ByNumeroVale/{vale}");
+        }
 
-    public async Task<List<Pedidos>> GetPendienteAprobacion()
-    {
-        return await Http.GetFromJsonAsync<List<Pedidos>>("api/Stock/GetPendienteAprobacion/");
-    }
+        public async Task<List<Pedidos>> GetPendienteAprobacion()
+        {
+            return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/GetPendienteAprobacion/");
+        }
 
-    public async Task<List<Pedidos>> GetControlCalidad()
-    {
-        return await Http.GetFromJsonAsync<List<Pedidos>>("api/Stock/GetControlCalidad/");
-    }
+        public async Task<List<Pedidos>> GetControlCalidad()
+        {
+            return await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/GetControlCalidad/");
+        }
 
-    public async Task<List<vControlCalidadPendientes>> GetControlCalidadPendientes()
-    {
-        return await Http.GetFromJsonAsync<List<vControlCalidadPendientes>>("api/Stock/GetControlCalidadPendientes/");
-    }
+        public async Task<List<vControlCalidadPendientes>> GetControlCalidadPendientes()
+        {
+            return await Http.GetFromJsonAsync<List<vControlCalidadPendientes>>($"api/Stock/GetControlCalidadPendientes/");
+        }
 
-    public async Task<List<vControlCalidadPendientes>> GetSegundaGrilla()
-    {
-        return await Http.GetFromJsonAsync<List<vControlCalidadPendientes>>("api/Stock/GetSegundaGrilla/");
+        public async Task<List<vControlCalidadPendientes>> GetSegundaGrilla()
+        {
+            return await Http.GetFromJsonAsync<List<vControlCalidadPendientes>>($"api/Stock/GetSegundaGrilla/");
+        }
+        //ADD METODOS EXISTE Y ELIMINAR
+        //public async Task<bool> Existe(int id)
+        //{
+        //    var response = await Http.GetFromJsonAsync<bool>($"{API}/Existe/{id}");
+        //    if (response.Error)
+        //    {
+        //        Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+        //        return false;
+        //    }
+        //    return response.Response;
+        //}
     }
-    //ADD METODOS EXISTE Y ELIMINAR
-    //public async Task<bool> Existe(int id)
-    //{
-    //    var response = await Http.GetFromJsonAsync<bool>($"{API}/Existe/{id}");
-    //    if (response.Error)
-    //    {
-    //        Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
-    //        return false;
-    //    }
-    //    return response.Response;
-    //}
 }

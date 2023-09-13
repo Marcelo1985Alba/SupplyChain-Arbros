@@ -1,9 +1,15 @@
-﻿@using Syncfusion.Blazor.Buttons
-@using SelectionType = Syncfusion.Blazor.Grids.SelectionType
+﻿@using Microsoft.AspNetCore.Components;
+@using Syncfusion.Blazor.Grids;
+@using System.Collections.Generic;
+@using System.Net.Http;
+@using SupplyChain.Shared.Models;
+@using Syncfusion.Blazor.Notifications;
+
 @inject HttpClient Http
+@using Syncfusion.Blazor.Buttons
 
 
-<SfButton OnClick="@(e => BuscarProveedores())" Disabled="buttondisableprove" IconCss="fa fa-search" CssClass="btn btn-sm btn-outline-primary" IsPrimary="false">Todos los proveedores</SfButton>
+<SfButton OnClick="@((e)=> BuscarProveedores())" Disabled="buttondisableprove" IconCss="fa fa-search" CssClass="btn btn-sm btn-outline-primary" IsPrimary="false">Todos los proveedores</SfButton>
 
 <SfDialog Width="1000px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisibleProveedores" Target="">
     <DialogTemplates>
@@ -13,15 +19,15 @@
                 <div class="content-wrapper">
                     <p>Seleccionar Proveedor</p>
                     <div class="row">
-                        <SfGrid @ref="Gridprove" DataSource="@Busquedaprove" AllowPaging="true" AllowFiltering="true"
-                                AllowResizing="true" GridLines="GridLine.Both" RowHeight="20" Height="290px"
-                                AllowReordering="true" AllowExcelExport="false" AllowSelection="true"
+                        <SfGrid @ref="Gridprove" DataSource="@Busquedaprove" AllowPaging="true" AllowFiltering="true" 
+                                AllowResizing="true" GridLines="GridLine.Both" RowHeight="20" Height="290px" 
+                                AllowReordering="true" AllowExcelExport="false" AllowSelection="true" 
                                 AllowSorting="true" AllowTextWrap="true" EnableHover="true" Width="100%" ShowColumnMenu="true" EnableVirtualization="true" TValue="vProveedorItris">
-                            <GridSelectionSettings Type="SelectionType.Single"></GridSelectionSettings>
+                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                             <GridEvents TValue="vProveedorItris" RowSelected="GetSelectedRecords" OnRecordDoubleClick="EnviarObjetoSeleccionado"></GridEvents>
                             <GridColumns>
-                                <GridColumn Field="@nameof(vProveedorItris.Id)" HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                                <GridColumn Field="@nameof(vProveedorItris.DESCRIPCION)" HeaderText="Razon Social" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                <GridColumn Field=@nameof(vProveedorItris.Id) HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                <GridColumn Field=@nameof(vProveedorItris.DESCRIPCION) HeaderText="Razon Social" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                             </GridColumns>
                         </SfGrid>
                     </div>
@@ -34,14 +40,10 @@
 @code {
 
 
-    [Parameter]
-    public bool IsVisibleProveedores { get; set; } = false;
+    [Parameter] public bool IsVisibleProveedores { get; set; } = false;
+    [Parameter] public bool buttondisableprove { get; set; } = true;
 
-    [Parameter]
-    public bool buttondisableprove { get; set; } = true;
-
-    [Parameter]
-    public EventCallback<vProveedorItris> OnProveSeleccionado { get; set; }
+    [Parameter] public EventCallback<vProveedorItris> OnProveSeleccionado { get; set; }
 
     public SfToast ToastObj;
     protected NotificacionToast NotificacionObj;
@@ -54,14 +56,14 @@
 
     protected async Task BuscarProveedores()
     {
-        Busquedaprove = await Http.GetFromJsonAsync<List<vProveedorItris>>("api/Proveedores/GetProveedoresItris");
+        Busquedaprove = await Http.GetFromJsonAsync<List<vProveedorItris>>($"api/Proveedores/GetProveedoresItris");
         IsVisibleProveedores = true;
     }
 
     protected void GetSelectedRecords(RowSelectEventArgs<vProveedorItris> args)
     {
         args.PreventRender = true; //without this, you may see noticable delay in selection with 75 rows in grid.
-    //var items = await this.Grid.GetSelectedRecords();
+                                   //var items = await this.Grid.GetSelectedRecords();
         Selected = args.Data;
     }
 
@@ -69,11 +71,13 @@
     {
         IsVisibleProveedores = false;
         await OnProveSeleccionado.InvokeAsync(Selected);
+
     }
+
 
 
     public async Task OnSelectedProve()
     {
-    }
 
+    }
 }

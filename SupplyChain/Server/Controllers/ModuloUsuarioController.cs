@@ -1,70 +1,74 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared.CodeModifier.CodeChange;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
+using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SupplyChain.Server.Repositorios;
-using SupplyChain.Shared;
 
-namespace SupplyChain.Server.Controllers;
-
-[Route("api/[controller]")]
-[ApiController]
-public class ModulosUsuarioController : ControllerBase
+namespace SupplyChain.Server.Controllers
 {
-    private readonly ModuloRepository _moduloRepository;
-    private readonly ModulosUsuarioRepository _modulosUsuarioRepository;
-
-    public ModulosUsuarioController(ModulosUsuarioRepository modulosUsuarioRepository,
-        ModuloRepository moduloRepository)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ModulosUsuarioController : ControllerBase
     {
-        _modulosUsuarioRepository = modulosUsuarioRepository;
-        _moduloRepository = moduloRepository;
-    }
+        private readonly ModulosUsuarioRepository _modulosUsuarioRepository;
+        private readonly ModuloRepository _moduloRepository;
 
-    [HttpGet("GetModulosFromUserId/{userId}")]
-    public async Task<ActionResult<List<Modulo>>> GetModulosFromUserId(string userId)
-    {
-        try
+        public ModulosUsuarioController(ModulosUsuarioRepository modulosUsuarioRepository, ModuloRepository moduloRepository)
         {
-            List<Modulo> modulos = new();
-            var modulosUsuario = await _modulosUsuarioRepository.ObtenerTodosQueryable()
-                .Where(m => m.UserId == userId).ToListAsync();
+            this._modulosUsuarioRepository = modulosUsuarioRepository;
+            this._moduloRepository = moduloRepository;
+        }
 
-            if (modulosUsuario is not null && modulosUsuario.Count > 0)
+        [HttpGet("GetModulosFromUserId/{userId}")]
+        public async Task<ActionResult<List<Modulo>>> GetModulosFromUserId(string userId)
+        {
+            try
             {
-                modulos = await _moduloRepository.ObtenerTodosQueryable().Where(m =>
-                    modulosUsuario.Select(s => s.ModuloId).Contains(m.Id)).ToListAsync();
+                List<Modulo> modulos = new();
+                var modulosUsuario = await _modulosUsuarioRepository.ObtenerTodosQueryable()
+                    .Where(m => m.UserId == userId).ToListAsync();
 
-                modulos ??= new List<Modulo>();
+                if (modulosUsuario is not null && modulosUsuario.Count > 0)
+                {
+                    modulos = await _moduloRepository.ObtenerTodosQueryable().Where(m =>
+                        modulosUsuario.Select(s => s.ModuloId).Contains(m.Id)).ToListAsync();
+
+                    modulos ??= new();
+                }
+
+
+                return Ok(modulos);
+            }
+            catch (Exception ex )
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        // POST: api/ModulosUsuario/PostList
+        [HttpPost("PostList")]
+        public async Task<ActionResult<Modulo>> PostList([FromBody] List<ModulosUsuario> modulosUsuarios)
+        {
+
+            try
+            {
+                await _modulosUsuarioRepository.GuardarLista(modulosUsuarios);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
-
+            var modulos = _moduloRepository.ObtenerTodosQueryable()
+                .Where(m=> modulosUsuarios.Select(s=> s.ModuloId).Contains(m.Id))
+                .ToList();
             return Ok(modulos);
         }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-    }
 
-    // POST: api/ModulosUsuario/PostList
-    [HttpPost("PostList")]
-    public async Task<ActionResult<Modulo>> PostList([FromBody] List<ModulosUsuario> modulosUsuarios)
-    {
-        try
-        {
-            await _modulosUsuarioRepository.GuardarLista(modulosUsuarios);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-
-        var modulos = _moduloRepository.ObtenerTodosQueryable()
-            .Where(m => modulosUsuarios.Select(s => s.ModuloId).Contains(m.Id))
-            .ToList();
-        return Ok(modulos);
     }
 }

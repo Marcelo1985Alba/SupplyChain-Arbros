@@ -1,10 +1,12 @@
 ﻿using SupplyChain.Server.Data.Repository;
 
-namespace SupplyChain.Server.Repositorios;
-
-public class ProcalMPRepository : Repository<ProcalsMP, int>
+namespace SupplyChain.Server.Repositorios
 {
-    public ProcalMPRepository(AppDbContext appDb) : base(appDb)
+    public class ProcalMPRepository : Repository<ProcalsMP, int>
     {
+        public ProcalMPRepository(AppDbContext appDb) : base (appDb)
+        {
+
+        }
     }
 }

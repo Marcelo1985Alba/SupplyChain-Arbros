@@ -1,121 +1,147 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Utilities;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
+using Syncfusion.Blazor.RichTextEditor;
+using Syncfusion.Pdf.Lists;
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
-namespace SupplyChain.Server.Controllers.ABM;
-
-[Route("api/[controller]")]
-[ApiController]
-public class ProMPController : ControllerBase
+namespace SupplyChain.Server.Controllers.ABM
 {
-    private readonly ProcalMPRepository _procalMPRepository;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProMPController : ControllerBase
+    { 
+       
+        private readonly ProcalMPRepository _procalMPRepository;
 
-    public ProMPController(ProcalMPRepository procalMPRepository)
-    {
-        _procalMPRepository = procalMPRepository;
-    }
+        public ProMPController(ProcalMPRepository procalMPRepository)
+        {
+            this._procalMPRepository = procalMPRepository;
+        }
 
-    // GET: api/ProcalsMP
-    [HttpGet]
-    //cambiar nombre del Get GetProcalMP()
-    public async Task<ActionResult<IEnumerable<ProcalsMP>>> GetProcalMP()
-    {
-        try
+        // GET: api/ProcalsMP
+        [HttpGet]
+        //cambiar nombre del Get GetProcalMP()
+        public async Task<ActionResult<IEnumerable<ProcalsMP>>> GetProcalMP()
         {
-            return await _procalMPRepository.ObtenerTodos();
+            try
+            {
+                return await _procalMPRepository.ObtenerTodos();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-    }
 
-    //GET: api/ProcalsMP/Existe/{id}
-    [HttpGet("Existe/{id}")]
-    public async Task<ActionResult<bool>> ExisteValor(int id)
-    {
-        try
+        //GET: api/ProcalsMP/Existe/{id}
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>>ExisteValor(int id)
         {
-            return await _procalMPRepository.Existe(id);
+            try
+            {
+                return await _procalMPRepository.Existe(id);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-    }
 
-    //PUTC: api/ProcalMP/{id}
-    [HttpPut("{id}")]
-    public async Task<ActionResult> PutProcalMP(int id, ProcalsMP procalMP)
-    {
-        if (id != procalMP.Id) return BadRequest();
+        //PUTC: api/ProcalMP/{id}
+        [HttpPut("{id}")]
+        
+        public async Task<ActionResult> PutProcalMP(int id, ProcalsMP procalMP)
+        {
 
-        try
-        {
-            await _procalMPRepository.Actualizar(procalMP);
+            if(id !=procalMP.Id)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                await _procalMPRepository.Actualizar(procalMP);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _procalMPRepository.Existe(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            return Ok(procalMP);
         }
-        catch (DbUpdateConcurrencyException)
+
+        // POST: api/ProcalsMP
+        [HttpPost]
+        public async Task<ActionResult<ProcalsMP>> PostProcalMP(ProcalsMP procalMP)
         {
-            if (!await _procalMPRepository.Existe(id))
+
+            try
+            {
+                await _procalMPRepository.Agregar(procalMP);
+                return CreatedAtAction("GetProcalMP", new { id = procalMP.Id }, procalMP);
+            }
+            catch (DbUpdateException exx)
+            {
+                if(!await _procalMPRepository.Existe(procalMP.Id))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+        //DELETE :api/ProcalsMP/{id}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ProcalsMP>> DeteleProcalsMP(int id)
+        {
+            var procalMP = await _procalMPRepository.ObtenerPorId(id);
+            if(procalMP == null)
+            {
                 return NotFound();
-            return BadRequest();
+            }
+            await _procalMPRepository.Remover(id);
+            return procalMP;
         }
-        catch (Exception ex)
+        //POST :api/ProcalsMP/PostList
+        [HttpPost("PostList")]
+
+        public async Task<ActionResult<ProcalsMP>> PostList(List<ProcalsMP> procalsMP)
         {
-            return BadRequest(ex);
+            try
+            {
+                foreach(var item in procalsMP)
+                {
+                    await _procalMPRepository.Remover(item.Id);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+            return Ok();
         }
 
-        return Ok(procalMP);
-    }
-
-    // POST: api/ProcalsMP
-    [HttpPost]
-    public async Task<ActionResult<ProcalsMP>> PostProcalMP(ProcalsMP procalMP)
-    {
-        try
-        {
-            await _procalMPRepository.Agregar(procalMP);
-            return CreatedAtAction("GetProcalMP", new { id = procalMP.Id }, procalMP);
-        }
-        catch (DbUpdateException exx)
-        {
-            if (!await _procalMPRepository.Existe(procalMP.Id))
-                return Conflict();
-            return BadRequest();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-    }
-
-    //DELETE :api/ProcalsMP/{id}
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<ProcalsMP>> DeteleProcalsMP(int id)
-    {
-        var procalMP = await _procalMPRepository.ObtenerPorId(id);
-        if (procalMP == null) return NotFound();
-
-        await _procalMPRepository.Remover(id);
-        return procalMP;
-    }
-
-    //POST :api/ProcalsMP/PostList
-    [HttpPost("PostList")]
-    public async Task<ActionResult<ProcalsMP>> PostList(List<ProcalsMP> procalsMP)
-    {
-        try
-        {
-            foreach (var item in procalsMP) await _procalMPRepository.Remover(item.Id);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest();
-        }
-
-        return Ok();
+        
     }
 }
+       

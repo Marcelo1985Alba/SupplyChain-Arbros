@@ -1,32 +1,40 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
-namespace SupplyChain;
-
-[Route("api/[controller]")]
-[ApiController]
-public class PedcliChapitaController : ControllerBase
+namespace SupplyChain
 {
-    private readonly AppDbContext _context;
-
-    public PedcliChapitaController(AppDbContext context)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PedcliChapitaController : ControllerBase
     {
-        _context = context;
-    }
+        private readonly AppDbContext _context;
 
-    [HttpGet]
-    public IEnumerable<PedCli> Get(string CG_ART)
-    {
-        try
+        public PedcliChapitaController(AppDbContext context)
         {
-            var xSQL = string.Format("select LOTE from Pedcli where CG_ART = '{0}'", CG_ART);
-            return _context.PedCli.FromSqlRaw(xSQL).ToList();
+            _context = context;
         }
-        catch
+
+        [HttpGet]
+        public IEnumerable<PedCli> Get(string CG_ART)
         {
-            return new List<PedCli>();
+            try
+            {
+                string xSQL = string.Format("select LOTE from Pedcli where CG_ART = '{0}'", CG_ART);
+                return _context.PedCli.FromSqlRaw(xSQL).ToList<PedCli>();
+            }
+            catch
+            {
+                return new List<PedCli>();
+            }
         }
     }
 }

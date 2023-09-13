@@ -1,7 +1,14 @@
-﻿namespace SupplyChain.Shared.Login;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class RolUser
+namespace SupplyChain.Shared.Login
 {
-    public string UserName { get; set; }
-    public string RolName { get; set; }
+    public class RolUser
+    {
+        public string UserName { get; set; }
+        public string RolName { get; set; }
+    }
 }

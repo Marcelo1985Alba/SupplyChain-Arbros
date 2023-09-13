@@ -1,16 +1,21 @@
 ﻿@page "/Abms/procalMP"
-@using EditMode = Syncfusion.Blazor.PivotView.EditMode
-@using SelectionType = Syncfusion.Blazor.Grids.SelectionType
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.DropDowns
+@using SupplyChain
+@using Syncfusion.Blazor.Calendars
+@using SupplyChain.Client.Shared
 @inherits ProcalMPPageBase
 
 <div class="row">
-    <div class="col-12">
-        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
-                           OnReiniciar="async () => await OnReinciarGrilla()"
-                           OnVistaSelected="asyncv => await OnVistaSeleccionada(v)"/>
+        <div class="col-12">
+            <ComboVistasGrilla AppName="@APPNAME" StateApp="@state" 
+                           OnReiniciar="(async ()=> await OnReinciarGrilla())"
+                               OnVistaSelected="(async(v) => await OnVistaSeleccionada(v))" />
+        </div>
     </div>
-</div>
 
 <div class="row">
     <div class="col-12">
@@ -21,44 +26,42 @@
                 @ref="refGrid" DataSource="@procalMP" Width="100%" Toolbar="Toolbaritems"
                 AllowExcelExport="true" AllowGrouping="true" ID="grdProcalMP" AllowFiltering="true"
                 AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
-
-            <GridSelectionSettings CheckboxOnly="true" Type="SelectionType.Multiple"></GridSelectionSettings>
+                
+            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolBarHandler"
-                        OnActionComplete="OnActionCompleteHandler" TValue="ProcalsMP">
-            </GridEvents>
+                        OnActionComplete="OnActionCompleteHandler" TValue="ProcalsMP"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true"AllowEditOnDblClick="true"
-                              ShowDeleteConfirmDialog="false" Mode="Syncfusion.Blazor.Grids.EditMode.Dialog">
-            </GridEditSettings>
+                    ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog">
+                </GridEditSettings>
             <GridColumns>
                 <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                <GridColumn Field="@nameof(ProcalsMP.Id)" HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
-                <GridColumn Field="@nameof(ProcalsMP.DESCAL)" HeaderText="DESCAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field="@nameof(ProcalsMP.CARCAL)" HeaderText="CARCAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field="@nameof(ProcalsMP.UNIDADM)" HeaderText="UNIDADM" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field="@nameof(ProcalsMP.MEDIDA)" HeaderText="MEDIDA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field="@nameof(ProcalsMP.TOLE1)" HeaderText="TOLE1" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field="@nameof(ProcalsMP.TOLE2)" HeaderText="TOLE2" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field="@nameof(ProcalsMP.OBSERV)" HeaderText="OBSERV" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field="@nameof(ProcalsMP.DESCAL2)" HeaderText="DESCAL2" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field="@nameof(ProcalsMP.CARCAL2)" HeaderText="CARCAL2" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field="@nameof(ProcalsMP.OBSERV2)" HeaderText="OBSERV2" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-                <GridColumn Field="@nameof(ProcalsMP.PRIORIDAD)" HeaderText="PRIORIDAD" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ProcalsMP.Id) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ProcalsMP.DESCAL) HeaderText="DESCAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ProcalsMP.CARCAL) HeaderText="CARCAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ProcalsMP.UNIDADM) HeaderText="UNIDADM" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ProcalsMP.MEDIDA) HeaderText="MEDIDA" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ProcalsMP.TOLE1) HeaderText="TOLE1" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ProcalsMP.TOLE2) HeaderText="TOLE2" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ProcalsMP.OBSERV) HeaderText="OBSERV" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ProcalsMP.DESCAL2) HeaderText="DESCAL2" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ProcalsMP.CARCAL2) HeaderText="CARCAL2" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ProcalsMP.OBSERV2) HeaderText="OBSERV2" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ProcalsMP.PRIORIDAD) HeaderText="PRIORIDAD" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
-        </SfGrid>
+        </SfGrid>  
+        </div>
+        @if (popupFormVisible)
+        {
+            <FormProcalMP procalMP="procalMPSeleccionada" Show="popupFormVisible" OnEliminar="@(async(p)=> await Guardar(p))"
+                OnCerrar="OnCerrarDialog" OnGuardar="@(async(p)=> await Guardar(p))"></FormProcalMP>
+        }
+
     </div>
-    @if (popupFormVisible)
-    {
-        <FormProcalMP procalMP="procalMPSeleccionada" Show="popupFormVisible" OnEliminar="@(asyncp => await Guardar(p))"
-                      OnCerrar="OnCerrarDialog" OnGuardar="@(asyncp => await Guardar(p))">
-        </FormProcalMP>
-    }
-
-</div>
-
-<style>
+    
+    <style>
         .form-group.col-md-6{
             width: 200px;
         }
@@ -77,36 +80,37 @@
     </style>
 
 @code{
-    public string edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
+    public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
     public bool DblClick = true;
-    public bool CommandColumnsClick;
+    public bool CommandColumnsClick = false;
 
-    public EditMode SelectedMode = EditMode.Normal;
-
-    public void OnRadioChange(ChangeArgs<string> args)
+    public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+    public void OnRadioChange (ChangeArgs<String>args)
     {
-        if (args.Value == "inline")
+        if(args.Value== "inline")
         {
-            DblClick = true;
-            CommandColumnsClick = false;
-            SelectedMode = EditMode.Normal;
+            this.DblClick= true;
+            this.CommandColumnsClick= false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
         }
         else if (args.Value == "batch")
         {
-            DblClick = true;
-            CommandColumnsClick = false;
-            SelectedMode = EditMode.Batch;
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Batch;
         }
         else if (args.Value == "dialog")
         {
-            DblClick = true;
-            CommandColumnsClick = false;
-            SelectedMode = EditMode.Dialog;
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Dialog;
         }
         else
         {
-            CommandColumnsClick = true;
+            this.CommandColumnsClick = true;
         }
     }
 
 }
+
+

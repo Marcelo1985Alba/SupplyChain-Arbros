@@ -1,4 +1,7 @@
-﻿@inherits FormAreasBase
+﻿@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@inherits FormAreasBase
 
 <SfToast ID="toast_default" @ref="ToastObj">
     <ToastPosition X="Center" Y="Top"></ToastPosition>
@@ -19,7 +22,7 @@
         </Header>
         <Content>
             <EditForm Model="areas" OnValidSubmit="@GuardarArea">
-                <DataAnnotationsValidator/>
+                <DataAnnotationsValidator />
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales" role="tab" aria-controls="pills-home" aria-selected="true">Datos Generales</a>

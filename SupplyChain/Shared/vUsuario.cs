@@ -1,9 +1,16 @@
-﻿namespace SupplyChain.Shared;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection.Metadata;
+using static System.Net.Mime.MediaTypeNames;
 
-public class vUsuario : EntityBase<string>
+namespace SupplyChain.Shared
 {
-    public string USUARIO { get; set; }
-    public string EMAIL { get; set; }
-    public string? CLIENTE { get; set; }
-    public byte[] FOTO { get; set; }
+    public class vUsuario : EntityBase<string>
+    {
+        public string USUARIO { get; set; }
+        public string EMAIL { get; set; }
+        public string? CLIENTE { get; set; }
+        public byte[] FOTO { get; set; }  
+        
+    }
 }

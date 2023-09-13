@@ -1,4 +1,7 @@
-﻿@*<div class="control-section toast-default-section">
+﻿@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Notifications
+
+@*<div class="control-section toast-default-section">
     <div id="toast_types">
         <div>
             <button class="e-btn e-control e-info" id="info_Toast" @onclick="@InfoBtnOnClick"> Info Message </button>
@@ -12,7 +15,7 @@
     </div>
 </div>*@
 <div class="col-lg-4 control-section">
-    <SfToast ID="toast_type" @ref="ToastObj" Content="@Content" ShowCloseButton="true" ShowProgressBar="true">
+    <SfToast ID="toast_type" @ref="ToastObj" Content="@Content" ShowCloseButton="true" ShowProgressBar="true"> 
         <ToastPosition X="50" Y="50"></ToastPosition>
     </SfToast>
 </div>
@@ -68,67 +71,49 @@
         text-align: center;
     }
 </style>
-
 @code{
-
-    [Parameter]
-    public bool Visible { get; set; }
-
-    [Parameter]
-    public string Content { get; set; }
-
+    [Parameter] public bool Visible { get; set; }
+    [Parameter] public string Content { get; set; }
     public SfToast ToastObj { get; set; }
     private string ToastPosition = "Right";
 
-    private List<ToastModel> Toast = new()
-    {
-        new() { Title = "Warning!", Content = "There was a problem with your network connection.", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" },
-        new()
-        {
-            Title = "Success!", Content = "Guardado Correctamente!",
-            CssClass = "e-toast-success", Icon = "e-success toast-icons", ShowCloseButton = true, ShowProgressBar = true
-        },
-        new()
-        {
-            Title = "Error!", Content = "Ocurrio un problema", CssClass = "e-toast-danger", Icon = "e-error toast-icons",
-            ShowCloseButton = true, ShowProgressBar = true
-        },
-        new() { Title = "Information!", Content = "Please read the comments carefully.", CssClass = "e-toast-info", Icon = "e-info toast-icons" }
+    private List<ToastModel> Toast = new List<ToastModel>
+{
+        new ToastModel{ Title = "Warning!", Content="There was a problem with your network connection.", CssClass="e-toast-warning", Icon="e-warning toast-icons" },
+        new ToastModel{ Title = "Success!", Content= "Guardado Correctamente!",
+            CssClass="e-toast-success", Icon="e-success toast-icons", ShowCloseButton=true, ShowProgressBar = true },
+        new ToastModel{ Title = "Error!", Content="Ocurrio un problema", CssClass="e-toast-danger", Icon="e-error toast-icons",
+        ShowCloseButton=true, ShowProgressBar = true, },
+        new ToastModel{ Title = "Information!", Content="Please read the comments carefully.", CssClass="e-toast-info", Icon="e-info toast-icons" }
     };
-
     private async Task InfoBtnOnClick()
     {
-        await ToastObj.Show(Toast[3]);
+        await this.ToastObj.Show(Toast[3]);
     }
-
     private async Task WarnBtnOnClick()
     {
-        await ToastObj.Show(Toast[0]);
+        await this.ToastObj.Show(Toast[0]);
     }
-
     private async Task SuccessBtnOnClick()
     {
-        await ToastObj.Show(Toast[1]);
+        await this.ToastObj.Show(Toast[1]);
     }
-
     private async Task ErrorBtnOnClick()
     {
-        await ToastObj.Show(Toast[2]);
+        await this.ToastObj.Show(Toast[2]);
     }
-
     private void HideBtnOnClick()
     {
-        ToastObj.Hide("All");
+        this.ToastObj.Hide("All");
     }
 
     public async Task ShowAsyncError()
     {
-        await ToastObj.Show(Toast[2]);
+        await this.ToastObj.Show(Toast[2]);
     }
 
     public async Task ShowAsync()
     {
-        await ToastObj.Show(Toast[1]);
+        await this.ToastObj.Show(Toast[1]);
     }
-
 }

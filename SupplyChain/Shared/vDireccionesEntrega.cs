@@ -1,7 +1,14 @@
-﻿namespace SupplyChain.Shared;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class vDireccionesEntrega : EntityBase<int>
+namespace SupplyChain.Shared
 {
-    public string ID_CLIENTE { get; set; }
-    public string DESCRIPCION { get; set; }
+    public class vDireccionesEntrega : EntityBase<int>
+    {
+        public string ID_CLIENTE { get; set; }
+        public string DESCRIPCION { get; set; }
+    }
 }

@@ -1,9 +1,25 @@
-﻿@inject IJSRuntime JsRuntime
+﻿@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using System.Configuration;
+@using System.Data.SqlClient;
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.BarcodeGenerator
+@using Syncfusion.Blazor.Spinner
+@using System.Text.Json
+@using System.Linq
+@inject IJSRuntime JsRuntime
+@using SupplyChain
+@using System.Net.Http.Json
+@using SupplyChain.Shared.PCP;
+@using Syncfusion.Blazor.Cards
 
 @inject NavigationManager NavManager
-@using Syncfusion.Blazor.Cards
-@using SelectionType = Syncfusion.Blazor.Grids.SelectionType
-@using Syncfusion.Blazor.Buttons
 @inherits PendientesFabricacionBase
 
 
@@ -13,16 +29,14 @@
     <div class="content-wrapper">
         <div class="row">
             <SfCard>
-                <SfButton OnClick="@(e => EmitirOrden())" CssClass="emitir" IsPrimary="false"
-                          IconCss="fa fa-check-circle">
-                    Emitir Ordenes
-                </SfButton>
+                <SfButton OnClick="@((e) => EmitirOrden())" CssClass="emitir" IsPrimary="false"
+                          IconCss="fa fa-check-circle">Emitir Ordenes</SfButton>
             </SfCard>
 
             <SfCard>
                 <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
-                                   OnReiniciar="async () => await OnReiniciarGrilla()"
-                                   OnVistaSelected="async v => await OnVistaSeleccionada(v)"/>
+                                   OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                                   OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
             </SfCard>
 
         </div>
@@ -37,6 +51,7 @@
     }
     else
     {
+        
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row">
@@ -44,15 +59,14 @@
                             @ref="Grid" DataSource="@listaPendFab" AllowExcelExport="true"
                             AllowGrouping="true" ID="grdPendienteFabricar" Height="100%" Width="100%" RowHeight="20"
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
-                        <GridSelectionSettings Type="SelectionType.Multiple"></GridSelectionSettings>
+                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                         @*<SfDataManager Url="api/PendientesFabricar" CrossDomain="true" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>*@
-                        <GridEvents DataBound="async () => await DataBoundHandler()"
-                                    OnToolbarClick="async a => await ClickHandler(a)"
-                                    QueryCellInfo="async a => await QueryCellInfoHandler(a)"
-                                    OnActionBegin="async a => await ActionBegin(a)"
-                                    TValue="vPendienteFabricar">
-                        </GridEvents>
-                        <GridFilterSettings Type="@FilterType.CheckBox"></GridFilterSettings>
+                        <GridEvents DataBound="(async()=> await DataBoundHandler())" 
+                                    OnToolbarClick="(async(a)=> await ClickHandler(a))"
+                                    QueryCellInfo="(async(a)=> await QueryCellInfoHandler(a))" 
+                                    OnActionBegin="(async(a)=> await ActionBegin(a))"
+                                    TValue="vPendienteFabricar"></GridEvents>
+                        <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                         <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
                             <HeaderTemplate>
@@ -60,7 +74,7 @@
                             </HeaderTemplate>
                             <Template>
                                 @{
-                                    var pfab = context as vPendienteFabricar;
+                                    var pfab = (context as vPendienteFabricar);
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
                                             <label class="col-form-label">Pedido:</label>
@@ -107,6 +121,7 @@
                 </div>
             </div>
         </div>
+
     }
     <SfSpinner Size="80" Type="SpinnerType.Bootstrap" @bind-Visible="@VisibleProperty">
     </SfSpinner>

@@ -230,6 +230,7 @@ namespace SupplyChain.Server.Controllers
             return Ok(Itemcompras);
         }
 
+<<<<<<< HEAD
         //[HttpPost("AnularOc")]
         //public async Task<ActionResult<Compra>> PostAnularOc(Compra Itemcompras)
         //{
@@ -265,6 +266,21 @@ namespace SupplyChain.Server.Controllers
         //    return Ok(numero);
 
         //}
+=======
+        [HttpPost("AnularOc")]
+        public async Task<ActionResult<Compra>> PostAnularOc(Compra Itemcompras)
+        {
+            try
+            {
+                await _compraRepository.Agregar(Itemcompras);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e);
+            }
+            return Ok(Itemcompras);
+        }
+>>>>>>> parent of 1c4fe0e (08092023 - agregue celdas y operaciones con boton de enviar al archivo php)
 
         [HttpPut("actualizaitem/{registro}")]
         //POST: api/compras/actualizaitem/5
@@ -307,7 +323,18 @@ namespace SupplyChain.Server.Controllers
             return Ok( await _compraRepository.UltimasCompras(3, cgmat));
         }
 
+<<<<<<< HEAD
  
+=======
+        //[HttpGet("OcSeleccionado")]
+        //public async Task<ActionResult<IEnumerable<Compra>>> OcSeleccionado(int numero)
+        //{
+        //    return Ok(await _compraRepository.OcSeleccionado(1, numero));
+        //}
+
+
+
+>>>>>>> parent of 1c4fe0e (08092023 - agregue celdas y operaciones con boton de enviar al archivo php)
         [HttpPut("actualizaoc/{listaordenescompra}/{especif}/{condven}/{bonif}")]
         //POST: api/compras/generaoc
         public async Task<ActionResult<Compra>> actualizaoc(string listaordenescompra, string especif, string condven, decimal? bonif)
@@ -348,6 +375,7 @@ namespace SupplyChain.Server.Controllers
             }
             return Ok(numoc);
         }
+<<<<<<< HEAD
 
 
         [HttpPut("anulacion/{numero}")]
@@ -364,6 +392,8 @@ namespace SupplyChain.Server.Controllers
             }
             return Ok(numero);
         }
+=======
+>>>>>>> parent of 1c4fe0e (08092023 - agregue celdas y operaciones con boton de enviar al archivo php)
 
     }
 }

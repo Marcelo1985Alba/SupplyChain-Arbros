@@ -1,10 +1,11 @@
 ﻿@page "/pivot-table/default-functionalities"
 @using Syncfusion.Blazor.PivotView
+@using Syncfusion.Blazor.Data
 
 <div class="control-section">
     <div class="content-wrapper">
-        <SfPivotView da TValue="EstadVenta" Height="340" EnableValueSorting="true">
-            <PivotViewDataSourceSettings DataSource="@Data" TValue="EstadVenta" ExpandAll="false" EnableSorting="true">
+        <SfPivotView da TValue="EstadVenta" Height="340" EnableValueSorting=true>
+            <PivotViewDataSourceSettings DataSource="@Data" TValue="EstadVenta" ExpandAll=false EnableSorting=true>
                 <PivotViewColumns>
                     <PivotViewColumn Name="AnoFactura"></PivotViewColumn>
                     @*<PivotViewColumn Name="Quarter"></PivotViewColumn>*@
@@ -18,7 +19,7 @@
                     <PivotViewValue Name="DolaresFactura" Caption="Dolares Factura"></PivotViewValue>
                 </PivotViewValues>
                 <PivotViewFormatSettings>
-                    <PivotViewFormatSetting Name="DolaresFactura" Format="C0" UseGrouping="true"></PivotViewFormatSetting>
+                    <PivotViewFormatSetting Name="DolaresFactura" Format="C0" UseGrouping=true></PivotViewFormatSetting>
                 </PivotViewFormatSettings>
             </PivotViewDataSourceSettings>
             <PivotViewGridSettings ColumnWidth="120"></PivotViewGridSettings>
@@ -30,17 +31,12 @@
         min-height: 200px;
     }
 </style>
-
 @code{
-
-    [Inject]
-    public HttpClient Http { get; set; }
-
+    [Inject] public HttpClient Http { get; set; }
     public List<EstadVenta> Data { get; set; }
-
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
-        Data = await Http.GetFromJsonAsync<List<EstadVenta>>("api/EstadisticaVentas/GetFacturacionAsync");
+        this.Data = await Http.GetFromJsonAsync<List<EstadVenta>>("api/EstadisticaVentas/GetFacturacionAsync");
     }
 
 }

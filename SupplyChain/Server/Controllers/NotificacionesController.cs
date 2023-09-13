@@ -1,47 +1,49 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
-namespace SupplyChain.Server.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-public class NotificacionesController : ControllerBase
+namespace SupplyChain.Server.Controllers
 {
-    private readonly ILogger<NotificacionSubscripcion> _logger;
-    private readonly NotificacionRepository notificacionRepository;
-
-    public NotificacionesController(ILogger<NotificacionSubscripcion> logger,
-        NotificacionRepository notificacionRepository)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class NotificacionesController : ControllerBase
     {
-        _logger = logger;
-        this.notificacionRepository = notificacionRepository;
-    }
 
-    [HttpGet]
-    public async Task<IEnumerable<NotificacionSubscripcion>> Get()
-    {
-        return await notificacionRepository.ObtenerTodos();
-    }
+        private readonly ILogger<NotificacionSubscripcion> _logger;
+        private readonly NotificacionRepository notificacionRepository;
 
-    [HttpPut]
-    public async Task<NotificacionSubscripcion> Subscribe(NotificacionSubscripcion notificacionSubscripcion)
-    {
-        var userId = GetUserId();
-        var oldsSubscribtion = notificacionRepository.Obtener(n => n.UserId == userId).ToArray();
-        await notificacionRepository.RemoveRange(oldsSubscribtion);
+        public NotificacionesController(ILogger<NotificacionSubscripcion> logger, NotificacionRepository notificacionRepository)
+        {
+            _logger = logger;
+            this.notificacionRepository = notificacionRepository;
+        }
 
-        await notificacionRepository.Agregar(notificacionSubscripcion);
-        return notificacionSubscripcion;
-    }
+        [HttpGet]
+        public async Task<IEnumerable<NotificacionSubscripcion>> Get()
+        {
+            return await notificacionRepository.ObtenerTodos();
+        }
 
-    private string GetUserId()
-    {
-        return HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        [HttpPut]
+        public async Task<NotificacionSubscripcion> Subscribe(NotificacionSubscripcion notificacionSubscripcion)
+        {
+            var userId = GetUserId();
+            var oldsSubscribtion = notificacionRepository.Obtener(n => n.UserId == userId).ToArray();
+            await notificacionRepository.RemoveRange(oldsSubscribtion);
+
+            await notificacionRepository.Agregar(notificacionSubscripcion);
+            return notificacionSubscripcion;
+        }
+
+        private string GetUserId()
+        {
+            return HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
     }
 }

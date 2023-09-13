@@ -1,10 +1,11 @@
 ﻿using System;
 
-namespace SupplyChain.Shared.Login;
-
-public class UserToken
+namespace SupplyChain.Shared.Login
 {
-    public string Token { get; set; }
-    public DateTime Expiration { get; set; }
-    public byte[] Foto { get; set; }
+    public class UserToken
+    {
+        public string Token { get; set; }
+        public DateTime Expiration { get; set; }
+        public byte[] Foto { get; set; }
+    }
 }

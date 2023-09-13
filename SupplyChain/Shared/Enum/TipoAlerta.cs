@@ -1,9 +1,14 @@
-﻿namespace SupplyChain.Shared.Enum;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-public enum TipoAlerta
+namespace SupplyChain.Shared.Enum
 {
-    Info,
-    Success,
-    Warning,
-    Error
+    public enum TipoAlerta
+    {
+        Info,
+        Success,
+        Warning,
+        Error
+    }
 }

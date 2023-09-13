@@ -1,6 +1,9 @@
-﻿@using Syncfusion.Blazor.Navigations
-@using Action = Syncfusion.Blazor.Grids.Action
+﻿@using System.ComponentModel.DataAnnotations;
+@using System.ComponentModel.DataAnnotations.Schema;
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Navigations
 @inject HttpClient Http
+@using System.Text.Json
 
 @if (DataSource == null)
 {
@@ -15,21 +18,22 @@ else
                 <SfGrid @ref="@Grid" DataSource="@DataSource" Width="100%" AllowExcelExport="true" AllowPaging="true"
                         GridLines="GridLine.Both" Locale="es-Ar" ID="grdEntregaOF" Toolbar="@Toolbaritems">
                     <GridPageSettings PageCount="4" PageSize="20"></GridPageSettings>
-                    <GridEvents OnBeginEdit="@(async (ped) => await BeginEditHandler(ped))"
-                                OnActionComplete="@(async (a) => await OnActionComplete(a))"
-                                TValue="Pedidos">
-                    </GridEvents>
+                    <GridEvents OnBeginEdit="@(async (ped)=> await BeginEditHandler(ped))"
+                                OnActionComplete="@(async (a)=> await OnActionComplete(a))"
+                                TValue="Pedidos"></GridEvents>
                     <GridEditSettings AllowAdding="@PermiteAgregar" AllowEditing="@PermiteEditar" AllowDeleting="@PermiteEliminar"
-                                      Mode="EditMode.Dialog" Dialog="new DialogSettings() { ShowCloseIcon = true, CloseOnEscape = true }">
+                                      Mode="EditMode.Dialog" Dialog="new DialogSettings() { ShowCloseIcon = true,
+                                                                             CloseOnEscape =true }">
 
                         <HeaderTemplate>
                             <span>Detalle</span>
                         </HeaderTemplate>
                         <Template>
                             @{
+
                                 stock = (context as Pedidos);
-                                <hr/>
-                                <br/>
+                                <hr />
+                                <br />
                                 <div class="form-row">
                                     <div class="form-group col-md-3">
                                         <label class="col-form-label">Codigo Producto :</label>
@@ -42,12 +46,12 @@ else
                                         <ValidationMessage For="@(() => stock.DES_ART)"></ValidationMessage>
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <SfButton CssClass="e-round" IconCss="fas fa-search" IsPrimary="true"
-                                                  Disabled="@DeshabilitaBotonBuscar"
-                                                  @onclick="@(async () => await Buscar())">
+                                            <SfButton CssClass="e-round" IconCss="fas fa-search" IsPrimary="true"
+                                                      Disabled="@DeshabilitaBotonBuscar"
+                                                      @onclick="@(async ()=> await Buscar())">
 
-                                        </SfButton>
-                                    </div>
+                                            </SfButton>
+                                        </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-2">
@@ -82,7 +86,7 @@ else
                         </Template>
                     </GridEditSettings>
 
-                    <GridSelectionSettings Type="SelectionType.Single"></GridSelectionSettings>
+                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                     <GridColumns>
                         <GridColumn HeaderText="" Width="120">
                             <GridCommandColumns>
@@ -106,6 +110,7 @@ else
                                     if (depositos.Any(c => c.CG_DEP == ped.CG_DEP))
                                     {
                                         <span>@depositos.Where(c => c.CG_DEP == ped.CG_DEP).FirstOrDefault().DES_DEP.Trim()</span>
+
                                     }
                                 }
                             </Template>
@@ -122,6 +127,8 @@ else
 
     @*<BuscadorEmergente @ref="BuscadorProducto" Titulo=@tituloBuscador Visible="@PopupBuscadorProdVisible"
         DataSource="@DataSourceProductos" Columnas="@ColumnasBuscador" onObjetoSeleccionado="onpro"  />*@
+
+
 }
 
 @code {
@@ -130,47 +137,33 @@ else
     Pedidos stock;
 
     Producto[] DataSourceProductos;
+    [Parameter] public string Titulo { get; set; } = null!;
+    [Parameter] public List<Pedidos> DataSource { get; set; } = null!;
+    [Parameter] public bool PermiteAgregar { get; set; } = false;
+    [Parameter] public bool PermiteEditar { get; set; } = false;
+    [Parameter] public bool PermiteEliminar { get; set; } = false;
+    [Parameter] public EventCallback<Pedidos> onEnviarDepos { get; set; }
 
-    [Parameter]
-    public string Titulo { get; set; } = null!;
-
-    [Parameter]
-    public List<Pedidos> DataSource { get; set; } = null!;
-
-    [Parameter]
-    public bool PermiteAgregar { get; set; } = false;
-
-    [Parameter]
-    public bool PermiteEditar { get; set; } = false;
-
-    [Parameter]
-    public bool PermiteEliminar { get; set; } = false;
-
-    [Parameter]
-    public EventCallback<Pedidos> onEnviarDepos { get; set; }
-
-    [Parameter]
-    public EventCallback<Pedidos> onGuardar { get; set; }
-
-    [CascadingParameter]
-    public Pedidos RegistroGenerado { get; set; }
+    [Parameter] public EventCallback<Pedidos> onGuardar { get; set; }
+    [CascadingParameter] public Pedidos RegistroGenerado { get; set; }
 
 
     SfGrid<Pedidos> Grid;
     Unidades[] Unidades = new List<Unidades>().ToArray();
-
-    protected List<Object> Toolbaritems = new List<Object>()
-    {
-        new ItemModel() { Text = "Buscar Stock", Type = ItemType.Input, ShowAlwaysInPopup = true, Id = "BuscarStock", CssClass = "btn btn-sm btn-succsess" },
-        new ItemModel() { Type = ItemType.Separator }
-    };
+    protected List<Object> Toolbaritems = new List<Object>(){
+        new ItemModel(){ Text="Buscar Stock", Type = ItemType.Input, ShowAlwaysInPopup=true, Id="BuscarStock",CssClass="btn btn-sm btn-succsess"},
+        new ItemModel(){ Type = ItemType.Separator},
+        };
 
     private bool deshabilitaBotonBuscar = false;
-
     bool DeshabilitaBotonBuscar
     {
         get { return deshabilitaBotonBuscar; }
-        set { deshabilitaBotonBuscar = DataSource.Any(s => s.TIPOO == 9); }
+        set
+        {
+            deshabilitaBotonBuscar = DataSource.Any(s => s.TIPOO == 9);
+
+        }
     }
 
     class TipoInsumo
@@ -180,16 +173,14 @@ else
     }
 
     int TipoInsumoCodigo = 1;
-
-    TipoInsumo[] TiposInsumo = new[]
-    {
-        new TipoInsumo { Codigo = 1, Descrip = "Productos" },
-        new TipoInsumo { Codigo = 2, Descrip = "Semi Elaborados" },
-        new TipoInsumo { Codigo = 4, Descrip = "Materias Primas" },
-        new TipoInsumo { Codigo = 10, Descrip = "Articulo de Reventa" },
-        new TipoInsumo { Codigo = 11, Descrip = "Herramental/Inventariables" },
-        new TipoInsumo { Codigo = 12, Descrip = "Repuestos" },
-        new TipoInsumo { Codigo = 13, Descrip = "Servicios" }
+    TipoInsumo[] TiposInsumo = new[] {
+      new TipoInsumo { Codigo = 1, Descrip = "Productos" },
+      new TipoInsumo { Codigo = 2, Descrip = "Semi Elaborados" },
+      new TipoInsumo { Codigo = 4, Descrip = "Materias Primas" },
+      new TipoInsumo { Codigo = 10, Descrip = "Articulo de Reventa" },
+      new TipoInsumo { Codigo = 11, Descrip = "Herramental/Inventariables" },
+      new TipoInsumo { Codigo = 12, Descrip = "Repuestos" },
+      new TipoInsumo { Codigo = 13, Descrip = "Servicios" }
     };
 
 
@@ -199,16 +190,16 @@ else
     {
         depositos = await Http.GetFromJsonAsync<List<Deposito>>("api/Deposito");
 
-    //await InvokeAsync(StateHasChanged);
+        //await InvokeAsync(StateHasChanged);
     }
 
     public async Task BeginEditHandler(BeginEditArgs<Pedidos> args)
     {
         var pedido = args.RowData;
 
-    //pedido.TIPOO = RegistroGenerado.TIPOO;
+        //pedido.TIPOO = RegistroGenerado.TIPOO;
 
-    //ir al servidor y cargar el stock del item
+        //ir al servidor y cargar el stock del item
         if (pedido.TIPOO == 6 || pedido.TIPOO == 9) //DEVolucion y Momvim entre deposito
         {
             if (pedido == null) return;
@@ -226,6 +217,7 @@ else
 
                 pedido.ResumenStock = resumen;
             }
+
         }
 
 
@@ -234,23 +226,24 @@ else
 
     void OnCancelButtonClick()
     {
-    //EditContext = null;
+        //EditContext = null;
     }
 
     public async Task OnActionComplete(ActionEventArgs<Pedidos> Args)
     {
-        if (Args.RequestType == Action.Save)
+
+        if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
         {
-    //await onGuardar.InvokeAsync(Args.Data);
-    //Args.Data.REGISTRO = RegistroGenerado.REGISTRO;
-    //if (RegistroGenerado.TIPOO == 5)
-    //{
-    //    Args.Data.IMPORTE1 = RegistroGenerado.IMPORTE1;
-    //    Args.Data.IMPORTE2 = RegistroGenerado.IMPORTE2;
-    //    Args.Data.IMPORTE3 = RegistroGenerado.IMPORTE3;
-    //    Args.Data.IMPORTE4 = RegistroGenerado.IMPORTE4;
-    //    Args.Data.IMPORTE6 = RegistroGenerado.IMPORTE6;
-    //}
+            //await onGuardar.InvokeAsync(Args.Data);
+            //Args.Data.REGISTRO = RegistroGenerado.REGISTRO;
+            //if (RegistroGenerado.TIPOO == 5)
+            //{
+            //    Args.Data.IMPORTE1 = RegistroGenerado.IMPORTE1;
+            //    Args.Data.IMPORTE2 = RegistroGenerado.IMPORTE2;
+            //    Args.Data.IMPORTE3 = RegistroGenerado.IMPORTE3;
+            //    Args.Data.IMPORTE4 = RegistroGenerado.IMPORTE4;
+            //    Args.Data.IMPORTE6 = RegistroGenerado.IMPORTE6;
+            //}
 
 
             await Grid.RefreshColumns();
@@ -262,53 +255,58 @@ else
 
     async Task HandleValidSubmit(ActionEventArgs<Pedidos> Args)
     {
-        if (Args.RequestType == Action.Add)
+        if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
         {
-    //DataSource.Concat(new Stock[] { Args.Data });
+            //DataSource.Concat(new Stock[] { Args.Data });
         }
 
-        if (Args.RequestType == Action.Save)
+        if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
         {
+
             try
             {
-    //envio item stock para guardar en la pantall operarcion
-    //para poder agregarle los datos de la cabecera: vale, ocompra etc
-    //await onGuardar.InvokeAsync(EditContext.DataItem);
+                //envio item stock para guardar en la pantall operarcion
+                //para poder agregarle los datos de la cabecera: vale, ocompra etc
+                //await onGuardar.InvokeAsync(EditContext.DataItem);
                 await onGuardar.InvokeAsync(Args.Data);
 
 
-    //agregar nuero de registro una vez guardado y obtner los importes
+                //agregar nuero de registro una vez guardado y obtner los importes
                 Args.Data.Id = RegistroGenerado.Id;
                 Args.Data.IMPORTE1 = RegistroGenerado.IMPORTE1;
                 Args.Data.IMPORTE2 = RegistroGenerado.IMPORTE2;
                 Args.Data.IMPORTE3 = RegistroGenerado.IMPORTE3;
                 Args.Data.IMPORTE4 = RegistroGenerado.IMPORTE4;
                 Args.Data.IMPORTE6 = RegistroGenerado.IMPORTE6;
-    //EditContext.DataItem.REGISTRO = RegistroGenerado.REGISTRO;
-    //EditContext.DataItem.IMPORTE1 = RegistroGenerado.IMPORTE1;
-    //EditContext.DataItem.IMPORTE2 = RegistroGenerado.IMPORTE2;
-    //EditContext.DataItem.IMPORTE3 = RegistroGenerado.IMPORTE3;
-    //EditContext.DataItem.IMPORTE4 = RegistroGenerado.IMPORTE4;
-    //EditContext.DataItem.IMPORTE6 = RegistroGenerado.IMPORTE6;
+                //EditContext.DataItem.REGISTRO = RegistroGenerado.REGISTRO;
+                //EditContext.DataItem.IMPORTE1 = RegistroGenerado.IMPORTE1;
+                //EditContext.DataItem.IMPORTE2 = RegistroGenerado.IMPORTE2;
+                //EditContext.DataItem.IMPORTE3 = RegistroGenerado.IMPORTE3;
+                //EditContext.DataItem.IMPORTE4 = RegistroGenerado.IMPORTE4;
+                //EditContext.DataItem.IMPORTE6 = RegistroGenerado.IMPORTE6;
 
-    //if (EditContext.IsNewRow)
-    //{
-    //    EditContext.IsNewRow = false;
-    //    var nuevoItem = (new Stock[] { EditContext.DataItem });
-    //    //lStock = (new Stock[] { EditContext.DataItem }).Concat(lStock);
-    //    DataSource = nuevoItem.Concat(DataSource).ToArray();
-    //}
+                //if (EditContext.IsNewRow)
+                //{
+                //    EditContext.IsNewRow = false;
+                //    var nuevoItem = (new Stock[] { EditContext.DataItem });
+                //    //lStock = (new Stock[] { EditContext.DataItem }).Concat(lStock);
+                //    DataSource = nuevoItem.Concat(DataSource).ToArray();
+                //}
 
                 await Grid.RefreshHeader();
                 await Grid.RefreshColumns();
                 Grid.Refresh();
                 await Grid.CloseEdit();
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
         }
+
+
+
     }
 
     void OnRowRemoving(Pedidos pedido)
@@ -319,32 +317,14 @@ else
 
     string tituloBuscador { get; set; } = "";
     private bool popupBuscadorVisible = false;
-
-    bool PopupBuscadorStockVisible
-    {
-        get => popupBuscadorVisible;
-        set
-        {
-            popupBuscadorVisible = value;
-            InvokeAsync(StateHasChanged);
-        }
-    }
-
-    bool PopupBuscadorProdVisible
-    {
-        get => popupBuscadorVisible;
-        set
-        {
-            popupBuscadorVisible = value;
-            InvokeAsync(StateHasChanged);
-        }
-    }
-
+    bool PopupBuscadorStockVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
+    bool PopupBuscadorProdVisible { get => popupBuscadorVisible; set { popupBuscadorVisible = value; InvokeAsync(StateHasChanged); } }
     string[] ColumnasBuscador = new string[] { "CG_PROD", "DES_PROD" }; /*,"DES_ART","DESPACHO", "LOTE","SERIE"*/
     ResumenStock[] Items;
 
     protected async Task Buscar()
     {
+
         if (RegistroGenerado.TIPOO == 21) //Ajuste
         {
             await BuscarProductosStock();
@@ -352,8 +332,11 @@ else
 
         if (RegistroGenerado.TIPOO == 9 || RegistroGenerado.TIPOO == 6) //Devol y Movim
         {
+
             await BuscarProductosStockEnPositivo();
         }
+
+
     }
 
 
@@ -408,10 +391,12 @@ else
         if (tipoEntidad == "Stock")
         {
             var pedido = (Pedidos)obj;
-    //Get items del vale
+            //Get items del vale
             var vale = pedido.VALE;
             DataSource = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Stock/AbriVale/{pedido.VALE}");
+
         }
+
     }
 
     private async Task onInsumoSelected(Producto obj)
@@ -426,16 +411,19 @@ else
                 var producto = (Producto)obj;
             }
         });
+
+
     }
 
 
     private async Task onResumenStockSelected(vResumenStock obj)
     {
+
         PopupBuscadorStockVisible = false;
 
         var resumenStock = (vResumenStock)obj;
 
-    //buscar registro mas reciente con las caracteristicas de resumen stock
+        //buscar registro mas reciente con las caracteristicas de resumen stock
         var cg_art = resumenStock.CG_ART;
         var cg_dep = resumenStock.CG_DEP;
         var despacho = resumenStock.DESPACHO == null ? "" : resumenStock.DESPACHO;
@@ -445,19 +433,19 @@ else
         var registroCompleto = await Http
             .GetFromJsonAsync<Pedidos>($"api/Stock/GetByResumenStock?CG_ART={cg_art}&CG_DEP={cg_dep}&DESPACHO={despacho}&LOTE={lote}&SERIE={serie}");
 
-        registroCompleto.Id = DataSource.Count > 0 ? -1 : DataSource.Count * -1; //indica que es un nuevo registro
+        registroCompleto.Id = DataSource.Count > 0 ? -1 : DataSource.Count * -1;//indica que es un nuevo registro
         registroCompleto.TIPOO = RegistroGenerado.TIPOO;
         registroCompleto.STOCK = 0;
         registroCompleto.ResumenStock = resumenStock;
 
-    //var nuevoItem = (new Stock[] { EditContext.DataItem });
-    //lStock = (new Stock[] { EditContext.DataItem }).Concat(lStock);
-    //DataSource = nuevoItem.Concat(DataSource).ToArray();
+        //var nuevoItem = (new Stock[] { EditContext.DataItem });
+        //lStock = (new Stock[] { EditContext.DataItem }).Concat(lStock);
+        //DataSource = nuevoItem.Concat(DataSource).ToArray();
 
-    //var lStock = new List<Stock>();
-    //lStock.Add(registroCompleto);
-    //DataSource = lStock.ToArray();
+        //var lStock = new List<Stock>();
+        //lStock.Add(registroCompleto);
+        //DataSource = lStock.ToArray();
         stock = registroCompleto;
-    }
 
+    }
 }

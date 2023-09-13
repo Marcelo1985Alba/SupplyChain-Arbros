@@ -1,21 +1,19 @@
-﻿@using Syncfusion.Blazor
-@using Syncfusion.Blazor.Data
+﻿@inject HttpClient Http
 @using Syncfusion.Blazor.DropDowns
-@inject HttpClient Http
+@using Syncfusion.Blazor.Data
 
 
-<SfDropDownList TValue="int" TItem="TiposNoConf" @bind-Value="@DropVal" Placeholder="Seleccione Tipo...">
-    <SfDataManager Url="api/TiposNoConf" Adaptor="Adaptors.WebApiAdaptor"
-                   CrossDomain="false">
-    </SfDataManager>
+<SfDropDownList TValue="int" TItem="TiposNoConf"  @bind-Value="@DropVal" Placeholder="Seleccione Tipo...">
+    <SfDataManager Url="api/TiposNoConf" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"
+                   CrossDomain=false></SfDataManager>
     <DropDownListFieldSettings Text="Des_TipoNc" Value="Cg_TipoNc"></DropDownListFieldSettings>
 </SfDropDownList>
 
-@code {
+                @code {
 
-    public int DropVal;
+                    public int DropVal;
 
-    /*
+                    /*
                     private IEnumerable<TiposNoConf> TiposNc = new List<TiposNoConf>();
 
 
@@ -26,4 +24,4 @@
                     }
                     */
 
-}
+                }

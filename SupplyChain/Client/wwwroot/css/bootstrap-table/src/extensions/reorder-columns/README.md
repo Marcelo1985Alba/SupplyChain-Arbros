@@ -1,9 +1,9 @@
 # Table Reorder Columns
 
-Use
-Plugin: [bootstrap-table-reorder-columns](https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-columns) </br>
+Use Plugin: [bootstrap-table-reorder-columns](https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-columns) </br>
 Dependence: [dragTable](https://github.com/akottr/dragtable/) v2.0.14 (must include the css file), </br>
 [jquery-ui](https://code.jquery.com/ui/) v1.11
+
 
 ## Usage
 

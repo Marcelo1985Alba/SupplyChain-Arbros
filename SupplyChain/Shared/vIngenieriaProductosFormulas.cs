@@ -1,13 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SupplyChain.Shared;
-
-public class vIngenieriaProductosFormulas
+namespace SupplyChain.Shared
 {
-    public string CG_PROD { get; set; }
-    public string DES_PROD { get; set; }
-    public bool TIENE_FORM { get; set; }
-    public bool FORM_ACTIVA { get; set; }
-
-    [NotMapped] public decimal? COSTO { get; set; }
+    public class vIngenieriaProductosFormulas
+    {
+        public string CG_PROD { get; set; }
+        public string DES_PROD { get; set; }
+        public bool TIENE_FORM { get; set; }
+        public bool FORM_ACTIVA { get; set; }
+        [NotMapped]
+        public decimal? COSTO { get; set; }
+    }
 }

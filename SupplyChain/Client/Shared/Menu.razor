@@ -1,9 +1,11 @@
-﻿@using Syncfusion.Blazor.Navigations
+﻿
+@using Syncfusion.Blazor.Navigations
+
 <SfMenu ID="menuBase" Items="@MenuItems" Orientation="Orientation.Vertical"></SfMenu>
 @*<div id="preview">@eventName Event Triggered</div>*@
 
 @code{
-    public List<MenuItem> MenuItems = new();
+    public List<MenuItem> MenuItems = new List<MenuItem>();
 
     public class CountryData
     {
@@ -13,15 +15,10 @@
         public List<CountryData> Languages { get; set; }
         public string Language { get; set; }
     }
-
-        @*PARTE DEL MENU DE NAVEGACION. Ej- Ventas, PCP, Administracion*@
-
-    [CascadingParameter]
-    public Task<AuthenticationState> AuthenticationStateAsync { get; set; }
-
+    @*PARTE DEL MENU DE NAVEGACION. Ej- Ventas, PCP, Administracion*@
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationStateAsync { get; set; }
     public AuthenticationState AuthState;
-
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
         AuthState = await AuthenticationStateAsync;
         if (AuthState.User.Identity.IsAuthenticated)
@@ -32,167 +29,124 @@
             {
                 MenuItems = new List<MenuItem>
                 {
-                    new()
-                    {
+                    new MenuItem 
+                    { 
                         Text = "PCP", IconCss = "e-icons e-file",
                         Items = new List<MenuItem>
                         {
-                            new() { Text = "Carga de Máquina", Url = "/cargamaquina" }
+                                new MenuItem { Text= "Carga de Máquina", Url="/cargamaquina" }
                         }
                     }
                 };
             }
             else
             {
-                MenuItems = new List<MenuItem>
-                {
-                    new()
-                    {
-                        Text = "ADMINISTRACIÓN", IconCss = "e-icons e-file", Items = new List<MenuItem>
-                        {
-                            new() { Text = "Parámetros", IconCss = "e-icons e-open" },
-                            new() { Separator = true },
-                            new() { Text = "Recálculo de stock", IconCss = "e-icons e-save" },
-                            new() { Text = "Monedas", Url = "/monedas" },
-                            new() { Text = "menu", Url = "/treeview" },
-                            new() { Separator = true },
-                            new() { Text = "índices y tasas de cambio", Url = "/indic" },
-                            new() { Text = "Usuarios y contraseñas" }
-                        }
-                    },
-                    new()
-                    {
-                        Text = "VENTAS", IconCss = "e-icons e-file", Hidden = !IsAdmin, Items = new List<MenuItem>
-                        {
-                            new() { Text = "Parámetros", IconCss = "e-icons e-open" },
-                            new() { Separator = true },
-                            new() { Text = "Logistica ", Url = "/logistica/listado", IconCss = "e-icons e-save" },
-                            new() { Text = "Servicios", Url = "/servicio/listado" },
-                            new() { Separator = true },
-                            new() { Text = "índices y tasas de cambio", Url = "/indic" },
-                            new() { Text = "Usuarios y contraseñas" }
-                        }
-                    },
-                    new()
-                    {
-                        Text = "ABASTECIMIENTO", IconCss = "e-icons e-edit", Items = new List<MenuItem>
-                        {
-                            new() { Text = "Compras", IconCss = "e-icons e-cut" },
-                            new() { Separator = true },
-                            new() { Text = "Estado de ordenes de compras", IconCss = "e-icons e-copy" }
-                        }
-                    },
-                    new()
-                    {
-                        Text = "INVENTARIOS", IconCss = "e-icons e-file", Items = new List<MenuItem>
-                        {
-                            new() { Text = "Administración de stock", Url = "/inventarios", Hidden = !IsAdmin },
-                            new() { Text = "Recepcion de Insumos", Url = "/inventario/5", Hidden = IsAdmin },
-                            new() { Text = "Pendientes de Aprobación", Url = "/inventario/9", Hidden = IsAdmin },
-                            new() { Separator = true },
-                            new() { Text = "Saldos de stock" }
-                        }
-                    },
-                    new()
-                    {
-                        Text = "PCP", IconCss = "e-icons e-file", Items = new List<MenuItem>
-                        {
-                            new() { Text = "Pronóstico de ventas" },
-                            new() { Separator = true },
-                            new() { Text = "Carga de Máquina", Url = "/cargamaquina" },
-                            new() { Text = "Pedidos de clientes" },
-                            new() { Text = "PCP", Url = "/programacioncontrolproduccion" }
-                        }
-                    },
-                    new()
-                    {
-                        Text = "INGENIERÍA", IconCss = "e-icons e-file", Items = new List<MenuItem>
-                        {
-                            new() { Text = "Lista de materiales y hoja de ruta" },
-                            new() { Text = "Celdas", Url = "/celdas" },
-                            new() { Separator = true },
-                            new() { Text = "Tipos de celdas", Url = "/tipocelda" },
-                            new() { Text = "Áreas", Url = "/area" },
-                            new() { Text = "Líneas", Url = "/linea" },
-                            new() { Separator = true },
-                            new() { Text = "Tipos de paradas de máquina", Url = "/parada" },
-                            new() { Text = "Tipos de insumos" },
-                            new() { Text = "Procesos" },
-                            new() { Text = "Tareas de procesos" },
-                            new() { Text = "Categoría de operarios", Url = "/cateope" },
-                            new() { Separator = true },
-                            new()
-                            {
-                                Text = "Abms", Items = new List<MenuItem>
-                                {
-                                    new() { Text = "Clase", Url = "/clase" },
-                                    new() { Text = "Depositos", Url = "/depos" },
-                                    new() { Text = "Operarios", Url = "/operario" },
-                                    new() { Text = "Países", Url = "/pais" },
-                                    new() { Text = "prod", Url = "/productos" },
-                                    new() { Text = "protab", Url = "/protab" },
-                                    new() { Text = "protarea", Url = "/protarea" },
-                                    new() { Text = "scrap", Url = "/scrap" },
-                                    new() { Text = "tipo area", Url = "/tipoarea" },
-    //ProcalMP
-                                    new() { Text = "ProcalMP", Url = "/procalMP" },
-                                    new() { Text = "turnos", Url = "/turnos" }
-                                }
-                            }
-                        }
-                    },
-                    new()
-                    {
-                        Text = "COSTOS", IconCss = "e-icons e-file", Items = new List<MenuItem>
-                        {
-                            new() { Text = "Costos estándar" },
-                            new() { Text = "Costos de productos dados de alta" }
-                        }
-                    },
-                    new()
-                    {
-                        Text = "CONTROL DE CALIDAD", IconCss = "e-icons e-file", Items = new List<MenuItem>
-                        {
-                            new() { Text = "Registro de no conformidades" },
-                            new() { Separator = true },
-                            new() { Text = "Tipos de no conformidades", Url = "/tiposnoconf" },
-                            new() { Text = "Registro de ensayos" },
-                            new() { Text = "Trazabilidad", Url = "/trazabilidad" }
-                        }
-                    }
-                };
+                MenuItems = new List<MenuItem>{
+                new MenuItem{ Text = "ADMINISTRACIÓN", IconCss = "e-icons e-file", Items = new List<MenuItem>{
+                    new MenuItem { Text= "Parámetros", IconCss= "e-icons e-open" },
+                    new MenuItem { Separator= true },
+                    new MenuItem { Text= "Recálculo de stock", IconCss= "e-icons e-save" },
+                    new MenuItem { Text= "Monedas", Url= "/monedas"},
+                    new MenuItem { Text= "menu", Url= "/treeview"},
+                    new MenuItem { Separator= true },
+                    new MenuItem { Text= "índices y tasas de cambio" , Url="/indic" },
+                    new MenuItem { Text= "Usuarios y contraseñas" }}},
+                new MenuItem{ Text = "VENTAS", IconCss = "e-icons e-file", Hidden = !IsAdmin , Items = new List<MenuItem>{
+                    new MenuItem { Text= "Parámetros", IconCss= "e-icons e-open" },
+                    new MenuItem { Separator= true },
+                    new MenuItem { Text= "Logistica ", Url="/logistica/listado", IconCss= "e-icons e-save" },
+                    new MenuItem { Text= "Servicios", Url= "/servicio/listado"},
+                    new MenuItem { Separator= true },
+                    new MenuItem { Text= "índices y tasas de cambio" , Url="/indic" },
+                    new MenuItem { Text= "Usuarios y contraseñas" }}},
+                new MenuItem{ Text = "ABASTECIMIENTO", IconCss = "e-icons e-edit", Items = new List<MenuItem>{
+                    new MenuItem{ Text= "Compras", IconCss= "e-icons e-cut" },
+                    new MenuItem { Separator= true },
+                    new MenuItem{ Text= "Estado de ordenes de compras", IconCss= "e-icons e-copy" }}},
+
+                new MenuItem{ Text = "INVENTARIOS",IconCss = "e-icons e-file", Items = new List<MenuItem>{
+                    new MenuItem { Text= "Administración de stock", Url="/inventarios", Hidden = !IsAdmin },
+                    new MenuItem { Text= "Recepcion de Insumos", Url="/inventario/5", Hidden = IsAdmin },
+                    new MenuItem { Text= "Pendientes de Aprobación", Url="/inventario/9", Hidden = IsAdmin },
+                    new MenuItem { Separator= true },
+                    new MenuItem{ Text = "Saldos de stock"}}},
+
+                new MenuItem { Text = "PCP", IconCss = "e-icons e-file",Items = new List<MenuItem>{
+                    new MenuItem { Text= "Pronóstico de ventas" },
+                    new MenuItem { Separator=true },
+                    new MenuItem { Text= "Carga de Máquina", Url="/cargamaquina" },
+                    new MenuItem { Text= "Pedidos de clientes" },
+                    new MenuItem { Text= "PCP", Url="/programacioncontrolproduccion" }}},
+
+                new MenuItem { Text = "INGENIERÍA", IconCss = "e-icons e-file",Items = new List<MenuItem>{
+                    new MenuItem { Text= "Lista de materiales y hoja de ruta" },
+                    new MenuItem { Text= "Celdas", Url="/celdas" },
+                    new MenuItem { Separator=true },
+                    new MenuItem { Text= "Tipos de celdas", Url="/tipocelda" },
+                    new MenuItem { Text= "Áreas" , Url="/area" },
+                    new MenuItem { Text= "Líneas", Url="/linea" },
+                    new MenuItem { Separator=true },
+                    new MenuItem { Text= "Tipos de paradas de máquina" , Url="/parada"},
+                    new MenuItem { Text= "Tipos de insumos" },
+                    new MenuItem { Text= "Procesos" },
+                    new MenuItem { Text= "Tareas de procesos" },
+                    new MenuItem { Text= "Categoría de operarios", Url="/cateope" },
+                    new MenuItem { Separator=true },
+                    new MenuItem { Text = "Abms", Items = new List<MenuItem>{
+                        new MenuItem { Text= "Clase", Url="/clase" },
+                        new MenuItem { Text= "Depositos", Url="/depos" },
+                        new MenuItem { Text= "Operarios", Url="/operario" },
+                        new MenuItem { Text= "Países", Url="/pais" },
+                        new MenuItem { Text= "prod", Url="/productos" },
+                        new MenuItem { Text= "protab", Url="/protab" },
+                        new MenuItem { Text= "protarea", Url="/protarea" },
+                        new MenuItem { Text= "scrap", Url="/scrap" },
+                        new MenuItem { Text= "tipo area", Url="/tipoarea" },
+                        //ProcalMP
+                        new MenuItem {Text= "ProcalMP", Url="/procalMP"},
+                        new MenuItem { Text= "turnos", Url="/turnos" }}}},},
+
+                new MenuItem { Text = "COSTOS", IconCss = "e-icons e-file",Items = new List<MenuItem>{
+                    new MenuItem { Text= "Costos estándar" },
+                    new MenuItem { Text= "Costos de productos dados de alta" }}},
+
+                new MenuItem { Text = "CONTROL DE CALIDAD", IconCss = "e-icons e-file", Items = new List<MenuItem>{
+                    new MenuItem { Text= "Registro de no conformidades" },
+                    new MenuItem { Separator= true },
+                    new MenuItem { Text= "Tipos de no conformidades" , Url="/tiposnoconf" },
+                    new MenuItem { Text= "Registro de ensayos" },
+                    new MenuItem { Text= "Trazabilidad",Url="/trazabilidad" }}}};
             }
+
         }
     }
 
 
     private string eventName = "No";
-
     private void onOpen()
     {
-        eventName = "OnOpen";
+        this.eventName = "OnOpen";
     }
 
     private void onClose()
     {
-        eventName = "OnClose";
+        this.eventName = "OnClose";
     }
 
     private void opened()
     {
-        eventName = "Opened";
+        this.eventName = "Opened";
     }
 
     private void closed()
     {
-        eventName = "Closed";
+        this.eventName = "Closed";
     }
 
     private void itemSelected()
     {
-        eventName = "ItemSelected";
+        this.eventName = "ItemSelected";
     }
-
 }
 
 <style>

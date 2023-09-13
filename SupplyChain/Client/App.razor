@@ -1,6 +1,5 @@
+@inject Microsoft.AspNetCore.Components.WebAssembly.Services.LazyAssemblyLoader lazyLoader
 @using System.Reflection
-@using Microsoft.AspNetCore.Components.WebAssembly.Services
-@inject LazyAssemblyLoader lazyLoader
 
 <Router AppAssembly="@typeof(Program).Assembly" OnNavigateAsync="OnNavigationAsync"
         AdditionalAssemblies="assemblies">
@@ -13,7 +12,7 @@
 
             </Authorizing>
             <NotAuthorized>
-
+                
                 <RedirectLogin></RedirectLogin>
             </NotAuthorized>
         </AuthorizeRouteView>
@@ -31,22 +30,22 @@
 
 @code{
 
-    private readonly List<Assembly> assemblies = new();
-
+    private List<Assembly> assemblies = new List<Assembly>();
     private async Task OnNavigationAsync(NavigationContext args)
     {
-    //if (args.Path.Contains("maquina") || args.Path.Contains("produccion")
-    //    || args.Path.Contains("servicio")
-    //    || args.Path.Contains("trazabilidad")
-    //    || args.Path.Contains("Noconformidades")
-    //    || args.Path.Contains("inventario"))
-    //{
-    //    var assembliesCargados = await lazyLoader.LoadAssembliesAsync(
-    //        new List<string> { "Syncfusion.Pdf.Portable.dll" }
-    //        );
+        //if (args.Path.Contains("maquina") || args.Path.Contains("produccion")
+        //    || args.Path.Contains("servicio")
+        //    || args.Path.Contains("trazabilidad")
+        //    || args.Path.Contains("Noconformidades")
+        //    || args.Path.Contains("inventario"))
+        //{
+        //    var assembliesCargados = await lazyLoader.LoadAssembliesAsync(
+        //        new List<string> { "Syncfusion.Pdf.Portable.dll" }
+        //        );
 
-    //    assemblies.AddRange(assembliesCargados);
-    //}
+        //    assemblies.AddRange(assembliesCargados);
+        //}
     }
-
 }
+
+

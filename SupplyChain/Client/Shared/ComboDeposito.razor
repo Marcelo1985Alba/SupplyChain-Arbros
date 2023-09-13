@@ -1,13 +1,12 @@
-﻿@using Syncfusion.Blazor.DropDowns
-@using Syncfusion.Blazor
+﻿@inject HttpClient Http
+@using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Data
-@inject HttpClient Http
 
-<SfDropDownList TValue="int" TItem="Deposito" Placeholder="Seleccione Deposito..."
-                Readonly="@EsSoloLectura"
+<SfDropDownList TValue="int" TItem="Deposito" Placeholder="Seleccione Deposito..." 
+                Readonly="@EsSoloLectura" 
                 @bind-Value="DepositoSeleccionado">
-    <SfDataManager Url="api/Deposito" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="false"></SfDataManager>
-    <DropDownListEvents TItem="Deposito" TValue="int" ValueChange="@(d => SelectedDepositoChanged(d))"></DropDownListEvents>
+    <SfDataManager Url="api/Deposito" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=false></SfDataManager>
+    <DropDownListEvents TItem="Deposito" TValue="int" ValueChange="@((d)=> SelectedDepositoChanged(d))" ></DropDownListEvents>
     <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP"></DropDownListFieldSettings>
 </SfDropDownList>
 
@@ -16,25 +15,20 @@
     private IEnumerable<Deposito> Depositos = new List<Deposito>();
 
     //[Parameter] public Deposito DepositoSeleccionado { get; set; } = new Deposito();
-    [Parameter]
-    public int DepositoSeleccionado { get; set; } = 0;
-
-    [Parameter]
-    public EventCallback<Deposito> OnSelectedDepositoChanged { get; set; }
-
-    [Parameter]
-    public bool EsSoloLectura { get; set; } = false;
+    [Parameter] public int DepositoSeleccionado { get; set; } = 0;
+    [Parameter] public EventCallback<Deposito> OnSelectedDepositoChanged { get; set; }
+    [Parameter] public bool EsSoloLectura { get; set; } = false;
 
     protected override async Task OnInitializedAsync()
     {
         Depositos = await Http.GetFromJsonAsync<IEnumerable<Deposito>>("api/Deposito");
-    //var nuevoItem = (new Deposito[] { new Deposito() {
-    //    CG_DEP = 0,
-    //    DES_DEP = "SELECCIONAR DEPOSITO"
-    //} });
+        //var nuevoItem = (new Deposito[] { new Deposito() {
+        //    CG_DEP = 0,
+        //    DES_DEP = "SELECCIONAR DEPOSITO"
+        //} });
 
-    //Depositos = nuevoItem.Concat(Depositos).ToArray();
-    //DepositoSeleccionado = Depositos.FirstOrDefault(d => d.CG_DEP == 0);
+        //Depositos = nuevoItem.Concat(Depositos).ToArray();
+        //DepositoSeleccionado = Depositos.FirstOrDefault(d => d.CG_DEP == 0);
 
         await InvokeAsync(StateHasChanged);
     }
@@ -49,7 +43,7 @@
 
     private async Task SelectedDepositoChanged(ChangeEventArgs<int, Deposito> dep)
     {
-        if (dep.Value == default)
+        if (dep.Value == (int)default)
         {
             return;
         }

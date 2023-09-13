@@ -1,10 +1,15 @@
-﻿@using Syncfusion.Blazor.Buttons
+﻿@using System.ComponentModel.DataAnnotations;
+@using System.ComponentModel.DataAnnotations.Schema;
+@using System.Text.Json
 @using Syncfusion.Blazor.DropDowns
-@using SelectionType = Syncfusion.Blazor.Grids.SelectionType
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Navigations
+
 @inherits GridEditEntregaBase
 
 @if (DataSource == null)
 {
+
 }
 else
 {
@@ -17,13 +22,12 @@ else
                         AllowResizing="true" AllowSelection="true" AllowSorting="true" AllowTextWrap="false"
                         AllowReordering="true" RowHeight="20">
                     <GridPageSettings PageCount="4" PageSize="50"></GridPageSettings>
-                    <GridEvents OnActionBegin="@(async p => await OnActionBeginHandler(p))"
-                                OnBeginEdit="@(async ped => await BeginEditHandler(ped))"
-                                QueryCellInfo="@(async e => await QueryCellInfoHandler(e))"
-                                OnActionComplete="@(async e => await OnActionComplete(e))"
-                                OnToolbarClick="@(async e => await ClickHandler(e))"
-                                TValue="Pedidos">
-                    </GridEvents>
+                    <GridEvents OnActionBegin="@(async(p)=> await OnActionBeginHandler(p))"
+                                OnBeginEdit="@(async (ped)=> await BeginEditHandler(ped))"
+                                QueryCellInfo="@(async(e)=> await QueryCellInfoHandler(e))"
+                                OnActionComplete="@(async(e)=> await OnActionComplete(e))" 
+                                OnToolbarClick="@(async(e)=> await ClickHandler(e))"
+                                TValue="Pedidos"></GridEvents>
                     <GridEditSettings AllowAdding="PermiteAgregar" AllowEditing="PermiteEditar" AllowDeleting="PermiteEliminar"
                                       Mode="EditMode.Dialog" Dialog="@DialogParams">
                         <HeaderTemplate>
@@ -31,9 +35,10 @@ else
                         </HeaderTemplate>
                         <Template>
                             @{
-                                stock = context as Pedidos;
-                                <hr/>
-                                <br/>
+
+                                stock = (context as Pedidos);
+                                <hr />
+                                <br />
                                 <div class="form-row">
                                     <div class="form-group col-md-2">
                                         <label class="col-form-label">Codigo Producto :</label>
@@ -46,9 +51,9 @@ else
                                         <ValidationMessage For="@(() => stock.DES_ART)"></ValidationMessage>
                                     </div>
                                     <div class="form-group col-md-1 mt-4">
-                                        <SfButton HtmlAttributes="@HtmlAttribute" OnClick="@(async () => await Buscar())"
+                                        <SfButton HtmlAttributes="@HtmlAttribute" OnClick="@(async ()=> await Buscar())"
                                                   CssClass="e-round"
-                                                  Content="" IconCss="fa fa-search"/>
+                                                  Content="" IconCss="fa fa-search" />
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label class="col-form-label text-info">Déposito Salida</label>
@@ -61,21 +66,21 @@ else
                                     </div>
                                     @if (stock.TIPOO == 9) //movim entre dep
                                     {
-                                        <div class="form-group col-md-2">
-                                            <label class="col-form-label text-info">Déposito Ingreso</label>
-                                            <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP_ALT"
-                                                            TValue="int" ID="CG_DEP" DataSource="@depositos">
-                                                <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP">
+                                <div class="form-group col-md-2">
+                                    <label class="col-form-label text-info">Déposito Ingreso</label>
+                                    <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP_ALT"
+                                                    TValue="int" ID="CG_DEP" DataSource="@depositos">
+                                        <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP">
 
-                                                </DropDownListFieldSettings>
-                                            </SfDropDownList>
-                                            <ValidationMessage For="@(() => stock.CG_DEP_ALT)"></ValidationMessage>
-                                        </div>
+                                        </DropDownListFieldSettings>
+                                    </SfDropDownList>
+                                    <ValidationMessage For="@(() => stock.CG_DEP_ALT)"></ValidationMessage>
+                                </div>
                                     }
                                     <div class="form-group col-md-1">
                                         <label class="col-form-label">Stock:</label>
                                         <SfNumericTextBox ShowSpinButton="false" @bind-Value="@stock.ResumenStock.STOCK"
-                                                          Readonly="true"/>
+                                                          Readonly="true" />
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label class="col-form-label">Stock - Entrega:</label>
@@ -111,7 +116,7 @@ else
                                         <SfTextBox @bind-Value="@stock.LOTE" Readonly="true"></SfTextBox>
                                         <ValidationMessage For="@(() => stock.LOTE)"></ValidationMessage>
                                     </div>
-                                    <hr/>
+                                    <hr />
                                 </div>
 
 
@@ -119,12 +124,12 @@ else
                         </Template>
                     </GridEditSettings>
 
-                    <GridSelectionSettings Type="SelectionType.Single"></GridSelectionSettings>
+                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                     <GridColumns>
                         <GridColumn HeaderText="" Width="120">
                             <GridCommandColumns>
-                                <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@new CommandButtonOptions { IconCss = "e-icons e-edit", CssClass = "e-flat" }"></GridCommandColumn>
-                                <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@new CommandButtonOptions { IconCss = "e-icons e-delete", CssClass = "e-flat" }"></GridCommandColumn>
+                                <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
+                                <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
                             </GridCommandColumns>
                         </GridColumn>
                         <GridColumn Field="@nameof(Pedidos.CG_ART)" HeaderText="Cod. Producto" AutoFit="true" Width="130"></GridColumn>
@@ -144,7 +149,7 @@ else
                         <GridColumn Field="@nameof(Pedidos.CG_DEP)" HeaderText="Deposito" AutoFit="true">
                             <Template>
                                 @{
-                                    var ped = context as Pedidos;
+                                    var ped = (context as Pedidos);
                                     if (depositos.Any(c => c.CG_DEP == ped.CG_DEP))
                                     {
                                         <span>@depositos.Where(c => c.CG_DEP == ped.CG_DEP).FirstOrDefault().DES_DEP.Trim()</span>
@@ -163,7 +168,7 @@ else
                         <GridColumn Field="@nameof(Pedidos.StockPlaneado)" HeaderText="Planeado" EditType="EditType.NumericEdit" AutoFit="true">
                             <Template>
                                 @{
-                                    var ped = context as Pedidos;
+                                    var ped = (context as Pedidos);
                                     if (ped.CG_ORDEN == 3)
                                     {
                                         <span>@ordenesPlaneadas.Where(c => c.CG_PROD.Trim() == ped.CG_ART.Trim()).Sum(p => p.CANT).ToString("0")</span>
@@ -172,14 +177,14 @@ else
                                     {
                                         <span>0</span>
                                     }
-
+                                    
                                 }
                             </Template>
                         </GridColumn>
                         <GridColumn Field="@nameof(Pedidos.StockEnFabricacion)" HeaderText="Fabricar" EditType="EditType.NumericEdit" AutoFit="true">
                             <Template>
                                 @{
-                                    var ped = context as Pedidos;
+                                    var ped = (context as Pedidos);
                                     if (ped.CG_ORDEN == 3)
                                     {
                                         <span>@ordenesFabricacion.Where(c => c.CG_PROD.Trim() == ped.CG_ART.Trim()).Sum(p => p.CANT).ToString("0")</span>
@@ -188,7 +193,7 @@ else
                                     {
                                         <span>0</span>
                                     }
-
+                                    
                                 }
                             </Template>
                         </GridColumn>
@@ -200,12 +205,14 @@ else
         </div>
     </div>
 
-    <BuscadorEmergenteResumenStock @ref="BuscadorEmergenteRS" DataSource="@Items" Visible="PopupBuscadorStockVisible"
-                                   TipoSeleccion="@TipoSeleccion" VisibleSpinner="@visibleSpinnerRS" EsModal="true"
-                                   Columnas="@new[] { "CG_ART", "STOCK", "CG_DEP", "DEPOSITO", "SERIE", "LOTE", "DESPACHO" }"
-                                   AplicarFiltro="AplicarFiltro" filterCG_ART="@filtro_CG_ART" filterDESPACHO="@filtro_DESPACHO"
-                                   OnObjetoSeleccionado="@(async r => await OnResumenStockSelected(r))"
-                                   OnObjetosSeleccionados="@(async r => await OnResumenStockSelected(r))"/>
+        <BuscadorEmergenteResumenStock @ref="BuscadorEmergenteRS" DataSource="@Items" Visible="PopupBuscadorStockVisible" 
+                                       TipoSeleccion="@TipoSeleccion" VisibleSpinner="@visibleSpinnerRS" EsModal="true"
+                                       Columnas="@(new string[] { "CG_ART", "STOCK", "CG_DEP", "DEPOSITO", "SERIE", "LOTE", "DESPACHO"})"
+                                       AplicarFiltro="AplicarFiltro" filterCG_ART= "@filtro_CG_ART"  filterDESPACHO="@filtro_DESPACHO"
+                                       OnObjetoSeleccionado="@(async(r)=> await OnResumenStockSelected(r))"
+                                       OnObjetosSeleccionados="@(async(r)=> await OnResumenStockSelected(r))"/>
+
+
 }
 
 <style>

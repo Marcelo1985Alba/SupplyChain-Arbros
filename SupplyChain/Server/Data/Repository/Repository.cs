@@ -1,162 +1,166 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using SupplyChain.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using SupplyChain.Shared;
 
-namespace SupplyChain.Server.Data.Repository;
-
-public abstract class Repository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : EntityBase<TId>, new()
+namespace SupplyChain.Server.Data.Repository
 {
-    public readonly DatabaseFacade Database;
-    protected readonly AppDbContext Db;
-    protected readonly DbSet<TEntity> DbSet;
-
-    protected Repository(AppDbContext db)
+    public abstract class Repository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : EntityBase<TId>, new()
     {
-        Db = db;
-        DbSet = Db.Set<TEntity>();
-        Database = Db.Database;
-    }
+        protected readonly AppDbContext Db;
+        protected readonly DbSet<TEntity> DbSet;
+        public readonly DatabaseFacade Database;
 
-    public virtual async Task<TEntity> ObtenerPorId(TId id)
-    {
-        return await DbSet.FindAsync(id);
-    }
-
-    public virtual async Task<List<TEntity>> ObtenerTodos()
-    {
-        return await DbSet.ToListAsync();
-    }
-
-    public IQueryable<TEntity> Obtener(Expression<Func<TEntity, bool>> filter, int take = 0,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-        bool ascending = false, params Expression<Func<TEntity, object>>[] includes)
-    {
-        var query = GetAsQueryable(filter, take, includes);
-        if (orderBy != null) query = orderBy(query);
-
-        if (take > 0) query = query.Take(take);
-
-        return query;
-    }
-
-    public virtual async Task Agregar(TEntity entity)
-    {
-        DbSet.Add(entity);
-        await SaveChanges();
-    }
-
-    public virtual async Task Actualizar(TEntity entity)
-    {
-        Db.Entry(entity).State = EntityState.Modified;
-        await SaveChanges();
-    }
-
-    public virtual async Task Remover(TId id)
-    {
-        //Db.Entry(entity: new TEntity { Id = id }).State = EntityState.Deleted;
-        var entity = await ObtenerPorId(id);
-        Db.Remove(entity);
-        await SaveChanges();
-    }
-
-    public async Task<int> SaveChanges()
-    {
-        return await Db.SaveChangesAsync();
-    }
-
-    public void Dispose()
-    {
-        Db?.Dispose();
-    }
-
-    public async Task<bool> AgregarList(IEnumerable<TEntity> entity)
-    {
-        using (var transaction = Database.BeginTransaction())
+        protected Repository(AppDbContext db)
         {
-            try
-            {
-                await Db.AddRangeAsync(entity);
-                await Db.SaveChangesAsync();
+            Db = db;
+            DbSet = Db.Set<TEntity>();
+            Database = Db.Database;
 
-                await transaction.CommitAsync();
-
-                return true;
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                return false;
-            }
-        }
-    }
-
-    private IQueryable<TEntity> GetAsQueryable(Expression<Func<TEntity, bool>> filter, int take,
-        params Expression<Func<TEntity, object>>[] includes)
-    {
-        var result = DbSet.Where(filter);
-        includes.Aggregate(result, (current, includeProperty) => current.Include(includeProperty));
-
-        return result;
-    }
-
-    public virtual async Task<bool> Existe(TId id)
-    {
-        var entity = await ObtenerPorId(id);
-        return entity != null;
-    }
-
-    public virtual async Task<bool> Existe(params object[] keyValues)
-    {
-        var entity = await DbSet.FindAsync(keyValues);
-        return entity != null;
-    }
-
-    public virtual IQueryable<TEntity> ObtenerTodosQueryable()
-    {
-        return DbSet.AsQueryable();
-    }
-
-    public virtual async Task RemoverList(List<TId> lista)
-    {
-        //Db.Entry(entity: new TEntity { Id = id }).State = EntityState.Deleted;
-        foreach (var item in lista)
-        {
-            var entity = await ObtenerPorId(item);
-            Db.RemoveRange(entity);
         }
 
-        await SaveChanges();
-    }
+        private IQueryable<TEntity> GetAsQueryable(Expression<Func<TEntity, bool>> filter, int take,
+            params Expression<Func<TEntity, object>>[] includes)
+        {
+            var result = DbSet.Where(filter);
+            includes.Aggregate(result, (current, includeProperty) => current.Include(includeProperty));
+            
+            return result;
+        }
+        public virtual async Task<bool> Existe(TId id)
+        {
+            var entity = await ObtenerPorId(id);
+            return entity != null;
+        }
 
-    public async Task EnviarCsvDataCore()
-    {
-        var xSQL = "EXEC INTERFACE_DATACORE";
-        await Db.Database.ExecuteSqlRawAsync(xSQL);
-    }
+        public virtual async Task<bool> Existe(params object[] keyValues)
+        {
+            var entity = await DbSet.FindAsync(keyValues);
+            return entity != null;
+        }
+        public virtual async Task<TEntity> ObtenerPorId(TId id)
+        {
+            return await DbSet.FindAsync(id);
+        }
 
-    public async Task GenerarCsvQrByPedido(int pedido)
-    {
-        var xSQL = string.Format($"EXEC INTERFACE_IMPRESORAQR {pedido}");
-        await Db.Database.ExecuteSqlRawAsync(xSQL);
-    }
+        public virtual async Task<List<TEntity>> ObtenerTodos()
+        {
+            return await DbSet.ToListAsync();
+        }
 
-    public async Task BeginTransaction()
-    {
-        await Db.Database.BeginTransactionAsync();
-    }
+        public virtual IQueryable<TEntity> ObtenerTodosQueryable()
+        {
+            return DbSet.AsQueryable();
+        }
 
-    public async Task CommitTransaction()
-    {
-        await Db.Database.CommitTransactionAsync();
-    }
+        public IQueryable<TEntity> Obtener(Expression<Func<TEntity, bool>> filter, int take = 0,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            bool ascending = false, params Expression<Func<TEntity, object>>[] includes )
+        {
+            var query = GetAsQueryable(filter, take, includes);
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
 
-    public async Task RollbackTransaction()
-    {
-        await Db.Database.RollbackTransactionAsync();
+            if (take > 0) query = query.Take(take);
+
+            return query;
+        }
+
+        public virtual async Task Agregar(TEntity entity)
+        {
+            DbSet.Add(entity);
+            await SaveChanges();
+        }
+
+        public virtual async Task Actualizar(TEntity entity)
+        {
+            Db.Entry(entity).State = EntityState.Modified;
+            await SaveChanges();
+        }
+
+        public virtual async Task Remover(TId id)
+        {
+            //Db.Entry(entity: new TEntity { Id = id }).State = EntityState.Deleted;
+            var entity = await ObtenerPorId(id);
+            Db.Remove(entity);
+            await SaveChanges();
+        }
+
+        public virtual async Task RemoverList(List<TId> lista)
+        {
+            //Db.Entry(entity: new TEntity { Id = id }).State = EntityState.Deleted;
+            foreach (var item in lista)
+            {
+                var entity = await ObtenerPorId(item);
+                Db.RemoveRange(entity);
+            }
+            
+            await SaveChanges();
+        }
+
+        public async Task<int> SaveChanges()
+        {
+            return await Db.SaveChangesAsync();
+        }
+
+        public async Task EnviarCsvDataCore()
+        {
+            string xSQL = string.Format("EXEC INTERFACE_DATACORE");
+            await Db.Database.ExecuteSqlRawAsync(xSQL);
+        }
+
+        public async Task GenerarCsvQrByPedido(int pedido)
+        {
+            string xSQL = string.Format($"EXEC INTERFACE_IMPRESORAQR {pedido}");
+            await Db.Database.ExecuteSqlRawAsync(xSQL);
+        }
+
+        public async Task BeginTransaction()
+        {
+            await Db.Database.BeginTransactionAsync();
+        }
+
+        public async Task CommitTransaction()
+        {
+            await Db.Database.CommitTransactionAsync();
+        }
+
+        public async Task RollbackTransaction()
+        {
+            await Db.Database.RollbackTransactionAsync();
+        }
+
+        public void Dispose()
+        {
+            Db?.Dispose();
+        }
+
+        public async Task<bool> AgregarList(IEnumerable<TEntity> entity)
+        {
+            using (var transaction = Database.BeginTransaction())
+            {
+                try
+                {
+                    await Db.AddRangeAsync(entity);
+                    await Db.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+
+                    return true;
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+            }
+            
+        }
     }
 }

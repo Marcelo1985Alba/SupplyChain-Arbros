@@ -1,16 +1,23 @@
-﻿namespace SupplyChain.Shared.Enum;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public enum TipoFiltro
+namespace SupplyChain.Shared.Enum
 {
-    Todos = 0,
-    Pendientes = 1,
-    NoPendientes = 2,
-    PendEmSolCot = 3,
-    PendEmisionOC = 4,
-    PendEntFecha = 5,
-    PendEntVenc = 6,
-    RecParcialPendPago = 7,
-    RecTotalPendPago = 8,
-    PagRecibida = 9,
-    Cerrada = 10
+    public enum TipoFiltro
+    {
+        Todos = 0,
+        Pendientes = 1,
+        NoPendientes = 2,
+        PendEmSolCot=3,
+        PendEmisionOC=4,
+        PendEntFecha=5,
+        PendEntVenc=6,
+        RecParcialPendPago=7,
+        RecTotalPendPago=8,
+        PagRecibida=9,
+        Cerrada=10
+    }
 }

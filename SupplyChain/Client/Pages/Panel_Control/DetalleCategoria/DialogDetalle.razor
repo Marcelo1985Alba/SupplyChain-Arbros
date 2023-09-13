@@ -1,4 +1,7 @@
-﻿@inherits DialogDetalleBase
+﻿@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Buttons
+
+@inherits SupplyChain.Client.Pages.Panel_Control.DetalleCategoria.DialogDetalleBase
 
 <SfDialog Height="@Height" Width="@Width" Target="#target" ShowCloseIcon="true" @bind-Visible="@Visible"
           IsModal="@IsModal" EnableResize="false">
@@ -6,27 +9,27 @@
     <DialogTemplates>
         <Header>
             @Titulo
-            <hr/>
+            <hr />
         </Header>
         <Content>
-            <div class="dialogContent">
-                <div class="col-lg-12 control-section">
-                    <div class="content-wrapper">
-                        <div class="row">
-                            @Content
+                <div class="dialogContent">
+                    <div class="col-lg-12 control-section">
+                        <div class="content-wrapper">
+                            <div class="row">
+                                @Content
+                            </div>
+                        </div>
+                        <div>
+
                         </div>
                     </div>
-                    <div>
 
-                    </div>
+
                 </div>
-
-
-            </div>
 
         </Content>
         <FooterTemplate>
-            <hr/>
+            <hr />
         </FooterTemplate>
 
     </DialogTemplates>

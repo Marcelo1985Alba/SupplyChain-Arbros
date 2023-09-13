@@ -1,145 +1,162 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace SupplyChain.Server.Controllers;
-
-[Route("api/[controller]")]
-[ApiController]
-public class PrecioArticulosController : ControllerBase
+namespace SupplyChain.Server.Controllers
 {
-    private readonly PrecioArticulosRepository _precioArticulosRepository;
-
-    public PrecioArticulosController(PrecioArticulosRepository precioArticulosRepository)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PrecioArticulosController : ControllerBase
     {
-        _precioArticulosRepository = precioArticulosRepository;
-    }
+        private readonly PrecioArticulosRepository _precioArticulosRepository;
 
-    // GET: api/PrecioArticulos
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<PreciosArticulos>>> Gets()
-    {
-        try
+        public PrecioArticulosController(PrecioArticulosRepository precioArticulosRepository)
         {
-            return await _precioArticulosRepository.ObtenerTodos();
+            _precioArticulosRepository = precioArticulosRepository;
         }
-        catch (Exception ex)
+
+        // GET: api/PrecioArticulos
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PreciosArticulos>>> Gets()
         {
-            return BadRequest(ex);
+            try
+            {
+                return await _precioArticulosRepository.ObtenerTodos();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
-    }
 
-    // GET: api/PrecioArticulos/Reparaciones
-    [HttpGet("Reparaciones")]
-    public async Task<ActionResult<IEnumerable<PreciosArticulos>>> Reparaciones()
-    {
-        try
+        // GET: api/PrecioArticulos/Reparaciones
+        [HttpGet("Reparaciones")]
+        public async Task<ActionResult<IEnumerable<PreciosArticulos>>> Reparaciones()
         {
-            return await _precioArticulosRepository.Obtener(p => p.Id.StartsWith("00")).ToListAsync();
+            try
+            {
+                return await _precioArticulosRepository.Obtener(p=> p.Id.StartsWith("00")).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
-        catch (Exception ex)
+
+        // GET: api/PrecioArticulos/Search/codigo/descripcion
+        [HttpGet("Search/{codigo}/{descripcion}")]
+        public async Task<ActionResult<IEnumerable<PreciosArticulos>>> Search(string codigo, string descripcion)
         {
-            return BadRequest(ex);
+            try
+            {
+                return Ok(await _precioArticulosRepository.Search(codigo, descripcion));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
-    }
 
-    // GET: api/PrecioArticulos/Search/codigo/descripcion
-    [HttpGet("Search/{codigo}/{descripcion}")]
-    public async Task<ActionResult<IEnumerable<PreciosArticulos>>> Search(string codigo, string descripcion)
-    {
-        try
+        // GET: api/PrecioArticulos/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Solicitud>> Get(string id)
         {
-            return Ok(await _precioArticulosRepository.Search(codigo, descripcion));
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-    }
+            var precioArt = await _precioArticulosRepository.ObtenerPorId(id);
 
-    // GET: api/PrecioArticulos/5
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Solicitud>> Get(string id)
-    {
-        var precioArt = await _precioArticulosRepository.ObtenerPorId(id);
-
-        if (precioArt == null) return NotFound();
-
-        return Ok(precioArt);
-    }
-
-    // GET: api/PrecioArticulos/id
-    [HttpGet("Existe/{id}")]
-    public async Task<ActionResult<bool>> Existe(string id)
-    {
-        var existe = await _precioArticulosRepository.Existe(id);
-
-        return Ok(existe);
-    }
-
-    // PUT: api/PrecioArticulos/id
-    // To protect from overposting attacks, enable the specific properties you want to bind to, for
-    // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put(string id, PreciosArticulos precioArt)
-    {
-        if (id != precioArt.Id) return BadRequest();
-
-        try
-        {
-            await _precioArticulosRepository.Actualizar(precioArt);
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!await _precioArticulosRepository.Existe(id))
+            if (precioArt == null)
+            {
                 return NotFound();
-            return BadRequest();
+            }
+
+            return Ok(precioArt);
         }
 
-        return Ok(precioArt);
-    }
-
-    // POST: api/PrecioArticulos
-    // To protect from overposting attacks, enable the specific properties you want to bind to, for
-    // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-    [HttpPost]
-    public async Task<ActionResult<PreciosArticulos>> Post(PreciosArticulos precioArt)
-    {
-        try
+        // GET: api/PrecioArticulos/id
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>> Existe(string id)
         {
-            await _precioArticulosRepository.Agregar(precioArt);
-            return CreatedAtAction("Get", new { id = precioArt.Id }, precioArt);
+            bool existe = await _precioArticulosRepository.Existe(id);
+
+            return Ok(existe);
         }
-        catch (Exception ex)
+
+        // PUT: api/PrecioArticulos/id
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(string id, PreciosArticulos precioArt)
         {
-            return BadRequest(ex);
+            if (id != precioArt.Id)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                await _precioArticulosRepository.Actualizar(precioArt);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _precioArticulosRepository.Existe(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+
+            return Ok(precioArt);
         }
-    }
 
-    // DELETE: api/PrecioArticulos/id
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<PreciosArticulos>> DeleteCompra(string id)
-    {
-        var solicitud = await _precioArticulosRepository.ObtenerPorId(id);
-        if (solicitud == null) return NotFound();
+        // POST: api/PrecioArticulos
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPost]
+        public async Task<ActionResult<PreciosArticulos>> Post(PreciosArticulos precioArt)
+        {
+            try
+            {
+                await _precioArticulosRepository.Agregar(precioArt);
+                return CreatedAtAction("Get", new { id = precioArt.Id }, precioArt);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
 
-        await _precioArticulosRepository.Remover(id);
+        // DELETE: api/PrecioArticulos/id
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<PreciosArticulos>> DeleteCompra(string id)
+        {
+            var solicitud = await _precioArticulosRepository.ObtenerPorId(id);
+            if (solicitud == null)
+            {
+                return NotFound();
+            }
 
-        return solicitud;
-    }
+            await _precioArticulosRepository.Remover(id);
 
-    // GET: api/PrecioArticulos/GetPrecio/id
-    [HttpGet("GetPrecio/{id}")]
-    public async Task<decimal> GetPrecio(string id)
-    {
-        decimal? precio = 0;
-        if (await _precioArticulosRepository.Existe(id))
-            precio = _precioArticulosRepository.Obtener(p => p.Id == id).FirstOrDefaultAsync().Result.Precio;
-        return (decimal)precio;
+            return solicitud;
+        }
+        
+        // GET: api/PrecioArticulos/GetPrecio/id
+        [HttpGet("GetPrecio/{id}")]
+        public async Task<decimal> GetPrecio(string id)
+        {
+            decimal? precio = 0;
+            if (await _precioArticulosRepository.Existe(id))
+                precio = _precioArticulosRepository.Obtener(p => p.Id == id).FirstOrDefaultAsync().Result.Precio;
+            return (decimal)precio;
+        }
     }
 }

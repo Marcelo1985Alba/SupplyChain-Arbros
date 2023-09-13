@@ -12,4 +12,3 @@ namespace SupplyChain.Server.Repositorios
     }
 }
 */
-

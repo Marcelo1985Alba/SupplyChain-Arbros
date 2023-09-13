@@ -1,6 +1,23 @@
-﻿@inject IJSRuntime JsRuntime
-@inject NavigationManager NavManager
+﻿
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor
 @using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using System.Configuration;
+@using System.Data.SqlClient;
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.BarcodeGenerator
+@using Syncfusion.Blazor.Spinner
+@using System.Text.Json
+@using System.Linq
+@inject IJSRuntime JsRuntime
+@using SupplyChain
+@using System.Net.Http.Json
+@inject NavigationManager NavManager
 @inherits PedidosPendientesBase
 
 
@@ -11,8 +28,8 @@
 <div class="row mt-3">
     <div class="col-12">
         <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
-                           OnReiniciar="async () => await OnReiniciarGrilla()"
-                           OnVistaSelected="async v => await OnVistaSeleccionada(v)"/>
+                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
     </div>
 
 </div>
@@ -27,30 +44,29 @@
                         AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems"
                         AllowExcelExport="true" AllowGrouping="true">
                     <GridPageSettings PageCount="20" PageSize="20" PageSizes="true"></GridPageSettings>
-                    <GridSelectionSettings Type="SelectionType.Single"></GridSelectionSettings>
-                    <GridEvents OnLoad="async a => await LoadGrid(a)" OnActionBegin="@(a => Begin(a))"
-                                DataBound="async () => await DataBoundHandler()" OnActionComplete="@(async a => await ActionComplete(a))"
-                                OnDataBound="@(async a => await OnDataBoundGrid(a))" CommandClicked="async a => await CommandClickHandler(a)"
-                                OnToolbarClick="@(async a => await ClickHandler(a))"
-                                QueryCellInfo="async a => await QueryCellInfoHandler(a)" TValue="ModeloPedidosPendientes">
-                    </GridEvents>
-                    <GridFilterSettings Type="@FilterType.CheckBox"></GridFilterSettings>
+                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                    <GridEvents OnLoad="(async(a)=> await LoadGrid(a))" OnActionBegin="@((a)=> Begin(a))"
+                                DataBound="(async()=> await DataBoundHandler())" OnActionComplete="@(async(a)=>await ActionComplete(a))"
+                                OnDataBound="@(async(a)=>await OnDataBoundGrid(a))" CommandClicked="(async (a)=> await CommandClickHandler(a))"
+                                OnToolbarClick="@(async(a)=> await ClickHandler(a))"
+                                QueryCellInfo="(async(a)=> await QueryCellInfoHandler(a))" TValue="ModeloPedidosPendientes"></GridEvents>
+                    <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                     <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                     <GridEditSettings AllowEditing="true" Mode="EditMode.Dialog">
                         <Template>
                             @{
-                                var prev = context as ModeloPedidosPendientes;
+                                var prev = (context as ModeloPedidosPendientes);
                                 <div>
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
                                             <label class="">Producto:</label>
-                                            <br/>
+                                            <br />
                                             <SfTextBox ID="CG_ART" @bind-Value="@(prev.CG_ART)" Readonly="true"></SfTextBox>
                                         </div>
 
                                         <div class="form-group col-md-6">
                                             <label class="">Descripcion del Producto:</label>
-                                            <br/>
+                                            <br />
                                             <SfTextBox ID="DES_ART" @bind-Value="@(prev.DES_ART)" Readonly="true"></SfTextBox>
                                         </div>
                                     </div>
@@ -58,13 +74,13 @@
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
                                             <label class="">Resorte:</label>
-                                            <br/>
+                                            <br />
                                             <SfTextBox ID="RESORTE" @bind-Value="@(prev.CAMPOCOM2)"></SfTextBox>
                                         </div>
 
                                         <div class="form-group col-md-6">
                                             <label class="">Pedido:</label>
-                                            <br/>
+                                            <br />
                                             <SfNumericTextBox ID="Pedido" Format="N0" @bind-Value="@(prev.PEDIDO)" Readonly="true" ShowSpinButton="false"></SfNumericTextBox>
                                         </div>
                                     </div>
@@ -72,12 +88,12 @@
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
                                             <label class="">O. Fabricación:</label>
-                                            <br/>
+                                            <br />
                                             <SfNumericTextBox ID="Of" Format="N0" @bind-Value="@(prev.CG_ORDF)" Readonly="true" ShowSpinButton="false"></SfNumericTextBox>
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label>Fecha Prevista:</label>
-                                            <br/>
+                                            <br />
                                             <SfDatePicker ID="FE_PED" @bind-Value="@(prev.ENTRPREV)" Placeholder="Fecha Prevista"></SfDatePicker>
                                         </div>
                                     </div>
@@ -85,7 +101,7 @@
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
                                             <label class="">Observaciones:</label>
-                                            <br/>
+                                            <br />
                                             <SfTextBox ID="Obs" @bind-Value="@(prev.Obseritem)" Multiline="true" Readonly="true"></SfTextBox>
                                         </div>
                                     </div>
@@ -98,7 +114,7 @@
                         <GridColumn Field=@nameof(ModeloPedidosPendientes.FE_MOV) HeaderText="Fecha Pedido">
                             <Template>
                                 @{
-                                    var Value = context as ModeloPedidosPendientes;
+                                    ModeloPedidosPendientes Value = (context as ModeloPedidosPendientes);
                                     <span>@Value.FE_MOV.ToString("dd/MM/yyyy")</span>
                                 }
                             </Template>
@@ -108,8 +124,10 @@
                         <GridColumn HeaderText="Entrega" Width="90px">
                             <GridCommandColumns>
                                 <GridCommandColumn Type="CommandButtonType.None" Title="Entrega"
-                                                   ButtonOption="@new CommandButtonOptions { IconCss = "fa fa-chevron-circle-up ", Content = "", CssClass = ""
-                                        }"/>
+                                                   ButtonOption="@(new CommandButtonOptions()
+                                                           {
+                                                               IconCss = "fa fa-chevron-circle-up ", Content="", CssClass=""
+                                                           })" />
                             </GridCommandColumns>
                         </GridColumn>
                         <GridColumn Field=@nameof(ModeloPedidosPendientes.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left"></GridColumn>
@@ -119,16 +137,16 @@
                         <GridColumn Field=@nameof(ModeloPedidosPendientes.CANTPED) HeaderText="Cant">
                             <Template>
                                 @{
-                                    var Value = context as ModeloPedidosPendientes;
-                                    if (Value.CANTPED.ToString().Substring(1, 1) == ".")
+                                    ModeloPedidosPendientes Value = (context as ModeloPedidosPendientes);
+                                    if (@Value.CANTPED.ToString().Substring(1, 1) == ".")
                                     {
                                         <span>@Value.CANTPED.ToString().Substring(0, 1)</span>
                                     }
-                                    else if (Value.CANTPED.ToString().Substring(2, 1) == ".")
+                                    else if (@Value.CANTPED.ToString().Substring(2, 1) == ".")
                                     {
                                         <span>@Value.CANTPED.ToString().Substring(0, 2)</span>
                                     }
-                                    else if (Value.CANTPED.ToString().Substring(3, 1) == ".")
+                                    else if (@Value.CANTPED.ToString().Substring(3, 1) == ".")
                                     {
                                         <span>@Value.CANTPED.ToString().Substring(0, 3)</span>
                                     }
@@ -138,7 +156,7 @@
                         <GridColumn Field=@nameof(ModeloPedidosPendientes.ENTRPREV) HeaderText="Fecha Prevista">
                             <Template>
                                 @{
-                                    var Value = context as ModeloPedidosPendientes;
+                                    ModeloPedidosPendientes Value = (context as ModeloPedidosPendientes);
                                     <span>@Value.ENTRPREV.ToString("dd/MM/yyyy")</span>
                                 }
                             </Template>
@@ -187,6 +205,5 @@
         background-color: #d8b90d;
     }
 </style>
-
 @code {
 }

@@ -1,8 +1,22 @@
 ﻿@page "/sc/ProTarea/list"
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using System.Configuration;
+@using System.Data.SqlClient;
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.BarcodeGenerator
+@using System.Text.Json
+@using System.Linq
 @inject IJSRuntime JsRuntime
+@using SupplyChain
+@using System.Net.Http.Json
 @inject HttpClient Http
 @inject NavigationManager NavManager
-@using ProTarea = SupplyChain.ProTarea
 @inherits SupplyChain.Pages.ProTareax.ProTareaxPageBase
 
 <div class="col-lg-12 control-section">
@@ -12,14 +26,14 @@
                     @ref="Grid" DataSource="@pts" ID="protareaGrid"
                     AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true"
                     AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
-                <GridSelectionSettings Type="SelectionType.Multiple"></GridSelectionSettings>
+                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                 <GridEvents OnToolbarClick="@ClickHandler" OnActionBegin="ActionBegin" TValue="ProTarea"></GridEvents>
-                <GridFilterSettings Type="@FilterType.CheckBox"></GridFilterSettings>
+                <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                 <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                 <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@EditMode.Dialog">
                     <Template>
                         @{
-                            var pt = context as ProTarea;
+                            var pt = (context as ProTarea);
                             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-Generalidades" role="tab" aria-controls="pills-home" aria-selected="true">Modelos</a>
@@ -59,11 +73,11 @@
                     </Template>
                 </GridEditSettings>
                 <GridColumns>
-                    <GridColumn Field="@nameof(ProTarea.TAREAPROC)" HeaderText="Tarea" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
-                    <GridColumn Field="@nameof(ProTarea.DESCRIP)" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field="@nameof(ProTarea.OBSERVAC)" HeaderText="Observaciones" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(ProTarea.TAREAPROC) HeaderText="Tarea" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(ProTarea.DESCRIP) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(ProTarea.OBSERVAC) HeaderText="Observaciones" TextAlign="TextAlign.Left" Width="200"></GridColumn>
 
-                    <GridColumn Field="@nameof(ProTarea.CG_CIA)" HeaderText="CG_CIA" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(ProTarea.CG_CIA) HeaderText="CG_CIA" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                 </GridColumns>
             </SfGrid>
         </div>
@@ -120,6 +134,5 @@
         height: 500px;
     }
 </style>
-
 @code {
 }

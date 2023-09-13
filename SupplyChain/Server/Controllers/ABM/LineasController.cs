@@ -1,121 +1,142 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
 
-namespace SupplyChain;
-
-[Route("api/[controller]")]
-[ApiController]
-public class LineasController : ControllerBase
+namespace SupplyChain
 {
-    private readonly LineasRepository _lineasRepository;
-
-    public LineasController(LineasRepository lineasRepository)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class LineasController : ControllerBase
     {
-        _lineasRepository = lineasRepository;
-    }
+        private readonly LineasRepository _lineasRepository;
 
-    // GET: api/Lineas
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Lineas>>> GetLineas()
-    {
-        try
+        public LineasController(LineasRepository lineasRepository)
         {
-            return await _lineasRepository.ObtenerTodos();
+            this._lineasRepository = lineasRepository;
         }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-    }
 
-    // GET: api/Lineas/Existe/{id}
-    [HttpGet("Existe/{id}")]
-    public async Task<ActionResult<bool>> ExisteLinea(int id)
-    {
-        try
+        // GET: api/Lineas
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Lineas>>> GetLineas()
         {
-            return await _lineasRepository.Existe(id);
+            try
+            {
+                return await _lineasRepository.ObtenerTodos();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-    }
 
-    // PUT: api/Lineas/{id}
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutLineas(int id, Lineas Linea)
-    {
-        if (id != Linea.Id) return BadRequest();
-
-        try
+        // GET: api/Lineas/Existe/{id}
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>> ExisteLinea(int id)
         {
-            await _lineasRepository.Actualizar(Linea);
+            try
+            {
+                return await _lineasRepository.Existe(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
-        catch (DbUpdateConcurrencyException)
+
+        // PUT: api/Lineas/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutLineas(int id, Lineas Linea)
         {
-            if (!await _lineasRepository.Existe(id))
+            if (id != Linea.Id)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                await _lineasRepository.Actualizar(Linea);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _lineasRepository.Existe(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            return Ok(Linea);
+        }
+
+        // POST: api/Lineas
+        [HttpPost]
+        public async Task<ActionResult<Lineas>> PostLineas(Lineas Linea)
+        {
+            try
+            {
+                await _lineasRepository.Agregar(Linea);
+                return CreatedAtAction("GetLineas", new { id = Linea.Id }, Linea);
+            }
+            catch (DbUpdateException exx)
+            {
+                if (!await _lineasRepository.Existe(Linea.Id))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        // DELETE: api/Lineas/{id}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Lineas>> DeleteLineas(int id)
+        {
+            var Linea = await _lineasRepository.ObtenerPorId(id);
+            if (Linea == null)
+            {
                 return NotFound();
-            return BadRequest();
+            }
+
+            await _lineasRepository.Remover(id);
+
+            return Linea;
         }
-        catch (Exception ex)
+
+        // POST: api/Lineas/PostList
+        [HttpPost("PostList")]
+        public async Task<ActionResult<Lineas>> PostList(List<Lineas> lineas)
         {
-            return BadRequest(ex);
+            try
+            {
+                foreach (var item in lineas)
+                {
+                    await _lineasRepository.Remover(item.Id);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
-
-        return Ok(Linea);
-    }
-
-    // POST: api/Lineas
-    [HttpPost]
-    public async Task<ActionResult<Lineas>> PostLineas(Lineas Linea)
-    {
-        try
-        {
-            await _lineasRepository.Agregar(Linea);
-            return CreatedAtAction("GetLineas", new { id = Linea.Id }, Linea);
-        }
-        catch (DbUpdateException exx)
-        {
-            if (!await _lineasRepository.Existe(Linea.Id))
-                return Conflict();
-            return BadRequest();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-    }
-
-    // DELETE: api/Lineas/{id}
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<Lineas>> DeleteLineas(int id)
-    {
-        var Linea = await _lineasRepository.ObtenerPorId(id);
-        if (Linea == null) return NotFound();
-
-        await _lineasRepository.Remover(id);
-
-        return Linea;
-    }
-
-    // POST: api/Lineas/PostList
-    [HttpPost("PostList")]
-    public async Task<ActionResult<Lineas>> PostList(List<Lineas> lineas)
-    {
-        try
-        {
-            foreach (var item in lineas) await _lineasRepository.Remover(item.Id);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest();
-        }
-
-        return Ok();
     }
 }

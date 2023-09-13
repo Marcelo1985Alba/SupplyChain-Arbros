@@ -1,30 +1,30 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using SupplyChain;
+using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Navigations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using Syncfusion.Blazor.Grids;
-using Syncfusion.Blazor.Navigations;
-using Action = Syncfusion.Blazor.Grids.Action;
 
-namespace SupplyChain.Pages.TipoCeldas;
-
-public class TipoCeldasPageBase : ComponentBase
+namespace SupplyChain.Pages.TipoCeldas
 {
-    public bool Disabled = false;
-
-    public bool Enabled = true;
-    protected SfGrid<TipoCelda> Grid;
-
-    protected List<TipoCelda> tipoceldas = new();
-
-    protected List<object> Toolbaritems = new()
+    public class TipoCeldasPageBase : ComponentBase
     {
+        [Inject] protected HttpClient Http { get; set; }
+        [Inject] protected IJSRuntime JsRuntime { get; set; }
+        protected SfGrid<TipoCelda> Grid;
+
+        public bool Enabled = true;
+        public bool Disabled = false;
+
+        protected List<TipoCelda> tipoceldas = new List<TipoCelda>();
+
+        protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
         "Add",
         "Edit",
@@ -34,106 +34,120 @@ public class TipoCeldasPageBase : ComponentBase
         "ExcelExport"
     };
 
-    [Inject] protected HttpClient Http { get; set; }
-    [Inject] protected IJSRuntime JsRuntime { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        tipoceldas = await Http.GetFromJsonAsync<List<TipoCelda>>("api/TipoCelda");
-
-        await base.OnInitializedAsync();
-    }
-
-    public void ActionBeginHandler(ActionEventArgs<TipoCelda> args)
-    {
-        if (args.RequestType == Action.BeginEdit)
-            Enabled = false;
-        else
-            Enabled = true;
-    }
-
-    public async Task ActionBegin(ActionEventArgs<TipoCelda> args)
-    {
-        if (args.RequestType == Action.Save)
+        protected override async Task OnInitializedAsync()
         {
-            HttpResponseMessage response;
-            var found = tipoceldas.Any(o => o.CG_TIPOCELDA == args.Data.CG_TIPOCELDA);
-            var ur = new Orificio();
+            tipoceldas = await Http.GetFromJsonAsync<List<TipoCelda>>("api/TipoCelda");
 
-            if (!found)
+            await base.OnInitializedAsync();
+        }
+
+        public void ActionBeginHandler(ActionEventArgs<TipoCelda> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                args.Data.CG_TIPOCELDA = tipoceldas.Max(s => s.CG_TIPOCELDA) + 1;
-                response = await Http.PostAsJsonAsync("api/TipoCelda", args.Data);
+                this.Enabled = false;
             }
             else
             {
-                response = await Http.PutAsJsonAsync($"api/TipoCelda/{args.Data.CG_TIPOCELDA}", args.Data);
-            }
-
-            if (response.StatusCode == HttpStatusCode.Created)
-            {
+                this.Enabled = true;
             }
         }
-
-        if (args.RequestType == Action.Delete) await EliminarCeldas(args);
-    }
-
-    private async Task EliminarCeldas(ActionEventArgs<TipoCelda> args)
-    {
-        try
+        public async Task ActionBegin(ActionEventArgs<TipoCelda> args)
         {
-            if (args.Data != null)
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
-                var isConfirmed =
-                    await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar la Areas?");
-                if (isConfirmed)
-                    //servicios.Remove(servicios.Find(m => m.PEDIDO == args.Data.PEDIDO));
-                    await Http.DeleteAsync($"api/TipóCelda/{args.Data.CG_TIPOCELDA}");
-            }
-        }
-        catch (Exception ex)
-        {
-        }
-    }
+                HttpResponseMessage response;
+                bool found = tipoceldas.Any(o => o.CG_TIPOCELDA == args.Data.CG_TIPOCELDA);
+                Orificio ur = new Orificio();
 
-    public async Task ClickHandler(ClickEventArgs args)
-    {
-        if (args.Item.Text == "Copy")
-            if (Grid.SelectedRecords.Count > 0)
-                foreach (var selectedRecord in Grid.SelectedRecords)
+                if (!found)
                 {
-                    var isConfirmed =
-                        await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar el area?");
+                    args.Data.CG_TIPOCELDA = tipoceldas.Max(s => s.CG_TIPOCELDA) + 1;
+                    response = await Http.PostAsJsonAsync("api/TipoCelda", args.Data);
+                }
+                else
+                {
+                    response = await Http.PutAsJsonAsync($"api/TipoCelda/{args.Data.CG_TIPOCELDA}", args.Data);
+                }
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                {
+
+                }
+            }
+
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+            {
+                await EliminarCeldas(args);
+            }
+        }
+
+        private async Task EliminarCeldas(ActionEventArgs<TipoCelda> args)
+        {
+            try
+            {
+                if (args.Data != null)
+                {
+                    bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea eliminar la Areas?");
                     if (isConfirmed)
                     {
-                        var Nuevo = new TipoCelda();
+                        //servicios.Remove(servicios.Find(m => m.PEDIDO == args.Data.PEDIDO));
+                        await Http.DeleteAsync($"api/TipóCelda/{args.Data.CG_TIPOCELDA}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
 
-                        Nuevo.CG_TIPOCELDA = tipoceldas.Max(s => s.CG_TIPOCELDA) + 1;
-                        Nuevo.DES_TIPOCELDA = selectedRecord.DES_TIPOCELDA;
-                        Nuevo.CG_CIA = selectedRecord.CG_CIA;
+            }
+        }
 
-
-                        var response = await Http.PostAsJsonAsync("api/TipoCelda", Nuevo);
-
-                        if (response.StatusCode == HttpStatusCode.Created)
+        public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+        {
+            if (args.Item.Text == "Copy")
+            {
+                if (this.Grid.SelectedRecords.Count > 0)
+                {
+                    foreach (TipoCelda selectedRecord in this.Grid.SelectedRecords)
+                    {
+                        bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar el area?");
+                        if (isConfirmed)
                         {
-                            Grid.Refresh();
-                            var tipocelda = await response.Content.ReadFromJsonAsync<TipoCelda>();
-                            await InvokeAsync(StateHasChanged);
-                            Nuevo.CG_TIPOCELDA = tipocelda.CG_TIPOCELDA;
-                            tipoceldas.Add(Nuevo);
-                            var itemsJson = JsonSerializer.Serialize(tipocelda);
-                            Console.WriteLine(itemsJson);
-                            tipoceldas.OrderByDescending(o => o.CG_TIPOCELDA);
+                            TipoCelda Nuevo = new TipoCelda();
+
+                            Nuevo.CG_TIPOCELDA = tipoceldas.Max(s => s.CG_TIPOCELDA) + 1;
+                            Nuevo.DES_TIPOCELDA = selectedRecord.DES_TIPOCELDA;
+                            Nuevo.CG_CIA = selectedRecord.CG_CIA;
+                         
+               
+
+                            var response = await Http.PostAsJsonAsync("api/TipoCelda", Nuevo);
+
+                            if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                            {
+                                Grid.Refresh();
+                                var tipocelda = await response.Content.ReadFromJsonAsync<TipoCelda>();
+                                await InvokeAsync(StateHasChanged);
+                                Nuevo.CG_TIPOCELDA = tipocelda.CG_TIPOCELDA;
+                                tipoceldas.Add(Nuevo);
+                                var itemsJson = JsonSerializer.Serialize(tipocelda);
+                                Console.WriteLine(itemsJson);
+                                tipoceldas.OrderByDescending(o => o.CG_TIPOCELDA);
+                            }
+
                         }
                     }
                 }
+            }
+            if (args.Item.Text == "Excel Export")
+            {
+                await this.Grid.ExcelExport();
+            }
+        }
 
-        if (args.Item.Text == "Excel Export") await Grid.ExcelExport();
-    }
-
-    public void Refresh()
-    {
-        Grid.Refresh();
+        public void Refresh()
+        {
+            Grid.Refresh();
+        }
     }
 }

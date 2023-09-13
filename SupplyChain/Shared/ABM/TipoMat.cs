@@ -1,12 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
-namespace SupplyChain;
-
-[Table("TipoMat")]
-public class TipoMat
+namespace SupplyChain
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public string TIPO { get; set; } = "";
+    [Table("TipoMat")]
+    public class TipoMat
+    {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string TIPO { get; set; } = "";
+
+    }
 }
+
+
+
+
+      

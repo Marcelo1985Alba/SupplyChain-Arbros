@@ -1,4 +1,5 @@
-﻿@inherits EmailEnviadosBase
+﻿
+@inherits EmailEnviadosBase
 <div class="row">
     <div class="col-12">
         <h3>Emails Enviados</h3>
@@ -9,12 +10,12 @@
 <SfGrid @ref="refGrid" TValue="SolCotEmail" DataSource="@Data" Height="200px" EnableVirtualization="true" AllowSorting="true">
     <SfSpinner Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="mostrarSpinnerCargando"></SfSpinner>
     <GridColumns>
-        <GridColumn Field="@nameof(SolCotEmail.Id)" HeaderText="N° Solic" TextAlign="TextAlign.Left" Width="100px" Format="N0"></GridColumn>
-        <GridColumn Field="@nameof(SolCotEmail.FE_SOLCOT)" HeaderText="Fecha" TextAlign="TextAlign.Left" Width="100px" Format="dd/MM/yyyy"></GridColumn>
-        <GridColumn Field="@nameof(SolCotEmail.CG_PROVE)" HeaderText="Codigo" TextAlign="TextAlign.Left" Width="100px" Format="N0"></GridColumn>
-        <GridColumn Field="@nameof(SolCotEmail.Proveedor)" HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-        <GridColumn Field="@nameof(SolCotEmail.CONTACTO)" HeaderText="Contacto" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-        <GridColumn Field="@nameof(SolCotEmail.EMAIL)" HeaderText="Email" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
-
+        <GridColumn Field=@nameof(SolCotEmail.Id) HeaderText="N° Solic" TextAlign="TextAlign.Left" Width="100px" Format="N0"></GridColumn>
+        <GridColumn Field=@nameof(SolCotEmail.FE_SOLCOT) HeaderText="Fecha" TextAlign="TextAlign.Left" Width="100px" Format="dd/MM/yyyy"></GridColumn>
+        <GridColumn Field=@nameof(SolCotEmail.CG_PROVE) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="100px" Format="N0"></GridColumn>
+        <GridColumn Field=@nameof(SolCotEmail.Proveedor) HeaderText="Proveedor" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+        <GridColumn Field=@nameof(SolCotEmail.CONTACTO) HeaderText="Contacto" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+        <GridColumn Field=@nameof(SolCotEmail.EMAIL) HeaderText="Email" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+        
     </GridColumns>
 </SfGrid>

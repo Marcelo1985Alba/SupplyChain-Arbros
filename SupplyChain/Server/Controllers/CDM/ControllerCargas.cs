@@ -1,47 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
-namespace SupplyChain;
-
-[Route("api/[controller]")]
-[ApiController]
-public class CargasController : ControllerBase
+namespace SupplyChain
 {
-    private readonly AppDbContext _context;
-
-    public CargasController(AppDbContext context)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CargasController : ControllerBase
     {
-        _context = context;
-    }
+        private readonly AppDbContext _context;
 
-    // GET: api/Cargas
-    [HttpGet]
-    public async Task<IEnumerable<ModeloCarga>> Get()
-    {
-        try
+        public CargasController(AppDbContext context)
         {
-            //Llena FECHA_PREVISTA_FABRICACION en casos que esté en null
-            await _context.Database.ExecuteSqlRawAsync("EXEC NET_PCP_Carga_Poner_Fecha_Prevista_Fabricacion 0");
+            _context = context;
+        }
 
-            // Llena tabla de carga
-            List<ModeloCarga> dbCarga;
-
-            dbCarga = await _context.Cargas.FromSqlRaw("EXEC NET_PCP_Carga_Maq 1")
-                .ToListAsync();
-            dbCarga = dbCarga.OrderBy(x => x.ORDEN_CELDA)
-                .ThenBy(x => x.CG_CELDA)
-                .ThenByDescending(x => x.CG_ESTADOCARGA)
-                .ThenBy(x => x.ORDEN)
-                .ThenBy(x => x.FECHA_PREVISTA_FABRICACION).ToList();
-
-            // Arma vector con colores para las barras
-            var xArrayColores = new string[138]
+        // GET: api/Cargas
+        [HttpGet]
+        public async Task<IEnumerable<ModeloCarga>> Get()
+        {
+            try
             {
+                //Llena FECHA_PREVISTA_FABRICACION en casos que esté en null
+                await _context.Database.ExecuteSqlRawAsync("EXEC NET_PCP_Carga_Poner_Fecha_Prevista_Fabricacion 0");
+
+                // Llena tabla de carga
+                List<ModeloCarga> dbCarga;
+
+                dbCarga = await _context.Cargas.FromSqlRaw("EXEC NET_PCP_Carga_Maq 1")
+                    .ToListAsync();
+                dbCarga = dbCarga.OrderBy(x => x.ORDEN_CELDA)
+                    .ThenBy(x => x.CG_CELDA)
+                    .ThenByDescending(x => x.CG_ESTADOCARGA)
+                    .ThenBy(x => x.ORDEN)
+                    .ThenBy(x => x.FECHA_PREVISTA_FABRICACION).ToList();
+
+                // Arma vector con colores para las barras
+                string[] xArrayColores = new string[138] {
                 Color.AliceBlue.Name,
                 Color.AntiqueWhite.Name,
                 Color.Aqua.Name,
@@ -182,33 +185,37 @@ public class CargasController : ControllerBase
                 Color.YellowGreen.Name
             };
 
-            // Carga colores en dbCarga
-            var xColor = 0;
-            foreach (var xRowCarga in dbCarga)
-            {
-                foreach (var xRowCargaColores in dbCarga)
-                    // Busca si alguna de las ordenes asociadas tiene BACKGROUND, si lo tiene se lo asigna
-                    if (xRowCarga.CG_ORDFASOC.ToString() == xRowCargaColores.CG_ORDFASOC.ToString() &&
-                        xRowCargaColores.BACKGROUND != "")
-                    {
-                        xRowCarga.BACKGROUND = xRowCargaColores.BACKGROUND;
-                        break;
-                    }
-
-                // Si todavia no tiene color, se le asigna uno del Vector de Colores
-                if (xRowCarga.BACKGROUND.Trim() == "")
+                // Carga colores en dbCarga
+                int xColor = 0;
+                foreach (ModeloCarga xRowCarga in dbCarga)
                 {
-                    xRowCarga.BACKGROUND = xArrayColores[xColor];
-                    xColor++;
-                    if (xColor == xArrayColores.Length) xColor = 0;
+                    foreach (ModeloCarga xRowCargaColores in dbCarga)
+                    {
+                        // Busca si alguna de las ordenes asociadas tiene BACKGROUND, si lo tiene se lo asigna
+                        if (xRowCarga.CG_ORDFASOC.ToString() == xRowCargaColores.CG_ORDFASOC.ToString() && xRowCargaColores.BACKGROUND.ToString() != "")
+                        {
+                            xRowCarga.BACKGROUND = xRowCargaColores.BACKGROUND;
+                            break;
+                        }
+                    }
+                    // Si todavia no tiene color, se le asigna uno del Vector de Colores
+                    if (xRowCarga.BACKGROUND.ToString().Trim() == "")
+                    {
+                        xRowCarga.BACKGROUND = xArrayColores[xColor];
+                        xColor++;
+                        if (xColor == (xArrayColores.Length))
+                        {
+                            xColor = 0;
+                        }
+                    }
                 }
-            }
 
-            return dbCarga;
-        }
-        catch (Exception ex)
-        {
-            return new List<ModeloCarga>();
+                return dbCarga;
+            }
+            catch (Exception ex)
+            {
+                return new List<ModeloCarga>();
+            }
         }
     }
 }

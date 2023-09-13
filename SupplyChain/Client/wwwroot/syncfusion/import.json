@@ -1,33 +1,33 @@
 {
-  "name": "syncfusion-blazor",
-  "version": "20.1.47",
-  "components": [
-    "SfGrid",
-    "SfAccordion",
-    "SfTab",
-    "SfToolbar",
-    "SfFileManager",
-    "SfSidebar",
-    "SfTreeView",
-    "SfPdfViewer",
-    "SfSpinner",
-    "SfToast",
-    "SfCheckBox",
-    "SfNumericTextBox",
-    "SfTextBox",
-    "SfComboBox",
-    "SfDropDownList",
-    "SfListBox",
-    "SfChart",
-    "SfAccumulationChart",
-    "SfKanban",
-    "SfListView",
-    "SfCard",
-    "SfDialog",
-    "SfButton"
-  ],
-  "minified": true,
-  "themes": [
-    "material"
-  ]
+    "name": "syncfusion-blazor",
+    "version": "20.1.47",
+    "components": [
+        "SfGrid",
+        "SfAccordion",
+        "SfTab",
+        "SfToolbar",
+        "SfFileManager",
+        "SfSidebar",
+        "SfTreeView",
+        "SfPdfViewer",
+        "SfSpinner",
+        "SfToast",
+        "SfCheckBox",
+        "SfNumericTextBox",
+        "SfTextBox",
+        "SfComboBox",
+        "SfDropDownList",
+        "SfListBox",
+        "SfChart",
+        "SfAccumulationChart",
+        "SfKanban",
+        "SfListView",
+        "SfCard",
+        "SfDialog",
+        "SfButton"
+    ],
+    "minified": true,
+    "themes": [
+        "material"
+    ]
 }

@@ -10,37 +10,36 @@
 
 
         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="false" AllowResizing="true"
-                @ref="refGrid" DataSource="@pedidos" Width="100%"
-                AllowExcelExport="true" AllowGrouping="true" ID="grdPedidos"
+                @ref="refGrid" DataSource="@pedidos" Width="100%" 
+                AllowExcelExport="true" AllowGrouping="true" ID="grdPedidos" 
                 AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
-            <GridFilterSettings Type="FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
-            <GridSelectionSettings Type="SelectionType.Single"></GridSelectionSettings>
+            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu" IgnoreAccent="true"></GridFilterSettings>
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete="OnActionCompleteHandler"
                         OnToolbarClick="OnToolbarHandler"
-                        TValue="PedCli">
-            </GridEvents>
+                        TValue="PedCli"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" NewRowPosition="NewRowPosition.Top"
-                              Mode="@EditMode.Dialog">
+                              Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
             </GridEditSettings>
             <GridColumns>
                 @*<GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>*@
-                <GridColumn Field="@nameof(PedCli.Id)" HeaderText="Id" Visible="false" IsPrimaryKey="true" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                <GridColumn Field="@nameof(PedCli.FE_PED)" HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                <GridColumn Field="@nameof(PedCli.PRESUPUESTOID)" HeaderText="Presupuesto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                <GridColumn Field="@nameof(PedCli.PEDIDO)" HeaderText="Pedido" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                <GridColumn Field="@nameof(PedCli.UNID)" HeaderText="Unidad" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
-                <GridColumn Field="@nameof(PedCli.CANTPED)" HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="120px" Format="N2"></GridColumn>
-                <GridColumn Field="@nameof(PedCli.TOTAL)" HeaderText="TOTAL" TextAlign="TextAlign.Left" Width="120px" Format="N2"></GridColumn>
-                <GridColumn Field="@nameof(PedCli.NUMOCI)" HeaderText="OCI" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
-                <GridColumn Field="@nameof(PedCli.ORCO)" HeaderText="Orden Compra" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field="@nameof(PedCli.CG_ART)" HeaderText="Articulo" TextAlign="TextAlign.Left" Width="160px"></GridColumn>
-                <GridColumn Field="@nameof(PedCli.DES_ART)" HeaderText="Descripcion Articulo" TextAlign="TextAlign.Left" Width="220px"></GridColumn>
-                <GridColumn Field="@nameof(PedCli.CG_CLI)" HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px"></GridColumn>
-                <GridColumn Field="@nameof(PedCli.DES_CLI)" HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
-                <GridColumn Field="@nameof(PedCli.BONIFIC)" HeaderText="Bonficacion %" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                <GridColumn Field="@nameof(PedCli.CONDVEN)" HeaderText="Cond.Pago" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.Id) HeaderText="Id" Visible="false" IsPrimaryKey="true" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.FE_PED) HeaderText="Fecha" Format="dd/MM/yyyy" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.PRESUPUESTOID) HeaderText="Presupuesto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.UNID) HeaderText="Unidad" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.CANTPED) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="120px" Format="N2"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.TOTAL) HeaderText="TOTAL" TextAlign="TextAlign.Left" Width="120px" Format="N2"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.NUMOCI) HeaderText="OCI" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.ORCO) HeaderText="Orden Compra" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.CG_ART) HeaderText="Articulo" TextAlign="TextAlign.Left" Width="160px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.DES_ART) HeaderText="Descripcion Articulo" TextAlign="TextAlign.Left" Width="220px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.CG_CLI) HeaderText="Cliente" TextAlign="TextAlign.Left" Format="N0" Width="110px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.BONIFIC) HeaderText="Bonficacion %" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.CONDVEN) HeaderText="Cond.Pago" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
 
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
@@ -50,32 +49,28 @@
     @if (popupFormVisible)
     {
         <FormPedido @ref="@refFormPedido" Show="popupFormVisible" Pedido="@PedidoSeleccionado" CondicionesPagos="@condicionesPagos"
-                    OnCerrar="@(() => popupFormVisible = false)" CondicionesEntrega="@condicionesEntrega"
-                    DireccionesEntregas="@direccionesEntregas" PorPedido="@abrePorPedido"
-                    OnGuardar="@(p => OnPedidoGuardado(p))">
+                    OnCerrar="@(()=> popupFormVisible = false)" CondicionesEntrega="@condicionesEntrega"
+                    DireccionesEntregas="@direccionesEntregas" PorPedido ="@abrePorPedido"
+                    OnGuardar="@((p)=> OnPedidoGuardado(p))">
         </FormPedido>
     }
 
 
     <ConfirmacionDialog @ref="@refConfirmacionDialog" ContentButtonConfirm="Por Pedido" ContentButtonConfirmTwo="Por OCI"
-                        OnConfirm="@(() => AbrirNumOCIPedido(true))" MontrarOtroButton="true"
-                        OnConfirmTwo="@(() => AbrirNumOCIPedido(false))">
-        <HeaderTempalte>
-            <div class="text-white-50">Confirmarcion</div>
-        </HeaderTempalte>
+                        OnConfirm="@(()=> AbrirNumOCIPedido(true))" MontrarOtroButton="true"
+                        OnConfirmTwo="@(()=> AbrirNumOCIPedido(false))">
+        <HeaderTempalte><div class="text-white-50">Confirmarcion</div></HeaderTempalte>
         <ContentTemplate>
             Como desea editar?
         </ContentTemplate>
 
     </ConfirmacionDialog>
 
-    <ConfirmacionDialog @ref="@PreguntaEliminarDialog" ContentButtonConfirm="@textbotonPorPedido"
+    <ConfirmacionDialog @ref="@PreguntaEliminarDialog" ContentButtonConfirm="@textbotonPorPedido" 
                         ContentButtonConfirmTwo="@textbotonPorOCI"
-                        OnConfirm="@(() => PreguntaEliminarPorNumOCIPedido(true))" MontrarOtroButton="true"
-                        OnConfirmTwo="@(() => PreguntaEliminarPorNumOCIPedido(false))">
-        <HeaderTempalte>
-            <div class="text-white-50">Confirmarcion</div>
-        </HeaderTempalte>
+                        OnConfirm="@(()=> PreguntaEliminarPorNumOCIPedido(true))" MontrarOtroButton="true"
+                        OnConfirmTwo="@(()=> PreguntaEliminarPorNumOCIPedido(false))">
+        <HeaderTempalte><div class="text-white-50">Confirmarcion</div></HeaderTempalte>
         <ContentTemplate>
             Como desea Eliminar?
         </ContentTemplate>
@@ -83,10 +78,8 @@
     </ConfirmacionDialog>
 
     <ConfirmacionDialog @ref="@ConfirmacionEliminarDialog" ContentButtonConfirm="Si"
-                        OnConfirm="@(() => Eliminar())">
-        <HeaderTempalte>
-            <div class="text-white-50">Confirmarcion</div>
-        </HeaderTempalte>
+                        OnConfirm="@(()=> Eliminar())">
+        <HeaderTempalte><div class="text-white-50">Confirmarcion</div></HeaderTempalte>
         <ContentTemplate>
             Está seguro que desea Eliminar?
         </ContentTemplate>

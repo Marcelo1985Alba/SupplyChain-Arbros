@@ -1,10 +1,19 @@
-﻿using SupplyChain.Server.Data.Repository;
+﻿using Microsoft.EntityFrameworkCore;
+using SupplyChain.Server.Data.Repository;
+using SupplyChain.Shared;
+using SupplyChain.Shared.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace SupplyChain.Server.Repositorios;
-
-public class LineasRepository : Repository<Lineas, int>
+namespace SupplyChain.Server.Repositorios
 {
-    public LineasRepository(AppDbContext appDb) : base(appDb)
+    public class LineasRepository : Repository<Lineas, int>
     {
+        public LineasRepository(AppDbContext appDb) : base(appDb)
+        {
+
+        }
     }
 }

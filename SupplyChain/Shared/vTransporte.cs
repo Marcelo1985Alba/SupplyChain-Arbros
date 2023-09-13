@@ -1,7 +1,14 @@
-﻿namespace SupplyChain.Shared;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class vTransporte : EntityBase<int>
+namespace SupplyChain.Shared
 {
-    public string DESCRIPCION { get; set; }
-    public string CALLE { get; set; }
+    public class vTransporte : EntityBase<int>
+    {
+        public string DESCRIPCION { get; set; }
+        public string CALLE { get; set; }
+    }
 }

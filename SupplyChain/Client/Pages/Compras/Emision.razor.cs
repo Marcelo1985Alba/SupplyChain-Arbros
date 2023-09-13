@@ -46,6 +46,7 @@ namespace SupplyChain.Client.Pages.Emision
         public bool ocagenerar { get; set; } = true;
         public bool ocabierta { get; set; } = false;
         public string proveocabierta { get; set; } = "";
+<<<<<<< HEAD
         public int onumero { get; set; } = 0;
         public int numeroorden { get; set; } = 0;
         public Compra item { get; set; } = new Compra();
@@ -65,6 +66,27 @@ namespace SupplyChain.Client.Pages.Emision
         public string xespecif = "";
         public string xespecif2 = "";
 
+=======
+
+        public int onumero { get; set; } = 0;
+        public Compra ocompraseleccionada { get; set; } = new Compra();
+        public decimal? bonif { get; set; } = 0;
+        public string listaordenescompra { get; set; } = "";
+
+        public SfToast ToastObj;
+        protected NotificacionToast NotificacionObj;
+        protected bool ToastVisible { get; set; } = false;
+
+        protected List<vCondicionesPago> condiconespago = new List<vCondicionesPago>();
+        protected List<Proveedores_compras> proveedorescompras = new List<Proveedores_compras>();
+        protected List<Compra> insumosproveedor = new();
+        protected List<Compra> ordenSeleccionada = new();
+        protected SfGrid<Compra> GridProve;
+
+        public string xespecif = "";
+        public string xespecif2 = "";
+
+>>>>>>> parent of 1c4fe0e (08092023 - agregue celdas y operaciones con boton de enviar al archivo php)
         public string DropVal = "";
         public string xcondven = "";
         public string Obs = "";
@@ -115,7 +137,11 @@ namespace SupplyChain.Client.Pages.Emision
             ocabierta = false;
             ocagenerar = true;
             insumosproveedor = new();
+<<<<<<< HEAD
             item = new();
+=======
+            ocompraseleccionada = new();
+>>>>>>> parent of 1c4fe0e (08092023 - agregue celdas y operaciones con boton de enviar al archivo php)
             bonif = 0;
             xespecif = "";
             DropVal = "";
@@ -136,7 +162,11 @@ namespace SupplyChain.Client.Pages.Emision
 
         public async Task EnviarObjetoSeleccionado(Compra compra)
         {
+<<<<<<< HEAD
             item = compra;
+=======
+            ocompraseleccionada = compra;
+>>>>>>> parent of 1c4fe0e (08092023 - agregue celdas y operaciones con boton de enviar al archivo php)
             PopupBuscadorVisible = false;
             await Buscador.HideAsync();
             BuscarOC();
@@ -144,9 +174,43 @@ namespace SupplyChain.Client.Pages.Emision
 
         protected async Task BuscarOC()
         {
+<<<<<<< HEAD
             if (item is null || item.NUMERO == 0)
             {
                 await this.ToastObj.ShowAsync(new ToastModel
+=======
+            if (ocompraseleccionada is null || ocompraseleccionada.NUMERO == 0)
+            {
+                await this.ToastObj.ShowAsync(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "Debe Indicar la Orden de compra para abrir",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }else {
+                insumosproveedor = await Http.GetFromJsonAsync<List<Compra>>("api/compras/GetCompraByNumero/" + ocompraseleccionada.NUMERO);
+                IsVisibleguarda = true;
+                IsVisibleimprime = false;
+
+                ocabierta = true;
+                ocagenerar = false;
+                var primerreg = insumosproveedor.FirstOrDefault();
+                proveocabierta = primerreg.DES_PROVE;
+                DropVal = primerreg.CONDVEN;
+                bonif = primerreg.BON;
+                xespecif = primerreg.ESPEGEN;
+            }
+        }
+
+        public async Task anularOc()
+        {
+            if (ocompraseleccionada is null || ocompraseleccionada.NUMERO == 0)
+            {
+                await this.ToastObj.ShowAsync(new ToastModel
+>>>>>>> parent of 1c4fe0e (08092023 - agregue celdas y operaciones con boton de enviar al archivo php)
                 {
                     Title = "ERROR!",
                     Content = "Debe Indicar la Orden de compra para abrir",
@@ -302,6 +366,7 @@ namespace SupplyChain.Client.Pages.Emision
             }
             else
             {
+<<<<<<< HEAD
 
                 PdfDocument document = new PdfDocument();
                 PdfPage page = document.Pages.Add();
@@ -381,6 +446,188 @@ namespace SupplyChain.Client.Pages.Emision
                 {
                     Title = "ERROR!",
                     Content = "Error al actualizar OC",
+=======
+                var responseMessage = await repositoryHttp2.PostAsJsonAsync("api/compras/PostAnularOc" , ocompraseleccionada);
+                if (responseMessage.Error)
+                {
+                    await this.ToastObj.ShowAsync(new ToastModel
+                    {
+                        Title = "ERROR!",
+                        Content = "Debe seleccionar la Orden de Compra",
+                        CssClass = "e-toast-danger",
+                        Icon = "e-error toast-icons",
+                        ShowCloseButton = true,
+                        ShowProgressBar = true
+                    });                }
+                else
+                {
+
+                    ocabierta = true;
+                    Compra num = responseMessage.Response;
+                    onumero = num.CG_ORDEN;
+                    Obs = num.ESPECIFICA;
+                }
+
+
+
+            }
+        }
+
+        //public async Task anularOc()
+        //{
+        //    try
+        //    {
+        //        if (ocompra == 0)
+        //        {
+        //            await this.ToastObj.Show(new ToastModel
+        //            {
+        //                Title = "ERROR!",
+        //                Content = "Debe seleccionar la Orden de Compra",
+        //                CssClass = "e-toast-danger",
+        //                Icon = "e-error toast-icons",
+        //                ShowCloseButton = true,
+        //                ShowProgressBar = true
+        //            });
+        //        }
+        //        else
+        //        {
+        //            ordenSeleccionada = await Http.GetFromJsonAsync<List<Compra>>("api/compras/PostAnularOc" + ocompra);
+
+        //            ocabierta = true;
+        //            Compra num = ordenSeleccionada.FirstOrDefault();
+        //            onumero = num.CG_ORDEN;
+        //            Obs = num.ESPECIFICA;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("Error al anular la Orden de Compra: " + ex.Message);
+        //        await this.ToastObj.Show(new ToastModel
+        //        {
+        //            Title = "ERROR!",
+        //            Content = "Error al anular la Orden de Compra",
+        //            CssClass = "e-toast-danger",
+        //            Icon = "e-error toast-icons",
+        //            ShowCloseButton = true,
+        //            ShowProgressBar = true
+        //        });
+        //    }
+        //}
+
+
+        public async Task imprimiroc()
+            {
+            if (ocompraseleccionada is null || ocompraseleccionada.NUMERO== 0)
+            {
+                await this.ToastObj.ShowAsync(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "Debe Indicar la Orden de compra para abrir",
+>>>>>>> parent of 1c4fe0e (08092023 - agregue celdas y operaciones con boton de enviar al archivo php)
+                    CssClass = "e-toast-danger",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }
+            else
+            {
+
+<<<<<<< HEAD
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    String responseString = await response.Content.ReadAsStringAsync();
+                    await this.ToastObj.Show(new ToastModel
+                    {
+                        Title = "EXITO!",
+                        Content = "Orden de Compra "+responseString+" Generada",
+                        CssClass = "e-toast-success",
+                        Icon = "e-success toast-icons",
+                        ShowCloseButton = false,
+                        ShowProgressBar = false
+                    });
+                }
+                proveedorescompras = await Http.GetFromJsonAsync<List<Proveedores_compras>>("api/compras/GetProveedorescompras/");
+
+=======
+                PdfDocument document = new PdfDocument();
+                PdfPage page = document.Pages.Add();
+                PdfGraphics graphics = page.Graphics;
+                PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+                graphics.DrawString("Orden de Compra: " + ocompraseleccionada.NUMERO.ToString(), font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+
+                /*
+                PdfGrid pdfGrid = new PdfGrid();
+                pdfGrid.DataSource = insumosproveedor;
+                //Create string format for PdfGrid
+                PdfStringFormat format = new PdfStringFormat();
+                format.Alignment = PdfTextAlignment.Center;
+                format.LineAlignment = PdfVerticalAlignment.Bottom;
+                //Assign string format for each column in PdfGrid
+                foreach (PdfGridColumn column in pdfGrid.Columns)
+                    column.Format = format;
+                //Apply a built-in style
+                pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent6);
+                //Set properties to paginate the grid
+                PdfGridLayoutFormat layoutFormat = new PdfGridLayoutFormat();
+                layoutFormat.Break = PdfLayoutBreakType.FitPage;
+                layoutFormat.Layout = PdfLayoutType.Paginate;
+                pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, 200), layoutFormat);
+                //Save the document.
+               // document.Save("Output.pdf");
+                */
+                MemoryStream xx = new MemoryStream();
+                document.Save(xx);
+                document.Close(true);
+
+                await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportOC?numero={ocompraseleccionada.NUMERO}", "_blank" });
+
+            }
+        }
+
+
+        public async Task guardaoc()
+        {
+
+            var SelectedRecords = await GridProve.GetSelectedRecords();
+
+            listaordenescompra = "";
+            await SelectedRecords.ForEachAsync(async s =>
+            {
+                listaordenescompra = listaordenescompra + s.Id + ",";
+            });
+            HttpResponseMessage response = null;
+
+            if (string.IsNullOrEmpty(xespecif) && string.IsNullOrEmpty(xespecif))
+            {
+                xespecif2 = "vacio";
+            }
+            else
+            {
+                xespecif2 = xespecif;
+            }
+            if (string.IsNullOrEmpty(@DropVal) && string.IsNullOrEmpty(@DropVal))
+            {
+                xcondven = "vacio";
+            }
+            else
+            {
+                xcondven = @DropVal;
+            }
+            //                  string sqlCommandString = string.Format("UPDATE COMPRAS SET NUMERO = 9999 WHERE REGISTRO IN ("+ listaordenescompra + ")");
+            response = await Http.PutAsJsonAsync("api/compras/actualizaoc/" + listaordenescompra+ '/'+xespecif2 + '/' + xcondven + '/' + bonif, listaordenescompra);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
+                || response.StatusCode == System.Net.HttpStatusCode.NotFound
+                || response.StatusCode == System.Net.HttpStatusCode.Conflict)
+            {
+                var mensServidor = await response.Content.ReadAsStringAsync();
+
+                Console.WriteLine($"Error: {mensServidor}");
+                await this.ToastObj.Show(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "Error al actualizar OC",
                     CssClass = "e-toast-danger",
                     Icon = "e-error toast-icons",
                     ShowCloseButton = true,
@@ -405,6 +652,7 @@ namespace SupplyChain.Client.Pages.Emision
                 }
                 proveedorescompras = await Http.GetFromJsonAsync<List<Proveedores_compras>>("api/compras/GetProveedorescompras/");
 
+>>>>>>> parent of 1c4fe0e (08092023 - agregue celdas y operaciones con boton de enviar al archivo php)
                 limpia();
             }
         }

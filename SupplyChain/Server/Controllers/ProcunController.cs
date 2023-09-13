@@ -1,120 +1,142 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
+using SupplyChain.Shared.Models;
 using SupplyChain.Shared;
 
-namespace SupplyChain;
-
-[Route("api/[controller]")]
-[ApiController]
-public class ProcunController : ControllerBase
+namespace SupplyChain
 {
-    private readonly ProcunRepository _procunRepository;
-
-    public ProcunController(ProcunRepository procunRepository)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProcunController : ControllerBase
     {
-        _procunRepository = procunRepository;
-    }
+        private readonly ProcunRepository _procunRepository;
 
-    // GET: api/Procun
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Procun>>> GetProcun()
-    {
-        try
+        public ProcunController(ProcunRepository procunRepository)
         {
-            return await _procunRepository.ObtenerTodos();
+            this._procunRepository = procunRepository;
         }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-    }
 
-    [HttpGet("Existe/{id}")]
-    public async Task<ActionResult<bool>> ExisteProcun(decimal id)
-    {
-        try
+        // GET: api/Procun
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Procun>>> GetProcun()
         {
-            return await _procunRepository.Existe(id);
+            try
+            {
+                return await _procunRepository.ObtenerTodos();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-    }
 
-    // PUT: api/Procun/5
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutProcun(decimal id, Procun Proc)
-    {
-        if (id != Proc.Id) return BadRequest();
-
-        try
+        [HttpGet("Existe/{id}")]
+        public async Task<ActionResult<bool>> ExisteProcun(decimal id)
         {
-            await _procunRepository.Actualizar(Proc);
+            try
+            {
+                return await _procunRepository.Existe(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
-        catch (DbUpdateConcurrencyException)
+
+        // PUT: api/Procun/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutProcun(decimal id, Procun Proc)
         {
-            if (!await _procunRepository.Existe(id))
+            if (id != Proc.Id)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                await _procunRepository.Actualizar(Proc);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _procunRepository.Existe(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            return Ok(Proc);
+        }
+
+        // POST: api/Procun
+        [HttpPost]
+        public async Task<ActionResult<Procun>> PostProcun(Procun Proc)
+        {
+            try
+            {
+                await _procunRepository.Agregar(Proc);
+                return CreatedAtAction("GetProcun", new { id = Proc.Id }, Proc);
+            }
+            catch (DbUpdateException exx)
+            {
+                if (!await _procunRepository.Existe(Proc.Id))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        // DELETE: api/Procun/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Procun>> DeleteProcun(decimal id)
+        {
+            var Proc = await _procunRepository.ObtenerPorId(id);
+            if (Proc == null)
+            {
                 return NotFound();
-            return BadRequest();
+            }
+
+            await _procunRepository.Remover(id);
+
+            return Proc;
         }
-        catch (Exception ex)
+
+        [HttpPost("PostList")]
+        public async Task<ActionResult<Procun>> PostList(List<Procun> Procs)
         {
-            return BadRequest(ex);
+            try
+            {
+                foreach (var item in Procs)
+                {
+                    await _procunRepository.Remover(item.Id);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
-
-        return Ok(Proc);
-    }
-
-    // POST: api/Procun
-    [HttpPost]
-    public async Task<ActionResult<Procun>> PostProcun(Procun Proc)
-    {
-        try
-        {
-            await _procunRepository.Agregar(Proc);
-            return CreatedAtAction("GetProcun", new { id = Proc.Id }, Proc);
-        }
-        catch (DbUpdateException exx)
-        {
-            if (!await _procunRepository.Existe(Proc.Id))
-                return Conflict();
-            return BadRequest();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }
-    }
-
-    // DELETE: api/Procun/5
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<Procun>> DeleteProcun(decimal id)
-    {
-        var Proc = await _procunRepository.ObtenerPorId(id);
-        if (Proc == null) return NotFound();
-
-        await _procunRepository.Remover(id);
-
-        return Proc;
-    }
-
-    [HttpPost("PostList")]
-    public async Task<ActionResult<Procun>> PostList(List<Procun> Procs)
-    {
-        try
-        {
-            foreach (var item in Procs) await _procunRepository.Remover(item.Id);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest();
-        }
-
-        return Ok();
     }
 }

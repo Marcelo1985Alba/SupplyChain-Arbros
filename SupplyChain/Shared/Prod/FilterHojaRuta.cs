@@ -1,7 +1,14 @@
-﻿namespace SupplyChain.Shared.Prod;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class FilterHojaRuta
+namespace SupplyChain.Shared.Prod
 {
-    public string CodigoProd { get; set; }
-    public string Cantidad { get; set; }
+    public class FilterHojaRuta
+    {
+        public string CodigoProd { get; set; }
+        public string Cantidad { get; set; }
+    }
 }

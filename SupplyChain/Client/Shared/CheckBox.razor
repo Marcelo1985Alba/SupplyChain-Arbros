@@ -1,12 +1,10 @@
-﻿@using Syncfusion.Blazor.Buttons
-<SfCheckBox Label="@LabelText" @bind-Checked="@IsChecked" ID="chk" Value="IsChecked"></SfCheckBox>
+﻿
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Buttons
+
+<SfCheckBox Label="@LabelText" @bind-Checked="@IsChecked" ID="chk" Value="IsChecked" ></SfCheckBox>
 
 @code {
-
-    [Parameter]
-    public bool IsChecked { get; set; }
-
-    [Parameter]
-    public string LabelText { get; set; }
-
+    [Parameter] public bool IsChecked { get; set; } = false;
+    [Parameter]public string  LabelText { get; set; }
 }
