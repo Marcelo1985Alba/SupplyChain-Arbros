@@ -13,6 +13,38 @@ public class ProductoService : BaseService<Producto, string>
 
     public ProductoService(IRepositoryHttp httpClient) : base(httpClient, API)
     {
+<<<<<<< HEAD
+=======
+        private const string API = "api/Prod";
+
+        public ProductoService(IRepositoryHttp httpClient) : base(httpClient, API)
+        {
+        }
+
+        public async Task<HttpResponseWrapper<List<Producto>>> GetProdAndReparaciones()
+        {
+            return await http.GetFromJsonAsync<List<Producto>>($"{API}/GetProdAndReparaciones");
+        }
+
+        public async Task<bool> Eliminar(List<Producto> productos)
+        {
+            var response = await http.PostAsJsonAsync<List<Producto>>($"{API}/PostList", productos);
+            if (response.Error)
+            {
+                Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task<HttpResponseWrapper<object>> Actualizar(Producto producto)
+        {
+            var response = await http.PutAsJsonAsync<Producto>($"{API}", producto);
+            return response;
+        }
+
+>>>>>>> parent of 9c2d7ab (07092023 ProductoService con metodo Search y Get, FormProducto metod Actualizar actualizado)
     }
 
     public async Task<HttpResponseWrapper<List<Producto>>> GetProdAndReparaciones()

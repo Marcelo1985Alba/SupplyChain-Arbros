@@ -107,7 +107,56 @@ public class FormProductoBase : ComponentBase
     {
         if (await PermiteGuardarNuevoInsumo())
         {
+<<<<<<< HEAD
             var response = await ProductoService.Agregar(producto);
+=======
+            var existe = await Http.GetFromJsonAsync<bool>($"api/Prod/Existe/{Producto.Id}");
+            if (!existe && Producto.CG_ORDEN != 3)
+            {
+                switch (Producto.CG_ORDEN)
+                {
+                    case 1:
+                        Producto.EXIGESERIE = true;
+                        Producto.EXIGEOA = true;
+                        break;
+                    case 3:
+                        Producto.EXIGELOTE = true;
+                        break;
+                    case 4:
+                        Producto.EXIGEDESPACHO = true;
+                        break;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+        protected async Task<bool> Agregar(Producto producto)
+        {
+            if (await PermiteGuardarNuevoInsumo())
+            {
+                var response = await ProductoService.Agregar(producto);
+                if (response.Error)
+                {
+                    Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+                    await ToastMensajeError("Error al intentar Guardar el producto.");
+                    return false;
+                }
+                Producto = response.Response;
+                return true;
+            }
+
+            await ToastMensajeError($"El insumo con codigo {producto.Id} ya existe.\n\rO El tipo de insumo no es permitidio.");
+
+
+            return false;
+        }
+
+        protected async Task<bool> Actualizar(Producto producto)
+        {
+            var response = await ProductoService.Actualizar(producto);
+>>>>>>> parent of 9c2d7ab (07092023 ProductoService con metodo Search y Get, FormProducto metod Actualizar actualizado)
             if (response.Error)
             {
                 Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
