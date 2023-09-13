@@ -1,0 +1,693 @@
+[33mfbd6930[m[33m ([m[1;36mHEAD -> [m[1;32mmaster-error[m[33m, [m[1;31morigin/master-error[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m Merge branch 'TG-ABMProcesos'
+[33meba32b3[m[33m ([m[1;31morigin/TG-ORDENCOMPRA[m[33m, [m[1;32mTG-ORDENCOMPRA[m[33m)[m Merge branch 'TG-ORDENCOMPRA'
+[33m1c4fe0e[m 08092023 - agregue celdas y operaciones con boton de enviar al archivo php
+[33m60b20fd[m[33m ([m[1;31morigin/TG-ABMProcesos[m[33m, [m[1;32mTG-ABMProcesos[m[33m)[m 07092023 FormProcun
+[33m0bf9af8[m Merge branch 'master' into TG-ABMProcesos
+[33m9c2d7ab[m 07092023 ProductoService con metodo Search y Get, FormProducto metod Actualizar actualizado
+[33m20d0560[m 07092023 S.w 80.20
+[33mf6b6d8c[m 07092023 ProductoService update
+[33m4e491a9[m 07092023 Costos
+[33mb67e28f[m 07092023 ABMProcun y Anulacion OC funcionando
+[33mcb28d90[m Merge branch 'TG-ABMProcesos' into TG-ORDENCOMPRA
+[33maecd3ac[m 06092023 FormProcun
+[33m7e5ffe4[m 04092023- Estado de pedido : mejora en detalle con fechas
+[33me5af99e[m 01092023 Busador funcionando. falta campo de codigos y autocompletar
+[33m24c6b7b[m[33m ([m[1;31morigin/estado_pedidos[m[33m)[m 31082023- Qr: correccion para link con codigo de mp con barras + Mov entre depositos: tomar codigo de mp con barras en la pagina Estado de pedido: mejora para ver detalle Entrega de insumo: calculo de Planificacion y Fabricacion solo para semis
+[33mfb060b6[m 30082023 ABM Producto ya guarda
+[33m76417bf[m 30082023 ServiceWorker 80.15
+[33m25902e5[m 30082023  Procun Buscador commit rpara cambiar a master
+[33mdb45b0d[m 30082023 - Costos y Solicitud
+[33md5120c7[m 30082023 Procun con futuro Buscador x
+[33m70b2b5e[m[33m ([m[1;31morigin/trazabilidad[m[33m)[m 29082023- Trazabilidad: ver pedidos del cliente + Planificacion anular of
+[33mc934449[m 28082023-  Entrega: se cargan Planeado y fabricar segun tipo de insumo
+[33md54c5c0[m 28082023- Mov entre deposito: agregar insumo ahora muestra correctamente los items
+[33meacca30[m 28082023 Boton Dark VerPlano
+[33m8cc95ae[m 26082023- Carga de maquina: visualizar plano en lugar de descargar y correccion ver of alta en tooltip Trazabilidad: ver plano
+[33ma087c56[m 23082023- correccion en planificacion, abasteciiento: mp y se
+[33me54e54e[m Service-worker 80.3 act
+[33mbfac89e[m 18082023  Trazabilidad con boton DescargarPlano
+[33me53384f[m[33m ([m[1;32mTG-Remito[m[33m)[m 17082023 Procun Columna AREA/CG_LINEA comentados
+[33m6628bb3[m[33m ([m[1;32mTG-PCP[m[33m)[m 1108223 ISOPage  Asp.Ambiental con descripcion
+[33md6f3481[m 11082023 OrdenCompra con ImpresionPDF
+[33mec2f1e7[m 10082023- cambio link grafana
+[33mcd24fff[m 09082023- Etiqueta recepcion: mejora en tamaño de recepcion
+[33m7624c25[m 09082023 abm procun fin
+[33m1b4a141[m 08082023 service-worker act 80
+[33mc070a6d[m 08082023 PROCUN FINAL
+[33mee6721c[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33mad20667[m 06082023 - Costos: Agrego boton para ver despiece. Consulta Formulas: corrección, ahora vuelve a cargar el módulo.
+[33mf6e0251[m 07082023- Mov entre deposito:  link de qr para realizar operacion
+[33m102a18c[m 07082023- Recepcion QR
+[33ma1d48ac[m 06082023 - Costos: Hecho desde 0, funcionando.
+[33m63122f7[m 04082023 FORM CON PROBLEMAS CON AREA
+[33mf362d07[m 03082023- Estado de pedidos: pendientes solo si no se cobro + Prod: actualiza campos exigeoa, exigeSerie, ExigeDespacho segun tipo de insumo
+[33m6d1367a[m 03082023 PROCESOS INC
+[33m210f019[m 02082023- Remitos: correccion de ver pendientes y ver remitidos Estadisiticas: aumento en el maximo de unidades equivalentes mensuales
+[33ma1b74da[m 28072023 Anulacion OrdenCompra completo
+[33mc188bb1[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33me317d1c[m Merge branch 'master' into TG-ORDENCOMPRA
+[33m416e1d7[m 25072023 Abastecimiento Corregido v77.2
+[33mbe0b781[m 25072023 Subida cambio master
+[33m7948224[m 25072023  Commit para cambiar a master  Emision.cs/ComprasController/ComprasRepository
+[33m6670d09[m 24072023- moficar of en planificacion y restablecer of
+[33maf18330[m 24072023 Preparacion con funcion ExportExcel
+[33m1084086[m 21072023- correccion al obtener costo de mp
+[33m29bcae8[m 21072023  Boton ExportarExcel agregado
+[33m6afb701[m 19072023 ServiceWorker 77
+[33m800681b[m 19072023 Presupuestos con Buscador
+[33mc97d7af[m 19072023 SeriveWorker 76.9
+[33md3550f3[m 19072023 Commit para actualizar produccion
+[33mc111c1e[m 218072023- correccion para guardar decimales en factor de conversion en compras
+[33mb22cfb3[m 18072023- correccion decimales en prod en factor de conversion
+[33m4d7a643[m 17072023 service-worker.published 76.7
+[33m1e0da27[m Merge branch 'TG-VENTAS/PRESUPUESTOS'
+[33m1c9a748[m[33m ([m[1;31morigin/TG-VENTAS/PRESUPUESTOS[m[33m, [m[1;32mTG-VENTAS/PRESUPUESTOS[m[33m)[m 14072023 Presupuestos con Motivo completo / PanelControl Prespuesto a Presupuesto
+[33m797c7dd[m 11072023  Presupuestos Comentario/Semaforo realizado
+[33me684c34[m 11072023- estado de pedidos cobrado
+[33m9a19fe8[m 10072023 appsettings ubicacion remito corregido
+[33m28b834a[m 100723 Presupuesto Casi-completo Comentario
+[33m0b4ac20[m 060723 Correccion Presupuesto_detalle
+[33m65fa64d[m 060723 Presupuesto con seleccion y update del color a la base
+[33mb96e5bc[m 300623 PresupuestosVentas alto para solucionar error
+[33m297feef[m 27062023- Trazabilidad descargar identificacion + Ingenieria: mejora en editar
+[33m691fcc2[m 260623 Presupuesto 'no carga la grilla'
+[33me3a9da4[m 21062023- mejora css Sidebar + ver filtros en ER
+[33maee46bf[m 20062023- mejora en ER con materia prima
+[33m5bcfa26[m 19062023- correccion ER
+[33m61b5d23[m 19062023- mejora en ER
+[33m5d9fcbc[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33m4dee8ed[m 18062023- Costos en consulta de formulas terminado
+[33m350a08c[m 17062023- mayor
+[33m4b60dab[m 17062023- mayor en panle de control
+[33m4377d3b[m 13062023- correccion copiar formulas
+[33me8a6779[m 10062023 - Cambios en consultaFormula (revisar implementación de editar y copiar).
+[33mf7bb618[m 10062023 - cambios en consultaFormulas, se agrega costos y copiar (hay que revisar la implementación de la copia y editar)
+[33mdd2f604[m 10062023- Emision Oc: condicion de pago de itris + solicitud de cotizacion:
+[33mc3adba6[m 090623  service worker actualizado
+[33m65c7457[m 090623 OCompra Actualizada
+[33m4b5622d[m Merge branch 'TG-ServicioCertificado'
+[33m9993eeb[m[33m ([m[1;31morigin/TG-ServicioCertificado[m[33m, [m[1;32mTG-ServicioCertificado[m[33m)[m 090623  Servicio OPDS formato actualizado
+[33mb51b005[m 070623 Servicio OPDS
+[33m5a0e28e[m 06062023- recepcion: ahora toma proveedores de itris
+[33m477e67d[m 20230603- envio de mails con copia a compras
+[33m7730b76[m[33m ([m[1;31morigin/TG-COMPRAS[m[33m, [m[1;32mTG-COMPRAS[m[33m)[m 020623 wwwroot
+[33m77ae3fd[m 020623 Solicitud Compra Corregido
+[33m11ad22e[m 020623 Emision corregido
+[33m384f1b4[m Merge branch 'master' into TG-COMPRAS
+[33m527dbef[m 01062023- correccion en solicitud de cotizacion de compras
+[33m1477cfd[m 010623 Boton AnularOc se creo tabla Proveedores_compras
+[33mb52af49[m 310523 AnularOC con error
+[33mee94644[m 310523 GrillaProveedores con Telefonos
+[33me9cdbd9[m Merge branch 'master' into TG-ESTADOVENTAS
+[33mf859ba7[m 290523 EstadoPedidos con boton VerTodos y Pendientes
+[33m28e2188[m 27052023- correccion datasheet desde solicitud
+[33m39c6d0f[m 24052023- estado pedido: se agrega recibo + estado pedido: se agrega recibo y condicion de pago
+[33m85ae77e[m Merge remote-tracking branch 'origin/TG-INVENTARIOS'
+[33m5c188ba[m Merge branch 'TG-ESTADOVENTAS'
+[33maf17768[m Merge branch 'master' into TG-COMPRAS
+[33m15c10f2[m 24052023- revision carga de maquina
+[33m0472c8d[m[33m ([m[1;31morigin/TG-INVENTARIOS[m[33m, [m[1;32mTG-INVENTARIOS[m[33m)[m 240523 Inventario/Listado/MoviStock con Remito
+[33mbd6ce10[m 240523 EstadoPedidosValorizado Funcionando
+[33made8d8a[m 230523 EstadoCompras con CantInterna y CantComercial
+[33ma0afdd3[m 22052023-  solicitud responsive + descargar plano
+[33m90edeed[m 20052023- presupuesto se quita impresion de datasheet y se pasa a solicitud
+[33mb326210[m 20052023- correccion solicitud
+[33md4fad91[m 20052023- correccion solicitud de cotizacion
+[33m72bebbc[m 20052023- mejora en solicitud
+[33mda02faf[m 19052023- correcciones en solicitud
+[33m9582a7b[m 18052023- solicitud: correccion proveedores + buscar proveedor
+[33mdcb5dfb[m agrego columnas pleanada y fabricacion
+[33m9533af6[m Merge branch 'master' into TG-Informes
+[33m6004c0e[m 15052023- mejora en usuarios para foto
+[33m55d8b33[m 150523 Ocompras Informe corregido
+[33m35f8007[m Merge branch 'TG-Informes'
+[33m35ae4bb[m Merge branch 'TG-MantCeldas'
+[33m6c290ab[m Merge branch 'master' into TG-Informes
+[33m49c5a40[m[33m ([m[1;31morigin/TG-MantCeldas[m[33m, [m[1;32mTG-MantCeldas[m[33m)[m Merge branch 'master' into TG-MantCeldas
+[33mc47c7f9[m[33m ([m[1;31morigin/TG-Usuarios[m[33m, [m[1;32mTG-Usuarios[m[33m)[m Merge branch 'master' into TG-Usuarios
+[33m472563c[m 11052023- mejora foto usuario
+[33m92f1866[m 110523 Informe de Ventas - Direccion de entrega corregido
+[33mdb8b2ea[m 20230511- avance foto usuario
+[33m01b3270[m 1052023- se modifica ver panel en carga de maquina
+[33m3b97258[m 100523 - Incorporar foto en ABM-Usuarios
+[33m610af89[m 08052023- correccion buscar en preparacion
+[33mb99a47e[m 090523 MantCeldas con botones REALIZADO-PROGRAMADOS-ANULADOS
+[33ma87bf68[m[33m ([m[1;31morigin/compras[m[33m, [m[1;32mcompras[m[33m)[m 090523 GrillaProve con buscador - EstadoCompras con sumatoria
+[33maf0c460[m 08052023- correccion version
+[33m0c729e5[m 06052023: estado de pedido image tick
+[33mc026549[m Merge branch 'compras'
+[33ma54574c[m 06052023- se habilita mail para enviar a proveedores en solicitudesde compra
+[33m0a1bf05[m 06052023- Sugerencias de compras en solicitud se ponen en colorado si tienen solicitud
+[33md0b7790[m 05052023-  estado compras: image tick
+[33m6dabac5[m 05052023: image tick compras
+[33mb6fadb6[m 05052023- correccion en proveedores
+[33mce8cdc4[m Merge branch 'master' into compras
+[33m9f26935[m 05052023- preparacion: correccion busqueda x vinculacion
+[33m525c471[m 050523 Compras OC con Direccion en remito
+[33m363863f[m Merge branch 'compras' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros into compras
+[33m5eda4c6[m 050523 Emision OC con direccion
+[33m39a3f02[m Merge branch 'compras' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros into compras
+[33m252212a[m 040523 EstadoCompras con sumatoria / CargaMaquina con boton a la web Grafana
+[33m3a07a8f[m 03052023- Finalizacion Estados de Compras (botones Pendientes y todos) + calcular autorizado em compras (para solicitud y preparacion) + correccion error fecha prevista + correccion buscar productos com barras em preparacion em grilla y al editar
+[33m93dee3e[m 03052023- estado de compras: ver pendientes y todos
+[33m3edf680[m Merge branch 'master' into compras
+[33md566746[m 0352023- correccion minima version
+[33md096e7a[m 030523 Estado-Compras Botones
+[33m7cda186[m 29042023- Abastecimiento: poder editar fecha prevista que e insertar en compras al igual que Necesario = Solicitado+ Soliciutd: ver Solicitdado
+[33m8e79a9d[m 280423 EstadoCompras BotonPendiente- Pendiente
+[33m7bfac0e[m 27042023- Preparacion: al editar traer siempre la especificacion + cambiar  label a Cantidad Comercial y Unidad Comercial + el boton abrir sugerencia paso a llamar Abrir Preparacion y trae ambos + Boton traer todos proveedores  itris
+[33m1bad68a[m 260423 Act Estado-Compras con TotalDolar
+[33m75b58d9[m Merge branch 'compras'
+[33m2fc7fa8[m 250423  Correccion Filtro Preparacion
+[33m387a4b5[m 180423 ESTADO COMPRAS
+[33m5c5f30d[m Merge branch 'Cond.Pago'
+[33m8d1c345[m[33m ([m[1;31morigin/Cond.Pago[m[33m, [m[1;32mCond.Pago[m[33m)[m 130423 -CONDICION DE PAGO EN INFORME
+[33m1d41cd5[m 05042023- correccion context
+[33maae31f8[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33m7aed66d[m 05042023- correcciones
+[33mccb36dd[m[33m ([m[1;31morigin/Indicador[m[33m, [m[1;32mIndicador[m[33m)[m 050423 - INDICADORES-EstadUnidEquiv: Aumentado
+[33me2e3846[m 050423 INDICADOR - Pedidos Ingresados: aumentado
+[33m197933a[m Merge branch 'master' into compras
+[33m61e93d0[m 040423 OCOMPRA Diseño Arregladao
+[33mf2bbfa9[m 01042023- servicios: refresca todos los campos + correccion pcp emitir orden + avance solicitud de cotizacion
+[33mf633aba[m 31032023- correccion menor
+[33mf152759[m 310320223- correccion menor
+[33m42b3620[m 31032023- correccion menor
+[33m21b8988[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33m766b62c[m 310320223- correccion
+[33me273548[m pipeline windows-latest
+[33m16abb4a[m vs 2022
+[33m0e6e91e[m vs 2022
+[33mff3a296[m 30032023- Correccion error en entrega + de presupuesto a pedido Condicion de pago y entrega + mejora en solicitud de cotizacion + correccion abm de productos
+[33m7ffc0d1[m 30032023- tabs en productos
+[33m30a06e7[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33mefd4e71[m 270323 TG compra
+[33m5d2eed8[m 270323 ESTADO-COMPRAS
+[33m7a82e63[m 25032023- solicitud de cotizacion de compras
+[33m47901dc[m 24032023- inicio solicitud de cotizacion compras
+[33m9d083d1[m 20032023- asignacion de menu por usuario
+[33md6d03d3[m 13032023- correcion logistica y remitos
+[33m4cba68f[m 11032023- Servicios: apretadaA y Posicion Anilo B
+[33m9c40a65[m 11032023- Servicios: cambio a tab de syncfusion en detalle + actualizar items de servicios al guardar pedido por item segun nro de solicitud
+[33m8e8c915[m 16022023- usuario cliente trazabilidad
+[33m0fa6433[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33mb1d7a73[m 15022023 - Cambios en prevision, planificacion y consultaFormulas
+[33m16fdf72[m 06022023- servicios
+[33m87bf94c[m 06022023-
+[33m3dfa889[m 0300223- coreccion version
+[33m910ee17[m 05022023 - cambio en reporte de trazabilidad
+[33m9094820[m 03022023 - varios cambios de errores. En planificacion, Logistica y carga de maquina.
+[33mec88b35[m 02022023 - cambios en planificacion e inventarios
+[33ma77ba7a[m 02022023 - cambios en ControlCalidad y Trazabilidad
+[33mc170689[m 20230201- se agregar licencia syncfusion
+[33m81e9812[m 29012023 - Cambios menores en trazabilidad
+[33m0c08cd1[m 28012023 - cambios en Trazabilidad
+[33mad2e27d[m 28012023- correcciones en control de calidad
+[33ma2efbc8[m 28012023 - version con ERROR en ControlCalidad. Subo para que marce lo vea.
+[33m9f13d33[m[33m ([m[1;31morigin/modulo_usuario[m[33m)[m 27012023- merge rama master
+[33mda7a6bb[m Merge branch 'procesosA'
+[33m33f8adf[m 27012023 - cambio trazabilidad pestaña
+[33ma06fa9f[m 27012023 - DataSheet Actualizado
+[33mfb1262f[m 25012023 - Se comenta linea 114 en FormControlCalidadPend.razor.cs
+[33m056cded[m 230122- correcciones panel control
+[33md44a626[m 22012023 - cambio en control calidad pendiente
+[33md26e5ba[m 210123- correcciones en el archivo de conexion
+[33m99984ee[m 200123- actualizacion syncfusion 20.4 y .net 7
+[33m5270e8b[m 200123- correcciones en panel control
+[33mccc4414[m Que ponga bien unid al seleccionar un item. Que guarde PRECIOTOT en compras
+[33m5375aeb[m 200123- correccion proyectos + reporte presupuesto
+[33m23b332c[m 20012023 Panel de Control -Grificos Arreglados
+[33ma0a4938[m 200123- carpeta pdf faltante
+[33m77c19a6[m 200123- correcciones menores en el merge
+[33mf320eae[m Merge branch 'ProcalPT'
+[33m236e45e[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33mae23b0a[m 20012023 - mejoras en iso
+[33madf0d47[m 19012023 - cambios y correcciones en iso y trazabilidad
+[33m13df0f6[m 19012023  ACTUALIZACION REPORTEEVENTO
+[33m6b0e768[m 18012023 ORDEN DE COMPRA LISTO
+[33mb4daa53[m 17012023 - ControlCalidad cambiado
+[33mc5724ae[m 170122
+[33m01398ef[m 17012023 - mejoras en controlcalidad
+[33me2e7e19[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33m4b19b18[m 16122  ISO- modificacion de lugar de comentarios
+[33m2704a4f[m 16012023 - cambios en controlCalidad, falta terminar color de celdas en la segunda grilla y guardar el proceso una vez aprobado los elementos de la segunda grilla
+[33m8e2805b[m cambios minimos
+[33m0d2b8a4[m 14012023 - Cambios en consultaFormulas
+[33m2aaf5f7[m 13122 backup
+[33m0384339[m 12122 Error de consola por Inventario service
+[33m3fd3f4b[m 10012023 - cambios en iso y en mantceldas
+[33m7b36a45[m 9122
+[33m1dfe2c6[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33mc442a60[m 61122 Evento (Se agrando el campo de Descripcion del Evento)
+[33mf9309ae[m 6/1/22 backup
+[33m41152d3[m 3012 Prueba Relacion ProcalMP
+[33m5ba3cca[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33mcb35a3a[m 30122022 - Correccion
+[33m8d05da5[m 291222- fecha en grilla solicitud
+[33m49c6dca[m 29122022 - Cambios en ISO, agrego ISO Graphics
+[33m6edef32[m 27/12 Error en page Procesos (CargaValores)
+[33md2e5ba2[m 261222- correcciones en panel de control
+[33m27f1c9c[m 211222- actualizacion y merge
+[33md2e34c4[m 2112 Error ProcalMP
+[33m1b64af5[m 2112- Error de ProcalMP
+[33mebc8b35[m 211222 - Cambios en ISO
+[33mc824288[m Modificaciones compras: Seleccion moneda. Especificaciones. Unidad y factor desde Materia prima
+[33mfebc780[m 1912 Error en la ventana nueva CargaValores// Correccion error ProcalMP (form)
+[33m0d70b62[m 1611 arreglos de Procesos
+[33m8d234c5[m 151222- Remitos: actualiza estado logistica
+[33m662b393[m 1512 CARGA-PROCESO
+[33me559784[m 15-12
+[33m783e081[m Merge branch 'ProcalPT' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros into ProcalPT
+[33m768b508[m VENTADA CARGA-PROCESOS
+[33mcf8e9ca[m 14122022 - Cambios en ABM ISO
+[33m2257c61[m 13122022 - Cambios ABM ISO
+[33m248a953[m 12122022 - Correccion de errores generales
+[33mbb85e74[m 12122022 - Cambio a ABM ISO
+[33m7fa0eb4[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33m152f8b7[m ProcalMP listo
+[33m347596d[m Update FormProcalMP.razor
+[33m3f6a97f[m ProcalMP listo
+[33m46d1a5e[m 121222- cambio en en pantalla de presupuesto + Trazabilidad seleccion segun columna presiona
+[33mc034669[m 12122022 - Cambio en ABM Prod
+[33m0accf54[m 12122022 - Cambios en ABM ISO y Prod.
+[33m1ff3bc5[m 071222- arreglos reporte orden de compra
+[33me2fd64d[m 061222- ver of en trazabilidad
+[33m849a7f6[m 061222 - Mejora en ABM ISO
+[33m73785ad[m 051222 - Pequeña correccion para que funcine abm de ISO
+[33m4d2aa90[m 041222 - Agrego ABM para ISO
+[33mfdff868[m 301122 - Agrege cambios a la lineas - Empece ABM ProcalMP
+[33m7593d19[m 301122 - Correccion de errores
+[33m34131cb[m 301122- Agrege cosas a lineas - Empece abm ProcalMP
+[33m6a7eebd[m 281122-  correccion exportar abm precios + se agreg IVA en reporte presupuesto
+[33m4d95845[m 251122- Correccion reporte etiqueta una sola hoja + Eliminar pedido: no quita la fila hasta que elimines +
+[33me4afa7a[m 231122-  Correccion en reportes  (presupuesto, pedido, etiqueta) + REMITO:  obtiene observaciones del item del pedido y la oc del cliente PEDIDO: eliminar pedido y por oci controlando que no tenga remito asociad0 o altal o orden de armado
+[33m336a968[m 231122- correccion etiqueta y menu usuarios
+[33m5a11c3c[m 211122- etiqueta de remito + repote de oc
+[33m00de37a[m 171122- eliminar presupuesto y desvincular solicitud asociada + mejora en reporte pedido y presupuesto
+[33mec5c63b[m 171122- correccion pedido y servicios
+[33ma94af71[m 161122- correccion menu por roles
+[33m3e1caca[m[33m ([m[1;31morigin/servicio-pedido[m[33m)[m 161122- actualizacion proy server
+[33mbdd67dc[m Merge branch 'master' into servicio-pedido
+[33mca5c7f0[m 161122- eliminacion de solicitud
+[33me764ded[m 1411122- fotos servicios + reporte datasheet
+[33mf523599[m 121122- cerrar pedido al hacer remito + fotos en servicios + actualizacion syncfusion
+[33me626957[m 091122- correccion ver planos + correccion modificar presiones en pedidos + actualizacion syncfusion
+[33m21e4bed[m 081122- correccion en presupuesto, pedido y remito + reporte remito
+[33m483ff1a[m 081122- correccion presupuesto + rereporte remito + actualizacion syncfusion
+[33m1988f16[m 081122- correcion remito
+[33m97c5103[m[33m ([m[1;31morigin/migrate_net_6[m[33m)[m 071122- se agrega datos de solicitud en presupuesto
+[33ma9094b5[m Merge branch 'servicio-pedido' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros into servicio-pedido
+[33mddfa764[m Modificaciones a compras
+[33ma96dd7b[m 061122- actualizacion syncfusion
+[33m35dd7de[m 061122- migracion net 6
+[33me39353a[m 061122- remito: bultos y monto en reporte y edicion a nivel encabezado + nombre de comproabntes descargados + arreglo de ingreso por roles
+[33m6f2689c[m 051122- correcciones varias modulo de ventas
+[33m7e1f6a0[m 041122- correccion guardar pedido invocando presupuesto sin campos comodines
+[33m0ff04e0[m 041122- correccion asignar pedido a servicios con cantidades mayor a 1
+[33m9bdcdc6[m Merge branch 'servicio-pedido'
+[33m569eccf[m 031122- correccion reportes
+[33m1f52948[m 291022- correccion al guarda remito
+[33m5a54108[m 281022- correccion al enviar solicitud pedido y presupuesto a servicio
+[33m5184182[m 271022- correccion usuarios
+[33m69150dd[m 271022- correccion oci y oc en pedido correccion en servicio correccion en pedidodo: cargar diferentes datasheet
+[33m1eb6e82[m 261022- abm usuarios
+[33mdbd520c[m Merge branch 'servicio-pedido' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros into servicio-pedido
+[33m4f319d4[m Ajustes preparacion
+[33m04ff736[m 221022- inicio abm usuarios
+[33m7f00221[m Merge branch 'servicio-pedido' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros into servicio-pedido
+[33m4ab9c82[m 221022- registrar usuario de calculo
+[33m78e4c48[m 211022 abm de procun
+[33ma826fab[m Cambios compras
+[33m76ba423[m Revert "Cambios compras"
+[33ma699e97[m Cambios compras
+[33m441d076[m Cambios compras
+[33m92c1788[m Ajustes compras: agregado descuento, bonificacion, condicion venta, especificaciones.
+[33m061b98c[m 171022- nuevos campos en solicitudes y presupuestos
+[33m5f1f56e[m 171022- campos nuevos en reporte datasheet
+[33md431139[m 111022- correcciones en reportes correccion en modulo pedidos
+[33mbeab947[m 081022- correccion para guardar presupuesto sin dirent + ajuste de reporte datasheet
+[33mab7d34b[m 071022 - presupuesto: correccion para guardar sin dirent
+[33mcaff850[m Merge branch 'master' into servicio-pedido
+[33m4216325[m 071022- se agrega campos nuevos solicitados por Monica + se agrega usuario a presupuesto
+[33m6579175[m 071022- mejoras en compras (archivos enviados por roman)
+[33m0e063e6[m 051022- se agrega ver programas desde consulta de formulas
+[33m0ec11b3[m 051022- ver planos desde consulta de formulas
+[33mf709289[m 041022- correccion en compras + orden solicitudes +
+[33m37fbe19[m 041022- se agrega modulo de compras
+[33md6e074a[m 011022-  correccion de reporte datasheet fix ir a servicios desde cargade maquina fix buscar producto para generar nueva of
+[33mdbe0910[m 150922- cambio para proyectos + modificacion menu user
+[33mbf6771d[m 140922- mejora datasheet
+[33m03c08a4[m 140922- cambio menu user + color amariilo en cerradas + correccion al grabar presupuesto
+[33mf12d85e[m 130922- correccion en reportes
+[33m5598e53[m 120922- protyectos
+[33m01e466f[m 070922 - Cambio en servicios, estadoPedidos y panel de control
+[33md0958cb[m 070922- habilita inventarios completo para PLANTA y USER
+[33mba5c932[m 070922- correccion
+[33m092129c[m 070922 - merge
+[33m76246af[m 070922 -  merge
+[33mc9067f9[m 070922 - cambios en informes
+[33mbbacf04[m Merge branch 'servicio-sin-modulo-ventas'
+[33m5ac5785[m[33m ([m[1;31morigin/servicio-sin-modulo-ventas[m[33m)[m 070922- menu usuarios
+[33me7bd882[m 060922- menu usuarios USER y PLANTA
+[33m7f729aa[m 050922- CORRECCION LISTADO DE MOVIMIENTOS DE STOCK Y DE INVENTARIOS
+[33m121e89a[m 050922- correccion recepcion
+[33mc884c9b[m 040922- adaptar servicio sin modulo de ventas
+[33maf7d887[m Update vDataSheet.Designer.cs
+[33mca31df8[m 310822- mejoras en reporte y modulo de ventas
+[33m6c76ade[m 300822- mejoras en reportes y modulo de ventas
+[33ma5f54b8[m 300822- mejoras en reportes y pedido para genrar siempre una oci
+[33m1bb2172[m 290822 - Merge
+[33m36aa2ce[m 290822 - cambio en reportes
+[33mda4c603[m 290822- reporte pedido y remito + mejoras
+[33m7a5b1de[m 280822- correccion obtener datasheet + pasar observaciones al presupuesto desde solicitud
+[33mb7eea24[m 250822- renovacion de token
+[33ma9192f1[m 250822- mejora reporte presupuesto
+[33mfe1cfd8[m 250822 Cambio en campos del DATASHEET
+[33md9be468[m Merge branch 'master' into servicio-pedido
+[33mb09e5b0[m 250822- correccion
+[33m982e41b[m 250822- descarga de presupuesto y datasheet juntos
+[33meca1942[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33md6d3ef3[m 240822 - Cambios en reporte Cotizacion
+[33m56b8797[m 240822- mejoras en solicitudes, pedidos y presupuestos + correcciones en el index
+[33mb1f9e75[m Merge branch 'master' into servicio-pedido
+[33m5091a2f[m 230822- correccion en campos de reporte cotizacion
+[33m2b0870e[m 230822: correccion reporte
+[33mfea94b4[m Merge branch 'master' into servicio-pedido
+[33mb59dcfb[m 230822- mejora en trazabilidad + mejora en vistas
+[33m5633346[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33m16707eb[m 220822 - Cambio en el reporte de Cotizacion
+[33ma996172[m Merge branch 'master' into servicio-pedido
+[33med10ebf[m 220822- modificacion report
+[33m5ebf6ce[m 220822- fin remito + inicio modulo chat
+[33mb12eae5[m 220822 - Cambio de reporte de cotizacion
+[33m27bd102[m Merge branch 'master' into servicio-pedido
+[33m3c308c4[m 150822 - avance remito
+[33mf0de2e6[m 160822 - Correcciones mantenimiento Celdas
+[33ma50ef55[m 160822 - Correccion en Mantenimiento Celdas
+[33m8a2f8b7[m Merge branch 'master' into servicio-pedido
+[33mfcf42dc[m 150822- avance remitos
+[33m9007334[m 150822 - Agrego matenimiento de Celdas
+[33m7bcb15e[m 150822- mejora chat
+[33m046e9a6[m 130822- remitos + inicio modulo usuarios
+[33m2aa78b2[m 120822- inicio remitos
+[33m9a21428[m 110822- solicitudes funcionalidad en tiempo rela cuando viene desde calculo
+[33mf6beeac[m 110822- correcciones en modulos de ventas
+[33m4a960bb[m 090822- mejora en presupuesto
+[33m1b30f4e[m 060822- cambio colores en toolbar grilla + mejoras en todo el modulo de ventas (solicitud presupuesto y pedido
+[33m733ec6a[m 010822- mejora en pedidos
+[33m7df71c6[m Merge branch 'master' into servicio-pedido
+[33mbf34558[m 010822- transportes
+[33m40185ed[m 310722 - Cambios minimos
+[33mbedd1e9[m 300722 - Correcciones en ABM
+[33ma2fe045[m 280722- mejoras pedido
+[33mcbaae9d[m 250722- correcciones minimas
+[33m0379aa1[m 250722- correcciones en servicios
+[33m373ac0f[m Merge branch 'master' into servicio-pedido
+[33m594aeec[m 250722- inico pedido + correecciones servicio
+[33m1b705ef[m 250722 - Certificados pdf mejorados en Estado de Pedidos
+[33md4d1200[m 250722 6 commit
+[33mf159036[m 250722- 5 commit
+[33mb220f55[m 250722- 4 commit
+[33m34995a4[m 250722- 3comiit
+[33md63f3bb[m 250722- 2do commit
+[33mdfd04d0[m 250722- 1er commit servicios
+[33m4c9fb78[m 20722 - ABM de Unidades, Lineas y TipoArea terminados
+[33m8f17718[m 240722 - Correccion en Trazabilidad
+[33m1441f92[m 230722 - Hago ABM Areas, cambio todos los get que se hacen de Areas y cambio otras cosas.
+[33mdc0c41d[m 220722- repositorio cliente
+[33mbb0b5d7[m 220722- mejora en busquedores: se habilita paginacion
+[33mb6aadf2[m 210722 - Cambios minimos prod y celdas
+[33m4d5a8ab[m 210722 - Terminado el ABM de celdas. Correccion minima en ABM prod.
+[33mc0c2dab[m Pruebas en Proyectos
+[33m282ebd3[m 200722- correccion en vistas
+[33m79e3a77[m 200722- cambio color boton en fabricacion
+[33m7d87ee3[m 190722- correccion menores en entregas
+[33mdd81d23[m 190722- correcion menor
+[33m21b8f67[m 190722- se agregan servicios
+[33mb923388[m 190722- correcciones menores
+[33me235e15[m 190722-  desactiva notificaciones
+[33m9f9ad3b[m 180722- merge
+[33m9890ad6[m 180722- correcciones menores
+[33mf3829c8[m 180722 - merge
+[33ma517d3c[m 180722 - ABM de Celdas y cambio en todos los llamados al controller de Celdas
+[33m019b40a[m 160722- correcciones en panel de control + garantia
+[33mc2935fd[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33m1d35e29[m 150722-  panel de control unidades equivalentes
+[33mbc48c1e[m 150722 - cambios minimos
+[33md6387df[m merge master-ItrisClientes
+[33m200e319[m Merge branch 'ItrisClientes' into master-itrisClientes
+[33mae63270[m 150722 - Cambios ABM Areas
+[33m99a171c[m 150722 - Cambios minimos
+[33ma5b0b43[m 150722 - Cambio minimo
+[33m8095e5c[m 150722 - Cambios ABM areas y Celdas
+[33m98ce1f1[m 150722- mejora en panel de control (garantia y dias atraso)
+[33m6437376[m 120722- mejora en panel de contol + eventos
+[33md564af1[m 120722- mejora en panel de control + reporte de vento + certificados
+[33mf8b3a4c[m 110722- correcciones
+[33m44af8a8[m 110722- cambios maximos en graficos
+[33m81dce56[m Merge branch
+[33m82d820c[m 07072022 Cambio columna NoConformidades y cambio de lugar el indicador de Eventos. Ahora pasa a estar en CONTROL DE CALIDAD>Indicadores>Eventos
+[33m4084cc8[m 090722- ruta datasheet
+[33m4f1459b[m 090722- ruta datasheet
+[33m994153a[m 290622 - Mejora en ABM prod y precios art. Comienzo con mejora de ABM Unidades.
+[33m05956a0[m 290622 -Mejora en ABM precios articulos
+[33m993ce6e[m 210622- busquedas de clientes y productos con filtro
+[33mf377e66[m 180622- mejora en presupuesto
+[33me996c1d[m 160622- correccion en lineas para descargar certificado.
+[33m4a1cc7e[m 150622- mejora en estado de pedidos
+[33m4ca15b9[m 150622- mejora en estado de pedidos: descargar factura remito y factura + columna numoci + vistas
+[33m968a8cf[m 140622- pedido en buscar de pedidos + mejora en estad de eventos (fecha ocurrencia)  + descarga de certificados desde estado de pedidos
+[33m9435930[m 110622- nueva mejora en estado de pedidos
+[33m832a2fd[m 110622- mejora en estado de pedidos
+[33m6009a4f[m 110622- toma datos de calculo + datasheet
+[33me91b6dd[m 070622- mejora en presupuesto
+[33m6e42f34[m 040622- avance presupuesto
+[33m320accc[m 030622- avance presupuesto
+[33mffff1fe[m 020622- correccion precios y prod
+[33mea93132[m 020622- correccion condicion pago
+[33m04bc437[m 020622- avance presupuesto
+[33m0f9d1be[m 020622- fusion rama prod
+[33md1b7e9b[m 020622- avance presupuesto
+[33m0a6e826[m 010622- condiciones de pago
+[33m27de01b[m[33m ([m[1;31morigin/Prod[m[33m)[m 01062022 - ABM de Prod y precios articulos terminados
+[33m3d62929[m 310522
+[33m0536622[m 280522- nuevo abm de productos
+[33mb47dbda[m 280522 - Falta corregir vistas a ABM Prod. Comienzo ABM de Pecios Articulos
+[33m94fedc6[m Correcciones en ABM de Prod y vistas puestas en prod pero sin funcionar
+[33m26fb4e6[m 240522- avance presupuesto y solicitud
+[33m3315cbd[m Commit entre prod y master
+[33m4dbea12[m 18052022 - Avance en el ABM de Prod
+[33mfbb7d23[m 170522- mejora en estilos de toolbar
+[33m585b72b[m 170522- css para tomar estilos en todas las grillas y toolbar
+[33m042300f[m 150522- notificaciones
+[33m44ef922[m 140522- mejora presupuesto y solicitud
+[33ma5c3e49[m 130522- mejora en solicutd (copiar
+[33m9120782[m actualizacion del master
+[33m5ddb74b[m 130522- se agrega campos comodines
+[33m9fad5a2[m 130522- correccion error vistas
+[33mcfb7456[m 130522- mejora en listado de movmientos de stock
+[33mddbeb0b[m 120522- se agrega unidades comerciales en movimientos de stock
+[33mb815bc4[m 120522- mejora en solicitud y presupuesto
+[33m87e1fd4[m 110522- primera parte presupuestos
+[33m32c8a5a[m 110522- mejora en solicitud
+[33m72df885[m 110522- mejora solicitud
+[33m69571a6[m 100522- mejora en solicitud y refactorizacion en repositorios
+[33m9d3a9bd[m 060522- mejora en generar presupuesto desde solicitud
+[33m6990d6e[m 050522- mejora solicitud
+[33meeb9b25[m 050522- refactirizacion + cliente itris
+[33me479d8e[m 050522- primera parte migracion a clientes itris
+[33me7e38bd[m 290422- mejora en boton agregar insumos
+[33m80322d5[m 130422- correcciones para estados de pedidos
+[33m5e21982[m 120422- Solicitudes + correccion al aregar insumo + impresion de etiqueta de mov entre dep
+[33m20d8f4d[m 060422 - Version con el merge hecho.
+[33m98310e8[m 060422 - Intento para evitar conflicto en merge
+[33mbbfb734[m 060422 - Empiezo modulo Proyectos con Gantt.
+[33m6a26d11[m 060422- mejora en eventos + carga de of y pedido al agregar item fuera de despiece + se puede modificar dias fab + mejora en estad eventos
+[33md65a142[m 310322- mejora en detalle de pedido y restricciones en adm de archivos
+[33m77ffbcc[m 300322- Eventos selecion anual y mes + restriccion en adm documentacion
+[33m23347d7[m 290322- nuevo listado de pedidos
+[33m896af98[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33m5e7368b[m 260322- Estadistica de Eventos finalizado.
+[33m89401f1[m 250322- mejora en reporte evento + administracion de archivos
+[33m8c77a5b[m 250322 - Mejora en el reporte de eventos. Creacion de archivos para el grafico de eventos.
+[33m303a9c4[m 220322- mejora para carga de archivos pdf desde azure
+[33mf349078[m 200322- cargar pdf desde azure
+[33m1ac71c0[m 190322- Trazabilidad: abrir pedido por url
+[33m08b5afd[m 190322- mejora en carga de maquian y panel de control
+[33madc1f50[m 090322- panel de control: mejoras + ver detalle categoria
+[33m8ae0ee4[m 080322- panel de control: indicador de categoria en porcentaje y mercado interno y externo.
+[33mffc6ced[m 070321- mejora en identificacion,
+[33mb36174b[m 060322- mejora en logistica: edicion de card y actualizar confirmado.
+[33m2e70554[m 040322- Pedidos ingresados por Categoria de Clientes
+[33ma648eec[m 040322- Mejora en tiempos producitovs: ahora se ve orden y operador
+[33m632cf47[m 180222- mejora en sidebar
+[33m41b9eb4[m 180222- nueva estad de presupuestos
+[33m8d7e9e4[m 160222- Nueva estadistica dolares pedidos
+[33m1018ea5[m Poder Mod Acciones eventos
+[33ma4be154[m 100222- mejora en estad compras
+[33mfce6c51[m 090222- mejora en estad compras
+[33m6d93fce[m 090221- Panel de control: estad de compras
+[33m6011cda[m 070221- Pedidos pendientes por fecha prevista
+[33m0e7f634[m 030222- Nueva esta de pedidos ingresados por fecha prevista
+[33mf001fcf[m 010222- Mejora en model solution
+[33m12c6e25[m 310121- Consulta de formulas: columnas de Comprometido de Entrada y Stock Corregido
+[33m68e1c70[m 310121- Consulta de formulas: se guarda excel en servidor
+[33m44f85a3[m 290122- mejora en consulta de formulas
+[33m4c0119b[m 270122- Nueva pantalla consulta de formulas
+[33m0c9b22c[m 250123- Prevision: ahora la fecha se crea en el sp
+[33mbc70bac[m 250121-Panel de control: mejora en unidades equivalentes y facturacion
+[33m5d1867d[m 240122- Nueva Pantalla Panel de Control
+[33m11120e9[m 230122- Estadisticas ventas: unid equiv dpor fecha de alta de prod
+[33m6af50c0[m 220122- Estadisticas ventas: unidades equivalentes de pedidos ingresados y altas de produccion
+[33m33f0632[m 170122- Mejora cerrar oc en recepciones
+[33m3835715[m 050121- actualizacion core 5.0.11 + cambio nombre de columna en Fabricacion + mejora para cerrar OC y pasar a Firme en la entrega
+[33m4e4c699[m 030121- pedidos pendientes: ahora se edita fecha prevista y resorte
+[33m9a545a6[m 010121- PENDIENTES DE ENTREGA: mejora en edicion
+[33m76e16d7[m 311221- pendientes de entrega: se agrega edicion y y campos a aeditar 1ra parte
+[33m6b9caab[m 311221- buscar insumos por codigo yo descripcion
+[33md450833[m 311221: se agega tilde para eliminar mas de un insumo + paginacion
+[33mcef2a4c[m 211221- se quita clave foranea en entidades de compras, pedidos y proveedor
+[33m741e959[m 161221- Abm de prod: ahora controla eliminacion de insumo validando si existe en form2
+[33m18f9bcb[m 161221- correccion en prevision
+[33m32dc8c3[m 151221- mejora en repositorio de pedidos + cambio de etiqueta de cliente ypf
+[33m7399983[m 111221- repositorio de  compras pedidos proveedor
+[33m84edf18[m 111221- repositorio de producto y prevision
+[33m08c1223[m 101221- Se agrega repositorio de programa
+[33mbd5915c[m 051221- mejoras en repositorios
+[33m9655697[m 051221- nuevo sistema de repositorio
+[33m5c2b7b4[m 301121- Regresion Net5 + correcciones en orden de armado: pasa orden a firme y quita de serie en items entregados
+[33m954ab8c[m 231121- Migracion a Net 6 + esconder sidebar al entrar a una pagina
+[33m21c3713[m 221121- Mejora en menu
+[33m072aa01[m 181121- Trazabilidad: mejora en busqueda de prod + cambio color sidebar
+[33m2f62a7e[m 171121- Tiempos productivos: mejora + Seagre abm de pro
+[33me2c73c7[m 171121- mejora en inventarios + mejora en indicadores productivos
+[33mb92f755[m 111121-Prevision: se agrega columna de despiece + correccion al eliminar item
+[33mdb54618[m 101121- mejora en trazabilidad
+[33m579e087[m 091121- Modificacion index para corregir problema de esconder columna + correccion de cambio de fecha de curso a ese tipo de ordenes
+[33m8e08f26[m 081121- Fabricion: mejora en visibilidad spinner
+[33m36f50e6[m 081121-Fabricacion:  Actualizar fecha en curso para ese tipo de ordenes.
+[33mafa4570[m 271021- Orden de armado pasa a firme
+[33me6d5fb4[m 251021- Actualizacion Syncfusion + arreglos mov entre depositos
+[33m73ecd40[m 221021- Operaciones de Stock: se agrega operacion Ordenes de Armado + arreglos de errores al eliminar
+[33m4be38a9[m 211021- Entregas: se agrega pedido para guardaar en db
+[33m92fd3a9[m 201021- Mejora en pdf de etiqueta de recepcion + mejora en boton eliminar de operaciones de stock
+[33mb1ba6d7[m 191021- Cambio para reporte eventos
+[33m0f61c9a[m 181021- Se agrega reportes evento  + arreglo en pdf de etiqueta of
+[33m8c346d1[m 151021- Se agrega reporting RDLC
+[33mf8dae54[m 141021- Trazabilidad: mejora en certificado
+[33m20ef898[m 1101021- Se agregan combo de vistas a los tabs de pedidos pendientes y fabricion en pcp
+[33me26d809[m 101021-Nuevo servicio de inventario y servicio pdf + mejora para movimiento entre deposito
+[33m1ce1f59[m 091021- Inventarios: movimiento entre depositos + notificacion a usuario por actualizacion
+[33m12cecb5[m 051021- Trazabilidad: mejora en certificado
+[33mc8a93f8[m 041021- Stock de Inventarios: se agrega columna descripcion + Ensayos Pdf: correccion
+[33m0926dc9[m 021021- Administracion de vistas: mejora en las vistas de las grillas
+[33ma9cc8f2[m 021021- Sidebar: se agregan iconos
+[33m83128fa[m 011021-Actualizacion syncfusion + mejora en certificado de trazabilidad + mejora en sidebar
+[33med317f3[m 300921- Trazabilidad: mejora en catalogo (certificado)
+[33m2018d57[m 290921- Trazabilidad: modificacion impresion catalogo(certificado)
+[33m746b287[m 270921- Carga de maquina: se cambia descarga de etiqueda a txt
+[33m7b4191c[m 220921- Carga de maquina: en identificacion se cambia para descargar xls  segun el tipo de insumo coloca el nombre de archivo
+[33m674da9c[m 210921- Nuevo listado de Stock de Inventarios
+[33mcae9453[m 210921- Carga de maquina: descarga de csv para identificacion de reparaciones y productos
+[33md53ab40[m 210921-Movimientos de Stock: mejora en limpiar filtros + Carga de maquina: generacion  y descarga de csv
+[33m6348db7[m 210921-Refactorizacion Carga de maquina + mejora en fabricacion
+[33m195e81a[m 200921- Mejora en pcp: mostrar mesaje de carga.
+[33m0361986[m 200921- Movimeinto de Stock: se agrega busqueda por deposito
+[33mfa1a279[m 190921- Mejora en carga de maquina + Nuevo listado de Movimientos de Stock
+[33m46f9d27[m 170921- Actualizacion Synfusion + refactirizacion en buscadores
+[33md011d78[m 150921- Se quitan persitencia en Grillas + inicio de refactorizacion de entrega + Ajuste de Inventario
+[33m46804e8[m[33m ([m[1;33mtag: v0.24.1[m[33m)[m 140921- Entrega a planta sin OF: se agrega campo aviso
+[33md3c707a[m[33m ([m[1;33mtag: v0.24.0[m[33m)[m 140921- Administracion de Stock: se agrega Entrega a Planta sin OF
+[33m398fb2a[m[33m ([m[1;33mtag: v0.23.2[m[33m)[m 140921- Recepcion: correccion para lazy loading de dll pdf
+[33meb8a071[m[33m ([m[1;33mtag: v0.23.1[m[33m)[m 100921- Nueva version
+[33m7659ec8[m[33m ([m[1;33mtag: v0.23.0[m[33m)[m 070921- Entrega: control para agregar insumos y editar los items
+[33me00ef47[m[33m ([m[1;33mtag: v0.22.0[m[33m)[m 060921- Entrega se agrega tipo de insumo al guardar
+[33m01aa2aa[m[33m ([m[1;33mtag: v0.21.0[m[33m)[m 010921- Nuevo modulo de Indicadores: Tiempos productivos
+[33m3c512cf[m[33m ([m[1;33mtag: v0.20.0[m[33m)[m 270821- Entrega: todos los procesos de la orden pasan a estado firme y se ven en cargade maquina
+[33m457f22d[m[33m ([m[1;33mtag: v0.19.4[m[33m)[m 260821- Carga de Maquina: arreglo para hoja de ruta y tiempos
+[33mdcc4aad[m[33m ([m[1;33mtag: v0.19.3[m[33m)[m 160821- Entrega: calculo de stock correctamente
+[33m6393286[m[33m ([m[1;33mtag: v0.19.2[m[33m)[m 100821- Carga de maquina: idenficacion para codigos de insumos con barra
+[33m93e6722[m[33m ([m[1;33mtag: v0.19.1[m[33m)[m 090821- arreglos para alta de semis con barra y entregas
+[33m0abc81e[m[33m ([m[1;33mtag: v0.19.0[m[33m)[m Merge branch 'estad'
+[33m0bc6189[m[33m ([m[1;33mtag: v0.18.7[m[33m)[m 090821- test2
+[33m1406315[m[33m ([m[1;33mtag: v0.18.6[m[33m)[m Eliminado db2
+[33m7fb6ac0[m[33m ([m[1;33mtag: v.0.18.5[m[33m)[m 090821- intento eliminar db por tamaño excedido
+[33m4f4f075[m[33m ([m[1;33mtag: v0.18.4[m[33m)[m 260721- Mejora performance
+[33m64b94d0[m[33m ([m[1;33mtag: v0.18.3[m[33m)[m 220721- Actualizacion controller trazabilidad
+[33m4fc7be9[m[33m ([m[1;33mtag: v0.18.2[m[33m)[m Merge branch 'Trazabilidad'
+[33m367409d[m[33m ([m[1;33mtag: v0.17.3[m[33m)[m 220721- Planificacion: vista de grillas y revertir ordenes cerrdas y anuladas
+[33m4194360[m[33m ([m[1;33mtag: v0.17.2[m[33m)[m Ajustes. Nuevo boton
+[33md643fee[m[33m ([m[1;33mtag: v0.17.1[m[33m)[m 210721- Se quita combo vista de index
+[33mc9832ce[m[33m ([m[1;33mtag: v0.18.1[m[33m)[m Merge branch 'master' of github.com:Marcelo1985Alba/SupplyChain-Arbros into Trazabilidad
+[33m663fed7[m[33m ([m[1;33mtag: v0.18.0[m[33m)[m 20-7-21 Cambios en Trazabilidad. Se usa vistas y hubo cambios en la grilla.
+[33me1dae1f[m[33m ([m[1;33mtag: v0.17.0[m[33m)[m 190721- vistas para grillas
+[33m6ad8956[m[33m ([m[1;33mtag: v0.16.0[m[33m)[m 150721- Entrega: se cambia resumen stock a vista con campos de descripcion de deposito y producto y otras mejoras menores
+[33md64aded[m[33m ([m[1;33mtag: v0.15.2[m[33m)[m 140721-Entrega a of: arreglos varios
+[33m408675c[m[33m ([m[1;33mtag: v0.15.1[m[33m)[m 130721- Entrega a OF: Se agrega aviso + se agrega tipo insumo cambio de of a firme + arreglos varios
+[33m4695328[m[33m ([m[1;33mtag: v0.15.0[m[33m)[m 120721- Entrega: agregar insumo
+[33mdb14c57[m[33m ([m[1;33mtag: v0.14.21[m[33m)[m 090721- Entrega: mejoras en nuscadores + seleccionar otro despacho,serielote o deposito + validadciones alguardar
+[33m08160b9[m[33m ([m[1;33mtag: v0.14.20[m[33m)[m 020721- arreglo en api OrdenesFabricacion
+[33m6dd08a0[m[33m ([m[1;33mtag: v0.14.19[m[33m)[m 010721- Cambios stylo loading + stylos de botnes en carga de maquina
+[33m33c6652[m[33m ([m[1;33mtag: v0.14.18[m[33m)[m 010721-Recepcion se agrega lote
+[33meaf805b[m[33m ([m[1;33mtag: v0.14.17[m[33m)[m 300621-Servicios filtrar por columna + test reportes
+[33m3ebaf0f[m[33m ([m[1;33mtag: v.0.14.16[m[33m)[m 280621- PCP: mejoras en pedidos pendientes y fabricacion TRABILIDAD: ver ensayos
+[33m5e38627[m[33m ([m[1;33mtag: v0.14.5[m[33m)[m Cambios a Eventos.
+[33mae0098d[m[33m ([m[1;33mtag: v0.14.4[m[33m)[m 180621- Ope de Stock: agrego loading
+[33md1f0749[m[33m ([m[1;33mtag: v0.14.3[m[33m)[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33m05c76a8[m Cambios a carga de maquina para poder generar un evento desde una OF
+[33m013a883[m[33m ([m[1;33mtag: v0.14.2[m[33m)[m 180621- Arreglos en planificacion, Trazabilidad y servicios
+[33mb039040[m[33m ([m[1;33mtag: v0.14.1[m[33m)[m 150621- Actualizacion Syncfusion + cambio a fuente Arial  en grillas + mejora en servicios
+[33m2255292[m[33m ([m[1;33mtag: v0.14.0[m[33m)[m 110621- arreglos para cargar ensayo + incorporracion de no conf + arregles en servicios
+[33m03dff41[m[33m ([m[1;33mtag: v.0.13.0[m[33m)[m 080621- Estadisticas Ventas: Crear tabla Estad_WEB + controller y componente
+[33mf3c3a01[m[33m ([m[1;33mtag: v.0.12.2[m[33m)[m 080621- cambio de style en grillas mas arreglos para filtrar prod con barras
+[33mfaeb8f9[m[33m ([m[1;33mtag: v0.12.1[m[33m, [m[1;33mtag: v.0.12.1[m[33m)[m 020621- se agrega unidad equivalente en planificacion  + colorear en abastecimiento los semis que tienen menos de 3 procesos + correccion sp
+[33me6269dd[m[33m ([m[1;33mtag: v0.12.0[m[33m)[m 010621- actualizacion de Syncfusion + se cambian check a controles genericos
+[33mee14a12[m[33m ([m[1;33mtag: v0.11.0[m[33m)[m 310521- Recepcion se agrega especificacion (boton y visor pdf)
+[33m7fcb533[m[33m ([m[1;33mtag: v0.10.0[m[33m)[m 260521- se agregan checks en recepcion para control de calidad + arreglo para copiar fila con cg_den
+[33m1b55689[m[33m ([m[1;33mtag: v0.9.7[m[33m)[m 200521- actualiza cantidad comercial + al abrir vale obtiene lo pendiente
+[33m7348841[m[33m ([m[1;33mtag: v.0.9.5[m[33m)[m 190521- En recepcion se agrega boton  de imprmir etiquetas + despliege de despiece en Planificaciones
+[33m802d873[m[33m ([m[1;33mtag: v0.9.5[m[33m)[m 180521- edit items recepcion: se colorea fila si la cantidad es mayor a la cantidad pendiente
+[33m5eca4c5[m[33m ([m[1;33mtag: v0.9.4[m[33m)[m 170521- Recepcion Se agrega etiqueta+ autocompletar remito con Ceros + al editar se carga cantidad pendiente
+[33m148eb59[m[33m ([m[1;33mtag: v.0.9.3[m[33m)[m 170521- reduccion de archivos scss
+[33m804ea93[m[33m ([m[1;33mtag: v.0.9.2[m[33m)[m 130521- carga despacho automaticamente en reepcion + cierrar orden si cumplio con las cantidades
+[33m59e31aa[m[33m ([m[1;33mtag: v0.9.1.1[m[33m)[m 100521- mejoras carga maquina
+[33m1b0ba6c[m[33m ([m[1;33mtag: v0.9.1.0[m[33m)[m 070521- se agrega visibilidad dinamica de mp, se y hoja de ruta en el dialog de of en carga de maquina + arreglo de pagina para ganar espacio en los 4 margenes + descarga de plano
+[33m26b6a35[m Merge branch 'Inventario'
+[33m9d6a46d[m Mejoras en Inventario recepcion
+[33m1f0dd16[m[33m ([m[1;33mtag: v0.9.0[m[33m)[m 060521- Actualizacion Syncfusion + nuevas mejoras en recepcion solicitadas por monica + se agrega menu para rol Produccion
+[33m5a9f14d[m[33m ([m[1;33mtag: v.0.8.0[m[33m)[m 050521- Agregar items a recepcion de materiales.
+[33mebdde1c[m[33m ([m[1;33mtag: v.0.7.7[m[33m)[m 030521- se agrega add item y control de deposito por item+ control para cerrar item por OC
+[33mf2b5b2a[m[33m ([m[1;33mtag: v.0.7.6[m[33m)[m 290421- se agrega spinner + correcciones al guardar
+[33m546e9da[m[33m ([m[1;33mtag: v.0.7.5[m[33m)[m 280421- Cambios en inventario para guardar el vale entero y no por items
+[33ma6d388f[m 270421- mejora en recepcion + primeros cambios para guardar completamente y no por items
+[33m2efc5bf[m[33m ([m[1;33mtag: v.0.7.4[m[33m, [m[1;33mtag: v.0.7.3[m[33m)[m 270421- arreglos menores
+[33m6fc949e[m[33m ([m[1;33mtag: v.0.7.2[m[33m)[m 270421- arreglos menos
+[33m500baa5[m[33m ([m[1;33mtag: v.0.7.1[m[33m)[m 220421-cambios para decargar dtos desde carga de maquina
+[33m70bb33f[m[33m ([m[1;33mtag: v0.7.0[m[33m)[m 210421- Arreglos en pdf + servicios + plano + inventarios + ingresos por dispositivos moviles
+[33m50d143c[m[33m ([m[1;33mtag: v0.6.2[m[33m)[m 170421- Se agrega menu contra base de datos: agregar tabla Modulo y sus registros. Se cambia menu.
+[33m9af009a[m[33m ([m[1;33mtag: v.0.6.1[m[33m)[m 170421-Correccion cargar doc pdf
+[33m492f71e[m[33m ([m[1;33mtag: v0.6.0[m[33m)[m 170421- se agrega ver ensayos y controller de administracion de archivos + se agregan iconos en botones
+[33mea3a2f1[m 160421- Carga de Maquina: Se agrega botones de enviar a datacore + arreglos en identificacion + inicio de modulos
+[33me594a9c[m[33m ([m[1;33mtag: v0.5.0[m[33m)[m 130421- SE AGREGA pdfium para que lo time en el server + se corrigen labels en Inventarios
+[33m5bb7fa5[m[33m ([m[1;33mtag: v0.4.18[m[33m)[m 130421- correccion de bug dialog en inventarios
+[33m90160e7[m[33m ([m[1;33mtag: v0.4.17[m[33m)[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33m36155ee[m 050421- ALTER TABLE RESUMENSTOCK ADD REGISTRO INT PRIMARY KEY IDENTITY(1,1) + ALTER PROCEDURE NET_PCP_TraerAbast + Se agrega  inventarios
+[33m19d9e3c[m Set up CI with Azure Pipelines
+[33m20de9c9[m Merge branch 'master' of https://github.com/Marcelo1985Alba/SupplyChain-Arbros
+[33mba5cd41[m 050421- Se agrega id a las grillas y controles de syncfusion
+[33m656af9e[m 050421- se agrega base de datos para pruebas
+[33m21cbf48[m 300321- Se agrega funcionalidad descargar datos en carga de maquina + mejoras en trazabilidad + mejoras en fabricacion: editar registro y actualizar grilla  +cartel de scrap mas chico.
+[33mc144e56[m 260321- se agrega el page size a las grillas
+[33m5de7f6c[m 260321- mejora en carga de maquina + se achica el  espaciado entre registros de las grillas de pcp
+[33m519cddd[m 250321- Arregos para Carga de maquina
+[33mae2526d[m 240321- Arreglos para ver pdf + correccion para agregar titulo en cada pagina + control version cache + globalizacion
+[33mbeec10b[m 220321- Nuevo sistema de notificacion + Arreglos en pcp (pendientes de fabricar + prevision + pendientes de entrega)
+[33m354acc3[m 210321- se agrega tab y se carga pcp como tabs
+[33mede90e4[m 200321- Se agrega pcp y se consigue que las grillas sean responsive
+[33mf4c91ff[m 190321- Se agrega abm de Productos
+[33m3200dd4[m 170321- Cambios estilos
+[33mc51632c[m 160321- Correccion estilos del header y sidebar + paginas responsivas.
+[33m6891dd8[m 160221- Arreglos varios en login paginas y pdf
+[33ma3d3f0f[m 140321- Mejora en Kanban y Login
+[33mad58ca6[m Agregar archivos de proyecto.
+[33m6afdeda[m Agregar .gitignore y .gitattributes.
