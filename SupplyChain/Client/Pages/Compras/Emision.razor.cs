@@ -26,9 +26,6 @@ using Syncfusion.Pdf.Grid;
 using Syncfusion.Pdf.Tables;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Shared;
-using Syncfusion.Blazor.Kanban.Internal;
-using System.Drawing;
-using Syncfusion.Blazor.SplitButtons;
 
 namespace SupplyChain.Client.Pages.Emision
 {
@@ -44,8 +41,6 @@ namespace SupplyChain.Client.Pages.Emision
 
         // variables generales
         public bool Anularoc { get; set; } = false;
-        public bool Anularpp { get; set; } = false;
-
         public bool IsVisibleguarda { get; set; } = false;
         public bool IsVisibleimprime { get; set; } = true;
         public bool IsVisibleAnular { get; set; } = true;
@@ -55,7 +50,6 @@ namespace SupplyChain.Client.Pages.Emision
         public int onumero { get; set; } = 0;
         public int numeroorden { get; set; } = 0;
         public Compra item { get; set; } = new Compra();
-        public Compra item2 { get; set; } = new Compra();
         public decimal? bonif { get; set; } = 0;
         public string listaordenescompra { get; set; } = "";
 
@@ -201,144 +195,7 @@ namespace SupplyChain.Client.Pages.Emision
             }
         }
 
-   
-
-    public async Task anularpp()
-        {
-            if( item is null || item.NUMERO == 0)
-            {
-                await this.ToastObj.ShowAsync(new ToastModel
-                {
-                    Title = "ERROR!",
-                    Content = "Debe seleccionar la Orden de Compra",
-                    CssClass = "e-toast-danger",
-                    Icon = "e-errror toast-icons",
-                    ShowCloseButton = true,
-                    ShowProgressBar = true
-                });
-            }
-            else
-            {
-                var orden = await Http.PutAsJsonAsync($"api/compras/anulacionpp/{item.NUMERO}", item);
-                Anularpp = true;
-                 await this.ToastObj.ShowAsync(new ToastModel
-                {
-                    Title = "EXITO!",
-                    Content = "Orden de Compra Anulada",
-                    Icon = "e-succes toast-icons",
-                    ShowCloseButton = true,
-                    ShowProgressBar = true
-                });
-                Compra itemagregarcompras = new Compra();
-
-                itemagregarcompras.NUMERO = 0;
-                itemagregarcompras.FE_EMIT = DateTime.Now.Date;
-                itemagregarcompras.CG_ORDEN = 4;
-                itemagregarcompras.CG_MAT = CgMat;
-                itemagregarcompras.DES_MAT = DesMat;
-                itemagregarcompras.SOLICITADO = xCant;
-                itemagregarcompras.UNID = xUnid;
-                itemagregarcompras.UNID1 = xUnid1;
-                itemagregarcompras.MONEDA = xMoneda;
-                itemagregarcompras.DIASVIGE = xDiasvige;
-                itemagregarcompras.CG_DEN = xCgden;
-                itemagregarcompras.PRECIO = xPrecio;
-                itemagregarcompras.DESCUENTO = xDescuento;
-
-                if (xDescuento > 0)
-                {
-                    itemagregarcompras.PRECIONETO = Math.Round(xPrecio * (1 - (xDescuento / 100)), 2);
-                }
-                else
-                {
-                    itemagregarcompras.PRECIONETO = xPrecio;
-                }
-                itemagregarcompras.ESPECIFICA = xespecif;
-                if (xUnid != xUnid1 && xCgden > 0)
-                {
-                    itemagregarcompras.AUTORIZADO = xCant / xCgden;
-                }
-                else
-                {
-                    itemagregarcompras.AUTORIZADO = xCant;
-                }
-                itemagregarcompras.PRECIOTOT = xPrecio * itemagregarcompras.AUTORIZADO;
-                itemagregarcompras.NROCLTE = xCgProve;
-                itemagregarcompras.DES_PROVE = xDesProve;
-                itemagregarcompras.FE_PREV = DateTime.Now.Date;
-                itemagregarcompras.CONDVEN = "";
-                itemagregarcompras.CG_CIA = 1;
-                itemagregarcompras.USUARIO = "USER";
-                itemagregarcompras.FE_REG = DateTime.Now.Date;
-                itemagregarcompras.Id = xRegistrocompras;
-
-                HttpResponseMessage response = null;
-                if (xRegistrocompras > 0)
-                {
-                    response = await Http.PutAsJsonAsync("api/compras/actualizaitem/" + xRegistrocompras, itemagregarcompras);
-                }
-                else
-                {
-                    response = await Http.PostAsJsonAsync("api/compras/agregaritem", itemagregarcompras);
-                }
-                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
-                    || response.StatusCode == System.Net.HttpStatusCode.NotFound
-                    || response.StatusCode == System.Net.HttpStatusCode.Conflict)
-                {
-                    var mensServidor = await response.Content.ReadAsStringAsync();
-
-                    Console.WriteLine($"Error:{mensServidor}");
-                    await this.ToastObj.Show(new ToastModel
-                    {
-                        Title = "ERROR!",
-                        Content = "Error al agregar item",
-                        CssClass = "e-toast-danger",
-                        Icon = "e-error toast-icons",
-                        ShowCloseButton = true,
-                        ShowProgressBar = true
-                    });
-                }
-                else
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        await this.ToastObj.ShowAsync(new ToastModel
-                        {
-                            Title = "EXITO!",
-                            Content = "Item Agregado a preparación Correctamente.",
-                            CssClass = "e-toast-success",
-                            Icon = "e-success toast-icons",
-                            ShowCloseButton = false,
-                            ShowProgressBar = false
-                        });
-                        xtituloboton = "Agregar";
-                        await cargapreparacion();
-                        xRegistrocompras = 0;
-
-                    }
-                }
-                if (xRegistrocompras > 0)
-                {
-                    response = await Http.PostAsJsonAsync("api/compras/agregaritem", itemagregarcompras);
-                }
-                limpia();
-
-            }
-        }
-
-    public async Task itemseleccionado(MenuEventArgs args)  
-     {
-            if(args.Item.Text == "Anular OC")
-            {
-                await anularoc();
-            }
-            else if(args.Item.Text=="Anular PP")
-            {
-                await anularpp();
-            }
-     }
-
-    public async Task anularoc()
+        public async Task anularoc()
         {
             if( item is null || item.NUMERO ==0)
             {
@@ -358,7 +215,7 @@ namespace SupplyChain.Client.Pages.Emision
             else
             {
                 
-                var orden = await Http.PutAsJsonAsync($"api/compras/anulacionoc/{item.NUMERO}", item);
+                var orden = await Http.PutAsJsonAsync($"api/compras/anulacion/{item.NUMERO}", item);
                 Anularoc = true;
 
 
@@ -484,57 +341,57 @@ namespace SupplyChain.Client.Pages.Emision
         }
 
 
-        public async Task imprimiroc()
-        {
-            if (item is null || item.NUMERO == 0)
-            {
-                await this.ToastObj.ShowAsync(new ToastModel
-                {
-                    Title = "ERROR!",
-                    Content = "Debe Indicar la Orden de compra para abrir",
-                    CssClass = "e-toast-danger",
-                    Icon = "e-error toast-icons",
-                    ShowCloseButton = true,
-                    ShowProgressBar = true
-                });
-            }
-            else
-            {
+        //public async Task imprimiroc()
+        //    {
+        //    if (item is null || item.NUMERO== 0)
+        //    {
+        //        await this.ToastObj.ShowAsync(new ToastModel
+        //        {
+        //            Title = "ERROR!",
+        //            Content = "Debe Indicar la Orden de compra para abrir",
+        //            CssClass = "e-toast-danger",
+        //            Icon = "e-error toast-icons",
+        //            ShowCloseButton = true,
+        //            ShowProgressBar = true
+        //        });
+        //    }
+        //    else
+        //    {
 
-                PdfDocument document = new PdfDocument();
-                PdfPage page = document.Pages.Add();
-                PdfGraphics graphics = page.Graphics;
-                PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
-                graphics.DrawString("Orden de Compra: " + item.NUMERO.ToString(), font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+        //        PdfDocument document = new PdfDocument();
+        //        PdfPage page = document.Pages.Add();
+        //        PdfGraphics graphics = page.Graphics;
+        //        PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+        //        graphics.DrawString("Orden de Compra: " + item.NUMERO.ToString(), font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
-                /*
-                PdfGrid pdfGrid = new PdfGrid();
-                pdfGrid.DataSource = insumosproveedor;
-                //Create string format for PdfGrid
-                PdfStringFormat format = new PdfStringFormat();
-                format.Alignment = PdfTextAlignment.Center;
-                format.LineAlignment = PdfVerticalAlignment.Bottom;
-                //Assign string format for each column in PdfGrid
-                foreach (PdfGridColumn column in pdfGrid.Columns)
-                    column.Format = format;
-                //Apply a built-in style
-                pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent6);
-                //Set properties to paginate the grid
-                PdfGridLayoutFormat layoutFormat = new PdfGridLayoutFormat();
-                layoutFormat.Break = PdfLayoutBreakType.FitPage;
-                layoutFormat.Layout = PdfLayoutType.Paginate;
-                pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, 200), layoutFormat);
-                //Save the document.
-               // document.Save("Output.pdf");
-                */
-                MemoryStream xx = new MemoryStream();
-                document.Save(xx);
-                document.Close(true);
+        //        /*
+        //        PdfGrid pdfGrid = new PdfGrid();
+        //        pdfGrid.DataSource = insumosproveedor;
+        //        //Create string format for PdfGrid
+        //        PdfStringFormat format = new PdfStringFormat();
+        //        format.Alignment = PdfTextAlignment.Center;
+        //        format.LineAlignment = PdfVerticalAlignment.Bottom;
+        //        //Assign string format for each column in PdfGrid
+        //        foreach (PdfGridColumn column in pdfGrid.Columns)
+        //            column.Format = format;
+        //        //Apply a built-in style
+        //        pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent6);
+        //        //Set properties to paginate the grid
+        //        PdfGridLayoutFormat layoutFormat = new PdfGridLayoutFormat();
+        //        layoutFormat.Break = PdfLayoutBreakType.FitPage;
+        //        layoutFormat.Layout = PdfLayoutType.Paginate;
+        //        pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, 200), layoutFormat);
+        //        //Save the document.
+        //       // document.Save("Output.pdf");
+        //        */
+        //        MemoryStream xx = new MemoryStream();
+        //        document.Save(xx);
+        //        document.Close(true);
 
-                await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportOC?numero={item.NUMERO}", "_blank" });
+        //        await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportOC?numero={item.NUMERO}", "_blank" });
 
-            }
-        }
+        //    }
+        //}
 
 
         public async Task guardaoc()
@@ -594,7 +451,7 @@ namespace SupplyChain.Client.Pages.Emision
                     await this.ToastObj.Show(new ToastModel
                     {
                         Title = "EXITO!",
-                        Content = "Orden de Compra " + responseString + " Generada",
+                        Content = "Orden de Compra "+responseString+" Generada",
                         CssClass = "e-toast-success",
                         Icon = "e-success toast-icons",
                         ShowCloseButton = false,
@@ -604,9 +461,34 @@ namespace SupplyChain.Client.Pages.Emision
                 proveedorescompras = await Http.GetFromJsonAsync<List<Proveedores_compras>>("api/compras/GetProveedorescompras/");
 
                 limpia();
-            
             }
-           
+            if(item is null || item.NUMERO == 0)
+            {
+                await this.ToastObj.ShowAsync(new ToastModel
+                {
+                    Title="ERROR!",
+                    Content="Debe Indicar la Orden de Compra para subir",
+                    CssClass="e-toast-danger",
+                    Icon="e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }
+            else
+            {
+                PdfDocument document = new PdfDocument();
+                PdfPage page = document.Pages.Add();
+                PdfGraphics graphics = page.Graphics;
+                PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+                graphics.DrawString("Orden de Compra: " + item.NUMERO.ToString(), font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+                
+                MemoryStream xx = new MemoryStream();
+                document.Save(xx);
+                document.Close(true);
+
+                await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportOC?numero={item.NUMERO}", "_blanck"});
+
+            }
         }
     }
 }

@@ -338,13 +338,13 @@ namespace SupplyChain.Server.Controllers
         }
 
 
-        [HttpPut("anulacionpp/{numero}")]
-        public async Task<ActionResult<IEnumerable<Compra>>> anularpp(int numero, Compra compra)
+        [HttpPut("anulacion/{numero}")]
+        public async Task<ActionResult<IEnumerable<Compra>>> anulacion(int numero, Compra compra)
         {
             try
             {
                 //await _compraRepository.Obtener(c => c.NUMERO == numero).ToListAsync();
-                await _compraRepository.AnularPP(compra);
+                await _compraRepository.AnularOC(compra);
                 return Ok(compra);
                 
             }
@@ -353,20 +353,6 @@ namespace SupplyChain.Server.Controllers
                 return BadRequest(ex);
             }
 
-        }
-
-        [HttpPut("anulacionoc/{numero}")]
-        public async Task<ActionResult<IEnumerable<Compra>>> anularoc(int numero, Compra compra)
-        {
-            try
-            {
-                await _compraRepository.AnularOC(compra);
-                return Ok(compra);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
         }
 
        
