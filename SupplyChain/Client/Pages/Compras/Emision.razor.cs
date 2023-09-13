@@ -40,7 +40,6 @@ namespace SupplyChain.Client.Pages.Emision
         [CascadingParameter] public MainLayout MainLayout { get; set; }
 
         // variables generales
-        public bool Anularoc { get; set; } = false;
         public bool IsVisibleguarda { get; set; } = false;
         public bool IsVisibleimprime { get; set; } = true;
         public bool IsVisibleAnular { get; set; } = true;
@@ -62,9 +61,6 @@ namespace SupplyChain.Client.Pages.Emision
         protected List<Compra> insumosproveedor = new();
         protected List<Compra> ordenSeleccionada = new();
         protected SfGrid<Compra> GridProve;
-        protected List<Compra> listapreparacion = new();
-
-
 
         public string xespecif = "";
         public string xespecif2 = "";
@@ -72,27 +68,6 @@ namespace SupplyChain.Client.Pages.Emision
         public string DropVal = "";
         public string xcondven = "";
         public string Obs = "";
-
-        protected string CgMat = "";
-        protected DateTime? xFeprev;
-        protected string DesMat = "";
-        // string xespecif = "";
-        protected int xCgProve = 0;
-        protected int xRegistrocompras = 0;
-        protected string xDesProve = "";
-        protected string xtituloboton = "Agregar";
-        protected decimal xPrecio = 0;
-        protected decimal xDescuento = 0;
-        protected decimal xCant = 0;
-        protected decimal? xCant1 = 0;
-        protected decimal? xCgden = 0;
-        protected int xDiasvige = 0;
-        protected string xUnid = "";
-        protected string xUnid1 = "";
-        protected string xUnidMP = "";
-        protected string xMoneda = "";
-        protected bool enableprecio = false;
-
 
         protected BuscadorEmergente<Compra> Buscador;
         protected Compra[] ItemsABuscar = null;
@@ -208,17 +183,13 @@ namespace SupplyChain.Client.Pages.Emision
                     ShowCloseButton = true,
                     ShowProgressBar = true
                 });
-                //CAMVBIAR ORDEN DEL IF
-                //VERIFICA ANTES
             }
 
             else
             {
-                
-                var orden = await Http.PutAsJsonAsync($"api/compras/anulacion/{item.NUMERO}", item);
-                Anularoc = true;
+                var responseMessage = await Http.PutAsJsonAsync("api/compras/anulacion", item);
 
-
+                //var responseMessage = await Http..PostAsJsonAsync("api/compras/anulacion", item);
                 await this.ToastObj.ShowAsync(new ToastModel
                 {
                     
@@ -228,117 +199,91 @@ namespace SupplyChain.Client.Pages.Emision
                     ShowCloseButton = true,
                     ShowProgressBar = true
                 });
-                Compra itemagregarcompras = new Compra();
-
-                itemagregarcompras.NUMERO = 0;
-                itemagregarcompras.FE_EMIT = DateTime.Now.Date;
-                itemagregarcompras.CG_ORDEN = 4;
-                itemagregarcompras.CG_MAT = CgMat;
-                itemagregarcompras.DES_MAT = DesMat;
-                itemagregarcompras.SOLICITADO = xCant;
-                itemagregarcompras.UNID = xUnid;
-                itemagregarcompras.UNID1 = xUnid1;
-                itemagregarcompras.MONEDA = xMoneda;
-                itemagregarcompras.DIASVIGE= xDiasvige;
-                itemagregarcompras.CG_DEN = xCgden;
-                itemagregarcompras.PRECIO = xPrecio;
-                itemagregarcompras.DESCUENTO = xDescuento;
-
-                if(xDescuento > 0)
-                {
-                    itemagregarcompras.PRECIONETO = Math.Round(xPrecio * (1 - (xDescuento / 100)), 2);
-                }
-                else
-                {
-                    itemagregarcompras.PRECIONETO = xPrecio;
-                }
-                itemagregarcompras.ESPECIFICA = xespecif;
-                if(xUnid != xUnid1 && xCgden > 0)
-                {
-                    itemagregarcompras.AUTORIZADO = xCant / xCgden;
-                }
-                else
-                {
-                    itemagregarcompras.AUTORIZADO= xCant;
-                }
-                itemagregarcompras.PRECIOTOT = xPrecio * itemagregarcompras.AUTORIZADO;
-                itemagregarcompras.NROCLTE = xCgProve;
-                itemagregarcompras.DES_PROVE=xDesProve;
-                itemagregarcompras.FE_PREV = DateTime.Now.Date;
-                itemagregarcompras.CONDVEN = "";
-                itemagregarcompras.CG_CIA = 1;
-                itemagregarcompras.USUARIO = "USER";
-                itemagregarcompras.FE_REG=DateTime.Now.Date;
-                itemagregarcompras.Id = xRegistrocompras;
-
-                HttpResponseMessage response = null;
-                if (xRegistrocompras > 0)
-                {
-                    response = await Http.PutAsJsonAsync("api/compras/actualizaitem/" + xRegistrocompras, itemagregarcompras);
-                }
-                else
-                {
-                    response = await Http.PostAsJsonAsync("api/compras/agregaritem", itemagregarcompras);
-                }
-                if(response.StatusCode==System.Net.HttpStatusCode.BadRequest
-                    || response.StatusCode == System.Net.HttpStatusCode.NotFound
-                    || response.StatusCode== System.Net.HttpStatusCode.Conflict)
-                {
-                    var mensServidor= await response.Content.ReadAsStringAsync();
-
-                    Console.WriteLine($"Error:{mensServidor}");
-                    await this.ToastObj.Show(new ToastModel
-                    {
-                        Title = "ERROR!",
-                        Content = "Error al agregar item",
-                        CssClass = "e-toast-danger",
-                        Icon = "e-error toast-icons",
-                        ShowCloseButton = true,
-                        ShowProgressBar = true
-                    });
-                }
-                else
-                {
-                    if(response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        await this.ToastObj.ShowAsync(new ToastModel
-                        {
-                            Title = "EXITO!",
-                            Content = "Item Agregado a preparación Correctamente.",
-                            CssClass = "e-toast-success",
-                            Icon = "e-success toast-icons",
-                            ShowCloseButton = false,
-                            ShowProgressBar = false
-                        });
-                        xtituloboton = "Agregar";
-                        await cargapreparacion();
-                        xRegistrocompras = 0;
-                        
-                    }
-                }
-                if(xRegistrocompras > 0)
-                {
-                    response = await Http.PostAsJsonAsync("api/compras/agregaritem", itemagregarcompras);
-                }
-                limpia();
-
             }
         }
 
-        public async Task cargapreparacion()
-        {
-            try
-            {
-                listapreparacion = await Http.GetFromJsonAsync<List<Compra>>("api/Compras/GetPreparacion/0");
-            }
-            catch (Exception e)
-            {
-                //return BadRequest(e);
-            }
+        //public async Task anularOc()
+        //{
+        //    if (ocompraseleccionada is null || ocompraseleccionada.NUMERO == 0)
+        //    {
+        //        await this.ToastObj.ShowAsync(new ToastModel
+        //        {
+        //            Title = "ERROR!",
+        //            Content = "Debe seleccionar la Orden de Compra",
+        //            CssClass = "e-toast-danger",
+        //            Icon = "e-error toast-icons",
+        //            ShowCloseButton = true,
+        //            ShowProgressBar = true
+        //        });
+        //    }
+        //    else
+        //    {
+        //        var responseMessage = await repositoryHttp2.PostAsJsonAsync("api/compras/PostAnularOc" , ocompraseleccionada);
+        //        if (responseMessage.Error)
+        //        {
+        //            await this.ToastObj.ShowAsync(new ToastModel
+        //            {
+        //                Title = "ERROR!",
+        //                Content = "Debe seleccionar la Orden de Compra",
+        //                CssClass = "e-toast-danger",
+        //                Icon = "e-error toast-icons",
+        //                ShowCloseButton = true,
+        //                ShowProgressBar = true
+        //            });                }
+        //        else
+        //        {
 
-            //datapreparacion = await Http.GetFromJsonAsync<List<Compra>>("api/Compras/GetPreparacion/");
-            //RefrescaLista();
-        }
+        //            ocabierta = true;
+        //            Compra num = responseMessage.Response;
+        //            onumero = num.CG_ORDEN;
+        //            Obs = num.ESPECIFICA;
+        //        }
+
+
+
+        //    }
+        //}
+
+        //public async Task anularOc()
+        //{
+        //    try
+        //    {
+        //        if (ocompra == 0)
+        //        {
+        //            await this.ToastObj.Show(new ToastModel
+        //            {
+        //                Title = "ERROR!",
+        //                Content = "Debe seleccionar la Orden de Compra",
+        //                CssClass = "e-toast-danger",
+        //                Icon = "e-error toast-icons",
+        //                ShowCloseButton = true,
+        //                ShowProgressBar = true
+        //            });
+        //        }
+        //        else
+        //        {
+        //            ordenSeleccionada = await Http.GetFromJsonAsync<List<Compra>>("api/compras/PostAnularOc" + ocompra);
+
+        //            ocabierta = true;
+        //            Compra num = ordenSeleccionada.FirstOrDefault();
+        //            onumero = num.CG_ORDEN;
+        //            Obs = num.ESPECIFICA;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("Error al anular la Orden de Compra: " + ex.Message);
+        //        await this.ToastObj.Show(new ToastModel
+        //        {
+        //            Title = "ERROR!",
+        //            Content = "Error al anular la Orden de Compra",
+        //            CssClass = "e-toast-danger",
+        //            Icon = "e-error toast-icons",
+        //            ShowCloseButton = true,
+        //            ShowProgressBar = true
+        //        });
+        //    }
+        //}
 
 
         public async Task imprimiroc()
