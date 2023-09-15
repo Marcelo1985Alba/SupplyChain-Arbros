@@ -39,6 +39,9 @@ namespace SupplyChain.Shared
         public string? FACTURA { get; set; } 
         public string? LETRA_FACTURA { get; set; }
         public double? TOT_DOL { get; set; }
+        public decimal? CANT_USO_RECIBIDA {  get; set; }
+        public decimal? CANT_COMERCIAL_RECIBIDA {  get; set; }
+        public decimal? PENDIENTE_RECIBIDO {  get; set; }
 
     }
 }
