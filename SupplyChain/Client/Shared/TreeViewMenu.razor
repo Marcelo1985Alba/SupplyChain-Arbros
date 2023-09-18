@@ -4,6 +4,8 @@
 @using SupplyChain.Shared
 @using System.Security.Claims;
 @inject HttpClient Http
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+@inject IJSRuntime Js
 
 @if (!IsAdmin)
 {
@@ -64,7 +66,7 @@ else
 
             dbMenu = await Http.GetFromJsonAsync<List<Modulo>>($"api/ModulosUsuario/GetModulosFromUserId/{userId.Value}");
         }
-        
+
     }
     protected async Task GetMenu()
     {
@@ -112,16 +114,16 @@ else
             if (IsVentas)
             {
                 dbMenu.AddRange( dbMenuMaster.Where(m => (m.Id == 2 || m.ParentId == 2) //Ventas: Logistica y servicios
-                                                                          //||
-                                                                          //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
-                                                                          //||
-                                                                          //(m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
-                                                                          //||
-                                                                          //(m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
-                                                                          //||
-                                                                          //(m.Id == 25 || m.ParentId == 25) //Ingenieria
-                                                                          //||
-                                                                          //(m.Id == 40) //Mnat celdas
+                                                                                       //||
+                                                                                       //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
+                                                                                       //||
+                                                                                       //(m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
+                                                                                       //||
+                                                                                       //(m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
+                                                                                       //||
+                                                                                       //(m.Id == 25 || m.ParentId == 25) //Ingenieria
+                                                                                       //||
+                                                                                       //(m.Id == 40) //Mnat celdas
                     ).ToList());
 
                 dbMenu.Add(new Modulo
@@ -144,31 +146,31 @@ else
             if (IsIngenieria)
             {
                 dbMenu.AddRange( dbMenuMaster.Where(m => (m.Id == 25 || m.ParentId == 25) //Ventas: Logistica y servicios
-                                                                            //||
-                                                                            //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
-                                                                            //||
-                                                                            //(m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
-                                                                            //||
-                                                                            //(m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
-                                                                            //||
-                                                                            //(m.Id == 25 || m.ParentId == 25) //Ingenieria
-                                                                            //||
-                                                                            //(m.Id == 40) //Mnat celdas
+                                                                                         //||
+                                                                                         //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
+                                                                                         //||
+                                                                                         //(m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
+                                                                                         //||
+                                                                                         //(m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
+                                                                                         //||
+                                                                                         //(m.Id == 25 || m.ParentId == 25) //Ingenieria
+                                                                                         //||
+                                                                                         //(m.Id == 40) //Mnat celdas
                     ).ToList());
             }
             if (IsCompras)
             {
                 dbMenu.AddRange( dbMenuMaster.Where(m => (m.Id == 45 || m.ParentId == 45) //Ventas: Logistica y servicios
-                                                                            //||
-                                                                            //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
-                                                                            //||
-                                                                            //(m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
-                                                                            //||
-                                                                            //(m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
-                                                                            //||
-                                                                            //(m.Id == 25 || m.ParentId == 25) //Ingenieria
-                                                                            //||
-                                                                            //(m.Id == 40) //Mnat celdas
+                                                                                         //||
+                                                                                         //(m.Id == 3 || m.ParentId == 3 || m.ParentId == 19) //Inventarios
+                                                                                         //||
+                                                                                         //(m.Id == 4 || m.ParentId == 4 || m.Id == 18 || m.ParentId == 18) //PCP: carga de 
+                                                                                         //||
+                                                                                         //(m.Id == 5 || m.Id == 14 || m.Id == 16) //Control Calidad: trazabilidad
+                                                                                         //||
+                                                                                         //(m.Id == 25 || m.ParentId == 25) //Ingenieria
+                                                                                         //||
+                                                                                         //(m.Id == 40) //Mnat celdas
                     ).ToList());
             }
             else
@@ -208,8 +210,31 @@ else
             //var moduloParent = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
             Layout.BreadCumParent = modulo.Descripcion;
             await OnChangeToggle.InvokeAsync(false);
+            if (args.NodeData.Text == "Panel de Produccion")
+            {
+                // Obtén la dirección base completa con el puerto
+                var baseAddressCompleta = NavigationManager.BaseUri;
 
-            //await InvokeAsync(StateHasChanged);
+                // Parsea la dirección base para eliminar el puerto
+                var uri = new Uri(baseAddressCompleta);
+                var baseAddressSinPuerto = uri.GetLeftPart(UriPartial.Authority);
+                var urlAutentio = $"{baseAddressSinPuerto.Replace(uri.Port.ToString(), "8080")}/aerre/index.html";
+                await Js.InvokeVoidAsync("open", urlAutentio, "_blank");
+            }
+        }
+        else
+        {
+            if (args.NodeData.Text == "Panel de Produccion")
+            {
+                // Obtén la dirección base completa con el puerto
+                var baseAddressCompleta = NavigationManager.BaseUri;
+
+                // Parsea la dirección base para eliminar el puerto
+                var uri = new Uri(baseAddressCompleta);
+                var baseAddressSinPuerto = uri.GetLeftPart(UriPartial.Authority);
+                var urlAutentio = $"{baseAddressSinPuerto.Replace(uri.Port.ToString(), "8080")}/aerre/index.html";
+                await Js.InvokeVoidAsync("open", urlAutentio, "_blank");
+            }
         }
 
     }
