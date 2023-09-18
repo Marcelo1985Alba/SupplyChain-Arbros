@@ -203,19 +203,23 @@ else
 
     protected async Task NodeClicked(NodeSelectEventArgs args)
     {
+
+        if (args.NodeData.Text == "Panel de Produccion")
+        {
+            // Obtén la dirección base completa con el puerto
+            var baseAddressCompleta = NavigationManager.BaseUri;
+
+            // Parsea la dirección base para eliminar el puerto
+            var uri = new Uri(baseAddressCompleta);
+            var baseAddressSinPuerto = uri.GetLeftPart(UriPartial.Authority);
+            var urlAutentio = $"{baseAddressSinPuerto.Replace(uri.Port.ToString(), "8080")}/aerre/index.html";
+            await Js.InvokeVoidAsync("open", urlAutentio, "_blank");
+        }
+
+
         if (!string.IsNullOrEmpty(args.NodeData.ParentID))
         {
-            if (args.NodeData.Text == "Panel de Produccion")
-            {
-                // Obtén la dirección base completa con el puerto
-                var baseAddressCompleta = NavigationManager.BaseUri;
-
-                // Parsea la dirección base para eliminar el puerto
-                var uri = new Uri(baseAddressCompleta);
-                var baseAddressSinPuerto = uri.GetLeftPart(UriPartial.Authority);
-                var urlAutentio = $"{baseAddressSinPuerto.Replace(uri.Port.ToString(), "8080")}/aerre/index.html";
-                await Js.InvokeVoidAsync("open", urlAutentio, "_blank");
-            }
+            
 
             var parentId = args.NodeData.ParentID;
             var modulo = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
