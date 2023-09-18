@@ -205,11 +205,6 @@ else
     {
         if (!string.IsNullOrEmpty(args.NodeData.ParentID))
         {
-            var parentId = args.NodeData.ParentID;
-            var modulo = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
-            //var moduloParent = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
-            Layout.BreadCumParent = modulo.Descripcion;
-            await OnChangeToggle.InvokeAsync(false);
             if (args.NodeData.Text == "Panel de Produccion")
             {
                 // Obtén la dirección base completa con el puerto
@@ -221,6 +216,13 @@ else
                 var urlAutentio = $"{baseAddressSinPuerto.Replace(uri.Port.ToString(), "8080")}/aerre/index.html";
                 await Js.InvokeVoidAsync("open", urlAutentio, "_blank");
             }
+
+            var parentId = args.NodeData.ParentID;
+            var modulo = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
+            //var moduloParent = await Http.GetFromJsonAsync<Modulo>($"api/Modulo/{parentId}");
+            Layout.BreadCumParent = modulo.Descripcion;
+            await OnChangeToggle.InvokeAsync(false);
+            
         }
         else
         {
