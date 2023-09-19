@@ -861,7 +861,8 @@ namespace SupplyChain.Server.Controllers
                 streams[i].Dispose();
             }
             string contentType = "application/pdf";
-            string fileName = $"AR-CO-{presupuesto}.pdf";
+            //AR-CO
+            string fileName = $"PR-{presupuesto}.pdf";
             return File(stream, contentType, fileName);
         }
 

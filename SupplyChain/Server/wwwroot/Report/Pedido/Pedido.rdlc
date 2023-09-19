@@ -1930,7 +1930,7 @@ Sum(Fields!TOTAL_ITEM.Value, "DataSet1")
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>PEDIDO INTERNO</Value>
+                      <Value>OC INTERNA</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
                         <FontFamily>Arial Black</FontFamily>
@@ -2019,7 +2019,7 @@ Sum(Fields!TOTAL_ITEM.Value, "DataSet1")
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>O.C.Interna Nº</Value>
+                      <Value>O.C.I Nº</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
                         <FontFamily>Ariel Black</FontFamily>
@@ -2030,7 +2030,7 @@ Sum(Fields!TOTAL_ITEM.Value, "DataSet1")
                       </Style>
                     </TextRun>
                     <TextRun>
-                      <Value>: </Value>
+                      <Value>:OCI-</Value>
                       <Style>
                         <FontSize>11pt</FontSize>
                         <FontWeight>Bold</FontWeight>

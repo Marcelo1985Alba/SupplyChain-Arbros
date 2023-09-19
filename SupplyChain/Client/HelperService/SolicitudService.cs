@@ -45,7 +45,7 @@ namespace SupplyChain.Client.HelperService
 
             // Crear un objeto FileContentsResult que contenga el archivo PDF
             var contentType = "application/pdf";
-            var nombreArchivo = $"AR-SOL-{solicitudId}.pdf";
+            var nombreArchivo = $"SL-{solicitudId}.pdf";
             var archivo = new FileContentResult(bytes, contentType) { FileDownloadName = nombreArchivo };
 
             // Descargar el archivo PDF en el navegador del usuario

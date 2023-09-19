@@ -509,7 +509,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Nº Solicitud :    </Value>
+                                  <Value>Nº Id Calculo:    </Value>
                                   <Style>
                                     <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
                                   </Style>
@@ -3342,7 +3342,7 @@
       <Width>7.98726in</Width>
       <Page>
         <PageHeader>
-          <Height>1.49667in</Height>
+          <Height>1.67441in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <ReportItems>
             <Rectangle Name="RectangleEncabezado">
@@ -3383,7 +3383,7 @@
                 </Textbox>
                 <Line Name="Line5">
                   <Left>12.21878cm</Left>
-                  <Height>3.50417cm</Height>
+                  <Height>3.95564cm</Height>
                   <Width>0cm</Width>
                   <ZIndex>1</ZIndex>
                   <Style>
@@ -3546,7 +3546,7 @@
                   </Paragraphs>
                   <rd:DefaultName>Textbox4</rd:DefaultName>
                   <Top>1.86366cm</Top>
-                  <Left>4.30572cm</Left>
+                  <Left>4.34099cm</Left>
                   <Height>0.60065cm</Height>
                   <Width>7.77195cm</Width>
                   <ZIndex>6</ZIndex>
@@ -3647,7 +3647,7 @@
                 </Textbox>
                 <Line Name="Line6">
                   <Left>4.19988cm</Left>
-                  <Height>3.483cm</Height>
+                  <Height>3.95564cm</Height>
                   <Width>0cm</Width>
                   <ZIndex>9</ZIndex>
                   <Style>
@@ -3775,11 +3775,53 @@
                     <PaddingBottom>2pt</PaddingBottom>
                   </Style>
                 </Textbox>
+                <Textbox Name="Textbox35">
+                  <CanGrow>true</CanGrow>
+                  <KeepTogether>true</KeepTogether>
+                  <Paragraphs>
+                    <Paragraph>
+                      <TextRuns>
+                        <TextRun>
+                          <Value>N° SL :      </Value>
+                          <Style>
+                            <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                          </Style>
+                        </TextRun>
+                        <TextRun>
+                          <Value>=First(Fields!Id.Value, "DataSet1")</Value>
+                          <Style>
+                            <FontFamily>Bahnschrift Light SemiCondensed</FontFamily>
+                            <FontWeight>Bold</FontWeight>
+                          </Style>
+                        </TextRun>
+                      </TextRuns>
+                      <Style>
+                        <TextAlign>Left</TextAlign>
+                      </Style>
+                    </Paragraph>
+                  </Paragraphs>
+                  <rd:DefaultName>Textbox4</rd:DefaultName>
+                  <Top>3.23704cm</Top>
+                  <Left>12.28934cm</Left>
+                  <Height>0.56346cm</Height>
+                  <Width>6.3245cm</Width>
+                  <ZIndex>13</ZIndex>
+                  <Style>
+                    <Border>
+                      <Style>None</Style>
+                    </Border>
+                    <VerticalAlign>Middle</VerticalAlign>
+                    <PaddingLeft>2pt</PaddingLeft>
+                    <PaddingRight>2pt</PaddingRight>
+                    <PaddingTop>2pt</PaddingTop>
+                    <PaddingBottom>2pt</PaddingBottom>
+                  </Style>
+                </Textbox>
               </ReportItems>
               <KeepTogether>true</KeepTogether>
               <Top>0.29737cm</Top>
               <Left>0.62962cm</Left>
-              <Height>3.50417cm</Height>
+              <Height>3.95564cm</Height>
               <Width>18.95956cm</Width>
               <Style>
                 <Border>

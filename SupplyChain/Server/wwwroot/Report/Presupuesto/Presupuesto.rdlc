@@ -1611,7 +1611,7 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>COTIZACION</Value>
+                      <Value>PRESUPUESTO</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
                         <FontFamily>Arial Black</FontFamily>
@@ -1693,7 +1693,7 @@ First(Fields!BONIFIC.Value, "DataSet1") / 100</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Numero: </Value>
+                      <Value>Numero:PR-</Value>
                       <Style>
                         <FontSize>11pt</FontSize>
                         <FontWeight>Bold</FontWeight>

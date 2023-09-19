@@ -82,7 +82,7 @@ namespace SupplyChain.Server.Controllers
 
             var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
 
-            return File(result.MainStream, contentType: "application/pdf", $"Evento_{noConf}.pdf");
+            return File(result.MainStream, contentType: "application/pdf", $"EV_{noConf}.pdf");
         }
 
         [HttpGet]
@@ -125,8 +125,8 @@ namespace SupplyChain.Server.Controllers
             localReport.AddDataSource(dataSetName: "DataSet1", vale);
 
             var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
-
-            return File(result.MainStream, contentType: "application/pdf", $"AR-CO-{id}.pdf");
+            //AR-OC
+            return File(result.MainStream, contentType: "application/pdf", $"PR-{id}.pdf");
         }
 
         [HttpGet]
@@ -148,7 +148,7 @@ namespace SupplyChain.Server.Controllers
 
             var result = localReport.Execute(RenderType.Pdf, 1, parameter, "");
 
-            return File(result.MainStream, contentType: "application/pdf", $"OCI-{numOci}.pdf");
+            return File(result.MainStream, contentType: "application/pdf", $"PD-{numOci}.pdf");
         }
 
         [HttpGet]
