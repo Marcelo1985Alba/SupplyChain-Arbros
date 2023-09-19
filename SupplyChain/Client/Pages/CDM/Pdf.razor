@@ -159,8 +159,8 @@ else
     private string DocumentPath { get; set; } = "data:application/pdf;base64,";
     bool VisibleSpinner = false;
 
-    [Inject]
-    protected HttpClient Http { get; set; }
+    [Inject] protected HttpClient Http { get; set; }
+    [Inject] protected IRepositoryHttp Http2 { get; set; }
 
     [Inject]
     protected IJSRuntime JS { get; set; }
@@ -216,22 +216,22 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-    //MainLayout.Titulo = $"Codigo";
+        //MainLayout.Titulo = $"Codigo";
         VisibleSpinner = true;
 
-    // rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+        // rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 
         if (accion == "RUTAOF")
         {
             Layout.Titulo = $"Plano {codigo}";
             codigoLimpio = codigo + ".pdf," + accion;
-    //DocumentPath = await Http.GetFromJsonAsync<string>($"api/AdministracionArchivos/GetPdfNube/{codigoLimpio}/RUTAOF");
-    //archivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/ByParamRuta/{accion}/{codigo.Substring(0, 7) + ".pdf"}");
+            //DocumentPath = await Http.GetFromJsonAsync<string>($"api/AdministracionArchivos/GetPdfNube/{codigoLimpio}/RUTAOF");
+            //archivos = await Http.GetFromJsonAsync<List<Archivo>>($"api/AdministracionArchivos/ByParamRuta/{accion}/{codigo.Substring(0, 7) + ".pdf"}");
 
-    // var file = await Http.GetByteArrayAsync($"api/AdministracionArchivos/GetPlano/{codigo.Substring(0, 7) + ".pdf"}/Load");
-    // string base64String = Convert.ToBase64String(file);
-    // DocumentPath = "data:application/pdf;base64," + base64String;
-    // await sfPdfViewerObj.Load(DocumentPath, null);
+            // var file = await Http.GetByteArrayAsync($"api/AdministracionArchivos/GetPlano/{codigo.Substring(0, 7) + ".pdf"}/Load");
+            // string base64String = Convert.ToBase64String(file);
+            // DocumentPath = "data:application/pdf;base64," + base64String;
+            // await sfPdfViewerObj.Load(DocumentPath, null);
         }
 
         if (accion == "RUTACNC" || accion == "RUTAENSAYO")
@@ -261,7 +261,7 @@ else
                     operacion = ""
                 });
             }
-    //sfPdfViewerObj.lo();
+            //sfPdfViewerObj.lo();
             docsCargados = true;
         }
         VisibleSpinner = false;
@@ -275,13 +275,13 @@ else
     private void DownloadText(string Nombre)
     {
         File.OpenRead(Nombre);
-    //JS.InvokeVoidAsync("BlazorDownloadFile", $"{Nombre}.txt", "text/plain", Nombre);
+        //JS.InvokeVoidAsync("BlazorDownloadFile", $"{Nombre}.txt", "text/plain", Nombre);
     }
 
     private void Descargar(string fileName, string extension, byte[] fileBytes)
     {
-    //byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
-    //File(filePath, "application/force-download", "file1.xlsx");
+        //byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+        //File(filePath, "application/force-download", "file1.xlsx");
 
         JS.SaveAs(fileName + extension, fileBytes);
     }
@@ -300,19 +300,40 @@ else
     {
         try
         {
-            var baseUrl = "https://192.168.0.131:8080/autentio";
-            var url = $"{baseUrl}/upload.php";
-            string datosAEnviar = $"{cel.Trim()}, {oper.Trim()}, {fileName.Trim()}"; // "CN1, send, 1.txt"
-            HttpContent contenido = new StringContent(datosAEnviar, Encoding.UTF8, "text/plain");
-            var response = await Http.PostAsync(url, contenido);
-            if (response.IsSuccessStatusCode)
+            // var baseUrl = "http://192.168.0.131:8080/autentio";
+            // var url = $"{baseUrl}/upload.php";
+            // string datosAEnviar = $"{cel.Trim()}, {oper.Trim()}, {fileName.Trim()}"; // "CN1, send, 1.txt"
+            //                                                                          // HttpContent contenido = new StringContent(datosAEnviar, Encoding.UTF8, "text/plain");
+
+            // Convierte los datos a formato JSON
+            // var postData = new
+            // {
+            //     operation = oper.Trim(),
+            //     filename = cel.Trim(),
+            //     serialport = $"{fileName.Trim()}.txt"
+            // };
+            // string json = Newtonsoft.Json.JsonConvert.SerializeObject(postData);
+            // var content = new StringContent(json, Encoding.UTF8, "application/json");
+            // HttpClient httpPHP = new HttpClient();
+            // httpPHP.BaseAddress = new Uri(baseUrl);
+            // var response = await httpPHP.PostAsJsonAsync("/upload.php", content);
+
+            var url = $"api/Php?fileName={fileName.Trim()}.txt&operacion={oper.Trim()}&serialPort={cel.Trim()}";
+            var response = await Http2.GetFromJsonAsync<string>(url);
+
+
+            if (!response.Error)
             {
                 await ToastMensajeExito("Archivo enviado correctamente");
             }
             else
             {
-                await ToastMensajeError($"ERROR. Se intentó envíar {cel}, {operacion}, {fileName} y se obtuvo el siguiente error: {response.StatusCode}");
+                await ToastMensajeError($"ERROR. Se intentó envíar {cel}, {operacion}, {fileName} y se obtuvo el siguiente error: {response.HttpResponseMessage.StatusCode}");
             }
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e.ToString());
         }
         catch (Exception ex)
         {
