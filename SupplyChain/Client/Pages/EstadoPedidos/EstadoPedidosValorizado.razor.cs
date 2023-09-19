@@ -42,7 +42,8 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
         {
             "Search",
         new ItemModel { Text = "Ver Todos", TooltipText = "Seleccionar Columnas", Id = "VerTodos" },
-        new ItemModel { Text = "Ver Pendientes", TooltipText = "Ver Pendientes", Id = "VerPendiente" }
+        new ItemModel { Text = "Ver Pendientes", TooltipText = "Ver Pendientes", Id = "VerPendiente" },
+        new ItemModel { Text = "Exportar Excel", TooltipText = "Exportar Excel", Id = "ExportarExcel" }
           };
 
         protected const string APPNAME = "grdEstadoPedidosValorizado";
@@ -250,11 +251,7 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             {
                 await refSfGrid.OpenColumnChooser(200, 50);
             }
-            if (args.Item.Text == "Exportar Grilla en Excel")
-            {
-                await this.refSfGrid.ExcelExport();
-            }
-             else if(args.Item.Id == "VerTodos"){
+            else if(args.Item.Id == "VerTodos"){
                 SpinnerVisible = true;
                 await GetPedidos();
                 SpinnerVisible = false;
@@ -264,6 +261,10 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
                 SpinnerVisible = true;
                 await GetPedidos(SupplyChain.Shared.Enum.EstadoPedido.TodosPendientes);
                 SpinnerVisible = false;
+            }
+            else if (args.Item.Id == "ExportarExcel")
+            {
+                await refSfGrid.ExportToExcelAsync();
             }
         }
 

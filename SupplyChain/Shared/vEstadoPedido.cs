@@ -31,7 +31,7 @@ namespace SupplyChain.Shared
         public string? RECIBO { get; set; }
         public string? CONDICION_PAGO { get; set; }
         public double TOT_DOL { get; set; }
-
+        public decimal? CONFIRMADO { get; set; }
         public DateTime? FE_PLAN { get; set; }
         public DateTime? FE_FIRME { get; set; }
         public DateTime? FE_CIERRE { get; set; }
