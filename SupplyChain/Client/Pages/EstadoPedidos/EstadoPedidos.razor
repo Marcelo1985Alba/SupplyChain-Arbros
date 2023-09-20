@@ -65,6 +65,7 @@
                         <GridColumn Field=@nameof(vEstadoPedido.ORCO) HeaderText="ORDEN DE COMPRA" Width="120"></GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.NUM_OCI) HeaderText="OC INTERNA" Width="120"></GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.FE_PREV) HeaderText="FECHA PREVISTA" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
+                        <GridColumn Field=@nameof(vEstadoPedido.FE_FACT) HeaderText="FECHA FACTURA" Width="150" Type="ColumnType.DateTime" Format="dd/MM/yyyy"></GridColumn>
                         <GridColumn Field=@nameof(vEstadoPedido.OBSERITEM) HeaderText="OBSERVACIONES" Width="220"></GridColumn>
                     </GridColumns>
                     <SfSpinner Type="SpinnerType.Fabric" Size="50" Label="Cargando..." @bind-Visible="@SpinnerVisible"></SfSpinner>
