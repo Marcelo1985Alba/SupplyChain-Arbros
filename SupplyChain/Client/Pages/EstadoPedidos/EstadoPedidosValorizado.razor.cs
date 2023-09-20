@@ -188,6 +188,10 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             {
                 args.Cell.AddClass(new string[] { "color-estado-pedido-anulado" });
             }
+            else if (args.Data.ESTADO_PEDIDO == 11) 
+            {
+                args.Cell.AddClass(new string []{ "color-estado-pedido-cobrado"});
+            } 
         }
 
         protected async Task OnRowSelected(RowSelectEventArgs<vEstadoPedido> arg)
@@ -273,21 +277,89 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             if (args.Text == "1")
                 args.Text = "PEDIDO A CONFIRMAR";
             else if (args.Text == "2")
-                args.Text = "PEDIDO CONFIRMADO";
+                args.Text = $"{PedidoSeleccionadoValorizado.FE_PED.ToString("dd/MM/yyyy")} PEDIDO CONFIRMADO";
             else if (args.Text == "3")
-                args.Text = "EN PROCESO";
+            {
+                if (PedidoSeleccionadoValorizado.FE_PLAN.HasValue)
+                {
+                    args.Text = $"{PedidoSeleccionadoValorizado.FE_PLAN.Value:G/MM/yyyy} EN PROCESO";
+                }
+                else
+                {
+                    args.Text = $"EN PROCESO";
+                }
+            }
             //else if (args.Text == "4")
             //    args.Text = "CON TOTALIDAD DE COMPONENTES";
             else if (args.Text == "4")
-                args.Text = "ARMADO Y PRUEBA";
+            {
+                if (PedidoSeleccionadoValorizado.FE_FIRME.HasValue)
+                {
+                    args.Text = $"{PedidoSeleccionadoValorizado.FE_FIRME.Value:dd/MM/yyyy} ARMADO Y PRUEBA";
+                }
+                else
+                {
+                    args.Text = $"ARMADO Y PRUEBA";
+                }
+            }
+
             else if (args.Text == "5")
-                args.Text = "A REMITIR";
+            {
+                if (PedidoSeleccionadoValorizado.FE_CIERRE.HasValue)
+                {
+                    args.Text = $"{PedidoSeleccionadoValorizado.FE_CIERRE.Value.ToString("dd/MM/yyyy")} A REMITIR";
+                }
+                else
+                {
+                    args.Text = $"A REMITIR";
+                }
+            }
+
             else if (args.Text == "6")
-                args.Text = "A ENTREGAR";
+            {
+                if (PedidoSeleccionadoValorizado.FE_REM.HasValue)
+                {
+                    args.Text = $"{PedidoSeleccionadoValorizado.FE_REM.Value.ToString("dd/MM/yyyy")} A ENTREGAR";
+                }
+                else
+                {
+                    args.Text = $"A ENTREGAR";
+                }
+            }
             else if (args.Text == "7")
-                args.Text = "ENTREGADO";
-            //else if (args.Text == "9")
-            //    args.Text = "FACTURADO";
+            {
+                if (PedidoSeleccionadoValorizado.FE_REM.HasValue)
+                {
+                    args.Text = $"{PedidoSeleccionadoValorizado.FE_REM.Value.ToString("dd/MM/yyyy")} ENTREGADO";
+                }
+                else
+                {
+                    args.Text = $"ENTREGADO";
+                }
+            }
+            else if (args.Text == "8")
+            {
+                if (PedidoSeleccionadoValorizado.FE_FACT.HasValue)
+                {
+                    args.Text = $"{PedidoSeleccionadoValorizado.FE_FACT.Value.ToString("dd/MM/yyyy")} FACTURADO";
+                }
+                else
+                {
+                    args.Text = $"FACTURADO";
+                }
+            }
+
+            else if (args.Text == "9")
+            {
+                if (PedidoSeleccionadoValorizado.FE_RECIBO.HasValue)
+                {
+                    args.Text = $"{PedidoSeleccionadoValorizado.FE_RECIBO.Value.ToString("dd/MM/yyyy")} COBRADO";
+                }
+                else
+                {
+                    args.Text = $"COBRADO";
+                }
+            }
             else
                 args.Text = " ";
         }
