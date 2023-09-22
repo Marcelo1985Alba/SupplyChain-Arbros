@@ -141,7 +141,7 @@ namespace SupplyChain.Client.Pages.ABM.Prods
 
         protected async Task<bool> Actualizar(Producto producto)
         {
-            var response = await ProductoService.Actualizar(producto.Id,producto);
+            var response = await ProductoService.ActualizarP(producto);
             if (response.Error)
             {
                 await ToastMensajeError("Error al intentar Guardar el producto.");

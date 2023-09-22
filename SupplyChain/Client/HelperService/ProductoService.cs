@@ -64,5 +64,11 @@ namespace SupplyChain.Client.HelperService
 
         }
 
+        public async Task<HttpResponseWrapper<object>>ActualizarP(Producto prod)
+        {
+            return await http.PutAsJsonAsync($"api/Prod",prod);
+
+        }
+
     }
 }

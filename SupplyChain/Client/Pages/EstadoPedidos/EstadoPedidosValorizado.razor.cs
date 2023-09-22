@@ -277,29 +277,31 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             if (args.Text == "1")
                 args.Text = "PEDIDO A CONFIRMAR";
             else if (args.Text == "2")
-                args.Text = $"{PedidoSeleccionadoValorizado.FE_PED.ToString("dd/MM/yyyy")} PEDIDO CONFIRMADO";
+                args.Text = $"{PedidoSeleccionadoValorizado.FE_PED.ToString("dd/MM/yyyy")} PEDIDO CONFIRMADO ";
             else if (args.Text == "3")
             {
                 if (PedidoSeleccionadoValorizado.FE_PLAN.HasValue)
                 {
-                    args.Text = $"{PedidoSeleccionadoValorizado.FE_PLAN.Value:G/MM/yyyy} EN PROCESO";
+                    args.Text = $"{PedidoSeleccionadoValorizado.FE_PLAN.Value:dd/MM/yyyy} EN PROCESO";
                 }
                 else
                 {
                     args.Text = $"EN PROCESO";
                 }
+
             }
+
             //else if (args.Text == "4")
             //    args.Text = "CON TOTALIDAD DE COMPONENTES";
             else if (args.Text == "4")
             {
                 if (PedidoSeleccionadoValorizado.FE_FIRME.HasValue)
                 {
-                    args.Text = $"{PedidoSeleccionadoValorizado.FE_FIRME.Value:dd/MM/yyyy} ARMADO Y PRUEBA";
+                    args.Text = $"{PedidoSeleccionadoValorizado.FE_FIRME.Value:dd/MM/yyyy} ARMADO Y CALIBRACION";
                 }
                 else
                 {
-                    args.Text = $"ARMADO Y PRUEBA";
+                    args.Text = $"ARMADO Y CALIBRACION";
                 }
             }
 
@@ -326,17 +328,19 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
                     args.Text = $"A ENTREGAR";
                 }
             }
+
             else if (args.Text == "7")
             {
                 if (PedidoSeleccionadoValorizado.FE_REM.HasValue)
                 {
-                    args.Text = $"{PedidoSeleccionadoValorizado.FE_REM.Value.ToString("dd/MM/yyyy")} ENTREGADO";
+                    args.Text = $"{PedidoSeleccionadoValorizado.FE_FACT.Value.ToString("dd/MM/yyyy")} ENTREGADO";
                 }
                 else
                 {
                     args.Text = $"ENTREGADO";
                 }
             }
+
             else if (args.Text == "8")
             {
                 if (PedidoSeleccionadoValorizado.FE_FACT.HasValue)
@@ -361,7 +365,7 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
                 }
             }
             else
-                args.Text = " ";
+                args.Text = "";
         }
 
     }
