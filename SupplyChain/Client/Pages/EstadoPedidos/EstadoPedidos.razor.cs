@@ -388,11 +388,11 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             {
                 if (PedidoSeleccionado.FE_FIRME.HasValue)
                 {
-                    args.Text = $"{PedidoSeleccionado.FE_FIRME.Value:dd/MM/yyyy} ARMADO Y PRUEBA"; 
+                    args.Text = $"{PedidoSeleccionado.FE_FIRME.Value:dd/MM/yyyy} ARMADO Y CALIBRACION"; 
                 }
                 else
                 {
-                    args.Text = $"ARMADO Y PRUEBA";
+                    args.Text = $"ARMADO Y CALIBRACION";
                 }
             }
                 
@@ -424,7 +424,7 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             {
                 if (PedidoSeleccionado.FE_REM.HasValue)
                 {
-                    args.Text = $"{PedidoSeleccionado.FE_REM.Value.ToString("dd/MM/yyyy")} ENTREGADO";
+                    args.Text = $"{PedidoSeleccionado.FE_FACT.Value.ToString("dd/MM/yyyy")} ENTREGADO";
                 }
                 else
                 {

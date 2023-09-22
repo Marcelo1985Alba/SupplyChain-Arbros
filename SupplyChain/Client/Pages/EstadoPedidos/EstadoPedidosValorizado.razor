@@ -45,8 +45,8 @@
                                     <FooterTemplate>
                                         @{
                                             var aggregate = (context as AggregateTemplateContext);
-                                            <div>
                                                 <p>TOTAL: @aggregate.Sum </p>
+                                            <div>
                                             </div>
                                         }
                                     </FooterTemplate>
@@ -131,13 +131,17 @@
                                         <LinearGaugePointer PointerValue="2" Height="25" Width="25"
                                                             Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                         <LinearGaugePointer PointerValue="3" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         <LinearGaugePointer PointerValue="4" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         <LinearGaugePointer PointerValue="5" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         <LinearGaugePointer PointerValue="6" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         if (PedidoSeleccionadoValorizado.CONFIRMADO == 1)
                                         {
                                             <LinearGaugePointer PointerValue="7" Height="25" Width="25"
@@ -149,9 +153,15 @@
                                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
                                         }
                                         <LinearGaugePointer PointerValue="8" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         <LinearGaugePointer PointerValue="9" Height="25" Width="25"
                                                             Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+                                        <LinearGaugePointer PointerValue="10" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+                                        <LinearGaugePointer PointerValue="11" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                     }
                                     else if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 3)
                                     {
@@ -160,11 +170,14 @@
                                         <LinearGaugePointer PointerValue="3" Height="25" Width="25"
                                                             Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                         <LinearGaugePointer PointerValue="4" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         <LinearGaugePointer PointerValue="5" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         <LinearGaugePointer PointerValue="6" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         if (PedidoSeleccionadoValorizado.CONFIRMADO == 1)
                                         {
                                             <LinearGaugePointer PointerValue="7" Height="25" Width="25"
@@ -176,10 +189,53 @@
                                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
                                         }
                                         <LinearGaugePointer PointerValue="8" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         <LinearGaugePointer PointerValue="9" Height="25" Width="25"
                                                             Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+                                        <LinearGaugePointer PointerValue="10" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+                                        <LinearGaugePointer PointerValue="11" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                     }
+                                    else if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 4)
+                                    {
+                                        <LinearGaugePointer PointerValue="2" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                        <LinearGaugePointer PointerValue="3" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                        <LinearGaugePointer PointerValue="4" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
+                                        <LinearGaugePointer PointerValue="5" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
+                                        <LinearGaugePointer PointerValue="6" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
+                                        if (PedidoSeleccionadoValorizado.CONFIRMADO == 1)
+                                        {
+                                            <LinearGaugePointer PointerValue="7" Height="25" Width="25"
+                                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                        }
+                                        else
+                                        {
+                                            <LinearGaugePointer PointerValue="7" Height="25" Width="25"
+                                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+                                        }
+                                        <LinearGaugePointer PointerValue="8" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
+                                        <LinearGaugePointer PointerValue="9" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+                                        <LinearGaugePointer PointerValue="10" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+                                        <LinearGaugePointer PointerValue="11" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
+                                    }
+                                    @*modifique recien *@
                                     else if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 5)
                                     {
                                         <LinearGaugePointer PointerValue="2" Height="25" Width="25"
@@ -189,9 +245,11 @@
                                         <LinearGaugePointer PointerValue="4" Height="25" Width="25"
                                                             Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                         <LinearGaugePointer PointerValue="5" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         <LinearGaugePointer PointerValue="6" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         if (PedidoSeleccionadoValorizado.CONFIRMADO == 1)
                                         {
                                             <LinearGaugePointer PointerValue="7" Height="25" Width="25"
@@ -203,12 +261,18 @@
                                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
                                         }
                                         <LinearGaugePointer PointerValue="8" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         <LinearGaugePointer PointerValue="9" Height="25" Width="25"
                                                             Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+                                        <LinearGaugePointer PointerValue="10" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+                                        <LinearGaugePointer PointerValue="11" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                     }
                                     else if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 6)
-                                    {
+                                    {@*recien modifcado*@
                                         <LinearGaugePointer PointerValue="2" Height="25" Width="25"
                                                             Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                         <LinearGaugePointer PointerValue="3" Height="25" Width="25"
@@ -218,7 +282,8 @@
                                         <LinearGaugePointer PointerValue="5" Height="25" Width="25"
                                                             Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                         <LinearGaugePointer PointerValue="6" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         if (PedidoSeleccionadoValorizado.CONFIRMADO == 1)
                                         {
                                             <LinearGaugePointer PointerValue="7" Height="25" Width="25"
@@ -230,10 +295,17 @@
                                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
                                         }
                                         <LinearGaugePointer PointerValue="8" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         <LinearGaugePointer PointerValue="9" Height="25" Width="25"
                                                             Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+                                        <LinearGaugePointer PointerValue="10" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+                                        <LinearGaugePointer PointerValue="11" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                     }
+                                    @*moficado*@
                                     else if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 7)
                                     {
                                         <LinearGaugePointer PointerValue="2" Height="25" Width="25"
@@ -257,9 +329,15 @@
                                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
                                         }
                                         <LinearGaugePointer PointerValue="8" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         <LinearGaugePointer PointerValue="9" Height="25" Width="25"
                                                             Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+                                        <LinearGaugePointer PointerValue="10" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+                                        <LinearGaugePointer PointerValue="11" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                     }
                                     else if (PedidoSeleccionadoValorizado.ESTADO_PEDIDO == 8)
                                     {
@@ -284,8 +362,14 @@
                                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
                                         }
                                         <LinearGaugePointer PointerValue="8" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
                                         <LinearGaugePointer PointerValue="9" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+
+                                        <LinearGaugePointer PointerValue="10" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+                                        <LinearGaugePointer PointerValue="11" Height="25" Width="25"
                                                             Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
 
                                     }
@@ -341,7 +425,8 @@
                                         <LinearGaugePointer PointerValue="8" Height="25" Width="25"
                                                             Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                         <LinearGaugePointer PointerValue="9" Height="25" Width="25"
-                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="0" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+
                                     }
                                 </LinearGaugePointers>
                                 <LinearGaugeRanges>
