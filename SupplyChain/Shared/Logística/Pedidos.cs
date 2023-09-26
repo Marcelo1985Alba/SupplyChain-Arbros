@@ -208,6 +208,8 @@ namespace SupplyChain
         public bool Control5 { get; set; } = false;
         public bool Control6 { get; set; } = false;
 
+        public DateTime? FE_CONFIRMADO { get; set; }
+
         [Column("FLAG")]
         public decimal CONFIRMADO { get; set; }
 

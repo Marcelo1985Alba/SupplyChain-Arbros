@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using SupplyChain.Client.HelperService;
 using SupplyChain.Client.Shared;
 using Syncfusion.Blazor.Data;
 using Syncfusion.Blazor.Grids;
@@ -19,6 +20,7 @@ namespace SupplyChain.Pages.Modelos
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
+        [Inject] protected PedCliService PedCliService { get; set; }
         protected SfKanban<PedCli> refKanban;
         protected SfGrid<PedCli> Grid;
         protected SfToast ToastObj;
@@ -34,7 +36,7 @@ namespace SupplyChain.Pages.Modelos
         protected string SearchValue = string.Empty;
         protected Query CardQuery = new();
         [CascadingParameter] public MainLayout Layout { get; set; }
-
+        protected PedCli pedidoSeleccionado = new();
         protected override async Task OnInitializedAsync()
         {
             SpinnerVisible = true;
@@ -47,7 +49,7 @@ namespace SupplyChain.Pages.Modelos
         }
 
         public string Cliente;
-        
+
         protected void onDragStart(Syncfusion.Blazor.Kanban.DragEventArgs<PedCli> args)
         {
             //status = args.Data[0].Status;
@@ -100,14 +102,14 @@ namespace SupplyChain.Pages.Modelos
             {
                 await this.ToastObj.ShowAsync
                     (new ToastModel
-                {
-                    Title = "ADVERTENCIA!",
-                    Content = $"El pedido {args.ChangedRecords.ToList()[0].PEDIDO} no se puede eliminar desde este modulo.",
-                    CssClass = "e-toast-warning",
-                    Icon = "e-warning toast-icons",
-                    ShowCloseButton = true,
-                    ShowProgressBar = true
-                });
+                    {
+                        Title = "ADVERTENCIA!",
+                        Content = $"El pedido {args.ChangedRecords.ToList()[0].PEDIDO} no se puede eliminar desde este modulo.",
+                        CssClass = "e-toast-warning",
+                        Icon = "e-warning toast-icons",
+                        ShowCloseButton = true,
+                        ShowProgressBar = true
+                    });
                 args.Cancel = true;
 
             }
@@ -140,7 +142,7 @@ namespace SupplyChain.Pages.Modelos
                     {
                         Pedclis = Pedclis.Where(p => p.PEDIDO != row.PEDIDO).ToList();
                     }
-                    
+
                     await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "EXITO!",
@@ -171,6 +173,24 @@ namespace SupplyChain.Pages.Modelos
 
             }
 
+        }
+
+        protected async Task AgregarDate(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+        {
+            await AgregarFechaAsync(pedidoSeleccionado);
+        }
+
+        protected async Task AgregarFechaAsync(PedCli pedcli)
+        { 
+            try
+            {
+                DateTime fe_confirmado = DateTime.Now;
+                var response = await Http.PostAsJsonAsync($"/api/PedCli/AgregarFecha", pedcli);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+            }
         }
     }
 }

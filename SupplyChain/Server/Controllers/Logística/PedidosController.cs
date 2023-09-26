@@ -666,6 +666,7 @@ namespace SupplyChain
                 foreach (var stock in lStocks)
                 {
                     stock.CONFIRMADO = pedCli.CONFIRMADO ? 1: 0;
+                    stock.FE_CONFIRMADO= DateTime.Now;
                     await ActualizaDb(stock);
                 }
             }
