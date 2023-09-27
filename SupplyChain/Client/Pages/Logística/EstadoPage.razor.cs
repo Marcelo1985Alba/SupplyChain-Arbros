@@ -175,22 +175,6 @@ namespace SupplyChain.Pages.Modelos
 
         }
 
-        protected async Task AgregarDate(Microsoft.AspNetCore.Components.ChangeEventArgs args)
-        {
-            await AgregarFechaAsync(pedidoSeleccionado);
-        }
-
-        protected async Task AgregarFechaAsync(PedCli pedcli)
-        { 
-            try
-            {
-                DateTime fe_confirmado = DateTime.Now;
-                var response = await Http.PostAsJsonAsync($"/api/PedCli/AgregarFecha", pedcli);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"{ex.Message}");
-            }
-        }
+        
     }
 }

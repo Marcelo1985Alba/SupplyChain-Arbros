@@ -47,7 +47,15 @@ namespace SupplyChain
         [HttpGet("ByFilter/{tipoFiltro}")]
         public async Task<IEnumerable<PedCli>> GetByFilter(TipoFiltro tipoFiltro = TipoFiltro.Todos)
         {
-            return await _pedCliRepository.ByFilter(tipoFiltro);
+            try
+            {
+                return await _pedCliRepository.ByFilter(tipoFiltro);
+
+            }catch (Exception ex)
+            {
+                return new List<PedCli>();
+
+            }
         }
 
         [HttpGet("ObtenerPedCliPedidos")]
