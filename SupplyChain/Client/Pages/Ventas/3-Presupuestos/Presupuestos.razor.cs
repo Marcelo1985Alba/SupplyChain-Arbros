@@ -259,6 +259,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 {
                     SpinnerVisible = true;
                     await PresupuestoService.Imprimir(seleccionado[0].Id);
+                    //await DescargarPresupuestoDataSheet();
                     SpinnerVisible = false;
                 }
                 
@@ -311,8 +312,11 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             }
 
         }
+        private async Task DescargarPresupuestoDataSheet()
+        {
+            await PresupuestoService.Imprimir(Presupuesto.Id);
+        }
 
-   
         protected async Task Eliminar()
         {
             SpinnerVisible = true;

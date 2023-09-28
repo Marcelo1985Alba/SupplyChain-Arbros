@@ -64,7 +64,9 @@ namespace SupplyChain.Client.HelperService
             var archivo = new FileContentResult(bytes, contentType) { FileDownloadName = nombreArchivo };
 
             // Descargar el archivo PDF en el navegador del usuario
-            await _js.InvokeAsync<object>("saveAsFile", nombreArchivo, Convert.ToBase64String(bytes));
+            await _js.InvokeVoidAsync("saveAsFile", nombreArchivo, Convert.ToBase64String(bytes));
+            //await _js.InvokeVoidAsync("open",$"Pdf/{nombreArchivo}RUTAOF","_blank");
+
         }
 
         public async Task<HttpResponseMessage> Eliminar(int id)
