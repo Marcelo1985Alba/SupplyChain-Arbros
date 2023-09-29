@@ -84,9 +84,9 @@ namespace SupplyChain.Client.HelperService
             Decimal.TryParse(vpedidos[0].CAMPOCOM4, out presAJ);
             string patronUtilizado = "";
             if (presAJ < 60)
-                patronUtilizado = "2-54275";
+                patronUtilizado = "17364";
             else
-                patronUtilizado = "AE4213";
+                patronUtilizado = "C-94220";
             if (vpedidos.Any(p => p.DES_ART.ToLower().StartsWith("tobera")))
             {
                 tobera = vpedidos.Where(p => p.DES_ART.ToLower().StartsWith("tobera")).FirstOrDefault().NORMA;
