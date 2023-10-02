@@ -36,6 +36,21 @@ namespace SupplyChain
                 return BadRequest(ex);
             }
         }
+        
+        // GET: api/Procun/Cg_Prod
+        [HttpGet("{Cg_Prod}")]
+        public async Task<ActionResult<IEnumerable<Procun>>> GetProcun(string Cg_Prod)
+        {
+            try
+            {
+                var listaprocun = await _procunRepository.ObtenerTodos();
+                return listaprocun.Where(x => x.CG_PROD == Cg_Prod).ToList();
+            }                                                               
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
 
         [HttpGet("Existe/{id}")]
         public async Task<ActionResult<bool>> ExisteProcun(decimal id)
@@ -149,6 +164,25 @@ namespace SupplyChain
             }
 
             return Ok();
+        }
+        
+        //POST: api/Procun/PostList2
+        [HttpPost("PostList2")]
+        public async Task<ActionResult<List<Procun>>> PostList2([FromBody] List<Procun> lista)
+        {
+            try
+            {
+                foreach (Procun proc in lista)
+                {
+                    await _procunRepository.Agregar(proc);
+                }
+                await _procunRepository.AgregarList(lista);
+                return Ok(lista);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("ActualizaCelda/{id}/{cg_celda}")]

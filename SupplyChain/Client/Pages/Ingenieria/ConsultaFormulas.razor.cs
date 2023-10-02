@@ -18,6 +18,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.JSInterop;
 using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared.PCP;
 
@@ -27,6 +28,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
     {
         [Inject] public HttpClient Http { get; set; }
         [Inject] public ExcelService ExcelService { get; set; }
+        [Inject] protected IJSRuntime JsRuntime { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
         [Parameter] public string extern_codigo { get; set; }
         protected SfTab refSfTab;
@@ -41,17 +43,34 @@ namespace SupplyChain.Client.Pages.Ingenieria
 
         protected SfToast ToastObj;
 
-        protected List<Object> Toolbaritems = new() { "ExcelExport",
+        protected List<Object> Toolbaritems = new()
+        {
+            "ExcelExport",
             new ItemModel() { Type = ItemType.Separator },
-            new ItemModel() { Text = "Guardar Excel", Type = ItemType.Button, CssClass = "", ShowTextOn = DisplayMode.Both,
-                TooltipText = "Guardar el despiece en formato excel", PrefixIcon = "e-update e-icons", Id = "GuardarExcel" } };
+            new ItemModel()
+            {
+                Text = "Guardar Excel", Type = ItemType.Button, CssClass = "", ShowTextOn = DisplayMode.Both,
+                TooltipText = "Guardar el despiece en formato excel", PrefixIcon = "e-update e-icons",
+                Id = "GuardarExcel"
+            }
+        };
 
         protected bool PopupBuscadorProdVisible = false;
-        protected List<Object> ToolbaritemsEditarFormula = new() {
-            new ItemModel() { Text = "Agregar Insumo", Type = ItemType.Button, CssClass = "", ShowTextOn = DisplayMode.Both,
-                TooltipText = "Buscar insumos", PrefixIcon = "e-search e-icons", Id = "BuscarInsumo" },
-            new ItemModel() { Text = "Guardar", Type = ItemType.Button, CssClass = "", ShowTextOn = DisplayMode.Both,
-                TooltipText = "Guardar el despiece en la base de datos", PrefixIcon = "e-update e-icons", Id = "GuardarDB" } };
+
+        protected List<Object> ToolbaritemsEditarFormula = new()
+        {
+            new ItemModel()
+            {
+                Text = "Agregar Insumo", Type = ItemType.Button, CssClass = "", ShowTextOn = DisplayMode.Both,
+                TooltipText = "Buscar insumos", PrefixIcon = "e-search e-icons", Id = "BuscarInsumo"
+            },
+            new ItemModel()
+            {
+                Text = "Guardar", Type = ItemType.Button, CssClass = "", ShowTextOn = DisplayMode.Both,
+                TooltipText = "Guardar el despiece en la base de datos", PrefixIcon = "e-update e-icons",
+                Id = "GuardarDB"
+            }
+        };
 
         protected List<Producto> Insumos = new List<Producto>();
         protected Producto insumoSeleccionado = new();
@@ -61,8 +80,13 @@ namespace SupplyChain.Client.Pages.Ingenieria
         protected SfGrid<vIngenieriaProductosFormulas> GridProdForm;
         protected SfGrid<vIngenieriaProductosFormulas> DetailedGridProdForm;
         protected List<DespiecePlanificacion> listaDespiece = new();
-        protected List<vIngenieriaProductosFormulas> DataOrdeProductosFormulas { get; set; } = new List<vIngenieriaProductosFormulas>();
-        protected List<vIngenieriaProductosFormulas> DataDetailedProductosFormulas { get; set; } = new List<vIngenieriaProductosFormulas>();
+
+        protected List<vIngenieriaProductosFormulas> DataOrdeProductosFormulas { get; set; } =
+            new List<vIngenieriaProductosFormulas>();
+
+        protected List<vIngenieriaProductosFormulas> DataDetailedProductosFormulas { get; set; } =
+            new List<vIngenieriaProductosFormulas>();
+
         protected List<Formula> DataEditarProductosFormulas { get; set; } = new List<Formula>();
         protected vIngenieriaProductosFormulas ProdSelected = new();
 
@@ -72,21 +96,27 @@ namespace SupplyChain.Client.Pages.Ingenieria
             public string CodigoInsumo { get; set; }
             public RenderFragment Content { get; set; }
         }
+
         protected List<TabData> TabItems = new();
 
         protected string tituloTabFormulas = string.Empty;
         protected bool mostrarCerrarTab = false;
+
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Consulta de Fórmulas";
             VisibleSpinner = true;
-            DataOrdeProductosFormulas = await Http.GetFromJsonAsync<List<vIngenieriaProductosFormulas>>("api/Ingenieria/GetProductoFormulas");
+            DataOrdeProductosFormulas =
+                await Http.GetFromJsonAsync<List<vIngenieriaProductosFormulas>>("api/Ingenieria/GetProductoFormulas");
             if (extern_codigo != null)
             {
                 ProdSelected = DataOrdeProductosFormulas.FirstOrDefault(s => s.CG_PROD.Trim() == extern_codigo.Trim());
-                listaDespiece = await Http.GetFromJsonAsync<List<DespiecePlanificacion>>($"api/Planificacion/Despiece/{extern_codigo.Trim()}/1/1");
+                listaDespiece =
+                    await Http.GetFromJsonAsync<List<DespiecePlanificacion>>(
+                        $"api/Planificacion/Despiece/{extern_codigo.Trim()}/1/1");
                 await DialogDespieceRef.Show();
             }
+
             VisibleSpinner = false;
         }
 
@@ -95,23 +125,27 @@ namespace SupplyChain.Client.Pages.Ingenieria
             if (args.CommandColumn.Title == "Editar")
             {
                 Selected = args.RowData;
-                DataEditarProductosFormulas = await Http.GetFromJsonAsync<List<Formula>>("api/Formulas/BuscarPorCgProd/" +
+                DataEditarProductosFormulas = await Http.GetFromJsonAsync<List<Formula>>(
+                    "api/Formulas/BuscarPorCgProd/" +
                     $"{args.RowData.CG_PROD.Trim()}");
                 dialogVisibleEditar = true;
-            } else if (args.CommandColumn.Title == "Copiar")
+            }
+            else if (args.CommandColumn.Title == "Copiar")
             {
                 Selected = args.RowData;
-                DataDetailedProductosFormulas = (await Http.GetFromJsonAsync<List<vIngenieriaProductosFormulas>>("api/Ingenieria/GetProductoFormulas")).Where(s => s.TIENE_FORM && s.FORM_ACTIVA).ToList();
+                DataDetailedProductosFormulas =
+                    (await Http.GetFromJsonAsync<List<vIngenieriaProductosFormulas>>(
+                        "api/Ingenieria/GetProductoFormulas")).Where(s => s.TIENE_FORM && s.FORM_ACTIVA).ToList();
                 dialogVisibleCopiar = true;
-            } else if (args.CommandColumn.Title == "Despiece")
+            }
+            else if (args.CommandColumn.Title == "Despiece")
             {
                 VisibleSpinner = true;
                 ProdSelected = args.RowData;
                 listaDespiece = await Http.GetFromJsonAsync<List<DespiecePlanificacion>>("api/Planificacion/Despiece/" +
                     $"{args.RowData.CG_PROD.Trim()}/1/1");
-                
-                
-                
+
+
                 VisibleSpinner = false;
                 await DialogDespieceRef.Show();
             }
@@ -124,10 +158,10 @@ namespace SupplyChain.Client.Pages.Ingenieria
                 {
                     Header = $"Plano ({args.RowData.CG_PROD.Trim()})",
                     //Verificar si es un semi o un prod, los semis obtener los primeros 7 digitos
-                    CodigoInsumo = new string(args.RowData.CG_PROD.Take(2).ToArray()) == "C-" 
-                                || new string(args.RowData.CG_PROD.Take(2).ToArray()) == "D-" ?
-                    args.RowData.CG_PROD.Substring(0, 7) : args.RowData.CG_PROD
-
+                    CodigoInsumo = new string(args.RowData.CG_PROD.Take(2).ToArray()) == "C-"
+                                   || new string(args.RowData.CG_PROD.Take(2).ToArray()) == "D-"
+                        ? args.RowData.CG_PROD.Substring(0, 7)
+                        : args.RowData.CG_PROD
                 });
 
 
@@ -152,7 +186,6 @@ namespace SupplyChain.Client.Pages.Ingenieria
                 {
                     Header = $"Programas ({args.RowData.CG_PROD.Trim()})",
                     CodigoInsumo = args.RowData.CG_PROD.Trim()
-
                 });
 
 
@@ -238,27 +271,12 @@ namespace SupplyChain.Client.Pages.Ingenieria
                     d.DES_PROD,
                     d.CG_FORM,
                     CANT = d.CANT_MAT
-
                 }).ToDataTable();
                 await ExcelService.CreateExcel(dataEspecial, ProdSelected.CG_PROD.Trim());
                 VisibleSpinner = false;
 
-                await MostrarMensajeToastSuccess();
-
+                await ToastMensajeExito("Guardado Correctamente.");
             }
-        }
-
-        private async Task MostrarMensajeToastSuccess()
-        {
-            await this.ToastObj.Show(new ToastModel
-            {
-                Title = "EXITO!",
-                Content = "Guardado Correctamente.",
-                CssClass = "e-toast-success",
-                Icon = "e-success toast-icons",
-                ShowCloseButton = true,
-                ShowProgressBar = true
-            });
         }
 
 
@@ -285,20 +303,20 @@ namespace SupplyChain.Client.Pages.Ingenieria
                 tituloTabFormulas = string.Empty;
             }
         }
+
         protected async Task CopiarFormula(MouseEventArgs args)
         {
+            dialogVisibleCopiar = false;
+            VisibleSpinner = true;
             if (DetailedGridProdForm.SelectedRecords.Count != 0)
             {
                 if (Selected != null)
                 {
                     vIngenieriaProductosFormulas SelectedFormula2 =
-                        DetailedGridProdForm.SelectedRecords.FirstOrDefault() as vIngenieriaProductosFormulas;
+                        DetailedGridProdForm.SelectedRecords.FirstOrDefault();
                     if (SelectedFormula2 != null)
                     {
-                        //List<Formula> formulas = await Http.GetFromJsonAsync<List<Formula>>("api/Formulas");
-
-                        HttpResponseMessage httpResponse =
-                            await Http.GetAsync($"api/Formulas/BuscarPorCgProd/{SelectedFormula2.CG_PROD}");
+                        HttpResponseMessage httpResponse = await Http.GetAsync($"api/Formulas/BuscarPorCgProdCopiar/{SelectedFormula2.CG_PROD}");
                         List<Formula> responseContent = await httpResponse.Content.ReadFromJsonAsync<List<Formula>>();
                         bool isError = !httpResponse.IsSuccessStatusCode;
                         HttpResponseWrapper<List<Formula>> responseFormulas =
@@ -307,30 +325,108 @@ namespace SupplyChain.Client.Pages.Ingenieria
                         {
                             var errorReason = responseFormulas.HttpResponseMessage?.ReasonPhrase;
                             Console.WriteLine(errorReason);
+                            return;
                         }
-                        else
+                        else if (responseFormulas.Response != null)
                         {
-                            List<Formula> formulas = responseFormulas.Response;
-                            List<Formula> aGuardar = new List<Formula>();
-                            foreach (Formula form in formulas)
+                            try
                             {
-                                Formula aux = form;
-                                aux.Id = 0;
-                                aux.Cg_Prod = Selected.CG_PROD;
-                                aux.CG_FORM = 1;
-                                aux.USUARIO = "USER";
-                                aGuardar.Add(aux);
-                            }
+                                List<Formula> formulas = responseFormulas.Response;
+                                foreach (Formula form in formulas)
+                                {
+                                    form.Id = 0;
+                                    form.REVISION = 0;
+                                    form.ACTIVO = "N";
+                                    form.CG_FORM = 1;
+                                    form.USUARIO = "USER";
+                                    form.Cg_Prod = Selected.CG_PROD;
+                                    form.FE_FORM = DateTime.Now;
+                                    form.OBSERV = "COPIADA DE FORMULA " + SelectedFormula2.CG_PROD;
+                                }
 
-                            await Http.PostAsJsonAsync<List<Formula>>($"api/Formulas/PostList", aGuardar);
+                                await Http.PostAsJsonAsync<List<Formula>>($"api/Formulas/PostList", formulas);
+                                await ToastMensajeExito("Formulas copiadas correctamente.");
+                                
+                                httpResponse = await Http.GetAsync($"api/Procun/{Selected.CG_PROD}");
+                                List<Procun> responseContent2 = await httpResponse.Content.ReadFromJsonAsync<List<Procun>>();
+                                isError = !httpResponse.IsSuccessStatusCode;
+                                HttpResponseWrapper<List<Procun>> responseProcuns = new HttpResponseWrapper<List<Procun>>(responseContent2, httpResponse, isError);
+                                if (responseProcuns.Error)
+                                {
+                                    var errorReason = responseProcuns.HttpResponseMessage?.ReasonPhrase;
+                                    Console.WriteLine(errorReason);
+                                    return;
+                                }
+                                if (responseProcuns.Response != null && responseProcuns.Response.Count > 0)
+                                {
+                                    bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", $"Ya existe una hoja de ruta para el código {Selected.CG_PROD}, desea sobreescribirla?");
+                                    if (isConfirmed)
+                                    {
+                                        dialogVisibleCopiar = false;
+                                        httpResponse = await Http.GetAsync($"api/Procun/{SelectedFormula2.CG_PROD}");
+                                        responseContent2 = await httpResponse.Content.ReadFromJsonAsync<List<Procun>>();
+                                        isError = !httpResponse.IsSuccessStatusCode;
+                                        responseProcuns = new HttpResponseWrapper<List<Procun>>(responseContent2, httpResponse, isError);
+                                        if (responseProcuns.Error)
+                                        {
+                                            var errorReason = responseProcuns.HttpResponseMessage?.ReasonPhrase;
+                                            Console.WriteLine(errorReason);
+                                            return;
+                                        }
+                                        if (responseProcuns.Response != null && responseProcuns.Response.Count > 0)
+                                        {
+                                            List<Procun> procuns = responseProcuns.Response;
+                                            foreach (Procun proc in procuns)
+                                            {
+                                                proc.Id = 0;
+                                                proc.CG_PROD = Selected.CG_PROD;
+                                                proc.USUARIO = "USER";
+                                                proc.FECHA = DateTime.Now;
+                                                proc.OBSERV = "COPIADA DE PROCUN " + SelectedFormula2.CG_PROD;
+                                            }
+                                            await Http.PostAsJsonAsync<List<Procun>>($"api/Procun/PostList2", procuns);
+                                            await ToastMensajeExito("Hoja de ruta copiada correctamente.");
+                                    
+                                            DataOrdeProductosFormulas = await Http.GetFromJsonAsync<List<vIngenieriaProductosFormulas>>("api/Ingenieria/GetProductoFormulas");
+                                        }
+                                        else
+                                        {
+                                            await ToastMensajeError($"No se encontró la hoja de ruta para copiar. Generela para {Selected.CG_PROD}.");
+                                            DataOrdeProductosFormulas = await Http.GetFromJsonAsync<List<vIngenieriaProductosFormulas>>("api/Ingenieria/GetProductoFormulas");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        DataOrdeProductosFormulas = await Http.GetFromJsonAsync<List<vIngenieriaProductosFormulas>>("api/Ingenieria/GetProductoFormulas");
+                                    }
+                                }
+                                else
+                                {
+                                    await ToastMensajeError($"No se encontró la hoja de ruta para copiar. Generela para {Selected.CG_PROD}.");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                await ToastMensajeError(ex.Message);
+                            }
                         }
                     }
                 }
             }
-
-            dialogVisibleCopiar = false;
+            VisibleSpinner = false;
         }
-
+        private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
+        {
+            await this.ToastObj.Show(new ToastModel
+            {
+                Title = "EXITO!",
+                Content = content,
+                CssClass = "e-toast-success",
+                Icon = "e-success toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
         private async Task ToastMensajeError(string content = "Ocurrio un Error.")
         {
             await ToastObj.Show(new ToastModel
