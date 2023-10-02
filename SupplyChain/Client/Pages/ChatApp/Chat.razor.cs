@@ -31,6 +31,7 @@ namespace SupplyChain.Client.Pages.ChatApp
         [Parameter] public string CurrentUserEmail { get; set; }
         protected List<ChatMessage> messages = new List<ChatMessage>();
         protected List<Usuario> ChatUsers = new List<Usuario>();
+        protected List<vUsuario> ChatvUsers = new List<vUsuario>();
         private AuthenticationState authState;
 
         protected SfTextBox SfTextBox;
@@ -116,6 +117,7 @@ namespace SupplyChain.Client.Pages.ChatApp
                 .Select(a => a.Value).FirstOrDefault();
             CurrentUserEmail = user.Claims.Where(a => a.Type == ClaimTypes.Email)
                 .Select(a => a.Value).FirstOrDefault();
+            
 
             if (!string.IsNullOrEmpty(ContactId))
             {

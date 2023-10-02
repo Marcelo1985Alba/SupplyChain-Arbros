@@ -89,7 +89,7 @@ namespace SupplyChain.Server.Controllers
         {
             var userId = User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
             var allUsers = await _context.Users.Where(user => user.Id != userId)
-                .Select(s=> new Usuario() { Id = s.Id, Nombre = s.UserName, Email = s.Email }).ToListAsync();
+                .Select(s=> new Usuario() { Id = s.Id, Nombre= s.UserName, Email= s.Email }).ToListAsync();
             return allUsers;
         }
 

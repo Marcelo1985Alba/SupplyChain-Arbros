@@ -19,7 +19,7 @@
                 <ListBoxTemplates TItem="Usuario">
                     <ItemTemplate>
                         <div class="list-wrapper">
-                            <span class="pic03 e-avatar e-avatar-xlarge e-avatar-circle"></span>
+                            <span class="">@((context as Usuario).Foto)</span>
                             <span class="text">@((context as Usuario).Nombre)</span><span class="description">@((context as Usuario).Email)</span>
                         </div>
                     </ItemTemplate>
