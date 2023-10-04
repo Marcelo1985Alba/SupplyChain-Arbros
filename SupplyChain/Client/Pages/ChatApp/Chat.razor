@@ -18,8 +18,14 @@
                 <ListBoxEvents TValue="string" TItem="Usuario" ValueChange="@change"></ListBoxEvents>
                 <ListBoxTemplates TItem="Usuario">
                     <ItemTemplate>
+                        @{
+                            var ApplicattionUser = new ApplicationUser();
+                        }
                         <div class="list-wrapper">
-                            <span class="">@((context as Usuario).Foto)</span>
+                            @if (string.IsNullOrEmpty(ApplicationUser.Id))
+                            {
+                              <span class="">@((context as ApplicationUser).Foto)</span>
+                            }
                             <span class="text">@((context as Usuario).Nombre)</span><span class="description">@((context as Usuario).Email)</span>
                         </div>
                     </ItemTemplate>

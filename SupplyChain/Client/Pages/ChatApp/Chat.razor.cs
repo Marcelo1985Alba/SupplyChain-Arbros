@@ -29,6 +29,9 @@ namespace SupplyChain.Client.Pages.ChatApp
         [Parameter] public string CurrentMessage { get; set; }
         [Parameter] public string CurrentUserId { get; set; }
         [Parameter] public string CurrentUserEmail { get; set; }
+
+        [Parameter] public ApplicationUser ApplicationUser { get; set; }
+
         protected List<ChatMessage> messages = new List<ChatMessage>();
         protected List<Usuario> ChatUsers = new List<Usuario>();
         protected List<vUsuario> ChatvUsers = new List<vUsuario>();

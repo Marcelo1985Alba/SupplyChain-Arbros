@@ -89,7 +89,7 @@ namespace SupplyChain.Server.Controllers
         {
             var userId = User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
             var allUsers = await _context.Users.Where(user => user.Id != userId)
-                .Select(s=> new Usuario() { Id = s.Id, Nombre= s.UserName, Email= s.Email }).ToListAsync();
+                .Select(s=> new Usuario() { Id = s.Id, Nombre= s.UserName, Email= s.Email, }).ToListAsync();
             return allUsers;
         }
 
@@ -100,6 +100,13 @@ namespace SupplyChain.Server.Controllers
                 .Select(s=> new Usuario() { Id = s.Id, Nombre = s.UserName, Email = s.Email }).FirstOrDefaultAsync();
             return Ok(user);
         }
+
+        //[HttpGet("users/{userId}/{foto}")]
+        //public async Task<ActionResult<List<vUsuario>>> GetUserFoto(string userId, byte foto)
+        //{
+        //    var user = await _context.Users.Where(user => user.Id == userId)
+        //        .Select(s => new vUsuario { Id= s.Id, FOTO = s.Foto});
+        //}
         [HttpPost]
         public async Task<ActionResult<ChatMessage>> SaveMessageAsync(ChatMessage message)
         {
