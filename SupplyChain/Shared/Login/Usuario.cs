@@ -14,6 +14,7 @@ namespace SupplyChain.Shared.Login
         public string Email { get; set; }
         //[NotMapped]
         //public byte[] Foto{ get; set; }
+        public byte[] Foto { get; set; }
         
 
     }

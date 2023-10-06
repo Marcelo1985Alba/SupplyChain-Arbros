@@ -13,6 +13,7 @@ namespace SupplyChain.Shared
         public string FromUserId { get; set; }
         public string ToUserId { get; set; }
         public string Message { get; set; }
+        public byte[] foto { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool Visto { get; set; }
         public virtual ApplicationUser FromUser { get; set; }

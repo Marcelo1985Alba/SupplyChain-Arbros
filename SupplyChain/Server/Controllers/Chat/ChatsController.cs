@@ -31,35 +31,43 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("{contactId}")]
         public async Task<ActionResult<List<ChatMessage>>> GetConversationAsync(string contactId)
         {
-            var userId = HttpContext.User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
-            var messages = await _context.ChatMessages
-                    .Where(h => (h.FromUserId == contactId && h.ToUserId == userId)
-                        || (h.FromUserId == userId && h.ToUserId == contactId))
-                    .OrderBy(a => a.CreatedDate)
-                    .Include(a => a.FromUser)
-                    .Include(a => a.ToUser)
-                    .Select(x => new ChatMessage
-                    {
-                        FromUserId = x.FromUserId,
-                        Message = x.Message,
-                        CreatedDate = x.CreatedDate,
-                        Id = x.Id,
-                        ToUserId = x.ToUserId,
-                        //ToUser = x.ToUser,
-                        NameToUser = x.ToUser.UserName,
-                        //FromUser = x.FromUser,
-                        NameFromUser = x.FromUser.UserName,
-                        Visto = x.Visto
-                    }).ToListAsync();
-
-            foreach (var item in messages.Where(m=> !m.Visto))
+            try
             {
-                item.Visto = true;
-                _context.Entry(item).State = EntityState.Modified;
-            }
+                var userId = HttpContext.User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
+                var messages = await _context.ChatMessages
+                        .Where(h => (h.FromUserId == contactId && h.ToUserId == userId)
+                            || (h.FromUserId == userId && h.ToUserId == contactId))
+                        .OrderBy(a => a.CreatedDate)
+                        //.Include(a=>a.Foto)
+                        .Include(a => a.FromUser)
+                        .Include(a => a.ToUser)
+                        .Select(x => new ChatMessage
+                        {
+                            FromUserId = x.FromUserId,
+                            Message = x.Message,
+                            CreatedDate = x.CreatedDate,
+                            Id = x.Id,
+                            ToUserId = x.ToUserId,
+                            //ToUser = x.ToUser,
+                            NameToUser = x.ToUser.UserName,
+                            //FromUser = x.FromUser,
+                            NameFromUser = x.FromUser.UserName,
+                            Visto = x.Visto
+                        }).ToListAsync();
 
-            await _context.SaveChangesAsync();
-            return messages;
+                foreach (var item in messages.Where(m => !m.Visto))
+                {
+                    item.Visto = true;
+                    _context.Entry(item).State = EntityState.Modified;
+                }
+
+                await _context.SaveChangesAsync();
+                return messages;
+            }catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         [HttpGet("NoView")]
@@ -89,7 +97,7 @@ namespace SupplyChain.Server.Controllers
         {
             var userId = User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
             var allUsers = await _context.Users.Where(user => user.Id != userId)
-                .Select(s=> new Usuario() { Id = s.Id, Nombre= s.UserName, Email= s.Email, }).ToListAsync();
+                .Select(s=> new Usuario() { Id = s.Id, Nombre= s.UserName, Email= s.Email,Foto = s.Foto }).ToListAsync();
             return allUsers;
         }
 
@@ -97,7 +105,7 @@ namespace SupplyChain.Server.Controllers
         public async Task<IActionResult> GetUserDetailsAsync(string userId)
         {
             var user = await _context.Users.Where(user => user.Id == userId)
-                .Select(s=> new Usuario() { Id = s.Id, Nombre = s.UserName, Email = s.Email }).FirstOrDefaultAsync();
+                .Select(s=> new Usuario() { Id = s.Id, Nombre = s.UserName, Email = s.Email, Foto = s.Foto }).FirstOrDefaultAsync();
             return Ok(user);
         }
 

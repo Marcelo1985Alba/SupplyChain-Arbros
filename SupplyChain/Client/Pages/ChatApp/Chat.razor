@@ -18,15 +18,22 @@
                 <ListBoxEvents TValue="string" TItem="Usuario" ValueChange="@change"></ListBoxEvents>
                 <ListBoxTemplates TItem="Usuario">
                     <ItemTemplate>
-                        @{
-                            var ApplicattionUser = new ApplicationUser();
-                        }
-                        <div class="list-wrapper">
-                            @if (string.IsNullOrEmpty(ApplicationUser.Id))
+                        <div class="profile-img">
+                            @if (context.Foto == null || context.Foto.Length == 0)
                             {
-                              <span class="">@((context as ApplicationUser).Foto)</span>
+                                <img src="~/img1-43x43.png" class="profile-pic" />
                             }
-                            <span class="text">@((context as Usuario).Nombre)</span><span class="description">@((context as Usuario).Email)</span>
+                            else
+                            {
+                                <img src="@($"data:image/png;base64,{Convert.ToBase64String(context.Foto)}")" alt="" class="e-avatar e-avatar-circle" />
+                            }
+
+                            <div style="position:relative; left:42px; top:-40">
+                                <span class="text">@((context as Usuario).Nombre)</span>
+                            </div>
+                            <div style="position:relative;left:42px; top:-30px;">
+                                <span class="description" style="text-align:end">@((context as Usuario).Email)</span>
+                            </div>
                         </div>
                     </ItemTemplate>
                 </ListBoxTemplates>
@@ -57,9 +64,10 @@
                                     @*<span class="pic03 e-avatar e-avatar-circle"></span>*@
                                 </div>
                                 <div class="flex content__container flex__8 vertical padding @(currentData.FromUserId == CurrentUserId ? "right__align" : "left__align")">
-                                    <span class="pic03 e-avatar e-avatar-circle @(currentData.FromUserId == CurrentUserId ? "right__align" : "left__align")"></span>
+                                    <span class="e-avatar-circle @(currentData.FromUserId == CurrentUserId ? "right__align" : "left__align")"></span>
+                                    <div class="">@currentData.NameFromUser</div>
                                     <div class="bold">@currentData.Message</div>
-                                    <div class="small__font">@currentData.NameFromUser</div>
+
                                 </div>
                             </div>
                         }

@@ -26,6 +26,7 @@ namespace SupplyChain.Client.Pages.ChatApp
         [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
         [Parameter] public string ContactEmail { get; set; }
         [Parameter] public string ContactId { get; set; }
+        [Parameter] public string ContactFoto { get; set; }
         [Parameter] public string CurrentMessage { get; set; }
         [Parameter] public string CurrentUserId { get; set; }
         [Parameter] public string CurrentUserEmail { get; set; }
@@ -34,8 +35,9 @@ namespace SupplyChain.Client.Pages.ChatApp
 
         protected List<ChatMessage> messages = new List<ChatMessage>();
         protected List<Usuario> ChatUsers = new List<Usuario>();
-        protected List<vUsuario> ChatvUsers = new List<vUsuario>();
         private AuthenticationState authState;
+
+        private byte[]? imageUsuario;
 
         protected SfTextBox SfTextBox;
         protected ObservableCollection<ListDataModel> DataSource = new ObservableCollection<ListDataModel>() {
@@ -159,30 +161,29 @@ namespace SupplyChain.Client.Pages.ChatApp
 
         async Task LoadUserChat(string userId)
         {
-            var response = await ChatService.GetUserDetailsAsync(userId);
-            if (response.Error)
-            {
-
-            }
-            else
-            {
-                var contact = response.Response;
-                ContactId = contact.Id;
-                ContactEmail = contact.Email;
-                _navigationManager.NavigateTo($"chat-app/{ContactId}");
-                messages = new List<ChatMessage>();
-                var responseConversation = await ChatService.GetConversationAsync(ContactId);
-                if (responseConversation.Error)
+           
+                var response = await ChatService.GetUserDetailsAsync(userId);
+                if (response.Error)
                 {
 
                 }
                 else
                 {
-                    messages = responseConversation.Response;
+                    var contact = response.Response;
+                    ContactId = contact.Id;
+                    ContactEmail = contact.Email;
+                    _navigationManager.NavigateTo($"chat-app/{ContactId}");
+                    messages = new List<ChatMessage>();
+                    var responseConversation = await ChatService.GetConversationAsync(ContactId);
+                    if (responseConversation.Error)
+                    {
+
+                    }
+                    else
+                    {
+                        messages = responseConversation.Response;
+                    }
                 }
-            }
-            
-                
             
         }
 
