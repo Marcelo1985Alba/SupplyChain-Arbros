@@ -214,12 +214,19 @@ namespace SupplyChain
         public decimal CONFIRMADO { get; set; }
 
 
-        [NotMapped]
-        public EstadoItem ESTADO { get; set; } = EstadoItem.Agregado;
+        [NotMapped] public EstadoItem ESTADO { get; set; } = EstadoItem.Agregado;
 
-        [NotMapped]
-        public int StockPlaneado { get; set; } = 0;
-        [NotMapped]
-        public int StockEnFabricacion { get; set; } = 0;
+        [NotMapped] public int StockPlaneado { get; set; } = 0;
+        [NotMapped] public int StockEnFabricacion { get; set; } = 0;
+
+        /// <summary>
+        /// Stock del deposito de insumos y reserva de todos los despachos
+        /// </summary>
+        [NotMapped] public decimal StockReal { get; set; } = 0;
+
+        /// <summary>
+        /// Stock para una determinada orden orden del insumo 
+        /// </summary>
+        [NotMapped] public decimal Reserva { get; set; } = 0;
     }
 }

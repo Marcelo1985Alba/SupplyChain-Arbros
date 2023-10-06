@@ -158,7 +158,7 @@ namespace SupplyChain.Client.Shared.Inventarios
             if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
                 await Grid.RefreshColumnsAsync();
-                Grid.Refresh();
+                await Grid.Refresh();
                 await Grid.RefreshHeaderAsync();
             }
 

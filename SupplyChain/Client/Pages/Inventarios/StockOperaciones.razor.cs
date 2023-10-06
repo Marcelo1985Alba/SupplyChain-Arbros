@@ -392,6 +392,8 @@ namespace SupplyChain.Client.Pages.Inventarios
 
                     pedido.Id = registronegativo;
                     pedido.PENDIENTEOC = item.STOCK; //STOCK
+                    pedido.StockReal = item.StockReal;
+                    pedido.Reserva = item.Reserva;
                     itemsGrilla.Add(pedido);
 
 
