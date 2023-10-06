@@ -560,17 +560,18 @@ namespace SupplyChain.Client.Pages.Emision
             {
                 xespecif2 = xespecif;
             }
-            if (string.IsNullOrEmpty(@DropVal) && string.IsNullOrEmpty(@DropVal))
+            if (string.IsNullOrEmpty(DropVal) && string.IsNullOrEmpty(DropVal))
             {
                 xcondven = "vacio";
             }
             else
             {
-                xcondven = @DropVal;
+                xcondven = DropVal;
             }
             //                  string sqlCommandString = string.Format("UPDATE COMPRAS SET NUMERO = 9999 WHERE REGISTRO IN ("+ listaordenescompra + ")");
-            response = await Http.PutAsJsonAsync("api/compras/actualizaoc/" + listaordenescompra + '/' + xespecif2 + '/' + xcondven + '/' + bonif, listaordenescompra);
-
+            //response = await Http.PutAsJsonAsync("api/compras/actualizaoc/" + listaordenescompra + '/' + xespecif2 + '/' + xcondven + '/' + bonif, listaordenescompra);
+            var urlPut= $"api/compras/actualizaoc/?listaordenescompra={listaordenescompra}&especif={xespecif2}&condven={xcondven}&bonif={bonif}";
+            response = await Http.PutAsJsonAsync(urlPut, listaordenescompra);
             if (!response.IsSuccessStatusCode)
             {
                 var mensServidor = await response.Content.ReadAsStringAsync();
