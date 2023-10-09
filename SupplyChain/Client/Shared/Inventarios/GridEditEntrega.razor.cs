@@ -12,20 +12,19 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using SupplyChain.Client.Shared;
+using SupplyChain.Client.RepositoryHttp;
+using Newtonsoft.Json;
+using System.Collections;
+using Syncfusion.Blazor.Notifications;
+
 namespace SupplyChain.Client.Shared.Inventarios
 {
     public class GridEditEntregaBase: ComponentBase
     {
         [Inject] public IJSRuntime JsRuntime { get; set; }
         [Inject] HttpClient Http { get; set; }
-        protected ConfirmacionDialog ConfirmacionDialog;
-        protected SupplyChain.Client.Shared.BuscadorEmergente<Pedidos> BuscadorProducto;
-        protected Pedidos stock;
-        protected Pedidos stockCopiado;
-        protected bool confirmaCopy = false;
-        protected bool bAgregarInsumo = false;
-        protected SupplyChain.Client.Shared.BuscadorEmergenteResumenStock BuscadorEmergenteRS;
-        protected Producto[] DataSourceProductos;
+        [Inject] IRepositoryHttp RepositoryHttp { get; set; }
+
         [Parameter] public string Titulo { get; set; } = null!;
         [Parameter] public List<Pedidos> DataSource { get; set; } = null!;
         [Parameter] public bool PermiteAgregar { get; set; } = false;
@@ -39,6 +38,19 @@ namespace SupplyChain.Client.Shared.Inventarios
         [Parameter] public string filtro_CG_ART { get; set; } = string.Empty;
         [Parameter] public string filtro_DESPACHO { get; set; } = string.Empty;
         [CascadingParameter] public PedidoEncabezado RegistroGenerado { get; set; }
+        protected ConfirmacionDialog ConfirmacionDialog;
+        protected SupplyChain.Client.Shared.BuscadorEmergente<Pedidos> BuscadorProducto;
+        protected Pedidos stock;
+        protected Pedidos stockCopiado;
+        protected bool confirmaCopy = false;
+        protected bool bAgregarInsumo = false;
+        protected bool RealizandoReserva = false;
+        protected SupplyChain.Client.Shared.BuscadorEmergenteResumenStock BuscadorEmergenteRS;
+        protected Producto[] DataSourceProductos;
+
+        protected SfToast ToastObj;
+
+
         protected Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
         {
            {"type", "button" }
@@ -136,7 +148,7 @@ namespace SupplyChain.Client.Shared.Inventarios
                 {
                     var cg_art = stock.CG_ART;
                     var cg_dep = stock.CG_DEP;
-                    var despacho = stock.DESPACHO == null ? "" : stock.DESPACHO;
+                    var despacho = stock.DESPACHO ?? "";
                     var lote = stock.LOTE == null ? "" : stock.LOTE;
                     var serie = stock.SERIE == null ? "" : stock.SERIE;
 
@@ -282,9 +294,9 @@ namespace SupplyChain.Client.Shared.Inventarios
             DataSource.Add(stock);
 
 
-            await Grid.RefreshColumns();
-            Grid.Refresh();
-            await Grid.RefreshHeader();
+            await Grid.RefreshColumnsAsync();
+            await Grid.Refresh();
+            await Grid.RefreshHeaderAsync();
             await BuscadorProducto.HideAsync();
         }
 
@@ -306,8 +318,6 @@ namespace SupplyChain.Client.Shared.Inventarios
             //await BuscadorEmergenteRS.HideAsync();
 
             await GetSeleccionResumenStock(resumenStock);
-
-            
         }
 
         private async Task GetSeleccionResumenStock(vResumenStock resumenStock)
@@ -338,9 +348,9 @@ namespace SupplyChain.Client.Shared.Inventarios
                 registroCompleto.PENDIENTEOC = resumenStock.STOCK;
                 registroCompleto.Id = DataSource.Count == 0 ? -1 : DataSource.Min(t => t.Id) - 1;
                 DataSource.Add(registroCompleto);
-                await Grid.RefreshColumns();
-                await Grid.RefreshHeader();
-                Grid.Refresh();
+                await Grid.RefreshColumnsAsync();
+                await Grid.RefreshHeaderAsync();
+                await Grid.Refresh();
                 bAgregarInsumo = false;
             }
             else
@@ -393,6 +403,74 @@ namespace SupplyChain.Client.Shared.Inventarios
             {
                 args.Cell.AddClass(new string[] { "sin-stock" });
             }
+        }
+
+        protected async Task ReservarInsumo()
+        {
+            RealizandoReserva = true;
+            var stockReservar = JsonConvert.DeserializeObject<Pedidos>(JsonConvert.SerializeObject(stock));
+            stockReservar.Id = stock.Id - 1;
+            stockReservar.FE_MOV = DateTime.Now;
+            stockReservar.AVISO = "MOVIMIENTO ENTRE DEPOSITOS";
+            stockReservar.TIPOO = 9;
+            stockReservar.CG_DEP_ALT = 31;
+
+            //var stockDescontar = JsonConvert.DeserializeObject<Pedidos>(JsonConvert.SerializeObject(stock));
+            //stockDescontar.Id = stockReservar.Id - 1;
+            //stockReservar.AVISO = "MOVIMIENTO ENTRE DEPOSITOS";
+
+            var list = new List<Pedidos>();
+            list.AddRange(new[] { stockReservar });
+
+
+            var response = await RepositoryHttp.PostAsJsonAsync("api/Pedidos/PostList", list);
+            
+            if (response.Error)
+            {
+                RealizandoReserva = false;
+                await MensajeToastError();
+                Console.WriteLine(response.HttpResponseMessage.ReasonPhrase); return;
+                
+            }
+            else
+            {
+                if (stock.ResumenStock != null)
+                {
+                    //stock.ResumenStock.STOCK -= Convert.ToDecimal(stockReservar.STOCK);
+                    stock.PENDIENTEOC -= Convert.ToDecimal(stockReservar.STOCK);
+                    stock.Reserva += Convert.ToDecimal(stockReservar.STOCK);
+                }
+
+                await Grid.EndEditAsync();
+                RealizandoReserva = false;
+                await Grid.Refresh();
+                await MostrarMensajeToastSuccess();
+            }
+        }
+
+        private async Task MostrarMensajeToastSuccess()
+        {
+            await this.ToastObj.ShowAsync(new ToastModel
+            {
+                Title = "EXITO!",
+                Content = $"Reservado Correctamente.",
+                CssClass = "e-toast-success",
+                Icon = "e-success toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
+        private async Task MensajeToastError()
+        {
+            await this.ToastObj.ShowAsync(new ToastModel
+            {
+                Title = "ERROR!",
+                Content = "Error al realizar Reserva",
+                CssClass = "e-toast-danger",
+                Icon = "e-error toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
         }
     }
 }

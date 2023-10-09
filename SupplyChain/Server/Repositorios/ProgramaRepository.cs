@@ -73,7 +73,7 @@ namespace SupplyChain.Server.Repositorios
                             r.CG_ART.ToUpper() == i.CG_ART.ToUpper() && (r.CG_DEP == 4 || r.CG_DEP == 31))
                     .SumAsync(s=> s.STOCK);
 
-                    i.Reserva = await PedidosRepository.ObtenerReservaByOF(cg_ordf);
+                    i.Reserva = await PedidosRepository.ObtenerReservaByOF(cg_ordf, i.CG_ART);
                 });
 
 

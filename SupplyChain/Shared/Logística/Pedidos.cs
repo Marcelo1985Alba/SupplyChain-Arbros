@@ -56,6 +56,9 @@ namespace SupplyChain
          * 1) con el deposito de ingres
          * 2) con el deposito de salida
          */
+        /// <summary>
+        /// Se utilizar para guardar el deposito de ingreso para Movimiento entre depositos
+        /// </summary>
         [NotMapped]
         [RequireDepositoItem]
         public int CG_DEP_ALT { get; set; } = 0;
@@ -74,6 +77,19 @@ namespace SupplyChain
         public string LEYENDA { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Remito")]
         public string REMITO { get; set; } = "0000-00000000";
+
+        /// <summary>
+        /// Ejemplos:
+        /// Tipoo = 5, Descrip = "Recepción de insumos de un proveedor"
+        /// Tipoo = 6, Descrip = "Devolución de insumos a un proveedor"
+        /// Tipoo = 9, Descrip = "Movimientos entre depósitos"
+        /// Tipoo = 10, Descrip = "Entrega de insumos a una orden de fabricación"
+        /// Tipoo = 11, Descrip = "Devolución de insumos de una orden de fabricación"
+        /// Tipoo = 21, Descrip = "Ajuste de Inventario" 
+        /// Tipoo = 27, Descrip = "Entrega a Planta sin OF"
+        /// Tipoo = 28, Descrip = "Entrega de un insumo a una orden de armado firme o en curso"
+        /// 
+        /// </summary>
         [ColumnaGridViewAtributo(Name = "Tipo de operación")]
         public int? TIPOO { get; set; } = 0;
         [ColumnaGridViewAtributo(Name = "Pedido")]

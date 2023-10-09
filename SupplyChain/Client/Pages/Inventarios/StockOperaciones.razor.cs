@@ -391,7 +391,15 @@ namespace SupplyChain.Client.Pages.Inventarios
                     pedido.ResumenStock = item.ResumenStock;
 
                     pedido.Id = registronegativo;
-                    pedido.PENDIENTEOC = item.STOCK; //STOCK
+                    if (pedido.TIPOO == 9)
+                    {
+                        pedido.PENDIENTEOC = item.STOCK - item.Reserva; //STOCK
+                    }
+                    else
+                    {
+                        pedido.PENDIENTEOC = item.STOCK; //STOCK
+                    }
+                    
                     pedido.StockReal = item.StockReal;
                     pedido.Reserva = item.Reserva;
                     itemsGrilla.Add(pedido);
