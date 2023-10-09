@@ -222,15 +222,15 @@
                         <SfGrid DataSource="@DataEditarProductosFormulas" AllowPaging="true" AllowSorting="true"
                                 ID="DetailedProdForm" Toolbar="@ToolbaritemsEditarFormula" Height="100%" Width="100%"
                                 GridLines="GridLine.Both">
-                            <GridEvents TValue="Formula"
-                                        OnToolbarClick="ToolbarEditFormClickHandler">
+                            <GridEvents TValue="Formula" OnToolbarClick="ToolbarEditFormClickHandler">
                             </GridEvents>
                             <GridPageSettings PageSizes="true" PageSize="10"></GridPageSettings>
-                            <GridEditSettings AllowAdding=true AllowDeleting=true AllowEditing=true
-                                              Mode="EditMode.Batch">
+                            <GridEditSettings AllowAdding=true AllowDeleting=true AllowEditing=true Mode="EditMode.Batch">
                             </GridEditSettings>
                             <GridColumns>
                                 <GridColumn Field=@nameof(Formula.Cg_Prod) HeaderText="Producto" Width="90" AllowEditing=false></GridColumn>
+                                <GridColumn Field=@nameof(Formula.DES_REVISION) HeaderText="Descripción" Width="90" AllowEditing=false></GridColumn>
+                                <GridColumn Field=@nameof(Formula.AUTORIZA) HeaderText="Aprobó" Width="90" AllowEditing=false></GridColumn>
                                 <GridColumn Field=@nameof(Formula.Cg_Se) HeaderText="Semielaborado" Width="80" AllowEditing=false></GridColumn>
                                 <GridColumn Field=@nameof(Formula.Cg_Mat) HeaderText="Materia Prima" Width="90" AllowEditing=false></GridColumn>
                                 <GridColumn Field=@nameof(Formula.CANT_MAT) HeaderText="Cantidad" Width="90"></GridColumn>
@@ -247,11 +247,10 @@
                     </div>
                 </div>
             </div>
-
-
         </Content>
     </DialogTemplates>
 </SfDialog>
+
 
 <BuscadorEmergente Height="650px" Width="820px" TItem="Producto" Titulo="Listado de Insumos" Target="#dlgEditar"
                    Visible="@PopupBuscadorProdVisible"
