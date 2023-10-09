@@ -10,8 +10,8 @@
 <div>
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-12 e-card">
-            <h3>#Contactos</h3>
-            <SfListBox @bind-Value="@ContactId" TValue="string" TItem="Usuario" DataSource="@ChatUsers" AllowFiltering="true"
+            <h3 style="padding:10px">#Contactos</h3>
+            <SfListBox @bind-Value="@ContactId" TValue="string" TItem="Usuario" DataSource="@ChatUsers" AllowFiltering="true" Height="480px"
                        FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains">
                 <ListBoxFieldSettings Text="Nombre" Value="Id"></ListBoxFieldSettings>
                 <ListBoxSelectionSettings Mode="Syncfusion.Blazor.DropDowns.SelectionMode.Single"></ListBoxSelectionSettings>
@@ -21,7 +21,7 @@
                         <div class="profile-img">
                             @if (context.Foto == null || context.Foto.Length == 0)
                             {
-                                <img src="~/img1-43x43.png" class="profile-pic" />
+                                <img src="~/img1-236x210.png" class="e-avatar-circle" />
                             }
                             else
                             {
@@ -39,11 +39,11 @@
                 </ListBoxTemplates>
             </SfListBox>
         </div>
-        <div class="col-lg-9 col-md-6 col-sm-12">
+        <div class="col-lg-9 col-md-6 col-sm-12" >
             <SfListView ID="list"
                         DataSource="@messages"
                         ShowHeader="true"
-                        Height="250px"
+                        Height="500px"
                         HeaderTitle="Chat">
                 <ListViewFieldSettings TValue="ChatMessage" Id="Id" Text="Message"></ListViewFieldSettings>
                 <ListViewTemplates TValue="ChatMessage">
@@ -84,52 +84,7 @@
                 </div>
             </div>
         </div>
-        @*<div class="col-lg-9">
-                <div id="container">
-                    <div id="sample">
-                        <SfListView ID="list"
-                                    DataSource="@DataSource"
-                                    ShowHeader="true"
-                                    Height="420px"
-                                    HeaderTitle="Chat">
-                            <ListViewFieldSettings TValue="ListDataModel" Id="Id" Text="Text"></ListViewFieldSettings>
-                            <ListViewTemplates TValue="ListDataModel">
-                                <Template>
-                                    @{
-                                        ListDataModel currentData = context as ListDataModel;
 
-                                        <div class="flex item__container">
-                                            <div class="flex flex__1 vertical__center flex__center @(currentData.Chat == "sender" ? "flex__order__2" : "")">
-                                                @if (currentData.Avatar != "")
-                                                {
-                                                    <span class="e-avatar e-avatar-circle">@currentData.Avatar</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="@currentData.Pic e-avatar e-avatar-circle"></span>
-                                                }
-                                            </div>
-                                            <div class="flex content__container flex__8 vertical padding @(currentData.Chat == "sender" ? "right__align" : "left__align")">
-                                                <div class="bold">@currentData.Text</div>
-                                                <div class="small__font">@currentData.Contact</div>
-                                            </div>
-                                        </div>
-                                    }
-                                </Template>
-                            </ListViewTemplates>
-                        </SfListView>
-                        <div class="flex">
-                            <div class="flex__8 padding">
-                                <SfTextBox Placeholder="Ingrese su Mensaje..."
-                                           @ref="@SfTextBox"></SfTextBox>
-                            </div>
-                            <div class="flex__1">
-                                <button class="e-btn" @onclick="@OnSend">Send</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
     </div>
 </div>
 
@@ -251,7 +206,7 @@
     }
 
     .pic01 {
-        background-image: url("https://ej2.syncfusion.com/demos/src/grid/images/1.png");
+        background-image: src("../../wwwroot/img1-236x210.png");
     }
 
     .pic02 {
@@ -306,5 +261,9 @@
 
     .e-listbox-container .e-list-item {
         height: auto !important;
+    }
+
+    .e-card{
+        margin-bottom:50%;
     }
 </style>

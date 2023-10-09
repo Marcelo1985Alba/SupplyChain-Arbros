@@ -105,7 +105,7 @@ namespace SupplyChain.Server.Controllers
         public async Task<IActionResult> GetUserDetailsAsync(string userId)
         {
             var user = await _context.Users.Where(user => user.Id == userId)
-                .Select(s=> new Usuario() { Id = s.Id, Nombre = s.UserName, Email = s.Email, Foto = s.Foto }).FirstOrDefaultAsync();
+                .Select(s=> new Usuario() { Id = s.Id, Nombre = s.UserName, Email = s.Email}).FirstOrDefaultAsync();
             return Ok(user);
         }
 
