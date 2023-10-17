@@ -9,7 +9,7 @@ namespace SupplyChain.Server.Hubs
 {
     public class ChatHub : Hub
     {
-        public async Task SendMessageAsync(ChatMessage message, string userName)
+        public async Task SendMessageAsync(ChatMessage message, string userName )
         {
             await Clients.All.SendAsync("ReceiveMessage", message, userName);
         }

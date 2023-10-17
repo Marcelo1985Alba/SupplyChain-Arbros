@@ -45,6 +45,7 @@ namespace SupplyChain.Server.Controllers
                         {
                             FromUserId = x.FromUserId,
                             Message = x.Message,
+                            //Foto =x.Foto,
                             CreatedDate = x.CreatedDate,
                             Id = x.Id,
                             ToUserId = x.ToUserId,
@@ -73,23 +74,31 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("NoView")]
         public async Task<IActionResult> GetAllConversationsNoViewAsync()
         {
-            var userId = HttpContext.User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
-            var messages = await _context.ChatMessages
-                    .Where(h => !h.Visto && h.ToUserId == userId)
-                    .OrderBy(a => a.CreatedDate)
-                    .Include(a => a.FromUser)
-                    .Include(a => a.ToUser)
-                    .Select(x => new ChatMessage
-                    {
-                        FromUserId = x.FromUserId,
-                        Message = x.Message,
-                        CreatedDate = x.CreatedDate,
-                        Id = x.Id,
-                        ToUserId = x.ToUserId,
-                        ToUser = x.ToUser,
-                        FromUser = x.FromUser
-                    }).ToListAsync();
-            return Ok(messages);
+            try
+            {
+                var userId = HttpContext.User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
+                var messages = await _context.ChatMessages
+                        .Where(h => !h.Visto && h.ToUserId == userId)
+                        .OrderBy(a => a.CreatedDate)
+                        .Include(a => a.FromUser)
+                        .Include(a => a.ToUser)
+                        .Select(x => new ChatMessage
+                        {
+                            FromUserId = x.FromUserId,
+                            Message = x.Message,
+                            //Foto = x.Foto,
+                            CreatedDate = x.CreatedDate,
+                            Id = x.Id,
+                            ToUserId = x.ToUserId,
+                            ToUser = x.ToUser,
+                            FromUser = x.FromUser
+                        }).ToListAsync();
+                return Ok(messages);
+
+            }
+            catch (Exception ex) {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("users")]
@@ -105,7 +114,7 @@ namespace SupplyChain.Server.Controllers
         public async Task<IActionResult> GetUserDetailsAsync(string userId)
         {
             var user = await _context.Users.Where(user => user.Id == userId)
-                .Select(s=> new Usuario() { Id = s.Id, Nombre = s.UserName, Email = s.Email}).FirstOrDefaultAsync();
+                .Select(s=> new Usuario() { Id = s.Id, Nombre = s.UserName, Email = s.Email, Foto = s.Foto}).FirstOrDefaultAsync();
             return Ok(user);
         }
 
@@ -118,13 +127,21 @@ namespace SupplyChain.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<ChatMessage>> SaveMessageAsync(ChatMessage message)
         {
-            var userId = User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
-            message.FromUserId = userId;
-            message.CreatedDate = DateTime.Now;
-            message.ToUser = await _context.Users.Where(user => user.Id == message.ToUserId).FirstOrDefaultAsync();
-            await _context.ChatMessages.AddAsync(message);
-            await _context.SaveChangesAsync();
-            return message;
+            try
+            {
+                var userId = User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
+                message.FromUserId = userId;
+                message.CreatedDate = DateTime.Now;
+                message.ToUser = await _context.Users.Where(user => user.Id == message.ToUserId).FirstOrDefaultAsync();
+                await _context.ChatMessages.AddAsync(message);
+                await _context.SaveChangesAsync();
+                return message;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+           
         }
     }
 

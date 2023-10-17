@@ -13,11 +13,15 @@ namespace SupplyChain.Shared
         public string FromUserId { get; set; }
         public string ToUserId { get; set; }
         public string Message { get; set; }
+
+        //public byte[]? Foto { get; set; }
         //public byte[]? foto { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool Visto { get; set; }
-        public virtual ApplicationUser FromUser { get; set; }
-        public virtual ApplicationUser ToUser { get; set; }
+        [NotMapped] public virtual ApplicationUser FromUser { get; set; }
+        [NotMapped] public virtual ApplicationUser ToUser { get; set; }
+        [NotMapped] public virtual ApplicationUser Foto { get; set; }
+        //public virtual ApplicationUser FotoUser { get; set; }
 
         [NotMapped]
         public string NameFromUser { get; set; }

@@ -26,10 +26,11 @@ namespace SupplyChain.Client.Pages.ChatApp
         [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
         [Parameter] public string ContactEmail { get; set; }
         [Parameter] public string ContactId { get; set; }
-        [Parameter] public string ContactFoto { get; set; }
+        [Parameter] public byte[]? ContactFoto { get; set; }
         [Parameter] public string CurrentMessage { get; set; }
         [Parameter] public string CurrentUserId { get; set; }
         [Parameter] public string CurrentUserEmail { get; set; }
+        [Parameter] public byte? CurrentUserFoto { get; set; }
 
         [Parameter] public ApplicationUser ApplicationUser { get; set; }
 
@@ -40,48 +41,7 @@ namespace SupplyChain.Client.Pages.ChatApp
         private byte[]? imageUsuario;
 
         protected SfTextBox SfTextBox;
-        protected ObservableCollection<ListDataModel> DataSource = new ObservableCollection<ListDataModel>() {
-        new ListDataModel {
-            Text = "Jenifer",
-            Contact = "Hi",
-            Id = "1",
-            Avatar = "",
-            Pic = "pic01",
-            Chat = "sender"
-        },
-        new ListDataModel {
-            Text = "Amenda",
-            Contact = "Hello",
-            Id = "2",
-            Avatar = "A",
-            Pic = "",
-            Chat = "receiver"
-        },
-        new ListDataModel {
-            Text = "Jenifer",
-            Contact = "What Knid of application going to launch",
-            Id = "4",
-            Avatar = "",
-            Pic = "pic02",
-            Chat = "sender"
-        },
-        new ListDataModel {
-            Text = "Amenda ",
-            Contact = "A knid of Emergency broadcast App",
-            Id = "5",
-            Avatar = "A",
-            Pic = "",
-            Chat = "receiver"
-        },
-        new ListDataModel {
-            Text = "Jacob",
-            Contact = "Can you please elaborate",
-            Id = "6",
-            Avatar = "",
-            Pic = "pic04",
-            Chat = "sender"
-        },
-    };
+      
 
         protected async override Task OnInitializedAsync()
         {
@@ -96,12 +56,12 @@ namespace SupplyChain.Client.Pages.ChatApp
             }
             hubConnection?.On<ChatMessage, string>("ReceiveMessage", async (message, userName) =>
             {
-                if ((ContactId == message.ToUserId && CurrentUserId == message.FromUserId) || (ContactId == message.FromUserId && CurrentUserId == message.ToUserId))
+                if ((ContactId == message.ToUserId && CurrentUserId == message.FromUserId ) || (ContactId == message.FromUserId && CurrentUserId == message.ToUserId))
                 {
 
                     if ((ContactId == message.ToUserId && CurrentUserId == message.FromUserId))
                     {
-                        messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { Email = CurrentUserEmail } });
+                        messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { Email = CurrentUserEmail} });
                         await hubConnection?.SendAsync("ChatNotificationAsync", $"Nuevo Mensaje de {userName}", ContactId, CurrentUserId);
                     }
                     else if ((ContactId == message.FromUserId && CurrentUserId == message.ToUserId))
@@ -172,6 +132,7 @@ namespace SupplyChain.Client.Pages.ChatApp
                     var contact = response.Response;
                     ContactId = contact.Id;
                     ContactEmail = contact.Email;
+                    //ContactFoto = contact.Foto;
                     _navigationManager.NavigateTo($"chat-app/{ContactId}");
                     messages = new List<ChatMessage>();
                     var responseConversation = await ChatService.GetConversationAsync(ContactId);
@@ -196,6 +157,7 @@ namespace SupplyChain.Client.Pages.ChatApp
                 {
                     Message = CurrentMessage,
                     ToUserId = ContactId,
+                    //Foto = ContactFoto,
                     CreatedDate = DateTime.Now
 
                 };
@@ -219,38 +181,6 @@ namespace SupplyChain.Client.Pages.ChatApp
              await LoadUserChat(args.Value);
         }
 
-        public class ListDataModel
-        {
-            public string Id
-            {
-                get;
-                set;
-            }
-            public string Chat
-            {
-                get;
-                set;
-            }
-            public string Pic
-            {
-                get;
-                set;
-            }
-            public string Avatar
-            {
-                get;
-                set;
-            }
-            public string Text
-            {
-                get;
-                set;
-            }
-            public string Contact
-            {
-                get;
-                set;
-            }
-        }
+       
     }
 }
