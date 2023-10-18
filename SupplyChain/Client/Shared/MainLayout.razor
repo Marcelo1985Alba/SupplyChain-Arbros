@@ -98,12 +98,22 @@
                                         {
 
                                             <div class="message-center" style="">
-                                                <h4>Mensaje</h4>
-                                                 @if(mensajes.Count >0){
-                                                    <button class="e-link btn-close" @onclick="() => CloseMessage(item.Id)">x</button>
+                                                <h4>Mensaje
+
+                                                </h4>
+                                                @* <SfIcon Name="IconName.Close" Title="Close" style="position:relative;left:85%; bottom:15%;" onclick="() => CloseMessage(item.Id)"></SfIcon> *@
+                                                <div class="e-icons-cancel" style="position:relative;left:85%; bottom:15%;">
+                                                <SfButton IconCss="e-icons" Content="x" IconPosition="IconPosition.Right" OnClick="()=> CloseMessage(item.Id)"></SfButton>
+                                                </div>
+
+                                                @if(mensajes.Count >0){
+                                                    @* <span class="e-icons e-" @onclick="() => CloseMessage(item.Id)">x</span> *@
+
+
+                                                    @*                                                     <button class="e-link btn-close" @onclick="() => CloseMessage(item.Id)">x</button> *@
                                                     <a href="/chat-app/@item.FromUserId" style="position:relative; bottom:35px; padding:20;">
                                                         <div class="mail-contnet">
-                                                            <h5>@item.FromUser?.UserName</h5> <span class="mail-desc" onfocus="">@item.Message</span>
+                                                            <h5>@item.FromUser?.UserName</h5><span class="mail-desc" >@item.Message</span>
                                                             <span class="time">@item.CreatedDate</span>
                                                         </div>
                                                     </a>
@@ -113,11 +123,7 @@
                                                 {
                                                     
                                                 }
-                                                @*                                                 <i CssClass='e-link' class="btn-close" Content='x' OnClick="(() => @CloseMessage(item.Id))></i>
- *@                                                @* <SfTooltip CssClass='e-link' class="btn-close" Content="@Content" IsSticky="true">
-                                                    <SfButton ID="target" ></SfButton>
-                                                </SfTooltip> *@
-                                                @* <div onclick="@Dismiss"></div> *@
+                                               
                                             </div>
                                             }
                                             
@@ -162,7 +168,16 @@
                                     <ul class="dropdown-user">
                                         <li>
                                             <div class="dw-user-box">
-                                                <div class="u-img"><img src="img1-150x150.png" alt="user"></div>
+                                                <div class="u-img">
+                                                @if(imageUsuario ==null || imageUsuario.Length == 0)
+                                                {
+                                                    <img src="img1-150x150.png" alt="user"/>
+                                                }
+                                                else
+                                                {
+                                                  <img src="@($"data:image/png;base64,{Convert.ToBase64String(imageUsuario)}")" alt="user" class="profile-pic" />
+                                                }
+                                            </div>
                                                 <div class="u-text">
                                                     <h4>@nombreUsuario</h4>
 
@@ -384,10 +399,7 @@
 
     // }
 
-    private void Dismiss()
-    {
-        this.Visibility = true;
-    }
+  
 
     protected async override Task OnInitializedAsync()
     {
@@ -547,7 +559,7 @@
         z-index: initial;
         padding: 15px 0 0 0px;
         height: 90%;
-        box-shadow: 1px 0px 20px rgb(0 0 0 / 8%);
+        /* box-shadow: 1px 0px 20px rgb(0 0 0 / 8%); */
     }
 
     .profile-img {
@@ -571,7 +583,7 @@
     .e-sidebar.e-left {
         /*background: #fff;*/
         border-right: 1px solid #c4c0c0;
-        box-shadow: 1px 0px 20px rgb(0 0 0 / 8%);
+        /* box-shadow: 1px 0px 20px rgb(0 0 0 / 8%); */
     }
 
     .text-content {
@@ -586,6 +598,10 @@
     e-icons {
         color: #00ffff;
         font-size: 60px;
+    }
+
+    e-icons-cancel{
+        width:1px;
     }
 
     .e-menu::before {
@@ -635,7 +651,7 @@
 
     #header-section .icon-menu {
         width: 40px;
-        cursor: pointer;
+        /* cursor: pointer; */
     }
 
     /* custom code start */

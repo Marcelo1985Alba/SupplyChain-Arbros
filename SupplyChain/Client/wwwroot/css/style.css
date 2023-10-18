@@ -4668,8 +4668,8 @@ File: scss
     text-decoration: none;
     width: 100%;
     padding: 9px 15px; }
-    .mailbox .message-center a:hover {
-      background: #e9edf2; }
+/*    .mailbox .message-center a:hover {
+      background: #e9edf2; }*/
     .mailbox .message-center a div {
       white-space: normal; }
     .mailbox .message-center a .user-img {
