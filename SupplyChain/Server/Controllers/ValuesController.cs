@@ -258,27 +258,62 @@ namespace SupplyChain
         //Gets the path of the PDF document
         private string GetDocumentPath(string document)
         {
-
-            var contenido = document.Split(',');
-            var campo = contenido[1];
-            document = contenido[0];
-
-            var ubicacion =  _context.Solution.Where(s=> s.CAMPO == campo).Select(c=> c.VALORC).FirstOrDefault();
-            string documentPath = string.Empty;
-
-            if (!System.IO.File.Exists(ubicacion + "/" + document))
+            //string[] contenido= new string[0];
+            string path = "R:\\20. Digital\\Doc.CompartidaISO\\";
+            var campo = string.Empty;
+            var ubicacion = string.Empty;
+            if (document.Contains(","))
             {
-                ubicacion = "D:\\Descargas\\";
-                document = "27303156459_011_00001_00000058.pdf";
-                if (System.IO.File.Exists(ubicacion + "/" + document))
-                    documentPath = ubicacion + "/" + document;
+                var contenido = document.Split(',');
+                campo = contenido[1];
+                document = contenido[0];
+                ubicacion = _context.Solution.Where(s => s.CAMPO == campo).Select(c => c.VALORC).FirstOrDefault();
+
             }
+            else if(document.Contains("_"))
+            {
+                var contenido = document.Split('_');
+                campo = contenido[1];
+                document = contenido[0];
+                ubicacion = _context.Solution.Where(s => s.CAMPO == campo).Select(c => c.VALORC).FirstOrDefault();
+
+            }
+            else if (!System.IO.File.Exists(ubicacion + "/" + document))
+            {
+                //var contenido = document.Split(',');
+                ubicacion = _context.Solution.Where(s => s.CAMPO == campo).Select(c => c.VALORC).FirstOrDefault();
+                document = document;
+                if (System.IO.File.Exists(ubicacion + "/" + document))
+                    path = ubicacion + "/" + document;
+            }
+            //else if (!System.IO.File.Exists(ubicacion + "/" + document))
+            //{
+            //    ubicacion = "C:\\Doc\\";
+            //    document = "AR-CO-27322.pdf";
+            //    if (System.IO.File.Exists(ubicacion + "/" + document))
+            //        path = ubicacion + "/" + document;
+            //}
             else
             {
-                documentPath = ubicacion + "/" + document;
+                path = ubicacion + "/" + document;
             }
+            return path;
 
-            return documentPath;
+            //string documentPath = string.Empty;
+
+            //if (!System.IO.File.Exists(ubicacion + "/" + document))
+            //{
+            //    ubicacion = "D:\\Descargas\\";
+            //    document = "27303156459_011_00001_00000058.pdf";
+            //    if (System.IO.File.Exists(ubicacion + "/" + document))
+            //        documentPath = ubicacion + "/" + document;
+            //}
+            //else
+            //{
+            //    documentPath = ubicacion + "/" + document;
+            //}
+
+            //return documentPath;
         }
         // GET api/values
         [HttpGet]

@@ -1,6 +1,18 @@
 ﻿@page  "/control-calidad/Documentacion"
 @using Syncfusion.Blazor;
 @using Syncfusion.Blazor.FileManager;
+@using Syncfusion.Blazor.PdfViewer
+@using System.IO;
+﻿@using System.Net.Http
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.JSInterop
+
+@using Syncfusion.Blazor.Popups
 @inject IJSRuntime JsRuntime;
 
 <div class="control-section">
@@ -10,14 +22,48 @@
                                  UploadUrl="/api/FilesManager/Upload"
                                  GetImageUrl="/api/FilesManager/GetImage">
         </FileManagerAjaxSettings>
-        <FileManagerEvents TValue="FileManagerDirectoryContent"></FileManagerEvents>
+        <FileManagerEvents TValue="FileManagerDirectoryContent" OnFileOpen="OpenFilePreview"></FileManagerEvents>
         <FileManagerNavigationPaneSettings Visible=false></FileManagerNavigationPaneSettings>
     </SfFileManager>
-</div>
+
+    <SfDialog Width="100%" Height="100%" EnableResize="true" AllowDragging="true" ShowCloseIcon="true" AllowPrerender="true" Visible="@IsDialogVisible">
+        <DialogTemplates>
+            <Header> @DialogTitle </Header>
+            <Content>
+                <div>
+                    <SfPdfViewer @ref="sfPdfViewerObj" ID="pdfViewerPlano" ServiceUrl="/api/Values" DocumentPath="@codigoLimpio.Trim()"
+                                 EnableErrorDialog="true"
+                                 Height="1250px" Width="100%">
+                    </SfPdfViewer>
+                </div>
+              @*   <div style="display:@PdfVisible">
+                    <SfPdfViewerServer DocumentPath="@DocumenPath" Height="500px" Width="1060px"></SfPdfViewerServer>
+                </div> *@
+               @*  <div style="display:@DocVisible">
+                    <SfDocumentEditorContainer @ref="documentEditorContainer" EnableToolbar="true">
+
+                    </SfDocumentEditorContainer>
+                </div> *@
+                @DialogContent
+            </Content>
+        </DialogTemplates>
+        @* <DialogEvents Opened="@DialogOpenedHandler"></DialogEvents> *@
+    </SfDialog>
+    </div>
 
 @code {
 
     [CascadingParameter] public MainLayout Layout { get; set; }
+    protected string DocumenPath{ get; set; }=string.Empty;
+    protected bool IsDialogVisible { get; set; } = false;
+    protected string PdfVisible { get; set; } = "none";
+    protected string DocVisible { get; set; } = "none";
+    protected string DialogTitle { get; set; } = "Prevista de Archivo";
+    protected string DialogContent { get; set; } = string.Empty;
+    SfPdfViewer sfPdfViewerObj;
+    string codigoLimpio = "";
+
+    // SfDocumentEditorContainer documentEditorContainer;
 
     protected override Task OnInitializedAsync()
     {
@@ -31,4 +77,40 @@
         var name = args.FileDetails.Name;
     }
 
+    protected void OpenFilePreview(FileOpenEventArgs<FileManagerDirectoryContent> args)
+    {
+        var doc = args;
+        var carpeta = "\\\\192.168.0.253\\Arbros\\20. Digital\\Doc.CompartidaISO";
+        carpeta += args.FileDetails.FilterPath + args.FileDetails.Name;
+        if (args.FileDetails.IsFile)
+        {
+            codigoLimpio = carpeta;
+            IsDialogVisible = true;
+        }
+    }
+    // public void OpenDocumentEditor(string filePath)
+    // {
+    //     if (documentEditorContainer != null)
+    //     {
+    //         using (FileStream fileStream = new FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+    //         {
+    //             WordDocument document = WordDocument.Load(fileStream, ImportFormatType.Docx);
+    //             string json = JsonSerializer.Serialize(document);
+    //             document.Dispose();
+    //             //To observe the memory go down, null out the reference of document variable.
+    //             document = null;
+    //             //editor = documentEditorContainer.DocumentEditor;
+    //             documentEditorContainer.DocumentEditor.OpenAsync(json);
+    //             //To observe the memory go down, null out the reference of json variable.
+    //             json = null;
+    //         }
+    //     }
+    // }
+
+    // public async void DialogOpenedHandler(OpenEventArgs args)
+    // {
+    //     if (DocVisible == "block" && documentEditorContainer != null)
+    //         await documentEditorContainer.ResizeAsync();
+    // }
+}
 }
