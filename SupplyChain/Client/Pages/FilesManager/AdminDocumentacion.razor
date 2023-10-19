@@ -36,18 +36,11 @@
                                  Height="1250px" Width="100%">
                     </SfPdfViewer>
                 </div>
-              @*   <div style="display:@PdfVisible">
-                    <SfPdfViewerServer DocumentPath="@DocumenPath" Height="500px" Width="1060px"></SfPdfViewerServer>
-                </div> *@
-               @*  <div style="display:@DocVisible">
-                    <SfDocumentEditorContainer @ref="documentEditorContainer" EnableToolbar="true">
-
-                    </SfDocumentEditorContainer>
-                </div> *@
+             
                 @DialogContent
             </Content>
         </DialogTemplates>
-        @* <DialogEvents Opened="@DialogOpenedHandler"></DialogEvents> *@
+        <DialogEvents Closed="@(()=> IsDialogVisible =false)"></DialogEvents>
     </SfDialog>
     </div>
 
@@ -81,7 +74,7 @@
     {
         var doc = args;
         var carpeta = "\\\\192.168.0.253\\Arbros\\20. Digital\\Doc.CompartidaISO";
-        carpeta += args.FileDetails.FilterPath + args.FileDetails.Name;
+        carpeta +=$",{args.FileDetails.FilterPath},{args.FileDetails.Name}";
         if (args.FileDetails.IsFile)
         {
             codigoLimpio = carpeta;

@@ -259,40 +259,38 @@ namespace SupplyChain
         private string GetDocumentPath(string document)
         {
             //string[] contenido= new string[0];
-            string path = "R:\\20. Digital\\Doc.CompartidaISO\\";
+            string path = string.Empty;
             var campo = string.Empty;
+            //var ubicacion = "R:\\20. Digital\\Doc.CompartidaISO\\";
             var ubicacion = string.Empty;
             if (document.Contains(","))
             {
                 var contenido = document.Split(',');
-                campo = contenido[1];
-                document = contenido[0];
-                ubicacion = _context.Solution.Where(s => s.CAMPO == campo).Select(c => c.VALORC).FirstOrDefault();
+                if(contenido.Length < 2)
+                {
+                    campo = contenido[1];
+                    document = contenido[0];
+                    ubicacion = _context.Solution.Where(s => s.CAMPO == campo).Select(c => c.VALORC).FirstOrDefault();
 
-            }
-            else if(document.Contains("_"))
-            {
-                var contenido = document.Split('_');
-                campo = contenido[1];
-                document = contenido[0];
-                ubicacion = _context.Solution.Where(s => s.CAMPO == campo).Select(c => c.VALORC).FirstOrDefault();
+                }
+                else
+                {
+                    campo = contenido[0] + contenido[1];
+                    document = contenido[2];
+                    ubicacion = campo;
 
+                }
             }
-            else if (!System.IO.File.Exists(ubicacion + "/" + document))
+
+            if (!System.IO.File.Exists(ubicacion + "/" + document))
             {
                 //var contenido = document.Split(',');
-                ubicacion = _context.Solution.Where(s => s.CAMPO == campo).Select(c => c.VALORC).FirstOrDefault();
-                document = document;
+                ubicacion ="C:\\Doc\\";
+                document = "AR-CO-27322.pdf";
                 if (System.IO.File.Exists(ubicacion + "/" + document))
                     path = ubicacion + "/" + document;
             }
-            //else if (!System.IO.File.Exists(ubicacion + "/" + document))
-            //{
-            //    ubicacion = "C:\\Doc\\";
-            //    document = "AR-CO-27322.pdf";
-            //    if (System.IO.File.Exists(ubicacion + "/" + document))
-            //        path = ubicacion + "/" + document;
-            //}
+            
             else
             {
                 path = ubicacion + "/" + document;
