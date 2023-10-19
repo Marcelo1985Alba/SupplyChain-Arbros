@@ -94,24 +94,23 @@
                                         </li>
                                         
                                         <li>
+                                        <div class="msg-tittle">
+                                            <h4>Mensajes</h4>
+                                        </div>
                                         @foreach (var item in mensajes.Take(4).OrderByDescending(m => m.CreatedDate).ToList())
                                         {
 
-                                            <div class="message-center" style="">
-                                                <h4>Mensaje
-
-                                                </h4>
+                                            <div class="message-center">
+                                                <p>------------------------------------------------</p>
                                                 @* <SfIcon Name="IconName.Close" Title="Close" style="position:relative;left:85%; bottom:15%;" onclick="() => CloseMessage(item.Id)"></SfIcon> *@
-                                                <div class="e-icons-cancel" style="position:relative;left:85%; bottom:15%;">
-                                                <SfButton IconCss="e-icons" Content="x" IconPosition="IconPosition.Right" OnClick="()=> CloseMessage(item.Id)"></SfButton>
-                                                </div>
+                                                 
 
                                                 @if(mensajes.Count >0){
                                                     @* <span class="e-icons e-" @onclick="() => CloseMessage(item.Id)">x</span> *@
 
 
                                                     @*                                                     <button class="e-link btn-close" @onclick="() => CloseMessage(item.Id)">x</button> *@
-                                                    <a href="/chat-app/@item.FromUserId" style="position:relative; bottom:35px; padding:20;">
+                                                    <a href="/chat-app/@item.FromUserId" style="position:relative; bottom:25px; padding:10;">
                                                         <div class="mail-contnet">
                                                             <h5>@item.FromUser?.UserName</h5><span class="mail-desc" >@item.Message</span>
                                                             <span class="time">@item.CreatedDate</span>
@@ -125,7 +124,10 @@
                                                 }
                                                
                                             </div>
-                                            }
+                                            <div class="e-icons-cancel">
+                                                <SfButton style="position:relative;bottom:86px;width:11px;left:254px;" Content="x" IconPosition="IconPosition.Right" OnClick="()=> CloseMessage(item.Id)"></SfButton>
+                                            </div>
+                                        }
                                             
 
                                         </li>
@@ -530,7 +532,17 @@
 <style>
 
     .message-center{
-        height:45px;
+        height:35px;
+        margin:auto;
+    }
+/* 
+    .msg-tittle {
+        position:relative;
+        margin-right:55px;
+    } */
+    .msg-tittle h4{
+        position:relative;
+        left:100px;
     }
 
     .mailbox .message-center{
@@ -542,10 +554,19 @@
         position:relative;
         bottom:25px;
         /* margin-bottom:1px; */
-        margin-left:230px;
+        left:230px;
+        width:11px;
 
     }
 
+    /* .e-btn, .e-css.e-btn{
+        position: relative;
+        bottom: 25px;
+        /* margin-bottom:1px; */
+        left: 230px;
+        width:11px;
+    }
+ */
     .msg-template-section .e-btn.msg-hidden {
         display: none;
     }
@@ -598,10 +619,14 @@
     e-icons {
         color: #00ffff;
         font-size: 60px;
+        
     }
-
+    /* //EICONS CANCEL POSIBLE CONFLICTO */
     e-icons-cancel{
-        width:1px;
+        position:relative;
+        top: 80px;
+        width: 11px;
+        left: 254px;
     }
 
     .e-menu::before {
