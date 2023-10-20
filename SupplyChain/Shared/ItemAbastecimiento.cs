@@ -34,5 +34,6 @@ namespace SupplyChain.Shared.Models
         /// Stock para una determinada orden orden del insumo 
         /// </summary>
         [NotMapped] public decimal Reserva { get; set; } = 0;
+        [NotMapped] public decimal ReservaTotal { get; set; } = 0;
     }
 }

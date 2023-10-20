@@ -70,10 +70,11 @@ namespace SupplyChain.Server.Repositorios
 
                     //carga de stock
                     i.StockReal = await Db.ResumenStock.Where(r =>
-                            r.CG_ART.ToUpper() == i.CG_ART.ToUpper() && (r.CG_DEP == 4 || r.CG_DEP == 31))
+                            r.CG_ART.ToUpper() == i.CG_ART.ToUpper() && (r.CG_DEP == 4 || r.CG_DEP == 15))
                     .SumAsync(s=> s.STOCK);
 
-                    i.Reserva = await PedidosRepository.ObtenerReservaByOF(cg_ordf, i.CG_ART);
+                    i.Reserva = await PedidosRepository.ObtenerStockReservaByOF(cg_ordf, i.CG_ART);
+                    i.ReservaTotal = await PedidosRepository.ObtenerStockReserva(i.CG_ART);
                 });
 
 

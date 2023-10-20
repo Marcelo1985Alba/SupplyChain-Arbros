@@ -17,14 +17,14 @@ else
         <div class="content-wrapper">
             <div class="row">
                 <SfGrid @ref="@Grid" DataSource="@DataSource" AllowExcelExport="true" AllowPaging="true" ID="gridEditEntregaNewOF"
-                        GridLines="GridLine.Both" Locale="es-Ar" Height="100%" Width="100%"
+                        GridLines="GridLine.Both" Locale="es-Ar" Height="100%" Width="100%" 
                         Toolbar="@Toolbaritems"
                         AllowResizing="true" AllowSelection="true" AllowSorting="true" AllowTextWrap="false"
                         AllowReordering="true" RowHeight="20">
                     <GridPageSettings PageCount="4" PageSize="50"></GridPageSettings>
                     <GridEvents OnActionBegin="@(async(p)=> await OnActionBeginHandler(p))"
                                 OnBeginEdit="@(async (ped)=> await BeginEditHandler(ped))"
-                                QueryCellInfo="@(async(e)=> await QueryCellInfoHandler(e))"
+                                QueryCellInfo="@(async(e)=> QueryCellInfoHandler(e))"
                                 OnActionComplete="@(async(e)=> await OnActionComplete(e))" 
                                 OnToolbarClick="@(async(e)=> await ClickHandler(e))"
                                 TValue="Pedidos"></GridEvents>
@@ -35,13 +35,14 @@ else
                         </HeaderTemplate>
                         <Template>
                             @{
-                                <SfSpinner Label="Realiazando reserva del insumo" Size="80" ZIndex="5000"
+                                <SfSpinner Label="Realiazando reserva del insumo" Size="80" ZIndex="5000" Type="SpinnerType.Tailwind"
                                            @bind-Visible="@RealizandoReserva"></SfSpinner>
 
                                 <SfToast ID="toast_default" @ref="ToastObj">
                                     <ToastPosition X="Center" Y="Top"></ToastPosition>
                                 </SfToast>
                                 stock = (context as Pedidos);
+                                cg_dep = stock.CG_DEP;
                                 <div class="form-row">
                                     <div class="form-group col-md-2">
                                         <label class="col-form-label">Codigo Producto :</label>
@@ -60,7 +61,7 @@ else
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label class="col-form-label">Déposito Salida</label>
-                                        <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP" Readonly="true"
+                                        <SfDropDownList TItem="Deposito" @bind-Value="@cg_dep" Readonly="false"
                                                         TValue="int" ID="CG_DEP" DataSource="@depositos">
                                             <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP">
 
@@ -119,10 +120,15 @@ else
                                         <SfTextBox @bind-Value="@stock.LOTE" Readonly="true"></SfTextBox>
                                         <ValidationMessage For="@(() => stock.LOTE)"></ValidationMessage>
                                     </div>
-                                    <div class="form-group col-md-3">
-                                        <SfButton Content="Reservar" IsPrimary=false CssClass="mt-4" IconCss="fa fa-folder" 
-                                                  OnClick="ReservarInsumo"></SfButton>
-                                    </div>
+                                    @if(stock.TIPOO == 28)
+                                    {
+                                        <div class="form-group col-md-3 mt-1">
+                                            <SfButton Content="Reservar" IsPrimary=false CssClass="mt-4" IconCss="fa fa-folder"
+                                                      OnClick="ReservarInsumo"></SfButton>
+                                        </div>
+                                        
+                                    }     
+                                    
                                 </div>
 
 
@@ -210,6 +216,12 @@ else
                         </GridColumn>
                         <GridColumn Field="@nameof(Pedidos.StockReal)" HeaderText="Stock Real" AutoFit="true"></GridColumn>
                         <GridColumn Field="@nameof(Pedidos.Reserva)" HeaderText="Reserva" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.ReservaTotal)" HeaderText="Reserva Total" AutoFit="true">
+                            <Template>
+                                @{ var ped = (context as Pedidos); }
+                                <a class="e-link" @onclick="VerReservas">@ped.ReservaTotal</a>
+                            </Template> 
+                        </GridColumn>
                         <GridColumn Field="@nameof(Pedidos.Id)" IsPrimaryKey="true" HeaderText="ID" Visible="false"></GridColumn>
                     </GridColumns>
 
@@ -219,11 +231,12 @@ else
     </div>
 
         <BuscadorEmergenteResumenStock @ref="BuscadorEmergenteRS" DataSource="@Items" Visible="PopupBuscadorStockVisible" 
-                                       TipoSeleccion="@TipoSeleccion" VisibleSpinner="@visibleSpinnerRS" EsModal="true"
+                                       TipoSeleccion="@TipoSeleccion" VisibleSpinner="@visibleSpinnerRS" EsModal="true" 
                                        Columnas="@(new string[] { "CG_ART", "STOCK", "CG_DEP", "DEPOSITO", "SERIE", "LOTE", "DESPACHO"})"
                                        AplicarFiltro="AplicarFiltro" filterCG_ART= "@filtro_CG_ART"  filterDESPACHO="@filtro_DESPACHO"
                                        OnObjetoSeleccionado="@(async(r)=> await OnResumenStockSelected(r))"
-                                       OnObjetosSeleccionados="@(async(r)=> await OnResumenStockSelected(r))"/>
+                                       OnObjetosSeleccionados="@(async(r)=> await OnResumenStockSelected(r))"
+                                       OnCerrar="@(()=> PopupBuscadorStockVisible = false)" />
 
 
 }
@@ -232,6 +245,11 @@ else
     /*    #dialogo {
         min-height: 400px;
     }*/
+
+    .con-reserva {
+        background-color: lightgreen !important;
+        /*color: #b93c3c !important;*/
+    }
 
     .sin-stock {
         background-color: #f87b7b !important;   

@@ -394,6 +394,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                     if (pedido.TIPOO == 9)
                     {
                         pedido.PENDIENTEOC = item.STOCK - item.Reserva; //STOCK
+                        
                     }
                     else
                     {
@@ -402,6 +403,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                     
                     pedido.StockReal = item.StockReal;
                     pedido.Reserva = item.Reserva;
+                    pedido.ReservaTotal = item.ReservaTotal;
                     itemsGrilla.Add(pedido);
 
 

@@ -41,7 +41,7 @@ namespace SupplyChain.Client.Shared.Inventarios
         protected ConfirmacionDialog ConfirmacionDialog;
         protected SupplyChain.Client.Shared.BuscadorEmergente<Pedidos> BuscadorProducto;
         protected Pedidos stock;
-        protected Pedidos stockCopiado;
+        protected int cg_dep = 0;
         protected bool confirmaCopy = false;
         protected bool bAgregarInsumo = false;
         protected bool RealizandoReserva = false;
@@ -57,8 +57,10 @@ namespace SupplyChain.Client.Shared.Inventarios
         };
 
         protected List<ItemModel> Toolbaritems = new List<ItemModel>(){
-        new ItemModel { CssClass="", Text = "Agregar Insumo", ShowTextOn = DisplayMode.Both, Type = ItemType.Button,
-            TooltipText = "Agregar Insumo", SuffixIcon = "fa fa-search", Id = "AgregarInsumo" }
+        new ItemModel { CssClass="e-small", Text = "Agregar Insumo", ShowTextOn = DisplayMode.Both, Type = ItemType.Button,
+            TooltipText = "Agregar Insumo", SuffixIcon = "fa fa-search", Id = "AgregarInsumo" },
+        new ItemModel { CssClass="e-small e-small", Text = "Agregar Reserva", ShowTextOn = DisplayMode.Both, Type = ItemType.Button,
+            TooltipText = "Agregar Reserva ", SuffixIcon = "fa fa-search", Id = "AgregarReserva" }
         };
 
         protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "900px" };
@@ -110,8 +112,9 @@ namespace SupplyChain.Client.Shared.Inventarios
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                args.PreventRender = false;
+                //args.PreventRender = false;
                 stock = args.Data;
+                cg_dep = stock.CG_DEP;
             }
         }
 
@@ -320,6 +323,11 @@ namespace SupplyChain.Client.Shared.Inventarios
             await GetSeleccionResumenStock(resumenStock);
         }
 
+        protected async Task CerrarBuscador()
+        {
+
+        }
+
         private async Task GetSeleccionResumenStock(vResumenStock resumenStock)
         {
             //buscar registro mas reciente con las caracteristicas de resumen stock
@@ -388,7 +396,7 @@ namespace SupplyChain.Client.Shared.Inventarios
         }
 
 
-        public async Task QueryCellInfoHandler(QueryCellInfoEventArgs<Pedidos> args)
+        public void QueryCellInfoHandler(QueryCellInfoEventArgs<Pedidos> args)
         {
             args.PreventRender = true;
             if (args.Data.TIPOO == 10 || args.Data.TIPOO == 28)
@@ -403,49 +411,60 @@ namespace SupplyChain.Client.Shared.Inventarios
             {
                 args.Cell.AddClass(new string[] { "sin-stock" });
             }
+
+            if (args.Data.Reserva > 0)
+            {
+                args.Cell.AddClass(new string[] { "con-reserva" });
+            }
         }
 
         protected async Task ReservarInsumo()
         {
+            stock.CG_DEP = 15;
             RealizandoReserva = true;
             var stockReservar = JsonConvert.DeserializeObject<Pedidos>(JsonConvert.SerializeObject(stock));
             stockReservar.Id = stock.Id - 1;
             stockReservar.FE_MOV = DateTime.Now;
             stockReservar.AVISO = "MOVIMIENTO ENTRE DEPOSITOS";
             stockReservar.TIPOO = 9;
-            stockReservar.CG_DEP_ALT = 31;
+            stockReservar.CG_DEP_ALT = 15;//deposito de reserva
 
-            //var stockDescontar = JsonConvert.DeserializeObject<Pedidos>(JsonConvert.SerializeObject(stock));
-            //stockDescontar.Id = stockReservar.Id - 1;
-            //stockReservar.AVISO = "MOVIMIENTO ENTRE DEPOSITOS";
+            ////var stockDescontar = JsonConvert.DeserializeObject<Pedidos>(JsonConvert.SerializeObject(stock));
+            ////stockDescontar.Id = stockReservar.Id - 1;
+            ////stockReservar.AVISO = "MOVIMIENTO ENTRE DEPOSITOS";
 
             var list = new List<Pedidos>();
             list.AddRange(new[] { stockReservar });
 
 
             var response = await RepositoryHttp.PostAsJsonAsync("api/Pedidos/PostList", list);
-            
+
             if (response.Error)
             {
                 RealizandoReserva = false;
                 await MensajeToastError();
                 Console.WriteLine(response.HttpResponseMessage.ReasonPhrase); return;
-                
-            }
-            else
-            {
-                if (stock.ResumenStock != null)
-                {
-                    //stock.ResumenStock.STOCK -= Convert.ToDecimal(stockReservar.STOCK);
-                    stock.PENDIENTEOC -= Convert.ToDecimal(stockReservar.STOCK);
-                    stock.Reserva += Convert.ToDecimal(stockReservar.STOCK);
-                }
 
-                await Grid.EndEditAsync();
-                RealizandoReserva = false;
-                await Grid.Refresh();
-                await MostrarMensajeToastSuccess();
             }
+
+
+            //cg_dep = stock.CG_DEP_ALT;
+            //stock.CG_DEP = stock.CG_DEP_ALT;
+            stock.PENDIENTEOC -= Convert.ToDecimal(stockReservar.STOCK);
+            stock.Reserva += Convert.ToDecimal(stockReservar.STOCK);
+            stock.ReservaTotal += Convert.ToDecimal(stockReservar.STOCK);
+
+            await Grid.EndEditAsync();
+            RealizandoReserva = false;
+            await Grid.RefreshColumnsAsync();
+            await Grid.Refresh();
+            await Grid.RefreshHeaderAsync();
+            
+        }
+
+        protected void VerReservas()
+        {
+            Grid.StartEditAsync();
         }
 
         private async Task MostrarMensajeToastSuccess()
