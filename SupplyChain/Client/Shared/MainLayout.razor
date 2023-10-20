@@ -97,11 +97,11 @@
                                         <div class="msg-tittle">
                                             <h4>Mensajes</h4>
                                         </div>
-                                        @foreach (var item in mensajes.Take(4).OrderByDescending(m => m.CreatedDate).ToList())
+                                            @foreach (var item in mensajes.Take(4).OrderByDescending(m => m.CreatedDate).ToList())
                                         {
 
                                             <div class="message-center">
-                                                <p>------------------------------------------------</p>
+                                                <p>----------------------------------------------</p>
                                                 @* <SfIcon Name="IconName.Close" Title="Close" style="position:relative;left:85%; bottom:15%;" onclick="() => CloseMessage(item.Id)"></SfIcon> *@
                                                  
 
@@ -110,7 +110,7 @@
 
 
                                                     @*                                                     <button class="e-link btn-close" @onclick="() => CloseMessage(item.Id)">x</button> *@
-                                                    <a href="/chat-app/@item.FromUserId" style="position:relative; bottom:25px; padding:10;">
+                                                    <a href="/chat-app/@item.FromUserId">
                                                         <div class="mail-contnet">
                                                             <h5>@item.FromUser?.UserName</h5><span class="mail-desc" >@item.Message</span>
                                                             <span class="time">@item.CreatedDate</span>
@@ -124,9 +124,10 @@
                                                 }
                                                
                                             </div>
-                                            <div class="e-icons-cancel">
-                                                <SfButton style="position:relative;bottom:86px;width:11px;left:254px;" Content="x" IconPosition="IconPosition.Right" OnClick="()=> CloseMessage(item.Id)"></SfButton>
+                                            @* <div class="e-icons-cancel">
                                             </div>
+                                             *@<SfButton style="position:relative;bottom:86px;width:11px;left:254px;" Content="x" IconPosition="IconPosition.Right" OnClick="()=> CloseMessage(item.Id)"></SfButton>
+
                                         }
                                             
 
@@ -531,9 +532,21 @@
 
 <style>
 
+    .dropdown-menu li{
+        margin-bottom:20px;
+
+    }
     .message-center{
-        height:35px;
-        margin:auto;
+        
+        margin:3px;
+
+    }
+
+    .message-center a{
+        position:relative;
+        bottom:30px;
+        width:auto;
+
     }
 /* 
     .msg-tittle {
@@ -627,6 +640,7 @@
         top: 80px;
         width: 11px;
         left: 254px;
+        
     }
 
     .e-menu::before {
