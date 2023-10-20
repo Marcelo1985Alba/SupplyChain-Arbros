@@ -59,8 +59,8 @@ namespace SupplyChain.Client.Shared.Inventarios
         protected List<ItemModel> Toolbaritems = new List<ItemModel>(){
         new ItemModel { CssClass="e-small", Text = "Agregar Insumo", ShowTextOn = DisplayMode.Both, Type = ItemType.Button,
             TooltipText = "Agregar Insumo", SuffixIcon = "fa fa-search", Id = "AgregarInsumo" },
-        new ItemModel { CssClass="e-small e-small", Text = "Agregar Reserva", ShowTextOn = DisplayMode.Both, Type = ItemType.Button,
-            TooltipText = "Agregar Reserva ", SuffixIcon = "fa fa-search", Id = "AgregarReserva" }
+        //new ItemModel { CssClass="e-small e-small", Text = "Agregar Reserva", ShowTextOn = DisplayMode.Both, Type = ItemType.Button,
+        //    TooltipText = "Agregar Reserva ", SuffixIcon = "fa fa-search", Id = "AgregarReserva" }
         };
 
         protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "900px" };
