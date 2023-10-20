@@ -32,7 +32,6 @@
                            OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
     </div>
 </div>
-
 <div class="col-lg-12 control-section">
         <div class="content-wrapper">
             <div class="row">
@@ -101,7 +100,7 @@
     [Inject] protected IRepositoryHttp Http { get; set; }
     [Inject] protected IJSRuntime JS { get; set; }
     [Inject] protected CeldasService CeldasService { get; set; }
-
+    
     [CascadingParameter] public MainLayout Layout { get; set; }
 
     [Parameter] public int Pedido { get; set; } = 0;
@@ -802,7 +801,8 @@
             {
                 foreach (Service selectedRecord in this.Grid.SelectedRecords)
                 {
-                    var responseClienteList = await Http.GetFromJsonAsync<List<Cliente>>($"api/Cliente/BuscarPorCliente/{selectedRecord.CG_CLI}");
+                    //var responseClienteList = await Http.GetFromJsonAsync<List<Cliente>>($"api/Cliente/BuscarPorCliente/{selectedRecord.CG_CLI}");
+                    var responseClienteList = await ClienteService.GetClientesExternoByCg_Cli(selectedRecord.CG_CLI);
                     if (responseClienteList.Error)
                     {
 
@@ -824,14 +824,14 @@
                     PdfLightTable pdfTable = new PdfLightTable();
                     page.Graphics.RotateTransform(-360);
                     string espaciosEmail = "";
-                    for (int i = 0; i < (38 - ClienteList.FirstOrDefault().DES_PROV.Trim().Length); i++)
+                    for (int i = 0; i < (38 - ClienteList.PROVINCIA.Trim().Length); i++)
                     {
                         espaciosEmail = espaciosEmail + " ";
                     }
                     string email = "";
-                    if (ClienteList.FirstOrDefault().EMAIL.Trim().Length > 29)
+                    if (ClienteList.EMAIL_CONTACTO.Trim().Length > 29)
                     {
-                        email = ClienteList.FirstOrDefault().EMAIL;
+                        email = ClienteList.EMAIL_CONTACTO;
                     }
                     string espaciosMedida = "";
                     for (int i = 0; i < (46 - selectedRecord.IDENTIFICACION.Trim().Length); i++)
@@ -928,10 +928,10 @@
                         $"\r\n" +
                         $"                   {selectedRecord.CLIENTE.Trim()}\r\n" +
                         $"\r\n" +
-                        $"              {ClienteList.FirstOrDefault().DIRECC.Trim()}\r\n" +//15
+                        $"              {ClienteList.CALLE?.Trim()}\r\n" +//15
                         $"\r\n" +
-                        $"                {ClienteList.FirstOrDefault().LOCALIDAD.Trim()}                                         {ClienteList.FirstOrDefault().CG_POST}\r" +//no va
-                        $"                  {ClienteList.FirstOrDefault().DES_PROV.Trim()}                    {email}\r\n" +   ///YA ESTA BIEN 
+                        $"                {ClienteList.LOCALIDAD?.Trim()}                                         {ClienteList.CP}\r" +//no va
+                        $"                  {ClienteList.PROVINCIA?.Trim()}                    {email}\r\n" +   ///YA ESTA BIEN 
                             $"\r\n" +
                             $"\r\n" +
                             $"\r\n" +//20

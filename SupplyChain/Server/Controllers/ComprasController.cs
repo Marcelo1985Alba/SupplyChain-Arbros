@@ -292,9 +292,9 @@ namespace SupplyChain.Server.Controllers
 
 
 
-        [HttpPut("actualizaoc/{listaordenescompra}/{especif}/{condven}/{bonif}")]
+        [HttpPut("actualizaoc")]
         //POST: api/compras/generaoc
-        public async Task<ActionResult<Compra>> actualizaoc(string listaordenescompra, string especif, string condven, decimal? bonif)
+        public async Task<ActionResult<Compra>> actualizaoc([FromQuery] string listaordenescompra, string especif, string condven, decimal? bonif)
         {
             var numoc = (int)0;
 
