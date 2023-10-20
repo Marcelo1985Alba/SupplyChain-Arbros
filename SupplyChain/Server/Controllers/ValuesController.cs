@@ -258,27 +258,60 @@ namespace SupplyChain
         //Gets the path of the PDF document
         private string GetDocumentPath(string document)
         {
+            //string[] contenido= new string[0];
+            string path = string.Empty;
+            var campo = string.Empty;
+            //var ubicacion = "R:\\20. Digital\\Doc.CompartidaISO\\";
+            var ubicacion = string.Empty;
+            if (document.Contains(","))
+            {
+                var contenido = document.Split(',');
+                if(contenido.Length < 2)
+                {
+                    campo = contenido[1];
+                    document = contenido[0];
+                    ubicacion = _context.Solution.Where(s => s.CAMPO == campo).Select(c => c.VALORC).FirstOrDefault();
 
-            var contenido = document.Split(',');
-            var campo = contenido[1];
-            document = contenido[0];
+                }
+                else
+                {
+                    campo = contenido[0] + contenido[1];
+                    document = contenido[2];
+                    ubicacion = campo;
 
-            var ubicacion =  _context.Solution.Where(s=> s.CAMPO == campo).Select(c=> c.VALORC).FirstOrDefault();
-            string documentPath = string.Empty;
+                }
+            }
 
             if (!System.IO.File.Exists(ubicacion + "/" + document))
             {
-                ubicacion = "D:\\Descargas\\";
-                document = "27303156459_011_00001_00000058.pdf";
+                //var contenido = document.Split(',');
+                ubicacion ="C:\\Doc\\";
+                document = "AR-CO-27322.pdf";
                 if (System.IO.File.Exists(ubicacion + "/" + document))
-                    documentPath = ubicacion + "/" + document;
+                    path = ubicacion + "/" + document;
             }
+            
             else
             {
-                documentPath = ubicacion + "/" + document;
+                path = ubicacion + "/" + document;
             }
+            return path;
 
-            return documentPath;
+            //string documentPath = string.Empty;
+
+            //if (!System.IO.File.Exists(ubicacion + "/" + document))
+            //{
+            //    ubicacion = "D:\\Descargas\\";
+            //    document = "27303156459_011_00001_00000058.pdf";
+            //    if (System.IO.File.Exists(ubicacion + "/" + document))
+            //        documentPath = ubicacion + "/" + document;
+            //}
+            //else
+            //{
+            //    documentPath = ubicacion + "/" + document;
+            //}
+
+            //return documentPath;
         }
         // GET api/values
         [HttpGet]
