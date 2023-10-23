@@ -452,7 +452,7 @@ namespace SupplyChain.Client.Shared.Inventarios
             //stock.CG_DEP = stock.CG_DEP_ALT;
             stock.PENDIENTEOC -= Convert.ToDecimal(stockReservar.STOCK);
             stock.Reserva += Convert.ToDecimal(stockReservar.STOCK);
-            stock.ReservaTotal += Convert.ToDecimal(stockReservar.STOCK);
+            stock.ReservaTotal += Convert.ToDecimal(stockReservar.ReservaTotal);
 
             await Grid.EndEditAsync();
             RealizandoReserva = false;
@@ -460,6 +460,50 @@ namespace SupplyChain.Client.Shared.Inventarios
             await Grid.Refresh();
             await Grid.RefreshHeaderAsync();
             
+        }
+
+        protected async Task DesReservarInsumo()
+        {
+            stock.CG_DEP = 4;
+            RealizandoReserva = true;
+            var stockReservar = JsonConvert.DeserializeObject<Pedidos>(JsonConvert.SerializeObject(stock));
+            stockReservar.Id = stock.Id - 1;
+            stockReservar.FE_MOV = DateTime.Now;
+            stockReservar.AVISO = "MOVIMIENTO ENTRE DEPOSITOS";
+            stockReservar.TIPOO = 9;
+            stockReservar.CG_DEP_ALT = 4;//deposito de reserva
+
+            ////var stockDescontar = JsonConvert.DeserializeObject<Pedidos>(JsonConvert.SerializeObject(stock));
+            ////stockDescontar.Id = stockReservar.Id - 1;
+            ////stockReservar.AVISO = "MOVIMIENTO ENTRE DEPOSITOS";
+
+            var list = new List<Pedidos>();
+            list.AddRange(new[] { stockReservar });
+
+
+            var response = await RepositoryHttp.PostAsJsonAsync("api/Pedidos/PostList", list);
+
+            if (response.Error)
+            {
+                RealizandoReserva = false;
+                await MensajeToastError();
+                Console.WriteLine(response.HttpResponseMessage.ReasonPhrase); return;
+
+            }
+
+
+            //cg_dep = stock.CG_DEP_ALT;
+            //stock.CG_DEP = stock.CG_DEP_ALT;
+            stock.PENDIENTEOC += Convert.ToDecimal(stockReservar.STOCK);
+            stock.Reserva -= Convert.ToDecimal(stockReservar.STOCK);
+            stock.ReservaTotal -= Convert.ToDecimal(stockReservar.ReservaTotal);
+
+            await Grid.EndEditAsync();
+            RealizandoReserva = false;
+            await Grid.RefreshColumnsAsync();
+            await Grid.Refresh();
+            await Grid.RefreshHeaderAsync();
+
         }
 
         protected void VerReservas()
