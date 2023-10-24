@@ -261,12 +261,13 @@ namespace SupplyChain
             //string[] contenido= new string[0];
             string path = string.Empty;
             var campo = string.Empty;
+
             //var ubicacion = "R:\\20. Digital\\Doc.CompartidaISO\\";
             var ubicacion = string.Empty;
             if (document.Contains(","))
             {
                 var contenido = document.Split(',');
-                if(contenido.Length < 2)
+                if(contenido.Length <= 2)
                 {
                     campo = contenido[1];
                     document = contenido[0];

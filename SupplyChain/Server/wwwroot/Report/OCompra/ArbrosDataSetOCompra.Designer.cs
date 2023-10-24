@@ -473,6 +473,8 @@ namespace SupplyChain.Server.wwwroot.Report.OCompra {
             
             private global::System.Data.DataColumn columnEMAIL_CONTACTO;
             
+            private global::System.Data.DataColumn columnNORMA;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public ComprasDataTable() {
@@ -1284,6 +1286,14 @@ namespace SupplyChain.Server.wwwroot.Report.OCompra {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn NORMAColumn {
+                get {
+                    return this.columnNORMA;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1415,7 +1425,8 @@ namespace SupplyChain.Server.wwwroot.Report.OCompra {
                         string PROVINCIA, 
                         string TE, 
                         string NOMBRE_CONTACTO, 
-                        string EMAIL_CONTACTO) {
+                        string EMAIL_CONTACTO, 
+                        string NORMA) {
                 ComprasRow rowComprasRow = ((ComprasRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         NUMERO,
@@ -1514,7 +1525,8 @@ namespace SupplyChain.Server.wwwroot.Report.OCompra {
                         PROVINCIA,
                         TE,
                         NOMBRE_CONTACTO,
-                        EMAIL_CONTACTO};
+                        EMAIL_CONTACTO,
+                        NORMA};
                 rowComprasRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowComprasRow);
                 return rowComprasRow;
@@ -1641,6 +1653,7 @@ namespace SupplyChain.Server.wwwroot.Report.OCompra {
                 this.columnTE = base.Columns["TE"];
                 this.columnNOMBRE_CONTACTO = base.Columns["NOMBRE_CONTACTO"];
                 this.columnEMAIL_CONTACTO = base.Columns["EMAIL_CONTACTO"];
+                this.columnNORMA = base.Columns["NORMA"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1840,6 +1853,8 @@ namespace SupplyChain.Server.wwwroot.Report.OCompra {
                 base.Columns.Add(this.columnNOMBRE_CONTACTO);
                 this.columnEMAIL_CONTACTO = new global::System.Data.DataColumn("EMAIL_CONTACTO", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEMAIL_CONTACTO);
+                this.columnNORMA = new global::System.Data.DataColumn("NORMA", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnNORMA);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnREGISTRO}, true));
                 this.columnNUMERO.AllowDBNull = false;
@@ -1963,6 +1978,8 @@ namespace SupplyChain.Server.wwwroot.Report.OCompra {
                 this.columnNOMBRE_CONTACTO.MaxLength = 100;
                 this.columnEMAIL_CONTACTO.ReadOnly = true;
                 this.columnEMAIL_CONTACTO.MaxLength = 100;
+                this.columnNORMA.AllowDBNull = false;
+                this.columnNORMA.MaxLength = 500;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3297,6 +3314,17 @@ namespace SupplyChain.Server.wwwroot.Report.OCompra {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string NORMA {
+                get {
+                    return ((string)(this[this.tableCompras.NORMAColumn]));
+                }
+                set {
+                    this[this.tableCompras.NORMAColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public bool IsFE_EMITNull() {
                 return this.IsNull(this.tableCompras.FE_EMITColumn);
             }
@@ -3852,6 +3880,7 @@ namespace SupplyChain.Server.wwwroot.Report.OCompra.ArbrosDataSetOCompraTableAda
             tableMapping.ColumnMappings.Add("TE", "TE");
             tableMapping.ColumnMappings.Add("NOMBRE_CONTACTO", "NOMBRE_CONTACTO");
             tableMapping.ColumnMappings.Add("EMAIL_CONTACTO", "EMAIL_CONTACTO");
+            tableMapping.ColumnMappings.Add("NORMA", "NORMA");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -3859,8 +3888,8 @@ namespace SupplyChain.Server.wwwroot.Report.OCompra.ArbrosDataSetOCompraTableAda
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = "Data Source=MARCELO-PC\\SQL2019LIC;Initial Catalog=ArbrosProd;Persist Security Inf" +
-                "o=True;User ID=SA;Password=Marce031010";
+            this._connection.ConnectionString = "Data Source=SERVERWEB\\SOLUTIIONWEB;Initial Catalog=Solutiion;Persist Security Inf" +
+                "o=True;User ID=sa;Password=M0r3n02800!";
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3869,12 +3898,17 @@ namespace SupplyChain.Server.wwwroot.Report.OCompra.ArbrosDataSetOCompraTableAda
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[2];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "Select * From vOCompraReporte";
+            this._commandCollection[0].CommandText = @"SELECT NUMERO, FE_EMIT, CG_PREP, CG_ORDEN, CG_MAT, CG_MATE, DES_MAT, TIPO, TILDE, TILDE1, TILDE2, NECESARIO, SOLICITADO, UNID, AUTORIZADO, CG_DEN, UNID1, PRECIO, BON, PRECIONETO, PRECIOTOT, MONEDA, NROCLTE, 
+                  DES_PROVE, ENTREGA, FE_PREV, FE_REAL, FE_VENC, FE_CIERRE, CONDVEN, CONDPREC, CONDVENEX, CG_DEPOSM, PRECIOUC, PRECIOPOND, PEDIDO, CG_EST, CG_CUENT, FE_PREC, DIASVIGE, CANTLOTE, CANTMIN, 
+                  ESPECIFICA, ESPEGEN, CG_PROD, NOPROD, CG_COS, ESTADO, MODALI, CG_GRUPOMP, FE_DISP, NUMANULA, NUMCOMP, TIPOPREC, CG_IMPORT, CG_EXPORT, CG_CIA, IMPRESA, MARCA1, AbiertoPreparacion, USUARIO, FE_REG, 
+                  REGISTRO, NUMREQ, FE_REQ, FE_AUTREQ, CG_PROVEREQ, OBSEREQ, MARCAREQ, AVANCE, TXTOBSERVADO, TXTCORREGIDO, USUARIO_AUT, FE_AUT, FE_CIERREREQ, USUREQ, CG_ORDF, CG_PROY, ESTADO_CAB, ESTADO_IT, 
+                  NECESARIO_ORI, NUM_SOLCOT, SOLICITADO_ORI, CG_MAT2, MODIF_INGRESO, PENDIENTE, TILDE3, Observaciones, DESCUENTO, CUIT, CALLE, CP, LOCALIDAD, PROVINCIA, TE, NOMBRE_CONTACTO, EMAIL_CONTACTO, 
+                  NORMA
+FROM     vOCompraReporte";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
-            this._commandCollection[1].Connection = new global::System.Data.SqlClient.SqlConnection("Data Source=MARCELO-PC\\SQL_2017;Initial Catalog=Arbros;User ID=sa;Password=Marce0" +
-                    "31010");
-            this._commandCollection[1].CommandText = @"SELECT ARTICULO, BONIFIC, CALLE_CLIENTE, CALLE_TRANSPORTE, CANTIDAD, CG_ART, CG_CLI, CLIENTE, CONDICION_ENTREGA, CONDICION_PAGO, CP_CLIENTE, CUIT_CLIENTE, Construccion, DESCRIPCION_IVA, DIAS_PLAZO_ENTREGA, DIRENT, EMAIL_CLIENTE, FECHAS_PRESUP, MONEDA, Marca, OBSERITEM, PORC_DESCUENTO, PREC_UNIT, PRESUPUESTO , PROVINCIA_CLIENTE, TELEFONO_CLIENTE, TOTAL_ITEM, TOTAL_PRESUPUESTO, TRANSPORTE FROM vPresupuestoReporte";
+            this._commandCollection[1].Connection = this.Connection;
+            this._commandCollection[1].CommandText = @"SELECT ARTICULO, BONIFIC, CALLE_CLIENTE, CALLE_TRANSPORTE, CANTIDAD, CG_ART, CG_CLI, CLIENTE, CONDICION_ENTREGA, CONDICION_PAGO, CP_CLIENTE, CUIT_CLIENTE, Construccion, DESCRIPCION_IVA, DIAS_PLAZO_ENTREGA, DIRENT, EMAIL_CLIENTE, FECHAS_PRESUP, MONEDA, Marca, OBSERITEM, PORC_DESCUENTO, PREC_UNIT, PRESUPUESTO, PROVINCIA_CLIENTE, TELEFONO_CLIENTE, TOTAL_ITEM, TOTAL_PRESUPUESTO, TRANSPORTE FROM vPresupuestoReporte";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
         }
         
