@@ -12,7 +12,8 @@ namespace SupplyChain.Shared.Models
         [Display(Name = "Registro")]
         new public int Id { get; set; }
 
-        public int CG_ORDEN { get; set; }
+        public int CG_ORDEN { get; set; } 
+        public string NORMA {  get; set; }
 
         [Display(Name = "Número")]
         public int NUMERO { get; set; }
