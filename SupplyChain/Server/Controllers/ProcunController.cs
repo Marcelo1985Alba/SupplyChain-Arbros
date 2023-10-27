@@ -110,7 +110,7 @@ namespace SupplyChain
                 Proc.DESCRIP = " ";
                 Proc.OBSERV = " ";
                 Proc.DESPROC = " ";
-                Proc.TAREAPROC = "1";
+                Proc.TAREAPROC = 1;
                 Proc.CG_CATEOP = " ";
                 Proc.CG_FORM = 1;
                 await _procunRepository.Agregar(Proc);
