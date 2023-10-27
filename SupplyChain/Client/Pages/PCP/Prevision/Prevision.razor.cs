@@ -37,6 +37,7 @@ namespace SupplyChain.Client.Pages.Prev
         public bool Enabled = true;
         public bool Disabled = false;
         public bool Showgrid = true;
+        public DateTime fechaPrevista= DateTime.Now;
         protected List<DespiecePlanificacion> listaDespiece = new List<DespiecePlanificacion>();
         protected List<PresAnual> previsiones = new();
         protected List<PresAnual> prueba = new();
@@ -113,18 +114,17 @@ namespace SupplyChain.Client.Pages.Prev
             
         }
 
-        public async Task ActionBeginHandler(ActionEventArgs<PresAnual> args)
-        {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add||
-                args.RequestType==Syncfusion.Blazor.Grids.Action.BeginEdit)
-            {
-                args.Cancel = true;
-                args.PreventRender = false;
-                popupFormVisible= true;
-                prodSeleccionado = new();
-                prodSeleccionado.ESNUEVO = true;
-            }
-        }
+        //public async Task ActionBeginHandler(ActionEventArgs<PresAnual> args)
+        //{
+        //    if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
+        //    {
+        //        args.Cancel = true;
+        //        args.PreventRender = false;
+        //        popupFormVisible= true;
+        //        prodSeleccionado = new();
+        //        prodSeleccionado.ESNUEVO = true;
+        //    }
+        //}
 
         public async Task ActionBegin(ActionEventArgs<PresAnual> args)
         {
@@ -218,7 +218,14 @@ namespace SupplyChain.Client.Pages.Prev
         {
             //previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/AgregarProductoPrevision/{CgString}");
             var producto = await Http.GetFromJsonAsync<Producto>($"api/Prod/{CgString}");
-            var response = await Http.PostAsJsonAsync($"api/Prevision/AgregarProductoPrevision", producto);
+            var presAnual = new PresAnual();
+            presAnual.CG_ART = CgString;
+            presAnual.DES_ART = DesString;
+            presAnual.ENTRPREV = fechaPrevista;
+            presAnual.UNID = producto.UNID;
+            presAnual.CANTPED = 1;
+
+            var response = await Http.PostAsJsonAsync($"api/Prevision/AgregarProductoPrevision", presAnual);
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
                 || response.StatusCode == System.Net.HttpStatusCode.NotFound
                 || response.StatusCode == System.Net.HttpStatusCode.Conflict)

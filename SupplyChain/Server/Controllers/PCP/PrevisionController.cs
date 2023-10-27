@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using SupplyChain;
 using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -104,12 +105,12 @@ namespace SupplyChain.Server.Controllers
 
         // GET: api/Prevision/AgregarProductoPrevision/{CG_PROD}/{DES_PROD}
         [HttpPost("AgregarProductoPrevision")]
-        public async Task<IActionResult> AgregarProductoPrevision(Producto parametros)
+        public async Task<IActionResult> AgregarProductoPrevision(PresAnual parametros)
         {
             try
             {
-                string xFecha = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
-                if (!await _productoRepository.Existe(parametros.Id.Trim()))
+                string xFecha = DateTime.Now.AddDays(1).ToString("yyyy/MM/dd");
+                if (!await _productoRepository.Existe(parametros.CG_ART.Trim()))
                 {
                     return NotFound();
                 }
@@ -155,7 +156,12 @@ namespace SupplyChain.Server.Controllers
                 try
                 {
                     var prod = await _productoRepository.ObtenerPorId(CG_ART.Trim());
-                    await _previsionRepository.AgregarBySP(prod);
+                    var presAnual = new PresAnual();
+                    presAnual.CG_ART = prod.Id;
+                    presAnual.DES_ART = prod.DES_PROD;
+                    presAnual.ENTRPREV = DateTime.Now;
+                    presAnual.CANTPED = 1;
+                    await _previsionRepository.AgregarBySP(presAnual);
                     var previsiones = await _previsionRepository.ObtenerTodos();
                     return Ok(previsiones.FirstOrDefault());
                 }

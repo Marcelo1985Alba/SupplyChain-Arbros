@@ -60,9 +60,13 @@
                 <SfTextBox Placeholder="Descripción de Producto" Input="OnInputDES_PROD" @bind-Value="DesString"
                            FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
             </div>
-            <div class="form-group col-lg-3 my-1">
-                <SfDatePicker TValue="DateTime?" Value="Fecha"></SfDatePicker>
-            </div>
+
+                <div class="form-group col-lg-3 my-1">
+                    <label>Fecha Prevista:</label>
+                <SfDatePicker ID="ENTRPREV" @bind-Value="@(fechaPrevista)" Enabled="true" Placeholder="Fecha Prevista" Format="yyyy/MM/dd"></SfDatePicker>
+                </div>
+
+
 
             <div class="form-group col-lg-3 my-4">
                 <SfButton OnClick="@((e)=> BuscarProductoPrevision())" IconCss="fa fa-search" CssClass="btn btn-sm btn-outline-primary"
