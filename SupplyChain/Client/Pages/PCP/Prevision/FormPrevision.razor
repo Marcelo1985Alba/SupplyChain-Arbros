@@ -1,0 +1,33 @@
+﻿@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Navigations
+
+
+<div class="row">
+    <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <SfToast ID="toast_default" @ref="ToastObj">
+            <ToastPosition X="Center" Y="Top"></ToastPosition>
+        </SfToast>
+
+        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+            @ref="refGrid" DataSource="@Producto" Width="%100" AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
+        <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
+        <GridEvents OnActionBegin="OnActionBenginHandler" TValue="Producto"></GridEvents>
+         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+            <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" AllowEditOnDblClick="false"
+                              ShowDeleteConfirmDialog="false" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
+                          
+            </GridEditSettings>
+        </SfGrid>
+
+    </div>
+</div>

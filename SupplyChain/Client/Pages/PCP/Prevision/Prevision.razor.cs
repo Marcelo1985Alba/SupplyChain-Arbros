@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using Syncfusion.Blazor.Notifications;
 using SupplyChain.Client.Shared;
 using Syncfusion.Blazor.Popups;
+using SupplyChain.Client.Pages.PCP.Prevision;
 
 namespace SupplyChain.Client.Pages.Prev
 {
@@ -25,6 +26,7 @@ namespace SupplyChain.Client.Pages.Prev
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
+        protected Producto Producto { get; set; }
 
         protected SfGrid<PresAnual> Grid;
         protected SfGrid<Producto> Grid2;
@@ -44,6 +46,7 @@ namespace SupplyChain.Client.Pages.Prev
         protected List<Producto> Agregarlist = new();
         protected string CgString = "";
         protected string DesString = "";
+        protected DateTime Fecha = DateTime.UtcNow;
         protected int CantidadMostrar = 100;
         protected bool IsVisible { get; set; } = false;
 
@@ -56,8 +59,15 @@ namespace SupplyChain.Client.Pages.Prev
         new ItemModel(){ Type = ItemType.Separator},
         "Print",
         new ItemModel(){ Type = ItemType.Separator},
-        "ExcelExport"
+        "ExcelExport",
+        new ItemModel(){ Type = ItemType.Separator},
+        "Add",
+
         };
+
+        protected Producto prodSeleccionado = new();
+        protected FormPrevision refFormPrevision;
+        protected bool popupFormVisible=false;
 
         protected NotificacionToast NotificacionObj;
         protected bool ToastVisible { get; set; } = false;
@@ -99,6 +109,20 @@ namespace SupplyChain.Client.Pages.Prev
                     previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
                     Grid.Refresh();
                 }
+            }
+            
+        }
+
+        public async Task ActionBeginHandler(ActionEventArgs<PresAnual> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add||
+                args.RequestType==Syncfusion.Blazor.Grids.Action.BeginEdit)
+            {
+                args.Cancel = true;
+                args.PreventRender = false;
+                popupFormVisible= true;
+                prodSeleccionado = new();
+                prodSeleccionado.ESNUEVO = true;
             }
         }
 
