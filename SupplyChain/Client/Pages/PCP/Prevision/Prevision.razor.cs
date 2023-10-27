@@ -66,9 +66,7 @@ namespace SupplyChain.Client.Pages.Prev
 
         };
 
-        protected Producto prodSeleccionado = new();
-        protected FormPrevision refFormPrevision;
-        protected bool popupFormVisible=false;
+   
 
         protected NotificacionToast NotificacionObj;
         protected bool ToastVisible { get; set; } = false;
