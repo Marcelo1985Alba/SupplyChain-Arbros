@@ -1,0 +1,106 @@
+﻿@page "/ventas/clientes"
+@using SupplyChain.Client.Pages.Ventas._5_Clientes;
+@using Syncfusion.Blazor.Buttons;
+
+@inherits GrillaClientesBase
+@attribute [Authorize]
+
+<div class="row">
+    <div class="col-12">
+
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                           OnReiniciar="(async ()=> await OnReinciarGrilla())"
+                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+    </div>
+
+</div>
+
+
+<div class="row">
+
+    <div class="col-12">
+        <SfToast ID="toast_deffault" @ref="ToastObj">
+            <ToastPosition X="Center" Y="Top"></ToastPosition>
+        </SfToast>
+        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                @ref="refGrid" DataSource="@clientes" Width="%100" Toolbar="Toolbaritems"
+                AllowExcelExport="false" AllowGrouping="true" ID="grdClienteExterno" AllowFiltering="true"
+                AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
+
+            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridPageSettings PageSize="12" PageSizes="true"></GridPageSettings>
+            <GridEvents OnActionBegin="OnActionBeginHandler" OnActionComplete=OnActionCompleteHandler TValue="ClienteExterno"></GridEvents>
+            <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+            <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" AllowEditOnDblClick="false"
+                              ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog"></GridEditSettings>
+            <GridColumns>
+                <GridColumn Field=@nameof(ClienteExterno.CG_CLI) HeaderText="CODIGO" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ClienteExterno.DESCRIPCION) HeaderText="NOMBRE" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ClienteExterno.LOCALIDAD) HeaderText="LOCALIDAD" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ClienteExterno.CUIT) HeaderText="CUIT" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ClienteExterno.CALLE) HeaderText="CALLE" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ClienteExterno.CP) HeaderText="CP" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ClienteExterno.EMAIL_CONTACTO) HeaderText="EMAIL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ClienteExterno.DESC_COMERCIAL) HeaderText="DESC.COMERCIAL" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+            </GridColumns>
+            <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
+        </SfGrid>
+
+
+
+
+    </div>
+</div>
+
+
+<style>
+    .form-group.col-md-6 {
+        width: 200px;
+    }
+
+    label.e-float-text {
+        position: relative;
+        padding-left: 0;
+        top: 10%;
+    }
+
+    .e-input-group.e-control-wrapper.customClass {
+        color: black;
+        background-color: lightblue
+    }
+
+</style>
+
+@code {
+    public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
+    public bool DblClick = true;
+    public bool CommandColumnsClick = false;
+
+    public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+    public void OnRadioChange(ChangeArgs<String> args)
+    {
+        if (args.Value == "inline")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+        }
+        else if (args.Value == "batch")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Batch;
+        }
+        else if (args.Value == "dialog")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Dialog;
+        }
+        else
+        {
+            this.CommandColumnsClick = true;
+        }
+    }
+
+}
