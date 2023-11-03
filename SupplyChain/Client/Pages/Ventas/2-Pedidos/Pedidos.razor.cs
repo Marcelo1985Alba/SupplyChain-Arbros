@@ -39,6 +39,11 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
         protected bool abrePorPedido = false;
         protected bool eliminaPorPedido = false;
 
+        #region "Vista Grilla"
+        protected const string APPNAME = "grdPedidos";
+        protected string state;
+        #endregion
+
         protected List<Object> Toolbaritems = new()
         {
             "Search",
@@ -70,6 +75,18 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             //await refGrid.AutoFitColumnsAsync();
             SpinnerVisible = false;
         }
+
+
+        #region "Eventos Vista Grilla"
+        protected async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
+        {
+            await refGrid.SetPersistData(vistasGrillas.Layout);
+        }
+        protected async Task OnReiniciarGrilla()
+        {
+            await refGrid.ResetPersistData();
+        }
+        #endregion
 
         protected async Task GetPedidos(TipoFiltro tipoFiltro = TipoFiltro.Todos)
         {
@@ -364,4 +381,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             });
         }
     }
+
+   
+
 }

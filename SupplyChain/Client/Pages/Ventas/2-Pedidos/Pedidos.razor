@@ -4,6 +4,14 @@
 
 <div class="row">
     <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                           OnReiniciar="(async ()=> await OnReiniciarGrilla())"
+                           OnVistaSelected="(async(v)=> await OnVistaSeleccionada(v))" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
         <SfToast ID="toast_default" @ref="ToastObj">
             <ToastPosition X="Center" Y="Top"></ToastPosition>
         </SfToast>
@@ -40,6 +48,8 @@
                 <GridColumn Field=@nameof(PedCli.DES_CLI) HeaderText="Descripcion Cliente" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
                 <GridColumn Field=@nameof(PedCli.BONIFIC) HeaderText="Bonficacion %" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
                 <GridColumn Field=@nameof(PedCli.CONDVEN) HeaderText="Cond.Pago" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.CAMPOCOM2) HeaderText="Resorte" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(PedCli.CAMPOCOM4) HeaderText="Ajuste Banco" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
 
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
