@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using Syncfusion.Blazor.Notifications;
 using SupplyChain.Client.Shared;
 using Syncfusion.Blazor.Popups;
+using SupplyChain.Client.Pages.PCP.Prevision;
 
 namespace SupplyChain.Client.Pages.Prev
 {
@@ -25,6 +26,7 @@ namespace SupplyChain.Client.Pages.Prev
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
+        protected Producto Producto { get; set; }
 
         protected SfGrid<PresAnual> Grid;
         protected SfGrid<Producto> Grid2;
@@ -35,6 +37,7 @@ namespace SupplyChain.Client.Pages.Prev
         public bool Enabled = true;
         public bool Disabled = false;
         public bool Showgrid = true;
+        public DateTime fechaPrevista= DateTime.Now;
         protected List<DespiecePlanificacion> listaDespiece = new List<DespiecePlanificacion>();
         protected List<PresAnual> previsiones = new();
         protected List<PresAnual> prueba = new();
@@ -44,6 +47,7 @@ namespace SupplyChain.Client.Pages.Prev
         protected List<Producto> Agregarlist = new();
         protected string CgString = "";
         protected string DesString = "";
+        protected DateTime Fecha = DateTime.UtcNow;
         protected int CantidadMostrar = 100;
         protected bool IsVisible { get; set; } = false;
 
@@ -56,8 +60,13 @@ namespace SupplyChain.Client.Pages.Prev
         new ItemModel(){ Type = ItemType.Separator},
         "Print",
         new ItemModel(){ Type = ItemType.Separator},
-        "ExcelExport"
+        "ExcelExport",
+        new ItemModel(){ Type = ItemType.Separator},
+        "Add",
+
         };
+
+   
 
         protected NotificacionToast NotificacionObj;
         protected bool ToastVisible { get; set; } = false;
@@ -100,7 +109,20 @@ namespace SupplyChain.Client.Pages.Prev
                     Grid.Refresh();
                 }
             }
+            
         }
+
+        //public async Task ActionBeginHandler(ActionEventArgs<PresAnual> args)
+        //{
+        //    if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
+        //    {
+        //        args.Cancel = true;
+        //        args.PreventRender = false;
+        //        popupFormVisible= true;
+        //        prodSeleccionado = new();
+        //        prodSeleccionado.ESNUEVO = true;
+        //    }
+        //}
 
         public async Task ActionBegin(ActionEventArgs<PresAnual> args)
         {
@@ -194,7 +216,14 @@ namespace SupplyChain.Client.Pages.Prev
         {
             //previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/AgregarProductoPrevision/{CgString}");
             var producto = await Http.GetFromJsonAsync<Producto>($"api/Prod/{CgString}");
-            var response = await Http.PostAsJsonAsync($"api/Prevision/AgregarProductoPrevision", producto);
+            var presAnual = new PresAnual();
+            presAnual.CG_ART = CgString;
+            presAnual.DES_ART = DesString;
+            presAnual.ENTRPREV = fechaPrevista;
+            presAnual.UNID = producto.UNID;
+            presAnual.CANTPED = 1;
+
+            var response = await Http.PostAsJsonAsync($"api/Prevision/AgregarProductoPrevision", presAnual);
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
                 || response.StatusCode == System.Net.HttpStatusCode.NotFound
                 || response.StatusCode == System.Net.HttpStatusCode.Conflict)

@@ -34,15 +34,23 @@ namespace SupplyChain.Server.Controllers
         public async Task<ActionResult<IEnumerable<vEstadoPedido>>> Get()
         {
             List<Claim> roleClaims = HttpContext.User.FindAll(ClaimTypes.Role).ToList();
-            if (roleClaims.Any(c=> c.Value == "Cliente"))
+            try
             {
-                var userName = HttpContext.User.Identity.Name;
-                var user = await userManager.FindByNameAsync(userName);
-                var cg_cli_usuario = user.Cg_Cli;
-                return await _context.vEstadoPedidos.Where(p => p.CG_CLI == cg_cli_usuario).ToListAsync();
-            }
+                if (roleClaims.Any(c => c.Value == "Cliente"))
+                {
+                    var userName = HttpContext.User.Identity.Name;
+                    var user = await userManager.FindByNameAsync(userName);
+                    var cg_cli_usuario = user.Cg_Cli;
+                    return await _context.vEstadoPedidos.Where(p => p.CG_CLI == cg_cli_usuario).ToListAsync();
+                }
 
-            return await _context.vEstadoPedidos.ToListAsync();
+                return await _context.vEstadoPedidos.ToListAsync();
+
+            }catch (Exception ex)
+            {
+                return new List<vEstadoPedido>();
+                 
+            }
         }
 
         

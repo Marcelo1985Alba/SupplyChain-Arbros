@@ -20,12 +20,13 @@ namespace SupplyChain.Server.Repositorios
             return await base.DbSet.AnyAsync(e => e.Id == id);
         }
 
-        public async Task  AgregarBySP(Producto parametros)
+        public async Task  AgregarBySP(PresAnual parametros)
         {
-            await Db.Database.ExecuteSqlRawAsync("NET_PCP_PrevisionAgregar '" + parametros.Id.Trim() + "', " +
-                                                                          "'" + parametros.DES_PROD.Trim() + "', " +
+            await Db.Database.ExecuteSqlRawAsync("NET_PCP_PrevisionAgregar '" + parametros.CG_ART.Trim() + "', " +
+                                                                          "'" + parametros.DES_ART.Trim() + "', " +
                                                                           "'" + parametros.UNID + "', " +
-                                                                          " " + 1 );
+                                                                          "'" + parametros.CANTPED + "', "+
+                                                                          "'" + parametros.ENTRPREV.Value.ToString("yyyy/MM/dd") + "'");
         }
     }
 }

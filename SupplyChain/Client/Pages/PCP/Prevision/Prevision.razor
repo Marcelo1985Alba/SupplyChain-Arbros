@@ -61,6 +61,13 @@
                            FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
             </div>
 
+                <div class="form-group col-lg-3 my-1">
+                    <label>Fecha Prevista:</label>
+                <SfDatePicker ID="ENTRPREV" @bind-Value="@(fechaPrevista)" Enabled="true" Placeholder="Fecha Prevista" Format="yyyy/MM/dd"></SfDatePicker>
+                </div>
+
+
+
             <div class="form-group col-lg-3 my-4">
                 <SfButton OnClick="@((e)=> BuscarProductoPrevision())" IconCss="fa fa-search" CssClass="btn btn-sm btn-outline-primary"
                           IsPrimary="false">Buscar</SfButton>
@@ -129,7 +136,7 @@
                                 <div class="form-group col-md-6">
                                     <label>Fecha Prevista:</label>
                                     <br />
-                                    <SfDatePicker ID="ENTRPREV" @bind-Value="@(prev.ENTRPREV)" Enabled="true" Placeholder="Fecha Prevista"></SfDatePicker>
+                                    <SfDatePicker ID="ENTRPREV" @bind-Value="@(prev.ENTRPREV)" Enabled="true" AllowEdit="true" Placeholder="Fecha Prevista"></SfDatePicker>
                                 </div>
                             </div>
                         </div>
