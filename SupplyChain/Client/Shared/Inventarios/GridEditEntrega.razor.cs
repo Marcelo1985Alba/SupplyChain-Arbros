@@ -420,13 +420,14 @@ namespace SupplyChain.Client.Shared.Inventarios
 
         protected async Task ReservarInsumo()
         {
-            stock.CG_DEP = 15;
+            
             RealizandoReserva = true;
             var stockReservar = JsonConvert.DeserializeObject<Pedidos>(JsonConvert.SerializeObject(stock));
             stockReservar.Id = stock.Id - 1;
             stockReservar.FE_MOV = DateTime.Now;
             stockReservar.AVISO = "MOVIMIENTO ENTRE DEPOSITOS";
             stockReservar.TIPOO = 9;
+            stockReservar.CG_DEP = stock.CG_DEP;
             stockReservar.CG_DEP_ALT = 15;//deposito de reserva
 
             ////var stockDescontar = JsonConvert.DeserializeObject<Pedidos>(JsonConvert.SerializeObject(stock));
@@ -447,9 +448,7 @@ namespace SupplyChain.Client.Shared.Inventarios
 
             }
 
-
-            //cg_dep = stock.CG_DEP_ALT;
-            //stock.CG_DEP = stock.CG_DEP_ALT;
+            stock.CG_DEP = 15;
             stock.PENDIENTEOC -= Convert.ToDecimal(stockReservar.STOCK);
             stock.Reserva += Convert.ToDecimal(stockReservar.STOCK);
             stock.ReservaTotal += Convert.ToDecimal(stockReservar.ReservaTotal);
@@ -464,14 +463,14 @@ namespace SupplyChain.Client.Shared.Inventarios
 
         protected async Task DesReservarInsumo()
         {
-            stock.CG_DEP = 4;
+            
             RealizandoReserva = true;
             var stockReservar = JsonConvert.DeserializeObject<Pedidos>(JsonConvert.SerializeObject(stock));
             stockReservar.Id = stock.Id - 1;
             stockReservar.FE_MOV = DateTime.Now;
             stockReservar.AVISO = "MOVIMIENTO ENTRE DEPOSITOS";
             stockReservar.TIPOO = 9;
-            stockReservar.CG_DEP_ALT = 4;//deposito de reserva
+            stockReservar.CG_DEP_ALT = 4;//deposito de MP
 
             ////var stockDescontar = JsonConvert.DeserializeObject<Pedidos>(JsonConvert.SerializeObject(stock));
             ////stockDescontar.Id = stockReservar.Id - 1;
@@ -491,9 +490,7 @@ namespace SupplyChain.Client.Shared.Inventarios
 
             }
 
-
-            //cg_dep = stock.CG_DEP_ALT;
-            //stock.CG_DEP = stock.CG_DEP_ALT;
+            stock.CG_DEP = 4;
             stock.PENDIENTEOC += Convert.ToDecimal(stockReservar.STOCK);
             stock.Reserva -= Convert.ToDecimal(stockReservar.STOCK);
             stock.ReservaTotal -= Convert.ToDecimal(stockReservar.ReservaTotal);
