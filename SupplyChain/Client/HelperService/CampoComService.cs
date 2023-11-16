@@ -36,13 +36,13 @@ namespace SupplyChain.Client.HelperService
 
         public async Task<bool>Existe(int id)
         {
-            var response = await http.GetFromJsonAsync<bool>($"{API}/Existe/{id}");
+             var response = await http.GetFromJsonAsync<bool>($"{API}/Existe/{id}");
             if (response.Error)
             {
                 Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
                 return false;
             }
-            return true;
+            return response.Response;
         }
      
     }

@@ -35,7 +35,7 @@ namespace SupplyChain.Client.Pages.ABM.CampoCom
         "Delete",
         "Print",
         new ItemModel { Text = "Copia", TooltipText = "Copiar un comodin", PrefixIcon = "e-copy", Id = "Copy" },
-        "ExcelExport"
+        new ItemModel{ Text="ExcelExport", TooltipText="Excel",Id="grd_ExcelExport" }
         };
 
         protected List<CampoComodin> campos= new();
