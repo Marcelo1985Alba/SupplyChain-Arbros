@@ -364,7 +364,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
             string cg_cli = args.Value.ToString();
             if (!string.IsNullOrEmpty(cg_cli))
             {
-                Pedido.CG_CLI = int.Parse(cg_cli);
+                Pedido.CG_CLI = int.Parse(cg_cli.Replace(",","."));
                 if (Pedido.CG_CLI > 0)
                 {
                     var response = await ClienteService.Search(Pedido.CG_CLI, Pedido.DES_CLI);
