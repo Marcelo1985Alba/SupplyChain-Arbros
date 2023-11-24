@@ -596,7 +596,9 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
         protected async Task IrAPrograma(string cg_prod)
         {
             //Pdf/@(ordenFabricacion.CG_PROD)/RUTACNC
-            await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{cg_prod}/RUTACNC", $"Pdf/{cg_prod}/RUTACNC" });
+            
+            //await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{cg_prod}/RUTACNC", $"Pdf/{cg_prod}/RUTACNC" });
+            await JS.InvokeVoidAsync("open", new object[1]{ "http://192.168.0.131:8080/autentio/dnc.html" });
         }
 
         protected async Task Ensayos(string pedido)
