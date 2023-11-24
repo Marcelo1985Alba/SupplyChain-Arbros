@@ -134,7 +134,7 @@ namespace SupplyChain.Server.Controllers
         public IActionResult GetReportPedido(int numOci)
         {
             var file = "Pedido.rdlc";
-            var pedido = _context.vPedidoReporte.Where(c => c.NUMOCI == numOci).ToList();
+            var pedido = _context.vPedidoReporte.Where(c => c.NUMOCI == numOci).OrderBy(c=> c.PEDIDO).ToList();
             var path = string.Empty;
             path = configuration["ReportesRDLC:Pedido"] + $"\\{file}";
 
@@ -156,7 +156,7 @@ namespace SupplyChain.Server.Controllers
         public IActionResult GetReportRemito(string remito)
         {
             var file = "Remito.rdlc";
-            var pedido = _context.vRemitoReporte.Where(c => c.REMITO == remito).ToList();
+            var pedido = _context.vRemitoReporte.Where(c => c.REMITO == remito).OrderBy(c=> c.PEDIDO).ToList();
             var path = string.Empty;
             path = configuration["ReportesRDLC:Remito"] + $"\\{file}";
 
