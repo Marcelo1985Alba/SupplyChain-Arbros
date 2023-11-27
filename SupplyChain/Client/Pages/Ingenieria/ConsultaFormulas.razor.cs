@@ -187,6 +187,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
                     Header = $"Programas ({args.RowData.CG_PROD.Trim()})",
                     CodigoInsumo = args.RowData.CG_PROD.Trim()
                 });
+                await JsRuntime.InvokeVoidAsync("open", new object[1] { "http://192.168.0.131:8080/autentio/dnc.html" });
 
 
                 //El primer tab no se encuentra dentro de la lista
