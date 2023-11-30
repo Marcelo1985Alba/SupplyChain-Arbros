@@ -80,7 +80,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
         protected SfSpinner SpinnerCDM;
         protected bool Visible = false;
         protected string MensajeCargando = "Cargando...";
-
+         protected List<Programa> programas = new List<Programa>();
         public void OpenExternalLink()
         {
             //string url = "https://aerre.grafana.net/public-dashboards/42c12fc6b1ad4c57b9ad51817fa6d364";
@@ -284,31 +284,66 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 ordenFabricacion = null;
                 await Refrescar();
             }
-            else if (ordenFabricacion.CG_ESTADOCARGA == 4)
+            else if (ordenFabricacion.CG_ESTADOCARGA >= 4)
             {
-                if (ordenFabricacion.CANTFAB == 0)
-                {
-                    await this.ToastObj.Show(new ToastModel
+
+                var ordenesGrupo = await this.Http.GetFromJsonAsync<List<Programa>>($"api/Programa/GetOrdenesAbiertas/{ordenFabricacion.CG_ORDFASOC}/{ordenFabricacion.CG_ORDF}");
+                //var ordenesGrupo = await this.Http.GetFromJsonAsync<List<Pedidos>>($"api/Cargas/Verificar/{ordenFabricacion}");
+                
+                 if (ordenesGrupo.Count>=1 && ordenFabricacion !=null)
+                 {
+                        await this.ToastObj.ShowAsync(new ToastModel
+                        {
+                            Title="AVISO!",
+                            Content="Existen ordenes anteriores abiertas.",
+                            CssClass="e-toast-waring",
+                            Icon="e-error toast-icons"
+                        });
+
+                        return;
+                
+                 }
+                    else if(ordenFabricacion.CANTFAB == 0)
                     {
-                        Title = "AVISO!",
-                        Content = "Órden sin indicar cantidad fabricada. Se continuará igualmente.",
-                        CssClass = "e-toast-warning",
-                        Icon = "e-warning toast-icons"
-                    });
-                }
+                        await this.ToastObj.ShowAsync(new ToastModel
+                        {
+                            Title = "AVISO!",
+                            Content = "Órden sin indicar cantidad fabricada. Se continuará igualmente.",
+                            CssClass = "e-toast-warning",
+                            Icon = "e-warning toast-icons"
+                        });
+                    }
+                        else
+                        {
+                            var lOfAsocs = dbCarga.Where(c => c.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(o => o.CG_ORDF).ToList();
+                            var ultimaOF = lOfAsocs.Max(m => m.CG_ORDF);
+                            if (dbScrap != null && ordenFabricacion.CG_ORDF == ultimaOF)
+                            {
+                                isScrapDialogVisible = true;
+                                StateHasChanged();
+                            }
+                            else
+                            {
+                                await CerrarOrdenFabricacion();
+                                await Refrescar();
+                            }
+                        }
+                await CerrarOrdenFabricacion();
+                await Refrescar();
+
                 //VERIFIFCAR QUE SE LA ULTIMA: LA QUE DA DE ALTA AL PRODUCTO
-                var lOfAsocs = dbCarga.Where(c => c.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(o => o.CG_ORDF).ToList();
-                var ultimaOF = lOfAsocs.Max(m=> m.CG_ORDF);
-                if (dbScrap != null && ordenFabricacion.CG_ORDF == ultimaOF)
-                {
-                    isScrapDialogVisible = true;
-                    StateHasChanged();
-                }
-                else
-                {
-                    await CerrarOrdenFabricacion();
-                    await Refrescar();
-                }
+                //var lOfAsocs = dbCarga.Where(c => c.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(o => o.CG_ORDF).ToList();
+                //var ultimaOF = lOfAsocs.Max(m=> m.CG_ORDF);
+                //if (dbScrap != null && ordenFabricacion.CG_ORDF == ultimaOF)
+                //{
+                //    isScrapDialogVisible = true;
+                //    StateHasChanged();
+                //}
+                //else
+                //{
+                //    await CerrarOrdenFabricacion();
+                //    await Refrescar();
+                //}
             }
             else if (ordenFabricacion.CG_ESTADOCARGA == 5)
             {
@@ -316,7 +351,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 var respuesta2 = await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
                 if (respuesta2.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = $"Ocurrio un error. Error al intentar anular OF: {ordenFabricacion.CG_ORDF}",
@@ -327,7 +362,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     });
                 }
                 StateHasChanged();
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "AVISO!",
                     Content = "Órden anulada.",
@@ -401,7 +436,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             var respuesta2 = await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
             if (respuesta2.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = $"Ocurrio un error. Error al registrar el alta",
@@ -424,7 +459,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
             if (ordenFabricacion.CG_ORDF == ordenFabricacion.ULTIMAORDENASOCIADA)
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "Exito!",
                     Content = $"Guardado Correctamente! Alta {ordenFabricacion.CG_PROD.Trim()}",
@@ -436,7 +471,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             }
             else
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "Exito!",
                     Content = "Guardado Correctamente!\n" +
@@ -465,7 +500,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
 
             if (ordenFabricacionOriginal.CG_ESTADOCARGA == 0 && ordenFabricacion.CG_ESTADOCARGA == 2)
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "No puede pasar una órden de fabricación EMITIDA a estado EN FIRME.",
@@ -475,11 +510,11 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             }
             else if (ordenFabricacionOriginal.CG_ESTADOCARGA == 0 && ordenFabricacion.CG_ESTADOCARGA == 3)
             {
-                await this.ToastObj.Show(new ToastModel { Title = "ERROR!", Content = "No puede pasar una órden de fabricación EMITIDA a estado EN CURSO.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
+                await this.ToastObj.ShowAsync(new ToastModel { Title = "ERROR!", Content = "No puede pasar una órden de fabricación EMITIDA a estado EN CURSO.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
             }
             else if (ordenFabricacionOriginal.CG_ESTADOCARGA == 1 && ordenFabricacion.CG_ESTADOCARGA == 3)
             {
-                await this.ToastObj.Show(new ToastModel { Title = "ERROR!", Content = "No puede pasar una órden de fabricación PLANEADA a estado EN CURSO.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
+                await this.ToastObj.ShowAsync(new ToastModel { Title = "ERROR!", Content = "No puede pasar una órden de fabricación PLANEADA a estado EN CURSO.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" });
             }
         }
 
@@ -641,7 +676,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     || respuesta.StatusCode == System.Net.HttpStatusCode.NotFound
                     || respuesta.StatusCode == System.Net.HttpStatusCode.UnsupportedMediaType)
                 {
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = "Error al descargar archivo",
@@ -653,7 +688,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 }
                 else
                 {
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "EXITO!",
                         Content = "Archivo generado con éxito",
@@ -898,7 +933,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest ||
                 response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "No se pudo enviar Archivo.",
@@ -910,7 +945,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             }
             else
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "EXITO!",
                     Content = "Archivo enviado con éxito",
@@ -942,7 +977,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
                 creado = false;
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "No se pudo generar Archivo.",
@@ -957,7 +992,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             else
             {
                 creado = true;
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "EXITO!",
                     Content = "Archivo generado con éxito",

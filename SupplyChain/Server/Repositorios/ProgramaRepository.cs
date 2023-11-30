@@ -28,6 +28,14 @@ namespace SupplyChain.Server.Repositorios
             return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
         }
 
+        public async Task<IEnumerable<Programa>>GetOrdenesAbiertas(int cg_ordfasoc, int cg_ordf)
+        {
+            string xSQL = $"select * from programa where CG_ORDFASOC = {cg_ordfasoc} and CG_ESTADOCARGA < 4  " +
+                            $"and cg_ordf < {cg_ordf} order by CG_ORDF ASC";
+            return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
+
+        }
+
         public async Task<IEnumerable<ItemAbastecimiento>> GetAbastecimientoByOF(int cg_ordf)
         {
             //var dt = new DataTable();

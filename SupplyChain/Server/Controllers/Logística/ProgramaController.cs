@@ -23,7 +23,7 @@ namespace SupplyChain
     {
         private readonly ProgramaRepository _programaRepository;
 
-        public ProgramaController( ProgramaRepository programaRepository)
+        public ProgramaController(ProgramaRepository programaRepository)
         {
             this._programaRepository = programaRepository;
         }
@@ -47,8 +47,8 @@ namespace SupplyChain
         public async Task<ActionResult<IEnumerable<Programa>>> GetPlaneadas()
         {
             return await _programaRepository
-                .Obtener(p => p.Cg_Cia == 1 && p.CG_ESTADOCARGA == 1 && p.CG_ORDF == p.CG_ORDFASOC, 0 , 
-                         r => r.OrderByDescending(p=> p.CG_ORDF))
+                .Obtener(p => p.Cg_Cia == 1 && p.CG_ESTADOCARGA == 1 && p.CG_ORDF == p.CG_ORDFASOC, 0,
+                         r => r.OrderByDescending(p => p.CG_ORDF))
                 .ToListAsync();
         }
 
@@ -102,7 +102,7 @@ namespace SupplyChain
             {
                 return BadRequest(ex);
             }
-            
+
 
         }
 
@@ -120,6 +120,22 @@ namespace SupplyChain
         {
             await _programaRepository.EnviarCsvDataCore();
             return Ok();
+        }
+
+        [HttpGet("GetOrdenesAbiertas/{cg_ordfasoc}/{cg_ordf}")]
+        public async Task<ActionResult<IEnumerable<Programa>>>GetAbiertas(int cg_ordfasoc, int cg_ordf)
+        {
+            
+            try
+            {
+                return Ok(await _programaRepository.GetOrdenesAbiertas(cg_ordfasoc, cg_ordf));
+                
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            
         }
 
         [HttpGet("GeneraCsvImpresoraQR/{pedido}")]
@@ -154,7 +170,7 @@ namespace SupplyChain
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (! await _programaRepository.Existe(id))
+                if (!await _programaRepository.Existe(id))
                 {
                     return NotFound();
                 }
@@ -192,6 +208,18 @@ namespace SupplyChain
 
             return programa;
         }
+        //[HttpGet]
+        //public async Task<List<Programa>> Verificar(int cg_ordfasoc)
+        //{
+        //    var programa = await _programaRepository.GetOrdenesAbiertas(cg_ordfasoc);
+        //    if (programa == null)
+        //    {
+        //        return NotFound();
+        //    }
 
+        //    var prog = programa();
+        //    return prog();
+
+        //}
     }
 }
