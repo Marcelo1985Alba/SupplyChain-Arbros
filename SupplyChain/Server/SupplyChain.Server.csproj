@@ -9,6 +9,10 @@
     <Optimize>False</Optimize>
   </PropertyGroup>
 
+		<PropertyGroup>
+			<BasePath>/SupplyChain-Arbros</BasePath>
+		</PropertyGroup>		
+		
   <ItemGroup>
     <Content Remove="wwwroot\Report\ArbrosDataSet.Designer.cs" />
     <Content Remove="wwwroot\Report\ArbrosDataSet.xsc" />
