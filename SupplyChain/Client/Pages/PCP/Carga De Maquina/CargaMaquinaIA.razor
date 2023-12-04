@@ -1,0 +1,36 @@
+@page "/cargamaquinaIA"
+
+@inherits SupplyChain.Client.Pages.PCP.Carga_de_Maquina.CargaMaquinaIA
+
+@using Syncfusion.Blazor.Gantt
+@using Syncfusion.Blazor.Buttons
+@using SupplyChain.Shared.CDM
+@using SupplyChain.Shared.Context
+
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <SfGantt @ref="Gantt" DataSource="@ordenes" DurationUnit="DurationUnit.Day"
+                     GridLines="Syncfusion.Blazor.Gantt.GridLine.Both" IncludeWeekend="true">
+                <GanttTaskFields Id="Id" Name="Name" StartDate="Sdate" EndDate="Edate" ParentID="ParentId" Progress="Progress" Duration="Duration"></GanttTaskFields>
+                <GanttColumns>
+                    <GanttColumn Field=@nameof(GanttDataDetails.Id) Width="80px"></GanttColumn>
+                    <GanttColumn Field=@nameof(GanttDataDetails.Name) Width="180px" HeaderText="Nombre" ClipMode="ClipMode.EllipsisWithTooltip"></GanttColumn>
+                    <GanttColumn Field=@nameof(GanttDataDetails.Sdate) Width="125px" HeaderText="Comienzo" Format="dd/MM/yyyy HH:mm"></GanttColumn>
+                    <GanttColumn Field=@nameof(GanttDataDetails.Edate) Width="125px" HeaderText="Fin" Format="dd/MM/yyyy HH:mm"></GanttColumn>
+                    <GanttColumn Field=@nameof(GanttDataDetails.Duration) Width="85px" HeaderText="Duración"></GanttColumn>
+                    <GanttColumn Field=@nameof(GanttDataDetails.Progress) HeaderText="Progreso" Visible="false"></GanttColumn>
+                    <GanttColumn Field=@nameof(GanttDataDetails.ParentId) Visible="false"></GanttColumn>
+                </GanttColumns>
+                <GanttEditSettings AllowAdding="false" AllowDeleting="false" AllowEditing="false"></GanttEditSettings>
+                <GanttTimelineSettings>
+                    <GanttTopTierSettings Unit="TimelineViewMode.Week" Format="dd MMM, yyyy"></GanttTopTierSettings>
+                    <GanttBottomTierSettings Unit="TimelineViewMode.Day"></GanttBottomTierSettings>
+                </GanttTimelineSettings>
+                <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@VisibleSpinner"></SfSpinner>
+            </SfGantt>
+        </div>
+    </div>
+</div>
+<style>
+</style>
