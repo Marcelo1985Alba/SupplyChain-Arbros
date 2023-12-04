@@ -183,6 +183,36 @@ namespace SupplyChain
             return NoContent();
         }
 
+        //[HttpPut("{cg_ordf}/{cantfab}")]
+        //public async Task<IActionResult> PutCantPrograma(int cg_ordf, Programa programa, int cantfab)
+        //{
+        //    if(cg_ordf != programa.CG_ORDF)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    try
+        //    {
+        //        await _programaRepository.ActualizaCantidadFabricado(programa);
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if(!await _programaRepository.Existe(cg_ordf))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            return BadRequest();
+        //        }
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
+        //    return Ok(programa);
+        //}
+
         // POST: api/Programas
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
