@@ -10,11 +10,14 @@
 <div class="col-lg-12 control-section">
     <div class="content-wrapper">
         <div class="row">
-            <SfGantt @ref="Gantt" DataSource="@ordenes" DurationUnit="DurationUnit.Day"
-                     GridLines="Syncfusion.Blazor.Gantt.GridLine.Both" IncludeWeekend="true">
+            <SfGantt @ref="Gantt" IncludeWeekend="true"
+                     DurationUnit="DurationUnit.Day" DataSource="@ordenes" TreeColumnIndex="1"
+                     AllowReordering="true" AllowResizing="true" ScrollToTaskbarOnClick="true"
+                     GridLines="Syncfusion.Blazor.Gantt.GridLine.Both" AllowRowDragAndDrop="true"
+                     Toolbar="@(new List<string>() { "ZoomIn", "ZoomOut", "ZoomToFit", "Search" })">
                 <GanttTaskFields Id="Id" Name="Name" StartDate="Sdate" EndDate="Edate" ParentID="ParentId" Progress="Progress" Duration="Duration"></GanttTaskFields>
                 <GanttColumns>
-                    <GanttColumn Field=@nameof(GanttDataDetails.Id) Width="80px"></GanttColumn>
+                    <GanttColumn Field=@nameof(GanttDataDetails.Id) Width="80px" Visible="false"></GanttColumn>
                     <GanttColumn Field=@nameof(GanttDataDetails.Name) Width="180px" HeaderText="Nombre" ClipMode="ClipMode.EllipsisWithTooltip"></GanttColumn>
                     <GanttColumn Field=@nameof(GanttDataDetails.Sdate) Width="125px" HeaderText="Comienzo" Format="dd/MM/yyyy HH:mm"></GanttColumn>
                     <GanttColumn Field=@nameof(GanttDataDetails.Edate) Width="125px" HeaderText="Fin" Format="dd/MM/yyyy HH:mm"></GanttColumn>
@@ -22,15 +25,21 @@
                     <GanttColumn Field=@nameof(GanttDataDetails.Progress) HeaderText="Progreso" Visible="false"></GanttColumn>
                     <GanttColumn Field=@nameof(GanttDataDetails.ParentId) Visible="false"></GanttColumn>
                 </GanttColumns>
+                <GanttSearchSettings Fields="@(new string[] { "Name", "Notes" })"> </GanttSearchSettings>
                 <GanttEditSettings AllowAdding="false" AllowDeleting="false" AllowEditing="false"></GanttEditSettings>
                 <GanttTimelineSettings>
                     <GanttTopTierSettings Unit="TimelineViewMode.Week" Format="dd MMM, yyyy"></GanttTopTierSettings>
                     <GanttBottomTierSettings Unit="TimelineViewMode.Day"></GanttBottomTierSettings>
                 </GanttTimelineSettings>
+                <GanttLabelSettings LeftLabel="Notes" TValue="GanttDataDetails"></GanttLabelSettings>
+                <GanttEvents RowDataBound="RowDataBound" QueryChartRowInfo="queryChart" TValue="GanttDataDetails"></GanttEvents>
                 <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@VisibleSpinner"></SfSpinner>
             </SfGantt>
         </div>
     </div>
 </div>
 <style>
+    .e-split-bar, .e-headercell, .custom-row {
+        background: #add8e6 !important
+    }
 </style>
