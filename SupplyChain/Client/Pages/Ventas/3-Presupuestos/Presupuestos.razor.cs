@@ -424,6 +424,27 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 ShowProgressBar = true
             });
         }
-
+        
+        public void CustomizeCell(QueryCellInfoEventArgs<vPresupuestos> args)
+        {
+            if (args.Column.Field == "COLOR")
+            {
+                if(args.Data.COLOR != null)
+                {
+                    if (args.Data.COLOR.Trim() == "ROJO")
+                    {
+                        args.Cell.AddClass(new string[] { "rojo" });
+                    }
+                    else if (args.Data.COLOR.Trim() == "AMARILLO")
+                    {
+                        args.Cell.AddClass(new string[] { "amarillo" });
+                    }
+                    else if (args.Data.COLOR.Trim() == "VERDE")
+                    {
+                        args.Cell.AddClass(new string[] { "verde" });
+                    }
+                }
+            }
+        }
     }
 }
