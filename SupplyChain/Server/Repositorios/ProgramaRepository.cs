@@ -36,6 +36,17 @@ namespace SupplyChain.Server.Repositorios
 
         }
 
+        //public async Task<IEnumerable<Programa>> PostEstadoFirme( int cg_estadocarg, DateTime fe_curso, int cg_estado, int cg_ordf, int cg_ordfasoc)
+        //{
+        //    string xSQL = $"UPDATE Programa SET CG_ESTADOCARGA = {cg_estadocarg}, " +
+        //            $"Fe_curso = {fe_curso}, CG_ESTADO = {cg_estado} WHERE (Cg_ordf = {cg_ordf} OR Cg_ordfAsoc = {cg_ordfasoc})";
+            
+        //    await base.Database.ExecuteSqlRawAsync(xSQL);
+            
+        //    return await DbSet.Where(p=>p.CG_ORDF==cg_ordf || p.CG_ORDFASOC==cg_ordfasoc).ToListAsync();
+
+        //}
+
         public async Task<IEnumerable<Programa>> ActualizaCantidadFabricado(int cg_ordf, int cantfab)
         {
             string xSQL = $"update programa set CANT={cantfab} from programa where CG_ESTADO=4 AND CG_ORDF={cg_ordf}";

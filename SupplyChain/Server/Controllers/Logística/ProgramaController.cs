@@ -224,6 +224,14 @@ namespace SupplyChain
             return CreatedAtAction("GetPrograma", new { id = programa.Id }, programa);
         }
 
+        //[HttpPost]
+        //public async Task<ActionResult<Programa>> EstadoFirme(Programa programa)
+        //{
+        //    var programaActu = await _programaRepository.PostEstadoFirme(programa.CG_ESTADOCARGA, DateTime?.FE_CURSO, programa.CG_ESTADO, programa.CG_ORDF, programa.CG_ORDFASOC);
+
+
+        //}
+
         // DELETE: api/Programas/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Programa>> DeletePrograma(int id)
@@ -238,18 +246,5 @@ namespace SupplyChain
 
             return programa;
         }
-        //[HttpGet]
-        //public async Task<List<Programa>> Verificar(int cg_ordfasoc)
-        //{
-        //    var programa = await _programaRepository.GetOrdenesAbiertas(cg_ordfasoc);
-        //    if (programa == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var prog = programa();
-        //    return prog();
-
-        //}
     }
 }

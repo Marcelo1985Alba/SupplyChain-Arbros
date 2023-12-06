@@ -19,6 +19,7 @@ namespace SupplyChain
     public class OrdenesFabricacionController : ControllerBase
     {
         private readonly AppDbContext _context;
+       
 
         public OrdenesFabricacionController(AppDbContext context)
         {
@@ -67,15 +68,14 @@ namespace SupplyChain
                 programa.FECHA_PREVISTA_FABRICACION = xItem.FECHA_PREVISTA_FABRICACION;
                 programa.FECHA_INICIO_REAL_FABRICACION = xItem.FECHA_INICIO_REAL_FABRICACION;
                 programa.CANTFAB = xItem.CANTFAB;
+                programa.CANT= xItem.CANTFAB;
                 programa.FE_CIERRE = xItem.FE_CIERRE;
                 programa.CG_ORDFORIG = xItem.CG_ORDFORIG;
                 programa.CG_CELDA = xItem.CG_CELDA;
                 programa.PROCESO = xItem.PROCESO;
                 programa.CG_OPER = xItem.CG_OPER;
                 programa.DES_OPER = xItem.DES_OPER;
-
-
-
+                
                 //string xSQL = string.Format("set dateformat dmy UPDATE Programa SET FECHA_PREVISTA_FABRICACION = '{0}', FECHA_INICIO_REAL_FABRICACION = '{1}', CANTFAB = {2}, FE_CIERRE = '{3}', " +
                 //                            "CG_ORDFORIG = {4}, CG_CELDA = '{5}', PROCESO = '{6}', CG_OPER = {7}, DES_OPER = '{8}' WHERE Cg_ordf = {9}",
                 //                          xItem.FECHA_PREVISTA_FABRICACION,
@@ -94,13 +94,14 @@ namespace SupplyChain
                 _context.Entry(programa).Property(p => p.FECHA_PREVISTA_FABRICACION).IsModified = true;
                 _context.Entry(programa).Property(p => p.FECHA_INICIO_REAL_FABRICACION).IsModified = true;
                 _context.Entry(programa).Property(p => p.CANTFAB).IsModified = true;
+                _context.Entry(programa).Property(p => p.CANT).IsModified = true;
                 _context.Entry(programa).Property(p => p.FE_CIERRE).IsModified = true;
                 _context.Entry(programa).Property(p => p.CG_ORDFORIG).IsModified = true;
                 _context.Entry(programa).Property(p => p.CG_CELDA).IsModified = true;
                 _context.Entry(programa).Property(p => p.PROCESO).IsModified = true;
                 _context.Entry(programa).Property(p => p.CG_OPER).IsModified = true;
                 _context.Entry(programa).Property(p => p.DES_OPER).IsModified = true;
-                
+               
 
 
                 await _context.SaveChangesAsync();

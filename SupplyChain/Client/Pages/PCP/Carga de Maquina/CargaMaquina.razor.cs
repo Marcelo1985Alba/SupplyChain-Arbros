@@ -295,55 +295,42 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                         await this.ToastObj.ShowAsync(new ToastModel
                         {
                             Title="AVISO!",
-                            Content="Existen ordenes anteriores abiertas.",
+                            Content="No se puede cerrar esta Orden. Existen ordenes anteriores abiertas.",
                             CssClass="e-toast-waring",
                             Icon="e-error toast-icons"
                         });
 
-                        return;
+                    return;
                 
                  }
-                    else if(ordenFabricacion.CANTFAB == 0)
+                else if (ordenFabricacion.CANTFAB == 0)
+                {
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
-                        await this.ToastObj.ShowAsync(new ToastModel
-                        {
-                            Title = "AVISO!",
-                            Content = "Órden sin indicar cantidad fabricada. Se continuará igualmente.",
-                            CssClass = "e-toast-warning",
-                            Icon = "e-warning toast-icons"
-                        });
-                    }
-                        else
-                        {
-                            var lOfAsocs = dbCarga.Where(c => c.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(o => o.CG_ORDF).ToList();
-                            var ultimaOF = lOfAsocs.Max(m => m.CG_ORDF);
-                            if (dbScrap != null && ordenFabricacion.CG_ORDF == ultimaOF)
-                            {
-                                isScrapDialogVisible = true;
-                                StateHasChanged();
-                            }
-                            else
-                            {
-                                await CerrarOrdenFabricacion();
-                                await Refrescar();
-                            }
-                        }
+                        Title = "AVISO!",
+                        Content = "Órden sin indicar cantidad fabricada. Se continuará igualmente.",
+                        CssClass = "e-toast-warning",
+                        Icon = "e-warning toast-icons"
+                    });
+                }
+                else
+                {
+                 var lOfAsocs = dbCarga.Where(c => c.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(o => o.CG_ORDF).ToList();
+                  var ultimaOF = lOfAsocs.Max(m => m.CG_ORDF);
+                     if (dbScrap != null && ordenFabricacion.CG_ORDF == ultimaOF)
+                     {
+                        isScrapDialogVisible = true;
+                        StateHasChanged();
+                     }
+                     else
+                     {
+                        await CerrarOrdenFabricacion();
+                        await Refrescar();
+                     }
+                }
                 await CerrarOrdenFabricacion();
                 await Refrescar();
 
-                //VERIFIFCAR QUE SE LA ULTIMA: LA QUE DA DE ALTA AL PRODUCTO
-                //var lOfAsocs = dbCarga.Where(c => c.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(o => o.CG_ORDF).ToList();
-                //var ultimaOF = lOfAsocs.Max(m=> m.CG_ORDF);
-                //if (dbScrap != null && ordenFabricacion.CG_ORDF == ultimaOF)
-                //{
-                //    isScrapDialogVisible = true;
-                //    StateHasChanged();
-                //}
-                //else
-                //{
-                //    await CerrarOrdenFabricacion();
-                //    await Refrescar();
-                //}
             }
             else if (ordenFabricacion.CG_ESTADOCARGA == 5)
             {
@@ -373,15 +360,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 await Refrescar();
             }
 
-            //await this.ToastObj.Show(new ToastModel
-            //{
-            //    Title = "Exito!",
-            //    Content = $"Guardado Correctamente!  Se actualizo OF: {ordenFabricacion.CG_PROD.Trim()}",
-            //    CssClass = "e-toast-success",
-            //    Icon = "e-success toast-icons",
-            //    ShowCloseButton = true,
-            //    ShowProgressBar = true
-            //});
+          
 
 
             Visible = false;
