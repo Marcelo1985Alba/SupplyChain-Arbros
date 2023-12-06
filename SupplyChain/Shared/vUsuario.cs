@@ -10,7 +10,10 @@ namespace SupplyChain.Shared
         public string USUARIO { get; set; }
         public string EMAIL { get; set; }
         public string? CLIENTE { get; set; }
-        public byte[] FOTO { get; set; }  
-        
+        public byte[] FOTO { get; set; }
+        [Column("Cg_Operario")] public int? CG_OPER { get; set; }
+
+        public int? Activo { get; set; }
+
     }
 }

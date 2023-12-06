@@ -165,7 +165,7 @@ namespace SupplyChain.Client.Pages.ABM.Prods
             }
             else
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Solo se puede copiar un item",

@@ -23,7 +23,7 @@ namespace SupplyChain
     {
         private readonly ProgramaRepository _programaRepository;
 
-        public ProgramaController( ProgramaRepository programaRepository)
+        public ProgramaController(ProgramaRepository programaRepository)
         {
             this._programaRepository = programaRepository;
         }
@@ -47,8 +47,8 @@ namespace SupplyChain
         public async Task<ActionResult<IEnumerable<Programa>>> GetPlaneadas()
         {
             return await _programaRepository
-                .Obtener(p => p.Cg_Cia == 1 && p.CG_ESTADOCARGA == 1 && p.CG_ORDF == p.CG_ORDFASOC, 0 , 
-                         r => r.OrderByDescending(p=> p.CG_ORDF))
+                .Obtener(p => p.Cg_Cia == 1 && p.CG_ESTADOCARGA == 1 && p.CG_ORDF == p.CG_ORDFASOC, 0,
+                         r => r.OrderByDescending(p => p.CG_ORDF))
                 .ToListAsync();
         }
 
@@ -102,7 +102,7 @@ namespace SupplyChain
             {
                 return BadRequest(ex);
             }
-            
+
 
         }
 
@@ -120,6 +120,22 @@ namespace SupplyChain
         {
             await _programaRepository.EnviarCsvDataCore();
             return Ok();
+        }
+
+        [HttpGet("GetOrdenesAbiertas/{cg_ordfasoc}/{cg_ordf}")]
+        public async Task<ActionResult<IEnumerable<Programa>>>GetAbiertas(int cg_ordfasoc, int cg_ordf)
+        {
+            
+            try
+            {
+                return Ok(await _programaRepository.GetOrdenesAbiertas(cg_ordfasoc, cg_ordf));
+                
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            
         }
 
         [HttpGet("GeneraCsvImpresoraQR/{pedido}")]
@@ -154,7 +170,7 @@ namespace SupplyChain
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (! await _programaRepository.Existe(id))
+                if (!await _programaRepository.Existe(id))
                 {
                     return NotFound();
                 }
@@ -167,6 +183,36 @@ namespace SupplyChain
             return NoContent();
         }
 
+        //[HttpPut("{cg_ordf}/{cantfab}")]
+        //public async Task<IActionResult> PutCantPrograma(int cg_ordf, Programa programa, int cantfab)
+        //{
+        //    if(cg_ordf != programa.CG_ORDF)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    try
+        //    {
+        //        await _programaRepository.ActualizaCantidadFabricado(programa);
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if(!await _programaRepository.Existe(cg_ordf))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            return BadRequest();
+        //        }
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
+        //    return Ok(programa);
+        //}
+
         // POST: api/Programas
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -177,6 +223,14 @@ namespace SupplyChain
 
             return CreatedAtAction("GetPrograma", new { id = programa.Id }, programa);
         }
+
+        //[HttpPost]
+        //public async Task<ActionResult<Programa>> EstadoFirme(Programa programa)
+        //{
+        //    var programaActu = await _programaRepository.PostEstadoFirme(programa.CG_ESTADOCARGA, DateTime?.FE_CURSO, programa.CG_ESTADO, programa.CG_ORDF, programa.CG_ORDFASOC);
+
+
+        //}
 
         // DELETE: api/Programas/5
         [HttpDelete("{id}")]
@@ -192,6 +246,5 @@ namespace SupplyChain
 
             return programa;
         }
-
     }
 }

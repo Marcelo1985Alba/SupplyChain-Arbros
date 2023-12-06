@@ -30,6 +30,32 @@ namespace SupplyChain.Server.Repositorios
             return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
         }
 
+        public async Task<IEnumerable<Programa>>GetOrdenesAbiertas(int cg_ordfasoc, int cg_ordf)
+        {
+            string xSQL = $"select * from programa where CG_ORDFASOC = {cg_ordfasoc} and CG_ESTADOCARGA < 4  " +
+                            $"and cg_ordf < {cg_ordf} order by CG_ORDF ASC";
+            return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
+
+        }
+
+        //public async Task<IEnumerable<Programa>> PostEstadoFirme( int cg_estadocarg, DateTime fe_curso, int cg_estado, int cg_ordf, int cg_ordfasoc)
+        //{
+        //    string xSQL = $"UPDATE Programa SET CG_ESTADOCARGA = {cg_estadocarg}, " +
+        //            $"Fe_curso = {fe_curso}, CG_ESTADO = {cg_estado} WHERE (Cg_ordf = {cg_ordf} OR Cg_ordfAsoc = {cg_ordfasoc})";
+            
+        //    await base.Database.ExecuteSqlRawAsync(xSQL);
+            
+        //    return await DbSet.Where(p=>p.CG_ORDF==cg_ordf || p.CG_ORDFASOC==cg_ordfasoc).ToListAsync();
+
+        //}
+
+        public async Task<IEnumerable<Programa>> ActualizaCantidadFabricado(int cg_ordf, int cantfab)
+        {
+            string xSQL = $"update programa set CANT={cantfab} from programa where CG_ESTADO=4 AND CG_ORDF={cg_ordf}";
+            await base.Database.ExecuteSqlRawAsync(xSQL);
+            
+            return await DbSet.Where(p=>p.CG_ORDF==cg_ordf).ToListAsync();
+        }
         public async Task<IEnumerable<ItemAbastecimiento>> GetAbastecimientoByOF(int cg_ordf)
         {
             //var dt = new DataTable();

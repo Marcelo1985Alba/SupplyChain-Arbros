@@ -87,7 +87,7 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
                         var response = CeldasService.Eliminar(celdasABorrar);
                         if (!response.IsCompletedSuccessfully)
                         {
-                            await this.ToastObj.Show(new ToastModel
+                            await this.ToastObj.ShowAsync(new ToastModel
                             {
                                 Title = "EXITO!",
                                 Content = "las celdas seleccionadas fueron eliminadas correctamente.",
@@ -124,7 +124,7 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
                     celdaSeleccionada.AIRE_COMP = selectedRecord.AIRE_COMP;
                     celdaSeleccionada.CANT_ANOS = selectedRecord.CANT_ANOS;
                     celdaSeleccionada.CANT_UNID = selectedRecord.CANT_UNID;
-                    celdaSeleccionada.CG_AREA = selectedRecord.CG_AREA;
+                     celdaSeleccionada.CG_AREA = selectedRecord.CG_AREA;
                     celdaSeleccionada.CG_DEPOSM = selectedRecord.CG_DEPOSM;
                     celdaSeleccionada.CG_PROVE = selectedRecord.CG_PROVE;
                     celdaSeleccionada.CG_TIPOCELDA = selectedRecord.CG_TIPOCELDA;
@@ -143,7 +143,7 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
             }
             else
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Solo se puede copiar un item",
@@ -254,7 +254,7 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
 
         private async Task ToastMensajeExito()
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = "Guardado Correctamente.",
@@ -266,7 +266,7 @@ namespace SupplyChain.Client.Pages.ABM.CeldasP
         }
         private async Task ToastMensajeError()
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = "Ocurrio un Error.",

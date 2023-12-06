@@ -1,0 +1,102 @@
+﻿@page "/Abms/campocom"
+@using Syncfusion.Blazor.Buttons;
+@inherits CampoComBase
+
+<div class="row">
+    <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+                            OnReiniciar="(async()=>await OnReinciarGrilla())"
+                            OnVistaSelected="(async(v)=>await OnVistaSeleccionada(v))"/>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <SfToast ID="toast-default" @ref="ToastObj">
+            <ToastPosition X="Center" Y="Top"></ToastPosition>
+        </SfToast>
+
+        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+            @ref="refGrid" DataSource="@campos" Width="100%" Toolbar="Toolbaritems"
+            AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
+            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridPageSettings  PageSize="10" PageSizes="true"></GridPageSettings>
+            <GridEvents OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolbarHandler" OnActionComplete="OnActionCompleteHandler" TValue="CampoComodin"></GridEvents>
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
+                    ShowDeleteConfirmDialog="false" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog"></GridEditSettings>
+        
+        <GridColumns>
+            <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+                <GridColumn Field=@nameof(CampoComodin.Id) HeaderText="Codigo" AllowEditing="true" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(CampoComodin.Tabla) HeaderText="Tabla" AllowEditing="true" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(CampoComodin.Presion) HeaderText="Presion" AllowEditing="true" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(CampoComodin.Resorte) HeaderText="Resorte" AllowEditing="true" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(CampoComodin.Fluido) HeaderText="Fluido" AllowEditing="true" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(CampoComodin.Ajuste_Banco) HeaderText="Ajuste Banco" AllowEditing="true" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(CampoComodin.Contra_Presion) HeaderText="Contra Presion" AllowEditing="true" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(CampoComodin.Temperatura) HeaderText="Temperatura" AllowEditing="true" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(CampoComodin.CampoCom7) HeaderText="CampoCom7" AllowEditing="true" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(CampoComodin.CampoCom8) HeaderText="CampoCom8" AllowEditing="true" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+        </GridColumns>    
+                    
+        </SfGrid>
+    </div>
+
+     @if (popupFormVisible)
+	{
+        <FormCampoCom campos="comodinSeleccionado" Show="popupFormVisible" OnEliminar="@(async(p)=>await GuardarCampo(p))"
+                     OnCerrar="OnCerrarDialog" OnGuardar="@(async(p)=>await GuardarCampo(p))"></FormCampoCom>
+	}
+</div>
+
+
+<style>
+    .form-group.col-md-6 {
+        width: 200px;
+    }
+
+    label.e-float-text {
+        position: relative;
+        padding-left: 0;
+        top: 10%;
+    }
+
+    .e-input-group.e-control-wrapper.customClass {
+        color: black;
+        background-color: lightblue;
+    }
+</style>
+
+@code {
+
+    public String edit = "Syncfusion.Blazor.PivotView.EditMode.Normal";
+    public bool DblClick = true;
+    public bool CommandColumnsClick = false;
+
+    public Syncfusion.Blazor.PivotView.EditMode SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+    public void OnRadioChange(ChangeArgs<string> args)
+    {
+        if (args.Value == "inline")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Normal;
+        }
+        else if (args.Value == "batch")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Batch;
+        }
+        else if (args.Value == "dialog")
+        {
+            this.DblClick = true;
+            this.CommandColumnsClick = false;
+            this.SelectedMode = Syncfusion.Blazor.PivotView.EditMode.Dialog;
+        }
+        else
+        {
+            this.CommandColumnsClick = true;
+        }
+    }
+}
