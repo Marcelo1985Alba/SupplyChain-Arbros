@@ -423,7 +423,7 @@ namespace SupplyChain.Client.Shared.Inventarios
             
             RealizandoReserva = true;
             var stockReservar = JsonConvert.DeserializeObject<Pedidos>(JsonConvert.SerializeObject(stock));
-            stockReservar.Id = stock.Id - 1;
+            stockReservar.Id = stock.Id;
             stockReservar.FE_MOV = DateTime.Now;
             stockReservar.AVISO = "MOVIMIENTO ENTRE DEPOSITOS";
             stockReservar.TIPOO = 9;
@@ -451,7 +451,7 @@ namespace SupplyChain.Client.Shared.Inventarios
             stock.CG_DEP = 15;
             stock.PENDIENTEOC -= Convert.ToDecimal(stockReservar.STOCK);
             stock.Reserva += Convert.ToDecimal(stockReservar.STOCK);
-            stock.ReservaTotal += Convert.ToDecimal(stockReservar.ReservaTotal);
+            stock.ReservaTotal += Convert.ToDecimal(stockReservar.STOCK);
 
             await Grid.EndEditAsync();
             RealizandoReserva = false;

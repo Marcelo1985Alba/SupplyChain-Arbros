@@ -100,7 +100,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                 MainLayout.Titulo = "Administracion de Stock: ingreso por Planificacion";
                 
 
-                await CargaDatosValeCabecera(tire);
+                CargaDatosValeCabecera(tire);
                 var programa = await Http.GetFromJsonAsync<List<Programa>>($"api/Programa/GetProgramaByOF/{OrdFab}");
 
                 await OnProgramaSelected(programa[0]);
@@ -391,7 +391,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                     pedido.ResumenStock = item.ResumenStock;
 
                     pedido.Id = registronegativo;
-                    if (pedido.TIPOO == 9)
+                    if (pedido.TIPOO == 9 || pedido.TIPOO == 28)
                     {
                         pedido.PENDIENTEOC = item.STOCK - item.Reserva; //STOCK
                         
