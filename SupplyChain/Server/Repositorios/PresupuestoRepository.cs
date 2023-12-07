@@ -27,12 +27,12 @@ namespace SupplyChain.Server.Repositorios
         {
             if (tipoFiltro == TipoFiltro.Pendientes)
             {
-                return await Db.vPresupuestos.Where(p=> !p.TIENEPEDIDO).ToListAsync();
+                return await Db.vPresupuestos.Where(p=> p.TIENEPEDIDO).ToListAsync();
             }
 
             if (tipoFiltro == TipoFiltro.NoPendientes)
             {
-                return await Db.vPresupuestos.Where(p => p.TIENEPEDIDO).ToListAsync();
+                return await Db.vPresupuestos.Where(p => !p.TIENEPEDIDO).ToListAsync();
             }
             return await Db.vPresupuestos.ToListAsync();
         }

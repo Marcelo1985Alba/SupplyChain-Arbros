@@ -402,7 +402,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = content,
@@ -414,7 +414,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         }
         private async Task ToastMensajeError(string content = "Ocurrio un Error.")
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = content,
@@ -431,17 +431,17 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             {
                 if(args.Data.COLOR != null)
                 {
-                    if (args.Data.COLOR.Trim() == "ROJO")
+                    if (args.Data.COLOR.Trim() == "PERDIDA")
                     {
-                        args.Cell.AddClass(new string[] { "rojo" });
+                        args.Cell.AddClass(new string[] { "perdida" });
                     }
-                    else if (args.Data.COLOR.Trim() == "AMARILLO")
+                    else if (args.Data.COLOR.Trim() == "PENDIENTE")
                     {
-                        args.Cell.AddClass(new string[] { "amarillo" });
+                        args.Cell.AddClass(new string[] { "pendiente" });
                     }
-                    else if (args.Data.COLOR.Trim() == "VERDE")
+                    else if (args.Data.COLOR.Trim() == "GANADA")
                     {
-                        args.Cell.AddClass(new string[] { "verde" });
+                        args.Cell.AddClass(new string[] { "ganada" });
                     }
                 }
             }
