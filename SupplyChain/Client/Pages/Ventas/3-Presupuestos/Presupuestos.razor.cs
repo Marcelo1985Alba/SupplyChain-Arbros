@@ -73,9 +73,12 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
     
         protected List<string> Monedas = new() { "PESOS", "DOLARES" };
 
-
+    
         protected PresupuestoAnterior presupuesto = new();
         protected ConfirmacionDialog ConfirmacionEliminarDialog;
+        private string colores;
+        private string colores2;
+
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Presupuestos";
@@ -125,7 +128,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 Presupuestos = response.Response.OrderByDescending(s => s.Id).ToList();
             }
         }
-
+       
         protected async Task GetSemaforo()
         {
             var response = await SemaforoService.Get();
