@@ -47,13 +47,13 @@ namespace SupplyChain.Server.Repositorios
 
         //}
 
-        public async Task<IEnumerable<Programa>> ActualizaCantidadFabricado(int cg_ordf, int cantfab)
-        {
-            string xSQL = $"update programa set CANT={cantfab} from programa where CG_ESTADO=4 AND CG_ORDF={cg_ordf}";
-            await base.Database.ExecuteSqlRawAsync(xSQL);
+        //public async Task<IEnumerable<Programa>> ActualizaCantidadFabricado(int cg_ordf, int cantfab)
+        //{
+        //    string xSQL = $"update programa set CANT={cantfab} from programa where CG_ESTADO=4 AND CG_ORDF={cg_ordf}";
+        //    await base.Database.ExecuteSqlRawAsync(xSQL);
             
-            return await DbSet.Where(p=>p.CG_ORDF==cg_ordf).ToListAsync();
-        }
+        //    return await DbSet.Where(p=>p.CG_ORDF==cg_ordf).ToListAsync();
+        //}
         public async Task<IEnumerable<ItemAbastecimiento>> GetAbastecimientoByOF(int cg_ordf)
         {
             //var dt = new DataTable();

@@ -288,9 +288,9 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             {
 
                 var ordenesGrupo = await this.Http.GetFromJsonAsync<List<Programa>>($"api/Programa/GetOrdenesAbiertas/{ordenFabricacion.CG_ORDFASOC}/{ordenFabricacion.CG_ORDF}");
-                //var ordenesGrupo = await this.Http.GetFromJsonAsync<List<Pedidos>>($"api/Cargas/Verificar/{ordenFabricacion}");
-                
-                 if (ordenesGrupo.Count>=1 && ordenFabricacion !=null)
+                //var ordenesGrupo = await this.Http.GetFromJsonAsync<List<Pedidos>>($"api/Programa/GetOrdenesAbiertas/{cg_ordgasoc}/{cg_ordf}");
+
+                if (ordenesGrupo.Count>=1 && ordenFabricacion !=null)
                  {
                         await this.ToastObj.ShowAsync(new ToastModel
                         {
@@ -303,16 +303,16 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     return;
                 
                  }
-                else if (ordenFabricacion.CANTFAB == 0)
-                {
-                    await this.ToastObj.ShowAsync(new ToastModel
-                    {
-                        Title = "AVISO!",
-                        Content = "Órden sin indicar cantidad fabricada. Se continuará igualmente.",
-                        CssClass = "e-toast-warning",
-                        Icon = "e-warning toast-icons"
-                    });
-                }
+                //else if (ordenFabricacion.CANTFAB == 0)
+                //{
+                //    await this.ToastObj.ShowAsync(new ToastModel
+                //    {
+                //        Title = "AVISO!",
+                //        Content = "Órden sin indicar cantidad fabricada. Se continuará igualmente.",
+                //        CssClass = "e-toast-warning",
+                //        Icon = "e-warning toast-icons"
+                //    });
+                //}
                 else
                 {
                  var lOfAsocs = dbCarga.Where(c => c.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(o => o.CG_ORDF).ToList();
