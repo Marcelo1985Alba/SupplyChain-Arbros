@@ -888,7 +888,7 @@ namespace SupplyChain.Server.Controllers
             //        listArchivosDescargar.Add(archivoDataSheet);
             //    }
             //}
-            
+
 
             //foreach (var sol in solicitudes)
             //{
@@ -923,7 +923,7 @@ namespace SupplyChain.Server.Controllers
             //    valeDS = null;
             //}
 
-            
+
 
             Stream[] streams = new Stream[listArchivosDescargar.Count];
             PdfDocument finalDoc = new PdfDocument();
@@ -933,7 +933,8 @@ namespace SupplyChain.Server.Controllers
             }
             PdfDocumentBase.Merge(finalDoc, streams);
             MemoryStream stream = new();
-            finalDoc.Save(stream);
+            finalDoc.Save(stream)
+            ;
             stream.Position = 0;
             finalDoc.Close(true);
             for (int i = 0; i < listArchivosDescargar.Count; i++)
