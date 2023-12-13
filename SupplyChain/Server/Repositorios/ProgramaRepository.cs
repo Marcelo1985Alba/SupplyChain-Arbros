@@ -79,6 +79,14 @@ namespace SupplyChain.Server.Repositorios
 
         }
 
-        
+        public async Task<IEnumerable<Programa>> GetOrdenesAbiertas(int cg_ordfasoc, int cg_ordf)
+        {
+            string xSQL = $"select * from programa where CG_ORDFASOC = {cg_ordfasoc} and CG_ESTADOCARGA < 4  " +
+                            $"and cg_ordf < {cg_ordf} order by CG_ORDF ASC";
+            return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
+
+        }
+
+
     }
 }

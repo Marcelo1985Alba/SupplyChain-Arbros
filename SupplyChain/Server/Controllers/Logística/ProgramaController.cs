@@ -167,6 +167,7 @@ namespace SupplyChain
             return NoContent();
         }
 
+
         // POST: api/Programas
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -191,6 +192,22 @@ namespace SupplyChain
             await _programaRepository.Remover(id);
 
             return programa;
+        }
+
+        [HttpGet("GetOrdenesAbiertas/{cg_ordfasoc}/{cg_ordf}")]
+        public async Task<ActionResult<IEnumerable<Programa>>> GetAbiertas(int cg_ordfasoc, int cg_ordf)
+        {
+
+            try
+            {
+                return Ok(await _programaRepository.GetOrdenesAbiertas(cg_ordfasoc, cg_ordf));
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
         }
 
     }
