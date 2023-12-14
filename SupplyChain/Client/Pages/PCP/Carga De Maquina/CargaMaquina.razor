@@ -305,7 +305,7 @@
                                                 <input type="button"
                                                        class="CargaButtonClass@((dbCarga.ElementAt(i).CG_ORDF == ordenAbuscar || (dbCarga.ElementAt(i).PEDIDO == ordenAbuscar && dbCarga.ElementAt(i).PEDIDO != 0)) ? " CargaButtonClassBuscarOrden" : ((dbCarga.ElementAt(i).BORDE) ? " CargaButtonClassFirstFirme" : ""))"
                                                        @onclick=@(async() => await OrdenFabricacionOpen(xOrdenFabricacion, xExigeOA, xPedido, xCgProd, xCantidad))
-                                                       style="width: 100%;background-image: linear-gradient( @dbCarga[i].BACKGROUND.ToLower(), whitesmoke)"
+                                                       style="width: 150%;background-image: linear-gradient( @dbCarga[i].BACKGROUND.ToLower(), whitesmoke)"
                                                        value="@ValorBoton"
                                                        id="of + @dbCarga[i].CG_ORDF" />
                                             </div>
@@ -410,6 +410,7 @@
                                                 <div>
                                                     <label style="color:blue">Operario:</label>
                                                 </div>
+
                                                 <SfComboBox TValue="string" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
                                                             @bind-Value="@ordenFabricacion.DES_OPER" DataSource="@operariosBE3">
                                                     <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
