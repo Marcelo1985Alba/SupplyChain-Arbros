@@ -115,6 +115,23 @@ namespace SupplyChain
             return programa == null ? NotFound() : programa;
         }
 
+        ///METODO PUT DE CANTIDADFAB, YA ESTA EL REPOSITORIO FALTA RESTO
+        //[HttpGet("GetCantidad/{cg_ordfasoc}")]
+        //public async Task<ActionResult<Programa>> GetCantidad(int cg_ordfasoc)
+        //{
+        //    try
+        //    {
+        //        var programa = await _programaRepository.GetCantidad(cg_ordfasoc);
+
+        //        return Ok();
+        //    }catch (Exception ex)
+        //    {
+        //        return BadRequest(ex);
+        //    }
+            
+        //}
+
+
         [HttpGet("EnviarCsvDataCore")]
         public async Task<ActionResult> EnviarCsv()
         {
@@ -166,19 +183,6 @@ namespace SupplyChain
 
             return NoContent();
         }
-        ///METODO PUT DE CANTIDADFAB, YA ESTA EL REPOSITORIO FALTA RESTO
-        //[HttpPut("PutCantidadFabridada/{cg_ordfasoc}/{cantidad}")]
-        //public async Task<IActionResult<IEnumerable<Programa>>> PutCantidadFabridada(int cg_ordfasoc, int cantidad)
-        //{
-        //    try
-        //    {
-        //        await _programaRepository.PutCantidadFab(cg_ordfasoc, cantidad);
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        return BadRequest(ex);
-        //    }
-        //}
 
         // POST: api/Programas
         // To protect from overposting attacks, enable the specific properties you want to bind to, for

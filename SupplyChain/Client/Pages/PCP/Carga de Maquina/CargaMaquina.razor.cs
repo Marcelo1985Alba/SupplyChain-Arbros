@@ -192,6 +192,9 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 dbProcesos = await Http.GetFromJsonAsync<List<ModeloGenericoStringString>>("api/ModelosGenericosStringString/" + xSQLcommand);
 
                 var cg_ordfAsoc = dbCarga.Where(c => c.CG_ORDF == ordenNumero).OrderBy(c => c.CG_ORDF).FirstOrDefault().CG_ORDFASOC;
+                //Get Datos de la cantidad 
+                //xSQLcommand = String.Format("select cantidad from programa where cg_ordfasoc={0}", ordenFabricacion.CG_ORDFASOC);
+                //ordenFabxCantidad = await Http.GetFromJsonAsync<List<ModeloGenericoStringString>>("api/ModelosGenericosStringString/" + xSQLcommand);
                 // Datos del encabezado del detalle
                 ordenFabricacionEncabezado = await Http.GetFromJsonAsync<ModeloOrdenFabricacionEncabezado>("api/OrdenesFabricacionEncabezado/" + ordenNumero.ToString());
                 // Materias primas
@@ -287,19 +290,22 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             }
             else if (ordenFabricacion.CG_ESTADOCARGA == 4)
             {
-                //if (ordenFabricacion.CANTFAB == 0)
-                //{
-                //    await this.ToastObj.Show(new ToastModel
-                //    {
-                //        Title = "AVISO!",
-                //        Content = "Órden sin indicar cantidad fabricada. Se continuará igualmente.",
-                //        CssClass = "e-toast-warning",
-                //        Icon = "e-warning toast-icons"
-                //    });
-                //}
+                if (ordenFabricacion.CANTFAB <= 0)
+                {
+                    await this.ToastObj.ShowAsync(new ToastModel
+                    {
+                        Title = "AVISO!",
+                        Content = "Debe ingresar la cantidad fabricada.",
+                        CssClass = "e-toast-warning",
+                        Icon = "e-warning toast-icons"
+                    });
+                    return;
+                }
+
+                
                 var ordenesGrupo = await this.Http.GetFromJsonAsync<List<Programa>>($"api/Programa/GetOrdenesAbiertas/{ordenFabricacion.CG_ORDFASOC}/{ordenFabricacion.CG_ORDF}");
                 //var ordenesGrupo = await this.Http.GetFromJsonAsync<List<Pedidos>>($"api/Programa/GetOrdenesAbiertas/{cg_ordgasoc}/{cg_ordf}");
-
+                
                 if (ordenesGrupo.Count >= 1 && ordenFabricacion != null)
                 {
                     await this.ToastObj.ShowAsync(new ToastModel
@@ -313,6 +319,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     return;
 
                 }
+
                 //VERIFIFCAR QUE SE LA ULTIMA: LA QUE DA DE ALTA AL PRODUCTO
                 var lOfAsocs = dbCarga.Where(c => c.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(o => o.CG_ORDF).ToList();
                 var ultimaOF = lOfAsocs.Max(m=> m.CG_ORDF);

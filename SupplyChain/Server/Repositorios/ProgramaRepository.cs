@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared.Models;
@@ -87,10 +88,16 @@ namespace SupplyChain.Server.Repositorios
 
         }
 
-        public async Task<IEnumerable<Programa>> PutCantidadFab(int cg_ordfasoc, int cantf, int cantidad)
-        {
-            string xSQL = $"update programa set cantfab={cantidad} where cg_ordfasoc={cg_ordfasoc} ";
-            return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
-        }
+        //public async Task<IEnumerable<Programa>> PutCantidadFab(int cg_ordfasoc, int cantf, int cantidad)
+        //{
+        //    string xSQL = $"update programa set cantfab={cantidad} where cg_ordfasoc={cg_ordfasoc} ";
+        //    return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
+        //}
+
+        //public async Task<IEnumerable<Programa>> GetCantidad(int cg_ordfasoc)
+        //{
+        //    string xSQL = $"select cantidad from programa where cg_ordfasoc={cg_ordfasoc}";
+        //    return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
+        //}        
     }
 }
