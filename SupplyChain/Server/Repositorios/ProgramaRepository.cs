@@ -87,6 +87,10 @@ namespace SupplyChain.Server.Repositorios
 
         }
 
-
+        public async Task<IEnumerable<Programa>> PutCantidadFab(int cg_ordfasoc, int cantf, int cantidad)
+        {
+            string xSQL = $"update programa set cantfab={cantidad} where cg_ordfasoc={cg_ordfasoc} ";
+            return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
+        }
     }
 }

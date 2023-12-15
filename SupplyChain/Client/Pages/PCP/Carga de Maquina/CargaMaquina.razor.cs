@@ -280,6 +280,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             else if (ordenFabricacion.CG_ESTADOCARGA == 3 && ordenFabricacion.CANTFAB > 0
                 && (ordenFabricacion.CG_ESTADOCARGA == ordenFabricacionOriginal.CG_ESTADOCARGA))
             {
+                //var cantidadcero= await
                 await Altaparcial();
                 ordenFabricacion = null;
                 await Refrescar();
