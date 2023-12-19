@@ -94,10 +94,10 @@ namespace SupplyChain.Server.Repositorios
         //    return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
         //}
 
-        //public async Task<IEnumerable<Programa>> GetCantidad(int cg_ordfasoc)
+        //public async Task<IEnumerable<Programa>> GetCantidad(int cg_ordfasoc, int cg_ordf)
         //{
-        //    string xSQL = $"select cantidad from programa where cg_ordfasoc={cg_ordfasoc}";
+        //    string xSQL = $"select CANT* from Programa where CG_ORDFASOC={cg_ordfasoc} and CG_ORDF={cg_ordf}";
         //    return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
-        //}        
+        //}
     }
 }

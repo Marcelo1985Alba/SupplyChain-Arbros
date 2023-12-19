@@ -116,19 +116,20 @@ namespace SupplyChain
         }
 
         ///METODO PUT DE CANTIDADFAB, YA ESTA EL REPOSITORIO FALTA RESTO
-        //[HttpGet("GetCantidad/{cg_ordfasoc}")]
-        //public async Task<ActionResult<Programa>> GetCantidad(int cg_ordfasoc)
+        //[HttpGet("GetCantidad/{cg_ordfasoc}/{cg_ordf}")]
+        //public async Task<ActionResult<IEnumerable<Programa>>> GetCantidad(int cg_ordfasoc, int cg_ordf)
         //{
         //    try
         //    {
-        //        var programa = await _programaRepository.GetCantidad(cg_ordfasoc);
+        //        var programas = await _programaRepository.GetCantidad(cg_ordfasoc, cg_ordf);
 
-        //        return Ok();
-        //    }catch (Exception ex)
-        //    {
-        //        return BadRequest(ex);
+        //        return Ok(programas);
         //    }
-            
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+
         //}
 
 
