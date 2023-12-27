@@ -20,6 +20,7 @@ using SupplyChain.Server.Repositorios;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
 using SupplyChain.Shared.Logística;
+using Syncfusion.Blazor.Data;
 using Syncfusion.Blazor.RichTextEditor;
 
 namespace SupplyChain
@@ -61,8 +62,17 @@ namespace SupplyChain
         [HttpGet("ObtenerPedCliPedidos")]
         public async Task<IEnumerable<PedCli>> Get()
         {
+            try
+            {
+                return await _pedCliRepository.ObtenerPedCliPedidos();
+
+            }
+            catch(Exception ex)
+            {
+                BadRequest(ex.Message);
+            }
             return await _pedCliRepository.ObtenerPedCliPedidos();
-        }
+         }
 
         [HttpGet("{id}")]
         public async Task<PedCli> Get(int id)

@@ -52,31 +52,38 @@
                     <Template>
                         @{
                             pedidoSeleccionado = (PedCli)context;
+                            // pedidopedSeleccionado = (Pedidos)context;    
 
-                            @*<div class="form-row">
-                                    <div class="form-group col-3">
-                                        <label class="col-form-label">Cliente:</label>
-                                        <SfTextBox Value="@data.CG_CLI.ToString()" Readonly="true"></SfTextBox>
-                                    </div>
-                                    <div class="form-group col-12">
-                                        <SfTextBox Value="@data.DES_CLI.Trim()" Readonly="true"></SfTextBox>
-                                    </div>
-                                </div>*@
                             <div class="form-row">
 
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-2">
                                     <label class="col-form-label">Fecha Pedido:</label>
                                     <SfTextBox Value="@pedidoSeleccionado.FE_PED.ToString("dd/MM/yyyy")" Readonly="true"></SfTextBox>
                                 </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-2">
                                     <label class="col-form-label">Pedido:</label>
                                     <SfTextBox Value="@pedidoSeleccionado.PEDIDO.ToString()" Readonly="true"></SfTextBox>
                                 </div>
+                                <div class="form-group col-md-2">
+                                         <label class="col-form-label">Remito:</label>
+                                         <SfTextBox Value="@pedidoSeleccionado.REMITO" Readonly="true"></SfTextBox>
+                                    
+                                </div>
+                                @*// if (pedidopedSeleccionado.PEDIDO == pedidoSeleccionado.PEDIDO)
+                                // {
+                                //   <div class="form-group col-md-3">
+                                //     <label class="col-form-label">Remito:</label>
+                                //     <SfTextBox Value="@pedidopedSeleccionado.REMITO" Readonly="true"></SfTextBox>
+                                //   </div>
+                                // }*@                                    
+                                
+                                
+                               
                                 @*<div class="form-group col-md-6">
                                         <label class="col-form-label">Cantidad:</label>
                                         <SfTextBox Value="@pedidoSeleccionado.CANTPED.ToString()" Readonly="true"></SfTextBox>
                                     </div>*@
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-2">
                                     <label class="col-form-label">Estado:</label>
                                     <SfTextBox Value="@pedidoSeleccionado.ESTADO_LOGISTICA" Readonly="true"></SfTextBox>
                                 </div>

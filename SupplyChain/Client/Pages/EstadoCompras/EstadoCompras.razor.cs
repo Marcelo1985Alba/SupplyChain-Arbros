@@ -108,11 +108,11 @@ namespace SupplyChain.Client.Pages.EstadoCompras
         {
             if (args.Item.Text == "Seleccionar Columnas")
             {
-                await refSfGrid.OpenColumnChooser(200, 50);
+                await refSfGrid.OpenColumnChooserAsync(200, 50);
             }
             if (args.Item.Text == "Exportar grilla en Excel")
             {
-                await this.refSfGrid.ExcelExport();
+                await this.refSfGrid.ExportToExcelAsync();
             }
         }
         //  1.Solicitar cotizacion
@@ -125,7 +125,7 @@ namespace SupplyChain.Client.Pages.EstadoCompras
 
         public void QueryCellInfoHandler(QueryCellInfoEventArgs<vESTADOS_COMPRAS> args)
         {
-            if (args.Data.ESTADOS_COMPRA == "Pendiente Em.Sol Cotizacion") //SOLICITAR COTIZACION
+            if (args.Data.ESTADOS_COMPRA == "Pendiente Em.Solicitud de Cotizacion") //SOLICITAR COTIZACION
             {
                 args.Cell.AddClass(new string[] { "color-estado-compra-pendiente-emitir-solcot" });
             }
@@ -133,23 +133,19 @@ namespace SupplyChain.Client.Pages.EstadoCompras
             {
                 args.Cell.AddClass(new string[] { "color-estado-compra-pendiente-emision-oc" });
             }
-            else if (args.Data.ESTADOS_COMPRA == "Pendiente Ent. en Fecha")
+            else if (args.Data.ESTADOS_COMPRA == "Pendiente Entrega en Fecha")
             {
                 args.Cell.AddClass(new string[] { "color-estado-compra-pendiente-entrega-fecha" });
             }
-            else if (args.Data.ESTADOS_COMPRA == "Pendiente Ent.Vencida")
+            else if (args.Data.ESTADOS_COMPRA == "Pendiente Entrega Vencida")
             {
                 args.Cell.AddClass(new string[] { "color-estado-compra-pendiente-entrega-vencida" });
             }
-            //else if (args.Data.ESTADOS_COMPRA == "Entrega Parcial")
-            //{
-            //    args.Cell.AddClass(new string[] { "color-estado-entrega-parcial" });
-            //}
-            else if (args.Data.ESTADOS_COMPRA == "Recibida Parcial-Pendiente Pago") //PENDIENTE DE ENTREGA
+            else if (args.Data.ESTADOS_COMPRA == "Recibida Parcial-Pendiente de Pago") //PENDIENTE DE ENTREGA
             {
                 args.Cell.AddClass(new string[] { "color-estado-compra-recibida-parcial-pendiente-pago" });
             }
-            else if (args.Data.ESTADOS_COMPRA == "Recibida Total-Pendiente Pago") //VENCIDA
+            else if (args.Data.ESTADOS_COMPRA == "Recibida Total-Pendiente de Pago") //VENCIDA
             {
                 args.Cell.AddClass(new string[] { "color-estado-compra-recibida-total-pendiente-pago" });
             }
@@ -157,20 +153,11 @@ namespace SupplyChain.Client.Pages.EstadoCompras
             {
                 args.Cell.AddClass(new string[] { "color-estado-compra-pagada-recibida" });
             }
-
             else if (args.Data.ESTADOS_COMPRA == "Cerrada") //PENDIENTE DE PAGO
             {
                 args.Cell.AddClass(new string[] { "color-estado-compra-cerrada" });
             }
-            //else if (args.Data.ESTADOS_COMPRA == 8) //PAGADA  
-            //{
-            //    args.Cell.AddClass(new string[] { "color-estado-compra-pagada" });
-            //}
-            //else if (args.Data.ESTADOS_COMPRA == 9)//ANULADA
-            //{
-            //    args.Cell.AddClass(new string[] { "color-estado-compra-anulada" });
-            //}
-
+         
 
         }
 
@@ -188,17 +175,17 @@ namespace SupplyChain.Client.Pages.EstadoCompras
             //9.Anulada
 
             if (args.Text == "1")
-                args.Text = "Pendiente Em.Sol Cotizacion";
+                args.Text = "Pendiente Em.Solicitud de Cotizacion";
             else if (args.Text == "2")
                 args.Text = "Pendiente Emision OC";
             else if (args.Text == "3")
-                args.Text = "Pendiente Ent. en Fecha";
+                args.Text = "Pendiente Entrega en Fecha";
             else if (args.Text == "4")
-                args.Text = "Pendiente Ent.Vencida";
+                args.Text = "Pendiente Entrega Vencida";
             else if (args.Text == "5")
-                args.Text = "Recibida Parcial-Pendiente Pago";
+                args.Text = "Recibida Parcial-Pendiente de Pago";
             else if (args.Text == "6")
-                args.Text = "Recibida Total-Pendiente Pago";
+                args.Text = "Recibida Total-Pendiente de Pago";
             else if (args.Text == "7")
                 args.Text = "Pagada-Recibida";
             else if (args.Text == "8")
