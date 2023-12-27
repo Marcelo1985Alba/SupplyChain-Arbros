@@ -91,262 +91,293 @@
     </div>
 </div>
 
-<SfDialog Height="450px" Width="80%" Target="#target" ShowCloseIcon="true" @bind-Visible="@VisibleDialog"
-        IsModal="true" EnableResize="true">
+<SfDialog Height="400px" Width="50%" ShowCloseIcon="true" @bind-Visible="@VisibleDialog"
+        IsModal="true" EnableResize="false">
     <DialogTemplates>
         <Header>
             Detalle Compras @ComprasSeleccionado.NUMERO - @ComprasSeleccionado.DES_MAT.ToUpper()
         </Header>
 
         <Content>
-            <SfLinearGauge Orientation="Orientation.Horizontal" Background="transparent" Title=@($"Estado Compra - Fecha Prevista: {ComprasSeleccionado.FE_PREV.Value.ToString("dd-MM-yyyy")}") AllowPdfExport="true" Height="300px" Width="1450px" >
+            <div class="row">
+                <div class="col-12" align="center">
+            <SfLinearGauge Orientation="Orientation.Vertical" Background="transparent"
+                            Title=@($"Estado Compra - Fecha Prevista: {ComprasSeleccionado.FE_PREV.Value.ToString("dd-MM-yyyy")}")
+                            AllowPdfExport="true" Height="450px">
                 <LinearGaugeEvents AxisLabelRendering="AxisLabelChange" />
-                <LinearGaugeAnnotations>
+               @*  <LinearGaugeAnnotations>
                     <LinearGaugeAnnotation ZIndex="1" AxisValue="110" X="-110" Y="-35">
                         <ContentTemplate>
                             <label class="label label-info">Speed to get higher milage</label>
                         </ContentTemplate>
                     </LinearGaugeAnnotation>
-                </LinearGaugeAnnotations>
+                </LinearGaugeAnnotations> *@
                 <LinearGaugeAxes>
-                    <LinearGaugeAxis Minimum="1" Maximum="8" OpposedPosition="true" >
+                    <LinearGaugeAxis Minimum="1" Maximum="8" OpposedPosition="true" IsInversed="true" >
+                        <LinearGaugeTitleStyle FontWeight="bold" FontFamily="inherit" />
                         <LinearGaugeLine Width="5" />
                         <LinearGaugeMajorTicks Height="0" />
                         <LinearGaugeMinorTicks Height="0" />
-                        <LinearGaugeAxisLabelStyle Offset="10">
-                        
-                        <LinearGaugeAxisLabelFont FontFamily="inherit" Size="12px" FontWeight="110"/>
+                        <LinearGaugeAxisLabelStyle Offset="5" Position="Syncfusion.Blazor.LinearGauge.Position.Outside">
+                        <LinearGaugeAxisLabelFont FontFamily="inherit" FontWeight="bold"/>
                         </LinearGaugeAxisLabelStyle>
-                        <LinearGaugePointers >
+                        <LinearGaugePointers>
                             
-                            @if (ComprasSeleccionado.ESTADOS_COMPRA == "Pendiente Em.Solicitud de Cotizacion"@*|| ComprasSeleccionado.ESTADOS_COMPRA=="Pendiente de cotizacion"*@
-                            )
+                            @if (ComprasSeleccionado.ESTADOS_COMPRA == "Pendiente Em.Solicitud de Cotizacion")
                             {
-                                <LinearGaugePointer PointerValue=" 1" Height="25" Width="25"
+                                <LinearGaugePointer PointerValue="1" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="2" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                                 <LinearGaugePointer PointerValue="3" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                                 <LinearGaugePointer PointerValue="4" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                                 <LinearGaugePointer PointerValue="5" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="6" Height="25" Width="15"
+                                <LinearGaugePointer PointerValue="6" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="7" Height="25" Width="15"
+                                <LinearGaugePointer PointerValue="7" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="8" Height="25" Width="15"
+                                <LinearGaugePointer PointerValue="8" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                             }
-                            
-                            @if (ComprasSeleccionado.ESTADOS_COMPRA == "Pendiente Emison OC")
+                            else if (ComprasSeleccionado.ESTADOS_COMPRA == "Pendiente Emision OC")
                             {
-                                <LinearGaugePointer PointerValue=" 1" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="1" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="2" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="3" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                                 <LinearGaugePointer PointerValue="4" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                                 <LinearGaugePointer PointerValue="5" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="6" Height="25" Width="15"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="7" Height="25" Width="15"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="8" Height="25" Width="15"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                            }
-                            @if (ComprasSeleccionado.ESTADOS_COMPRA == "Pendiente Ent. en Fecha")
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                <LinearGaugePointer PointerValue="6" Height="25" Width="25"
+                                                           Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                <LinearGaugePointer PointerValue="7" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                 <LinearGaugePointer PointerValue="8" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                    }
+                          
+                            else if (ComprasSeleccionado.ESTADOS_COMPRA == "Pendiente Entrega en Fecha")
                             {
-                                <LinearGaugePointer PointerValue=" 1" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="1" Height="25" Width="25"
+                                               Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="2" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png"/>
+                                               Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png"/>
                                 <LinearGaugePointer PointerValue="3" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                               Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="4" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                               Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                                 <LinearGaugePointer PointerValue="5" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="6" Height="25" Width="15"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="7" Height="25" Width="15"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="8" Height="25" Width="15"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                               Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                <LinearGaugePointer PointerValue="6" Height="25" Width="25"
+                                               Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                <LinearGaugePointer PointerValue="7" Height="25" Width="25"
+                                               Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                <LinearGaugePointer PointerValue="8" Height="25" Width="25"
+                                               Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                             }
-                            @if (ComprasSeleccionado.ESTADOS_COMPRA == "Pendiente Ent. Vencida")
+                            else if (ComprasSeleccionado.ESTADOS_COMPRA == "Pendiente Entrega Vencida")
                             {
-                                <LinearGaugePointer PointerValue=" 1" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="https://blazor.syncfusion.com/demos/_content/blazorservercommon_net6/images/linear-gauge/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="1" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="2" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" MarkerType="MarkerType.Image" ImageUrl="https://blazor.syncfusion.com/demos/_content/blazorservercommon_net6/images/linear-gauge/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="3" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" MarkerType="MarkerType.Image" ImageUrl="https://blazor.syncfusion.com/demos/_content/blazorservercommon_net6/images/linear-gauge/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="4" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" MarkerType="MarkerType.Image" ImageUrl="https://blazor.syncfusion.com/demos/_content/blazorservercommon_net6/images/linear-gauge/tick-icon.png"/>
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="5" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="6" Height="25" Width="15"
+                                <LinearGaugePointer PointerValue="6" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="7" Height="25" Width="15"
+                                <LinearGaugePointer PointerValue="7" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="8" Height="25" Width="15"
+                                <LinearGaugePointer PointerValue="8" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                             }
-                            @if (ComprasSeleccionado.ESTADOS_COMPRA == "Recibida Parcial- Pend.Pago")
+                            else if (ComprasSeleccionado.ESTADOS_COMPRA == "Recibida Parcial-Pendiente de Pago")
                             {
-                                <LinearGaugePointer PointerValue=" 1" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="https://blazor.syncfusion.com/demos/_content/blazorservercommon_net6/images/linear-gauge/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="1" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="2" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" MarkerType="MarkerType.Image" ImageUrl="https://blazor.syncfusion.com/demos/_content/blazorservercommon_net6/images/linear-gauge/tick-icon.png" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="3" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="4" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="5" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="6" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="6" Height="25" Width="15"
+                                <LinearGaugePointer PointerValue="7" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="7" Height="25" Width="15"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="8" Height="25" Width="15"
+                                <LinearGaugePointer PointerValue="8" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                             }
-                            @if (ComprasSeleccionado.ESTADOS_COMPRA == "Recibida Total- Pend.Pago")
+                            else if (ComprasSeleccionado.ESTADOS_COMPRA == "Recibida Total-Pendiente de Pago")
                             {
-                                <LinearGaugePointer PointerValue=" 1" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="https://blazor.syncfusion.com/demos/_content/blazorservercommon_net6/images/linear-gauge/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="1" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="2" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="3" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="4" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="5" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="6" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="7" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="6" Height="25" Width="15"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="7" Height="25" Width="15"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="8" Height="25" Width="15"
+                                <LinearGaugePointer PointerValue="8" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                             }
-                            @if (ComprasSeleccionado.ESTADOS_COMPRA == "Pagada-Recibida")
+                            else if (ComprasSeleccionado.ESTADOS_COMPRA == "Pagada-Recibida")
                              {
-                                <LinearGaugePointer PointerValue=" 1" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="https://blazor.syncfusion.com/demos/_content/blazorservercommon_net6/images/linear-gauge/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="1" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="2" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="3" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="4" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="5" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="6" Height="25" Width="15"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="7" Height="25" Width="15"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="8" Height="25" Width="15"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="6" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="7" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="8" Height="25" Width="25"
                                                 Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
                             }
-                            @if (ComprasSeleccionado.ESTADOS_COMPRA == "Cerrada")
+                            else if (ComprasSeleccionado.ESTADOS_COMPRA == "Cerrada")
                             {
-                                <LinearGaugePointer PointerValue=" 1" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="https://blazor.syncfusion.com/demos/_content/blazorservercommon_net6/images/linear-gauge/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="1" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="2" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="3" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="3" Height="25"Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="4" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
                                 <LinearGaugePointer PointerValue="5" Height="25" Width="25"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="6" Height="25" Width="15"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="7" Height="25" Width="15"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                                <LinearGaugePointer PointerValue="8" Height="25" Width="15"
-                                                Placement="Syncfusion.Blazor.LinearGauge.Placement.Far" Position="Syncfusion.Blazor.LinearGauge.Position.Cross" Color="#D1D9DD" MarkerType="MarkerType.Circle" Offset="-2" />
-                            }
-                           
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="6" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="7" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                                <LinearGaugePointer PointerValue="8" Height="25" Width="25"
+                                                            Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" MarkerType="MarkerType.Image" ImageUrl="./Imagenes/tick-icon.png" />
+                            }                           
                         </LinearGaugePointers>
 
 
                         <LinearGaugeRanges>
-                            @if (ComprasSeleccionado.ESTADOS_COMPRA == "Pendiente Em.Sol Cotizacion")
+                            @if (ComprasSeleccionado.ESTADOS_COMPRA == "Pendiente Em.Solicitud de Cotizacion")
                             {
-                                <LinearGaugeRange Start="1" StartWidth="1" EndWidth="2"  Color="#1FAC8A" />
+                                <LinearGaugeRange Start="1" End="2.5" StartWidth="1" EndWidth="2"  Color="#1FAC8A" />
+                                <LinearGaugeRange Start="2" End="3" StartWidth="2" EndWidth="3" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="3" End="4" StartWidth="3" EndWidth="4" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="4" End="5" StartWidth="4" EndWidth="5" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="5" End="6" StartWidth="5" EndWidth="6" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="6" End="7" StartWidth="6" EndWidth="7" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="7" End="8" StartWidth="7" EndWidth="8" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="8" End="9" StartWidth="8" EndWidth="8" Color="#D1D9DD" />
                             }
-                            else if (ComprasSeleccionado.ESTADOS_COMPRA=="Pendiente Emision OC")
+                            else if(ComprasSeleccionado.ESTADOS_COMPRA=="Pendiente Emision OC")
                             {
-                                <LinearGaugeRange Start="1" End="2" StartWidth="1" EndWidth="2"  Color="#1FAC8A" />
-                                <LinearGaugeRange Start="2" End="2" StartWidth="2" EndWidth="3" Color="#1FAC8A" />
-
-                            }else if(ComprasSeleccionado.ESTADOS_COMPRA=="Pendiente Ent. en Fecha")
+                                    <LinearGaugeRange Start="1" End="2" StartWidth="1" EndWidth="2" Color="#1FAC8A" />
+                                    <LinearGaugeRange Start="2" End="3.5" StartWidth="2" EndWidth="3" Color="#1FAC8A" />
+                                    <LinearGaugeRange Start="3" End="4" StartWidth="3" EndWidth="4" Color="#D1D9DD" />
+                                    <LinearGaugeRange Start="4" End="5" StartWidth="4" EndWidth="5" Color="#D1D9DD" />
+                                    <LinearGaugeRange Start="5" End="6" StartWidth="5" EndWidth="6" Color="#D1D9DD" />
+                                    <LinearGaugeRange Start="6" End="7" StartWidth="6" EndWidth="7" Color="#D1D9DD" />
+                                    <LinearGaugeRange Start="7" End="8" StartWidth="7" EndWidth="8" Color="#D1D9DD" />
+                                    <LinearGaugeRange Start="8" End="9" StartWidth="8" EndWidth="8" Color="#D1D9DD" />
+                            }
+                            else if(ComprasSeleccionado.ESTADOS_COMPRA=="Pendiente Entrega en Fecha")
                             {
                                 <LinearGaugeRange Start="1" End="2" StartWidth="1" EndWidth="2" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="2" End="3" StartWidth="2" EndWidth="3" Color="#1FAC8A" />
-                                <LinearGaugeRange Start="3"  StartWidth="3" EndWidth="4" Color="#1FAC8A" />
+                                <LinearGaugeRange Start="3" End="4.5" StartWidth="3" EndWidth="4" Color="#1FAC8A" />
+                                <LinearGaugeRange Start="4" End="5" StartWidth="4" EndWidth="5" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="5" End="6" StartWidth="5" EndWidth="6" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="6" End="7" StartWidth="6" EndWidth="7" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="7" End="8" StartWidth="7" EndWidth="8" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="8" End="9" StartWidth="8" EndWidth="8" Color="#D1D9DD" />
                             }
-                            else if (ComprasSeleccionado.ESTADOS_COMPRA == "Pendiente Ent. Vencida")
+                            else if (ComprasSeleccionado.ESTADOS_COMPRA == "Pendiente Entrega Vencida")
                             {
                                 <LinearGaugeRange Start="1" End="2" StartWidth="1" EndWidth="2" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="2" End="3" StartWidth="2" EndWidth="3" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="3" End="4" StartWidth="3" EndWidth="4" Color="#1FAC8A" />
-                                <LinearGaugeRange Start="4" StartWidth="4" EndWidth="5" Color="#1FAC8A" />
+                                <LinearGaugeRange Start="4" End="5.5" StartWidth="4" EndWidth="5" Color="#1FAC8A" />
+                                <LinearGaugeRange Start="5" End="6" StartWidth="5" EndWidth="6" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="6" End="7" StartWidth="6" EndWidth="7" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="7" End="8" StartWidth="7" EndWidth="8" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="8" End="9" StartWidth="8" EndWidth="8" Color="#D1D9DD" />
 
                             }
-                            else if (ComprasSeleccionado.ESTADOS_COMPRA == "Recbida Parcial - Pend.Pago")
+                            else if (ComprasSeleccionado.ESTADOS_COMPRA == "Recbida Parcial-Pendiente de Pago")
                             {
                                 <LinearGaugeRange Start="1" End="2" StartWidth="1" EndWidth="2" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="2" End="3" StartWidth="2" EndWidth="3" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="3" End="4" StartWidth="3" EndWidth="4" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="4" End="5" StartWidth="4" EndWidth="5" Color="#1FAC8A" />
-                                <LinearGaugeRange Start="5" StartWidth="8" EndWidth="6"  Color="#1FAC8A" />
+                                <LinearGaugeRange Start="5" End="6.5" StartWidth="5" EndWidth="6" Color="#1FAC8A" />
+                                <LinearGaugeRange Start="6" End="7" StartWidth="6" EndWidth="7" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="7" End="8" StartWidth="7" EndWidth="8" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="8" End="9" StartWidth="8" EndWidth="8" Color="#D1D9DD" />
                                
                             }
-                            else if (ComprasSeleccionado.ESTADOS_COMPRA == "Recibida Total - Pend.Pago")
+                            else if (ComprasSeleccionado.ESTADOS_COMPRA == "Recibida Total-Pendiente de Pago")
                             {
                                 <LinearGaugeRange Start="1" End="2" StartWidth="1" EndWidth="2" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="2" End="3" StartWidth="2" EndWidth="3" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="3" End="4" StartWidth="3" EndWidth="4" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="4" End="5" StartWidth="4" EndWidth="5" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="5" End="6" StartWidth="5" EndWidth="6" Color="#1FAC8A" />
-                                <LinearGaugeRange Start="6"  StartWidth="8" EndWidth="7"  Color="#1FAC8A" />
+                                <LinearGaugeRange Start="6" End="7.5" StartWidth="6" EndWidth="7" Color="#1FAC8A" />
+                                <LinearGaugeRange Start="7" End="8" StartWidth="7" EndWidth="8" Color="#D1D9DD" />
+                                <LinearGaugeRange Start="8" End="9" StartWidth="8" EndWidth="8" Color="#D1D9DD" />
                                
                             }
                             else if (ComprasSeleccionado.ESTADOS_COMPRA == "Pagada-Recibida")
                             {
                                 <LinearGaugeRange Start="1" End="2" StartWidth="1" EndWidth="2" Color="#1FAC8A" />
-                                <LinearGaugeRange Start="2" End="3" StartWidth="2" EndWidth="3" Color=" #1FAC8A" />
+                                <LinearGaugeRange Start="2" End="3" StartWidth="2" EndWidth="3" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="3" End="4" StartWidth="3" EndWidth="4" Color="#1FAC8A" />
-                                <LinearGaugeRange Start="4" End="5" StartWidth="4" EndWidth="5"  Color="#1FAC8A" />
+                                <LinearGaugeRange Start="4" End="5" StartWidth="4" EndWidth="5" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="5" End="6" StartWidth="5" EndWidth="6" Color="#1FAC8A" />
-                                <LinearGaugeRange Start="6" End="7" StartWidth="6" EndWidth="7"  Color="#1FAC8A" />
-                                <LinearGaugeRange Start="7" StartWidth="8" EndWidth="8" Color="#1FAC8A" />
-
+                                <LinearGaugeRange Start="6" End="7" StartWidth="6" EndWidth="7" Color="#1FAC8A" />
+                                <LinearGaugeRange Start="7" End="8.5" StartWidth="7" EndWidth="8" Color="#1FAC8A" />
+                                <LinearGaugeRange Start="8" End="9" StartWidth="8" EndWidth="8" Color="#D1D9DD" />
                             }
                               else if (ComprasSeleccionado.ESTADOS_COMPRA == "Cerrada")
                             {
                                 <LinearGaugeRange Start="1" End="2" StartWidth="1" EndWidth="2" Color="#1FAC8A" />
-                                <LinearGaugeRange Start="2" End="3" StartWidth="2" EndWidth="3" Color=" #1FAC8A" />
+                                <LinearGaugeRange Start="2" End="3" StartWidth="2" EndWidth="3" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="3" End="4" StartWidth="3" EndWidth="4" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="4" End="5" StartWidth="4" EndWidth="5" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="5" End="6" StartWidth="5" EndWidth="6" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="6" End="7" StartWidth="6" EndWidth="7" Color="#1FAC8A" />
                                 <LinearGaugeRange Start="7" End="8" StartWidth="7" EndWidth="8" Color="#1FAC8A" />
-                                <LinearGaugeRange Start="8" StartWidth="8" EndWidth="8" Color="#1FAC8A" />
+                                <LinearGaugeRange Start="8" End="9.5" StartWidth="8" EndWidth="8" Color="#1FAC8A" />
 
                             }                          
                         </LinearGaugeRanges>
                     </LinearGaugeAxis>
                 </LinearGaugeAxes>
             </SfLinearGauge>
+         </div>
+         </div>
         </Content>
         <FooterTemplate>
             <hr />
@@ -368,40 +399,33 @@
         color: #15D3AE !important;
     }
 
-    .color-estado-compra-pendiente-emision-oc{
+    .color-estado-compra-pendiente-emision-oc {
         color:  #0000ff !important;
     }
 
-    .color-estado-compra-pendiente-entrega-fecha{
+    .color-estado-compra-pendiente-entrega-fecha {
         color: #5715D3 !important;
     }
 
-    .color-estado-compra-pendiente-entrega-vencida{
+    .color-estado-compra-pendiente-entrega-vencida {
         color: #AB2727 !important;
     }
 
-    .color-estado-compra-recibida-parcial-pendiente-pago{
+    .color-estado-compra-recibida-parcial-pendiente-pago {
         color: #6B27AB !important;
     }
 
-    .color-estado-compra-recibida-total-pendiente-pago{
+    .color-estado-compra-recibida-total-pendiente-pago {
         color: #8A0B2F !important;
     }
 
-    .color-estado-compra-pagada-recibida{
+    .color-estado-compra-pagada-recibida {
         color: #188A0B !important;
     }
 
-    .color-estado-compra-cerrada{
+    .color-estado-compra-cerrada {
         color: #ff0000 !important;
     }
-
-   
-
-    /*    .e-btn .e-btn-icon, .e-css.e-btn .e-btn-icon {
-        font-size: 9px;
-        color: blue;
-    }*/
 
     .e-Editbutton, .e-Editbutton .e-btn-icon {
         font-size: 9px;

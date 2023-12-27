@@ -37,11 +37,14 @@ namespace SupplyChain.Pages.Modelos
         protected Query CardQuery = new();
         [CascadingParameter] public MainLayout Layout { get; set; }
         protected PedCli pedidoSeleccionado = new();
+
+
         protected override async Task OnInitializedAsync()
         {
             SpinnerVisible = true;
             Layout.Titulo = "Logistica";
             Pedclis = await Http.GetFromJsonAsync<List<PedCli>>("api/PedCli/ObtenerPedCliPedidos");
+
             //Pedidoss = await Http.GetFromJsonAsync<List<Pedidos>>("api/Pedidos");
             //Programas = await Http.GetFromJsonAsync<List<Programa>>("api/Programa");
             SpinnerVisible = false;
