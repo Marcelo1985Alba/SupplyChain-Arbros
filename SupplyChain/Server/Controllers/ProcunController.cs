@@ -39,7 +39,7 @@ namespace SupplyChain
         
         // GET: api/Procun/Cg_Prod
         [HttpGet("{Cg_Prod}")]
-        public async Task<ActionResult<IEnumerable<Procun>>> GetProcun(string Cg_Prod)
+        public async Task<IEnumerable<Procun>> GetProcun(string Cg_Prod)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace SupplyChain
             }                                                               
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return null;
             }
         }
 

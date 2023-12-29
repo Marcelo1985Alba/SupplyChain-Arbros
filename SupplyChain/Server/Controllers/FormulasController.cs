@@ -53,10 +53,25 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("BuscarPorCgProd/{CG_PROD}")]
         public async Task<IEnumerable<Formula>> BuscarPorCgProd(string CG_PROD)
         {
-            string xSQL = string.Format($"Select * From Form2 where CG_PROD = '{CG_PROD}'");
             try
             {
                 return await _formulaRepository.Obtener(f => f.Cg_Prod == CG_PROD).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return new List<Formula>();
+            }
+        }
+        
+        // GET: api/Formulas/BuscarPorCgProdMaxRevision/{CG_PROD}
+        [HttpGet("BuscarPorCgProdMaxRevision/{CG_PROD}")]
+        public async Task<IEnumerable<Formula>> BuscarPorCgProdMaxRevision(string CG_PROD)
+        {
+            try
+            {
+                List<Formula> formulas = await _formulaRepository.Obtener(f => f.Cg_Prod == CG_PROD).ToListAsync();
+                int maxRevision = formulas.Max(f => f.REVISION);
+                return formulas.Where(f => f.REVISION == maxRevision);
             }
             catch (Exception ex)
             {
@@ -141,6 +156,7 @@ namespace SupplyChain.Server.Controllers
         {
             try
             {
+                form.Id = new int();
                 await _formulaRepository.Agregar(form);
                 return CreatedAtAction("Get", new { id = form.Id }, form);
             }
@@ -169,9 +185,82 @@ namespace SupplyChain.Server.Controllers
             {
                 foreach (Formula form in lista)
                 {
-                    await _formulaRepository.Agregar(form);
+                    await PostFormula(form);
                 }
-                await _formulaRepository.AgregarList(lista);
+                return Ok(lista);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
+        // PUT: api/Formulas/PutList
+        [HttpPut("PutList")]
+        public async Task<ActionResult<List<Formula>>> PutList([FromBody] List<Formula> lista)
+        {
+            try
+            {
+                foreach (Formula form in lista)
+                {
+                    try
+                    {
+                        ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
+                        // cambio el valor de la cantidad de materiales y la observacion
+                        xConexionSQL.EjecutarSQL($"UPDATE Form2 SET CANT_MAT = {form.CANT_MAT}, OBSERV = '{form.OBSERV}' WHERE Registro = {form.Id}");
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!await _formulaRepository.Existe(form.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            return BadRequest();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return BadRequest(ex);
+                    }
+                }
+                return Ok(lista);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
+        // DELETE: api/Formulas/DeleteList
+        [HttpPost("DeleteList")]
+        public async Task<ActionResult<List<Formula>>> DeleteList([FromBody] List<Formula> lista)
+        {
+            try
+            {
+                foreach (Formula form in lista)
+                {
+                    try
+                    {
+                        await _formulaRepository.Remover(form.Id);
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!await _formulaRepository.Existe(form.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            return BadRequest();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return BadRequest(ex);
+                    }
+                }
                 return Ok(lista);
             }
             catch (Exception ex)
