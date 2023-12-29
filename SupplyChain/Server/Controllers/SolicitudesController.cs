@@ -19,10 +19,12 @@ namespace SupplyChain.Server.Controllers
     public class SolicitudesController : ControllerBase
     {
         private readonly SolicitudRepository _solicitudRepository;
+        private readonly ServiciosRepository _serviciosRepository;
         private readonly IHubContext<SolicitudHub> _hubContext;
 
-        public SolicitudesController(SolicitudRepository solicitudRepository, IHubContext<SolicitudHub> hubContext )
+        public SolicitudesController(SolicitudRepository solicitudRepository,ServiciosRepository serviciosRepository, IHubContext<SolicitudHub> hubContext )
         {
+            _serviciosRepository = serviciosRepository;
             _solicitudRepository = solicitudRepository;
             this._hubContext = hubContext;
         }
@@ -178,16 +180,30 @@ namespace SupplyChain.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Solicitud>> DeleteCompra(int id)
         {
-            var solicitud = await _solicitudRepository.ObtenerPorId(id);
-            if (solicitud == null)
+            try
             {
-                return NotFound();
+                var Servicios = await _serviciosRepository.Obtener(p => p.SOLICITUD == id).FirstOrDefaultAsync();
+                if (Servicios == null) return NotFound();
+
+                //_context.Servicios.Remove(Servicios);
+                //await _context.SaveChangesAsync();
+                await _serviciosRepository.Remover(Servicios.Id);
+
+                var solicitud = await _solicitudRepository.ObtenerPorId(id);
+                if (solicitud == null)
+                {
+                    return NotFound();
+                }
+
+                await _solicitudRepository.Remover(id);
+
+                return solicitud;
             }
-
-
-            await _solicitudRepository.Remover(id);
-
-            return solicitud;
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+           
         }
     }
 }

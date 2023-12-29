@@ -1,5 +1,5 @@
-﻿@page "/servicio-listado"
-@page "/servicio/{pedido}"
+﻿@* @page "/servicio/listado"
+@page "/servicio/{pedido}" *@
 @using SupplyChain.Client.Pages.Visor_Pdf
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Data
@@ -712,10 +712,10 @@
                 <GridColumns>
                     <GridColumn Field=@nameof(Service.Id) HeaderText="Id" AllowSearching="true" Visible="false" IsPrimaryKey="true"
                                 TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                    @*<GridColumn Field=@nameof(Service.SOLICITUD) HeaderText="Solicitud" AllowSearching="true"
+                    <GridColumn Field=@nameof(Service.SOLICITUD) HeaderText="Solicitud" AllowSearching="true"
                                 TextAlign="TextAlign.Left" Width="90"></GridColumn>
                     <GridColumn Field=@nameof(Service.PRESUPUESTO) HeaderText="Presupuesto" AllowSearching="true"
-                                TextAlign="TextAlign.Left" Width="90"></GridColumn>*@
+                                TextAlign="TextAlign.Left" Width="90"></GridColumn>
                     <GridColumn Field=@nameof(Service.PEDIDO) HeaderText="Pedido" AllowSearching="true"
                                 TextAlign="TextAlign.Left" Width="90"></GridColumn>
                     <GridColumn Field=@nameof(Service.FECHA) HeaderText="Fecha" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
