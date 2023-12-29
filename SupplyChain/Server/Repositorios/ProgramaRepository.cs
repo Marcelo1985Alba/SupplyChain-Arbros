@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared.Models;
@@ -79,6 +80,24 @@ namespace SupplyChain.Server.Repositorios
 
         }
 
-        
+        public async Task<IEnumerable<Programa>> GetOrdenesAbiertas(int cg_ordfasoc, int cg_ordf)
+        {
+            string xSQL = $"select * from programa where CG_ORDFASOC = {cg_ordfasoc} and CG_ESTADOCARGA < 4  " +
+                            $"and cg_ordf < {cg_ordf} order by CG_ORDF ASC";
+            return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
+
+        }
+
+        //public async Task<IEnumerable<Programa>> PutCantidadFab(int cg_ordfasoc, int cantf, int cantidad)
+        //{
+        //    string xSQL = $"update programa set cantfab={cantidad} where cg_ordfasoc={cg_ordfasoc} ";
+        //    return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
+        //}
+
+        //public async Task<IEnumerable<Programa>> GetCantidad(int cg_ordfasoc, int cg_ordf)
+        //{
+        //    string xSQL = $"select CANT* from Programa where CG_ORDFASOC={cg_ordfasoc} and CG_ORDF={cg_ordf}";
+        //    return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
+        //}
     }
 }

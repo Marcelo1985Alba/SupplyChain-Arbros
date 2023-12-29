@@ -48,7 +48,10 @@ namespace SupplyChain.Client.HelperService
         {
             return await http.GetFromJsonAsync<List<Procun>>($"api/Procun/ActualizaCelda/{numeroprocun}/{cg_celda}");
         }
-
+        public async Task<HttpResponseWrapper<List<Procun>>> ActualizaProceso(decimal numeroprocun, string proceso)
+        {
+            return await http.GetFromJsonAsync<List<Procun>>($"api/Procun/ActualizaCelda/{numeroprocun}/{proceso}");
+        }
         public async Task<HttpResponseWrapper<List<Procun>>> PostProcun(Procun proc)
         {
             return await http.GetFromJsonAsync<List<Procun>>($"api/Procun/PostProcun/{proc}");

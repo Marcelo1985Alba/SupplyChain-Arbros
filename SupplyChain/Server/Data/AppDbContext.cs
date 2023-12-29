@@ -160,6 +160,7 @@ namespace SupplyChain
         public DbSet<SolCotEmail> SolCotEmails { get; set; }
 
         public DbSet<CampoComodin> CampoComodin {  get; set; }
+        public DbSet<ProcunProcesos> ProcunProcesos{ get; set; }
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

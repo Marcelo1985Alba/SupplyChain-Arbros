@@ -84,9 +84,11 @@ namespace SupplyChain.Server.Controllers
         {
             switch (estado)
             {
+
                 case EstadoCompras.TodosPendientes:
+                    DateTime fechaLimite = new DateTime(2023, 01, 01);
                     return await _context.vESTADOS_COMPRAS.Where(c=> c.ESTADOS_COMPRA.ToUpper() != "CERRADA" 
-                        && c.ESTADOS_COMPRA.ToUpper() != "PAGADA-RECIBIDA").ToListAsync();
+                        && c.ESTADOS_COMPRA.ToUpper() != "PAGADA-RECIBIDA" && c.FE_PREV > fechaLimite).ToListAsync();
                 case EstadoCompras.Todos:
                     return await _context.vESTADOS_COMPRAS.ToListAsync();
                 default:
