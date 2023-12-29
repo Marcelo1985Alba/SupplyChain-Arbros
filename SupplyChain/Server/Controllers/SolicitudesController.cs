@@ -189,21 +189,21 @@ namespace SupplyChain.Server.Controllers
                 //await _context.SaveChangesAsync();
                 await _serviciosRepository.Remover(Servicios.Id);
 
-                var solicitud = await _solicitudRepository.ObtenerPorId(id);
-                if (solicitud == null)
-                {
-                    return NotFound();
-                }
-
-                await _solicitudRepository.Remover(id);
-
-                return solicitud;
+            var solicitud = await _solicitudRepository.ObtenerPorId(id);
+            if (solicitud == null)
+            {
+                return NotFound();
             }
+
+            await _solicitudRepository.Remover(id);
+
+            return solicitud;
+        }
             catch(Exception ex)
             {
                 return BadRequest(ex.Message);
-            }
+    }
            
-        }
+}
     }
 }

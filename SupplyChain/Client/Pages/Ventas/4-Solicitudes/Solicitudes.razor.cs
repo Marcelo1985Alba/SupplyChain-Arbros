@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using SupplyChain.Client.HelperService;
+using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Client.Shared;
+using SupplyChain.Client.Shared.BuscadorCliente;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
 using Syncfusion.Blazor.Grids;
@@ -12,7 +14,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
+
 namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
 {
     public class SolicitudesBase : ComponentBase
@@ -27,7 +31,6 @@ namespace SupplyChain.Client.Pages.Ventas._4_Solicitudes
         protected ConfirmacionDialog ConfirmacionEliminarDialog;
         protected FormSolicitud refFormSolicitud;
         protected Solicitud SolicitudSeleccionada = new();
-        protected Service ServicioSeleccionada = new();
         protected List<vSolicitudes> Solicitudes = new();
         protected string heightPopup = "510px";
         protected bool SpinnerVisible = true;
