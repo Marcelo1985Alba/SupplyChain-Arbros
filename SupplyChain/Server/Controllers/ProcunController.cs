@@ -198,7 +198,19 @@ namespace SupplyChain
                 return BadRequest(ex);
             }
         }
-
+        [HttpGet("ActualizaProceso/{id}/{proceso}")]
+        public async Task<ActionResult<Procun>> ActualizaProceso(decimal id, string proceso)
+        {
+            try
+            {
+                var lista = await _procunRepository.ActualizaProceso(id, proceso);
+                return Ok(lista);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
         [HttpGet("Search/{idProd}/{Des_Prod}")]
         public async Task<ActionResult<IEnumerable<Procun>>> Search(string idProd, string Des_Prod)
         {
