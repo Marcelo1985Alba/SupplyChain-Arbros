@@ -14,13 +14,13 @@ namespace SupplyChain.Server.Controllers.ABM
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProcunProcesosController :ControllerBase
+    public class ProcunProcesosController : ControllerBase
     {
-        private readonly ProcunProcesosRepository procunProcesosRepository;
+        private readonly ProcunProcesosRepository _procesosRepository;
 
-        public ProcunProcesosController(ProcunProcesosRepository procunProcesosRepository)
+        public ProcunProcesosController(ProcunProcesosRepository ProcunProcesosRepository)
         {
-            this.procunProcesosRepository = procunProcesosRepository;
+            this._procesosRepository = ProcunProcesosRepository;
         }
 
         // GET: api/Compras
@@ -28,13 +28,15 @@ namespace SupplyChain.Server.Controllers.ABM
         public async Task<ActionResult<IEnumerable<ProcunProcesos>>> GetProcunProcesos()
         {
             try
-            {
-                return await procunProcesosRepository.ObtenerTodos();
+            {var respuesta = await _procesosRepository.ObtenerTodos();
+                return respuesta;
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+
+
         }
 
         [HttpGet("{id}")]
@@ -42,7 +44,7 @@ namespace SupplyChain.Server.Controllers.ABM
         {
             try
             {
-                var proceso = await procunProcesosRepository.ObtenerPorId(id);
+                var proceso = await _procesosRepository.ObtenerPorId(id);
 
                 if (proceso == null)
                 {
@@ -56,6 +58,7 @@ namespace SupplyChain.Server.Controllers.ABM
             {
                 return BadRequest(ex.Message);
             }
+
         }
 
     }

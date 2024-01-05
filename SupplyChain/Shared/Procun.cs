@@ -25,7 +25,7 @@ namespace SupplyChain.Shared
         public string CG_CELDA { get; set; }
         //public string DES_AREA { get; set; }
 		[ColumnaGridViewAtributo(Name = "Proceso"), Required(ErrorMessage = "El proceso es requerido")]
-        public string PROCESO { get; set; }
+        public string? PROCESO { get; set; }
         public string? DESCRIP { get; set; }
 		public string? OBSERV {		get; set; }
 		public string? DESPROC { get; set; }
@@ -72,7 +72,7 @@ namespace SupplyChain.Shared
 		[NotMapped]
 		public bool ESNUEVO { get; set; }
 		[NotMapped]
-		public string Des_Prod { get; set; }
+		public string? Des_Prod { get; set; }
 		
 	}
 }

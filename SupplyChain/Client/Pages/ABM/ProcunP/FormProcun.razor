@@ -96,8 +96,13 @@
                                                                                                    
                                 <div class="form-group col-md-6">
                                     <label>Proceso:</label>
-                                    <SfTextBox ID="Proceso" @bind-Value="@(procuns.PROCESO)" Placeholder="Proceso"></SfTextBox>
-                                    <ValidationMessage For="@(()=> procuns.PROCESO)"></ValidationMessage>
+                                    @* <SfTextBox ID="Proceso" @bind-Value="@(procuns.PROCESO)" Placeholder="Proceso"></SfTextBox>
+                                    <ValidationMessage For="@(()=> procuns.PROCESO)"></ValidationMessage> *@
+                                    <SfDropDownList TValue="string" TItem="ProcunProcesos" DataSource="@procunsProcesos" @bind-Value="procuns.PROCESO">
+                                        <ValidationMessage For="@(()=>procuns.PROCESO)"></ValidationMessage>
+                                       <DropDownListFieldSettings Text="PROCESO" Value="PROCESO"></DropDownListFieldSettings>
+                                       <DropDownListEvents TItem="ProcunProcesos" TValue="string"></DropDownListEvents>
+                                    </SfDropDownList>
 
                                 </div>
                                 <div class="form-group col-md-6">

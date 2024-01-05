@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Server.Repositorios
 {
-    public class ProcunProcesosRepository : Repository<ProcunProcesos,int>
+    public class ProcunProcesosRepository : Repository<ProcunProcesos, int>
     {
         public ProcunProcesosRepository(AppDbContext appDbContext) : base(appDbContext) 
         {

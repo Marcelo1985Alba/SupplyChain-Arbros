@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace SupplyChain.Shared
     public class ProcunProcesos : EntityBase<int>
     {
         public string PROCESO {  get; set; }
-        //public int ID {  get; set; }
-        public int REGISTRO {  get; set; }
+        public int ID { get; set; } = 0;
+        //public int REGISTRO {  get; set; }
     }
 }

@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using SupplyChain.Shared.Models;
 using System.Threading.Tasks;
 
 namespace SupplyChain.Client.Pages.ABM.ProcunP
@@ -22,11 +23,13 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] public ProcunService ProcunService { get; set; }
+        [Inject] public ProcunProcesosService ProcunProcesosService { get; set; }
         [Inject] public ProductoService ProductoService { get; set; }
         [Inject] public AreasService AreasService { get; set; }
         [Inject] public LineasService LineasService { get; set; }
         [Inject] public CeldasService CeldasService { get; set; }
         [Parameter] public Procun procuns { get; set; } = new();
+        [Parameter] public ProcunProcesos procunProcesos { get; set; } = new();
         [Parameter] public Producto prod { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;
         [Parameter] public EventCallback<Procun> OnGuardar { get; set; }
@@ -50,6 +53,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         protected List<Areas> areas = new();
         protected List<Lineas> lineas = new();
         protected List<Celdas> celdas = new();
+        protected List<ProcunProcesos> procunsProcesos= new();
 
         protected SfSpinner refSpinner;
         
@@ -58,8 +62,25 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         {
             base.OnInitialized();
         }
+
+        protected async Task GetProcesos()
+        {
+            var response = await ProcunProcesosService.Get();
+            if (response.Error)
+            {
+                await ToastMensajeError("Error al obtener los procesos.");
+            }
+            else
+            {
+                procunsProcesos = response.Response;
+            }
+
+        }
+
+
         protected async override Task OnInitializedAsync()
         {
+            await GetProcesos();
             var response = await ProductoService.Get();
             if (!response.Error)
             {
@@ -80,6 +101,13 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             {
                 celdas = response4.Response;
             }
+            //var response5 = await ProcunProcesosService.Get();
+            //if (!response5.Error)
+            //{
+            //    procunsProcesos = response5.Response;
+            //}
+            //procunProcesos = await Http.GetFromJsonAsync<ProcunProcesos>("api/ProcunProceso");
+        
         }
 
         protected async Task BuscarProd()
@@ -242,6 +270,19 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
 
         }
 
+        
+
+        protected async Task <bool>ActualizarCel(string cg_celda, decimal numeroprocun)
+        {
+            var response = await ProcunService.ActualizaCelda(numeroprocun, cg_celda);
+            if(response.Error)
+            {
+                await ToastMensajeError("Error al guardar la celda");
+                return false;
+            }
+            return true;
+        }
+
         protected async Task GuardarProc()
         {
             try
@@ -253,10 +294,11 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     procuns.ESNUEVO = true;
                 }
                 else
-                {
+                {   
                     guardado = await Actualizar(procuns);
-                }
 
+                }
+                
                 if (guardado)
                 {
                     Show = false;
@@ -281,7 +323,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         }
         private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = content,
@@ -293,7 +335,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         }
         private async Task ToastMensajeError(string content = "Ocurrio un Error.")
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = content,
