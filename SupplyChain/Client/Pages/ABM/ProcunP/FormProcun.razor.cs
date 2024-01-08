@@ -23,7 +23,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] public ProcunService ProcunService { get; set; }
-        [Inject] public ProcunProcesosService ProcunProcesosService { get; set; }
+        //[Inject] public ProcunProcesosService ProcunProcesosService { get; set; }
         [Inject] public ProductoService ProductoService { get; set; }
         [Inject] public AreasService AreasService { get; set; }
         [Inject] public LineasService LineasService { get; set; }
@@ -63,24 +63,24 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             base.OnInitialized();
         }
 
-        protected async Task GetProcesos()
-        {
-            var response = await ProcunProcesosService.Get();
-            if (response.Error)
-            {
-                await ToastMensajeError("Error al obtener los procesos.");
-            }
-            else
-            {
-                procunsProcesos = response.Response;
-            }
+        //protected async Task GetProcesos()
+        //{
+        //    var response = await ProcunProcesosService.Get();
+        //    if (response.Error)
+        //    {
+        //        await ToastMensajeError("Error al obtener los procesos.");
+        //    }
+        //    else
+        //    {
+        //        procunsProcesos = response.Response;
+        //    }
 
-        }
+        //}
 
 
         protected async override Task OnInitializedAsync()
         {
-            await GetProcesos();
+           
             var response = await ProductoService.Get();
             if (!response.Error)
             {
@@ -101,13 +101,20 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             {
                 celdas = response4.Response;
             }
+            procunsProcesos = await Http.GetFromJsonAsync<List<ProcunProcesos>>("api/ProcunProcesos");
+            //await GetProcesos();
+            //var response5 = await ProcunProcesosService.Get();
+            //if (!response5.Error)
+            //{
+            //    procunsProcesos = response5.Response;
+            //}
             //var response5 = await ProcunProcesosService.Get();
             //if (!response5.Error)
             //{
             //    procunsProcesos = response5.Response;
             //}
             //procunProcesos = await Http.GetFromJsonAsync<ProcunProcesos>("api/ProcunProceso");
-        
+
         }
 
         protected async Task BuscarProd()
@@ -259,7 +266,8 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
 
         protected async Task<bool> Actualizar(Procun proc)
         {
-            var response = await ProcunService.Actualizar(proc.Id, proc);
+            var response = await ProcunService.ActualizarPro(proc);
+            //var response = await ProcunService.Actualizar(proc.Id, proc);
             if (response.Error)
             {
                await ToastMensajeError("Error al intentar Guardar el procun.");
@@ -272,16 +280,16 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
 
         
 
-        protected async Task <bool>ActualizarCel(string cg_celda, decimal numeroprocun)
-        {
-            var response = await ProcunService.ActualizaCelda(numeroprocun, cg_celda);
-            if(response.Error)
-            {
-                await ToastMensajeError("Error al guardar la celda");
-                return false;
-            }
-            return true;
-        }
+        //protected async Task <bool>ActualizarCel(string cg_celda, decimal numeroprocun)
+        //{
+        //    var response = await ProcunService.ActualizaCelda(numeroprocun, cg_celda);
+        //    if(response.Error)
+        //    {
+        //        await ToastMensajeError("Error al guardar la celda");
+        //        return false;
+        //    }
+        //    return true;
+        //}
 
         protected async Task GuardarProc()
         {
@@ -305,7 +313,8 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     procuns.GUARDADO = guardado;
                     await OnGuardar.InvokeAsync(procuns);
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                Console.WriteLine(ex.Message);
             }
