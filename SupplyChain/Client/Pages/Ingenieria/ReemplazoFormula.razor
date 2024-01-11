@@ -1,0 +1,136 @@
+﻿@page "/ingenieria/reemplazo-formula"
+@inherits BaseReemplazoFormula
+@using Syncfusion.Blazor.Buttons
+
+<SfSpinner @ref="@refSpinner" @bind-Visible="@SpinnerVisible" Label="Cargando..." Size="80" Type="SpinnerType.Bootstrap">
+</SfSpinner>
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+
+<div class="container">
+    <EditForm Model="@searchModel">
+        <DataAnnotationsValidator/>
+
+        <div class="form-row justify-content-center">
+            <div class="form-group col-md-4 bg-light p-3">
+                <div class="form-check">
+                    <SfRadioButton Label="Materia Prima" Name="tipo" @bind-Checked="@searchModel.Tipo" Value="MP" ValueChange="OnRadioChange" TChecked="string"></SfRadioButton>
+                </div>
+                <div class="form-check">
+                    <SfRadioButton Label="Semi Elaborado" Name="tipo" @bind-Checked="@searchModel.Tipo" Value="SE" ValueChange="OnRadioChange" TChecked="string"></SfRadioButton>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-5 d-flex flex-column h-100 bg-light p-3">
+                <label class="mb-2">Buscar:</label>
+                <div class="input-group">
+                    <SfTextBox Placeholder="Código" @bind-Value="@searchModel.TextoBusqueda" Input="BusquedaTextChanged" CssClass="form-control"></SfTextBox>
+                    <SfTextBox Placeholder="Descripción" @bind-Value="@searchModel.DescripcionBusqueda" Input="DescripcionBusquedaTextChanged" CssClass="form-control"></SfTextBox>
+                </div>
+            </div>
+            <div class="form-group col-md-1 d-flex align-items-center">
+                <SfButton CssClass="e-info sf-button-custom" OnClick="@(args => BuscarProducto("busqueda"))">
+                    <span class="fa fa-search"></span>
+                </SfButton>
+            </div>
+            <div class="form-group col-md-5 d-flex flex-column h-100 bg-light p-3">
+                <label class="mb-2">Reemplazar por:</label>
+                <div class="input-group">
+                    <SfTextBox Placeholder="Código" @bind-Value="@searchModel.TextoReemplazo" Input="ReemplazoTextChanged" CssClass="form-control"></SfTextBox>
+                    <SfTextBox Placeholder="Descripción" @bind-Value="@searchModel.DescripcionReemplazo" Input="DescripcionReemplazoTextChanged" CssClass="form-control"></SfTextBox>
+                </div>
+            </div>
+            <div class="form-group col-md-1 d-flex align-items-center">
+                <SfButton CssClass="e-info sf-button-custom" OnClick="@(args => BuscarProducto("reemplazo"))">
+                    <span class="fa fa-search"></span>
+                </SfButton>
+            </div>
+        </div>
+
+        <div class="mt-4 justify-content-center">
+            <SfButton Type="SubmitButton" OnClick="@(async () => await Buscar())" CssClass="btn btn-primary sf-button-custom-2 w-100 white-button">
+                <span>Buscar</span>
+            </SfButton>
+        </div>
+    </EditForm>
+
+    <div class="mt-4">
+        <SfGrid @ref="gridFormulas" DataSource="@resultados" AllowSelection="true" AllowPaging="true" AllowResizing="true">
+            <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+            <GridEvents TValue="Formula" QueryCellInfo="CustomizeCell"></GridEvents>
+            <GridColumns>
+                <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+                <GridColumn Field="@nameof(Formula.Cg_Prod)" HeaderText="Producto" Width="200"></GridColumn>
+                <GridColumn Field="@nameof(Formula.DES_PROD)" HeaderText="Descripción"></GridColumn>
+                <GridColumn Field="@nameof(Formula.REVISION)" HeaderText="Revisión" Width="75"></GridColumn>
+                <GridColumn Field="@nameof(Formula.ACTIVO)" HeaderText="Activo" Width="75"></GridColumn>
+            </GridColumns>
+        </SfGrid>
+    </div>
+
+    <div class="mt-4 justify-content-center">
+        <SfButton OnClick="Reemplazar" CssClass="btn btn-success sf-button-custom-2 w-100 white-button">
+            <span>Reemplazar</span>
+        </SfButton>
+    </div>
+</div>
+
+<SfDialog Width="1000px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible" Target="">
+    <DialogTemplates>
+        <Content>
+            <div class="col-lg-12 control-section">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4 class="mb-3">Elija el Producto</h4>
+                        </div>
+                        <SfGrid @ref="gridProductos" DataSource="@Busquedalist" Height="100%" Width="100%" AllowSorting="true">
+                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                            <GridEvents RowSelected="OnSelected" TValue="Producto"></GridEvents>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(Producto.Id) HeaderText="Producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                <GridColumn Field=@nameof(Producto.DES_PROD) HeaderText="Descripción" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                        @{
+                            if (Busquedalist.Count == CantidadMostrar)
+                            {
+                                <div class="col-sm-3 my-1">
+                                    <button class="btn btn-primary" @onclick="@AgregarValores">Buscar más</button>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: auto;
+    }
+    .e-grid .e-gridcontent .e-rowcell.rojas {
+        background-color: #FA1D1D;
+        font-weight: bold;
+    }
+    .e-input-group.e-rojas {
+        background-color: #FA1D1D !important;
+        color: black !important;
+        border-radius: 4px;
+    }
+    .sf-button-custom {
+        height: 100%;
+    }
+    .sf-button-custom-2 {
+        height: 100%;
+    }
+    .white-button span {
+        color: white !important;
+    }
+</style>
