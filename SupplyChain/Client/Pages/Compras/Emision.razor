@@ -107,8 +107,24 @@
         <hr />
 
         <hr style="border:0px;" />
+        
+        <div class="form-group align-items-center">
+            <label class="col-form-label">Subtotal</label>
+            <div class="form-row">
+                <div class="form-group col-lg-6 my-1">
+                    <SfTextBox @bind-Value="subtotalDolares" Enabled="false"></SfTextBox>
+                </div>
+                <div class="form-group col-lg-6 my-1">
+                    <SfTextBox @bind-Value="subtotalPesos" Enabled="false"></SfTextBox>
+                </div>
+            </div>
+        </div>
+        
+        <hr style="border:0px;" />
+        
         <SfGrid @ref="GridProve" DataSource="@insumosproveedor" Height="100%" Width="100%" AllowSelection="true" AllowPaging="true">
             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple" CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+            <GridEvents TValue="Compra" RowSelected="@(async ()=> await OnSelected())" RowDeselected="@(async ()=> await OnSelected())"></GridEvents>
             <GridColumns>
                 <GridColumn Field=@nameof(Compra.Id) Type="ColumnType.CheckBox" Width="50px"></GridColumn>
                 <GridColumn Field=@nameof(Compra.CG_MAT) HeaderText="Insumo" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
@@ -125,4 +141,4 @@
 
 <BuscadorEmergente Height="600px" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
                    Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async(v)=>await Cerrar(v))"
-                   OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+                   OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" SpinnerVisible="IsVisible"/>

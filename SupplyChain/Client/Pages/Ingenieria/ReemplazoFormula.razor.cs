@@ -303,13 +303,6 @@ namespace SupplyChain.Client.Pages.Ingenieria
             IsVisible = false;
         }
         
-        protected async Task QueryCellInfoHandler(QueryCellInfoEventArgs<Formula> args)
-        {
-            if (args.Data != null)
-                if (args.Data.ACTIVO.Trim() == "N")
-                    args.Cell.AddClass(new string[] { "rojas" });
-        }
-        
         public void CustomizeCell(QueryCellInfoEventArgs<Formula> args)
         {
             if(args.Data.ACTIVO.Trim() == "N")
