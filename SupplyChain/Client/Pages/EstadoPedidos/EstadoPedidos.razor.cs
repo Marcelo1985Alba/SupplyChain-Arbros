@@ -459,17 +459,6 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
                     args.Text = $"COBRADO";
                 }
             }
-            else if (args.Text == "12")
-            {
-                if (PedidoSeleccionado.FE_REM.HasValue)
-                {
-                    args.Text = $"{PedidoSeleccionado.FE_REM.Value.ToString("dd/MM/yyyy")} SIN CARGO";
-                }
-                else
-                {
-                    args.Text = $"SIN CARGO";
-                }
-            }
             else
                 args.Text = "";
 
