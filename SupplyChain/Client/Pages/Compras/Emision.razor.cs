@@ -40,13 +40,11 @@ namespace SupplyChain.Client.Pages.Emision
         [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
         [Inject] protected IRepositoryHttp repositoryHttp2 { get; set; }
 
-
         [CascadingParameter] public MainLayout MainLayout { get; set; }
 
         // variables generales
         public bool Anularoc { get; set; } = false;
         public bool Anularpp { get; set; } = false;
-
         public bool IsVisibleguarda { get; set; } = false;
         public bool IsVisibleimprime { get; set; } = true;
         public bool IsVisibleAnular { get; set; } = true;
@@ -71,10 +69,11 @@ namespace SupplyChain.Client.Pages.Emision
         protected SfGrid<Compra> GridProve;
         protected List<Compra> listapreparacion = new();
 
-
-
         public string xespecif = "";
         public string xespecif2 = "";
+        
+        public string subtotalDolares = "U$S 0.00 dólares";
+        public string subtotalPesos = "$ 0.00 pesos";
 
         public string DropVal = "";
         public string xcondven = "";
@@ -100,13 +99,13 @@ namespace SupplyChain.Client.Pages.Emision
         protected string xMoneda = "";
         protected bool enableprecio = false;
 
-
         protected BuscadorEmergente<Compra> Buscador;
         protected Compra[] ItemsABuscar = null;
         protected string[] ColumnasBuscador = new string[] { "NUMERO", "FE_EMIT", "CG_MAT", "SOLICITADO", "UNID", "DES_PROVE" };
         protected string TituloBuscador = "Seleccion de Orden de Compra para apertura";
         protected bool PopupBuscadorVisible = false;
-
+        protected List<Cotizaciones> cotizaciones;
+        protected bool IsVisible = false;
 
         protected Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
         {
@@ -117,12 +116,9 @@ namespace SupplyChain.Client.Pages.Emision
         protected override async Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Emisión de Ordenes de Compras";
-
             condiconespago = await Http.GetFromJsonAsync<List<vCondicionesPago>>("api/Condven/Itris");
-
-
             proveedorescompras = await Http.GetFromJsonAsync<List<Proveedores_compras>>("api/compras/GetProveedorescompras/");
-
+            cotizaciones = await Http.GetFromJsonAsync<List<Cotizaciones>>("api/Cotizacion");
         }
 
         //        public void SeleccionProveedor(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int, Proveedores_compras> args)
@@ -136,12 +132,10 @@ namespace SupplyChain.Client.Pages.Emision
                 IsVisibleimprime = true;
                 IsVisibleAnular = true;
                 if (insumosproveedor.Count > 0)
-                {
                     DropVal = insumosproveedor[0].CONDVEN;
-                }
-
             }
         }
+        
         public async Task limpia()
         {
             ocabierta = false;
@@ -157,10 +151,13 @@ namespace SupplyChain.Client.Pages.Emision
         {
             // Busca todas las OC sin filtros para la apertura en emision
             await Buscador.ShowAsync();
+            IsVisible = true;
             PopupBuscadorVisible = true;
             ItemsABuscar = await Http.GetFromJsonAsync<Compra[]>("api/Compras/todas");
+            IsVisible = false;
             await InvokeAsync(StateHasChanged);
         }
+        
         public async Task Cerrar(bool visible)
         {
             PopupBuscadorVisible = visible;
@@ -168,6 +165,8 @@ namespace SupplyChain.Client.Pages.Emision
 
         public async Task EnviarObjetoSeleccionado(Compra compra)
         {
+            subtotalDolares = "U$S 0.00 dólares";
+            subtotalPesos = "$ 0.00 pesos";
             item = compra;
             PopupBuscadorVisible = false;
             await Buscador.HideAsync();
@@ -203,8 +202,6 @@ namespace SupplyChain.Client.Pages.Emision
                 xespecif = primerreg.ESPEGEN;
             }
         }
-
-
 
         public async Task anularpp()
         {
@@ -249,22 +246,16 @@ namespace SupplyChain.Client.Pages.Emision
                 itemagregarcompras.DESCUENTO = xDescuento;
 
                 if (xDescuento > 0)
-                {
                     itemagregarcompras.PRECIONETO = Math.Round(xPrecio * (1 - (xDescuento / 100)), 2);
-                }
                 else
-                {
                     itemagregarcompras.PRECIONETO = xPrecio;
-                }
+                
                 itemagregarcompras.ESPECIFICA = xespecif;
                 if (xUnid != xUnid1 && xCgden > 0)
-                {
                     itemagregarcompras.AUTORIZADO = xCant / xCgden;
-                }
                 else
-                {
                     itemagregarcompras.AUTORIZADO = xCant;
-                }
+                
                 itemagregarcompras.PRECIOTOT = xPrecio * itemagregarcompras.AUTORIZADO;
                 itemagregarcompras.NROCLTE = xCgProve;
                 itemagregarcompras.DES_PROVE = xDesProve;
@@ -277,13 +268,9 @@ namespace SupplyChain.Client.Pages.Emision
 
                 HttpResponseMessage response = null;
                 if (xRegistrocompras > 0)
-                {
                     response = await Http.PutAsJsonAsync("api/compras/actualizaitem/" + xRegistrocompras, itemagregarcompras);
-                }
                 else
-                {
                     response = await Http.PostAsJsonAsync("api/compras/agregaritem", itemagregarcompras);
-                }
                 if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
                     || response.StatusCode == System.Net.HttpStatusCode.NotFound
                     || response.StatusCode == System.Net.HttpStatusCode.Conflict)
@@ -317,28 +304,20 @@ namespace SupplyChain.Client.Pages.Emision
                         xtituloboton = "Agregar";
                         await cargapreparacion();
                         xRegistrocompras = 0;
-
                     }
                 }
                 if (xRegistrocompras > 0)
-                {
                     response = await Http.PostAsJsonAsync("api/compras/agregaritem", itemagregarcompras);
-                }
                 limpia();
-
             }
         }
 
         public async Task itemseleccionado(MenuEventArgs args)
         {
             if (args.Item.Text == "Anular OC")
-            {
                 await anularoc();
-            }
             else if (args.Item.Text == "Anular PP")
-            {
                 await anularpp();
-            }
         }
 
         public async Task anularoc()
@@ -357,14 +336,10 @@ namespace SupplyChain.Client.Pages.Emision
                 //CAMVBIAR ORDEN DEL IF
                 //VERIFICA ANTES
             }
-
             else
             {
-
                 var orden = await Http.PutAsJsonAsync($"api/compras/anulacionoc/{item.NUMERO}", item);
                 Anularoc = true;
-
-
                 await this.ToastObj.ShowAsync(new ToastModel
                 {
 
@@ -391,22 +366,15 @@ namespace SupplyChain.Client.Pages.Emision
                 itemagregarcompras.DESCUENTO = xDescuento;
 
                 if (xDescuento > 0)
-                {
                     itemagregarcompras.PRECIONETO = Math.Round(xPrecio * (1 - (xDescuento / 100)), 2);
-                }
                 else
-                {
                     itemagregarcompras.PRECIONETO = xPrecio;
-                }
+                
                 itemagregarcompras.ESPECIFICA = xespecif;
                 if (xUnid != xUnid1 && xCgden > 0)
-                {
                     itemagregarcompras.AUTORIZADO = xCant / xCgden;
-                }
                 else
-                {
                     itemagregarcompras.AUTORIZADO = xCant;
-                }
                 itemagregarcompras.PRECIOTOT = xPrecio * itemagregarcompras.AUTORIZADO;
                 itemagregarcompras.NROCLTE = xCgProve;
                 itemagregarcompras.DES_PROVE = xDesProve;
@@ -419,13 +387,9 @@ namespace SupplyChain.Client.Pages.Emision
 
                 HttpResponseMessage response = null;
                 if (xRegistrocompras > 0)
-                {
                     response = await Http.PutAsJsonAsync("api/compras/actualizaitem/" + xRegistrocompras, itemagregarcompras);
-                }
                 else
-                {
                     response = await Http.PostAsJsonAsync("api/compras/agregaritem", itemagregarcompras);
-                }
                 if (response.StatusCode == System.Net.HttpStatusCode.BadRequest
                     || response.StatusCode == System.Net.HttpStatusCode.NotFound
                     || response.StatusCode == System.Net.HttpStatusCode.Conflict)
@@ -459,15 +423,11 @@ namespace SupplyChain.Client.Pages.Emision
                         xtituloboton = "Agregar";
                         await cargapreparacion();
                         xRegistrocompras = 0;
-
                     }
                 }
                 if (xRegistrocompras > 0)
-                {
                     response = await Http.PostAsJsonAsync("api/compras/agregaritem", itemagregarcompras);
-                }
                 limpia();
-
             }
         }
 
@@ -481,11 +441,9 @@ namespace SupplyChain.Client.Pages.Emision
             {
                 //return BadRequest(e);
             }
-
             //datapreparacion = await Http.GetFromJsonAsync<List<Compra>>("api/Compras/GetPreparacion/");
             //RefrescaLista();
         }
-
 
         public async Task imprimiroc()
         {
@@ -503,7 +461,6 @@ namespace SupplyChain.Client.Pages.Emision
             }
             else
             {
-
                 PdfDocument document = new PdfDocument();
                 PdfPage page = document.Pages.Add();
                 PdfGraphics graphics = page.Graphics;
@@ -535,10 +492,8 @@ namespace SupplyChain.Client.Pages.Emision
                 document.Close(true);
 
                 await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportOC?numero={item.NUMERO}", "_blank" });
-
             }
         }
-
 
         public async Task guardaoc()
         {
@@ -553,23 +508,15 @@ namespace SupplyChain.Client.Pages.Emision
             HttpResponseMessage response = null;
 
             if (string.IsNullOrEmpty(xespecif) && string.IsNullOrEmpty(xespecif))
-            {
                 xespecif2 = "vacio";
-            }
             else
-            {
                 xespecif2 = xespecif;
-            }
             if (string.IsNullOrEmpty(DropVal) && string.IsNullOrEmpty(DropVal))
-            {
                 xcondven = "vacio";
-            }
             else
-            {
                 xcondven = DropVal;
-            }
-            //                  string sqlCommandString = string.Format("UPDATE COMPRAS SET NUMERO = 9999 WHERE REGISTRO IN ("+ listaordenescompra + ")");
-            //response = await Http.PutAsJsonAsync("api/compras/actualizaoc/" + listaordenescompra + '/' + xespecif2 + '/' + xcondven + '/' + bonif, listaordenescompra);
+            // string sqlCommandString = string.Format("UPDATE COMPRAS SET NUMERO = 9999 WHERE REGISTRO IN ("+ listaordenescompra + ")");
+            // response = await Http.PutAsJsonAsync("api/compras/actualizaoc/" + listaordenescompra + '/' + xespecif2 + '/' + xcondven + '/' + bonif, listaordenescompra);
             var urlPut= $"api/compras/actualizaoc/?listaordenescompra={listaordenescompra}&especif={xespecif2}&condven={xcondven}&bonif={bonif}";
             response = await Http.PutAsJsonAsync(urlPut, listaordenescompra);
             if (!response.IsSuccessStatusCode)
@@ -589,7 +536,6 @@ namespace SupplyChain.Client.Pages.Emision
             }
             else
             {
-
                 if (response.IsSuccessStatusCode)
                 {
                     String responseString = await response.Content.ReadAsStringAsync();
@@ -606,10 +552,8 @@ namespace SupplyChain.Client.Pages.Emision
                         ShowCloseButton = false,
                         ShowProgressBar = false
                     });
-
                 }
                 listaordenescompra = listaordenescompra;
-
                 //proveedorescompras = await Http.GetFromJsonAsync<List<Proveedores_compras>>("api/compras/GetProveedorescompras/");
                 //PdfDocument document= new PdfDocument();
                 //PdfPage page = document.Pages.Add();
@@ -623,9 +567,31 @@ namespace SupplyChain.Client.Pages.Emision
                 //await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportOC?numero={listaordenescompra}", "_blank" });
                 await imprimiroc();
                 await limpia();
-
             }
-
+        }
+        
+        public async Task OnSelected()
+        {
+            var SelectedRecords = await GridProve.GetSelectedRecordsAsync();
+            decimal subtPesos = 0;
+            decimal subtDolares = 0;
+            await SelectedRecords.ForEachAsync(async s =>
+            {
+                double cot = 0;
+                cot = cotizaciones.Where(c => c.FEC_ULT_ACT <= s.FE_EMIT).MaxBy(c => c.FEC_ULT_ACT).COTIZACION;
+                if (s.MONEDA.Trim().ToLower() == "dolares")
+                {
+                    subtDolares += ((s.PRECIO ?? 0) * (s.AUTORIZADO ?? 0));
+                    subtPesos += (((s.PRECIO ?? 0) * (s.AUTORIZADO ?? 0)) * (decimal) cot);
+                }
+                else if(s.MONEDA.Trim().ToLower() == "pesos")
+                {
+                    subtDolares += (((s.PRECIO ?? 0) * (s.AUTORIZADO ?? 0)) / (decimal) cot);
+                    subtPesos += ((s.PRECIO ?? 0) * (s.AUTORIZADO ?? 0));
+                }
+            });
+            subtotalDolares = "U$S " + Math.Round(subtDolares, 2).ToString("N2") + " dólares";
+            subtotalPesos = "$ " + Math.Round(subtPesos, 2).ToString("N2") + " pesos";
         }
     }
 }
