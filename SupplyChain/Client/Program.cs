@@ -106,7 +106,7 @@ namespace SupplyChain.Client
             services.AddScoped<SemaforoService>();
             services.AddScoped<MotivosPresupuestoService>();
             services.AddScoped<CampoComService>();
-            //services.AddScoped<ProcunProcesosService>();
+            services.AddScoped<ProcunProcesosService>();
 
         }
     }

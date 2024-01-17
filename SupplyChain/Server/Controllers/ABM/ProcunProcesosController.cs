@@ -28,20 +28,19 @@ namespace SupplyChain.Server.Controllers.ABM
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProcunProcesos>>> GetProcunProcesos()
         {
-            //try
-            //{
-            //    var respuesta = await _procesosRepository.ObtenerTodos();
-            //    return respuesta;
-            //}
-            //catch (Exception ex)
-            //{
-            //    return BadRequest(ex.Message);
-            //}
-            return await _context.ProcunProcesos.ToListAsync();
+            try
+            {
+                return await _context.ProcunProcesos.ToListAsync();
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);  
+            }
 
         }
 
-        [HttpGet("{REGISTRO}")]
+        [HttpGet("{registro}")]
         public async Task<ActionResult<ProcunProcesos>> GetProcunProceso(int registro)
         {
             var proceso = await _context.ProcunProcesos.FindAsync(registro);

@@ -62,22 +62,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         {
             base.OnInitialized();
         }
-
-        //protected async Task GetProcesos()
-        //{
-        //    var response = await ProcunProcesosService.Get();
-        //    if (response.Error)
-        //    {
-        //        await ToastMensajeError("Error al obtener los procesos.");
-        //    }
-        //    else
-        //    {
-        //        procunsProcesos = response.Response;
-        //    }
-
-        //}
-
-
+    
         protected async override Task OnInitializedAsync()
         {
            
@@ -102,18 +87,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 celdas = response4.Response;
             }
             procunsProcesos = await Http.GetFromJsonAsync<List<ProcunProcesos>>("api/ProcunProcesos");
-            //await GetProcesos();
-            //var response5 = await ProcunProcesosService.Get();
-            //if (!response5.Error)
-            //{
-            //    procunsProcesos = response5.Response;
-            //}
-            //var response5 = await ProcunProcesosService.Get();
-            //if (!response5.Error)
-            //{
-            //    procunsProcesos = response5.Response;
-            //}
-            //procunProcesos = await Http.GetFromJsonAsync<ProcunProcesos>("api/ProcunProceso");
+           
 
         }
 
@@ -160,61 +134,9 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     }
                 }
             }
-         }
+        }
 
-        //protected async Task Codigo_Prod(InputEventArgs args)
-        //{
-        //    string idProd = args.Value;
-        //    prod.Id= idProd;
-
-        //    var response = await ProductoService.Search(idProd, prod.DES_PROD);
-        //    if (response.Error)
-        //    {
-        //        await ToastMensajeError("Al obtener Precio de articulo");
-        //    }
-        //    else
-        //    {
-        //        if(response.Response != null)
-        //        {
-        //            if (response.Response.Count == 1)
-        //            {
-        //                prod.Id= response.Response[0].Id;
-        //                prod.DES_PROD = response.Response[0].DES_PROD;
-        //            }
-        //            else
-        //            {
-        //                prod.DES_PROD= string.Empty;
-        //            }
-        //        }
-        //    }
-        //}
-  
-        //protected async Task Descripcion_prod(InputEventArgs args)
-        //{
-        //    string des_prod = args.Value;
-
-        //    prod.DES_PROD = des_prod;
-        //    var response = await ProductoService.Search(prod.Id, prod.DES_PROD);
-        //    if(response.Error)
-        //    {
-        //        await ToastMensajeError("Al obtener Precio de articulo");
-        //    }
-        //    else
-        //    {
-        //        if(response.Response!= null)
-        //        {
-        //            if (response.Response.Count == 1)
-        //            {
-        //                prod.Id = response.Response[0].Id;
-        //                prod.DES_PROD = response.Response[0].DES_PROD;
-        //            }
-        //            else
-        //            {
-        //                prod.Id= string.Empty;
-        //            }
-        //        }
-        //    }
-        //}
+       
         protected async Task Cg_Prod_Changed(InputEventArgs args)
         {
             string idProd = args.Value;
@@ -277,25 +199,10 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             return true;
 
         }
-
-        
-
-        //protected async Task <bool>ActualizarCel(string cg_celda, decimal numeroprocun)
-        //{
-        //    var response = await ProcunService.ActualizaCelda(numeroprocun, cg_celda);
-        //    if(response.Error)
-        //    {
-        //        await ToastMensajeError("Error al guardar la celda");
-        //        return false;
-        //    }
-        //    return true;
-        //}
-
+      
         protected async Task GuardarProc()
         {
-            try
-            {
-                bool guardado;
+                bool guardado=false;
                 if (procuns.ESNUEVO)
                 {
                     guardado = await Agregar(procuns);
@@ -312,13 +219,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     Show = false;
                     procuns.GUARDADO = guardado;
                     await OnGuardar.InvokeAsync(procuns);
-                }
-            }
-            catch (Exception ex)
-            {
-               Console.WriteLine(ex.Message);
-            }
-            
+                }   
         }
 
 

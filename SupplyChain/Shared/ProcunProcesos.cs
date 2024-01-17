@@ -10,11 +10,12 @@ using System.Threading.Tasks;
 namespace SupplyChain.Shared
 {
     [Table("ProcunProcesos")]
-    public class ProcunProcesos 
+    public class ProcunProcesos : EntityBase<int>
     {
-        public string PROCESO {  get; set; }
+        //[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string PROCESO { get; set; } = "";
         //public int ID { get; set; } = 0;
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
         public int REGISTRO { get; set; } = 0;
     }
 }
