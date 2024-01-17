@@ -51,7 +51,7 @@ namespace SupplyChain
 
                 if (conSE)
                 {
-                    cg_0rdenValues.Add(2);
+                    cg_0rdenValues.Add(3);
                 }
 
                 if (conPT)
