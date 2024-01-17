@@ -23,7 +23,6 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
     {
         [Inject] protected HttpClient Http { get; set; }
         [Inject] public ProcunService ProcunService { get; set; }
-        //[Inject] public ProcunProcesosService ProcunProcesosService { get; set; }
         [Inject] public ProductoService ProductoService { get; set; }
         [Inject] public AreasService AreasService { get; set; }
         [Inject] public LineasService LineasService { get; set; }
@@ -105,7 +104,6 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             popupBuscadorVisibleProducto = false;
             procuns.CG_PROD = productoSelected.Id;
             procuns.Des_Prod = productoSelected.DES_PROD;
-            //procuns.DES_PROD = productoSelected.DES_PROD.Trim();
             await refSpinnerCli.HideAsync();
         }
         protected async Task Des_prod_Changed(InputEventArgs args)

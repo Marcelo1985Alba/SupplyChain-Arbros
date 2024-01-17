@@ -149,7 +149,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             }
             else
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Solo se puede copiar un item",
@@ -301,7 +301,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         }
         private async Task ToastMensajeError()
         {
-            await ToastObj.ShowAS(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = "Ocurrio un Error.",
