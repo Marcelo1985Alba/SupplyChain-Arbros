@@ -17,10 +17,12 @@ namespace SupplyChain.Shared
         public string CG_PROD { get; set; }
         //[ColumnaGridViewAtributo(Name = "Form"), Range(1, 13, ErrorMessage = "El Form es requerido")]
         public int CG_FORM { get; set; }
-        [ColumnaGridViewAtributo(Name = "Área"), Range(1, 13, ErrorMessage = "El tipo de Área es requerido")]
-        public int CG_AREA { get; set; }
-        [ColumnaGridViewAtributo(Name = "Línea"), Range(1, 220, ErrorMessage = "El tipo de Línea es requerido")]
-        public int CG_LINEA { get; set; }
+        [ColumnaGridViewAtributo(Name = "Área")]
+		//, Range(1, 13, ErrorMessage = "El tipo de Área es requerido")]
+        public int? CG_AREA { get; set; }
+        [ColumnaGridViewAtributo(Name = "Línea")]
+		//, Range(1, 220, ErrorMessage = "El tipo de Línea es requerido")]
+        public int? CG_LINEA { get; set; }
 		[ColumnaGridViewAtributo(Name	= "Celda"), Required(ErrorMessage = "El tipo de Celda es requerido")]
         public string CG_CELDA { get; set; }
         //public string DES_AREA { get; set; }
