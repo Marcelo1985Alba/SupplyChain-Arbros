@@ -282,7 +282,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
 
         protected async Task BuscarInsumo()
         {
-            Insumos = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/ByTipo/{true}/{true}/{false}");
+            Insumos = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/ByTipo/{true}/{true}/{true}");
             PopupBuscadorProdVisible = true;
         }
 
