@@ -61,7 +61,7 @@
 </SfSpinner>
 
 <div class="control-section">
-    <SfSchedule TValue="EventData" Width="100%" Height="100%" @bind-SelectedDate="@CurrentDate" @bind-CurrentView="@CurrentView">
+    <SfSchedule @ref="scheduleObj" TValue="EventData" ShowQuickInfo="false" Width="100%" Height="100%" @bind-CurrentView="@CurrentView" ShowTimeIndicator="true">
         <ScheduleTemplates>
             <ResourceHeaderTemplate>
                 <div class='template-wrap'>
@@ -76,10 +76,11 @@
             <ScheduleResource TItem="ResourceData" TValue="int[]" DataSource="@ResourceDatasource" Field="ResourceId" Title="Resource" Name="Resources" TextField="Text" IdField="Id" ColorField="Color" AllowMultiple="true"></ScheduleResource>
         </ScheduleResources>
         <ScheduleEvents TValue="EventData"
+                        Dragged="OnDragged"
                         OnEventDoubleClick="@(async (a) => await OrdenFabricacionOpen(a))"
                         OnEventClick="@(async (a) => await OrdenFabricacionOpen(a))">
         </ScheduleEvents>
-        <ScheduleEventSettings DataSource="@appointmentData" EnableTooltip="true" AllowEditing="false">
+        <ScheduleEventSettings DataSource="@ordenesData" EnableTooltip="true" AllowEditing="false">
             <TooltipTemplate>
                 @{
                     var eventData = (context as EventData);
@@ -87,18 +88,36 @@
                         <div class="content-area">
                             <div class="name">@eventData.Subject</div>
                             <div class="city">Cantidad: @eventData.cantidad</div>
-                            <div class="city">OF Inicial: @eventData.OFinicial</div>
-                            <div class="city">OF Alta: @eventData.OFalta</div>
-                            <div class="time">From : @eventData.StartTime</div>
-                            <div class="time">To : @eventData.EndTime</div>
+                            <div class="city">Inicial: @eventData.OFinicial - Alta: @eventData.OFalta</div>
+                            <div class="time">Inicio : @eventData.StartTime.ToString("d/M HH:mm") - Fin : @eventData.EndTime.ToString("d/M HH:mm")</div>
                         </div>
                     </div>
                 }
             </TooltipTemplate>
         </ScheduleEventSettings>
         <ScheduleViews>
-            <ScheduleView MaxEventsPerRow="3" Option="View.TimelineDay" StartHour="07:00" AllowVirtualScrolling="true" IsSelected="true"></ScheduleView>
-            <ScheduleView MaxEventsPerRow="3" Option="View.Day" StartHour="07:00" AllowVirtualScrolling="true"></ScheduleView>
+            <ScheduleView MaxEventsPerRow="3" Option="View.MonthAgenda" StartHour="07:00">
+                <EventTemplate>
+                    @{
+                        EventData eventData = (context as EventData);
+                        <div class='template-wrap' style='background:@(eventData?.CategoryColor ?? "transparent"); display: flex; flex-direction: column; text-align: left;'>
+                            <div class="subject" style='color: black; font-family: "Arial", sans-serif; font-size: 100%; font-weight: bold; padding-left: 5px; padding-top: 1px;'>@eventData?.Subject</div>
+                            <div class="date" style='color: black; font-family: "Arial", sans-serif; font-size: 80%; font-weight: bold; padding-left: 5px; padding-bottom: 1px;'>@eventData?.StartTime.ToString("HH:mm") - @eventData?.EndTime.ToString("HH:mm")</div>
+                        </div>
+                    }
+                </EventTemplate>
+            </ScheduleView>
+            <ScheduleView MaxEventsPerRow="3" Option="View.TimelineWeek" StartHour="07:00" IsSelected="true">
+                <EventTemplate>
+                    @{
+                        EventData eventData = (context as EventData);
+                        <div class='template-wrap' style='background:@(eventData?.CategoryColor ?? "transparent"); display: flex; flex-direction: column; text-align: left;'>
+                            <div class="subject" style='color: black; font-family: "Arial", sans-serif; font-size: 100%; font-weight: bold; padding-left: 5px; padding-top: 1px;'>@eventData?.Subject</div>
+                            <div class="date" style='color: black; font-family: "Arial", sans-serif; font-size: 80%; font-weight: bold; padding-left: 5px; padding-bottom: 1px;'>@eventData?.StartTime.ToString("HH:mm") - @eventData?.EndTime.ToString("HH:mm")</div>
+                        </div>
+                    }
+                </EventTemplate>
+            </ScheduleView>
         </ScheduleViews>
     </SfSchedule>
 </div>

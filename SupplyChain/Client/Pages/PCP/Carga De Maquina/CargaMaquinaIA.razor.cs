@@ -13,6 +13,7 @@ using Syncfusion.Pdf.Grid;
 using Syncfusion.Pdf.Tables;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -87,11 +88,13 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
         private DateTime? projectEnd = null;
         protected int CurrentYear;
         protected List<ResourceData> ResourceDatasource = new List<ResourceData>();
-        protected List<EventData> appointmentData = new List<EventData>();
+        protected List<EventData> ordenesData = new List<EventData>();
         protected List<String> celdasList = new List<string>();
         protected string[] groupData = { "Resources" };
         protected DateTime CurrentDate { get; set; }
-        protected View CurrentView { get; set; } = View.TimelineDay;
+        protected View CurrentView { get; set; } = View.TimelineDay;    
+        protected SfSchedule<EventData> scheduleObj;
+
 
         public void OpenExternalLink()
         {
@@ -132,7 +135,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 
                 ResourceDatasource = await GenerateResourceData();
                 
-                appointmentData = await GenerateEvents();
+                ordenesData = await GenerateEvents();
 
                 // turno
                 List<ModeloGenericoIntString> xTurno = await Http.GetFromJsonAsync<List<ModeloGenericoIntString>>(
@@ -169,10 +172,10 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
 
         protected async Task OrdenFabricacionOpen(EventClickArgs<EventData> args)
         {
-            string xOrdenFabricacion = args.Event.Subject;
+            string xOrdenFabricacion = args.Event.CG_ORDF;
             bool xExigeOA = false;
             int xPedido = 0;
-            string xCgProd = args.Event.Subject;
+            string xCgProd = args.Event.CG_ORDF;
             string xCantidad = args.Event.cantidad;
             Visible = true;
             try
@@ -212,9 +215,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     await Http.GetFromJsonAsync<List<ModeloGenericoStringString>>("api/ModelosGenericosStringString/" +
                         xSQLcommand);
 
-                var cg_ordfAsoc = ordenesIA.Where(c => c.CG_ORDF.ToString().Trim() == ordenNumero).OrderBy(c => c.CG_ORDF)
-                    .FirstOrDefault()
-                    .CG_ORDFASOC;
+                var cg_ordfAsoc = ordenesData.Where(c => c.CG_ORDF.ToString().Trim() == ordenNumero).MinBy(c => c.CG_ORDF).OFinicial;
                 //Get Datos de la cantidad 
                 //xSQLcommand = String.Format("select cantidad from programa where cg_ordfasoc={0}", ordenFabricacion.CG_ORDFASOC);
                 //ordenFabxCantidad = await Http.GetFromJsonAsync<List<ModeloGenericoStringString>>("api/ModelosGenericosStringString/" + xSQLcommand);
@@ -348,10 +349,9 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 }
 
                 //VERIFIFCAR QUE SE LA ULTIMA: LA QUE DA DE ALTA AL PRODUCTO
-                var lOfAsocs = ordenesIA.Where(c => c.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC)
-                    .OrderByDescending(o => o.CG_ORDF).ToList();
+                var lOfAsocs = ordenesData.Where(c => c.OFinicial == ordenFabricacion.CG_ORDFASOC.ToString().Trim()).OrderByDescending(o => o.CG_ORDF).ToList();
                 var ultimaOF = lOfAsocs.Max(m => m.CG_ORDF);
-                if (dbScrap != null && ordenFabricacion.CG_ORDF == ultimaOF)
+                if (dbScrap != null && ordenFabricacion.CG_ORDF.ToString().Trim() == ultimaOF)
                 {
                     isScrapDialogVisible = true;
                     StateHasChanged();
@@ -762,8 +762,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             {
                 //await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportEtiquetaOF?cg_ordf={ordenFabricacion.CG_ORDF}", "_blank" });
 
-                OrdenDeFabAlta = ordenesIA.Where(t => t.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC)
-                    .OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF;
+                OrdenDeFabAlta = Convert.ToInt32(ordenesData.Where(t => t.OFinicial == ordenFabricacion.CG_ORDFASOC.ToString().Trim()).MaxBy(t => t.CG_ORDF).CG_ORDF);
                 await PdfService.EtiquetaOF(OrdenDeFabAlta, ordenFabricacion);
             }
         }
@@ -1055,6 +1054,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
         {
             public int Id { get; set; }
             public string Subject { get; set; }
+            public string CG_ORDF { get; set; }
             public string Location { get; set; }
             public string Description { get; set; }
             public DateTime StartTime { get; set; }
@@ -1067,8 +1067,10 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             public string StartTimezone { get; set; }
             public string EndTimezone { get; set; }
             public string cantidad { get; set; }
+            public string proceso { get; set; }
             public string OFinicial { get; set; }
             public string OFalta { get; set; }
+            public string titulo { get; set; }
             public int ResourceId { get; set; }
         }
 
@@ -1106,33 +1108,209 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             }
             return resources;
         }
+        
+        
+        protected async Task OnDragged(DragEventArgs<EventData> args)
+        {
+            
+            if(args.Data.StartTime <= DateTime.Now && args.Data.EndTime >= DateTime.Now)
+            {
+                await this.ToastObj.ShowAsync(new ToastModel
+                {
+                    Title = "ERROR!",
+                    Content = "No puede mover una orden que esta en curso.",
+                    CssClass = "e-toast-danger",
+                    Icon = "e-error toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }
+            
+            DateTime fechaOrig = ordenesData.FirstOrDefault(t => t.CG_ORDF == args.Data.CG_ORDF)!.StartTime;
+            DateTime fechaDest = args.Data.StartTime;
+
+            if (fechaOrig < fechaDest)
+            {
+                var ordenes = ordenesData.Where(t => t.ResourceId == args.Data.ResourceId && ((t.StartTime >= fechaOrig && t.EndTime <= fechaDest) || (fechaDest >= t.StartTime && fechaDest <= t.EndTime))).OrderBy(t => t.StartTime).ToList();
+                
+                if(ordenes.Count <= 1)
+                    return;
+                
+                if(ordenes.Count(t => t.OFalta == ordenes[^1].OFalta) > 1)
+                {
+                    await this.ToastObj.ShowAsync(new ToastModel
+                    {
+                        Title = "ERROR!",
+                        Content = "No puede intercambiar el orden del proceso.",
+                        CssClass = "e-toast-danger",
+                        Icon = "e-error toast-icons",
+                        ShowCloseButton = true,
+                        ShowProgressBar = true
+                    });
+                    return;
+                }
+
+                var firstStartDate = ordenes[0].StartTime;
+                var lastEndDate = ordenes[^1].EndTime;
+            
+                var auxStart = ordenesData.FirstOrDefault(t => t.CG_ORDF == ordenes[0].CG_ORDF)!.StartTime;
+            
+                for (int i = 1; i < ordenes.Count; i++)
+                {
+                    var orden = ordenesData.FirstOrDefault(t => t.CG_ORDF == ordenes[i].CG_ORDF);
+                    orden!.EndTime = auxStart.AddMinutes(orden.EndTime.Subtract(orden.StartTime).TotalMinutes);
+                    orden.StartTime = auxStart;
+                    auxStart = orden.EndTime;
+                }
+            
+                var last = ordenesData.FirstOrDefault(t => t.CG_ORDF == ordenes[^1].CG_ORDF);
+                var orig = ordenesData.FirstOrDefault(t => t.CG_ORDF == args.Data.CG_ORDF);
+                orig!.EndTime = last!.EndTime.AddMinutes(args.Data.EndTime.Subtract(args.Data.StartTime).TotalMinutes);
+                orig.StartTime = last.EndTime;
+                
+                foreach (var orden in ordenes)
+                {
+                    // quiero chequear si alguna de las ordenes por algun error quedo fuera del rango firstStartDate/lastEndDate
+                    if (orden.StartTime < firstStartDate || orden.EndTime > lastEndDate)
+                    {
+                        await this.ToastObj.ShowAsync(new ToastModel
+                        {
+                            Title = "ERROR!",
+                            Content = "Hubo un error al mover la orden, por favor intente nuevamente.",
+                            CssClass = "e-toast-danger",
+                            Icon = "e-error toast-icons",
+                            ShowCloseButton = true,
+                            ShowProgressBar = true
+                        });
+                        ordenesData = await GenerateEvents();
+                        return;
+                    }
+                }
+            
+                foreach (var orden in ordenes)
+                {
+                    var ordenFabricacion = ordenesIA.FirstOrDefault(t => t.CG_ORDF.ToString().Trim() == orden.CG_ORDF);
+                    ordenFabricacion!.INICIO = orden.StartTime;
+                    ordenFabricacion.FIN = orden.EndTime;
+                    var result = await Http.PutAsJsonAsync($"api/CargasIA/UpdateOrden/{orden.CG_ORDF}", ordenFabricacion);
+                }
+            }
+            else
+            {
+                (fechaOrig, fechaDest) = (fechaDest, fechaOrig);
+                
+                var ordenes = ordenesData.Where(t => t.ResourceId == args.Data.ResourceId && ((t.StartTime >= fechaOrig && t.EndTime <= fechaDest) || (fechaOrig >= t.StartTime && fechaOrig <= t.EndTime) || fechaDest == t.StartTime)).OrderBy(t => t.StartTime).ToList();
+                
+                if(ordenes.Count <= 1)
+                    return;
+                
+                if(ordenes.Count(t => t.OFalta == ordenes[^1].OFalta) > 1)
+                {
+                    await this.ToastObj.ShowAsync(new ToastModel
+                    {
+                        Title = "ERROR!",
+                        Content = "No puede intercambiar el orden del proceso.",
+                        CssClass = "e-toast-danger",
+                        Icon = "e-error toast-icons",
+                        ShowCloseButton = true,
+                        ShowProgressBar = true
+                    });
+                    return;
+                }
+                
+                var firstStartDate = ordenes[0].StartTime;
+                var lastEndDate = ordenes[^1].EndTime;
+                
+                var last = ordenesData.FirstOrDefault(t => t.CG_ORDF == ordenes[^1].CG_ORDF);
+                last!.StartTime = ordenesData.FirstOrDefault(t => t.CG_ORDF == ordenes[0].CG_ORDF)!.StartTime;
+                last.EndTime = last.StartTime.AddMinutes(args.Data.EndTime.Subtract(args.Data.StartTime).TotalMinutes);
+                
+                var auxStart = last.EndTime;
+            
+                for (int i = 0; i < ordenes.Count-1; i++)
+                {
+                    var orden = ordenesData.FirstOrDefault(t => t.CG_ORDF == ordenes[i].CG_ORDF);
+                    orden!.EndTime = auxStart.AddMinutes(orden.EndTime.Subtract(orden.StartTime).TotalMinutes);
+                    orden.StartTime = auxStart;
+                    auxStart = orden.EndTime;
+                }
+
+                foreach (var orden in ordenes)
+                {
+                    // quiero chequear si alguna de las ordenes por algun error quedo fuera del rango firstStartDate/lastEndDate
+                    if (orden.StartTime < firstStartDate || orden.EndTime > lastEndDate)
+                    {
+                        await this.ToastObj.ShowAsync(new ToastModel
+                        {
+                            Title = "ERROR!",
+                            Content = "Hubo un error al mover la orden, por favor intente nuevamente.",
+                            CssClass = "e-toast-danger",
+                            Icon = "e-error toast-icons",
+                            ShowCloseButton = true,
+                            ShowProgressBar = true
+                        });
+                        ordenesData = await GenerateEvents();
+                        return;
+                    }
+                }
+
+            
+                foreach (var orden in ordenes)
+                {
+                    var ordenFabricacion = ordenesIA.FirstOrDefault(t => t.CG_ORDF.ToString().Trim() == orden.CG_ORDF);
+                    ordenFabricacion!.INICIO = orden.StartTime;
+                    ordenFabricacion.FIN = orden.EndTime;
+                    var result = await Http.PutAsJsonAsync($"api/CargasIA/UpdateOrden/{orden.CG_ORDF}", ordenFabricacion);
+                }
+            }
+            
+            await scheduleObj.RefreshEventsAsync();
+        }
 
         protected async Task<List<EventData>> GenerateEvents()
         {
             CurrentYear = DateTime.Today.Year;
+            var colors = new string[]
+            {
+                "#ff8787", "#9775fa", "#748ffc", "#3bc9db", "#69db7c",
+                "#fdd835", "#df5286", "#7fa900",
+                "#fec200", "#5978ee", "#00bdae", "#ea80fc",
+                "#81c784", "#ffb74d", "#ba68c8", "#4db6ac", "#ff8a65",
+                "#64b5f6", "#a1887f", "#ffcc80", "#90a4ae", "#9ccc65"
+            };
             ordenesIA = await Http.GetFromJsonAsync<List<PLANNER>>("api/CargasIA");
-            ordenesIA = ordenesIA.OrderBy(s => s.INICIO).ToList();
             int cantOrdenes = ordenesIA.Count;
             List<EventData> data = new List<EventData>(cantOrdenes);
+            var ult_asoc = ordenesIA[0].ULT_ASOC;
+            var ult_asoc_ant = ult_asoc;
+            var color_index = 0;
             for (int a = 0; a < cantOrdenes; a++)
             {
                 var orden = ordenesIA[a];
                 int resourceId = celdasList.IndexOf(orden.CG_CELDA.Trim());
+                ult_asoc = orden.ULT_ASOC;
+                if (ult_asoc != ult_asoc_ant)
+                    color_index++;
                 data.Add(new EventData
                 {
                     Id = a,
-                    Subject = orden.CG_ORDF.ToString().Trim(),
+                    CG_ORDF = orden.CG_ORDF.ToString().Trim(),
+                    Subject = orden.CG_ORDF.ToString().Trim() + " - " + orden.DES_PROD.Trim() + " - " + orden.PROCESO.Trim(),
                     StartTime = orden.INICIO,
                     EndTime = orden.FIN,
                     ResourceId = resourceId+1,
                     cantidad = orden.CANT.ToString(),
+                    Description = orden.DES_PROD.Trim(),
+                    proceso = orden.PROCESO.Trim(),
                     OFinicial = orden.CG_ORDFASOC.ToString(),
-                    OFalta = ordenesIA.Where(t => t.CG_ORDFASOC == orden.CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF.ToString()
+                    CategoryColor = colors[color_index % colors.Length],
+                    OFalta = ordenesIA.Where(t => t.CG_ORDFASOC == orden.CG_ORDFASOC).MaxBy(t => t.CG_ORDF)!.CG_ORDF.ToString(),
                 });
                 if (orden.INICIO < projectStart || projectStart == null)
                     projectStart = orden.INICIO;
                 if (orden.FIN > projectEnd || projectEnd == null)
                     projectEnd = orden.FIN;
+                ult_asoc_ant = orden.ULT_ASOC;
             }
             CurrentDate = projectStart ?? DateTime.Today;
             return data;
