@@ -11,6 +11,8 @@ using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Syncfusion.Blazor.Charts.Chart.Models;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -23,10 +25,12 @@ namespace SupplyChain.Server.Controllers
 
         private readonly AppDbContext _context;
         private readonly FormulaRepository _formulaRepository;
+        private readonly ProductoRepository _prodRepository;
 
-        public FormulasController(FormulaRepository formulaRepository)
+        public FormulasController(FormulaRepository formulaRepository, ProductoRepository productoRepository)
         {
             this._formulaRepository = formulaRepository;
+            this._prodRepository = productoRepository;
         }
 
         [HttpGet("EnFormula/{codigo}")]
@@ -71,7 +75,40 @@ namespace SupplyChain.Server.Controllers
             {
                 List<Formula> formulas = await _formulaRepository.Obtener(f => f.Cg_Prod == CG_PROD).ToListAsync();
                 int maxRevision = formulas.Max(f => f.REVISION);
-                return formulas.Where(f => f.REVISION == maxRevision);
+                List<Formula> toReturn = formulas.Where(f => f.REVISION == maxRevision).ToList();
+                foreach (var formula in toReturn)
+                {
+                    if (formula.CG_ORDEN == 4)
+                    {
+                        var prod = _prodRepository.ObtenerPorId(formula.Cg_Mat.Trim()).Result;
+                        if (prod != null)
+                            formula.DES_PROD = prod.DES_PROD;
+                    }
+                    else if (formula.CG_ORDEN == 3)
+                    {
+                        var prod = _prodRepository.ObtenerPorId(formula.Cg_Se.Trim()).Result;
+                        if (prod != null)
+                            formula.DES_PROD = prod.DES_PROD;
+                    }
+                    else if (formula.CG_ORDEN == 1)
+                    {
+                        // para un futuro cuando se puedan poner productos dentro de el producto
+                        if (!formula.Cg_Mat.IsNullOrEmpty())
+                        {
+                            var prod = _prodRepository.ObtenerPorId(formula.Cg_Mat.Trim()).Result;
+                            if (prod != null)
+                                formula.DES_PROD = prod.DES_PROD;
+                        }
+                        else if (!formula.Cg_Se.IsNullOrEmpty())
+                        {
+                            var prod = _prodRepository.ObtenerPorId(formula.Cg_Se.Trim()).Result;
+                            if (prod != null)
+                                formula.DES_PROD = prod.DES_PROD;
+                        }
+                    }
+                }
+
+                return toReturn;
             }
             catch (Exception ex)
             {

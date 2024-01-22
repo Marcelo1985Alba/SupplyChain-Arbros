@@ -296,9 +296,10 @@ namespace SupplyChain.Client.Pages.Ingenieria
                     ACTIVO = "S",
                     CG_ORDEN = insumoSeleccionado.CG_ORDEN,
                     Cg_Mat = insumoSeleccionado.CG_ORDEN == 4 ? insumoSeleccionado.Id : string.Empty,
-                    Cg_Se = insumoSeleccionado.CG_ORDEN == 2 ? insumoSeleccionado.Id : string.Empty,
+                    Cg_Se = insumoSeleccionado.CG_ORDEN == 3 ? insumoSeleccionado.Id : string.Empty,
                     CANTIDAD = 0M,
                     Cg_Prod = DataEditarProductosFormulas[0].Cg_Prod,
+                    DES_PROD = insumoSeleccionado.DES_PROD,
                     REVISION = DataEditarProductosFormulas[0].REVISION,
                     USUARIO = authState.User.Identity != null ? authState.User.Identity.Name : "USER",
                     FE_FORM = DateTime.Now,
@@ -309,7 +310,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
                     CG_CLAS = 0,
                     CG_DEC = 0,
                     CG_DEC_OF = 0,
-                    CANT_MAT = 0M,
+                    CANT_MAT = 1,
                     CATEGORIA = 0,
                     COSTO = 0M,
                     DES_FORM = "",
@@ -339,9 +340,9 @@ namespace SupplyChain.Client.Pages.Ingenieria
         public async Task CellSavedHandler(CellSaveArgs<Formula> args)
         {
             if (args.Value is decimal)
-                DataEditarProductosFormulas.First(f => f.Id == args.RowData.Id).CANT_MAT = args.Value as decimal? ?? 0;
+                DataEditarProductosFormulas.First(f => f.DES_PROD.Trim() == args.RowData.DES_PROD.Trim()).CANT_MAT = args.Value as decimal? ?? 0;
             else if (args.Value.GetType() == typeof(string))
-                DataEditarProductosFormulas.First(f => f.Id == args.RowData.Id).OBSERV = args.Value as string;
+                DataEditarProductosFormulas.First(f => f.DES_PROD.Trim() == args.RowData.DES_PROD.Trim()).OBSERV = args.Value as string;
             edited = true;
         }
         
