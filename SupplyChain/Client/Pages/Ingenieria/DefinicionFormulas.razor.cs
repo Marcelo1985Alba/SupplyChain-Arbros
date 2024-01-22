@@ -26,7 +26,7 @@ using Syncfusion.Blazor.Popups;
 
 namespace SupplyChain.Client.Pages.Ingenieria
 {
-    public class BaseConsultaFormulas : ComponentBase
+    public class BaseDefinicionFormulas : ComponentBase
     {
         [Inject] public HttpClient Http { get; set; }
         [Inject] public ExcelService ExcelService { get; set; }
@@ -63,6 +63,22 @@ namespace SupplyChain.Client.Pages.Ingenieria
         };
 
         protected bool PopupBuscadorProdVisible = false;
+
+        protected List<Object> ToolbaritemsEditarFormula = new()
+        {
+            new ItemModel()
+            {
+                Text = "Agregar Insumo", Type = ItemType.Button, CssClass = "", ShowTextOn = DisplayMode.Both,
+                TooltipText = "Buscar insumos", PrefixIcon = "e-search e-icons", Id = "BuscarInsumo"
+            },
+            new ItemModel()
+            {
+                Text = "Guardar", Type = ItemType.Button, CssClass = "", ShowTextOn = DisplayMode.Both,
+                TooltipText = "Guardar el despiece en la base de datos", PrefixIcon = "e-update e-icons",
+                Id = "GuardarDB"
+            },
+            "Delete"
+        };
 
         protected List<Producto> Insumos = new List<Producto>();
         protected Producto insumoSeleccionado = new();
@@ -234,21 +250,42 @@ namespace SupplyChain.Client.Pages.Ingenieria
             if (args.Item.Id == "ProdForm_excelexport") //Id is combination of Grid's ID and itemname
             {
                 VisibleSpinner = true;
-                await this.GridProdForm.ExportToExcelAsync();
+                await this.GridProdForm.ExcelExport();
                 VisibleSpinner = false;
             }
         }
-        
+
         protected async Task ToolbarEditFormClickHandler(ClickEventArgs args)
         {
-            if (args.Item.Id == "EditForm_excelexport") //Id is combination of Grid's ID and itemname
+            if (args.Item.Id == "BuscarInsumo")
             {
                 VisibleSpinner = true;
-                await this.EditForm.ExportToExcelAsync();
+                await BuscarInsumo();
                 VisibleSpinner = false;
             }
+            if(args.Item.Id == "GuardarDB")
+            {
+                VisibleSpinner = true;
+                await GuardarDB();
+                VisibleSpinner = false;
+            }
+            if(args.Item.Text == "Delete")
+            {
+                deleted = true;
+                var form = DataEditarProductosFormulas.FirstOrDefault(f => f.Id == EditForm.SelectedRecords.First().Id);
+                if (form != null)
+                {
+                    DataEditarProductosFormulas.Remove(form);
+                }
+            }
         }
-        
+
+        protected async Task BuscarInsumo()
+        {
+            Insumos = await Http.GetFromJsonAsync<List<Producto>>($"api/Prod/ByTipo/{true}/{true}/{true}");
+            PopupBuscadorProdVisible = true;
+        }
+
         protected async Task OnInsumoSeleccionado(Producto insumoSeleccionado)
         {
             PopupBuscadorProdVisible = false;
@@ -298,6 +335,63 @@ namespace SupplyChain.Client.Pages.Ingenieria
                 added = true;
                 await EditForm.Refresh();
             }
+        }
+        
+        public async Task CellSavedHandler(CellSaveArgs<Formula> args)
+        {
+            if (args.Value is decimal)
+                DataEditarProductosFormulas.First(f => f.DES_PROD.Trim() == args.RowData.DES_PROD.Trim()).CANT_MAT = args.Value as decimal? ?? 0;
+            else if (args.Value.GetType() == typeof(string))
+                DataEditarProductosFormulas.First(f => f.DES_PROD.Trim() == args.RowData.DES_PROD.Trim()).OBSERV = args.Value as string;
+            edited = true;
+        }
+        
+        protected async Task GuardarDB()
+        {
+            if (added)
+            {
+                DataEditarProductosFormulas.ForEach(f => f.REVISION += 1);
+                DataEditarProductosFormulas.ForEach(f => f.FE_FORM = DateTime.Now);
+                DataEditarProductosFormulas.ForEach(f => f.USUARIO = authState.User.Identity != null ? authState.User.Identity.Name : "USER");
+                await Http.PostAsJsonAsync<List<Formula>>($"api/Formulas/PostList", DataEditarProductosFormulas);
+                edited = false;
+                deleted = false;
+                await ToastMensajeExito("Se guardo la nueva revision correctamente.");
+                dialogVisibleEditar = false;
+                return;
+            }
+            if (!edited && !deleted)
+            {
+                await ToastMensajeError("No se ha modificado la formula.");
+                return;
+            } 
+            bool isConfirmed = await DialogService.ConfirmAsync("Quiere que se guarde como una nueva revisión?", 
+                "Revisión actual: " + DataEditarProductosFormulas[0].REVISION, new DialogOptions()
+                {
+                    PrimaryButtonOptions = new DialogButtonOptions() { Content = "Crear revisión " + (DataEditarProductosFormulas[0].REVISION + 1)},
+                    CancelButtonOptions = new DialogButtonOptions() { Content = "Actualizar revisión " + DataEditarProductosFormulas[0].REVISION},
+                });
+            if (isConfirmed)
+            {
+                DataEditarProductosFormulas.ForEach(f => f.REVISION += 1);
+                DataEditarProductosFormulas.ForEach(f => f.FE_FORM = DateTime.Now);
+                DataEditarProductosFormulas.ForEach(f => f.USUARIO = authState.User.Identity != null ? authState.User.Identity.Name : "USER");
+                await Http.PostAsJsonAsync<List<Formula>>($"api/Formulas/PostList", DataEditarProductosFormulas);
+                edited = false;
+                deleted = false;
+                await ToastMensajeExito("Se guardo la nueva revision correctamente.");
+                dialogVisibleEditar = false;
+                return;
+            }
+            List<Formula> formsOriginales = await Http.GetFromJsonAsync<List<Formula>>($"api/Formulas/BuscarPorCgProdMaxRevision/{DataEditarProductosFormulas[0].Cg_Prod.Trim()}");
+            List<Formula> formsEliminar = formsOriginales.Where(f => DataEditarProductosFormulas.All(f2 => f2.Id != f.Id)).ToList();
+            if (formsEliminar.Count > 0)
+                await Http.PostAsJsonAsync<List<Formula>>($"api/Formulas/DeleteList", formsEliminar);
+            await Http.PutAsJsonAsync<List<Formula>>($"api/Formulas/PutList", DataEditarProductosFormulas);
+            edited = false;
+            deleted = false;
+            await ToastMensajeExito("La revision se actualizo correctamente.");
+            dialogVisibleEditar = false;
         }
 
         protected async Task ToolbarClickHandler(ClickEventArgs args)

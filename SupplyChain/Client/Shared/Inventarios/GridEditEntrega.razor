@@ -224,16 +224,14 @@ else
                                 }
                             </Template>
                         </GridColumn>
-                        @*
-                            <GridColumn Field="@nameof(Pedidos.StockReal)" HeaderText="Stock Real" AutoFit="true"></GridColumn>
-                                                <GridColumn Field="@nameof(Pedidos.Reserva)" HeaderText="Reserva" AutoFit="true"></GridColumn>
-                                                <GridColumn Field="@nameof(Pedidos.ReservaTotal)" HeaderText="Reserva Total" AutoFit="true">
-                                                    <Template>
-                                                        @{ var ped = (context as Pedidos); }
-                                                        <a class="e-link" @onclick="VerReservas">@ped.ReservaTotal</a>
-                                                    </Template>
-                                                </GridColumn>
-                        *@
+                        <GridColumn Field="@nameof(Pedidos.StockReal)" HeaderText="Stock Real" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.Reserva)" HeaderText="Reserva" AutoFit="true"></GridColumn>
+                        <GridColumn Field="@nameof(Pedidos.ReservaTotal)" HeaderText="Reserva Total" AutoFit="true">
+                            <Template>
+                                @{ var ped = (context as Pedidos); }
+                                <a class="e-link" @onclick="VerReservas">@ped.ReservaTotal</a>
+                            </Template>
+                        </GridColumn>
                         <GridColumn Field="@nameof(Pedidos.Id)" IsPrimaryKey="true" HeaderText="ID" Visible="false"></GridColumn>
                     </GridColumns>
 

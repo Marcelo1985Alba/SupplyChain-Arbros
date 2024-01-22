@@ -2,9 +2,9 @@
 @using Syncfusion.Blazor.Navigations
 @using SupplyChain.Client.Pages.Visor_Pdf
 @using SupplyChain.Client.Pages.CDM
-@page "/ingenieria/consulta-formulas"
-@page "/ingenieria/consulta-formulas/{extern_codigo}"
-@inherits BaseConsultaFormulas
+@page "/ingenieria/definicion-formulas"
+@page "/ingenieria/definicion-formulas/{extern_codigo}"
+@inherits BaseDefinicionFormulas
 
 <SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
 
@@ -222,13 +222,14 @@
                 <div class="">
                     <div class="e-card">
                         <SfGrid @ref="@EditForm" DataSource="@DataEditarProductosFormulas" AllowPaging="true" AllowSorting="true"
-                                ID="EditForm" Height="100%" Width="100%" GridLines="GridLine.Both"
-                                Toolbar="@(new List<string>() { "ExcelExport" })" AllowExcelExport="true">
-                            <GridPageSettings PageSizes="true" PageSize="10"></GridPageSettings>
-                            <GridEvents TValue="Formula"
-                                        OnToolbarClick="ToolbarEditFormClickHandler">
+                                ID="EditForm" Toolbar="@ToolbaritemsEditarFormula" Height="100%" Width="100%"
+                                GridLines="GridLine.Both">
+                            <GridEvents TValue="Formula" OnToolbarClick="ToolbarEditFormClickHandler" CommandClicked="OnCommandClicked" CellSaved="CellSavedHandler">
                             </GridEvents>
-                            <GridEditSettings AllowEditing=false></GridEditSettings>
+                            <GridPageSettings PageSizes="true" PageSize="10"></GridPageSettings>
+                            <GridEditSettings ShowDeleteConfirmDialog="false" AllowAdding=true AllowEditing=true
+                                              ShowConfirmDialog="false" AllowDeleting=true Mode="EditMode.Batch">
+                            </GridEditSettings>
                             <GridColumns>
                                 <GridColumn Field=@nameof(Formula.Cg_Se) HeaderText="Semielaborado" Width="80" AllowEditing=false></GridColumn>
                                 <GridColumn Field=@nameof(Formula.Cg_Mat) HeaderText="Materia Prima" Width="90" AllowEditing=false></GridColumn>
