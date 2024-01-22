@@ -114,6 +114,7 @@
     <PackageReference Include="Syncfusion.Blazor.FileManager" Version="20.4.0.44" />
     <PackageReference Include="Syncfusion.Blazor.FileManager.PhysicalFileProvider" Version="20.4.0.38" />
     <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.Schedule" Version="20.4.0.44" />
     <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.4.0.44" />
     <PackageReference Include="Syncfusion.Licensing" Version="20.4.0.44" />
     <PackageReference Include="System.CodeDom" Version="7.0.0" />

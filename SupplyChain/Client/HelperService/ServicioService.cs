@@ -6,6 +6,7 @@ using SupplyChain.Shared.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -30,6 +31,11 @@ namespace SupplyChain.Client.HelperService
         public async Task<HttpResponseWrapper<Service>> GetByPedido(int pedido)
         {
             return await http.GetFromJsonAsync<Service>($"{API}/GetByPedido/{pedido}");
+        }
+
+        public async Task<HttpResponseMessage> Eliminar(int id)
+        {
+            return await http.DeleteAsync($"{API}/{id}");
         }
     }
 }

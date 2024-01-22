@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Syncfusion.Blazor.Popups;
 
 namespace SupplyChain.Client
 {
@@ -38,6 +39,8 @@ namespace SupplyChain.Client
             //CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("es");
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
+            builder.Services.AddScoped<SfDialogService>();
+            builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
             await builder.Build().RunAsync();
         }
 
@@ -103,6 +106,7 @@ namespace SupplyChain.Client
             services.AddScoped<SemaforoService>();
             services.AddScoped<MotivosPresupuestoService>();
             services.AddScoped<CampoComService>();
+            services.AddScoped<ProcunProcesosService>();
 
         }
     }

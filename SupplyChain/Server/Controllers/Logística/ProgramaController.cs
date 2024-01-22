@@ -115,6 +115,24 @@ namespace SupplyChain
             return programa == null ? NotFound() : programa;
         }
 
+        ///METODO PUT DE CANTIDADFAB, YA ESTA EL REPOSITORIO FALTA RESTO
+        //[HttpGet("GetCantidad/{cg_ordfasoc}/{cg_ordf}")]
+        //public async Task<ActionResult<IEnumerable<Programa>>> GetCantidad(int cg_ordfasoc, int cg_ordf)
+        //{
+        //    try
+        //    {
+        //        var programas = await _programaRepository.GetCantidad(cg_ordfasoc, cg_ordf);
+
+        //        return Ok(programas);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+
+        //}
+
+
         [HttpGet("EnviarCsvDataCore")]
         public async Task<ActionResult> EnviarCsv()
         {
@@ -246,5 +264,22 @@ namespace SupplyChain
 
             return programa;
         }
+
+        [HttpGet("GetOrdenesAbiertas/{cg_ordfasoc}/{cg_ordf}")]
+        public async Task<ActionResult<IEnumerable<Programa>>> GetAbiertas(int cg_ordfasoc, int cg_ordf)
+        {
+
+            try
+            {
+                return Ok(await _programaRepository.GetOrdenesAbiertas(cg_ordfasoc, cg_ordf));
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+        }
+
     }
 }
