@@ -43,7 +43,6 @@ namespace SupplyChain.Client.Pages.Inventarios
         protected SfToast ToastObj;
         protected ConfirmacionDialog ConfirmacionEliminarDialog;
         protected ConfirmacionDialog ConfirmacionGuardarDialog;
-        protected GridEditEntrega refGridEditEntrega;
         protected bool SpinnerVisible { get; set; } = false;
         private bool puedeBuscarStock = false;
         protected SupplyChain.Client.Shared.BuscadorEmergenteResumenStock BuscadorEmergenteResumenStock;

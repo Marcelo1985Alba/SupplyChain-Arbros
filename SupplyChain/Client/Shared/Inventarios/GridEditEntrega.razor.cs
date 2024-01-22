@@ -25,19 +25,19 @@ namespace SupplyChain.Client.Shared.Inventarios
         [Inject] HttpClient Http { get; set; }
         [Inject] IRepositoryHttp RepositoryHttp { get; set; }
 
-        [Parameter] public string Titulo { get; set; } = null!;
+        //[Parameter] public string Titulo { get; set; } = null!;
         [Parameter] public List<Pedidos> DataSource { get; set; } = null!;
         [Parameter] public bool PermiteAgregar { get; set; } = false;
         [Parameter] public bool PermiteEditar { get; set; } = false;
         [Parameter] public bool PermiteEliminar { get; set; } = false;
         [Parameter] public EventCallback<Pedidos> OnGuardar { get; set; }
-        [Parameter] public EventCallback<List<Pedidos>> OnItemsDataSource { get; set; }
+        //[Parameter] public EventCallback<List<Pedidos>> OnItemsDataSource { get; set; }
         [Parameter] public SelectionType TipoSeleccion { get; set; } = SelectionType.Single;
         [Parameter] public bool AbrirBuscadorResumenStock { get; set; } = false;
         [Parameter] public bool AplicarFiltro { get; set; } = false;
         [Parameter] public string filtro_CG_ART { get; set; } = string.Empty;
         [Parameter] public string filtro_DESPACHO { get; set; } = string.Empty;
-        [CascadingParameter] public PedidoEncabezado RegistroGenerado { get; set; }
+        [CascadingParameter] public PedidoEncabezado RegistroGenerado { get; set; } = new PedidoEncabezado();
         protected ConfirmacionDialog ConfirmacionDialog;
         protected SupplyChain.Client.Shared.BuscadorEmergente<Pedidos> BuscadorProducto;
         protected Pedidos stock;
