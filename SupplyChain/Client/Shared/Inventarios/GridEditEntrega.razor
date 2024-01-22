@@ -9,7 +9,6 @@
 
 @if (DataSource == null)
 {
-
 }
 else
 {
@@ -17,17 +16,18 @@ else
         <div class="content-wrapper">
             <div class="row">
                 <SfGrid @ref="@Grid" DataSource="@DataSource" AllowExcelExport="true" AllowPaging="true" ID="gridEditEntregaNewOF"
-                        GridLines="GridLine.Both" Locale="es-Ar" Height="100%" Width="100%" 
+                        GridLines="GridLine.Both" Locale="es-Ar" Height="100%" Width="100%"
                         Toolbar="@Toolbaritems"
                         AllowResizing="true" AllowSelection="true" AllowSorting="true" AllowTextWrap="false"
                         AllowReordering="true" RowHeight="20">
                     <GridPageSettings PageCount="4" PageSize="50"></GridPageSettings>
-                    <GridEvents OnActionBegin="@(async(p)=> await OnActionBeginHandler(p))"
-                                OnBeginEdit="@(async (ped)=> await BeginEditHandler(ped))"
-                                QueryCellInfo="@(async(e)=> QueryCellInfoHandler(e))"
-                                OnActionComplete="@(async(e)=> await OnActionComplete(e))" 
-                                OnToolbarClick="@(async(e)=> await ClickHandler(e))"
-                                TValue="Pedidos"></GridEvents>
+                    <GridEvents OnActionBegin="@(async (p) => await OnActionBeginHandler(p))"
+                                OnBeginEdit="@(async (ped) => await BeginEditHandler(ped))"
+                                QueryCellInfo="@(async (e) => QueryCellInfoHandler(e))"
+                                OnActionComplete="@(async (e) => await OnActionComplete(e))"
+                                OnToolbarClick="@(async (e) => await ClickHandler(e))"
+                                TValue="Pedidos">
+                    </GridEvents>
                     <GridEditSettings AllowAdding="PermiteAgregar" AllowEditing="PermiteEditar" AllowDeleting="PermiteEliminar"
                                       Mode="EditMode.Dialog" Dialog="@DialogParams">
                         <HeaderTemplate>
@@ -36,109 +36,112 @@ else
                         <Template>
                             @{
                                 <SfSpinner Label="Realiazando reserva del insumo" Size="80" ZIndex="5000" Type="SpinnerType.Tailwind"
-                                           @bind-Visible="@RealizandoReserva"></SfSpinner>
+                                           @bind-Visible="@RealizandoReserva">
+                                </SfSpinner>
 
                                 <SfToast ID="toast_default" @ref="ToastObj">
                                     <ToastPosition X="Center" Y="Top"></ToastPosition>
                                 </SfToast>
                                 stock = (context as Pedidos);
-                                cg_dep = stock.CG_DEP;
-                                <div class="form-row">
-                                    <div class="form-group col-md-2">
-                                        <label class="col-form-label">Codigo Producto :</label>
-                                        <SfTextBox @bind-Value="@stock.CG_ART" Readonly="true"></SfTextBox>
-                                        <ValidationMessage For="@(() => stock.CG_ART)"></ValidationMessage>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label class="col-form-label">Descripcion Producto :</label>
-                                        <SfTextBox @bind-Value="@stock.DES_ART" Readonly="true"></SfTextBox>
-                                        <ValidationMessage For="@(() => stock.DES_ART)"></ValidationMessage>
-                                    </div>
-                                    <div class="form-group col-md-1 mt-4">
-                                        <SfButton HtmlAttributes="@HtmlAttribute" OnClick="@(async ()=> await Buscar())"
-                                                  CssClass="e-round"
-                                                  Content="" IconCss="fa fa-search" />
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label class="col-form-label">Déposito Salida</label>
-                                        <SfDropDownList TItem="Deposito" @bind-Value="@cg_dep" Readonly="false"
-                                                        TValue="int" ID="CG_DEP" DataSource="@depositos">
-                                            <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP">
-
-                                            </DropDownListFieldSettings>
-                                        </SfDropDownList>
-                                    </div>
-                                    @if (stock.TIPOO == 9) //movim entre dep
-                                    {
+                                if (stock != null)
+                                {
+                                    cg_dep = stock.CG_DEP;
+                                    <div class="form-row">
                                         <div class="form-group col-md-2">
-                                            <label class="col-form-label text-info">Déposito Ingreso</label>
-                                            <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP_ALT"
+                                            <label class="col-form-label">Codigo Producto :</label>
+                                            <SfTextBox @bind-Value="@stock.CG_ART" Readonly="true"></SfTextBox>
+                                            <ValidationMessage For="@(() => stock.CG_ART)"></ValidationMessage>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="col-form-label">Descripcion Producto :</label>
+                                            <SfTextBox @bind-Value="@stock.DES_ART" Readonly="true"></SfTextBox>
+                                            <ValidationMessage For="@(() => stock.DES_ART)"></ValidationMessage>
+                                        </div>
+                                        <div class="form-group col-md-1 mt-4">
+                                            <SfButton HtmlAttributes="@HtmlAttribute" OnClick="@(async () => await Buscar())"
+                                                      CssClass="e-round"
+                                                      Content="" IconCss="fa fa-search"/>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label class="col-form-label">Déposito Salida</label>
+                                            <SfDropDownList TItem="Deposito" @bind-Value="@cg_dep" Readonly="false"
                                                             TValue="int" ID="CG_DEP" DataSource="@depositos">
                                                 <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP">
 
                                                 </DropDownListFieldSettings>
                                             </SfDropDownList>
-                                            <ValidationMessage For="@(() => stock.CG_DEP_ALT)"></ValidationMessage>
                                         </div>
-                                    }
-                                    <div class="form-group col-md-1">
-                                        <label class="col-form-label">Stock:</label>
-                                        <SfNumericTextBox ShowSpinButton="false" @bind-Value="@stock.ResumenStock.STOCK"
-                                                          Readonly="true" />
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label class="col-form-label">Stock - Entrega:</label>
-                                        <SfNumericTextBox ShowSpinButton="false" @bind-Value="@stock.PENDIENTEOC" TValue="decimal?"
-                                                          Readonly="true">
-                                        </SfNumericTextBox>
-                                    </div>
+                                        @if (stock.TIPOO == 9) //movim entre dep
+                                        {
+                                            <div class="form-group col-md-2">
+                                                <label class="col-form-label text-info">Déposito Ingreso</label>
+                                                <SfDropDownList TItem="Deposito" @bind-Value="@stock.CG_DEP_ALT"
+                                                                TValue="int" ID="CG_DEP" DataSource="@depositos">
+                                                    <DropDownListFieldSettings Text="DES_DEP" Value="CG_DEP">
 
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-2">
-                                        <label class="col-form-label">Cantidad :</label>
-                                        <SfNumericTextBox @bind-Value="@stock.STOCK" Decimals="2" @onchange="@CantChange"></SfNumericTextBox>
-                                         <ValidationMessage For="@(() => stock.STOCK)"></ValidationMessage> 
-                                    </div>
-                                    <div class="form-group col-md-1">
-                                        <label class="col-form-label">Unidad :</label>
-                                        <SfTextBox @bind-Value="@stock.UNID" Readonly="true"></SfTextBox>
-                                        <ValidationMessage For="@(() => stock.UNID)"></ValidationMessage>
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label class="col-form-label">Serie :</label>
-                                        <SfTextBox @bind-Value="@stock.SERIE"></SfTextBox>
-                                        <ValidationMessage For="@(() => stock.SERIE)"></ValidationMessage>
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label class="col-form-label">Depacho :</label>
-                                        <SfTextBox @bind-Value="@stock.DESPACHO" Readonly="true"></SfTextBox>
-                                        <ValidationMessage For="@(() => stock.DESPACHO)"></ValidationMessage>
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label class="col-form-label">Lote :</label>
-                                        <SfTextBox @bind-Value="@stock.LOTE" Readonly="true"></SfTextBox>
-                                        <ValidationMessage For="@(() => stock.LOTE)"></ValidationMessage>
-                                    </div>
-                                    @if(stock.TIPOO == 28 && stock.CG_DEP != 15)
-                                    {
-                                        <div class="form-group col-md-3 mt-1">
-                                            <SfButton Content="Reservar" IsPrimary=false CssClass="mt-4" IconCss="fa fa-folder"
-                                                      OnClick="ReservarInsumo"></SfButton>
+                                                    </DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                                <ValidationMessage For="@(() => stock.CG_DEP_ALT)"></ValidationMessage>
+                                            </div>
+                                        }
+                                        <div class="form-group col-md-1">
+                                            <label class="col-form-label">Stock:</label>
+                                            <SfNumericTextBox ShowSpinButton="false" @bind-Value="@stock.ResumenStock.STOCK"
+                                                              Readonly="true"/>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label class="col-form-label">Stock - Entrega:</label>
+                                            <SfNumericTextBox ShowSpinButton="false" @bind-Value="@stock.PENDIENTEOC" TValue="decimal?"
+                                                              Readonly="true">
+                                            </SfNumericTextBox>
                                         </div>
 
-                                    }
-                                    else
-                                    {
-                                        <div class="form-group col-md-3 mt-1">
-                                            <SfButton Content="DesReservar" IsPrimary=false CssClass="mt-4" IconCss="fa fa-folder"
-                                                      OnClick="DesReservarInsumo"></SfButton>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-2">
+                                            <label class="col-form-label">Cantidad :</label>
+                                            <SfNumericTextBox @bind-Value="@stock.STOCK" Decimals="2" @onchange="@CantChange"></SfNumericTextBox>
+                                            <ValidationMessage For="@(() => stock.STOCK)"></ValidationMessage>
                                         </div>
-                                    }
+                                        <div class="form-group col-md-1">
+                                            <label class="col-form-label">Unidad :</label>
+                                            <SfTextBox @bind-Value="@stock.UNID" Readonly="true"></SfTextBox>
+                                            <ValidationMessage For="@(() => stock.UNID)"></ValidationMessage>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label class="col-form-label">Serie :</label>
+                                            <SfTextBox @bind-Value="@stock.SERIE"></SfTextBox>
+                                            <ValidationMessage For="@(() => stock.SERIE)"></ValidationMessage>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label class="col-form-label">Depacho :</label>
+                                            <SfTextBox @bind-Value="@stock.DESPACHO" Readonly="true"></SfTextBox>
+                                            <ValidationMessage For="@(() => stock.DESPACHO)"></ValidationMessage>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label class="col-form-label">Lote :</label>
+                                            <SfTextBox @bind-Value="@stock.LOTE" Readonly="true"></SfTextBox>
+                                            <ValidationMessage For="@(() => stock.LOTE)"></ValidationMessage>
+                                        </div>
+                                        @if (stock.TIPOO == 28 && stock.CG_DEP != 15)
+                                        {
+                                            <div class="form-group col-md-3 mt-1">
+                                                <SfButton Content="Reservar" IsPrimary=false CssClass="mt-4" IconCss="fa fa-folder"
+                                                          OnClick="ReservarInsumo">
+                                                </SfButton>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-group col-md-3 mt-1">
+                                                <SfButton Content="DesReservar" IsPrimary=false CssClass="mt-4" IconCss="fa fa-folder"
+                                                          OnClick="DesReservarInsumo">
+                                                </SfButton>
+                                            </div>
+                                        }
 
-                                </div>
-
-
+                                    </div>
+                                }
                             }
                         </Template>
                         @* <FooterTemplate>
@@ -201,7 +204,7 @@ else
                                     {
                                         <span>0</span>
                                     }
-                                    
+
                                 }
                             </Template>
                         </GridColumn>
@@ -217,7 +220,7 @@ else
                                     {
                                         <span>0</span>
                                     }
-                                    
+
                                 }
                             </Template>
                         </GridColumn>
@@ -227,7 +230,7 @@ else
                             <Template>
                                 @{ var ped = (context as Pedidos); }
                                 <a class="e-link" @onclick="VerReservas">@ped.ReservaTotal</a>
-                            </Template> 
+                            </Template>
                         </GridColumn>
                         <GridColumn Field="@nameof(Pedidos.Id)" IsPrimaryKey="true" HeaderText="ID" Visible="false"></GridColumn>
                     </GridColumns>
@@ -237,15 +240,13 @@ else
         </div>
     </div>
 
-        <BuscadorEmergenteResumenStock @ref="BuscadorEmergenteRS" DataSource="@Items" Visible="PopupBuscadorStockVisible" 
-                                       TipoSeleccion="@TipoSeleccion" VisibleSpinner="@visibleSpinnerRS" EsModal="true" 
-                                       Columnas="@(new string[] { "CG_ART", "STOCK", "CG_DEP", "DEPOSITO", "SERIE", "LOTE", "DESPACHO"})"
-                                       AplicarFiltro="AplicarFiltro" filterCG_ART= "@filtro_CG_ART"  filterDESPACHO="@filtro_DESPACHO"
-                                       OnObjetoSeleccionado="@(async(r)=> await OnResumenStockSelected(r))"
-                                       OnObjetosSeleccionados="@(async(r)=> await OnResumenStockSelected(r))"
-                                       OnCerrar="@(()=> PopupBuscadorStockVisible = false)" />
-
-
+    <BuscadorEmergenteResumenStock @ref="BuscadorEmergenteRS" DataSource="@Items" Visible="PopupBuscadorStockVisible"
+                                   TipoSeleccion="@TipoSeleccion" VisibleSpinner="@visibleSpinnerRS" EsModal="true"
+                                   Columnas="@(new string[] { "CG_ART", "STOCK", "CG_DEP", "DEPOSITO", "SERIE", "LOTE", "DESPACHO" })"
+                                   AplicarFiltro="AplicarFiltro" filterCG_ART="@filtro_CG_ART" filterDESPACHO="@filtro_DESPACHO"
+                                   OnObjetoSeleccionado="@(async (r) => await OnResumenStockSelected(r))"
+                                   OnObjetosSeleccionados="@(async (r) => await OnResumenStockSelected(r))"
+                                   OnCerrar="@(() => PopupBuscadorStockVisible = false)"/>
 }
 
 <style>
