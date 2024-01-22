@@ -29,7 +29,8 @@
                                 OnRecordDoubleClick="@((a)=> OnRowSelectedDouble_Click(a))"
                                 CommandClicked="CommandClickHandler" OnToolbarClick="OnToolBarHandler"
                                 OnActionBegin="@((a)=> BeginHandler(a))"
-                                QueryCellInfo="@((a)=> QueryCellInfoHandler(a))"></GridEvents>
+                                QueryCellInfo="@((a)=> QueryCellInfoHandler(a))">
+                    </GridEvents>
                     <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                     <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                     <GridPageSettings PageSize="12" PageSizes="true"></GridPageSettings>
@@ -435,5 +436,9 @@
     .e-Deletebutton, .e-Deletebutton .e-btn-icon {
         font-size: 9px;
         color: blue;
+    }
+
+    .e-grid .e-gridcontent .e-rowcell.color-fecha-vencimiento-pasados{
+        background-color: #fa5d52;
     }
 </style>

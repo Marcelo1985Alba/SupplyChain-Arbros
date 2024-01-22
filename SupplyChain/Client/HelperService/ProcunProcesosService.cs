@@ -8,9 +8,11 @@ namespace SupplyChain.Client.HelperService
     {
         private const string API = "api/ProcunProcesos";
 
-        public ProcunProcesosService(IRepositoryHttp httpClient): base(httpClient, API)
+        public ProcunProcesosService(IRepositoryHttp httpClient) : base(httpClient, API)
         {
 
         }
+
+
     }
 }
