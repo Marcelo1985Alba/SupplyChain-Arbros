@@ -19,7 +19,7 @@
                 <div>@tituloTabFormulas</div>
             </HeaderTemplate>
             <ContentTemplate>
-                <SfGrid @ref="@GridProdForm" DataSource="@DataOrdeProductosFormulas" AllowPaging="true" AllowFiltering="true" AllowSorting="true" AllowGrouping="true" AllowReordering="true" AllowResizing="true"       AllowMultiSorting="true" ID="ProdForm"
+                <SfGrid @ref="@GridProdForm" DataSource="@DataOrdeProductosFormulas" AllowPaging="true" AllowFiltering="true" AllowSorting="true" AllowGrouping="true" AllowReordering="true" AllowResizing="true" AllowMultiSorting="true" ID="ProdForm"
                         GridLines="GridLine.Both" Toolbar="@(new List<string>() { "ExcelExport" })" AllowExcelExport="true">
                     <GridPageSettings PageSizes="true"></GridPageSettings>
                     <GridEvents TValue="vIngenieriaProductosFormulas"
@@ -31,13 +31,13 @@
                         <GridColumn HeaderText="Editar" Width="30px">
                             <GridCommandColumns>
                                 <GridCommandColumn Type="CommandButtonType.Edit" Title="Editar"
-                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-edit", Content = "", CssClass = "botonGrilla" })"/>
+                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-edit", Content = "", CssClass = "botonGrilla" })" />
                             </GridCommandColumns>
                         </GridColumn>
                         <GridColumn HeaderText="Copiar" Width="30px">
                             <GridCommandColumns>
                                 <GridCommandColumn Type="CommandButtonType.Edit" Title="Copiar"
-                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-copy", Content = "", CssClass = "botonGrilla" })"/>
+                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-copy", Content = "", CssClass = "botonGrilla" })" />
                             </GridCommandColumns>
                         </GridColumn>
                         <GridColumn Field=@nameof(vIngenieriaProductosFormulas.CG_PROD) HeaderText="Producto" Width="120"></GridColumn>
@@ -48,22 +48,22 @@
                         <GridColumn Field=@nameof(vIngenieriaProductosFormulas.FORM_ACTIVA) HeaderText="Formula Activa" TextAlign="TextAlign.Right"
                                     Width="50" DisplayAsCheckBox="true">
                         </GridColumn>
-                        <GridColumn HeaderText="Despiece" Width="30px">
-                            <GridCommandColumns>
-                                <GridCommandColumn Type="CommandButtonType.None" Title="Despiece"
-                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-list-ul black", Content = "", CssClass = "botonGrilla" })"/>
-                            </GridCommandColumns>
-                        </GridColumn>
+                        @* <GridColumn HeaderText="Despiece" Width="30px">
+                        <GridCommandColumns>
+                        <GridCommandColumn Type="CommandButtonType.None" Title="Despiece"
+                        ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-list-ul black", Content = "", CssClass = "botonGrilla" })"/>
+                        </GridCommandColumns>
+                        </GridColumn> *@
                         <GridColumn HeaderText="Plano" Width="30px">
                             <GridCommandColumns>
                                 <GridCommandColumn Type="CommandButtonType.None" Title="Ver Plano"
-                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-eye", Content = "", CssClass = "botonGrilla" })"/>
+                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-eye", Content = "", CssClass = "botonGrilla" })" />
                             </GridCommandColumns>
                         </GridColumn>
                         <GridColumn HeaderText="Programas" Width="30px">
                             <GridCommandColumns>
                                 <GridCommandColumn Type="CommandButtonType.None" Title="Ver Programas"
-                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-eye", Content = "", CssClass = "botonGrilla" })"/>
+                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-eye", Content = "", CssClass = "botonGrilla" })" />
                             </GridCommandColumns>
                         </GridColumn>
                     </GridColumns>
@@ -176,7 +176,7 @@
     <DialogTemplates>
         <Header>
             <p class="card-header badge badge-info text-white">Copiar Formula</p>
-            <hr/>
+            <hr />
         </Header>
         <Content>
             <SfGrid @ref="@DetailedGridProdForm" DataSource="@DataDetailedProductosFormulas" AllowPaging="true" AllowFiltering="true" AllowSorting="true" ID="DetailedProdForm"
@@ -188,19 +188,19 @@
                     <GridColumn HeaderText="Despiece" Width="30px">
                         <GridCommandColumns>
                             <GridCommandColumn Type="CommandButtonType.None" Title="Despiece"
-                                               ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-list-ul black", Content = "", CssClass = "botonGrilla" })"/>
+                                               ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-list-ul black", Content = "", CssClass = "botonGrilla" })" />
                         </GridCommandColumns>
                     </GridColumn>
                     <GridColumn HeaderText="Plano" Width="30px">
                         <GridCommandColumns>
                             <GridCommandColumn Type="CommandButtonType.None" Title="Ver Plano"
-                                               ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-eye", Content = "", CssClass = "botonGrilla" })"/>
+                                               ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-eye", Content = "", CssClass = "botonGrilla" })" />
                         </GridCommandColumns>
                     </GridColumn>
                     <GridColumn HeaderText="Programas" Width="30px">
                         <GridCommandColumns>
                             <GridCommandColumn Type="CommandButtonType.None" Title="Ver Programas"
-                                               ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-eye", Content = "", CssClass = "botonGrilla" })"/>
+                                               ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-eye", Content = "", CssClass = "botonGrilla" })" />
                         </GridCommandColumns>
                     </GridColumn>
                 </GridColumns>
@@ -225,12 +225,13 @@
                             <GridEvents TValue="Formula" OnToolbarClick="ToolbarEditFormClickHandler" CommandClicked="OnCommandClicked" CellSaved="CellSavedHandler">
                             </GridEvents>
                             <GridPageSettings PageSizes="true" PageSize="10"></GridPageSettings>
-                            <GridEditSettings ShowDeleteConfirmDialog="false" AllowAdding=true AllowEditing=true 
+                            <GridEditSettings ShowDeleteConfirmDialog="false" AllowAdding=true AllowEditing=true
                                               ShowConfirmDialog="false" AllowDeleting=true Mode="EditMode.Batch">
                             </GridEditSettings>
                             <GridColumns>
                                 <GridColumn Field=@nameof(Formula.Cg_Se) HeaderText="Semielaborado" Width="80" AllowEditing=false></GridColumn>
                                 <GridColumn Field=@nameof(Formula.Cg_Mat) HeaderText="Materia Prima" Width="90" AllowEditing=false></GridColumn>
+                                <GridColumn Field=@nameof(Formula.DES_PROD) HeaderText="Descripción" Width="90" AllowEditing=false></GridColumn>
                                 <GridColumn Field=@nameof(Formula.CANT_MAT) HeaderText="Cantidad" Width="90" AllowEditing="true"></GridColumn>
                                 <GridColumn Field=@nameof(Formula.OBSERV) HeaderText="Observación" Width="90" AllowEditing="true"></GridColumn>
                                 <GridColumn Field=@nameof(Formula.AUTORIZA) HeaderText="Aprobó" Width="90" AllowEditing=false></GridColumn>
@@ -247,7 +248,7 @@
                    Visible="@PopupBuscadorProdVisible"
                    DataSource="@Insumos"
                    Columnas="@(new string[] { "ID", "DES_PROD", "CG_ORDEN" })"
-                   OnObjetoSeleccionado="@(async(o)=> await OnInsumoSeleccionado(o))"/>
+                   OnObjetoSeleccionado="@(async(o)=> await OnInsumoSeleccionado(o))" />
 
 @*
 
@@ -256,13 +257,13 @@
                    OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
 *@
 
-<Syncfusion.Blazor.Popups.SfDialogProvider/>
+<Syncfusion.Blazor.Popups.SfDialogProvider />
 
 <style>
     .e-grid .e-gridcontent .e-rowcell.rojas {
         background-color: #fd8787;
     }
-    
+
     .e-grid .e-gridcontent .e-rowcell.amarillas {
         background-color: #c3ab29;
     }
@@ -276,7 +277,7 @@
     }
 
     .custom-dialog .e-dlg-content {
-         padding: 0px 0px 0px; 
+        padding: 0px 0px 0px;
     }
 
     .e-custom {

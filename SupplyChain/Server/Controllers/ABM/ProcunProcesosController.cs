@@ -14,13 +14,14 @@ namespace SupplyChain.Server.Controllers.ABM
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProcunProcesosController :ControllerBase
+    public class ProcunProcesosController : ControllerBase
     {
-        private readonly ProcunProcesosRepository procunProcesosRepository;
+        //private readonly ProcunProcesosRepository _procesosRepository;
+        private readonly AppDbContext _context;
 
-        public ProcunProcesosController(ProcunProcesosRepository procunProcesosRepository)
+        public ProcunProcesosController(AppDbContext context)
         {
-            this.procunProcesosRepository = procunProcesosRepository;
+            _context = context;
         }
 
         // GET: api/Compras
@@ -29,34 +30,45 @@ namespace SupplyChain.Server.Controllers.ABM
         {
             try
             {
-                return await procunProcesosRepository.ObtenerTodos();
+                return await _context.ProcunProcesos.ToListAsync();
+
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message);  
             }
+
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ProcunProcesos>> GetProcunProceso(int id)
+        [HttpGet("{registro}")]
+        public async Task<ActionResult<ProcunProcesos>> GetProcunProceso(int registro)
         {
-            try
+            var proceso = await _context.ProcunProcesos.FindAsync(registro);
+            if (proceso == null)
             {
-                var proceso = await procunProcesosRepository.ObtenerPorId(id);
-
-                if (proceso == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(proceso);
-
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return proceso;
+            //    try
+            //    {
+            //        var proceso = await _procesosRepository.ObtenerPorId(id);
+
+            //        if (proceso == null)
+            //        {
+            //            return NotFound();
+            //        }
+
+            //        return Ok(proceso);
+
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        return BadRequest(ex.Message);
+            //    }
+
+            //}
+
         }
-
     }
 }
+
