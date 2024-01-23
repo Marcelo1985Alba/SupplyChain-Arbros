@@ -52,9 +52,12 @@ namespace SupplyChain.Client.HelperService
             await _js.InvokeAsync<object>("saveAsFile", nombreArchivo, Convert.ToBase64String(bytes));
         }
 
+        
         public async Task<HttpResponseMessage> Eliminar(int id)
         {
-            return await http.DeleteAsync($"{API}/{id}");
+            var sol=await http.DeleteAsync($"{API}/{id}");
+
+            return sol; 
         }
 
     }

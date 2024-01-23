@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using SupplyChain.Client.HelperService;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared.Models;
@@ -12,8 +13,10 @@ namespace SupplyChain.Server.Repositorios
 {
     public class ProgramaRepository : Repository<Programa, decimal>
     {
-        public ProgramaRepository(AppDbContext db) : base(db)
+        Repositorios.PedidosRepository PedidosRepository;
+        public ProgramaRepository(AppDbContext db, PedidosRepository pedidosRepository) : base(db)
         {
+            PedidosRepository = pedidosRepository;
         }
 
         public async Task<IEnumerable<Programa>> GetProgramasPedidos()
@@ -78,7 +81,7 @@ namespace SupplyChain.Server.Repositorios
                     && r.STOCK > 0
                     ).AsQueryable();
 
-                    var res = await query.FirstOrDefaultAsync();
+                    //var res = await query.FirstOrDefaultAsync();
 
                     if (i.CG_DEP > 0)
                         query = query.Where(r => r.CG_DEP == i.CG_DEP);
@@ -92,6 +95,13 @@ namespace SupplyChain.Server.Repositorios
                         i.CG_DEP = rs.CG_DEP;
                     }
 
+                    //carga de stock
+                    i.StockReal = await Db.ResumenStock.Where(r =>
+                            r.CG_ART.ToUpper() == i.CG_ART.ToUpper() && (r.CG_DEP == 4 || r.CG_DEP == 15))
+                    .SumAsync(s=> s.STOCK);
+
+                    i.Reserva = await PedidosRepository.ObtenerStockReservaByOF(cg_ordf, i.CG_ART);
+                    i.ReservaTotal = await PedidosRepository.ObtenerStockReserva(i.CG_ART);
                 });
 
 
@@ -105,6 +115,16 @@ namespace SupplyChain.Server.Repositorios
 
         }
 
-        
+        //public async Task<IEnumerable<Programa>> PutCantidadFab(int cg_ordfasoc, int cantf, int cantidad)
+        //{
+        //    string xSQL = $"update programa set cantfab={cantidad} where cg_ordfasoc={cg_ordfasoc} ";
+        //    return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
+        //}
+
+        //public async Task<IEnumerable<Programa>> GetCantidad(int cg_ordfasoc, int cg_ordf)
+        //{
+        //    string xSQL = $"select CANT* from Programa where CG_ORDFASOC={cg_ordfasoc} and CG_ORDF={cg_ordf}";
+        //    return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
+        //}
     }
 }

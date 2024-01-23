@@ -20,228 +20,294 @@
 </SfSpinner>
 
 <div class="col-12 control-section">
-    <SfToast ID="toast_default" @ref="ToastObj">
-        <ToastPosition X="Center" Y="Top"></ToastPosition>
-    </SfToast>
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
 
 
+<!-- Row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="">
+            <div class="form-material">
+                <EditForm Model="@StockEncabezado" OnValidSubmit="@(async () => await AbrirConfirmacionGuardarVale())">
+                    <DataAnnotationsValidator/>
+                    <ToolbarMenu OnNuevoClick="@(async () => await NuevoVale())"
+                                 DisabledEliminar="!abrioVale" OnEliminarClick="@(async () => await AbrirConfirmacionEliminarVale())"
+                                 DisabledGuardar="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"
+                                 DisabledImprimir="@(!abrioVale)"
+                                 OnImprimirClick="@(async () => await ImprimirEtiqueta())">
+                    </ToolbarMenu>
+                    <hr/>
+                    @*<h3 class="card-title">Vale</h3>*@
 
-    <!-- Row -->
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="">
-                <div class="form-material">
-                    <EditForm Model="@StockEncabezado" OnValidSubmit="@(async () => await AbrirConfirmacionGuardarVale())">
-                        <DataAnnotationsValidator />
-                        <ToolbarMenu OnNuevoClick="@(async () => await NuevoVale())"
-                                     DisabledEliminar="!abrioVale" OnEliminarClick="@(async () => await AbrirConfirmacionEliminarVale())"
-                                     DisabledGuardar="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"
-                                     DisabledImprimir="@(!abrioVale)"
-                                     OnImprimirClick="@(async () => await ImprimirEtiqueta())"></ToolbarMenu>
-                        <hr />
-                        @*<h3 class="card-title">Vale</h3>*@
+                    <fieldset class="scheduler-border">
+                        <legend class="scheduler-border"> Vale</legend>
+                        <ObjectGraphDataAnnotationsValidator/>
+                        <div class="form-row">
+                            <div class="form-group col-lg-7 col-md-5 col-sm-12 col-12">
+                                <label class="col-form-label text-info">Op. de Stock</label>
+                                <ComboTipoo TipoOperacionIdUnico="@OperacionId" TipooSeleccionado="@OperacionId" Filtra="@FiltraComboOperaciones"
+                                            OnSelectedTireChanged="@(async (t) => await SelectedTireChanged(t))"/>
 
-                        <fieldset class="scheduler-border">
-                            <legend class="scheduler-border"> Vale</legend>
-                            <ObjectGraphDataAnnotationsValidator />
-                            <div class="form-row">
-                                <div class="form-group col-lg-7 col-md-5 col-sm-12 col-12">
-                                    <label class="col-form-label text-info">Op. de Stock</label>
-                                        <ComboTipoo TipoOperacionIdUnico="@OperacionId" TipooSeleccionado="@OperacionId" Filtra="@FiltraComboOperaciones"
-                                                    OnSelectedTireChanged="@(async(t)=>await SelectedTireChanged(t))" />
-                                    
-                                </div>
-                                <div class="form-group col-lg-3 col-md-4 col-sm-8">
-                                    <label class="col-form-label text-info">Vale</label>
-                                    <BuscadorPedido Valor="@StockEncabezado.VALE" EsSoloLectura="true"
-                                                    MostrarSpin="false" MostraBotonBusqueda="true"
-                                                    HtmlAttr="@HtmlAttribute"
-                                                    TipoOperacion="@StockEncabezado.TIPOO"
-                                                    HabilitaBotonBusqueda="@DisableCssClass"
-                                                    OnOCSeleccionada="@(async(p)=> await OnObjectSelected(p))" />
-
-
-                                </div>
-                                <div class="form-group col-lg-2 col-md-3 col-sm-4">
-                                    <label class="col-form-label text-info">Fecha</label>
-                                    <SfDatePicker TValue="DateTime" Value='@StockEncabezado.FE_MOV' Format='dd/MM/yyyy'></SfDatePicker>
-                                </div>
+                            </div>
+                            <div class="form-group col-lg-3 col-md-4 col-sm-8">
+                                <label class="col-form-label text-info">Vale</label>
+                                <BuscadorPedido Valor="@StockEncabezado.VALE" EsSoloLectura="true"
+                                                MostrarSpin="false" MostraBotonBusqueda="true"
+                                                HtmlAttr="@HtmlAttribute"
+                                                TipoOperacion="@StockEncabezado.TIPOO"
+                                                HabilitaBotonBusqueda="@DisableCssClass"
+                                                OnOCSeleccionada="@(async (p) => await OnObjectSelected(p))"/>
 
 
                             </div>
-
-                            <div class="form-row">
-                                @if (StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28)
-                                {
-                                    <div class="form-group col-lg-3 col-md-4 col-sm-6">
-                                        <label class="col-form-label text-info">Orden de Fabricación</label>
-                                        <BuscadorOFab EsSoloLectura="@OFSoloLectura" DeshabilitaBotonBusqueda="@DeshabilitaBotonOF"
-                                                      MostraBotonBusqueda="@MostrarBotorOF" MostrarSpin="false"
-                                                      HtmlAttribute="@HtmlAttribute"
-                                                      Valor="@StockEncabezado.CG_ORDF" OnOFSeleccionada="OnProgramaSelected" />
-                                    </div>
-
-
-                                }
-
-                                @if (StockEncabezado.TIPOO == 5)
-                                {
-                                    <div class="form-group col-lg-2 col-md-6 col-sm-8">
-                                        <label class="col-form-label text-info">O. de Compra</label>
-                                        <BuscadorOCompra EsSoloLectura="@OCSoloLectura" DeshabilitaBotonBusqueda="@DeshabilitaBotonOC"
-                                                         MostraBotonBusqueda="@MostrarBotorOC" MostrarSpin="false"
-                                                         Remito="@StockEncabezado.REMITO" HtmlAttribute="@HtmlAttribute"
-                                                         Tipoo="StockEncabezado.TIPOO"
-                                                         Valor="@((int)StockEncabezado.OCOMPRA)"
-                                                         OnOCSeleccionada="@(async(c)=>await OnCompraSelected(c))" />
-                                    </div>
-
-                                    <div class="form-group col-lg-2 col-md-6 col-sm-4">
-                                        <label class="col-form-label text-info">Remito</label>
-                                        <SfTextBox ID="Remito" ShowClearButton="false" @bind-Value="@StockEncabezado.REMITO"
-                                                   Type="InputType.Text"
-                                                   Readonly="false" Blur="OnBlurRemito">
-                                        </SfTextBox>
-
-                                    </div>
-
-                                    <div class="form-group col-lg-1 col-md-6 col-sm-4">
-                                        <label class="col-form-label text-info">@labelClienteProveedor</label>
-                                        <SfNumericTextBox ID="Cg_CLI_Cg_PROVE" TValue="int?" @bind-Value="@Cg_CLI_Cg_PROVE" Readonly="true" ShowSpinButton="false">
-
-                                        </SfNumericTextBox>
-                                    </div>
-                                    <div class="form-group col-lg-7 col-md-6 col-sm-8">
-                                        <label class="col-form-label text-info">Razon Social</label>
-                                        <SfTextBox ID="DescripcionPro" ShowClearButton="true"
-                                                   @bind-Value="@DescripcionPro" Readonly="true">
-
-                                        </SfTextBox>
-
-                                    </div>
-                                }
-
-
-                                @if ((StockEncabezado.TIPOO == 1 || StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28)
-                                  && StockEncabezado.PEDIDO > 0)
-                                {
-                                    <div class="form-group col-lg-3 col-md-4 col-sm-6">
-                                        <label class="col-form-label text-info">Pedido</label>
-                                        <BuscadorPedido Valor="@StockEncabezado.PEDIDO" MostrarSpin="false" EsSoloLectura="true"
-                                                        HabilitaBotonBusqueda="false" MostraBotonBusqueda="false" />
-                                    </div>
-                                }
-                                @if ((StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28) &&
-                                    StockEncabezado.ModeloOrdenFabricacionEncabezado != null
-                                       && StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ORDEN == 1)
-                                {
-                                    <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                                        <label class="col-form-label text-info">Producto</label>
-                                        <SfTextBox ID="CG_PROD" ShowClearButton="false"
-                                                   @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ART"
-                                                   Type="InputType.Text" Readonly="true">
-                                        </SfTextBox>
-
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                                        <label class="col-form-label text-info">Presion</label>
-                                        <SfTextBox ID="CAMPOCOM1" ShowClearButton="false"
-                                                   @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM1"
-                                                   Type="InputType.Text" Readonly="true">
-                                        </SfTextBox>
-
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                                        <label class="col-form-label text-info">Resorte</label>
-                                        <SfTextBox ID="CAMPOCOM2" ShowClearButton="false"
-                                                   @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM2"
-                                                   Type="InputType.Text" Readonly="true">
-                                        </SfTextBox>
-
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                                        <label class="col-form-label text-info">Fluido</label>
-                                        <SfTextBox ID="CAMPOCOM3" ShowClearButton="false"
-                                                   @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM3"
-                                                   Type="InputType.Text" Readonly="true">
-                                        </SfTextBox>
-
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                                        <label class="col-form-label text-info">Presion de Prueba</label>
-                                        <SfTextBox ID="CAMPOCOM4" ShowClearButton="false"
-                                                   @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM4"
-                                                   Type="InputType.Text" Readonly="true">
-                                        </SfTextBox>
-
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                                        <label class="col-form-text-info">Contrapresion</label>
-                                        <SfTextBox ID="CAMPOCOM5" ShowClearButton="false"
-                                                   @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM5"
-                                                   Type="InputType.Text" Readonly="true">
-                                        </SfTextBox>
-
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                                        <label class="col-form-label text-info">Temperatura</label>
-                                        <SfTextBox ID="CAMPOCOM6" ShowClearButton="false"
-                                                   @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM6"
-                                                   Type="InputType.Text" Readonly="true">
-                                        </SfTextBox>
-
-                                    </div>
-
-                                    <div class="form-group col-12">
-                                        <label class="col-form-label text-info">Observaciones</label>
-                                        <SfTextBox ID="OBSERVACIONES" ShowClearButton="false" Multiline="true"
-                                                   @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.OBSERITEM"
-                                                   Type="InputType.Text" Readonly="true">
-                                        </SfTextBox>
-
-                                    </div>
-                                }
+                            <div class="form-group col-lg-2 col-md-3 col-sm-4">
+                                <label class="col-form-label text-info">Fecha</label>
+                                <SfDatePicker TValue="DateTime" Value='@StockEncabezado.FE_MOV' Format='dd/MM/yyyy'></SfDatePicker>
                             </div>
-                        </fieldset>
 
-                        <CascadingValue Value="@StockEncabezado">
-                            <CascadingValue Value="@StockEncabezado.Items">
 
-                                @if (StockEncabezado.TIPOO == 5)
+                        </div>
+
+                        <div class="form-row">
+                            @if (StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28)
+                            {
+                                <div class="form-group col-lg-3 col-md-4 col-sm-6">
+                                    <label class="col-form-label text-info">Orden de Fabricación</label>
+                                    <BuscadorOFab EsSoloLectura="@OFSoloLectura" DeshabilitaBotonBusqueda="@DeshabilitaBotonOF"
+                                                  MostraBotonBusqueda="@MostrarBotorOF" MostrarSpin="false"
+                                                  HtmlAttribute="@HtmlAttribute"
+                                                  Valor="@StockEncabezado.CG_ORDF" OnOFSeleccionada="OnProgramaSelected"/>
+                                </div>
+                            }
+
+                            @if (StockEncabezado.TIPOO == 5)
+                            {
+                                <div class="form-group col-lg-2 col-md-6 col-sm-8">
+                                    <label class="col-form-label text-info">O. de Compra</label>
+                                    <BuscadorOCompra EsSoloLectura="@OCSoloLectura" DeshabilitaBotonBusqueda="@DeshabilitaBotonOC"
+                                                     MostraBotonBusqueda="@MostrarBotorOC" MostrarSpin="false"
+                                                     Remito="@StockEncabezado.REMITO" HtmlAttribute="@HtmlAttribute"
+                                                     Tipoo="StockEncabezado.TIPOO"
+                                                     Valor="@((int)StockEncabezado.OCOMPRA)"
+                                                     OnOCSeleccionada="@(async (c) => await OnCompraSelected(c))"/>
+                                </div>
+
+                                <div class="form-group col-lg-2 col-md-6 col-sm-4">
+                                    <label class="col-form-label text-info">Remito</label>
+                                    <SfTextBox ID="Remito" ShowClearButton="false" @bind-Value="@StockEncabezado.REMITO"
+                                               Type="InputType.Text"
+                                               Readonly="false" Blur="OnBlurRemito">
+                                    </SfTextBox>
+
+                                </div>
+
+                                <div class="form-group col-lg-1 col-md-6 col-sm-4">
+                                    <label class="col-form-label text-info">@labelClienteProveedor</label>
+                                    <SfNumericTextBox ID="Cg_CLI_Cg_PROVE" TValue="int?" @bind-Value="@Cg_CLI_Cg_PROVE" Readonly="true" ShowSpinButton="false">
+
+                                    </SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-lg-7 col-md-6 col-sm-8">
+                                    <label class="col-form-label text-info">Razon Social</label>
+                                    <SfTextBox ID="DescripcionPro" ShowClearButton="true"
+                                               @bind-Value="@DescripcionPro" Readonly="true">
+
+                                    </SfTextBox>
+
+                                </div>
+                            }
+
+
+                            @if ((StockEncabezado.TIPOO == 1 || StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28)
+                                 && StockEncabezado.PEDIDO > 0)
+                            {
+                                <div class="form-group col-lg-3 col-md-4 col-sm-6">
+                                    <label class="col-form-label text-info">Pedido</label>
+                                    <BuscadorPedido Valor="@StockEncabezado.PEDIDO" MostrarSpin="false" EsSoloLectura="true"
+                                                    HabilitaBotonBusqueda="false" MostraBotonBusqueda="false"/>
+                                </div>
+                            }
+                            @if ((StockEncabezado.TIPOO == 10 || StockEncabezado.TIPOO == 28) &&
+                                 StockEncabezado.ModeloOrdenFabricacionEncabezado != null
+                                 && StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ORDEN == 1)
+                            {
+                                <div class="form-group col-lg-3 col-md-4 col-sm-12">
+                                    <label class="col-form-label text-info">Producto</label>
+                                    <SfTextBox ID="CG_PROD" ShowClearButton="false"
+                                               @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CG_ART"
+                                               Type="InputType.Text" Readonly="true">
+                                    </SfTextBox>
+
+                                </div>
+                                <div class="form-group col-lg-3 col-md-4 col-sm-12">
+                                    <label class="col-form-label text-info">Presion</label>
+                                    <SfTextBox ID="CAMPOCOM1" ShowClearButton="false"
+                                               @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM1"
+                                               Type="InputType.Text" Readonly="true">
+                                    </SfTextBox>
+
+                                </div>
+                                <div class="form-group col-lg-3 col-md-4 col-sm-12">
+                                    <label class="col-form-label text-info">Resorte</label>
+                                    <SfTextBox ID="CAMPOCOM2" ShowClearButton="false"
+                                               @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM2"
+                                               Type="InputType.Text" Readonly="true">
+                                    </SfTextBox>
+
+                                </div>
+                                <div class="form-group col-lg-3 col-md-4 col-sm-12">
+                                    <label class="col-form-label text-info">Fluido</label>
+                                    <SfTextBox ID="CAMPOCOM3" ShowClearButton="false"
+                                               @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM3"
+                                               Type="InputType.Text" Readonly="true">
+                                    </SfTextBox>
+
+                                </div>
+                                <div class="form-group col-lg-3 col-md-4 col-sm-12">
+                                    <label class="col-form-label text-info">Presion de Prueba</label>
+                                    <SfTextBox ID="CAMPOCOM4" ShowClearButton="false"
+                                               @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM4"
+                                               Type="InputType.Text" Readonly="true">
+                                    </SfTextBox>
+
+                                </div>
+                                <div class="form-group col-lg-3 col-md-4 col-sm-12">
+                                    <label class="col-form-text-info">Contrapresion</label>
+                                    <SfTextBox ID="CAMPOCOM5" ShowClearButton="false"
+                                               @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM5"
+                                               Type="InputType.Text" Readonly="true">
+                                    </SfTextBox>
+
+                                </div>
+                                <div class="form-group col-lg-3 col-md-4 col-sm-12">
+                                    <label class="col-form-label text-info">Temperatura</label>
+                                    <SfTextBox ID="CAMPOCOM6" ShowClearButton="false"
+                                               @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.CAMPOCOM6"
+                                               Type="InputType.Text" Readonly="true">
+                                    </SfTextBox>
+
+                                </div>
+
+                                <div class="form-group col-12">
+                                    <label class="col-form-label text-info">Observaciones</label>
+                                    <SfTextBox ID="OBSERVACIONES" ShowClearButton="false" Multiline="true"
+                                               @bind-Value="@StockEncabezado.ModeloOrdenFabricacionEncabezado.OBSERITEM"
+                                               Type="InputType.Text" Readonly="true">
+                                    </SfTextBox>
+
+                                </div>
+                            }
+                        </div>
+                    </fieldset>
+
+                    <CascadingValue Value="@StockEncabezado">
+                        <CascadingValue Value="@StockEncabezado.Items">
+
+                            @if (StockEncabezado.TIPOO == 5)
+                            {
+                                <GridEditStock DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
+                                               PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
+                                               onGuardar="@(async (s) => await SetearCamposParaGuardar(s))"/>
+                            }
+                            else
+                            {
+                                <!--Si alguno de los parametros esta en null voy a tirar un error-->
+                                if (StockEncabezado.Items == null || PermiteAgregarItem == null
+                                    || PermiteEditarItem == null || PermiteEliminarItem == null || AplicarFiltro == null
+                                    || cg_mat == null || despacho == null || AbrirBuscadorResumenStockAutomaticamente == null)
                                 {
-                                    <GridEditStock DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
-                                                   PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
-                                                   onGuardar="@(async(s)=> await SetearCamposParaGuardar(s))" />
+                                    if (StockEncabezado.Items == null)
+                                    {
+                                        <div class="alert alert-danger" role="alert">
+                                            <strong>ERROR</strong> No se pudo cargar el componente
+                                            <p>StockEncabezado.Items es null</p>
+                                        </div>
+                                    }
+                                    if (PermiteAgregarItem == null)
+                                    {
+                                        <div class="alert alert-danger" role="alert">
+                                            <strong>ERROR</strong> No se pudo cargar el componente
+                                            <p>PermiteAgregarItem es null</p>
+                                        </div>
+                                    }
+                                    if (PermiteEditarItem == null)
+                                    {
+                                        <div class="alert alert-danger" role="alert">
+                                            <strong>ERROR</strong> No se pudo cargar el componente
+                                            <p>PermiteEditarItem es null</p>
+                                        </div>
+                                    }
+                                    if (PermiteEliminarItem == null)
+                                    {
+                                        <div class="alert alert-danger" role="alert">
+                                            <strong>ERROR</strong> No se pudo cargar el componente
+                                            <p>PermiteEliminarItem es null</p>
+                                        </div>
+                                    }
+                                    if (AplicarFiltro == null)
+                                    {
+                                        <div class="alert alert-danger" role="alert">
+                                            <strong>ERROR</strong> No se pudo cargar el componente
+                                            <p>AplicarFiltro es null</p>
+                                        </div>
+                                    }
+                                    if (cg_mat == null)
+                                    {
+                                        <div class="alert alert-danger" role="alert">
+                                            <strong>ERROR</strong> No se pudo cargar el componente
+                                            <p>cg_mat es null</p>
+                                        </div>
+                                    }
+                                    if (despacho == null)
+                                    {
+                                        <div class="alert alert-danger" role="alert">
+                                            <strong>ERROR</strong> No se pudo cargar el componente
+                                            <p>despacho es null</p>
+                                        </div>
+                                    }
+                                    if (AbrirBuscadorResumenStockAutomaticamente == null)
+                                    {
+                                        <div class="alert alert-danger" role="alert">
+                                            <strong>ERROR</strong> No se pudo cargar el componente
+                                            <p>AbrirBuscadorResumenStockAutomaticamente es null</p>
+                                        </div>
+                                    }
                                 }
                                 else
                                 {
-                                    <GridEditEntrega @ref="refGridEditEntrega" DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
+                                    <GridEditEntrega DataSource="@StockEncabezado.Items" PermiteAgregar="@PermiteAgregarItem"
                                                      PermiteEditar="@PermiteEditarItem" PermiteEliminar="@PermiteEliminarItem"
                                                      AplicarFiltro="@AplicarFiltro" filtro_CG_ART="@cg_mat" filtro_DESPACHO="@despacho"
                                                      AbrirBuscadorResumenStock="@AbrirBuscadorResumenStockAutomaticamente"
-                                                     OnGuardar="@(async(s)=> await SetearCamposParaGuardar(s))" />
+                                                     OnGuardar="@(async (s) => await SetearCamposParaGuardar(s))"/>
                                 }
-                            </CascadingValue>
+                            }
                         </CascadingValue>
-                        <ValidationSummary />
+                    </CascadingValue>
+                    <ValidationSummary/>
 
-                        @*Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"*@
-                        <SfButton Content="Guardar" IsPrimary="false" IconCss="fa fa-save"
-                                  CssClass="btn btn-block e-info"></SfButton>
+                    @*Disabled="@(StockEncabezado.TIPOO == 0 || StockEncabezado.Items.Count == 0)"*@
+                    <SfButton Content="Guardar" IsPrimary="false" IconCss="fa fa-save"
+                              CssClass="btn btn-block e-info">
+                    </SfButton>
 
-                    </EditForm>
-                </div>
+                </EditForm>
             </div>
         </div>
     </div>
+</div>
 
 </div>
 
 <ConfirmacionDialog @ref="ConfirmacionEliminarDialog" OnConfirm="@(async () => await EliminarVale())">
     <HeaderTempalte>
 
-        <p> <strong>Eliminacion Vale</strong></p>
-        <hr />
+        <p>
+            <strong>Eliminacion Vale</strong>
+        </p>
+        <hr/>
     </HeaderTempalte>
     <ContentTemplate>
         <p>Estas seguro que desea elimnar el vale <strong>@StockEncabezado?.VALE</strong> ?</p>
@@ -250,8 +316,10 @@
 
 <ConfirmacionDialog @ref="ConfirmacionGuardarDialog" OnConfirm="@(async () => await Guardar())">
     <HeaderTempalte>
-        <p> <strong>Guardar Vale </strong></p>
-        <hr />
+        <p>
+            <strong>Guardar Vale </strong>
+        </p>
+        <hr/>
     </HeaderTempalte>
     <ContentTemplate>
         <p>Esta seguro que desea guardar el vale <strong>@StockEncabezado?.VALE</strong> ?</p>
@@ -261,7 +329,7 @@
 
 <BuscadorEmergente Height="520px" TItem="Pedidos" Titulo=@tituloBuscador Visible="@PopupBuscadorVisible"
                    DataSource="@ItemsABuscar"
-                   Columnas="@ColumnasBuscador" OnObjetoSeleccionado="OnObjectSelected" OnBuscarMas="@(async()=> await BuscarVales())" />
+                   Columnas="@ColumnasBuscador" OnObjetoSeleccionado="OnObjectSelected" OnBuscarMas="@(async () => await BuscarVales())"/>
 
 
 <style>

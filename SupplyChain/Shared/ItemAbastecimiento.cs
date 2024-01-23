@@ -24,7 +24,16 @@ namespace SupplyChain.Shared.Models
 		public string OBSERITEM {get;set;}
         public string AVISO { get; set; }
 
-		[NotMapped]
-		public vResumenStock ResumenStock { get; set; } = new vResumenStock();
+		[NotMapped] public vResumenStock ResumenStock { get; set; } = new vResumenStock();
+        /// <summary>
+        /// Stock del deposito de insumos y reserva de todos los despachos
+        /// </summary>
+        [NotMapped] public decimal StockReal { get; set; } = 0;
+
+        /// <summary>
+        /// Stock para una determinada orden orden del insumo 
+        /// </summary>
+        [NotMapped] public decimal Reserva { get; set; } = 0;
+        [NotMapped] public decimal ReservaTotal { get; set; } = 0;
     }
 }

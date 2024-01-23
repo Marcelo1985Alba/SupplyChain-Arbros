@@ -48,7 +48,7 @@ namespace SupplyChain
         {
             return await _programaRepository
                 .Obtener(p => p.Cg_Cia == 1 && p.CG_ESTADOCARGA == 1 && p.CG_ORDF == p.CG_ORDFASOC, 0,
-                         r => r.OrderByDescending(p => p.CG_ORDF))
+                    r => r.OrderByDescending(p => p.CG_ORDF))
                 .ToListAsync();
         }
 
@@ -58,8 +58,10 @@ namespace SupplyChain
         {
             //se usa en GridEditEntrega.razor.cs
             return await _programaRepository
-                .Obtener(p => p.Cg_Cia == 1 && (p.CG_ESTADOCARGA == 1 || p.CG_ESTADOCARGA == 0) && p.PROCESO.Trim() == "MC", 0,
-                         r => r.OrderByDescending(p => p.CG_ORDF))
+                .Obtener(
+                    p => p.Cg_Cia == 1 && (p.CG_ESTADOCARGA == 1 || p.CG_ESTADOCARGA == 0) && p.PROCESO.Trim() == "MC",
+                    0,
+                    r => r.OrderByDescending(p => p.CG_ORDF))
                 .ToListAsync();
         }
 
@@ -69,8 +71,10 @@ namespace SupplyChain
         {
             //se usa en GridEditEntrega.razor.cs
             return await _programaRepository
-                .Obtener(p => p.Cg_Cia == 1 && (p.CG_ESTADOCARGA == 2 || p.CG_ESTADOCARGA == 3) && p.PROCESO.Trim() == "MC", 0,
-                         r => r.OrderByDescending(p => p.CG_ORDF))
+                .Obtener(
+                    p => p.Cg_Cia == 1 && (p.CG_ESTADOCARGA == 2 || p.CG_ESTADOCARGA == 3) && p.PROCESO.Trim() == "MC",
+                    0,
+                    r => r.OrderByDescending(p => p.CG_ORDF))
                 .ToListAsync();
         }
 
@@ -86,7 +90,6 @@ namespace SupplyChain
             {
                 return BadRequest(ex);
             }
-
         }
 
         // GET: api/Programas/GetProgramaByOF/cg_ordf
@@ -96,14 +99,12 @@ namespace SupplyChain
             try
             {
                 return Ok(await _programaRepository.Obtener(p => p.Cg_Cia == 1
-                    && p.CG_ORDF == cg_ordf).ToListAsync());
+                                                                 && p.CG_ORDF == cg_ordf).ToListAsync());
             }
             catch (Exception ex)
             {
                 return BadRequest(ex);
             }
-
-
         }
 
         // GET: api/Programas/5
@@ -115,6 +116,22 @@ namespace SupplyChain
             return programa == null ? NotFound() : programa;
         }
 
+        ///METODO PUT DE CANTIDADFAB, YA ESTA EL REPOSITORIO FALTA RESTO
+        //[HttpGet("GetCantidad/{cg_ordfasoc}/{cg_ordf}")]
+        //public async Task<ActionResult<IEnumerable<Programa>>> GetCantidad(int cg_ordfasoc, int cg_ordf)
+        //{
+        //    try
+        //    {
+        //        var programas = await _programaRepository.GetCantidad(cg_ordfasoc, cg_ordf);
+
+        //        return Ok(programas);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+
+        //}
         [HttpGet("EnviarCsvDataCore")]
         public async Task<ActionResult> EnviarCsv()
         {
@@ -123,19 +140,16 @@ namespace SupplyChain
         }
 
         [HttpGet("GetOrdenesAbiertas/{cg_ordfasoc}/{cg_ordf}")]
-        public async Task<ActionResult<IEnumerable<Programa>>>GetAbiertas(int cg_ordfasoc, int cg_ordf)
+        public async Task<ActionResult<IEnumerable<Programa>>> GetAbiertas(int cg_ordfasoc, int cg_ordf)
         {
-            
             try
             {
                 return Ok(await _programaRepository.GetOrdenesAbiertas(cg_ordfasoc, cg_ordf));
-                
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex);
             }
-            
         }
 
         [HttpGet("GeneraCsvImpresoraQR/{pedido}")]
