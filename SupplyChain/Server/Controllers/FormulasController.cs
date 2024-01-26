@@ -11,6 +11,8 @@ using SupplyChain.Shared;
 using SupplyChain.Shared.Models;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Syncfusion.Blazor.Charts.Chart.Models;
 
 namespace SupplyChain.Server.Controllers
 {
@@ -23,10 +25,12 @@ namespace SupplyChain.Server.Controllers
 
         private readonly AppDbContext _context;
         private readonly FormulaRepository _formulaRepository;
+        private readonly ProductoRepository _prodRepository;
 
-        public FormulasController(FormulaRepository formulaRepository)
+        public FormulasController(FormulaRepository formulaRepository, ProductoRepository productoRepository)
         {
             this._formulaRepository = formulaRepository;
+            this._prodRepository = productoRepository;
         }
 
         [HttpGet("EnFormula/{codigo}")]
@@ -71,7 +75,40 @@ namespace SupplyChain.Server.Controllers
             {
                 List<Formula> formulas = await _formulaRepository.Obtener(f => f.Cg_Prod == CG_PROD).ToListAsync();
                 int maxRevision = formulas.Max(f => f.REVISION);
-                return formulas.Where(f => f.REVISION == maxRevision);
+                List<Formula> toReturn = formulas.Where(f => f.REVISION == maxRevision).ToList();
+                foreach (var formula in toReturn)
+                {
+                    if (formula.CG_ORDEN == 4)
+                    {
+                        var prod = _prodRepository.ObtenerPorId(formula.Cg_Mat.Trim()).Result;
+                        if (prod != null)
+                            formula.DES_PROD = prod.DES_PROD;
+                    }
+                    else if (formula.CG_ORDEN == 3)
+                    {
+                        var prod = _prodRepository.ObtenerPorId(formula.Cg_Se.Trim()).Result;
+                        if (prod != null)
+                            formula.DES_PROD = prod.DES_PROD;
+                    }
+                    else if (formula.CG_ORDEN == 1)
+                    {
+                        // para un futuro cuando se puedan poner productos dentro de el producto
+                        if (!formula.Cg_Mat.IsNullOrEmpty())
+                        {
+                            var prod = _prodRepository.ObtenerPorId(formula.Cg_Mat.Trim()).Result;
+                            if (prod != null)
+                                formula.DES_PROD = prod.DES_PROD;
+                        }
+                        else if (!formula.Cg_Se.IsNullOrEmpty())
+                        {
+                            var prod = _prodRepository.ObtenerPorId(formula.Cg_Se.Trim()).Result;
+                            if (prod != null)
+                                formula.DES_PROD = prod.DES_PROD;
+                        }
+                    }
+                }
+
+                return toReturn;
             }
             catch (Exception ex)
             {
@@ -157,16 +194,13 @@ namespace SupplyChain.Server.Controllers
             {
                 List<Formula> formulas = new List<Formula>();
                 ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
-                DataTable xTabla = xConexionSQL.EjecutarSQL($"SELECT P.DES_PROD, F.* " +
-                                                            "FROM Form2 F " +
-                                                            "INNER JOIN ( " +
-                                                            "SELECT CG_PROD, MAX(REVISION) AS MAX_REVISION " +
-                                                            "FROM Form2 " +
-                                                            $"WHERE CG_MAT = '{CG_MAT}' " +
-                                                            "GROUP BY CG_PROD " +
-                                                            ") MaxRevisionSubquery ON F.CG_PROD = MaxRevisionSubquery.CG_PROD AND F.REVISION = MaxRevisionSubquery.MAX_REVISION " +
-                                                            "INNER JOIN PROD P ON F.CG_PROD = P.CG_PROD " +
-                                                            $"WHERE F.CG_MAT = '{CG_MAT}'");
+                DataTable xTabla = xConexionSQL.EjecutarSQL($"SELECT P.DES_PROD, F2.* FROM Form2 F2 " +
+                                                            $"JOIN (SELECT CG_PROD, MAX(REVISION) AS MAX_REVISION " +
+                                                            $"FROM Form2 WHERE CG_MAT = '{CG_MAT}' GROUP BY CG_PROD) " +
+                                                            $"SubqueryCG_MAT ON F2.CG_PROD = SubqueryCG_MAT.CG_PROD AND F2.REVISION = SubqueryCG_MAT.MAX_REVISION " +
+                                                            $"INNER JOIN PROD P ON F2.CG_PROD = P.CG_PROD " +
+                                                            $"WHERE (SELECT MAX(REVISION) FROM Form2 " +
+                                                            $"WHERE CG_PROD = F2.CG_PROD GROUP BY CG_PROD) = SubqueryCG_MAT.MAX_REVISION AND CG_MAT = '{CG_MAT}'");
                 formulas = xTabla.AsEnumerable().Select(r => new Formula
                 {
                     Id = r.Field<int>("Registro"),
@@ -180,7 +214,7 @@ namespace SupplyChain.Server.Controllers
                     ACTIVO = r.Field<string>("ACTIVO"),
                     CG_DEC = r.Field<int>("CG_DEC"),
                     CG_DEC_OF = r.Field<int>("CG_DEC_OF"),
-                    FE_FORM = r.Field<DateTime>("FE_FORM"),
+                    FE_FORM = r.Field<DateTime?>("FE_FORM") ?? DateTime.Now,
                     MERMA = r.Field<decimal>("MERMA"),
                     CANTIDAD = r.Field<decimal>("CANTIDAD"),
                     REVISION = r.Field<int>("REVISION"),
@@ -222,16 +256,13 @@ namespace SupplyChain.Server.Controllers
             {
                 List<Formula> formulas = new List<Formula>();
                 ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
-                DataTable xTabla = xConexionSQL.EjecutarSQL($"SELECT P.DES_PROD, F.* " +
-                                                            "FROM Form2 F " +
-                                                            "INNER JOIN ( " +
-                                                            "SELECT CG_PROD, MAX(REVISION) AS MAX_REVISION " +
-                                                            "FROM Form2 " +
-                                                            $"WHERE CG_SE = '{CG_SE}' " +
-                                                            "GROUP BY CG_PROD " +
-                                                            ") MaxRevisionSubquery ON F.CG_PROD = MaxRevisionSubquery.CG_PROD AND F.REVISION = MaxRevisionSubquery.MAX_REVISION " +
-                                                            "INNER JOIN PROD P ON F.CG_PROD = P.CG_PROD " +
-                                                            $"WHERE F.CG_SE = '{CG_SE}'");
+                DataTable xTabla = xConexionSQL.EjecutarSQL($"SELECT P.DES_PROD, F2.* FROM Form2 F2 " +
+                                                            $"JOIN (SELECT CG_PROD, MAX(REVISION) AS MAX_REVISION " +
+                                                            $"FROM Form2 WHERE CG_SE = '{CG_SE}' GROUP BY CG_PROD) " +
+                                                            $"SubqueryCG_MAT ON F2.CG_PROD = SubqueryCG_MAT.CG_PROD AND F2.REVISION = SubqueryCG_MAT.MAX_REVISION " +
+                                                            $"INNER JOIN PROD P ON F2.CG_PROD = P.CG_PROD " +
+                                                            $"WHERE (SELECT MAX(REVISION) FROM Form2 " +
+                                                            $"WHERE CG_PROD = F2.CG_PROD GROUP BY CG_PROD) = SubqueryCG_MAT.MAX_REVISION AND CG_SE = '{CG_SE}'");
                 formulas = xTabla.AsEnumerable().Select(r => new Formula
                 {
                     Id = r.Field<int>("Registro"),
@@ -245,7 +276,7 @@ namespace SupplyChain.Server.Controllers
                     ACTIVO = r.Field<string>("ACTIVO"),
                     CG_DEC = r.Field<int>("CG_DEC"),
                     CG_DEC_OF = r.Field<int>("CG_DEC_OF"),
-                    FE_FORM = r.Field<DateTime>("FE_FORM"),
+                    FE_FORM = r.Field<DateTime?>("FE_FORM") ?? DateTime.Now,
                     MERMA = r.Field<decimal>("MERMA"),
                     CANTIDAD = r.Field<decimal>("CANTIDAD"),
                     REVISION = r.Field<int>("REVISION"),

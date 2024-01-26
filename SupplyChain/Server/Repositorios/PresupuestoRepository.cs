@@ -5,6 +5,7 @@ using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,15 +28,16 @@ namespace SupplyChain.Server.Repositorios
         {
             if (tipoFiltro == TipoFiltro.Pendientes)
             {
-                return await Db.vPresupuestos.Where(p=> !p.TIENEPEDIDO).ToListAsync();
+                return await Db.vPresupuestos.Where(p=> string.IsNullOrEmpty(p.COLOR) || p.COLOR.Contains("PENDIENTE")).ToListAsync();
             }
 
             if (tipoFiltro == TipoFiltro.NoPendientes)
             {
-                return await Db.vPresupuestos.Where(p => p.TIENEPEDIDO).ToListAsync();
+                return await Db.vPresupuestos.Where(p => !p.TIENEPEDIDO && p.COLOR.Contains("PERDIDA")).ToListAsync();
             }
             return await Db.vPresupuestos.ToListAsync();
         }
+
 
         internal async Task<bool> TienePedido(int presupuestoId)
         {

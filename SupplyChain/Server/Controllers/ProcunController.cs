@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Server.Repositorios;
-using SupplyChain.Shared.Models;
 using SupplyChain.Shared;
 
 namespace SupplyChain
@@ -65,36 +64,7 @@ namespace SupplyChain
             }
         }
 
-        // PUT: api/Procun/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProcun(decimal id, Procun Proc)
-        {
-            if (id != Proc.Id)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                await _procunRepository.Actualizar(Proc);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _procunRepository.Existe(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {   
-                return BadRequest(ex);
-            }
-            return Ok(Proc);
-        }
+      
 
         // POST: api/Procun
         [HttpPost]
@@ -185,32 +155,34 @@ namespace SupplyChain
             }
         }
 
-        [HttpGet("ActualizaCelda/{id}/{cg_celda}")]
-        public async Task<ActionResult<Procun>> ActualizaCelda(decimal id, string cg_celda)
-        {
-            try
-            {
-                var lista = await _procunRepository.ActualizaCelda(id, cg_celda);
-                return Ok(lista);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-        [HttpGet("ActualizaProceso/{id}/{proceso}")]
-        public async Task<ActionResult<Procun>> ActualizaProceso(decimal id, string proceso)
-        {
-            try
-            {
-                var lista = await _procunRepository.ActualizaProceso(id, proceso);
-                return Ok(lista);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
+        //[HttpPut("ActualizaCelda/{id}/{cg_celda}")]
+        //public async Task<ActionResult<Procun>> ActualizaCelda(decimal id, string cg_celda)
+        //{
+        //    try
+        //    {
+        //        var lista = await _procunRepository.ActualizaCelda(id, cg_celda);
+        //        return Ok(lista);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex);
+        //    }
+        //}
+        //[HttpPut("ActualizaProceso/{id}/{proceso}")]
+        //public async Task<ActionResult<Procun>> ActualizaProceso(decimal id, string proceso)
+        //{
+        //    try
+        //    {
+        //        var lista = await _procunRepository.ActualizaProceso(id, proceso);
+        //        return Ok(lista);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex);
+        //    }
+        //}
+
+
         [HttpGet("Search/{idProd}/{Des_Prod}")]
         public async Task<ActionResult<IEnumerable<Procun>>> Search(string idProd, string Des_Prod)
         {
@@ -223,7 +195,62 @@ namespace SupplyChain
                 return BadRequest(ex);
             }
         }
-        
-      
+
+        [HttpPut]
+        public async Task<IActionResult> ActualizarPro(Procun procun)
+        {
+            try
+            {
+                await _procunRepository.Actualizar(procun);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _procunRepository.Existe(procun.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            return Ok(procun);
+        }
+
+
+        //PUT: api/Procun/5
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutProcun(decimal id, Procun Proc)
+        //{
+        //    if (id != Proc.Id)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    try
+        //    {
+        //        await _procunRepository.Actualizar(Proc);
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!await _procunRepository.Existe(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            return BadRequest();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex);
+        //    }
+        //    return Ok(Proc);
+        //}
     }
 }

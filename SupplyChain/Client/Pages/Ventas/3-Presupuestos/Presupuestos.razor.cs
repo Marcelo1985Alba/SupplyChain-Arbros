@@ -73,9 +73,12 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
     
         protected List<string> Monedas = new() { "PESOS", "DOLARES" };
 
-
+    
         protected PresupuestoAnterior presupuesto = new();
         protected ConfirmacionDialog ConfirmacionEliminarDialog;
+        private string colores;
+        private string colores2;
+
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Presupuestos";
@@ -125,7 +128,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 Presupuestos = response.Response.OrderByDescending(s => s.Id).ToList();
             }
         }
-
+       
         protected async Task GetSemaforo()
         {
             var response = await SemaforoService.Get();
@@ -402,7 +405,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = content,
@@ -414,7 +417,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         }
         private async Task ToastMensajeError(string content = "Ocurrio un Error.")
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = content,
@@ -424,6 +427,27 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 ShowProgressBar = true
             });
         }
-
+        
+        public void CustomizeCell(QueryCellInfoEventArgs<vPresupuestos> args)
+        {
+            if (args.Column.Field == "COLOR")
+            {
+                if(args.Data.COLOR != null)
+                {
+                    if (args.Data.COLOR.Trim() == "PERDIDA")
+                    {
+                        args.Cell.AddClass(new string[] { "perdida" });
+                    }
+                    else if (args.Data.COLOR.Trim() == "PENDIENTE")
+                    {
+                        args.Cell.AddClass(new string[] { "pendiente" });
+                    }
+                    else if (args.Data.COLOR.Trim() == "GANADA")
+                    {
+                        args.Cell.AddClass(new string[] { "ganada" });
+                    }
+                }
+            }
+        }
     }
 }

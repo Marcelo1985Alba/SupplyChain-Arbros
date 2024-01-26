@@ -53,6 +53,7 @@ namespace SupplyChain.Server.Controllers
             return await _presupuestoRepository.GetForView(tipoFiltro);
         }
 
+     
         // GET api/<PresupuestosController>/5
         [HttpGet("{id}")]
         public async Task<Presupuesto> GetPresupuesto(int id)

@@ -9,7 +9,7 @@
 @inherits FormPresupuestoBase
 
 
-<SfDialog @bind-Visible="Show" IsModal="true" Width="80%" Height="680px" ShowCloseIcon="true">
+<SfDialog @bind-Visible="Show" IsModal="true" Width="80%" Height="630px" ShowCloseIcon="true">
     <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
     <DialogAnimationSettings Effect="DialogEffect.FadeZoom" Duration="200"></DialogAnimationSettings>
     <DialogTemplates>
@@ -118,7 +118,7 @@
                                 </SfToast>
 
                                 <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="150px"
-                                        @ref="refGridItems" DataSource="@Presupuesto.Items" Width="100%" ID="grdItemsPresup"
+                                        @ref="refGridItems" DataSource="@Presupuesto.Items" Width="1170" ID="grdItemsPresup"
                                         AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
                                     <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
                                     @*<GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>*@
@@ -129,9 +129,9 @@
                                     </GridEditSettings>
                                     <GridColumns>
                                         <GridColumn Field=@nameof(PresupuestoDetalle.Id) IsPrimaryKey="true" Width="4"></GridColumn>
-                                        <GridColumn Field=@nameof(PresupuestoDetalle.CG_ART) AllowEditing="false" HeaderText="Producto" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
-                                        <GridColumn Field=@nameof(PresupuestoDetalle.DES_ART) AllowEditing="false" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
-                                        <GridColumn Field=@nameof(PresupuestoDetalle.CANTIDAD) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px">
+                                        <GridColumn Field=@nameof(PresupuestoDetalle.CG_ART) AllowEditing="false" HeaderText="Producto" TextAlign="TextAlign.Left" Width="auto"></GridColumn>
+                                        <GridColumn Field=@nameof(PresupuestoDetalle.DES_ART) AllowEditing="false" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="auto"></GridColumn>
+                                        <GridColumn Field=@nameof(PresupuestoDetalle.CANTIDAD) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="auto">
                                             <EditTemplate Context="detalle">
                                                 @{
                                                     var value = (detalle as PresupuestoDetalle);
@@ -139,7 +139,7 @@
                                                 }
                                             </EditTemplate>
                                         </GridColumn>
-                                        <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT) HeaderText="Precio Unit." TextAlign="TextAlign.Left" Width="100px"
+                                        <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT) HeaderText="Precio Unit." TextAlign="TextAlign.Left" Width="auto"
                                                     EditType="EditType.NumericEdit" Format="N2">
                                             <EditTemplate Context="detalle">
                                                 @{
@@ -148,7 +148,7 @@
                                                 }
                                             </EditTemplate>
                                         </GridColumn>
-                                        <GridColumn Field="@nameof(PresupuestoDetalle.DIAS_PLAZO_ENTREGA)" HeaderText="Dias Entrega" Width="100">
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.DIAS_PLAZO_ENTREGA)" HeaderText="Dias Entrega" Width="auto">
                                             <EditTemplate Context="detalle">
                                                 @{
                                                     var value = (detalle as PresupuestoDetalle);
@@ -157,7 +157,7 @@
                                             </EditTemplate>
                                         </GridColumn>
                                         <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT_X_CANTIDAD) AllowEditing="false" Format="C2"
-                                                    HeaderText="Neto" TextAlign="TextAlign.Left" Width="100px">
+                                                    HeaderText="Neto" TextAlign="TextAlign.Left" Width="auto">
                                             <Template Context="detalle">
                                                 @{
                                                     var value = (detalle as PresupuestoDetalle);
@@ -167,7 +167,7 @@
                                                 }
                                             </Template>
                                         </GridColumn>
-                                        <GridColumn Field=@nameof(PresupuestoDetalle.DESCUENTO) HeaderText="% Descuento" Format="N2" TextAlign="TextAlign.Left" Width="120px">
+                                        <GridColumn Field=@nameof(PresupuestoDetalle.DESCUENTO) HeaderText="% Descuento" Format="N2" TextAlign="TextAlign.Left" Width="auto">
                                             <Template Context="detalle">
                                                 @{
                                                     var value = (detalle as PresupuestoDetalle);
@@ -183,7 +183,7 @@
                                                 }
                                             </EditTemplate>
                                         </GridColumn>
-                                        <GridColumn Field=@nameof(PresupuestoDetalle.IMP_DESCUENTO) HeaderText="Descuento" Format="N2" TextAlign="TextAlign.Left" Width="120px">
+                                        <GridColumn Field=@nameof(PresupuestoDetalle.IMP_DESCUENTO) HeaderText="Descuento" Format="N2" TextAlign="TextAlign.Left" Width="auto">
                                             <Template Context="detalle">
                                                 @{
                                                     var value = (detalle as PresupuestoDetalle);
@@ -197,7 +197,7 @@
                                                 }
                                             </Template>
                                         </GridColumn>
-                                        <GridColumn Field="@nameof(PresupuestoDetalle.TOTAL)" Format="N2" HeaderText="Total" Width="100">
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.TOTAL)" Format="N2" HeaderText="Total" Width="auto">
                                             <Template Context="detalle">
                                                 @{
                                                     var value = (detalle as PresupuestoDetalle);
@@ -207,15 +207,15 @@
                                                 }
                                             </Template>
                                         </GridColumn>
-                                        <GridColumn Field="@nameof(PresupuestoDetalle.PRESIONAPERTURA)" HeaderText="Presion Apertura" Width="100" AllowEditing="false"></GridColumn>
-                                        <GridColumn Field="@nameof(PresupuestoDetalle.TEMPERATURADESCARGAT)" HeaderText="Temperatura" Width="100" AllowEditing="false"></GridColumn>
-                                        <GridColumn Field="@nameof(PresupuestoDetalle.DESCRIPCIONFLUIDO)" HeaderText="Fluido" Width="100" AllowEditing="false"></GridColumn>
-                                        <GridColumn Field="@nameof(PresupuestoDetalle.CONTRAPRESIONVARIABLE)" HeaderText="Contrapresion Variable" Width="100" AllowEditing="false"></GridColumn>
-                                        <GridColumn Field="@nameof(PresupuestoDetalle.CONTRAPRESIONFIJA)" HeaderText="Contrapresion Fija" Width="100" AllowEditing="false"></GridColumn>
-                                        <GridColumn Field="@nameof(PresupuestoDetalle.CAPACIDADREQUERIDA)" HeaderText="Capacidad" Width="100" AllowEditing="false"></GridColumn>
-                                        <GridColumn Field="@nameof(PresupuestoDetalle.DESCRIPCIONTAG)" HeaderText="Identificacion" Width="100" AllowEditing="false"></GridColumn>
-                                        <GridColumn Field="@nameof(PresupuestoDetalle.SOLICITUDID)" HeaderText="Nº Solicitud" Width="100" AllowEditing="false"></GridColumn>
-                                        <GridColumn Field="@nameof(PresupuestoDetalle.OBSERITEM)" HeaderText="Observaciones" Width="250"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.PRESIONAPERTURA)" HeaderText="Presion Apertura" Width="auto" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.TEMPERATURADESCARGAT)" HeaderText="Temperatura" Width="auto" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.DESCRIPCIONFLUIDO)" HeaderText="Fluido" Width="auto" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.CONTRAPRESIONVARIABLE)" HeaderText="Contrapresion Variable" Width="auto" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.CONTRAPRESIONFIJA)" HeaderText="Contrapresion Fija" Width="auto" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.CAPACIDADREQUERIDA)" HeaderText="Capacidad" Width="auto" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.DESCRIPCIONTAG)" HeaderText="Identificacion" Width="auto" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.SOLICITUDID)" HeaderText="Nº Solicitud" Width="auto" AllowEditing="false"></GridColumn>
+                                        <GridColumn Field="@nameof(PresupuestoDetalle.OBSERITEM)" HeaderText="Observaciones" Width="auto"></GridColumn>
 
                                     </GridColumns>
                                 </SfGrid>
@@ -254,7 +254,7 @@
 
                         </ToolbarItems>
                     </SfToolbar>*@
-                    <div class="h-50">
+                    <div class="h-50 form-detalle">
                         @{
                             var cantItems = Convert.ToInt32(Presupuesto.Items.Sum(i => i.CANTIDAD));
                             var totalItems = Math.Round(Presupuesto.Items.Sum(i => i.TOTAL), 2);
@@ -300,10 +300,10 @@
         
             
         </Content>
-        <FooterTemplate>
+        <FooterTemplate >
 
             <hr />
-            <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
+            <SfButton IsPrimary="true"   Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
             <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async()=>await Hide())" IconCss="fa fa-window-close-o"></SfButton>
 
         </FooterTemplate>
@@ -336,6 +336,7 @@
 
 <style>
 
+   
     #toolbar-form-solicitud {
         border: 0px solid rgb(173, 255, 47) !important;
     }
@@ -407,5 +408,10 @@
 
     #grdItemsPresup .e-row .e-rowcell {
         font-size: 10px !important;
+    }
+
+    .form-detalle{
+        position:relative;
+        margin-top:-130px;
     }
 </style>

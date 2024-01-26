@@ -8,7 +8,7 @@
 
 
 
-<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
+<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="1000px" ShowCloseIcon="true">
     <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
     <DialogAnimationSettings Effect="DialogEffect.FadeZoom" Duration="200"></DialogAnimationSettings>
     <DialogTemplates>
@@ -117,7 +117,7 @@
                             <ToastPosition X="Center" Y="Top"></ToastPosition>
                         </SfToast>
 
-                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="112px"
+                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="212px"
                                 @ref="refGridItems" DataSource="@Pedido.Items" Width="100%" ID="grdItemsPresup"
                                 AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both" RowHeight="30">
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>

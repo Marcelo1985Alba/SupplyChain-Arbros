@@ -20,8 +20,9 @@
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionComplete="OnActionCompleteHandler"
                         OnToolbarClick="OnToolbarHandler"
-                        RowSelected="RowSelectHandler" 
+                        RowSelected="RowSelectHandler"
                         CellSelected="CellSelectHandler"
+                        QueryCellInfo="CustomizeCell"
                         TValue="vPresupuestos"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true" EnableLazyLoading="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" NewRowPosition="NewRowPosition.Top"
@@ -167,6 +168,14 @@
         display: flex;
         margin: auto;
     }
-
-   
+    
+    .perdida{
+        background-color: #e53935;
+    }
+    .pendiente{
+        background-color: #fff176;
+    }
+    .ganada{
+        background-color: #4caf50;
+    }
 </style>

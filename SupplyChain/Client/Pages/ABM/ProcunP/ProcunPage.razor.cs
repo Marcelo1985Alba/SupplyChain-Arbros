@@ -149,7 +149,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             }
             else
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Solo se puede copiar un item",
@@ -231,6 +231,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     procunSinModificar.Id = proc.Id;
                     procunSinModificar.ORDEN = proc.ORDEN;
                     procunSinModificar.CG_PROD = proc.CG_PROD;
+                    procunSinModificar.Des_Prod = proc.Des_Prod;
                     procunSinModificar.CG_FORM = proc.CG_FORM;
                     procunSinModificar.CG_AREA = proc.CG_AREA;
                     procunSinModificar.CG_LINEA = proc.CG_LINEA;
@@ -288,7 +289,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
 
         private async Task ToastMensajeExito()
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = "Guardado Correctamente.",
@@ -300,7 +301,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         }
         private async Task ToastMensajeError()
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = "Ocurrio un Error.",
