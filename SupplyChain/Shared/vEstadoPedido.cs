@@ -38,6 +38,6 @@ namespace SupplyChain.Shared
         public DateTime? FE_REM { get; set; }
         public DateTime? FE_FACT { get; set; }
         public DateTime? FE_RECIBO { get; set; }
-
+        public decimal IMPORTE3 { get; set; } = 0;    
     }
 }

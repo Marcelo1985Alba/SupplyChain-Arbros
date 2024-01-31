@@ -9,7 +9,7 @@
 @inherits FormPresupuestoBase
 
 
-<SfDialog @bind-Visible="Show" IsModal="true" Width="80%" Height="630px" ShowCloseIcon="true">
+<SfDialog @bind-Visible="Show" IsModal="true" Width="80%" Height="650px" ShowCloseIcon="true">
     <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
     <DialogAnimationSettings Effect="DialogEffect.FadeZoom" Duration="200"></DialogAnimationSettings>
     <DialogTemplates>
@@ -31,67 +31,62 @@
                         <ObjectGraphDataAnnotationsValidator />
                         <ValidationSummary />
                         <div class="form-row">
-                            <div class="form-group col-lg-2 col-md-2">
-                                <label class="">Cod. Cliente:</label>
+                            <div class="form-group col-lg-1 col-md-1">
+                                <label class="">#Cliente:</label>
                                 <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Presupuesto.CG_CLI)" ShowSpinButton="false" Readonly="false"
                                                   OnInput="@(e => Cg_cli_Changed(e))"></SfNumericTextBox>
                             </div>
-                            <div class="form-group col-lg-4 col-md-9">
+                            <div class="form-group col-lg-2 col-md-2" id="form-cli" >
                                 <label class="">Cliente:</label>
                                 <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Presupuesto.DES_CLI)" Input="@(e => Des_cli_Changed(e))" Readonly="false"></SfTextBox>
                             </div>
-                            <div class="form-group col-md-1 mt-4">
+                            <div class="form-group col-md-1 mt-4" id="form-botton">
                                 <SfButton IconCss="fa fa-search" CssClass="e-round e-info" OnClick="@(async ()=> await BuscarClientes())"
                                           HtmlAttributes="@HtmlAttribute"></SfButton>
                             </div>
-                            <div class="form-group col-lg-2 col-md-3">
+                            <div class="form-group col-lg-2 col-md-2" id="form-moneda">
                                 <label class="">Moneda:</label>
                                 <SfDropDownList TValue="string" TItem="string" DataSource="Monedas" Readonly="ReadOnlyMoneda"
                                                 @bind-Value="Presupuesto.MONEDA">
                                     <DropDownListEvents TItem="string" TValue="string" ValueChange="@CambioMoneda"></DropDownListEvents>
                                 </SfDropDownList>
                             </div>
-                            <div class="form-group col-lg-1 col-md-2">
+                            <div class="form-group col-lg-1 col-md-1" id="form-tc">
                                 <label class="">TC:</label>
                                 <SfNumericTextBox ID="TC" @bind-Value="@(Presupuesto.TC)" ShowSpinButton="false" Decimals="2" Readonly="true"></SfNumericTextBox>
                             </div>
-                            <div class="form-group col-md-1 mt-4">
+                            <div class="form-group col-md-1 mt-4" id="form-button-tc">
                                 <SfButton IconCss="e-icons e-repeat" CssClass="e-round e-warning"
                                           OnClick="@(async ()=> await GetTipoCambioDolarHoy())"
                                           HtmlAttributes="@HtmlAttributeButtonTC"></SfButton>
                             </div>
-                            <div class="form-group col-lg-1 col-md-4">
+                            <div class="form-group col-lg-1 col-md-4" id="form-bonif">
                                 <label class="">Bonificacion:</label>
                                 <SfNumericTextBox ID="Bonifc" @bind-Value="@(Presupuesto.BONIFIC)" ShowSpinButton="false" Decimals="2"></SfNumericTextBox>
                             </div>
-
-                        </div>
-                        <div class="form-row">
-
-                            <div class="form-group col-lg-4 col-md-6">
+                            <div class="form-group col-lg-2 col-md-2" id="form-cond-pago">
                                 <label class="">Condicion de Pago:</label>
                                 <SfDropDownList TValue="int" TItem="vCondicionesPago" @bind-Value="Presupuesto.CONDICION_PAGO"
                                                 DataSource="condicionesPagos">
                                     <DropDownListFieldSettings Text="DESCRIPCION" Value="Id"></DropDownListFieldSettings>
                                 </SfDropDownList>
                             </div>
-                            <div class="form-group col-lg-8 col-md-6 col-sm-12">
+                        </div>
+                        <div class="form-row">
+
+                            
+                            <div class="form-group col-lg-3 col-md-4 col-sm-12" id="form-cond-ent">
                                 <label class="">Condicion de Entrega:</label>
                                 <SfDropDownList TValue="int" TItem="vCondicionesEntrega" @bind-Value="Presupuesto.CG_COND_ENTREGA"
                                                 DataSource="condicionesEntrega">
                                     <DropDownListFieldSettings Text="OBSERVACIONES" Value="Id"></DropDownListFieldSettings>
                                 </SfDropDownList>
                             </div>
-
-                        </div>
-                        <div class="form-row">
-
-                            <div class="form-group col-lg-8 col-md-12">
+                            <div class="form-group col-lg-3 col-md-4" id="form-dire-entr">
                                 <label class="">Direccion de Entrega:</label>
                                 <SfDropDownList TValue="string" TItem="string" DataSource="direccionesEntregas"
                                                 @bind-Value="Presupuesto.DIRENT"></SfDropDownList>
                             </div>
-
                             <div class="form-group col-lg-1 col-md-4">
                                 <label class="">Proyecto:</label>
                                 <SfTextBox ID="Proy" @bind-Value="@(Presupuesto.PROYECTO)"></SfTextBox>
@@ -108,6 +103,26 @@
                                 <label class="">Nro Doc.:</label>
                                 <SfTextBox ID="NroDoc" @bind-Value="@(Presupuesto.NRODOC)"></SfTextBox>
                             </div>
+                        </div>
+                        <div class="form-row">
+
+                            
+                           @*  <div class="form-group col-lg-1 col-md-4">
+                                <label class="">Proyecto:</label>
+                                <SfTextBox ID="Proy" @bind-Value="@(Presupuesto.PROYECTO)"></SfTextBox>
+                            </div>
+                            <div class="form-group col-lg-1 col-md-4">
+                                <label class="">Ingenieria:</label>
+                                <SfTextBox ID="Inge" @bind-Value="@(Presupuesto.INGENIERIA)"></SfTextBox>
+                            </div>
+                            <div class="form-group col-lg-1 col-md-4">
+                                <label class="">Revision:</label>
+                                <SfTextBox ID="Proy" @bind-Value="@(Presupuesto.REVISION)"></SfTextBox>
+                            </div>
+                            <div class="form-group col-lg-1 col-md-4">
+                                <label class="">Nro Doc.:</label>
+                                <SfTextBox ID="NroDoc" @bind-Value="@(Presupuesto.NRODOC)"></SfTextBox>
+                            </div> *@
 
                         </div>
 
@@ -117,7 +132,7 @@
                                     <ToastPosition X="Center" Y="Top"></ToastPosition>
                                 </SfToast>
 
-                                <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="150px"
+                                <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="360px"
                                         @ref="refGridItems" DataSource="@Presupuesto.Items" Width="1170" ID="grdItemsPresup"
                                         AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
                                     <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -229,8 +244,8 @@
 
                     </EditForm>
                 </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="h-50">
+                <div class="col-lg-3 col-sm-6" >
+                    <div class="h-50" id="form-buttons">
                         <div class="form-row mt-2">
                             <SfButton Content="Solicitudes" CssClass="e-btn e-small e-info e-block" OnClick="BuscarSolicitudes"
                                       IconCss="e-eye e-icons e-btn-icon-left"></SfButton>
@@ -244,6 +259,43 @@
                             <SfButton Content="Reparaciones" CssClass="e-btn e-small e-info e-block" OnClick="BuscarReparaciones"
                                       IconCss="e-eye e-icons e-btn-icon-left"></SfButton>
                         </div>
+                        <div class="h-50 form-detalle">
+                            @{
+                                var cantItems = Convert.ToInt32(Presupuesto.Items.Sum(i => i.CANTIDAD));
+                                var totalItems = Math.Round(Presupuesto.Items.Sum(i => i.TOTAL), 2);
+                                var bonficacion = Math.Round(totalItems * Presupuesto.BONIFIC / 100, 2);
+                                var total = Presupuesto.TOTAL = Math.Round(totalItems - bonficacion, 2);
+                                var moneda = "$";
+                                if (Presupuesto.MONEDA == "PESOS")
+                                {
+                                    moneda = "$";
+                                }
+                                else
+                                {
+                                    moneda = "U$S";
+                                }
+
+
+
+
+                            }
+
+                            <div class="form-row">
+                                <div class="total-price">Items : @cantItems</div>
+                            </div>
+
+                            <div class="form-row mt-2">
+                                <div class="total-price">SUBTOTAL @moneda : @totalItems</div>
+                            </div>
+
+                            <div class="form-row mt-2">
+                                <div class="total-price">BONIF. (@Presupuesto.BONIFIC %) @moneda : @bonficacion</div>
+                            </div>
+
+                            <div class="form-row mt-2">
+                                <div class="total-price">TOTAL @moneda : @total</div>
+                            </div>
+                        </div>
                     </div>
                     <hr />
 @*                    <SfToolbar ID="toolbar-form-solicitud" CssClass="">
@@ -254,7 +306,7 @@
 
                         </ToolbarItems>
                     </SfToolbar>*@
-                    <div class="h-50 form-detalle">
+                   @*  <div class="h-50 form-detalle">
                         @{
                             var cantItems = Convert.ToInt32(Presupuesto.Items.Sum(i => i.CANTIDAD));
                             var totalItems = Math.Round(Presupuesto.Items.Sum(i => i.TOTAL), 2);
@@ -290,7 +342,7 @@
                         <div class="form-row mt-2">
                             <div class="total-price">TOTAL @moneda : @total</div>
                         </div>
-                    </div>
+                    </div> *@
                     
                 </div>
 
@@ -336,7 +388,45 @@
 
 <style>
 
-   
+   #form-tc{
+       position:relative;
+       right:25px;
+   }
+
+   #form-button{
+       position:relative;
+       right:10px;
+   }
+   #form-buttons{
+       position:relative;
+       width:37%;
+   }
+
+    #form-moneda {
+        position: relative;
+        right:30px;
+    }
+    #form-bonif{
+       position:relative;
+        right: 35px;
+   }
+
+   #form-button-tc{
+       position:relative;
+       right:29px;
+   }
+
+    #form-cond-pago {
+        position: relative;
+    }
+
+    #form-cond-ent {
+        position: relative;
+    }
+
+    #form-dire-entr {
+        position: relative;
+    }
     #toolbar-form-solicitud {
         border: 0px solid rgb(173, 255, 47) !important;
     }
@@ -412,6 +502,7 @@
 
     .form-detalle{
         position:relative;
-        margin-top:-130px;
+        margin-top:-100px;
+        left:150px;
     }
 </style>

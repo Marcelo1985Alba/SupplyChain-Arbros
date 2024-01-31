@@ -23,13 +23,15 @@
             }
         </Header>
         <Content>
-            <SfToolbar ID="toolbar-form-pedido" CssClass="">
+            <div id="form-btn">
+           @*  <SfToolbar ID="toolbar-form-pedido" CssClass="">
                 <ToolbarItems>
                     <ToolbarItem Id="tiPresupuestos" CssClass="e-round e-small" Type="ItemType.Button" Text="Presupuestos" OnClick="BuscarPresupuestos" Align="ItemAlign.Right"></ToolbarItem>
-                    @*<ToolbarItem Id="tiProductos" CssClass="e-round" Text="Productos" OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>*@
+                    @*<ToolbarItem Id="tiProductos" CssClass="e-round" Text="Productos" OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>
                     
                 </ToolbarItems>
-            </SfToolbar>
+            </SfToolbar> *@
+            </div>
             <EditForm id="formPedido" Model="@Pedido" OnValidSubmit="@(async()=> await Guardar())">
                 <SfSpinner @bind-Visible="@spinerVisible" Label="Guardando..." Type="SpinnerType.Fabric"></SfSpinner>
                 <SfSpinner @bind-Visible="@spinerVisibleCargando" Label="Cargando..." Type="SpinnerType.Fabric" 
@@ -37,27 +39,27 @@
                 <ObjectGraphDataAnnotationsValidator />
                 <ValidationSummary />
                 <div class="form-row">
-                    <div class="form-group col-md-2">
-                        <label class="">Cod. Cliente:</label>
+                    <div class="form-group col-md-1">
+                        <label class="">#Cliente:</label>
                         <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Pedido.CG_CLI)" ShowSpinButton="false" Readonly="false"
                                           OnInput="@(e => Cg_cli_Changed(e))"></SfNumericTextBox>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-2" id="form-cliente">
                         <label class="">Cliente:</label>
                         <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Pedido.DES_CLI)" Input="@(e => Des_cli_Changed(e))" Readonly="false"></SfTextBox>
                     </div>
-                    <div class="form-group col-md-1 mt-4">
+                    <div class="form-group col-md-1 mt-4" id="btn-cli">
                         <SfButton IconCss="fa fa-search" CssClass="e-round e-info" OnClick="@(async ()=> await BuscarClientes())"
                                   HtmlAttributes="@HtmlAttribute"></SfButton>
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-2" id="form-moneda">
                         <label class="">Moneda:</label>
                         <SfDropDownList TValue="string" TItem="string" DataSource="Monedas" Readonly="ReadOnlyMoneda"
                                         @bind-Value="Pedido.MONEDA">
                             <DropDownListEvents TItem="string" TValue="string" ValueChange="@CambioMoneda"></DropDownListEvents>
                         </SfDropDownList>
                     </div>
-                    <div class="form-group col-md-1">
+                    <div class="form-group col-md-1" id="form-tc">
                         <label class="">TC:</label>
                         <SfNumericTextBox ID="TC" @bind-Value="@(Pedido.TC)" ShowSpinButton="false" Decimals="2" Readonly="true"></SfNumericTextBox>
                     </div>
@@ -66,38 +68,43 @@
                                   OnClick="@(async ()=> await GetTipoCambioDolarHoy())"
                                   HtmlAttributes="@HtmlAttributeButtonTC"></SfButton>
                     </div>
-                    <div class="form-group col-md-1">
+                    <div class="form-group col-md-1" id="form-bonif">
                         <label class="">Bonificacion:</label>
                         <SfNumericTextBox ID="Bonifc" @bind-Value="@(Pedido.BONIFIC)" ShowSpinButton="false" Decimals="2"></SfNumericTextBox>
+                    </div>
+                    <div id="form-presup" class="col-md-3">
+                    <SfToolbar ID="toolbar-form-pedido" CssClass="">
+                        <ToolbarItems>
+                            <ToolbarItem Id="tiPresupuestos" CssClass="e-round e-small" Type="ItemType.Button" Text="Presupuestos" OnClick="BuscarPresupuestos" Align="ItemAlign.Right"></ToolbarItem>
+                            @*<ToolbarItem Id="tiProductos" CssClass="e-round" Text="Productos" OnClick="BuscarProductos" Align="ItemAlign.Right"></ToolbarItem>*@
+
+                        </ToolbarItems>
+                    </SfToolbar>
                     </div>
 
                 </div>
                 <div class="form-row">
 
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-2" id="form-cond-pago">
                         <label class="">Condicion de Pago:</label>
                         <SfDropDownList TValue="int" TItem="vCondicionesPago" @bind-Value="Pedido.CONDICION_PAGO"
                                         DataSource="CondicionesPagos">
                             <DropDownListFieldSettings Text="DESCRIPCION" Value="Id"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
-                    <div class="form-group col-md-8">
+                    <div class="form-group col-md-2" id="form-cond-entre">
                         <label class="">Condicion de Entrega:</label>
                         <SfDropDownList TValue="int" TItem="vCondicionesEntrega" @bind-Value="Pedido.CG_COND_ENTREGA"
                                         DataSource="CondicionesEntrega">
                             <DropDownListFieldSettings Text="OBSERVACIONES" Value="Id"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
-
-                </div>
-                <div class="form-row">
-
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-2">
                         <label class="">Direccion de Entrega:</label>
                         <SfDropDownList TValue="string" TItem="string" DataSource="@DireccionesEntregas"
                                         @bind-Value="Pedido.DIRENT"></SfDropDownList>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-2">
                         <label class="">Transporte:</label>
                         <SfDropDownList TValue="int" TItem="vTransporte" DataSource="@Transportes" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
                                         @bind-Value="Pedido.CG_TRANS">
@@ -108,6 +115,25 @@
                         <label class="">O. Compra:</label>
                         <SfTextBox ID="ORCO" @bind-Value="@(Pedido.ORCO)"></SfTextBox>
                     </div>
+                </div>
+                <div class="form-row">
+
+                    @* <div class="form-group col-md-6">
+                        <label class="">Direccion de Entrega:</label>
+                        <SfDropDownList TValue="string" TItem="string" DataSource="@DireccionesEntregas"
+                                        @bind-Value="Pedido.DIRENT"></SfDropDownList>
+                    </div> *@
+                  @*   <div class="form-group col-md-4">
+                        <label class="">Transporte:</label>
+                        <SfDropDownList TValue="int" TItem="vTransporte" DataSource="@Transportes" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
+                                        @bind-Value="Pedido.CG_TRANS">
+                            <DropDownListFieldSettings Value="Id" Text="DESCRIPCION"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="">O. Compra:</label>
+                        <SfTextBox ID="ORCO" @bind-Value="@(Pedido.ORCO)"></SfTextBox>
+                    </div> *@
 
                 </div>
 
@@ -117,7 +143,7 @@
                             <ToastPosition X="Center" Y="Top"></ToastPosition>
                         </SfToast>
 
-                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="212px"
+                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="350px"
                                 @ref="refGridItems" DataSource="@Pedido.Items" Width="100%" ID="grdItemsPresup"
                                 AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both" RowHeight="30">
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -274,7 +300,7 @@
                     
                     
                 }
-            <div class="row" style="text-align:left">
+            @* <div class="row" style="text-align:left">
                 <div class="col-3">
                     <div class="total-price">SUBTOTAL @moneda : @totalItems</div>
                 </div>
@@ -284,11 +310,21 @@
                 <div class="col-4" style="text-align:right">
                     <div class="total-price">TOTAL @moneda : @total</div>
                 </div>
-            </div>
+            </div> *@
 
 
             <div class=" mt-5">
-
+                <div class="row" style="text-align:left">
+                    <div class="col-3">
+                        <div class="total-price">SUBTOTAL @moneda : @totalItems</div>
+                    </div>
+                    <div class="col-5" style="text-align:center">
+                        <div class="total-price">BONIFICACION (@Pedido.BONIFIC %) @moneda : @bonficacion</div>
+                    </div>
+                    <div class="col-4" style="text-align:right">
+                        <div class="total-price">TOTAL @moneda : @total</div>
+                    </div>
+                </div>
                 <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
                 <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async()=>await Hide())" IconCss="fa fa-window-close-o"></SfButton>
             </div>

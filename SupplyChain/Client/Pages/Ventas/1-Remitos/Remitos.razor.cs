@@ -439,6 +439,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 }
                 else
                 {
+                    await calcularTotal();
                     PedidoSeleccionado = response.Response;
                     popupFormVisible = true;
                 }
@@ -447,6 +448,13 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
 
         }
 
+        protected async Task<decimal> calcularTotal()
+        {
+            var pedidoSeleccionado = await refGrid.GetSelectedRecordsAsync();
+            decimal totalseleccionado = pedidoSeleccionado.Cast<vEstadoPedido>().Sum(v => v.IMPORTE3);
+
+            return totalseleccionado;
+        }
 
         protected async Task OnRemitoGuardado(List<Pedidos> pedidosGuardados)
         {
