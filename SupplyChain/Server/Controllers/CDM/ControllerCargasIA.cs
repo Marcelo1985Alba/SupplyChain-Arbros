@@ -55,7 +55,7 @@ namespace SupplyChain
         {
             string xSQL = string.Format($"UPDATE PLANNER SET INICIO = '{orden.INICIO:yyyy-MM-dd HH:mm}', FIN = '{orden.FIN:yyyy-MM-dd HH:mm}' WHERE CG_ORDF = '{CG_ORDF}'");
             await _context.Database.ExecuteSqlRawAsync(xSQL);
-            xSQL = string.Format($"UPDATE PROGRAMA SET FECHA_PREVISTA_FABRICACION = '{orden.INICIO:yyyy-MM-dd HH:mm}' WHERE CG_ORDF = '{CG_ORDF}'");
+            xSQL = string.Format($"UPDATE PROGRAMA SET FECHA_PREVISTA_FABRICACION = '{orden.INICIO:yyyy-MM-dd HH:mm}', ORDEN = ORDEN + ({orden.cambiarPrioridad}) WHERE CG_ORDF = '{CG_ORDF}'");
             await _context.Database.ExecuteSqlRawAsync(xSQL);
             return NoContent();
         }

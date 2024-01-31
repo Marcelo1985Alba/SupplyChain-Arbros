@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SupplyChain.Shared.CDM
 {
@@ -20,5 +21,7 @@ namespace SupplyChain.Shared.CDM
         public string PROCESO { get; set; }
         public int CANT { get; set; }
         public int CG_ORDFASOC { get; set; }
+        [NotMapped]
+        public int cambiarPrioridad { get; set; } = 0;
     }
 }

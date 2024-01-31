@@ -92,7 +92,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
         protected List<String> celdasList = new List<string>();
         protected string[] groupData = { "Resources" };
         protected DateTime CurrentDate { get; set; }
-        protected View CurrentView { get; set; } = View.TimelineDay;    
+        protected View CurrentView { get; set; } = View.TimelineDay;
         protected SfSchedule<EventData> scheduleObj;
 
 
@@ -119,11 +119,11 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 where operariosBE3.CG_OPER == 51 || operariosBE3.CG_OPER == 131 || operariosBE3.CG_OPER == 135 ||
                       operariosBE3.CG_OPER == 139 || operariosBE3.CG_OPER == 144
                 select operariosBE3;
-            
+
             celdasList = await Http.GetFromJsonAsync<List<String>>("api/CargasIA/GetCeldas");
-            
+
             await Refrescar();
-            
+
             Visible = false;
         }
 
@@ -132,9 +132,9 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             try
             {
                 Visible = true;
-                
+
                 ResourceDatasource = await GenerateResourceData();
-                
+
                 ordenesData = await GenerateEvents();
 
                 // turno
@@ -191,7 +191,8 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
 
                 // Datos de la orden
                 ordenNumero = xOrdenFabricacion;
-                ordenFabricacion = await Http.GetFromJsonAsync<ModeloOrdenFabricacion>("api/OrdenesFabricacion/" + ordenNumero);
+                ordenFabricacion =
+                    await Http.GetFromJsonAsync<ModeloOrdenFabricacion>("api/OrdenesFabricacion/" + ordenNumero);
                 ordenFabricacionOriginal =
                     Newtonsoft.Json.JsonConvert.DeserializeObject<ModeloOrdenFabricacion>(
                         Newtonsoft.Json.JsonConvert.SerializeObject(ordenFabricacion));
@@ -215,7 +216,8 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     await Http.GetFromJsonAsync<List<ModeloGenericoStringString>>("api/ModelosGenericosStringString/" +
                         xSQLcommand);
 
-                var cg_ordfAsoc = ordenesData.Where(c => c.CG_ORDF.ToString().Trim() == ordenNumero).MinBy(c => c.CG_ORDF).OFinicial;
+                var cg_ordfAsoc = ordenesData.Where(c => c.CG_ORDF.ToString().Trim() == ordenNumero)
+                    .MinBy(c => c.CG_ORDF).OFinicial;
                 //Get Datos de la cantidad 
                 //xSQLcommand = String.Format("select cantidad from programa where cg_ordfasoc={0}", ordenFabricacion.CG_ORDFASOC);
                 //ordenFabxCantidad = await Http.GetFromJsonAsync<List<ModeloGenericoStringString>>("api/ModelosGenericosStringString/" + xSQLcommand);
@@ -349,7 +351,8 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 }
 
                 //VERIFIFCAR QUE SE LA ULTIMA: LA QUE DA DE ALTA AL PRODUCTO
-                var lOfAsocs = ordenesData.Where(c => c.OFinicial == ordenFabricacion.CG_ORDFASOC.ToString().Trim()).OrderByDescending(o => o.CG_ORDF).ToList();
+                var lOfAsocs = ordenesData.Where(c => c.OFinicial == ordenFabricacion.CG_ORDFASOC.ToString().Trim())
+                    .OrderByDescending(o => o.CG_ORDF).ToList();
                 var ultimaOF = lOfAsocs.Max(m => m.CG_ORDF);
                 if (dbScrap != null && ordenFabricacion.CG_ORDF.ToString().Trim() == ultimaOF)
                 {
@@ -592,7 +595,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
 
             return response.Response;
         }
-        
+
         protected async Task VerPlano()
         {
             var response = await Http2.GetFromJsonAsync<Producto>($"api/Prod/{ordenFabricacion.CG_PROD.Trim()}");
@@ -762,7 +765,9 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             {
                 //await JS.InvokeVoidAsync("open", new object[2] { $"/api/ReportRDLC/GetReportEtiquetaOF?cg_ordf={ordenFabricacion.CG_ORDF}", "_blank" });
 
-                OrdenDeFabAlta = Convert.ToInt32(ordenesData.Where(t => t.OFinicial == ordenFabricacion.CG_ORDFASOC.ToString().Trim()).MaxBy(t => t.CG_ORDF).CG_ORDF);
+                OrdenDeFabAlta = Convert.ToInt32(ordenesData
+                    .Where(t => t.OFinicial == ordenFabricacion.CG_ORDFASOC.ToString().Trim()).MaxBy(t => t.CG_ORDF)
+                    .CG_ORDF);
                 await PdfService.EtiquetaOF(OrdenDeFabAlta, ordenFabricacion);
             }
         }
@@ -889,7 +894,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             document1.Close(true);
             await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
         }
-        
+
         private async Task EtiquetaClientesNOypf()
         {
             string espaciosPedidox = "";
@@ -1072,6 +1077,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             public string OFalta { get; set; }
             public string titulo { get; set; }
             public int ResourceId { get; set; }
+            public int cambiarPrioridad { get; set; } = 0;
         }
 
         protected class ResourceData
@@ -1099,21 +1105,21 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             {
                 resources.Add(new ResourceData()
                 {
-                    Id = a+1,
+                    Id = a + 1,
                     Text = celdasList[a],
                     Color = colors[a % colors.Length],
                     Name = celdasList[a],
                     Designation = celdasList[a]
                 });
             }
+
             return resources;
         }
-        
-        
+
+
         protected async Task OnDragged(DragEventArgs<EventData> args)
         {
-            
-            if(args.Data.StartTime <= DateTime.Now && args.Data.EndTime >= DateTime.Now)
+            if (args.Data.StartTime <= DateTime.Now && args.Data.EndTime >= DateTime.Now)
             {
                 await this.ToastObj.ShowAsync(new ToastModel
                 {
@@ -1125,18 +1131,22 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     ShowProgressBar = true
                 });
             }
-            
+
             DateTime fechaOrig = ordenesData.FirstOrDefault(t => t.CG_ORDF == args.Data.CG_ORDF)!.StartTime;
             DateTime fechaDest = args.Data.StartTime;
 
             if (fechaOrig < fechaDest)
             {
-                var ordenes = ordenesData.Where(t => t.ResourceId == args.Data.ResourceId && ((t.StartTime >= fechaOrig && t.EndTime <= fechaDest) || (fechaDest >= t.StartTime && fechaDest <= t.EndTime))).OrderBy(t => t.StartTime).ToList();
-                
-                if(ordenes.Count <= 1)
+                var ordenes = ordenesData
+                    .Where(t => t.ResourceId == args.Data.ResourceId &&
+                                ((t.StartTime >= fechaOrig && t.EndTime <= fechaDest) ||
+                                 (fechaDest >= t.StartTime && fechaDest <= t.EndTime))).OrderBy(t => t.StartTime)
+                    .ToList();
+
+                if (ordenes.Count <= 1)
                     return;
-                
-                if(ordenes.Count(t => t.OFalta == ordenes[^1].OFalta) > 1)
+
+                if (ordenes.Count(t => t.OFalta == ordenes[0].OFalta) > 1)
                 {
                     await this.ToastObj.ShowAsync(new ToastModel
                     {
@@ -1150,11 +1160,14 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     return;
                 }
 
+                ordenes.ForEach(t => t.cambiarPrioridad = 0);
+                ordenes[0].cambiarPrioridad = 3;
+
                 var firstStartDate = ordenes[0].StartTime;
                 var lastEndDate = ordenes[^1].EndTime;
-            
+
                 var auxStart = ordenesData.FirstOrDefault(t => t.CG_ORDF == ordenes[0].CG_ORDF)!.StartTime;
-            
+
                 for (int i = 1; i < ordenes.Count; i++)
                 {
                     var orden = ordenesData.FirstOrDefault(t => t.CG_ORDF == ordenes[i].CG_ORDF);
@@ -1162,12 +1175,12 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     orden.StartTime = auxStart;
                     auxStart = orden.EndTime;
                 }
-            
+
                 var last = ordenesData.FirstOrDefault(t => t.CG_ORDF == ordenes[^1].CG_ORDF);
                 var orig = ordenesData.FirstOrDefault(t => t.CG_ORDF == args.Data.CG_ORDF);
                 orig!.EndTime = last!.EndTime.AddMinutes(args.Data.EndTime.Subtract(args.Data.StartTime).TotalMinutes);
                 orig.StartTime = last.EndTime;
-                
+
                 foreach (var orden in ordenes)
                 {
                     // quiero chequear si alguna de las ordenes por algun error quedo fuera del rango firstStartDate/lastEndDate
@@ -1186,25 +1199,31 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                         return;
                     }
                 }
-            
+
                 foreach (var orden in ordenes)
                 {
                     var ordenFabricacion = ordenesIA.FirstOrDefault(t => t.CG_ORDF.ToString().Trim() == orden.CG_ORDF);
                     ordenFabricacion!.INICIO = orden.StartTime;
                     ordenFabricacion.FIN = orden.EndTime;
-                    var result = await Http.PutAsJsonAsync($"api/CargasIA/UpdateOrden/{orden.CG_ORDF}", ordenFabricacion);
+                    ordenFabricacion.cambiarPrioridad = orden.cambiarPrioridad;
+                    var result =
+                        await Http.PutAsJsonAsync($"api/CargasIA/UpdateOrden/{orden.CG_ORDF}", ordenFabricacion);
                 }
             }
             else
             {
                 (fechaOrig, fechaDest) = (fechaDest, fechaOrig);
-                
-                var ordenes = ordenesData.Where(t => t.ResourceId == args.Data.ResourceId && ((t.StartTime >= fechaOrig && t.EndTime <= fechaDest) || (fechaOrig >= t.StartTime && fechaOrig <= t.EndTime) || fechaDest == t.StartTime)).OrderBy(t => t.StartTime).ToList();
-                
-                if(ordenes.Count <= 1)
+
+                var ordenes = ordenesData
+                    .Where(t => t.ResourceId == args.Data.ResourceId &&
+                                ((t.StartTime >= fechaOrig && t.EndTime <= fechaDest) ||
+                                 (fechaOrig >= t.StartTime && fechaOrig <= t.EndTime) || fechaDest == t.StartTime))
+                    .OrderBy(t => t.StartTime).ToList();
+
+                if (ordenes.Count <= 1)
                     return;
-                
-                if(ordenes.Count(t => t.OFalta == ordenes[^1].OFalta) > 1)
+
+                if (ordenes.Count(t => t.OFalta == ordenes[^1].OFalta) > 1)
                 {
                     await this.ToastObj.ShowAsync(new ToastModel
                     {
@@ -1218,16 +1237,19 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     return;
                 }
                 
+                ordenes.ForEach(t => t.cambiarPrioridad = 0);
+                ordenes[^1].cambiarPrioridad = -3;
+
                 var firstStartDate = ordenes[0].StartTime;
                 var lastEndDate = ordenes[^1].EndTime;
-                
+
                 var last = ordenesData.FirstOrDefault(t => t.CG_ORDF == ordenes[^1].CG_ORDF);
                 last!.StartTime = ordenesData.FirstOrDefault(t => t.CG_ORDF == ordenes[0].CG_ORDF)!.StartTime;
                 last.EndTime = last.StartTime.AddMinutes(args.Data.EndTime.Subtract(args.Data.StartTime).TotalMinutes);
-                
+
                 var auxStart = last.EndTime;
-            
-                for (int i = 0; i < ordenes.Count-1; i++)
+
+                for (int i = 0; i < ordenes.Count - 1; i++)
                 {
                     var orden = ordenesData.FirstOrDefault(t => t.CG_ORDF == ordenes[i].CG_ORDF);
                     orden!.EndTime = auxStart.AddMinutes(orden.EndTime.Subtract(orden.StartTime).TotalMinutes);
@@ -1254,16 +1276,18 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     }
                 }
 
-            
+
                 foreach (var orden in ordenes)
                 {
                     var ordenFabricacion = ordenesIA.FirstOrDefault(t => t.CG_ORDF.ToString().Trim() == orden.CG_ORDF);
                     ordenFabricacion!.INICIO = orden.StartTime;
                     ordenFabricacion.FIN = orden.EndTime;
-                    var result = await Http.PutAsJsonAsync($"api/CargasIA/UpdateOrden/{orden.CG_ORDF}", ordenFabricacion);
+                    ordenFabricacion.cambiarPrioridad = orden.cambiarPrioridad;
+                    var result =
+                        await Http.PutAsJsonAsync($"api/CargasIA/UpdateOrden/{orden.CG_ORDF}", ordenFabricacion);
                 }
             }
-            
+
             await scheduleObj.RefreshEventsAsync();
         }
 
@@ -1295,16 +1319,18 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 {
                     Id = a,
                     CG_ORDF = orden.CG_ORDF.ToString().Trim(),
-                    Subject = orden.CG_ORDF.ToString().Trim() + " - " + orden.DES_PROD.Trim() + " - " + orden.PROCESO.Trim(),
+                    Subject = orden.CG_ORDF.ToString().Trim() + " - " + orden.DES_PROD.Trim() + " - " +
+                              orden.PROCESO.Trim(),
                     StartTime = orden.INICIO,
                     EndTime = orden.FIN,
-                    ResourceId = resourceId+1,
+                    ResourceId = resourceId + 1,
                     cantidad = orden.CANT.ToString(),
                     Description = orden.DES_PROD.Trim(),
                     proceso = orden.PROCESO.Trim(),
                     OFinicial = orden.CG_ORDFASOC.ToString(),
                     CategoryColor = colors[color_index % colors.Length],
-                    OFalta = ordenesIA.Where(t => t.CG_ORDFASOC == orden.CG_ORDFASOC).MaxBy(t => t.CG_ORDF)!.CG_ORDF.ToString(),
+                    OFalta = ordenesIA.Where(t => t.CG_ORDFASOC == orden.CG_ORDFASOC).MaxBy(t => t.CG_ORDF)!.CG_ORDF
+                        .ToString(),
                 });
                 if (orden.INICIO < projectStart || projectStart == null)
                     projectStart = orden.INICIO;
@@ -1312,6 +1338,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     projectEnd = orden.FIN;
                 ult_asoc_ant = orden.ULT_ASOC;
             }
+
             CurrentDate = projectStart ?? DateTime.Today;
             return data;
         }
