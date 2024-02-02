@@ -9,7 +9,7 @@
 
 
 
-<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
+<SfDialog @bind-Visible="Show" IsModal="true" Width="80%" Height="880px" ShowCloseIcon="true">
     <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
     <DialogAnimationSettings Effect="DialogEffect.FadeZoom" Duration="200"></DialogAnimationSettings>
     <DialogTemplates>
@@ -29,12 +29,12 @@
                 <ObjectGraphDataAnnotationsValidator />
                 <ValidationSummary />
                 <div class="form-row">
-                    <div class="form-group col-md-2">
-                        <label class="">Cod. Cliente:</label>
+                    <div class="form-group col-md-1" id="form-cli">
+                        <label class="">#Cliente:</label>
                         <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Pedido.CG_CLI)" ShowSpinButton="false" Readonly="false"
                                           OnInput="@(e => Cg_cli_Changed(e))"></SfNumericTextBox>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-2" id="form-cliente">
                         <label class="">Cliente:</label>
                         <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Pedido.DES_CLI)" Input="@(e => Des_cli_Changed(e))" Readonly="false"></SfTextBox>
                     </div>
@@ -42,78 +42,82 @@
                         <SfButton IconCss="fa fa-search" CssClass="e-round e-info" OnClick="@(async ()=> await BuscarClientes())"
                                   HtmlAttributes="@HtmlAttribute"></SfButton>
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-1" id="form-moneda">
                         <label class="">Moneda:</label>
                         <SfDropDownList TValue="string" TItem="string" DataSource="Monedas" Readonly="true"
                                         @bind-Value="Pedido.MONEDA">
                             <DropDownListEvents TItem="string" TValue="string" ValueChange="@CambioMoneda"></DropDownListEvents>
                         </SfDropDownList>
                     </div>
-                    <div class="form-group col-md-1">
+                    <div class="form-group col-md-1" id="form-tc">
                         <label class="">TC:</label>
                         <SfNumericTextBox ID="TC" @bind-Value="@(Pedido.VA_INDIC)" ShowSpinButton="false" Decimals="2" Readonly="true"></SfNumericTextBox>
                     </div>
-                </div>
-                <div class="form-row">
-
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3" id="form-cond-pago">
                         <label class="">Condicion de Pago:</label>
                         <SfDropDownList TValue="int" TItem="vCondicionesPago" @bind-Value="Pedido.CG_CONDICION_PAGO"
                                         DataSource="CondicionesPagos">
                             <DropDownListFieldSettings Text="DESCRIPCION" Value="Id"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
-                    <div class="form-group col-md-8">
+                    <div class="form-group col-md-3" id="form-cond-entre">
                         <label class="">Condicion de Entrega:</label>
                         <SfDropDownList TValue="int" TItem="vCondicionesEntrega" @bind-Value="Pedido.CG_COND_ENTREGA"
                                         DataSource="CondicionesEntrega">
                             <DropDownListFieldSettings Text="OBSERVACIONES" Value="Id"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
-
                 </div>
                 <div class="form-row">
 
-                    <div class="form-group col-md-6">
+                  
+                   
+
+                </div>
+                <div class="form-row">
+                    
+                    <div class="form-group col-md-3" id="form-direc-entre">
                         <label class="">Direccion de Entrega:</label>
                         <SfDropDownList TValue="string" TItem="string" DataSource="@DireccionesEntregas"
                                         @bind-Value="Pedido.DIRENT"></SfDropDownList>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3" id="form-transporte">
                         <label class="">Transporte:</label>
                         <SfDropDownList TValue="int" TItem="vTransporte" DataSource="@Transportes"
                                         @bind-Value="Pedido.CG_TRANS">
                             <DropDownListFieldSettings Value="Id" Text="DESCRIPCION"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
-                </div>
-
-                <div class="form-row">
-
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-1" id="form-bulto">
                         <label class="">Bultos:</label>
                         <SfTextBox CssClass="customClass" ID="Bultos" @bind-Value="@(Pedido.BULTOS)" Width="250" Readonly="false"></SfTextBox>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3" id="form-selec-moneda">
                         <label for="choice">Seleccione la moneda:</label>
                         <select class="form-control" id="choice" @onchange="HandleMonedaChange">
                             <option value="dolares">Dólares</option>
                             <option value="pesos">Pesos</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-1" id="form-monto">
                         <label class="">Monto:</label>
                         <SfTextBox CssClass="customClass" ID="Monto" @bind-Value="@(Pedido.MONTO)" Readonly="false"></SfTextBox>
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="form-row">
+
+                   
+                    
+                </div>
+
+                <div class="row" id="grd-">
                     <div class="col-12">
                         <SfToast ID="toast_default" @ref="ToastObj">
                             <ToastPosition X="Center" Y="Top"></ToastPosition>
                         </SfToast>
 
-                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="120px"
+                        <SfGrid AllowReordering="true" AllowResizing="true" AllowTextWrap="false" Height="420px"
                                 @ref="refGridItems" DataSource="@Pedido.Items" Width="100%" ID="grdItemsPresup"
                                 AllowSorting="true" AllowPaging="false" GridLines="GridLine.Both">
                             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
@@ -214,6 +218,59 @@
 
 <style>
 
+    #form-cliente{
+        position:relative;
+        bottom:12px;
+    }
+
+    #form-cli{
+        position:relative;
+        bottom:15px;
+    }
+
+    #form-moneda{
+        position:relative;
+        right:25px;
+        bottom:15px;
+    }
+
+    #form-tc{
+        position:relative;
+        right:15px;
+        bottom:15px;
+    }
+    #form-cond-pago{
+        position:relative;
+        right:15px;
+        bottom:15px;
+    }
+    #form-cond-entre{
+        position:relative;
+        bottom:15px;
+    }
+
+    #form-direc-entre {
+        position: relative;
+        bottom:18px;    
+    }
+    #form-transporte{
+        position:relative;
+        bottom:18px;
+    }
+    #form-bulto{
+        position:relative;
+        bottom:20px;
+    }
+
+    #form-monto {
+        position: relative;
+        bottom: 20px;
+    }
+
+    #form-selec-moneda{
+        position: relative;
+        bottom: 20px;
+    }
     #toolbar-form-pedido {
         border: 0px solid rgb(173, 255, 47) !important;
     }
@@ -283,6 +340,6 @@
     }
 
     #grdItemsPresup .e-row .e-rowcell {
-        font-size: 10px !important;
+        font-size: 12px !important;
     }
 </style>
