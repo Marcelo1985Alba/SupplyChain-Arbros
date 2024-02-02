@@ -81,7 +81,7 @@ namespace SupplyChain
         [HttpPut]
         public async Task<IActionResult> UpdateTarea(Tareas tarea)
         {
-            string xSQL = string.Format($"UPDATE Tareas SET Titulo = '{tarea.Titulo}', Estado = '{tarea.Estado}', Resumen = '{tarea.Resumen}', Modulo = '{tarea.Modulo}' WHERE Id = '{tarea.Id}'");
+            string xSQL = string.Format($"UPDATE Tareas SET Titulo = '{tarea.Titulo}', Estado = '{tarea.Estado}', Resumen = '{tarea.Resumen}', Modulo = '{tarea.Modulo}', FechaRequerida = '{tarea.FechaRequerida:MM/dd/yyyy}', Importancia = '{tarea.Importancia}' WHERE Id = '{tarea.Id}'");
             await _context.Database.ExecuteSqlRawAsync(xSQL);
             return NoContent();
         }
@@ -90,7 +90,7 @@ namespace SupplyChain
         [HttpPost]
         public async Task<ActionResult<Tareas>> InsertTarea(Tareas tarea)
         {
-            string xSQL = string.Format($"INSERT INTO Tareas (Titulo, Estado, Resumen, Modulo) VALUES ('{tarea.Titulo}', '{tarea.Estado}', '{tarea.Resumen}', '{tarea.Modulo}')");
+            string xSQL = string.Format($"INSERT INTO Tareas (Titulo, Estado, Resumen, Modulo, FechaRequerida, Importancia, Creador) VALUES ('{tarea.Titulo}', '{tarea.Estado}', '{tarea.Resumen}', '{tarea.Modulo}', '{tarea.FechaRequerida:MM/dd/yyyy}', '{tarea.Importancia}', '{tarea.Creador}')");
             await _context.Database.ExecuteSqlRawAsync(xSQL);
             return CreatedAtAction("Get", new { id = tarea.Id }, tarea);
         }

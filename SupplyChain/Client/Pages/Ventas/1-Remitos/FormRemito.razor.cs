@@ -49,6 +49,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
         protected List<string> Monedas = new() { "PESOS", "DOLARES" };
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
+        protected string moneda = "dolares";
 
         protected Dictionary<string, object> HtmlAttribute = new()
         {
@@ -573,6 +574,19 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 ShowCloseButton = true,
                 ShowProgressBar = true
             });
+        }
+        protected void HandleMonedaChange(ChangeEventArgs args)
+        {
+            if(moneda == "pesos")
+            {
+                Pedido.MONTO = $"{Convert.ToDecimal(Pedido.MONTO) / Convert.ToDecimal(Pedido.VA_INDIC):0.00}";
+                moneda = "dolares";
+            }
+            else
+            {
+                Pedido.MONTO = $"{Convert.ToDecimal(Pedido.MONTO) * Convert.ToDecimal(Pedido.VA_INDIC):0.00}";
+                moneda = "pesos";
+            }
         }
     }
 }

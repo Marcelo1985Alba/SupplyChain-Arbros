@@ -36,6 +36,7 @@ namespace filemanager.Server.Controllers
             this.operation.SetRules(GetRules());
         }
 
+        
         // Processing the File Manager operations
         [Route("FileOperations")]
         public object FileOperations([FromBody] Syncfusion.Blazor.FileManager.Base.FileManagerDirectoryContent args)

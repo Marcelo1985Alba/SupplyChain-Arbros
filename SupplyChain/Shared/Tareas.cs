@@ -17,7 +17,14 @@ namespace SupplyChain.Shared
         public String Estado { get; set; }
         public String Resumen { get; set; }
         public String Modulo { get; set; }
+        public DateTime? FechaRequerida { get; set; }
+        public string Importancia { get; set; }
+        public string Creador { get; set; }
         [NotMapped]
         public List<string> Asignados { get; set; } = new List<string>();
+        [NotMapped]
+        public string NombreCreador { get; set; } 
+        [NotMapped]
+        public string Color { get; set; }
     }
 }

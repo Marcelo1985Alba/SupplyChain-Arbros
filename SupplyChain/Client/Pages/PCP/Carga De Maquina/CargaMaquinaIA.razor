@@ -18,7 +18,11 @@
 @inject NavigationManager NavigationManager;
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
+@using SupplyChain.Shared.CDM
 @using Syncfusion.Blazor.Schedule
+@using EditMode = Syncfusion.Blazor.Grids.EditMode
+@using GridLine = Syncfusion.Blazor.Grids.GridLine
+@using TextAlign = Syncfusion.Blazor.FileManager.TextAlign
 @attribute [Authorize(Roles = "Administrador, Produccion")]
 @inherits SupplyChain.Client.Pages.PCP.Carga_de_Maquina.CargaMaquinaCopiaBase
 
@@ -28,99 +32,145 @@
 </SfToast>
 <h3 class="card-title">Carga de Máquina</h3>
 <hr/>
-<div class="row form-inline">
-    <div class="col-4 text-center">
-        <div>
-            <SfProgressButton Content="Refrescar"
-                              IconCss="fa fa-refresh" CssClass="btn btn-sm btn-info"
-                              @onclick="@(async () => await Refrescar())">
-            </SfProgressButton>
-        </div>
-    </div>
-    <div class="col-4 text-center">
-        <div>
-            <SfProgressButton Content="Enviar OFs a DataCore"
-                              IconCss="fa fa-share-square" CssClass="btn btn-sm btn-info"
-                              @onclick="@(async () => await EnviarCSVDataCore())">
-            </SfProgressButton>
-        </div>
-    </div>
-    <div class="col-4 text-center">
-        @*<button class="" onclick="@(() => OpenExternalLink("https://aerre.grafana.net/public-dashboards/42c12fc6b1ad4c57b9ad51817fa6d364"))">Ver Panel</button>*@
-        <div>
-            <SfButton IconCss="" CssClass="btn btn-sm btn-info"
-                      OnClick="OpenExternalLink">
-                Ver Panel
-            </SfButton>
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label for="choice">Seleccione la vista:</label>
+            <select class="form-control" id="choice" @bind="@vista">
+                <option value="1">Planificación</option>
+                <option value="2">Grilla</option>
+            </select>
         </div>
     </div>
 </div>
-<SfSpinner @ref="SpinnerCDM" Size="60" Label="@MensajeCargando" CssClass="mt-5 pt-5"
-           Type="SpinnerType.Bootstrap"
-           @bind-Visible="Visible">
-</SfSpinner>
-
-<div class="control-section">
-    <SfSchedule @ref="scheduleObj" TValue="EventData" ShowQuickInfo="false" Width="100%" Height="100%" @bind-CurrentView="@CurrentView" ShowTimeIndicator="true">
-        <ScheduleTemplates>
-            <ResourceHeaderTemplate>
-                <div class='template-wrap'>
-                    <div class="employee-name">
-                        <b>@(((context as TemplateContext).ResourceData as ResourceData).Name)</b>
-                    </div>
+<hr/>
+@{
+    if (vista == "1") // vista de Planificación
+    {
+        <div class="row form-inline">
+            <div class="col-4 text-center">
+                <div>
+                    <SfProgressButton Content="Refrescar"
+                                      IconCss="fa fa-refresh" CssClass="btn btn-sm btn-info"
+                                      @onclick="@(async () => await Refrescar())">
+                    </SfProgressButton>
                 </div>
-            </ResourceHeaderTemplate>
-        </ScheduleTemplates>
-        <ScheduleGroup EnableCompactView="false" Resources="@groupData"></ScheduleGroup>
-        <ScheduleResources>
-            <ScheduleResource TItem="ResourceData" TValue="int[]" DataSource="@ResourceDatasource" Field="ResourceId" Title="Resource" Name="Resources" TextField="Text" IdField="Id" ColorField="Color" AllowMultiple="true"></ScheduleResource>
-        </ScheduleResources>
-        <ScheduleEvents TValue="EventData"
-                        Dragged="OnDragged"
-                        OnEventDoubleClick="@(async (a) => await OrdenFabricacionOpen(a))"
-                        OnEventClick="@(async (a) => await OrdenFabricacionOpen(a))">
-        </ScheduleEvents>
-        <ScheduleEventSettings DataSource="@ordenesData" EnableTooltip="true" AllowEditing="false">
-            <TooltipTemplate>
-                @{
-                    var eventData = (context as EventData);
-                    <div class="tooltip-wrap">
-                        <div class="content-area">
-                            <div class="name">@eventData.Subject</div>
-                            <div class="city">Cantidad: @eventData.cantidad</div>
-                            <div class="city">Inicial: @eventData.OFinicial - Alta: @eventData.OFalta</div>
-                            <div class="time">Inicio : @eventData.StartTime.ToString("d/M HH:mm") - Fin : @eventData.EndTime.ToString("d/M HH:mm")</div>
+            </div>
+            <div class="col-4 text-center">
+                <div>
+                    <SfProgressButton Content="Enviar OFs a DataCore"
+                                      IconCss="fa fa-share-square" CssClass="btn btn-sm btn-info"
+                                      @onclick="@(async () => await EnviarCSVDataCore())">
+                    </SfProgressButton>
+                </div>
+            </div>
+            <div class="col-4 text-center">
+                @*<button class="" onclick="@(() => OpenExternalLink("https://aerre.grafana.net/public-dashboards/42c12fc6b1ad4c57b9ad51817fa6d364"))">Ver Panel</button>*@
+                <div>
+                    <SfButton IconCss="" CssClass="btn btn-sm btn-info"
+                              OnClick="OpenExternalLink">
+                        Ver Panel
+                    </SfButton>
+                </div>
+            </div>
+        </div>
+        <SfSpinner @ref="SpinnerCDM" Size="60" Label="@MensajeCargando" CssClass="mt-5 pt-5"
+                   Type="SpinnerType.Bootstrap"
+                   @bind-Visible="Visible">
+        </SfSpinner>
+        <div class="control-section">
+            <SfSchedule @ref="scheduleObj" TValue="EventData" ShowQuickInfo="false" Width="100%" Height="100%" @bind-CurrentView="@CurrentView" ShowTimeIndicator="true">
+                <ScheduleTemplates>
+                    <ResourceHeaderTemplate>
+                        <div class='template-wrap'>
+                            <div class="employee-name">
+                                <b>@(((context as TemplateContext).ResourceData as ResourceData).Name)</b>
+                            </div>
                         </div>
-                    </div>
-                }
-            </TooltipTemplate>
-        </ScheduleEventSettings>
-        <ScheduleViews>
-            <ScheduleView MaxEventsPerRow="3" Option="View.MonthAgenda" StartHour="07:00">
-                <EventTemplate>
-                    @{
-                        EventData eventData = (context as EventData);
-                        <div class='template-wrap' style='background:@(eventData?.CategoryColor ?? "transparent"); display: flex; flex-direction: column; text-align: left;'>
-                            <div class="subject" style='color: black; font-family: "Arial", sans-serif; font-size: 100%; font-weight: bold; padding-left: 5px; padding-top: 1px;'>@eventData?.Subject</div>
-                            <div class="date" style='color: black; font-family: "Arial", sans-serif; font-size: 80%; font-weight: bold; padding-left: 5px; padding-bottom: 1px;'>@eventData?.StartTime.ToString("HH:mm") - @eventData?.EndTime.ToString("HH:mm")</div>
-                        </div>
-                    }
-                </EventTemplate>
-            </ScheduleView>
-            <ScheduleView MaxEventsPerRow="3" Option="View.TimelineWeek" StartHour="07:00" IsSelected="true">
-                <EventTemplate>
-                    @{
-                        EventData eventData = (context as EventData);
-                        <div class='template-wrap' style='background:@(eventData?.CategoryColor ?? "transparent"); display: flex; flex-direction: column; text-align: left;'>
-                            <div class="subject" style='color: black; font-family: "Arial", sans-serif; font-size: 100%; font-weight: bold; padding-left: 5px; padding-top: 1px;'>@eventData?.Subject</div>
-                            <div class="date" style='color: black; font-family: "Arial", sans-serif; font-size: 80%; font-weight: bold; padding-left: 5px; padding-bottom: 1px;'>@eventData?.StartTime.ToString("HH:mm") - @eventData?.EndTime.ToString("HH:mm")</div>
-                        </div>
-                    }
-                </EventTemplate>
-            </ScheduleView>
-        </ScheduleViews>
-    </SfSchedule>
-</div>
+                    </ResourceHeaderTemplate>
+                </ScheduleTemplates>
+                <ScheduleGroup EnableCompactView="false" Resources="@groupData"></ScheduleGroup>
+                <ScheduleResources>
+                    <ScheduleResource TItem="ResourceData" TValue="int[]" DataSource="@ResourceDatasource" Field="ResourceId" Title="Resource" Name="Resources" TextField="Text" IdField="Id" ColorField="Color" AllowMultiple="true"></ScheduleResource>
+                </ScheduleResources>
+                <ScheduleEvents TValue="EventData"
+                                Dragged="OnDragged"
+                                OnEventDoubleClick="@(async (a) => await OrdenFabricacionOpen(a))"
+                                OnEventClick="@(async (a) => await OrdenFabricacionOpen(a))">
+                </ScheduleEvents>
+                <ScheduleEventSettings DataSource="@ordenesData" EnableTooltip="true" AllowEditing="false">
+                    <TooltipTemplate>
+                        @{
+                            var eventData = (context as EventData);
+                            <div class="tooltip-wrap">
+                                <div class="content-area">
+                                    <div class="name">@eventData.Subject</div>
+                                    <div class="city">Cantidad: @eventData.cantidad</div>
+                                    <div class="city">Inicial: @eventData.OFinicial - Alta: @eventData.OFalta</div>
+                                    <div class="time">Inicio : @eventData.StartTime.ToString("d/M HH:mm") - Fin : @eventData.EndTime.ToString("d/M HH:mm")</div>
+                                </div>
+                            </div>
+                        }
+                    </TooltipTemplate>
+                </ScheduleEventSettings>
+                <ScheduleViews>
+                    <ScheduleView MaxEventsPerRow="3" Option="View.MonthAgenda" StartHour="07:00">
+                        <EventTemplate>
+                            @{
+                                EventData eventData = (context as EventData);
+                                <div class='template-wrap' style='background:@(eventData?.CategoryColor ?? "transparent"); display: flex; flex-direction: column; text-align: left;'>
+                                    <div class="subject" style='color: black; font-family: "Arial", sans-serif; font-size: 100%; font-weight: bold; padding-left: 5px; padding-top: 1px;'>@eventData?.Subject</div>
+                                    <div class="date" style='color: black; font-family: "Arial", sans-serif; font-size: 80%; font-weight: bold; padding-left: 5px; padding-bottom: 1px;'>@eventData?.StartTime.ToString("HH:mm") - @eventData?.EndTime.ToString("HH:mm")</div>
+                                </div>
+                            }
+                        </EventTemplate>
+                    </ScheduleView>
+                    <ScheduleView MaxEventsPerRow="3" Option="View.TimelineWeek" StartHour="07:00" IsSelected="true">
+                        <EventTemplate>
+                            @{
+                                EventData eventData = (context as EventData);
+                                <div class='template-wrap' style='background:@(eventData?.CategoryColor ?? "transparent"); display: flex; flex-direction: column; text-align: left;'>
+                                    <div class="subject" style='color: black; font-family: "Arial", sans-serif; font-size: 100%; font-weight: bold; padding-left: 5px; padding-top: 1px;'>@eventData?.Subject</div>
+                                    <div class="date" style='color: black; font-family: "Arial", sans-serif; font-size: 80%; font-weight: bold; padding-left: 5px; padding-bottom: 1px;'>@eventData?.StartTime.ToString("HH:mm") - @eventData?.EndTime.ToString("HH:mm")</div>
+                                </div>
+                            }
+                        </EventTemplate>
+                    </ScheduleView>
+                </ScheduleViews>
+            </SfSchedule>
+        </div>
+    }
+    else // vista de Grilla
+    {
+        <!--Hago un CRUD con sfGrid de la tabla PLANNER-->
+        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="false" AllowResizing="true"
+                @ref="refGrid" DataSource="@ordenesIA" Width="100%" Height="100%" 
+                AllowExcelExport="true" AllowGrouping="true" ID="grdPLANNER" GridLines="GridLine.Both"
+                AllowSorting="true" AllowPaging="true" Toolbar="Toolbaritems">
+            <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
+            <GridEvents TValue="PLANNER" OnToolbarClick="OnToolbarHandler" CellSaved="CellSavedHandler"></GridEvents>
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
+                              ShowDeleteConfirmDialog="false" Mode="EditMode.Batch">
+            </GridEditSettings>
+            <GridColumns>
+                <GridColumn Field=@nameof(PLANNER.CG_PROD) HeaderText="Código" Width="100px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(PLANNER.DES_PROD) HeaderText="Descripción" Width="250px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(PLANNER.CG_ORDF) HeaderText="Orden" Width="100px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(PLANNER.CG_ORDFASOC) HeaderText="Asociada" Width="100px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(PLANNER.CG_ESTADOCARGA) HeaderText="Estado" Width="135px"></GridColumn>
+                <GridColumn Field=@nameof(PLANNER.PRIORIDAD) HeaderText="Prioridad" Width="135px"></GridColumn>
+                <GridColumn Field=@nameof(PLANNER.CG_CELDA) HeaderText="Celda" Width="135px"></GridColumn>
+                <GridColumn Field=@nameof(PLANNER.PROCESO) HeaderText="Proceso" Width="100px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(PLANNER.INICIO) HeaderText="Inicio" Width="150px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(PLANNER.FIN) HeaderText="Fin" Width="150px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(PLANNER.CANT) HeaderText="Cantidad" Width="100px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(PLANNER.FE_ENTREGA) HeaderText="Entrega" Width="150px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(PLANNER.PEDIDO) HeaderText="Pedido" Width="100px" AllowEditing="false"></GridColumn>
+            </GridColumns>
+            <SfSpinner @ref="SpinnerGrid" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@VisibleGrid"></SfSpinner>
+        </SfGrid>
+    }
+}
 
 @*DIALOG ORDEN DE FABRICACION*@
 @if (isOrdenDialogVisible && ordenFabricacion != null && ordenesIA != null)

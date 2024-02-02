@@ -94,11 +94,17 @@
                         <label class="">Bultos:</label>
                         <SfTextBox CssClass="customClass" ID="Bultos" @bind-Value="@(Pedido.BULTOS)" Width="250" Readonly="false"></SfTextBox>
                     </div>
-                    <div class="form-group col-md-8">
+                    <div class="form-group col-md-4">
+                        <label for="choice">Seleccione la moneda:</label>
+                        <select class="form-control" id="choice" @onchange="HandleMonedaChange">
+                            <option value="dolares">Dólares</option>
+                            <option value="pesos">Pesos</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
                         <label class="">Monto:</label>
                         <SfTextBox CssClass="customClass" ID="Monto" @bind-Value="@(Pedido.MONTO)" Readonly="false"></SfTextBox>
                     </div>
-
                 </div>
 
                 <div class="row">

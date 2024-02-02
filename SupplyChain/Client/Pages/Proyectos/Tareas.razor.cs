@@ -70,8 +70,26 @@ namespace SupplyChain.Client.Pages.Proyectos
                 var moduloNombres = Modulos.Select(x => x.Descripcion).ToList();
                 tasks = await Http.GetFromJsonAsync<List<SupplyChain.Shared.Tareas>>(
                     $"api/Tareas/TareasByModulos?modulos={Uri.EscapeDataString(string.Join("','", moduloNombres))}");
-                // elimino las task que son null
-                tasks.RemoveAll(x => x == null);
+                foreach (var task in tasks)
+                {
+                    task.NombreCreador = Usuarios.FirstOrDefault(x => x.Id == task.Creador)?.USUARIO;
+                    if(task.Importancia == "Poco Importante")
+                    {
+                        task.Color = "#FFD700"; // color dorado
+                    }
+                    else if(task.Importancia == "Algo Importante")
+                    {
+                        task.Color = "#FFA500"; // color naranja
+                    }
+                    else if(task.Importancia == "Muy Importante")
+                    {
+                        task.Color = "#FF0000"; // color rojo
+                    }
+                    else
+                    {
+                        task.Color = "#FFFFFF"; // color blanco
+                    }
+                }
 
                 var ids = tasks.Select(x => x.Id).ToList();
                 tasksPerUser = await Http.GetFromJsonAsync<List<TareasPorUsuario>>(
@@ -96,13 +114,18 @@ namespace SupplyChain.Client.Pages.Proyectos
 
         protected async Task AddRecord()
         {
+            var userId = authState.User.Claims.FirstOrDefault(i => i.Type == ClaimTypes.NameIdentifier);
             SupplyChain.Shared.Tareas tarea = new SupplyChain.Shared.Tareas
             {
                 Id = tasks.Max(x => x.Id) + 1,
                 Titulo = "Nueva tarea",
                 Estado = "Planificado",
                 Resumen = "Resumen",
-                Modulo = ""
+                Modulo = "",
+                FechaRequerida = DateTime.Now,
+                Importancia = "Poco Importante",
+                Creador = userId!.Value,
+                NombreCreador = Usuarios.FirstOrDefault(x => x.Id == userId.Value)?.USUARIO
             };
             isAdding = true;
             await refKanban.OpenDialogAsync(CurrentAction.Add, tarea);
@@ -143,6 +166,22 @@ namespace SupplyChain.Client.Pages.Proyectos
         {
             if (args.Interaction == "Save")
             {
+                if(args.Data.Importancia == "Poco Importante")
+                {
+                    args.Data.Color = "#FFD700"; // color dorado
+                }
+                else if(args.Data.Importancia == "Algo Importante")
+                {
+                    args.Data.Color = "#FFA500"; // color naranja
+                }
+                else if(args.Data.Importancia == "Muy Importante")
+                {
+                    args.Data.Color = "#FF0000"; // color rojo
+                }
+                else
+                {
+                    args.Data.Color = "#FFFFFF"; // color blanco
+                }
                 if (isAdding)
                 {
                     await Http.PostAsJsonAsync("api/Tareas", args.Data);
@@ -161,7 +200,11 @@ namespace SupplyChain.Client.Pages.Proyectos
                 {
                     await Http.PutAsJsonAsync("api/Tareas", args.Data);
                 }
-                await refKanban.Refresh();
+                await refKanban.RefreshAsync();
+            }
+            if(args.Interaction == "Cancel" || args.Interaction == "Close")
+            {
+                isAdding = false;
             }
         }
         
@@ -190,6 +233,14 @@ namespace SupplyChain.Client.Pages.Proyectos
             new DropDownModel { Id = 1, Value = "En Progreso" },
             new DropDownModel { Id = 2, Value = "En Prueba" },
             new DropDownModel { Id = 3, Value = "Terminado" }
+        };
+        
+        
+        protected List<DropDownModel> ImportanciaData = new List<DropDownModel>()
+        {
+            new DropDownModel { Id = 1, Value = "Poco Importante" },
+            new DropDownModel { Id = 2, Value = "Algo Importante" },
+            new DropDownModel { Id = 3, Value = "Muy Importante" }
         };
     }
 }
