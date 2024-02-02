@@ -60,5 +60,13 @@ namespace SupplyChain
             return NoContent();
         }
         
+        // PUT: api/CargasIA/EditOrden/{CG_ORDF}
+        [HttpPut("EditOrden/{CG_ORDF}")]
+        public async Task<IActionResult> EditOrden(string CG_ORDF, PLANNER orden)
+        {
+            string xSQL = string.Format($"UPDATE PLANNER SET CG_ESTADOCARGA = '{orden.CG_ESTADOCARGA}', CG_CELDA = '{orden.CG_CELDA}', PRIORIDAD = '{orden.PRIORIDAD}' WHERE CG_ORDF = '{CG_ORDF}'");
+            await _context.Database.ExecuteSqlRawAsync(xSQL);
+            return NoContent();
+        }
     }
 }

@@ -5,6 +5,7 @@
 @using System.Security.Claims
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Calendars
 @attribute [Authorize(Roles = "Administrador, Produccion, Ventas")]
 
 @inherits SupplyChain.Client.Pages.Proyectos.TareasPageBase
@@ -29,9 +30,9 @@
                 <KanbanColumn HeaderText="En Prueba" KeyField="@(new List<string>() { "En Prueba" })"></KanbanColumn>
                 <KanbanColumn HeaderText="Terminado" KeyField="@(new List<string>() { "Terminado" })"></KanbanColumn>
             </KanbanColumns>
-            <KanbanCardSettings HeaderField="Titulo" ContentField="Resumen" TagsField="Asignados"></KanbanCardSettings>
+            <KanbanCardSettings HeaderField="Titulo" ContentField="Resumen" TagsField="Asignados" GrabberField="Color"></KanbanCardSettings>
             <KanbanSwimlaneSettings KeyField="Modulo"></KanbanSwimlaneSettings>
-            <KanbanDialogSettings>
+            <KanbanDialogSettings Width="50%">
                 <Template>
                     @{
                         var data = (SupplyChain.Shared.Tareas)context;
@@ -51,6 +52,12 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td class="e-label">Creador</td>
+                                    <td>
+                                        <SfTextBox CssClass="e-field" @bind-Value="@data.NombreCreador" Enabled="false"/>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td class="e-label">Estado</td>
                                     <td>
                                         <SfDropDownList TValue="string" TItem="DropDownModel" CssClass="e-field" DataSource="@StatusData" @bind-Value="@data.Estado">
@@ -66,32 +73,33 @@
                                         </SfDropDownList>
                                     </td>
                                 </tr>
-                                @*
-                            <tr>
-                                <td class="e-label">Asignado</td>
-                                <td>
-                                    <SfMultiSelect TValue="string[]" AllowFiltering="true" TItem="DropDownModel" CssClass="e-field" DataSource="@AssigneeData" @bind-Value="@data.Asignados">
-                                        <MultiSelectFieldSettings Text="Value" Value="Value"/>
-                                    </SfMultiSelect>
-                                    <div>
-                                        @foreach (var asignado in data.Asignados)
-                                        {
-                                            <span class="selected-user">@asignado</span>
-                                        }
-                                    </div>
-                                </td>
-                            </tr>
-                            *@
+                                <tr>
+                                    <td class="e-label">Fecha Requerida</td>
+                                    <td>
+                                        <SfDatePicker CssClass="e-field" @bind-Value="@(data.FechaRequerida)" Enabled="true" ShowTodayButton="true" Format='dd/MM/yyyy'></SfDatePicker>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="e-label">Importancia</td>
+                                    <td>
+                                        <SfDropDownList TValue="string" TItem="DropDownModel" CssClass="e-field" DataSource="@ImportanciaData" @bind-Value="@data.Importancia">
+                                            <DropDownListFieldSettings Text="Value" Value="Value"/>
+                                        </SfDropDownList>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td>
                                         @{
-                                            if(data.Asignados.Contains(Usuarios.FirstOrDefault(x => x.Id == authState.User.Claims.FirstOrDefault(i => i.Type == ClaimTypes.NameIdentifier)!.Value)!.USUARIO))
+                                            if (!isAdding)
                                             {
-                                                <SfButton CssClass="btn-take-task" OnClick="@(() => DejarTarea(data))">Dejar Tarea</SfButton>
-                                            }
-                                            else
-                                            {
-                                                <SfButton CssClass="btn-take-task" OnClick="@(() => TomarTarea(data))">Tomar Tarea</SfButton>
+                                                if (data.Asignados.Contains(Usuarios.FirstOrDefault(x => x.Id == authState.User.Claims.FirstOrDefault(i => i.Type == ClaimTypes.NameIdentifier)!.Value)!.USUARIO))
+                                                {
+                                                    <SfButton CssClass="btn-take-task" OnClick="@(() => DejarTarea(data))">Dejar Tarea</SfButton>
+                                                }
+                                                else
+                                                {
+                                                    <SfButton CssClass="btn-take-task" OnClick="@(() => TomarTarea(data))">Tomar Tarea</SfButton>
+                                                }
                                             }
                                         }
                                     </td>

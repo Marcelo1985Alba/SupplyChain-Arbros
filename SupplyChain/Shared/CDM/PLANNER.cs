@@ -21,6 +21,7 @@ namespace SupplyChain.Shared.CDM
         public string PROCESO { get; set; }
         public int CANT { get; set; }
         public int CG_ORDFASOC { get; set; }
+        public int CG_ESTADOCARGA { get; set; }
         [NotMapped]
         public int cambiarPrioridad { get; set; } = 0;
     }

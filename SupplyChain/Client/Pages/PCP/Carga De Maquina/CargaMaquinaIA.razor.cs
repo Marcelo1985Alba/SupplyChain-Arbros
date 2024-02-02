@@ -21,6 +21,8 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using SupplyChain.Shared.CDM;
 using SupplyChain.Shared.Context;
+using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Schedule;
 
 
@@ -79,7 +81,9 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
         protected List<PedCli> PedCliList = new List<PedCli>();
         protected Producto prodList = new();
         protected SfSpinner SpinnerCDM;
+        protected SfSpinner SpinnerGrid;
         protected bool Visible = false;
+        protected bool VisibleGrid = false;
         protected string MensajeCargando = "Cargando...";
 
         protected List<Operario> operarios = new List<Operario>();
@@ -94,8 +98,21 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
         protected DateTime CurrentDate { get; set; }
         protected View CurrentView { get; set; } = View.TimelineDay;
         protected SfSchedule<EventData> scheduleObj;
-
-
+        protected string vista = "1";
+        protected SfGrid<PLANNER> refGrid;
+        protected List<Object> Toolbaritems = new List<Object>(){
+            new ItemModel()
+            {
+                Text = "Guardar Cambios", Type = ItemType.Button, CssClass = "", ShowTextOn = DisplayMode.Both,
+                TooltipText = "Guardar los cambios realizados", PrefixIcon = "e-update e-icons",
+                Id = "GuardarDB"
+            },
+            "ExcelExport",
+            "Search"
+        };
+        protected PLANNER edited = new PLANNER();
+        protected List<PLANNER> editedList = new List<PLANNER>();
+        
         public void OpenExternalLink()
         {
             string url = "http://192.168.0.247:8080/aerre/index.html";
@@ -1116,7 +1133,6 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
             return resources;
         }
 
-
         protected async Task OnDragged(DragEventArgs<EventData> args)
         {
             if (args.Data.StartTime <= DateTime.Now && args.Data.EndTime >= DateTime.Now)
@@ -1161,7 +1177,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 }
 
                 ordenes.ForEach(t => t.cambiarPrioridad = 0);
-                ordenes[0].cambiarPrioridad = 3;
+                ordenes[0].cambiarPrioridad = 10;
 
                 var firstStartDate = ordenes[0].StartTime;
                 var lastEndDate = ordenes[^1].EndTime;
@@ -1238,7 +1254,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                 }
                 
                 ordenes.ForEach(t => t.cambiarPrioridad = 0);
-                ordenes[^1].cambiarPrioridad = -3;
+                ordenes[^1].cambiarPrioridad = -10;
 
                 var firstStartDate = ordenes[0].StartTime;
                 var lastEndDate = ordenes[^1].EndTime;
@@ -1341,6 +1357,72 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
 
             CurrentDate = projectStart ?? DateTime.Today;
             return data;
+        }
+        
+        protected async Task OnToolbarHandler(ClickEventArgs args)
+        {
+            if(args.Item.Id == "GuardarDB")
+            {
+                VisibleGrid = true;
+                await GuardarDB();
+                VisibleGrid = false;
+            }
+            else if(args.Item.Text == "grdPLANNER_excelexport")
+            {
+                VisibleGrid = true;
+                await refGrid.ExportToExcelAsync();
+                VisibleGrid = false;
+            }
+        }
+        protected async Task GuardarDB()
+        {
+            if (editedList.Count > 0)
+            {
+                try
+                {
+                    foreach (var item in editedList)
+                        await Http.PutAsJsonAsync($"api/CargasIA/EditOrden/{item.CG_ORDF}", item);
+                } catch (Exception e)
+                {
+                    await this.ToastObj.ShowAsync(new ToastModel
+                    {
+                        Title = "ERROR!",
+                        Content = "Error al guardar cambios",
+                        CssClass = "e-toast-danger",
+                        Icon = "e-error toast-icons",
+                        ShowCloseButton = true,
+                        ShowProgressBar = true
+                    });
+                    return;
+                }
+                await this.ToastObj.ShowAsync(new ToastModel
+                {
+                    Title = "EXITO!",
+                    Content = "Cambios guardados con éxito",
+                    CssClass = "e-toast-success",
+                    Icon = "e-success toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+                editedList.Clear();
+            }
+            else
+            {
+                await this.ToastObj.ShowAsync(new ToastModel
+                {
+                    Title = "AVISO!",
+                    Content = "No hay cambios para guardar",
+                    CssClass = "e-toast-warning",
+                    Icon = "e-success toast-icons",
+                    ShowCloseButton = true,
+                    ShowProgressBar = true
+                });
+            }
+        }
+        public async Task CellSavedHandler(CellSaveArgs<PLANNER> args)
+        {
+            edited = args.Data;
+            editedList.Add(edited);
         }
     }
 }
