@@ -1337,8 +1337,8 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                     CG_ORDF = orden.CG_ORDF.ToString().Trim(),
                     Subject = orden.CG_ORDF.ToString().Trim() + " - " + orden.DES_PROD.Trim() + " - " +
                               orden.PROCESO.Trim(),
-                    StartTime = orden.INICIO,
-                    EndTime = orden.FIN,
+                    StartTime = orden.INICIO ?? DateTime.Today,
+                    EndTime = orden.FIN ?? DateTime.Today,
                     ResourceId = resourceId + 1,
                     cantidad = orden.CANT.ToString(),
                     Description = orden.DES_PROD.Trim(),
