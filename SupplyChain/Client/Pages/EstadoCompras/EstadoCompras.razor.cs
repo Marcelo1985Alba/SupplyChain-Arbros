@@ -123,29 +123,42 @@ namespace SupplyChain.Client.Pages.EstadoCompras
         //6.Vencida
         //7.Cerrada
 
-        public async Task QueryCellInfoHandler2(QueryCellInfoEventArgs<vESTADOS_COMPRAS> args)
-        {
-            //DateTime fe_actual= DateTime.Now;
-            //int diasPasados = 5;
-            //DateTime fechaLimite = args.Data.FE_VENC.AddDays(diasPasados);
-            if(args.Data.FE_VENC.HasValue)
-            {
-                DateTime fechaActual= DateTime.Now;
-                int diasPasados = 5;
-                DateTime fechaLimite = args.Data.FE_VENC.Value.AddDays(diasPasados);
+        //public async Task QueryCellInfoHandler2(QueryCellInfoEventArgs<vESTADOS_COMPRAS> args)
+        //{
+        //    //DateTime fe_actual= DateTime.Now;
+        //    //int diasPasados = 5;
+        //    //DateTime fechaLimite = args.Data.FE_VENC.AddDays(diasPasados);
+        //    //if(args.Data.FE_VENC.HasValue)
+        //    //{
 
-                if(fechaActual> fechaLimite)
-                {
-                    args.Cell.AddStyle(new string[] { "color-fecha-vencimiento-pasados" });
-                }
-            }
-         
-        }
+        //    //}
+
+        //    if(args.Data.ESTADOS_COMPRA== "Pendiente Em.Solicitud de Cotizacion" && args.Data.ESTADOS_COMPRA=="Pendiente Entrega Vencida" && args.Data.FE_VENC.HasValue)
+        //    {
+        //        DateTime fechaActual = DateTime.Now;
+        //        int diasPasados = 5;
+        //        DateTime fechaLimite = args.Data.FE_VENC.Value.AddDays(diasPasados);
+        //        if (fechaActual > fechaLimite)
+        //        {
+        //            args.Cell.AddClass(new string[] { "color-fecha-vencimiento-pasados" });
+        //        }
+
+        //    }
+
+        //}
+
+       
+
         public void QueryCellInfoHandler(QueryCellInfoEventArgs<vESTADOS_COMPRAS> args)
         {
             if (args.Data.ESTADOS_COMPRA == "Pendiente Em.Solicitud de Cotizacion") //SOLICITAR COTIZACION
             {
-                args.Cell.AddClass(new string[] { "color-estado-compra-pendiente-emitir-solcot" });
+                DateTime fechaActual = DateTime.Now;
+                int diasPasados = 5;
+                DateTime fechaLimite = args.Data.FE_VENC.Value.AddDays(diasPasados);
+                args.Cell.AddClass(new string[] { "color-estado-compra-pendiente-emitir-solcot", "color-fecha-vencimiento-pasados" } 
+                );
+                
             }
             else if (args.Data.ESTADOS_COMPRA == "Pendiente Emision OC") //PENDIENTE A COTIZACION
             {
@@ -175,17 +188,17 @@ namespace SupplyChain.Client.Pages.EstadoCompras
             {
                 args.Cell.AddClass(new string[] { "color-estado-compra-cerrada" });
             }
-            if (args.Data.FE_VENC.HasValue)
-            {
-                DateTime fechaActual = DateTime.Now;
-                int diasPasados = 5;
-                DateTime fechaLimite = args.Data.FE_VENC.Value.AddDays(diasPasados);
+            //if (args.Data.FE_VENC.HasValue)
+            //{
+            //    DateTime fechaActual = DateTime.Now;
+            //    int diasPasados = 5;
+            //    DateTime fechaLimite = args.Data.FE_VENC.Value.AddDays(diasPasados);
 
-                if (fechaActual > fechaLimite)
-                {
-                    args.Cell.AddClass(new string[] { "color-fecha-vencimiento-pasados" });
-                }
-            }
+            //    if (fechaActual > fechaLimite)
+            //    {
+            //        args.Cell.AddClass(new string[] { "color-fecha-vencimiento-pasados" });
+            //    }
+            //}
 
 
         }
