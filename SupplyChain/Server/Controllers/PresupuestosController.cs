@@ -178,6 +178,8 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
+       
+
         // DELETE api/<PresupuestosController>/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Presupuesto>> DeleteCompra(int id)

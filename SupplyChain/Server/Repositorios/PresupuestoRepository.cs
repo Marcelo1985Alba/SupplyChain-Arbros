@@ -133,14 +133,25 @@ namespace SupplyChain.Server.Repositorios
         }
 
 
+        //public async Task<IEnumerable<Presupuesto>> ActualizarColor(int id, string color)
+        //{ 
+        //    string xSQL= $"UPDATE PRESUPUESTO_ENCABEZADO SET COLOR='{color}' WHERE ID = {id}";
+        //    await base.Database.ExecuteSqlRawAsync(xSQL);
+
+        //    return await DbSet.Where(p=> p.Id == id).ToListAsync();
+        //}
         public async Task<IEnumerable<Presupuesto>> ActualizarColor(int id, string color)
-        { 
-            string xSQL= $"UPDATE PRESUPUESTO_ENCABEZADO SET COLOR='{color}' WHERE ID = {id}";
+        {
+            string xSQL = $"UPDATE PRESUPUESTO_ENCABEZADO SET COLOR='{color}'";
+            if (color.Trim().ToUpper() == "GANADA")
+            {
+                xSQL += ", TienePedido=1";
+            }
+            xSQL += $"WHERE id={id}";
             await base.Database.ExecuteSqlRawAsync(xSQL);
 
-            return await DbSet.Where(p=> p.Id == id).ToListAsync();
+            return await DbSet.Where(p => p.Id == id).ToListAsync();
         }
-
         public async Task<IEnumerable<Presupuesto>> EnviarMotivos(int id, string motivo)
         {
             string xSQL = $"UPDATE PRESUPUESTO_ENCABEZADO SET MOTIVO ='{motivo}' WHERE ID = {id}";

@@ -51,7 +51,8 @@ namespace SupplyChain.Client.HelperService
             return await http.GetFromJsonAsync<List<vPresupuestos>>($"{API}/GetPresupuestoVista/{tipoFiltro}");
 
         }
-      
+
+     
 
 
         public async Task Imprimir(int presupuestoId)
