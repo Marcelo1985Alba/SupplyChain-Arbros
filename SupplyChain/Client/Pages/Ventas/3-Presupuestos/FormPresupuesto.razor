@@ -222,6 +222,8 @@
                                                 }
                                             </Template>
                                         </GridColumn>
+                                         <GridColumn Field="@nameof(PresupuestoDetalle.OBSERITEM)" HeaderText="Observaciones" Width="auto"></GridColumn>
+
                                         <GridColumn Field="@nameof(PresupuestoDetalle.PRESIONAPERTURA)" HeaderText="Presion Apertura" Width="auto" AllowEditing="false"></GridColumn>
                                         <GridColumn Field="@nameof(PresupuestoDetalle.TEMPERATURADESCARGAT)" HeaderText="Temperatura" Width="auto" AllowEditing="false"></GridColumn>
                                         <GridColumn Field="@nameof(PresupuestoDetalle.DESCRIPCIONFLUIDO)" HeaderText="Fluido" Width="auto" AllowEditing="false"></GridColumn>
@@ -230,8 +232,7 @@
                                         <GridColumn Field="@nameof(PresupuestoDetalle.CAPACIDADREQUERIDA)" HeaderText="Capacidad" Width="auto" AllowEditing="false"></GridColumn>
                                         <GridColumn Field="@nameof(PresupuestoDetalle.DESCRIPCIONTAG)" HeaderText="Identificacion" Width="auto" AllowEditing="false"></GridColumn>
                                         <GridColumn Field="@nameof(PresupuestoDetalle.SOLICITUDID)" HeaderText="Nº Solicitud" Width="auto" AllowEditing="false"></GridColumn>
-                                        <GridColumn Field="@nameof(PresupuestoDetalle.OBSERITEM)" HeaderText="Observaciones" Width="auto"></GridColumn>
-
+                                       
                                     </GridColumns>
                                 </SfGrid>
                             </div>
@@ -259,6 +260,7 @@
                             <SfButton Content="Reparaciones" CssClass="e-btn e-small e-info e-block" OnClick="BuscarReparaciones"
                                       IconCss="e-eye e-icons e-btn-icon-left"></SfButton>
                         </div>
+                    </div>
                         <div class="h-50 form-detalle">
                             @{
                                 var cantItems = Convert.ToInt32(Presupuesto.Items.Sum(i => i.CANTIDAD));
@@ -346,7 +348,7 @@
                     
                 </div>
 
-            </div>
+            @* </div> *@
 
             
         
@@ -502,8 +504,8 @@
 
     .form-detalle{
         position:relative;
-        margin-top:-100px;
-        left:150px;
+        margin-top:-280px;
+        left:130px;
     }
 /**/
 </style>
