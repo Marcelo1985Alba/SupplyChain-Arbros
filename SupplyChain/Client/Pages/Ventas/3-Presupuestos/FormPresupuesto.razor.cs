@@ -53,6 +53,8 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected bool popupBuscadorVisiblePrecio { get; set; } = false;
         protected bool buscarSoloReparaciones = false;
 
+        protected bool solicProdOrRepSelected = false;
+
         protected SolicitudesDialog refSolicitudDialog;
         protected bool popupBuscadorVisibleSolicitud { get; set; } = false;
 
@@ -104,8 +106,6 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 ReadOnlyMoneda = false;
                 await GetTipoCambioDolarHoy();
             }
-
-            
         }
 
         public async Task GetTipoCambioDolarHoy()
@@ -172,6 +172,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task BuscarProductos()
         {
+            solicProdOrRepSelected = true;
             buscarSoloReparaciones = false;
             SpinnerVisible = true;
             await refPrecioDialog.Show();
@@ -181,6 +182,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task BuscarReparaciones()
         {
+            solicProdOrRepSelected = true;
             buscarSoloReparaciones = true;
             SpinnerVisible = true;
             await refPrecioDialog.Show();
@@ -190,6 +192,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task BuscarSolicitudes()
         {
+            solicProdOrRepSelected = true;
             //if (Presupuesto.CG_CLI == 0)
             //{
             //    await ToastMensajeError("Seleccione Cliente.");
@@ -301,14 +304,11 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                     await ClienteExternoSelected(response.Response);
                 }
             }
-
             //Debe venir siempre con precio
             if (solicitudSelected.PrecioArticulo != null)
             {
                 await AgregarSolicitud(solicitudSelected);
             }
-
-            
         }
 
         private async Task AgregarSolicitud(Solicitud solicitudSelected)
@@ -398,30 +398,31 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task Guardar()
         {
-            BotonGuardarDisabled = true;
-            bool guardado;
-
-            if (Presupuesto.Id == 0)
+            if (!solicProdOrRepSelected)
             {
-                guardado = await Agregar(Presupuesto);
-                Presupuesto.ESNUEVO = true;
-            }
-            else
-            {
-                guardado = await Actualizar(Presupuesto);
-            }
+                BotonGuardarDisabled = true;
+                bool guardado;
 
-
-            
-            BotonGuardarDisabled = false;
-            if (guardado)
-            {
-                Show = false;
-                Presupuesto.GUARDADO = guardado;
-                await DescargarPresupuestoDataSheet();
-                await OnGuardar.InvokeAsync(Presupuesto);
+                if (Presupuesto.Id == 0)
+                {
+                    guardado = await Agregar(Presupuesto);
+                    Presupuesto.ESNUEVO = true;
+                }
+                else
+                {
+                    guardado = await Actualizar(Presupuesto);
+                }
+                
+                BotonGuardarDisabled = false;
+                if (guardado)
+                {
+                    Show = false;
+                    Presupuesto.GUARDADO = guardado;
+                    await DescargarPresupuestoDataSheet();
+                    await OnGuardar.InvokeAsync(Presupuesto);
+                }
             }
-            
+            solicProdOrRepSelected = false;
         }
 
 
