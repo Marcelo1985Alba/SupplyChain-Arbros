@@ -182,12 +182,14 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                     else
                     {
                         PedidoSeleccionado = response.Response;
-                        PedidoSeleccionado.MONTO = "0";
+                        var monto = "0";
                         foreach (var item in PedidoSeleccionado.Items)
                         {
                             item.ESTADO = SupplyChain.Shared.Enum.EstadoItem.Modificado;
-                            PedidoSeleccionado.MONTO = $"{decimal.Parse(PedidoSeleccionado.MONTO) + (item.STOCK * item.IMPORTE4):0.00}";
+                            monto = $"{decimal.Parse(monto) + (item.STOCK * item.IMPORTE4):0.00}";
                         }
+                        monto = $"{decimal.Parse(monto):###,###,###,###.##}";
+                        PedidoSeleccionado.MONTO = "U$S " + monto;
                         //direccionesEntregas = PedidoSeleccionado.DireccionesEntregas.Select(d => d.DESCRIPCION).ToList();
                         popupFormVisible = true;
                     }
@@ -443,9 +445,12 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 {
                     await calcularTotal();
                     PedidoSeleccionado = response.Response;
-                    PedidoSeleccionado.MONTO = "0";
+                    var monto = "0";
                     foreach (var item in PedidoSeleccionado.Items)
-                        PedidoSeleccionado.MONTO =$"{decimal.Parse(PedidoSeleccionado.MONTO) + (item.STOCK * item.IMPORTE4):0.00}";
+                        monto =$"{decimal.Parse(monto) + (item.STOCK * item.IMPORTE4):0.00}";
+                    // papso a formato ###,###,###,###.##
+                    monto = $"{decimal.Parse(monto):###,###,###,###.##}";
+                    PedidoSeleccionado.MONTO = "U$S " + monto;
                     popupFormVisible = true;
                 }
             }

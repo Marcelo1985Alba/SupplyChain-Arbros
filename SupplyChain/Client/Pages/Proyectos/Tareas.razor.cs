@@ -75,11 +75,11 @@ namespace SupplyChain.Client.Pages.Proyectos
                     task.NombreCreador = Usuarios.FirstOrDefault(x => x.Id == task.Creador)?.USUARIO;
                     if(task.Importancia == "Poco Importante")
                     {
-                        task.Color = "#FFD700"; // color dorado
+                        task.Color = "#89ac76"; // color verde
                     }
                     else if(task.Importancia == "Algo Importante")
                     {
-                        task.Color = "#FFA500"; // color naranja
+                        task.Color = "#FFD700"; // color dorado
                     }
                     else if(task.Importancia == "Muy Importante")
                     {

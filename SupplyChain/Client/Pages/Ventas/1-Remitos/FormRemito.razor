@@ -4,9 +4,9 @@
 @using Syncfusion.Blazor.Layouts
 @using SupplyChain.Client.Shared.BuscadorCliente
 @using SupplyChain.Client.Shared.BuscadorPedidos
+@using System.Globalization
 
 @inherits FormRemitoBase
-
 
 
 <SfDialog @bind-Visible="Show" IsModal="true" Width="80%" Height="880px" ShowCloseIcon="true">
@@ -24,23 +24,25 @@
             }
         </Header>
         <Content>
-            <EditForm id="formPedido" Model="@Pedido" OnValidSubmit="@(async()=> await Guardar())">
+            <EditForm id="formPedido" Model="@Pedido" OnValidSubmit="@(async () => await Guardar())">
                 <SfSpinner @bind-Visible="@spinerVisible" Label="Guardando..." Type="SpinnerType.Fabric"></SfSpinner>
-                <ObjectGraphDataAnnotationsValidator />
-                <ValidationSummary />
+                <ObjectGraphDataAnnotationsValidator/>
+                <ValidationSummary/>
                 <div class="form-row">
                     <div class="form-group col-md-1" id="form-cli">
                         <label class="">#Cliente:</label>
                         <SfNumericTextBox ID="CG_CLI" @bind-Value="@(Pedido.CG_CLI)" ShowSpinButton="false" Readonly="false"
-                                          OnInput="@(e => Cg_cli_Changed(e))"></SfNumericTextBox>
+                                          OnInput="@(e => Cg_cli_Changed(e))">
+                        </SfNumericTextBox>
                     </div>
                     <div class="form-group col-md-2" id="form-cliente">
                         <label class="">Cliente:</label>
                         <SfTextBox CssClass="customClass" ID="Cliente" @bind-Value="@(Pedido.DES_CLI)" Input="@(e => Des_cli_Changed(e))" Readonly="false"></SfTextBox>
                     </div>
                     <div class="form-group col-md-1 mt-4">
-                        <SfButton IconCss="fa fa-search" CssClass="e-round e-info" OnClick="@(async ()=> await BuscarClientes())"
-                                  HtmlAttributes="@HtmlAttribute"></SfButton>
+                        <SfButton IconCss="fa fa-search" CssClass="e-round e-info" OnClick="@(async () => await BuscarClientes())"
+                                  HtmlAttributes="@HtmlAttribute">
+                        </SfButton>
                     </div>
                     <div class="form-group col-md-1" id="form-moneda">
                         <label class="">Moneda:</label>
@@ -69,17 +71,11 @@
                     </div>
                 </div>
                 <div class="form-row">
-
-                  
-                   
-
-                </div>
-                <div class="form-row">
-                    
-                    <div class="form-group col-md-3" id="form-direc-entre">
+                    <div class="form-group col-md-6" id="form-direc-entre">
                         <label class="">Direccion de Entrega:</label>
                         <SfDropDownList TValue="string" TItem="string" DataSource="@DireccionesEntregas"
-                                        @bind-Value="Pedido.DIRENT"></SfDropDownList>
+                                        @bind-Value="Pedido.DIRENT">
+                        </SfDropDownList>
                     </div>
                     <div class="form-group col-md-3" id="form-transporte">
                         <label class="">Transporte:</label>
@@ -92,25 +88,20 @@
                         <label class="">Bultos:</label>
                         <SfTextBox CssClass="customClass" ID="Bultos" @bind-Value="@(Pedido.BULTOS)" Width="250" Readonly="false"></SfTextBox>
                     </div>
-                    <div class="form-group col-md-3" id="form-selec-moneda">
-                        <label for="choice">Seleccione la moneda:</label>
+                    <div class="form-group col-md-2" id="form-selec-moneda">
+                        <label for="choice">Moneda:</label>
                         <select class="form-control" id="choice" @onchange="HandleMonedaChange">
                             <option value="dolares">Dólares</option>
                             <option value="pesos">Pesos</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-1" id="form-monto">
+                    <!--
+                    <div class="form-group col-md-2" id="form-monto">
                         <label class="">Monto:</label>
-                        <SfTextBox CssClass="customClass" ID="Monto" @bind-Value="@(Pedido.MONTO)" Readonly="false"></SfTextBox>
+                        <SfTextBox CssClass="customClass" ID="Monto" @bind-Value="@(Pedido.MONTO)" Readonly="false" Format="C0"></SfTextBox>
                     </div>
+                    -->
                 </div>
-
-                <div class="form-row">
-
-                   
-                    
-                </div>
-
                 <div class="row" id="grd-">
                     <div class="col-12">
                         <SfToast ID="toast_default" @ref="ToastObj">
@@ -125,13 +116,14 @@
                             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowConfirmDialog="false"
                                               Mode="@Syncfusion.Blazor.Grids.EditMode.Batch">
                                 <GridEvents TValue="Pedidos" OnBatchDelete="BatchDeleteHandler"
-                                            CellSaved="CellSavedHandler" OnBatchAdd="BatchAddHandler" OnBatchSave="BatchSaveHandler"></GridEvents>
+                                            CellSaved="CellSavedHandler" OnBatchAdd="BatchAddHandler" OnBatchSave="BatchSaveHandler">
+                                </GridEvents>
                             </GridEditSettings>
                             <GridColumns>
                                 <GridColumn Field=@nameof(Pedidos.Id) IsPrimaryKey="true" Width="3"></GridColumn>
                                 <GridColumn Field=@nameof(Pedidos.CG_ART) AllowEditing="false" HeaderText="Producto" TextAlign="TextAlign.Left" Width="130px"></GridColumn>
                                 <GridColumn Field=@nameof(Pedidos.DES_ART) AllowEditing="false" HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="250px"></GridColumn>
-                                <GridColumn Field=@nameof(Pedidos.STOCK) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px">
+                                <GridColumn Field=@nameof(Pedidos.STOCK) HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="100px" Format="N0">
                                     <EditTemplate Context="detalle">
                                         @{
                                             var value = (detalle as Pedidos);
@@ -148,13 +140,13 @@
                                         }
                                     </EditTemplate>
                                 </GridColumn>
-                                <GridColumn Field=@nameof(Pedidos.IMPORTE2) AllowEditing="false" Format="C2"
+                                <GridColumn Field=@nameof(Pedidos.IMPORTE2) AllowEditing="false" Format="N2"
                                             HeaderText="Neto" TextAlign="TextAlign.Left" Width="100px">
                                     <Template Context="detalle">
                                         @{
                                             var value = (detalle as Pedidos);
-                                            var res = Math.Abs((decimal)value.STOCK * (decimal)value.IMPORTE1);
-                                            value.IMPORTE2 = res;
+                                            var res = Math.Abs((decimal)value.STOCK * (decimal)value.IMPORTE1).ToString("N2");
+                                            value.IMPORTE2 = decimal.Parse(res);
                                             <span> @value.IMPORTE2 </span>
                                         }
                                     </Template>
@@ -170,50 +162,49 @@
 
 
                 </div>
-
-
                 <SfSpinner @ref="@refSpinnerCli" Size="50" @bind-Visible="@SpinnerVisible"
                            Label="Buscando ..." Type="SpinnerType.Fabric">
                 </SfSpinner>
 
                 <ClientesDialog @ref="refClienteDialog" PopupBuscadorVisible="@popupBuscadorVisibleCliente"
                                 OnObjectSelected="@ClienteExternoSelected" Cg_Cli="@Pedido.CG_CLI" Des_Cli="@Pedido.DES_CLI"
-                                OnCerrarDialog="@(()=> popupBuscadorVisibleCliente = false)"></ClientesDialog>
+                                OnCerrarDialog="@(() => popupBuscadorVisibleCliente = false)">
+                </ClientesDialog>
 
 
-
-                <ValidationSummary />
+                <ValidationSummary/>
 
             </EditForm>
-            
-            
+
+
         </Content>
         <FooterTemplate>
             <div class="row">
                 <div class="col-3 text-left">
-                    <span class="text-muted font-weight-bold">Cantidad: @Pedido.Items.Count()</span>
+                    <span class="text-muted font-weight-bold">Cantidad: @Pedido.Items.Count(). Monto: @Pedido.MONTO</span>
                 </div>
                 <div class="col-9 text-right">
                     @if (!string.IsNullOrEmpty(Pedido.REMITO))
                     {
                         <SfButton Content="Imprimir" HtmlAttributes="@HtmlAttribute" CssClass="e-success"
-                                  OnClick="@(async()=>await Imprimir())" IconCss="fa fa-print"></SfButton>
+                                  OnClick="@(async () => await Imprimir())" IconCss="fa fa-print">
+                        </SfButton>
                     }
 
                     <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
-                    <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async()=>await Hide())" IconCss="fa fa-window-close-o"></SfButton>
+                    <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async () => await Hide())" IconCss="fa fa-window-close-o"></SfButton>
                 </div>
             </div>
-            
+
         </FooterTemplate>
     </DialogTemplates>
 </SfDialog>
 
-<PedidosEstados @ref="@refPresupuestosDialog" CompararCliente="true" Cg_Cli_Comparar="@Pedido.CG_CLI" 
+<PedidosEstados @ref="@refPresupuestosDialog" CompararCliente="true" Cg_Cli_Comparar="@Pedido.CG_CLI"
                 PopupBuscadorVisible="@popupBuscadorVisiblePresupuestos"
-                    OnCerrarDialog="@(() => popupBuscadorVisiblePresupuestos = false)"
-                    OnObjectSelected="@PresupuestoSelected"></PedidosEstados>
-
+                OnCerrarDialog="@(() => popupBuscadorVisiblePresupuestos = false)"
+                OnObjectSelected="@PresupuestoSelected">
+</PedidosEstados>
 
 
 <style>

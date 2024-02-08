@@ -28,7 +28,7 @@
                 <KanbanColumn HeaderText="Planificado" KeyField="@(new List<string>() { "Planificado" })"></KanbanColumn>
                 <KanbanColumn HeaderText="En Progreso" KeyField="@(new List<string>() { "En Progreso" })"></KanbanColumn>
                 <KanbanColumn HeaderText="En Prueba" KeyField="@(new List<string>() { "En Prueba" })"></KanbanColumn>
-                <KanbanColumn HeaderText="Terminado" KeyField="@(new List<string>() { "Terminado" })"></KanbanColumn>
+                <KanbanColumn HeaderText="Terminado" KeyField="@(new List<string>() { "Terminado" })" Visible="false"></KanbanColumn>
             </KanbanColumns>
             <KanbanCardSettings HeaderField="Titulo" ContentField="Resumen" TagsField="Asignados" GrabberField="Color"></KanbanCardSettings>
             <KanbanSwimlaneSettings KeyField="Modulo"></KanbanSwimlaneSettings>
