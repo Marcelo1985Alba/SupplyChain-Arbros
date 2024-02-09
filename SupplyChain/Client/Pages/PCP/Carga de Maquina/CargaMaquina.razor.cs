@@ -303,7 +303,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                             CssClass="e-toast-waring",
                             Icon="e-error toast-icons"
                         });
-
+                    Visible = false;
                     return;
                 
                  }
@@ -316,6 +316,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                         CssClass = "e-toast-warning",
                         Icon = "e-warning toast-icons"
                     });
+                    Visible = false;
                     return;
                 }
                 else
