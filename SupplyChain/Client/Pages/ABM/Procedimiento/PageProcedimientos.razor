@@ -1,0 +1,43 @@
+﻿@page "/Abms/procedimientos"
+@using SupplyChain.Shared.ABM
+@using SupplyChain
+
+@inherits PageProcedimientosBase
+
+<div class="row">
+    <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+            OnReiniciar="(async()=>await OnReiniciarGrilla())"
+            OnVistaSelected="(async(v)=>await OnVistaSeleccionada(v))" />
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-12">
+        <SfToast ID="toast_default" @ref="@ToastObj">
+            <ToastPosition X="Center" Y="Top"></ToastPosition>
+        </SfToast>
+
+        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" 
+            @ref="grid" DataSource="@Procedimientos" Width="100%" Toolbar="Toolbaritems"
+            AllowExcelExport="true" AllowGrouping="true" GridLines="GridLine.Both">
+            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
+            <GridEvents  TValue="Procedimiento"></GridEvents>
+            <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
+                ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog">
+            </GridEditSettings>
+
+            <GridColumns>
+                @* <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn> *@
+                <GridColumn Field=@nameof(Procedimiento.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                      @*//DATOS GENERALES*@
+
+                @* <GridColumn Field=@nameof(Procedimientos.DES) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="150"></GridColumn> *@
+            </GridColumns>
+
+        </SfGrid>
+
+    </div>
+</div>
