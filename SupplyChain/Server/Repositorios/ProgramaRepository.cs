@@ -101,7 +101,7 @@ namespace SupplyChain.Server.Repositorios
                     .SumAsync(s=> s.STOCK);
 
                     i.Reserva = await PedidosRepository.ObtenerStockReservaByOF(cg_ordf, i.CG_ART);
-                    i.ReservaTotal = await PedidosRepository.ObtenerStockReserva(i.CG_ART);
+                    i.ReservaTotal = await PedidosRepository.ObtenerStockReserva(i.CG_ART, i.DESPACHO, i.SERIE, i.LOTE);
                 });
 
 

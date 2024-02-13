@@ -1,5 +1,6 @@
 ﻿using BoldReports.RDL.DOM;
 using Microsoft.EntityFrameworkCore;
+using SupplyChain.Client.Pages.Servicio.Servicios;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
@@ -17,12 +18,14 @@ namespace SupplyChain.Server.Repositorios
     {
         private readonly vDireccionesEntregaRepository direccionesEntregaRepository;
         private readonly GeneraRepository generaRepository;
+        private readonly PresupuestoRepository presupuestoRepository;
 
         public PedCliRepository(AppDbContext db, vDireccionesEntregaRepository direccionesEntregaRepository, 
-            GeneraRepository generaRepository) : base(db)
+            GeneraRepository generaRepository, PresupuestoRepository presupuestoRepository) : base(db)
         {
             this.direccionesEntregaRepository = direccionesEntregaRepository;
             this.generaRepository = generaRepository;
+            this.presupuestoRepository = presupuestoRepository;
         }
 
         internal async Task<bool> TieneRemito(int pedido)
@@ -236,6 +239,9 @@ namespace SupplyChain.Server.Repositorios
 
                 //lo ejecuta despues de obtener el numero de pedido
                 await AsignarServicio(list);
+
+                //establecer presupuesto como ganada y quitar de los pendientes
+                await PresupuestoGanado(list);
             }
             catch (Exception ex)
             {
@@ -267,6 +273,23 @@ namespace SupplyChain.Server.Repositorios
                         Db.Entry(servicio).Property(p => p.OBSERV).IsModified = true;
                         await Db.SaveChangesAsync(); 
                     }
+                }
+            }
+        }
+        private async Task PresupuestoGanado(List<PedCli> list)
+        {
+            foreach (var item in list.Where(p => p.PRESUPUESTOID > 0).Distinct())
+            {
+                var presupuesto = presupuestoRepository.Obtener(p => p.Id == item.PRESUPUESTOID).AsNoTracking().FirstOrDefault();
+
+                if (presupuesto is not null)
+                {
+                    presupuesto.TienePedido = true;
+                    presupuesto.COLOR = "GANADA";
+                    Db.Entry(presupuesto).State = EntityState.Modified;
+                    Db.Entry(presupuesto).Property(p => p.TienePedido).IsModified = true;
+                    Db.Entry(presupuesto).Property(p => p.COLOR).IsModified = true;
+                    await Db.SaveChangesAsync();
                 }
             }
         }

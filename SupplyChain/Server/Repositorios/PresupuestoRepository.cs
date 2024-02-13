@@ -28,7 +28,7 @@ namespace SupplyChain.Server.Repositorios
         {
             if (tipoFiltro == TipoFiltro.Pendientes)
             {
-                return await Db.vPresupuestos.Where(p=> string.IsNullOrEmpty(p.COLOR) || p.COLOR.Contains("PENDIENTE")).ToListAsync();
+                return await Db.vPresupuestos.Where(p=> (string.IsNullOrEmpty(p.COLOR) || p.COLOR.Contains("PENDIENTE")) && !p.TIENEPEDIDO).ToListAsync();
             }
 
             if (tipoFiltro == TipoFiltro.NoPendientes)
