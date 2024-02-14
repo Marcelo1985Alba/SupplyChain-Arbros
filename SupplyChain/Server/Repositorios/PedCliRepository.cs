@@ -278,12 +278,15 @@ namespace SupplyChain.Server.Repositorios
         }
         private async Task PresupuestoGanado(List<PedCli> list)
         {
-            foreach (var item in list.Where(p => p.PRESUPUESTOID > 0).Distinct())
+
+            var presupuestoUnicos = list.Where(p => p.PRESUPUESTOID > 0).DistinctBy(d => d.PRESUPUESTOID).ToList();
+
+            foreach (var item in presupuestoUnicos)
             {
                 var presupuesto = presupuestoRepository.Obtener(p => p.Id == item.PRESUPUESTOID).AsNoTracking().FirstOrDefault();
 
                 if (presupuesto is not null)
-                {
+                {   
                     presupuesto.TienePedido = true;
                     presupuesto.COLOR = "GANADA";
                     Db.Entry(presupuesto).State = EntityState.Modified;
