@@ -91,6 +91,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         public async Task Actualizar(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, Semaforo> args)
         {
+            
             var presupuesto = await PresupuestoService.ActualizarColor(presup.Id, args.Value);
             
         }
@@ -111,6 +112,8 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 Console.WriteLine(ex.Message);
             }
         }
+
+        
         public void RowSelectHandler(RowSelectEventArgs<vPresupuestos> args)
         {
             presup = args.Data;
@@ -430,24 +433,26 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         
         public void CustomizeCell(QueryCellInfoEventArgs<vPresupuestos> args)
         {
-            if (args.Column.Field == "COLOR")
-            {
-                if(args.Data.COLOR != null)
+          
+                if (args.Column.Field == "COLOR")
                 {
-                    if (args.Data.COLOR.Trim() == "PERDIDA")
+                    if (args.Data.COLOR != null)
                     {
-                        args.Cell.AddClass(new string[] { "perdida" });
-                    }
-                    else if (args.Data.COLOR.Trim() == "PENDIENTE")
-                    {
-                        args.Cell.AddClass(new string[] { "pendiente" });
-                    }
-                    else if (args.Data.COLOR.Trim() == "GANADA")
-                    {
-                        args.Cell.AddClass(new string[] { "ganada" });
+                        if (args.Data.COLOR.Trim() == "PERDIDA")
+                        {
+                            args.Cell.AddClass(new string[] { "perdida" });
+                        }
+                        else if (args.Data.COLOR.Trim() == "PENDIENTE")
+                        {
+                            args.Cell.AddClass(new string[] { "pendiente" });
+                        }
+                        else if (args.Data.COLOR.Trim() == "GANADA")
+                        {
+                            args.Cell.AddClass(new string[] { "ganada" });
+                            //args.Data.TIENEPEDIDO =1;
+                        }
                     }
                 }
-            }
         }
     }
 }

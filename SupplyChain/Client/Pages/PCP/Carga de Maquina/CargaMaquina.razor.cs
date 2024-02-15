@@ -303,7 +303,7 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                             CssClass="e-toast-waring",
                             Icon="e-error toast-icons"
                         });
-
+                    Visible = false;
                     return;
                 
                  }
@@ -316,25 +316,26 @@ namespace SupplyChain.Client.Pages.PCP.Carga_de_Maquina
                         CssClass = "e-toast-warning",
                         Icon = "e-warning toast-icons"
                     });
+                    Visible = false;
                     return;
                 }
                 else
                 {
-                 var lOfAsocs = dbCarga.Where(c => c.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(o => o.CG_ORDF).ToList();
-                  var ultimaOF = lOfAsocs.Max(m => m.CG_ORDF);
-                     if (dbScrap != null && ordenFabricacion.CG_ORDF == ultimaOF)
-                     {
+                        var lOfAsocs = dbCarga.Where(c => c.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(o => o.CG_ORDF).ToList();
+                        var ultimaOF = lOfAsocs.Max(m => m.CG_ORDF);
+                        if (dbScrap != null && ordenFabricacion.CG_ORDF == ultimaOF)
+                        {
                         isScrapDialogVisible = true;
                         StateHasChanged();
-                     }
-                     else
-                     {
+                        }
+                        else
+                        {
                         await CerrarOrdenFabricacion();
                         await Refrescar();
-                     }
+                        }
                 }
-                await CerrarOrdenFabricacion();
-                await Refrescar();
+                //await CerrarOrdenFabricacion();
+                //await Refrescar();
 
             }
             else if (ordenFabricacion.CG_ESTADOCARGA == 5)
