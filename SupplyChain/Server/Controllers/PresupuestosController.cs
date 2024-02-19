@@ -178,7 +178,20 @@ namespace SupplyChain.Server.Controllers
             }
         }
 
-       
+        [HttpGet("EnviarAviso/{id}/{aviso}")]
+        public async Task<ActionResult<IEnumerable<Presupuesto>>> EnviarAviso(int id, string aviso)
+        {
+            try
+            {
+                var lista = await _presupuestoRepository.EnviarAviso(id, aviso);
+                return Ok(lista);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
 
         // DELETE api/<PresupuestosController>/5
         [HttpDelete("{id}")]

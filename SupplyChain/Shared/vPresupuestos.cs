@@ -25,6 +25,6 @@ namespace SupplyChain.Shared
         public int? ASIGNA { get; set; } = 0;
         public string COMENTARIO { get; set; } = "";
         public string MOTIVO { get; set; }
-
+        public string AVISO { get; set; } = "";
     }
 }

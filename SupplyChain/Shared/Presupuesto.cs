@@ -40,6 +40,7 @@ namespace SupplyChain.Shared
         public string COLOR { get; set; }
         public int? ASIGNA { get; set; } = 0;
         public string Motivo { get; set; }
+        public string AVISO { get; set; } = "";
 
         [ValidateComplexType]
         public virtual List<PresupuestoDetalle> Items { get; set; } = new();

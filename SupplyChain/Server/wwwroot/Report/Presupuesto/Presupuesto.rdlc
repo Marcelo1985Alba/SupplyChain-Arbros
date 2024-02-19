@@ -134,10 +134,14 @@
           <DataField>Marca</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="AVISO">
+          <DataField>AVISO</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>ArbrosDataSet6</rd:DataSetName>
-        <rd:SchemaPath>D:\Clientes\Arbros\Marcelo1985Alba\SupplyChain-Arbros\SupplyChain\Server\wwwroot\Report\Presupuesto\ArbrosDataSet6.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\Users\BG\source\repos\Marcelo1985Alba\SupplyChain-Arbros\SupplyChain\Server\wwwroot\Report\Presupuesto\ArbrosDataSet6.xsd</rd:SchemaPath>
         <rd:TableName>vPresupuestoReporte</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
