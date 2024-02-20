@@ -44,22 +44,29 @@ namespace SupplyChain
             var query = _productoRepository.ObtenerTodosQueryable();
             try
             {
-                if (conMP)
+                if (conMP && conSE && conPT)
                 {
-                    cg_0rdenValues.Add(4);
+                    query = query;
                 }
-
-                if (conSE)
+                else
                 {
-                    cg_0rdenValues.Add(3);
-                }
+                    if (conMP)
+                    {
+                        cg_0rdenValues.Add(4);
+                    }
 
-                if (conPT)
-                {
-                    cg_0rdenValues.Add(1);
-                }
+                    if (conSE)
+                    {
+                        cg_0rdenValues.Add(3);
+                    }
 
-                return await query.Where(p=> cg_0rdenValues.Contains(p.CG_ORDEN)).ToListAsync();
+                    if (conPT)
+                    {
+                        cg_0rdenValues.Add(1);
+                    }
+                    query = query.Where(p => cg_0rdenValues.Contains(p.CG_ORDEN));
+                }
+                return await query.ToListAsync();
             }
             catch (Exception ex)
             {
