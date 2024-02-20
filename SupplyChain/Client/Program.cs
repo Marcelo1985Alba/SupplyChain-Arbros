@@ -14,6 +14,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Syncfusion.Blazor.Popups;
+using SupplyChain.Shared.Models;
 
 namespace SupplyChain.Client
 {
@@ -107,7 +108,7 @@ namespace SupplyChain.Client
             services.AddScoped<MotivosPresupuestoService>();
             services.AddScoped<CampoComService>();
             services.AddScoped<ProcunProcesosService>();
-
+            services.AddScoped<ProcedimientosService>();
         }
     }
 }

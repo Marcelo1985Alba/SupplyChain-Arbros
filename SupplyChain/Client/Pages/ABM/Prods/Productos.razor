@@ -34,6 +34,7 @@
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
                               ShowDeleteConfirmDialog="false" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
             </GridEditSettings>
+            <GridSearchSettings Operator=Syncfusion.Blazor.Operator.Contains IgnoreCase="true"></GridSearchSettings>
             <GridColumns>
                 <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
                 <GridColumn Field=@nameof(Producto.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>                      @*//DATOS GENERALES*@

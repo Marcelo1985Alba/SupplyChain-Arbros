@@ -32,6 +32,7 @@ namespace SupplyChain
         public virtual DbSet<Operario> Operario { get; set; }
         public virtual DbSet<EstadosCargaMaquina> EstadosCargaMaquinas { get; set; }
         public virtual DbSet<PLANNER> PLANNER { get; set; }
+        public virtual DbSet<Operaciones> Procedimiento { get; set; }
         //public virtual DbSet<Prod> Prod { get; set; }
         public virtual DbSet<Cliente> Cliente { get; set; }
         public virtual DbSet<ClienteExterno> ClientesExternos { get; set; }
@@ -156,7 +157,7 @@ namespace SupplyChain
         public DbSet<AspNetRoles> AspNetRoles { get; set; }
         public DbSet<ProcalsMP> ProcalsMP { get; set; }
         public DbSet<vControlCalidadPendientes> vcontrolCalidadPendientes { get; set; }
-        public DbSet<Procesos> Procesos { get; set; }
+        //public DbSet<Procesos> Procesos { get; set; }
      
         public DbSet<vProveedorItris> vProveedoresItris { get; set; }
 
