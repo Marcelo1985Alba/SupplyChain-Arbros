@@ -28,7 +28,7 @@ namespace SupplyChain.Shared
         public decimal TOTAL { get; set; } = 0;
         public Presupuesto Presupuesto { get; set; }
         public Solicitud Solicitud { get; set; }
-        public string AVISO {  get; set; }
+        
 
         [NotMapped]
         public string CONTRAPRESIONFIJA { get; set; } = string.Empty;

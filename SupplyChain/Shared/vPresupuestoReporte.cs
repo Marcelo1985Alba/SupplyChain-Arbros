@@ -39,5 +39,6 @@ namespace SupplyChain.Shared
 		public string CALLE_TRANSPORTE { get; set; }
 		public string OBSERITEM { get; set; }
         public int DIAS_PLAZO_ENTREGA { get; set; }
+		public string AVISO {  get; set; }
     }
 }

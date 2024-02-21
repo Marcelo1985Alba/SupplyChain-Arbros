@@ -1820,7 +1820,9 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto.ArbrosDataSet6TableAdapt
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = @"SELECT PRESUPUESTO, FECHAS_PRESUP, BONIFIC, CG_CLI, CLIENTE, CALLE_CLIENTE, CP_CLIENTE, DIRENT, CONDICION_PAGO, CONDICION_ENTREGA, PROVINCIA_CLIENTE, DESCRIPCION_IVA, CUIT_CLIENTE, TRANSPORTE, 
-                  CALLE_TRANSPORTE, TELEFONO_CLIENTE, EMAIL_CLIENTE, CG_ART, ARTICULO, CANTIDAD, PORC_DESCUENTO, PREC_UNIT, TOTAL_ITEM, OBSERITEM, DIAS_PLAZO_ENTREGA, MONEDA, TOTAL_PRESUPUESTO, Construccion,Marca,AVISO FROM     vPresupuestoReporte";
+                  CALLE_TRANSPORTE, TELEFONO_CLIENTE, EMAIL_CLIENTE, CG_ART, ARTICULO, CANTIDAD, PORC_DESCUENTO, PREC_UNIT, TOTAL_ITEM, OBSERITEM, DIAS_PLAZO_ENTREGA, MONEDA, TOTAL_PRESUPUESTO, Construccion, 
+                  Marca, AVISO
+FROM     vPresupuestoReporte";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;

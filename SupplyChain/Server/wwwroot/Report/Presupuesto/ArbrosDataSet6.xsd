@@ -13,9 +13,11 @@
             <MainSource>
               <DbSource ConnectionRef="serverweb\solutiionweb.Solutiion.dbo" DbObjectName="Solutiion.dbo.vPresupuestoReporte" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
-                  <DbCommand CommandType="Text" ModifiedByUser="false">
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT PRESUPUESTO, FECHAS_PRESUP, BONIFIC, CG_CLI, CLIENTE, CALLE_CLIENTE, CP_CLIENTE, DIRENT, CONDICION_PAGO, CONDICION_ENTREGA, PROVINCIA_CLIENTE, DESCRIPCION_IVA, CUIT_CLIENTE, TRANSPORTE, 
-                  CALLE_TRANSPORTE, TELEFONO_CLIENTE, EMAIL_CLIENTE, CG_ART, ARTICULO, CANTIDAD, PORC_DESCUENTO, PREC_UNIT, TOTAL_ITEM, OBSERITEM, DIAS_PLAZO_ENTREGA, MONEDA, TOTAL_PRESUPUESTO, Construccion,Marca,AVISO FROM     vPresupuestoReporte</CommandText>
+                  CALLE_TRANSPORTE, TELEFONO_CLIENTE, EMAIL_CLIENTE, CG_ART, ARTICULO, CANTIDAD, PORC_DESCUENTO, PREC_UNIT, TOTAL_ITEM, OBSERITEM, DIAS_PLAZO_ENTREGA, MONEDA, TOTAL_PRESUPUESTO, Construccion, 
+                  Marca, AVISO
+FROM     vPresupuestoReporte</CommandText>
                     <Parameters />
                   </DbCommand>
                 </SelectCommand>
@@ -218,7 +220,7 @@
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="AVISO" msprop:Generator_ColumnPropNameInRow="AVISO" msprop:Generator_ColumnPropNameInTable="AVISOColumn" msprop:Generator_ColumnVarNameInTable="columnAVISO" msprop:Generator_UserColumnName="AVISO" minOccurs="0">
+              <xs:element name="AVISO" msprop:Generator_UserColumnName="AVISO" msprop:Generator_ColumnPropNameInTable="AVISOColumn" msprop:Generator_ColumnPropNameInRow="AVISO" msprop:Generator_ColumnVarNameInTable="columnAVISO" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
