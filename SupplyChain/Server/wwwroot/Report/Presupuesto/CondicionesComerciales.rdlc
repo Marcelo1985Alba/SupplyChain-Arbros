@@ -141,7 +141,7 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>ArbrosDataSet6</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\BG\source\repos\Marcelo1985Alba\SupplyChain-Arbros\SupplyChain\Server\wwwroot\Report\Presupuesto\ArbrosDataSet6.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\Users\BG\Source\Repos\Marcelo1985Alba\SupplyChain-Arbros\SupplyChain\Server\wwwroot\Report\Presupuesto\ArbrosDataSet6.xsd</rd:SchemaPath>
         <rd:TableName>vPresupuestoReporte</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
@@ -257,14 +257,22 @@ En el caso que el cliente no especifique las condiciones de servicio, Arbros S.A
             </Textbox>
             <Rectangle Name="Rectangle1">
               <ReportItems>
-                <Textbox Name="Textbox3">
+                <Textbox Name="Aviso">
                   <CanGrow>true</CanGrow>
                   <KeepTogether>true</KeepTogether>
                   <Paragraphs>
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>AVISO:</Value>
+                          <Value>Aviso:</Value>
+                          <Style>
+                            <FontStyle>Italic</FontStyle>
+                            <FontFamily>Arial Black</FontFamily>
+                            <FontWeight>Bold</FontWeight>
+                          </Style>
+                        </TextRun>
+                        <TextRun>
+                          <Value xml:space="preserve"> </Value>
                           <Style>
                             <FontStyle>Italic</FontStyle>
                             <FontFamily>Arial Black</FontFamily>
@@ -273,7 +281,7 @@ En el caso que el cliente no especifique las condiciones de servicio, Arbros S.A
                           </Style>
                         </TextRun>
                         <TextRun>
-                          <Label>AVISO</Label>
+                          <Label>Aviso</Label>
                           <Value>=First(Fields!AVISO.Value, "DataSet1")</Value>
                           <Style>
                             <FontSize>9pt</FontSize>
@@ -283,7 +291,6 @@ En el caso que el cliente no especifique las condiciones de servicio, Arbros S.A
                       <Style />
                     </Paragraph>
                   </Paragraphs>
-                  <rd:DefaultName>Textbox3</rd:DefaultName>
                   <Top>0.05555in</Top>
                   <Left>0.08333in</Left>
                   <Height>0.65in</Height>

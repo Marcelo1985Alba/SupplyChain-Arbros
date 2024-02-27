@@ -820,9 +820,13 @@ namespace SupplyChain.Server.Controllers
 
             //obtengo pdf de condiciones comerciales
             var fileCC = "CondicionesComerciales.rdlc";
+            var vale2 = _context.vPresupuestosReporte.Where(c => c.PRESUPUESTO == presupuesto).ToList();
             path = configuration["ReportesRDLC:Presupuesto"] + $"\\{fileCC}";
+            Dictionary<string, string> parameter2 = new();
+            parameter2.Add("param", "Condiciones Comerciales");
+
             LocalReport localReportCC = new(path);
-            //localReportCC.AddDataSource(dataSetName: "DataSet1", vale);
+            localReportCC.AddDataSource(dataSetName: "DataSet1", vale2);
 
             var resultCC = localReportCC.Execute(RenderType.Pdf, 1);
             path = Path.Combine(env.WebRootPath, "pdf/", $"CC{presupuesto}.pdf");

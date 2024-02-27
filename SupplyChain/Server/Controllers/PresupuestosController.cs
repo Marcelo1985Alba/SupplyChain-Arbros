@@ -44,7 +44,16 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("TienePedido/{id}")]
         public async Task<bool> TienePedido(int id)
         {
-            return await _presupuestoRepository.TienePedido(id);
+            try
+            {
+                return await _presupuestoRepository.TienePedido(id);
+
+            }
+             catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
 
         [HttpGet("GetPresupuestoVista/{tipoFiltro}")]

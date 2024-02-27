@@ -182,14 +182,14 @@
                                     }
                                 </EditTemplate>
                             </GridColumn>
-                            <GridColumn Field="@nameof(PresupuestoDetalle.DIAS_PLAZO_ENTREGA)" HeaderText="Dias Entrega" Width="auto">
-                                <EditTemplate Context="detalle">
-                                    @{
-                                        var value = (detalle as PresupuestoDetalle);
+                                <GridColumn Field="@nameof(PresupuestoDetalle.DIAS_PLAZO_ENTREGA)" HeaderText="Dias Entrega" Width="auto">
+                                    <EditTemplate Context="detalle">
+                                        @{
+                                            var value = (detalle as PresupuestoDetalle);
                                         <SfNumericTextBox @bind-Value="value.DIAS_PLAZO_ENTREGA" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
-                                    }
-                                </EditTemplate>
-                            </GridColumn>
+                                        }
+                                    </EditTemplate>
+                                </GridColumn>
                             <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT_X_CANTIDAD) AllowEditing="false" Format="C2"
                                         HeaderText="Neto" TextAlign="TextAlign.Left" Width="auto">
                                 <Template Context="detalle">
@@ -298,7 +298,7 @@
                 <div class="total-price">TOTAL @moneda : @total</div>
             </div>
             <div class="col-4 text-right">
-                <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
+                    <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
                 <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async () => await Hide())" IconCss="fa fa-window-close-o"></SfButton>
             </div>
         </div>

@@ -1809,8 +1809,7 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto.ArbrosDataSet6TableAdapt
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = "Data Source=192.168.0.247\\solutiionweb;Initial Catalog=Solutiion;User ID=sa;Passw" +
-                "ord=M0r3n02800!;TrustServerCertificate=True";
+            this._connection.ConnectionString = "Data Source=192.168.0.247\\solutiionweb;Initial Catalog='Solutiion';User ID=sa;Password=M0r3n02800!;TrustServerCertificate=True";
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
