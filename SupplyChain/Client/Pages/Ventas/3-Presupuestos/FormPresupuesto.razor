@@ -2,6 +2,7 @@
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Layouts
+@using Syncfusion.Blazor.Calendars
 @using SupplyChain.Client.Shared.BuscadorCliente
 @using SupplyChain.Client.Shared.BuscadorProducto
 @using SupplyChain.Client.Shared.BuscarSolicitud
@@ -96,6 +97,11 @@
                                     DataSource="condicionesEntrega">
                         <DropDownListFieldSettings Text="OBSERVACIONES" Value="Id"></DropDownListFieldSettings>
                     </SfDropDownList>
+                    <label class="">Fecha Validez:</label>
+                      
+                    <SfDatePicker @bind-Value="Presupuesto.FECHAVALIDEZ" Format="dd/MM/yyy" Readonly="Presupuesto.Id!=0"></SfDatePicker>                        
+                       
+
                 </div>
                 
                 <div class="form-group col-md-5" id="form-dire-entr">

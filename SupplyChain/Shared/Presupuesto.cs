@@ -13,6 +13,7 @@ namespace SupplyChain.Shared
     {
         
         public DateTime FECHA { get; set; } = DateTime.Now;
+        public DateTime? FECHAVALIDEZ {  get; set; }
         [Required(ErrorMessage ="* La Moneda es requerida")]
         public string MONEDA { get; set; } = "DOLARES";
         [Required(ErrorMessage = "* El Cliente es requerido")]

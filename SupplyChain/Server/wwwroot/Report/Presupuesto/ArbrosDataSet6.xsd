@@ -11,12 +11,12 @@
         <Tables>
           <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="vPresupuestoReporteTableAdapter" GeneratorDataComponentClassName="vPresupuestoReporteTableAdapter" Name="vPresupuestoReporte" UserDataComponentName="vPresupuestoReporteTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="serverweb\solutiionweb.Solutiion.dbo" DbObjectName="Solutiion.dbo.vPresupuestoReporte" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="serverweb\solutiionweb.Solutiion.dbo" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT PRESUPUESTO, FECHAS_PRESUP, BONIFIC, CG_CLI, CLIENTE, CALLE_CLIENTE, CP_CLIENTE, DIRENT, CONDICION_PAGO, CONDICION_ENTREGA, PROVINCIA_CLIENTE, DESCRIPCION_IVA, CUIT_CLIENTE, TRANSPORTE, 
                   CALLE_TRANSPORTE, TELEFONO_CLIENTE, EMAIL_CLIENTE, CG_ART, ARTICULO, CANTIDAD, PORC_DESCUENTO, PREC_UNIT, TOTAL_ITEM, OBSERITEM, DIAS_PLAZO_ENTREGA, MONEDA, TOTAL_PRESUPUESTO, Construccion, 
-                  Marca, AVISO
+                  Marca, AVISO, FECHA_VALIDEZ
 FROM     vPresupuestoReporte</CommandText>
                     <Parameters />
                   </DbCommand>
@@ -54,12 +54,13 @@ FROM     vPresupuestoReporte</CommandText>
               <Mapping SourceColumn="Construccion" DataSetColumn="Construccion" />
               <Mapping SourceColumn="Marca" DataSetColumn="Marca" />
               <Mapping SourceColumn="AVISO" DataSetColumn="AVISO" />
+              <Mapping SourceColumn="FECHA_VALIDEZ" DataSetColumn="FECHA_VALIDEZ" />
             </Mappings>
             <Sources>
               <DbSource ConnectionRef="serverweb\solutiionweb.Solutiion.dbo" DbObjectName="Solutiion.dbo.vPresupuestoReporte" DbObjectType="View" FillMethodModifier="Public" FillMethodName="FillBy" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetDataBy" GeneratorSourceName="FillBy" GetMethodModifier="Public" GetMethodName="GetDataBy" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="FillBy">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
-                    <CommandText>SELECT ARTICULO, AVISO, BONIFIC, CALLE_CLIENTE, CALLE_TRANSPORTE, CANTIDAD, CG_ART, CG_CLI, CLIENTE, CONDICION_ENTREGA, CONDICION_PAGO, CP_CLIENTE, CUIT_CLIENTE, Construccion, DESCRIPCION_IVA, DIAS_PLAZO_ENTREGA, DIRENT, EMAIL_CLIENTE, FECHAS_PRESUP, MONEDA, Marca, OBSERITEM, PORC_DESCUENTO, PREC_UNIT, PRESUPUESTO, PROVINCIA_CLIENTE, TELEFONO_CLIENTE, TOTAL_ITEM, TOTAL_PRESUPUESTO, TRANSPORTE FROM vPresupuestoReporte</CommandText>
+                    <CommandText>SELECT ARTICULO, AVISO, BONIFIC, CALLE_CLIENTE, CALLE_TRANSPORTE, CANTIDAD, CG_ART, CG_CLI, CLIENTE, CONDICION_ENTREGA, CONDICION_PAGO, CP_CLIENTE, CUIT_CLIENTE, Construccion, DESCRIPCION_IVA, DIAS_PLAZO_ENTREGA, DIRENT, EMAIL_CLIENTE, FECHAS_PRESUP, FECHAVALIDEZ, MONEDA, Marca, OBSERITEM, PORC_DESCUENTO, PREC_UNIT, PRESUPUESTO, PROVINCIA_CLIENTE, TELEFONO_CLIENTE, TOTAL_ITEM, TOTAL_PRESUPUESTO, TRANSPORTE FROM vPresupuestoReporte</CommandText>
                     <Parameters />
                   </DbCommand>
                 </SelectCommand>
@@ -220,13 +221,14 @@ FROM     vPresupuestoReporte</CommandText>
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="AVISO" msprop:Generator_UserColumnName="AVISO" msprop:Generator_ColumnPropNameInTable="AVISOColumn" msprop:Generator_ColumnPropNameInRow="AVISO" msprop:Generator_ColumnVarNameInTable="columnAVISO" minOccurs="0">
+              <xs:element name="AVISO" msprop:Generator_ColumnPropNameInTable="AVISOColumn" msprop:Generator_ColumnPropNameInRow="AVISO" msprop:Generator_UserColumnName="AVISO" msprop:Generator_ColumnVarNameInTable="columnAVISO" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
+              <xs:element name="FECHA_VALIDEZ" msprop:Generator_ColumnPropNameInRow="FECHA_VALIDEZ" msprop:Generator_ColumnPropNameInTable="FECHA_VALIDEZColumn" msprop:Generator_ColumnVarNameInTable="columnFECHA_VALIDEZ" msprop:Generator_UserColumnName="FECHA_VALIDEZ" type="xs:dateTime" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

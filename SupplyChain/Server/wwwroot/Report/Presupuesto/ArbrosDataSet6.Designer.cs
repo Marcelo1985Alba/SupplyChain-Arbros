@@ -339,6 +339,8 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
             
             private global::System.Data.DataColumn columnAVISO;
             
+            private global::System.Data.DataColumn columnFECHA_VALIDEZ;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public vPresupuestoReporteDataTable() {
@@ -614,6 +616,14 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn FECHA_VALIDEZColumn {
+                get {
+                    return this.columnFECHA_VALIDEZ;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -679,7 +689,8 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
                         decimal TOTAL_PRESUPUESTO, 
                         string Construccion, 
                         string Marca, 
-                        string AVISO) {
+                        string AVISO, 
+                        System.DateTime FECHA_VALIDEZ) {
                 vPresupuestoReporteRow rowvPresupuestoReporteRow = ((vPresupuestoReporteRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         PRESUPUESTO,
@@ -711,7 +722,8 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
                         TOTAL_PRESUPUESTO,
                         Construccion,
                         Marca,
-                        AVISO};
+                        AVISO,
+                        FECHA_VALIDEZ};
                 rowvPresupuestoReporteRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowvPresupuestoReporteRow);
                 return rowvPresupuestoReporteRow;
@@ -771,6 +783,7 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
                 this.columnConstruccion = base.Columns["Construccion"];
                 this.columnMarca = base.Columns["Marca"];
                 this.columnAVISO = base.Columns["AVISO"];
+                this.columnFECHA_VALIDEZ = base.Columns["FECHA_VALIDEZ"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -836,6 +849,8 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
                 base.Columns.Add(this.columnMarca);
                 this.columnAVISO = new global::System.Data.DataColumn("AVISO", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnAVISO);
+                this.columnFECHA_VALIDEZ = new global::System.Data.DataColumn("FECHA_VALIDEZ", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFECHA_VALIDEZ);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnPRESUPUESTO}, true));
                 this.columnPRESUPUESTO.AllowDBNull = false;
@@ -1434,6 +1449,23 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public System.DateTime FECHA_VALIDEZ {
+                get {
+                    try {
+                        return ((global::System.DateTime)(this[this.tablevPresupuestoReporte.FECHA_VALIDEZColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'FECHA_VALIDEZ\' de la tabla \'vPresupuestoReporte\' es DBNul" +
+                                "l.", e);
+                    }
+                }
+                set {
+                    this[this.tablevPresupuestoReporte.FECHA_VALIDEZColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public bool IsFECHAS_PRESUPNull() {
                 return this.IsNull(this.tablevPresupuestoReporte.FECHAS_PRESUPColumn);
             }
@@ -1610,6 +1642,18 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public void SetAVISONull() {
                 this[this.tablevPresupuestoReporte.AVISOColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsFECHA_VALIDEZNull() {
+                return this.IsNull(this.tablevPresupuestoReporte.FECHA_VALIDEZColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetFECHA_VALIDEZNull() {
+                this[this.tablevPresupuestoReporte.FECHA_VALIDEZColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -1802,6 +1846,7 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto.ArbrosDataSet6TableAdapt
             tableMapping.ColumnMappings.Add("Construccion", "Construccion");
             tableMapping.ColumnMappings.Add("Marca", "Marca");
             tableMapping.ColumnMappings.Add("AVISO", "AVISO");
+            tableMapping.ColumnMappings.Add("FECHA_VALIDEZ", "FECHA_VALIDEZ");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -1809,7 +1854,8 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto.ArbrosDataSet6TableAdapt
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = "Data Source=192.168.0.247\\solutiionweb;Initial Catalog='Solutiion';User ID=sa;Password=M0r3n02800!;TrustServerCertificate=True";
+            this._connection.ConnectionString = "Data Source=192.168.0.247\\solutiionweb;Initial Catalog=Solutiion;User ID=sa;Passw" +
+                "ord=M0r3n02800!;TrustServerCertificate=True";
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1820,12 +1866,12 @@ namespace SupplyChain.Server.wwwroot.Report.Presupuesto.ArbrosDataSet6TableAdapt
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = @"SELECT PRESUPUESTO, FECHAS_PRESUP, BONIFIC, CG_CLI, CLIENTE, CALLE_CLIENTE, CP_CLIENTE, DIRENT, CONDICION_PAGO, CONDICION_ENTREGA, PROVINCIA_CLIENTE, DESCRIPCION_IVA, CUIT_CLIENTE, TRANSPORTE, 
                   CALLE_TRANSPORTE, TELEFONO_CLIENTE, EMAIL_CLIENTE, CG_ART, ARTICULO, CANTIDAD, PORC_DESCUENTO, PREC_UNIT, TOTAL_ITEM, OBSERITEM, DIAS_PLAZO_ENTREGA, MONEDA, TOTAL_PRESUPUESTO, Construccion, 
-                  Marca, AVISO
+                  Marca, AVISO, FECHA_VALIDEZ
 FROM     vPresupuestoReporte";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = @"SELECT ARTICULO, AVISO, BONIFIC, CALLE_CLIENTE, CALLE_TRANSPORTE, CANTIDAD, CG_ART, CG_CLI, CLIENTE, CONDICION_ENTREGA, CONDICION_PAGO, CP_CLIENTE, CUIT_CLIENTE, Construccion, DESCRIPCION_IVA, DIAS_PLAZO_ENTREGA, DIRENT, EMAIL_CLIENTE, FECHAS_PRESUP, MONEDA, Marca, OBSERITEM, PORC_DESCUENTO, PREC_UNIT, PRESUPUESTO, PROVINCIA_CLIENTE, TELEFONO_CLIENTE, TOTAL_ITEM, TOTAL_PRESUPUESTO, TRANSPORTE FROM vPresupuestoReporte";
+            this._commandCollection[1].CommandText = @"SELECT ARTICULO, AVISO, BONIFIC, CALLE_CLIENTE, CALLE_TRANSPORTE, CANTIDAD, CG_ART, CG_CLI, CLIENTE, CONDICION_ENTREGA, CONDICION_PAGO, CP_CLIENTE, CUIT_CLIENTE, Construccion, DESCRIPCION_IVA, DIAS_PLAZO_ENTREGA, DIRENT, EMAIL_CLIENTE, FECHAS_PRESUP, FECHAVALIDEZ, MONEDA, Marca, OBSERITEM, PORC_DESCUENTO, PREC_UNIT, PRESUPUESTO, PROVINCIA_CLIENTE, TELEFONO_CLIENTE, TOTAL_ITEM, TOTAL_PRESUPUESTO, TRANSPORTE FROM vPresupuestoReporte";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
         }
         

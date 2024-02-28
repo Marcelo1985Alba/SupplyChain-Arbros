@@ -138,6 +138,10 @@
           <DataField>AVISO</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="FECHA_VALIDEZ">
+          <DataField>FECHA_VALIDEZ</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>ArbrosDataSet6</rd:DataSetName>
@@ -283,6 +287,17 @@ En el caso que el cliente no especifique las condiciones de servicio, Arbros S.A
                         <TextRun>
                           <Label>Aviso</Label>
                           <Value>=First(Fields!AVISO.Value, "DataSet1")</Value>
+                          <Style>
+                            <FontSize>9pt</FontSize>
+                          </Style>
+                        </TextRun>
+                      </TextRuns>
+                      <Style />
+                    </Paragraph>
+                    <Paragraph>
+                      <TextRuns>
+                        <TextRun>
+                          <Value />
                           <Style>
                             <FontSize>9pt</FontSize>
                           </Style>

@@ -67,15 +67,15 @@ namespace SupplyChain.Server.Controllers
         [HttpGet("{id}")]
         public async Task<Presupuesto> GetPresupuesto(int id)
         {
-            var presup = await _presupuestoRepository.Obtener(p => p.Id == id).Include(p => p.Items)
+                var presup = await _presupuestoRepository.Obtener(p => p.Id == id).Include(p => p.Items)
                 //.ThenInclude(i=> i.Solicitud)
                 .FirstOrDefaultAsync();
 
-            
-            await _presupuestoRepository.AgregarDatosFaltantes(presup);
+
+                await _presupuestoRepository.AgregarDatosFaltantes(presup);
 
 
-            return presup;
+                return presup;
         }
 
         // POST api/<PresupuestosController>

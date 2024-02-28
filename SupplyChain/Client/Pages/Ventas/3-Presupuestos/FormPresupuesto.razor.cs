@@ -371,18 +371,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             
         }
 
-        protected async Task FechaOk(Object args)
-        {
-            Visible = true;
-            
-            if(PresupuestoDetalle.DIAS_PLAZO_ENTREGA==0)
-            {
-                string sql = string.Format($"UPDATE PRESUPUESTO_DETALLE SET DIAS_PLAZO_ENTREGA=30 WHER PRESUPUESTOID={PresupuestoDetalle.PRESUPUESTOID}");
-                await Http2.PutAsJsonAsync("api/SQLgenericCommandString/" + sql, PresupuestoDetalle);
-            }
-            Visible= false;
-        }
-
+      
 
 
         private bool PermiteAgregItemSolicitud(int solicitudId)
@@ -393,7 +382,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task<bool> Agregar(Presupuesto presupueto)
         {
-            await FechaOk(presupueto);
+            //await FechaOk(presupueto);
 
             var response = await PresupuestoService.Agregar(presupueto);
             if (response.Error)
@@ -429,6 +418,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 if (Presupuesto.Id == 0)
                 {
                     guardado = await Agregar(Presupuesto);
+                    
                     Presupuesto.ESNUEVO = true;
                 }
                 else

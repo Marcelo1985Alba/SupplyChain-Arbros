@@ -13,9 +13,6 @@ namespace SupplyChain.Server.Repositorios
         public PresupuestoDetalleRepository(AppDbContext appDbContext) : base(appDbContext) { }
 
 
-        //public async Task<IEnumerable<PresupuestoDetalle>> EnviarAviso(int id, string aviso)
-        //{
-        //   // string xSql=$"UPDATE "
-        //}
+       
     }
 }
