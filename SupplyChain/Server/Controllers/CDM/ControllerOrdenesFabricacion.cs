@@ -68,7 +68,7 @@ namespace SupplyChain
                 programa.FECHA_PREVISTA_FABRICACION = xItem.FECHA_PREVISTA_FABRICACION;
                 programa.FECHA_INICIO_REAL_FABRICACION = xItem.FECHA_INICIO_REAL_FABRICACION;
                 programa.CANTFAB = xItem.CANTFAB;
-                programa.CANT= xItem.CANTFAB;
+                programa.CANT= xItem.CANT;
                 programa.FE_CIERRE = xItem.FE_CIERRE;
                 programa.CG_ORDFORIG = xItem.CG_ORDFORIG;
                 programa.CG_CELDA = xItem.CG_CELDA;

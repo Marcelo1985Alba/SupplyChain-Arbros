@@ -12,7 +12,8 @@ namespace SupplyChain.Shared
 	{
 		public int PRESUPUESTO { get; set; }
 		public DateTime FECHAS_PRESUP { get; set; }
-		public decimal BONIFIC { get; set; }
+		public DateTime? FECHA_VALIDEZ { get; set; }
+        public decimal BONIFIC { get; set; }
 		public int CG_CLI { get; set; }
 		public string CLIENTE { get; set; }
 		public string CALLE_CLIENTE { get; set; }
@@ -39,5 +40,6 @@ namespace SupplyChain.Shared
 		public string CALLE_TRANSPORTE { get; set; }
 		public string OBSERITEM { get; set; }
         public int DIAS_PLAZO_ENTREGA { get; set; }
+		public string AVISO {  get; set; }
     }
 }

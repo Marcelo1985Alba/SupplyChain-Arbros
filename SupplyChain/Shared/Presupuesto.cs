@@ -13,6 +13,7 @@ namespace SupplyChain.Shared
     {
         
         public DateTime FECHA { get; set; } = DateTime.Now;
+        public DateTime? FECHAVALIDEZ { get; set; } = DateTime.Now.AddDays(30);
         [Required(ErrorMessage ="* La Moneda es requerida")]
         public string MONEDA { get; set; } = "DOLARES";
         [Required(ErrorMessage = "* El Cliente es requerido")]
@@ -40,6 +41,7 @@ namespace SupplyChain.Shared
         public string COLOR { get; set; }
         public int? ASIGNA { get; set; } = 0;
         public string Motivo { get; set; }
+        public string AVISO { get; set; } = "";
 
         [ValidateComplexType]
         public virtual List<PresupuestoDetalle> Items { get; set; } = new();

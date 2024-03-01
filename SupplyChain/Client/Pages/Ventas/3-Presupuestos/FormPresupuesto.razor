@@ -2,6 +2,7 @@
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Layouts
+@using Syncfusion.Blazor.Calendars
 @using SupplyChain.Client.Shared.BuscadorCliente
 @using SupplyChain.Client.Shared.BuscadorProducto
 @using SupplyChain.Client.Shared.BuscarSolicitud
@@ -62,14 +63,14 @@
                               HtmlAttributes="@HtmlAttributeButtonTC">
                     </SfButton>
                 </div>
-                <div class="form-group col-md-3 col" id="form-cond-pago">
+               @*  <div class="form-group col-md-3 col" id="form-cond-pago">
                     <label class="">Condicion de Pago:</label>
                     <SfDropDownList TValue="int" TItem="vCondicionesPago" @bind-Value="Presupuesto.CONDICION_PAGO"
                                     DataSource="condicionesPagos">
                         <DropDownListFieldSettings Text="DESCRIPCION" Value="Id"></DropDownListFieldSettings>
                     </SfDropDownList>
-                </div>
-                <div class="form-group col-md-2">
+                </div> *@
+                <div class="form-group col-md-2" id="btns">
                     <SfButton Content="Solicitudes" CssClass="e-btn e-small e-info mb-1 e-block" OnClick="@BuscarSolicitudes">
                     </SfButton>
                         <SfButton Content="Productos" CssClass="e-btn e-small e-info mb-1 e-block" OnClick="@BuscarProductos">
@@ -88,6 +89,7 @@
                     </SfButton>
                 </div> *@
             </div>
+                
             <div class="form-row">
                 <div class="form-group col-md-2" id="form-cond-ent">
                     <label class="">Condicion de Entrega:</label>
@@ -95,16 +97,32 @@
                                     DataSource="condicionesEntrega">
                         <DropDownListFieldSettings Text="OBSERVACIONES" Value="Id"></DropDownListFieldSettings>
                     </SfDropDownList>
+                    <label class="">Fecha Validez:</label>
+                      
+                    <SfDatePicker @bind-Value="Presupuesto.FECHAVALIDEZ" Format="dd/MM/yyy" Readonly="Presupuesto.Id!=0"></SfDatePicker>                        
+                       
+
                 </div>
+                
                 <div class="form-group col-md-5" id="form-dire-entr">
-                    <label class="">Direccion de Entrega:</label>
+                        <label class="">Condicion de Pago:</label>
+                        <SfDropDownList TValue="int" TItem="vCondicionesPago" @bind-Value="Presupuesto.CONDICION_PAGO"
+                                        DataSource="condicionesPagos">
+                            <DropDownListFieldSettings Text="DESCRIPCION" Value="Id"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                        <label class="">Direccion de Entrega:</label>
                     <SfDropDownList TValue="string" TItem="string" DataSource="direccionesEntregas"
                                     @bind-Value="Presupuesto.DIRENT">
                     </SfDropDownList>
+                        @* <div class="form-group col-md-3" id="form-cond-pago"> *@
+                            
+                        @* </div> *@
                 </div>
                 <div class="form-group col-md-1">
                     <label class="">Proyecto:</label>
                     <SfTextBox ID="Proy" @bind-Value="@(Presupuesto.PROYECTO)"></SfTextBox>
+                    <label class="">Aviso:</label>
+                    <SfTextBox ID="Aviso" @bind-Value="@(Presupuesto.AVISO)"></SfTextBox>
                 </div>
                 <div class="form-group col-md-1">
                     <label class="">Ingenieria:</label>
@@ -123,6 +141,15 @@
                     <SfNumericTextBox ID="Bonifc" @bind-Value="@(Presupuesto.BONIFIC)" ShowSpinButton="false" Decimals="2"></SfNumericTextBox>
                 </div>
             </div>
+           @*  <div class="form-row">
+                    <div class="form-group col-md-3" id="form-cond-pago">
+                        <label class="">Condicion de Pago:</label>
+                        <SfDropDownList TValue="int" TItem="vCondicionesPago" @bind-Value="Presupuesto.CONDICION_PAGO"
+                                        DataSource="condicionesPagos">
+                            <DropDownListFieldSettings Text="DESCRIPCION" Value="Id"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                    </div>
+                </div> *@
             <div class="row">
                 <div class="col-12">
                     <SfToast ID="toast_default" @ref="ToastObj">
@@ -161,14 +188,14 @@
                                     }
                                 </EditTemplate>
                             </GridColumn>
-                            <GridColumn Field="@nameof(PresupuestoDetalle.DIAS_PLAZO_ENTREGA)" HeaderText="Dias Entrega" Width="auto">
-                                <EditTemplate Context="detalle">
-                                    @{
-                                        var value = (detalle as PresupuestoDetalle);
+                                <GridColumn Field="@nameof(PresupuestoDetalle.DIAS_PLAZO_ENTREGA)" HeaderText="Dias Entrega" Width="auto">
+                                    <EditTemplate Context="detalle">
+                                        @{
+                                            var value = (detalle as PresupuestoDetalle);
                                         <SfNumericTextBox @bind-Value="value.DIAS_PLAZO_ENTREGA" Decimals="0" ShowSpinButton="false"></SfNumericTextBox>
-                                    }
-                                </EditTemplate>
-                            </GridColumn>
+                                        }
+                                    </EditTemplate>
+                                </GridColumn>
                             <GridColumn Field=@nameof(PresupuestoDetalle.PREC_UNIT_X_CANTIDAD) AllowEditing="false" Format="C2"
                                         HeaderText="Neto" TextAlign="TextAlign.Left" Width="auto">
                                 <Template Context="detalle">
@@ -229,6 +256,17 @@
                             <GridColumn Field="@nameof(PresupuestoDetalle.DESCRIPCIONTAG)" HeaderText="Identificacion" Width="auto" AllowEditing="false"></GridColumn>
                             <GridColumn Field="@nameof(PresupuestoDetalle.SOLICITUDID)" HeaderText="Nº Solicitud" Width="auto" AllowEditing="false"></GridColumn>
                             <GridColumn Field="@nameof(PresupuestoDetalle.OBSERITEM)" HeaderText="Observaciones" Width="200px"></GridColumn>
+                                @* <GridColumn Field=@nameof(PresupuestoDetalle.AVISO) HeaderText="Aviso" Format="N2" Width="auto">
+                                    <Template Context="aviso">
+                                        @{
+                                            var value = (aviso as PresupuestoDetalle);
+                                        }
+                                        <p>
+                                            @value.AVISO
+                                        </p>
+                                    </Template>
+                                </GridColumn> *@
+                        
                         </GridColumns>
                     </SfGrid>
                 </div>
@@ -266,7 +304,7 @@
                 <div class="total-price">TOTAL @moneda : @total</div>
             </div>
             <div class="col-4 text-right">
-                <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
+                    <SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" HtmlAttributes="@HtmlAttributeSubmit" Disabled="@BotonGuardarDisabled"></SfButton>
                 <SfButton Content="Cancel" HtmlAttributes="@HtmlAttribute" OnClick="@(async () => await Hide())" IconCss="fa fa-window-close-o"></SfButton>
             </div>
         </div>
@@ -302,6 +340,7 @@
 
 <style>
 
+    
     #form-tc {
         position: relative;
         right: 25px;
@@ -349,8 +388,14 @@
         right: 29px;
     }
 
+    #btns{
+        position:relative;
+        left:350px;
+    }
     #form-cond-pago {
         position: relative;
+        /* left:190px;
+        bottom:15px; */
     }
 
     #form-cond-ent {

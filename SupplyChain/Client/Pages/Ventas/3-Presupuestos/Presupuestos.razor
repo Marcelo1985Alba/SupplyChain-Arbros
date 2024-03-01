@@ -37,6 +37,32 @@
                 <GridColumn Field=@nameof(vPresupuestos.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="150px" AllowEditing="false"></GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.TOTAL) HeaderText="Total" TextAlign="TextAlign.Left" Width="150px" Format="N2" AllowEditing="false"></GridColumn>
                 <GridColumn Field=@nameof(vPresupuestos.USUARIO) HeaderText="Usuario" TextAlign="TextAlign.Left" Width="120px" AllowEditing="false"></GridColumn>
+                <GridColumn Field=@nameof(vPresupuestos.AVISO) HeaderText="Aviso" TextAlign="TextAlign.Left" Width="190px">
+                    <Template>
+
+                        @{
+                            var presup = context as vPresupuestos;
+                        }
+                        <p>
+                            @presup.AVISO
+                        </p>
+
+
+                    </Template>
+                    <EditTemplate>
+                        @{
+                            var presup = context as vPresupuestos;
+                        }
+                        @*<p>
+                        @presup.COMENTARIO
+                        </p>*@
+                        <SfTextBox Placeholder="Comentario" Width="100px" @bind-Value="presup.AVISO">@presup.AVISO</SfTextBox>
+
+                            <Syncfusion.Blazor.Buttons.SfButton Content="Guardar" @onclick="@(()=> EnviarAviso(presup.Id, presup.AVISO))">GUARDAR</Syncfusion.Blazor.Buttons.SfButton>
+                        </EditTemplate>
+
+                    </GridColumn>
+                
                 <GridColumn Field=@nameof(vPresupuestos.COMENTARIO) HeaderText="Comentario" TextAlign="TextAlign.Left" Width="190px">
                     <Template>
 

@@ -43,10 +43,11 @@ namespace SupplyChain.Server.Repositorios
                     .SumAsync(p => p.STOCK) ?? 0;
         }
 
-        public async Task<decimal> ObtenerStockReserva(string cg_art, string despacho, string lote, string serie)
+        public async Task<decimal> ObtenerStockReserva(string cg_art, string despacho, string serie, string lote)
         {
-            return await DbSet.Where(p => p.CG_DEP == 15 && p.CG_ART.Trim().ToUpper() == cg_art.Trim().ToUpper()
-                                     && p.DESPACHO.ToLower() == despacho.ToLower() && p.LOTE.ToLower() == lote.ToLower() && p.SERIE.ToLower() == serie.ToLower())
+            return await DbSet.Where(p => p.CG_DEP == 15 && p.CG_ART.ToUpper() == cg_art.ToUpper()
+                                     && p.DESPACHO.ToLower() == despacho.ToLower() && p.LOTE.ToLower() == lote.ToLower() 
+                                     && p.SERIE.ToLower() == serie.ToLower())
                     .SumAsync(p => p.STOCK) ?? 0;
         }
 
