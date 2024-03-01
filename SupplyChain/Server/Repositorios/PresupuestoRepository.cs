@@ -89,6 +89,14 @@ namespace SupplyChain.Server.Repositorios
             return await DbSet.Where(p => p.Id == id).ToListAsync();
         }
 
+        public async Task<IEnumerable<Presupuesto>> EnviarAviso(int id, string aviso)
+        {
+            string xSql = $"UPDATE PRESUPUESTO_ENCABEZADO SET AVISO = '{aviso}' WHERE ID ={id}";
+            await base.Database.ExecuteSqlRawAsync(xSql);
+
+            return await DbSet.Where(p => p.Id == id).ToListAsync();
+        }
+
 
         private async Task AsignarServicio(Presupuesto entity)
         {

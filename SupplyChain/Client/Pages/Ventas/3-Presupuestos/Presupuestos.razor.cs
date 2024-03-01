@@ -100,6 +100,9 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         {
             var motivos = await PresupuestoService.EnviarMotivos(presup.Id, args.Value);
         }
+
+       
+
         public async Task GuardarComentario(int id, string comentario)
         {
             try
@@ -113,7 +116,18 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             }
         }
 
-        
+        public async Task EnviarAviso(int id, string aviso)
+        {
+
+            try
+            {
+                var presup = await PresupuestoService.EnviarAviso(id, aviso);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
         public void RowSelectHandler(RowSelectEventArgs<vPresupuestos> args)
         {
             presup = args.Data;
@@ -287,7 +301,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                         await refFormPresupuesto.ShowAsync(seleccionado[0].Id);
                         popupFormVisible = true;
                     }
-                    SpinnerVisible = true;
+                    SpinnerVisible = false;
 
                 }
             }
@@ -352,7 +366,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
             SpinnerVisible = false;
         }
-
+      
         protected async Task Guardar(Presupuesto presupuesto)
         {
             if (presupuesto.GUARDADO)
@@ -371,6 +385,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                         MONEDA = presupuesto.MONEDA,
                         TOTAL = presupuesto.TOTAL,
                         COMENTARIO = presupuesto.COMENTARIO,
+                        AVISO = presupuesto.AVISO,
                         USUARIO = auth.User.Identity.Name
                     };
                     Presupuestos.Add(nuevoPresup);
@@ -386,6 +401,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                     presupActualizado.TOTAL = presupuesto.TOTAL;
                     presupActualizado.USUARIO = presupuesto.USUARIO;
                     presupActualizado.COMENTARIO = presupuesto.COMENTARIO;
+                    presupActualizado.AVISO=presupuesto.AVISO;
                 }
 
 
