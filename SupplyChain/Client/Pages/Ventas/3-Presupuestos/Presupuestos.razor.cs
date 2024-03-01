@@ -301,7 +301,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                         await refFormPresupuesto.ShowAsync(seleccionado[0].Id);
                         popupFormVisible = true;
                     }
-                    SpinnerVisible = true;
+                    SpinnerVisible = false;
 
                 }
             }
