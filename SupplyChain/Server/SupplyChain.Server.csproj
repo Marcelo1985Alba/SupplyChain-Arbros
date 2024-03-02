@@ -99,24 +99,25 @@
     <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.14.1" />
     <PackageReference Include="BoldReports.Net.Core" Version="4.2.68" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.16" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.16" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.2">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.16">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.2" />
-    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.Blazor.FileManager.PhysicalFileProvider" Version="20.4.0.38" />
-    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.Blazor.Schedule" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.Licensing" Version="20.4.0.44" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="22.2.12" />
+    <PackageReference Include="Syncfusion.Blazor.FileManager.PhysicalFileProvider" Version="22.2.12" />
+    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="22.2.12" />
+    <PackageReference Include="Syncfusion.Blazor.Schedule" Version="22.2.12" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="22.2.12" />
+    <PackageReference Include="Syncfusion.Licensing" Version="22.2.12" />
     <PackageReference Include="System.CodeDom" Version="7.0.0" />
   </ItemGroup>
 

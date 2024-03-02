@@ -15,97 +15,102 @@
 </SfToast>
 
 <div class="row">
-    <SfTextBox ID="search_text" Placeholder="Buscar por Numero de Pedidos o Nombre de Cliente..."
-               ShowClearButton="true" Value="@SearchValue"
-               OnChange="OnCardSearch" OnFocus="@(() => { PriorityValue = "None";  StatusValue = "None"; })">
-
-    </SfTextBox>
-
+    <div col-12>
+        <SfTextBox ID="search_text" Placeholder="Buscar por Numero de Pedidos o Nombre de Cliente..."
+                   ShowClearButton="true" Value="@SearchValue" FloatLabelType="FloatLabelType.Never"
+                   OnChange="OnCardSearch" OnFocus="@(() => { PriorityValue = "None";  StatusValue = "None"; })">
+        </SfTextBox>
+    </div>
+    
     <div class="col-12">
-        <SfKanban @ref="@refKanban" ID="logisticaKanban" TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis"
-                  AllowDragAndDrop="true" Height="440px" Query="@CardQuery">
-            <KanbanEvents TValue="PedCli"
-                          ActionBegin="@((a)=> OnActionBegin(a))"
-                          ActionComplete="@((a)=> OnActionComplete(a))"
-                          DragStart="@onDragStart" DragStop="@onDragStop"></KanbanEvents>
-            <KanbanColumns>
-                @foreach (Syncfusion.Blazor.Kanban.ColumnModel item in columnData)
-                {
-                    <KanbanColumn HeaderText="@item.HeaderText" KeyField="@item.KeyField" AllowToggle="true">
+        <div class="control_wrapper">
+            <SfKanban @ref="@refKanban" ID="logisticaKanban" TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis"
+                      AllowDragAndDrop="true" Height="350px" Query="@CardQuery" Width="100%" EnableTooltip="true">
+                <KanbanEvents TValue="PedCli"
+                              ActionBegin="@((a)=> OnActionBegin(a))"
+                              ActionComplete="@((a)=> OnActionComplete(a))"
+                              DragStart="@onDragStart" DragStop="@onDragStop"></KanbanEvents>
+                <KanbanColumns>
+                    @foreach (Syncfusion.Blazor.Kanban.ColumnModel item in columnData)
+                    {
+                        <KanbanColumn HeaderText="@item.HeaderText" KeyField="@item.KeyField" AllowToggle="true">
+                            <Template>
+                                @{
+                                    KanbanColumn column = (KanbanColumn)context;
+                                    <div class="header-template-wrap">
+                                        <div class="header-icon e-icons @column.KeyField[0]"></div>
+                                        <div class="text-uppercase font-weight-bold"><strong>@column.HeaderText</strong></div>
+                                    </div>
+                                }
+                            </Template>
+                        </KanbanColumn>
+                    }
+                </KanbanColumns>
+                <div style="z-index:0;">
+                    <KanbanCardSettings HeaderField="@(nameof(PedCli.PEDIDO))" ContentField="@(nameof(PedCli.DES_ART))"
+                                        GrabberField="@(nameof(PedCli.COLOR))">
+                    </KanbanCardSettings>
+                    <KanbanDialogSettings IsModal="true">
                         <Template>
+
                             @{
-                                KanbanColumn column = (KanbanColumn)context;
-                                <div class="header-template-wrap">
-                                    <div class="header-icon e-icons @column.KeyField[0]"></div>
-                                    <div class="header-text"><strong>@column.HeaderText</strong></div>
-                                </div>
-                            }
-                        </Template>
-                    </KanbanColumn>
-                }
-            </KanbanColumns>
-            <div style="z-index:0;">
-                <KanbanCardSettings HeaderField="@(nameof(PedCli.PEDIDO))" ContentField="@(nameof(PedCli.DES_ART))"
-                                    GrabberField="@(nameof(PedCli.COLOR))">
-                </KanbanCardSettings>
-                <KanbanDialogSettings IsModal="true">
-                    <Template>
-                        @{
-                            pedidoSeleccionado = (PedCli)context;
-                            // pedidopedSeleccionado = (Pedidos)context;    
+                                pedidoSeleccionado = (PedCli)context;
+                                // pedidopedSeleccionado = (Pedidos)context;
 
-                            <div class="form-row">
+                                <div class="form-row">
 
-                                <div class="form-group col-md-2">
-                                    <label class="col-form-label">Fecha Pedido:</label>
-                                    <SfTextBox Value="@pedidoSeleccionado.FE_PED.ToString("dd/MM/yyyy")" Readonly="true"></SfTextBox>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="col-form-label">Pedido:</label>
-                                    <SfTextBox Value="@pedidoSeleccionado.PEDIDO.ToString()" Readonly="true"></SfTextBox>
-                                </div>
-                                <div class="form-group col-md-2">
-                                         <label class="col-form-label">Remito:</label>
-                                         <SfTextBox Value="@pedidoSeleccionado.REMITO" Readonly="true"></SfTextBox>
-                                    
-                                </div>
-                                @*// if (pedidopedSeleccionado.PEDIDO == pedidoSeleccionado.PEDIDO)
+                                    <div class="form-group col-md-2">
+                                        <label class="col-form-label">Fecha Pedido:</label>
+                                        <SfTextBox Value="@pedidoSeleccionado.FE_PED.ToString("dd/MM/yyyy")" Readonly="true"></SfTextBox>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="col-form-label">Pedido:</label>
+                                        <SfTextBox Value="@pedidoSeleccionado.PEDIDO.ToString()" Readonly="true"></SfTextBox>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="col-form-label">Remito:</label>
+                                        <SfTextBox Value="@pedidoSeleccionado.REMITO" Readonly="true"></SfTextBox>
+
+                                    </div>
+                                    @*// if (pedidopedSeleccionado.PEDIDO == pedidoSeleccionado.PEDIDO)
                                 // {
                                 //   <div class="form-group col-md-3">
                                 //     <label class="col-form-label">Remito:</label>
                                 //     <SfTextBox Value="@pedidopedSeleccionado.REMITO" Readonly="true"></SfTextBox>
                                 //   </div>
-                                // }*@                                    
-                                
-                                
-                               
-                                @*<div class="form-group col-md-6">
-                                        <label class="col-form-label">Cantidad:</label>
-                                        <SfTextBox Value="@pedidoSeleccionado.CANTPED.ToString()" Readonly="true"></SfTextBox>
-                                    </div>*@
-                                <div class="form-group col-md-2">
-                                    <label class="col-form-label">Estado:</label>
-                                    <SfTextBox Value="@pedidoSeleccionado.ESTADO_LOGISTICA" Readonly="true"></SfTextBox>
-                                </div>
-                                @*<div class="form-group col-md-9">
-                                        <label class="col-form-label">Producto:</label>
-                                        <SfTextBox CssClass="e-field" Value="@pedidoSeleccionado.DES_ART.Trim()" Readonly="true"
-                                                   Multiline="true" />
-                                    </div>*@
-                                <div class="form-group col-md-2 mt-5">
-                                    <SfCheckBox Label="Confirmado" @bind-Checked="@pedidoSeleccionado.CONFIRMADO" />
-                                </div>
-                            </div>
+                                // }*@
 
-                        }
-                    </Template>
-                </KanbanDialogSettings>
-                <KanbanSwimlaneSettings KeyField="@nameof(PedCli.DES_CLI)" TextField="@nameof(PedCli.DES_CLI)"
-                                        AllowDragAndDrop=true ShowItemCount=true EnableFrozenRows="true"
-                                        SortDirection=Syncfusion.Blazor.Kanban.SortDirection.Ascending ShowEmptyRow=true>
-                </KanbanSwimlaneSettings>
-            </div>
-        </SfKanban>
+
+
+                                    @*<div class="form-group col-md-6">
+                                <label class="col-form-label">Cantidad:</label>
+                                <SfTextBox Value="@pedidoSeleccionado.CANTPED.ToString()" Readonly="true"></SfTextBox>
+                                </div>*@
+                                    <div class="form-group col-md-2">
+                                        <label class="col-form-label">Estado:</label>
+                                        <SfTextBox Value="@pedidoSeleccionado.ESTADO_LOGISTICA" Readonly="true"></SfTextBox>
+                                    </div>
+                                    @*<div class="form-group col-md-9">
+                                <label class="col-form-label">Producto:</label>
+                                <SfTextBox CssClass="e-field" Value="@pedidoSeleccionado.DES_ART.Trim()" Readonly="true"
+                                Multiline="true" />
+                                </div>*@
+                                    <div class="form-group col-md-2 mt-5">
+                                        <SfCheckBox Label="Confirmado" @bind-Checked="@pedidoSeleccionado.CONFIRMADO" />
+                                    </div>
+                                </div>
+
+                            }
+                        </Template>
+                    </KanbanDialogSettings>
+                    <KanbanSwimlaneSettings KeyField="@nameof(PedCli.DES_CLI)" TextField="@nameof(PedCli.DES_CLI)"
+                                            AllowDragAndDrop=true ShowItemCount=true EnableFrozenRows="true"
+                                            SortDirection=Syncfusion.Blazor.Kanban.SortDirection.Ascending ShowEmptyRow=true>
+                    </KanbanSwimlaneSettings>
+                </div>
+            </SfKanban>
+        </div>
+        
 
     </div>
 </div>
@@ -126,5 +131,11 @@
 <style>
     .e-dialog-delete {
         display: none;
+    }
+
+    .control_wrapper {
+        margin: auto;
+        max-height: 350px;
+        overflow: auto;
     }
 </style> 

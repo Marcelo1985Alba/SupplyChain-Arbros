@@ -92,7 +92,7 @@ namespace SupplyChain.Client.Pages.AsignacionMenu
             else
             {
                 dbMenu.AddRange(response.Response.Except(dbMenu));
-                await treeviewUsuario.Refresh();
+                //await treeviewUsuario.RefreshNodeAsync("tvUsuario", dbMenu);
             }
         }
 
@@ -135,9 +135,9 @@ namespace SupplyChain.Client.Pages.AsignacionMenu
             if (CheckedNodes is not null && CheckedNodes.Count() > 0)
             {
                 //Obtener todos los seleccionados
-                var nodes = treeviewMaster.GetAllCheckedNodes();
+                //var idNodes = treeviewMaster.GetAllCheckedNodes();
 
-
+                //var idNodes = treeviewMaster.GetAllCheckedNodes();
             }
 
 
@@ -154,7 +154,7 @@ namespace SupplyChain.Client.Pages.AsignacionMenu
 
 
             //Obtener todos los seleccionados
-            var idNodes = treeviewMaster.GetAllCheckedNodes();
+            var idNodes = CheckedNodes.ToList();
             if (idNodes is null || idNodes.Count == 0)
             {
                 await ToastMensajeError("Seleccione menu");
@@ -188,7 +188,7 @@ namespace SupplyChain.Client.Pages.AsignacionMenu
                 }
 
 
-                treeviewUsuario.Refresh();
+                treeviewUsuario.RefreshNodeAsync("tvUsuario", dbMenu);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿@page "/ver-plano"
 @using Syncfusion.Blazor.PdfViewer;
-
+@using Syncfusion.Blazor.SfPdfViewer;
 
 @if (!DocLoad) { 
 }
@@ -10,6 +10,8 @@ else
 <SfPdfViewer ID="idPdf"
     ServiceUrl="/api/Values" DocumentPath="@DocumentPath"
     Height="1200px" Width="100%"></SfPdfViewer>
+
+    
 }
 
 

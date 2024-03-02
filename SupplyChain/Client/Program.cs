@@ -24,11 +24,12 @@ namespace SupplyChain.Client
         {
     
             Syncfusion.Licensing.SyncfusionLicenseProvider
-                .RegisterLicense("MTA0Njk4NUAzMjMwMmUzNDJlMzBaRFRIcHVVaVJ2K1ZFVTd6TXA4dnRXQ01EVlRTMEpXdXpkTnFUTGdMem9rPQ==");
+                .RegisterLicense("MzEzNTc5M0AzMjMyMmUzMDJlMzBrV0c5bGNOOVZnTmZRZmNLRTZWc3lpUDhZOStiYnBvVS9NMXErRk40T2xVPQ==");
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
             builder.RootComponents.Add<App>("#app");
+            builder.Services.AddMemoryCache();
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             ConfigureServices(builder.Services);
             builder.Services.AddSyncfusionBlazor();
@@ -41,7 +42,7 @@ namespace SupplyChain.Client
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
             builder.Services.AddScoped<SfDialogService>();
-            builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
+            //builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
             await builder.Build().RunAsync();
         }
 

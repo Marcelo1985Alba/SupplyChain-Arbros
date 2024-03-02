@@ -203,24 +203,24 @@ e-grid .e-gridheader {
 }
 
 /*TOOLBAR GRID*/
-.e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn.e-tbtn-txt .e-icons.e-btn-icon,
-.e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn-text {
+.e-grid > .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn.e-tbtn-txt .e-icons.e-btn-icon,
+.e-grid > .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn-text {
     color: white;
     font-weight: bold;
 }
 
-.e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn {
+.e-grid > .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn {
     /*height: 9px !important;
     min-height: 29px !important;
     min-width: 34px !important;*/
     background: #549bf9;
 }
-    .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:focus {
-        background: #2f86f9;
-    }
-    .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:hover {
-        background: #3582e8;
-    }
+.e-grid > .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:focus {
+    background: #2f86f9;
+}
+.e-grid > .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn:hover {
+    background: #3582e8;
+}
 
 /*.e-toolbar-item button[aria-label="Add"] {
     background: #04cb93;*/
@@ -370,7 +370,7 @@ e-grid .e-gridheader {
 /*}*/
 
 
-.e-toolbar-item .e-control .e-btn .e-icons .e-btn-icon {
+.e-grid > .e-toolbar-item .e-control .e-btn .e-icons .e-btn-icon {
     color: white;
     font-weight: bold;
 }

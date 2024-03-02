@@ -223,20 +223,37 @@
                 {
                     if (authState.User.Identity.IsAuthenticated)
                     {
-                        <div class="profile-img">
-                        @if (imageUsuario == null || imageUsuario.Length == 0)
-                        {
-                            <img src="img1-150x150.png" alt="user" class="profile-pic" />
-                        }
-                        else
-                        {
-                            <img src="@($"data:image/png;base64,{Convert.ToBase64String(imageUsuario)}")" alt="user" class="profile-pic" />
-                        }
+                    <div class="profile-img mb-2">
+                        <div class="row no-gutters">
+                            <div class="col-auto">
+                                @if (imageUsuario == null || imageUsuario.Length == 0)
+                                {
+                                    <div class="symbol symbol-50px">
+                                        <img src="img1-150x150.png" alt="user" class="profile-pic" />
+                                    </div>
 
-                            <div class="text text-white-50" style="width: 100%;font-size: 30px;text-align: center;">
-                                @authState.User.Identity.Name
+                                }
+                                else
+                                {
+                                    <div class="symbol symbol-50px">
+                                        <img src="@($"data:image/png;base64,{Convert.ToBase64String(imageUsuario)}")" alt="user" class="profile-pic" />
+                                    </div>
+
+                                }
                             </div>
+                            <div class="col-auto">
+                                <div class="text text-white-50 ml-2 font-weight-bold" style="width: 100%;font-size: 14px;text-align: left;">
+                                    @authState.User.Identity.Name
+                                </div>
+                                <span class="text text-white ml-2 mb-1">@emailUsuario</span>
+                            </div>
+
                         </div>
+                        
+
+
+                    </div>
+                        
 
 
                     }
@@ -244,19 +261,24 @@
                 @*<hr />*@
                 <div class="main-menu">
                     <div class="table-content">
-                        @*<input type="text" placeholder="Search..." class="search-icon">*@
-                        @*<p class="main-menu-header">TABLE OF CONTENTS</p>*@
+                        @* <SfTextBox CssClass="e-outline text-buscar" ShowClearButton="true" Placeholder="Buscar..." Input="@OnInputSearch"></SfTextBox> *@
                     </div>
-                    <TreeViewMenu OnChangeToggle="@Close"></TreeViewMenu>
-
+                    <div class="control_wrapper">
+                        <TreeViewMenu OnChangeToggle="@Close"></TreeViewMenu>
+                    </div>
+                    
+                <div class="footer" style="">
+                    <div class="version badge bg-info text-white">
+                        Version 2.0.0
+                    </div>
+                    <div class="empresa badge bg-info text-white">
+                        Copyright © 2021-@DateTime.Now.Year.ToString() Developer Aerre S.A.
+                    </div>
 
                 </div>
-                @*<div class="footer">
-            <div class="version">
-                Version 0.1
-            </div>
 
-        </div>*@
+                </div>
+                
             </ChildContent>
 
         </SfSidebar>
@@ -316,31 +338,6 @@
         <ToastPosition X="Right" Y="Bottom"></ToastPosition>
     </SfToast>
 
-    @*<SfToast ID="toast_custom" @ref="@ToastObj" Width="400px" ExtendedTimeout=0 Timeout="200">
-        <ToastPosition X="Right" Y="Bottom"></ToastPosition>
-        <ToastTemplates>
-            <Template>
-                <div id='template_toast'>
-                    <div class="horizontal-align">
-                        <div class='e-icons toast-icons e-alarm'></div>
-                        <div class='toast-content'>
-                            <div class='toast-title'>
-                                Weekend Alarm
-                            </div>
-                            <div class='toast-message'>
-                                With traffic, its likely to take 45 minutes to get to jenny's 24th Birthday Bash at Hillside Bar, 454 E.
-                                Olive Way by 10:00 PM
-                            </div>
-                        </div>
-                    </div>
-                    <div class="snoozeBtn">
-                        <SfButton ID="snooze" CssClass="e-btn e-flat e-info"> Snooze </SfButton>
-                        <SfButton ID="dismiss" CssClass="e-btn e-flat e-info"> Dismiss </SfButton>
-                    </div>
-                </div>
-            </Template>
-        </ToastTemplates>
-    </SfToast>*@
 
 @code{
     [Inject] public ILoginServiceJWT LoginService { get; set; }
@@ -597,9 +594,29 @@
     }
 
     .profile-img {
-        border-bottom: 1px solid #656a70;
-        /*padding-bottom: 5px;*/
+        /* border-top: 1px dashed #1f212a; */
+        padding: 0 25px;
     }
+
+    .symbol {
+        display: inline-block;
+        flex-shrink: 0;
+        position: relative;
+        border-radius: .475rem;
+    }
+
+    .symbol.symbol-50px > img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .symbol > img {
+        width: 100%;
+        flex-shrink: 0;
+        display: inline-block;
+        border-radius: 0.475rem;
+    }
+
 
     .e-sidebar .profile-img > img {
         width: 80px;
@@ -744,9 +761,9 @@
 
     .e-sidebar.e-lib.e-dock.e-left .footer {
         display: block;
-        padding-top: 16px;
+        padding-top: 10px;
         border-top: 1px solid #E8E8E8;
-        background-color: #395b7b;
+        background-color: #173a7a;
     }
 
     .e-sidebar.e-lib.e-dock.e-left .footer {
@@ -756,6 +773,37 @@
         right: 18px;
     }
 
+
+    .control_wrapper {
+        max-width: 500px;
+        margin: auto;
+        max-height: 506px;
+        overflow: auto;
+    }
+
+    /* Esto seleccionará cualquier scrollbar que esté directamente dentro de un treeview */
+        .control_wrapper::-webkit-scrollbar {
+        width: 12px; /* Ancho de la barra de desplazamiento */
+    }
+
+        .control_wrapper::-webkit-scrollbar-track {
+            background: #fafafa;
+            ; /* Color de la pista de desplazamiento */
+    }
+
+    .control_wrapper::-webkit-scrollbar-thumb {
+        background-color: #173a7a; /* Color del pulgar de desplazamiento */
+        border-radius: 10px; /* Redondez del pulgar de desplazamiento */
+        border: 1px solid #fafafa; /* Crea un padding alrededor del pulgar de desplazamiento */
+    }
+
+    .empresa {
+        font-size: 10px;
+    }
+
+    .version {
+        font-size: 10px;
+    }
     /*    .card {
         margin-bottom: 30px !important;
     }
