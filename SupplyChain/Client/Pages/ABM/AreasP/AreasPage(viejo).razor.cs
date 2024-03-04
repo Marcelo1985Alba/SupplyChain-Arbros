@@ -71,7 +71,7 @@ namespace SupplyChain.Pages.Area
                 }
                 else
                 {
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = "Solo se puede editar un item",
@@ -103,7 +103,7 @@ namespace SupplyChain.Pages.Area
                 }
                 else
                 {
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = "Solo se puede copiar un item",
@@ -132,7 +132,7 @@ namespace SupplyChain.Pages.Area
                         var response = await Http.PostAsJsonAsync("api/Areas/PostList", areas);
                         if (response.IsSuccessStatusCode)
                         {
-                            await this.ToastObj.Show(new ToastModel
+                            await this.ToastObj.ShowAsync(new ToastModel
                             {
                                 Title = "EXITO!",
                                 Content = "las areas seleccionadas fueron eliminadas correctamente.",
@@ -145,7 +145,7 @@ namespace SupplyChain.Pages.Area
                         }
                         else
                         {
-                            await this.ToastObj.Show(new ToastModel
+                            await this.ToastObj.ShowAsync(new ToastModel
                             {
                                 Title = "ERROR!",
                                 Content = "Hubo un problema al eliminar las areas seleccionadas",
@@ -160,7 +160,7 @@ namespace SupplyChain.Pages.Area
                 }
                 else
                 {
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = "No ha seleccionado productos para eliminar.",
@@ -192,7 +192,7 @@ namespace SupplyChain.Pages.Area
                         Grid.Refresh();
                         await Grid.RefreshHeader();
 
-                        await this.ToastObj.Show(new ToastModel
+                        await this.ToastObj.ShowAsync(new ToastModel
                         {
                             Title = "EXITO!",
                             Content = $"AREA {area.Id} Guardada Correctamente.",
@@ -208,7 +208,7 @@ namespace SupplyChain.Pages.Area
                     }
                     else
                     {
-                        await this.ToastObj.Show(new ToastModel
+                        await this.ToastObj.ShowAsync(new ToastModel
                         {
                             Title = "ERROR!",
                             Content = "Error al verificar datos",
@@ -221,7 +221,7 @@ namespace SupplyChain.Pages.Area
                 }
                 else
                 {
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = "Error al verificar datos",
@@ -244,7 +244,7 @@ namespace SupplyChain.Pages.Area
                     areaSinModificar.Id = newArea.Id;
                     areaSinModificar.DES_AREA = newArea.DES_AREA;
                     areas.OrderByDescending(p => p.Id);
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "EXITO!",
                         Content = $"AREA {area.Id} editada Correctamente.",

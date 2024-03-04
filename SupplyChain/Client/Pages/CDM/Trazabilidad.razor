@@ -1268,7 +1268,7 @@
                     Archivos = responseArchivos.Response;
                 }
             }
-            await DialogRef.Show(false);
+            await DialogRef.ShowAsync(false);
         }
         await refSpinner.HideAsync();
     }
@@ -1421,7 +1421,7 @@
     {
         if (string.IsNullOrEmpty(BoxCodigo))
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = "Debe seleccionar un Pedido",
@@ -2112,7 +2112,7 @@
                     }
                 }
                 ShowSpinner = false;
-                await DialogRef.Show(false);
+                await DialogRef.ShowAsync(false);
             }
 
             
@@ -2171,7 +2171,7 @@
 
     private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
     {
-        await this.ToastObj.Show(new ToastModel
+        await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = content,
@@ -2184,7 +2184,7 @@
 
     private async Task ToastMensajeError(string content = "Ocurrio un error.")
     {
-        await ToastObj.Show(new ToastModel
+        await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = content,

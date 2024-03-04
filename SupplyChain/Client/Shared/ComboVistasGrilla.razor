@@ -114,7 +114,7 @@
             //await refComboBox.AddItems( new List<VistasGrillas>() { vis } );
             VistaSeleccionada = vis;
 
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = $"Vista Guardada Correctamente.",
@@ -126,7 +126,7 @@
         }
         else
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "ERROR!",
                 Content = "Error al guardar",
@@ -151,7 +151,7 @@
 
 
 
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "EXITO!",
                     Content = $"Vista Eliminada Correctamente.",
@@ -163,7 +163,7 @@
             }
             else
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Error al Eliminar",

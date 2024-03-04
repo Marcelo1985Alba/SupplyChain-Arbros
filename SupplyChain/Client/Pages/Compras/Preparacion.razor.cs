@@ -451,7 +451,7 @@ namespace SupplyChain.Client.Pages.Preparacion
 
                 Console.WriteLine($"Error: {mensServidor}");
                 //toastService.ShowToast($"{mensServidor}", TipoAlerta.Error);
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Error al agregar item",

@@ -83,7 +83,7 @@ namespace SupplyChain.Client.Pages.Prev
                 listaDespiece = await Http.GetFromJsonAsync<List<DespiecePlanificacion>>($"api/Planificacion/Despiece/" +
                     $"{args.RowData.CG_ART.Trim()}/1/{args.RowData.CANTPED}");
                 //IsVisible = true;
-                await DialogDespieceRef.Show();
+                await DialogDespieceRef.ShowAsync();
             }
         }
 

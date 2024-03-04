@@ -348,7 +348,7 @@ namespace SupplyChain.Client.Pages.Servicio.Servicios
             var response = await Http2.PutAsJsonAsync($"api/Servicios/{Servicio.Id}", Servicio);
             if (response.Error)
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Error al actualizar pedido",
@@ -364,7 +364,7 @@ namespace SupplyChain.Client.Pages.Servicio.Servicios
             }
             else
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "EXITO!",
                     Content = $"Servico actualizado correctamente",

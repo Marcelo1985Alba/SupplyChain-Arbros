@@ -87,7 +87,7 @@ namespace SupplyChain.Client.Pages.ABM.UnidadesP
                         var response = UnidadesService.Eliminar(unidadesABorrar);
                         if (!response.IsCompletedSuccessfully)
                         {
-                            await this.ToastObj.Show(new ToastModel
+                            await this.ToastObj.ShowAsync(new ToastModel
                             {
                                 Title = "EXITO!",
                                 Content = "las unidades seleccionadas fueron eliminadas correctamente.",
@@ -129,7 +129,7 @@ namespace SupplyChain.Client.Pages.ABM.UnidadesP
             }
             else
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Solo se puede copiar un item",
@@ -227,7 +227,7 @@ namespace SupplyChain.Client.Pages.ABM.UnidadesP
 
         private async Task ToastMensajeExito()
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = "Guardado Correctamente.",
@@ -239,7 +239,7 @@ namespace SupplyChain.Client.Pages.ABM.UnidadesP
         }
         private async Task ToastMensajeError()
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = "Ocurrio un Error.",

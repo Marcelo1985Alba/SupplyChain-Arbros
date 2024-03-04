@@ -317,7 +317,7 @@ namespace SupplyChain.Client.Pages.NoConf
 
                 Console.WriteLine($"Error: {mensServidor}");
                 //toastService.ShowToast($"{mensServidor}", TipoAlerta.Error);
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Error al guardar",
@@ -332,7 +332,7 @@ namespace SupplyChain.Client.Pages.NoConf
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
 
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "EXITO!",
                         Content = "Evento Guardado Correctamente.",
@@ -360,7 +360,7 @@ namespace SupplyChain.Client.Pages.NoConf
 
             if (ValorOF == 0)
             {
-                await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Debe indicar una Orden de Fabricación ", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
+                await this.ToastObj.ShowAsync(new ToastModel { Title = "AVISO!", Content = "Debe indicar una Orden de Fabricación ", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
             }
             else
             {
@@ -370,7 +370,7 @@ namespace SupplyChain.Client.Pages.NoConf
 
                 if (ItemsABuscar is null || ItemsABuscar.Count() < 1)
                 {
-                    await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "No se encuentra la Orden de Fabricación ", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
+                    await this.ToastObj.ShowAsync(new ToastModel { Title = "AVISO!", Content = "No se encuentra la Orden de Fabricación ", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
 
                 }
                 else
@@ -416,7 +416,7 @@ namespace SupplyChain.Client.Pages.NoConf
 
             if (@ValorOC == 0)
             {
-                await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Debe indicar una Orden de Compra ", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
+                await this.ToastObj.ShowAsync(new ToastModel { Title = "AVISO!", Content = "Debe indicar una Orden de Compra ", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
             }
             else
             {
@@ -425,7 +425,7 @@ namespace SupplyChain.Client.Pages.NoConf
 
                 if (ItemsABuscar is null || ItemsABuscar.Count() < 1)
                 {
-                    await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "No se encuentra la Orden de Compra ", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
+                    await this.ToastObj.ShowAsync(new ToastModel { Title = "AVISO!", Content = "No se encuentra la Orden de Compra ", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
                 }
                 else
                 {
@@ -467,7 +467,7 @@ namespace SupplyChain.Client.Pages.NoConf
 
             if (@ValorPedido == 0)
             {
-                await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Debe indicar un Pedido", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
+                await this.ToastObj.ShowAsync(new ToastModel { Title = "AVISO!", Content = "Debe indicar un Pedido", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
             }
             else
             {
@@ -476,7 +476,7 @@ namespace SupplyChain.Client.Pages.NoConf
 
                 if (PedidosABuscar is null || PedidosABuscar.Count() < 1)
                 {
-                    await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "No se encuentra el Pedido", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
+                    await this.ToastObj.ShowAsync(new ToastModel { Title = "AVISO!", Content = "No se encuentra el Pedido", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
 
                 }
                 else
@@ -933,7 +933,7 @@ namespace SupplyChain.Client.Pages.NoConf
 
             if (!correct)
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "Errores de Validacion",
                     Content = validationsResults[0].ErrorMessage,
@@ -959,7 +959,7 @@ namespace SupplyChain.Client.Pages.NoConf
 
                     Console.WriteLine($"Error: {mensServidor}");
                     //toastService.ShowToast($"{mensServidor}", TipoAlerta.Error);
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = "Error al guardar",
@@ -974,7 +974,7 @@ namespace SupplyChain.Client.Pages.NoConf
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
                         IsVisibledialogacciones = false;
-                        await this.ToastObj.Show(new ToastModel
+                        await this.ToastObj.ShowAsync(new ToastModel
                         {
                             Title = "EXITO!",
                             Content = "Accion Guardada Correctamente.",

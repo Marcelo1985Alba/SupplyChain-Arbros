@@ -228,7 +228,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
 
         private async Task ToastMensajeError(string content = "Ocurrio un Error.")
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = content,
@@ -376,7 +376,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
 
         private async Task ToastMensajeError()
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = "Ocurrio un Error.",

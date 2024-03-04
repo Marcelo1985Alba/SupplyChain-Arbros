@@ -776,7 +776,7 @@ namespace SupplyChain.Client.Pages.Inventarios
 
                     Console.WriteLine($"Error: {mensServidor}");
                     //toastService.ShowToast($"{mensServidor}", TipoAlerta.Error);
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = "Error al eliminar vale",
@@ -790,7 +790,7 @@ namespace SupplyChain.Client.Pages.Inventarios
                 {
                     SpinnerVisible = false;
                     StockEncabezado = new();
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "EXITO!",
                         Content = $"Vale anulado Correctamente.",

@@ -159,7 +159,7 @@ namespace SupplyChain.Client.Pages.ABM.Usuarios
 
         private async Task ToastMensajeExito()
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = "Guardado Correctamente.",

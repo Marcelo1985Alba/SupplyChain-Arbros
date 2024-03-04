@@ -115,7 +115,7 @@ namespace SupplyChain.Client.Shared.BuscadorCliente
 
         private async Task ToastMensajeError(string content = "Ocurrio un Error.")
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = content,

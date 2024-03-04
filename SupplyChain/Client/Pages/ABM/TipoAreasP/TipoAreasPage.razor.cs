@@ -87,7 +87,7 @@ namespace SupplyChain.Client.Pages.ABM.TipoAreasP
                         var response = TipoAreaService.Eliminar(tipoAreaABorrar);
                         if (!response.IsCompletedSuccessfully)
                         {
-                            await this.ToastObj.Show(new ToastModel
+                            await this.ToastObj.ShowAsync(new ToastModel
                             {
                                 Title = "EXITO!",
                                 Content = "los tipos de area seleccionados fueron eliminadas correctamente.",
@@ -126,7 +126,7 @@ namespace SupplyChain.Client.Pages.ABM.TipoAreasP
             }
             else
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Solo se puede copiar un item",
@@ -221,7 +221,7 @@ namespace SupplyChain.Client.Pages.ABM.TipoAreasP
 
         private async Task ToastMensajeExito()
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = "Guardado Correctamente.",
@@ -233,7 +233,7 @@ namespace SupplyChain.Client.Pages.ABM.TipoAreasP
         }
         private async Task ToastMensajeError()
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = "Ocurrio un Error.",

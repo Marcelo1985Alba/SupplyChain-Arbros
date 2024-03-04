@@ -82,7 +82,7 @@ namespace SupplyChain.Pages.Fab
                 var reponse = await Http.PutAsJsonAsync("api/OrdenesFabricacion/actualizarFechaCursoPrimeraCelda", args);
                 if (reponse.IsSuccessStatusCode)
                 {
-                    await this.ToasObj.Show(new ToastModel
+                    await this.ToasObj.ShowAsync(new ToastModel
                     {
                         Title = "Exito!",
                         Content = "Guardado Correctamente!",
@@ -94,7 +94,7 @@ namespace SupplyChain.Pages.Fab
                 }
                 else
                 {
-                    await this.ToasObj.Show(new ToastModel
+                    await this.ToasObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = "Ocurrrio un error.Error al intentar actualizar fechas de curso para ordenes en curso. ",
@@ -145,7 +145,7 @@ namespace SupplyChain.Pages.Fab
                 var respuesta = await Http.PutAsJsonAsync($"api/OrdenesFabricacion/PutFromModeloOF/{args.Data.CG_ORDF}", args.Data);
                 if (respuesta.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
-                    await ToasObj.Show(new ToastModel
+                    await ToasObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = $"Ocurrrio un error.Error al intentar Guardar OF: {args.Data.CG_ORDF} ",
@@ -157,7 +157,7 @@ namespace SupplyChain.Pages.Fab
                 }
                 else
                 {
-                    await this.ToasObj.Show(new ToastModel
+                    await this.ToasObj.ShowAsync(new ToastModel
                     {
                         Title = "Exito!",
                         Content = $"Guardado Correctamente! Nro OF: {args.Data.CG_ORDF}",

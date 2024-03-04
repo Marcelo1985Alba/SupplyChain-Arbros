@@ -1214,7 +1214,7 @@
             var response = await Http.PutAsJsonAsync($"api/Servicios/{id}", serv);
             if (response.Error)
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Error al actualizar pedido",

@@ -126,7 +126,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
                 listaDespiece =
                     await Http.GetFromJsonAsync<List<DespiecePlanificacion>>(
                         $"api/Planificacion/Despiece/{extern_codigo.Trim()}/1/1");
-                await DialogDespieceRef.Show();
+                await DialogDespieceRef.ShowAsync();
             }
 
             VisibleSpinner = false;
@@ -170,7 +170,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
 
 
                 VisibleSpinner = false;
-                await DialogDespieceRef.Show();
+                await DialogDespieceRef.ShowAsync();
             }
             else if (args.CommandColumn.Title == "Ver Plano")
             {
@@ -566,7 +566,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
         
         private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = content,
@@ -579,7 +579,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
         
         private async Task ToastMensajeError(string content = "Ocurrio un Error.")
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = content,

@@ -163,7 +163,7 @@ namespace SupplyChain.Pages.Prods
                         Grid.Refresh();
                         await Grid.RefreshHeader();
 
-                        await this.ToastObj.Show(new ToastModel
+                        await this.ToastObj.ShowAsync(new ToastModel
                         {
                             Title = "EXITO!",
                             Content = $"PRODUCTO {prodAux.Id} Guardado Correctamente.",
@@ -179,7 +179,7 @@ namespace SupplyChain.Pages.Prods
                     }
                     else
                     {
-                        await this.ToastObj.Show(new ToastModel
+                        await this.ToastObj.ShowAsync(new ToastModel
                         {
                             Title = "ERROR!",
                             Content = "Error al verificar datos",
@@ -192,7 +192,7 @@ namespace SupplyChain.Pages.Prods
                 }
                 else
                 {
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = "Error al verificar datos",
@@ -251,7 +251,7 @@ namespace SupplyChain.Pages.Prods
                     prodSinModificar.CG_TIPOAREA = prodNuevo.CG_TIPOAREA;
                     prodSinModificar.FE_UC = prodNuevo.FE_UC;
                     prods.OrderByDescending(p => p.Id);
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "EXITO!",
                         Content = $"PRODUCTO {prodAux.Id} editado Correctamente.",
@@ -323,7 +323,7 @@ namespace SupplyChain.Pages.Prods
                 }
                 else
                 {
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = "Solo se puede editar un item",
@@ -394,7 +394,7 @@ namespace SupplyChain.Pages.Prods
                 }
                 else
                 {
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = "Solo se puede copiar un item",
@@ -442,7 +442,7 @@ namespace SupplyChain.Pages.Prods
                             var response = await Http.PostAsJsonAsync("api/Prod/PostList", productos);
                             if (response.IsSuccessStatusCode)
                             {
-                                await this.ToastObj.Show(new ToastModel
+                                await this.ToastObj.ShowAsync(new ToastModel
                                 {
                                     Title = "EXITO!",
                                     Content = "Insumos Eliminados Correctamente.",
@@ -457,7 +457,7 @@ namespace SupplyChain.Pages.Prods
                             {
                                 //cancela eliminacion en grilla por error
                                 args.Cancel = true;
-                                await this.ToastObj.Show(new ToastModel
+                                await this.ToastObj.ShowAsync(new ToastModel
                                 {
                                     Title = "ERROR!",
                                     Content = "Error al Eliminar insumos: contactar al administrador",
@@ -478,7 +478,7 @@ namespace SupplyChain.Pages.Prods
                     {
                         //cancela eliminacion en grilla por estaar en una formula
                         args.Cancel = true;
-                        await this.ToastObj.Show(new ToastModel
+                        await this.ToastObj.ShowAsync(new ToastModel
                         {
                             Title = "Atención!",
                             Content = "No se puede Eliminar insumos: insumos relacionados con formula",

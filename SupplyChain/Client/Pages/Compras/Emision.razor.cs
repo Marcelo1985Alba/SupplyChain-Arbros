@@ -278,7 +278,7 @@ namespace SupplyChain.Client.Pages.Emision
                     var mensServidor = await response.Content.ReadAsStringAsync();
 
                     Console.WriteLine($"Error:{mensServidor}");
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = "Error al agregar item",
@@ -397,7 +397,7 @@ namespace SupplyChain.Client.Pages.Emision
                     var mensServidor = await response.Content.ReadAsStringAsync();
 
                     Console.WriteLine($"Error:{mensServidor}");
-                    await this.ToastObj.Show(new ToastModel
+                    await this.ToastObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = "Error al agregar item",

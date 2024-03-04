@@ -136,7 +136,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
                 var respuesta = await Http.PutAsJsonAsync($"api/PedidosPendientes/{args.Data.PEDIDO}", args.Data);
                 if (!respuesta.IsSuccessStatusCode)
                 {
-                    await ToasObj.Show(new ToastModel
+                    await ToasObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = $"Ocurrrio un error.Error al intentar Guardar Pedido: {args.Data.PEDIDO} ",
@@ -148,7 +148,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
                 }
                 else
                 {
-                    await this.ToasObj.Show(new ToastModel
+                    await this.ToasObj.ShowAsync(new ToastModel
                     {
                         Title = "ÉXITO!",
                         Content = $"Guardado Correctamente! Nro OF: {args.Data.PEDIDO}",

@@ -97,7 +97,7 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
                         var response = MantCeldasService.Eliminar(mantCeldasABorrar);
                         if (!response.IsCompletedSuccessfully)
                         {
-                            await this.ToastObj.Show(new ToastModel
+                            await this.ToastObj.ShowAsync(new ToastModel
                             {
                                 Title = "EXITO!",
                                 Content = "las mantCeldas seleccionadas fueron eliminadas correctamente.",
@@ -185,7 +185,7 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
             }
             else
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Solo se puede copiar un item",
@@ -295,7 +295,7 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
 
         private async Task ToastMensajeExito()
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = "Guardado Correctamente.",
@@ -307,7 +307,7 @@ namespace SupplyChain.Client.Pages.ABM.MantCeldasP
         }
         private async Task ToastMensajeError()
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = "Ocurrio un Error.",

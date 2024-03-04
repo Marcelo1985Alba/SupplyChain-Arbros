@@ -92,7 +92,7 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
                         var response = LineasService.Eliminar(lineasABorrar);
                         if (!response.IsCompletedSuccessfully)
                         {
-                            await this.ToastObj.Show(new ToastModel
+                            await this.ToastObj.ShowAsync(new ToastModel
                             {
                                 Title = "EXITO!",
                                 Content = "las lineas seleccionadas fueron eliminadas correctamente.",
@@ -131,7 +131,7 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
             }
             else
             {
-                await this.ToastObj.Show(new ToastModel
+                await this.ToastObj.ShowAsync(new ToastModel
                 {
                     Title = "ERROR!",
                     Content = "Solo se puede copiar un item",
@@ -228,7 +228,7 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
 
         private async Task ToastMensajeExito()
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = "Guardado Correctamente.",
@@ -240,7 +240,7 @@ namespace SupplyChain.Client.Pages.ABM.LineasP
         }
         private async Task ToastMensajeError()
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = "Ocurrio un Error.",

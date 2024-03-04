@@ -106,7 +106,7 @@
             var xUser = httpResponse.Response;
 
             //IsDialogLoginVisible = false;
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = $"Bienvenid@ {xUser.Usuario}!",
                 Content = "Usuario y contraseña correcta.",
@@ -122,7 +122,7 @@
             MensajeServidor = "Usuario o Contraseña incorrecta.";
             ;
             Console.WriteLine(await httpResponse.HttpResponseMessage.Content.ReadAsStringAsync());
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = "Usuario o contraseña incorrecta.",

@@ -453,28 +453,28 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.16" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.16" />
-    <PackageReference Include="Syncfusion.Blazor.BarcodeGenerator" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.Buttons" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.Cards" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.DropDowns" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.Gantt" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.Grid" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.HeatMap" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.Kanban" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.LinearGauge" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.PivotTable" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.Popups" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.Schedule" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.SfPdfViewer" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Blazor.Themes" Version="22.2.12" />
-    <PackageReference Include="Syncfusion.Licensing" Version="22.2.12" />
+    <PackageReference Include="Syncfusion.Blazor.BarcodeGenerator" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.Buttons" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.Cards" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.DropDowns" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.FileManager" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.Gantt" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.Grid" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.HeatMap" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.Kanban" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.LinearGauge" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.PivotTable" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.Popups" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.Schedule" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.SfPdfViewer" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="23.1.36" />
+    <PackageReference Include="Syncfusion.Licensing" Version="23.1.36" />
     
-    <PackageReference Include="Syncfusion.Pdf.Net.Core" Version="22.2.12" />
+    <PackageReference Include="Syncfusion.Pdf.Net.Core" Version="23.1.36" />
     
-    <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="22.2.12" />
+    <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="23.1.36" />
     <PackageReference Include="System.Net.Http.Json" Version="7.0.0" />
   </ItemGroup>
 

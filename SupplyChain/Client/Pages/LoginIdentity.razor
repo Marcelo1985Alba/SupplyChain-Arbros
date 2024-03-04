@@ -141,7 +141,7 @@
             MensajeServidor = await httpResponse.HttpResponseMessage.Content.ReadAsStringAsync();
             
             Console.WriteLine(await httpResponse.HttpResponseMessage.Content.ReadAsStringAsync());
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = "Usuario o contraseña incorrecta.",

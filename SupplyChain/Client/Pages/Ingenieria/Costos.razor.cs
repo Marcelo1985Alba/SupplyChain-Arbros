@@ -243,12 +243,12 @@ namespace SupplyChain.Client.Pages.Ingenieria
                 listaDespiece = await Http.GetFromJsonAsync<List<DespiecePlanificacion>>("api/Planificacion/Despiece/" +
                     $"{args.RowData.CG_PROD.Trim()}/1/1");
                 SpinnerVisible = false;
-                await DialogDespieceRef.Show();
+                await DialogDespieceRef.ShowAsync();
             }
         }
         private async Task ToastMensajeExito(string content = "Guardado con exito!")
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = content,

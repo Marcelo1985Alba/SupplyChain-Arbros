@@ -88,32 +88,32 @@
     };
     private async Task InfoBtnOnClick()
     {
-        await this.ToastObj.Show(Toast[3]);
+        await this.ToastObj.ShowAsync(Toast[3]);
     }
     private async Task WarnBtnOnClick()
     {
-        await this.ToastObj.Show(Toast[0]);
+        await this.ToastObj.ShowAsync(Toast[0]);
     }
     private async Task SuccessBtnOnClick()
     {
-        await this.ToastObj.Show(Toast[1]);
+        await this.ToastObj.ShowAsync(Toast[1]);
     }
     private async Task ErrorBtnOnClick()
     {
-        await this.ToastObj.Show(Toast[2]);
+        await this.ToastObj.ShowAsync(Toast[2]);
     }
     private void HideBtnOnClick()
     {
-        this.ToastObj.Hide("All");
+        this.ToastObj.HideAsync("All");
     }
 
     public async Task ShowAsyncError()
     {
-        await this.ToastObj.Show(Toast[2]);
+        await this.ToastObj.ShowAsync(Toast[2]);
     }
 
     public async Task ShowAsync()
     {
-        await this.ToastObj.Show(Toast[1]);
+        await this.ToastObj.ShowAsync(Toast[1]);
     }
 }
