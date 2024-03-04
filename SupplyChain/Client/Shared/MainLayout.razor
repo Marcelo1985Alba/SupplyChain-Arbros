@@ -317,9 +317,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <CascadingValue Value="hubConnection">
-                                @* <SfButton Content="Mensaje" IsPrimary="false" CssClass="btn-sm e-info" IconCss="fa fa-eye"
-                                          OnClick="mensajeChat"></SfButton> *@
-                                @Body
+                                 @Body
                                     
                                 </CascadingValue>
                             </div>
@@ -376,30 +374,6 @@
         this.Visibility = false;
         this.showBtnClass = "e-outline e-primary e-success";
     }
-
-    // private void CloseDialog()
-    // {
-    //     hubConnection?.On<string, string>("ReceiveChatNotification", (message, senderUserId) =>
-    //     {
-    //         if ()
-    //         {
-    //            iconClassNotification = "mdi-message";
-    //             Js.InvokeAsync<string>("PlayAudio", "notification");
-    //             ToastObj.ShowAsync(new ToastModel()
-    //             {
-    //                 Title = "Nuevo Mensaje Recibido",
-    //                 Content = message,
-    //                 NewestOnTop = true,
-    //                 ShowCloseButton = true,
-    //                 ShowProgressBar = true,
-    //                 this.Visibility = true
-
-    //                 };
-    //     }
-
-    // }
-
-  
 
     protected async override Task OnInitializedAsync()
     {

@@ -88,6 +88,7 @@ namespace SupplyChain.Pages.Modelos
 
         protected void OnCardSearch(Microsoft.AspNetCore.Components.ChangeEventArgs args)
         {
+            SpinnerVisible = true;
             string searchString = (string)args.Value;
             if (searchString == string.Empty)
             {
@@ -97,6 +98,7 @@ namespace SupplyChain.Pages.Modelos
             {
                 CardQuery = new Query().Search(searchString, new List<string>() { "PEDIDO", "DES_ART", "DES_CLI" }, "contains", true);
             }
+            SpinnerVisible = false;
         }
 
         protected async Task OnActionBegin(Syncfusion.Blazor.Kanban.ActionEventArgs<PedCli> args)

@@ -15,17 +15,16 @@
 </SfToast>
 
 <div class="row">
-    <div col-12>
-        <SfTextBox ID="search_text" Placeholder="Buscar por Numero de Pedidos o Nombre de Cliente..."
-                   ShowClearButton="true" Value="@SearchValue" FloatLabelType="FloatLabelType.Never"
+    <div class="col-lg-6 col-md-8 col-sm-12 mb-1">
+        <SfTextBox @ref="TextBoxDropDownObj" ID="search_text" Placeholder="Buscar por Numero de Pedidos o Nombre de Cliente..." CssClass="e-filled"
+                   ShowClearButton="true" Value="@SearchValue" FloatLabelType="FloatLabelType.Never" Created="CreatedHandler"
                    OnChange="OnCardSearch" OnFocus="@(() => { PriorityValue = "None";  StatusValue = "None"; })">
         </SfTextBox>
     </div>
     
     <div class="col-12">
-        <div class="control_wrapper">
             <SfKanban @ref="@refKanban" ID="logisticaKanban" TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis"
-                      AllowDragAndDrop="true" Height="350px" Query="@CardQuery" Width="100%" EnableTooltip="true">
+                      AllowDragAndDrop="true" Height="300px" Query="@CardQuery" Width="100%" EnableTooltip="true">
                 <KanbanEvents TValue="PedCli"
                               ActionBegin="@((a)=> OnActionBegin(a))"
                               ActionComplete="@((a)=> OnActionComplete(a))"
@@ -39,7 +38,7 @@
                                     KanbanColumn column = (KanbanColumn)context;
                                     <div class="header-template-wrap">
                                         <div class="header-icon e-icons @column.KeyField[0]"></div>
-                                        <div class="text-uppercase font-weight-bold"><strong>@column.HeaderText</strong></div>
+                                        <div class="text text-uppercase font-weight-bold"><strong>@column.HeaderText</strong></div>
                                     </div>
                                 }
                             </Template>
@@ -109,13 +108,12 @@
                     </KanbanSwimlaneSettings>
                 </div>
             </SfKanban>
-        </div>
-        
-
     </div>
 </div>
 
 @code {
+    protected SfTextBox TextBoxDropDownObj;
+
     private List<Syncfusion.Blazor.Kanban.ColumnModel> columnData = new List<Syncfusion.Blazor.Kanban.ColumnModel>() {
         new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Remitir", KeyField= new List<string>() { "Remitir" } },
         new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Inspección", KeyField= new List<string>() { "Inspeccion" } },
@@ -125,6 +123,19 @@
         new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Facturar", KeyField= new List<string>() { "Facturar" } },
         new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Pago", KeyField= new List<string>() { "Pago" } }
     };
+
+
+    private void CreatedHandler(Object args)
+    {
+        // Event creation with event handler
+        var Click = EventCallback.Factory.Create<MouseEventArgs>(this, SearchClick);
+        this.TextBoxDropDownObj.AddIconAsync("append", "e-icons e-search", new Dictionary<string, object>() { { "onclick", Click } });
+    }
+
+    public void SearchClick()
+    {
+        // Icon Click event triggered
+    }
 }
 
 
