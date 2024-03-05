@@ -52,19 +52,19 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             SpinnerVisible = true;
             await GetPedidos(SupplyChain.Shared.Enum.EstadoPedido.TodosPendientes);
 
-            var response = await Http.GetFromJsonAsync<List<vEstadoPedido>>
-                ("api/EstadoPedidos");
-            if (response.Error)
-            {
-                Console.WriteLine("E R R O R !!!");
-                Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
-            }
-            else
-            {
-                DataEstadosPedidos = response.Response;
-                refSfGrid?.PreventRender();
-                //await refSfGrid?.AutoFitColumnsAsync();
-            }
+            //var response = await Http.GetFromJsonAsync<List<vEstadoPedido>>
+            //    ("api/EstadoPedidos");
+            //if (response.Error)
+            //{
+            //    Console.WriteLine("E R R O R !!!");
+            //    Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
+            //}
+            //else
+            //{
+            //    DataEstadosPedidos = response.Response;
+            //    refSfGrid?.PreventRender();
+            //    //await refSfGrid?.AutoFitColumnsAsync();
+            //}
             SpinnerVisible = false;
         }
 
