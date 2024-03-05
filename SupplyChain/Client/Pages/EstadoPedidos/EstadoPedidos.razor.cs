@@ -20,6 +20,7 @@ using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Grid;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.Design;
 
 namespace SupplyChain.Client.Pages.EstadoPedidos
 {
@@ -273,8 +274,11 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             {
                 args.Cell.AddClass(new string[] { "color-estado-pedido-cobrado" });
             }
+            else if (args.Data.ESTADO_PEDIDO == 12) /*SIN CARGO*/
+            {
+                args.Cell.AddClass(new string[] { "color-estado-sin-cargo" });
+            }
         }
-
         protected async Task OnRowSelected(RowSelectEventArgs<vEstadoPedido> arg)
         {
             arg.PreventRender = true;
@@ -457,6 +461,8 @@ namespace SupplyChain.Client.Pages.EstadoPedidos
             }
             else
                 args.Text = "";
+
+            
         }
     }
 }

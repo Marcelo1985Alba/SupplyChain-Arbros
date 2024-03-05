@@ -36,6 +36,22 @@ namespace SupplyChain.Server.Repositorios
                     .SumAsync(p => p.STOCK) ?? 0;
         }
 
+
+        public async Task<decimal> ObtenerStockReservaByOF(int cg_ordf, string cg_art)
+        {
+            return await DbSet.Where(p => p.TIPOO == 9 && p.CG_ORDF == cg_ordf && p.CG_DEP == 15 && p.CG_ART == cg_art)
+                    .SumAsync(p => p.STOCK) ?? 0;
+        }
+
+        public async Task<decimal> ObtenerStockReserva(string cg_art, string despacho, string serie, string lote)
+        {
+            return await DbSet.Where(p => p.CG_DEP == 15 && p.CG_ART.ToUpper() == cg_art.ToUpper()
+                                     && p.DESPACHO.ToLower() == despacho.ToLower() && p.LOTE.ToLower() == lote.ToLower() 
+                                     && p.SERIE.ToLower() == serie.ToLower())
+                    .SumAsync(p => p.STOCK) ?? 0;
+        }
+
+
         public async Task<List<Pedidos>> ObtenerByNumeroVale(int vale, int cg_cia_usuario)
         {
             

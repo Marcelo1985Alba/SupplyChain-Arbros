@@ -149,6 +149,8 @@ namespace SupplyChain.Server
             services.AddTransient<SemaforoRepository>();
             services.AddTransient<MotivosPresupuestoRepository>();
             services.AddTransient<CampoComRepository>();
+            services.AddTransient<ProcedimientosRepository>();
+            //services.AddTransient<ProcunProcesosRepository>();
             //services.AddTransient<CargaValoresRepository>();
             //services.AddTransient<MatproveRepository>();
             #endregion

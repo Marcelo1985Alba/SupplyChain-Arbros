@@ -56,6 +56,9 @@ namespace SupplyChain
          * 1) con el deposito de ingres
          * 2) con el deposito de salida
          */
+        /// <summary>
+        /// Se utilizar para guardar el deposito de ingreso para Movimiento entre depositos
+        /// </summary>
         [NotMapped]
         [RequireDepositoItem]
         public int CG_DEP_ALT { get; set; } = 0;
@@ -73,7 +76,31 @@ namespace SupplyChain
         [ColumnaGridViewAtributo(Name = "Letra de la factura")]
         public string LEYENDA { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Remito")]
+        //resumen: sdsds
         public string REMITO { get; set; } = "0000-00000000";
+
+        /// <summary>
+        /// Almacena el tipo de operacion en stock. Ejemplos:
+        /// </summary>
+        /// <remarks>
+        /// <code>
+        /// Tipoo = 5, Descrip = "Recepción de insumos de un proveedor"
+        /// 
+        /// Tipoo = 6, Descrip = "Devolución de insumos a un proveedor"
+        /// 
+        /// Tipoo = 9, Descrip = "Movimientos entre depósitos"
+        /// 
+        /// Tipoo = 10, Descrip = "Entrega de insumos a una orden de fabricación"
+        /// 
+        /// Tipoo = 11, Descrip = "Devolución de insumos de una orden de fabricación"
+        /// 
+        /// Tipoo = 21, Descrip = "Ajuste de Inventario" 
+        /// 
+        /// Tipoo = 27, Descrip = "Entrega a Planta sin OF"
+        /// 
+        /// Tipoo = 28, Descrip = "Entrega de un insumo a una orden de armado firme o en curso"
+        /// </code>
+        /// </remarks>
         [ColumnaGridViewAtributo(Name = "Tipo de operación")]
         public int? TIPOO { get; set; } = 0;
         [ColumnaGridViewAtributo(Name = "Pedido")]
@@ -110,6 +137,13 @@ namespace SupplyChain
         public string TIPO { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Lote")]
         [RequireWhenExigeLote]
+        //
+        // Resumen:
+        //     Defines the cell edit template that used as editor for a particular column.
+        //
+        // Comentarios:
+        //     The parameters passed to the templates can be accessed using implicit parameter
+        //     named context. The context is of type TValue.
         public string LOTE { get; set; } = "";
         [ColumnaGridViewAtributo(Name = "Serie")]
         [RequireWhenExigeSerie]
@@ -214,12 +248,24 @@ namespace SupplyChain
         public decimal CONFIRMADO { get; set; }
 
 
-        [NotMapped]
-        public EstadoItem ESTADO { get; set; } = EstadoItem.Agregado;
+        [NotMapped] public EstadoItem ESTADO { get; set; } = EstadoItem.Agregado;
 
-        [NotMapped]
-        public int StockPlaneado { get; set; } = 0;
-        [NotMapped]
-        public int StockEnFabricacion { get; set; } = 0;
+        [NotMapped] public int StockPlaneado { get; set; } = 0;
+        [NotMapped] public int StockEnFabricacion { get; set; } = 0;
+
+        /// <summary>
+        /// Stock del deposito de insumos y reserva de todos los despachos
+        /// </summary>
+        [NotMapped] public decimal StockReal { get; set; } = 0;
+
+        /// <summary>
+        /// Stock para una determinada orden orden del insumo 
+        /// </summary>
+        [NotMapped] public decimal Reserva { get; set; } = 0;
+
+        /// <summary>
+        /// Stock Total del deposito de Reserva para un determinado item
+        /// </summary>
+        [NotMapped] public decimal ReservaTotal { get; set; } = 0;
     }
 }

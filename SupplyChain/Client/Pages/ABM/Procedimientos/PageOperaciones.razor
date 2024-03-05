@@ -1,0 +1,69 @@
+﻿@page "/Abms/procedimientos"
+@using SupplyChain.Shared
+@using SupplyChain
+
+@inherits PageProcedimientosBase
+
+<div class="row">
+    <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+            OnReiniciar="(async()=>await OnReiniciarGrilla())"
+            OnVistaSelected="(async(v)=>await OnVistaSeleccionada(v))" />
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-12">
+        <SfToast ID="toast_default" @ref="@ToastObj">
+            <ToastPosition X="Center" Y="Top"></ToastPosition>
+        </SfToast>
+
+        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                @ref="refGrid" DataSource="@Operacion" Width="100%" Toolbar="Toolbaritems"
+            AllowExcelExport="true" AllowGrouping="true" ID="grdOpe" AllowFiltering="true" AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
+            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
+            <GridEvents  OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolbarHandler" OnActionComplete="OnActionCompleteHandler" TValue="Operaciones"></GridEvents>
+            <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
+                ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog">
+            </GridEditSettings>
+
+            <GridColumns>
+                <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" AllowFiltering="true" Width="80px"></GridColumn>                      @*//DATOS GENERALES*@
+                <GridColumn Field=@nameof(Operaciones.VALE) HeaderText="VALE" TextAlign="TextAlign.Left" Width="80px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.DESPACHO) HeaderText="DESPACHO" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.CG_PROD) HeaderText="CODIGO PROD" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.CG_ORDEN) HeaderText="ORDEN" TextAlign="TextAlign.Left" Width="80px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.DESCAL) HeaderText="DESCAL" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.CARCAL) HeaderText="CARCAL" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.UNIDADM) HeaderText="UNID.MEDIDA" TextAlign="TextAlign.Left" Width="120px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.CANTMEDIDA) HeaderText="CANT.MEDIDA" TextAlign="TextAlign.Left" Width="80px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.TOLE1) HeaderText="TOLE1" TextAlign="TextAlign.Left" Width="80px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.TOLE2) HeaderText="TOLE2" TextAlign="TextAlign.Left" Width="80px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.OBSERV) HeaderText="OBSERVACIONES" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.CG_PROVE) HeaderText="COD.PROVEEDOR" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.REMITO) HeaderText="REMITO" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.CG_ORDF) HeaderText="ORDEN FABRICACIÓN" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.UNID) HeaderText="UNID" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.NUM_PASE) HeaderText="NUM.PASE" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.FE_REG) HeaderText="FECHA REGISTRADO" TextAlign="TextAlign.Left" Type="ColumnType.DateTime" Width="160px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.APROBADO) HeaderText="APROBADO" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.ANULADO) HeaderText="ANULADO" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.CG_CLI) HeaderText="COD.CLIENTE" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
+                <GridColumn Field=@nameof(Operaciones.FE_REG) HeaderText="FE REGISTRO" TextAlign="TextAlign.Left" Type="ColumnType.DateTime" Width="100px"></GridColumn>
+              
+            </GridColumns>
+            <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
+        </SfGrid>
+
+    </div>
+    @if (popupFormVisible)
+    {
+        
+    }
+    <FormOperaciones @ref="refFormOperaciones" Operaciones="operacionesSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
+                     OnGuardar="@(async(p)=>await Guardar(p))"></FormOperaciones>
+</div>

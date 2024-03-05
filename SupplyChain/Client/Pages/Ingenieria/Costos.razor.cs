@@ -225,7 +225,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
 
         protected async Task AbrirTrazabilidad()
         {
-            await JsRuntime.InvokeVoidAsync("open", new object[2] { $"/ingenieria/consulta-formulas/{Codigo.Trim()}", "_blank" });
+            await JsRuntime.InvokeVoidAsync("open", new object[2] { $"/ingenieria/definicion-formulas/{Codigo.Trim()}", "_blank" });
         }
         protected async Task QueryCellInfoHandler(QueryCellInfoEventArgs<vIngenieriaProductosFormulas> args)
         {

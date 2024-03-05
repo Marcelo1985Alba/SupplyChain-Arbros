@@ -31,6 +31,8 @@ namespace SupplyChain
         public virtual DbSet<Solution> Solution { get; set; }
         public virtual DbSet<Operario> Operario { get; set; }
         public virtual DbSet<EstadosCargaMaquina> EstadosCargaMaquinas { get; set; }
+        public virtual DbSet<PLANNER> PLANNER { get; set; }
+        public virtual DbSet<Operaciones> Procedimiento { get; set; }
         //public virtual DbSet<Prod> Prod { get; set; }
         public virtual DbSet<Cliente> Cliente { get; set; }
         public virtual DbSet<ClienteExterno> ClientesExternos { get; set; }
@@ -100,6 +102,8 @@ namespace SupplyChain
         public DbSet<StockSP> StocksSP { get; set; }
         public DbSet<Compra> Compras { get; set; }
         public DbSet<Cotizaciones> Cotizaciones { get; set; }
+        public DbSet<Tareas> Tareas { get; set; }
+        public DbSet<TareasPorUsuario> TareasPorUsuario { get; set; }
         public DbSet<ResumenStock> ResumenStock { get; set; }
         public DbSet<vResumenStock> vResumenStock { get; set; }
         public DbSet<Modulo> Modulos { get; set; }
@@ -153,13 +157,14 @@ namespace SupplyChain
         public DbSet<AspNetRoles> AspNetRoles { get; set; }
         public DbSet<ProcalsMP> ProcalsMP { get; set; }
         public DbSet<vControlCalidadPendientes> vcontrolCalidadPendientes { get; set; }
-        public DbSet<Procesos> Procesos { get; set; }
+        //public DbSet<Procesos> Procesos { get; set; }
      
         public DbSet<vProveedorItris> vProveedoresItris { get; set; }
 
         public DbSet<SolCotEmail> SolCotEmails { get; set; }
 
         public DbSet<CampoComodin> CampoComodin {  get; set; }
+        public DbSet<ProcunProcesos> ProcunProcesos{ get; set; }
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -228,7 +233,6 @@ namespace SupplyChain
                 eb.ToView("vPendientesFabricar");
             });
 
-
             modelBuilder.Entity<vResumenStock>(
             eb =>
             {
@@ -254,6 +258,7 @@ namespace SupplyChain
             modelBuilder.Entity<ItemAbastecimiento>().HasNoKey().ToView(null);
             modelBuilder.Entity<EstadVenta>().HasNoKey().ToView(null);
             modelBuilder.Entity<StockSP>().HasNoKey().ToView(null);
+            modelBuilder.Entity<PLANNER>().HasNoKey().ToView(null);
             modelBuilder.Entity<PedCli>().ToTable(tb => tb.HasTrigger("trgPedcli"));
             modelBuilder.Entity<Pedidos>().ToTable(tb => tb.HasTrigger("trgResumenStock"));
             modelBuilder.Entity<Programa>().ToTable(tb => tb.HasTrigger("trgPrograma"));

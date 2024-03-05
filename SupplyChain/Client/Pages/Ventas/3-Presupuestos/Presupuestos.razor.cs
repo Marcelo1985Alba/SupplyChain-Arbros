@@ -73,9 +73,12 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
     
         protected List<string> Monedas = new() { "PESOS", "DOLARES" };
 
-
+    
         protected PresupuestoAnterior presupuesto = new();
         protected ConfirmacionDialog ConfirmacionEliminarDialog;
+        private string colores;
+        private string colores2;
+
         protected async override Task OnInitializedAsync()
         {
             MainLayout.Titulo = "Presupuestos";
@@ -88,6 +91,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         public async Task Actualizar(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, Semaforo> args)
         {
+            
             var presupuesto = await PresupuestoService.ActualizarColor(presup.Id, args.Value);
             
         }
@@ -96,6 +100,9 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         {
             var motivos = await PresupuestoService.EnviarMotivos(presup.Id, args.Value);
         }
+
+       
+
         public async Task GuardarComentario(int id, string comentario)
         {
             try
@@ -104,6 +111,19 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
             }
             catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public async Task EnviarAviso(int id, string aviso)
+        {
+
+            try
+            {
+                var presup = await PresupuestoService.EnviarAviso(id, aviso);
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -125,7 +145,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 Presupuestos = response.Response.OrderByDescending(s => s.Id).ToList();
             }
         }
-
+       
         protected async Task GetSemaforo()
         {
             var response = await SemaforoService.Get();
@@ -281,7 +301,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                         await refFormPresupuesto.ShowAsync(seleccionado[0].Id);
                         popupFormVisible = true;
                     }
-                    SpinnerVisible = true;
+                    SpinnerVisible = false;
 
                 }
             }
@@ -346,7 +366,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
             SpinnerVisible = false;
         }
-
+      
         protected async Task Guardar(Presupuesto presupuesto)
         {
             if (presupuesto.GUARDADO)
@@ -365,6 +385,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                         MONEDA = presupuesto.MONEDA,
                         TOTAL = presupuesto.TOTAL,
                         COMENTARIO = presupuesto.COMENTARIO,
+                        AVISO = presupuesto.AVISO,
                         USUARIO = auth.User.Identity.Name
                     };
                     Presupuestos.Add(nuevoPresup);
@@ -380,6 +401,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                     presupActualizado.TOTAL = presupuesto.TOTAL;
                     presupActualizado.USUARIO = presupuesto.USUARIO;
                     presupActualizado.COMENTARIO = presupuesto.COMENTARIO;
+                    presupActualizado.AVISO=presupuesto.AVISO;
                 }
 
 
@@ -402,7 +424,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = content,
@@ -414,7 +436,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         }
         private async Task ToastMensajeError(string content = "Ocurrio un Error.")
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = content,
@@ -424,6 +446,29 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 ShowProgressBar = true
             });
         }
-
+        
+        public void CustomizeCell(QueryCellInfoEventArgs<vPresupuestos> args)
+        {
+          
+                if (args.Column.Field == "COLOR")
+                {
+                    if (args.Data.COLOR != null)
+                    {
+                        if (args.Data.COLOR.Trim() == "PERDIDA")
+                        {
+                            args.Cell.AddClass(new string[] { "perdida" });
+                        }
+                        else if (args.Data.COLOR.Trim() == "PENDIENTE")
+                        {
+                            args.Cell.AddClass(new string[] { "pendiente" });
+                        }
+                        else if (args.Data.COLOR.Trim() == "GANADA")
+                        {
+                            args.Cell.AddClass(new string[] { "ganada" });
+                            //args.Data.TIENEPEDIDO =1;
+                        }
+                    }
+                }
+        }
     }
 }

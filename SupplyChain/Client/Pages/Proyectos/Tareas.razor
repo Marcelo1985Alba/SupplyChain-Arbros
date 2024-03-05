@@ -1,0 +1,121 @@
+﻿@page "/tareas"
+
+@using Syncfusion.Blazor.Kanban
+@using System.Diagnostics
+@using System.Security.Claims
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Calendars
+@attribute [Authorize(Roles = "Administrador, Produccion, Ventas")]
+
+@inherits SupplyChain.Client.Pages.Proyectos.TareasPageBase
+
+
+<SfSpinner @ref="spinnerRef" @bind-Visible="@SpinnerVisible" Label="Cargando..." Size="100" Type="SpinnerType.Fabric"/>
+
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+
+<div class="row">
+    <div class="col-12">
+        <div class="btn" style="margin: 0 0 7px 7px;">
+            <SfButton @onclick="AddRecord">Añadir Tarea</SfButton>
+        </div>
+        <SfKanban @ref="refKanban" TValue="SupplyChain.Shared.Tareas" KeyField="Estado" DataSource="tasks">
+            <KanbanEvents TValue="SupplyChain.Shared.Tareas" DragStop="@onDragStop" DialogClose="@DialogCloseHandler"></KanbanEvents>
+            <KanbanColumns>
+                <KanbanColumn HeaderText="Planificado" KeyField="@(new List<string>() { "Planificado" })"></KanbanColumn>
+                <KanbanColumn HeaderText="En Progreso" KeyField="@(new List<string>() { "En Progreso" })"></KanbanColumn>
+                <KanbanColumn HeaderText="En Prueba" KeyField="@(new List<string>() { "En Prueba" })"></KanbanColumn>
+                <KanbanColumn HeaderText="Terminado" KeyField="@(new List<string>() { "Terminado" })" Visible="false"></KanbanColumn>
+            </KanbanColumns>
+            <KanbanCardSettings HeaderField="Titulo" ContentField="Resumen" TagsField="Asignados" GrabberField="Color"></KanbanCardSettings>
+            <KanbanSwimlaneSettings KeyField="Modulo"></KanbanSwimlaneSettings>
+            <KanbanDialogSettings Width="50%">
+                <Template>
+                    @{
+                        var data = (SupplyChain.Shared.Tareas)context;
+                        <div>
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <td class="e-label">Tarea</td>
+                                    <td>
+                                        <SfTextBox CssClass="e-field" @bind-Value="@data.Titulo" Enabled="true"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="e-label">Resumen</td>
+                                    <td>
+                                        <SfTextBox CssClass="e-field" Multiline="true" @bind-Value="@data.Resumen" Enabled="true"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="e-label">Creador</td>
+                                    <td>
+                                        <SfTextBox CssClass="e-field" @bind-Value="@data.NombreCreador" Enabled="false"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="e-label">Estado</td>
+                                    <td>
+                                        <SfDropDownList TValue="string" TItem="DropDownModel" CssClass="e-field" DataSource="@StatusData" @bind-Value="@data.Estado">
+                                            <DropDownListFieldSettings Text="Value" Value="Value"/>
+                                        </SfDropDownList>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="e-label">Modulo</td>
+                                    <td>
+                                        <SfDropDownList TValue="string" AllowFiltering="true" TItem="DropDownModel" CssClass="e-field" DataSource="@ModulosData" @bind-Value="@data.Modulo">
+                                            <DropDownListFieldSettings Text="Value" Value="Value"/>
+                                        </SfDropDownList>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="e-label">Fecha Requerida</td>
+                                    <td>
+                                        <SfDatePicker CssClass="e-field" @bind-Value="@(data.FechaRequerida)" Enabled="true" ShowTodayButton="true" Format='dd/MM/yyyy'></SfDatePicker>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="e-label">Importancia</td>
+                                    <td>
+                                        <SfDropDownList TValue="string" TItem="DropDownModel" CssClass="e-field" DataSource="@ImportanciaData" @bind-Value="@data.Importancia">
+                                            <DropDownListFieldSettings Text="Value" Value="Value"/>
+                                        </SfDropDownList>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @{
+                                            if (!isAdding)
+                                            {
+                                                if (data.Asignados.Contains(Usuarios.FirstOrDefault(x => x.Id == authState.User.Claims.FirstOrDefault(i => i.Type == ClaimTypes.NameIdentifier)!.Value)!.USUARIO))
+                                                {
+                                                    <SfButton CssClass="btn-take-task" OnClick="@(() => DejarTarea(data))">Dejar Tarea</SfButton>
+                                                }
+                                                else
+                                                {
+                                                    <SfButton CssClass="btn-take-task" OnClick="@(() => TomarTarea(data))">Tomar Tarea</SfButton>
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </Template>
+            </KanbanDialogSettings>
+        </SfKanban>
+    </div>
+</div>
+
+<style>
+    .e-dialog-delete {
+        display: none;
+    }
+</style>

@@ -14,6 +14,7 @@ namespace SupplyChain.Shared
         [Display(Name ="PRESUPUESTOS")]
         public int Id { get; set; }
         public DateTime Fecha { get; set; } = DateTime.Now;
+        //public DateTime FechaValidez { get; set; }
         public int CG_CLI { get; set; } = 0;
         [Display(Name = "CLIENTE")]
         public string DES_CLI { get; set; }
@@ -25,6 +26,6 @@ namespace SupplyChain.Shared
         public int? ASIGNA { get; set; } = 0;
         public string COMENTARIO { get; set; } = "";
         public string MOTIVO { get; set; }
-
+        public string AVISO { get; set; } = "";
     }
 }

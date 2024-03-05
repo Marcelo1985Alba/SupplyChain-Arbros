@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/SupplyChain/Server/wwwroot/pdf/CC27359.pdf

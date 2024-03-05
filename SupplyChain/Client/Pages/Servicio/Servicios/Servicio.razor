@@ -1,6 +1,6 @@
 ﻿@page "/servicio/listado"
 @page "/servicio/list/{Pedido:int}"
-@using System.IO
+ @using System.IO
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Navigations
@@ -100,7 +100,7 @@
     [Inject] protected IRepositoryHttp Http { get; set; }
     [Inject] protected IJSRuntime JS { get; set; }
     [Inject] protected CeldasService CeldasService { get; set; }
-    
+
     [CascadingParameter] public MainLayout Layout { get; set; }
 
     [Parameter] public int Pedido { get; set; } = 0;
@@ -829,10 +829,15 @@
                         espaciosEmail = espaciosEmail + " ";
                     }
                     string email = "";
-                    if (ClienteList.EMAIL_CONTACTO.Trim().Length > 29)
+
+                    if (!string.IsNullOrEmpty(ClienteList.EMAIL_CONTACTO))
                     {
-                        email = ClienteList.EMAIL_CONTACTO;
+                        if (ClienteList.EMAIL_CONTACTO.Trim().Length > 29)
+                        {
+                            email = ClienteList.EMAIL_CONTACTO;
+                        }
                     }
+                    
                     string espaciosMedida = "";
                     for (int i = 0; i < (46 - selectedRecord.IDENTIFICACION.Trim().Length); i++)
                     {

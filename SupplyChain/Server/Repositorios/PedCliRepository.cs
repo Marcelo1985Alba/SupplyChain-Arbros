@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BoldReports.RDL.DOM;
+using Microsoft.EntityFrameworkCore;
+using SupplyChain.Client.Pages.Servicio.Servicios;
 using SupplyChain.Server.Data.Repository;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
 using SupplyChain.Shared.Logística;
 using SupplyChain.Shared.Models;
+using Syncfusion.Blazor.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +18,14 @@ namespace SupplyChain.Server.Repositorios
     {
         private readonly vDireccionesEntregaRepository direccionesEntregaRepository;
         private readonly GeneraRepository generaRepository;
+        private readonly PresupuestoRepository presupuestoRepository;
 
         public PedCliRepository(AppDbContext db, vDireccionesEntregaRepository direccionesEntregaRepository, 
-            GeneraRepository generaRepository) : base(db)
+            GeneraRepository generaRepository, PresupuestoRepository presupuestoRepository) : base(db)
         {
             this.direccionesEntregaRepository = direccionesEntregaRepository;
             this.generaRepository = generaRepository;
+            this.presupuestoRepository = presupuestoRepository;
         }
 
         internal async Task<bool> TieneRemito(int pedido)
@@ -51,17 +56,40 @@ namespace SupplyChain.Server.Repositorios
         }
         public async Task<IEnumerable<PedCli>> ObtenerPedCliPedidos()
         {
-            string xSQL = string.Format("SELECT Pedcli.*, CAST( (CASE WHEN Pedidos.FLAG = 0 THEN 0 ELSE 1 END) AS BIT) AS FLAG " +
-                "FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
-                "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) where(pedidos.FLAG = 0 AND Programa.CG_ESTADO = 3 " +
-                "AND Pedidos.CG_ORDF != 0 AND(Pedidos.TIPOO = 1)) " +
-                "UNION " +
-                "SELECT Pedcli.*, CAST( (CASE WHEN Pedidos.FLAG = 0 THEN 0 ELSE 1 END) AS BIT) AS FLAG " +
-                "FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
-                "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) " +
-                "where Pedcli.PEDIDO NOT IN(select PEDIDO from Pedidos where TIPOO = 1) " +
-                "AND Programa.CG_ESTADO = 3  AND Pedcli.CANTPED > 0 AND Pedidos.TIPOO != 28");
+            string xSQL = string.Format("SELECT Pedcli.DES_CLI,Pedcli.PRESUP,Pedcli.OBRA,Pedcli.PEDIDO,Pedcli.CG_ESTADPEDCLI,Pedcli.CG_ESTADO,Pedcli.FE_PED,Pedcli.ORDCAR,Pedcli.CG_CAM,Pedcli.CG_ART, " +
+                "Pedcli.DESCUENTO, Pedcli.DES_ART,Pedcli.CANTPED,Pedcli.UNID,Pedcli.CANTEMP,Pedcli.CANTENT,Pedcli.IMPORTE1,Pedcli.IMPORTE2,Pedcli.IMPORTE3,pedcli.IMPORTE4,Pedcli.IMPORTE6,Pedcli.IVA, "+
+                "Pedcli.ENTRPREV,pedcli.ENTRREAL,Pedcli.cg_cli,PEDIDOS.REMITO,Pedidos.Factura, Pedcli.CG_CATEG,Pedcli.ORCO, Pedcli.DPP,Pedcli.DFF,Pedcli.BONIFIC,Pedcli.CG_TRANS, " +
+                "Pedcli.CG_ZONA, Pedcli.DIRENT,Pedcli.LOCALIDAD,Pedcli.CG_POST,Pedcli.CG_PROV,Pedcli.CG_VEN,Pedcli.LISTA,Pedcli.FACTCAMION,Pedcli.CONCARGO,pedcli.IMPRIMIBLE,Pedcli.GARANTIA,Pedcli.DES_OBRA, " +
+                "Pedcli.SERVICIO,Pedcli.FE_VENC,Pedcli.CG_CLAS,Pedcli.CG_DEp,Pedcli.USUARIO,Pedcli.REGISTRO,Pedcli.FE_REG,Pedcli.MERMA,Pedcli.CG_CIA,Pedcli.NUMOCI,Pedcli.MONEDA,Pedcli.FE_INDIC, " +
+                "Pedcli.VA_INDIC,Pedcli.RECAL,Pedcli.OBSERITEM,Pedcli.CG_ART1,Pedcli.CG_COT,Pedcli.COMBO,Pedcli.CG_EXPRESO,Pedcli.CG_EXPORT,Pedcli.CG_FORM,Pedcli.CAMPOCOM1,Pedcli.CAMPOCOM2,Pedcli.CAMPOCOM3, " +
+                "Pedcli.CAMPOCOM4,Pedcli.CAMPOCOM5,Pedcli.CAMPOCOM6,Pedcli.CG_PROY,Pedcli.VIA,Pedcli.OBS1,Pedcli.OBS2,Pedcli.OBS3,Pedcli.OBS4,Pedcli.PROFORMA,Pedcli.MUESTRA,Pedcli.PREVORIG,Pedcli.DES_ART1," +
+                "Pedcli.STOCKA,Pedcli.UNIDA,Pedcli.CANTENTA,Pedcli.CG_DEN,Pedcli.lote,Pedcli.despacho,Pedcli.serie,Pedcli.cg_pallet,Pedcli.campana,Pedcli.OCOMPRA,Pedcli.CANTPED_ORI,Pedcli.CG_POSTA, " +
+                "Pedcli.DIRECC,Pedcli.ESTADO_IT,Pedcli.FE_AUT,Pedcli.USU_AUT,Pedcli.NOMRP,Pedcli.CG_FORM_VENTAS,Pedcli.CONDVEN,Pedcli.CG_COS,Pedcli.ESTADO_LOGISTICA,Pedcli.CAMPOCOM7,Pedcli.CAMPOCOM8, " +
+                "Pedcli.CG_COND_ENTREGA, CAST( (CASE WHEN Pedidos.FLAG = 0 THEN 0 ELSE 1 END) AS BIT) AS FLAG FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
+                "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) where(pedidos.FLAG = 0 AND Programa.CG_ESTADO = 3 AND Pedidos.CG_ORDF != 0 AND(Pedidos.TIPOO = 1)) UNION SELECT Pedcli.DES_CLI, " +
+                "Pedcli.PRESUP,Pedcli.OBRA,Pedcli.PEDIDO,Pedcli.CG_ESTADPEDCLI,Pedcli.CG_ESTADO,Pedcli.FE_PED,Pedcli.ORDCAR,Pedcli.CG_CAM,Pedcli.CG_ART,Pedcli.DESCUENTO,Pedcli.DES_ART,Pedcli.CANTPED,Pedcli.UNID, " +
+                "Pedcli.CANTEMP,Pedcli.CANTENT,Pedcli.IMPORTE1,Pedcli.IMPORTE2,Pedcli.IMPORTE3,pedcli.IMPORTE4,Pedcli.IMPORTE6,Pedcli.IVA,Pedcli.ENTRPREV,pedcli.ENTRREAL,Pedcli.cg_cli, " +
+                "PEDIDOS.REMITO,Pedidos.Factura,Pedcli.CG_CATEG,Pedcli.ORCO, Pedcli.DPP,Pedcli.DFF,Pedcli.BONIFIC,Pedcli.CG_TRANS,Pedcli.CG_ZONA, Pedcli.DIRENT,Pedcli.LOCALIDAD,Pedcli.CG_POST,Pedcli.CG_PROV, " +
+                "Pedcli.CG_VEN,Pedcli.LISTA,Pedcli.FACTCAMION,Pedcli.CONCARGO,pedcli.IMPRIMIBLE,Pedcli.GARANTIA,Pedcli.DES_OBRA,Pedcli.SERVICIO,Pedcli.FE_VENC,Pedcli.CG_CLAS,Pedcli.CG_DEp,Pedcli.USUARIO, " +
+                "Pedcli.REGISTRO,Pedcli.FE_REG,Pedcli.MERMA,Pedcli.CG_CIA,Pedcli.NUMOCI,Pedcli.MONEDA,Pedcli.FE_INDIC,Pedcli.VA_INDIC,Pedcli.RECAL,Pedcli.OBSERITEM,Pedcli.CG_ART1,Pedcli.CG_COT, " +
+                "Pedcli.COMBO,Pedcli.CG_EXPRESO,Pedcli.CG_EXPORT,Pedcli.CG_FORM,Pedcli.CAMPOCOM1,Pedcli.CAMPOCOM2,Pedcli.CAMPOCOM3,Pedcli.CAMPOCOM4,Pedcli.CAMPOCOM5,Pedcli.CAMPOCOM6,Pedcli.CG_PROY,Pedcli.VIA, " +
+                "Pedcli.OBS1,Pedcli.OBS2,Pedcli.OBS3,Pedcli.OBS4,Pedcli.PROFORMA,Pedcli.MUESTRA,Pedcli.PREVORIG,Pedcli.DES_ART1,Pedcli.STOCKA,Pedcli.UNIDA,Pedcli.CANTENTA,Pedcli.CG_DEN,Pedcli.lote, " +
+                "Pedcli.despacho,Pedcli.serie,Pedcli.cg_pallet,Pedcli.campana,Pedcli.OCOMPRA,Pedcli.CANTPED_ORI,Pedcli.CG_POSTA,Pedcli.DIRECC,Pedcli.ESTADO_IT,Pedcli.FE_AUT,Pedcli.USU_AUT,Pedcli.NOMRP, " +
+                "Pedcli.CG_FORM_VENTAS,Pedcli.CONDVEN,Pedcli.CG_COS,Pedcli.ESTADO_LOGISTICA,Pedcli.CAMPOCOM7,Pedcli.CAMPOCOM8,Pedcli.CG_COND_ENTREGA,CAST( (CASE WHEN Pedidos.FLAG = 0 THEN 0 ELSE 1 END) AS BIT) " +
+                "AS FLAG FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) where Pedcli.PEDIDO NOT IN" +
+                "(select PEDIDO from Pedidos where TIPOO = 1) AND Programa.CG_ESTADO = 3  AND Pedcli.CANTPED > 0 AND Pedidos.TIPOO != 28");
+            //string xSQL = string.Format("SELECT Pedcli.*, CAST( (CASE WHEN Pedidos.FLAG = 0 THEN 0 ELSE 1 END) AS BIT) AS FLAG " +
+            //    "FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
+            //    "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) where(pedidos.FLAG = 0 AND Programa.CG_ESTADO = 3 " +
+            //    "AND Pedidos.CG_ORDF != 0 AND(Pedidos.TIPOO = 1)) " +
+            //    "UNION " +
+            //    "SELECT Pedcli.*, CAST( (CASE WHEN Pedidos.FLAG = 0 THEN 0 ELSE 1 END) AS BIT) AS FLAG " +
+            //    "FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
+            //    "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) " +
+            //    "where Pedcli.PEDIDO NOT IN(select PEDIDO from Pedidos where TIPOO = 1) " +
+            //    "AND Programa.CG_ESTADO = 3  AND Pedcli.CANTPED > 0 AND Pedidos.TIPOO != 28");
             return await base.DbSet.FromSqlRaw(xSQL).ToListAsync();
+
         }
 
         public async Task<IEnumerable<ModeloPedidosPendientes>> ObtenerPedidosPedientes()
@@ -211,6 +239,9 @@ namespace SupplyChain.Server.Repositorios
 
                 //lo ejecuta despues de obtener el numero de pedido
                 await AsignarServicio(list);
+
+                //establecer presupuesto como ganada y quitar de los pendientes
+                await PresupuestoGanado(list);
             }
             catch (Exception ex)
             {
@@ -242,6 +273,26 @@ namespace SupplyChain.Server.Repositorios
                         Db.Entry(servicio).Property(p => p.OBSERV).IsModified = true;
                         await Db.SaveChangesAsync(); 
                     }
+                }
+            }
+        }
+        private async Task PresupuestoGanado(List<PedCli> list)
+        {
+
+            var presupuestoUnicos = list.Where(p => p.PRESUPUESTOID > 0).DistinctBy(d => d.PRESUPUESTOID).ToList();
+
+            foreach (var item in presupuestoUnicos)
+            {
+                var presupuesto = presupuestoRepository.Obtener(p => p.Id == item.PRESUPUESTOID).AsNoTracking().FirstOrDefault();
+
+                if (presupuesto is not null)
+                {   
+                    presupuesto.TienePedido = true;
+                    presupuesto.COLOR = "GANADA";
+                    Db.Entry(presupuesto).State = EntityState.Modified;
+                    Db.Entry(presupuesto).Property(p => p.TienePedido).IsModified = true;
+                    Db.Entry(presupuesto).Property(p => p.COLOR).IsModified = true;
+                    await Db.SaveChangesAsync();
                 }
             }
         }

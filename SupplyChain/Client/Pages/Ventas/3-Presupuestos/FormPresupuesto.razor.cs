@@ -14,9 +14,12 @@ using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Inputs;
 using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
+using Syncfusion.Blazor.TreeGrid;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
@@ -24,6 +27,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
     public class FormPresupuestoBase : ComponentBase
     {
         [Inject] public IRepositoryHttp Http { get; set; }
+        [Inject] public HttpClient Http2 { get; set; }
         [Inject] public IJSRuntime Js { get; set; }
         [Inject] public ClienteService ClienteService { get; set; }
         [Inject] public PresupuestoService PresupuestoService { get; set; }
@@ -37,6 +41,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         /// objecto modificado el cual tambien obtiene la id nueva en caso de agregar un nuevo
         /// </summary>
         [Parameter] public Presupuesto Presupuesto { get; set; } = new ();
+        [Parameter] public PresupuestoDetalle PresupuestoDetalle { get; set; } = new ();
         [Parameter] public bool Show { get; set; } = false;
         [Parameter] public EventCallback<Presupuesto> OnGuardar { get; set; }
         [Parameter] public EventCallback OnCerrar { get; set; }
@@ -52,6 +57,8 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected PreciosDialog refPrecioDialog;
         protected bool popupBuscadorVisiblePrecio { get; set; } = false;
         protected bool buscarSoloReparaciones = false;
+
+        protected bool solicProdOrRepSelected = false;
 
         protected SolicitudesDialog refSolicitudDialog;
         protected bool popupBuscadorVisibleSolicitud { get; set; } = false;
@@ -85,6 +92,8 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         protected bool ReadOnlyMoneda = true;
         protected decimal IMP_BONFIC = 0;
         protected bool BotonGuardarDisabled = false;
+        protected bool Visible = false;
+
         public async Task ShowAsync(int id)
         {
             if (id > 0)
@@ -104,8 +113,6 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 ReadOnlyMoneda = false;
                 await GetTipoCambioDolarHoy();
             }
-
-            
         }
 
         public async Task GetTipoCambioDolarHoy()
@@ -172,6 +179,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task BuscarProductos()
         {
+            solicProdOrRepSelected = true;
             buscarSoloReparaciones = false;
             SpinnerVisible = true;
             await refPrecioDialog.Show();
@@ -181,6 +189,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task BuscarReparaciones()
         {
+            solicProdOrRepSelected = true;
             buscarSoloReparaciones = true;
             SpinnerVisible = true;
             await refPrecioDialog.Show();
@@ -190,6 +199,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task BuscarSolicitudes()
         {
+            solicProdOrRepSelected = true;
             //if (Presupuesto.CG_CLI == 0)
             //{
             //    await ToastMensajeError("Seleccione Cliente.");
@@ -301,14 +311,11 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                     await ClienteExternoSelected(response.Response);
                 }
             }
-
             //Debe venir siempre con precio
             if (solicitudSelected.PrecioArticulo != null)
             {
                 await AgregarSolicitud(solicitudSelected);
             }
-
-            
         }
 
         private async Task AgregarSolicitud(Solicitud solicitudSelected)
@@ -364,6 +371,9 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
             
         }
 
+      
+
+
         private bool PermiteAgregItemSolicitud(int solicitudId)
         {
             return !Presupuesto.Items.Any(i => i.SOLICITUDID == solicitudId);
@@ -372,6 +382,8 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task<bool> Agregar(Presupuesto presupueto)
         {
+            //await FechaOk(presupueto);
+
             var response = await PresupuestoService.Agregar(presupueto);
             if (response.Error)
             {
@@ -398,30 +410,32 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         protected async Task Guardar()
         {
-            BotonGuardarDisabled = true;
-            bool guardado;
-
-            if (Presupuesto.Id == 0)
+            if (!solicProdOrRepSelected)
             {
-                guardado = await Agregar(Presupuesto);
-                Presupuesto.ESNUEVO = true;
-            }
-            else
-            {
-                guardado = await Actualizar(Presupuesto);
-            }
+                BotonGuardarDisabled = true;
+                bool guardado;
 
-
-            
-            BotonGuardarDisabled = false;
-            if (guardado)
-            {
-                Show = false;
-                Presupuesto.GUARDADO = guardado;
-                await DescargarPresupuestoDataSheet();
-                await OnGuardar.InvokeAsync(Presupuesto);
+                if (Presupuesto.Id == 0)
+                {
+                    guardado = await Agregar(Presupuesto);
+                    
+                    Presupuesto.ESNUEVO = true;
+                }
+                else
+                {
+                    guardado = await Actualizar(Presupuesto);
+                }
+                
+                BotonGuardarDisabled = false;
+                if (guardado)
+                {
+                    Show = false;
+                    Presupuesto.GUARDADO = guardado;
+                    await DescargarPresupuestoDataSheet();
+                    await OnGuardar.InvokeAsync(Presupuesto);
+                }
             }
-            
+            solicProdOrRepSelected = false;
         }
 
 
@@ -472,17 +486,17 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         public async Task CellSavedHandler(CellSaveArgs<PresupuestoDetalle> args)
         {
-            var index = await refGridItems.GetRowIndexByPrimaryKey(args.RowData.Id);
+            var index = await refGridItems.GetRowIndexByPrimaryKeyAsync(args.RowData.Id);
             if (args.ColumnName == "Cantidad")
             {
                 args.RowData.CANTIDAD = (decimal)args.Value;
                 if (IsAdd)
                 {
                     
-                    await refGridItems.UpdateCell(index, "PREC_UNIT", Convert.ToInt32(args.Value) * args.RowData.PREC_UNIT);
+                    await refGridItems.UpdateCellAsync(index, "PREC_UNIT", Convert.ToInt32(args.Value) * args.RowData.PREC_UNIT);
                     //await refGridItems.UpdateCell(index, "Sum", Convert.ToInt32(args.Value) + 0);
                 }
-                await refGridItems.UpdateCell(index, "PREC_UNIT", Convert.ToInt32(args.Value) * args.RowData.PREC_UNIT);
+                await refGridItems.UpdateCellAsync(index, "PREC_UNIT", Convert.ToInt32(args.Value) * args.RowData.PREC_UNIT);
                 
             }
             else if (args.ColumnName == "PREC_UNIT")
@@ -491,11 +505,11 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
                 if (IsAdd)
                 {
                     
-                    await refGridItems.UpdateCell(index, "PREC_UNIT_X_CANTIDAD", 
+                    await refGridItems.UpdateCellAsync(index, "PREC_UNIT_X_CANTIDAD", 
                         Convert.ToDouble(args.Value) * (double)args.RowData.CANTIDAD);
                     //await refGridItems.UpdateCell(index, "Sum", Convert.ToDouble(args.Value) + 0);
                 }
-                await refGridItems.UpdateCell(index, "PREC_UNIT_X_CANTIDAD", Convert.ToDouble(args.Value) * (double)args.RowData.CANTIDAD);
+                await refGridItems.UpdateCellAsync(index, "PREC_UNIT_X_CANTIDAD", Convert.ToDouble(args.Value) * (double)args.RowData.CANTIDAD);
                 
             }
             else if (args.ColumnName == "DESCUENTO")
@@ -506,11 +520,11 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
                     if (args.RowData.CANTIDAD == 0 || args.RowData.PREC_UNIT_X_CANTIDAD == 0 || (decimal)args.Value == 0)
                     {
-                        await refGridItems.UpdateCell(index, "IMP_DESCUENTO", (double)0);
+                        await refGridItems.UpdateCellAsync(index, "IMP_DESCUENTO", (double)0);
                     }
                     else
                     {
-                        await refGridItems.UpdateCell(index, "IMP_DESCUENTO", 
+                        await refGridItems.UpdateCellAsync(index, "IMP_DESCUENTO", 
                             args.RowData.PREC_UNIT_X_CANTIDAD / (1 + (decimal)args.Value / 100 ));
                         //await refGridItems.UpdateCell(index, "Sum", Convert.ToDouble(args.Value) + 0);
                     }
@@ -519,14 +533,14 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
                 }
                 var descuento = Math.Round( args.RowData.PREC_UNIT_X_CANTIDAD * args.RowData.DESCUENTO / 100, 2);
-                await refGridItems.UpdateCell(index, "IMP_DESCUENTO", descuento);
+                await refGridItems.UpdateCellAsync(index, "IMP_DESCUENTO", descuento);
             }
 
             //var item = Presupuesto.Items.Find(i=> i.Id == args.RowData.Id);
             //item.TOTAL = args.RowData.PREC_UNIT_X_CANTIDAD - args.RowData.IMP_DESCUENTO;
 
 
-            await refGridItems.UpdateCell(index, "TOTAL", args.RowData.PREC_UNIT_X_CANTIDAD - args.RowData.IMP_DESCUENTO);// total del item
+            await refGridItems.UpdateCellAsync(index, "TOTAL", args.RowData.PREC_UNIT_X_CANTIDAD - args.RowData.IMP_DESCUENTO);// total del item
 
             //Presupuesto.TOTAL = Math.Round(Presupuesto.Items.Sum(i => i.TOTAL)); //total del presupuesto - la 
             await refGridItems.EndEditAsync();
@@ -696,7 +710,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
 
         private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = content,
@@ -708,7 +722,7 @@ namespace SupplyChain.Client.Pages.Ventas._3_Presupuestos
         }
         private async Task ToastMensajeError(string content = "Ocurrio un Error.")
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = content,

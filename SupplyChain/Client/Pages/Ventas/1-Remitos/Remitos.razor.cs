@@ -182,10 +182,14 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                     else
                     {
                         PedidoSeleccionado = response.Response;
+                        var monto = "0";
                         foreach (var item in PedidoSeleccionado.Items)
                         {
                             item.ESTADO = SupplyChain.Shared.Enum.EstadoItem.Modificado;
+                            monto = $"{decimal.Parse(monto) + (item.STOCK * item.IMPORTE4):0.00}";
                         }
+                        monto = $"{decimal.Parse(monto):###,###,###,###.##}";
+                        PedidoSeleccionado.MONTO = "U$S " + monto;
                         //direccionesEntregas = PedidoSeleccionado.DireccionesEntregas.Select(d => d.DESCRIPCION).ToList();
                         popupFormVisible = true;
                     }
@@ -439,14 +443,26 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 }
                 else
                 {
+                    await calcularTotal();
                     PedidoSeleccionado = response.Response;
+                    var monto = "0";
+                    foreach (var item in PedidoSeleccionado.Items)
+                        monto =$"{decimal.Parse(monto) + (item.STOCK * item.IMPORTE4):0.00}";
+                    // papso a formato ###,###,###,###.##
+                    monto = $"{decimal.Parse(monto):###,###,###,###.##}";
+                    PedidoSeleccionado.MONTO = "U$S " + monto;
                     popupFormVisible = true;
                 }
-                
             }
-
         }
 
+        protected async Task<decimal> calcularTotal()
+        {
+            var pedidoSeleccionado = await refGrid.GetSelectedRecordsAsync();
+            decimal totalseleccionado = pedidoSeleccionado.Cast<vEstadoPedido>().Sum(v => v.IMPORTE3);
+
+            return totalseleccionado;
+        }
 
         protected async Task OnRemitoGuardado(List<Pedidos> pedidosGuardados)
         {

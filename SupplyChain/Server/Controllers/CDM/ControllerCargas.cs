@@ -217,5 +217,31 @@ namespace SupplyChain
                 return new List<ModeloCarga>();
             }
         }
+
+        //[HttpGet]
+        //public async Task<List<Programa>> Verificar(int cg_ordfasoc)
+        //{
+        //    string xSQL = $"select CG_ESTADOCARGA, CG_ORDFASOC, CG_ORDFORIG from programa where CG_ORDFASOC = {cg_ordfasoc} and CG_ESTADOCARGA < 4 order by CG_ORDF ASC";
+        //    var list = await _context.Programa.FromSqlRaw(xSQL).ToListAsync();
+
+        //    try
+        //    {
+        //        if (list.Count >= 1)
+        //        {
+        //            foreach (var programa in list)
+        //            {
+        //                Console.WriteLine($"CG_ORDFASOC: {programa.CG_ORDFASOC}, CG_ORDFORIG: {programa.CG_ORDFORIG}, CG_ESTADOCARGA: {programa.CG_ESTADOCARGA}");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
+
+        //    return list;
+        //}
+
+
     }
 }

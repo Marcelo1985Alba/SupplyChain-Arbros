@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using SupplyChain.Shared.Models;
 using System.Threading.Tasks;
 
 namespace SupplyChain.Client.Pages.ABM.ProcunP
@@ -27,6 +28,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         [Inject] public LineasService LineasService { get; set; }
         [Inject] public CeldasService CeldasService { get; set; }
         [Parameter] public Procun procuns { get; set; } = new();
+        [Parameter] public ProcunProcesos procunProcesos { get; set; } = new();
         [Parameter] public Producto prod { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;
         [Parameter] public EventCallback<Procun> OnGuardar { get; set; }
@@ -50,6 +52,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         protected List<Areas> areas = new();
         protected List<Lineas> lineas = new();
         protected List<Celdas> celdas = new();
+        protected List<ProcunProcesos> procunsProcesos= new();
 
         protected SfSpinner refSpinner;
         
@@ -58,8 +61,10 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         {
             base.OnInitialized();
         }
+    
         protected async override Task OnInitializedAsync()
         {
+           
             var response = await ProductoService.Get();
             if (!response.Error)
             {
@@ -80,6 +85,9 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             {
                 celdas = response4.Response;
             }
+            procunsProcesos = await Http.GetFromJsonAsync<List<ProcunProcesos>>("api/ProcunProcesos");
+           
+
         }
 
         protected async Task BuscarProd()
@@ -95,17 +103,16 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             await refSpinnerCli.ShowAsync();
             popupBuscadorVisibleProducto = false;
             procuns.CG_PROD = productoSelected.Id;
-            procuns.Des_Prod = productoSelected.DES_PROD;
-            //procuns.DES_PROD = productoSelected.DES_PROD.Trim();
+            procuns.DESCRIPCION = productoSelected.DES_PROD;
             await refSpinnerCli.HideAsync();
         }
         protected async Task Des_prod_Changed(InputEventArgs args)
         {
-            string Des_Prod = args.Value;
+            string DESCRIPCION = args.Value;
 
-            procuns.Des_Prod= Des_Prod;
+            procuns.DESCRIPCION = DESCRIPCION;
 
-            var response = await ProductoService.Search(procuns.CG_PROD, procuns.Des_Prod);
+            var response = await ProductoService.Search(procuns.CG_PROD, procuns.DESCRIPCION);
             if (response.Error)
             {
                 await ToastMensajeError("Al obtener Producto");
@@ -115,9 +122,10 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 if (response.Response != null)
                 {
                     if (response.Response.Count == 1)
+                    if (response.Response.Count == 1)
                     {
                         procuns.CG_PROD= response.Response[0].Id;
-                        procuns.Des_Prod= response.Response[0].DES_PROD;
+                        procuns.DESCRIPCION= response.Response[0].DES_PROD;
                     }
                     else
                     {   
@@ -125,67 +133,15 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     }
                 }
             }
-         }
+        }
 
-        //protected async Task Codigo_Prod(InputEventArgs args)
-        //{
-        //    string idProd = args.Value;
-        //    prod.Id= idProd;
-
-        //    var response = await ProductoService.Search(idProd, prod.DES_PROD);
-        //    if (response.Error)
-        //    {
-        //        await ToastMensajeError("Al obtener Precio de articulo");
-        //    }
-        //    else
-        //    {
-        //        if(response.Response != null)
-        //        {
-        //            if (response.Response.Count == 1)
-        //            {
-        //                prod.Id= response.Response[0].Id;
-        //                prod.DES_PROD = response.Response[0].DES_PROD;
-        //            }
-        //            else
-        //            {
-        //                prod.DES_PROD= string.Empty;
-        //            }
-        //        }
-        //    }
-        //}
-  
-        //protected async Task Descripcion_prod(InputEventArgs args)
-        //{
-        //    string des_prod = args.Value;
-
-        //    prod.DES_PROD = des_prod;
-        //    var response = await ProductoService.Search(prod.Id, prod.DES_PROD);
-        //    if(response.Error)
-        //    {
-        //        await ToastMensajeError("Al obtener Precio de articulo");
-        //    }
-        //    else
-        //    {
-        //        if(response.Response!= null)
-        //        {
-        //            if (response.Response.Count == 1)
-        //            {
-        //                prod.Id = response.Response[0].Id;
-        //                prod.DES_PROD = response.Response[0].DES_PROD;
-        //            }
-        //            else
-        //            {
-        //                prod.Id= string.Empty;
-        //            }
-        //        }
-        //    }
-        //}
+       
         protected async Task Cg_Prod_Changed(InputEventArgs args)
         {
             string idProd = args.Value;
             procuns.CG_PROD = idProd;
 
-            var response = await ProductoService.Search(idProd, procuns.Des_Prod);
+            var response = await ProductoService.Search(idProd, procuns.DESCRIPCION);
             if (response.Error)
             {
 
@@ -198,11 +154,11 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     if (response.Response.Count == 1)
                     {
                         procuns.CG_PROD= response.Response[0].Id;
-                        procuns.Des_Prod = response.Response[0].DES_PROD;
+                        procuns.DESCRIPCION = response.Response[0].DES_PROD;
                     }
                     else
                     {
-                        procuns.Des_Prod= string.Empty;
+                        procuns.DESCRIPCION = string.Empty;
                     }
                 }
 
@@ -231,7 +187,8 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
 
         protected async Task<bool> Actualizar(Procun proc)
         {
-            var response = await ProcunService.Actualizar(proc.Id, proc);
+            var response = await ProcunService.ActualizarPro(proc);
+            //var response = await ProcunService.Actualizar(proc.Id, proc);
             if (response.Error)
             {
                await ToastMensajeError("Error al intentar Guardar el procun.");
@@ -241,33 +198,27 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             return true;
 
         }
-
+      
         protected async Task GuardarProc()
         {
-            try
-            {
-                bool guardado;
+                bool guardado=false;
                 if (procuns.ESNUEVO)
                 {
                     guardado = await Agregar(procuns);
                     procuns.ESNUEVO = true;
                 }
                 else
-                {
+                {   
                     guardado = await Actualizar(procuns);
-                }
 
+                }
+                
                 if (guardado)
                 {
                     Show = false;
                     procuns.GUARDADO = guardado;
                     await OnGuardar.InvokeAsync(procuns);
-                }
-            }catch (Exception ex)
-            {
-               Console.WriteLine(ex.Message);
-            }
-            
+                }   
         }
 
 
@@ -281,7 +232,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         }
         private async Task ToastMensajeExito(string content = "Guardado Correctamente.")
         {
-            await this.ToastObj.Show(new ToastModel
+            await this.ToastObj.ShowAsync(new ToastModel
             {
                 Title = "EXITO!",
                 Content = content,
@@ -293,7 +244,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         }
         private async Task ToastMensajeError(string content = "Ocurrio un Error.")
         {
-            await ToastObj.Show(new ToastModel
+            await ToastObj.ShowAsync(new ToastModel
             {
                 Title = "Error!",
                 Content = content,

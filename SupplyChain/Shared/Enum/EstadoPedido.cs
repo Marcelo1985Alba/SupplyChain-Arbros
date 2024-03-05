@@ -19,7 +19,7 @@ namespace SupplyChain.Shared.Enum
         Facturado = 9,
         Anulado = 10,
         TodosPendientes= 11,
-        
+        SinCargo=12,
         Todos = 100,
 
     }

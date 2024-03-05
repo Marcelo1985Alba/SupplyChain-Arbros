@@ -4,7 +4,7 @@
     <BuscadorEmergente @ref="@Buscador" TItem="vResumenStock" DataSource="@DataSource" TipoSeleccion="@TipoSeleccion"
                        Columnas="@Columnas" Visible="@Visible" Height="600px" Width="75%" HabilitarPaginacion="true"
                        AplicarFiltro="@AplicarFiltro" filterCG_ART="@filterCG_ART" filterDESPACHO="@filterDESPACHO"
-                       OnObjetosSeleccionados="@(async(l)=> await OnSeleccionados(l))" HeightGrid="210px" 
+                       OnObjetosSeleccionados="@(async(l)=> await OnSeleccionados(l))" HeightGrid="230px" 
                        Target="@Target" SpinnerVisible="@VisibleSpinner" IsModal="@EsModal"
                        Titulo="@Titulo" OnObjetoSeleccionado="@(async(o)=> await OnSeleccionado(o))"
                        OnCerrarDialog="@(async(b)=>await Cerrar(b))">
@@ -79,7 +79,7 @@
 
     protected async Task BeginGrid()
     {
-        await Grid.AutoFitColumns();
+        await Grid.AutoFitColumnsAsync();
     }
 
     public async Task GetSelectedRecords(RowSelectEventArgs<vResumenStock> args)
@@ -93,5 +93,6 @@
     protected async Task Cerrar(bool visible)
     {
         Visible = visible;
+        await InvokeAsync(StateHasChanged);
     }
 }

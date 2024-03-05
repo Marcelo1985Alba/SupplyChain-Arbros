@@ -49,6 +49,7 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
         protected List<string> Monedas = new() { "PESOS", "DOLARES" };
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
+        protected string moneda = "dolares";
 
         protected Dictionary<string, object> HtmlAttribute = new()
         {
@@ -573,6 +574,31 @@ namespace SupplyChain.Client.Pages.Ventas._1_Remitos
                 ShowCloseButton = true,
                 ShowProgressBar = true
             });
+        }
+        protected void HandleMonedaChange(ChangeEventArgs args)
+        {
+            var monto = Pedido.MONTO;
+            if (Pedido.MONTO[0] == 'U')
+            {
+                monto = Pedido.MONTO.Substring(4);
+            } else if(Pedido.MONTO[0] == '$')
+            {
+                monto = Pedido.MONTO.Substring(2);
+            }
+            if(moneda == "pesos")
+            {
+                Pedido.MONTO = "U$S ";
+                var mon = $"{Convert.ToDecimal(monto) / Convert.ToDecimal(Pedido.VA_INDIC):###,###,###,###.##}";
+                Pedido.MONTO += mon;
+                moneda = "dolares";
+            }
+            else
+            {
+                Pedido.MONTO = "$ ";
+                var mon= $"{Convert.ToDecimal(monto) * Convert.ToDecimal(Pedido.VA_INDIC):###,###,###,###.##}";
+                Pedido.MONTO += mon;
+                moneda = "pesos";
+            }
         }
     }
 }

@@ -1,0 +1,288 @@
+﻿@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Navigations
+@using SupplyChain.Client.Pages.Visor_Pdf
+@using SupplyChain.Client.Pages.CDM
+@page "/ingenieria/definicion-formulas"
+@page "/ingenieria/definicion-formulas/{extern_codigo}"
+@inherits BaseDefinicionFormulas
+
+<SfSpinner @ref="refSpinner" Label="Cargando..." Type="SpinnerType.Fabric" @bind-Visible="@VisibleSpinner"></SfSpinner>
+
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
+<SfTab @ref="@refSfTab" LoadOn="ContentLoad.Init" ShowCloseButton="@mostrarCerrarTab">
+    <TabEvents Removing="@((a) => TabEliminando(a))" Removed="@((a) => TabEliminado(a))"></TabEvents>
+    <TabItems>
+        <TabItem>
+            <HeaderTemplate>
+                <div>@tituloTabFormulas</div>
+            </HeaderTemplate>
+            <ContentTemplate>
+                <SfGrid @ref="@GridProdForm" DataSource="@DataOrdeProductosFormulas" AllowPaging="true" AllowFiltering="true" AllowSorting="true" AllowGrouping="true" AllowReordering="true" AllowResizing="true" AllowMultiSorting="true" ID="ProdForm"
+                        GridLines="GridLine.Both" Toolbar="@(new List<string>() { "ExcelExport" })" AllowExcelExport="true">
+                    <GridPageSettings PageSizes="true"></GridPageSettings>
+                    <GridEvents TValue="vIngenieriaProductosFormulas"
+                                QueryCellInfo="(async (args) => await QueryCellInfoHandler(args))"
+                                CommandClicked="(async (args) => await CommandClickHandler(args))"
+                                OnToolbarClick="ToolbarProdFormClickHandler">
+                    </GridEvents>
+                    <GridColumns>
+                        <GridColumn HeaderText="Editar" Width="30px">
+                            <GridCommandColumns>
+                                <GridCommandColumn Type="CommandButtonType.Edit" Title="Editar"
+                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-edit", Content = "", CssClass = "botonGrilla" })" />
+                            </GridCommandColumns>
+                        </GridColumn>
+                        <GridColumn HeaderText="Copiar" Width="30px">
+                            <GridCommandColumns>
+                                <GridCommandColumn Type="CommandButtonType.Edit" Title="Copiar"
+                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-copy", Content = "", CssClass = "botonGrilla" })" />
+                            </GridCommandColumns>
+                        </GridColumn>
+                        <GridColumn Field=@nameof(vIngenieriaProductosFormulas.CG_PROD) HeaderText="Producto" Width="120"></GridColumn>
+                        <GridColumn Field=@nameof(vIngenieriaProductosFormulas.DES_PROD) HeaderText="Descripcion" Width="150"></GridColumn>
+                        <GridColumn Field=@nameof(vIngenieriaProductosFormulas.TIENE_FORM) HeaderText="Tiene Formula" TextAlign="TextAlign.Right"
+                                    Width="50" DisplayAsCheckBox="true">
+                        </GridColumn>
+                        <GridColumn Field=@nameof(vIngenieriaProductosFormulas.FORM_ACTIVA) HeaderText="Formula Activa" TextAlign="TextAlign.Right"
+                                    Width="50" DisplayAsCheckBox="true">
+                        </GridColumn>
+                    <!--
+                    <GridColumn HeaderText="Despiece" Width="30px">
+                        <GridCommandColumns>
+                            <GridCommandColumn Type="CommandButtonType.None" Title="Despiece"
+                                               ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-list-ul black", Content = "", CssClass = "botonGrilla" })"/>
+                        </GridCommandColumns>
+                    </GridColumn>
+                    -->
+                        <GridColumn HeaderText="Plano" Width="30px">
+                            <GridCommandColumns>
+                                <GridCommandColumn Type="CommandButtonType.None" Title="Ver Plano"
+                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-eye", Content = "", CssClass = "botonGrilla" })" />
+                            </GridCommandColumns>
+                        </GridColumn>
+                        <GridColumn HeaderText="Programas" Width="30px">
+                            <GridCommandColumns>
+                                <GridCommandColumn Type="CommandButtonType.None" Title="Ver Programas"
+                                                   ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-eye", Content = "", CssClass = "botonGrilla" })" />
+                            </GridCommandColumns>
+                        </GridColumn>
+                    </GridColumns>
+                </SfGrid>
+            </ContentTemplate>
+        </TabItem>
+        @foreach (TabData Item in TabItems)
+        {
+            if (Item.Header.ToLower().Contains("plano"))
+            {
+                <TabItem>
+                    <HeaderTemplate>
+                        <div>@(Item.Header)</div>
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        <VerEnsayos Accion="RUTAOF" Codigo=@Item.CodigoInsumo></VerEnsayos>
+                    </ContentTemplate>
+                </TabItem>
+            }
+
+            if (Item.Header.ToLower().Contains("programas"))
+            {
+                <TabItem>
+                    <HeaderTemplate>
+                        <div>@(Item.Header)</div>
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        <Pdf accion="RUTACNC" codigo=@Item.CodigoInsumo></Pdf>
+                    </ContentTemplate>
+                </TabItem>
+            }
+        }
+
+        @*DIALOG PARA DESPIECE*@
+        <SfDialog @ref="DialogDespieceRef" Width="80%" Height="550px" IsModal="true" ShowCloseIcon="true" Visible="false" CssClass="custom-dialog">
+            <DialogTemplates>
+                <Header>
+                    <p class="card-header badge badge-info text-white">DESPIECE DEL PRODUCTO: @ProdSelected.CG_PROD.Trim() - @ProdSelected.DES_PROD </p>
+                </Header>
+                <Content>
+                    <div class="col-lg-12 control-section mt-2">
+                        <div class="form-row">
+                            <SfGrid @ref="GridDespiece" DataSource="@listaDespiece" ID="Despiece"
+                                    GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true" AllowFiltering="true" AllowSorting="true"
+                                    Height="100%" Width="100%" Toolbar="@Toolbaritems" AllowExcelExport="true">
+                                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"></GridSelectionSettings>
+                                <GridEvents TValue="DespiecePlanificacion" OnToolbarClick="ToolbarClickHandler"></GridEvents>
+                                <GridTemplates>
+                                    <DetailTemplate>
+                                        @{
+                                            var insumo = context as DespiecePlanificacion;
+                                        }
+                                        <div>
+                                            <SfGrid ID="grdDespieceStockPrev" Width="870px" TValue="Formula"
+                                                    AllowPaging="true" AllowResizing="true" AllowReordering="true"
+                                                    DataSource="@insumo.formulasSemielaborado">
+                                                <GridColumns>
+                                                    <GridColumn Field=@nameof(Formula.CANT_MAT) HeaderText="CANTIDAD" Width="110"></GridColumn>
+                                                    <GridColumn Field=@nameof(Formula.Cg_Mat) HeaderText="CG_MAT" Width="110"></GridColumn>
+                                                    <GridColumn Field=@nameof(Formula.Cg_Se) HeaderText="CG_SE" Width="150"></GridColumn>
+                                                    <GridColumn Field=@nameof(Formula.COSTO) Format="N2" HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                                </GridColumns>
+                                            </SfGrid>
+                                        </div>
+                                    </DetailTemplate>
+                                </GridTemplates>
+                                <GridColumns>
+                                    <GridColumn Field=@nameof(DespiecePlanificacion.CG_SE) HeaderText="Semi Elaborado" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                    <GridColumn Field=@nameof(DespiecePlanificacion.CG_MAT) HeaderText="Materia prima" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                    <GridColumn Field=@nameof(DespiecePlanificacion.CANT_MAT) HeaderText="Cant" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                                    <GridColumn Field=@nameof(DespiecePlanificacion.DES_PROD) HeaderText="Descripción" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                    <GridColumn Field=@nameof(DespiecePlanificacion.COSTO) Format="N2" HeaderText="Costo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                    <GridColumn Field=@nameof(DespiecePlanificacion.STOCK) Format="N2" HeaderText="Stock" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                    <GridColumn Field=@nameof(DespiecePlanificacion.CANT_MAT) Format="N2" HeaderText="Cantidad Necesaria de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                    <GridColumn Field=@nameof(DespiecePlanificacion.COMP_DE_ENTRADA) Format="N2" HeaderText="Comprometido Entrada" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                    <GridColumn Field=@nameof(DespiecePlanificacion.STOCK_CORREGIDO) Format="N2" HeaderText="Stock Corregido" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                    <GridColumn Field=@nameof(DespiecePlanificacion.SALDO) Format="N2" HeaderText="Saldo de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                    <GridColumn Field=@nameof(DespiecePlanificacion.CANT_PLANEADAS) Format="N2" HeaderText="Cantidad Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                    <GridColumn Field=@nameof(DespiecePlanificacion.SALDO_PLANEADAS) Format="N2" HeaderText="Saldo Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                    <GridColumn Field=@nameof(DespiecePlanificacion.CANT_TOTAL) Format="N2" HeaderText="Cantidad Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                    <GridColumn Field=@nameof(DespiecePlanificacion.SALDO_TOTAL) Format="N2" HeaderText="Saldo Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                                </GridColumns>
+                                <GridAggregates>
+                                    <GridAggregate>
+                                        <GridAggregateColumns>
+                                            <GridAggregateColumn Field=@nameof(DespiecePlanificacion.COSTO) Type="AggregateType.Sum" Format="C2">
+                                                <FooterTemplate>
+                                                    @{
+                                                        var aggregate = (context as AggregateTemplateContext);
+                                                        <div>
+                                                            <p>Costo total de producto: @aggregate.Sum</p>
+                                                        </div>
+                                                    }
+                                                </FooterTemplate>
+                                            </GridAggregateColumn>
+                                        </GridAggregateColumns>
+                                    </GridAggregate>
+                                </GridAggregates>
+                            </SfGrid>
+                        </div>
+                    </div>
+
+                </Content>
+            </DialogTemplates>
+        </SfDialog>
+    </TabItems>
+</SfTab>
+
+<SfDialog Width="80%" Height="550px" IsModal="true" ShowCloseIcon="true" Visible="@dialogVisibleCopiar">
+    <DialogTemplates>
+        <Header>
+            <p class="card-header badge badge-info text-white">Copiar Formula</p>
+            <hr />
+        </Header>
+        <Content>
+            <SfGrid @ref="@DetailedGridProdForm" DataSource="@DataDetailedProductosFormulas" AllowPaging="true" AllowFiltering="true" AllowSorting="true" ID="DetailedProdForm"
+                    GridLines="GridLine.Both">
+                <GridPageSettings PageSizes="true" PageSize="5"></GridPageSettings>
+                <GridColumns>
+                    <GridColumn Field=@nameof(vIngenieriaProductosFormulas.CG_PROD) HeaderText="Producto" Width="120"></GridColumn>
+                    <GridColumn Field=@nameof(vIngenieriaProductosFormulas.DES_PROD) HeaderText="Descripcion" Width="150"></GridColumn>
+                    <GridColumn HeaderText="Despiece" Width="30px">
+                        <GridCommandColumns>
+                            <GridCommandColumn Type="CommandButtonType.None" Title="Despiece"
+                                               ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-list-ul black", Content = "", CssClass = "botonGrilla" })" />
+                        </GridCommandColumns>
+                    </GridColumn>
+                    <GridColumn HeaderText="Plano" Width="30px">
+                        <GridCommandColumns>
+                            <GridCommandColumn Type="CommandButtonType.None" Title="Ver Plano"
+                                               ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-eye", Content = "", CssClass = "botonGrilla" })" />
+                        </GridCommandColumns>
+                    </GridColumn>
+                    <GridColumn HeaderText="Programas" Width="30px">
+                        <GridCommandColumns>
+                            <GridCommandColumn Type="CommandButtonType.None" Title="Ver Programas"
+                                               ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-eye", Content = "", CssClass = "botonGrilla" })" />
+                        </GridCommandColumns>
+                    </GridColumn>
+                </GridColumns>
+            </SfGrid>
+            <button class="btn btn-primary" @onclick="(args) => CopiarFormula(args)">Copiar</button>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
+<SfDialog ID="dlgEditar" Width="80%" Height="92%" IsModal="true" ShowCloseIcon="true" Visible="@dialogVisibleEditar">
+    <DialogTemplates>
+        <Header>
+            <p class="text-white">Editar Formula de Producto: @DataEditarProductosFormulas[0].Cg_Prod.Trim() - Revision: @DataEditarProductosFormulas[0].REVISION</p>
+        </Header>
+        <Content>
+            <div class="">
+                <div class="">
+                    <div class="e-card">
+                        <SfGrid @ref="@EditForm" DataSource="@DataEditarProductosFormulas" AllowPaging="true" AllowSorting="true"
+                                ID="EditForm" Toolbar="@ToolbaritemsEditarFormula" Height="100%" Width="100%"
+                                GridLines="GridLine.Both">
+                            <GridEvents TValue="Formula" OnToolbarClick="ToolbarEditFormClickHandler" CommandClicked="OnCommandClicked" CellSaved="CellSavedHandler">
+                            </GridEvents>
+                            <GridPageSettings PageSizes="true" PageSize="10"></GridPageSettings>
+                            <GridEditSettings ShowDeleteConfirmDialog="false" AllowAdding=true AllowEditing=true
+                                              ShowConfirmDialog="false" AllowDeleting=true Mode="EditMode.Batch">
+                            </GridEditSettings>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(Formula.Cg_Se) HeaderText="Semielaborado" Width="80" AllowEditing=false></GridColumn>
+                                <GridColumn Field=@nameof(Formula.Cg_Mat) HeaderText="Materia Prima" Width="90" AllowEditing=false></GridColumn>
+                                <GridColumn Field=@nameof(Formula.DES_PROD) HeaderText="Descrición" Width="90" AllowEditing=false></GridColumn>
+                                <GridColumn Field=@nameof(Formula.CANT_MAT) HeaderText="Cantidad" Width="50" AllowEditing="true"></GridColumn>
+                                <GridColumn Field=@nameof(Formula.OBSERV) HeaderText="Observación" Width="90" AllowEditing="true"></GridColumn>
+                                <GridColumn Field=@nameof(Formula.AUTORIZA) HeaderText="Aprobó" Width="90" AllowEditing=false></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    </div>
+                </div>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
+<BuscadorEmergente Height="600px" Width="80%" TItem="Producto" Titulo="Listado de Insumos" Target="#dlgEditar"
+                   Visible="@PopupBuscadorProdVisible"
+                   DataSource="@Insumos"
+                   Columnas="@(new string[] { "ID", "DES_PROD", "CG_ORDEN" })"
+                   OnObjetoSeleccionado="@(async(o)=> await OnInsumoSeleccionado(o))" />
+
+@*
+
+<BuscadorEmergente Height="600px" @ref="Buscador" TItem="Compra" DataSource="ItemsABuscar" Columnas="ColumnasBuscador"
+                   Titulo="@TituloBuscador" Width="80%" OnCerrarDialog="@(async(v)=>await Cerrar(v))"
+                   OnObjetoSeleccionado="@(async(o)=> await EnviarObjetoSeleccionado(o))" />
+*@
+
+<Syncfusion.Blazor.Popups.SfDialogProvider />
+
+<style>
+    .e-grid .e-gridcontent .e-rowcell.rojas {
+        background-color: #fd8787;
+    }
+
+    .e-grid .e-gridcontent .e-rowcell.amarillas {
+        background-color: #c3ab29;
+    }
+
+    .e-btn.e-flat, .e-css.e-btn.e-flat {
+        background-color: transparent;
+    }
+
+    .e-btn .e-btn-icon .e-custom, .e-css.e-btn .e-btn-icon {
+        color: blue;
+    }
+
+    .custom-dialog .e-dlg-content {
+        padding: 0px 0px 0px;
+    }
+
+    .e-custom {
+        color: blue;
+    }
+</style>

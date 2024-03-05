@@ -54,7 +54,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
             new ItemModel { Text = "Imprimir", TooltipText = "Imprimir por Pedido o OCI", 
                 PrefixIcon = "e-print e-icons e-btn-icon e-icon-left", Id = "imprimir" },
             //new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
-            "ExcelExport",
+            new ItemModel { Text= "ExcelExport", Id="ExcelExport", TooltipText="ExcelExport" },
             new ItemModel { Text = "", TooltipText = "Actualizar Grilla", PrefixIcon = "e-refresh", Id = "refresh" },
             new ItemModel { Text = "Ver Todos", Id = "VerTodos" },
             new ItemModel { Text = "Ver Pendientes", Id = "VerPendientes" },
@@ -364,6 +364,12 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                 await Imprimir();
                 SpinnerVisible = false;
             }
+            else if (args.Item.Id == "ExcelExport")
+            {
+                await refGrid.ExportToExcelAsync();
+              
+            }
+
 
         }
 

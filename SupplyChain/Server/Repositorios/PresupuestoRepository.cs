@@ -5,6 +5,7 @@ using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,15 +28,16 @@ namespace SupplyChain.Server.Repositorios
         {
             if (tipoFiltro == TipoFiltro.Pendientes)
             {
-                return await Db.vPresupuestos.Where(p=> !p.TIENEPEDIDO).ToListAsync();
+                return await Db.vPresupuestos.Where(p=> (string.IsNullOrEmpty(p.COLOR) || p.COLOR.Contains("PENDIENTE")) && !p.TIENEPEDIDO).ToListAsync();
             }
 
             if (tipoFiltro == TipoFiltro.NoPendientes)
             {
-                return await Db.vPresupuestos.Where(p => p.TIENEPEDIDO).ToListAsync();
+                return await Db.vPresupuestos.Where(p => !p.TIENEPEDIDO && p.COLOR.Contains("PERDIDA")).ToListAsync();
             }
             return await Db.vPresupuestos.ToListAsync();
         }
+
 
         internal async Task<bool> TienePedido(int presupuestoId)
         {
@@ -87,6 +89,14 @@ namespace SupplyChain.Server.Repositorios
             return await DbSet.Where(p => p.Id == id).ToListAsync();
         }
 
+        public async Task<IEnumerable<Presupuesto>> EnviarAviso(int id, string aviso)
+        {
+            string xSql = $"UPDATE PRESUPUESTO_ENCABEZADO SET AVISO = '{aviso}' WHERE ID ={id}";
+            await base.Database.ExecuteSqlRawAsync(xSql);
+
+            return await DbSet.Where(p => p.Id == id).ToListAsync();
+        }
+
 
         private async Task AsignarServicio(Presupuesto entity)
         {
@@ -131,14 +141,25 @@ namespace SupplyChain.Server.Repositorios
         }
 
 
+        //public async Task<IEnumerable<Presupuesto>> ActualizarColor(int id, string color)
+        //{ 
+        //    string xSQL= $"UPDATE PRESUPUESTO_ENCABEZADO SET COLOR='{color}' WHERE ID = {id}";
+        //    await base.Database.ExecuteSqlRawAsync(xSQL);
+
+        //    return await DbSet.Where(p=> p.Id == id).ToListAsync();
+        //}
         public async Task<IEnumerable<Presupuesto>> ActualizarColor(int id, string color)
-        { 
-            string xSQL= $"UPDATE PRESUPUESTO_ENCABEZADO SET COLOR='{color}' WHERE ID = {id}";
+        {
+            string xSQL = $"UPDATE PRESUPUESTO_ENCABEZADO SET COLOR='{color}'";
+            if (color.Trim().ToUpper() == "GANADA")
+            {
+                xSQL += ", TienePedido=1";
+            }
+            xSQL += $"WHERE id={id}";
             await base.Database.ExecuteSqlRawAsync(xSQL);
 
-            return await DbSet.Where(p=> p.Id == id).ToListAsync();
+            return await DbSet.Where(p => p.Id == id).ToListAsync();
         }
-
         public async Task<IEnumerable<Presupuesto>> EnviarMotivos(int id, string motivo)
         {
             string xSQL = $"UPDATE PRESUPUESTO_ENCABEZADO SET MOTIVO ='{motivo}' WHERE ID = {id}";

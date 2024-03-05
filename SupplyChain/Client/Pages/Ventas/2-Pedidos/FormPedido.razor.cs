@@ -341,7 +341,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                             CAMPOCOM7 = item.Solicitud == null ? string.Empty : item.Solicitud?.ContrapresionFija,
                             CAMPOCOM8 = item.Solicitud == null ? string.Empty : item.Solicitud?.CapacidadRequerida,
                             OBSERITEM = item.OBSERITEM,
-                            ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA),
+                            ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA ?? 30),
                             ESTADO = SupplyChain.Shared.Enum.EstadoItem.Agregado,
                             SolicitudId = item.SOLICITUDID
                         };
@@ -380,7 +380,7 @@ namespace SupplyChain.Client.Pages.Ventas._2_Pedidos
                         CAMPOCOM7 = item.Solicitud == null ? string.Empty : item.Solicitud?.ContrapresionFija,
                         CAMPOCOM8 = item.Solicitud == null ? string.Empty : item.Solicitud?.CapacidadRequerida,
                         OBSERITEM = item.OBSERITEM,
-                        ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA),
+                        ENTRPREV = DateTime.Now.AddDays(item.DIAS_PLAZO_ENTREGA ?? 30),
                         ESTADO = SupplyChain.Shared.Enum.EstadoItem.Agregado,
                         SolicitudId = item.SOLICITUDID
                     };

@@ -20,7 +20,7 @@ namespace SupplyChain.Shared
         public string ACTIVO { get; set; }
         public int CG_DEC { get; set; }
         public int CG_DEC_OF { get; set; }
-        public DateTime FE_FORM { get; set; }
+        public DateTime FE_FORM { get; set; } = DateTime.Now;
         public decimal MERMA { get; set; }
         public decimal CANTIDAD { get; set; }
         public int REVISION { get; set; }
@@ -46,5 +46,6 @@ namespace SupplyChain.Shared
         public string FOTO { get; set; }
         public string AUTORIZA { get; set; }
         [NotMapped] public decimal? COSTO { get; set; } = 0;
+        [NotMapped] public string DES_PROD { get; set; } = "";
     }
 }
