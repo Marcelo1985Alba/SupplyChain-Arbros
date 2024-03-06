@@ -28,7 +28,7 @@
                                 OnToolbarClick="ToolbarProdFormClickHandler">
                     </GridEvents>
                     <GridColumns>
-                        <GridColumn HeaderText="Editar" Width="30px">
+                       @*  <GridColumn HeaderText="Editar" Width="30px">
                             <GridCommandColumns>
                                 <GridCommandColumn Type="CommandButtonType.Edit" Title="Editar"
                                                    ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-edit", Content = "", CssClass = "botonGrilla" })" />
@@ -39,7 +39,7 @@
                                 <GridCommandColumn Type="CommandButtonType.Edit" Title="Copiar"
                                                    ButtonOption="@(new CommandButtonOptions() { IconCss = "fa fa-copy", Content = "", CssClass = "botonGrilla" })" />
                             </GridCommandColumns>
-                        </GridColumn>
+                        </GridColumn> *@
                         <GridColumn Field=@nameof(vIngenieriaProductosFormulas.CG_PROD) HeaderText="Producto" Width="120"></GridColumn>
                         <GridColumn Field=@nameof(vIngenieriaProductosFormulas.DES_PROD) HeaderText="Descripcion" Width="150"></GridColumn>
                         <GridColumn Field=@nameof(vIngenieriaProductosFormulas.TIENE_FORM) HeaderText="Tiene Formula" TextAlign="TextAlign.Right"
