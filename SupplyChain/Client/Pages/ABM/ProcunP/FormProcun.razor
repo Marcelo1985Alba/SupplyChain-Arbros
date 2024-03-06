@@ -12,7 +12,7 @@
     <ToastPosition X="Center" Y="Top"></ToastPosition>
 </SfToast>
 
-<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="680px" ShowCloseIcon="true">
+<SfDialog @bind-Visible="Show" IsModal="true" Width="70%" Height="450px" ShowCloseIcon="true">
     <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
     <DialogTemplates>
         <Header>
@@ -42,15 +42,32 @@
                                     <label>Registro:</label>
                                     <SfNumericTextBox ID="Registro" @bind-Value="@((procuns.Id))"  Enabled="@procuns.ESNUEVO" Placeholder="Registro"></SfNumericTextBox>
                                 </div>*@
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-5">
                                     <label>Orden:</label>
                                     <SfNumericTextBox ID="Orden" @bind-Value="@(procuns.ORDEN)" Placeholder="Orden"></SfNumericTextBox>
                                     <ValidationMessage For="@(()=> procuns.ORDEN)"></ValidationMessage>
 
                                 </div>
+                                <div class="form-group col-md-3">
+                                    <label class="">Producto:</label>
+                                    <SfTextBox CssClass="customClass" ID="Producto" @bind-Value="@(procuns.CG_PROD)" Readonly="false"
+                                               Input="@(e=>Cg_Prod_Changed(e))"></SfTextBox>
+                                    <ValidationMessage For="@(()=> procuns.CG_PROD)"></ValidationMessage>
+
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="">Descripcion Producto:</label>
+                                    <SfTextBox CssClass="customClass" ID="Descripcion Producto" Value="@procuns.DESCRIPCION" Readonly="false"
+                                               Input="@(e=> Des_prod_Changed(e))"></SfTextBox>
+                                </div>
+
+                                <div class="form-group col-md-1">
+                                    <SfButton IconCss="fa fa-search" CssClass="e-smal e-round e-info" OnClick="@(async() => await BuscarProd())"
+                                              HtmlAttributes="@HtmlAttributeSubmit"></SfButton>
+                                </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-3">
+                               @*  <div class="form-group col-md-3">
                                     <label class="">Producto:</label>
                                     <SfTextBox CssClass="customClass" ID="Producto" @bind-Value="@(procuns.CG_PROD)" Readonly="false"
                                        Input="@(e=>Cg_Prod_Changed(e))" ></SfTextBox>
@@ -59,14 +76,14 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label class="">Descripcion Producto:</label>
-                                    <SfTextBox CssClass="customClass" ID="Descripcion Producto" Value="@procuns.Des_Prod" Readonly="false"
-                                      Input="@(e=> Des_prod_Changed(e))" ></SfTextBox>
+                                    <SfTextBox CssClass="customClass" ID="Descripcion Producto" Value="@procuns.DESCRIPCION" Readonly="false"
+                                      Input="@(e=> Des_prod_Changed(e))"></SfTextBox>
                                 </div>
 
                                 <div class="form-group col-md-1">
                                     <SfButton IconCss="fa fa-search" CssClass="e-smal e-round e-info" OnClick="@(async() => await BuscarProd())"
                                               HtmlAttributes="@HtmlAttributeSubmit"></SfButton>
-                                </div>
+                                </div> *@
                                 @**@
                                                                           
                             
@@ -74,12 +91,12 @@
     
                             <div class="form-row">
                                 
-                                <div class="form-group col-md-6">
+                                @* <div class="form-group col-md-6">
                                     <label>Linea:</label>
                                     <SfNumericTextBox ID="Linea" @bind-Value="@(procuns.CG_LINEA)" Placeholder="Linea"></SfNumericTextBox>
                                   
 
-                                </div>
+                                </div> *@
 
                                 <div class="form-group col-md-6">
                                     <a href="/Abms/celdas" target="_blank">Celda:</a>
@@ -91,48 +108,53 @@
 
 
                                 </div>
-                                                                                               
+                                <div class="form-group col-md-6">
+                                    <label>Proceso:</label>
+
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="ProcunProcesos" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(procuns.PROCESO)" DataSource="@procunsProcesos">
+                                        <ComboBoxFieldSettings Value="PROCESO" Text="PROCESO"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+
+
+                                </div>
                             </div>
 
                             <div class="form-row">
                                                                                                    
-                                <div class="form-group col-md-6">
-                                    <label>Proceso:</label>
-                             
-                                    <SfComboBox TValue="string" CssClass="customClass" TItem="ProcunProcesos" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(procuns.PROCESO)" DataSource="@procunsProcesos">
-                                       <ComboBoxFieldSettings Value="PROCESO" Text="PROCESO"></ComboBoxFieldSettings>          
-                                   </SfComboBox>
-                                  
-
-                                </div>
-                                <div class="form-group col-md-6">
+                                
+                                @* <div class="form-group col-md-6">
                                     <label>Area:</label>
                                     <SfNumericTextBox ID="Area" @bind-Value="@(procuns.CG_AREA)" Placeholder="Area"></SfNumericTextBox>
-                                    @* <ValidationMessage For="@(()=> procuns.CG_AREA)"></ValidationMessage> *@
+                                    @* <ValidationMessage For="@(()=> procuns.CG_AREA)"></ValidationMessage> 
 
-                                </div>
+                                </div> *@
                                 <div class="form-group col-md-6">
                                     <label>Tiempo:</label>
                                     <SfNumericTextBox ID="Tiempo" @bind-Value="@(procuns.TIEMPO1)" Placeholder="Tiempo"></SfNumericTextBox>
                                     <ValidationMessage For="@(()=> procuns.TIEMPO1)"></ValidationMessage>
 
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-3">
                                     <label>TS1:</label>
                                     <SfNumericTextBox ID="TS1" @bind-Value="@(procuns.TS1)" Placeholder="TS1"></SfNumericTextBox>
                                     <ValidationMessage For="@(()=> procuns.TS1)"></ValidationMessage>
                                 </div>
-
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-1">
                                     <label>Proporcion:</label>
                                     <SfTextBox ID="Proporcion" @bind-Value="@(procuns.PROPORC)" Placeholder="Proporcion"></SfTextBox>
                                     <ValidationMessage For="@(()=> procuns.PROPORC)"></ValidationMessage>
 
                                 </div>
                             </div>
+                            @* <div class="form-row">
+                                <div class="form-group col-md-1">
+                                    <label>Proporcion:</label>
+                                    <SfTextBox ID="Proporcion" @bind-Value="@(procuns.PROPORC)" Placeholder="Proporcion"></SfTextBox>
+                                    <ValidationMessage For="@(()=> procuns.PROPORC)"></ValidationMessage>
+
+                                </div>
+                            </div> *@
                         </div>
                     </div>
                 </div>
