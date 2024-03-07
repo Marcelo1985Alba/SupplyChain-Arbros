@@ -183,12 +183,12 @@ namespace SupplyChain
         //}
 
 
-        [HttpGet("Search/{idProd}/{DESCRIPCION}")]
-        public async Task<ActionResult<IEnumerable<Procun>>> Search(string idProd, string DESCRIPCION)
+        [HttpGet("Search/{idProd}/{Des_Prod}")]
+        public async Task<ActionResult<IEnumerable<Procun>>> Search(string idProd, string Des_Prod)
         {
             try
             {
-                return Ok(await _procunRepository.Search(idProd, DESCRIPCION));
+                return Ok(await _procunRepository.Search(idProd, Des_Prod));
             }
             catch (Exception ex)
             {

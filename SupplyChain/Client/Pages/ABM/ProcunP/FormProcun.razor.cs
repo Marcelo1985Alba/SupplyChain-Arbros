@@ -103,16 +103,16 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             await refSpinnerCli.ShowAsync();
             popupBuscadorVisibleProducto = false;
             procuns.CG_PROD = productoSelected.Id;
-            procuns.DESCRIPCION = productoSelected.DES_PROD;
+            procuns.Des_Prod = productoSelected.DES_PROD;
             await refSpinnerCli.HideAsync();
         }
         protected async Task Des_prod_Changed(InputEventArgs args)
         {
-            string DESCRIPCION = args.Value;
+            string Des_Prod = args.Value;
 
-            procuns.DESCRIPCION = DESCRIPCION;
+            procuns.Des_Prod= Des_Prod;
 
-            var response = await ProductoService.Search(procuns.CG_PROD, procuns.DESCRIPCION);
+            var response = await ProductoService.Search(procuns.CG_PROD, procuns.Des_Prod);
             if (response.Error)
             {
                 await ToastMensajeError("Al obtener Producto");
@@ -125,7 +125,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     if (response.Response.Count == 1)
                     {
                         procuns.CG_PROD= response.Response[0].Id;
-                        procuns.DESCRIPCION= response.Response[0].DES_PROD;
+                        procuns.Des_Prod = response.Response[0].DES_PROD;
                     }
                     else
                     {   
@@ -141,7 +141,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             string idProd = args.Value;
             procuns.CG_PROD = idProd;
 
-            var response = await ProductoService.Search(idProd, procuns.DESCRIPCION);
+            var response = await ProductoService.Search(idProd, procuns.Des_Prod);
             if (response.Error)
             {
 
@@ -154,11 +154,11 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     if (response.Response.Count == 1)
                     {
                         procuns.CG_PROD= response.Response[0].Id;
-                        procuns.DESCRIPCION = response.Response[0].DES_PROD;
+                        procuns.Des_Prod = response.Response[0].DES_PROD;
                     }
                     else
                     {
-                        procuns.DESCRIPCION = string.Empty;
+                        procuns.Des_Prod= string.Empty;
                     }
                 }
 
