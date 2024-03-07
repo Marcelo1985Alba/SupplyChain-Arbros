@@ -10,9 +10,10 @@
 <div>
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-12 e-card">
+            <SfSpinner Label="Cargando..." Type="SpinnerType.Fabric" Size="100" @bind-Visible="@ShowSpinner"></SfSpinner>
             <h3 style="padding:10px"><strong>#Contactos</strong></h3>
             <SfListBox @bind-Value="@ContactId" TValue="string" TItem="Usuario" DataSource="@ChatUsers" AllowFiltering="true" Height="480px"
-                       FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains">
+                       FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" id="ListView">
                 <ListBoxFieldSettings Text="Nombre" Value="Id"></ListBoxFieldSettings>
                 <ListBoxSelectionSettings Mode="Syncfusion.Blazor.DropDowns.SelectionMode.Single"></ListBoxSelectionSettings>
                 <ListBoxEvents TValue="string" TItem="Usuario" ValueChange="@change"></ListBoxEvents>
@@ -41,7 +42,8 @@
                 </ListBoxTemplates>
             </SfListBox>
         </div>
-        <div class="col-lg-9 col-md-6 col-sm-12" >
+        <div class="col-lg-9 col-md-6 col-sm-12 e-card">
+            <SfSpinner Label="Cargando..." Type="SpinnerType.Fabric" Size="100" @bind-Visible="@ShowSpinnerMensajes"></SfSpinner>
             <SfListView ID="list"
                         DataSource="@messages"
                         ShowHeader="true"

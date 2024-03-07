@@ -37,7 +37,8 @@ namespace SupplyChain.Client.Pages.ChatApp
         protected List<ChatMessage> messages = new List<ChatMessage>();
         protected List<Usuario> ChatUsers = new List<Usuario>();
         private AuthenticationState authState;
-
+        protected bool ShowSpinner = false;
+        protected bool ShowSpinnerMensajes = false;
         private byte[]? imageUsuario;
 
         protected SfTextBox SfTextBox;
@@ -45,36 +46,37 @@ namespace SupplyChain.Client.Pages.ChatApp
 
         protected async override Task OnInitializedAsync()
         {
+            
             MainLayout.Titulo = "Chat";
-            if (hubConnection == null)
-            {
-                hubConnection = new HubConnectionBuilder().WithUrl(_navigationManager.ToAbsoluteUri("/chathub")).Build();
-            }
-            if (hubConnection.State == HubConnectionState.Disconnected)
-            {
-                await hubConnection?.StartAsync();
-            }
-            hubConnection?.On<ChatMessage, string>("ReceiveMessage", async (message, userName) =>
-            {
-                if ((ContactId == message.ToUserId && CurrentUserId == message.FromUserId ) || (ContactId == message.FromUserId && CurrentUserId == message.ToUserId))
-                {
+            //if (hubConnection == null)
+            //{
+            //    hubConnection = new HubConnectionBuilder().WithUrl(_navigationManager.ToAbsoluteUri("/chathub")).Build();
+            //}
+            //if (hubConnection.State == HubConnectionState.Disconnected)
+            //{
+            //    await hubConnection?.StartAsync();
+            //}
+            //hubConnection?.On<ChatMessage, string>("ReceiveMessage", async (message, userName) =>
+            //{
+            //    if ((ContactId == message.ToUserId && CurrentUserId == message.FromUserId ) || (ContactId == message.FromUserId && CurrentUserId == message.ToUserId))
+            //    {
 
-                    if ((ContactId == message.ToUserId && CurrentUserId == message.FromUserId))
-                    {
-                        messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { Email = CurrentUserEmail} });
-                        await hubConnection?.SendAsync("ChatNotificationAsync", $"Nuevo Mensaje de {userName}", ContactId, CurrentUserId);
-                    }
-                    else if ((ContactId == message.FromUserId && CurrentUserId == message.ToUserId))
-                    {
-                        messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { Email = ContactEmail } });
-                    }
+            //        if ((ContactId == message.ToUserId && CurrentUserId == message.FromUserId))
+            //        {
+            //            
+            //            await hubConnection?.SendAsync("ChatNotificationAsync", $"Nuevo Mensaje de {userName}", ContactId, CurrentUserId);
+            //        }
+            //        else if ((ContactId == message.FromUserId && CurrentUserId == message.ToUserId))
+            //        {
+            //            messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { Email = ContactEmail } });
+            //        }
 
-                    await IrUtlimoMensaje();
-                    StateHasChanged();
-                }
-            });
+            //        await IrUtlimoMensaje();
+            //        StateHasChanged();
+            //    }
+            //});
 
-            await GetUsersAsync();
+            GetUsersAsync();
             var state = await authenticationState;
             var user = state.User;
             var claims = user.Claims.ToList();
@@ -86,7 +88,7 @@ namespace SupplyChain.Client.Pages.ChatApp
 
             if (!string.IsNullOrEmpty(ContactId))
             {
-                await LoadUserChat(ContactId);
+                LoadUserChat(ContactId);
             }
 
         }
@@ -108,6 +110,7 @@ namespace SupplyChain.Client.Pages.ChatApp
 
         private async Task GetUsersAsync()
         {
+            ShowSpinner = true;
             var response = await ChatService.GetUsersAsync();
             if (response.Error)
             {
@@ -117,12 +120,13 @@ namespace SupplyChain.Client.Pages.ChatApp
             {
                 ChatUsers = response.Response;
             }
+            ShowSpinner = false;
         }
 
         async Task LoadUserChat(string userId)
         {
-           
-                var response = await ChatService.GetUserDetailsAsync(userId);
+            ShowSpinnerMensajes = true;
+            var response = await ChatService.GetUserDetailsAsync(userId);
                 if (response.Error)
                 {
 
@@ -145,13 +149,14 @@ namespace SupplyChain.Client.Pages.ChatApp
                         messages = responseConversation.Response;
                     }
                 }
-            
+            ShowSpinnerMensajes = false;
         }
 
         protected async Task EnviarMensaje()
         {
             if (!string.IsNullOrEmpty(CurrentMessage) && !string.IsNullOrEmpty(ContactId))
             {
+
                 //Save Message to DB
                 var chatHistory = new ChatMessage()
                 {
@@ -161,15 +166,16 @@ namespace SupplyChain.Client.Pages.ChatApp
                     CreatedDate = DateTime.Now
 
                 };
-                var response = await ChatService.Agregar(chatHistory);
-                if (response.Error)
-                {
-                    Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
+                messages.Add(new ChatMessage { Message = chatHistory.Message, CreatedDate = chatHistory.CreatedDate, FromUser = new ApplicationUser() { Email = CurrentUserEmail } });
+                var response = ChatService.Agregar(chatHistory);
+                //if (response.Error)
+                //{
+                //    Console.WriteLine(response.HttpResponseMessage.ReasonPhrase);
 
-                }
+                //}
 
                 chatHistory.FromUserId = CurrentUserId;
-                await hubConnection.SendAsync("SendMessageAsync", chatHistory, CurrentUserEmail);
+                hubConnection.SendAsync("SendMessageAsync", chatHistory, CurrentUserEmail);
                 CurrentMessage = string.Empty;
             }
 

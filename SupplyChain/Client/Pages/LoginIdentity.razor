@@ -113,7 +113,7 @@
                 Icon = "e-success toast-icons"
             });
 
-            await loginServiceJWT.Login(xUser);
+            loginServiceJWT.Login(xUser);
             var geturl = navigationManager.ToBaseRelativePath(navigationManager.Uri);
             var url = geturl.Split("=");
 
