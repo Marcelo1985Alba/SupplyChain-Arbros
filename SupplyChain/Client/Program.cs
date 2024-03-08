@@ -27,7 +27,7 @@ namespace SupplyChain.Client
                 .RegisterLicense("MTA0Njk4NUAzMjMwMmUzNDJlMzBaRFRIcHVVaVJ2K1ZFVTd6TXA4dnRXQ01EVlRTMEpXdXpkTnFUTGdMem9rPQ==");
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-
+            builder.Services.AddMemoryCache();
             builder.RootComponents.Add<App>("#app");
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             ConfigureServices(builder.Services);

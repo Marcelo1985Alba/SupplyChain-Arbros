@@ -213,6 +213,7 @@
 </SfDialog>
 
 <SfDialog ID="dlgEditar" Width="80%" Height="92%" IsModal="true" ShowCloseIcon="true" Visible="@dialogVisibleEditar">
+    <DialogEvents Closed="CerrarDialog"></DialogEvents>
     <DialogTemplates>
         <Header>
             <p class="text-white">Editar Formula de Producto: @DataEditarProductosFormulas[0].Cg_Prod.Trim() - Revision: @DataEditarProductosFormulas[0].REVISION</p>
@@ -249,7 +250,10 @@
                    Visible="@PopupBuscadorProdVisible"
                    DataSource="@Insumos"
                    Columnas="@(new string[] { "ID", "DES_PROD", "CG_ORDEN" })"
-                   OnObjetoSeleccionado="@(async(o)=> await OnInsumoSeleccionado(o))" />
+                   OnObjetoSeleccionado="@(async(o)=> await OnInsumoSeleccionado(o))" 
+                   OnCerrarDialog="CerrarDialogProd">
+
+</BuscadorEmergente>
 
 @*
 
