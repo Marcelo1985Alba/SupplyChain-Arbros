@@ -69,7 +69,7 @@ namespace SupplyChain.Shared
 		public decimal REVISION { get; set; }
 		public string USUARIO { get; set; }
 		public string? AUTORIZA { get; set; }
-		public string? DESCRIPCION {  get; set; }
+		
 		[NotMapped]
 		public bool GUARDADO { get; set; }
 		[NotMapped]
