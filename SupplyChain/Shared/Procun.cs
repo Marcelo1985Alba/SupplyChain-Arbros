@@ -75,7 +75,7 @@ namespace SupplyChain.Shared
 		[NotMapped]
 		public bool ESNUEVO { get; set; }
 		[NotMapped]
-		public string? Des_Prod { get; set; } = "";
+		public string Des_Prod { get; set; }
 		
 	}
 }

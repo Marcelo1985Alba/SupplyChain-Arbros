@@ -16,22 +16,6 @@ namespace SupplyChain.Server.Repositorios
 
         }
 
-
-
-        //public async Task<IEnumerable<Procun>> ActualizaCelda(decimal id, string cg_celda)
-        //{
-        //    string xSQL = $"UPDATE PROCUN SET CG_PROD='{cg_celda}' WHERE ID ={id}";
-        //    await base.Database.ExecuteSqlRawAsync(xSQL);
-
-        //    return await DbSet.Where(p=>p.Id == id).ToListAsync();
-        //}
-        //public async Task<IEnumerable<Procun>> ActualizaProceso(decimal id, string proceso)
-        //{
-        //    string xSQL = $"UPDATE PROCUN SET PROCESO='{proceso}' WHERE ID ={id}";
-        //    await base.Database.ExecuteSqlRawAsync(xSQL);
-
-        //    return await DbSet.Where(p => p.Id == id).ToListAsync();
-        //}
         internal async Task<IEnumerable<Procun>> Search(string idProd, string Des_Prod)
         {
             IQueryable<Procun> query = DbSet.AsQueryable();
@@ -44,6 +28,14 @@ namespace SupplyChain.Server.Repositorios
                 query = query.Where(p=>p.Des_Prod.Contains(Des_Prod));
             }
             return await query.ToListAsync();
+        }
+
+        public async Task<List<vProcun>> GetvProcun()
+        {
+            var appDb = new AppDbContext();
+            {
+                return await appDb.vProcun.ToListAsync();
+            }
         }
     }
 }

@@ -165,11 +165,16 @@ namespace SupplyChain
 
         public DbSet<CampoComodin> CampoComodin {  get; set; }
         public DbSet<ProcunProcesos> ProcunProcesos{ get; set; }
+        public DbSet<vProcun> vProcun {  get; set; }
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             this.Database.SetCommandTimeout(60);
+        }
+
+        public AppDbContext()
+        {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -299,6 +304,7 @@ namespace SupplyChain
             modelBuilder.Entity<vESTADOS_COMPRAS>().HasNoKey().ToView("vESTADOS_COMPRAS");
 
             modelBuilder.Entity<vProveedorItris>().HasNoKey().ToView("vProveItris");
+            modelBuilder.Entity<vProcun>().HasNoKey().ToView("vProcun");
 
 
         }

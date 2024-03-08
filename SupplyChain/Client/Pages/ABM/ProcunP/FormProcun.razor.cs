@@ -28,6 +28,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         [Inject] public LineasService LineasService { get; set; }
         [Inject] public CeldasService CeldasService { get; set; }
         [Parameter] public Procun procuns { get; set; } = new();
+        [Parameter] public vProcun vprocuns { get; set; } = new();
         [Parameter] public ProcunProcesos procunProcesos { get; set; } = new();
         [Parameter] public Producto prod { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;

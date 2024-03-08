@@ -15,6 +15,7 @@ namespace SupplyChain
     public class ProcunController : ControllerBase
     {
         private readonly ProcunRepository _procunRepository;
+
         private readonly ProductoRepository _productoRepository;
 
         public ProcunController(ProcunRepository procunRepository)
@@ -23,33 +24,60 @@ namespace SupplyChain
         }
 
         // GET: api/Procun
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Procun>>> GetProcun()
+        //{
+        //    try
+        //    {   //var listaprocun= await _procunRepository.ObtenerTodos();
+        //        return await _procunRepository.ObtenerTodos();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex);
+        //    }
+        //}
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Procun>>> GetProcun()
+        public async Task<ActionResult<IEnumerable<vProcun>>> GetvProcun()
         {
             try
-            {   //var listaprocun= await _procunRepository.ObtenerTodos();
-                return await _procunRepository.ObtenerTodos();
-            }                                                               
+            {   
+                //var listaprocun= await _procunRepository.ObtenerTodos();
+                return await _procunRepository.GetvProcun();
+            }
             catch (Exception ex)
             {
                 return BadRequest(ex);
             }
         }
-        
+
+
+        //[HttpGet("{Cg_Prod}")]
+        //public async Task<IEnumerable<vProcun>> GetvProcun(string Cg_Prod)
+        //{
+        //    try
+        //    {
+        //        var listaprocun = await _procunRepository.ObtenerTodos();
+        //        return listaprocun.Where(x => x.CG_PROD == Cg_Prod).ToList();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
         // GET: api/Procun/Cg_Prod
-        [HttpGet("{Cg_Prod}")]
-        public async Task<IEnumerable<Procun>> GetProcun(string Cg_Prod)
-        {
-            try
-            {
-                var listaprocun = await _procunRepository.ObtenerTodos();
-                return listaprocun.Where(x => x.CG_PROD == Cg_Prod).ToList();
-            }                                                               
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
+        //[HttpGet("{Cg_Prod}")]
+        //public async Task<IEnumerable<Procun>> GetProcun(string Cg_Prod)
+        //{
+        //    try
+        //    {
+        //        var listaprocun = await _procunRepository.ObtenerTodos();
+        //        return listaprocun.Where(x => x.CG_PROD == Cg_Prod).ToList();
+        //    }                                                               
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
 
         [HttpGet("Existe/{id}")]
         public async Task<ActionResult<bool>> ExisteProcun(decimal id)
@@ -84,7 +112,7 @@ namespace SupplyChain
                 Proc.CG_CATEOP = " ";
                 Proc.CG_FORM = 1;
                 await _procunRepository.Agregar(Proc);
-                return CreatedAtAction("GetProcun", new { id = Proc.Id }, Proc);
+                return CreatedAtAction("GetvProcun", new { id = Proc.Id }, Proc);
             }
             catch (DbUpdateException exx)
             {
