@@ -115,7 +115,7 @@ namespace SupplyChain.Client.Pages.Ingenieria
         
         protected async override Task OnInitializedAsync()
         {
-            MainLayout.Titulo = "Consulta de Fórmulas";
+            MainLayout.Titulo = "Definición de Fórmulas";
             VisibleSpinner = true;
             authState = await authenticationState;
             DataOrdeProductosFormulas =

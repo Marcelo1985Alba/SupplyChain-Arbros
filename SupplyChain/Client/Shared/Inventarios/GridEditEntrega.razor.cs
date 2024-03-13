@@ -325,7 +325,7 @@ namespace SupplyChain.Client.Shared.Inventarios
 
         protected async Task CerrarBuscador()
         {
-
+            PopupBuscadorStockVisible = false;
         }
 
         private async Task GetSeleccionResumenStock(vResumenStock resumenStock)

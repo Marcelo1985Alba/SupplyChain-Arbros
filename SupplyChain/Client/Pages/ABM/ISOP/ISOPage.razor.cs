@@ -37,6 +37,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
         "ExcelExport"
         };
         protected List<ISO> isos = new();
+        protected List<ISO> allIsos = new();
 
         protected SfToast ToastObj;
         protected SfSpinner refSpinner;
@@ -45,6 +46,10 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
         protected bool SpinnerVisible = false;
 
         protected bool popupFormVisible = false;
+        
+        public string blancasCss { get; set; } = "blancas";
+        public string naranjasCss { get; set; } = "naranjas";
+        public string RojasCss { get; set; } = "rojas";
 
         [CascadingParameter] MainLayout MainLayout { get; set; }
         protected override async Task OnInitializedAsync()
@@ -56,6 +61,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
             if (!response.Error)
             {
                 isos = response.Response;
+                allIsos = isos;
             }
             SpinnerVisible = false;
         }
@@ -190,7 +196,20 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
                 await refGrid.RefreshHeader();
             }
         }
-
+        public List<GraphicIso.BaseOption> Filtros = new List<GraphicIso.BaseOption> {
+            new GraphicIso.BaseOption() {Text= "Ambos" },
+            new GraphicIso.BaseOption() {Text= "9001" },
+            new GraphicIso.BaseOption() {Text= "14001" },
+        };
+        protected void ChangeFiltro(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, GraphicIso.BaseOption> args)
+        {
+            if (args.Value == "Ambos")
+                isos = allIsos;
+            else if (args.Value == "9001")
+                isos = allIsos.Where(s => s.ImpAmb == "OPORTUNIDAD" || s.ImpAmb == "RIESGO").ToList();
+            else if (args.Value == "14001")
+                isos = allIsos.Where(s => s.ImpAmb != "OPORTUNIDAD" && s.ImpAmb != "RIESGO").ToList();
+        }
         protected async Task OnActionCompleteHandler(ActionEventArgs<ISO> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
