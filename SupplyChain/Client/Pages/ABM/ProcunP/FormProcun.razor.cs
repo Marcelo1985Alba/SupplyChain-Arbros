@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using SupplyChain.Shared.Models;
 using System.Threading.Tasks;
 
 namespace SupplyChain.Client.Pages.ABM.ProcunP
@@ -40,6 +39,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         protected ProductoDialog refProductoDialog;
 
         protected SfGrid<Procun> refGridItems;
+        
         protected SfSpinner refSpinnerCli;
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
@@ -58,6 +58,13 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         protected SfSpinner refSpinner;
         
         
+        public async Task Refrescar(vProcun vprocun)
+        {
+            vprocuns = vprocun;
+            await InvokeAsync(StateHasChanged);
+        }
+
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -103,17 +110,17 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         {
             await refSpinnerCli.ShowAsync();
             popupBuscadorVisibleProducto = false;
-            procuns.CG_PROD = productoSelected.Id;
-            procuns.Des_Prod = productoSelected.DES_PROD;
+            vprocuns.CG_PROD = productoSelected.Id;
+            vprocuns.DES_PROD = productoSelected.DES_PROD;
             await refSpinnerCli.HideAsync();
         }
         protected async Task Des_prod_Changed(InputEventArgs args)
         {
             string Des_Prod = args.Value;
 
-            procuns.Des_Prod= Des_Prod;
+            vprocuns.DES_PROD= Des_Prod;
 
-            var response = await ProductoService.Search(procuns.CG_PROD, procuns.Des_Prod);
+            var response = await ProductoService.Search(vprocuns.CG_PROD, vprocuns.DES_PROD);
             if (response.Error)
             {
                 await ToastMensajeError("Al obtener Producto");
@@ -125,12 +132,12 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     if (response.Response.Count == 1)
                     if (response.Response.Count == 1)
                     {
-                        procuns.CG_PROD= response.Response[0].Id;
-                        procuns.Des_Prod = response.Response[0].DES_PROD;
+                        vprocuns.CG_PROD= response.Response[0].Id;
+                        vprocuns.DES_PROD= response.Response[0].DES_PROD;
                     }
                     else
                     {   
-                        procuns.CG_PROD = string.Empty;
+                        vprocuns.CG_PROD = string.Empty;
                     }
                 }
             }
@@ -140,9 +147,9 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         protected async Task Cg_Prod_Changed(InputEventArgs args)
         {
             string idProd = args.Value;
-            procuns.CG_PROD = idProd;
+            vprocuns.CG_PROD = idProd;
 
-            var response = await ProductoService.Search(idProd, procuns.Des_Prod);
+            var response = await ProductoService.Search(idProd, vprocuns.DES_PROD);
             if (response.Error)
             {
 
@@ -154,12 +161,12 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 {
                     if (response.Response.Count == 1)
                     {
-                        procuns.CG_PROD= response.Response[0].Id;
-                        procuns.Des_Prod = response.Response[0].DES_PROD;
+                        vprocuns.CG_PROD= response.Response[0].Id;
+                        vprocuns.DES_PROD = response.Response[0].DES_PROD;
                     }
                     else
                     {
-                        procuns.Des_Prod= string.Empty;
+                        vprocuns.DES_PROD= string.Empty;
                     }
                 }
 
@@ -186,16 +193,16 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             return false;
         }
 
-        protected async Task<bool> Actualizar(Procun proc)
+        protected async Task<bool> Actualizar(vProcun vproc)
         {
-            var response = await ProcunService.ActualizarPro(proc);
+            var response = await ProcunService.ActualizarPro(vproc);
             //var response = await ProcunService.Actualizar(proc.Id, proc);
             if (response.Error)
             {
                await ToastMensajeError("Error al intentar Guardar el procun.");
                return false;
             }
-            procuns = proc;
+            vprocuns = vproc;
             return true;
 
         }
@@ -203,21 +210,21 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         protected async Task GuardarProc()
         {
                 bool guardado=false;
-                if (procuns.ESNUEVO)
+                if (vprocuns.ESNUEVO)
                 {
                     guardado = await Agregar(procuns);
-                    procuns.ESNUEVO = true;
+                    vprocuns.ESNUEVO = true;
                 }
                 else
                 {   
-                    guardado = await Actualizar(procuns);
+                    guardado = await Actualizar(vprocuns);
 
                 }
                 
                 if (guardado)
                 {
                     Show = false;
-                    procuns.GUARDADO = guardado;
+                    vprocuns.GUARDADO = guardado;
                     await OnGuardar.InvokeAsync(procuns);
                 }   
         }

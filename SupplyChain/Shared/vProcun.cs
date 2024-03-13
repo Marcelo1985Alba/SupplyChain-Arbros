@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Shared
 {
-    public class vProcun : EntityBase<int>
+    public class vProcun 
     {
         [Key]
-        [Display(Name ="REGISTRO")]
-        public int Id { get; set; }
+        [Column("REGISTRO")]
+        public decimal Id { get; set; }
         public int ORDEN { get; set; }
         [ColumnaGridViewAtributo(Name = "Código producto"), Required(ErrorMessage = "El producto es requerido")]
         public string CG_PROD { get; set; }

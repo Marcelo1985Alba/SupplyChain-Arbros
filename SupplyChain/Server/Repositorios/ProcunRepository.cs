@@ -30,12 +30,14 @@ namespace SupplyChain.Server.Repositorios
             return await query.ToListAsync();
         }
 
-        public async Task<List<vProcun>> GetvProcun()
+        public async Task<IEnumerable<vProcun>> ObtenerProcun()
         {
-            var appDb = new AppDbContext();
-            {
-                return await appDb.vProcun.ToListAsync();
-            }
+            string xSQL = string.Format("select top 10 * from vprocun");
+
+            return await base.Db.vProcun.FromSqlRaw(xSQL).ToListAsync();
+
         }
+
+
     }
 }

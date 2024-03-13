@@ -43,32 +43,33 @@ namespace SupplyChain.Client.HelperService
 
             return true;
         }
-        public async Task<HttpResponseWrapper<List<vProcun>>> GetvProcun()
+
+        public async Task<bool> Eliminar2(List<vProcun> procs)
         {
-               return await http.GetFromJsonAsync<List<vProcun>>($"ai/Procun/GetvProcun");
+            var response = await http.PostAsJsonAsync<List<vProcun>>($"{API}/PostList", procs);
+            if (response.Error)
+            {
+                Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+                return false;
+            }
+
+            return true;
+        }
+        public async Task<HttpResponseWrapper<List<vProcun>>> GetvProcuns()
+        {
+               return await http.GetFromJsonAsync<List<vProcun>>($"{API}/GetvProcuns");
 
         }
 
-
-
-        //public async Task<HttpResponseWrapper<List<Procun>>> ActualizaCelda(decimal numeroprocun,string cg_celda)
-        //{
-        //    return await http.GetFromJsonAsync<List<Procun>>($"api/Procun/ActualizaCelda/{numeroprocun}/{cg_celda}");
-        //}
-        //public async Task<HttpResponseWrapper<List<Procun>>> ActualizaProceso(decimal numeroprocun, string proceso)
-        //{
-        //    return await http.GetFromJsonAsync<List<Procun>>($"api/Procun/ActualizaCelda/{numeroprocun}/{proceso}");
-        //}
         public async Task<HttpResponseWrapper<List<Procun>>> PostProcun(Procun proc)
         {
-            return await http.GetFromJsonAsync<List<Procun>>($"api/Procun/PostProcun/{proc}");
+            return await http.GetFromJsonAsync<List<Procun>>($"{API}/PostProcun/{proc}");
         }
 
-        public async Task<HttpResponseWrapper<object>>ActualizarPro(Procun procun)
+        public async Task<HttpResponseWrapper<object>> ActualizarPro(vProcun vprocun)
         {
-            return await http.PutAsJsonAsync($"api/Procun",procun);
+            return await http.PutAsJsonAsync($"{API}", vprocun);
         }
-
         public async Task<HttpResponseWrapper<List<Procun>>> Search(string idProd ="VACIO", string Des_Prod = "VACIO")
         {
             //Des_Prod = string.IsNullOrEmpty(Des_Prod) ? "VACIO" : Des_Prod;

@@ -76,6 +76,6 @@ namespace SupplyChain.Shared
 		public bool ESNUEVO { get; set; }
 		[NotMapped]
 		public string Des_Prod { get; set; }
-		
+
 	}
 }

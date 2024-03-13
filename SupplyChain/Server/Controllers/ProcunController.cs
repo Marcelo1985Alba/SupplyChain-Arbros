@@ -17,53 +17,54 @@ namespace SupplyChain
         private readonly ProcunRepository _procunRepository;
 
         private readonly ProductoRepository _productoRepository;
-
-        public ProcunController(ProcunRepository procunRepository)
+        public ProcunController(ProcunRepository procunRepository,ProductoRepository productoRepository)
         {
             this._procunRepository = procunRepository;
+           
+            _productoRepository = productoRepository;
         }
 
-        // GET: api/Procun
+        //GET: api/Procun
         //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Procun>>> GetProcun()
-        //{
-        //    try
-        //    {   //var listaprocun= await _procunRepository.ObtenerTodos();
-        //        return await _procunRepository.ObtenerTodos();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex);
-        //    }
-        //}
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<vProcun>>> GetvProcun()
+        // public async Task<ActionResult<IEnumerable<Procun>>> GetProcun()
+        // {
+        //     try
+        //     {   //var listaprocun= await _procunRepository.ObtenerTodos();
+        //         return await _procunRepository.ObtenerTodos();
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return BadRequest(ex);
+        //     }
+        // }
+        [HttpGet("GetvProcuns")]
+        public async Task<ActionResult<IEnumerable<vProcun>>> GetvProcuns()
         {
             try
-            {   
-                //var listaprocun= await _procunRepository.ObtenerTodos();
-                return await _procunRepository.GetvProcun();
+            {
+                var listaprocun = await _procunRepository.ObtenerProcun();
+                return Ok(listaprocun);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
 
-        //[HttpGet("{Cg_Prod}")]
-        //public async Task<IEnumerable<vProcun>> GetvProcun(string Cg_Prod)
-        //{
-        //    try
-        //    {
-        //        var listaprocun = await _procunRepository.ObtenerTodos();
-        //        return listaprocun.Where(x => x.CG_PROD == Cg_Prod).ToList();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return null;
-        //    }
-        //}
+        [HttpGet("{Cg_Prod}")]
+        public async Task<IEnumerable<vProcun>> GetvProcun(string Cg_Prod)
+        {
+            try
+            {
+                var listaprocun = await _procunRepository.ObtenerProcun();
+                return listaprocun.Where(x => x.CG_PROD == Cg_Prod).ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         // GET: api/Procun/Cg_Prod
         //[HttpGet("{Cg_Prod}")]
         //public async Task<IEnumerable<Procun>> GetProcun(string Cg_Prod)
@@ -78,6 +79,7 @@ namespace SupplyChain
         //        return null;
         //    }
         //}
+
 
         [HttpGet("Existe/{id}")]
         public async Task<ActionResult<bool>> ExisteProcun(decimal id)
@@ -249,6 +251,35 @@ namespace SupplyChain
             return Ok(procun);
         }
 
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutProcun(decimal id, Procun Proc)
+        //{
+        //    if (id != Proc.Id)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    try
+        //    {
+        //        await _procunRepository.Actualizar(Proc);
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!await _procunRepository.Existe(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            return BadRequest();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex);
+        //    }
+        //    return Ok(Proc);
+        //}
 
         //PUT: api/Procun/5
         //[HttpPut("{id}")]

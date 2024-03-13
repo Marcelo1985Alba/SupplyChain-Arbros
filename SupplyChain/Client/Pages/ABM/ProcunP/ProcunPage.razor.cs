@@ -29,6 +29,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
         "Add",
+        //new ItemModel { Text = "Editar", TooltipText = "Editar", PrefixIcon = "e-edit", Id = "Editar" },
         "Edit",
         "Delete",
         new ItemModel { Text = "Copia", TooltipText = "Copiar una celda", PrefixIcon = "e-copy", Id = "Copy" },
@@ -37,10 +38,13 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
 
         protected FormProcun refFormProcun;
         protected List<Procun> procuns = new();
+        protected List<vProcun> vprocuns = new();
         protected SfToast ToastObj;
         protected SfSpinner refSpinner;
         protected SfGrid<Procun> refGrid;
+        protected SfGrid<vProcun> refGrid2;
         protected Procun procSeleccionado = new();
+        protected vProcun vprocSeleccionado = new();
         protected bool SpinnerVisible = false;
 
         protected bool popupFormVisible = false;
@@ -53,10 +57,10 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             MainLayout.Titulo = "Procun";
 
             SpinnerVisible = true;
-            var response = await ProcunService.Get();
+            var response = await ProcunService.GetvProcuns();
             if (!response.Error)
             {
-                procuns = response.Response;
+                vprocuns = response.Response;
             }
             SpinnerVisible = false;
         }
@@ -64,7 +68,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         #region "Eventos Vista Grilla"
         protected async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
         {
-            await refGrid.SetPersistData(vistasGrillas.Layout);
+            await refGrid.SetPersistDataAsync(vistasGrillas.Layout);
         }
         protected async Task OnReiniciarGrilla()
         {
@@ -82,13 +86,13 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             }
             else if (args.Item.Id == "grdProcun_delete")
             {
-                if((await refGrid.GetSelectedRecordsAsync()).Count > 0)
+                if((await refGrid2.GetSelectedRecordsAsync()).Count > 0)
                 {
                     bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desela eliminar el proceso?");
                     if (isConfirmed)
                     {
-                        List<Procun> procunsABorrar= await refGrid.GetSelectedRecordsAsync();
-                        var response = ProcunService.Eliminar(procunsABorrar);
+                        List<vProcun> procunsABorrar= await refGrid2.GetSelectedRecordsAsync();
+                        var response = ProcunService.Eliminar2(procunsABorrar);
                         if (!response.IsCompletedSuccessfully)
                         {
                             await this.ToastObj.ShowAsync(new ToastModel
@@ -104,46 +108,48 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                         {
                             await ToastMensajeError();
                         }
+                        await refGrid2.Refresh();
 
                         //await refGrid.Refresh();
-                         
+
                         // novaawait refGrid.RefreshColumnsAsync();    
                     }
                 }
             }
             else if (args.Item.Id == "ExcelExport")
             {
-                await refGrid.ExportToExcelAsync();
+                await refGrid2.ExportToExcelAsync();
             }
+          
          
         }
 
 
         private async Task CopiarProcun()
         {
-            if (refGrid.SelectedRecords.Count == 1)
+            if (refGrid2.SelectedRecords.Count == 1)
             {
                 procSeleccionado = new();
-                Procun selectedRecord = refGrid.SelectedRecords[0];
+                vProcun selectedRecord = refGrid2.SelectedRecords[0];
                 bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar el procun?");
                 if (isConfirmed)
                 {
 
-                    procSeleccionado.ESNUEVO = true;
-                    procSeleccionado.ORDEN = selectedRecord.ORDEN;
-                    procSeleccionado.CG_PROD = selectedRecord.CG_PROD;
-                    procSeleccionado.Des_Prod = selectedRecord.Des_Prod;
-                    procSeleccionado.CG_AREA = selectedRecord.CG_AREA;
-                    procSeleccionado.CG_LINEA = selectedRecord.CG_LINEA;
-                    procSeleccionado.CG_CELDA = selectedRecord.CG_CELDA;
-                    procSeleccionado.PROCESO = selectedRecord.PROCESO;
-                    procSeleccionado.TIEMPO1 = selectedRecord.TIEMPO1;
-                    procSeleccionado.TS1 = selectedRecord.TS1;
-                    procSeleccionado.PROPORC = selectedRecord.PROPORC;
-                    procSeleccionado.AUTORIZA = selectedRecord.AUTORIZA;
-                    procSeleccionado.USUARIO= selectedRecord.USUARIO;
-                    procSeleccionado.CG_CATEOP=selectedRecord.CG_CATEOP;
-                    procSeleccionado.TAREAPROC= selectedRecord.TAREAPROC;
+                    vprocSeleccionado.ESNUEVO = true;
+                    vprocSeleccionado.ORDEN = selectedRecord.ORDEN;
+                    vprocSeleccionado.CG_PROD = selectedRecord.CG_PROD;
+                    vprocSeleccionado.DES_PROD= selectedRecord.DES_PROD;
+                    vprocSeleccionado.CG_AREA = selectedRecord.CG_AREA;
+                    vprocSeleccionado.CG_LINEA = selectedRecord.CG_LINEA;
+                    vprocSeleccionado.CG_CELDA = selectedRecord.CG_CELDA;
+                    vprocSeleccionado.PROCESO = selectedRecord.PROCESO;
+                    vprocSeleccionado.TIEMPO1 = selectedRecord.TIEMPO1;
+                    vprocSeleccionado.TS1 = selectedRecord.TS1;
+                    vprocSeleccionado.PROPORC = selectedRecord.PROPORC;
+                    vprocSeleccionado.AUTORIZA = selectedRecord.AUTORIZA;
+                    vprocSeleccionado.USUARIO= selectedRecord.USUARIO;
+                    vprocSeleccionado.CG_CATEOP=selectedRecord.CG_CATEOP;
+                    vprocSeleccionado.TAREAPROC= selectedRecord.TAREAPROC;
                     popupFormVisible = true;
                 }
             }
@@ -161,7 +167,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             }
         }
 
-        protected async Task OnActionBeginHandler(ActionEventArgs<Procun> args)
+        protected async Task OnActionBeginHandler(ActionEventArgs<vProcun> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
                 args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
@@ -169,13 +175,14 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 args.Cancel = true;
                 args.PreventRender = false;
                 popupFormVisible = true;
-                procSeleccionado = new();
-                procSeleccionado.ESNUEVO = true;
+                vprocSeleccionado = new();
+                vprocSeleccionado.ESNUEVO = true;
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                procSeleccionado = args.Data;
-                procSeleccionado.ESNUEVO = false;
+                vprocSeleccionado = args.Data;
+                vprocSeleccionado.ESNUEVO = false;
+                //await refFormProcun.Refrescar(procSeleccionado);
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
@@ -188,18 +195,18 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 )
             {
                 //VisibleProperty = true;
-                refGrid.PreventRender();
-                refGrid.Refresh();
+                refGrid2.PreventRender();
+                await refGrid2.Refresh();
 
-                state = await refGrid.GetPersistData();
-                await refGrid.AutoFitColumnsAsync();
-                await refGrid.RefreshColumns();
-                await refGrid.RefreshHeader();
+                state = await refGrid2.GetPersistDataAsync();
+                await refGrid2.AutoFitColumnsAsync();
+                await refGrid2.RefreshColumnsAsync();
+                await refGrid2.RefreshHeaderAsync();
             }
           
         }
 
-        protected async Task OnActionCompleteHandler(ActionEventArgs<Procun> args)
+        protected async Task OnActionCompleteHandler(ActionEventArgs<vProcun> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
@@ -207,6 +214,22 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 args.PreventRender = false;
                 popupFormVisible = true;
             }
+        }
+
+        protected async Task CellSelectedHandler(CellSelectEventArgs<vProcun> args)
+        {
+            var CellValue= await refGrid2.GetSelectedRowCellIndexesAsync();
+            var CurrentEditRow = CellValue[0].Item1;
+            var CurrentEditCell = (int)CellValue[0].Item2;
+
+            var fields= await refGrid2.GetColumnFieldNamesAsync();
+            await refGrid2.EditCellAsync(CurrentEditRow, fields[CurrentEditCell]);
+
+        }
+
+        public void RowSelectHandler(RowSelectEventArgs<vProcun> args)
+        {
+            vprocSeleccionado = args.Data;
         }
 
         protected void OnCerrarDialog()
@@ -275,11 +298,11 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     procunSinModificar.REVISION = proc.REVISION;
                     procunSinModificar.USUARIO = proc.USUARIO;
                     procunSinModificar.AUTORIZA = proc.AUTORIZA;
-                    procuns.OrderByDescending(p => p.Id);
+                    vprocuns.OrderByDescending(p => p.Id);
                 }
-                await refGrid.RefreshHeaderAsync();
-                refGrid.Refresh();
-                await refGrid.RefreshColumnsAsync();
+                await refGrid2.RefreshHeaderAsync();
+                await refGrid2.Refresh();
+                await refGrid2.RefreshColumnsAsync();
             }
             else
             {
