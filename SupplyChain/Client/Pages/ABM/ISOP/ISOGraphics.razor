@@ -14,7 +14,7 @@
 
 <div class="row">
 	<div class="col-5">
-		<label class="e-float-text e-label-top">Impacto Ambiental:</label>
+		<label class="e-float-text e-label-top">Norma:</label>
 	</div>
 	<div class="col-5">
 		<label class="e-float-text e-label-top">Identificacion:</label>
@@ -25,11 +25,19 @@
 
 <div class="row">
 	<div class="col-5">
-		<SfDropDownList TItem="BaseOption" TValue="string" Placeholder="RIESGO" PopupHeight="auto" DataSource="@Impactos" EnableVirtualization="true">
-			<DropDownListEvents TItem="BaseOption" TValue="string" ValueChange="ChangeImpAmb"></DropDownListEvents>
+		<SfDropDownList TItem="BaseOption" TValue="string" Placeholder="Filtrar" PopupHeight="auto" DataSource="@Filtros" EnableVirtualization="true">
+			<DropDownListEvents TItem="BaseOption" TValue="string" ValueChange="ChangeFiltro"></DropDownListEvents>
 			<DropDownListFieldSettings Text="Text" Value="Text"></DropDownListFieldSettings>
 		</SfDropDownList>
 	</div>
+<!--
+<div class="col-4">
+	<SfDropDownList TItem="BaseOption" TValue="string" Placeholder="RIESGO" PopupHeight="auto" DataSource="@Impactos" EnableVirtualization="true">
+		<DropDownListEvents TItem="BaseOption" TValue="string" ValueChange="ChangeImpAmb"></DropDownListEvents>
+		<DropDownListFieldSettings Text="Text" Value="Text"></DropDownListFieldSettings>
+	</SfDropDownList>
+</div>
+-->
 	<div class="col-5">
 		<SfDropDownList TItem="int" TValue="int" Placeholder="Id" PopupHeight="auto" DataSource="@idByImp" EnableVirtualization="true">
 			<DropDownListEvents TItem="int" TValue="int" ValueChange="ChangeId"></DropDownListEvents>
@@ -43,7 +51,6 @@
 
 <SfHeatMap DataSource="@HeatMapColors">
 	<HeatMapEvents TooltipRendering="@TooltipRendering"></HeatMapEvents>
-
 	<HeatMapTitleSettings Text="Matriz Impacto/Frecuencia"></HeatMapTitleSettings>
 	<HeatMapXAxis Labels="@XLabels" LabelRotation="45" LabelIntersectAction="@SFHeatMap.LabelIntersectAction.None">
 	</HeatMapXAxis>

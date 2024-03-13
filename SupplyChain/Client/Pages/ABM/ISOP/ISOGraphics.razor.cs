@@ -23,6 +23,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
         [Inject] public ISOService isoService { get; set; }
 
         protected List<ISO> isos = new();
+        protected List<ISO> allIsos = new();
         protected SfSpinner refSpinner;
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
@@ -75,6 +76,11 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
 			new BaseOption() {Text= "RIESGO" },
 			new BaseOption() {Text= "OPORTUNIDAD" },
 		};
+		public List<BaseOption> Filtros = new List<BaseOption> {
+			new BaseOption() {Text= "Ambos" },
+			new BaseOption() {Text= "9001" },
+			new BaseOption() {Text= "14001" },
+		};
 		public List<int> idByImp;
 		protected override async Task OnInitializedAsync()
 		{
@@ -83,6 +89,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
 			if (!response.Error)
 			{
 				isos = response.Response;
+				allIsos = isos;
             }
             idByImp = isos.Where(s => s.ImpAmb == impAmb).Select(s => s.Identificacion).OrderBy(s => s).ToList();
             idByImp.Add(0);
@@ -105,6 +112,15 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
             idByImp = isos.Where(s => s.ImpAmb == impAmb).Select(s => s.Identificacion).OrderBy(s => s).ToList();
             idByImp.Add(0);
         }
+		protected void ChangeFiltro(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, BaseOption> args)
+		{
+			if (args.Value == "Ambos")
+				isos = allIsos;
+			else if (args.Value == "9001")
+				isos = allIsos.Where(s => s.ImpAmb == "OPORTUNIDAD" || s.ImpAmb == "RIESGO").ToList();
+			else if (args.Value == "14001")
+				isos = allIsos.Where(s => s.ImpAmb != "OPORTUNIDAD" && s.ImpAmb != "RIESGO").ToList();
+		}
         protected void ChangeId(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int, int> args)
         {
 			idForImpSelected = args.Value;
@@ -121,21 +137,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
             string content = " ";
             //string content = "";
 			for (int i = 0; i < registros.Count; i++)
-			{
-				/*
-				string toShow = registros[i].Detalle;
-				int comienzo = 0;
-				content += $"<br>";
-				while(toShow.Length > comienzo){
-					if(toShow.Length < comienzo || toShow.Length < 50)
-						content += $"{registros[i].Detalle.Substring(comienzo, toShow.Length-1)}";
-					else
-						content += $"{registros[i].Detalle.Substring(comienzo, comienzo+50-1)}";
-					comienzo += 50;
-				}
-				*/
 				content += $"<br>* {registros[i].Detalle}";
-			}
 			if (content == " ")
 				content = "-";
 			args.Content = new[] { content };
