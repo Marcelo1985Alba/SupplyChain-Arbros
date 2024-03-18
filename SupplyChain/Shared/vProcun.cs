@@ -11,8 +11,7 @@ namespace SupplyChain.Shared
 {
     public class vProcun 
     {
-        [Key]
-        [Column("REGISTRO")]
+        [Key,Column("REGISTRO")]
         public decimal Id { get; set; }
         public int ORDEN { get; set; }
         [ColumnaGridViewAtributo(Name = "Código producto"), Required(ErrorMessage = "El producto es requerido")]

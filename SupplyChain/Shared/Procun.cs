@@ -27,7 +27,7 @@ namespace SupplyChain.Shared
         public string CG_CELDA { get; set; }
         //public string DES_AREA { get; set; }
 		[ColumnaGridViewAtributo(Name = "Proceso"), Required(ErrorMessage = "El proceso es requerido")]
-        public string? PROCESO { get; set; }
+        public string PROCESO { get; set; }
         public string? DESCRIP { get; set; }
 		public string? OBSERV {		get; set; }
 		public string? DESPROC { get; set; }
@@ -35,7 +35,7 @@ namespace SupplyChain.Shared
 		public decimal TIEMPO1 { get; set; }
 		[ColumnaGridViewAtributo(Name = "TS1"), Range(1,20000, ErrorMessage = "El ts1 es requerido")]
         public decimal TS1 { get; set; }
-        public int FRECU { get; set; }
+        public int? FRECU { get; set; }
 		public int CG_CALI1 { get; set; }
 		[ColumnaGridViewAtributo(Name = "Proporc"), Required(ErrorMessage = "La proporción es requerido")]
 		public string PROPORC { get; set; }

@@ -25,18 +25,20 @@ namespace SupplyChain
         }
 
         //GET: api/Procun
-        //[HttpGet]
-        // public async Task<ActionResult<IEnumerable<Procun>>> GetProcun()
-        // {
-        //     try
-        //     {   //var listaprocun= await _procunRepository.ObtenerTodos();
-        //         return await _procunRepository.ObtenerTodos();
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return BadRequest(ex);
-        //     }
-        // }
+        [HttpGet("id")]
+        public async Task<ActionResult<Procun>> GetProcunById(decimal id)
+        {
+            try
+            {   //var listaprocun= await _procunRepository.ObtenerTodos();
+                return await _procunRepository.ObtenerPorId(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
         [HttpGet("GetvProcuns")]
         public async Task<ActionResult<IEnumerable<vProcun>>> GetvProcuns()
         {
@@ -65,21 +67,7 @@ namespace SupplyChain
                 return null;
             }
         }
-        // GET: api/Procun/Cg_Prod
-        //[HttpGet("{Cg_Prod}")]
-        //public async Task<IEnumerable<Procun>> GetProcun(string Cg_Prod)
-        //{
-        //    try
-        //    {
-        //        var listaprocun = await _procunRepository.ObtenerTodos();
-        //        return listaprocun.Where(x => x.CG_PROD == Cg_Prod).ToList();
-        //    }                                                               
-        //    catch (Exception ex)
-        //    {
-        //        return null;
-        //    }
-        //}
-
+        
 
         [HttpGet("Existe/{id}")]
         public async Task<ActionResult<bool>> ExisteProcun(decimal id)
@@ -98,7 +86,7 @@ namespace SupplyChain
 
         // POST: api/Procun
         [HttpPost]
-        public async Task<ActionResult<Procun>> PostProcun(Procun Proc)
+        public async Task<ActionResult<vProcun>> PostProcun(Procun Proc)
         {
             try
             {
@@ -113,8 +101,9 @@ namespace SupplyChain
                 Proc.TAREAPROC = 1;
                 Proc.CG_CATEOP = " ";
                 Proc.CG_FORM = 1;
+                Proc.FRECU = 0;
                 await _procunRepository.Agregar(Proc);
-                return CreatedAtAction("GetvProcun", new { id = Proc.Id }, Proc);
+                return CreatedAtAction("GetProcunById", new { id = Proc.Id }, Proc);
             }
             catch (DbUpdateException exx)
             {
@@ -129,24 +118,24 @@ namespace SupplyChain
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
         // DELETE: api/Procun/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Procun>> DeleteProcun(decimal id)
-        {
-            var Proc = await _procunRepository.ObtenerPorId(id);
-            if (Proc == null)
-            {
-                return NotFound();
-            }
+        //[HttpDelete("{id}")]
+        //public async Task<ActionResult<Procun>> DeleteProcun(decimal id)
+        //{
+        //    var Proc = await _procunRepository.ObtenerPorId(id);
+        //    if (Proc == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            await _procunRepository.Remover(id);
+        //    await _procunRepository.Remover(id);
 
-            return Proc;
-        }
+        //    return Proc;
+        //}
 
         [HttpPost("PostList")]
         public async Task<ActionResult<Procun>> PostList(List<Procun> Procs)
@@ -160,10 +149,31 @@ namespace SupplyChain
             }
             catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
             return Ok();
+        }
+
+        [HttpDelete("Delete/{id}")]
+        public async Task<ActionResult<Procun>>DeleteProcun(decimal id)
+        {
+            try
+            {
+                var procun = await _procunRepository.Obtener(p => p.Id == id).FirstOrDefaultAsync();
+
+                if(procun == null)
+                {
+                    return NotFound();
+                }
+
+                await _procunRepository.Remover(id);
+                return procun;
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Error al eliminar el proceso" + ex.Message);
+            }
         }
         
         //POST: api/Procun/PostList2
@@ -185,33 +195,7 @@ namespace SupplyChain
             }
         }
 
-        //[HttpPut("ActualizaCelda/{id}/{cg_celda}")]
-        //public async Task<ActionResult<Procun>> ActualizaCelda(decimal id, string cg_celda)
-        //{
-        //    try
-        //    {
-        //        var lista = await _procunRepository.ActualizaCelda(id, cg_celda);
-        //        return Ok(lista);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex);
-        //    }
-        //}
-        //[HttpPut("ActualizaProceso/{id}/{proceso}")]
-        //public async Task<ActionResult<Procun>> ActualizaProceso(decimal id, string proceso)
-        //{
-        //    try
-        //    {
-        //        var lista = await _procunRepository.ActualizaProceso(id, proceso);
-        //        return Ok(lista);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex);
-        //    }
-        //}
-
+       
 
         [HttpGet("Search/{idProd}/{Des_Prod}")]
         public async Task<ActionResult<IEnumerable<Procun>>> Search(string idProd, string Des_Prod)
@@ -226,11 +210,51 @@ namespace SupplyChain
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> ActualizarPro(Procun procun)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Procun>> ActualizarPro(decimal id, Procun procun)
         {
             try
             {
+                var username = HttpContext.User.Identity.Name;
+
+                procun.USUARIO = username;
+                procun.AUTORIZA= username;
+                procun.CG_CATEOP=" ";
+                procun.CG_AREA = 0;
+                procun.CG_LINEA = 0;
+                procun.DESCRIP=" ";
+                procun.OBSERV=" ";
+                procun.DESPROC = "";
+                procun.FRECU = 0;
+                procun.CG_CALI1 = 0;
+                procun.CG_CALI2 = 0;
+                procun.CG_CALI3 = 0;
+                procun.CG_CALI4 = 0;
+                procun.CG_CALI5 = 0;
+                procun.CG_CALI6 = 0;
+                procun.CG_CALI7 = 0;
+                procun.CG_OPER = 0;
+                procun.TOLE1= 0;
+                procun.TOLE2 = 0;
+                procun.VALOR1 = 0;
+                procun.VALOR2 = 0;
+                procun.VALOR3 = 0;
+                procun.VALOR4 = 0;
+                procun.TOLE3 = 0;
+                procun.TOLE4 = 0;
+                procun.COSTO = 0;
+                procun.COSTOCOMB = 0;
+                procun.COSTOENERG = 0;
+                procun.PLANTEL = 0;
+                procun.CG_CATEOP= " ";
+                procun.COSTAC= 0;
+                procun.OCUPACION= 0;
+                procun.COEFI= 0;
+                procun.ESTANDAR= false;
+                procun.RELEVAN= 0;
+                procun.REVISION= 0;
+                procun.TAREAPROC = 0;
+
                 await _procunRepository.Actualizar(procun);
             }
             catch (DbUpdateConcurrencyException)
@@ -251,65 +275,6 @@ namespace SupplyChain
             return Ok(procun);
         }
 
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutProcun(decimal id, Procun Proc)
-        //{
-        //    if (id != Proc.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    try
-        //    {
-        //        await _procunRepository.Actualizar(Proc);
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!await _procunRepository.Existe(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            return BadRequest();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex);
-        //    }
-        //    return Ok(Proc);
-        //}
-
-        //PUT: api/Procun/5
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutProcun(decimal id, Procun Proc)
-        //{
-        //    if (id != Proc.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    try
-        //    {
-        //        await _procunRepository.Actualizar(Proc);
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!await _procunRepository.Existe(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            return BadRequest();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex);
-        //    }
-        //    return Ok(Proc);
-        //}
+        
     }
 }

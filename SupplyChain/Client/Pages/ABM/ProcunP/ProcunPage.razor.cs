@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System.Security;
 
 namespace SupplyChain.Client.Pages.ABM.ProcunP
 {
@@ -41,12 +42,12 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         protected List<vProcun> vprocuns = new();
         protected SfToast ToastObj;
         protected SfSpinner refSpinner;
-        protected SfGrid<Procun> refGrid;
-        protected SfGrid<vProcun> refGrid2;
+        protected SfGrid<vProcun> refGrid;
+        protected SfGrid<Procun> refGrid2;
         protected Procun procSeleccionado = new();
         protected vProcun vprocSeleccionado = new();
-        protected bool SpinnerVisible = false;
-
+        protected bool SpinnerVisible = true;
+        protected bool SfSpinnerVisibleProcun = false;
         protected bool popupFormVisible = false;
         protected ConfirmacionDialog ConfirmacionEliminarDialog;
 
@@ -63,6 +64,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 vprocuns = response.Response;
             }
             SpinnerVisible = false;
+            //await refGrid2.RefreshColumnsAsync();
         }
 
         #region "Eventos Vista Grilla"
@@ -79,36 +81,36 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
 
 
         protected async Task OnToolbarHandler(ClickEventArgs args)
-        {   
+        {
             if (args.Item.Id == "Copy")
             {
                 await CopiarProcun();
             }
             else if (args.Item.Id == "grdProcun_delete")
             {
-                if((await refGrid2.GetSelectedRecordsAsync()).Count > 0)
+                if ((await refGrid.GetSelectedRecordsAsync()).Count > 0)
                 {
                     bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro que desela eliminar el proceso?");
                     if (isConfirmed)
                     {
-                        List<vProcun> procunsABorrar= await refGrid2.GetSelectedRecordsAsync();
+                        List<vProcun> procunsABorrar = await refGrid.GetSelectedRecordsAsync();
                         var response = ProcunService.Eliminar2(procunsABorrar);
                         if (!response.IsCompletedSuccessfully)
                         {
                             await this.ToastObj.ShowAsync(new ToastModel
                             {
-                                Title="EXITO!",
-                                Content="Los procesos eliminados fueron eliminados correctamente.",
-                                Icon="e-success toast-icons",
-                                ShowCloseButton=true,
-                                ShowProgressBar=true
+                                Title = "EXITO!",
+                                Content = "Los procesos eliminados fueron eliminados correctamente.",
+                                Icon = "e-success toast-icons",
+                                ShowCloseButton = true,
+                                ShowProgressBar = true
                             });
                         }
                         else
                         {
                             await ToastMensajeError();
                         }
-                        await refGrid2.Refresh();
+                        await refGrid.Refresh();
 
                         //await refGrid.Refresh();
 
@@ -118,38 +120,34 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             }
             else if (args.Item.Id == "ExcelExport")
             {
-                await refGrid2.ExportToExcelAsync();
+                await refGrid.ExportToExcelAsync();
             }
-          
-         
+            
+
         }
 
 
         private async Task CopiarProcun()
         {
-            if (refGrid2.SelectedRecords.Count == 1)
+            if (refGrid.SelectedRecords.Count == 1)
             {
                 procSeleccionado = new();
-                vProcun selectedRecord = refGrid2.SelectedRecords[0];
+                vProcun selectedRecord = refGrid.SelectedRecords[0];
                 bool isConfirmed = await jSRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar el procun?");
                 if (isConfirmed)
                 {
 
-                    vprocSeleccionado.ESNUEVO = true;
-                    vprocSeleccionado.ORDEN = selectedRecord.ORDEN;
-                    vprocSeleccionado.CG_PROD = selectedRecord.CG_PROD;
-                    vprocSeleccionado.DES_PROD= selectedRecord.DES_PROD;
-                    vprocSeleccionado.CG_AREA = selectedRecord.CG_AREA;
-                    vprocSeleccionado.CG_LINEA = selectedRecord.CG_LINEA;
-                    vprocSeleccionado.CG_CELDA = selectedRecord.CG_CELDA;
-                    vprocSeleccionado.PROCESO = selectedRecord.PROCESO;
-                    vprocSeleccionado.TIEMPO1 = selectedRecord.TIEMPO1;
-                    vprocSeleccionado.TS1 = selectedRecord.TS1;
-                    vprocSeleccionado.PROPORC = selectedRecord.PROPORC;
-                    vprocSeleccionado.AUTORIZA = selectedRecord.AUTORIZA;
-                    vprocSeleccionado.USUARIO= selectedRecord.USUARIO;
-                    vprocSeleccionado.CG_CATEOP=selectedRecord.CG_CATEOP;
-                    vprocSeleccionado.TAREAPROC= selectedRecord.TAREAPROC;
+                    procSeleccionado.ESNUEVO = true;
+                    procSeleccionado.ORDEN = selectedRecord.ORDEN;
+                    procSeleccionado.CG_PROD = selectedRecord.CG_PROD;
+                    procSeleccionado.Des_Prod= selectedRecord.DES_PROD;
+                    procSeleccionado.CG_CELDA = selectedRecord.CG_CELDA;
+                    procSeleccionado.PROCESO = selectedRecord.PROCESO;
+                    procSeleccionado.TIEMPO1 = selectedRecord.TIEMPO1;
+                    procSeleccionado.TS1 = selectedRecord.TS1;
+                    procSeleccionado.PROPORC = selectedRecord.PROPORC;
+                    procSeleccionado.AUTORIZA = selectedRecord.AUTORIZA;
+                    procSeleccionado.USUARIO= selectedRecord.USUARIO;
                     popupFormVisible = true;
                 }
             }
@@ -170,19 +168,37 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         protected async Task OnActionBeginHandler(ActionEventArgs<vProcun> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add ||
-                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
-            {
+                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit
+                )
+                { 
+                    args.Cancel = true;
+                    args.PreventRender = false;    
+                }
+            if(args.RequestType==Syncfusion.Blazor.Grids.Action.Add) 
+                {
                 args.Cancel = true;
                 args.PreventRender = false;
                 popupFormVisible = true;
-                vprocSeleccionado = new();
-                vprocSeleccionado.ESNUEVO = true;
+                procSeleccionado = new();
+                procSeleccionado.ESNUEVO = true;
+
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                vprocSeleccionado = args.Data;
-                vprocSeleccionado.ESNUEVO = false;
-                //await refFormProcun.Refrescar(procSeleccionado);
+                procSeleccionado.ESNUEVO = false;
+                //SpinnerVisible = true;
+                procSeleccionado.Id = args.Data.Id;
+                procSeleccionado.ORDEN = args.Data.ORDEN;
+                procSeleccionado.CG_PROD=args.Data.CG_PROD;
+                procSeleccionado.Des_Prod = args.Data.DES_PROD;
+                procSeleccionado.CG_CELDA = args.Data.CG_CELDA;
+                procSeleccionado.PROCESO = args.Data.PROCESO;
+                procSeleccionado.TIEMPO1=args.Data.TIEMPO1;
+                procSeleccionado.TS1 = args.Data.TS1;
+                procSeleccionado.PROPORC=args.Data.PROPORC;
+                procSeleccionado.FRECU = args.Data.FRECU;
+                popupFormVisible = true;
+                
             }
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Grouping
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.UnGrouping
@@ -195,16 +211,18 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 )
             {
                 //VisibleProperty = true;
-                refGrid2.PreventRender();
-                await refGrid2.Refresh();
+                refGrid.PreventRender();
+                await refGrid.Refresh();
 
-                state = await refGrid2.GetPersistDataAsync();
-                await refGrid2.AutoFitColumnsAsync();
-                await refGrid2.RefreshColumnsAsync();
-                await refGrid2.RefreshHeaderAsync();
+                state = await refGrid.GetPersistDataAsync();
+                await refGrid.AutoFitColumnsAsync();
+                await refGrid.RefreshColumnsAsync();
+                await refGrid.RefreshHeaderAsync();
             }
           
         }
+
+       
 
         protected async Task OnActionCompleteHandler(ActionEventArgs<vProcun> args)
         {
@@ -218,12 +236,12 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
 
         protected async Task CellSelectedHandler(CellSelectEventArgs<vProcun> args)
         {
-            var CellValue= await refGrid2.GetSelectedRowCellIndexesAsync();
+            var CellValue= await refGrid.GetSelectedRowCellIndexesAsync();
             var CurrentEditRow = CellValue[0].Item1;
             var CurrentEditCell = (int)CellValue[0].Item2;
 
-            var fields= await refGrid2.GetColumnFieldNamesAsync();
-            await refGrid2.EditCellAsync(CurrentEditRow, fields[CurrentEditCell]);
+            var fields= await refGrid.GetColumnFieldNamesAsync();
+            await refGrid.EditCellAsync(CurrentEditRow, fields[CurrentEditCell]);
 
         }
 
@@ -245,28 +263,33 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 popupFormVisible = false;
                 if (proc.ESNUEVO)
                 {
-                    procuns.Add(proc);
+                    var procgrilla = new vProcun();
+                    procgrilla.ORDEN = proc.ORDEN;
+                    procgrilla.CG_PROD= proc.CG_PROD;
+                    procgrilla.DES_PROD= proc.Des_Prod;
+                    procgrilla.CG_CELDA= proc.CG_CELDA;
+                    procgrilla.PROCESO= proc.PROCESO;
+                    procgrilla.TIEMPO1= proc.TIEMPO1;
+                    procgrilla.TS1= proc.TS1;
+                    procgrilla.PROPORC= proc.PROPORC;
+                    vprocuns.Add(procgrilla);
                 }
                 else
                 {
                     //actualizar datos sin ir a la base de datos
-                    var procunSinModificar = procuns.Where(p => p.Id == proc.Id).FirstOrDefault();
+                    var procunSinModificar = vprocuns.Where(p => p.Id == proc.Id).FirstOrDefault();
                     procunSinModificar.Id = proc.Id;
                     procunSinModificar.ORDEN = proc.ORDEN;
                     procunSinModificar.CG_PROD = proc.CG_PROD;
-                    procunSinModificar.Des_Prod = proc.Des_Prod;
-                    procunSinModificar.CG_FORM = proc.CG_FORM;
+                    procunSinModificar.DES_PROD = proc.Des_Prod;
                     procunSinModificar.CG_AREA = proc.CG_AREA;
                     procunSinModificar.CG_LINEA = proc.CG_LINEA;
                     procunSinModificar.CG_CELDA = proc.CG_CELDA;
                     procunSinModificar.PROCESO = proc.PROCESO;
-                    procunSinModificar.DESCRIP = proc.DESCRIP;
-                    procunSinModificar.OBSERV = proc.OBSERV;
                     procunSinModificar.DESPROC = proc.DESPROC;
                     procunSinModificar.TIEMPO1 = proc.TIEMPO1;
                     procunSinModificar.TS1 = proc.TS1;
-                    procunSinModificar.FRECU = proc.FRECU;
-                    procunSinModificar.CG_CALI1 = proc.CG_CALI1;
+
                     procunSinModificar.PROPORC = proc.PROPORC;
                     procunSinModificar.TOLE1 = proc.TOLE1;
                     procunSinModificar.CG_CALI2 = proc.CG_CALI2;
@@ -292,7 +315,6 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     procunSinModificar.COSTAC = proc.COSTAC;
                     procunSinModificar.OCUPACION = proc.OCUPACION;
                     procunSinModificar.COEFI = proc.COEFI;
-                    procunSinModificar.TAREAPROC = proc.TAREAPROC;
                     procunSinModificar.ESTANDAR = proc.ESTANDAR;
                     procunSinModificar.RELEVAN = proc.RELEVAN;
                     procunSinModificar.REVISION = proc.REVISION;
@@ -300,9 +322,10 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     procunSinModificar.AUTORIZA = proc.AUTORIZA;
                     vprocuns.OrderByDescending(p => p.Id);
                 }
-                await refGrid2.RefreshHeaderAsync();
-                await refGrid2.Refresh();
-                await refGrid2.RefreshColumnsAsync();
+                await refGrid.RefreshHeaderAsync();
+                await refGrid.Refresh();
+                await refGrid.RefreshColumnsAsync();
+                
             }
             else
             {

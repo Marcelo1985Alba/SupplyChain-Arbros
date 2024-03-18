@@ -4,9 +4,11 @@ using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
 using SupplyChain.Shared.Models;
+using Syncfusion.XlsIO.Implementation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -63,13 +65,15 @@ namespace SupplyChain.Client.HelperService
 
         public async Task<HttpResponseWrapper<List<Procun>>> PostProcun(Procun proc)
         {
-            return await http.GetFromJsonAsync<List<Procun>>($"{API}/PostProcun/{proc}");
+                return await http.GetFromJsonAsync<List<Procun>>($"{API}/PostProcun/{proc}");
+         
         }
+       
 
-        public async Task<HttpResponseWrapper<object>> ActualizarPro(vProcun vprocun)
-        {
-            return await http.PutAsJsonAsync($"{API}", vprocun);
-        }
+        //public async Task<HttpResponseWrapper<object>> ActualizarPro(Procun procun)
+        //{
+        //    return await http.PutAsJsonAsync($"{API}", procun);
+        //}
         public async Task<HttpResponseWrapper<List<Procun>>> Search(string idProd ="VACIO", string Des_Prod = "VACIO")
         {
             //Des_Prod = string.IsNullOrEmpty(Des_Prod) ? "VACIO" : Des_Prod;
@@ -85,6 +89,6 @@ namespace SupplyChain.Client.HelperService
             return await http.GetFromJsonAsync<List<Procun>>($"api/Procun/Search/{idProd}/{Des_Prod}");
         }
 
-      
+       
     }
 }

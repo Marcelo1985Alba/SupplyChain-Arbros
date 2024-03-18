@@ -59,6 +59,7 @@ namespace SupplyChain
         public DbSet<ProTarea> ProTarea { get; set; }
         public DbSet<TipoMat> TipoMat { get; set; }
         public DbSet<Producto> Prod { get; set; }
+        public DbSet<Proporcion> Proporcion { get; set; }
 
         public DbSet<PreciosArticulos> PrecioArticulo { get; set; }
         //MODULO SERVICIOS
@@ -110,7 +111,7 @@ namespace SupplyChain
         public DbSet<ModulosUsuario> ModulosUsuarios { get; set; }
         public virtual DbSet<Genera> Genera { get; set; }
         public virtual DbSet<Planificacion> Planificaciones { get; set; }
-
+     
         public DbSet<Proveedor> Proveedores { get; set; }
         public DbSet<EstadVenta> EstadVentas { get; set; }
         public DbSet<vEstadPedidosIngresados> vEstadPedidosIngresados { get; set; }

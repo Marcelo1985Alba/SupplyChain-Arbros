@@ -24,13 +24,13 @@
             <ToastPosition X="Center" Y="Top"></ToastPosition>
         </SfToast>
         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                @ref="refGrid2" DataSource="@vprocuns" Width="100%" Toolbar="Toolbaritems"
+                @ref="refGrid" DataSource="@vprocuns" Width="100%" Toolbar="Toolbaritems"
                 AllowExcelExport="true" AllowGrouping="true" ID="grdProcun" AllowFiltering="true"
                 AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
             <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
             <GridEvents OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolbarHandler" RowSelected="RowSelectHandler"
-                        OnActionComplete="OnActionCompleteHandler" CellSelected="CellSelectedHandler" TValue="vProcun"></GridEvents>
+                         CellSelected="CellSelectedHandler" TValue="vProcun"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
                               ShowDeleteConfirmDialog="false" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
@@ -54,7 +54,8 @@
 
     @if (popupFormVisible)
 	{
-		 <FormProcun @ref="refFormProcun" vprocuns="vprocSeleccionado" Show="popupFormVisible" 
+       
+		 <FormProcun @ref="refFormProcun" procuns="procSeleccionado" Show="popupFormVisible" 
                      OnCerrar="OnCerrarDialog" OnGuardar="@(async(p)=>await Guardar(p))"></FormProcun>
 	}
 </div>

@@ -16,17 +16,17 @@
     <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
     <DialogTemplates>
         <Header>
-            @if (string.IsNullOrEmpty(vprocuns.Id.ToString()))
+            @if (string.IsNullOrEmpty(procuns.Id.ToString()))
             {
                 <p>Nuevo procun</p>
             }
             else
             {
-                <p>&nbsp;&nbsp;@vprocuns.Id&nbsp</p>
+                <p>&nbsp;&nbsp;@procuns.Id&nbsp</p>
             }
         </Header>
         <Content>
-            <EditForm Model="@vprocuns" id="form-procun" OnValidSubmit="@GuardarProc">
+            <EditForm Model="@procuns" id="form-procun" OnValidSubmit="@GuardarProc">
                 <DataAnnotationsValidator/>
 
                @* <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -44,20 +44,20 @@
                                 </div>*@
                                 <div class="form-group col-md-5">
                                     <label>Orden:</label>
-                                    <SfNumericTextBox ID="Orden" @bind-Value="@(vprocuns.ORDEN)" Placeholder="Orden"></SfNumericTextBox>
-                                    <ValidationMessage For="@(()=> vprocuns.ORDEN)"></ValidationMessage>
+                                    <SfNumericTextBox ID="Orden" @bind-Value="@(procuns.ORDEN)" Placeholder="Orden"></SfNumericTextBox>
+                                    <ValidationMessage For="@(()=> procuns.ORDEN)"></ValidationMessage>
 
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label class="">Producto:</label>
-                                    <SfTextBox CssClass="customClass" ID="Producto" @bind-Value="@(vprocuns.CG_PROD)" Readonly="false"
+                                    <SfTextBox CssClass="customClass" ID="Producto" @bind-Value="@(procuns.CG_PROD)" Readonly="false"
                                                Input="@(e=>Cg_Prod_Changed(e))"></SfTextBox>
-                                    <ValidationMessage For="@(()=> vprocuns.CG_PROD)"></ValidationMessage>
+                                    <ValidationMessage For="@(()=> procuns.CG_PROD)"></ValidationMessage>
 
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label class="">Descripcion Producto:</label>
-                                    <SfTextBox CssClass="customClass" ID="Descripcion Producto" Value="@vprocuns.DES_PROD" Readonly="false"
+                                    <SfTextBox CssClass="customClass" ID="Descripcion Producto" Value="@procuns.Des_Prod" Readonly="false"
                                                Input="@(e=> Des_prod_Changed(e))"></SfTextBox>
                                 </div>
 
@@ -96,10 +96,10 @@
                                 <div class="form-group col-md-6">
                                     <a href="/Abms/celdas" target="_blank">Celda:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="Celdas" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(vprocuns.CG_CELDA)" DataSource="@celdas">
+                                                @bind-Value="@(procuns.CG_CELDA)" DataSource="@celdas">
                                         <ComboBoxFieldSettings Value="Id" Text="DES_CELDA"></ComboBoxFieldSettings>
                                     </SfComboBox>
-                                    <ValidationMessage For="@(()=> vprocuns.CG_CELDA)"></ValidationMessage>
+                                    <ValidationMessage For="@(()=> procuns.CG_CELDA)"></ValidationMessage>
 
 
                                 </div>
@@ -107,12 +107,15 @@
                                     <label>Proceso:</label>
 
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="ProcunProcesos" PopupWidth="auto" AllowFiltering="true"
-                                                @bind-Value="@(vprocuns.PROCESO)" DataSource="@procunsProcesos">
+                                                @bind-Value="@(procuns.PROCESO)" DataSource="@procunsProcesos">
                                         <ComboBoxFieldSettings Value="PROCESO" Text="PROCESO"></ComboBoxFieldSettings>
                                     </SfComboBox>
 
 
                                 </div>
+                                
+
+
                             </div>
 
                             <div class="form-row">
@@ -126,30 +129,28 @@
                                 </div> *@
                                 <div class="form-group col-md-6">
                                     <label>Tiempo:</label>
-                                    <SfNumericTextBox ID="Tiempo" @bind-Value="@(vprocuns.TIEMPO1)" Placeholder="Tiempo"></SfNumericTextBox>
-                                    <ValidationMessage For="@(()=> vprocuns.TIEMPO1)"></ValidationMessage>
+                                    <SfNumericTextBox ID="Tiempo" @bind-Value="@(procuns.TIEMPO1)" Placeholder="Tiempo"></SfNumericTextBox>
+                                    <ValidationMessage For="@(()=> procuns.TIEMPO1)"></ValidationMessage>
 
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>TS1:</label>
-                                    <SfNumericTextBox ID="TS1" @bind-Value="@(vprocuns.TS1)" Placeholder="TS1"></SfNumericTextBox>
-                                    <ValidationMessage For="@(()=> vprocuns.TS1)"></ValidationMessage>
+                                    <SfNumericTextBox ID="TS1" @bind-Value="@(procuns.TS1)" Placeholder="TS1"></SfNumericTextBox>
+                                    <ValidationMessage For="@(()=> procuns.TS1)"></ValidationMessage>
                                 </div>
-                                <div class="form-group col-md-1">
+                                <div class="form-group col-md-2">
                                     <label>Proporcion:</label>
-                                    <SfTextBox ID="Proporcion" @bind-Value="@(vprocuns.PROPORC)" Placeholder="Proporcion"></SfTextBox>
-                                    <ValidationMessage For="@(()=> vprocuns.PROPORC)"></ValidationMessage>
 
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Proporcion" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(procuns.PROPORC)" DataSource="@proporciones">
+                                        <ComboBoxFieldSettings Value="PROPORC" Text="PROPORC"></ComboBoxFieldSettings>
+                                    </SfComboBox>
                                 </div>
+                            
+
+
+
                             </div>
-                            @* <div class="form-row">
-                                <div class="form-group col-md-1">
-                                    <label>Proporcion:</label>
-                                    <SfTextBox ID="Proporcion" @bind-Value="@(procuns.PROPORC)" Placeholder="Proporcion"></SfTextBox>
-                                    <ValidationMessage For="@(()=> procuns.PROPORC)"></ValidationMessage>
-
-                                </div>
-                            </div> *@
                         </div>
                     </div>
                 </div>
@@ -157,7 +158,7 @@
                            Label="Buscando ..." Type="SpinnerType.Fabric">
                 </SfSpinner>
                 <ProductoDialog @ref="refProductoDialog" PopupBuscadorVisible="@popupBuscadorVisibleProducto" conMP=false conSE=true conPT=true
-                                OnObjectSelected="@ProductoExternoSelected" Cg_Prod="@vprocuns.CG_PROD" Des_Producto="@vprocuns.DES_PROD"
+                                OnObjectSelected="@ProductoExternoSelected" Cg_Prod="@procuns.CG_PROD" Des_Producto="@procuns.Des_Prod"
                                 OnCerrarDialog="CerrarDialogProducto">
                 </ProductoDialog>
                 @*<SfButton IsPrimary="true" Content="Guardar" IconCss="fa fa-save" Show="popupFormVisible" HtmlAttributes="@HtmlAttributeSubmit"></SfButton> *@
