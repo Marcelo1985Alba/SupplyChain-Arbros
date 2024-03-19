@@ -32,10 +32,10 @@
             </GridEditSettings>
 
             <GridColumns>
-                <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
-                <GridColumn Field=@nameof(ProcunProceso.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" AllowFiltering="true" Width="80px"></GridColumn>
+                <GridColumn Type="ColumnType.CheckBox" Width="5"></GridColumn>
+                <GridColumn Field=@nameof(ProcunProceso.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" AllowFiltering="true" Width="10px"></GridColumn>
                 @*//DATOS GENERALES *@
-                <GridColumn Field=@nameof(ProcunProceso.PROCESO) HeaderText="PROCESO" TextAlign="TextAlign.Left" Width="80px"></GridColumn>
+                <GridColumn Field=@nameof(ProcunProceso.PROCESO) HeaderText="PROCESO" TextAlign="TextAlign.Left" Width="50px"></GridColumn>
                
               
             </GridColumns> 
@@ -47,6 +47,6 @@
     {
         
     }
-    @* <FormOperaciones @ref="refFormOperaciones" Operaciones="operacionesSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
-                     OnGuardar="@(async(p)=>await Guardar(p))"></FormOperaciones> *@
+     <FormProcunProcesos ProcunProceso="procedimientoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
+                     OnGuardar="@(async(p)=>await Guardar(p))"></FormProcunProcesos> 
 </div>

@@ -31,7 +31,7 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
         "Add",
         "Edit",
         new ItemModel{Text="Delete",Id="Delete"},       
-        new ItemModel{Text="ExcelExport", Id="ExcelExport" },
+        //new ItemModel{Text="ExcelExport", Id="ExcelExport" },
         new ItemModel{Text="Copy", Id="Copy"}
 
         };
@@ -40,8 +40,8 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
         protected SfToast ToastObj;
         protected SfSpinner refSpinner;
         protected SfGrid<ProcunProceso> refGrid;
-        //protected FormProcunProcesos refFormProcunProcesos;
-        protected ProcunProceso operacionesSeleccionado = new();
+       protected FormProcunProcesos refFormProcunProcesos;
+        protected ProcunProceso procedimientoSeleccionado = new();
         protected bool SpinnerVisible = false;
 
         protected bool popupFormVisible = false;
@@ -102,10 +102,10 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
             {
                 await CopiarProcedimiento();
             }
-            else if(args.Item.Text== "ExcelExport")
-            {
-                await refGrid.ExportToExcelAsync();
-            }
+            //else if(args.Item.Text== "ExcelExport")
+            //{
+            //    await refGrid.ExportToExcelAsync();
+            //}
             else if(args.Item.Text== "Delete")
             {
                 if((await refGrid.GetSelectedRecordsAsync()).Count > 0)
@@ -127,7 +127,7 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
                                 ShowCloseButton = true,
                                 ShowProgressBar = true
                             });
-                            procunProcesos= procunProcesos.Where(s => s.Id != operacionesSeleccionado.Id)
+                            procunProcesos= procunProcesos.Where(s => s.Id != procedimientoSeleccionado.Id)
                             .OrderByDescending(s => s.Id)
                             .ToList();
                             await refGrid.Refresh();
@@ -145,13 +145,13 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
         {
             if (refGrid.SelectedRecords.Count == 1)
             {
-                operacionesSeleccionado = new();
+                procedimientoSeleccionado = new();
                 ProcunProceso selectedRecord = refGrid.SelectedRecords[0];
                 bool isConfirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Seguro que desea copiar el Procedimiento?");
                 if (isConfirmed)
                 {
-                    //operacionesSeleccionado.ESNUEVO = true;
-                    operacionesSeleccionado.PROCESO = selectedRecord.PROCESO;
+                    procedimientoSeleccionado.ESNUEVO = true;
+                    procedimientoSeleccionado.PROCESO = selectedRecord.PROCESO;
                     popupFormVisible = true;
                 }
             }
@@ -183,8 +183,9 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
                 else
                 {
                     var procSinModificar = procunProcesos.Where(p => p.Id == procunProceso.Id).FirstOrDefault();
-                    //procSinModificar.Id= operaciones.Id;
-                   
+                    procSinModificar.Id=procunProceso.Id;
+                    procSinModificar.PROCESO=procunProceso.PROCESO;
+                                       
                     procunProcesos.OrderByDescending(p => p.Id);
                 }
                 await refGrid.RefreshHeaderAsync();
@@ -200,21 +201,22 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
 
         protected async Task OnActionBeginHandler(ActionEventArgs<ProcunProceso> args)
         {
-            if(args.RequestType==Syncfusion.Blazor.Grids.Action.Add || args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            if(args.RequestType==Syncfusion.Blazor.Grids.Action.Add ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
                 args.Cancel = true;
                 args.PreventRender = false;
                 popupFormVisible = true;
-                operacionesSeleccionado = new();
-                operacionesSeleccionado.ESNUEVO = true;
+                procedimientoSeleccionado = new();
+                procedimientoSeleccionado.ESNUEVO = true;
                 //await refFormOperaciones.Refrescar(operacionesSeleccionado);
             }
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                operacionesSeleccionado = args.Data;
-                operacionesSeleccionado.ESNUEVO = false;
-                //await refFormProcunProcesos.Refrescar(operacionesSeleccionado);
+                procedimientoSeleccionado = args.Data;
+                procedimientoSeleccionado.ESNUEVO = false;
+                //await refFormProcunProcesos.Refrescar(procedimientoSeleccionado);
             }
             if(args.RequestType== Syncfusion.Blazor.Grids.Action.Grouping
                 || args.RequestType==Syncfusion.Blazor.Grids.Action.UnGrouping

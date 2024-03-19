@@ -1,5 +1,53 @@
-﻿<h3>FormProcunProcesos</h3>
+﻿@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@inherits FormProcunProcesosBase
 
-@code {
+<SfToast ID="toast_default" @ref="ToastObj">
+    <ToastPosition X="Center" Y="Top"></ToastPosition>
+</SfToast>
 
-}
+<SfDialog @bind-Visible=Show IsModal="true" Width="70%" Header="680px" ShowCloseIcon="true">
+    <DialogEvents Closed="OnCerrarDialog"></DialogEvents>
+    <DialogTemplates>
+        <Header>
+            @if (string.IsNullOrEmpty(ProcunProceso.Id.ToString()))
+            {
+                <p>Nuevo Procedimiento</p>
+            }
+            else
+            {
+                <p>&nbsp;&nbsp;@ProcunProceso.Id&nbsp;&nbsp;-&nbsp;&nbsp;@ProcunProceso.PROCESO</p>
+
+            }
+        </Header>
+        <Content>
+            <EditForm Model="ProcunProceso" OnValidSubmit="@GurdarProcedimiento">
+                <DataAnnotationsValidator />
+                  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-DatosGenerales" role="tab" aria-controls="pills-home" aria-selected="true">Datos Generales</a>
+                    </li>
+                </ul>
+                 <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-DatosGenerales" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Codigo:</label>
+                                    <SfNumericTextBox ID="Codigo" @bind-Value="@(ProcunProceso.Id)"></SfNumericTextBox>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="e-float-text e-label-top">Descripcion:</label>
+                                    <SfTextBox ID="Descripcion" @bind-Value="@(ProcunProceso.PROCESO)"></SfTextBox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="sendButton" type="submit" class="e-control e-btn e-primary" data-ripple="true">Guardar</button>
+            </EditForm>
+        </Content>
+    </DialogTemplates>
+
+</SfDialog>
