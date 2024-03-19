@@ -1,0 +1,52 @@
+﻿@page "/Abms/procedimientos"
+@using SupplyChain.Client.Pages.ABM.Procedimientos
+@using SupplyChain.Shared
+@using SupplyChain
+
+@inherits PageProcunProcesosBase
+
+<div class="row">
+    <div class="col-12">
+        <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
+            OnReiniciar="(async()=>await OnReiniciarGrilla())"
+            OnVistaSelected="(async(v)=>await OnVistaSeleccionada(v))" />
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-12">
+        <SfToast ID="toast_default" @ref="@ToastObj">
+            <ToastPosition X="Center" Y="Top"></ToastPosition>
+        </SfToast>
+
+        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                @ref="refGrid" DataSource="@procunProcesos" Width="100%" Toolbar="Toolbaritems"
+            AllowExcelExport="true" AllowGrouping="true" ID="grdOpe" AllowFiltering="true" AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
+            <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
+            <GridEvents  OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolbarHandler" OnActionComplete="OnActionCompleteHandler" TValue="ProcunProceso"></GridEvents>
+            <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
+                ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog">
+            </GridEditSettings>
+
+            <GridColumns>
+                <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+                <GridColumn Field=@nameof(ProcunProceso.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" AllowFiltering="true" Width="80px"></GridColumn>
+                @*//DATOS GENERALES *@
+                <GridColumn Field=@nameof(ProcunProceso.PROCESO) HeaderText="PROCESO" TextAlign="TextAlign.Left" Width="80px"></GridColumn>
+               
+              
+            </GridColumns> 
+            <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>
+        </SfGrid>
+
+    </div>
+    @if (popupFormVisible)
+    {
+        
+    }
+    @* <FormOperaciones @ref="refFormOperaciones" Operaciones="operacionesSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
+                     OnGuardar="@(async(p)=>await Guardar(p))"></FormOperaciones> *@
+</div>

@@ -10,12 +10,16 @@ using System.Threading.Tasks;
 namespace SupplyChain.Shared
 {
     [Table("ProcunProcesos")]
-    public class ProcunProcesos : EntityBase<int>
+    public class ProcunProceso : EntityBase<int>
     {
         //[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string PROCESO { get; set; } = "";
         //public int ID { get; set; } = 0;
 
         public int REGISTRO { get; set; } = 0;
+        [NotMapped]
+        public bool ESNUEVO { get; set; }
+        [NotMapped]
+        public bool GUARDADO { get; set; }
     }
 }

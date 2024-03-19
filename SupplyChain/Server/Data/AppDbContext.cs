@@ -32,7 +32,6 @@ namespace SupplyChain
         public virtual DbSet<Operario> Operario { get; set; }
         public virtual DbSet<EstadosCargaMaquina> EstadosCargaMaquinas { get; set; }
         public virtual DbSet<PLANNER> PLANNER { get; set; }
-        public virtual DbSet<Operaciones> Procedimiento { get; set; }
         //public virtual DbSet<Prod> Prod { get; set; }
         public virtual DbSet<Cliente> Cliente { get; set; }
         public virtual DbSet<ClienteExterno> ClientesExternos { get; set; }
@@ -159,13 +158,13 @@ namespace SupplyChain
         public DbSet<ProcalsMP> ProcalsMP { get; set; }
         public DbSet<vControlCalidadPendientes> vcontrolCalidadPendientes { get; set; }
         //public DbSet<Procesos> Procesos { get; set; }
-     
+
+        public DbSet<ProcunProceso> ProcunProceso { get; set; }
         public DbSet<vProveedorItris> vProveedoresItris { get; set; }
 
         public DbSet<SolCotEmail> SolCotEmails { get; set; }
 
         public DbSet<CampoComodin> CampoComodin {  get; set; }
-        public DbSet<ProcunProcesos> ProcunProcesos{ get; set; }
         public DbSet<vProcun> vProcun {  get; set; }
         #endregion
 

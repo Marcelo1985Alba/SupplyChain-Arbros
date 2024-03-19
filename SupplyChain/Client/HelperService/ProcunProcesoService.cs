@@ -1,29 +1,29 @@
 ﻿using SupplyChain.Client.HelperService.Base;
 using SupplyChain.Client.RepositoryHttp;
-using SupplyChain.Shared.Models;
+using SupplyChain.Shared;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SupplyChain.Client.HelperService
 {
-    public class ProcedimientosService : BaseService<Operaciones,int>
+    public class ProcunProcesoService : BaseService<ProcunProceso,int>
     {
-        private const string API = "api/Procedimientos";
+        private const string API = "api/ProcunProcesos";
 
-        public ProcedimientosService(IRepositoryHttp httpClient) : base(httpClient, API)
+        public ProcunProcesoService(IRepositoryHttp httpClient) : base(httpClient, API)
         {
 
         }
 
-        public async Task<HttpResponseWrapper<List<Operaciones>>> GetProcedimientos()
+        public async Task<HttpResponseWrapper<List<ProcunProceso>>> GetProcedimientos()
         {
-            return await http.GetFromJsonAsync<List<Operaciones>>($"{API}/GetProcedimientos");
+            return await http.GetFromJsonAsync<List<ProcunProceso>>($"{API}/GetProcedimientos");
         }
 
-        public async Task<bool> Eliminar(List<Operaciones> operaciones)
+        public async Task<bool> Eliminar(List<ProcunProceso> procunProcesos)
         {
-            var response = await http.PostAsJsonAsync<List<Operaciones>>($"{API}/PostList", operaciones);
+            var response = await http.PostAsJsonAsync<List<ProcunProceso>>($"{API}/PostList", procunProcesos);
             if (response.Error)
             {
                 Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());

@@ -26,11 +26,11 @@ namespace SupplyChain.Server.Controllers.ABM
 
         // GET: api/Compras
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProcunProcesos>>> GetProcunProcesos()
+        public async Task<ActionResult<IEnumerable<ProcunProceso>>> GetProcunProcesos()
         {
             try
             {
-                return await _context.ProcunProcesos.ToListAsync();
+                return await _context.ProcunProceso.ToListAsync();
 
             }
             catch (Exception ex)
@@ -41,9 +41,9 @@ namespace SupplyChain.Server.Controllers.ABM
         }
 
         [HttpGet("{registro}")]
-        public async Task<ActionResult<ProcunProcesos>> GetProcunProceso(int registro)
+        public async Task<ActionResult<ProcunProceso>> GetProcunProceso(int registro)
         {
-            var proceso = await _context.ProcunProcesos.FindAsync(registro);
+            var proceso = await _context.ProcunProceso.FindAsync(registro);
             if (proceso == null)
             {
                 return NotFound();

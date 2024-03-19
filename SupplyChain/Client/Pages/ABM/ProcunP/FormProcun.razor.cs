@@ -28,7 +28,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         [Inject] public CeldasService CeldasService { get; set; }
         [Parameter] public Procun procuns { get; set; } = new();
         [Parameter] public vProcun vprocuns { get; set; } = new();
-        [Parameter] public ProcunProcesos procunProcesos { get; set; } = new();
+        [Parameter] public ProcunProceso procunProcesos { get; set; } = new();
          [Parameter] public Proporcion proporcion { get; set; } = new();
         [Parameter] public Producto prod { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;
@@ -54,7 +54,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         protected List<Areas> areas = new();
         protected List<Lineas> lineas = new();
         protected List<Celdas> celdas = new();
-        protected List<ProcunProcesos> procunsProcesos= new();
+        protected List<ProcunProceso> procunsProcesos= new();
         protected List<Proporcion> proporciones = new();
         protected SfSpinner refSpinner;
         
@@ -90,7 +90,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             {
                 celdas = response4.Response;
             }
-            procunsProcesos = await Http.GetFromJsonAsync<List<ProcunProcesos>>("api/ProcunProcesos");
+            procunsProcesos = await Http.GetFromJsonAsync<List<ProcunProceso>>("api/ProcunProcesos");
             proporciones= await Http.GetFromJsonAsync<List<Proporcion>>("api/Proporcion");
             //proporcion = await Http.GetFromJsonAsync<List<Proporcion>>("api/Proporcion");
 
