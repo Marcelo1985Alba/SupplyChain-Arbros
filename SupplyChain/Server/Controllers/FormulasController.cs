@@ -370,7 +370,7 @@ namespace SupplyChain.Server.Controllers
                         ConexionSQL xConexionSQL = new ConexionSQL(CadenaConexionSQL);
                         // cambio el valor de la cantidad de materiales y la observacion
                         xConexionSQL.EjecutarSQL(
-                            $"UPDATE Form2 SET CANT_MAT = {form.CANT_MAT}, OBSERV = '{form.OBSERV}' WHERE Registro = {form.Id}");
+                            $"UPDATE Form2 SET CANTIDAD = {form.CANTIDAD}, CANT_MAT = {form.CANTIDAD}, OBSERV = '{form.OBSERV}' WHERE Registro = {form.Id}");
                     }
                     catch (DbUpdateConcurrencyException)
                     {
