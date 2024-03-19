@@ -24,12 +24,12 @@
 </div>
 
 <div class="row">
-	<div class="col-2">
-		<SfDropDownList TItem="GraphicIso.BaseOption" TValue="string" Placeholder="Filtrar" PopupHeight="auto" DataSource="@Filtros" EnableVirtualization="true">
-			<DropDownListEvents TItem="GraphicIso.BaseOption" TValue="string" ValueChange="ChangeFiltro"></DropDownListEvents>
-			<DropDownListFieldSettings Text="Text" Value="Text"></DropDownListFieldSettings>
-		</SfDropDownList>
-	</div>
+    <div class="col-2">
+        <SfDropDownList TItem="GraphicIso.BaseOption" TValue="string" Value="@SelectedOption"  Placeholder="Filtrar" PopupHeight="auto" DataSource="@Filtros" EnableVirtualization="true">
+            <DropDownListEvents TItem="GraphicIso.BaseOption" TValue="string" ValueChange="s => ChangeFiltro(s, pendientes)"></DropDownListEvents>
+            <DropDownListFieldSettings Text="Text" Value="Text"></DropDownListFieldSettings>
+        </SfDropDownList>
+    </div>
     <div class="col-8">
         <ComboVistasGrilla AppName="@APPNAME" StateApp="@state"
                            OnReiniciar="(async ()=> await OnReiniciarGrilla())"
