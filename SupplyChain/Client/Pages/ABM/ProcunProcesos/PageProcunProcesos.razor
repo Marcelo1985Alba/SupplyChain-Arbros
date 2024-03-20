@@ -21,11 +21,11 @@
         </SfToast>
 
         <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                @ref="refGrid" DataSource="@procunProcesos" Width="100%" Toolbar="Toolbaritems"
+                @ref="refGrid" DataSource="@protabs" Width="100%" Toolbar="Toolbaritems"
             AllowExcelExport="true" AllowGrouping="true" ID="grdOpe" AllowFiltering="true" AllowSorting="true" AllowPaging="true" GridLines="GridLine.Both">
             <GridSelectionSettings CheckboxOnly="true" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
             <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
-            <GridEvents  OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolbarHandler" OnActionComplete="OnActionCompleteHandler" TValue="ProcunProceso"></GridEvents>
+            <GridEvents  OnActionBegin="OnActionBeginHandler" OnToolbarClick="OnToolbarHandler" OnActionComplete="OnActionCompleteHandler" TValue="Protab"></GridEvents>
             <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
                 ShowDeleteConfirmDialog="false" Mode="EditMode.Dialog">
@@ -33,9 +33,9 @@
 
             <GridColumns>
                 <GridColumn Type="ColumnType.CheckBox" Width="5"></GridColumn>
-                <GridColumn Field=@nameof(ProcunProceso.Id) HeaderText="Codigo" TextAlign="TextAlign.Left" AllowFiltering="true" Width="10px"></GridColumn>
-                @*//DATOS GENERALES *@
-                <GridColumn Field=@nameof(ProcunProceso.PROCESO) HeaderText="PROCESO" TextAlign="TextAlign.Left" Width="50px"></GridColumn>
+                <GridColumn Field=@nameof(Protab.Id) HeaderText="PROCESO" TextAlign="TextAlign.Left"  AllowFiltering="true" Width="10px"></GridColumn>
+                
+                <GridColumn Field=@nameof(Protab.DESCRIP) HeaderText="DESCRIPCION" TextAlign="TextAlign.Left" Width="50px"></GridColumn>
                
               
             </GridColumns> 

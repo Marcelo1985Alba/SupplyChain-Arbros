@@ -17,12 +17,12 @@ namespace SupplyChain.Client.Pages.ABM.ProcunProcesos
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected IJSRuntime JSRuntime { get; set; }
         [Inject] protected ProcunProcesoService ProcunProcesoService { get; set; }
-        [Parameter] public ProcunProceso ProcunProceso { get; set; }
+        [Parameter] public Protab Protab { get; set; }
         [Parameter] public bool Show {  get; set; }
-        [Parameter] public EventCallback<ProcunProceso> OnGuardar { get; set; }
-        [Parameter] public EventCallback<ProcunProceso> OnEliminar{ get; set; }
+        [Parameter] public EventCallback<Protab> OnGuardar { get; set; }
+        [Parameter] public EventCallback<Protab> OnEliminar{ get; set; }
         [Parameter] public EventCallback OnCerrar{ get; set; }
-        protected SfGrid<ProcunProceso> refGridItems;
+        protected SfGrid<Protab> refGridItems;
         protected SfSpinner refSpinnerCli;
         protected bool SpinnerVisible=false;
         protected SfToast ToastObj;
@@ -36,54 +36,54 @@ namespace SupplyChain.Client.Pages.ABM.ProcunProcesos
         {
         }
 
-        protected async Task<bool> Agregar(ProcunProceso procunProceso)
+        protected async Task<bool> Agregar(Protab protab)
         {
-            var response = await ProcunProcesoService.Existe(procunProceso.Id);
+            var response = await ProcunProcesoService.Existe(protab.Id);
             if (!response)
             {
-                var response2= await ProcunProcesoService.Agregar(procunProceso);
+                var response2= await ProcunProcesoService.Agregar(protab);
                 if(response2.Error)
                 {
                     Console.WriteLine(await response2.HttpResponseMessage.Content.ReadAsStringAsync());
                     await ToastMensajeError("Error al intentar Guardar el procedimiento.");
                     return false;
                 }
-                procunProceso = response2.Response;
+                protab = response2.Response;
                 return true;
             }
-            await ToastMensajeError($"El procedimiento con codigo {procunProceso.Id} ya existe.\n\rO el procedimiento no es permitido.");
+            await ToastMensajeError($"El procedimiento con codigo {protab.Id} ya existe.\n\rO el procedimiento no es permitido.");
             return false;
         }
 
-        protected async Task<bool> Actualizar(ProcunProceso procunProceso)
+        protected async Task<bool> Actualizar(Protab protab)
         {
-            var response = await ProcunProcesoService.Actualizar(procunProceso.Id, procunProceso);
+            var response = await ProcunProcesoService.Actualizar(protab.Id, protab);
             if(response.Error)
             {
                 await ToastMensajeError("Error al intentar Guardar el procedimiento.");
                 return false;
             }
-            ProcunProceso = procunProceso;
+            Protab = protab;
             return true;
         }
 
         protected async Task GurdarProcedimiento()
         {
             bool guardado=false;
-            if (ProcunProceso.ESNUEVO)
+            if (Protab.ESNUEVO)
             {
-                guardado = await Agregar(ProcunProceso);
+                guardado = await Agregar(Protab);
             }
             else
             {
-                guardado = await Actualizar(ProcunProceso);
+                guardado = await Actualizar(Protab);
             }
 
             if (guardado)
             {
                 Show = false;
-                ProcunProceso.GUARDADO=guardado;
-                await OnGuardar.InvokeAsync(ProcunProceso);
+                Protab.GUARDADO=guardado;
+                await OnGuardar.InvokeAsync(Protab);
             }
         }
 

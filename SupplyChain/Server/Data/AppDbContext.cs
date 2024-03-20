@@ -159,7 +159,7 @@ namespace SupplyChain
         public DbSet<vControlCalidadPendientes> vcontrolCalidadPendientes { get; set; }
         //public DbSet<Procesos> Procesos { get; set; }
 
-        public DbSet<ProcunProceso> ProcunProceso { get; set; }
+        public DbSet<Protab> Protab { get; set; }
         public DbSet<vProveedorItris> vProveedoresItris { get; set; }
 
         public DbSet<SolCotEmail> SolCotEmails { get; set; }

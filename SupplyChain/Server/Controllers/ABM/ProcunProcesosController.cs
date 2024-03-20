@@ -25,11 +25,12 @@ namespace SupplyChain.Server.Controllers.ABM
 
         // GET: api/Compras
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProcunProceso>>> GetProcunProcesos()
+        public async Task<ActionResult<IEnumerable<Protab>>> GetProcunProcesos()
         {
             try
             {
-                return await _procunProcesoRepository.ObtenerTodos();
+                var listapro = await _procunProcesoRepository.ObtenerTodos();
+                return Ok(listapro);
 
             }
             catch (Exception ex)
@@ -39,8 +40,21 @@ namespace SupplyChain.Server.Controllers.ABM
 
         }
 
+        [HttpGet("id")]
+        public async Task<ActionResult<Protab>>GetProcunProcesosById(string id)
+        {
+            try
+            {
+                return await _procunProcesoRepository.ObtenerPorId(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message); 
+            }
+        }
+
         [HttpGet("Existe/{id}")]
-        public async Task<ActionResult<bool>> GetProcunProceso(int id)
+        public async Task<ActionResult<bool>> GetProcunProceso(string id)
         {
             try
             {
@@ -54,20 +68,16 @@ namespace SupplyChain.Server.Controllers.ABM
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProcunProcedimiento(int id, ProcunProceso procunProceso)
+        public async Task<ActionResult<Protab>> PutProcunProcedimiento(decimal id, Protab protab)
         {
-            if(id != procunProceso.Id)
-            {
-                return BadRequest();
-            }
-
+            
             try
             {
-                await _procunProcesoRepository.Actualizar(procunProceso);
+                await _procunProcesoRepository.Actualizar(protab);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if(!await _procunProcesoRepository.Existe(id))
+                if (!await _procunProcesoRepository.Existe(id))
                 {
                     return NotFound();
                 }
@@ -76,24 +86,25 @@ namespace SupplyChain.Server.Controllers.ABM
                     return BadRequest();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return Ok(procunProceso);
+            return Ok(protab);
         }
 
+       
         [HttpPost]
-        public async Task<ActionResult<ProcunProceso>> PostProcunProceso(ProcunProceso procunProceso)
+        public async Task<ActionResult<Protab>> PostProcunProcesos(Protab protab)
         {
             try
             {
-                await _procunProcesoRepository.Agregar(procunProceso);
-                return CreatedAtAction("GetProcunProcesos", new { id = procunProceso.Id }, procunProceso);
+                await _procunProcesoRepository.Agregar(protab);
+                return CreatedAtAction("GetProcunProcesos", new { id = protab.Id }, protab);
             }
             catch(DbUpdateConcurrencyException exx) 
             {
-                if(!await _procunProcesoRepository.Existe(procunProceso.Id))
+                if(!await _procunProcesoRepository.Existe(protab.Id))
                 {
                     return Conflict();
                 }
@@ -109,32 +120,39 @@ namespace SupplyChain.Server.Controllers.ABM
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ProcunProceso>> DeleteProcunProcedimiento(int id)
-        {
-            var procunProceso = await _procunProcesoRepository.ObtenerPorId(id);
-            if (procunProceso == null)
-            {
-                return NotFound();
-            }
-
-            await _procunProcesoRepository.Remover(id);
-
-            return procunProceso;
-        }
-
-        [HttpPost("PostList")]
-        public async Task<ActionResult<TipoArea>> PostList(List<ProcunProceso> procunProcesos)
+        public async Task<ActionResult<Protab>> DeleteProcunProcedimiento(string id)
         {
             try
             {
-                foreach (var item in procunProcesos)
+                var procunProceso = await _procunProcesoRepository.Obtener(p=>p.Id == id).FirstOrDefaultAsync();
+                if (procunProceso == null)
                 {
-                    await _procunProcesoRepository.Remover(item.Id);
+                    return NotFound();
+                }
+                await _procunProcesoRepository.Remover(id);
+                return procunProceso;
+
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Error al eliminar el proceso" + ex.Message);
+
+            }
+        }
+
+        [HttpPost("PostList")]
+        public async Task<ActionResult<Protab>> PostList(List<Protab> protab)
+        {
+            try
+            {
+                foreach (var item in protab)
+                {
+                    await _procunProcesoRepository.Remover(item.Id.Trim());
                 }
             }
             catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
             return Ok();

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Client.HelperService
 {
-    public class ProcunProcesoService : BaseService<ProcunProceso,int>
+    public class ProcunProcesoService : BaseService<Protab,string>
     {
         private const string API = "api/ProcunProcesos";
 
@@ -16,14 +16,14 @@ namespace SupplyChain.Client.HelperService
 
         }
 
-        public async Task<HttpResponseWrapper<List<ProcunProceso>>> GetProcedimientos()
+        public async Task<HttpResponseWrapper<List<Protab>>> GetProcedimientos()
         {
-            return await http.GetFromJsonAsync<List<ProcunProceso>>($"{API}/GetProcedimientos");
+            return await http.GetFromJsonAsync<List<Protab>>($"{API}/GetProcunProcesos");
         }
 
-        public async Task<bool> Eliminar(List<ProcunProceso> procunProcesos)
+        public async Task<bool> Eliminar(List<Protab> protab)
         {
-            var response = await http.PostAsJsonAsync<List<ProcunProceso>>($"{API}/PostList", procunProcesos);
+            var response = await http.PostAsJsonAsync<List<Protab>>($"{API}/PostList", protab);
             if (response.Error)
             {
                 Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
@@ -32,7 +32,7 @@ namespace SupplyChain.Client.HelperService
             return true;
         }
 
-        public async Task<bool> Existe(int id)
+        public async Task<bool> Existe(string id)
         {
             var response = await http.GetFromJsonAsync<bool>($"{API}/Existe{id}");
             if (response.Error)
@@ -43,5 +43,14 @@ namespace SupplyChain.Client.HelperService
             return response.Response;
         }
 
+        public async Task<HttpResponseWrapper<List<Protab>>> GetProcunProcesos()
+        {
+            return await http.GetFromJsonAsync<List<Protab>>($"{API}/GetProcunProcesos");
+        }
+
+        public async Task<HttpResponseWrapper<List<Protab>>> PostProcunProcesos(Protab protab)
+        {
+            return await http.GetFromJsonAsync<List<Protab>>($"{API}/PostProcunProcesos/{protab}");
+        }
     }
 }

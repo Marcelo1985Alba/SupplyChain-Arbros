@@ -32,11 +32,13 @@ namespace SupplyChain.Server.Repositorios
 
         public async Task<IEnumerable<vProcun>> ObtenerProcun()
         {
-            string xSQL = string.Format("select top 10 * from vprocun");
+            string xSQL = string.Format("select * from vprocun");
 
             return await base.Db.vProcun.FromSqlRaw(xSQL).ToListAsync();
 
         }
+
+       
 
 
     }

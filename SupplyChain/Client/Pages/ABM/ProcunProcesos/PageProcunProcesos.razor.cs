@@ -36,12 +36,12 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
 
         };
         //protected List<ProcunProcesos> procunProcesos = new();
-        protected List<ProcunProceso> procunProcesos = new();
+        protected List<Protab> protabs= new();
         protected SfToast ToastObj;
         protected SfSpinner refSpinner;
-        protected SfGrid<ProcunProceso> refGrid;
+        protected SfGrid<Protab> refGrid;
        protected FormProcunProcesos refFormProcunProcesos;
-        protected ProcunProceso procedimientoSeleccionado = new();
+        protected Protab procedimientoSeleccionado = new();
         protected bool SpinnerVisible = false;
 
         protected bool popupFormVisible = false;
@@ -64,7 +64,7 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
             var response = await ProcunProcesosService.Get();
             if(!response.Error)
             {
-                procunProcesos = response.Response;
+                protabs = response.Response;
             }
             SpinnerVisible = false;
         }
@@ -113,7 +113,7 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
                     bool isConfirmed= await jsRuntime.InvokeAsync<bool>("confirm","Seguro que desea eliminar la Operación?");
                     if (isConfirmed)
                     {
-                        List<ProcunProceso> procedimientoABorrar= await refGrid.GetSelectedRecordsAsync();
+                        List<Protab> procedimientoABorrar= await refGrid.GetSelectedRecordsAsync();
                         var elimino = await ProcunProcesosService.Eliminar(procedimientoABorrar);
 
                         if (elimino)
@@ -127,7 +127,7 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
                                 ShowCloseButton = true,
                                 ShowProgressBar = true
                             });
-                            procunProcesos= procunProcesos.Where(s => s.Id != procedimientoSeleccionado.Id)
+                            protabs= protabs.Where(s => s.Id != procedimientoSeleccionado.Id)
                             .OrderByDescending(s => s.Id)
                             .ToList();
                             await refGrid.Refresh();
@@ -146,12 +146,12 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
             if (refGrid.SelectedRecords.Count == 1)
             {
                 procedimientoSeleccionado = new();
-                ProcunProceso selectedRecord = refGrid.SelectedRecords[0];
+                Protab selectedRecord = refGrid.SelectedRecords[0];
                 bool isConfirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Seguro que desea copiar el Procedimiento?");
                 if (isConfirmed)
                 {
                     procedimientoSeleccionado.ESNUEVO = true;
-                    procedimientoSeleccionado.PROCESO = selectedRecord.PROCESO;
+                    procedimientoSeleccionado.Id = selectedRecord.Id;
                     popupFormVisible = true;
                 }
             }
@@ -170,23 +170,24 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
 
         }
 
-        protected async Task Guardar(ProcunProceso procunProceso)
+        protected async Task Guardar(Protab protab)
         {
-            if (procunProceso.GUARDADO)
+            if (protab.GUARDADO)
             {
                 await ToastMensajeExito();
                 popupFormVisible = false;
-                if (procunProceso.ESNUEVO)
+                if (protab.ESNUEVO)
                 {
-                    procunProcesos.Add(procunProceso);
+                    protabs.Add(protab);
                 }
                 else
                 {
-                    var procSinModificar = procunProcesos.Where(p => p.Id == procunProceso.Id).FirstOrDefault();
-                    procSinModificar.Id=procunProceso.Id;
-                    procSinModificar.PROCESO=procunProceso.PROCESO;
-                                       
-                    procunProcesos.OrderByDescending(p => p.Id);
+                    var procSinModificar = protabs.Where(p => p.Id == protab.Id).FirstOrDefault();
+                   
+                    procSinModificar.Id= protab.Id;
+                    procSinModificar.DESCRIP= protab.DESCRIP;
+
+                    protabs.OrderByDescending(p => p.Id);
                 }
                 await refGrid.RefreshHeaderAsync();
                 await refGrid.Refresh();
@@ -199,7 +200,7 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
         }
 
 
-        protected async Task OnActionBeginHandler(ActionEventArgs<ProcunProceso> args)
+        protected async Task OnActionBeginHandler(ActionEventArgs<Protab> args)
         {
             if(args.RequestType==Syncfusion.Blazor.Grids.Action.Add ||
                 args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
@@ -240,7 +241,7 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
 
 
 
-        protected async Task OnActionCompleteHandler(ActionEventArgs<ProcunProceso> args)
+        protected async Task OnActionCompleteHandler(ActionEventArgs<Protab> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
