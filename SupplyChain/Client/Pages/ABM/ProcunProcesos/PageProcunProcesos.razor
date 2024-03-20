@@ -33,7 +33,7 @@
 
             <GridColumns>
                 <GridColumn Type="ColumnType.CheckBox" Width="5"></GridColumn>
-                <GridColumn Field=@nameof(Protab.Id) HeaderText="PROCESO" TextAlign="TextAlign.Left"  AllowFiltering="true" Width="10px"></GridColumn>
+                <GridColumn Field=@nameof(Protab.Id) HeaderText="PROCESO" TextAlign="TextAlign.Left" AllowFiltering="true" Width="10px"></GridColumn>
                 
                 <GridColumn Field=@nameof(Protab.DESCRIP) HeaderText="DESCRIPCION" TextAlign="TextAlign.Left" Width="50px"></GridColumn>
                
@@ -47,6 +47,6 @@
     {
         
     }
-     <FormProcunProcesos ProcunProceso="procedimientoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
+     <FormProcunProcesos Protab="procedimientoSeleccionado" Show="popupFormVisible" OnCerrar="OnCerraDialog"
                      OnGuardar="@(async(p)=>await Guardar(p))"></FormProcunProcesos> 
 </div>

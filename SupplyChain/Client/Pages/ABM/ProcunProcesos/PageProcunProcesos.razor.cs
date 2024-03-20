@@ -121,7 +121,7 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
                             await this.ToastObj.ShowAsync(new ToastModel
                             {
                                 Title = "EXITO!",
-                                Content = "las Operaciones seleccionados fueron eliminados correctamente.",
+                                Content = "El proceso seleccionado fue eliminado correctamente.",
                                 CssClass = "e-toast-success",
                                 Icon = "e-success toast-icons",
                                 ShowCloseButton = true,

@@ -68,9 +68,13 @@ namespace SupplyChain.Server.Controllers.ABM
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Protab>> PutProcunProcedimiento(decimal id, Protab protab)
+        public async Task<ActionResult<Protab>> PutProcunProcedimiento(string id, Protab protab)
         {
-            
+           
+            if (id != protab.Id)
+            {
+                return BadRequest();
+            }
             try
             {
                 await _procunProcesoRepository.Actualizar(protab);
