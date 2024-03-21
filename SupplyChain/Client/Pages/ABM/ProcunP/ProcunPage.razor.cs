@@ -231,7 +231,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     procunSinModificar.Id = proc.Id;
                     procunSinModificar.ORDEN = proc.ORDEN;
                     procunSinModificar.CG_PROD = proc.CG_PROD;
-                    procunSinModificar.DESCRIPCION = proc.DESCRIPCION;
+                    procunSinModificar.Des_Prod = proc.Des_Prod;
                     procunSinModificar.CG_FORM = proc.CG_FORM;
                     procunSinModificar.CG_AREA = proc.CG_AREA;
                     procunSinModificar.CG_LINEA = proc.CG_LINEA;

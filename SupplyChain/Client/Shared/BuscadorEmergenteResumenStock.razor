@@ -7,7 +7,7 @@
                        OnObjetosSeleccionados="@(async(l)=> await OnSeleccionados(l))" HeightGrid="230px" 
                        Target="@Target" SpinnerVisible="@VisibleSpinner" IsModal="@EsModal"
                        Titulo="@Titulo" OnObjetoSeleccionado="@(async(o)=> await OnSeleccionado(o))"
-                       OnCerrarDialog="@(async(b)=>await Cerrar(b))">
+                       OnCerrarDialog="CerrarDialog">
     </BuscadorEmergente>
 
 </div>
@@ -90,9 +90,10 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    protected async Task Cerrar(bool visible)
+    protected async Task CerrarDialog()
     {
-        Visible = visible;
-        await InvokeAsync(StateHasChanged);
+        await HideAsync();
+        await OnCerrar.InvokeAsync();
     }
+
 }

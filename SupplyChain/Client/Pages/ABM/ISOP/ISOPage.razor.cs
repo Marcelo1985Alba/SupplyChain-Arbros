@@ -34,17 +34,27 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
         "Delete",
         "Print",
         new ItemModel { Text = "Copia", TooltipText = "Copiar un ISO", PrefixIcon = "e-copy", Id = "Copy" },
-        "ExcelExport"
+        "ExcelExport",
+        new ItemModel { Text = "Ver Todos", Type = ItemType.Button, Id = "VerTodos", PrefixIcon = "e-icons e-eye" },
+        new ItemModel { Text = "Ver Pendientes", Type = ItemType.Button, Id = "VerPendientes" },
         };
         protected List<ISO> isos = new();
+        protected List<ISO> allIsos = new();
+        protected string SelectedOption { get; set; } = "Ambos";
+        protected bool pendientes = false;
+
 
         protected SfToast ToastObj;
         protected SfSpinner refSpinner;
-        protected SfGrid<ISO> refGrid;
+        public SfGrid<ISO> refGrid;
         protected ISO isoSeleccionado = new();
         protected bool SpinnerVisible = false;
 
         protected bool popupFormVisible = false;
+        
+        public string blancasCss { get; set; } = "blancas";
+        public string naranjasCss { get; set; } = "naranjas";
+        public string RojasCss { get; set; } = "rojas";
 
         [CascadingParameter] MainLayout MainLayout { get; set; }
         protected override async Task OnInitializedAsync()
@@ -56,6 +66,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
             if (!response.Error)
             {
                 isos = response.Response;
+                allIsos = isos;
             }
             SpinnerVisible = false;
         }
@@ -108,6 +119,20 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
             else if (args.Item.Id == "grdISO_excelexport")
             {
                 await refGrid.ExportToExcelAsync();
+            }
+            else if (args.Item.Id == "VerPendientes")
+            {
+                SpinnerVisible = true;
+                pendientes = true;
+                ChangeFiltro(new Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, GraphicIso.BaseOption> { Value = SelectedOption }, pendientes);
+                SpinnerVisible = false;
+            }
+            else if (args.Item.Id == "VerTodos")
+            {
+                SpinnerVisible = true;
+                pendientes = false;
+                ChangeFiltro(new Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, GraphicIso.BaseOption> { Value = SelectedOption }, pendientes);
+                SpinnerVisible = false;
             }
         }
 
@@ -190,7 +215,32 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
                 await refGrid.RefreshHeader();
             }
         }
-
+        public List<GraphicIso.BaseOption> Filtros = new List<GraphicIso.BaseOption> {
+            new GraphicIso.BaseOption() {Text= "Ambos" },
+            new GraphicIso.BaseOption() {Text= "9001" },
+            new GraphicIso.BaseOption() {Text= "14001" },
+        };
+        protected void ChangeFiltro(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, GraphicIso.BaseOption> args, bool pendientes)
+        {
+            if (pendientes == true)
+            {
+                if (args.Value == "Ambos")
+                    isos = allIsos.Where(s => s.FechaCumplido == null).ToList();
+                else if (args.Value == "9001")
+                    isos = allIsos.Where(s => (s.ImpAmb == "OPORTUNIDAD" || s.ImpAmb == "RIESGO") && s.FechaCumplido == null).ToList();
+                else if (args.Value == "14001")
+                    isos = allIsos.Where(s => s.ImpAmb != "OPORTUNIDAD" && s.ImpAmb != "RIESGO" && s.FechaCumplido == null).ToList();
+            }else
+            {
+                if (args.Value == "Ambos")
+                    isos = allIsos.ToList();
+                else if (args.Value == "9001")
+                    isos = allIsos.Where(s => s.ImpAmb == "OPORTUNIDAD" || s.ImpAmb == "RIESGO").ToList();
+                else if (args.Value == "14001")
+                    isos = allIsos.Where(s => s.ImpAmb != "OPORTUNIDAD" && s.ImpAmb != "RIESGO").ToList();
+            }
+            SelectedOption = args.Value;
+        }
         protected async Task OnActionCompleteHandler(ActionEventArgs<ISO> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
@@ -236,18 +286,18 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
                     isoSinModificar.NaturalezaDelImpacto = iso.NaturalezaDelImpacto;
                     isoSinModificar.Gestion = iso.Gestion;
                     isoSinModificar.Comentarios = iso.Comentarios;
+                    isoSinModificar.FechaCumplido = iso.FechaCumplido;
                     isos.OrderByDescending(p => p.Id);
                 }
-                await refGrid.RefreshHeaderAsync();
-                refGrid.Refresh();
-                await refGrid.RefreshColumnsAsync();
             }
             else
             {
                 await ToastMensajeError();
             }
+            await refGrid.RefreshHeaderAsync();
+            refGrid.Refresh();
+            await refGrid.RefreshColumnsAsync();
         }
-
         private async Task ToastMensajeExito()
         {
             await this.ToastObj.Show(new ToastModel
@@ -272,7 +322,6 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
                 ShowProgressBar = true
             });
         }
-
         public void onClick()
         {
             NavigationManager.NavigateTo("/Abms/Iso/Graphics");
