@@ -21,9 +21,11 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
         [Inject] protected HttpClient Http { get; set; }
         [Inject] protected NavigationManager NavigationManager { get; set; }
         [Inject] public ISOService isoService { get; set; }
+        [Inject] protected AspAmbService AspAmbService { get; set; }
 
         protected List<ISO> isos = new();
         protected List<ISO> allIsos = new();
+        protected List<AspAmb> aspectosAmbientales = new();
         protected SfSpinner refSpinner;
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
@@ -93,6 +95,11 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
             }
             idByImp = isos.Where(s => s.ImpAmb == impAmb).Select(s => s.Identificacion).OrderBy(s => s).ToList();
             idByImp.Add(0);
+            var response2 = await AspAmbService.Get();
+            if (!response2.Error)
+	            aspectosAmbientales = response2.Response;
+            foreach (var item in isos)
+				item.AspAmbNombre = aspectosAmbientales.Where(s => s.Id == item.AspAmb).Select(s => s.descripcion).FirstOrDefault();
         }
 		int[,] GetDefaultColors()
 		{

@@ -18,10 +18,21 @@
 </SfToast>
 
 <div class="row">
-    <div class="col-12">
+    <div class="col-2">
         <div class="btn" style="margin: 0 0 7px 7px;">
             <SfButton @onclick="AddRecord">Añadir Tarea</SfButton>
         </div>
+    </div>
+	<div class="col-5">
+		<SfDropDownList TItem="BaseOption" TValue="string" Placeholder="Filtrar" PopupHeight="auto" DataSource="@Filtros" EnableVirtualization="true">
+			<DropDownListEvents TItem="BaseOption" TValue="string" ValueChange="ChangeFiltro"></DropDownListEvents>
+			<DropDownListFieldSettings Text="Text" Value="Text"></DropDownListFieldSettings>
+		</SfDropDownList>
+	</div>
+</div>
+
+<div class="row">
+    <div class="col-12">
         <SfKanban @ref="refKanban" TValue="SupplyChain.Shared.Tareas" KeyField="Estado" DataSource="tasks">
             <KanbanEvents TValue="SupplyChain.Shared.Tareas" DragStop="@onDragStop" DialogClose="@DialogCloseHandler"></KanbanEvents>
             <KanbanColumns>

@@ -135,6 +135,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
 
         protected async Task<bool> Actualizar(ISO iso)
         {
+            iso.AspAmb = aspAmbientales.Where(s => s.descripcion == iso.AspAmbNombre).Select(s => s.Id).FirstOrDefault();
             var response = await isoService.Actualizar(iso.Id, iso);
             if (response.Error)
             {

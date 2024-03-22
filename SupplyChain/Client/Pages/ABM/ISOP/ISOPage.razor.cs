@@ -23,6 +23,8 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
         [Inject] protected NavigationManager NavigationManager { get; set; }
         [Inject] protected IJSRuntime jSRuntime { get; set; }
         [Inject] protected ISOService isoService { get; set; }
+        [Inject] protected AspAmbService AspAmbService { get; set; }
+        protected List<AspAmb> aspectosAmbientales = new();
         #region "Vista Grilla"
         protected const string APPNAME = "grdISOABM";
         protected string state;
@@ -68,6 +70,11 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
                 isos = response.Response;
                 allIsos = isos;
             }
+            var response2 = await AspAmbService.Get();
+            if (!response2.Error)
+                aspectosAmbientales = response2.Response;
+            foreach (var item in isos)
+                item.AspAmbNombre = aspectosAmbientales.Where(s => s.Id == item.AspAmb).Select(s => s.descripcion).FirstOrDefault();
             SpinnerVisible = false;
         }
 
@@ -278,7 +285,9 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
                     isoSinModificar.Proceso = iso.Proceso;
                     isoSinModificar.FODA = iso.FODA;
                     isoSinModificar.ImpAmb = iso.ImpAmb;
-                    isoSinModificar.AspAmb = iso.AspAmb;
+                    isoSinModificar.AspAmbNombre = iso.AspAmbNombre;
+                    // debo buscar el id del aspecto ambiental
+                    isoSinModificar.AspAmb = aspectosAmbientales.Where(s => s.descripcion == iso.AspAmbNombre).Select(s => s.Id).FirstOrDefault();
                     isoSinModificar.Frecuencia = iso.Frecuencia;
                     isoSinModificar.Impacto = iso.Impacto;
                     isoSinModificar.CondOperacion = iso.CondOperacion;

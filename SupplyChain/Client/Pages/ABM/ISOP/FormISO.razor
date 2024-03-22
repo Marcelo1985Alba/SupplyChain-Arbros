@@ -107,9 +107,9 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <a>Aspecto Ambiental:</a>
-                        <SfComboBox TValue="int" CssClass="customClass" TItem="AspAmb" PopupWidth="auto" AllowFiltering="true"
-                                    @bind-Value="@(isos.AspAmb)" Enabled="@edit" DataSource="@aspAmbientales">
-                            <ComboBoxFieldSettings Value="Id" Text="descripcion"></ComboBoxFieldSettings>
+                        <SfComboBox TValue="string" CssClass="customClass" TItem="AspAmb" PopupWidth="auto" AllowFiltering="true"
+                                    @bind-Value="@(isos.AspAmbNombre)" Enabled="@edit" DataSource="@aspAmbientales">
+                            <ComboBoxFieldSettings Value="descripcion" Text="descripcion"></ComboBoxFieldSettings>
                         </SfComboBox>
                     </div>
                     <div class="form-group col-md-6">
