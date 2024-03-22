@@ -28,6 +28,7 @@ namespace SupplyChain
         public string Gestion { get; set; } = "";
         public string Comentarios { get; set; } = "";
         public string Medidas { get; set; } = "";
+        public string Efectividad { get; set; } = "";
         public DateTime? FechaCumplido { get; set; }
         public string USER { get; set; } = "";
         [NotMapped]

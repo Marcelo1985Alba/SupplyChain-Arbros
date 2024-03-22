@@ -166,6 +166,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
                     isoSeleccionado.CondOperacion = selectedRecord.CondOperacion;
                     isoSeleccionado.CondControl = selectedRecord.CondControl;
                     isoSeleccionado.NaturalezaDelImpacto = selectedRecord.NaturalezaDelImpacto;
+                    isoSeleccionado.Efectividad = selectedRecord.Efectividad;
                     isoSeleccionado.Gestion = selectedRecord.Gestion;
                     isoSeleccionado.Comentarios = selectedRecord.Comentarios;
                     popupFormVisible = true;
@@ -293,6 +294,7 @@ namespace SupplyChain.Client.Pages.ABM.ISOP
                     isoSinModificar.CondOperacion = iso.CondOperacion;
                     isoSinModificar.CondControl = iso.CondControl;
                     isoSinModificar.NaturalezaDelImpacto = iso.NaturalezaDelImpacto;
+                    isoSinModificar.Efectividad = iso.Efectividad;
                     isoSinModificar.Gestion = iso.Gestion;
                     isoSinModificar.Comentarios = iso.Comentarios;
                     isoSinModificar.FechaCumplido = iso.FechaCumplido;
