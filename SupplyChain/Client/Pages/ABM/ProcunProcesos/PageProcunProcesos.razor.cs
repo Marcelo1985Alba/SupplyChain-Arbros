@@ -9,23 +9,19 @@ using Syncfusion.Blazor.Notifications;
 using Syncfusion.Blazor.Spinner;
 using Syncfusion.Blazor.Grids;
 using System.Threading.Tasks;
-using SupplyChain;
-using SupplyChain.Shared.Models;
 using SupplyChain.Client.Shared;
-using Syncfusion.Blazor.Lists;
 using Syncfusion.Blazor.Navigations;
-using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
-using SupplyChain.Client.Pages.Ventas._3_Presupuestos;
+using SupplyChain.Client.Pages.ABM.ProcunProcesos;
 
 namespace SupplyChain.Client.Pages.ABM.Procedimientos
 {
-    public class PageProcedimientosBase : ComponentBase
+    public class PageProcunProcesosBase : ComponentBase
     {
         [Inject] protected HttpClient http { get; set; }
         [Inject] protected IJSRuntime jsRuntime { get; set; }
-        [Inject] protected ProcedimientosService ProcedimientosService { get; set; }
+        [Inject] protected ProcunProcesoService ProcunProcesosService { get; set; }
         #region "Vista Grilla"
         protected const string APPNAME = "grdOpeABM";
         protected string state;
@@ -35,16 +31,17 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
         "Add",
         "Edit",
         new ItemModel{Text="Delete",Id="Delete"},       
-        new ItemModel{Text="ExcelExport", Id="ExcelExport" },
+        //new ItemModel{Text="ExcelExport", Id="ExcelExport" },
         new ItemModel{Text="Copy", Id="Copy"}
 
         };
-        protected List<Operaciones> Operacion = new();
+        //protected List<ProcunProcesos> procunProcesos = new();
+        protected List<Protab> protabs= new();
         protected SfToast ToastObj;
         protected SfSpinner refSpinner;
-        protected SfGrid<Operaciones> refGrid;
-        protected FormOperaciones refFormOperaciones;
-        protected Operaciones operacionesSeleccionado = new();
+        protected SfGrid<Protab> refGrid;
+       protected FormProcunProcesos refFormProcunProcesos;
+        protected Protab procedimientoSeleccionado = new();
         protected bool SpinnerVisible = false;
 
         protected bool popupFormVisible = false;
@@ -62,12 +59,12 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
         #endregion
         protected override async Task OnInitializedAsync()
         {
-            MainLayout.Titulo = "Operaciones";
+            MainLayout.Titulo = "Procedimientos";
             SpinnerVisible = true;
-            var response = await ProcedimientosService.Get();
+            var response = await ProcunProcesosService.Get();
             if(!response.Error)
             {
-                Operacion = response.Response;
+                protabs = response.Response;
             }
             SpinnerVisible = false;
         }
@@ -105,10 +102,10 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
             {
                 await CopiarProcedimiento();
             }
-            else if(args.Item.Text== "ExcelExport")
-            {
-                await refGrid.ExportToExcelAsync();
-            }
+            //else if(args.Item.Text== "ExcelExport")
+            //{
+            //    await refGrid.ExportToExcelAsync();
+            //}
             else if(args.Item.Text== "Delete")
             {
                 if((await refGrid.GetSelectedRecordsAsync()).Count > 0)
@@ -116,21 +113,21 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
                     bool isConfirmed= await jsRuntime.InvokeAsync<bool>("confirm","Seguro que desea eliminar la Operación?");
                     if (isConfirmed)
                     {
-                        List<Operaciones> procedimientoABorrar= await refGrid.GetSelectedRecordsAsync();
-                        var elimino = await ProcedimientosService.Eliminar(procedimientoABorrar);
+                        List<Protab> procedimientoABorrar= await refGrid.GetSelectedRecordsAsync();
+                        var elimino = await ProcunProcesosService.Eliminar(procedimientoABorrar);
 
                         if (elimino)
                         {
                             await this.ToastObj.ShowAsync(new ToastModel
                             {
                                 Title = "EXITO!",
-                                Content = "las Operaciones seleccionados fueron eliminados correctamente.",
+                                Content = "El proceso seleccionado fue eliminado correctamente.",
                                 CssClass = "e-toast-success",
                                 Icon = "e-success toast-icons",
                                 ShowCloseButton = true,
                                 ShowProgressBar = true
                             });
-                            Operacion= Operacion.Where(s => s.Id != operacionesSeleccionado.Id)
+                            protabs= protabs.Where(s => s.Id != procedimientoSeleccionado.Id)
                             .OrderByDescending(s => s.Id)
                             .ToList();
                             await refGrid.Refresh();
@@ -148,41 +145,13 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
         {
             if (refGrid.SelectedRecords.Count == 1)
             {
-                operacionesSeleccionado = new();
-                Operaciones selectedRecord = refGrid.SelectedRecords[0];
+                procedimientoSeleccionado = new();
+                Protab selectedRecord = refGrid.SelectedRecords[0];
                 bool isConfirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Seguro que desea copiar el Procedimiento?");
                 if (isConfirmed)
                 {
-                    operacionesSeleccionado.ESNUEVO = true;
-                    operacionesSeleccionado.DESPACHO = selectedRecord.DESPACHO;
-                    operacionesSeleccionado.VALE= selectedRecord.VALE;
-                    operacionesSeleccionado.CG_PROD = selectedRecord.CG_PROD;
-                    operacionesSeleccionado.CG_ORDEN = selectedRecord.CG_ORDEN;
-                    operacionesSeleccionado.DESCAL = selectedRecord.DESCAL;
-                    operacionesSeleccionado.CARCAL = selectedRecord.CARCAL;
-                    operacionesSeleccionado.UNIDADM = selectedRecord.UNIDADM;
-                    operacionesSeleccionado.CANTMEDIDA = selectedRecord.CANTMEDIDA;
-                    operacionesSeleccionado.MEDIDA = selectedRecord.MEDIDA;
-                    operacionesSeleccionado.MEDIDA1 = selectedRecord.MEDIDA1;
-                    operacionesSeleccionado.TOLE1 = selectedRecord.TOLE1;
-                    operacionesSeleccionado.TOLE2 = selectedRecord.TOLE2;
-                    operacionesSeleccionado.OBSERV1 = selectedRecord.OBSERV1;
-                    operacionesSeleccionado.AVISO = selectedRecord.AVISO;
-                    operacionesSeleccionado.CG_PROVE = selectedRecord.CG_PROVE;
-                    operacionesSeleccionado.VALORNC = selectedRecord.VALORNC;
-                    operacionesSeleccionado.LEYENDANC = selectedRecord.LEYENDANC;
-                    operacionesSeleccionado.LOTE = selectedRecord.LOTE;
-                    operacionesSeleccionado.UNID = selectedRecord.UNID;
-                    operacionesSeleccionado.NUM_PASE = selectedRecord.NUM_PASE;
-                    operacionesSeleccionado.ENSAYOS = selectedRecord.ENSAYOS;
-                    operacionesSeleccionado.FE_REG = selectedRecord.FE_REG;
-                    operacionesSeleccionado.APROBADO = selectedRecord.APROBADO;
-                    operacionesSeleccionado.TIPO = selectedRecord.TIPO;
-                    operacionesSeleccionado.ANULADO = selectedRecord.ANULADO;
-                    operacionesSeleccionado.CG_CLI = selectedRecord.CG_CLI;
-                    operacionesSeleccionado.UNIDADM = selectedRecord.UNIDADM;
-                    operacionesSeleccionado.Usuario = selectedRecord.Usuario;
-
+                    procedimientoSeleccionado.ESNUEVO = true;
+                    procedimientoSeleccionado.Id = selectedRecord.Id;
                     popupFormVisible = true;
                 }
             }
@@ -201,47 +170,24 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
 
         }
 
-        protected async Task Guardar(Operaciones operaciones)
+        protected async Task Guardar(Protab protab)
         {
-            if (operaciones.GUARDADO)
+            if (protab.GUARDADO)
             {
                 await ToastMensajeExito();
                 popupFormVisible = false;
-                if (operaciones.ESNUEVO)
+                if (protab.ESNUEVO)
                 {
-                    Operacion.Add(operaciones);
+                    protabs.Add(protab);
                 }
                 else
                 {
-                    var procSinModificar = Operacion.Where(p => p.Id == operaciones.Id).FirstOrDefault();
-                    //procSinModificar.Id= operaciones.Id;
-                    procSinModificar.DESPACHO = operaciones.DESPACHO;
-                    procSinModificar.CG_PROD = operaciones.CG_PROD;
-                    procSinModificar.CG_ORDEN = operaciones.CG_ORDEN;
-                    procSinModificar.DESCAL = operaciones.DESCAL;
-                    procSinModificar.CARCAL = operaciones.CARCAL;
-                    procSinModificar.UNIDADM = operaciones.UNIDADM;
-                    procSinModificar.CANTMEDIDA = operaciones.CANTMEDIDA;
-                    procSinModificar.MEDIDA = operaciones.MEDIDA;
-                    procSinModificar.MEDIDA1 = operaciones.MEDIDA1;
-                    procSinModificar.TOLE1 = operaciones.TOLE1;
-                    procSinModificar.TOLE2 = operaciones.TOLE2;
-                    procSinModificar.OBSERV1 = operaciones.OBSERV1;
-                    procSinModificar.AVISO = operaciones.AVISO;
-                    procSinModificar.CG_PROVE = operaciones.CG_PROVE;
-                    procSinModificar.VALORNC = operaciones.VALORNC;
-                    procSinModificar.LEYENDANC = operaciones.LEYENDANC;
-                    procSinModificar.LOTE = operaciones.LOTE;
-                    procSinModificar.UNID = operaciones.UNID;
-                    procSinModificar.NUM_PASE = operaciones.NUM_PASE;
-                    procSinModificar.ENSAYOS = operaciones.ENSAYOS;
-                    procSinModificar.FE_REG = operaciones.FE_REG;
-                    procSinModificar.APROBADO = operaciones.APROBADO;
-                    procSinModificar.TIPO = operaciones.TIPO;
-                    procSinModificar.ANULADO = operaciones.ANULADO;
-                    procSinModificar.CG_CLI = operaciones.CG_CLI;
-                    procSinModificar.Usuario = operaciones.Usuario;
-                    Operacion.OrderByDescending(p => p.Id);
+                    var procSinModificar = protabs.Where(p => p.Id == protab.Id).FirstOrDefault();
+                   
+                    procSinModificar.Id= protab.Id;
+                    procSinModificar.DESCRIP= protab.DESCRIP;
+
+                    protabs.OrderByDescending(p => p.Id);
                 }
                 await refGrid.RefreshHeaderAsync();
                 await refGrid.Refresh();
@@ -254,23 +200,24 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
         }
 
 
-        protected async Task OnActionBeginHandler(ActionEventArgs<Operaciones> args)
+        protected async Task OnActionBeginHandler(ActionEventArgs<Protab> args)
         {
-            if(args.RequestType==Syncfusion.Blazor.Grids.Action.Add || args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+            if(args.RequestType==Syncfusion.Blazor.Grids.Action.Add ||
+                args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
                 args.Cancel = true;
                 args.PreventRender = false;
                 popupFormVisible = true;
-                operacionesSeleccionado = new();
-                operacionesSeleccionado.ESNUEVO = true;
+                procedimientoSeleccionado = new();
+                procedimientoSeleccionado.ESNUEVO = true;
                 //await refFormOperaciones.Refrescar(operacionesSeleccionado);
             }
 
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {
-                operacionesSeleccionado = args.Data;
-                operacionesSeleccionado.ESNUEVO = false;
-                await refFormOperaciones.Refrescar(operacionesSeleccionado);
+                procedimientoSeleccionado = args.Data;
+                procedimientoSeleccionado.ESNUEVO = false;
+                //await refFormProcunProcesos.Refrescar(procedimientoSeleccionado);
             }
             if(args.RequestType== Syncfusion.Blazor.Grids.Action.Grouping
                 || args.RequestType==Syncfusion.Blazor.Grids.Action.UnGrouping
@@ -282,7 +229,7 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
                 || args.RequestType == Syncfusion.Blazor.Grids.Action.Sorting)
             {
                 refGrid.PreventRender();
-                refGrid.Refresh();
+                await refGrid.Refresh();
 
                 state= await refGrid.GetPersistDataAsync();
                 await refGrid.AutoFitColumnsAsync();
@@ -294,7 +241,7 @@ namespace SupplyChain.Client.Pages.ABM.Procedimientos
 
 
 
-        protected async Task OnActionCompleteHandler(ActionEventArgs<Operaciones> args)
+        protected async Task OnActionCompleteHandler(ActionEventArgs<Protab> args)
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
             {

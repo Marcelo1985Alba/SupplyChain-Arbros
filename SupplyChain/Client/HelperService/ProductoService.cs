@@ -38,7 +38,7 @@ namespace SupplyChain.Client.HelperService
             return true;
         }
 
-        public async Task<HttpResponseWrapper<List<Producto>>> Search( string idProd, string Des_producto)
+        public async Task<HttpResponseWrapper<List<Producto>>> Search( string idProd, string Des_Prod)
         {
             // Des_producto = string.IsNullOrEmpty(Des_producto) ? "VACIO" : Des_producto;
             //return await http.GetFromJsonAsync<List<Producto>>($"api/Prod/Search/{idProd}/{Des_producto}");
@@ -47,11 +47,11 @@ namespace SupplyChain.Client.HelperService
                 idProd = "VACIO";
             }
 
-            if (string.IsNullOrEmpty(Des_producto))
+            if (string.IsNullOrEmpty(Des_Prod))
             {
-                Des_producto = "VACIO";
+                Des_Prod = "VACIO";
             }
-            return await http.GetFromJsonAsync<List<Producto>>($"{API}/Search/{idProd}/{Des_producto}");
+            return await http.GetFromJsonAsync<List<Producto>>($"{API}/Search/{idProd}/{Des_Prod}");
         }
 
         

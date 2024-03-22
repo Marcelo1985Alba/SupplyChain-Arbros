@@ -32,7 +32,6 @@ namespace SupplyChain
         public virtual DbSet<Operario> Operario { get; set; }
         public virtual DbSet<EstadosCargaMaquina> EstadosCargaMaquinas { get; set; }
         public virtual DbSet<PLANNER> PLANNER { get; set; }
-        public virtual DbSet<Operaciones> Procedimiento { get; set; }
         //public virtual DbSet<Prod> Prod { get; set; }
         public virtual DbSet<Cliente> Cliente { get; set; }
         public virtual DbSet<ClienteExterno> ClientesExternos { get; set; }
@@ -59,6 +58,7 @@ namespace SupplyChain
         public DbSet<ProTarea> ProTarea { get; set; }
         public DbSet<TipoMat> TipoMat { get; set; }
         public DbSet<Producto> Prod { get; set; }
+        public DbSet<Proporcion> Proporcion { get; set; }
 
         public DbSet<PreciosArticulos> PrecioArticulo { get; set; }
         //MODULO SERVICIOS
@@ -110,7 +110,7 @@ namespace SupplyChain
         public DbSet<ModulosUsuario> ModulosUsuarios { get; set; }
         public virtual DbSet<Genera> Genera { get; set; }
         public virtual DbSet<Planificacion> Planificaciones { get; set; }
-
+     
         public DbSet<Proveedor> Proveedores { get; set; }
         public DbSet<EstadVenta> EstadVentas { get; set; }
         public DbSet<vEstadPedidosIngresados> vEstadPedidosIngresados { get; set; }
@@ -158,18 +158,23 @@ namespace SupplyChain
         public DbSet<ProcalsMP> ProcalsMP { get; set; }
         public DbSet<vControlCalidadPendientes> vcontrolCalidadPendientes { get; set; }
         //public DbSet<Procesos> Procesos { get; set; }
-     
+
+        public DbSet<Protab> Protab { get; set; }
         public DbSet<vProveedorItris> vProveedoresItris { get; set; }
 
         public DbSet<SolCotEmail> SolCotEmails { get; set; }
 
         public DbSet<CampoComodin> CampoComodin {  get; set; }
-        public DbSet<ProcunProcesos> ProcunProcesos{ get; set; }
+        public DbSet<vProcun> vProcun {  get; set; }
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             this.Database.SetCommandTimeout(60);
+        }
+
+        public AppDbContext()
+        {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -299,6 +304,7 @@ namespace SupplyChain
             modelBuilder.Entity<vESTADOS_COMPRAS>().HasNoKey().ToView("vESTADOS_COMPRAS");
 
             modelBuilder.Entity<vProveedorItris>().HasNoKey().ToView("vProveItris");
+            modelBuilder.Entity<vProcun>().HasNoKey().ToView("vProcun");
 
 
         }

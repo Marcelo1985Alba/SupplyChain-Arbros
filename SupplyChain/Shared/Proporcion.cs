@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,13 +9,12 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Shared
 {
-    [Table("ProcunProcesos")]
-    public class ProcunProcesos : EntityBase<int>
+    [Table("Proporcion2")]
+    public class Proporcion : EntityBase<int>
     {
-        //[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string PROCESO { get; set; } = "";
-        //public int ID { get; set; } = 0;
 
         public int REGISTRO { get; set; } = 0;
+        //public int ID { get; set; } = 0;
+        public string PROPORC { get; set; } = "";
     }
 }
