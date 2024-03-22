@@ -153,9 +153,15 @@
                         <div class="card">
                             <div class="pane card-body card5">
                                 <SfGrid @ref="gridDetalleEventos" DataSource="@DataEventosDetalle" GridLines="Syncfusion.Blazor.Grids.GridLine.Both" AllowResizing="true"
-                                        AllowReordering="true" AllowSorting="true"
+                                        AllowReordering="true" AllowSorting="true" Toolbar="Toolbaritems"
                                         AllowPaging="true" Height="450">
+                                    <GridEvents OnActionBegin="ActionBegin" TValue="Noconformidades"></GridEvents>
+                                        <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+                                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
+                                                      ShowDeleteConfirmDialog="false" Mode="Syncfusion.Blazor.Grids.EditMode.Dialog">
+                                    </GridEditSettings>
                                     <GridColumns>
+                                        <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
                                         <GridColumn Field="@(nameof(vEstadEventos.FE_EMIT))" HeaderText="FECHA EMISION" Format="dd/MM/yyyy"></GridColumn>
                                         <GridColumn Field="@(nameof(vEstadEventos.Cg_NoConf))" HeaderText="N EVENTO" Format="N0"></GridColumn>
                                         <GridColumn Field="@(nameof(vEstadEventos.Des_TipoNc))" HeaderText="DESCRIPCION"></GridColumn>

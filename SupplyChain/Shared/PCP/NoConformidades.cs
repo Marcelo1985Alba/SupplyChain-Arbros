@@ -1,3 +1,4 @@
+using SupplyChain.Shared;
 using SupplyChain.Shared.HelpersAtributo;
 using SupplyChain.Shared.Models;
 using System;
@@ -9,7 +10,7 @@ using System.Text;
 namespace SupplyChain
 {
     [Table("NoConfor")]
-    public class NoConformidades
+    public class NoConformidades 
     {
         [Key]
 		public int Cg_NoConf { get; set; } = 0;

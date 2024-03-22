@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using SupplyChain;
 using SupplyChain.Shared.Models;
 using SupplyChain.Server.Controllers;
+using Syncfusion.Blazor.Data;
 
 namespace SupplyChain
 {
@@ -227,5 +228,35 @@ namespace SupplyChain
                 return BadRequest(ex);
             }
         }
+
+        [HttpPost("PostList")]
+        public async Task<ActionResult<List<NoConformidades>>> PostList(List<NoConformidades> noConformidades)
+        {
+            try
+            {
+                foreach(var item in noConformidades)
+                {
+                    _context.NoConformidades.RemoveRange(noConformidades);
+                }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok(new List<NoConformidades>());
+        }
+
+        [HttpDelete("DeleteEvento/{Cg_NoConf}")]
+        public async Task<ActionResult<NoConformidades>> DeleteEvento(int Cg_NoConf)
+        {
+            var NoConformidades = await _context.NoConformidades.FindAsync(Cg_NoConf);
+            if(NoConformidades == null)
+            {
+                return NotFound();
+            }
+             _context.Remove(Cg_NoConf);
+            return NoConformidades;
+        }
+
     }
 }

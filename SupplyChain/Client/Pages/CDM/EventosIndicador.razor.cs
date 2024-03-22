@@ -14,6 +14,8 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
+using Microsoft.JSInterop;
+using SupplyChain.Client.Pages.CDM;
 
 namespace SupplyChain.Client.Pages
 {
@@ -22,6 +24,8 @@ namespace SupplyChain.Client.Pages
     {
         [Inject] public HttpClient Http { get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
+        [Inject] protected IJSRuntime jsRuntime { get; set; }
+
         #region "Vista Grilla"
         protected const string APPNAME = "grdEventos";
         protected string state;
@@ -32,9 +36,15 @@ namespace SupplyChain.Client.Pages
         protected SfSpinner refSpinner;
         protected bool VisibleSpinner = false;
 
-        ///////*****************NO CONFORMIDADES*************////////////////////////////
-        protected List<vEstadEventos> DataEventosOriginal = new();
+        protected List<Object> Toolbaritems = new List<object>()
+        {
+            "Delete"
+        };
 
+        ///////*****************NO CONFORMIDADES*************////////////////////////////
+        protected NoConformidades noConformidadesSeleccionado = new();
+        protected List<vEstadEventos> DataEventosOriginal = new();
+        protected List<NoConformidades> NoConformidadesOriginal= new();
         protected SfGrid<vEstadEventos> gridDetalleEventos;
         protected SfChart refChartDetalleEventos;
         protected SfChart refChartDetalleEventosMesTipo;
@@ -182,5 +192,113 @@ namespace SupplyChain.Client.Pages
             await refChartDetalleEventosMesTipo.RefreshAsync();
             await refChartDetalleEventosProveedor.RefreshAsync();
         }
+
+        protected async Task ActionBegin(ActionEventArgs<Noconformidades> args)
+        {
+            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+            {
+                //await EliminarEvento(args);
+            }
+        }
+
+        private async Task EliminarEvento(ActionEventArgs<NoConformidades> args)
+        {
+            try
+            {
+                if (args.Data != null)
+                {
+                    bool isConfirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Seguro que desea eliminar el evento?");
+                    if (isConfirmed)
+                    {
+                        await Http.DeleteAsync($"api/NoConformidades/DeleteEvento/{args.Data.Cg_NoConf}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        //protected async Task EliminarEvento(ActionEventArgs<NoConformidades> args)
+        //{
+        //    try
+        //    {
+        //        if (args.Data != null)
+        //        {
+        //            bool isConfirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Seguro que desea eliminar el evento?");
+        //            if (isConfirmed)
+        //            {
+        //                await Http.DeleteAsync($"api/NoConformidades/{args.Data.Cg_NoConf}");
+        //            }
+        //        }
+        //    }
+        //    catch(Exception ex)
+        //    {
+
+        //    }
+        //}
+
+        protected async Task OnToolbarHandler(ClickEventArgs args)
+        {
+            if (args.Item.Id == "Delete")
+            {
+                if ((await gridDetalleEventos.GetSelectedRecordsAsync()).Count > 0)
+                {
+                    bool isConfirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Seguro que desea eliminar el evento?");
+                    if (isConfirmed)
+                    {
+                        List<vEstadEventos> eventosABorrar = await gridDetalleEventos.GetSelectedRecordsAsync();
+                        //var elimino= await Noco
+                        var response = await Http.DeleteFromJsonAsync<List<NoConformidades>>($"api/NoConformidades/{args.}");
+                        if (response.Count > 0)
+                        {
+                            await this.ToastObj.ShowAsync(new ToastModel
+                            {
+                                Title = "EXITO!",
+                                Content = "las Operaciones seleccionados fueron eliminados correctamente.",
+                                CssClass = "e-toast-success",
+                                Icon = "e-success toast-icons",
+                                ShowCloseButton = true,
+                                ShowProgressBar = true
+                            });
+                            NoConformidadesOriginal = NoConformidadesOriginal.Where(s => s.Cg_NoConf != noConformidadesSeleccionado.Cg_NoConf)
+                                .OrderByDescending(s => s.Cg_NoConf).ToList();
+                            await gridDetalleEventos.Refresh();
+                        }
+                        else
+                        {
+                            await ToastMensajeError();
+                        }
+                    }
+                }
+            }
+        }
+
+        private async Task ToastMensajeExito()
+        {
+            await this.ToastObj.ShowAsync(new ToastModel
+            {
+                Title = "EXITO!",
+                Content = "Guardado Correctamente.",
+                CssClass = "e-toast-success",
+                Icon = "e-success toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
+        private async Task ToastMensajeError()
+        {
+            await ToastObj.ShowAsync(new ToastModel
+            {
+                Title = "Error!",
+                Content = "Ocurrio un Error.",
+                CssClass = "e-toast-warning",
+                Icon = "e-warning toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
     }
+    
 }
