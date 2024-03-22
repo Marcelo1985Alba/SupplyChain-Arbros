@@ -50,6 +50,7 @@ namespace SupplyChain.Client.Pages.Proyectos
         protected bool isAdding = false;
 
         protected List<SupplyChain.Shared.Tareas> tasks = new List<SupplyChain.Shared.Tareas>();
+        protected List<SupplyChain.Shared.Tareas> allTasks = new List<SupplyChain.Shared.Tareas>();
         protected List<TareasPorUsuario> tasksPerUser = new List<TareasPorUsuario>();
         protected List<vUsuario> Usuarios = new();
 
@@ -65,23 +66,25 @@ namespace SupplyChain.Client.Pages.Proyectos
             {
                 Modulos = await Http.GetFromJsonAsync<List<Modulo>>(
                     $"api/ModulosUsuario/GetModulosFromUserId/{userId!.Value}");
-                ModulosData = Modulos.Select(x => new DropDownModel { Id = x.Id, Value = x.Descripcion.ToUpper() }).ToList();
-                
+                ModulosData = Modulos.Select(x => new DropDownModel { Id = x.Id, Value = x.Descripcion.ToUpper() })
+                    .ToList();
+
                 var moduloNombres = Modulos.Select(x => x.Descripcion).ToList();
                 tasks = await Http.GetFromJsonAsync<List<SupplyChain.Shared.Tareas>>(
                     $"api/Tareas/TareasByModulos?modulos={Uri.EscapeDataString(string.Join("','", moduloNombres))}");
+                allTasks = tasks;
                 foreach (var task in tasks)
                 {
                     task.NombreCreador = Usuarios.FirstOrDefault(x => x.Id == task.Creador)?.USUARIO;
-                    if(task.Importancia == "Poco Importante")
+                    if (task.Importancia == "Poco Importante")
                     {
                         task.Color = "#89ac76"; // color verde
                     }
-                    else if(task.Importancia == "Algo Importante")
+                    else if (task.Importancia == "Algo Importante")
                     {
                         task.Color = "#FFD700"; // color dorado
                     }
-                    else if(task.Importancia == "Muy Importante")
+                    else if (task.Importancia == "Muy Importante")
                     {
                         task.Color = "#FF0000"; // color rojo
                     }
@@ -101,7 +104,7 @@ namespace SupplyChain.Client.Pages.Proyectos
                         .Add(Usuarios.FirstOrDefault(x => x.Id == taskUser.userId)?.USUARIO);
                 }
             }
-            
+
             SpinnerVisible = false;
             await base.OnInitializedAsync();
         }
@@ -145,7 +148,7 @@ namespace SupplyChain.Client.Pages.Proyectos
             await refKanban.CloseDialogAsync();
             await refKanban.RefreshAsync();
         }
-        
+
         protected async Task DejarTarea(SupplyChain.Shared.Tareas tarea)
         {
             var userId = authState.User.Claims.FirstOrDefault(i => i.Type == ClaimTypes.NameIdentifier);
@@ -154,7 +157,9 @@ namespace SupplyChain.Client.Pages.Proyectos
                 tareaId = tarea.Id,
                 userId = userId!.Value
             };
-            var tareaToDelete = await Http.GetFromJsonAsync<TareasPorUsuario>($"api/Tareas/GetTareaPorUsuarioByUserAndTask/{tarea.Id}?userId={userId!.Value}");
+            var tareaToDelete =
+                await Http.GetFromJsonAsync<TareasPorUsuario>(
+                    $"api/Tareas/GetTareaPorUsuarioByUserAndTask/{tarea.Id}?userId={userId!.Value}");
             await Http.DeleteAsync($"api/Tareas/{tareaToDelete.Id}");
             var task = tasks.FirstOrDefault(x => x.Id == tarea.Id);
             task?.Asignados.Remove(Usuarios.FirstOrDefault(x => x.Id == userId!.Value)?.USUARIO);
@@ -166,15 +171,15 @@ namespace SupplyChain.Client.Pages.Proyectos
         {
             if (args.Interaction == "Save")
             {
-                if(args.Data.Importancia == "Poco Importante")
+                if (args.Data.Importancia == "Poco Importante")
                 {
                     args.Data.Color = "#FFD700"; // color dorado
                 }
-                else if(args.Data.Importancia == "Algo Importante")
+                else if (args.Data.Importancia == "Algo Importante")
                 {
                     args.Data.Color = "#FFA500"; // color naranja
                 }
-                else if(args.Data.Importancia == "Muy Importante")
+                else if (args.Data.Importancia == "Muy Importante")
                 {
                     args.Data.Color = "#FF0000"; // color rojo
                 }
@@ -182,6 +187,7 @@ namespace SupplyChain.Client.Pages.Proyectos
                 {
                     args.Data.Color = "#FFFFFF"; // color blanco
                 }
+
                 if (isAdding)
                 {
                     await Http.PostAsJsonAsync("api/Tareas", args.Data);
@@ -194,20 +200,23 @@ namespace SupplyChain.Client.Pages.Proyectos
                         };
                         await Http.PostAsJsonAsync("api/Tareas/TomarTarea", tareaPorUsuario);
                     }
+
                     isAdding = false;
                 }
                 else
                 {
                     await Http.PutAsJsonAsync("api/Tareas", args.Data);
                 }
+
                 await refKanban.RefreshAsync();
             }
-            if(args.Interaction == "Cancel" || args.Interaction == "Close")
+
+            if (args.Interaction == "Cancel" || args.Interaction == "Close")
             {
                 isAdding = false;
             }
         }
-        
+
         protected async Task GetUsuarios()
         {
             var response = await Http2.GetFromJsonAsync<List<vUsuario>>("api/Cuentas/Usuarios");
@@ -234,13 +243,40 @@ namespace SupplyChain.Client.Pages.Proyectos
             new DropDownModel { Id = 2, Value = "En Prueba" },
             new DropDownModel { Id = 3, Value = "Terminado" }
         };
-        
-        
+
+
         protected List<DropDownModel> ImportanciaData = new List<DropDownModel>()
         {
             new DropDownModel { Id = 1, Value = "Poco Importante" },
             new DropDownModel { Id = 2, Value = "Algo Importante" },
             new DropDownModel { Id = 3, Value = "Muy Importante" }
         };
+
+        public class BaseOption
+        {
+            public string Text { get; set; }
+        }
+
+        public List<BaseOption> Filtros = new List<BaseOption>
+        {
+            new BaseOption() { Text = "Todos los usuarios" },
+            new BaseOption() { Text = "Mis tareas" },
+        };
+
+        protected void ChangeFiltro(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, BaseOption> args)
+        {
+            if (args.Value == "Todos los usuarios")
+            {
+                tasks = allTasks;
+            }
+            else if (args.Value == "Mis tareas")
+            {
+                var userId = authState.User.Claims.FirstOrDefault(i => i.Type == ClaimTypes.NameIdentifier);
+                tasks = allTasks.Where(x =>
+                    x.Asignados.Contains(Usuarios.FirstOrDefault(x => x.Id == userId!.Value)?.USUARIO)).ToList();
+            }
+
+            refKanban.Refresh();
+        }
     }
 }
