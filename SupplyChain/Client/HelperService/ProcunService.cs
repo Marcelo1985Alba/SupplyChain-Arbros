@@ -4,9 +4,11 @@ using SupplyChain.Client.RepositoryHttp;
 using SupplyChain.Shared;
 using SupplyChain.Shared.Enum;
 using SupplyChain.Shared.Models;
+using Syncfusion.XlsIO.Implementation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -44,25 +46,34 @@ namespace SupplyChain.Client.HelperService
             return true;
         }
 
-    
-        //public async Task<HttpResponseWrapper<List<Procun>>> ActualizaCelda(decimal numeroprocun,string cg_celda)
-        //{
-        //    return await http.GetFromJsonAsync<List<Procun>>($"api/Procun/ActualizaCelda/{numeroprocun}/{cg_celda}");
-        //}
-        //public async Task<HttpResponseWrapper<List<Procun>>> ActualizaProceso(decimal numeroprocun, string proceso)
-        //{
-        //    return await http.GetFromJsonAsync<List<Procun>>($"api/Procun/ActualizaCelda/{numeroprocun}/{proceso}");
-        //}
+        public async Task<bool> Eliminar2(List<vProcun> procs)
+        {
+            var response = await http.PostAsJsonAsync<List<vProcun>>($"{API}/PostList", procs);
+            if (response.Error)
+            {
+                Console.WriteLine(await response.HttpResponseMessage.Content.ReadAsStringAsync());
+                return false;
+            }
+
+            return true;
+        }
+        public async Task<HttpResponseWrapper<List<vProcun>>> GetvProcuns()
+        {
+               return await http.GetFromJsonAsync<List<vProcun>>($"{API}/GetvProcuns");
+
+        }
+
         public async Task<HttpResponseWrapper<List<Procun>>> PostProcun(Procun proc)
         {
-            return await http.GetFromJsonAsync<List<Procun>>($"api/Procun/PostProcun/{proc}");
+                return await http.GetFromJsonAsync<List<Procun>>($"{API}/PostProcun/{proc}");
+         
         }
+       
 
-        public async Task<HttpResponseWrapper<object>>ActualizarPro(Procun procun)
-        {
-            return await http.PutAsJsonAsync($"api/Procun",procun);
-        }
-
+        //public async Task<HttpResponseWrapper<object>> ActualizarPro(Procun procun)
+        //{
+        //    return await http.PutAsJsonAsync($"{API}", procun);
+        //}
         public async Task<HttpResponseWrapper<List<Procun>>> Search(string idProd ="VACIO", string Des_Prod = "VACIO")
         {
             //Des_Prod = string.IsNullOrEmpty(Des_Prod) ? "VACIO" : Des_Prod;
@@ -78,6 +89,6 @@ namespace SupplyChain.Client.HelperService
             return await http.GetFromJsonAsync<List<Procun>>($"api/Procun/Search/{idProd}/{Des_Prod}");
         }
 
-      
+       
     }
 }

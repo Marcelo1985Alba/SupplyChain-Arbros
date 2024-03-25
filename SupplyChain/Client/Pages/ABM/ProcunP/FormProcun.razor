@@ -26,7 +26,7 @@
             }
         </Header>
         <Content>
-            <EditForm Model="procuns" OnValidSubmit="@GuardarProc">
+            <EditForm Model="@procuns" id="form-procun" OnValidSubmit="@GuardarProc">
                 <DataAnnotationsValidator/>
 
                @* <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -66,8 +66,8 @@
                                               HtmlAttributes="@HtmlAttributeSubmit"></SfButton>
                                 </div>
                             </div>
-                            <div class="form-row">
-                               @*  <div class="form-group col-md-3">
+                            @*   <div class="form-row">
+                              <div class="form-group col-md-3">
                                     <label class="">Producto:</label>
                                     <SfTextBox CssClass="customClass" ID="Producto" @bind-Value="@(procuns.CG_PROD)" Readonly="false"
                                        Input="@(e=>Cg_Prod_Changed(e))" ></SfTextBox>
@@ -83,32 +83,27 @@
                                 <div class="form-group col-md-1">
                                     <SfButton IconCss="fa fa-search" CssClass="e-smal e-round e-info" OnClick="@(async() => await BuscarProd())"
                                               HtmlAttributes="@HtmlAttributeSubmit"></SfButton>
-                                </div> *@
-                                @**@
-                                                                          
-                            
-                            </div>
+                                </div>
+
+
+
+                                </div>*@
     
                             <div class="form-row">
                                 
-                                @* <div class="form-group col-md-6">
-                                    <label>Linea:</label>
-                                    <SfNumericTextBox ID="Linea" @bind-Value="@(procuns.CG_LINEA)" Placeholder="Linea"></SfNumericTextBox>
-                                  
-
-                                </div> *@
+                             
 
                                 <div class="form-group col-md-6">
                                     <a href="/Abms/celdas" target="_blank">Celda:</a>
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="Celdas" PopupWidth="auto" AllowFiltering="true"
-                                    @bind-Value="@(procuns.CG_CELDA)" DataSource="@celdas">
+                                                @bind-Value="@(procuns.CG_CELDA)" DataSource="@celdas">
                                         <ComboBoxFieldSettings Value="Id" Text="DES_CELDA"></ComboBoxFieldSettings>
                                     </SfComboBox>
                                     <ValidationMessage For="@(()=> procuns.CG_CELDA)"></ValidationMessage>
 
 
                                 </div>
-                                <div class="form-group col-md-6">
+                               @*  <div class="form-group col-md-6">
                                     <label>Proceso:</label>
 
                                     <SfComboBox TValue="string" CssClass="customClass" TItem="ProcunProcesos" PopupWidth="auto" AllowFiltering="true"
@@ -117,7 +112,10 @@
                                     </SfComboBox>
 
 
-                                </div>
+                                </div> *@
+                                
+
+
                             </div>
 
                             <div class="form-row">
@@ -140,21 +138,19 @@
                                     <SfNumericTextBox ID="TS1" @bind-Value="@(procuns.TS1)" Placeholder="TS1"></SfNumericTextBox>
                                     <ValidationMessage For="@(()=> procuns.TS1)"></ValidationMessage>
                                 </div>
-                                <div class="form-group col-md-1">
+                                <div class="form-group col-md-2">
                                     <label>Proporcion:</label>
-                                    <SfTextBox ID="Proporcion" @bind-Value="@(procuns.PROPORC)" Placeholder="Proporcion"></SfTextBox>
-                                    <ValidationMessage For="@(()=> procuns.PROPORC)"></ValidationMessage>
 
+                                    <SfComboBox TValue="string" CssClass="customClass" TItem="Proporcion" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@(procuns.PROPORC)" DataSource="@proporciones">
+                                        <ComboBoxFieldSettings Value="PROPORC" Text="PROPORC"></ComboBoxFieldSettings>
+                                    </SfComboBox>
                                 </div>
+                            
+
+
+
                             </div>
-                            @* <div class="form-row">
-                                <div class="form-group col-md-1">
-                                    <label>Proporcion:</label>
-                                    <SfTextBox ID="Proporcion" @bind-Value="@(procuns.PROPORC)" Placeholder="Proporcion"></SfTextBox>
-                                    <ValidationMessage For="@(()=> procuns.PROPORC)"></ValidationMessage>
-
-                                </div>
-                            </div> *@
                         </div>
                     </div>
                 </div>

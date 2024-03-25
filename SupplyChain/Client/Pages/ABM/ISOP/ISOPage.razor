@@ -72,7 +72,7 @@
                 <GridColumn Field=@nameof(ISO.FODA) HeaderText="FODA" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(ISO.ImpAmb) HeaderText="Impacto / Riesgo-Oportunidad" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                 @*<GridColumn Field=@nameof(ISO.AspAmb) HeaderText="Aspecto Ambiental" TextAlign="TextAlign.Left" Width="200px"></GridColumn>*@
-                <GridColumn Field=@nameof(ISO.Descripcion) HeaderText="Aspecto Ambiental" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.AspAmbNombre) HeaderText="Aspecto Ambiental" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                 <GridColumn Field=@nameof(ISO.Frecuencia) HeaderText="Frecuencia" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
                 <GridColumn Field=@nameof(ISO.Impacto) HeaderText="Impacto" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(ISO.CondOperacion) HeaderText="Condicion de Operacion" TextAlign="TextAlign.Left" Width="175px"></GridColumn>
@@ -81,6 +81,7 @@
                 <GridColumn Field=@nameof(ISO.Gestion) HeaderText="Gestion" TextAlign="TextAlign.Left" Width="100px"></GridColumn>
                 <GridColumn Field=@nameof(ISO.Comentarios) HeaderText="Comentarios" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                 <GridColumn Field=@nameof(ISO.Medidas) HeaderText="Medidas" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
+                <GridColumn Field=@nameof(ISO.Efectividad) HeaderText="Efectividad" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
                 <GridColumn Field=@nameof(ISO.FechaCumplido) HeaderText="Fecha de cumplido" TextAlign="TextAlign.Left" Width="200px"></GridColumn>
             </GridColumns>
             <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@SpinnerVisible"></SfSpinner>

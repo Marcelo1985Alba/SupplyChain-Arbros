@@ -1,5 +1,6 @@
 ﻿using SupplyChain.Shared;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -27,6 +28,7 @@ namespace SupplyChain
         public string Gestion { get; set; } = "";
         public string Comentarios { get; set; } = "";
         public string Medidas { get; set; } = "";
+        public string Efectividad { get; set; } = "";
         public DateTime? FechaCumplido { get; set; }
         public string USER { get; set; } = "";
         [NotMapped]
@@ -35,6 +37,8 @@ namespace SupplyChain
         public bool GUARDADO { get; set; }
         [NotMapped]
         public bool ESNUEVO { get; set; }
+        [NotMapped]
+        public string AspAmbNombre { get; set; } = "";
 
         protected int getPuntaje()
         {

@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using SupplyChain.Shared.Models;
 using System.Threading.Tasks;
 
 namespace SupplyChain.Client.Pages.ABM.ProcunP
@@ -28,7 +27,9 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         [Inject] public LineasService LineasService { get; set; }
         [Inject] public CeldasService CeldasService { get; set; }
         [Parameter] public Procun procuns { get; set; } = new();
-        [Parameter] public ProcunProcesos procunProcesos { get; set; } = new();
+        [Parameter] public vProcun vprocuns { get; set; } = new();
+        [Parameter] public Protab protab { get; set; } = new();
+         [Parameter] public Proporcion proporcion { get; set; } = new();
         [Parameter] public Producto prod { get; set; } = new();
         [Parameter] public bool Show { get; set; } = false;
         [Parameter] public EventCallback<Procun> OnGuardar { get; set; }
@@ -39,24 +40,28 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         protected ProductoDialog refProductoDialog;
 
         protected SfGrid<Procun> refGridItems;
+        
         protected SfSpinner refSpinnerCli;
         protected bool SpinnerVisible = false;
         protected SfToast ToastObj;
         protected Dictionary<string, object> HtmlAttributeSubmit = new()
         {
-            { "type", "submit" },
-            { "form","form-procun"}
+            
+            { "type", "button" }
         };
         protected bool IsAdd { get; set; }
         protected List<Producto> productos = new();
         protected List<Areas> areas = new();
         protected List<Lineas> lineas = new();
         protected List<Celdas> celdas = new();
-        protected List<ProcunProcesos> procunsProcesos= new();
-
+        protected List<Protab> protabs= new();
+        protected List<Proporcion> proporciones = new();
         protected SfSpinner refSpinner;
         
         
+        
+
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -85,8 +90,9 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             {
                 celdas = response4.Response;
             }
-            procunsProcesos = await Http.GetFromJsonAsync<List<ProcunProcesos>>("api/ProcunProcesos");
-           
+            protabs = await Http.GetFromJsonAsync<List<Protab>>("api/ProcunProcesos");
+            proporciones= await Http.GetFromJsonAsync<List<Proporcion>>("api/Proporcion");
+            //proporcion = await Http.GetFromJsonAsync<List<Proporcion>>("api/Proporcion");
 
         }
 
@@ -110,7 +116,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
         {
             string Des_Prod = args.Value;
 
-            procuns.Des_Prod = Des_Prod;
+            procuns.Des_Prod= Des_Prod;
 
             var response = await ProductoService.Search(procuns.CG_PROD, procuns.Des_Prod);
             if (response.Error)
@@ -135,7 +141,40 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
             }
         }
 
-       
+        public async Task ShowAsync(decimal id)
+        {
+            if (procuns.ESNUEVO == false)
+            {
+                //await ToastMensajeError("Error al obtener el proceso.");
+                var response = await ProcunService.GetById(id);
+                procuns = response.Response;
+            }
+            else
+            {
+                await ToastMensajeError("Error al obtener el proceso");
+            }
+
+        }
+        public async Task Refrescar(vProcun procun)
+        {
+            vprocuns = procun;
+            await InvokeAsync(StateHasChanged);
+        }
+
+        protected async Task GetProcun(decimal id)
+        {
+            var response = await ProcunService.GetById(id);
+            if (response.Error)
+            {
+                await ToastMensajeError("Error al obtener el proceso.");
+            }
+            else
+            {
+                procuns= response.Response;
+               
+            }
+        }
+
         protected async Task Cg_Prod_Changed(InputEventArgs args)
         {
             string idProd = args.Value;
@@ -158,7 +197,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     }
                     else
                     {
-                        procuns.Des_Prod = string.Empty;
+                        procuns.Des_Prod= string.Empty;
                     }
                 }
 
@@ -175,33 +214,38 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 if (response_2.Error)
                 {
                     Console.WriteLine(await response_2.HttpResponseMessage.Content.ReadAsStringAsync());
-                    await ToastMensajeError("Error al intentar Guardar el proceso.");
+                 
+                    await ToastMensajeError("Error al intentar Guardar el Proceso.");
                     return false;
                 }
-                procuns = response_2.Response;
-                return true;
+                else
+                {
+                    procuns = response_2.Response;
+                    return true;
+                }
+            
             }
-            await ToastMensajeError($"El procun con registro {proc.Id} ya existe.\n\rO el procun no es permitido.");
             return false;
         }
 
         protected async Task<bool> Actualizar(Procun proc)
         {
-            var response = await ProcunService.ActualizarPro(proc);
-            //var response = await ProcunService.Actualizar(proc.Id, proc);
+
+            var response = await ProcunService.Actualizar(proc.Id, proc);
             if (response.Error)
             {
-               await ToastMensajeError("Error al intentar Guardar el procun.");
-               return false;
+                await ToastMensajeError("Error al intentar Guardar el Proceso.");
+                return false;
             }
             procuns = proc;
             return true;
 
         }
-      
+
         protected async Task GuardarProc()
         {
                 bool guardado=false;
+            SpinnerVisible = true;
                 if (procuns.ESNUEVO)
                 {
                     guardado = await Agregar(procuns);
@@ -210,7 +254,7 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                 else
                 {   
                     guardado = await Actualizar(procuns);
-
+                    
                 }
                 
                 if (guardado)
@@ -218,7 +262,9 @@ namespace SupplyChain.Client.Pages.ABM.ProcunP
                     Show = false;
                     procuns.GUARDADO = guardado;
                     await OnGuardar.InvokeAsync(procuns);
+                   SpinnerVisible = false;
                 }   
+                
         }
 
 
