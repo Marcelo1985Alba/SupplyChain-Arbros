@@ -152,15 +152,27 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="pane card-body card5">
+                                <SfToast ID="toast_default" @ref="ToastObj">
+                                    <ToastPosition X="Center" Y="Top"></ToastPosition>
+                                </SfToast>
                                 <SfGrid @ref="gridDetalleEventos" DataSource="@DataEventosDetalle" GridLines="Syncfusion.Blazor.Grids.GridLine.Both" AllowResizing="true"
-                                        AllowReordering="true" AllowSorting="true"
-                                        AllowPaging="true" Height="450">
+                                        AllowReordering="true" AllowSorting="true" Toolbar="Toolbaritems" ShowColumnChooser="true" ShowColumnMenu="true"
+                                        AllowPaging="true" Height="450" AllowGrouping="true" ID="grdEstadEvento" AllowFiltering="true">
+                                        <GridEvents OnToolbarClick="OnToolbarHandler" RowSelected="RowSelectHandler" TValue="vEstadEventos"></GridEvents>
+                                        <GridPageSettings PageSize="10" PageSizes="true"></GridPageSettings>
+                                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" AllowEditOnDblClick="true"
+                                                          ShowDeleteConfirmDialog="false" Mode="@Syncfusion.Blazor.Grids.EditMode.Dialog">
+                                        </GridEditSettings>
+
                                     <GridColumns>
+                                        <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
                                         <GridColumn Field="@(nameof(vEstadEventos.FE_EMIT))" HeaderText="FECHA EMISION" Format="dd/MM/yyyy"></GridColumn>
                                         <GridColumn Field="@(nameof(vEstadEventos.Cg_NoConf))" HeaderText="N EVENTO" Format="N0"></GridColumn>
                                         <GridColumn Field="@(nameof(vEstadEventos.Des_TipoNc))" HeaderText="DESCRIPCION"></GridColumn>
                                         <GridColumn Field="@(nameof(vEstadEventos.DES_PROVE))" HeaderText="PROVEEDOR"></GridColumn>
                                     </GridColumns>
+                                    <SfSpinner @ref="refSpinner" Type="SpinnerType.Fabric" Size="50" @bind-Visible="@VisibleSpinner"></SfSpinner>
+
                                 </SfGrid>
                             </div>
                         </div>

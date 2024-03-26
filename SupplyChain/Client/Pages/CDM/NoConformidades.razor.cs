@@ -236,7 +236,7 @@ namespace SupplyChain.Client.Pages.NoConf
         {
 
             
-            NoConf.Cg_NoConf = ValorCg_noconf;
+            NoConf.Id = ValorCg_noconf;
 
             NoConf.Cg_TipoNc = @DropVal;
             NoConf.Orden = 1;
@@ -299,13 +299,13 @@ namespace SupplyChain.Client.Pages.NoConf
 
 
             HttpResponseMessage response = null;
-            if (NoConf.Cg_NoConf == 0)
+            if (NoConf.Id == 0)
             {
                 response = await Http.PostAsJsonAsync("api/NoConformidades", NoConf);
             }
             else
             {
-                var registro = NoConf.Cg_NoConf;
+                var registro = NoConf.Id;
                 response = await Http.PutAsJsonAsync("api/NoConformidades/"+registro, NoConf);
 
             }

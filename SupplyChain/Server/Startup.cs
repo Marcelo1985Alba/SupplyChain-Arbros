@@ -150,6 +150,7 @@ namespace SupplyChain.Server
             services.AddTransient<MotivosPresupuestoRepository>();
             services.AddTransient<CampoComRepository>();
             services.AddTransient<ProcunProcesoRepository>();
+            services.AddTransient<NoConformidadesRepository>();
 
             //services.AddTransient<ProcunProcesosRepository>();
             //services.AddTransient<CargaValoresRepository>();

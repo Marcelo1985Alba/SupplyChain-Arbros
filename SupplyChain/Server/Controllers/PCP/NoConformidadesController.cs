@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using SupplyChain;
 using SupplyChain.Shared.Models;
 using SupplyChain.Server.Controllers;
+using SupplyChain.Server.Repositorios;
 
 namespace SupplyChain
 {
@@ -21,11 +22,13 @@ namespace SupplyChain
     {
         private readonly AppDbContext _context;
         private readonly GeneraController generaController;
+        private readonly NoConformidadesRepository _noConformidadesRepository;
 
-        public NoConformidadesController(AppDbContext context, GeneraController generaController)
+        public NoConformidadesController(AppDbContext context, GeneraController generaController, NoConformidadesRepository noConformidadesRepository)
         {
             _context = context;
             this.generaController = generaController;
+            _noConformidadesRepository = noConformidadesRepository;
         }
 
         /*
@@ -136,7 +139,7 @@ namespace SupplyChain
                 //y aqui se ejecuta por item.
                 await generaController.ReservaByCampo("NOCONF");
                 var genera = _context.Genera.Where(g => g.Id == "NOCONF").FirstOrDefault();
-                NoConf.Cg_NoConf = (int)genera.VALOR1;
+                NoConf.Id = (int)genera.VALOR1;
 
 
                 _context.NoConformidades.Add(NoConf);
@@ -163,12 +166,33 @@ namespace SupplyChain
             return Ok(NoConf);
         }
 
+        [HttpPost("PostList")]
+        public async Task<ActionResult> PostList(List<NoConformidades> NoConfs)
+        {
+            try
+            {
+                foreach (var item in NoConfs)
+                {
+                    //var noConformidades = new NoConformidades { Cg_NoConf = item.Cg_NoConf };
+                    await _noConformidadesRepository.Remover(item.Id);
+                    //await _noConformidadesRepository.DeleteEvento(item.Cg_NoConf);
+
+                }
+
+            }
+            catch (Exception e)
+            {
+                BadRequest(e.Message);
+            }
+            return Ok();
+        }
+
         //POST: api/NoConformidades/123729
         [HttpPut("{registro}")]
         public async Task<ActionResult<NoConformidades>> PutStock(int Cg_NoConf, NoConformidades NoConf)
         //public async Task<ActionResult<Pedidos>> PutStock(decimal registro, Pedidos stock)
         {
-            if (NoConf.Cg_NoConf == 0)
+            if (NoConf.Id == 0)
             {
                 return BadRequest("Registro Incorrecto");
             }
@@ -200,7 +224,7 @@ namespace SupplyChain
 
         private bool RegistroExists(decimal? Cg_NoConf)
         {
-            return _context.NoConformidades.Any(e => e.Cg_NoConf == Cg_NoConf);
+            return _context.NoConformidades.Any(e => e.Id== Cg_NoConf);
         }
 
         // GET: api/NoConformidades/GetAccionesByEvento/cg_noconf

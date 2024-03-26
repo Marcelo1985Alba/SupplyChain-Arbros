@@ -14,6 +14,8 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Syncfusion.Blazor.Navigations;
 using Syncfusion.Blazor.Notifications;
+using Microsoft.JSInterop;
+using SupplyChain.Client.HelperService;
 
 namespace SupplyChain.Client.Pages
 {
@@ -21,6 +23,8 @@ namespace SupplyChain.Client.Pages
     public class EventosIndicadorCopia : ComponentBase
     {
         [Inject] public HttpClient Http { get; set; }
+        [Inject] protected IJSRuntime jSRuntime{ get; set; }
+        [Inject] protected NoConformidadesService NoConformidadesService {  get; set; }
         [CascadingParameter] public MainLayout MainLayout { get; set; }
         #region "Vista Grilla"
         protected const string APPNAME = "grdEventos";
@@ -49,9 +53,15 @@ namespace SupplyChain.Client.Pages
         protected string TituloGraficoEventosProveedor = "";
         protected string SerieSeleccionaEventos = "";
         protected string añoEventoSeleccionado = string.Empty;
-        
-        ///////**********************************************////////////////////////////
+        protected vEstadEventos vestadSeleccionado = new();
 
+        protected List<Object> Toolbaritems = new List<Object>()
+        {
+            new ItemModel{Text="Delete", Id="Delete" }
+        };
+
+        ///////**********************************************////////////////////////////
+        
         public class ChartData
         {
             public string XSerieName { get; set; }
@@ -181,6 +191,68 @@ namespace SupplyChain.Client.Pages
             StateHasChanged();
             await refChartDetalleEventosMesTipo.RefreshAsync();
             await refChartDetalleEventosProveedor.RefreshAsync();
+        }
+
+        protected async Task OnToolbarHandler(ClickEventArgs args)
+        {
+            if (args.Item.Id == "Delete")
+            {
+                if((await gridDetalleEventos.GetSelectedRecordsAsync()).Count>0)
+                {
+                    bool isConfirmed= await jSRuntime.InvokeAsync<bool>("confirm","Seguro que desea eliminar el Evento?");
+                    if (isConfirmed)
+                    {
+                        List<vEstadEventos> eventosABorrar= await gridDetalleEventos.GetSelectedRecordsAsync();
+                        var response = NoConformidadesService.Eliminar(eventosABorrar);
+                        if (!response.IsCompletedSuccessfully)
+                        {
+                            await this.ToastObj.ShowAsync(new ToastModel
+                            {
+                                Title = "EXITO!",
+                                Content = "Los procesos eliminados fueron eliminados correctamente.",
+                                Icon = "e-success toast-icons",
+                                ShowCloseButton = true,
+                                ShowProgressBar = true
+                            });
+                        }
+                        else
+                        {
+                            await ToastMensajeError();
+                        }
+                        await gridDetalleEventos.Refresh();
+                    }
+                }
+            }
+        }
+
+        public void RowSelectHandler(RowSelectEventArgs<vEstadEventos> args)
+        {
+            vestadSeleccionado = args.Data;
+        }
+
+        private async Task ToastMensajeExito()
+        {
+            await this.ToastObj.ShowAsync(new ToastModel
+            {
+                Title = "EXITO!",
+                Content = "Guardado Correctamente.",
+                CssClass = "e-toast-success",
+                Icon = "e-success toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
+        }
+        private async Task ToastMensajeError()
+        {
+            await ToastObj.ShowAsync(new ToastModel
+            {
+                Title = "Error!",
+                Content = "Ocurrio un Error.",
+                CssClass = "e-toast-warning",
+                Icon = "e-warning toast-icons",
+                ShowCloseButton = true,
+                ShowProgressBar = true
+            });
         }
     }
 }
