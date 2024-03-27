@@ -12,9 +12,9 @@ namespace SupplyChain
     [Table("NoConfor")]
     public class NoConformidades : EntityBase<int>
     {
-		//[Key]
+		[Key]
 		[Column("Cg_NoConf")]
-		public int Id{ get; set; } = 0;
+		public int Id { get; set; } = 0;
 		//[Range(minimum: 1, maximum: 999999)]
 		public int Cg_TipoNc { get; set; } = 0;
 		public int Orden { get; set; } = 0;

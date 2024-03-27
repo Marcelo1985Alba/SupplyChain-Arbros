@@ -167,14 +167,14 @@ namespace SupplyChain
         }
 
         [HttpPost("PostList")]
-        public async Task<ActionResult> PostList(List<NoConformidades> NoConfs)
+        public async Task<ActionResult> PostList(List<vEstadEventos> NoConfs)
         {
             try
             {
                 foreach (var item in NoConfs)
                 {
                     //var noConformidades = new NoConformidades { Cg_NoConf = item.Cg_NoConf };
-                    await _noConformidadesRepository.Remover(item.Id);
+                    await _noConformidadesRepository.DeleteEvento(item.Cg_NoConf);
                     //await _noConformidadesRepository.DeleteEvento(item.Cg_NoConf);
 
                 }
@@ -222,9 +222,9 @@ namespace SupplyChain
             return Ok(NoConf);
         }
 
-        private bool RegistroExists(decimal? Cg_NoConf)
+        private bool RegistroExists(int? Cg_NoConf)
         {
-            return _context.NoConformidades.Any(e => e.Id== Cg_NoConf);
+            return _context.NoConformidades.Any(e => e.Id == Cg_NoConf);
         }
 
         // GET: api/NoConformidades/GetAccionesByEvento/cg_noconf
