@@ -47,7 +47,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
         {
             VisibleProperty = true;
             listaPedPend = await Http.GetFromJsonAsync<List<ModeloPedidosPendientes>>("api/PedidosPendientes");
-            await Grid.AutoFitColumns();
+            await Grid.AutoFitColumnsAsync();
             VisibleProperty = false;
         }
 
@@ -65,12 +65,12 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
             {
                 //VisibleProperty = true;
                 Grid.PreventRender();
-                Grid.Refresh();
+                await Grid.Refresh();
 
-                state = await Grid.GetPersistData();
+                state = await Grid.GetPersistDataAsync();
                 await Grid.AutoFitColumnsAsync();
-                await Grid.RefreshColumns();
-                await Grid.RefreshHeader();
+                await Grid.RefreshColumnsAsync();
+                await Grid.RefreshHeaderAsync();
                 //VisibleProperty = false;
             }
 
@@ -90,13 +90,13 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
         {
             await SpinnerObj.ShowAsync();
             VisibleProperty = true;
-            await Grid.AutoFitColumns();
+            await Grid.AutoFitColumnsAsync();
             VisibleProperty = false;
         }
         public async Task DataBoundHandler()
         {
             Grid.PreventRender();
-            await Grid.AutoFitColumns();
+            await Grid.AutoFitColumnsAsync();
             VisibleProperty = false;
         }
 
@@ -104,7 +104,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
         {
             if (args.Item.Text == "Seleccionar Columnas")
             {
-                await Grid.OpenColumnChooser();
+                await Grid.OpenColumnChooserAsync();
             }
             if (args.Item.Text == "Excel Export")
             {
@@ -113,7 +113,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
             }
             if (args.Item.Text == "Print")
             {
-                await this.Grid.Print();
+                await this.Grid.PrintAsync();
             }
         }
 
@@ -136,7 +136,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
                 var respuesta = await Http.PutAsJsonAsync($"api/PedidosPendientes/{args.Data.PEDIDO}", args.Data);
                 if (!respuesta.IsSuccessStatusCode)
                 {
-                    await ToasObj.Show(new ToastModel
+                    await ToasObj.ShowAsync(new ToastModel
                     {
                         Title = "ERROR!",
                         Content = $"Ocurrrio un error.Error al intentar Guardar Pedido: {args.Data.PEDIDO} ",
@@ -148,7 +148,7 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
                 }
                 else
                 {
-                    await this.ToasObj.Show(new ToastModel
+                    await this.ToasObj.ShowAsync(new ToastModel
                     {
                         Title = "ÉXITO!",
                         Content = $"Guardado Correctamente! Nro OF: {args.Data.PEDIDO}",
@@ -185,11 +185,11 @@ namespace SupplyChain.Client.Pages.PCP.Pedidos_Pendientes
 
         public async Task OnVistaSeleccionada(VistasGrillas vistasGrillas)
         {
-            await Grid.SetPersistData(vistasGrillas.Layout);
+            await Grid.SetPersistDataAsync(vistasGrillas.Layout);
         }
         public async Task OnReiniciarGrilla()
         {
-            await Grid.ResetPersistData();
+            await Grid.ResetPersistDataAsync();
         }
 
     }

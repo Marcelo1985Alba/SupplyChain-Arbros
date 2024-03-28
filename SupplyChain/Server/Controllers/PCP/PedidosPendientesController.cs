@@ -52,7 +52,7 @@ namespace SupplyChain.Server.Controllers
             var pedcli = await _pedCliRepository.Obtener(p => p.PEDIDO == modeloPedidosPendientes.PEDIDO).FirstOrDefaultAsync();
             pedcli.CAMPOCOM2 = modeloPedidosPendientes.CAMPOCOM2;//resorte
             pedcli.ENTRPREV = modeloPedidosPendientes.ENTRPREV;
-
+            pedcli.FE_PLAN= modeloPedidosPendientes.FE_PLAN;//agregadp
             try
             {
                 await _pedCliRepository.Actualizar(pedcli);

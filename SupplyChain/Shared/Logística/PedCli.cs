@@ -15,6 +15,7 @@ namespace SupplyChain
         [Key, Column("REGISTRO")]
         new public int Id { get; set; } = 0;
         public DateTime FE_PED { get; set; }
+        public DateTime FE_PLAN { get; set; }
         [Column("PRESUP")]
         public int PRESUPUESTOID { get; set; } = 0;
         public int PEDIDO { get; set; } = 0;

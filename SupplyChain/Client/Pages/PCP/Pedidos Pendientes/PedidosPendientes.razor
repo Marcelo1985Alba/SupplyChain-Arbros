@@ -97,8 +97,14 @@
                                             <SfDatePicker ID="FE_PED" @bind-Value="@(prev.ENTRPREV)" Placeholder="Fecha Prevista"></SfDatePicker>
                                         </div>
                                     </div>
-
+                                   
                                     <div class="form-row">
+                                        <div class="form-group col-md-10">
+                                            <label class="">Fecha Planificada:</label>
+                                            <br />
+                                            <SfDatePicker ID="FE_PLAN" @bind-Value="@(prev.FE_PLAN)" Placeholder="Fecha Planificada"></SfDatePicker>
+                                        </div>
+                                    </div> <div class="form-row">
                                         <div class="form-group col-md-12">
                                             <label class="">Observaciones:</label>
                                             <br />
@@ -158,6 +164,14 @@
                                 @{
                                     ModeloPedidosPendientes Value = (context as ModeloPedidosPendientes);
                                     <span>@Value.ENTRPREV.ToString("dd/MM/yyyy")</span>
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field=@nameof(ModeloPedidosPendientes.FE_PLAN) HeaderText="Fecha Planificada">
+                            <Template>
+                                @{
+                                    ModeloPedidosPendientes Value = (context as ModeloPedidosPendientes);
+                                    <span>@Value.FE_PLAN.ToString("dd/MM/yyyy")</span>
                                 }
                             </Template>
                         </GridColumn>

@@ -12,6 +12,7 @@ namespace SupplyChain.Shared.Models
         [Key]
         public int PEDIDO { get; set; } = 0;
         public DateTime FE_MOV { get; set; }
+        public DateTime FE_PLAN { get; set; }
         public decimal CG_CLI { get; set; } = 0;
         public string DES_CLI { get; set; } = "";
         public string CG_ART { get; set; } = "";
